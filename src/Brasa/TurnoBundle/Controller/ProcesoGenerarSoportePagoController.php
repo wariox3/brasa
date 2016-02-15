@@ -149,8 +149,15 @@ class ProcesoGenerarSoportePagoController extends Controller
         $this->listaDetalle($codigoSoportePago, "");
         if ($form->isValid()) {
         }        
+        $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+        $arSoportePago =  $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($codigoSoportePago);                                
+        $strAnio = $arSoportePago->getFechaDesde()->format('Y');
+        $strMes = $arSoportePago->getFechaDesde()->format('m');
+        $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+        $arProgramacionDetalle =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arSoportePago->getCodigoRecursoFk()));                        
         $arSoportesPagoDetalle = $paginator->paginate($em->createQuery($this->strListaDqlDetalle), $request->query->get('page', 1), 200);        
         return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:ver.html.twig', array(                        
+            'arProgramacionDetalle' => $arProgramacionDetalle,
             'arSoportesPagosDetalles' => $arSoportesPagoDetalle,
             'form' => $form->createView()));
     }     

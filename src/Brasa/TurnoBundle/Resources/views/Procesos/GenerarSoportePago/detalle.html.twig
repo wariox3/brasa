@@ -19,7 +19,7 @@
                 <th>HASTA</th>
                 <th>RECURSO</th>
                 <th>DIAS</th>
-                <th>DESCANSO</th>
+                <th>DSC</th>
                 <th>H</th>
                 <th>HD</th>
                 <th>HN</th>
@@ -38,7 +38,7 @@
                 <td>{{ arSoportesPagos.codigoSoportePagoPk  }}</td>
                 <td>{{ arSoportesPagos.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arSoportesPagos.fechaHasta |date("Y/m/d")  }}</td>
-                <td>{{ arSoportesPagos.recursoRel.nombreCorto  }}</td>
+                <td>{{ arSoportesPagos.codigoRecursoFk  }}-{{ arSoportesPagos.recursoRel.nombreCorto  }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.dias | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.descanso | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horas | number_format(0, '.', ',') }}</td>
