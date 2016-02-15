@@ -41,6 +41,7 @@
                 <th>TIPO</th>
                 <th>IDENTIFICACION</th>
                 <th>NOMBRE</th>
+                <th>CENTRO COSTO</th>
                 <th>APODO</th>
                 <th>ACTIVO</th>                
                 <th></th>
@@ -53,6 +54,7 @@
                 <td>{{ arRecursos.recursoTipoRel.nombre |default('') }}</td>                
                 <td>{{ arRecursos.numeroIdentificacion }}</td>                
                 <td>{{ arRecursos.nombreCorto }}</td>   
+                <td>{{ arRecursos.centroCostoRel.nombre | default('') }}</td>   
                 <td>{{ arRecursos.apodo }}</td> 
                 <td>{% if arRecursos.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td style="text-align: center"><a href="{{ path('brs_tur_base_recurso_nuevo', {'codigoRecurso': arRecursos.codigoRecursoPk, 'codigoEmpleado': 0 }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
