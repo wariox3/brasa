@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 class TurRecursoRepository extends EntityRepository {    
     
-    public function ListaDql($strNombre = "", $strCodigo = "", $codigoCentroCosto = "") {
+    public function ListaDql($strNombre = "", $strCodigo = "", $codigoCentroCosto = "", $strNumeroIdentificacion = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT r FROM BrasaTurnoBundle:TurRecurso r WHERE r.codigoRecursoPk <> 0";
         if($strNombre != "" ) {
@@ -15,6 +15,9 @@ class TurRecursoRepository extends EntityRepository {
         if($strCodigo != "" ) {
             $dql .= " AND r.codigoRecursoPk LIKE '%" . $strCodigo . "%'";
         }
+        if($strNumeroIdentificacion != "" ) {
+            $dql .= " AND r.numeroIdentificacion LIKE '%" . $strNumeroIdentificacion . "%'";
+        }        
         if($codigoCentroCosto != "" ) {
             $dql .= " AND r.codigoCentroCostoFk = " . $codigoCentroCosto ;
         }        

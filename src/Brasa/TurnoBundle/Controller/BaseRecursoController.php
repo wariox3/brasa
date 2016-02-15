@@ -10,6 +10,7 @@ class BaseRecursoController extends Controller
     var $strCodigo = "";
     var $strNombre = "";
     var $codigoCentroCosto = "";
+    var $strNumeroIdentificacion = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -161,7 +162,8 @@ class BaseRecursoController extends Controller
         $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurRecurso')->listaDQL(
                 $this->strNombre,                
                 $this->strCodigo,
-                $this->codigoCentroCosto
+                $this->codigoCentroCosto,
+                $this->strNumeroIdentificacion                
                 ); 
     }
 
@@ -169,6 +171,7 @@ class BaseRecursoController extends Controller
         $arCentroCosto = $form->get('centroCostoRel')->getData();
         $this->strCodigo = $form->get('TxtCodigo')->getData();
         $this->strNombre = $form->get('TxtNombre')->getData();
+        $this->strNumeroIdentificacion = $form->get('TxtNumeroIdentificacion')->getData();
         if($arCentroCosto) {
             $this->codigoCentroCosto = $arCentroCosto->getCodigoCentroCostoPk();
         }
@@ -194,6 +197,7 @@ class BaseRecursoController extends Controller
             ->add('centroCostoRel', 'entity', $arrayPropiedadesCentroCosto)
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->strNombre))
             ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->strCodigo))                  
+            ->add('TxtNumeroIdentificacion', 'text', array('label'  => 'NumeroIdentificacion','data' => $this->strNumeroIdentificacion))                            
             ->add('BtnActivarInactivar', 'submit', array('label'  => 'Activar / Inactivar',))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))

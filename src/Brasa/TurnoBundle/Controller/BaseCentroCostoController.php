@@ -82,7 +82,7 @@ class BaseCentroCostoController extends Controller
     private function formularioFiltro() {
         $form = $this->createFormBuilder()            
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->strNombre))
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->strCodigo))                            
+            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->strCodigo))                                        
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))

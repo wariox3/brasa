@@ -65,7 +65,7 @@ class BuscarRecursoController extends Controller
     private function formularioLista() {                
         $form = $this->createFormBuilder()                                                
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->strNombre))
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->strCodigo))                            
+            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->strCodigo))            
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();        
         return $form;
