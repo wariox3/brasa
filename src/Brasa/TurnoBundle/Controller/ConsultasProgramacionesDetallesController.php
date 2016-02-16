@@ -8,6 +8,7 @@ class ConsultasProgramacionesDetallesController extends Controller
     var $strListaDql = "";
     var $codigoCliente = "";
     var $codigoRecurso = "";
+    var $codigoCentroCosto = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -31,7 +32,11 @@ class ConsultasProgramacionesDetallesController extends Controller
                 if($arRecurso) {
                     $this->codigoRecurso = $arRecurso->getCodigoRecursoPk();
                 }
-            }            
+            }       
+            $arCentroCosto = $form->get('centroCostoRel')->getData();
+            if($arCentroCosto) {
+                $this->codigoCentroCosto = $arCentroCosto->getCodigoCentroCostoPk();
+            }
             if ($form->get('BtnFiltrar')->isClicked()) {                
                 $this->lista();
             }
@@ -53,13 +58,29 @@ class ConsultasProgramacionesDetallesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->consultaDetalleDql(
                 $this->codigoCliente,
-                $this->codigoRecurso);
+                $this->codigoRecurso,
+                $this->codigoCentroCosto);
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $form = $this->createFormBuilder()                       
+        $arrayPropiedadesCentroCosto = array(
+                'class' => 'BrasaTurnoBundle:TurCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($this->codigoCentroCosto != "") {
+            $arrayPropiedadesCentroCosto['data'] = $em->getReference("BrasaTurnoBundle:TurCentroCosto", $this->codigoCentroCosto);
+        }        
+        $form = $this->createFormBuilder()   
+            ->add('centroCostoRel', 'entity', $arrayPropiedadesCentroCosto)                
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
@@ -80,7 +101,7 @@ class ConsultasProgramacionesDetallesController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'AM'; $col++) {
+        for($col = 'A'; $col !== 'AN'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
         }                   
@@ -92,37 +113,38 @@ class ConsultasProgramacionesDetallesController extends Controller
                     ->setCellValue('E1', 'PUESTO')
                     ->setCellValue('F1', 'RECURSO')
                     ->setCellValue('G1', 'TIPO')
-                    ->setCellValue('H1', 'D1')
-                    ->setCellValue('I1', 'D2')
-                    ->setCellValue('J1', 'D3')
-                    ->setCellValue('K1', 'D4')
-                    ->setCellValue('L1', 'D5')
-                    ->setCellValue('M1', 'D6')
-                    ->setCellValue('N1', 'D7')
-                    ->setCellValue('O1', 'D8')
-                    ->setCellValue('P1', 'D9')
-                    ->setCellValue('Q1', 'D10')
-                    ->setCellValue('R1', 'D11')
-                    ->setCellValue('S1', 'D12')
-                    ->setCellValue('T1', 'D13')
-                    ->setCellValue('U1', 'D14')
-                    ->setCellValue('V1', 'D15')
-                    ->setCellValue('W1', 'D16')
-                    ->setCellValue('X1', 'D17')
-                    ->setCellValue('Y1', 'D18')
-                    ->setCellValue('Z1', 'D19')
-                    ->setCellValue('AA1', 'D20')
-                    ->setCellValue('AB1', 'D21')
-                    ->setCellValue('AC1', 'D22')
-                    ->setCellValue('AD1', 'D23')
-                    ->setCellValue('AE1', 'D24')
-                    ->setCellValue('AF1', 'D25')
-                    ->setCellValue('AG1', 'D26')
-                    ->setCellValue('AH1', 'D27')
-                    ->setCellValue('AI1', 'D28')
-                    ->setCellValue('AJ1', 'D29')
-                    ->setCellValue('AK1', 'D30')
-                    ->setCellValue('AL1', 'D31');
+                    ->setCellValue('H1', 'C.COSTO')
+                    ->setCellValue('I1', 'D1')
+                    ->setCellValue('J1', 'D2')
+                    ->setCellValue('K1', 'D3')
+                    ->setCellValue('L1', 'D4')
+                    ->setCellValue('M1', 'D5')
+                    ->setCellValue('N1', 'D6')
+                    ->setCellValue('O1', 'D7')
+                    ->setCellValue('P1', 'D8')
+                    ->setCellValue('Q1', 'D9')
+                    ->setCellValue('R1', 'D10')
+                    ->setCellValue('S1', 'D11')
+                    ->setCellValue('T1', 'D12')
+                    ->setCellValue('U1', 'D13')
+                    ->setCellValue('V1', 'D14')
+                    ->setCellValue('W1', 'D15')
+                    ->setCellValue('X1', 'D16')
+                    ->setCellValue('Y1', 'D17')
+                    ->setCellValue('Z1', 'D18')
+                    ->setCellValue('AA1', 'D19')
+                    ->setCellValue('AB1', 'D20')
+                    ->setCellValue('AC1', 'D21')
+                    ->setCellValue('AD1', 'D22')
+                    ->setCellValue('AE1', 'D23')
+                    ->setCellValue('AF1', 'D24')
+                    ->setCellValue('AG1', 'D25')
+                    ->setCellValue('AH1', 'D26')
+                    ->setCellValue('AI1', 'D27')
+                    ->setCellValue('AJ1', 'D28')
+                    ->setCellValue('AK1', 'D29')
+                    ->setCellValue('AL1', 'D30')
+                    ->setCellValue('AM1', 'D31');
         
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -133,38 +155,38 @@ class ConsultasProgramacionesDetallesController extends Controller
                     ->setCellValue('A' . $i, $arProgramacionDetalle->getCodigoProgramacionDetallePk())
                     ->setCellValue('B' . $i, $arProgramacionDetalle->getProgramacionRel()->getCodigoProgramacionPk())
                     ->setCellValue('C' . $i, $arProgramacionDetalle->getProgramacionRel()->getFecha()->format('Y-m'))
-                    ->setCellValue('D' . $i, $arProgramacionDetalle->getProgramacionRel()->getClienteRel()->getNombreCorto())                    
-                    ->setCellValue('H' . $i, $arProgramacionDetalle->getDia1())
-                    ->setCellValue('I' . $i, $arProgramacionDetalle->getDia2())
-                    ->setCellValue('J' . $i, $arProgramacionDetalle->getDia3())
-                    ->setCellValue('K' . $i, $arProgramacionDetalle->getDia4())
-                    ->setCellValue('L' . $i, $arProgramacionDetalle->getDia5())
-                    ->setCellValue('M' . $i, $arProgramacionDetalle->getDia6())
-                    ->setCellValue('N' . $i, $arProgramacionDetalle->getDia7())
-                    ->setCellValue('O' . $i, $arProgramacionDetalle->getDia8())
-                    ->setCellValue('P' . $i, $arProgramacionDetalle->getDia9())
-                    ->setCellValue('Q' . $i, $arProgramacionDetalle->getDia10())
-                    ->setCellValue('R' . $i, $arProgramacionDetalle->getDia11())
-                    ->setCellValue('S' . $i, $arProgramacionDetalle->getDia12())
-                    ->setCellValue('T' . $i, $arProgramacionDetalle->getDia13())
-                    ->setCellValue('U' . $i, $arProgramacionDetalle->getDia14())
-                    ->setCellValue('V' . $i, $arProgramacionDetalle->getDia15())
-                    ->setCellValue('W' . $i, $arProgramacionDetalle->getDia16())
-                    ->setCellValue('X' . $i, $arProgramacionDetalle->getDia17())
-                    ->setCellValue('Y' . $i, $arProgramacionDetalle->getDia18())
-                    ->setCellValue('Z' . $i, $arProgramacionDetalle->getDia19())
-                    ->setCellValue('AA' . $i, $arProgramacionDetalle->getDia20())
-                    ->setCellValue('AB' . $i, $arProgramacionDetalle->getDia21())
-                    ->setCellValue('AC' . $i, $arProgramacionDetalle->getDia22())
-                    ->setCellValue('AD' . $i, $arProgramacionDetalle->getDia23())
-                    ->setCellValue('AE' . $i, $arProgramacionDetalle->getDia24())
-                    ->setCellValue('AF' . $i, $arProgramacionDetalle->getDia25())
-                    ->setCellValue('AG' . $i, $arProgramacionDetalle->getDia26())
-                    ->setCellValue('AH' . $i, $arProgramacionDetalle->getDia27())
-                    ->setCellValue('AI' . $i, $arProgramacionDetalle->getDia28())
-                    ->setCellValue('AJ' . $i, $arProgramacionDetalle->getDia29())
-                    ->setCellValue('AK' . $i, $arProgramacionDetalle->getDia30())
-                    ->setCellValue('AL' . $i, $arProgramacionDetalle->getDia31());  
+                    ->setCellValue('D' . $i, $arProgramacionDetalle->getProgramacionRel()->getClienteRel()->getNombreCorto())                                        
+                    ->setCellValue('I' . $i, $arProgramacionDetalle->getDia1())
+                    ->setCellValue('J' . $i, $arProgramacionDetalle->getDia2())
+                    ->setCellValue('K' . $i, $arProgramacionDetalle->getDia3())
+                    ->setCellValue('L' . $i, $arProgramacionDetalle->getDia4())
+                    ->setCellValue('M' . $i, $arProgramacionDetalle->getDia5())
+                    ->setCellValue('N' . $i, $arProgramacionDetalle->getDia6())
+                    ->setCellValue('O' . $i, $arProgramacionDetalle->getDia7())
+                    ->setCellValue('P' . $i, $arProgramacionDetalle->getDia8())
+                    ->setCellValue('Q' . $i, $arProgramacionDetalle->getDia9())
+                    ->setCellValue('R' . $i, $arProgramacionDetalle->getDia10())
+                    ->setCellValue('S' . $i, $arProgramacionDetalle->getDia11())
+                    ->setCellValue('T' . $i, $arProgramacionDetalle->getDia12())
+                    ->setCellValue('U' . $i, $arProgramacionDetalle->getDia13())
+                    ->setCellValue('V' . $i, $arProgramacionDetalle->getDia14())
+                    ->setCellValue('W' . $i, $arProgramacionDetalle->getDia15())
+                    ->setCellValue('X' . $i, $arProgramacionDetalle->getDia16())
+                    ->setCellValue('Y' . $i, $arProgramacionDetalle->getDia17())
+                    ->setCellValue('Z' . $i, $arProgramacionDetalle->getDia18())
+                    ->setCellValue('AA' . $i, $arProgramacionDetalle->getDia19())
+                    ->setCellValue('AB' . $i, $arProgramacionDetalle->getDia20())
+                    ->setCellValue('AC' . $i, $arProgramacionDetalle->getDia21())
+                    ->setCellValue('AD' . $i, $arProgramacionDetalle->getDia22())
+                    ->setCellValue('AE' . $i, $arProgramacionDetalle->getDia23())
+                    ->setCellValue('AF' . $i, $arProgramacionDetalle->getDia24())
+                    ->setCellValue('AG' . $i, $arProgramacionDetalle->getDia25())
+                    ->setCellValue('AH' . $i, $arProgramacionDetalle->getDia26())
+                    ->setCellValue('AI' . $i, $arProgramacionDetalle->getDia27())
+                    ->setCellValue('AJ' . $i, $arProgramacionDetalle->getDia28())
+                    ->setCellValue('AK' . $i, $arProgramacionDetalle->getDia29())
+                    ->setCellValue('AL' . $i, $arProgramacionDetalle->getDia30())
+                    ->setCellValue('AM' . $i, $arProgramacionDetalle->getDia31());  
             
             if($arProgramacionDetalle->getPuestoRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
@@ -173,7 +195,8 @@ class ConsultasProgramacionesDetallesController extends Controller
             if($arProgramacionDetalle->getRecursoRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('F' . $i, $arProgramacionDetalle->getRecursoRel()->getNombreCorto())
-                    ->setCellValue('G' . $i, $arProgramacionDetalle->getRecursoRel()->getRecursoTipoRel()->getNombre());                
+                    ->setCellValue('G' . $i, $arProgramacionDetalle->getRecursoRel()->getRecursoTipoRel()->getNombre())                
+                    ->setCellValue('H' . $i, $arProgramacionDetalle->getRecursoRel()->getCentroCostoRel()->getNombre());
             }
             
             $i++;

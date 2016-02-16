@@ -28,10 +28,20 @@ class TurCentroCosto
     protected $recursosCentroCostoRel; 
    
     /**
-     * @ORM\OneToMany(targetEntity="TurCentroCosto", mappedBy="centroCostoRel")
+     * @ORM\OneToMany(targetEntity="TurSoportePagoPeriodo", mappedBy="centroCostoRel")
      */
-    protected $soportesPagosCentroCostoRel;     
+    protected $soportesPagosPeriodosCentroCostoRel;     
     
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->recursosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->soportesPagosPeriodosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get codigoCentroCostoPk
      *
@@ -64,13 +74,6 @@ class TurCentroCosto
     public function getNombre()
     {
         return $this->nombre;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->recursosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -108,36 +111,36 @@ class TurCentroCosto
     }
 
     /**
-     * Add soportesPagosCentroCostoRel
+     * Add soportesPagosPeriodosCentroCostoRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurCentroCosto $soportesPagosCentroCostoRel
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportesPagosPeriodosCentroCostoRel
      *
      * @return TurCentroCosto
      */
-    public function addSoportesPagosCentroCostoRel(\Brasa\TurnoBundle\Entity\TurCentroCosto $soportesPagosCentroCostoRel)
+    public function addSoportesPagosPeriodosCentroCostoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportesPagosPeriodosCentroCostoRel)
     {
-        $this->soportesPagosCentroCostoRel[] = $soportesPagosCentroCostoRel;
+        $this->soportesPagosPeriodosCentroCostoRel[] = $soportesPagosPeriodosCentroCostoRel;
 
         return $this;
     }
 
     /**
-     * Remove soportesPagosCentroCostoRel
+     * Remove soportesPagosPeriodosCentroCostoRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurCentroCosto $soportesPagosCentroCostoRel
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportesPagosPeriodosCentroCostoRel
      */
-    public function removeSoportesPagosCentroCostoRel(\Brasa\TurnoBundle\Entity\TurCentroCosto $soportesPagosCentroCostoRel)
+    public function removeSoportesPagosPeriodosCentroCostoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportesPagosPeriodosCentroCostoRel)
     {
-        $this->soportesPagosCentroCostoRel->removeElement($soportesPagosCentroCostoRel);
+        $this->soportesPagosPeriodosCentroCostoRel->removeElement($soportesPagosPeriodosCentroCostoRel);
     }
 
     /**
-     * Get soportesPagosCentroCostoRel
+     * Get soportesPagosPeriodosCentroCostoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getSoportesPagosCentroCostoRel()
+    public function getSoportesPagosPeriodosCentroCostoRel()
     {
-        return $this->soportesPagosCentroCostoRel;
+        return $this->soportesPagosPeriodosCentroCostoRel;
     }
 }

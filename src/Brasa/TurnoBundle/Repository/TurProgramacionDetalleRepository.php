@@ -13,9 +13,9 @@ class TurProgramacionDetalleRepository extends EntityRepository {
         return $dql;
     }                
 
-    public function consultaDetalleDql($codigoCliente, $codigoRecurso) {
+    public function consultaDetalleDql($codigoCliente, $codigoRecurso, $codigoCentroCosto) {
         $em = $this->getEntityManager();
-        $dql   = "SELECT pd FROM BrasaTurnoBundle:TurProgramacionDetalle pd JOIN pd.programacionRel p "
+        $dql   = "SELECT pd FROM BrasaTurnoBundle:TurProgramacionDetalle pd JOIN pd.programacionRel p JOIN pd.recursoRel r "
                 . "WHERE pd.codigoProgramacionDetallePk <> 0 ";
         if($codigoCliente != '') {
             $dql = $dql . "AND p.codigoClienteFk = " . $codigoCliente;
@@ -23,6 +23,9 @@ class TurProgramacionDetalleRepository extends EntityRepository {
         if($codigoRecurso != '') {
             $dql = $dql . "AND pd.codigoRecursoFk = " . $codigoRecurso;
         }        
+        if($codigoCentroCosto != '') {
+            $dql = $dql . "AND r.codigoCentroCostoFk = " . $codigoCentroCosto;
+        }                
         $dql .= " ORDER BY p.codigoClienteFk";
         return $dql;
     }    

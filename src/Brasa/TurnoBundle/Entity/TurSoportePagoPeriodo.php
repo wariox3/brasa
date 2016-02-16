@@ -48,7 +48,7 @@ class TurSoportePagoPeriodo
     private $estadoAprobado = false;     
 
     /**
-     * @ORM\ManyToOne(targetEntity="TurCentroCosto", inversedBy="soportesPagosCentroCostoRel")
+     * @ORM\ManyToOne(targetEntity="TurCentroCosto", inversedBy="soportesPagosPeriodosCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
     protected $centroCostoRel;     
@@ -63,6 +63,15 @@ class TurSoportePagoPeriodo
      */
     protected $soportesPagosDetallesSoportePagoPeriodoRel;     
     
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->soportesPagosSoportePagoPeriodoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->soportesPagosDetallesSoportePagoPeriodoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get codigoSoportePagoPeriodoPk
      *
@@ -122,6 +131,54 @@ class TurSoportePagoPeriodo
     }
 
     /**
+     * Set recursos
+     *
+     * @param integer $recursos
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setRecursos($recursos)
+    {
+        $this->recursos = $recursos;
+
+        return $this;
+    }
+
+    /**
+     * Get recursos
+     *
+     * @return integer
+     */
+    public function getRecursos()
+    {
+        return $this->recursos;
+    }
+
+    /**
+     * Set codigoCentroCostoFk
+     *
+     * @param integer $codigoCentroCostoFk
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
+    {
+        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCentroCostoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCentroCostoFk()
+    {
+        return $this->codigoCentroCostoFk;
+    }
+
+    /**
      * Set estadoGenerado
      *
      * @param boolean $estadoGenerado
@@ -168,46 +225,29 @@ class TurSoportePagoPeriodo
     {
         return $this->estadoAprobado;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->soportesPagosDetallesSoportePagoPeriodoRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
-     * Add soportesPagosDetallesSoportePagoPeriodoRel
+     * Set centroCostoRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoPeriodoRel
+     * @param \Brasa\TurnoBundle\Entity\TurCentroCosto $centroCostoRel
      *
      * @return TurSoportePagoPeriodo
      */
-    public function addSoportesPagosDetallesSoportePagoPeriodoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoPeriodoRel)
+    public function setCentroCostoRel(\Brasa\TurnoBundle\Entity\TurCentroCosto $centroCostoRel = null)
     {
-        $this->soportesPagosDetallesSoportePagoPeriodoRel[] = $soportesPagosDetallesSoportePagoPeriodoRel;
+        $this->centroCostoRel = $centroCostoRel;
 
         return $this;
     }
 
     /**
-     * Remove soportesPagosDetallesSoportePagoPeriodoRel
+     * Get centroCostoRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoPeriodoRel
+     * @return \Brasa\TurnoBundle\Entity\TurCentroCosto
      */
-    public function removeSoportesPagosDetallesSoportePagoPeriodoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoPeriodoRel)
+    public function getCentroCostoRel()
     {
-        $this->soportesPagosDetallesSoportePagoPeriodoRel->removeElement($soportesPagosDetallesSoportePagoPeriodoRel);
-    }
-
-    /**
-     * Get soportesPagosDetallesSoportePagoPeriodoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSoportesPagosDetallesSoportePagoPeriodoRel()
-    {
-        return $this->soportesPagosDetallesSoportePagoPeriodoRel;
+        return $this->centroCostoRel;
     }
 
     /**
@@ -245,74 +285,36 @@ class TurSoportePagoPeriodo
     }
 
     /**
-     * Set codigoCentroCostoFk
+     * Add soportesPagosDetallesSoportePagoPeriodoRel
      *
-     * @param integer $codigoCentroCostoFk
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoPeriodoRel
      *
      * @return TurSoportePagoPeriodo
      */
-    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
+    public function addSoportesPagosDetallesSoportePagoPeriodoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoPeriodoRel)
     {
-        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
+        $this->soportesPagosDetallesSoportePagoPeriodoRel[] = $soportesPagosDetallesSoportePagoPeriodoRel;
 
         return $this;
     }
 
     /**
-     * Get codigoCentroCostoFk
+     * Remove soportesPagosDetallesSoportePagoPeriodoRel
      *
-     * @return integer
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoPeriodoRel
      */
-    public function getCodigoCentroCostoFk()
+    public function removeSoportesPagosDetallesSoportePagoPeriodoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoPeriodoRel)
     {
-        return $this->codigoCentroCostoFk;
+        $this->soportesPagosDetallesSoportePagoPeriodoRel->removeElement($soportesPagosDetallesSoportePagoPeriodoRel);
     }
 
     /**
-     * Set centroCostoRel
+     * Get soportesPagosDetallesSoportePagoPeriodoRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurCentroCosto $centroCostoRel
-     *
-     * @return TurSoportePagoPeriodo
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setCentroCostoRel(\Brasa\TurnoBundle\Entity\TurCentroCosto $centroCostoRel = null)
+    public function getSoportesPagosDetallesSoportePagoPeriodoRel()
     {
-        $this->centroCostoRel = $centroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurCentroCosto
-     */
-    public function getCentroCostoRel()
-    {
-        return $this->centroCostoRel;
-    }
-
-    /**
-     * Set recursos
-     *
-     * @param integer $recursos
-     *
-     * @return TurSoportePagoPeriodo
-     */
-    public function setRecursos($recursos)
-    {
-        $this->recursos = $recursos;
-
-        return $this;
-    }
-
-    /**
-     * Get recursos
-     *
-     * @return integer
-     */
-    public function getRecursos()
-    {
-        return $this->recursos;
+        return $this->soportesPagosDetallesSoportePagoPeriodoRel;
     }
 }

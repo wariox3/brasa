@@ -31,7 +31,9 @@
             <table class="table table-striped table-bordered table-condensed">
             <tr>
                 <th>COD</th>
+                <th>IDENTIFICACION</th>
                 <th>NOMBRE</th>
+                <th>TIPO</th>
                 <th>TELEFONO</th>
                 <th>CELULAR</th>
                 <th>TURNO</th>
@@ -40,7 +42,9 @@
             {% for arRecurso in arRecurso %}
                 <tr>
                     <td>{{ arRecurso.codigoRecursoPk  }}</td>                    
+                    <td>{{ arRecurso.numeroIdentificacion  }}</td>
                     <td>{{ arRecurso.nombreCorto  }}</td>
+                    <td>{{ arRecurso.tipo  }}</td>
                     <td>{{ arRecurso.telefono  }}</td>
                     <td>{{ arRecurso.celular  }}</td>
                     <td>{{ arRecurso.nombreTurno  }}</td>

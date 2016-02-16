@@ -44,7 +44,9 @@ class ConsultasRecursosDisponiblesController extends Controller
                     if(!$resultados) {
                         $arrDisponibles[] = array(
                             'codigoRecursoPk' => $arRecurso->getCodigoRecursoPk(),
+                            'numeroIdentificacion' => $arRecurso->getNumeroIdentificacion(),
                             'nombreCorto' => $arRecurso->getNombreCorto(),
+                            'tipo' => $arRecurso->getRecursoTipoRel()->getNombre(),
                             'telefono' => $arRecurso->getTelefono(),
                             'celular' => $arRecurso->getCelular(),
                             'nombreTurno' => ''                  
@@ -62,7 +64,9 @@ class ConsultasRecursosDisponiblesController extends Controller
                         if($resultados) {                        
                             $arrDisponibles[] = array(
                                 'codigoRecursoPk' => $arRecurso->getCodigoRecursoPk(),
+                                'numeroIdentificacion' => $arRecurso->getNumeroIdentificacion(),
                                 'nombreCorto' => $arRecurso->getNombreCorto(),
+                                'tipo' => $arRecurso->getRecursoTipoRel()->getNombre(),
                                 'telefono' => $arRecurso->getTelefono(),
                                 'celular' => $arRecurso->getCelular(),
                                 'nombreTurno' => 'DESCANSO'
@@ -83,10 +87,13 @@ class ConsultasRecursosDisponiblesController extends Controller
     
     public function programacionAction($anio, $mes, $codigoRecurso) {
         $em = $this->getDoctrine()->getManager();        
+        $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
+        $arRecurso =  $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigoRecurso);                
         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
         $arProgramacionDetalle =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $anio, 'mes' => $mes, 'codigoRecursoFk' => $codigoRecurso));                
         return $this->render('BrasaTurnoBundle:Consultas/Recurso:disponibleProgramacion.html.twig', array(
-            'arProgramacionDetalle' => $arProgramacionDetalle));
+            'arProgramacionDetalle' => $arProgramacionDetalle,
+            'arRecurso' => $arRecurso));
     }        
     
     private function lista() {
