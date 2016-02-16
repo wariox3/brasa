@@ -726,7 +726,8 @@ class SeguridadSocialPeriodosController extends Controller
         $session = $this->getRequest()->getSession();
         $arrBotonEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonActualizarDatos = array('label' => 'Actualizar datos', 'disabled' => false);        
-        $arrBotonActualizarSalario = array('label' => 'Actualizar salario', 'disabled' => false);        
+        $arrBotonActualizarSalario = array('label' => 'Actualizar salario', 'disabled' => false);
+        $arrBotonActualizarSalarioMinimo = array('label' => 'Actualizar salario minimo', 'disabled' => false);
         if($ar->getEstadoGenerado() == 1) {            
             $arrBotonEliminar['disabled'] = true;
             $arrBotonActualizarDatos['disabled'] = true;            
@@ -750,7 +751,8 @@ class SeguridadSocialPeriodosController extends Controller
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnActualizarEmpleadoAporte', 'submit', $arrBotonActualizarDatos)    
-            ->add('BtnActualizarSalario', 'submit', $arrBotonActualizarSalario)        
+            ->add('BtnActualizarSalario', 'submit', $arrBotonActualizarSalario)
+            ->add('BtnActualizarSalarioMinimo', 'submit', $arrBotonActualizarSalarioMinimo)    
             ->add('BtnEliminar', 'submit', $arrBotonEliminar)
             ->getForm();
         return $form;

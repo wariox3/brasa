@@ -26,7 +26,8 @@
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
                 <th>CÓDIGO</th>
-                <th>IDENTIFICACION</th>
+                <th>IDENTIFICACIÓN</th>
+                <th>EMPLEADO</th>
                 <th>CENTRO COSTO</th>
                 <th>CONTRATO</th>
                 <th>ING</th>
@@ -67,6 +68,7 @@
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arSsoAportes.codigoAportePk }}">{{ arSsoAportes.codigoAportePk }} </td>
                 <td><a href="javascript:abrirVentana3('{{ path('brs_rhu_ss_resumen_pago', {'codigoPeriodoDetalle': arPeriodoDetalle.codigoPeriodoDetallePK, 'codigoEmpleado': arSsoAportes.codigoEmpleadoFK}) }}', 'resumenPagos', 600, 900)">{{ arSsoAportes.empleadoRel.numeroIdentificacion  }}</a></td>
+                <td>{{ arSsoAportes.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arSsoAportes.empleadoRel.centroCostoRel.nombre |default('')  }}</td>
                 <td>{{ arSsoAportes.codigoContratoFk  }}</td>
                 <td>{{ arSsoAportes.ingreso  }}</td>

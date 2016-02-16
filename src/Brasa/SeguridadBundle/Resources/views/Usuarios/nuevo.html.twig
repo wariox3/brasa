@@ -22,7 +22,12 @@
             <div class="form-group form-group-sm">
                 <label for="form_email" class="col-sm-3 control-label">Correo:</label>
                 <div class="col-sm-9">
-                    {{ form_widget(form.email, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control','autofocus':'autofocus'} }) }}
+                    {% if form_errors(form.email) %}
+                        {{ form_widget(form.email, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control','autofocus':'autofocus'} }) }}
+                        <div class="alert alert-danger" role="alert">{{ form_errors(form.email, { 'attr': {'autofocus': 'autofocus'} }) }}</div>
+                    {% else %}
+                        {{ form_widget(form.email, { 'attr': {'class': 'form-control'} }) }}
+                    {% endif %}
                 </div>
             </div>                
             <div class="form-group form-group-sm">

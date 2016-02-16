@@ -4,11 +4,14 @@ namespace Brasa\SeguridadBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 
 /**
  *
  * @ORM\Table(name="users")
  * @ORM\Entity(repositoryClass="Brasa\SeguridadBundle\Entity\UserRepository")
+ * @DoctrineAssert\UniqueEntity(fields={"email"},message="Ya existe este correo") 
  */
 class User implements UserInterface, \Serializable
 {

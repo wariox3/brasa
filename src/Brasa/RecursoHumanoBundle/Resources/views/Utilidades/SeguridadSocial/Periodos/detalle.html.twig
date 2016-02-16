@@ -72,13 +72,17 @@
                 <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_ss_periodo_lista') }}" style="float:left">Volver</a>
             </div>
         </div>
-        <div class="btn-toolbar" style="float:right">
+        <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
                 <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_ss_periodo_detalle_nuevo', { 'codigoPeriodo': codigoPeriodo }) }}', 'AgregarNuevoDetalle', 600, 900)" style="float:left">Nuevo</a>
             </div>
             <div class="btn-group">
                 <button class="btn btn-default btn-sm" type="submit" name="OpGenerarPagosExcel" value="{{ codigoPeriodo }}">Excel pagos periodo</button>
+            </div>
+            <div class="btn-group">
                 <button class="btn btn-default btn-sm" type="submit" name="OpGenerarPagosDetalleExcel" value="{{ codigoPeriodo }}">Excel pago detalles periodo</button>
+            </div>    
+            <div class="btn-group">    
                 <button class="btn btn-default btn-sm" type="submit" name="OpGenerarAportesExcel" value="{{ codigoPeriodo }}">Excel aportes periodo</button>
             </div>
             <div class="btn-group">
