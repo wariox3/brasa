@@ -118,7 +118,7 @@ class BaseLicenciaTipoController extends Controller
         $formLicenciaTipo->handleRequest($request);
         if ($formLicenciaTipo->isValid())
         {
-            // guardar la tarea en la base de datos
+            // guardar la tarea en la base de datos.
             $em->persist($arLicenciaTipo);
             $arLicenciaTipo = $formLicenciaTipo->getData();
             $em->flush();
