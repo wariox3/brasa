@@ -16,9 +16,9 @@
             <div class="panel-heading">Filtros de busqueda</div>
             <div class="panel-body">                                    
                 <div class="form-group form-group-sm">  
-                    <label for="form_TxtNumero" class="col-sm-2 control-label"></label>
+                    <label for="form_usuarioTareaRel" class="col-sm-2 control-label">Responsable:</label>
                     <div class="col-sm-4">
-                        
+                        {{ form_widget(form.usuarioTareaRel, { 'attr': {'class': 'form-control'} }) }}
                     </div>
                     <label for="form_estadoTerminado" class="col-sm-2 control-label">Terminado:</label>
                     <div class="col-sm-4">                  
@@ -46,16 +46,13 @@
             <tr>
                 <th>CODIGO</th>                
                 <th>FECHA</th>
-                <th>HORA</th> 
-                <th>ASUNTO</th>
-                <th>USUARIO</th>
-                <th>FECHA TERMINA</th>
-                <th>U.TERMINA</th>   
-                <th>TER</th>
-                <th>FECHA ANULA</th>
-                <th>U.ANULA</th>   
-                <th>ANU</th>
+                <th>PROGRAMADA</th>                
+                <th>CREA</th>
+                <th>RESPONSABLE</th>
+                <th>ASUNTO</th>                                
                 <th>COMENTARIOS</th>
+                <th>TER</th>   
+                <th>ANU</th>                
                 <th></th>
                 <th></th>
                 <th></th>
@@ -64,16 +61,14 @@
             <tr>                
                 <td>{{ arTareas.codigoTareaPk  }}</td>  
                 <td>{{ arTareas.fecha |date("Y/m/d")  }}</td> 
-                <td>{{ arTareas.hora |date("H:i")  }}</td> 
-                <td>{{ arTareas.asunto }}</td>  
-                <td>{{ arTareas.usuarioCreaFk  }}</td>
-                <td>{% if arTareas.estadoTerminado == 1 %} {{ arTareas.fechaTermina |date("Y/m/d H:i")  }} {% endif %}</td>
-                <td>{{ arTareas.usuarioTerminaFk  }}</td>                                 
-                <td>{% if arTareas.estadoTerminado == 1 %} SI {% else %} NO {% endif %}</td>              
-                <td>{% if arTareas.estadoAnulado == 1 %} {{ arTareas.fechaAnula |date("Y/m/d H:i")  }} {% endif %}</td>
-                <td>{{ arTareas.usuarioAnulaFk  }}</td>                                 
-                <td>{% if arTareas.estadoAnulado == 1 %} SI {% else %} NO {% endif %}</td>                              
+                <td>{{ arTareas.fechaProgramada |date("Y/m/d")  }} {{ arTareas.hora |date("H:i") }}</td> 
+                <td>{{ arTareas.usuarioCreaFk  }}</td>                
+                <td>{{ arTareas.usuarioTareaFk  }}</td>                                
+                <td>{{ arTareas.asunto }}</td>                 
                 <td>{{ arTareas.comentarios  }}</td>
+                <td>{% if arTareas.estadoTerminado == 1 %} SI {% else %} NO {% endif %}</td>                                              
+                <td>{% if arTareas.estadoAnulado == 1 %} SI {% else %} NO {% endif %}</td>                              
+                
                 <td style="text-align: center">{% if arTareas.estadoTerminado == 0 and arTareas.estadoAnulado == 0 %}<a href="{{ path('brs_gen_mov_tarea_nuevo', {'codigoTarea': arTareas.codigoTareaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                
                 <td>{% if arTareas.estadoTerminado == 0 and arTareas.estadoAnulado == 0 %}<button class="btn btn-default btn-xs" type="submit" name="OpCerrar" value="{{ arTareas.codigoTareaPk }}">Cerrar</button>{% endif %}</td>
                 <td>{% if arTareas.estadoTerminado == 0 and arTareas.estadoAnulado == 0 %}<button class="btn btn-default btn-xs" type="submit" name="OpAnular" value="{{ arTareas.codigoTareaPk }}">Anular</button>{% endif %}</td>                

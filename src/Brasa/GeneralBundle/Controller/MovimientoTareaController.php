@@ -7,20 +7,22 @@ use Brasa\GeneralBundle\Form\Type\GenTareaType;
 
 class MovimientoTareaController extends Controller
 {
-    var $strListaDql = "";    
+    var $strListaDql = "";
     var $estadoTerminado = "";
     var $estadoAnulado = "";
-    
+    var $codigoUsuario = "";
+
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->estadoTerminado = 0;
         $this->estadoAnulado = 0;
-        $this->lista();        
-        if ($form->isValid()) {            
+        $this->lista();
+        if ($form->isValid()) {
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
                 $this->lista();
@@ -36,11 +38,16 @@ class MovimientoTareaController extends Controller
                 $arTarea = $em->getRepository('BrasaGeneralBundle:GenTarea')->find($codigo);
                 if($arTarea->getEstadoTerminado() == 0) {
                     $arUsuario = $this->getUser();
-                    $arTarea->setEstadoTerminado(1);                    
-                    $arTarea->setFechaTermina(new \DateTime('now'));
-                    $arTarea->setUsuarioTerminaFk($arUsuario->getUserName());                     
-                    $em->persist($arTarea);
-                    $em->flush();
+                    if($arUsuario->getUsername() == $arTarea->getUsuarioTareaFk()) {
+                        $arTarea->setEstadoTerminado(1);
+                        $arTarea->setFechaTermina(new \DateTime('now'));
+                        $arTarea->setUsuarioTerminaFk($arUsuario->getUserName());
+                        $em->persist($arTarea);
+                        $em->flush();                        
+                    } else {
+                        $objMensaje->Mensaje("error", "Solo puede terminar la tarea el usuario responsable " . $arTarea->getUsuarioTareaFk(), $this);
+                    }
+
                 }
                 return $this->redirect($this->generateUrl('brs_gen_mov_tarea_lista'));
             }
@@ -50,79 +57,105 @@ class MovimientoTareaController extends Controller
                 $arTarea = $em->getRepository('BrasaGeneralBundle:GenTarea')->find($codigo);
                 if($arTarea->getEstadoTerminado() == 0) {
                     $arUsuario = $this->getUser();
-                    $arTarea->setEstadoAnulado(1);                    
-                    $arTarea->setFechaAnula(new \DateTime('now'));
-                    $arTarea->setUsuarioAnulaFk($arUsuario->getUserName());                     
-                    $em->persist($arTarea);
-                    $em->flush();
+                    if($arUsuario->getUsername() == $arTarea->getUsuarioCreaFk()) {                        
+                        $arTarea->setEstadoAnulado(1);
+                        $arTarea->setFechaAnula(new \DateTime('now'));
+                        $arTarea->setUsuarioAnulaFk($arUsuario->getUserName());
+                        $em->persist($arTarea);
+                        $em->flush();                        
+                    } else {
+                        $objMensaje->Mensaje("error", "Solo puede anular la tarea el usuario que la creo " . $arTarea->getUsuarioCreaFk(), $this);    
+                    }
                 }
                 return $this->redirect($this->generateUrl('brs_gen_mov_tarea_lista'));
-            }            
+            }
         }
 
         $arTareas = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 50);
         return $this->render('BrasaGeneralBundle:Movimientos/Tarea:lista.html.twig', array(
-            'arTareas' => $arTareas,            
+            'arTareas' => $arTareas,
             'form' => $form->createView()));
     }
 
     public function nuevoAction($codigoTarea) {
-        $request = $this->getRequest();        
+        $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $arTarea = new \Brasa\GeneralBundle\Entity\GenTarea();
         if($codigoTarea != 0) {
             $arTarea = $em->getRepository('BrasaGeneralBundle:GenTarea')->find($codigoTarea);
         }else{
-            $arTarea->setFecha(new \DateTime('now'));                       
+            $arTarea->setFecha(new \DateTime('now'));
+            $arTarea->setFechaProgramada(new \DateTime('now'));
         }
         $form = $this->createForm(new GenTareaType, $arTarea);
-        $form->handleRequest($request);        
+        $form->handleRequest($request);
         if ($form->isValid()) {
             $arUsuario = $this->getUser();
-            $arTarea = $form->getData();  
-            $arTarea->setUsuarioCreaFk($arUsuario->getUserName());           
-            $em->persist($arTarea);          
+            $arTarea = $form->getData();
+            $arTarea->setUsuarioTareaFk($arTarea->getUsuarioTareaFk()->getUsername());
+            $arTarea->setUsuarioCreaFk($arUsuario->getUserName());
+            $em->persist($arTarea);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_gen_mov_tarea_nuevo', array('codigoTarea' => 0 )));
             } else {
                 return $this->redirect($this->generateUrl('brs_gen_mov_tarea_lista'));
-            }                                                                       
+            }
         }
         return $this->render('BrasaGeneralBundle:Movimientos/Tarea:nuevo.html.twig', array(
             'arTarea' => $arTarea,
             'form' => $form->createView()));
-    }  
-    
-    private function lista() {        
+    }
+
+    private function lista() {
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaGeneralBundle:GenTarea')->listaDQL(
                 $this->estadoTerminado,
-                $this->estadoAnulado
+                $this->estadoAnulado, 
+                $this->codigoUsuario
         );
-    }    
+    }
 
-    private function filtrar ($form) {                
+    private function filtrar ($form) {
+        $arUsuario = $form->get('usuarioTareaRel')->getData();
         $this->estadoTerminado = $form->get('estadoTerminado')->getData();
         $this->estadoAnulado = $form->get('estadoAnulado')->getData();
+        if($arUsuario) {
+            $this->codigoUsuario = $arUsuario->getUsername();
+        }        
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();        
+        $session = $this->getRequest()->getSession();
+        $arrayPropiedadesUsuario = array(
+                'class' => 'BrasaSeguridadBundle:User',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                    ->orderBy('u.nombreCorto', 'ASC');},
+                'property' => 'nombreCorto',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($this->codigoUsuario != "") {
+            $arrayPropiedadesUsuario['data'] = $em->getReference("BrasaSeguridadBundle:User", $this->codigoUsuario);
+        }        
         $form = $this->createFormBuilder()
-            ->add('estadoTerminado', 'choice', array('choices'   => array('0' => 'SIN TERMINAR', '1' => 'TERMINADA', '2' => 'TODOS'), 'data' => $this->estadoTerminado))                
-            ->add('estadoAnulado', 'choice', array('choices'   => array('0' => 'SIN ANULAR', '2' => 'TODOS', '1' => 'ANULADAS'), 'data' => $this->estadoAnulado))                            
+            ->add('usuarioTareaRel', 'entity', $arrayPropiedadesUsuario)
+            ->add('estadoTerminado', 'choice', array('choices'   => array('0' => 'SIN TERMINAR', '1' => 'TERMINADA', '2' => 'TODOS'), 'data' => $this->estadoTerminado))
+            ->add('estadoAnulado', 'choice', array('choices'   => array('0' => 'SIN ANULAR', '2' => 'TODOS', '1' => 'ANULADAS'), 'data' => $this->estadoAnulado))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
-    }      
-    
+    }
+
     private function generarExcel() {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
-        $em = $this->getDoctrine()->getManager();        
+        $em = $this->getDoctrine()->getManager();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")
@@ -132,12 +165,12 @@ class MovimientoTareaController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
-        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10);
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         for($col = 'A'; $col !== 'M'; $col++) {
-            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                                       
-        }     
-        
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+        }
+
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
                     ->setCellValue('B1', 'FECHA')
@@ -157,16 +190,16 @@ class MovimientoTareaController extends Controller
         $arTareas = new \Brasa\GeneralBundle\Entity\GenTarea();
         $arTareas = $query->getResult();
 
-        foreach ($arTareas as $arTarea) {            
+        foreach ($arTareas as $arTarea) {
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arTarea->getCodigoTareaPk())
                     ->setCellValue('B' . $i, $arTarea->getFecha()->format('Y/m/d'))
                     ->setCellValue('C' . $i, $arTarea->getHora()->format('H:i'))
                     ->setCellValue('D' . $i, $arTarea->getAsunto())
                     ->setCellValue('E' . $i, $arTarea->getComentarios())
-                    ->setCellValue('F' . $i, $arTarea->getUsuarioCreaFk())                    
+                    ->setCellValue('F' . $i, $arTarea->getUsuarioCreaFk())
                     ->setCellValue('H' . $i, $arTarea->getUsuarioTerminaFk())
-                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arTarea->getEstadoTerminado()))                    
+                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arTarea->getEstadoTerminado()))
                     ->setCellValue('K' . $i, $arTarea->getUsuarioAnulaFk())
                     ->setCellValue('L' . $i, $objFunciones->devuelveBoolean($arTarea->getEstadoAnulado()));
             if($arTarea->getFechaTermina()) {
@@ -174,7 +207,7 @@ class MovimientoTareaController extends Controller
             }
             if($arTarea->getFechaAnula()) {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J' . $i, $arTarea->getFechaAnula()->format('Y/m/d'));
-            }            
+            }
             $i++;
         }
 
@@ -194,6 +227,6 @@ class MovimientoTareaController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }    
+    }
 
 }

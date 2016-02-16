@@ -18,10 +18,15 @@ class GenTarea
     private $codigoTareaPk;                    
     
     /**
-     * @ORM\Column(name="fecha", type="date", nullable=false)
+     * @ORM\Column(name="fecha", type="date", nullable=true)
      */    
     private $fecha;             
 
+    /**
+     * @ORM\Column(name="fecha_programada", type="date", nullable=true)
+     */    
+    private $fechaProgramada;    
+    
     /**
      * @ORM\Column(name="hora", type="time", nullable=false)
      */    
@@ -40,8 +45,8 @@ class GenTarea
     /**
      * @ORM\Column(name="asunto", type="string", length=80, nullable=true)
      */    
-    private $asunto;               
-
+    private $asunto;                   
+    
     /**
      * @ORM\Column(name="estado_terminado", type="boolean")
      */    
@@ -51,6 +56,11 @@ class GenTarea
      * @ORM\Column(name="estado_anulado", type="boolean")
      */    
     private $estadoAnulado = 0;     
+    
+    /**
+     * @ORM\Column(name="usuario_tarea_fk", type="string", length=50, nullable=true)
+     */    
+    private $usuarioTareaFk;    
     
     /**
      * @ORM\Column(name="usuario_crea_fk", type="string", length=50, nullable=true)
@@ -71,8 +81,6 @@ class GenTarea
      * @ORM\Column(name="comentarios", type="string", length=250, nullable=true)
      */    
     private $comentarios;           
-
-
 
 
     /**
@@ -107,6 +115,30 @@ class GenTarea
     public function getFecha()
     {
         return $this->fecha;
+    }
+
+    /**
+     * Set fechaProgramada
+     *
+     * @param \DateTime $fechaProgramada
+     *
+     * @return GenTarea
+     */
+    public function setFechaProgramada($fechaProgramada)
+    {
+        $this->fechaProgramada = $fechaProgramada;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaProgramada
+     *
+     * @return \DateTime
+     */
+    public function getFechaProgramada()
+    {
+        return $this->fechaProgramada;
     }
 
     /**
@@ -251,6 +283,30 @@ class GenTarea
     public function getEstadoAnulado()
     {
         return $this->estadoAnulado;
+    }
+
+    /**
+     * Set usuarioTareaFk
+     *
+     * @param string $usuarioTareaFk
+     *
+     * @return GenTarea
+     */
+    public function setUsuarioTareaFk($usuarioTareaFk)
+    {
+        $this->usuarioTareaFk = $usuarioTareaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get usuarioTareaFk
+     *
+     * @return string
+     */
+    public function getUsuarioTareaFk()
+    {
+        return $this->usuarioTareaFk;
     }
 
     /**

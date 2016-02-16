@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
 class GenTareaRepository extends EntityRepository
 {
     
-    public function listaDql($boolEstadoTerminado = "", $boolEstadoAnulado = "") {
+    public function listaDql($boolEstadoTerminado = "", $boolEstadoAnulado = "", $codigoUsuarioTarea = "") {
         $dql   = "SELECT t FROM BrasaGeneralBundle:GenTarea t WHERE t.codigoTareaPk <> 0";        
         if($boolEstadoTerminado == 1 ) {
             $dql .= " AND t.estadoTerminado = 1";
@@ -26,7 +26,10 @@ class GenTareaRepository extends EntityRepository
         }
         if($boolEstadoAnulado == "0") {
             $dql .= " AND t.estadoAnulado = 0";
-        }         
+        }  
+        if($codigoUsuarioTarea != "") {
+            $dql .= " AND t.usuarioTareaFk = '" . $codigoUsuarioTarea . "'";
+        }        
         return $dql;
     }    
     
