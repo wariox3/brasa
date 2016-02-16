@@ -97,11 +97,9 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
                     }                            
                 }
             }
-
             if($arContrato->getFechaDesde() >= $arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde()) {
                 $strNovedadIngreso = "X";
             }
-
             if($arContrato->getIndefinido() == 0 && $fechaTerminaCotrato <= $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta()) {                    
                 $strNovedadRetiro = "X";                    
             }
@@ -131,9 +129,10 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
             $arPeriodoEmpleadoActualizar->setCodigoEntidadSaludPertenece($arContrato->getEntidadSaludRel()->getCodigoInterface());
             $arPeriodoEmpleadoActualizar->setCodigoEntidadCajaPertenece($arContrato->getEntidadCajaRel()->getCodigoInterface());
             $em->persist($arPeriodoEmpleadoActualizar);
+            $arPeriodoDetalle->setEstadoActualizado(1);
+            $em->persist($arPeriodoDetalle);
         }
-        $em->flush();
-                        
+        $em->flush();            
         return true;
     }
 }

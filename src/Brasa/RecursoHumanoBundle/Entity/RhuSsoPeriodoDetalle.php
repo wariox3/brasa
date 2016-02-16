@@ -37,6 +37,11 @@ class RhuSsoPeriodoDetalle
      */    
     private $estadoCerrado = 0;
     
+    /**     
+     * @ORM\Column(name="estado_actualizado", type="boolean")
+     */    
+    private $estadoActualizado = 0;
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="ssoPeriodosDetallesSsoPeriodoRel")
      * @ORM\JoinColumn(name="codigo_periodo_fk", referencedColumnName="codigo_periodo_pk")
@@ -286,5 +291,29 @@ class RhuSsoPeriodoDetalle
     public function getEstadoCerrado()
     {
         return $this->estadoCerrado;
+    }
+
+    /**
+     * Set estadoActualizado
+     *
+     * @param boolean $estadoActualizado
+     *
+     * @return RhuSsoPeriodoDetalle
+     */
+    public function setEstadoActualizado($estadoActualizado)
+    {
+        $this->estadoActualizado = $estadoActualizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoActualizado
+     *
+     * @return boolean
+     */
+    public function getEstadoActualizado()
+    {
+        return $this->estadoActualizado;
     }
 }

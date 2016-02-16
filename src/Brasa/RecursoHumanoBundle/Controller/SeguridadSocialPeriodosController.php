@@ -110,6 +110,7 @@ class SeguridadSocialPeriodosController extends Controller
     public function detalleAction($codigoPeriodo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $paginator  = $this->get('knp_paginator');
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()->getForm();
@@ -142,7 +143,10 @@ class SeguridadSocialPeriodosController extends Controller
             }
             if($request->request->get('OpGenerar')) {
                 $codigoPeriodoDetalle = $request->request->get('OpGenerar');
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->generar($codigoPeriodoDetalle);
+                $resultado = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->generar($codigoPeriodoDetalle);
+                if ($resultado == false){
+                    $objMensaje->Mensaje("error", "No hay personal a generar en el periodo detalle " . $codigoPeriodoDetalle . "", $this);
+                }
             }
             if($request->request->get('OpDesgenerar')) {
                 $codigoPeriodoDetalle = $request->request->get('OpDesgenerar');
@@ -152,7 +156,6 @@ class SeguridadSocialPeriodosController extends Controller
                 $codigoPeriodo = $request->request->get('OpCerrar');
                 $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
                 $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodo);
-                $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
                 if ($arPeriodoDetalle->getEstadoGenerado() == 0){
                     $objMensaje->Mensaje("error", "Debe generar periodo de la sucursal para poder cerrarlo", $this);
                 } else {
@@ -318,6 +321,7 @@ class SeguridadSocialPeriodosController extends Controller
             }
             
             if($request->request->get('OpGenerarExcel')) {
+                ob_clean();
                 $codigoPeriodoDetalle = $request->request->get('OpGenerarExcel');
                 $em = $this->getDoctrine()->getManager();        
                 $objPHPExcel = new \PHPExcel();
@@ -331,6 +335,34 @@ class SeguridadSocialPeriodosController extends Controller
                     ->setCategory("Test result file");
                 $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
                 $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('AA')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setAutoSize(true);
                 $objPHPExcel->setActiveSheetIndex(0)
                     
                     ->setCellValue('A1', 'PERIODO DETALLE')
@@ -535,7 +567,6 @@ class SeguridadSocialPeriodosController extends Controller
                     }
                 }
                 $em->flush();
-                
                 return $this->redirect($this->generateUrl('brs_rhu_ss_periodo_detalle_empleados', array('codigoPeriodoDetalle' => $codigoPeriodoDetalle)));
             }
         }
@@ -895,6 +926,7 @@ class SeguridadSocialPeriodosController extends Controller
     }
     
     private function generarPagosPeriodoExcel($codigoPeriodo) {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
         // Set document properties
@@ -981,6 +1013,7 @@ class SeguridadSocialPeriodosController extends Controller
     }
     
     private function generarPagosDetallePeriodoExcel($codigoPeriodo) {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
         // Set document properties
@@ -1064,6 +1097,7 @@ class SeguridadSocialPeriodosController extends Controller
     }
     
     private function generarAportesPeriodoExcel($codigoPeriodo) {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
