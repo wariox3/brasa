@@ -335,6 +335,9 @@ class SeguridadSocialPeriodosController extends Controller
                     ->setCategory("Test result file");
                 $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
                 $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle('2')->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle('3')->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle('5')->getFont()->setBold(true);
                 $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
                 $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
                 $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
@@ -364,7 +367,6 @@ class SeguridadSocialPeriodosController extends Controller
                 $objPHPExcel->getActiveSheet()->getColumnDimension('AA')->setAutoSize(true);
                 $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setAutoSize(true);
                 $objPHPExcel->setActiveSheetIndex(0)
-                    
                     ->setCellValue('A1', 'PERIODO DETALLE')
                     ->setCellValue('A2', 'CÓDIGO SUCURSAL')
                     ->setCellValue('A3', 'SUCURSAL')
@@ -554,7 +556,7 @@ class SeguridadSocialPeriodosController extends Controller
             if($form->get('BtnActualizarEmpleadoAporte')->isClicked()) {
                $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->actualizar($codigoPeriodoDetalle);
             }
-            if ($form->get('BtnActualizarSalario')->isClicked()) {
+            if ($form->get('BtnActualizarDetalle')->isClicked()) {
                 $arrControles = $request->request->All();
                 $intIndice = 0;
                 foreach ($arrControles['LblCodigo'] as $intCodigo) {                
@@ -563,8 +565,43 @@ class SeguridadSocialPeriodosController extends Controller
                         $arPeriodoEmpleado =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->find($intCodigo);
                         $floSalario = $arrControles['TxtSalario'.$intCodigo];
                         $arPeriodoEmpleado->setVrSalario($floSalario);
+                        $em->persist($arPeriodoEmpleado);
+                    }
+                    if($arrControles['TxtSuplementario'.$intCodigo] != "" ) {
+                        $floSuplementario = $arrControles['TxtSuplementario'.$intCodigo];
+                        $arPeriodoEmpleado->setVrSuplementario($floSuplementario);
+                        $em->persist($arPeriodoEmpleado);
+                    }
+                }
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_rhu_ss_periodo_detalle_empleados', array('codigoPeriodoDetalle' => $codigoPeriodoDetalle)));
+            }
+            if ($form->get('BtnActualizarSalarioMinimo')->isClicked()) {
+                $arrControles = $request->request->All();
+                $intIndice = 0;
+                foreach ($arrControles['LblCodigo'] as $intCodigo) {                
+                    if($arrControles['TxtSalario'.$intCodigo] != "" && $arrControles['TxtSalario'.$intCodigo] != 0) {
+                        $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+                        $arConfiguracion =  $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+                        $arPeriodoEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
+                        $arPeriodoEmpleado =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->find($intCodigo);
+                        $floSalario = $arConfiguracion->getVrSalario();
+                        $arPeriodoEmpleado->setVrSalario($floSalario);
                         $em->persist($arPeriodoEmpleado);                        
                     }
+                }
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_rhu_ss_periodo_detalle_empleados', array('codigoPeriodoDetalle' => $codigoPeriodoDetalle)));
+            }
+            if ($form->get('BtnLimpiarSuplementario')->isClicked()) {
+                $arrControles = $request->request->All();
+                $intIndice = 0;
+                foreach ($arrControles['LblCodigo'] as $intCodigo) {                
+                    $arPeriodoEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
+                    $arPeriodoEmpleado =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->find($intCodigo);
+                    $arPeriodoEmpleado->setVrSuplementario(0);
+                    $em->persist($arPeriodoEmpleado);                        
+                    
                 }
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_rhu_ss_periodo_detalle_empleados', array('codigoPeriodoDetalle' => $codigoPeriodoDetalle)));
@@ -726,12 +763,15 @@ class SeguridadSocialPeriodosController extends Controller
         $session = $this->getRequest()->getSession();
         $arrBotonEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonActualizarDatos = array('label' => 'Actualizar datos', 'disabled' => false);        
-        $arrBotonActualizarSalario = array('label' => 'Actualizar salario', 'disabled' => false);
+        $arrBotonActualizarDetalle = array('label' => 'Actualizar detalle', 'disabled' => false);
         $arrBotonActualizarSalarioMinimo = array('label' => 'Actualizar salario minimo', 'disabled' => false);
+        $arrBotonLimpiarSuplementario = array('label' => 'Limpiar tiempo suplementario', 'disabled' => false);
         if($ar->getEstadoGenerado() == 1) {            
             $arrBotonEliminar['disabled'] = true;
             $arrBotonActualizarDatos['disabled'] = true;            
-            $arrBotonActualizarSalario['disabled'] = true;
+            $arrBotonActualizarDetalle['disabled'] = true;
+            $arrBotonActualizarSalarioMinimo['disabled'] = true;
+            $arrBotonLimpiarSuplementario['disabled'] = true;
         } 
         $arrayPropiedades = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
@@ -751,8 +791,9 @@ class SeguridadSocialPeriodosController extends Controller
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnActualizarEmpleadoAporte', 'submit', $arrBotonActualizarDatos)    
-            ->add('BtnActualizarSalario', 'submit', $arrBotonActualizarSalario)
-            ->add('BtnActualizarSalarioMinimo', 'submit', $arrBotonActualizarSalarioMinimo)    
+            ->add('BtnActualizarDetalle', 'submit', $arrBotonActualizarDetalle)
+            ->add('BtnActualizarSalarioMinimo', 'submit', $arrBotonActualizarSalarioMinimo)
+            ->add('BtnLimpiarSuplementario', 'submit', $arrBotonLimpiarSuplementario)    
             ->add('BtnEliminar', 'submit', $arrBotonEliminar)
             ->getForm();
         return $form;
@@ -939,7 +980,27 @@ class SeguridadSocialPeriodosController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
-
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'NÚMERO')
@@ -997,7 +1058,79 @@ class SeguridadSocialPeriodosController extends Controller
 
         $objPHPExcel->getActiveSheet()->setTitle('Pagos '.$dateFechaPeriodo);
         $objPHPExcel->setActiveSheetIndex(0);
+        
+        $objPHPExcel->createSheet(2)->setTitle('detalles'.$dateFechaPeriodo)
+                ->setCellValue('A1', 'CÓDIGO DETALLE')
+                ->setCellValue('B1', 'CÓDIGO PAGO')
+                ->setCellValue('C1', 'CONCEPTO PAGO')
+                ->setCellValue('D1', 'IDENTIFICACIÓN')
+                ->setCellValue('E1', 'EMPLEADO')
+                ->setCellValue('F1', 'CENTRO COSTO')
+                ->setCellValue('G1', 'FECHA PAGO DESDE')
+                ->setCellValue('H1', 'FECHA PAGO HASTA')
+                ->setCellValue('I1', 'VR PAGO')
+                ->setCellValue('J1', 'VR HORA')
+                ->setCellValue('K1', 'VR DÍA')
+                ->setCellValue('L1', 'NÚMERO HORAS')
+                ->setCellValue('M1', 'NÚMERO DÍAS')
+                ->setCellValue('N1', 'PORCENTAJE APLICADO')
+                ->setCellValue('O1', 'VR INGRESO BASE COTIZACIÓN')    
+                ->setCellValue('P1', 'CÓDIGO PROGRAMACION PAGO DETALLE')
+                ->setCellValue('Q1', 'CÓDIGO CRÉDITO')
+                ->setCellValue('R1', 'VR INGRESO BASE PRESTACIONAL')
+                ->setCellValue('S1', 'DÍAS AUSENTIMO');
 
+        $i = 2;
+        $arPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo();
+        $arPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->find($codigoPeriodo);
+        $dateFechaPeriodo = $arPeriodo->getFechaDesde()->format('Y-m-d'). ' - ' . $arPeriodo->getFechaHasta()->format('Y-m-d');
+        $arPagosDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+        $arPagosDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->listaDqlPagosDetallePeriodoAportes($arPeriodo->getFechaDesde(),$arPeriodo->getFechaHasta());
+        
+        foreach ($arPagosDetalle as $arPagoDetalle) {
+        $objPHPExcel->getActiveSheet()->getStyle('A1:S1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
+        $objPHPExcel->setActiveSheetIndex(1)
+                ->setCellValue('A' . $i, $arPagoDetalle->getCodigoPagoDetallePk())
+                ->setCellValue('B' . $i, $arPagoDetalle->getCodigoPagoFk())
+                ->setCellValue('C' . $i, $arPagoDetalle->getPagoConceptoRel()->getNombre())
+                ->setCellValue('D' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getNumeroIdentificacion())
+                ->setCellValue('E' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getNombreCorto())
+                ->setCellValue('F' . $i, $arPagoDetalle->getPagoRel()->getCentroCostoRel()->getNombre())
+                ->setCellValue('G' . $i, $arPagoDetalle->getPagoRel()->getFechaDesdePago())
+                ->setCellValue('H' . $i, $arPagoDetalle->getPagoRel()->getFechaHastaPago())
+                ->setCellValue('I' . $i, $arPagoDetalle->getVrPago())
+                ->setCellValue('J' . $i, $arPagoDetalle->getVrHora())
+                ->setCellValue('K' . $i, $arPagoDetalle->getVrDia())
+                ->setCellValue('L' . $i, $arPagoDetalle->getNumeroHoras())
+                ->setCellValue('M' . $i, $arPagoDetalle->getNumeroDias())
+                ->setCellValue('N' . $i, $arPagoDetalle->getPorcentajeAplicado())
+                ->setCellValue('O' . $i, $arPagoDetalle->getVrIngresoBaseCotizacion())
+                ->setCellValue('P' . $i, $arPagoDetalle->getCodigoProgramacionPagoDetalleFk())
+                ->setCellValue('Q' . $i, $arPagoDetalle->getCodigoCreditoFk())
+                ->setCellValue('R' . $i, $arPagoDetalle->getVrIngresoBasePrestacion())
+                ->setCellValue('S' . $i, $arPagoDetalle->getDiasAusentismo());
+        $i++;
+        }
+                
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="Pagos '.$dateFechaPeriodo.'.xlsx"');
@@ -1015,7 +1148,7 @@ class SeguridadSocialPeriodosController extends Controller
     }
     
     private function generarPagosDetallePeriodoExcel($codigoPeriodo) {
-        ob_clean();
+    /*    ob_clean();
         $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
         // Set document properties
@@ -1095,7 +1228,7 @@ class SeguridadSocialPeriodosController extends Controller
         header ('Pragma: public'); // HTTP/1.0
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
-        exit;
+        exit;*/
     }
     
     private function generarAportesPeriodoExcel($codigoPeriodo) {
@@ -1111,7 +1244,65 @@ class SeguridadSocialPeriodosController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
-
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AA')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AC')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AD')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AE')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AF')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AG')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AH')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AI')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AJ')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AK')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AL')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AM')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AN')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AO')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AP')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AQ')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AR')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AS')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AT')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AU')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AV')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AW')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AX')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AY')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AZ')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BA')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BB')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BC')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BD')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BE')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('BF')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'SUCURSAL')
