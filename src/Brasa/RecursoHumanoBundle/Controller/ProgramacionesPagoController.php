@@ -359,18 +359,21 @@ class ProgramacionesPagoController extends Controller
     private function formularioDetalle($arProgramacionPago) {
 
         //$arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-        
+        $arrBotonAplicarDiaLaborado = array('label' => 'Aplicar dia laborado', 'disabled' => false);
+        $arrBotonRetirarConcepto = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonGenerarEmpleados = array('label' => 'Analizar contratos', 'disabled' => false);
         $arrBotonEliminarEmpleados = array('label' => 'Eliminar', 'disabled' => false);        
         if($arProgramacionPago->getEstadoGenerado() == 1) {            
             $arrBotonGenerarEmpleados['disabled'] = true;         
-            $arrBotonEliminarEmpleados['disabled'] = true;         
+            $arrBotonEliminarEmpleados['disabled'] = true;
+            $arrBotonRetirarConcepto['disabled'] = true;
+            $arrBotonAplicarDiaLaborado['disabled'] = true;
         }
         $form = $this->createFormBuilder()    
                     ->add('BtnGenerarEmpleados', 'submit', $arrBotonGenerarEmpleados)                        
                     ->add('BtnEliminarEmpleados', 'submit', $arrBotonEliminarEmpleados)
-                    ->add('BtnRetirarConcepto', 'submit', array('label'  => 'Eliminar',))
-                    ->add('BtnAplicaDiaLaborado', 'submit', array('label'  => 'Aplicar a dia laborado',))
+                    ->add('BtnRetirarConcepto', 'submit', $arrBotonRetirarConcepto)
+                    ->add('BtnAplicaDiaLaborado', 'submit', $arrBotonAplicarDiaLaborado)
                     ->getForm();  
         return $form;
     }    
