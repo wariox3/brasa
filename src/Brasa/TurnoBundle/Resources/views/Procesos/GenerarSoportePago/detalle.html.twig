@@ -57,13 +57,17 @@
 
             {% endfor %}
         </table>
-        <div class="btn-group" style="float: left">
-            <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_proceso_generar_soporte_pago') }}">Volver</a>            
+        <div class="btn-toolbar" style="float: left">
+            <div class="btn-group">
+                <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_proceso_generar_soporte_pago') }}">Volver</a>            
+            </div>
+            <!-- Botones Menu Items -->
+            <div class="btn-group">
+                    <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arSoportesPagos.getTotalItemCount }}</span></div>
+            </div>            
         </div>
-        <!-- Botones Menu Items -->
-        <div class="btn-group" style="float: left">
-                <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arSoportesPagos.getTotalItemCount }}</span></div>
-        </div>
+
+        
         <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
                 {{ knp_pagination_render(arSoportesPagos) }}
         </div>

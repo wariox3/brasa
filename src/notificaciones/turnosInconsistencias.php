@@ -92,8 +92,62 @@ if($arrTurnosDobles) {
     $strMensaje .= "</table><br /><br />";    
 }
 
+// Recursos sin turnos
+$arrSinTurnos = array();
+for ($i = 1; $i <= $strUltimoDiaMes; $i++) {
+    $strSql = "SELECT codigo_recurso_pk FROM tur_recurso WHERE estado_activo = 1";
+    $arRecursos = $servidor->query($strSql);
+    while ($arRecurso = $arRecursos->fetch_assoc()) {
+        $codigoRecurso = $arRecurso['codigo_recurso_pk'];
+        $strSql = "SELECT
+                        codigo_recurso_fk AS codigoRecursoFk, 
+                        tur_recurso.nombre_corto AS nombreCorto,
+                        tur_recurso.numero_identificacion AS numeroIdentificacion,
+                        COUNT(dia_$i) AS numero
+                        FROM
+                        tur_programacion_detalle
+                        LEFT JOIN tur_recurso ON tur_programacion_detalle.codigo_recurso_fk = tur_recurso.codigo_recurso_pk                                
+                        WHERE
+                        anio = $strAnio AND mes = $strMes AND codigo_recurso_fk = $codigoRecurso
+                        GROUP BY
+                        codigo_recurso_fk";   
+        $arProgramacionesDetalles = $servidor->query($strSql);
+        if ($arProgramacionesDetalles->num_rows > 0) {
+            while ($arProgramacionDetalle = $arProgramacionesDetalles->fetch_assoc()) {
+                if($arProgramacionDetalle['numero'] <= 0) {
+                    $arrSinTurnos[] = array(
+                    'codigo' => $arProgramacionDetalle['codigoRecursoFk'],
+                    'identificacion' => $arProgramacionDetalle['numeroIdentificacion'],
+                    'nombre' => $arProgramacionDetalle['nombreCorto'],
+                    'dia' => $i
+                );                  
+                }
+            }
+        }
+    }       
+}
+if($arrSinTurnos) {
+    $strMensaje .= "Los siguientes recursos no tienen turno asignado el mes $strMes año $strAnio<br /><br />";
+    $strMensaje .= "<table border='2'>";
+    $strMensaje .= "<tr>";
+    $strMensaje .= "<th>CODIGO</th>";
+    $strMensaje .= "<th>IDENTIFICACION</th>";
+    $strMensaje .= "<th>NOMBRE</th>";
+    $strMensaje .= "<th>DIA</th>";
+    $strMensaje .= "</tr>";
+    foreach ($arrSinTurnos as $recurso) {
+        $strMensaje .= "<tr>";
+        $strMensaje .= "<td>" . $recurso['codigo'] . "</td>";
+        $strMensaje .= "<td>" . $recurso['identificacion'] . "</td>";
+        $strMensaje .= "<td>" . $recurso['nombre'] . "</td>";
+        $strMensaje .= "<td>" . $recurso['dia'] . "</td>";
+        $strMensaje .= "</tr>";
+    }
+    $strMensaje .= "</table><br /><br />";    
+}
+
 //Enviar mensaje
-if ($arrRecursosSinProgramacion || $arrTurnosDobles) {
+if ($arrRecursosSinProgramacion || $arrTurnosDobles || $arrSinTurnos) {
     $strMensaje .= "Por favor no conteste este mensaje, para comunicarse con servicio al cliente marque 4448120 ext 131<br /><br />";
     $strMensaje = utf8_decode($strMensaje);
     $arrDirecciones = direcciones('correo_turno_inconsistencia', $servidor);

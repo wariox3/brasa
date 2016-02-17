@@ -21,85 +21,12 @@ class UtilidadProgramacionInconsistenciaController extends Controller
             if($form->get('BtnGenerar')->isClicked()) {          
                 $dateFecha = $form->get('fecha')->getData();
                 $strAnio = $dateFecha->format('Y');
-                $strMes = $dateFecha->format('m');                                
-                //Verificar turnos dobles
-                for($i = 1; $i <= 31; $i++) {
-                    $strSql = "SELECT
-                                codigo_recurso_fk as codigoRecursoFk, 
-                                tur_recurso.nombre_corto as nombreCorto,                                                                   
-                                COUNT(dia_$i) AS numero
-                                FROM
-                                tur_programacion_detalle
-                                LEFT JOIN tur_recurso ON tur_programacion_detalle.codigo_recurso_fk = tur_recurso.codigo_recurso_pk                                
-                                WHERE
-                                dia_$i IS NOT NULL AND anio = $strAnio AND mes = $strMes
-                                GROUP BY
-                                codigo_recurso_fk"; 
-                    $connection = $em->getConnection();
-                    $statement = $connection->prepare($strSql);        
-                    $statement->execute();
-                    $results = $statement->fetchAll();
-                    if(count($results) > 0) {
-                        foreach ($results as $registro) {
-                            if($registro['numero'] > 1) {
-                                $arProgramacionInconsistencia = new \Brasa\TurnoBundle\Entity\TurProgramacionInconsistencia();
-                                $arProgramacionInconsistencia->setInconsistencia('Asignacion doble de turno');
-                                $arProgramacionInconsistencia->setDetalle("Recurso " . $registro['codigoRecursoFk'] . " " . 
-                                        $registro['nombreCorto'] . " dia " . $i);
-                                $em->persist($arProgramacionInconsistencia);                                
-                            }
-                        }                        
-                    }                        
-                }
-                $em->flush();
-                //Recursos sin programacion en el mes
+                $strMes = $dateFecha->format('m'); 
                 $arRecursos = new \Brasa\TurnoBundle\Entity\TurRecurso();
                 $arRecursos =  $em->getRepository('BrasaTurnoBundle:TurRecurso')->findBy(array('estadoActivo' => 1));                
-                foreach ($arRecursos as $arRecurso) {
-                    $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
-                    $arProgramacionDetalle =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoRecursoFk' => $arRecurso->getCodigoRecursoPk(), 'anio' => $strAnio, 'mes' => $strMes));                
-                    if(count($arProgramacionDetalle) <= 0) {
-                        $arProgramacionInconsistencia = new \Brasa\TurnoBundle\Entity\TurProgramacionInconsistencia();
-                        $arProgramacionInconsistencia->setInconsistencia('Recurso sin programacion en el mes');
-                        $arProgramacionInconsistencia->setDetalle("El recurso " . $arRecurso->getCodigoRecursoPk() . " " . $arRecurso->getNombreCorto() . " no registra programaciones para el mes");
-                        $em->persist($arProgramacionInconsistencia);                         
-                    }
-                }
-                $em->flush();
-                $strUltimoDiaMes = date("d",(mktime(0,0,0,$strMes+1,1,$strAnio)-1));
-                //Recursos sin turno en programacion
-                foreach ($arRecursos as $arRecurso) {
-                    for($i = 1; $i <= $strUltimoDiaMes; $i++) {
-                        $codigoRecurso = $arRecurso->getCodigoRecursoPk();
-                        $strSql = "SELECT
-                                    codigo_recurso_fk AS codigoRecursoFk, 
-                                    tur_recurso.nombre_corto AS nombreCorto,                                                                   
-                                    COUNT(dia_$i) AS numero
-                                    FROM
-                                    tur_programacion_detalle
-                                    LEFT JOIN tur_recurso ON tur_programacion_detalle.codigo_recurso_fk = tur_recurso.codigo_recurso_pk                                
-                                    WHERE
-                                    anio = $strAnio AND mes = $strMes AND codigo_recurso_fk = $codigoRecurso
-                                    GROUP BY
-                                    codigo_recurso_fk";   
-                        $connection = $em->getConnection();
-                        $statement = $connection->prepare($strSql);        
-                        $statement->execute();
-                        $results = $statement->fetchAll();
-                        if(count($results) > 0) {
-                            foreach ($results as $registro) {
-                                if($registro['numero'] <= 0) {
-                                    $arProgramacionInconsistencia = new \Brasa\TurnoBundle\Entity\TurProgramacionInconsistencia();
-                                    $arProgramacionInconsistencia->setInconsistencia('Sin turno asignado');
-                                    $arProgramacionInconsistencia->setDetalle("Recurso " . $registro['codigoRecursoFk'] . " " . 
-                                            $registro['nombreCorto'] . " dia " . $i);
-                                    $em->persist($arProgramacionInconsistencia);                                
-                                }
-                            }                        
-                        }                         
-                    }                    
-                }
-                $em->flush();
+                $this->recursosTurnoDoble($strAnio, $strMes);
+                $this->recursosSinProgramacionMes($arRecursos, $strAnio, $strMes);
+                $this->recursosSinTurno($arRecursos, $strAnio, $strMes);
                 return $this->redirect($this->generateUrl('brs_tur_utilidad_programacion_inconsistencias')); 
             } 
             if($form->get('BtnEliminar')->isClicked()) {            
@@ -112,7 +39,7 @@ class UtilidadProgramacionInconsistenciaController extends Controller
             }
         }                 
         $dql = $em->getRepository('BrasaTurnoBundle:TurProgramacionInconsistencia')->listaDql();
-        $arProgramacionInconsistencias = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 50);
+        $arProgramacionInconsistencias = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 200);
         return $this->render('BrasaTurnoBundle:Utilidades/Programaciones:inconsistencias.html.twig', array(            
             'arProgramacionInconsistencias' => $arProgramacionInconsistencias,
             'form' => $form->createView()));
@@ -180,6 +107,98 @@ class UtilidadProgramacionInconsistenciaController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }    
+    } 
+    
+    private function recursosSinProgramacionMes($arRecursos, $strAnio, $strMes) {
+        $em = $this->getDoctrine()->getManager();
+        foreach ($arRecursos as $arRecurso) {
+            $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+            $arProgramacionDetalle =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoRecursoFk' => $arRecurso->getCodigoRecursoPk(), 'anio' => $strAnio, 'mes' => $strMes));                
+            if(count($arProgramacionDetalle) <= 0) {
+                $arProgramacionInconsistencia = new \Brasa\TurnoBundle\Entity\TurProgramacionInconsistencia();
+                $arProgramacionInconsistencia->setInconsistencia('Recurso sin programacion en el mes');
+                $arProgramacionInconsistencia->setDetalle("El recurso " . $arRecurso->getCodigoRecursoPk() . " " . $arRecurso->getNombreCorto() . " no registra programaciones para el mes");
+                $em->persist($arProgramacionInconsistencia);                         
+            }
+        }
+        $em->flush();    
+        return TRUE;
+    }
+    
+    private function recursosSinTurno($arRecursos, $strAnio, $strMes) {
+        $em = $this->getDoctrine()->getManager();
+        $strUltimoDiaMes = date("d",(mktime(0,0,0,$strMes+1,1,$strAnio)-1));
+        //Recursos sin turno en programacion
+        foreach ($arRecursos as $arRecurso) {
+            for($i = 1; $i <= $strUltimoDiaMes; $i++) {
+                $codigoRecurso = $arRecurso->getCodigoRecursoPk();
+                $strSql = "SELECT
+                            codigo_recurso_fk AS codigoRecursoFk, 
+                            tur_recurso.nombre_corto AS nombreCorto,
+                            tur_recurso.numero_identificacion AS numeroIdentificacion,
+                            COUNT(dia_$i) AS numero
+                            FROM
+                            tur_programacion_detalle
+                            LEFT JOIN tur_recurso ON tur_programacion_detalle.codigo_recurso_fk = tur_recurso.codigo_recurso_pk                                
+                            WHERE
+                            anio = $strAnio AND mes = $strMes AND codigo_recurso_fk = $codigoRecurso
+                            GROUP BY
+                            codigo_recurso_fk";   
+                $connection = $em->getConnection();
+                $statement = $connection->prepare($strSql);        
+                $statement->execute();
+                $results = $statement->fetchAll();
+                if(count($results) > 0) {
+                    foreach ($results as $registro) {
+                        if($registro['numero'] <= 0) {
+                            $arProgramacionInconsistencia = new \Brasa\TurnoBundle\Entity\TurProgramacionInconsistencia();
+                            $arProgramacionInconsistencia->setInconsistencia('Sin turno asignado');
+                            $arProgramacionInconsistencia->setDetalle("Recurso " . $registro['codigoRecursoFk'] . " " .
+                            "Identificacion: " . $registro['numeroIdentificacion'] . " " .
+                            $registro['nombreCorto'] . " dia " . $i);
+                            $em->persist($arProgramacionInconsistencia);                                
+                        }
+                    }                        
+                }                         
+            }                    
+        }
+        $em->flush();               
+        return TRUE;
+    }
+    
+    private function recursosTurnoDoble($strAnio, $strMes) {
+        $em = $this->getDoctrine()->getManager();                               
+        //Verificar turnos dobles
+        for($i = 1; $i <= 31; $i++) {
+            $strSql = "SELECT
+                        codigo_recurso_fk as codigoRecursoFk, 
+                        tur_recurso.nombre_corto as nombreCorto,                                                                   
+                        COUNT(dia_$i) AS numero
+                        FROM
+                        tur_programacion_detalle
+                        LEFT JOIN tur_recurso ON tur_programacion_detalle.codigo_recurso_fk = tur_recurso.codigo_recurso_pk                                
+                        WHERE
+                        dia_$i IS NOT NULL AND anio = $strAnio AND mes = $strMes
+                        GROUP BY
+                        codigo_recurso_fk"; 
+            $connection = $em->getConnection();
+            $statement = $connection->prepare($strSql);        
+            $statement->execute();
+            $results = $statement->fetchAll();
+            if(count($results) > 0) {
+                foreach ($results as $registro) {
+                    if($registro['numero'] > 1) {
+                        $arProgramacionInconsistencia = new \Brasa\TurnoBundle\Entity\TurProgramacionInconsistencia();
+                        $arProgramacionInconsistencia->setInconsistencia('Asignacion doble de turno');
+                        $arProgramacionInconsistencia->setDetalle("Recurso " . $registro['codigoRecursoFk'] . " " . 
+                                $registro['nombreCorto'] . " dia " . $i);
+                        $em->persist($arProgramacionInconsistencia);                                
+                    }
+                }                        
+            }                        
+        }
+        $em->flush();        
+        return TRUE;
+    }
 
 }

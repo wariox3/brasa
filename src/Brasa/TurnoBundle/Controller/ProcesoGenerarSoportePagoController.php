@@ -35,54 +35,9 @@ class ProcesoGenerarSoportePagoController extends Controller
                         $dateFecha2 = date_create($dateFecha2);
                         $boolFestivo = $this->festivo($arFestivos, $dateFecha);
                         $boolFestivo2 = $this->festivo($arFestivos, $dateFecha2);
-                        $arTurno = NULL;
-                        if($i == 1) {
-                            $arTurno = $arProgramacionDetalle->getDia1();
-                        }
-                        if($i == 2) {
-                            $arTurno = $arProgramacionDetalle->getDia2();
-                        }
-                        if($i == 3) {
-                            $arTurno = $arProgramacionDetalle->getDia3();
-                        }
-                        if($i == 4) {
-                            $arTurno = $arProgramacionDetalle->getDia4();
-                        }
-                        if($i == 5) {
-                            $arTurno = $arProgramacionDetalle->getDia5();
-                        }
-                        if($i == 6) {
-                            $arTurno = $arProgramacionDetalle->getDia6();
-                        }
-                        if($i == 7) {
-                            $arTurno = $arProgramacionDetalle->getDia7();
-                        }
-                        if($i == 8) {
-                            $arTurno = $arProgramacionDetalle->getDia8();
-                        }
-                        if($i == 9) {
-                            $arTurno = $arProgramacionDetalle->getDia9();
-                        }
-                        if($i == 10) {
-                            $arTurno = $arProgramacionDetalle->getDia10();
-                        }
-                        if($i == 11) {
-                            $arTurno = $arProgramacionDetalle->getDia11();
-                        }
-                        if($i == 12) {
-                            $arTurno = $arProgramacionDetalle->getDia12();
-                        }
-                        if($i == 13) {
-                            $arTurno = $arProgramacionDetalle->getDia13();
-                        }
-                        if($i == 14) {
-                            $arTurno = $arProgramacionDetalle->getDia14();
-                        }
-                        if($i == 15) {
-                            $arTurno = $arProgramacionDetalle->getDia15();
-                        }
-                        if($arTurno) {
-                            $this->insertarSoportePago($arSoportePagoPeriodo, $arProgramacionDetalle, $dateFechaDesde, $dateFechaHasta, $arTurno, $dateFecha, $dateFecha2, $boolFestivo, $boolFestivo2);
+                        $strTurno = $this->devuelveTurnoDia($arProgramacionDetalle, $i);                        
+                        if($strTurno) {
+                            $this->insertarSoportePago($arSoportePagoPeriodo, $arProgramacionDetalle, $dateFechaDesde, $dateFechaHasta, $strTurno, $dateFecha, $dateFecha2, $boolFestivo, $boolFestivo2);
                         }
                     }                        
                     //}
@@ -96,8 +51,10 @@ class ProcesoGenerarSoportePagoController extends Controller
             }
             if($request->request->get('OpDeshacer')) {
                 $codigoSoportePagoPeriodo = $request->request->get('OpDeshacer');
+                $arSoportePagoPeriodo = NEW \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
                 $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
                 $arSoportePagoPeriodo->setEstadoGenerado(0);
+                $arSoportePagoPeriodo->setRecursos(0);
                 $em->persist($arSoportePagoPeriodo);
                 $em->flush();  
                 $strSql = "DELETE FROM tur_soporte_pago_detalle WHERE codigo_soporte_pago_periodo_fk = " . $codigoSoportePagoPeriodo;           
@@ -218,10 +175,15 @@ class ProcesoGenerarSoportePagoController extends Controller
     }
     
     private function insertarSoportePago ($arSoportePagoPeriodo, $arProgramacionDetalle, $dateFechaDesde, $dateFechaHasta, $codigoTurno, $dateFecha, $dateFecha2, $boolFestivo, $boolFestivo2) {
-        $em = $this->getDoctrine()->getManager();        
-        
+        $em = $this->getDoctrine()->getManager();                
+        $strTurnoFijoNomina = $arProgramacionDetalle->getRecursoRel()->getCodigoTurnoFijoNominaFk();
         $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
         $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($codigoTurno);
+        if($arTurno->getDescanso() == 0) {                
+            if($strTurnoFijoNomina) {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($strTurnoFijoNomina);
+            }                
+        }                
         $intDias = 0;
 
         $intHoraInicio = $arTurno->getHoraDesde()->format('G');
@@ -261,6 +223,10 @@ class ProcesoGenerarSoportePagoController extends Controller
             $arSoportePagoDetalle->setHorasFestivasNocturnas($arrHoras['horasFestivasNocturnas']);        
             $arSoportePagoDetalle->setHorasExtrasFestivasDiurnas($arrHoras['horasExtrasFestivasDiurnas']);
             $arSoportePagoDetalle->setHorasExtrasFestivasNocturnas($arrHoras['horasExtrasFestivasNocturnas']);
+            if($strTurnoFijoNomina) {
+                $arSoportePagoDetalle->setHorasDiurnas($arrHoras['horasDiurnas'] + $arrHoras['horasFestivasDiurnas']);
+                $arSoportePagoDetalle->setHorasFestivasDiurnas(0);
+            }
             $em->persist($arSoportePagoDetalle);
 
             if($arrHoras1) {
@@ -521,4 +487,101 @@ class ProcesoGenerarSoportePagoController extends Controller
         return $arrHoras;
     }
     
+    private function devuelveTurnoDia($arProgramacionDetalle, $intDia) {        
+        $strTurno = NULL;
+        if($intDia == 1) {
+            $strTurno = $arProgramacionDetalle->getDia1();
+        }
+        if($intDia == 2) {
+            $strTurno = $arProgramacionDetalle->getDia2();
+        }
+        if($intDia == 3) {
+            $strTurno = $arProgramacionDetalle->getDia3();
+        }
+        if($intDia == 4) {
+            $strTurno = $arProgramacionDetalle->getDia4();
+        }
+        if($intDia == 5) {
+            $strTurno = $arProgramacionDetalle->getDia5();
+        }
+        if($intDia == 6) {
+            $strTurno = $arProgramacionDetalle->getDia6();
+        }
+        if($intDia == 7) {
+            $strTurno = $arProgramacionDetalle->getDia7();
+        }
+        if($intDia == 8) {
+            $strTurno = $arProgramacionDetalle->getDia8();
+        }
+        if($intDia == 9) {
+            $strTurno = $arProgramacionDetalle->getDia9();
+        }
+        if($intDia == 10) {
+            $strTurno = $arProgramacionDetalle->getDia10();
+        }
+        if($intDia == 11) {
+            $strTurno = $arProgramacionDetalle->getDia11();
+        }
+        if($intDia == 12) {
+            $strTurno = $arProgramacionDetalle->getDia12();
+        }
+        if($intDia == 13) {
+            $strTurno = $arProgramacionDetalle->getDia13();
+        }
+        if($intDia == 14) {
+            $strTurno = $arProgramacionDetalle->getDia14();
+        }
+        if($intDia == 15) {
+            $strTurno = $arProgramacionDetalle->getDia15();
+        }
+        if($intDia == 16) {
+            $strTurno = $arProgramacionDetalle->getDia16();
+        }
+        if($intDia == 17) {
+            $strTurno = $arProgramacionDetalle->getDia17();
+        }
+        if($intDia == 18) {
+            $strTurno = $arProgramacionDetalle->getDia18();
+        }
+        if($intDia == 19) {
+            $strTurno = $arProgramacionDetalle->getDia19();
+        }
+        if($intDia == 20) {
+            $strTurno = $arProgramacionDetalle->getDia20();
+        }
+        if($intDia == 21) {
+            $strTurno = $arProgramacionDetalle->getDia21();
+        }
+        if($intDia == 22) {
+            $strTurno = $arProgramacionDetalle->getDia22();
+        }
+        if($intDia == 23) {
+            $strTurno = $arProgramacionDetalle->getDia23();
+        }
+        if($intDia == 24) {
+            $strTurno = $arProgramacionDetalle->getDia24();
+        }
+        if($intDia == 25) {
+            $strTurno = $arProgramacionDetalle->getDia25();
+        }
+        if($intDia == 26) {
+            $strTurno = $arProgramacionDetalle->getDia26();
+        }
+        if($intDia == 27) {
+            $strTurno = $arProgramacionDetalle->getDia27();
+        }
+        if($intDia == 28) {
+            $strTurno = $arProgramacionDetalle->getDia28();
+        }
+        if($intDia == 29) {
+            $strTurno = $arProgramacionDetalle->getDia29();
+        }
+        if($intDia == 30) {
+            $strTurno = $arProgramacionDetalle->getDia30();
+        }        
+        if($intDia == 31) {
+            $strTurno = $arProgramacionDetalle->getDia31();
+        }
+        return $strTurno;
+    }
 }

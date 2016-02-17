@@ -63,8 +63,8 @@
     </div>                   
                 
     <ul class="nav nav-tabs">
-            <li  class="active"><a href="#empleados" data-toggle="tab">Empleados</a></li>
-            <li><a href="#adicionalesPago" data-toggle="tab">Adicionales al pago</a></li>
+            <li  class="active"><a href="#empleados" data-toggle="tab">Empleados <span class="badge">{{ arProgramacionPagoDetalles.getTotalItemCount }}</span></a></li>
+            <li><a href="#adicionalesPago" data-toggle="tab">Adicionales al pago <span class="badge">{{ arPagosAdicionales.getTotalItemCount }}</span></a></li>
             <li><a href="#incapacidades" data-toggle="tab">Incapacidades</a></li>
             <li><a href="#licencias" data-toggle="tab">Licencias</a></li>
             
@@ -246,9 +246,6 @@
         <div class="btn-toolbar" style="float: left">
             <div class="btn-group">
                 <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_programaciones_pago_lista') }}" style="float:left">Volver</a>
-            </div>
-            <div class="btn-group" style="float: left">
-                <div class="btn btn-default btn-sm">Programación pago detalles <span class="badge">{{ arProgramacionPagoDetalles.getTotalItemCount }}</span></div>                        
             </div>
             <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
                 {{ knp_pagination_render(arProgramacionPagoDetalles) }}       

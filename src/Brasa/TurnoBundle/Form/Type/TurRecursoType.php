@@ -24,7 +24,8 @@ class TurRecursoType extends AbstractType
                 'property' => 'nombre',
                 'required' => true))                             
             ->add('numeroIdentificacion', 'text', array('required' => true))                             
-            ->add('nombreCorto', 'text', array('required' => true))                  
+            ->add('nombreCorto', 'text', array('required' => true))
+            ->add('codigoTurnoFijoNominaFk', 'text', array('required' => false))
             ->add('apodo', 'text', array('required' => false))    
             ->add('telefono', 'text', array('required' => false))
             ->add('celular', 'text', array('required' => false))
