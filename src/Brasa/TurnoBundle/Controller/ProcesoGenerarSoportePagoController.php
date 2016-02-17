@@ -179,7 +179,7 @@ class ProcesoGenerarSoportePagoController extends Controller
         $strTurnoFijoNomina = $arProgramacionDetalle->getRecursoRel()->getCodigoTurnoFijoNominaFk();
         $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
         $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($codigoTurno);
-        if($arTurno->getDescanso() == 0) {                
+        if($arTurno->getDescanso() == 0 && $arTurno->getNovedad() == 0) {                
             if($strTurnoFijoNomina) {
                 $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($strTurnoFijoNomina);
             }                
