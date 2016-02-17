@@ -1,196 +1,204 @@
 {% extends '::base.html.twig' %}
 {% block title %}Servicio detalle - Soga App{% endblock %}
 {% block content %}
-<script>
-    $('#myTab a').click(function(e) {
-        e.preventDefault();
-        $(this).tab('show');
-    })
-</script>
-<div class="container">
-    <div class="page-header">
-        <h3>Detalle servicio</h3>
-    </div>
-    {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
-    {{ form_errors(form) }}
-    <div class="btn-toolbar" style="float:left">
-        <div class="btn-group">
-            {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}            
-            {{ form_widget(form.BtnCerrar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+    <script>
+        $('#myTab a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+    </script>
+    <div class="container">
+        <div class="page-header">
+            <h3>Detalle servicio</h3>
         </div>
-    </div>
-    <br /><br />
-    <!-- Encabezado Movimiento -->
-    <div class="panel panel-default">
-      <div class="panel-heading">Información</div>
-      <div class="panel-body">
-            <table width="100%" class="table table-condensed table-bordered">
-                <tr>
-                    <td class="titulo">CODIGO:</td>
-                    <td class="td-in-well">{{ arServicio.codigoServicioPk }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                </tr>
-                <tr>
-                    <td class="titulo">CLIENTE:</td>
-                    <td class="td-in-well">{{ arServicio.clienteRel.nombreCorto }}</td>
-                    <td class="titulo" >HORAS DIURNAS:</td>
-                    <td align="right">{{ arServicio.horasDiurnas | number_format(0, '.', ',')}}</td>
-                </tr> 
-                <tr>
-                    <td class="titulo">SECTOR:</td>
-                    <td class="td-in-well">{{ arServicio.sectorRel.nombre }}</td>
-                    <td class="titulo" >HORAS NOCTURNAS:</td>
-                    <td align="right">{{ arServicio.horasNocturnas | number_format(0, '.', ',')}}</td>
-                </tr>                 
-                <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                    <td class="titulo" >HORAS:</td>
-                    <td align="right">{{ arServicio.horas | number_format(0, '.', ',')}}</td>
-                </tr> 
-                <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                    <td class="titulo" >COSTO:</td>
-                    <td align="right">{{ arServicio.vrTotalCosto | number_format(0, '.', ',')}}</td>
-                </tr>                
-                <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                    <td class="titulo" >MINIMO:</td>
-                    <td align="right">{{ arServicio.vrTotalPrecioMinimo | number_format(0, '.', ',')}}</td>
-                </tr>                
-                <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                    <td class="titulo" >VALOR:</td>
-                    <td align="right">{{ arServicio.vrTotal | number_format(0, '.', ',')}}</td>
-                </tr>                 
-            </table>
-      </div>
-    </div>
+        {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+        {{ form_errors(form) }}
+        <div class="btn-toolbar" style="float:left">
+            <div class="btn-group">
+                <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_servicio_nuevo', {'codigoServicio': 0 }) }}">Nuevo</a>                
+                {% if arServicio.estadoAutorizado == 0 %}                    
+                    <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_servicio_nuevo', {'codigoServicio': arServicio.codigoServicioPk }) }}">Editar</a>                
+                {% endif %}            
+                {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}            
+                {{ form_widget(form.BtnCerrar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            </div>
+        </div>
+        <div style="float:right">
+            {% if arServicio.estadoAutorizado == 1 %}<span class="label label-default">Autorizado</span>{% endif %}            
+            {% if arServicio.estadoAnulado == 1 %}<span class="label label-danger">Anulado</span>{% endif %}
+        </div>            
+        <br /><br />
+        <!-- Encabezado Movimiento -->
+        <div class="panel panel-default">
+            <div class="panel-heading">Información</div>
+            <div class="panel-body">
+                <table width="100%" class="table table-condensed table-bordered">
+                    <tr>
+                        <td class="titulo">CODIGO:</td>
+                        <td class="td-in-well">{{ arServicio.codigoServicioPk }}</td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">CLIENTE:</td>
+                        <td class="td-in-well">{{ arServicio.clienteRel.nombreCorto }}</td>
+                        <td class="titulo" >HORAS DIURNAS:</td>
+                        <td align="right">{{ arServicio.horasDiurnas | number_format(0, '.', ',')}}</td>
+                    </tr> 
+                    <tr>
+                        <td class="titulo">SECTOR:</td>
+                        <td class="td-in-well">{{ arServicio.sectorRel.nombre }}</td>
+                        <td class="titulo" >HORAS NOCTURNAS:</td>
+                        <td align="right">{{ arServicio.horasNocturnas | number_format(0, '.', ',')}}</td>
+                    </tr>                 
+                    <tr>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo" >HORAS:</td>
+                        <td align="right">{{ arServicio.horas | number_format(0, '.', ',')}}</td>
+                    </tr> 
+                    <tr>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo" >COSTO:</td>
+                        <td align="right">{{ arServicio.vrTotalCosto | number_format(0, '.', ',')}}</td>
+                    </tr>                
+                    <tr>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo" >MINIMO:</td>
+                        <td align="right">{{ arServicio.vrTotalPrecioMinimo | number_format(0, '.', ',')}}</td>
+                    </tr>                
+                    <tr>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo" >VALOR:</td>
+                        <td align="right">{{ arServicio.vrTotal | number_format(0, '.', ',')}}</td>
+                    </tr>                 
+                </table>
+            </div>
+        </div>
 
-    <!-- Fin Encabezado Movimiento -->
+        <!-- Fin Encabezado Movimiento -->
 
-    <ul class="nav nav-tabs">
-        <li class="active"><a href="#tipos" data-toggle="tab">Detalle</a></li>
-    </ul>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#tipos" data-toggle="tab">Detalle</a></li>
+        </ul>
 
-    <div class="tab-content">
-        <div class="tab-pane active" id="tipos">
+        <div class="tab-content">
+            <div class="tab-pane active" id="tipos">
                 <!-- Menu Encabezado Movimiento -->
-            <div id="detalles" style="width: 100%"><br>
-            <table class="table table-striped table-bordered table-condensed">
-            <tr>
-                <th>COD</th>
-                <th>PUESTO</th>
-                <th></th>
-                <th>SERVICIO</th>
-                <th>MODALIDAD</th>
-                <th>PERIODO</th>
-                <th>PLANTILLA</th>
-                <th>DESDE</th>
-                <th>HASTA</th>
-                <th>CANT</th>
-                <th>LU</th>
-                <th>MA</th>
-                <th>MI</th>
-                <th>JU</th>
-                <th>VI</th>
-                <th>SA</th>
-                <th>DO</th>
-                <th>FE</th>
-                <th>HORAS</th>
-                <th>H.D</th>
-                <th>H.N</th>
-                <th>DIAS</th>
-                <th>P.MINIMO</th>
-                <th>P.AJUSTADO</th>
-                <th>TOTAL</th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tr>
-            {% for arServicioDetalle in arServicioDetalle %}
-                <tr>
-                    <td>{{ arServicioDetalle.codigoServicioDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arServicioDetalle.codigoServicioDetallePk }}"></td>
-                    {% if arServicio.estadoAutorizado == 0 %}
-                        <td>
-                            <input class="input-grid" type="text" name="TxtPuesto{{ arServicioDetalle.codigoServicioDetallePk }}" id="TxtPuesto{{ arServicioDetalle.codigoServicioDetallePk }}" value="{{ arServicioDetalle.codigoPuestoFk  }}" size="10" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/>
-                            <a href="javascript:abrirVentana3('{{ path('brs_tur_buscar_puesto', {'campoCodigo': 'TxtPuesto' ~ arServicioDetalle.codigoServicioDetallePk, 'codigoCliente' : arServicio.codigoClienteFk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Buscar"></a>                            
-                        </td>                        
-                    {% else %}
-                        <td>{{ arServicioDetalle.codigoPuestoFk }}</td> 
-                    {% endif %}
-                    <td>{{ arServicioDetalle.puestoRel.nombre | default('') }}</td> 
-                    <td>{{ arServicioDetalle.conceptoServicioRel.nombre  }}</td>                    
-                    <td>{{ arServicioDetalle.modalidadServicioRel.nombre  }}</td>                    
-                    <td>{{ arServicioDetalle.periodoRel.nombre  }}</td>
-                    <td>{% if arServicioDetalle.codigoPlantillaFk is not null %} <a href="{{ path('brs_tur_base_plantilla_detalle', { 'codigoPlantilla': arServicioDetalle.codigoPlantillaFk }) }}" target="_blanck">{% endif %}{{ arServicioDetalle.plantillaRel.nombre | default('')  }}</a> ({{ arServicioDetalle.fechaIniciaPlantilla | date('Y/m/d')  }})</td>                    
-                    <td>{{ arServicioDetalle.fechaDesde |date('Y/m/d') }}</td>    
-                    <td>{{ arServicioDetalle.fechaHasta |date('Y/m/d') }}</td>                    
-                    {% if arServicio.estadoAutorizado == 0 %}                        
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arServicioDetalle.codigoServicioDetallePk }}" value="{{ arServicioDetalle.cantidad  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
-                        <td><input type="checkbox" name="chkLunes{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.lunes == 1 %} checked="true" {% endif %}></td>
-                        <td><input type="checkbox" name="chkMartes{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.martes == 1 %} checked="true" {% endif %}></td>
-                        <td><input type="checkbox" name="chkMiercoles{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.miercoles == 1 %} checked="true" {% endif %}></td>
-                        <td><input type="checkbox" name="chkJueves{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.jueves == 1 %} checked="true" {% endif %}></td>
-                        <td><input type="checkbox" name="chkViernes{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.viernes == 1 %} checked="true" {% endif %}></td>
-                        <td><input type="checkbox" name="chkSabado{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.sabado == 1 %} checked="true" {% endif %}></td>
-                        <td><input type="checkbox" name="chkDomingo{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.domingo == 1 %} checked="true" {% endif %}></td>
-                        <td><input type="checkbox" name="chkFestivo{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.festivo == 1 %} checked="true" {% endif %}></td>                    
-                    {% else %}                            
-                        <td>{{ arServicioDetalle.cantidad  }}</td>                        
-                        <td>{% if arServicioDetalle.lunes == 1 %} SI {% else %} NO {% endif %}</td>
-                        <td>{% if arServicioDetalle.martes == 1 %} SI {% else %} NO {% endif %}</td>
-                        <td>{% if arServicioDetalle.miercoles == 1 %} SI {% else %} NO {% endif %}</td>
-                        <td>{% if arServicioDetalle.jueves == 1 %} SI {% else %} NO {% endif %}</td>
-                        <td>{% if arServicioDetalle.viernes == 1 %} SI {% else %} NO {% endif %}</td>
-                        <td>{% if arServicioDetalle.sabado == 1 %} SI {% else %} NO {% endif %}</td>
-                        <td>{% if arServicioDetalle.domingo == 1 %} SI {% else %} NO {% endif %}</td>
-                        <td>{% if arServicioDetalle.festivo == 1 %} SI {% else %} NO {% endif %}</td>
-                    {% endif %}
-                    <td style="text-align: right">{{ arServicioDetalle.horas | number_format(0, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arServicioDetalle.horasDiurnas | number_format(0, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arServicioDetalle.horasNocturnas | number_format(0, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arServicioDetalle.dias | number_format(0, '.', ',') }}</td>                     
-                    <td style="text-align: right">{{ arServicioDetalle.vrPrecioMinimo | number_format(0, '.', ',') }}</td> 
-                    {% if arServicio.estadoAutorizado == 0 %}
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorAjustado{{ arServicioDetalle.codigoServicioDetallePk }}" value="{{ arServicioDetalle.vrPrecioAjustado  }}" size="10" style="text-align: right; width:80px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
-                    {% else %}
-                        <td style="text-align: right">{{ arServicioDetalle.vrPrecioAjustado | number_format(0, '.', ',') }}</td> 
-                    {% endif %}                    
-                    <td style="text-align: right">{{ arServicioDetalle.vrTotalDetalle | number_format(0, '.', ',') }}</td> 
-                    <td>{% if arServicio.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_servicio_detalle_nuevo', {'codigoServicio': arServicioDetalle.codigoServicioFk, 'codigoServicioDetalle': arServicioDetalle.codigoServicioDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                    
-                    <td style="text-align: center"><a href="{{ path('brs_tur_servicio_detalle_recurso', { 'codigoServicioDetalle': arServicioDetalle.codigoServicioDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" width=22 height=22></a></td>                                    
-                    <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arServicioDetalle.codigoServicioDetallePk }}" /></td>
-                </tr>
-            {% endfor %}
-        </table>
-            </div>
-        </div>
-        <div class="btn-toolbar" style="float: right">
-            {% if arServicio.estadoAutorizado == 0 %}
-                <div class="btn-group">
-                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_servicio_detalle_nuevo', {'codigoServicio': arServicio.codigoServicioPk, 'codigoServicioDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
-                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_servicio_detalle_nuevo_cotizacion', {'codigoServicio': arServicio.codigoServicioPk, 'codigoServicioDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo de cotizacion</a>                
+                <div id="detalles" style="width: 100%"><br>
+                    <table class="table table-striped table-bordered table-condensed">
+                        <tr>
+                            <th>COD</th>
+                            <th>PUESTO</th>
+                            <th></th>
+                            <th>SERVICIO</th>
+                            <th>MODALIDAD</th>
+                            <th>PERIODO</th>
+                            <th>PLANTILLA</th>
+                            <th>DESDE</th>
+                            <th>HASTA</th>
+                            <th>CANT</th>
+                            <th>LU</th>
+                            <th>MA</th>
+                            <th>MI</th>
+                            <th>JU</th>
+                            <th>VI</th>
+                            <th>SA</th>
+                            <th>DO</th>
+                            <th>FE</th>
+                            <th>HORAS</th>
+                            <th>H.D</th>
+                            <th>H.N</th>
+                            <th>DIAS</th>
+                            <th>P.MINIMO</th>
+                            <th>P.AJUSTADO</th>
+                            <th>TOTAL</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        {% for arServicioDetalle in arServicioDetalle %}
+                            <tr>
+                                <td>{{ arServicioDetalle.codigoServicioDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arServicioDetalle.codigoServicioDetallePk }}"></td>
+                                    {% if arServicio.estadoAutorizado == 0 %}
+                                    <td>
+                                        <input class="input-grid" type="text" name="TxtPuesto{{ arServicioDetalle.codigoServicioDetallePk }}" id="TxtPuesto{{ arServicioDetalle.codigoServicioDetallePk }}" value="{{ arServicioDetalle.codigoPuestoFk  }}" size="10" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/>
+                                        <a href="javascript:abrirVentana3('{{ path('brs_tur_buscar_puesto', {'campoCodigo': 'TxtPuesto' ~ arServicioDetalle.codigoServicioDetallePk, 'codigoCliente' : arServicio.codigoClienteFk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Buscar"></a>                            
+                                    </td>                        
+                                {% else %}
+                                    <td>{{ arServicioDetalle.codigoPuestoFk }}</td> 
+                                {% endif %}
+                                <td>{{ arServicioDetalle.puestoRel.nombre | default('') }}</td> 
+                                <td>{{ arServicioDetalle.conceptoServicioRel.nombre  }}</td>                    
+                                <td>{{ arServicioDetalle.modalidadServicioRel.nombre  }}</td>                    
+                                <td>{{ arServicioDetalle.periodoRel.nombre  }}</td>
+                                <td>{% if arServicioDetalle.codigoPlantillaFk is not null %} <a href="{{ path('brs_tur_base_plantilla_detalle', { 'codigoPlantilla': arServicioDetalle.codigoPlantillaFk }) }}" target="_blanck">{% endif %}{{ arServicioDetalle.plantillaRel.nombre | default('')  }}</a> ({{ arServicioDetalle.fechaIniciaPlantilla | date('Y/m/d')  }})</td>                    
+                                <td>{{ arServicioDetalle.fechaDesde |date('Y/m/d') }}</td>    
+                                <td>{{ arServicioDetalle.fechaHasta |date('Y/m/d') }}</td>                    
+                                {% if arServicio.estadoAutorizado == 0 %}                        
+                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arServicioDetalle.codigoServicioDetallePk }}" value="{{ arServicioDetalle.cantidad  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
+                                    <td><input type="checkbox" name="chkLunes{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.lunes == 1 %} checked="true" {% endif %}></td>
+                                    <td><input type="checkbox" name="chkMartes{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.martes == 1 %} checked="true" {% endif %}></td>
+                                    <td><input type="checkbox" name="chkMiercoles{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.miercoles == 1 %} checked="true" {% endif %}></td>
+                                    <td><input type="checkbox" name="chkJueves{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.jueves == 1 %} checked="true" {% endif %}></td>
+                                    <td><input type="checkbox" name="chkViernes{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.viernes == 1 %} checked="true" {% endif %}></td>
+                                    <td><input type="checkbox" name="chkSabado{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.sabado == 1 %} checked="true" {% endif %}></td>
+                                    <td><input type="checkbox" name="chkDomingo{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.domingo == 1 %} checked="true" {% endif %}></td>
+                                    <td><input type="checkbox" name="chkFestivo{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.festivo == 1 %} checked="true" {% endif %}></td>                    
+                                    {% else %}                            
+                                    <td>{{ arServicioDetalle.cantidad  }}</td>                        
+                                    <td>{% if arServicioDetalle.lunes == 1 %} SI {% else %} NO {% endif %}</td>
+                                    <td>{% if arServicioDetalle.martes == 1 %} SI {% else %} NO {% endif %}</td>
+                                    <td>{% if arServicioDetalle.miercoles == 1 %} SI {% else %} NO {% endif %}</td>
+                                    <td>{% if arServicioDetalle.jueves == 1 %} SI {% else %} NO {% endif %}</td>
+                                    <td>{% if arServicioDetalle.viernes == 1 %} SI {% else %} NO {% endif %}</td>
+                                    <td>{% if arServicioDetalle.sabado == 1 %} SI {% else %} NO {% endif %}</td>
+                                    <td>{% if arServicioDetalle.domingo == 1 %} SI {% else %} NO {% endif %}</td>
+                                    <td>{% if arServicioDetalle.festivo == 1 %} SI {% else %} NO {% endif %}</td>
+                                {% endif %}
+                                <td style="text-align: right">{{ arServicioDetalle.horas | number_format(0, '.', ',') }}</td> 
+                                <td style="text-align: right">{{ arServicioDetalle.horasDiurnas | number_format(0, '.', ',') }}</td> 
+                                <td style="text-align: right">{{ arServicioDetalle.horasNocturnas | number_format(0, '.', ',') }}</td> 
+                                <td style="text-align: right">{{ arServicioDetalle.dias | number_format(0, '.', ',') }}</td>                     
+                                <td style="text-align: right">{{ arServicioDetalle.vrPrecioMinimo | number_format(0, '.', ',') }}</td> 
+                                {% if arServicio.estadoAutorizado == 0 %}
+                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorAjustado{{ arServicioDetalle.codigoServicioDetallePk }}" value="{{ arServicioDetalle.vrPrecioAjustado  }}" size="10" style="text-align: right; width:80px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
+                                    {% else %}
+                                    <td style="text-align: right">{{ arServicioDetalle.vrPrecioAjustado | number_format(0, '.', ',') }}</td> 
+                                {% endif %}                    
+                                <td style="text-align: right">{{ arServicioDetalle.vrTotalDetalle | number_format(0, '.', ',') }}</td> 
+                                <td>{% if arServicio.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_servicio_detalle_nuevo', {'codigoServicio': arServicioDetalle.codigoServicioFk, 'codigoServicioDetalle': arServicioDetalle.codigoServicioDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                    
+                                <td style="text-align: center"><a href="{{ path('brs_tur_servicio_detalle_recurso', { 'codigoServicioDetalle': arServicioDetalle.codigoServicioDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" width=22 height=22></a></td>                                    
+                                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arServicioDetalle.codigoServicioDetallePk }}" /></td>
+                            </tr>
+                        {% endfor %}
+                    </table>
                 </div>
-            {% endif %}            
-            <div class="btn-group">
-                {{ form_widget(form.BtnDetalleActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            </div>        
-            <div class="btn-group">
-                {{ form_widget(form.BtnDetalleEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+            </div>
+            <div class="btn-toolbar" style="float: right">
+                {% if arServicio.estadoAutorizado == 0 %}
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_servicio_detalle_nuevo', {'codigoServicio': arServicio.codigoServicioPk, 'codigoServicioDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_servicio_detalle_nuevo_cotizacion', {'codigoServicio': arServicio.codigoServicioPk, 'codigoServicioDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo de cotizacion</a>                
+                    </div>
+                {% endif %}            
+                <div class="btn-group">
+                    {{ form_widget(form.BtnDetalleActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                </div>        
+                <div class="btn-group">
+                    {{ form_widget(form.BtnDetalleEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+                </div>
             </div>
         </div>
-    </div>
 
 
         {{ form_rest(form) }}
-    {{ form_end(form) }}
-    <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_servicio_lista') }}">Volver</a>
-</div>
+        {{ form_end(form) }}
+        <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_servicio_lista') }}">Volver</a>
+    </div>
 {% endblock %}

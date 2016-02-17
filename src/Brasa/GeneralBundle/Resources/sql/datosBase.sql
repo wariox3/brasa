@@ -3799,9 +3799,9 @@ insert into `tur_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`)
 insert into `tur_concepto_servicio` (`codigo_concepto_servicio_pk`, `nombre`, `horas`, `horas_diurnas`, `horas_nocturnas`, `vr_costo`) values('1','24 HORAS','24','16','8','0');
 insert into `tur_concepto_servicio` (`codigo_concepto_servicio_pk`, `nombre`, `horas`, `horas_diurnas`, `horas_nocturnas`, `vr_costo`) values('2','12 HORAS','12','12','0','0');
 
-insert into `tur_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `comentarios`, `descanso`) values('1','DIURNO','06:00:00','18:00:00','12','12','0','0',NULL,'0');
-insert into `tur_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `comentarios`, `descanso`) values('2','NOCTURNO','18:00:00','06:00:00','12','4','8','0',NULL,'0');
-insert into `tur_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `comentarios`, `descanso`) values('D','DESCANSO','00:00:00','00:00:00','0','0','0','0',NULL,'1');
+insert into `tur_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_nomina`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `comentarios`, `descanso`) values('1','DIURNO','06:00:00','18:00:00','12', '12','12','0','0',NULL,'0');
+insert into `tur_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_nomina`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `comentarios`, `descanso`) values('2','NOCTURNO','18:00:00','06:00:00','12', '12','4','8','0',NULL,'0');
+insert into `tur_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_nomina`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `comentarios`, `descanso`) values('D','DESCANSO','06:00:00','14:00:00','0', '8','8','0','0',NULL,'1');
 
 insert into `tur_recurso_tipo` (`codigo_recurso_tipo_pk`, `nombre`) values('1','FIJO');
 insert into `tur_recurso_tipo` (`codigo_recurso_tipo_pk`, `nombre`) values('2','APOYO');

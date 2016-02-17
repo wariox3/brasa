@@ -18,7 +18,7 @@ class TurPedidoDetalleType extends AbstractType
                     ->setParameter('codigoCliente', $options['data']->getPedidoRel()->getCodigoClienteFk())
                     ->orderBy('p.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => false))                
+                'required' => true))                
             ->add('conceptoServicioRel', 'entity', array(
                 'class' => 'BrasaTurnoBundle:TurConceptoServicio',
                 'query_builder' => function (EntityRepository $er)  {

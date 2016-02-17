@@ -32,6 +32,7 @@
                 <th>NOVEDAD</th>
                 <th>DESCANSO</th>
                 <th>HORAS</th>
+                <th>H. NOMINA</th>
                 <th>H. DIURNAS</th>
                 <th>H. NOCTURNAS</th>                                
                 <th></th>
@@ -47,6 +48,7 @@
                 <td>{% if arTurnos.novedad == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arTurnos.descanso == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: right">{{ arTurnos.horas | number_format(0, '.', ',') }}</td>                 
+                <td style="text-align: right">{{ arTurnos.horasNomina | number_format(0, '.', ',') }}</td>                 
                 <td style="text-align: right">{{ arTurnos.horasDiurnas | number_format(0, '.', ',') }}</td> 
                 <td style="text-align: right">{{ arTurnos.horasNocturnas | number_format(0, '.', ',') }}</td>                 
                 <td style="text-align: center"><a href="{{ path('brs_tur_base_turno_nuevo', {'codigoTurno': arTurnos.codigoTurnoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                

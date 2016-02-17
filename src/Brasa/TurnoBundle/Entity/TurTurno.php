@@ -37,6 +37,11 @@ class TurTurno
     private $horas = 0;    
 
     /**
+     * @ORM\Column(name="horas_nomina", type="float")
+     */    
+    private $horasNomina = 0;    
+    
+    /**
      * @ORM\Column(name="horas_diurnas", type="float")
      */    
     private $horasDiurnas = 0;     
@@ -434,5 +439,29 @@ class TurTurno
     public function getSoportesPagosDetallesTurnoRel()
     {
         return $this->soportesPagosDetallesTurnoRel;
+    }
+
+    /**
+     * Set horasNomina
+     *
+     * @param float $horasNomina
+     *
+     * @return TurTurno
+     */
+    public function setHorasNomina($horasNomina)
+    {
+        $this->horasNomina = $horasNomina;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNomina
+     *
+     * @return float
+     */
+    public function getHorasNomina()
+    {
+        return $this->horasNomina;
     }
 }

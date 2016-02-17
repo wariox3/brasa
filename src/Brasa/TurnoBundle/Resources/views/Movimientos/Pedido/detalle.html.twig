@@ -1,216 +1,218 @@
 {% extends '::base.html.twig' %}
 {% block title %}Pedido detalle - Soga App{% endblock %}
 {% block content %}
-<script>
-    $('#myTab a').click(function(e) {
-        e.preventDefault();
-        $(this).tab('show');
-    })
-</script>
-<div class="container">
-    <div class="page-header">
-        <h3>Detalle pedido</h3>
-    </div>
-    {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
-    {{ form_errors(form) }}
-    <div class="btn-toolbar" style="float:left">
-        <div class="btn-group">
-            {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            {{ form_widget(form.BtnAnular, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            {{ form_widget(form.BtnDesprogramar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+    <script>
+        $('#myTab a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+    </script>
+    <div class="container">        
+        <div class="page-header">            
+            <h3>Detalle pedido</h3>            
         </div>
-    </div>
-    <br /><br />
-    <!-- Encabezado Movimiento -->
-    <div class="panel panel-default">
-      <div class="panel-heading">Información</div>
-      <div class="panel-body">
-            <table width="100%" class="table table-condensed table-bordered">
-                <tr>
-                    <td class="titulo">NUMERO:</td>
-                    <td class="td-in-well">{{ arPedido.numero }}</td>                    
-                    <td class="titulo">CODIGO:</td>
-                    <td class="td-in-well">{{ arPedido.codigoPedidoPk }}</td>
-                </tr>
-                <tr>
-                    <td class="titulo">TIPO:</td>
-                    <td class="td-in-well">{{ arPedido.pedidoTipoRel.nombre }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                </tr>                
-                <tr>
-                    <td class="titulo">CLIENTE:</td>
-                    <td class="td-in-well">{{ arPedido.clienteRel.nombreCorto }}</td>
-                    <td class="titulo" >HORAS DIURNAS:</td>
-                    <td align="right">{{ arPedido.horasDiurnas | number_format(0, '.', ',')}}</td>
-                </tr> 
-                <tr>
-                    <td class="titulo">SECTOR:</td>
-                    <td class="td-in-well">{{ arPedido.sectorRel.nombre }}</td>
-                    <td class="titulo" >HORAS NOCTURNAS:</td>
-                    <td align="right">{{ arPedido.horasNocturnas | number_format(0, '.', ',')}}</td>
-                </tr>                 
-                <tr>
-                    <td class="titulo">FECHA:</td>
-                    <td class="td-in-well">{{ arPedido.fecha |date("Y/m/d") }}</td>
-                    <td class="titulo" >HORAS:</td>
-                    <td align="right">{{ arPedido.horas | number_format(0, '.', ',')}}</td>
-                </tr>                 
-                <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                    <td class="titulo" >COSTO:</td>
-                    <td align="right">{{ arPedido.vrTotalCosto | number_format(0, '.', ',')}}</td>
-                </tr>                
-                <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                    <td class="titulo" >MINIMO:</td>
-                    <td align="right">{{ arPedido.vrTotalPrecioMinimo | number_format(0, '.', ',')}}</td>
-                </tr>                
-                <tr>
-                    <td class="titulo">FECHA PROGRAMACION:</td>
-                    <td class="td-in-well">{{ arPedido.fechaProgramacion |date("Y F") }}</td>
-                    <td class="titulo" >VALOR:</td>
-                    <td align="right">{{ arPedido.vrTotal | number_format(0, '.', ',')}}</td>
-                </tr>                
-            </table>
-      </div>
-    </div>
+        {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+        {{ form_errors(form) }}
+        <div class="btn-toolbar" style="float:left">
+            <div class="btn-group">
+                <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_pedido_nuevo', {'codigoPedido': 0 }) }}">Nuevo</a>                
+                {% if arPedido.estadoAutorizado == 0 %}                    
+                    <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_pedido_nuevo', {'codigoPedido': arPedido.codigoPedidoPk }) }}">Editar</a>                
+                {% endif %}                        
+                {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+                {{ form_widget(form.BtnAnular, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnProgramar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnDesprogramar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnFacturar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            </div>            
+        </div>
+        <div style="float:right">
+            {% if arPedido.estadoAutorizado == 1 %}<span class="label label-default">Autorizado</span>{% endif %}
+            {% if arPedido.estadoProgramado == 1 %}<span class="label label-warning">Programado</span>{% endif %}
+            {% if arPedido.estadoFacturado == 1 %}<span class="label label-warning">Facturado</span>{% endif %}
+            {% if arPedido.estadoAnulado == 1 %}<span class="label label-danger">Anulado</span>{% endif %}
+        </div>
+        <br /><br />
+        <!-- Encabezado Movimiento -->
+        <div class="panel panel-default">
+            <div class="panel-heading">Información</div>
+            <div class="panel-body">
+                <table width="100%" class="table table-condensed table-bordered">
+                    <tr>
+                        <td class="titulo">NUMERO:</td>
+                        <td class="td-in-well">{{ arPedido.numero }}</td>                    
+                        <td class="titulo">CODIGO:</td>
+                        <td class="td-in-well">{{ arPedido.codigoPedidoPk }}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">TIPO:</td>
+                        <td class="td-in-well">{{ arPedido.pedidoTipoRel.nombre }}</td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                    </tr>                
+                    <tr>
+                        <td class="titulo">CLIENTE:</td>
+                        <td class="td-in-well">{{ arPedido.clienteRel.nombreCorto }}</td>
+                        <td class="titulo" >HORAS DIURNAS:</td>
+                        <td align="right">{{ arPedido.horasDiurnas | number_format(0, '.', ',')}}</td>
+                    </tr> 
+                    <tr>
+                        <td class="titulo">SECTOR:</td>
+                        <td class="td-in-well">{{ arPedido.sectorRel.nombre }}</td>
+                        <td class="titulo" >HORAS NOCTURNAS:</td>
+                        <td align="right">{{ arPedido.horasNocturnas | number_format(0, '.', ',')}}</td>
+                    </tr>                 
+                    <tr>
+                        <td class="titulo">FECHA:</td>
+                        <td class="td-in-well">{{ arPedido.fecha |date("Y/m/d") }}</td>
+                        <td class="titulo" >HORAS:</td>
+                        <td align="right">{{ arPedido.horas | number_format(0, '.', ',')}}</td>
+                    </tr>                 
+                    <tr>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo" >COSTO:</td>
+                        <td align="right">{{ arPedido.vrTotalCosto | number_format(0, '.', ',')}}</td>
+                    </tr>                
+                    <tr>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo" >MINIMO:</td>
+                        <td align="right">{{ arPedido.vrTotalPrecioMinimo | number_format(0, '.', ',')}}</td>
+                    </tr>                
+                    <tr>
+                        <td class="titulo">FECHA PROGRAMACION:</td>
+                        <td class="td-in-well">{{ arPedido.fechaProgramacion |date("Y F") }}</td>
+                        <td class="titulo" >VALOR:</td>
+                        <td align="right">{{ arPedido.vrTotal | number_format(0, '.', ',')}}</td>
+                    </tr>  
+                </table>
+            </div>
+        </div>
 
-    <!-- Fin Encabezado Movimiento -->
+        <!-- Fin Encabezado Movimiento -->
 
-    <ul class="nav nav-tabs">
-        <li class="active"><a href="#tipos" data-toggle="tab">Detalle</a></li>
-    </ul>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#tipos" data-toggle="tab">Detalle</a></li>
+        </ul>
 
-    <div class="tab-content">
-        <div class="tab-pane active" id="tipos">
+        <div class="tab-content">
+            <div class="tab-pane active" id="tipos">
                 <!-- Menu Encabezado Movimiento -->
-            <div id="detalles" style="width: 100%"><br>
-            <table class="table table-striped table-bordered table-condensed">
-            <tr>
-                <th>COD</th>
-                <th>PUESTO</th>
-                <th></th>
-                <th>SERVICIO</th>
-                <th>MODALIDAD</th>
-                <th>PERIODO</th>
-                <th>PLANTILLA</th>
-                <th>DES</th>
-                <th>HAS</th>
-                <th>CANT</th>
-                <th>LU</th>
-                <th>MA</th>
-                <th>MI</th>
-                <th>JU</th>
-                <th>VI</th>
-                <th>SA</th>
-                <th>DO</th>
-                <th>FE</th>
-                <th>HORAS</th>
-                <th>H.D</th>
-                <th>H.N</th>
-                <th>DIAS</th>
-                <th>COSTO</th>
-                <th>P.MINIMO</th>
-                <th>P.AJUSTADO</th>
-                <th>TOTAL</th>
-                <th>SERV</th>
-                <th>PRG</th>
-                <th>FAC</th>
-                <th></th>
-                <th></th>               
-                <th></th>
-            </tr>
-            {% for arPedidoDetalle in arPedidoDetalle %}
-                <tr>
-                    <td><a href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_resumen', {'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'pedidoDetalleResumen', 600, 900)">{{ arPedidoDetalle.codigoPedidoDetallePk }}</a><input type="hidden" name="LblCodigo[]" value="{{ arPedidoDetalle.codigoPedidoDetallePk }}"></td>
-                    {% if arPedido.estadoAutorizado == 0 %}
-                        <td>
-                            <input class="input-grid" type="text" name="TxtPuesto{{ arPedidoDetalle.codigoPedidoDetallePk }}" id="TxtPuesto{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.codigoPuestoFk  }}" size="10" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/>
-                            <a href="javascript:abrirVentana3('{{ path('brs_tur_buscar_puesto', {'campoCodigo': 'TxtPuesto' ~ arPedidoDetalle.codigoPedidoDetallePk, 'codigoCliente' : arPedido.codigoClienteFk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=20 height=20 title="Buscar"></a>                            
-                        </td>                        
-                    {% else %}
-                        <td>{{ arPedidoDetalle.codigoPuestoFk }}</td> 
-                    {% endif %}
-                    <td>{{ arPedidoDetalle.puestoRel.nombre | default('') }}</td> 
-                    <td>{{ arPedidoDetalle.conceptoServicioRel.nombre  }}</td>                    
-                    <td>{{ arPedidoDetalle.modalidadServicioRel.nombre  }}</td>                    
-                    <td>{{ arPedidoDetalle.periodoRel.nombre  }}</td>
-                    <td>{% if arPedidoDetalle.codigoPlantillaFk is not null %} <a href="{{ path('brs_tur_base_plantilla_detalle', { 'codigoPlantilla': arPedidoDetalle.codigoPlantillaFk }) }}" target="_blanck">{% endif %}{{ arPedidoDetalle.plantillaRel.nombre | default('')  }}</a> ({{ arPedidoDetalle.fechaIniciaPlantilla | date('Y/m/d')  }})</td>                    
-                    {% if arPedido.estadoAutorizado == 0 %}                        
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiaDesde{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.diaDesde  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiaHasta{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.diaHasta  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.cantidad  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
-                        <td><input type="checkbox" name="chkLunes{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.lunes == 1 %} checked="true" {% endif %}></td>
-                        <td><input type="checkbox" name="chkMartes{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.martes == 1 %} checked="true" {% endif %}></td>
-                        <td><input type="checkbox" name="chkMiercoles{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.miercoles == 1 %} checked="true" {% endif %}></td>
-                        <td><input type="checkbox" name="chkJueves{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.jueves == 1 %} checked="true" {% endif %}></td>
-                        <td><input type="checkbox" name="chkViernes{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.viernes == 1 %} checked="true" {% endif %}></td>
-                        <td><input type="checkbox" name="chkSabado{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.sabado == 1 %} checked="true" {% endif %}></td>
-                        <td><input type="checkbox" name="chkDomingo{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.domingo == 1 %} checked="true" {% endif %}></td>
-                        <td><input type="checkbox" name="chkFestivo{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.festivo == 1 %} checked="true" {% endif %}></td>                    
-                    {% else %}                        
-                        <td>{{ arPedidoDetalle.diaDesde }}</td>    
-                        <td>{{ arPedidoDetalle.diaHasta }}</td>    
-                        <td>{{ arPedidoDetalle.cantidad  }}</td>
-                        <td>{% if arPedidoDetalle.lunes == 1 %} SI {% else %} NO {% endif %}</td>
-                        <td>{% if arPedidoDetalle.martes == 1 %} SI {% else %} NO {% endif %}</td>
-                        <td>{% if arPedidoDetalle.miercoles == 1 %} SI {% else %} NO {% endif %}</td>
-                        <td>{% if arPedidoDetalle.jueves == 1 %} SI {% else %} NO {% endif %}</td>
-                        <td>{% if arPedidoDetalle.viernes == 1 %} SI {% else %} NO {% endif %}</td>
-                        <td>{% if arPedidoDetalle.sabado == 1 %} SI {% else %} NO {% endif %}</td>
-                        <td>{% if arPedidoDetalle.domingo == 1 %} SI {% else %} NO {% endif %}</td>
-                        <td>{% if arPedidoDetalle.festivo == 1 %} SI {% else %} NO {% endif %}</td>
-                    {% endif %}
-                    <td style="text-align: right">{{ arPedidoDetalle.horas | number_format(0, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arPedidoDetalle.horasDiurnas | number_format(0, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arPedidoDetalle.horasNocturnas | number_format(0, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arPedidoDetalle.dias | number_format(0, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arPedidoDetalle.vrCosto | number_format(0, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arPedidoDetalle.vrPrecioMinimo | number_format(0, '.', ',') }}</td>                     
-                    {% if arPedido.estadoAutorizado == 0 %}
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorAjustado{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.vrPrecioAjustado  }}" size="10" style="text-align: right; width:80px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
-                    {% else %}
-                        <td style="text-align: right">{{ arPedidoDetalle.vrPrecioAjustado | number_format(0, '.', ',') }}</td> 
-                    {% endif %}                    
-                    <td style="text-align: right">{{ arPedidoDetalle.vrTotalDetalle | number_format(0, '.', ',') }}</td>                     
-                    <td>{% if arPedidoDetalle.codigoServicioDetalleFk is not null %} <a href="{{ path('brs_tur_servicio_detalle', { 'codigoServicio': arPedidoDetalle.servicioDetalleRel.codigoServicioFk }) }}" target="_blanck">{% endif %}{{ arPedidoDetalle.codigoServicioDetalleFk | default('')  }}</a></td>                    
-                    <td>{% if arPedidoDetalle.estadoProgramado == 1 %} SI {% else %} NO {% endif %}</td>
-                    <td>{% if arPedidoDetalle.estadoFacturado == 1 %} SI {% else %} NO {% endif %}</td>
-                    <td>{% if arPedido.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                                        
-                    <td style="text-align: center"><a href="{{ path('brs_tur_pedido_detalle_recurso', { 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" width=22 height=22></a></td>                                                        
-                    <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidoDetalle.codigoPedidoDetallePk }}" /></td>
-                </tr>
-            {% endfor %}
-        </table>
-            </div>
-        </div>
-        <div class="btn-toolbar" style="float: right">
-            {% if arPedido.estadoAutorizado == 0 %}
-                <div class="btn-group">
-                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
-                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo_cotizacion', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo desde cotizacion</a>                
-                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo_servicio', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 1200)">Nuevo desde servicio</a>                                    
+                <div id="detalles" style="width: 100%"><br>
+                    <table class="table table-striped table-bordered table-condensed">
+                        <tr>
+                            <th>COD</th>
+                            <th>PUESTO</th>
+                            <th>SERVICIO</th>
+                            <th>MODALIDAD</th>
+                            <th>PERIODO</th>
+                            <th>PLANTILLA</th>
+                            <th>DES</th>
+                            <th>HAS</th>
+                            <th>CANT</th>
+                            <th>LU</th>
+                            <th>MA</th>
+                            <th>MI</th>
+                            <th>JU</th>
+                            <th>VI</th>
+                            <th>SA</th>
+                            <th>DO</th>
+                            <th>FE</th>
+                            <th>HORAS</th>
+                            <th>H.D</th>
+                            <th>H.N</th>
+                            <th>DIAS</th>
+                            <th>COSTO</th>
+                            <th>P.MINIMO</th>
+                            <th>P.AJUSTADO</th>
+                            <th>TOTAL</th>
+                            <th>SERV</th>
+                            <th>PRG</th>
+                            <th>FAC</th>
+                            <th></th>
+                            <th></th>               
+                            <th></th>
+                        </tr>
+                        {% for arPedidoDetalle in arPedidoDetalle %}
+                            <tr>
+                                <td><a href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_resumen', {'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'pedidoDetalleResumen', 600, 900)">{{ arPedidoDetalle.codigoPedidoDetallePk }}</a><input type="hidden" name="LblCodigo[]" value="{{ arPedidoDetalle.codigoPedidoDetallePk }}"></td>                                
+                                <td>{{ arPedidoDetalle.puestoRel.nombre | default('') }}</td> 
+                                <td>{{ arPedidoDetalle.conceptoServicioRel.nombre  }}</td>                    
+                                <td>{{ arPedidoDetalle.modalidadServicioRel.nombre  }}</td>                    
+                                <td>{{ arPedidoDetalle.periodoRel.nombre  }}</td>
+                                <td>{% if arPedidoDetalle.codigoPlantillaFk is not null %} <a href="{{ path('brs_tur_base_plantilla_detalle', { 'codigoPlantilla': arPedidoDetalle.codigoPlantillaFk }) }}" target="_blanck">{% endif %}{{ arPedidoDetalle.plantillaRel.nombre | default('')  }}</a> ({{ arPedidoDetalle.fechaIniciaPlantilla | date('Y/m/d')  }})</td>                    
+                                {% if arPedido.estadoAutorizado == 0 %}                        
+                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiaDesde{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.diaDesde  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
+                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiaHasta{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.diaHasta  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
+                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.cantidad  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
+                                    <td><input type="checkbox" name="chkLunes{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.lunes == 1 %} checked="true" {% endif %}></td>
+                                    <td><input type="checkbox" name="chkMartes{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.martes == 1 %} checked="true" {% endif %}></td>
+                                    <td><input type="checkbox" name="chkMiercoles{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.miercoles == 1 %} checked="true" {% endif %}></td>
+                                    <td><input type="checkbox" name="chkJueves{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.jueves == 1 %} checked="true" {% endif %}></td>
+                                    <td><input type="checkbox" name="chkViernes{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.viernes == 1 %} checked="true" {% endif %}></td>
+                                    <td><input type="checkbox" name="chkSabado{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.sabado == 1 %} checked="true" {% endif %}></td>
+                                    <td><input type="checkbox" name="chkDomingo{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.domingo == 1 %} checked="true" {% endif %}></td>
+                                    <td><input type="checkbox" name="chkFestivo{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.festivo == 1 %} checked="true" {% endif %}></td>                    
+                                    {% else %}                        
+                                    <td>{{ arPedidoDetalle.diaDesde }}</td>    
+                                    <td>{{ arPedidoDetalle.diaHasta }}</td>    
+                                    <td>{{ arPedidoDetalle.cantidad  }}</td>
+                                    <td>{% if arPedidoDetalle.lunes == 1 %} SI {% else %} NO {% endif %}</td>
+                                    <td>{% if arPedidoDetalle.martes == 1 %} SI {% else %} NO {% endif %}</td>
+                                    <td>{% if arPedidoDetalle.miercoles == 1 %} SI {% else %} NO {% endif %}</td>
+                                    <td>{% if arPedidoDetalle.jueves == 1 %} SI {% else %} NO {% endif %}</td>
+                                    <td>{% if arPedidoDetalle.viernes == 1 %} SI {% else %} NO {% endif %}</td>
+                                    <td>{% if arPedidoDetalle.sabado == 1 %} SI {% else %} NO {% endif %}</td>
+                                    <td>{% if arPedidoDetalle.domingo == 1 %} SI {% else %} NO {% endif %}</td>
+                                    <td>{% if arPedidoDetalle.festivo == 1 %} SI {% else %} NO {% endif %}</td>
+                                {% endif %}
+                                <td style="text-align: right">{{ arPedidoDetalle.horas | number_format(0, '.', ',') }}</td> 
+                                <td style="text-align: right">{{ arPedidoDetalle.horasDiurnas | number_format(0, '.', ',') }}</td> 
+                                <td style="text-align: right">{{ arPedidoDetalle.horasNocturnas | number_format(0, '.', ',') }}</td> 
+                                <td style="text-align: right">{{ arPedidoDetalle.dias | number_format(0, '.', ',') }}</td> 
+                                <td style="text-align: right">{{ arPedidoDetalle.vrCosto | number_format(0, '.', ',') }}</td> 
+                                <td style="text-align: right">{{ arPedidoDetalle.vrPrecioMinimo | number_format(0, '.', ',') }}</td>                     
+                                {% if arPedido.estadoAutorizado == 0 %}
+                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorAjustado{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.vrPrecioAjustado  }}" size="10" style="text-align: right; width:80px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
+                                    {% else %}
+                                    <td style="text-align: right">{{ arPedidoDetalle.vrPrecioAjustado | number_format(0, '.', ',') }}</td> 
+                                {% endif %}                    
+                                <td style="text-align: right">{{ arPedidoDetalle.vrTotalDetalle | number_format(0, '.', ',') }}</td>                     
+                                <td>{% if arPedidoDetalle.codigoServicioDetalleFk is not null %} <a href="{{ path('brs_tur_servicio_detalle', { 'codigoServicio': arPedidoDetalle.servicioDetalleRel.codigoServicioFk }) }}" target="_blanck">{% endif %}{{ arPedidoDetalle.codigoServicioDetalleFk | default('')  }}</a></td>                    
+                                <td>{% if arPedidoDetalle.estadoProgramado == 1 %} SI {% else %} NO {% endif %}</td>
+                                <td>{% if arPedidoDetalle.estadoFacturado == 1 %} SI {% else %} NO {% endif %}</td>
+                                <td>{% if arPedido.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                                        
+                                <td style="text-align: center"><a href="{{ path('brs_tur_pedido_detalle_recurso', { 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" width=22 height=22></a></td>                                                        
+                                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidoDetalle.codigoPedidoDetallePk }}" /></td>
+                            </tr>
+                        {% endfor %}
+                    </table>
                 </div>
-            {% endif %}            
-            <div class="btn-group">
-                {{ form_widget(form.BtnDetalleActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            </div>        
-            <div class="btn-group">
-                {{ form_widget(form.BtnDetalleDesprogramar, { 'attr': {'class': 'btn btn-sm'} }) }}
-                {{ form_widget(form.BtnDetalleEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+            </div>
+            <div class="btn-toolbar" style="float: right">
+                {% if arPedido.estadoAutorizado == 0 %}
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo_cotizacion', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo desde cotizacion</a>                
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo_servicio', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 1200)">Nuevo desde servicio</a>                                    
+                    </div>
+                {% endif %}            
+                <div class="btn-group">
+                    {{ form_widget(form.BtnDetalleActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                </div>        
+                <div class="btn-group">
+                    {{ form_widget(form.BtnDetalleDesprogramar, { 'attr': {'class': 'btn btn-sm'} }) }}
+                    {{ form_widget(form.BtnDetalleEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+                </div>
             </div>
         </div>
-    </div>
 
 
         {{ form_rest(form) }}
-    {{ form_end(form) }}
-    <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_pedido_lista') }}">Volver</a>
-</div>
+        {{ form_end(form) }}
+        <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_pedido_lista') }}">Volver</a>
+    </div>
 {% endblock %}

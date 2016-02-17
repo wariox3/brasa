@@ -25,8 +25,9 @@ class MovimientoPedidoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
+        $this->estadoAnulado = 0;
         $form = $this->formularioFiltro();
-        $form->handleRequest($request);
+        $form->handleRequest($request);        
         $this->lista();
         $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
         if ($form->isValid()) { 
@@ -133,7 +134,27 @@ class MovimientoPedidoController extends Controller
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
                 }
-            }   
+            } 
+            if($form->get('BtnProgramar')->isClicked()) {            
+                if($arPedido->getEstadoProgramado() == 0 && $arPedido->getEstadoAutorizado() == 1) {                    
+                    $codigoProgramacion = $this->programar($codigoPedido);
+                    if($codigoProgramacion != 0) {
+                        return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));                                        
+                    } else {
+                        return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                                        
+                    }                    
+                }
+            }    
+            if($form->get('BtnFacturar')->isClicked()) {            
+                if($arPedido->getEstadoFacturado() == 0 && $arPedido->getEstadoAutorizado() == 1) {                    
+                    $codigoFactura = $this->facturar($codigoPedido);
+                    if($codigoFactura != 0) {
+                        return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $codigoFactura)));                                        
+                    } else {
+                        return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                                        
+                    }                    
+                }
+            }            
             if($form->get('BtnDesprogramar')->isClicked()) {            
                 if($arPedido->getEstadoProgramado() == 1) {
                     $arPedido->setEstadoProgramado(0);
@@ -141,15 +162,7 @@ class MovimientoPedidoController extends Controller
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
                 }
-            }   
-            if($form->get('BtnAprobar')->isClicked()) {            
-                if($arPedido->getEstadoAutorizado() == 1) {
-                    $arPedido->setEstadoAprobado(1);
-                    $em->persist($arPedido);
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
-                }
-            }            
+            }               
             if($form->get('BtnDetalleActualizar')->isClicked()) {                
                 $arrControles = $request->request->All();
                 $this->actualizarDetalle($arrControles, $codigoPedido);                                
@@ -622,8 +635,9 @@ class MovimientoPedidoController extends Controller
     private function formularioDetalle($ar) {        
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);        
         $arrBotonAnular = array('label' => 'Anular', 'disabled' => true);        
-        $arrBotonAprobar = array('label' => 'Aprobar', 'disabled' => true);        
-        $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
+        $arrBotonProgramar = array('label' => 'Programar', 'disabled' => true);        
+        $arrBotonFacturar = array('label' => 'Facturar', 'disabled' => true);        
+        $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);        
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
@@ -631,33 +645,38 @@ class MovimientoPedidoController extends Controller
         $arrBotonDesprogramar = array('label' => 'Desprogramar', 'disabled' => true);        
         
         if($ar->getEstadoAutorizado() == 1) {            
-            $arrBotonAutorizar['disabled'] = true;            
-            $arrBotonAprobar['disabled'] = false;            
+            $arrBotonAutorizar['disabled'] = true;                        
             $arrBotonDetalleEliminar['disabled'] = true;
             $arrBotonDetalleActualizar['disabled'] = true;
+            $arrBotonProgramar['disabled'] = false;
             $arrBotonAnular['disabled'] = false; 
             if($ar->getEstadoAnulado() == 1) {
                 $arrBotonDesAutorizar['disabled'] = true;
-                $arrBotonAnular['disabled'] = true;
-                $arrBotonAprobar['disabled'] = true;
+                $arrBotonAnular['disabled'] = true;                
                 $arrBotonDetalleDesprogramar['disabled'] = true;
+            } else {
+                if($ar->getEstadoFacturado() == 0) {
+                    $arrBotonFacturar['disabled'] = false;
+                }
             }
         } else {            
             $arrBotonDesAutorizar['disabled'] = true;                        
             $arrBotonImprimir['disabled'] = true;            
         }
         if($ar->getEstadoAprobado() == 1 && $ar->getEstadoAnulado() == 0) {
-            $arrBotonDesAutorizar['disabled'] = true;            
-            $arrBotonAprobar['disabled'] = true;            
+            $arrBotonDesAutorizar['disabled'] = true;                        
         } 
         if($ar->getEstadoProgramado() == 1 && $ar->getEstadoAnulado() == 0) {
-            $arrBotonDesprogramar['disabled'] = false;                   
+            $arrBotonDesprogramar['disabled'] = false;
+            $arrBotonProgramar['disabled'] = true;
+            $arrBotonDesAutorizar['disabled'] = true; 
         } 
         $form = $this->createFormBuilder()
+                    ->add('BtnFacturar', 'submit', $arrBotonFacturar)                
+                    ->add('BtnProgramar', 'submit', $arrBotonProgramar)            
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                 
-                    ->add('BtnAnular', 'submit', $arrBotonAnular)                 
-                    ->add('BtnAprobar', 'submit', $arrBotonAprobar)                 
+                    ->add('BtnAnular', 'submit', $arrBotonAnular)                                     
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
@@ -780,66 +799,61 @@ class MovimientoPedidoController extends Controller
     private function actualizarDetalle($arrControles, $codigoPedido) {
         $em = $this->getDoctrine()->getManager();
         $intIndice = 0;
-        foreach ($arrControles['LblCodigo'] as $intCodigo) {
-            $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
-            $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($intCodigo);
-            $arPedidoDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);            
-            $arPedidoDetalle->setDiaDesde($arrControles['TxtDiaDesde'.$intCodigo]);
-            $arPedidoDetalle->setDiaHasta($arrControles['TxtDiaHasta'.$intCodigo]);
-            if($arrControles['TxtPuesto'.$intCodigo] != '') {
-                $arPuesto = new \Brasa\TurnoBundle\Entity\TurPuesto();
-                $arPuesto = $em->getRepository('BrasaTurnoBundle:TurPuesto')->find($arrControles['TxtPuesto'.$intCodigo]);
-                if($arPuesto) {
-                    $arPedidoDetalle->setPuestoRel($arPuesto);
+        if(isset($arrControles['LblCodigo'])) {
+            foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($intCodigo);
+                $arPedidoDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);            
+                $arPedidoDetalle->setDiaDesde($arrControles['TxtDiaDesde'.$intCodigo]);
+                $arPedidoDetalle->setDiaHasta($arrControles['TxtDiaHasta'.$intCodigo]);
+                if($arrControles['TxtValorAjustado'.$intCodigo] != '') {
+                    $arPedidoDetalle->setVrPrecioAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
+                }            
+                if(isset($arrControles['chkLunes'.$intCodigo])) {
+                    $arPedidoDetalle->setLunes(1);
+                } else {
+                    $arPedidoDetalle->setLunes(0);
                 }
+                if(isset($arrControles['chkMartes'.$intCodigo])) {
+                    $arPedidoDetalle->setMartes(1);
+                } else {
+                    $arPedidoDetalle->setMartes(0);
+                }
+                if(isset($arrControles['chkMiercoles'.$intCodigo])) {
+                    $arPedidoDetalle->setMiercoles(1);
+                } else {
+                    $arPedidoDetalle->setMiercoles(0);
+                }
+                if(isset($arrControles['chkJueves'.$intCodigo])) {
+                    $arPedidoDetalle->setJueves(1);
+                } else {
+                    $arPedidoDetalle->setJueves(0);
+                }
+                if(isset($arrControles['chkViernes'.$intCodigo])) {
+                    $arPedidoDetalle->setViernes(1);
+                } else {
+                    $arPedidoDetalle->setViernes(0);
+                }
+                if(isset($arrControles['chkSabado'.$intCodigo])) {
+                    $arPedidoDetalle->setSabado(1);
+                } else {
+                    $arPedidoDetalle->setSabado(0);
+                }
+                if(isset($arrControles['chkDomingo'.$intCodigo])) {
+                    $arPedidoDetalle->setDomingo(1);
+                } else {
+                    $arPedidoDetalle->setDomingo(0);
+                }
+                if(isset($arrControles['chkFestivo'.$intCodigo])) {
+                    $arPedidoDetalle->setFestivo(1);
+                } else {
+                    $arPedidoDetalle->setFestivo(0);
+                }                    
+                $em->persist($arPedidoDetalle);
             }
-            if($arrControles['TxtValorAjustado'.$intCodigo] != '') {
-                $arPedidoDetalle->setVrPrecioAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
-            }            
-            if(isset($arrControles['chkLunes'.$intCodigo])) {
-                $arPedidoDetalle->setLunes(1);
-            } else {
-                $arPedidoDetalle->setLunes(0);
-            }
-            if(isset($arrControles['chkMartes'.$intCodigo])) {
-                $arPedidoDetalle->setMartes(1);
-            } else {
-                $arPedidoDetalle->setMartes(0);
-            }
-            if(isset($arrControles['chkMiercoles'.$intCodigo])) {
-                $arPedidoDetalle->setMiercoles(1);
-            } else {
-                $arPedidoDetalle->setMiercoles(0);
-            }
-            if(isset($arrControles['chkJueves'.$intCodigo])) {
-                $arPedidoDetalle->setJueves(1);
-            } else {
-                $arPedidoDetalle->setJueves(0);
-            }
-            if(isset($arrControles['chkViernes'.$intCodigo])) {
-                $arPedidoDetalle->setViernes(1);
-            } else {
-                $arPedidoDetalle->setViernes(0);
-            }
-            if(isset($arrControles['chkSabado'.$intCodigo])) {
-                $arPedidoDetalle->setSabado(1);
-            } else {
-                $arPedidoDetalle->setSabado(0);
-            }
-            if(isset($arrControles['chkDomingo'.$intCodigo])) {
-                $arPedidoDetalle->setDomingo(1);
-            } else {
-                $arPedidoDetalle->setDomingo(0);
-            }
-            if(isset($arrControles['chkFestivo'.$intCodigo])) {
-                $arPedidoDetalle->setFestivo(1);
-            } else {
-                $arPedidoDetalle->setFestivo(0);
-            }                    
-            $em->persist($arPedidoDetalle);
-        }
-        $em->flush();                
-        $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);        
+            $em->flush();                
+            $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);            
+        }        
     }
     
     private function actualizarDetalleRecurso($arrControles) {
@@ -853,5 +867,62 @@ class MovimientoPedidoController extends Controller
         }
         $em->flush();                        
     }
-
+    
+    private function programar($codigoPedido) {
+        $em = $this->getDoctrine()->getManager();
+        $codigoProgramacion = 0;
+        $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
+        $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido); 
+        $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+        $arPedidoDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigoPedido, 'estadoProgramado' => 0));         
+        if(count($arPedidoDetalles) > 0) {            
+            $arPedido->setEstadoProgramado(1);
+            $em->persist($arPedido);            
+            $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
+            $arProgramacion->setClienteRel($arPedido->getClienteRel());
+            $arProgramacion->setFecha($arPedido->getFechaProgramacion());
+            $arProgramacion->setAnio($arPedido->getFechaProgramacion()->format('Y'));
+            $arProgramacion->setMes($arPedido->getFechaProgramacion()->format('m'));
+            $em->persist($arProgramacion);
+            $em->flush();
+            $codigoProgramacion = $arProgramacion->getCodigoProgramacionPk();
+            foreach ($arPedidoDetalles as $arPedidoDetalle) {            
+                $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->nuevo($arPedidoDetalle->getCodigoPedidoDetallePk(), $arProgramacion);
+            }                    
+        }
+        return $codigoProgramacion;
+    }
+    
+    private function facturar($codigoPedido) {
+        $em = $this->getDoctrine()->getManager();
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
+        $codigoFactura = 0;
+        $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
+        $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido); 
+        $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+        $arPedidoDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigoPedido, 'estadoFacturado' => 0));         
+        if(count($arPedidoDetalles) > 0) {            
+            $arPedido->setEstadoFacturado(1);
+            $em->persist($arPedido);            
+            $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
+            $arFactura->setFecha(new \DateTime('now'));
+            $dateFechaVence = $objFunciones->sumarDiasFecha($arPedido->getClienteRel()->getPlazoPago(), $arFactura->getFecha());
+            $arFactura->setFechaVence($dateFechaVence);            
+            $arFactura->setClienteRel($arPedido->getClienteRel());                                                            
+            $em->persist($arFactura);                        
+            foreach ($arPedidoDetalles as $arPedidoDetalle) {  
+                $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
+                $arFacturaDetalle->setFacturaRel($arFactura);                        
+                $arFacturaDetalle->setConceptoServicioRel($arPedidoDetalle->getConceptoServicioRel());
+                $arFacturaDetalle->setPedidoDetalleRel($arPedidoDetalle);
+                $arFacturaDetalle->setCantidad($arPedidoDetalle->getCantidad());
+                $arFacturaDetalle->setVrPrecio($arPedidoDetalle->getVrTotalDetallePendiente());                        
+                $em->persist($arFacturaDetalle);                                
+            }                    
+            $em->flush();  
+            $codigoFactura = $arFactura->getCodigoFacturaPk();
+            $em->getRepository('BrasaTurnoBundle:TurFactura')->liquidar($codigoFactura);            
+        }
+        return $codigoFactura;
+    }
 }

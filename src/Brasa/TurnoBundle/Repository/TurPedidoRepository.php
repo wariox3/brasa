@@ -275,14 +275,19 @@ class TurPedidoRepository extends EntityRepository {
         $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);            
         $strResultado = "";        
         if($arPedido->getEstadoAutorizado() == 0) {
-            if($em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->numeroRegistros($codigoPedido) > 0) {            
-                $arPedido->setEstadoAutorizado(1);
-                if($arPedido->getNumero() == 0) {
-                    $intNumero = $em->getRepository('BrasaTurnoBundle:TurConsecutivo')->consecutivo(1);
-                    $arPedido->setNumero($intNumero);
-                }
-                $em->persist($arPedido);
-                $em->flush();                        
+            if($em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->numeroRegistros($codigoPedido) > 0) {
+                $intSinPuesto = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->validarPuesto($codigoPedido);
+                if($intSinPuesto <= 0) {
+                    $arPedido->setEstadoAutorizado(1);
+                    if($arPedido->getNumero() == 0) {
+                        $intNumero = $em->getRepository('BrasaTurnoBundle:TurConsecutivo')->consecutivo(1);
+                        $arPedido->setNumero($intNumero);
+                    }
+                    $em->persist($arPedido);
+                    $em->flush();                    
+                } else {
+                    $strResultado = $intSinPuesto . " servicios no tienen puesto asignado";
+                }                        
             } else {
                 $strResultado = "Debe adicionar detalles al pedido";
             }            

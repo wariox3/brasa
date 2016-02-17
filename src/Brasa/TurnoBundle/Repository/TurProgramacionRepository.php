@@ -261,9 +261,7 @@ class TurProgramacionRepository extends EntityRepository {
                 }
                 if($booEliminar) {
                     $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigo);
-                    if($arProgramacion->getEstadoAnulado() == 1) {
-                        $em->remove($arProgramacion);                    
-                    }                    
+                    $em->remove($arProgramacion);                    
                 }
             }
             $em->flush();

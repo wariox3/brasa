@@ -228,17 +228,6 @@ class ProcesoGenerarSoportePagoController extends Controller
         $intHoraFinal = $arTurno->getHoraHasta()->format('G');
         $diaSemana = $dateFecha->format('N');
         $diaSemana2 = $dateFecha2->format('N');
-        /*if($arTurno->getDescanso() == 1){
-            $arSoportePagoDetalle = new \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle();
-            $arSoportePagoDetalle->setSoportePagoPeriodoRel($arSoportePagoPeriodo);
-            $arSoportePagoDetalle->setRecursoRel($arProgramacionDetalle->getRecursoRel());
-            $arSoportePagoDetalle->setProgramacionDetalleRel($arProgramacionDetalle);
-            $arSoportePagoDetalle->setPedidoDetalleRel($arProgramacionDetalle->getPedidoDetalleRel());
-            $arSoportePagoDetalle->setFecha($dateFecha);
-            $arSoportePagoDetalle->setTurnoRel($arTurno);
-            $arSoportePagoDetalle->setDescanso(1);
-            $em->persist($arSoportePagoDetalle);            
-        }*/
         if($arTurno->getNovedad() == 0) {            
             $intDias += 1;
             if($diaSemana == 7) {
@@ -263,7 +252,7 @@ class ProcesoGenerarSoportePagoController extends Controller
             $arSoportePagoDetalle->setTurnoRel($arTurno);
             $arSoportePagoDetalle->setDescanso($arTurno->getDescanso());
             $arSoportePagoDetalle->setDias($intDias);
-            $arSoportePagoDetalle->setHoras($arTurno->getHoras());        
+            $arSoportePagoDetalle->setHoras($arTurno->getHorasNomina());        
             $arSoportePagoDetalle->setHorasDiurnas($arrHoras['horasDiurnas']);
             $arSoportePagoDetalle->setHorasNocturnas($arrHoras['horasNocturnas']);
             $arSoportePagoDetalle->setHorasExtrasOrdinariasDiurnas($arrHoras['horasExtrasDiurnas']);
@@ -284,7 +273,7 @@ class ProcesoGenerarSoportePagoController extends Controller
                 $arSoportePagoDetalle->setTurnoRel($arTurno);
                 $arSoportePagoDetalle->setDescanso($arTurno->getDescanso());
                 $arSoportePagoDetalle->setDias(0);
-                $arSoportePagoDetalle->setHoras($arTurno->getHoras());        
+                $arSoportePagoDetalle->setHoras($arTurno->getHorasNomina());        
                 $arSoportePagoDetalle->setHorasDiurnas($arrHoras1['horasDiurnas']);
                 $arSoportePagoDetalle->setHorasNocturnas($arrHoras1['horasNocturnas']);
                 $arSoportePagoDetalle->setHorasExtrasOrdinariasDiurnas($arrHoras1['horasExtrasDiurnas']);

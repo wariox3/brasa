@@ -37,6 +37,13 @@
                 </div>                
             </div>  
             <div class="form-group form-group-sm">
+                <label for="form_horasNomina" class="col-sm-3 control-label">Horas nomina:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.horasNomina, { 'attr': {'class': 'form-control'} }) }}                        
+                    <p style="font-size: 0.8em;">* Horas para el pago de nomina.</p>                    
+                </div>                
+            </div>                
+            <div class="form-group form-group-sm">
                 <label for="form_horasDiurnas" class="col-sm-3 control-label">Horas diurnas:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.horasDiurnas, { 'attr': {'class': 'form-control'} }) }}                        

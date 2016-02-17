@@ -81,6 +81,19 @@ class TurPedidoDetalleRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $arDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigo));
         return count($arDetalles);
-    }          
+    }  
+    
+    public function validarPuesto($codigo) {        
+        $em = $this->getEntityManager();
+        $intNumeroRegistros = 0;
+        $dql   = "SELECT COUNT(pd.codigoPedidoDetallePk) as numeroRegistros FROM BrasaTurnoBundle:TurPedidoDetalle pd "
+                . "WHERE pd.codigoPedidoFk = " . $codigo . " AND pd.codigoPuestoFk IS NULL";
+        $query = $em->createQuery($dql);
+        $arrPedidosDetalles = $query->getSingleResult(); 
+        if($arrPedidosDetalles) {
+            $intNumeroRegistros = $arrPedidosDetalles['numeroRegistros'];
+        }
+        return $intNumeroRegistros;
+    }     
     
 }

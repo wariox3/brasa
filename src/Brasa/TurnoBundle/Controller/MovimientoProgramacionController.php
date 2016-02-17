@@ -323,7 +323,6 @@ class MovimientoProgramacionController extends Controller
                 $arrBotonDesAutorizar['disabled'] = true;
                 $arrBotonAnular['disabled'] = true;
                 $arrBotonAprobar['disabled'] = true;
-
             }
         } else {
             $arrBotonDesAutorizar['disabled'] = true;

@@ -14,13 +14,20 @@
         {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
         <div class="btn-toolbar" style="float:left">
-            <div class="btn-group">
+            <div class="btn-group">                
+                <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_cotizacion_nuevo', {'codigoCotizacion': 0 }) }}">Nuevo</a>                
+                {% if arCotizacion.estadoAutorizado == 0 %}                    
+                    <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_cotizacion_nuevo', {'codigoCotizacion': arCotizacion.codigoCotizacionPk }) }}">Editar</a>                
+                {% endif %}                    
                 {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
         </div>
+        <div style="float:right">
+            {% if arCotizacion.estadoAutorizado == 1 %}<span class="label label-default">Autorizado</span>{% endif %}                        
+        </div>            
         <br /><br />
         <!-- Encabezado Movimiento -->
         <div class="panel panel-default">
@@ -142,7 +149,7 @@
                                     <td><input type="checkbox" name="chkSabado{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" {% if arCotizacionDetalle.sabado == 1 %} checked="true" {% endif %}></td>
                                     <td><input type="checkbox" name="chkDomingo{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" {% if arCotizacionDetalle.domingo == 1 %} checked="true" {% endif %}></td>
                                     <td><input type="checkbox" name="chkFestivo{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" {% if arCotizacionDetalle.festivo == 1 %} checked="true" {% endif %}></td>                    
-                                {% else %}                        
+                                    {% else %}                        
                                     <td>{{ arCotizacionDetalle.cantidad  }}</td>
                                     <td>{% if arCotizacionDetalle.lunes == 1 %} SI {% else %} NO {% endif %}</td>
                                     <td>{% if arCotizacionDetalle.martes == 1 %} SI {% else %} NO {% endif %}</td>
@@ -161,7 +168,7 @@
                                 <td style="text-align: right">{{ arCotizacionDetalle.vrPrecioMinimo | number_format(0, '.', ',') }}</td> 
                                 {% if arCotizacion.estadoAutorizado == 0 %}
                                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorAjustado{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" value="{{ arCotizacionDetalle.vrPrecioAjustado  }}" size="10" style="text-align: right; width:80px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
-                                {% else %}
+                                    {% else %}
                                     <td style="text-align: right">{{ arCotizacionDetalle.vrPrecioAjustado | number_format(0, '.', ',') }}</td> 
                                 {% endif %}                    
                                 <td style="text-align: right">{{ arCotizacionDetalle.vrTotalDetalle | number_format(0, '.', ',') }}</td> 
@@ -201,7 +208,7 @@
                                 <td>{{ arCotizacionOtros.detalle  }}</td>                                                                                    
                                 {% if arCotizacion.estadoAutorizado == 0 %}                        
                                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidadOtro{{ arCotizacionOtros.codigoCotizacionOtroPk }}" value="{{ arCotizacionOtros.cantidad  }}" size="5" style="width:40px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
-                                {% else %}                        
+                                    {% else %}                        
                                     <td>{{ arCotizacionOtros.cantidad  }}</td>
                                 {% endif %}                                
                                 <td><input type="checkbox" name="ChkSeleccionarOtro[]" value="{{ arCotizacionOtros.codigoCotizacionOtroPk }}" /></td>
