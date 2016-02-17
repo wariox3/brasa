@@ -119,6 +119,18 @@ class RhuContratoRepository extends EntityRepository {
         return $dql;
     }
     
+    //lista contratos carta laboral
+    public function listaContratosCartaLaboralDQL($strCodigoCentroCosto = "", $strIdentificacion = "") {        
+        $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0";
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND c.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }   
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        return $dql;
+    }
+    
     public function numtoletras($xcifra) {
     $em = $this->getEntityManager();
         $xarray = array(0 => "Cero",

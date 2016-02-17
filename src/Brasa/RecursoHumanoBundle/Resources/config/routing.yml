@@ -114,6 +114,10 @@ brs_rhu_utilidades_certificado_ingreso_retencion:
     path:     /rhu/utilidades/certificado/ingreso/retencion
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCertificadoIngresoRetencion:Certificado }     
 
+brs_rhu_utilidades_carta_laboral:
+    path:     /rhu/utilidades/carta/laboral
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCartaLaboral:lista }     
+
 brs_rhu_utilidades_supervigilancia_parafiscales:
     path:     /rhu/utilidades/supervigilancia/parafiscales
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesSupervigilanciaParafiscales:lista }  
