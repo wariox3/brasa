@@ -75,7 +75,7 @@ for ($i = 1; $i <= $strUltimoDiaMes; $i++) {
     }    
 }
 if($arrTurnosDobles) {
-    $strMensaje .= "Los siguientes recursos no tienen doble asignacion de turno para el mes $strMes año $strAnio<br /><br />";
+    $strMensaje .= "Los siguientes recursos tienen doble asignacion de turno para el mes $strMes año $strAnio<br /><br />";
     $strMensaje .= "<table border='2'>";
     $strMensaje .= "<tr>";
     $strMensaje .= "<th>CODIGO</th>";
