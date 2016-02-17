@@ -142,6 +142,23 @@ class RhuPagoRepository extends EntityRepository {
         return $dql;
     }
     
+    public function listaConsultaPagosDetallesDQL($strIdentificacion = "", $strDesde = "", $strHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT pd, p FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p JOIN p.empleadoRel e WHERE pd.codigoPagoDetallePk <> 0";
+          
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if ($strDesde != ""){
+            $dql .= " AND p.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND p.fechaDesde <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        
+        return $dql;
+    }
+    
     public function pendientesContabilizarDql() {        
         $dql   = "SELECT p FROM BrasaRecursoHumanoBundle:RhuPago p WHERE p.estadoContabilizado = 0 AND p.estadoPagado = 1";       
         $dql .= " ORDER BY p.codigoPagoPk DESC";
