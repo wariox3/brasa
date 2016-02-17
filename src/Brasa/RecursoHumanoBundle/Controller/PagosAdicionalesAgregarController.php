@@ -424,7 +424,8 @@ class PagosAdicionalesAgregarController extends Controller
                 'property' => 'nombre',
                 'required' => true))
             ->add('TxtValor', 'number', array('required' => true))                             
-            ->add('TxtDetalle', 'text', array('required' => false))                             
+            ->add('TxtDetalle', 'text', array('required' => false))
+            ->add('aplicarDiaLaborado', 'choice', array('choices' => array('0' => 'NO', '1' => 'SI')))                
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->add('BtnGuardaryNuevo', 'submit', array('label'  => 'Guardar y nuevo',))
             ->getForm();
@@ -489,6 +490,7 @@ class PagosAdicionalesAgregarController extends Controller
                                 $arPagoAdicional->setPrestacional($arPagoConcepto->getPrestacional());
                                 $arPagoAdicional->setTipoAdicional($tipo);
                                 $arPagoAdicional->setpermanente(1);
+                                $arPagoAdicional->setAplicaDiaLaborado($form->get('aplicarDiaLaborado')->getData());
                                 $em->persist($arPagoAdicional);                                                        
                                 $em->flush();
                             }
@@ -514,6 +516,11 @@ class PagosAdicionalesAgregarController extends Controller
         $em = $this->getDoctrine()->getManager();
         $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
         $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
+        if ($arPagoAdicional->getAplicaDiaLaborado() == 1){
+            $intAplicaDiaLaborado = "SI";
+        } else {
+            $intAplicaDiaLaborado = "NO";
+        }
         $codigoEmpleado = $arPagoAdicional->getCodigoEmpleadoFk();
         $codigoCentroCosto = $arPagoAdicional->getEmpleadoRel()->getCodigoCentroCostoFk();
         $codigoPagoConcepto = $arPagoAdicional->getCodigoPagoConceptoFk();
@@ -545,7 +552,7 @@ class PagosAdicionalesAgregarController extends Controller
                 ))
             ->add('TxtValor', 'number', array('required' => true, 'data' => $arPagoAdicional->getValor()))                             
             ->add('TxtDetalle', 'text', array('required' => false, 'data' => $arPagoAdicional->getDetalle()))
-            ->add('aplicaDiaLaborado', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))                
+            ->add('aplicarDiaLaborado', 'choice', array('choices' => array($arPagoAdicional->getAplicaDiaLaborado() => $intAplicaDiaLaborado, '0' => 'NO', '1' => 'SI')))                
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->add('BtnGuardaryNuevo', 'submit', array('label'  => 'Guardar y nuevo',))
             ->getForm();
@@ -597,7 +604,7 @@ class PagosAdicionalesAgregarController extends Controller
                         $arPagoAdicional->setPrestacional($arPagoConcepto->getPrestacional());
                         $arPagoAdicional->setTipoAdicional($tipo);
                         $arPagoAdicional->setPermanente(1);
-                        $arPagoAdicional->setAplicaDiaLaborado($form->get('aplicaDiaLaborado')->getData());
+                        $arPagoAdicional->setAplicaDiaLaborado($form->get('aplicarDiaLaborado')->getData());
                         $em->persist($arPagoAdicional);                                                        
                         $em->flush();
                         if($form->get('BtnGuardaryNuevo')->isClicked()) {
