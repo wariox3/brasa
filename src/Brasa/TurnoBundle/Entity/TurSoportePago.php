@@ -56,6 +56,11 @@ class TurSoportePago
      * @ORM\Column(name="descanso", type="integer")
      */    
     private $descanso = 0;    
+
+    /**
+     * @ORM\Column(name="novedad", type="integer")
+     */    
+    private $novedad = 0;
     
     /**
      * @ORM\Column(name="dias", type="integer")
@@ -654,5 +659,29 @@ class TurSoportePago
     public function getVrSalario()
     {
         return $this->vrSalario;
+    }
+
+    /**
+     * Set novedad
+     *
+     * @param integer $novedad
+     *
+     * @return TurSoportePago
+     */
+    public function setNovedad($novedad)
+    {
+        $this->novedad = $novedad;
+
+        return $this;
+    }
+
+    /**
+     * Get novedad
+     *
+     * @return integer
+     */
+    public function getNovedad()
+    {
+        return $this->novedad;
     }
 }

@@ -17,6 +17,7 @@ class TurSoportePagoRepository extends EntityRepository {
         $arSoportePagoPeriodoActualizar = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($arSoportePagoPeriodo->getCodigoSoportePagoPeriodoPk());
         $dql   = "SELECT spd.codigoRecursoFk, "
                 . "SUM(spd.descanso) as descanso, "
+                . "SUM(spd.novedad) as novedad, "
                 . "SUM(spd.dias) as dias, "
                 . "SUM(spd.horasDiurnas) as horasDiurnas, "
                 . "SUM(spd.horasNocturnas) as horasNocturnas, "
@@ -50,6 +51,7 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePago->setFechaHasta($dateFechaHasta);
             $arSoportePago->setDias($arrayResultado[$i]['dias']);
             $arSoportePago->setDescanso($arrayResultado[$i]['descanso']);
+            $arSoportePago->setNovedad($arrayResultado[$i]['novedad']);
             $arSoportePago->setHoras($floHoras);
             $arSoportePago->setHorasDiurnas($arrayResultado[$i]['horasDiurnas']);
             $arSoportePago->setHorasNocturnas($arrayResultado[$i]['horasNocturnas']);

@@ -190,8 +190,10 @@ class ProcesoGenerarSoportePagoController extends Controller
         $intHoraFinal = $arTurno->getHoraHasta()->format('G');
         $diaSemana = $dateFecha->format('N');
         $diaSemana2 = $dateFecha2->format('N');
-        if($arTurno->getNovedad() == 0) {            
+        if($arTurno->getNovedad() == 0) {
             $intDias += 1;
+        }            
+            
             if($diaSemana == 7) {
                 $boolFestivo = 1;
             }
@@ -213,6 +215,7 @@ class ProcesoGenerarSoportePagoController extends Controller
             $arSoportePagoDetalle->setFecha($dateFecha);
             $arSoportePagoDetalle->setTurnoRel($arTurno);
             $arSoportePagoDetalle->setDescanso($arTurno->getDescanso());
+            $arSoportePagoDetalle->setNovedad($arTurno->getNovedad());
             $arSoportePagoDetalle->setDias($intDias);
             $arSoportePagoDetalle->setHoras($arTurno->getHorasNomina());        
             $arSoportePagoDetalle->setHorasDiurnas($arrHoras['horasDiurnas']);
@@ -238,6 +241,7 @@ class ProcesoGenerarSoportePagoController extends Controller
                 $arSoportePagoDetalle->setFecha($dateFecha2);
                 $arSoportePagoDetalle->setTurnoRel($arTurno);
                 $arSoportePagoDetalle->setDescanso($arTurno->getDescanso());
+                $arSoportePagoDetalle->setNovedad($arTurno->getNovedad());
                 $arSoportePagoDetalle->setDias(0);
                 $arSoportePagoDetalle->setHoras($arTurno->getHorasNomina());        
                 $arSoportePagoDetalle->setHorasDiurnas($arrHoras1['horasDiurnas']);
@@ -249,9 +253,7 @@ class ProcesoGenerarSoportePagoController extends Controller
                 $arSoportePagoDetalle->setHorasExtrasFestivasDiurnas($arrHoras1['horasExtrasFestivasDiurnas']);
                 $arSoportePagoDetalle->setHorasExtrasFestivasNocturnas($arrHoras1['horasExtrasFestivasNocturnas']);
                 $em->persist($arSoportePagoDetalle);            
-            }            
-            
-        }        
+            }                    
     }
 
     public function festivo($arFestivos, $dateFecha) {

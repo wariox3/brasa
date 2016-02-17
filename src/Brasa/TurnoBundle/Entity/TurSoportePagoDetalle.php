@@ -46,6 +46,11 @@ class TurSoportePagoDetalle
      * @ORM\Column(name="descanso", type="integer")
      */    
     private $descanso = 0;     
+
+    /**
+     * @ORM\Column(name="novedad", type="integer")
+     */    
+    private $novedad = 0;    
     
     /**
      * @ORM\Column(name="dias", type="integer")
@@ -758,5 +763,29 @@ class TurSoportePagoDetalle
     public function getTurnoRel()
     {
         return $this->turnoRel;
+    }
+
+    /**
+     * Set novedad
+     *
+     * @param integer $novedad
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setNovedad($novedad)
+    {
+        $this->novedad = $novedad;
+
+        return $this;
+    }
+
+    /**
+     * Get novedad
+     *
+     * @return integer
+     */
+    public function getNovedad()
+    {
+        return $this->novedad;
     }
 }
