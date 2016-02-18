@@ -10,7 +10,7 @@ use Brasa\RecursoHumanoBundle\Form\Type\RhuPagoConceptoType;
  * RhuPagoConcepto controller.
  *
  */
-class PagoConceptoController extends Controller
+class BasePagoConceptoController extends Controller
 {
 
     public function listaAction() {
@@ -158,7 +158,7 @@ class PagoConceptoController extends Controller
         }
         $arPagoConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->findAll();
-        $arPagoConceptos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),40);
+        $arPagoConceptos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),100);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/PagoConcepto:listar.html.twig', array(
                     'arPagoConceptos' => $arPagoConceptos,

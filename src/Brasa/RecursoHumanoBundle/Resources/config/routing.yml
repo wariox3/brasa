@@ -240,11 +240,11 @@ brs_rhu_liquidacion_adicional_concepto_nuevo:
     
 brs_rhu_pago_concepto_lista:
     path:     /rhu/pago/concepto/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagoConcepto:lista }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:BasePagoConcepto:lista }    
 
 brs_rhu_pago_concepto_nuevo:
     path:     /rhu/pago/concepto/nuevo/{codigoPagoConcepto}
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagoConcepto:nuevo }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:BasePagoConcepto:nuevo }    
     
 brs_rhu_incapacidades_pagos_nuevo:
     path:     /rhu/incapacidades/pagos/nuevo/{codigoIncapacidadPago}

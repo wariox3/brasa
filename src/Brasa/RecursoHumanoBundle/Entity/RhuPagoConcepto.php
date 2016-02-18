@@ -48,6 +48,16 @@ class RhuPagoConcepto
     private $prestacional = 0;     
     
     /**
+     * @ORM\Column(name="genera_ingreso_base_prestacion", type="boolean")
+     */    
+    private $generaIngresoBasePrestacion = 0;    
+
+    /**
+     * @ORM\Column(name="genera_ingreso_base_cotizacion", type="boolean")
+     */    
+    private $generaIngresoBaseCotizacion = 0;    
+    
+    /**
      * @ORM\Column(name="operacion", type="integer")
      */
     private $operacion = 0;            
@@ -706,5 +716,53 @@ class RhuPagoConcepto
     public function getTurProgramacionesTerceroRel()
     {
         return $this->turProgramacionesTerceroRel;
+    }
+
+    /**
+     * Set generaIngresoBasePrestacion
+     *
+     * @param boolean $generaIngresoBasePrestacion
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setGeneraIngresoBasePrestacion($generaIngresoBasePrestacion)
+    {
+        $this->generaIngresoBasePrestacion = $generaIngresoBasePrestacion;
+
+        return $this;
+    }
+
+    /**
+     * Get generaIngresoBasePrestacion
+     *
+     * @return boolean
+     */
+    public function getGeneraIngresoBasePrestacion()
+    {
+        return $this->generaIngresoBasePrestacion;
+    }
+
+    /**
+     * Set generaIngresoBaseCotizacion
+     *
+     * @param boolean $generaIngresoBaseCotizacion
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setGeneraIngresoBaseCotizacion($generaIngresoBaseCotizacion)
+    {
+        $this->generaIngresoBaseCotizacion = $generaIngresoBaseCotizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get generaIngresoBaseCotizacion
+     *
+     * @return boolean
+     */
+    public function getGeneraIngresoBaseCotizacion()
+    {
+        return $this->generaIngresoBaseCotizacion;
     }
 }

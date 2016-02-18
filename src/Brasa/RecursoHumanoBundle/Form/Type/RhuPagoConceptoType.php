@@ -19,6 +19,8 @@ class RhuPagoConceptoType extends AbstractType
             ->add('componeValor', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('porPorcentaje', 'number', array('required' => true))
             ->add('prestacional', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
+            ->add('generaIngresoBasePrestacion', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
+            ->add('generaIngresoBaseCotizacion', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('operacion', 'number', array('required' => true))
             ->add('conceptoAdicion', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('conceptoIncapacidad', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))

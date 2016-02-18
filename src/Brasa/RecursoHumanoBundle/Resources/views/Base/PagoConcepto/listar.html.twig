@@ -11,20 +11,20 @@
         <tr>
             <th>CÓDIGO</th>
             <th>{{ knp_pagination_sortable(arPagoConceptos, 'NOMBRE', 'codigo') }}</th>
-            <th>COMPONE SALARIO</th>
-            <th>COMPONE PORCENTAJE</th>
-            <th>COMPONE VALOR</th>
-            <th>POR PORCENTAJE</th>
-            <th>PRESTACIONAL</th>
-            <th>OPERACIÓN</th>
-            <th>ADICIÓN</th>
-            <th>INCAPACIDAD</th>
-            <th>AUXILIO TRANSPORTE</th>
-            <th>CÓDIGO CUENTA</th>
-            <th>TIPO CUENTA</th>
+            <th>SALARIO</th>
+            <th>%</th>
+            <th></th>
+            <th>VR</th>            
+            <th>PREST</th>
+            <th>IBP</th>
+            <th>IBC</th>           
+            <th></th>
+            <th>ADICIÓN</th>            
+            <th>A.TTE</th>
+            <th>CUENTA</th>            
             <th>PENSIÓN</th>
             <th>SALUD</th>
-            <th>TIPO ADICIONAL</th>
+            <th>T.ADIC</th>
             <th></th>
             <th></th>
         </tr>
@@ -34,15 +34,15 @@
                 <td>{{arPagoConceptos.nombre}}</td>
                 <td>{% if arPagoConceptos.componeSalario == 1%} SI {% else %}NO{% endif%}</td>
                 <td>{% if arPagoConceptos.componePorcentaje == 1%} SI {% else %}NO{% endif%}</td>
-                <td>{% if arPagoConceptos.componeValor == 1%} SI {% else %}NO{% endif%}</td>
                 <td>{{arPagoConceptos.porPorcentaje}}</td>
+                <td>{% if arPagoConceptos.componeValor == 1%} SI {% else %}NO{% endif%}</td>                                
                 <td>{% if arPagoConceptos.prestacional == 1%} SI {% else %}NO{% endif%}</td>
+                <td>{% if arPagoConceptos.generaIngresoBasePrestacion == 1%} SI {% else %}NO{% endif%}</td>
+                <td>{% if arPagoConceptos.generaIngresoBaseCotizacion == 1%} SI {% else %}NO{% endif%}</td>
                 <td>{{arPagoConceptos.operacion}}</td>
-                <td>{% if arPagoConceptos.conceptoAdicion == 1%} SI {% else %}NO{% endif%}</td>
-                <td>{% if arPagoConceptos.conceptoIncapacidad == 1%} SI {% else %}NO{% endif%}</td>
+                <td>{% if arPagoConceptos.conceptoAdicion == 1%} SI {% else %}NO{% endif%}</td>                
                 <td>{% if arPagoConceptos.conceptoAuxilioTransporte == 1%} SI {% else %}NO{% endif%}</td>
-                <td>{{arPagoConceptos.codigoCuentaFK}}</td>
-                <td>{{arPagoConceptos.TipoCuenta}}</td>
+                <td>{{arPagoConceptos.codigoCuentaFK}}{% if arPagoConceptos.TipoCuenta == 1%}D{% else %}C{% endif%}</td>                
                 <td>{% if arPagoConceptos.conceptoPension == 1%} SI {% else %}NO{% endif%}</td>
                 <td>{% if arPagoConceptos.conceptoSalud == 1%} SI {% else %}NO{% endif%}</td>
                 <td>{{arPagoConceptos.TipoAdicional}}</td>
