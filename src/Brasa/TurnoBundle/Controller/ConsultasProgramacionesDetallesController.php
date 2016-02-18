@@ -17,6 +17,7 @@ class ConsultasProgramacionesDetallesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
+        $this->filtrarFecha = TRUE;
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->lista();
@@ -40,6 +41,11 @@ class ConsultasProgramacionesDetallesController extends Controller
             if($arCentroCosto) {
                 $this->codigoCentroCosto = $arCentroCosto->getCodigoCentroCostoPk();
             }
+            $dateFechaDesde = $form->get('fechaDesde')->getData();
+            $dateFechaHasta = $form->get('fechaHasta')->getData();
+            $this->fechaDesde = $dateFechaDesde->format('Y/m/d');
+            $this->fechaHasta = $dateFechaHasta->format('Y/m/d');   
+            $this->filtrarFecha = $form->get('filtrarFecha')->getData();            
             if ($form->get('BtnFiltrar')->isClicked()) {                
                 $this->lista();
             }
@@ -59,10 +65,19 @@ class ConsultasProgramacionesDetallesController extends Controller
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
+        $strFechaDesde = "";
+        $strFechaHasta = "";        
+        $filtrarFecha = $this->filtrarFecha;
+        if($filtrarFecha) {
+            $strFechaDesde = $this->fechaDesde;
+            $strFechaHasta = $this->fechaHasta;                    
+        }        
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->consultaDetalleDql(
                 $this->codigoCliente,
                 $this->codigoRecurso,
-                $this->codigoCentroCosto);
+                $this->codigoCentroCosto,
+                $strFechaDesde,
+                $strFechaHasta);
     }
 
     private function formularioFiltro() {
@@ -98,7 +113,7 @@ class ConsultasProgramacionesDetallesController extends Controller
         $form = $this->createFormBuilder()  
             ->add('fechaDesde', 'date', array('format' => 'yyyyMMMMdd', 'data' => $dateFechaDesde)) 
             ->add('fechaHasta', 'date', array('format' => 'yyyyMMMMdd', 'data' => $dateFechaHasta))  
-            ->add('filtrarFecha', 'checkbox', array('required'  => false))                                 
+            ->add('filtrarFecha', 'checkbox', array('required'  => false, 'data' => $this->filtrarFecha))                                 
             ->add('centroCostoRel', 'entity', $arrayPropiedadesCentroCosto)                
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
