@@ -254,10 +254,14 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                             
                             if($arPagoAdicional->getPagoConceptoRel()->getPrestacional() == 1) {
                                 $douDevengado = $douDevengado + $douPagoDetalle;
-                                $douIngresoBasePrestacional += $douPagoDetalle;
-                                $douIngresoBaseCotizacion += $douPagoDetalle;
-                                $arPagoDetalle->setVrIngresoBasePrestacion($douPagoDetalle);
-                                $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);
+                                if($arPagoAdicional->getPagoConceptoRel()->getGeneraIngresoBaseCotizacion() == 1) {
+                                    $douIngresoBaseCotizacion += $douPagoDetalle;    
+                                    $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);
+                                }
+                                if($arPagoAdicional->getPagoConceptoRel()->getGeneraIngresoBasePrestacion() == 1) {
+                                    $douIngresoBasePrestacional += $douPagoDetalle;    
+                                    $arPagoDetalle->setVrIngresoBasePrestacion($douPagoDetalle);
+                                }                                                                                                                                                                
                                 $arPagoDetalle->setPrestacional(1);
                             }
                             $em->persist($arPagoDetalle);                            
