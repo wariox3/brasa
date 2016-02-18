@@ -30,7 +30,7 @@
                 <td>{{ arSoportePagoPeriodos.centroCostoRel.nombre  }}</td>
                 <td>{{ arSoportePagoPeriodos.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arSoportePagoPeriodos.fechaHasta |date("Y/m/d")  }}</td>
-                <td>{{ arSoportePagoPeriodos.recursos  }}</td>
+                <td style="text-align: right">{{ arSoportePagoPeriodos.recursos | number_format(0, '.', ',') }}</td>
                 {% if arSoportePagoPeriodos.estadoGenerado == 0 %}
                     <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }}">Generar</button></td>
                     <td></td>

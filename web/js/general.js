@@ -21,6 +21,15 @@ function ChequearTodos(chkbox) {
     }
 }
 
+function ChequearTodosTabla(chkbox, nombre) {
+    for (var i=0;i < document.forms[0].elements.length;i++)  {
+        var elemento = document.forms[0].elements[i];
+        if (elemento.name == nombre) {
+            elemento.checked = chkbox.checked
+        }
+    }
+}
+
 $(document).ready(function(){        
         $('a').click(
             function(){

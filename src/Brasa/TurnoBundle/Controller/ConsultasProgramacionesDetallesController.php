@@ -9,6 +9,9 @@ class ConsultasProgramacionesDetallesController extends Controller
     var $codigoCliente = "";
     var $codigoRecurso = "";
     var $codigoCentroCosto = "";
+    var $fechaDesde = "";
+    var $fechaHasta = "";
+    var $filtrarFecha = "";    
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -65,6 +68,19 @@ class ConsultasProgramacionesDetallesController extends Controller
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
+        $dateFecha = new \DateTime('now');
+        $strFechaDesde = $dateFecha->format('Y/m/')."01";
+        $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
+        $strFechaHasta = $dateFecha->format('Y/m/').$intUltimoDia;
+        if($this->fechaDesde != "") {
+            $strFechaDesde = $this->fechaDesde;
+        }
+        if($this->fechaHasta != "") {
+            $strFechaDesde = $this->fechaHasta;
+        }    
+        $dateFechaDesde = date_create($strFechaDesde);
+        $dateFechaHasta = date_create($strFechaHasta);
+        
         $arrayPropiedadesCentroCosto = array(
                 'class' => 'BrasaTurnoBundle:TurCentroCosto',
                 'query_builder' => function (EntityRepository $er) {
@@ -79,7 +95,10 @@ class ConsultasProgramacionesDetallesController extends Controller
         if($this->codigoCentroCosto != "") {
             $arrayPropiedadesCentroCosto['data'] = $em->getReference("BrasaTurnoBundle:TurCentroCosto", $this->codigoCentroCosto);
         }        
-        $form = $this->createFormBuilder()   
+        $form = $this->createFormBuilder()  
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMMMdd', 'data' => $dateFechaDesde)) 
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMMMdd', 'data' => $dateFechaHasta))  
+            ->add('filtrarFecha', 'checkbox', array('required'  => false))                                 
             ->add('centroCostoRel', 'entity', $arrayPropiedadesCentroCosto)                
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))

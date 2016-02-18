@@ -7,15 +7,19 @@
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
                 <th>CODIGO</th>
+                <th>CENTRO COSTO</th>
                 <th>DESDE</th>
                 <th>HASTA</th>
+                <th>RECURSOS</th>
                 <th></th>                
             </tr>
             {% for arSoportePagoPeriodos in arSoportePagoPeriodos %}
             <tr>
                 <td>{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk  }}</td>
+                <td>{{ arSoportePagoPeriodos.centroCostoRel.nombre  }}</td>
                 <td>{{ arSoportePagoPeriodos.fechaDesde |date("Y/m/d")  }}</td>
-                <td>{{ arSoportePagoPeriodos.fechaHasta |date("Y/m/d")  }}</td>                
+                <td>{{ arSoportePagoPeriodos.fechaHasta |date("Y/m/d")  }}</td>  
+                <td style="text-align: right">{{ arSoportePagoPeriodos.recursos | number_format(0, '.', ',') }}</td>
                 <td><button class="btn btn-default btn-xs" type="submit" name="OpCargar" value="{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }}">Cargar</button></td>
             </tr>
 
