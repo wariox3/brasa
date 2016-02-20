@@ -169,13 +169,17 @@
                             <td>{{ arContratos.centroCostoRel.nombre  }}</td>
                             <td>{{ arContratos.tipoTiempoRel.nombre  }}</td>
                             <td>{{ arContratos.fechaDesde |date("Y/m/d")  }}</td>
-                            <td>{% if arContratos.indefinido == 1 %} INDEFINIDO {% else %} {{ arContratos.fechaHasta |date("Y/m/d")  }} {% endif %}</td>
+                            <td>{% if arContratos.codigoContratoTipoFk != 2 %} INDEFINIDO {% else %} {{ arContratos.fechaHasta |date("Y/m/d")  }} {% endif %}</td>
                             <td style="text-align: right">{% if permisoVerSalario == false %} {% else %} {{ arContratos.vrSalario | number_format(0, '.', ',') }}{% endif %}</td>
                             <td>{{ arContratos.cargoRel.nombre|default('SIN CONTRATO')  }}</td>
                             <td>{{ arContratos.cargoDescripcion  }}</td>
                             <td>{{ arContratos.clasificacionRiesgoRel.nombre|default('SIN CONTRATO') }}</td>
                             <td>{% if arContratos.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>
-                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': arContratos.codigoContratoPk,  'codigoEmpleado': arContratos.codigoEmpleadoFk}) }}', 'AgregarContrato', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                            {% if arContratos.indefinido == 1 %}
+                                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': arContratos.codigoContratoPk,  'codigoEmpleado': arContratos.codigoEmpleadoFk}) }}', 'AgregarContrato', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
                             <td style="text-align: center"><a href="{{ path('brs_rhu_base_contratos_detalles', { 'codigoContrato': arContratos.codigoContratoPk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                             <td><input type="checkbox" name="ChkSeleccionarContrato[]" value="{{ arContratos.codigoContratoPk }}" /></td>
                         </tr>

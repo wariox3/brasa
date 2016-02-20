@@ -27,14 +27,14 @@
                 <tr>
                     <td class="titulo">FECHA INICIO:</td>
                     <td class="td-in-well">{{ arContrato.fechaDesde|date("Y/m/d") }}</td>
-                    <td class="titulo">NUMERO:</td>
-                    <td class="td-in-well">{{ arContrato.numero }}</td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
                     <td class="titulo">SALARIO:</td>
                     <td class="td-in-well-numerico" align="right">$ {{ arContrato.vrSalario | number_format(2, '.', ',') }}</td>                   
                 </tr>    
                 <tr>
                     <td class="titulo">FECHA TERMINA:</td>
-                    <td class="td-in-well">{% if arContrato.indefinido == 1 %} INDEFINIDO {% else %} {{ arContrato.fechaHasta |date("Y/m/d") }} {%endif%}</td>
+                    <td>{% if arContrato.codigoContratoTipoFk != 2 %} INDEFINIDO {% else %} {{ arContrato.fechaHasta |date("Y/m/d")  }} {% endif %}</td>
                     <td class="titulo">CENTRO COSTO:</td>
                     <td class="td-in-well">{{ arContrato.centroCostoRel.nombre|default('SIN CENTRO COSTO') }}</td>
                     <td class="titulo">CARGO:</td>
@@ -92,6 +92,9 @@
             <li><a href="#vacaciones" data-toggle="tab">Vacaciones</a></li>
             <li><a href="#sedes" data-toggle="tab">Sedes</a></li>
             <li><a href="#traslados" data-toggle="tab">Traslados</a></li>
+            {% if arContrato.codigoContratoTipoFk == 2 %}
+            <li><a href="#prorroga" data-toggle="tab">Prorrogas</a></li>
+            {% endif %}
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="cambiosalario">
@@ -116,7 +119,9 @@
                 </table>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_cambio_salario_nuevo', {'codigoContrato': arContrato.codigoContratoPk, 'codigoCambioSalario': 0 }) }}', 'AgregarCambioSalario', 600, 900)" >Nuevo</a>
+                        {% if arContrato.indefinido == 1%}
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_cambio_salario_nuevo', {'codigoContrato': arContrato.codigoContratoPk, 'codigoCambioSalario': 0 }) }}', 'AgregarCambioSalario', 600, 900)" >Nuevo</a>
+                        {% endif %}    
                     </div>
                 </div>        
                 
@@ -180,7 +185,9 @@
                 </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_sedes_nuevo', {'codigoContrato': arContrato.codigoContratoPk }) }}', 'AgregarSede', 600, 900)" >Nuevo</a>
+                        {% if arContrato.indefinido == 1%}
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_sedes_nuevo', {'codigoContrato': arContrato.codigoContratoPk }) }}', 'AgregarSede', 600, 900)" >Nuevo</a>
+                        {% endif %}        
                     </div>
                 </div>
             </div>
@@ -210,7 +217,9 @@
                 </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_traslado_pension_nuevo', {'codigoContrato': arContrato.codigoContratoPk, 'codigoTrasladoPension': 0 }) }}', 'AgregarTrasladoPension', 600, 900)" >Nuevo</a>
+                        {% if arContrato.indefinido == 1%}
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_traslado_pension_nuevo', {'codigoContrato': arContrato.codigoContratoPk, 'codigoTrasladoPension': 0 }) }}', 'AgregarTrasladoPension', 600, 900)" >Nuevo</a>
+                        {% endif %}    
                     </div>
                 </div>
                 <br /><br />
@@ -238,12 +247,52 @@
                 </div>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_traslado_salud_nuevo', {'codigoContrato': arContrato.codigoContratoPk, 'codigoTrasladoSalud': 0 }) }}', 'AgregarTrasladoSalud', 600, 900)" >Nuevo</a>
+                        {% if arContrato.indefinido == 1%}
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_traslado_salud_nuevo', {'codigoContrato': arContrato.codigoContratoPk, 'codigoTrasladoSalud': 0 }) }}', 'AgregarTrasladoSalud', 600, 900)" >Nuevo</a>
+                        {% endif %}    
                     </div>
                 </div>    
-            </div>        
+            </div>
+            <div class="tab-pane" id="prorroga">
+                <br />
+                <table class="table table-striped table-bordered table-condensed">
+                    <tr>
+                        <th>CÓDIGO</th>
+                        <th>FECHA</th>
+                        <th>FECHA DESDE ANTERIOR</th>
+                        <th>FECHA HASTA ANTERIOR</th>
+                        <th>FECHA DESDE NUEVO</th>
+                        <th>FECHA HASTA NUEVO</th>
+                        <th>MESES PRORROGA</th>
+                        <th>DETALLE</th>
+                        <th></th>
+                    </tr>
+                    {% for arContratoProrrogas in arContratoProrrogas %}
+                        <tr>
+                            <td><input type="hidden" name="LblCodigo[]" value="{{ arContratoProrrogas.codigoContratoProrrogaPk }}">{{ arContratoProrrogas.codigoContratoProrrogaPk }} </td>
+                            <td>{{ arContratoProrrogas.fecha |date("Y/m/d")  }}</td>                            
+                            <td>{{ arContratoProrrogas.fechaInicialAnterior |date("Y/m/d")  }}</td>
+                            <td>{{ arContratoProrrogas.fechaFinalAnterior |date("Y/m/d")  }}</td>
+                            <td>{{ arContratoProrrogas.fechaInicialNueva |date("Y/m/d")  }}</td>
+                            <td>{{ arContratoProrrogas.fechaFinalNueva |date("Y/m/d")  }}</td>
+                            <td>{{ arContratoProrrogas.meses  }}</td>
+                            <td>{{ arContratoProrrogas.detalle  }}</td>
+                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_contrato_prorroga_nuevo', { 'codigoContrato': arContrato.codigoContratoPk,  'codigoContratoProrroga': arContratoProrrogas.codigoContratoProrrogaPk}) }}', 'EditarProrroga', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <div class="btn-toolbar" style="float: right">
+                    <div class="btn-group">
+                        {% if arContrato.indefinido == 1%}
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_contrato_prorroga_nuevo', {'codigoContrato': arContrato.codigoContratoPk, 'codigoContratoProrroga': 0 }) }}', 'AgregarContratoProrroga', 500, 900)" >Nuevo</a>
+                        {% endif %}    
+                    </div>
+                </div>        
+                <div class="btn-toolbar" style="float: left">
+                    {{ knp_pagination_render(arContratoProrrogas) }}
+                </div>
+            </div>  
         </div>
-        
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
                 <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_contratos_lista') }}" style="float:left">Volver</a>

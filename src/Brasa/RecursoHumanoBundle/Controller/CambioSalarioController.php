@@ -42,7 +42,8 @@ class CambioSalarioController extends Controller
                 $arContrato->setVrSalario($form->get('salarioNuevo')->getData());
                 $arContrato->setVrSalarioPago($form->get('salarioNuevo')->getData());
                 $em->persist($arEmpleadoActualizar);
-                $em->persist($arCambioSalario);  
+                $em->persist($arCambioSalario);
+                $em->persist($arContrato);
                 $em->flush();
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                 
             }

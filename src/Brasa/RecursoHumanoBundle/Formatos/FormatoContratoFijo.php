@@ -54,17 +54,22 @@ class FormatoContratoFijo extends \FPDF_FPDF {
         $sustitucion7 = $arContrato->getCargoRel()->getNombre();
         $sustitucion8 = number_format($arContrato->getVrSalario(), 2,'.',',');
         $sustitucion9 = $arContrato->getCentroCostoRel()->getPeriodoPagoRel()->getNombre();
-        $sustitucion10 = $arContrato->getFechaDesde()->format('Y/m/d');
+        if ($arContrato->getFechaProrrogaInicio() == null){
+            $sustitucion10 = $arContrato->getFechaDesde()->format('Y/m/d');
+            $sustitucion13 = $arContrato->getFechaHasta()->format('Y/m/d');
+            $feci = $arContrato->getFechaDesde();
+            $fecf = $arContrato->getFechaHasta();
+        } else {
+            $sustitucion10 = $arContrato->getFechaProrrogaInicio()->format('Y/m/d');
+            $sustitucion13 = $arContrato->getFechaProrrogaFinal()->format('Y/m/d');
+            $feci = $arContrato->getFechaProrrogaInicio();
+            $fecf = $arContrato->getFechaProrrogaFinal();
+        }
         $sustitucion11 = $arContrato->getCentroCostoRel()->getCiudadRel()->getNombre();
-        $sustitucion13 = $arContrato->getFechaHasta()->format('Y/m/d');
-        //calculo meses
-        $aniodesde = substr($sustitucion10, 0,-6);
-        $mesdesde = substr($sustitucion10, -5,-3);
-        $aniohasta = substr($sustitucion13, 0,-6);
-        $meshasta = substr($sustitucion13, -5,-3);
-        $anioresta = $aniohasta - $aniodesde;
-        $mesresta = $meshasta - $mesdesde + 1 +($anioresta * 12);
-        $sustitucion12 = $mesresta;
+        //calculo meses        
+        $interval = $feci->diff($fecf);
+        $interval = round($interval->format('%a%') / 30);
+        $sustitucion12 = $interval;
         $sustitucion14 = $arContrato->getFechaDesde()->format('Y/m/d');
         setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
         $sustitucion14 = strftime("%d de %B de %Y", strtotime($sustitucion14));

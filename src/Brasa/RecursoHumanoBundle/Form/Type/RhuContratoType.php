@@ -70,7 +70,7 @@ class RhuContratoType extends AbstractType
             ->add('fechaHasta', 'date', array('required' => true))                
             ->add('horarioTrabajo', 'text', array('required' => false)) 
             ->add('vrSalario', 'number', array('required' => true))  
-            ->add('numero', 'text', array('required' => true))                                           
+            //->add('numero', 'text', array('required' => true))                                           
             ->add('cargoDescripcion', 'text', array('required' => true))                                                                       
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('salarioIntegral', 'choice', array('choices' => array('0' => 'NO', '1' => 'SI')))

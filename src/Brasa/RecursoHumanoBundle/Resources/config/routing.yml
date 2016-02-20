@@ -500,7 +500,11 @@ brs_rhu_traslado_salud_nuevo:
     
 brs_rhu_cambio_salario_nuevo:
     path:     /rhu/cambiosalario/nuevo/{codigoContrato}/{codigoCambioSalario}
-    defaults: { _controller: BrasaRecursoHumanoBundle:CambioSalario:nuevo }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:CambioSalario:nuevo }
+    
+brs_rhu_contrato_prorroga_nuevo:
+    path:     /rhu/contrato/prorroga/nuevo/{codigoContrato}/{codigoContratoProrroga}
+    defaults: { _controller: BrasaRecursoHumanoBundle:ContratoProrroga:nuevo }    
     
 brs_rhu_facturas_lista:
     path:     /rhu/facturas/lista

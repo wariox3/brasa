@@ -55,8 +55,8 @@
                     <tr>
                         <th>CÓDIGO</th>
                         <th>TIPO</th>                        
-                        <th>NUMERO</th>
                         <th>EMPLEADO</th>
+                        <th>IDENTIFICACIÓN</th>
                         <th>CENTRO COSTO</th>
                         <th>TIEMPO</th>
                         <th>DESDE</th>
@@ -73,12 +73,12 @@
                         <tr>
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arContratos.codigoContratoPk }}">{{ arContratos.codigoContratoPk }} </td>
                             <td>{{ arContratos.contratoTipoRel.nombre|default('SIN TIPO')  }}</td>                            
-                            <td>{{ arContratos.numero  }}</td>
                             <td><a href="{{ path('brs_rhu_base_empleados_detalles', { 'codigoEmpleado': arContratos.codigoEmpleadoFk }) }}" target="_blanck" >{{ arContratos.empleadoRel.nombreCorto  }}</a></td>
+                            <td>{{ arContratos.empleadoRel.numeroIdentificacion  }}</td>
                             <td>{{ arContratos.centroCostoRel.nombre  }}</td>
                             <td>{{ arContratos.tipoTiempoRel.nombre  }}</td>
                             <td>{{ arContratos.fechaDesde |date("Y/m/d")  }}</td>
-                            <td>{% if arContratos.indefinido == 1 %} INDEFINIDO {% else %} {{ arContratos.fechaHasta |date("Y/m/d")  }} {% endif %}</td>
+                            <td>{% if arContratos.codigoContratoTipoFk != 2 %} INDEFINIDO {% else %} {{ arContratos.fechaHasta |date("Y/m/d")  }} {% endif %}</td>
                             <td style="text-align: right">{{ arContratos.vrSalario | number_format(0, '.', ',') }}</td>                            
                             <td>{% if arContratos.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>
                             <td>{{ arContratos.fechaUltimoPagoVacaciones |date("Y/m/d")  }}</td>

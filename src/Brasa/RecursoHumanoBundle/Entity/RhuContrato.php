@@ -60,7 +60,17 @@ class RhuContrato
     /**
      * @ORM\Column(name="fecha_hasta", type="date", nullable=true)
      */    
-    private $fechaHasta; 
+    private $fechaHasta;
+    
+    /**
+     * @ORM\Column(name="fecha_prorroga_inicio", type="date", nullable=true)
+     */    
+    private $fechaProrrogaInicio;    
+    
+    /**
+     * @ORM\Column(name="fecha_prorroga_final", type="date", nullable=true)
+     */    
+    private $fechaProrrogaFinal;
     
     /**
      * @ORM\Column(name="numero", type="string", length=30, nullable=true)
@@ -321,7 +331,10 @@ class RhuContrato
      */
     protected $trasladosSaludContratoRel;
     
-    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuContratoProrroga", mappedBy="contratoRel")
+     */
+    protected $contratosProrrogasContratoRel;
     /**
      * Constructor
      */
@@ -339,6 +352,7 @@ class RhuContrato
         $this->proyeccionesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->trasladosPensionesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->trasladosSaludContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contratosProrrogasContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1861,5 +1875,87 @@ class RhuContrato
     public function getTrasladosSaludContratoRel()
     {
         return $this->trasladosSaludContratoRel;
+    }
+
+    /**
+     * Add contratosProrrogasContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContratoProrroga $contratosProrrogasContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addContratosProrrogasContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContratoProrroga $contratosProrrogasContratoRel)
+    {
+        $this->contratosProrrogasContratoRel[] = $contratosProrrogasContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove contratosProrrogasContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContratoProrroga $contratosProrrogasContratoRel
+     */
+    public function removeContratosProrrogasContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContratoProrroga $contratosProrrogasContratoRel)
+    {
+        $this->contratosProrrogasContratoRel->removeElement($contratosProrrogasContratoRel);
+    }
+
+    /**
+     * Get contratosProrrogasContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContratosProrrogasContratoRel()
+    {
+        return $this->contratosProrrogasContratoRel;
+    }
+
+    /**
+     * Set fechaProrrogaInicio
+     *
+     * @param \DateTime $fechaProrrogaInicio
+     *
+     * @return RhuContrato
+     */
+    public function setFechaProrrogaInicio($fechaProrrogaInicio)
+    {
+        $this->fechaProrrogaInicio = $fechaProrrogaInicio;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaProrrogaInicio
+     *
+     * @return \DateTime
+     */
+    public function getFechaProrrogaInicio()
+    {
+        return $this->fechaProrrogaInicio;
+    }
+
+    /**
+     * Set fechaProrrogaFinal
+     *
+     * @param \DateTime $fechaProrrogaFinal
+     *
+     * @return RhuContrato
+     */
+    public function setFechaProrrogaFinal($fechaProrrogaFinal)
+    {
+        $this->fechaProrrogaFinal = $fechaProrrogaFinal;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaProrrogaFinal
+     *
+     * @return \DateTime
+     */
+    public function getFechaProrrogaFinal()
+    {
+        return $this->fechaProrrogaFinal;
     }
 }
