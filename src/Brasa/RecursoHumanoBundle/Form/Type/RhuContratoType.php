@@ -66,8 +66,10 @@ class RhuContratoType extends AbstractType
                     ->orderBy('ec.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                
-            ->add('fechaDesde', 'date', array('required' => true))
-            ->add('fechaHasta', 'date', array('required' => true))                
+            //->add('fechaDesde', 'date', array('required' => true))
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                
+            //->add('fechaHasta', 'date', array('required' => true))                
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                
             ->add('horarioTrabajo', 'text', array('required' => false)) 
             ->add('vrSalario', 'number', array('required' => true))  
             //->add('numero', 'text', array('required' => true))                                           
