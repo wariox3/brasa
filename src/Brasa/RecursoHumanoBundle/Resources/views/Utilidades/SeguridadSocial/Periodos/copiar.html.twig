@@ -9,7 +9,13 @@
         {{ form_errors(form) }}
         <div class="panel panel-default">
             <div class="panel-heading">Filtros de busqueda</div>
-            <div class="panel-body"> 
+            <div class="panel-body">
+                <div class="form-group form-group-sm">  
+                    <label for="form_sucursalRel" class="col-sm-3 control-label">Sucursal:</label>
+                    <div class="col-sm-9">                  
+                        {{ form_widget(form.sucursalRel, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>
                 <div class="form-group form-group-sm">  
                     <label for="form_centroCostoRel" class="col-sm-3 control-label">Centro costo:</label>
                     <div class="col-sm-9">                  

@@ -20,20 +20,26 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
             return $dql;
     }
     
-    public function listaTrasladoDql($codigoPeriodoDetalle, $strCodigoCentroCosto ) {                    
+    public function listaTrasladoDql($codigoPeriodoDetalle, $strCodigoCentroCosto, $strCodigoSucursal) {                    
             $dql   = "SELECT pe, e FROM BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado pe JOIN pe.empleadoRel e "
                     ."WHERE pe.codigoPeriodoDetalleFk <> " . $codigoPeriodoDetalle . " ";
             if($strCodigoCentroCosto != "") {
                 $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
             }
+            if($strCodigoSucursal != "") {
+                $dql .= " AND pe.codigoSucursalFk = " . $strCodigoSucursal;
+            }
             return $dql;
     }
     
-    public function listaCopiarDql($codigoPeriodoDetalle, $strCodigoCentroCosto ) {                    
+    public function listaCopiarDql($codigoPeriodoDetalle, $strCodigoCentroCosto, $strCodigoSucursal ) {                    
             $dql   = "SELECT pe, e FROM BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado pe JOIN pe.empleadoRel e "
                     ."WHERE pe.codigoPeriodoDetalleFk <> " . $codigoPeriodoDetalle . " ";
             if($strCodigoCentroCosto != "") {
                 $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+            }
+            if($strCodigoSucursal != "") {
+                $dql .= " AND pe.codigoSucursalFk = " . $strCodigoSucursal;
             }
             return $dql;
     }
