@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuSsoPeriodoType;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuSsoPeriodoDetalleType;
 
 class SeguridadSocialPeriodosController extends Controller
 {
@@ -493,22 +494,20 @@ class SeguridadSocialPeriodosController extends Controller
             'form' => $form->createView()));
     }
     
-    public function detalleNuevoAction($codigoPeriodo) {
+    public function detalleNuevoAction($codigoPeriodo, $codigoPeriodoDetallePk) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $arPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo();
         $arPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->find($codigoPeriodo);
-        $form = $this->createFormBuilder()
-            ->add('sucursalRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuSsoSucursal',
-                'property' => 'nombre',
-            ))
-            ->add('BtnGuardar', 'submit', array('label' => 'Guardar'))
-            ->getForm();
+        $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
+        if ($codigoPeriodoDetallePk != 0)
+        {
+            $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetallePk);
+        }    
+        $form = $this->createForm(new RhuSsoPeriodoDetalleType(), $arPeriodoDetalle);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
-            $arPeriodoDetalle->setSsoSucursalRel($form->get('sucursalRel')->getData());
+            $arPeriodoDetalle = $form->getData();
             $arPeriodoDetalle->setSsoPeriodoRel($arPeriodo);
             $em->persist($arPeriodoDetalle);
             $em->flush();
@@ -663,7 +662,7 @@ class SeguridadSocialPeriodosController extends Controller
         $session = $this->getRequest()->getSession();
         $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
         $arPeriodoDetalle =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);
-        $form = $this->formularioTrasladarEmpleado();
+        $form = $this->formularioTrasladarEmpleado($arPeriodoDetalle);
         $form->handleRequest($request);
         $this->listarTrasladoEmpleados($codigoPeriodoDetalle);
         if($form->isValid()) {
@@ -801,9 +800,10 @@ class SeguridadSocialPeriodosController extends Controller
         return $form;
     }
     
-    private function formularioTrasladarEmpleado() {
+    private function formularioTrasladarEmpleado($ar) {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
+        $codigoPeriodo = $ar->getCodigoPeriodoFk();
         $arrayPropiedades = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'query_builder' => function (EntityRepository $er) {
@@ -818,7 +818,8 @@ class SeguridadSocialPeriodosController extends Controller
         if($session->get('filtroCodigoCentroCosto')) {
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
         }
-        $arrayPropiedadesSucursal = array(
+        
+        /*$arrayPropiedadesSucursal = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSsoSucursal',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('ssos')
@@ -831,7 +832,19 @@ class SeguridadSocialPeriodosController extends Controller
             );
         if($session->get('filtroCodigoSucursal')) {
             $arrayPropiedadesSucursal['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuSsoSucursal", $session->get('filtroCodigoSucursal'));
-        }
+        }*/
+       $arrayPropiedadesSucursal = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle',
+                'query_builder' => function (EntityRepository $er) use($codigoPeriodo) {
+                    return $er->createQueryBuilder('ssopd')
+                    ->where('ssopd.codigoPeriodoFk = :codigoPeriodo')
+                    ->setParameter('codigoPeriodo', $codigoPeriodo)
+                    ->orderBy('ssopd.codigoPeriodoDetallePk', 'ASC');},
+                'property' => 'detalle',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                );
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('sucursalRel', 'entity', $arrayPropiedadesSucursal)

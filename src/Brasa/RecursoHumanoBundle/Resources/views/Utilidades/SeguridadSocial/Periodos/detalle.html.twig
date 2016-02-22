@@ -11,6 +11,7 @@
             <tr>
                 <th>CÓDIGO</th>
                 <th>SUCURSAL</th>
+                <th>DETALLE</th>
                 <th>GENERADO</th>
                 <th>CERRADO</th>
                 <th>DESDE</th>
@@ -25,12 +26,14 @@
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
                 <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
             </tr>
             {% for arSsoPeriodoDetalles in arSsoPeriodoDetalles %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}">{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }} </td>
-                <td>{{ arSsoPeriodoDetalles.SsoSucursalRel.nombre  }}</td>
+                <td>{{ arSsoPeriodoDetalles.SsoSucursalRel.nombre  }} ({{arSsoPeriodoDetalles.SsoSucursalRel.codigoInterface}})</td>
+                <td>{{ arSsoPeriodoDetalles.detalle  }}</td>
                 <td {% if arSsoPeriodoDetalles.estadoGenerado == 1 %}class="success"{% endif %}>{% if arSsoPeriodoDetalles.estadoGenerado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td {% if arSsoPeriodoDetalles.estadoCerrado == 1 %}class="success"{% endif %}>{% if arSsoPeriodoDetalles.estadoCerrado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.fechaDesde |date("Y/m/d")  }}</td>
@@ -59,6 +62,9 @@
                 </td>
                 <td style="text-align: center">{% if arSsoPeriodoDetalles.estadoGenerado == 1 %}<a href="{{ path('brs_rhu_ss_periodo_detalle_aportes', { 'codigoPeriodoDetalle': arSsoPeriodoDetalles.codigoPeriodoDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a>{% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_ss_periodo_detalle_empleados', { 'codigoPeriodoDetalle': arSsoPeriodoDetalles.codigoPeriodoDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" ></a></td>
+                {% if arSsoPeriodoDetalles.estadoGenerado == 0 %}
+                    <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_ss_periodo_detalle_nuevo', { 'codigoPeriodo': codigoPeriodo, 'codigoPeriodoDetallePk': arSsoPeriodoDetalles.codigoPeriodoDetallePk }) }}', 'EditarNuevoDetalle', 600, 900)" style="float:left"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                {% endif %}
                 <td style="text-align: center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}" /></td>
             </tr>
             {% endfor %}
@@ -74,7 +80,7 @@
         </div>
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_ss_periodo_detalle_nuevo', { 'codigoPeriodo': codigoPeriodo }) }}', 'AgregarNuevoDetalle', 600, 900)" style="float:left">Nuevo</a>
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_ss_periodo_detalle_nuevo', { 'codigoPeriodo': codigoPeriodo, 'codigoPeriodoDetallePk': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)" style="float:left">Nuevo</a>
             </div>
             <div class="btn-group">
                 <button class="btn btn-default btn-sm" type="submit" name="OpGenerarPagosExcel" value="{{ codigoPeriodo }}">Excel pagos periodo</button>

@@ -29,6 +29,7 @@ class RhuSsoPeriodoRepository extends EntityRepository {
                 $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
                 $arPeriodoDetalle->setSsoPeriodoRel($arPeriodo);
                 $arPeriodoDetalle->setSsoSucursalRel($arSucursal);
+                $arPeriodoDetalle->setDetalle($arSucursal->getNombre());
                 $em->persist($arPeriodoDetalle);            
             }
             $em->flush();

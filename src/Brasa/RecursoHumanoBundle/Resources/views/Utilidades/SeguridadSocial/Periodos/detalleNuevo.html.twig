@@ -8,11 +8,17 @@
         <div class="panel-heading">Información detalle nuevo</div>
         <div class="panel-body">   
             <div class="form-group form-group-sm">
-                <label for="form_sucursalRel" class="col-sm-2 control-label">Sucursal:</label>
+                <label for="form_ssoSucursalRel" class="col-sm-2 control-label">Sucursal:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(form.sucursalRel, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                        {{ form_widget(form.ssoSucursalRel, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
                 </div>
-            </div>          
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_detalle" class="col-sm-2 control-label">Detalle:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.detalle, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>    
         </div>
     </div>                   
     <div class="modal-footer">      

@@ -25,7 +25,12 @@ class RhuSsoPeriodoDetalle
     /**
      * @ORM\Column(name="codigo_sucursal_fk", type="integer")
      */    
-    private $codigoSucursalFk;       
+    private $codigoSucursalFk;
+    
+    /**
+     * @ORM\Column(name="detalle", type="string", length=50)
+     */    
+    private $detalle;
     
     /**     
      * @ORM\Column(name="estado_generado", type="boolean")
@@ -315,5 +320,29 @@ class RhuSsoPeriodoDetalle
     public function getEstadoActualizado()
     {
         return $this->estadoActualizado;
+    }
+
+    /**
+     * Set detalle
+     *
+     * @param string $detalle
+     *
+     * @return RhuSsoPeriodoDetalle
+     */
+    public function setDetalle($detalle)
+    {
+        $this->detalle = $detalle;
+
+        return $this;
+    }
+
+    /**
+     * Get detalle
+     *
+     * @return string
+     */
+    public function getDetalle()
+    {
+        return $this->detalle;
     }
 }
