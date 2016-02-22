@@ -105,6 +105,11 @@ class RhuPago
     private $vrAdicionalValorNoPrestasional = 0;     
     
     /**
+     * @ORM\Column(name="vr_adicional_cotizacion", type="float")
+     */
+    private $vrAdicionalCotizacion = 0;    
+    
+    /**
      * @ORM\Column(name="vr_auxilio_transporte", type="float")
      */
     private $vrAuxilioTransporte = 0;    
@@ -1670,5 +1675,29 @@ class RhuPago
     public function getVrAdicionalValorNoPrestasional()
     {
         return $this->vrAdicionalValorNoPrestasional;
+    }
+
+    /**
+     * Set vrAdicionalCotizacion
+     *
+     * @param float $vrAdicionalCotizacion
+     *
+     * @return RhuPago
+     */
+    public function setVrAdicionalCotizacion($vrAdicionalCotizacion)
+    {
+        $this->vrAdicionalCotizacion = $vrAdicionalCotizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAdicionalCotizacion
+     *
+     * @return float
+     */
+    public function getVrAdicionalCotizacion()
+    {
+        return $this->vrAdicionalCotizacion;
     }
 }

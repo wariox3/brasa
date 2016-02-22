@@ -111,6 +111,11 @@ class RhuPagoDetalle
      * @ORM\Column(name="prestacional", type="boolean")
      */
     private $prestacional = 0;    
+
+    /**
+     * @ORM\Column(name="cotizacion", type="boolean")
+     */
+    private $cotizacion = 0;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuPago", inversedBy="pagosDetallesPagoRel")
@@ -700,5 +705,29 @@ class RhuPagoDetalle
     public function getPrestacional()
     {
         return $this->prestacional;
+    }
+
+    /**
+     * Set cotizacion
+     *
+     * @param boolean $cotizacion
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setCotizacion($cotizacion)
+    {
+        $this->cotizacion = $cotizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get cotizacion
+     *
+     * @return boolean
+     */
+    public function getCotizacion()
+    {
+        return $this->cotizacion;
     }
 }

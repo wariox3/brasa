@@ -18,6 +18,7 @@ class RhuPagoRepository extends EntityRepository {
         $douAdicionTiempo = 0;
         $douAdicionValor = 0;
         $douAdicionValorNoPrestacional = 0;
+        $douAdicionCotizacion = 0;
         $douPension = 0;
         $douEps = 0;
         $douCaja = 0;
@@ -52,15 +53,26 @@ class RhuPagoRepository extends EntityRepository {
                 $douEps = $douEps + $arPagoDetalle->getVrPago();
             }            
             if($arPagoDetalle->getPagoConceptoRel()->getConceptoAdicion() == 1) {
-                if($arPagoDetalle->getPagoConceptoRel()->getComponeValor() == 1) {
-                    $douAdicionValor = $douAdicionValor + $arPagoDetalle->getVrPago();    
-                } else {
-                    $douAdicionTiempo = $douAdicionTiempo + $arPagoDetalle->getVrPago();    
-                }                
+                if($arPagoDetalle->getOperacion() == 1) {                
+                    if($arPagoDetalle->getPagoConceptoRel()->getComponeValor() == 1) {
+                        $douAdicionValor = $douAdicionValor + $arPagoDetalle->getVrPago();    
+                    } else {
+                        $douAdicionTiempo = $douAdicionTiempo + $arPagoDetalle->getVrPago();    
+                    }                    
+                }                                
+            }
+            if($arPagoDetalle->getAdicional() == 1) {
+                if($arPagoDetalle->getOperacion() == 1) {
+                    if($arPagoDetalle->getCotizacion() == 1) {
+                        $douAdicionCotizacion = $douAdicionCotizacion + $arPagoDetalle->getVrPago();
+                    }                    
+                }
             }
             if($arPagoDetalle->getAdicional() == 1) {
                 if($arPagoDetalle->getPrestacional() == 0) {
-                    $douAdicionValorNoPrestacional = $douAdicionValorNoPrestacional + $arPagoDetalle->getVrPago();
+                    if($arPagoDetalle->getOperacion() == 1) {
+                        $douAdicionValorNoPrestacional = $douAdicionValorNoPrestacional + $arPagoDetalle->getVrPago();
+                    }                    
                 }
             }
             $douIngresoBaseCotizacion += $arPagoDetalle->getVrIngresoBaseCotizacion();
@@ -82,6 +94,7 @@ class RhuPagoRepository extends EntityRepository {
         $arPago->setVrAdicionalTiempo($douAdicionTiempo);
         $arPago->setVrAdicionalValor($douAdicionValor);
         $arPago->setVrAdicionalValorNoPrestasional($douAdicionValorNoPrestacional);
+        $arPago->setVrAdicionalCotizacion($douAdicionCotizacion);
         $arPago->setVrArp(0);
         $arPago->setVrPension($douPension);
         $arPago->setVrEps($douEps);

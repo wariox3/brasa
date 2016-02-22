@@ -51,6 +51,7 @@ class PagosController extends Controller
         $arPagoDetallesSede = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalleSede();
         $arPagoDetallesSede = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalleSede')->findBy(array('codigoPagoFk' => $codigoPago));        
         $form = $this->createFormBuilder()
+            ->add('BtnReliquidar', 'submit', array('label'  => 'Reliquidar',))           
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))           
             ->getForm();
         $form->handleRequest($request);
@@ -58,6 +59,9 @@ class PagosController extends Controller
             if($form->get('BtnImprimir')->isClicked()) {
                 $objFormatoPago = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPago();
                 $objFormatoPago->Generar($this, $codigoPago);
+            }
+            if($form->get('BtnReliquidar')->isClicked()) {           
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->liquidar($codigoPago);
             }
         }        
         

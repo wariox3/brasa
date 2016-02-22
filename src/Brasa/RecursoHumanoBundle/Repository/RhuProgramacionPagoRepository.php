@@ -257,6 +257,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                 if($arPagoAdicional->getPagoConceptoRel()->getGeneraIngresoBaseCotizacion() == 1) {
                                     $douIngresoBaseCotizacion += $douPagoDetalle;    
                                     $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);
+                                    $arPagoDetalle->setCotizacion(1);
                                 }
                                 if($arPagoAdicional->getPagoConceptoRel()->getGeneraIngresoBasePrestacion() == 1) {
                                     $douIngresoBasePrestacional += $douPagoDetalle;    
@@ -264,6 +265,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                 }                                                                                                                                                                
                                 $arPagoDetalle->setPrestacional(1);
                             }
+                            
                             $em->persist($arPagoDetalle);                            
                         }
 
