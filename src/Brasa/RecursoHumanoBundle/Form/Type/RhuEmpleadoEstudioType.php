@@ -22,7 +22,8 @@ class RhuEmpleadoEstudioType extends AbstractType
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))
-            ->add('fechaVencimiento', 'date')      
+            //->add('fechaVencimiento', 'date')
+            ->add('fechaVencimiento','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                
             ->add('validarVencimiento', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))                            
             ->add('titulo', 'text', array('required' => true))
             ->add('comentarios', 'textarea', array('required' => false))                

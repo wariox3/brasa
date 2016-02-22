@@ -13,6 +13,8 @@ class SeguridadSocialPeriodosController extends Controller
     var $strDqlListaDetalle = "";
     var $strDqlListaEmpleados = "";
     var $strDqlListaDetalleAportes = "";
+    var $strCodigoPeriodoDetalleTraslados = "";
+    var $strCodigoPeriodoDetalleCopias = "";
 
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -699,7 +701,7 @@ class SeguridadSocialPeriodosController extends Controller
         $session = $this->getRequest()->getSession();
         $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
         $arPeriodoDetalle =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);
-        $form = $this->formularioCopiarEmpleado();
+        $form = $this->formularioCopiarEmpleado($arPeriodoDetalle);
         $form->handleRequest($request);
         $this->listarCopiarEmpleados($codigoPeriodoDetalle);
         if($form->isValid()) {
@@ -819,20 +821,7 @@ class SeguridadSocialPeriodosController extends Controller
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
         }
         
-        /*$arrayPropiedadesSucursal = array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuSsoSucursal',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('ssos')
-                    ->orderBy('ssos.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => false,
-                'empty_data' => "",
-                'empty_value' => "TODOS",
-                'data' => ""
-            );
-        if($session->get('filtroCodigoSucursal')) {
-            $arrayPropiedadesSucursal['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuSsoSucursal", $session->get('filtroCodigoSucursal'));
-        }*/
+        
        $arrayPropiedadesSucursal = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle',
                 'query_builder' => function (EntityRepository $er) use($codigoPeriodo) {
@@ -854,9 +843,10 @@ class SeguridadSocialPeriodosController extends Controller
         return $form;
     }
     
-    private function formularioCopiarEmpleado() {
+    private function formularioCopiarEmpleado($ar) {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
+        $codigoPeriodo = $ar->getCodigoPeriodoFk();
         $arrayPropiedades = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'query_builder' => function (EntityRepository $er) {
@@ -872,19 +862,17 @@ class SeguridadSocialPeriodosController extends Controller
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
         }
         $arrayPropiedadesSucursal = array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuSsoSucursal',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('ssos')
-                    ->orderBy('ssos.nombre', 'ASC');},
-                'property' => 'nombre',
+                'class' => 'BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle',
+                'query_builder' => function (EntityRepository $er) use($codigoPeriodo) {
+                    return $er->createQueryBuilder('ssopd')
+                    ->where('ssopd.codigoPeriodoFk = :codigoPeriodo')
+                    ->setParameter('codigoPeriodo', $codigoPeriodo)
+                    ->orderBy('ssopd.codigoPeriodoDetallePk', 'ASC');},
+                'property' => 'detalle',
                 'required' => false,
                 'empty_data' => "",
                 'empty_value' => "TODOS",
-                'data' => ""
-            );
-        if($session->get('filtroCodigoSucursal')) {
-            $arrayPropiedadesSucursal['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuSsoSucursal", $session->get('filtroCodigoSucursal'));
-        }
+                );
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('sucursalRel', 'entity', $arrayPropiedadesSucursal)    
@@ -929,8 +917,11 @@ class SeguridadSocialPeriodosController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
+        $codigoPeriodoDetalle = $form->get('sucursalRel')->getData();
+        $codigoPeriodoDetalle = $codigoPeriodoDetalle->getCodigoPeriodoDetallePk();
+        $this->strCodigoPeriodoDetalleTraslados = $codigoPeriodoDetalle;
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
-        $session->set('filtroCodigoSucursal',$controles['sucursalRel']);
+        
     }
     
     private function filtrarCopiarEmpleado($form) {
@@ -938,7 +929,9 @@ class SeguridadSocialPeriodosController extends Controller
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
-        $session->set('filtroCodigoSucursal',$controles['sucursalRel']);
+        $codigoPeriodoDetalle = $form->get('sucursalRel')->getData();
+        $codigoPeriodoDetalle = $codigoPeriodoDetalle->getCodigoPeriodoDetallePk();
+        $this->strCodigoPeriodoDetalleCopias = $codigoPeriodoDetalle;
     }
     
     private function filtrarDetalleAporte($form) {
@@ -986,13 +979,13 @@ class SeguridadSocialPeriodosController extends Controller
     private function listarTrasladoEmpleados($codigoPeriodoDetalle) {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $this->strDqlListaEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->listaTrasladoDql($codigoPeriodoDetalle, $session->get('filtroCodigoCentroCosto'),$session->get('filtroCodigoSucursal'));
+        $this->strDqlListaEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->listaTrasladoDql($codigoPeriodoDetalle, $session->get('filtroCodigoCentroCosto'),$this->strCodigoPeriodoDetalleTraslados);
     }
     
     private function listarCopiarEmpleados($codigoPeriodoDetalle) {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $this->strDqlListaEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->listaCopiarDql($codigoPeriodoDetalle, $session->get('filtroCodigoCentroCosto'),$session->get('filtroCodigoSucursal'));
+        $this->strDqlListaEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->listaCopiarDql($codigoPeriodoDetalle, $session->get('filtroCodigoCentroCosto'),$this->strCodigoPeriodoDetalleCopias);
     }
 
     private function listarDetalleAportes($codigoPeriodoDetalle) {

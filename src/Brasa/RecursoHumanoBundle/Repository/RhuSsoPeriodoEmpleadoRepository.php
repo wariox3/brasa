@@ -27,7 +27,7 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
                 $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
             }
             if($strCodigoSucursal != "") {
-                $dql .= " AND pe.codigoSucursalFk = " . $strCodigoSucursal;
+                $dql .= " AND pe.codigoPeriodoDetalleFk = " . $strCodigoSucursal;
             }
             return $dql;
     }
@@ -39,7 +39,7 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
                 $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
             }
             if($strCodigoSucursal != "") {
-                $dql .= " AND pe.codigoSucursalFk = " . $strCodigoSucursal;
+                $dql .= " AND pe.codigoPeriodoDetalleFk = " . $strCodigoSucursal;
             }
             return $dql;
     }
