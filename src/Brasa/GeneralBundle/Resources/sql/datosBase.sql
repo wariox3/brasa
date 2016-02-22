@@ -3948,27 +3948,9 @@ insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) 
 insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('7','BOTAS');
 insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('8','GORRO');
 insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('9','GUANTES');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('10','CORRE');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('11','BATOLA');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('12','TAPAOIDOS');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('13','GAFAS');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('14','MORRAL');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('15','CARPETA');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('16','INVENTARIO');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('17','BORRADOR');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('18','LAPIZ');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('19','RESALTADOR');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('20','LAPICERO');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('21','REGLA');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('22','CALCULADORA');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('23','GRAPADORA');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('24','TIJERAS');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('25','VISTURI');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('26','MARCADOR');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('27','GUELLERO');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('28','PEGANTE');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('29','IMPRESORA');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('30','TABLA');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('10','BATOLA');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('11','TAPAOIDOS');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('12','GAFAS');
 
 INSERT INTO `rhu_empleado_estudio_tipo` (`codigo_empleado_estudio_tipo_pk`, `nombre`, `validar_vencimiento`) VALUES('1','SECUNDARIA','0');
 INSERT INTO `rhu_empleado_estudio_tipo` (`codigo_empleado_estudio_tipo_pk`, `nombre`, `validar_vencimiento`) VALUES('2','TECNICO','0');
@@ -5254,14 +5236,13 @@ insert into `rhu_capacitacion_tipo` (`codigo_capacitacion_tipo_pk`, `nombre`) va
 insert into `rhu_permiso_tipo` (`codigo_permiso_tipo_pk`, `nombre`) values('1','CONSULTA ODONTOLOGIA');
 insert into `rhu_permiso_tipo` (`codigo_permiso_tipo_pk`, `nombre`) values('2','CONSULTA MEDICA');
 
-INSERT INTO `rhu_entidad_examen` (`codigo_entidad_examen_pk`, `nombre`, `nit`, `direccion`, `telefono`) VALUES('2','ORGANIZACION MEDICA ODONTOLOGICA NACIONAL INTEGRADA SA','88888888','CL 33 74 E 56','222222222');
-INSERT INTO `rhu_entidad_examen` (`codigo_entidad_examen_pk`, `nombre`, `nit`, `direccion`, `telefono`) VALUES('3','SALUD MEDICA ROTE','800980987','CARRERA 20 N 40-20','343444');
-INSERT INTO `rhu_entidad_examen` (`codigo_entidad_examen_pk`, `nombre`, `nit`, `direccion`, `telefono`) VALUES('4','SALUD EN CASA','800145748','CARRERA 48 N 58-+58','4587458');
-INSERT INTO `rhu_entidad_examen` (`codigo_entidad_examen_pk`, `nombre`, `nit`, `direccion`, `telefono`) VALUES('5','CONCASA','800000000','ASGDSAGDHAG','45654645645');
+INSERT INTO `rhu_entidad_examen` (`codigo_entidad_examen_pk`, `nombre`, `nit`, `direccion`, `telefono`) VALUES('1','ORGANIZACION MEDICA ODONTOLOGICA NACIONAL INTEGRADA SA','88888888','CL 33 74 E 56','222222222');
+INSERT INTO `rhu_entidad_examen` (`codigo_entidad_examen_pk`, `nombre`, `nit`, `direccion`, `telefono`) VALUES('2','SALUD MEDICA ROTE','800980987','CARRERA 20 N 40-20','343444');
+INSERT INTO `rhu_entidad_examen` (`codigo_entidad_examen_pk`, `nombre`, `nit`, `direccion`, `telefono`) VALUES('3','SALUD EN CASA','800145748','CARRERA 48 N 58-+58','4587458');
 
-insert into `rhu_examen_lista_precio` (`codigo_examen_lista_precio_pk`, `codigo_entidad_examen_fk`, `codigo_examen_tipo_fk`, `precio`) values('1','2','1','15000');
-insert into `rhu_examen_lista_precio` (`codigo_examen_lista_precio_pk`, `codigo_entidad_examen_fk`, `codigo_examen_tipo_fk`, `precio`) values('2','2','5','13000');
-insert into `rhu_examen_lista_precio` (`codigo_examen_lista_precio_pk`, `codigo_entidad_examen_fk`, `codigo_examen_tipo_fk`, `precio`) values('3','2','18','22000');
+insert into `rhu_examen_lista_precio` (`codigo_examen_lista_precio_pk`, `codigo_entidad_examen_fk`, `codigo_examen_tipo_fk`, `precio`) values('1','1','1','15000');
+insert into `rhu_examen_lista_precio` (`codigo_examen_lista_precio_pk`, `codigo_entidad_examen_fk`, `codigo_examen_tipo_fk`, `precio`) values('2','1','5','13000');
+insert into `rhu_examen_lista_precio` (`codigo_examen_lista_precio_pk`, `codigo_entidad_examen_fk`, `codigo_examen_tipo_fk`, `precio`) values('3','1','18','22000');
 
 INSERT INTO `rhu_sso_sucursal` (`codigo_sucursal_pk`, `nombre`, `codigo_interface`) values('1','MEDELLIN','1010');
 
@@ -5277,9 +5258,7 @@ INSERT INTO `seg_roles` (`codigo_rol_pk`, `nombre`) VALUES('ROLE_USER','USUARIO'
 
 INSERT INTO `users` (`id`, `username`, `nombre_corto`, `salt`, `password`, `email`, `is_active`, `empresa`, `roles`) VALUES('1','MARIOESTRADA','MARIO ESTRADA','9f86f39cd7c299efc10a2cbd375ad2d4','QVMBXCvFHaltPm/ebXycQ7rOvgbgLFfQQvSxZVa/I/FvtsO9Ps9k9B84YP6rC+1aEio86UKY0ZxwsAEV/se7+Q==','maestradaz3@gmail.com','1','emp1','ROLE_ADMIN');
 INSERT INTO `users` (`id`, `username`, `nombre_corto`, `salt`, `password`, `email`, `is_active`, `empresa`, `roles`) VALUES('2','PABLOARANZAZU','PABLO ARANZAZU','7fb88ebcff4bec1ae089355b3d42f254','iYgIUQ/CHkNJ/yHurnk5twbWUjHkKal1V6OPTIpN2OV9I5D+OpTFoLGj/NRfALioHaaPqB3vW9pQrhPa5kXB5Q==','analista.desarrollo@jgefectivo.com','1','emp1','ROLE_USER');
-INSERT INTO `users` (`id`, `username`, `nombre_corto`, `salt`, `password`, `email`, `is_active`, `empresa`, `roles`) VALUES('4','DANIELGRANADA','DANIEL GRANADA','b6905f341c121301080b3c9449ba718e','A4aG6KWdcudH2xniCt5erl61T+jAghqxduZpS4s4p4Y+qiSDKOQhZ5DgNQuitlAKYj8H1Knno6uMVxDxEt2SZg==','AUXILIARSISTEMAS@JGEFECTIVO.COM','1','emp1','ROLE_USER');
 INSERT INTO `users` (`id`, `username`, `nombre_corto`, `salt`, `password`, `email`, `is_active`, `empresa`, `roles`) VALUES('5','ADMINISTRADOR','ADMINISTRADOR','a0d365adb33e4d59b6a9c9af2639e2fb','VusE/ogCqpMWuaFE3rusp7Yx5nMK90tIMsa7dvgyD/NmwLkgc2nXuupaoBqsPt3shsB1UWqgRs/UFqioNrZbLg==','administrador@appsoga.com','1',NULL,'ROLE_ADMIN');
-INSERT INTO `users` (`id`, `username`, `nombre_corto`, `salt`, `password`, `email`, `is_active`, `empresa`, `roles`) VALUES('7','JUANDELAP','JUAN DE LA PEÑA','8834a99bd0913447212c1d1610ed0460','8A5rac6utPsxSL9fzp9NsURqcnBcTFPu7B5DFw+tPwfGJEpfBlHOYl2U+3WZVFdekJ7KyLPeXB1otCMW8uiJyw==','JUAN@HOTMAIL.COM','1',NULL,'ROLE_USER');
 
 insert into `seg_usuario_permiso_especial` (`codigo_usuario_permiso_especial_pk`, `codigo_usuario_fk`, `codigo_permiso_especial_fk`, `permitir`) values('1','1','1','1');
 insert into `seg_usuario_permiso_especial` (`codigo_usuario_permiso_especial_pk`, `codigo_usuario_fk`, `codigo_permiso_especial_fk`, `permitir`) values('2','2','1','1');
