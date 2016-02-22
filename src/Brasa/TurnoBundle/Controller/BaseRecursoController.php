@@ -84,7 +84,7 @@ class BaseRecursoController extends Controller
         $form = $this->createForm(new TurRecursoType, $arRecurso);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            if($form->get('guardar')->isClicked()) {
+            if($form->get('guardar')->isClicked() || $form->get('guardarnuevo')->isClicked()) {
                 $arrControles = $request->request->All();
                 $arRecurso = $form->getData(); 
                 if($arrControles['txtNumeroIdentificacion'] != '') {
@@ -94,20 +94,19 @@ class BaseRecursoController extends Controller
                         if($arRecurso->getCodigoTurnoFijoNominaFk()) {
                             $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
                             $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arRecurso->getCodigoTurnoFijoNominaFk());
-                            if($arTurno) {
-                                $arRecurso->setEmpleadoRel($arEmpleado);
-                                $em->persist($arRecurso);
-                                $em->flush();            
-
-                                if($form->get('guardarnuevo')->isClicked()) {
-                                    return $this->redirect($this->generateUrl('brs_tur_base_recurso_nuevo', array('codigoRecurso' => 0, 'codigoEmpleado' => 0 )));
-                                } else {
-                                    return $this->redirect($this->generateUrl('brs_tur_base_recurso_lista'));
-                                }                                 
-                            } else {
-                                $objMensaje->Mensaje("error", "Asigno un turno fijo de nomina pero ese codigo no existe", $this);
+                            if(!$arTurno) {
+                                $arRecurso->setCodigoTurnoFijoNominaFk(NULL);
                             }
                         }                   
+                        $arRecurso->setEmpleadoRel($arEmpleado);
+                        $em->persist($arRecurso);
+                        $em->flush();            
+
+                        if($form->get('guardarnuevo')->isClicked()) {
+                            return $this->redirect($this->generateUrl('brs_tur_base_recurso_nuevo', array('codigoRecurso' => 0, 'codigoEmpleado' => 0 )));
+                        } else {
+                            return $this->redirect($this->generateUrl('brs_tur_base_recurso_lista'));
+                        }                         
                     } else {
                         $objMensaje->Mensaje("error", "El empleado no existe", $this);
                     }
@@ -188,11 +187,11 @@ class BaseRecursoController extends Controller
                 ); 
     }
 
-    private function filtrar ($form) {
-        $arCentroCosto = $form->get('centroCostoRel')->getData();
+    private function filtrar ($form) {        
         $this->strCodigo = $form->get('TxtCodigo')->getData();
         $this->strNombre = $form->get('TxtNombre')->getData();
         $this->strNumeroIdentificacion = $form->get('TxtNumeroIdentificacion')->getData();
+        $arCentroCosto = $form->get('centroCostoRel')->getData();
         if($arCentroCosto) {
             $this->codigoCentroCosto = $arCentroCosto->getCodigoCentroCostoPk();
         }

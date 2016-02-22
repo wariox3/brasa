@@ -300,6 +300,7 @@
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
                         <th>COD</th>
+                        <th>IDENTIFICACION</th>
                         <th>RECURSO</th>
                         <th>TIPO</th>
                         <th style="background-color: #FA5858;">POSICION</th>
@@ -308,6 +309,7 @@
                     {% for arServicioDetalleRecursos in arServicioDetalleRecursos %}
                         <tr>
                             <td>{{ arServicioDetalleRecursos.codigoServicioDetalleRecursoPk  }}<input type="hidden" name="LblCodigo[]" value="{{ arServicioDetalleRecursos.codigoServicioDetalleRecursoPk }}"></td>
+                            <td>{{ arServicioDetalleRecursos.recursoRel.numeroIdentificacion | default('') }}</td>                     
                             <td>{{ arServicioDetalleRecursos.recursoRel.nombreCorto | default('') }}</td>                     
                             <td>{{ arServicioDetalleRecursos.recursoRel.recursoTipoRel.nombre | default('') }}</td>                     
                             <td style="text-align: right; background-color: #FA5858;"><input class="input-grid" type="text" name="TxtPosicion{{ arServicioDetalleRecursos.codigoServicioDetalleRecursoPk }}" value="{{ arServicioDetalleRecursos.posicion  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
