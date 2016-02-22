@@ -54,6 +54,8 @@
                 <th>NUMERO</th>
                 <th>CONCEPTO</th>                                                                
                 <th>VALOR</th>
+                <th>IBP</th>
+                <th>IBP</th>
             </tr>
             {% set douTotalIBPP = 0  %}             
             {% for arPagosDetalles in arPagosDetalles %}
@@ -61,6 +63,8 @@
                 <td>{{ arPagosDetalles.codigoPagoDetallePk  }}</td>
                 <td>{{ arPagosDetalles.pagoConceptoRel.nombre  }}</td>
                 <td style="text-align: right">{{ arPagosDetalles.vrPago | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagosDetalles.vrIngresoBaseCotizacion | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagosDetalles.vrIngresoBasePrestacion | number_format(0, '.', ',') }}</td>
             </tr>
                            
             
