@@ -64,6 +64,8 @@
                 <td style="text-align: center"><a href="{{ path('brs_rhu_ss_periodo_detalle_empleados', { 'codigoPeriodoDetalle': arSsoPeriodoDetalles.codigoPeriodoDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" ></a></td>
                 {% if arSsoPeriodoDetalles.estadoGenerado == 0 %}
                     <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_ss_periodo_detalle_nuevo', { 'codigoPeriodo': codigoPeriodo, 'codigoPeriodoDetallePk': arSsoPeriodoDetalles.codigoPeriodoDetallePk }) }}', 'EditarNuevoDetalle', 600, 900)" style="float:left"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                {% else %}
+                    <td></td>
                 {% endif %}
                 <td style="text-align: center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}" /></td>
             </tr>
