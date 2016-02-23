@@ -80,8 +80,8 @@
                         <td>{{ arServiciosDetallesRecursos.servicioDetalleRel.modalidadServicioRel.nombre  }}</td>                    
                         <td>{{ arServiciosDetallesRecursos.servicioDetalleRel.periodoRel.nombre  }}</td>
                         <td>{{ arServiciosDetallesRecursos.servicioDetalleRel.plantillaRel.nombre | default('')  }}</td>                                            
-                        <td>{{ arServiciosDetallesRecursos.servicioDetalleRel.diaDesde }}</td>    
-                        <td>{{ arServiciosDetallesRecursos.servicioDetalleRel.diaHasta }}</td>    
+                        <td>{{ arServiciosDetallesRecursos.servicioDetalleRel.fechaDesde |date('Y-m-d') }}</td>    
+                        <td>{{ arServiciosDetallesRecursos.servicioDetalleRel.fechaHasta |date('Y-m-d') }}</td>    
                         <td>{{ arServiciosDetallesRecursos.servicioDetalleRel.cantidad  }}</td>
                         <td>{{ arServiciosDetallesRecursos.servicioDetalleRel.cantidadRecurso  }}</td>
                         <td>{% if arServiciosDetallesRecursos.servicioDetalleRel.lunes == 1 %} SI {% else %} NO {% endif %}</td>

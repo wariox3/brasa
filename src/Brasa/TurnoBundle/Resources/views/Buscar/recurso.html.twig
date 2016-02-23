@@ -54,7 +54,7 @@
                 <td>{{ arRecursos.numeroIdentificacion  }}</td>
                 <td>{{ arRecursos.nombreCorto }}</td>
                 <td>{{ arRecursos.apodo }}</td>
-                <td style="text-align: center"><a href="javascript:selTercero('{{ arRecursos.numeroIdentificacion }}','{{ arRecursos.nombreCorto }}','{{ campoCodigo }}','{{ campoNombre }}')" ><img src="{{ asset('imagenes/bootstrap/glyphicons_198_ok.png') }}" width=20 height=20></a></td>                                
+                <td style="text-align: center"><a href="javascript:selTercero('{{ arRecursos.codigoRecursoPk }}','{{ arRecursos.nombreCorto }}','{{ campoCodigo }}','{{ campoNombre }}')" ><img src="{{ asset('imagenes/bootstrap/glyphicons_198_ok.png') }}" width=20 height=20></a></td>                                
             </tr>
             {% endfor %} 
         </table>                                         

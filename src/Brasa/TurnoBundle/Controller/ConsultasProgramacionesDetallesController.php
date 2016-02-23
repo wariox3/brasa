@@ -31,8 +31,8 @@ class ConsultasProgramacionesDetallesController extends Controller
                     $this->codigoCliente = $arCliente->getCodigoClientePk();
                 }
             } 
-            if($arrControles['txtNumeroIdentificacion'] != '') {                
-                $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
+            if($arrControles['txtCodigo'] != '') {                
+                $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($arrControles['txtCodigo']);
                 if($arRecurso) {
                     $this->codigoRecurso = $arRecurso->getCodigoRecursoPk();
                 }

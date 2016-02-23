@@ -85,8 +85,8 @@
                     <td>{{ arServiciosDetalles.modalidadServicioRel.nombre  }}</td>                    
                     <td>{{ arServiciosDetalles.periodoRel.nombre  }}</td>
                     <td>{{ arServiciosDetalles.plantillaRel.nombre | default('')  }}</td>                                            
-                    <td>{{ arServiciosDetalles.diaDesde }}</td>    
-                    <td>{{ arServiciosDetalles.diaHasta }}</td>    
+                    <td>{{ arServiciosDetalles.fechaDesde |date('Y-m-d') }}</td>    
+                    <td>{{ arServiciosDetalles.fechaHasta |date('Y-m-d') }}</td>    
                     <td>{{ arServiciosDetalles.cantidad  }}</td>
                     <td>{{ arServiciosDetalles.cantidadRecurso  }}</td>
                     <td>{% if arServiciosDetalles.lunes == 1 %} SI {% else %} NO {% endif %}</td>

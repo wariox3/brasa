@@ -36,19 +36,19 @@
                     </div>
                 </div>                 
                 <div class="form-group form-group-sm">
-                    <label for="txtNit" class="col-sm-2 control-label">Recurso:</label>
+                    <label for="txtCodigo" class="col-sm-2 control-label">Recurso:</label>
                     <div class="col-sm-10">
                         <div class="row">
                           <div class="col-lg-2">
                             <div class="input-group">
-                              <input id="txtNumeroIdentificacion"  name="txtNumeroIdentificacion"  type="text" class="form-control" value="{{ arRecurso.numeroIdentificacion |default('') }}"/>
+                              <input id="txtCodigo"  name="txtCodigo"  type="text" class="form-control" value="{{ arRecurso.codigoRecursoPk |default('') }}"/>
                             </div>
                           </div>
                           <div class="col-lg-10">
                             <div class="input-group">                                      
                               <input id="txtNombreCortoRecurso"  name="txtNombreCortoRecurso"  type="text" class="form-control" value="{{ arRecurso.nombreCorto |default('') }}" readOnly="ReadOnly" />
                               <span class="input-group-btn">                                        
-                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_buscar_recurso', { 'campoCodigo': 'txtNumeroIdentificacion', 'campoNombre': 'txtNombreCortoRecurso' }) }}', 'buscarTercero', 600, 900)">Buscar</a>
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_buscar_recurso', { 'campoCodigo': 'txtCodigo', 'campoNombre': 'txtNombreCortoRecurso' }) }}', 'buscarTercero', 600, 900)">Buscar</a>
                               </span>
                             </div>
                           </div>

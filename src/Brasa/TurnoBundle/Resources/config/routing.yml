@@ -224,11 +224,7 @@ brs_tur_consultas_pedidos_detalles:
 
 brs_tur_consultas_programaciones_detalles:    
     path:     /tur/consultas/programaciones/detalles
-    defaults: { _controller: BrasaTurnoBundle:ConsultasProgramacionesDetalles:lista }         
-
-brs_tur_consultas_recursos_programaciones:    
-    path:     /tur/consultas/recursos/programaciones
-    defaults: { _controller: BrasaTurnoBundle:ConsultasRecursosProgramaciones:lista }     
+    defaults: { _controller: BrasaTurnoBundle:ConsultasProgramacionesDetalles:lista }             
     
 brs_tur_consultas_recursos_disponibles:    
     path:     /tur/consultas/recursos/disponibles
