@@ -31,8 +31,8 @@ class TurCotizacionDetalleType extends AbstractType
                     ->orderBy('p.codigoPeriodoPk', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                            
-            ->add('fechaDesde', 'date', array('format' => 'yyyyMMMMdd')) 
-            ->add('fechaHasta', 'date', array('format' => 'yyyyMMMMdd'))
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd')) 
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd'))
             ->add('cantidad', 'number')
             ->add('lunes', 'checkbox', array('required'  => false))
             ->add('martes', 'checkbox', array('required'  => false))

@@ -43,7 +43,7 @@
                 <td>{{ arPedidoDetalles.pedidoRel.numero  }}</td>
                 <td>{{ arPedidoDetalles.pedidoRel.pedidoTipoRel.nombre  }}</td>
                 <td>{{ arPedidoDetalles.pedidoRel.fecha |date("Y/m/d")  }}</td> 
-                <td>{{ arPedidoDetalles.pedidoRel.fechaProgramacion |date("Y F")  }}</td>
+                <td>{{ arPedidoDetalles.pedidoRel.fechaProgramacion |date("Y/m/d")  }}</td>
                 {% if boolMostrarTodo == 1 %} 
                     <td>{{ arPedidoDetalles.pedidoRel.clienteRel.nombreCorto }}</td>
                 {% endif %}                    

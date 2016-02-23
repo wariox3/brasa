@@ -112,7 +112,7 @@
                 <td>{{ arPedidos.fecha |date("Y/m/d")  }}</td>                                
                 <td>{{ arPedidos.clienteRel.nombreCorto |default('') }}</td>  
                 <td>{{ arPedidos.sectorRel.nombre |default('')  }}</td> 
-                <td>{{ arPedidos.fechaProgramacion |date("Y F")  }}</td>                                
+                <td>{{ arPedidos.fechaProgramacion |date("Y/m/d")  }}</td>                                
                 <td style="text-align: right">{{ arPedidos.horas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidos.horasDiurnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidos.horasNocturnas | number_format(0, '.', ',') }}</td>

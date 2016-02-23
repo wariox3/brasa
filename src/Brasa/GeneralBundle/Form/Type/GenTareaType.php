@@ -18,7 +18,7 @@ class GenTareaType extends AbstractType
                 'property' => 'nombreCorto',
                 'required' => true))                 
             ->add('asunto', 'text', array('required' => true))               
-            ->add('fechaProgramada', 'date', array('format' => 'yyyyMMMMdd'))                
+            ->add('fechaProgramada', 'date', array('format' => 'yyyyMMdd'))                
             ->add('hora', 'time')
             ->add('comentarios', 'textarea', array('required' => false))                
             ->add('guardar', 'submit')

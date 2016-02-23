@@ -111,8 +111,8 @@ class ConsultasProgramacionesDetallesController extends Controller
             $arrayPropiedadesCentroCosto['data'] = $em->getReference("BrasaTurnoBundle:TurCentroCosto", $this->codigoCentroCosto);
         }        
         $form = $this->createFormBuilder()  
-            ->add('fechaDesde', 'date', array('format' => 'yyyyMMMMdd', 'data' => $dateFechaDesde)) 
-            ->add('fechaHasta', 'date', array('format' => 'yyyyMMMMdd', 'data' => $dateFechaHasta))  
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde)) 
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))  
             ->add('filtrarFecha', 'checkbox', array('required'  => false, 'data' => $this->filtrarFecha))                                 
             ->add('centroCostoRel', 'entity', $arrayPropiedadesCentroCosto)                
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))

@@ -44,6 +44,10 @@ class ConsultasRecursosDisponiblesController extends Controller
                     $statement->execute();
                     $resultados = $statement->fetchAll();
                     if(!$resultados) {
+                        $strRutaFoto = "";
+                        if($arRecurso->getEmpleadoRel()->getRutaFoto()) { 
+                            $strRutaFoto = $strRutaImagen . $arRecurso->getEmpleadoRel()->getRutaFoto();
+                        }                        
                         $arrDisponibles[] = array(
                             'codigoRecursoPk' => $arRecurso->getCodigoRecursoPk(),
                             'numeroIdentificacion' => $arRecurso->getNumeroIdentificacion(),
@@ -51,6 +55,7 @@ class ConsultasRecursosDisponiblesController extends Controller
                             'tipo' => $arRecurso->getRecursoTipoRel()->getNombre(),
                             'telefono' => $arRecurso->getTelefono(),
                             'celular' => $arRecurso->getCelular(),
+                            'rutaFoto' => $strRutaFoto,
                             'nombreTurno' => ''                  
                             );
                     } else {
@@ -116,7 +121,7 @@ class ConsultasRecursosDisponiblesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-            ->add('fecha', 'date', array('format' => 'yyyyMMMMdd', 'data' => new \DateTime('now')))            
+            ->add('fecha', 'date', array('format' => 'yyyyMMdd', 'data' => new \DateTime('now')))            
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
         return $form;

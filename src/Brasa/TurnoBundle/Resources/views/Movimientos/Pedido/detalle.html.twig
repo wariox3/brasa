@@ -84,7 +84,7 @@
                     </tr>                
                     <tr>
                         <td class="titulo">FECHA PROGRAMACION:</td>
-                        <td class="td-in-well">{{ arPedido.fechaProgramacion |date("Y F") }}</td>
+                        <td class="td-in-well">{{ arPedido.fechaProgramacion |date("Y/m/d") }}</td>
                         <td class="titulo" >VALOR:</td>
                         <td align="right">{{ arPedido.vrTotal | number_format(0, '.', ',')}}</td>
                     </tr>  

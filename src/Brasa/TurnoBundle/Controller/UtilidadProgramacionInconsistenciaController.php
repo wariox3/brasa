@@ -50,7 +50,7 @@ class UtilidadProgramacionInconsistenciaController extends Controller
     private function formularioLista() {                
 
         $form = $this->createFormBuilder()                        
-            ->add('fecha', 'date', array('data' => new \DateTime('now'), 'format' => 'yyyyMMMMdd'))                            
+            ->add('fecha', 'date', array('data' => new \DateTime('now'), 'format' => 'yyyyMMdd'))                            
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))    
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))    
             ->add('BtnExportar', 'submit', array('label'  => 'Exportar'))    

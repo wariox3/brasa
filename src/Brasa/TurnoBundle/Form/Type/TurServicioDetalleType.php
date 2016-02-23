@@ -34,8 +34,8 @@ class TurServicioDetalleType extends AbstractType
                 'property' => 'nombre',
                 'required' => true))                             
             ->add('cantidad', 'number')
-            ->add('fechaDesde', 'date', array('format' => 'yyyyMMMMdd')) 
-            ->add('fechaHasta', 'date', array('format' => 'yyyyMMMMdd')) 
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd')) 
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd')) 
             ->add('lunes', 'checkbox', array('required'  => false))
             ->add('martes', 'checkbox', array('required'  => false))
             ->add('miercoles', 'checkbox', array('required'  => false))

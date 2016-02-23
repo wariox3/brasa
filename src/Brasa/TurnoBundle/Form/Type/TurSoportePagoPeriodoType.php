@@ -16,8 +16,8 @@ class TurSoportePagoPeriodoType extends AbstractType
                     ->orderBy('cc.codigoCentroCostoPk', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                 
-            ->add('fechaDesde', 'date', array('format' => 'yyyyMMMMdd'))
-            ->add('fechaHasta', 'date', array('format' => 'yyyyMMMMdd'))            
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd'))
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd'))            
             ->add('guardar', 'submit');
     }
 

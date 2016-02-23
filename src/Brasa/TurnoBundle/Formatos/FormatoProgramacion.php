@@ -76,7 +76,7 @@ class FormatoProgramacion extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, "PERIODO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(65, 4, $arProgramacion->getFecha()->format('Y F'), 1, 0, 'L', 1);               
+        $this->Cell(65, 4, $arProgramacion->getFecha()->format('Y/m/d'), 1, 0, 'L', 1);               
         
         $this->SetXY(10, $intY + 8);
         $this->SetFont('Arial','B',8);

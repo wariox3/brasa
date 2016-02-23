@@ -17,9 +17,9 @@ class RhuSsoPeriodoType extends AbstractType
             ->add('mes', 'text', array('required' => true))
             ->add('anioPago', 'text', array('required' => true))
             ->add('mesPago', 'text', array('required' => true))    
-            ->add('fechaDesde', 'date', array('format' => 'yyyyMMMMdd', 'data' => new \DateTime('now'))) 
-            ->add('fechaHasta', 'date', array('format' => 'yyyyMMMMdd', 'data' => new \DateTime('now')))
-            ->add('fechaPago', 'date', array('format' => 'yyyyMMMMdd', 'data' => new \DateTime('now')))    
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => new \DateTime('now'))) 
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => new \DateTime('now')))
+            ->add('fechaPago', 'date', array('format' => 'yyyyMMdd', 'data' => new \DateTime('now')))    
             ->add('BtnGuardar', 'submit', array('label' => 'Guardar'));
     }
 

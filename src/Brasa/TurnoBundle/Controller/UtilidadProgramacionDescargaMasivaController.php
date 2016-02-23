@@ -68,8 +68,8 @@ class UtilidadProgramacionDescargaMasivaController extends Controller
     private function formularioLista() {                
 
         $form = $this->createFormBuilder()                        
-            ->add('fechaDesde', 'date', array('data' => new \DateTime('now'), 'format' => 'yyyyMMMMdd'))                
-            ->add('fechaHasta', 'date', array('data' => new \DateTime('now'), 'format' => 'yyyyMMMMdd'))                
+            ->add('fechaDesde', 'date', array('data' => new \DateTime('now'), 'format' => 'yyyyMMdd'))                
+            ->add('fechaHasta', 'date', array('data' => new \DateTime('now'), 'format' => 'yyyyMMdd'))                
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))    
             ->getForm();        
         return $form;

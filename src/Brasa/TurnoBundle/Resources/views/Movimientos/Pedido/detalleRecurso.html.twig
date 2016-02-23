@@ -27,7 +27,7 @@
                     </tr>                
                     <tr>
                         <td class="titulo">MES</td>
-                        <td class="td-in-well">{{ arPedidoDetalle.pedidoRel.fechaProgramacion |date('Y F') }}</td>
+                        <td class="td-in-well">{{ arPedidoDetalle.pedidoRel.fechaProgramacion |date('Y/m/d') }}</td>
                         <td class="titulo">SERVICIO:</td>
                         <td class="td-in-well">{{ arPedidoDetalle.conceptoServicioRel.nombre |default('') }}</td>
                     </tr>

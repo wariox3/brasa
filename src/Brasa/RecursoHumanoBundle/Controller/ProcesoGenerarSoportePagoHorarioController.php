@@ -153,8 +153,8 @@ class ProcesoGenerarSoportePagoHorarioController extends Controller
 
     private function formularioGenerar() {
         $form = $this->createFormBuilder()
-            ->add('fechaDesde', 'date', array('data' => new \DateTime('now'), 'format' => 'yyyyMMMMdd'))
-            ->add('fechaHasta', 'date', array('data' => new \DateTime('now'), 'format' => 'yyyyMMMMdd'))
+            ->add('fechaDesde', 'date', array('data' => new \DateTime('now'), 'format' => 'yyyyMMdd'))
+            ->add('fechaHasta', 'date', array('data' => new \DateTime('now'), 'format' => 'yyyyMMdd'))
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))
             ->add('BtnCerrar', 'submit', array('label'  => 'Cerrar'))                
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))            

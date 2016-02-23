@@ -16,7 +16,7 @@ class RhuPermisoType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuPermisoTipo',
                 'property' => 'nombre',
                 'required' => true))
-            ->add('fechaPermiso', 'date', array('format' => 'yyyyMMMMdd'))    
+            ->add('fechaPermiso', 'date', array('format' => 'yyyyMMdd'))    
             ->add('horaSalida', 'time', array('required' => true))
             ->add('horaLlegada', 'time', array('required' => true))                
             ->add('motivo', 'textarea', array('required' => true))

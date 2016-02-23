@@ -96,7 +96,7 @@
             {% for arProgramaciones in arProgramaciones %}
             <tr>                
                 <td>{{ arProgramaciones.codigoProgramacionPk  }}</td>
-                <td>{{ arProgramaciones.fecha |date("Y F")  }}</td>
+                <td>{{ arProgramaciones.fecha |date("Y/m/d")  }}</td>
                 <td>{{ arProgramaciones.clienteRel.nombreCorto  }}</td>  
                 <td>{% if arProgramaciones.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>                                
                 <td>{% if arProgramaciones.estadoAnulado == 1 %} SI {% else %} NO {% endif %}</td>                                
