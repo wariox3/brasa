@@ -74,6 +74,8 @@ class MovimientoProgramacionController extends Controller
                 $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));
                 if(count($arCliente) > 0) {
                     $arProgramacion->setClienteRel($arCliente);
+                    $arUsuario = $this->getUser();
+                    $arProgramacion->setUsuario($arUsuario->getUserName());                    
                     $em->persist($arProgramacion);
                     $em->flush();
 

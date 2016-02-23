@@ -101,6 +101,11 @@ class TurRecurso
     private $codigoTurnoFijoNominaFk;     
     
     /**
+     * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
+     */    
+    private $usuario;     
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;     
@@ -818,5 +823,29 @@ class TurRecurso
     public function getCodigoTurnoFijoNominaFk()
     {
         return $this->codigoTurnoFijoNominaFk;
+    }
+
+    /**
+     * Set usuario
+     *
+     * @param string $usuario
+     *
+     * @return TurRecurso
+     */
+    public function setUsuario($usuario)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return string
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
     }
 }

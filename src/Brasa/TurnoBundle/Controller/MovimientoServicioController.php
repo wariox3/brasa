@@ -74,6 +74,8 @@ class MovimientoServicioController extends Controller
                 $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));                
                 if(count($arCliente) > 0) {
                     $arServicio->setClienteRel($arCliente);
+                    $arUsuario = $this->getUser();
+                    $arServicio->setUsuario($arUsuario->getUserName());
                     $em->persist($arServicio);
                     $em->flush();
 

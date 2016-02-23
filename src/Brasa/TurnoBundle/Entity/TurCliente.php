@@ -123,6 +123,11 @@ class TurCliente
     private $telefonoContacto;    
     
     /**
+     * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
+     */    
+    private $usuario;     
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;                    
@@ -1041,5 +1046,29 @@ class TurCliente
     public function getCiudadRel()
     {
         return $this->ciudadRel;
+    }
+
+    /**
+     * Set usuario
+     *
+     * @param string $usuario
+     *
+     * @return TurCliente
+     */
+    public function setUsuario($usuario)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return string
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
     }
 }

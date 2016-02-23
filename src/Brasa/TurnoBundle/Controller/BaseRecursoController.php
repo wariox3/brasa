@@ -99,6 +99,8 @@ class BaseRecursoController extends Controller
                             }
                         }                   
                         $arRecurso->setEmpleadoRel($arEmpleado);
+                        $arUsuario = $this->getUser();
+                        $arRecurso->setUsuario($arUsuario->getUserName());                        
                         $em->persist($arRecurso);
                         $em->flush();            
 

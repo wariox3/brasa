@@ -26,6 +26,8 @@ class ProcesoGenerarProgramacionController extends Controller
                 $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
                 $arProgramacion->setClienteRel($arPedido->getClienteRel());
                 $arProgramacion->setFecha($arPedido->getFechaProgramacion());
+                $arUsuario = $this->getUser();
+                $arProgramacion->setUsuario($arUsuario->getUserName());                                
                 $em->persist($arProgramacion); 
                 $arPedido->setEstadoProgramado(true);
                 $em->persist($arPedido);

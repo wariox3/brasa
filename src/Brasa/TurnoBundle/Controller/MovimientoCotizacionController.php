@@ -75,6 +75,8 @@ class MovimientoCotizacionController extends Controller
                     $arCotizacion->setClienteRel($arCliente);
                 }
             }
+            $arUsuario = $this->getUser();
+            $arCotizacion->setUsuario($arUsuario->getUserName());            
             $em->persist($arCotizacion);
             $em->flush();
 

@@ -62,6 +62,11 @@ class TurTurno
     private $descanso = false;           
     
     /**
+     * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
+     */    
+    private $usuario;     
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;       
@@ -463,5 +468,29 @@ class TurTurno
     public function getHorasNomina()
     {
         return $this->horasNomina;
+    }
+
+    /**
+     * Set usuario
+     *
+     * @param string $usuario
+     *
+     * @return TurTurno
+     */
+    public function setUsuario($usuario)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return string
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
     }
 }

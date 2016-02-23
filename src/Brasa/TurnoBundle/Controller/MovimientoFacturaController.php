@@ -74,7 +74,9 @@ class MovimientoFacturaController extends Controller
                         }                        
                     }
                     $dateFechaVence = $objFunciones->sumarDiasFecha($arCliente->getPlazoPago(), $arFactura->getFecha());
-                    $arFactura->setFechaVence($dateFechaVence);                            
+                    $arFactura->setFechaVence($dateFechaVence); 
+                    $arUsuario = $this->getUser();
+                    $arFactura->setUsuario($arUsuario->getUserName());
                     $em->persist($arFactura);
                     $em->flush();
 

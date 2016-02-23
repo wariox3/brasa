@@ -83,6 +83,8 @@ class MovimientoPedidoController extends Controller
                 $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));                
                 if(count($arCliente) > 0) {
                     $arPedido->setClienteRel($arCliente);
+                    $arUsuario = $this->getUser();
+                    $arPedido->setUsuario($arUsuario->getUserName());
                     $em->persist($arPedido);
                     $em->flush();
 
@@ -883,6 +885,8 @@ class MovimientoPedidoController extends Controller
             $arProgramacion->setFecha($arPedido->getFechaProgramacion());
             $arProgramacion->setAnio($arPedido->getFechaProgramacion()->format('Y'));
             $arProgramacion->setMes($arPedido->getFechaProgramacion()->format('m'));
+            $arUsuario = $this->getUser();
+            $arProgramacion->setUsuario($arUsuario->getUserName()); 
             $em->persist($arProgramacion);
             $em->flush();
             $codigoProgramacion = $arProgramacion->getCodigoProgramacionPk();
@@ -908,7 +912,9 @@ class MovimientoPedidoController extends Controller
             $arFactura->setFecha(new \DateTime('now'));
             $dateFechaVence = $objFunciones->sumarDiasFecha($arPedido->getClienteRel()->getPlazoPago(), $arFactura->getFecha());
             $arFactura->setFechaVence($dateFechaVence);            
-            $arFactura->setClienteRel($arPedido->getClienteRel());                                                            
+            $arFactura->setClienteRel($arPedido->getClienteRel());        
+            $arUsuario = $this->getUser();
+            $arFactura->setUsuario($arUsuario->getUserName());             
             $em->persist($arFactura);                        
             foreach ($arPedidoDetalles as $arPedidoDetalle) {  
                 $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();

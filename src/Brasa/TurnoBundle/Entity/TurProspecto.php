@@ -48,6 +48,11 @@ class TurProspecto
     private $telefonoContacto;    
     
     /**
+     * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
+     */    
+    private $usuario;     
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;                     
@@ -275,5 +280,29 @@ class TurProspecto
     public function getCotizacionesProspectoRel()
     {
         return $this->cotizacionesProspectoRel;
+    }
+
+    /**
+     * Set usuario
+     *
+     * @param string $usuario
+     *
+     * @return TurProspecto
+     */
+    public function setUsuario($usuario)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return string
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
     }
 }

@@ -50,7 +50,9 @@ class BaseTurnoController extends Controller
         $form = $this->createForm(new TurTurnoType, $arTurno);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arTurno = $form->getData();            
+            $arTurno = $form->getData(); 
+            $arUsuario = $this->getUser();
+            $arTurno->setUsuario($arUsuario->getUserName());
             $em->persist($arTurno);
             $em->flush();            
             

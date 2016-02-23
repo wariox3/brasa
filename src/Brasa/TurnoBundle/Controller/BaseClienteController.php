@@ -58,6 +58,8 @@ class BaseClienteController extends Controller
             if(($codigoCliente == 0 || $codigoCliente == '') && count($arClienteValidar) > 0) {
                 $objMensaje->Mensaje("error", "El cliente con ese nit ya existe", $this);
             } else {
+                $arUsuario = $this->getUser();
+                $arCliente->setUsuario($arUsuario->getUserName());
                 $em->persist($arCliente);
                 $em->flush();            
                 if($form->get('guardarnuevo')->isClicked()) {

@@ -103,6 +103,11 @@ class TurCotizacion
     private $vrTotal = 0; 
     
     /**
+     * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
+     */    
+    private $usuario;     
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;                  
@@ -725,5 +730,29 @@ class TurCotizacion
     public function getNumero()
     {
         return $this->numero;
+    }
+
+    /**
+     * Set usuario
+     *
+     * @param string $usuario
+     *
+     * @return TurCotizacion
+     */
+    public function setUsuario($usuario)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return string
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
     }
 }

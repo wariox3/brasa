@@ -111,7 +111,12 @@ class TurSoportePago
      * @ORM\Column(name="horas_extras_festivas_nocturnas", type="integer")
      */    
     private $horasExtrasFestivasNocturnas = 0;    
-        
+
+    /**
+     * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
+     */    
+    private $usuario;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="TurSoportePagoPeriodo", inversedBy="soportesPagosSoportePagoPeriodoRel")
      * @ORM\JoinColumn(name="codigo_soporte_pago_periodo_fk", referencedColumnName="codigo_soporte_pago_periodo_pk")
@@ -683,5 +688,29 @@ class TurSoportePago
     public function getNovedad()
     {
         return $this->novedad;
+    }
+
+    /**
+     * Set usuario
+     *
+     * @param string $usuario
+     *
+     * @return TurSoportePago
+     */
+    public function setUsuario($usuario)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return string
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
     }
 }

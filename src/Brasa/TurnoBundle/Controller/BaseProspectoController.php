@@ -50,7 +50,9 @@ class BaseProspectoController extends Controller
         $form = $this->createForm(new TurProspectoType, $arProspecto);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arProspecto = $form->getData();            
+            $arProspecto = $form->getData(); 
+            $arUsuario = $this->getUser();
+            $arProspecto->setUsuario($arUsuario->getUserName());            
             $em->persist($arProspecto);
             $em->flush();            
 

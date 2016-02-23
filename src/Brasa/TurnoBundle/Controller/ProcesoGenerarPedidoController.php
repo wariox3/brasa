@@ -26,7 +26,9 @@ class ProcesoGenerarPedidoController extends Controller
                 $arServicio = new \Brasa\TurnoBundle\Entity\TurServicio();
                 $arServicio = $em->getRepository('BrasaTurnoBundle:TurServicio')->find($codigoServicio);                
                 $arPedidoTipo = $em->getRepository('BrasaTurnoBundle:TurPedidoTipo')->find(2);
-                $arPedidoNuevo = new \Brasa\TurnoBundle\Entity\TurPedido();                    
+                $arPedidoNuevo = new \Brasa\TurnoBundle\Entity\TurPedido(); 
+                $arUsuario = $this->getUser();
+                $arPedidoNuevo->setUsuario($arUsuario->getUserName());                
                 $arPedidoNuevo->setPedidoTipoRel($arPedidoTipo);
                 $arPedidoNuevo->setClienteRel($arServicio->getClienteRel());
                 $arPedidoNuevo->setSectorRel($arServicio->getSectorRel());

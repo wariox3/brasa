@@ -53,6 +53,8 @@ class BasePlantillaController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arPlantilla = $form->getData();
+            $arUsuario = $this->getUser();
+            $arPlantilla->setUsuario($arUsuario->getUserName());
             $em->persist($arPlantilla);
             $em->flush();
 
