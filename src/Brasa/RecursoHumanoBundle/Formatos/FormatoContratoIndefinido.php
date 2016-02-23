@@ -31,9 +31,9 @@ class FormatoContratoIndefinido extends \FPDF_FPDF {
         $arContrato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find(self::$codigoContrato);        
         $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuContenidoFormato();
         $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find($arContrato->getCodigoContratoTipoFk());        
-        $this->SetXY(10, 10);
-        $this->Cell(185, 7, utf8_decode($arContenidoFormato->getTitulo()), 0, 0, 'C', 1);
-        $this->Text(10, 25, "Contrato numero: " . $arContrato->getCodigoContratoPk());
+        
+        $this->Image('imagenes/logos/logo.jpg' , 90 ,5, 40 , 20,'JPG'); //cuadro para el logo
+        
         $this->Ln(20);
     }
 
@@ -42,7 +42,67 @@ class FormatoContratoIndefinido extends \FPDF_FPDF {
         $arContrato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find(self::$codigoContrato);        
         $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuContenidoFormato();
         $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find($arContrato->getCodigoContratoTipoFk());        
-        $pdf->SetXY(10, 30);
+        $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $pdf->SetX(10);
+        $pdf->SetFont('Arial', 'B', 13);
+        $pdf->Cell(185, 7, utf8_decode($arContenidoFormato->getTitulo()), 0, 0, 'C');
+        $pdf->SetXY(10, 37);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(190, 7, utf8_decode("N° ") . $arContrato->getCodigoContratoPk(), 0, 0, 'R');
+        $pdf->SetXY(10, 40);
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(190, 7, utf8_decode($arConfiguracion->getNitEmpresa()), 0, 0, 'C');
+        $pdf->SetXY(10, 47);
+        $pdf->Cell(190, 7, utf8_decode("REGIONAL ANTIOQUIA"), 0, 0, 'C');
+        //LINEA 1 CUADRO
+        $pdf->SetXY(10, 60);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(95, 7, "NIT EMPRESA:" , 1, 0, 'L', 0);
+        $pdf->Cell(95, 7, $arConfiguracion->getNitEmpresa() , 1, 0, 'L', 0);
+        //LINEA 2 CUADRO
+        $pdf->SetXY(10, 67);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(95, 7, "NOMBRE DEL EMPLEADOR:" , 1, 0, 'L', 0);
+        $pdf->Cell(95, 7, $arConfiguracion->getNombreEmpresa() , 1, 0, 'L', 0);
+        //LINEA 3 CUADRO
+        $pdf->SetXY(10, 74);
+        $pdf->Cell(95, 7, utf8_decode("DIRECCIÓN EMPRESA:") , 1, 0, 'L', 0);
+        $pdf->Cell(95, 7, utf8_decode($arConfiguracion->getDireccionEmpresa()) , 1, 0, 'L', 0);
+        //LINEA 4 CUADRO
+        $pdf->SetXY(10, 81);
+        $pdf->Cell(95, 7, utf8_decode("IDENTIFICACIÓN EMPLEADO:") , 1, 0, 'L', 0);
+        $pdf->Cell(95, 7, $arContrato->getEmpleadoRel()->getNumeroIdentificacion() , 1, 0, 'L', 0);
+        //LINEA 5 CUADRO
+        $pdf->SetXY(10, 88);
+        $pdf->Cell(95, 7, "EMPLEADO:" , 1, 0, 'L', 0);
+        $pdf->Cell(95, 7, utf8_decode($arContrato->getEmpleadoRel()->getNombreCorto()) , 1, 0, 'L', 0);                            
+        //LINEA 6 CUADRO
+        $pdf->SetXY(10, 95);
+        $pdf->Cell(95, 7, utf8_decode("DIRECCIÓN EMPLEADO:") , 1, 0, 'L', 0);
+        $pdf->Cell(95, 7, utf8_decode($arContrato->getEmpleadoRel()->getDireccion()) , 1, 0, 'L', 0);
+        //LINEA 7 CUADRO
+        $pdf->SetXY(10, 102);
+        $pdf->Cell(95, 7, utf8_decode("FECHA INGRESO:") , 1, 0, 'L', 0);
+        $pdf->Cell(95, 7, $arContrato->getFechaDesde()->format('Y-m-d') , 1, 0, 'L', 0);
+        //LINEA 8 CUADRO
+        $pdf->SetXY(10, 109);
+        $pdf->Cell(95, 7, utf8_decode("CARGO U OFICIO QUE DESEMPEÑARA EL TRABAJADOR:") , 1, 0, 'L', 0);
+        $pdf->Cell(95, 7, utf8_decode($arContrato->getCargoRel()->getNombre()) , 1, 0, 'L', 0);
+        //LINEA 9 CUADRO
+        $pdf->SetXY(10, 116);
+        $pdf->Cell(95, 7, utf8_decode("SALARIO:") , 1, 0, 'L', 0);
+        $pdf->Cell(95, 7, number_format($arContrato->getVrSalario(), 2, '.', ','), 1, 0, 'L');
+        //LINEA 10 CUADRO
+        $pdf->SetXY(10, 123);
+        $pdf->Cell(95, 7, utf8_decode("FECHA DE INICIACIÓN DE LABORES:") , 1, 0, 'L', 0);
+        $pdf->Cell(95, 7, $arContrato->getFechaDesde()->format('Y-m-d') , 1, 0, 'L', 0);
+        //LINEA 11 CUADRO
+        $pdf->SetXY(10, 130);
+        $pdf->Cell(95, 7, utf8_decode("CIUDAD DONDE HA SIDO CONTRATADO EL TRABAJADOR:") , 1, 0, 'L', 0);
+        $pdf->Cell(95, 7, number_format($arContrato->getVrSalario(), 2, '.', ','), 1, 0, 'L');
+        
+        $pdf->SetXY(10, 140);
         $pdf->SetFont('Arial', '', 10);  
         //se reemplaza el contenido de la tabla tipo de proceso disciplinario
         $sustitucion1 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion();
