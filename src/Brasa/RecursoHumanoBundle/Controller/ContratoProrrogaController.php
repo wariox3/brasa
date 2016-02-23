@@ -34,6 +34,7 @@ class ContratoProrrogaController extends Controller
         $form->handleRequest($request);
         if ($form->isValid())
         {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             $boolValidarContratoFijo = TRUE;
             $fechaDesde = $form->get('fechaInicioNueva')->getData();
             $fechaHasta = $form->get('fechaFinalNueva')->getData();
@@ -48,7 +49,7 @@ class ContratoProrrogaController extends Controller
                if ($boolValidarContratoFijo == FALSE){
                     $objMensaje->Mensaje("error", "La prorroga no puede ser mayor o igual a un año", $this);;
                } else {
-                    if ($codigoContratoProrroga = 0){
+                    if ($codigoContratoProrroga == 0){
                         $arContratoProrroga->setContratoRel($arContrato);
                         $arContratoProrroga->setCodigoEmpleadoFk($arContrato->getEmpleadoRel()->getCodigoEmpleadoPk());
                         $arContratoProrroga->setFecha(new \DateTime('now'));
@@ -70,6 +71,7 @@ class ContratoProrrogaController extends Controller
                         //fin calculo meses
                         $arContratoProrroga->setMeses($interval);
                         $arContratoProrroga->setDetalle($form->get('detalle')->getData());
+                        $arContratoProrroga->setCodigoUsuario($arUsuario->getId());
                         $arContrato->setFechaHasta($form->get('fechaFinalNueva')->getData());
                         $arContrato->setFechaProrrogaInicio($form->get('fechaInicioNueva')->getData());
                         $arContrato->setFechaProrrogaFinal($form->get('fechaFinalNueva')->getData());

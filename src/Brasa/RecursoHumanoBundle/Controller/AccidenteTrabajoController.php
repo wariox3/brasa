@@ -166,7 +166,8 @@ class AccidenteTrabajoController extends Controller
         } 
         $form = $this->createForm(new RhuAccidenteTrabajoType, $arAccidenteTrabajo);         
         $form->handleRequest($request);
-        if ($form->isValid()) {            
+        if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arrControles = $request->request->All();
             $arAccidenteTrabajo = $form->getData();
             if($arrControles['txtNumeroIdentificacion'] != '') {
@@ -181,6 +182,9 @@ class AccidenteTrabajoController extends Controller
                     if($arEmpleado->getCodigoContratoActivoFk() != '') {                        
                         $arAccidenteTrabajo->setCentroCostoRel($arEmpleado->getCentroCostoRel());
                         $arAccidenteTrabajo->setEntidadRiesgoProfesionalRel(($arEntidadRiesgo));
+                        if($codigoAccidenteTrabajo == 0) {
+                            $arAccidenteTrabajo->setCodigoUsuario($arUsuario->getId());
+                        }
                         $em->persist($arAccidenteTrabajo);
                         $em->flush();
                         if($form->get('guardarnuevo')->isClicked()) {

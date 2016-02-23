@@ -45,7 +45,12 @@ class RhuCambioSalario
     /**
      * @ORM\Column(name="detalle", type="string", length=250, nullable=true)
      */    
-    private $detalle;     
+    private $detalle;
+    
+    /**
+     * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
+     */    
+    private $codigoUsuario;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="cambiosSalariosEmpleadoRel")
@@ -261,5 +266,29 @@ class RhuCambioSalario
     public function getDetalle()
     {
         return $this->detalle;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuCambioSalario
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
     }
 }

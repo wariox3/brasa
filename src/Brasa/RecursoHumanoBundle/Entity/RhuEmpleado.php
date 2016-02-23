@@ -313,6 +313,11 @@ class RhuEmpleado
     private $codigoDepartamentoEmpresaFk;
     
     /**
+     * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
+     */    
+    private $codigoUsuario;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuClasificacionRiesgo", inversedBy="empleadosClasificacionRiesgoRel")
      * @ORM\JoinColumn(name="codigo_clasificacion_riesgo_fk", referencedColumnName="codigo_clasificacion_riesgo_pk")
      */
@@ -3473,5 +3478,29 @@ class RhuEmpleado
     public function getPermisosEmpleadoRel()
     {
         return $this->permisosEmpleadoRel;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
     }
 }

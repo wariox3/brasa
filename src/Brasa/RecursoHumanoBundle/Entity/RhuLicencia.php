@@ -60,7 +60,12 @@ class RhuLicencia
     /**     
      * @ORM\Column(name="afecta_transporte", type="boolean")
      */    
-    private $afectaTransporte = 0;                
+    private $afectaTransporte = 0; 
+    
+    /**
+     * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
+     */    
+    private $codigoUsuario;
 
     /**
      * @ORM\ManyToOne(targetEntity="RhuLicenciaTipo", inversedBy="licenciasLicenciaTipoRel")
@@ -377,5 +382,29 @@ class RhuLicencia
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuLicencia
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
     }
 }

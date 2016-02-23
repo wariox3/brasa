@@ -230,7 +230,12 @@ class RhuLiquidacion
     /**
      * @ORM\Column(name="fecha_inicio_contrato", type="date", nullable=true)
      */    
-    private $fechaInicioContrato;     
+    private $fechaInicioContrato;
+    
+    /**
+     * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
+     */    
+    private $codigoUsuario;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="liquidacionesEmpleadoRel")
@@ -1439,5 +1444,29 @@ class RhuLiquidacion
     public function getDiasPrimasDescontar()
     {
         return $this->diasPrimasDescontar;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuLiquidacion
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
     }
 }

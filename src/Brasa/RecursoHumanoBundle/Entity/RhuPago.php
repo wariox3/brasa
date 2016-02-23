@@ -237,7 +237,12 @@ class RhuPago
     /**
      * @ORM\Column(name="dias_ausentismo", type="integer")
      */
-    private $diasAusentismo = 0;     
+    private $diasAusentismo = 0;
+    
+    /**
+     * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
+     */    
+    private $codigoUsuario;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuPagoTipo", inversedBy="pagosPagoTipoRel")
@@ -1699,5 +1704,29 @@ class RhuPago
     public function getVrAdicionalCotizacion()
     {
         return $this->vrAdicionalCotizacion;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuPago
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
     }
 }

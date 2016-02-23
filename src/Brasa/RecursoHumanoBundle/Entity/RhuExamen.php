@@ -124,6 +124,11 @@ class RhuExamen
     private $controlPago = 0;
     
     /**
+     * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
+     */    
+    private $codigoUsuario;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuExamenClase", inversedBy="examenesExamenClaseRel")
      * @ORM\JoinColumn(name="codigo_examen_clase_fk", referencedColumnName="codigo_examen_clase_pk")
      */
@@ -935,5 +940,29 @@ class RhuExamen
     public function getPagosExamenesDetallesExamenRel()
     {
         return $this->pagosExamenesDetallesExamenRel;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuExamen
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
     }
 }

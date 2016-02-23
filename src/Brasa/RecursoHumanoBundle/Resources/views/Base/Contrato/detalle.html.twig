@@ -106,6 +106,7 @@
                         <th>ANTERIOR</th>
                         <th>NUEVO</th>
                         <th>DETALLE</th>
+                        <th></th>
                     </tr>
                     {% for arCambiosSalario in arCambiosSalario %}
                         <tr>
@@ -114,6 +115,11 @@
                             <td style="text-align: right">{{ arCambiosSalario.vrSalarioAnterior | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arCambiosSalario.vrSalarioNuevo | number_format(0, '.', ',') }}</td>
                             <td>{{ arCambiosSalario.detalle  }}</td>
+                            {% if arContrato.indefinido == 1%}
+                                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_cambio_salario_nuevo', { 'codigoContrato': arContrato.codigoContratoPk,  'codigoCambioSalario': arCambiosSalario.codigoCambioSalarioPk}) }}', 'EditarCambioSalario', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}    
                         </tr>
                     {% endfor %}
                 </table>
@@ -277,7 +283,11 @@
                             <td>{{ arContratoProrrogas.fechaFinalNueva |date("Y/m/d")  }}</td>
                             <td>{{ arContratoProrrogas.meses  }}</td>
                             <td>{{ arContratoProrrogas.detalle  }}</td>
-                            <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_contrato_prorroga_nuevo', { 'codigoContrato': arContrato.codigoContratoPk,  'codigoContratoProrroga': arContratoProrrogas.codigoContratoProrrogaPk}) }}', 'EditarProrroga', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                            {% if arContrato.indefinido == 1%}
+                                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_contrato_prorroga_nuevo', { 'codigoContrato': arContrato.codigoContratoPk,  'codigoContratoProrroga': arContratoProrrogas.codigoContratoProrrogaPk}) }}', 'EditarProrroga', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
                         </tr>
                     {% endfor %}
                 </table>

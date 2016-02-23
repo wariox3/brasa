@@ -35,7 +35,12 @@ class RhuEntidadExamen
     /**
      * @ORM\Column(name="telefono", type="string", length=15, nullable=true)
      */    
-    private $telefono;    
+    private $telefono;
+
+    /**
+     * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
+     */    
+    private $codigoUsuario;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuExamen", mappedBy="entidadExamenRel")
@@ -228,5 +233,29 @@ class RhuEntidadExamen
     public function getPagosExamenesEntidadExamenRel()
     {
         return $this->pagosExamenesEntidadExamenRel;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuEntidadExamen
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
     }
 }

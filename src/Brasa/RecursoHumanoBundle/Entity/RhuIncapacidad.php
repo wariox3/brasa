@@ -110,7 +110,12 @@ class RhuIncapacidad
     /**
      * @ORM\Column(name="porcentaje_pago", type="float")
      */
-    private $porcentajePago = 0;    
+    private $porcentajePago = 0;
+
+    /**
+     * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
+     */    
+    private $codigoUsuario;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuIncapacidadTipo", inversedBy="incapacidadesIncapacidadTipoRel")
@@ -808,5 +813,29 @@ class RhuIncapacidad
     public function getIncapacidadesIncapacidadPagoRel()
     {
         return $this->incapacidadesIncapacidadPagoRel;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuIncapacidad
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
     }
 }

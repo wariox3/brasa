@@ -125,7 +125,12 @@ class RhuVacacion
     /**
      * @ORM\Column(name="estado_autorizado", type="boolean")
      */
-    private $estadoAutorizado = 0;    
+    private $estadoAutorizado = 0;
+
+    /**
+     * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
+     */    
+    private $codigoUsuario;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="vacacionesCentroCostoRel")
@@ -801,5 +806,29 @@ class RhuVacacion
     public function getDiasPagados()
     {
         return $this->diasPagados;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuVacacion
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
     }
 }

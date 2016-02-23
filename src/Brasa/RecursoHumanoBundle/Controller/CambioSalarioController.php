@@ -17,24 +17,31 @@ class CambioSalarioController extends Controller
         if ($codigoCambioSalario != 0)
         {
             $arCambioSalario = $em->getRepository('BrasaRecursoHumanoBundle:RhuCambioSalario')->find($codigoCambioSalario);
+            $dateAplicacion = $arCambioSalario->getFecha();
+        }else {
+            $dateAplicacion = new \DateTime('now');
         }    
         $form = $this->createFormBuilder()
-            ->add('salarioNuevo', 'number', array('required' => true))
+            ->add('salarioNuevo', 'number', array('required' => true, 'data' => $arCambioSalario->getVrSalarioNuevo()))
             ->add('fechaAplicacion', 'date', array('data' => new \DateTime('now')))
-            ->add('detalle', 'text', array('required' => true))
+            ->add('detalle', 'text', array('required' => true, 'data' => $arCambioSalario->getDetalle()))
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid())
         {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             if ($arContrato->getFechaUltimoPago() > $form->get('fechaAplicacion')->getData()){
                 $objMensaje->Mensaje("error", "El cambio de salario se debe realizar despues del pago del ".$arContrato->getFechaUltimoPago()->format('Y/m/d')."", $this);
             } else {
                 $arCambioSalario->setContratoRel($arContrato);
                 $arCambioSalario->setEmpleadoRel($arContrato->getEmpleadoRel());
                 $arCambioSalario->setFecha($form->get('fechaAplicacion')->getData());
-                $arCambioSalario->setVrSalarioNuevo($form->get('salarioNuevo')->getData());
-                $arCambioSalario->setVrSalarioAnterior($arContrato->getVrSalario());
+                $arCambioSalario->setVrSalarioNuevo($form->get('salarioNuevo')->getData());    
+                if ($codigoCambioSalario == 0){
+                    $arCambioSalario->setVrSalarioAnterior($arContrato->getVrSalario());
+                    $arCambioSalario->setCodigoUsuario($arUsuario->getId());
+                }
                 $arCambioSalario->setDetalle($form->get('detalle')->getData());
                 $arEmpleadoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                 $arEmpleadoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato->getEmpleadoRel());

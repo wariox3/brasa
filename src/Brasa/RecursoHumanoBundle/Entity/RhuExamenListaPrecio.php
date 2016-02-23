@@ -30,7 +30,12 @@ class RhuExamenListaPrecio
     /**
      * @ORM\Column(name="precio", type="float")
      */
-    private $precio;  
+    private $precio;
+    
+    /**
+     * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
+     */    
+    private $codigoUsuario;
 
     /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadExamen", inversedBy="examenesEntidadExamenRel")
@@ -219,5 +224,29 @@ class RhuExamenListaPrecio
     public function getExamenesExamenDetalleRel()
     {
         return $this->examenesExamenDetalleRel;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuExamenListaPrecio
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
     }
 }

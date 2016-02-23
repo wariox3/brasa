@@ -88,10 +88,14 @@ class BaseCentroCostoController extends Controller
         $form->handleRequest($request);
         
         if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arCentroCosto = $form->getData();
             $strDia = $arCentroCosto->getFechaUltimoPagoProgramado()->format('d');
             $strMes = $arCentroCosto->getFechaUltimoPagoProgramado()->format('m');
             $strPeriodo = $arCentroCosto->getPeriodoPagoRel()->getCodigoPeriodoPagoPk();
+            if ($codigoCentroCosto == 0){
+                $arCentroCosto->setCodigoUsuario($arUsuario->getId());
+            }
             if ($strPeriodo == 2 && ($strDia != 10 && $strDia != 20 && $strDia != 30 && $strMes != 2)) {
                 $objMensaje->Mensaje("error", "El periodo debe terminar en dias 10, 20 o 30", $this);
             } else {

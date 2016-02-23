@@ -60,7 +60,12 @@ class RhuContratoProrroga
     /**
      * @ORM\Column(name="detalle", type="string", length=250, nullable=true)
      */    
-    private $detalle;     
+    private $detalle;
+    
+    /**
+     * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
+     */    
+    private $codigoUsuario;
         
     /**
      * @ORM\ManyToOne(targetEntity="RhuContrato", inversedBy="contratosProrrogasContratoRel")
@@ -318,5 +323,29 @@ class RhuContratoProrroga
     public function getContratoRel()
     {
         return $this->contratoRel;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuContratoProrroga
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
     }
 }
