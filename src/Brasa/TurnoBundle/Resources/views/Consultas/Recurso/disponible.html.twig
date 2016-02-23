@@ -31,6 +31,7 @@
             <table class="table table-striped table-bordered table-condensed">
             <tr>
                 <th>COD</th>
+                <th></th>
                 <th>IDENTIFICACION</th>
                 <th>NOMBRE</th>
                 <th>TIPO</th>
@@ -41,7 +42,12 @@
             </tr>
             {% for arRecurso in arRecurso %}
                 <tr>
-                    <td>{{ arRecurso.codigoRecursoPk  }}</td>                    
+                    <td>{{ arRecurso.codigoRecursoPk  }}</td>   
+                    <td>
+                        {% if arRecurso.rutaFoto != '' %} 
+                            <img src="{{ arRecurso.rutaFoto }}" width=50 height=50>
+                        {% endif %}
+                    </td>
                     <td>{{ arRecurso.numeroIdentificacion  }}</td>
                     <td>{{ arRecurso.nombreCorto  }}</td>
                     <td>{{ arRecurso.tipo  }}</td>

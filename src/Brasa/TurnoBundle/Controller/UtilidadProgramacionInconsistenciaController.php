@@ -18,7 +18,9 @@ class UtilidadProgramacionInconsistenciaController extends Controller
         $form = $this->formularioLista();
         $form->handleRequest($request);
         if($form->isValid()) {
-            if($form->get('BtnGenerar')->isClicked()) {          
+            if($form->get('BtnGenerar')->isClicked()) {   
+                $strSql = "DELETE FROM tur_programacion_inconsistencia WHERE 1";           
+                $em->getConnection()->executeQuery($strSql);                
                 $dateFecha = $form->get('fecha')->getData();
                 $strAnio = $dateFecha->format('Y');
                 $strMes = $dateFecha->format('m'); 

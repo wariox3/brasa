@@ -27,8 +27,10 @@ class ConsultasRecursosDisponiblesController extends Controller
                 $anio = $dateFecha->format('Y');
                 $mes = $dateFecha->format('m');
                 $strDia = $dateFecha->format('j');
-                $connection = $em->getConnection();
-                
+                $connection = $em->getConnection();                
+                $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+                $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+                $strRutaImagen = "/almacenamiento/imagenes/empleados/";                
                 $arRecursos = new \Brasa\TurnoBundle\Entity\TurRecurso();
                 $arRecursos = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findBy(array('estadoActivo' => 1));
                 foreach ($arRecursos as $arRecurso) {
@@ -61,7 +63,11 @@ class ConsultasRecursosDisponiblesController extends Controller
                         $statement = $connection->prepare($strSql2);        
                         $statement->execute();
                         $resultados = $statement->fetchAll();                        
-                        if($resultados) {                        
+                        if($resultados) {
+                            $strRutaFoto = "";
+                            if($arRecurso->getEmpleadoRel()->getRutaFoto()) { 
+                                $strRutaFoto = $strRutaImagen . $arRecurso->getEmpleadoRel()->getRutaFoto();
+                            }
                             $arrDisponibles[] = array(
                                 'codigoRecursoPk' => $arRecurso->getCodigoRecursoPk(),
                                 'numeroIdentificacion' => $arRecurso->getNumeroIdentificacion(),
@@ -69,6 +75,7 @@ class ConsultasRecursosDisponiblesController extends Controller
                                 'tipo' => $arRecurso->getRecursoTipoRel()->getNombre(),
                                 'telefono' => $arRecurso->getTelefono(),
                                 'celular' => $arRecurso->getCelular(),
+                                'rutaFoto' => $strRutaFoto,
                                 'nombreTurno' => 'DESCANSO'
                                 );                            
                         }
