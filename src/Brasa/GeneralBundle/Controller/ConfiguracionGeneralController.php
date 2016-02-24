@@ -19,6 +19,14 @@ class ConfiguracionGeneralController extends Controller
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $arConfiguracionNotificaciones = new \Brasa\GeneralBundle\Entity\GenConfiguracionNotificaciones();
         $arConfiguracionNotificaciones = $em->getRepository('BrasaGeneralBundle:GenConfiguracionNotificaciones')->find(1);
+        $arrayPropiedadesCiudad = array(
+            'class' => 'BrasaGeneralBundle:GenCiudad',
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('c')                                        
+                ->orderBy('c.nombre', 'ASC');},
+            'property' => 'nombre',
+            'required' => false);                   
+        $arrayPropiedadesCiudad['data'] = $em->getReference("BrasaGeneralBundle:GenCiudad", $arConfiguracionGeneral->getCodigoCiudadFk());
         $formConfiguracionNotificaciones = $this->createFormBuilder() 
             ->add('correoTurnoInconsistencia', 'text', array('data' => $arConfiguracionNotificaciones->getCorreoTurnoInconsistencia(), 'required' => false))
             ->add('guardar', 'submit', array('label' => 'Actualizar'))            
@@ -31,6 +39,7 @@ class ConfiguracionGeneralController extends Controller
             ->add('sigla', 'text', array('data' => $arConfiguracionGeneral->getSigla(), 'required' => true))    
             ->add('telefonoEmpresa', 'text', array('data' => $arConfiguracionGeneral->getTelefonoEmpresa(), 'required' => true))
             ->add('direccionEmpresa', 'text', array('data' => $arConfiguracionGeneral->getDireccionEmpresa(), 'required' => true))    
+            ->add('ciudadRel', 'entity', $arrayPropiedadesCiudad)
             ->add('baseRetencionFuente', 'text', array('data' => $arConfiguracionGeneral->getBaseRetencionFuente(), 'required' => true))
             ->add('baseRetencionCree', 'text', array('data' => $arConfiguracionGeneral->getBaseRetencionCREE(), 'required' => true))    
             ->add('porcentajeRetencionFuente', 'text', array('data' => $arConfiguracionGeneral->getPorcentajeRetencionFuente(), 'required' => true))    
@@ -55,6 +64,7 @@ class ConfiguracionGeneralController extends Controller
                 $Sigla = $controles['sigla'];
                 $TelefonoEmpresa = $controles['telefonoEmpresa'];
                 $DireccionEmpresa = $controles['direccionEmpresa'];
+                $Ciudad = $controles['ciudadRel'];
                 $BaseRetencionFuente = $controles['baseRetencionFuente'];
                 $BaseRetencionCree = $controles['baseRetencionCree'];
                 $PorcentajeRetencionFuente = $controles['porcentajeRetencionFuente'];
@@ -74,6 +84,7 @@ class ConfiguracionGeneralController extends Controller
                 $arConfiguracionGeneral->setSigla($Sigla);
                 $arConfiguracionGeneral->setTelefonoEmpresa($TelefonoEmpresa);
                 $arConfiguracionGeneral->setDireccionEmpresa($DireccionEmpresa);
+                $arConfiguracionGeneral->setCodigoCiudadFk($Ciudad);
                 $arConfiguracionGeneral->setBaseRetencionFuente($BaseRetencionFuente);
                 $arConfiguracionGeneral->setBaseRetencionCree($BaseRetencionCree);
                 $arConfiguracionGeneral->setPorcentajeRetencionFuente($PorcentajeRetencionFuente);

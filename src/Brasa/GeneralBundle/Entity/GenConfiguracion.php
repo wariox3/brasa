@@ -96,7 +96,12 @@ class GenConfiguracion
     /**
      * @ORM\Column(name="direccion_empresa", type="string", length=120, nullable=true)
      */    
-    private $direccionEmpresa;  
+    private $direccionEmpresa;
+    
+    /**
+     * @ORM\Column(name="codigo_ciudad_fk", type="integer", nullable=true)
+     */
+    private $codigoCiudadFk;
     
     /**
      * @ORM\Column(name="ruta_directorio", type="string", length=500, nullable=true)
@@ -108,7 +113,12 @@ class GenConfiguracion
      */      
     private $paginaWeb;
         
-
+    /**
+     * @ORM\ManyToOne(targetEntity="GenCiudad", inversedBy="configuracionesRel")
+     * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
+     */
+    protected $ciudadRel;
+    
 
     /**
      * Get codigoConfiguracionPk
@@ -550,5 +560,53 @@ class GenConfiguracion
     public function getPaginaWeb()
     {
         return $this->paginaWeb;
+    }
+
+    /**
+     * Set codigoCiudadFk
+     *
+     * @param integer $codigoCiudadFk
+     *
+     * @return GenConfiguracion
+     */
+    public function setCodigoCiudadFk($codigoCiudadFk)
+    {
+        $this->codigoCiudadFk = $codigoCiudadFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCiudadFk
+     *
+     * @return integer
+     */
+    public function getCodigoCiudadFk()
+    {
+        return $this->codigoCiudadFk;
+    }
+
+    /**
+     * Set ciudadRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
+     *
+     * @return GenConfiguracion
+     */
+    public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
+    {
+        $this->ciudadRel = $ciudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     */
+    public function getCiudadRel()
+    {
+        return $this->ciudadRel;
     }
 }

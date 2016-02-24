@@ -166,6 +166,11 @@ class GenCiudad
      */
     protected $rhuContratosCiudadContratoRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="GenConfiguracion", mappedBy="ciudadRel")
+     */
+    protected $configuracionesRel;
+    
     
     /**
      * Constructor
@@ -1120,5 +1125,39 @@ class GenCiudad
     public function getRhuContratosCiudadContratoRel()
     {
         return $this->rhuContratosCiudadContratoRel;
+    }
+
+    /**
+     * Add configuracionesRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenConfiguracion $configuracionesRel
+     *
+     * @return GenCiudad
+     */
+    public function addConfiguracionesRel(\Brasa\GeneralBundle\Entity\GenConfiguracion $configuracionesRel)
+    {
+        $this->configuracionesRel[] = $configuracionesRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove configuracionesRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenConfiguracion $configuracionesRel
+     */
+    public function removeConfiguracionesRel(\Brasa\GeneralBundle\Entity\GenConfiguracion $configuracionesRel)
+    {
+        $this->configuracionesRel->removeElement($configuracionesRel);
+    }
+
+    /**
+     * Get configuracionesRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getConfiguracionesRel()
+    {
+        return $this->configuracionesRel;
     }
 }

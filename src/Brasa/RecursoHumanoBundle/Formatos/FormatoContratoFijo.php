@@ -54,33 +54,43 @@ class FormatoContratoFijo extends \FPDF_FPDF {
         $sustitucion5 = $arContrato->getEmpleadoRel()->getDireccion();
         $sustitucion6 = $arConfiguracion->getDireccionEmpresa();
         $sustitucion7 = $arContrato->getEmpleadoRel()->getBarrio();
-        $sustitucion5 = $arContrato->getEmpleadoRel()->getFechaNacimiento()->format('Y/m/d');
-        $sustitucion6 = $arContrato->getEmpleadoRel()->getCiudadNacimientoRel()->getNombre();
-        $sustitucion7 = $arContrato->getCargoRel()->getNombre();
-        $sustitucion8 = number_format($arContrato->getVrSalario(), 2,'.',',');
-        $sustitucion9 = $arContrato->getCentroCostoRel()->getPeriodoPagoRel()->getNombre();
+        $sustitucion8 = $arContrato->getEmpleadoRel()->getFechaNacimiento()->format('Y/m/d');
+        $sustitucion9 = $arContrato->getEmpleadoRel()->getCiudadNacimientoRel()->getNombre();
+        $sustitucion10 = $arContrato->getEmpleadoRel()->getCiudadRel()->getNombre();
+        $sustitucion11 = $arContrato->getEmpleadoRel()->getPaisRel()->getGentilicio();
+        $sustitucion12 = $arContrato->getCargoRel()->getNombre();
+        $sustitucion13 = number_format($arContrato->getVrSalario(), 2,'.',',');
+        $sustitucion14 = $arContrato->getCentroCostoRel()->getPeriodoPagoRel()->getNombre();
+        $sustitucion15 = $arContrato->getCentroCostoRel()->getDiasPago();
+        
         if ($arContrato->getFechaProrrogaInicio() == null){
-            $sustitucion10 = $arContrato->getFechaDesde()->format('Y/m/d');
-            $sustitucion13 = $arContrato->getFechaHasta()->format('Y/m/d');
+            $sustitucion16 = $arContrato->getFechaDesde()->format('Y/m/d');
+            $sustitucion23 = $arContrato->getFechaHasta()->format('Y/m/d');
             $feci = $arContrato->getFechaDesde();
             $fecf = $arContrato->getFechaHasta();
         } else {
-            $sustitucion10 = $arContrato->getFechaProrrogaInicio()->format('Y/m/d');
-            $sustitucion13 = $arContrato->getFechaProrrogaFinal()->format('Y/m/d');
+            $sustitucion16 = $arContrato->getFechaProrrogaInicio()->format('Y/m/d');
+            $sustitucion23 = $arContrato->getFechaProrrogaFinal()->format('Y/m/d');
             $feci = $arContrato->getFechaProrrogaInicio();
             $fecf = $arContrato->getFechaProrrogaFinal();
         }
-        $sustitucion11 = $arContrato->getCentroCostoRel()->getCiudadRel()->getNombre();
+        $sustitucion17 = $arContrato->getCiudadContratoRel()->getNombre();
+        $sustitucion18 = $arContrato->getEmpleadoRel()->getCiudadExpedicionRel()->getNombre();
+        setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
+        $sustitucion19 = strftime("%d de %B de %Y", strtotime($sustitucion16));
+        $sustitucion20 = $arContrato->getHorarioTrabajo();
+        $sustitucion21 = strftime("%d de %B de %Y", strtotime($sustitucion16));
         //calculo meses        
         $interval = $feci->diff($fecf);
         $interval = round($interval->format('%a%') / 30);
-        $sustitucion12 = $interval;
-        $sustitucion14 = $arContrato->getFechaDesde()->format('Y/m/d');
-        setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
-        $sustitucion14 = strftime("%d de %B de %Y", strtotime($sustitucion14));
-        $sustitucion15 = $arContrato->getEmpleadoRel()->getNombreCorto();
-        $sustitucion16 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion()." de ".$arContrato->getEmpleadoRel()->getCiudadExpedicionRel()->getNombre();
-        $sustitucion17 = $arContrato->getCentroCostoRel()->getDiasPago();
+        $sustitucion22 = $interval; 
+        $sustitucion24 = strftime("%d de %B de %Y", strtotime($sustitucion23));
+        $sustitucion25 = " - ".$arConfiguracion->getDigitoVerificacionEmpresa();
+        $salarioLetras = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->numtoletras($arContrato->getVrSalario());
+        $sustitucion26 = $salarioLetras." $(";
+        $sustitucion26 .= number_format($arContrato->getVrSalario(), 2,'.',',');
+        $sustitucion26 .= ")";
+        $sustitucion27 = $arConfiguracion->getCiudadRel()->getNombre();
         //contenido de la cadena
         $cadena = $arContenidoFormato->getContenido();
         $patron1 = '/#1/';
@@ -100,6 +110,16 @@ class FormatoContratoFijo extends \FPDF_FPDF {
         $patron15 = '/#f/';
         $patron16 = '/#g/';
         $patron17 = '/#h/';
+        $patron18 = '/#i/';
+        $patron19 = '/#j/';
+        $patron20 = '/#k/';
+        $patron21 = '/#l/';
+        $patron22 = '/#m/';
+        $patron23 = '/#n/';
+        $patron24 = '/#o/';
+        $patron25 = '/#p/';
+        $patron26 = '/#q/';
+        $patron27 = '/#r/';
         //reemplazar en la cadena
         $cadenaCambiada = preg_replace($patron1, $sustitucion1, $cadena);
         $cadenaCambiada = preg_replace($patron2, $sustitucion2, $cadenaCambiada);
@@ -118,6 +138,16 @@ class FormatoContratoFijo extends \FPDF_FPDF {
         $cadenaCambiada = preg_replace($patron15, $sustitucion15, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron16, $sustitucion16, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron17, $sustitucion17, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron18, $sustitucion18, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron19, $sustitucion19, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron20, $sustitucion20, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron21, $sustitucion21, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron22, $sustitucion22, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron23, $sustitucion23, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron24, $sustitucion24, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron25, $sustitucion25, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron26, $sustitucion26, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron27, $sustitucion27, $cadenaCambiada);
         $pdf->MultiCell(0,5, $cadenaCambiada);
         
         $pdf->SetAutoPageBreak(true, 15);
