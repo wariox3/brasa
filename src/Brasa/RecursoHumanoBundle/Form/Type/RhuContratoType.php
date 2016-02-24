@@ -76,6 +76,13 @@ class RhuContratoType extends AbstractType
             ->add('cargoDescripcion', 'text', array('required' => true))                                                                       
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('salarioIntegral', 'choice', array('choices' => array('0' => 'NO', '1' => 'SI')))
+            ->add('ciudadContratoRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenCiudad',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('c')
+                    ->orderBy('c.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                
             ->add('guardar', 'submit');        
     }
  

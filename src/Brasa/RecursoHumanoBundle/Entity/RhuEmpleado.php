@@ -318,6 +318,11 @@ class RhuEmpleado
     private $codigoUsuario;
     
     /**
+     * @ORM\Column(name="codigo_pais_fk", type="integer", nullable=true)
+     */    
+    private $codigoPaisFk;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuClasificacionRiesgo", inversedBy="empleadosClasificacionRiesgoRel")
      * @ORM\JoinColumn(name="codigo_clasificacion_riesgo_fk", referencedColumnName="codigo_clasificacion_riesgo_pk")
      */
@@ -417,7 +422,13 @@ class RhuEmpleado
      * @ORM\ManyToOne(targetEntity="RhuSsoSubtipoCotizante", inversedBy="empleadosSsoSubtipoCotizanteRel")
      * @ORM\JoinColumn(name="codigo_subtipo_cotizante_fk", referencedColumnName="codigo_subtipo_cotizante_pk")
      */
-    protected $ssoSubtipoCotizanteRel;    
+    protected $ssoSubtipoCotizanteRel;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenPais", inversedBy="rhuEmpleadosPaisRel")
+     * @ORM\JoinColumn(name="codigo_pais_fk", referencedColumnName="codigo_pais_pk")
+     */
+    protected $paisRel;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuPago", mappedBy="empleadoRel")
@@ -1981,6 +1992,54 @@ class RhuEmpleado
     }
 
     /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
+    }
+
+    /**
+     * Set codigoPaisFk
+     *
+     * @param integer $codigoPaisFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoPaisFk($codigoPaisFk)
+    {
+        $this->codigoPaisFk = $codigoPaisFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPaisFk
+     *
+     * @return integer
+     */
+    public function getCodigoPaisFk()
+    {
+        return $this->codigoPaisFk;
+    }
+
+    /**
      * Set clasificacionRiesgoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo $clasificacionRiesgoRel
@@ -2386,6 +2445,30 @@ class RhuEmpleado
     public function getSsoSubtipoCotizanteRel()
     {
         return $this->ssoSubtipoCotizanteRel;
+    }
+
+    /**
+     * Set paisRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenPais $paisRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setPaisRel(\Brasa\GeneralBundle\Entity\GenPais $paisRel = null)
+    {
+        $this->paisRel = $paisRel;
+
+        return $this;
+    }
+
+    /**
+     * Get paisRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenPais
+     */
+    public function getPaisRel()
+    {
+        return $this->paisRel;
     }
 
     /**
@@ -3478,29 +3561,5 @@ class RhuEmpleado
     public function getPermisosEmpleadoRel()
     {
         return $this->permisosEmpleadoRel;
-    }
-
-    /**
-     * Set codigoUsuario
-     *
-     * @param string $codigoUsuario
-     *
-     * @return RhuEmpleado
-     */
-    public function setCodigoUsuario($codigoUsuario)
-    {
-        $this->codigoUsuario = $codigoUsuario;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoUsuario
-     *
-     * @return string
-     */
-    public function getCodigoUsuario()
-    {
-        return $this->codigoUsuario;
     }
 }

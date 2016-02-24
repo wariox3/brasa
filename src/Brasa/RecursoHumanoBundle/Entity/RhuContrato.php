@@ -194,6 +194,11 @@ class RhuContrato
     private $codigoEntidadCajaFk;
     
     /**
+     * @ORM\Column(name="codigo_ciudad_contrato_fk", type="integer", nullable=true)
+     */    
+    private $codigoCiudadContratoFk;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="contratosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -272,6 +277,12 @@ class RhuContrato
     protected $entidadCajaRel;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuContratosCiudadContratoRel")
+     * @ORM\JoinColumn(name="codigo_ciudad_contrato_fk", referencedColumnName="codigo_ciudad_pk")
+     */
+    protected $ciudadContratoRel;
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuLiquidacion", mappedBy="contratoRel")
      */
     protected $liquidacionesContratoRel; 
@@ -335,6 +346,8 @@ class RhuContrato
      * @ORM\OneToMany(targetEntity="RhuContratoProrroga", mappedBy="contratoRel")
      */
     protected $contratosProrrogasContratoRel;
+    
+    
     /**
      * Constructor
      */
@@ -579,6 +592,54 @@ class RhuContrato
     public function getFechaHasta()
     {
         return $this->fechaHasta;
+    }
+
+    /**
+     * Set fechaProrrogaInicio
+     *
+     * @param \DateTime $fechaProrrogaInicio
+     *
+     * @return RhuContrato
+     */
+    public function setFechaProrrogaInicio($fechaProrrogaInicio)
+    {
+        $this->fechaProrrogaInicio = $fechaProrrogaInicio;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaProrrogaInicio
+     *
+     * @return \DateTime
+     */
+    public function getFechaProrrogaInicio()
+    {
+        return $this->fechaProrrogaInicio;
+    }
+
+    /**
+     * Set fechaProrrogaFinal
+     *
+     * @param \DateTime $fechaProrrogaFinal
+     *
+     * @return RhuContrato
+     */
+    public function setFechaProrrogaFinal($fechaProrrogaFinal)
+    {
+        $this->fechaProrrogaFinal = $fechaProrrogaFinal;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaProrrogaFinal
+     *
+     * @return \DateTime
+     */
+    public function getFechaProrrogaFinal()
+    {
+        return $this->fechaProrrogaFinal;
     }
 
     /**
@@ -1158,6 +1219,30 @@ class RhuContrato
     }
 
     /**
+     * Set codigoCiudadContratoFk
+     *
+     * @param integer $codigoCiudadContratoFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoCiudadContratoFk($codigoCiudadContratoFk)
+    {
+        $this->codigoCiudadContratoFk = $codigoCiudadContratoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCiudadContratoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCiudadContratoFk()
+    {
+        return $this->codigoCiudadContratoFk;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -1467,6 +1552,30 @@ class RhuContrato
     public function getEntidadCajaRel()
     {
         return $this->entidadCajaRel;
+    }
+
+    /**
+     * Set ciudadContratoRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function setCiudadContratoRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadContratoRel = null)
+    {
+        $this->ciudadContratoRel = $ciudadContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadContratoRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     */
+    public function getCiudadContratoRel()
+    {
+        return $this->ciudadContratoRel;
     }
 
     /**
@@ -1909,53 +2018,5 @@ class RhuContrato
     public function getContratosProrrogasContratoRel()
     {
         return $this->contratosProrrogasContratoRel;
-    }
-
-    /**
-     * Set fechaProrrogaInicio
-     *
-     * @param \DateTime $fechaProrrogaInicio
-     *
-     * @return RhuContrato
-     */
-    public function setFechaProrrogaInicio($fechaProrrogaInicio)
-    {
-        $this->fechaProrrogaInicio = $fechaProrrogaInicio;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaProrrogaInicio
-     *
-     * @return \DateTime
-     */
-    public function getFechaProrrogaInicio()
-    {
-        return $this->fechaProrrogaInicio;
-    }
-
-    /**
-     * Set fechaProrrogaFinal
-     *
-     * @param \DateTime $fechaProrrogaFinal
-     *
-     * @return RhuContrato
-     */
-    public function setFechaProrrogaFinal($fechaProrrogaFinal)
-    {
-        $this->fechaProrrogaFinal = $fechaProrrogaFinal;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaProrrogaFinal
-     *
-     * @return \DateTime
-     */
-    public function getFechaProrrogaFinal()
-    {
-        return $this->fechaProrrogaFinal;
     }
 }

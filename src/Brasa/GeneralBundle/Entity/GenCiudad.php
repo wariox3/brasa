@@ -162,6 +162,12 @@ class GenCiudad
     protected $turClientesCiudadRel;
     
     /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuContrato", mappedBy="ciudadContratoRel")
+     */
+    protected $rhuContratosCiudadContratoRel;
+    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -186,6 +192,8 @@ class GenCiudad
         $this->rhuaccidentesTrabajoCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ctbTercerosCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->turClientesDireccionesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->turClientesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rhuContratosCiudadContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1078,5 +1086,39 @@ class GenCiudad
     public function getTurClientesCiudadRel()
     {
         return $this->turClientesCiudadRel;
+    }
+
+    /**
+     * Add rhuContratosCiudadContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $rhuContratosCiudadContratoRel
+     *
+     * @return GenCiudad
+     */
+    public function addRhuContratosCiudadContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $rhuContratosCiudadContratoRel)
+    {
+        $this->rhuContratosCiudadContratoRel[] = $rhuContratosCiudadContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuContratosCiudadContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $rhuContratosCiudadContratoRel
+     */
+    public function removeRhuContratosCiudadContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $rhuContratosCiudadContratoRel)
+    {
+        $this->rhuContratosCiudadContratoRel->removeElement($rhuContratosCiudadContratoRel);
+    }
+
+    /**
+     * Get rhuContratosCiudadContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuContratosCiudadContratoRel()
+    {
+        return $this->rhuContratosCiudadContratoRel;
     }
 }

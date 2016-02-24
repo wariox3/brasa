@@ -42,13 +42,18 @@ class FormatoContratoFijo extends \FPDF_FPDF {
         $arContrato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find(self::$codigoContrato);        
         $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuContenidoFormato();
         $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find($arContrato->getCodigoContratoTipoFk());        
+        $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $pdf->SetXY(10, 30);
         $pdf->SetFont('Arial', '', 10);  
         //se reemplaza el contenido de la tabla tipo de proceso disciplinario
         $sustitucion1 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion();
         $sustitucion2 = $arContrato->getEmpleadoRel()->getNombreCorto();
-        $sustitucion3 = $arContrato->getEmpleadoRel()->getDireccion();
-        $sustitucion4 = $arContrato->getEmpleadoRel()->getBarrio();
+        $sustitucion3 = $arConfiguracion->getNitEmpresa();
+        $sustitucion4 = $arConfiguracion->getNombreEmpresa();
+        $sustitucion5 = $arContrato->getEmpleadoRel()->getDireccion();
+        $sustitucion6 = $arConfiguracion->getDireccionEmpresa();
+        $sustitucion7 = $arContrato->getEmpleadoRel()->getBarrio();
         $sustitucion5 = $arContrato->getEmpleadoRel()->getFechaNacimiento()->format('Y/m/d');
         $sustitucion6 = $arContrato->getEmpleadoRel()->getCiudadNacimientoRel()->getNombre();
         $sustitucion7 = $arContrato->getCargoRel()->getNombre();
