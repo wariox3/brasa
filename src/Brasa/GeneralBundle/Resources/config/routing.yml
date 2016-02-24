@@ -84,4 +84,4 @@ brs_gen_utilidad_gestorarchivo_cargar_archivo:
 brs_gen_utilidad_gestorarchivo_descargar_archivo:
     pattern:  /general/utilidad/gestorarchivo/descargar/archivo/{codigoArchivo}
     defaults: { _controller: BrasaGeneralBundle:Directorio:descargarArchivo }    
-    
+

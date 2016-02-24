@@ -5,7 +5,8 @@ namespace Brasa\GeneralBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Bundle\DoctrineBundle\ConnectionFactory;
 class DefaultController extends Controller
-{    
+{           
+    
     public function indexAction()
     {
         // Chart

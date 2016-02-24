@@ -500,6 +500,8 @@ class MovimientoProgramacionController extends Controller
                 if($arRecurso) {
                     $arProgramacionDetalle->setRecursoRel($arRecurso);
                 }
+            } else {
+                $arProgramacionDetalle->setRecursoRel(NULL);
             }
             if($arrControles['TxtPuesto'.$intCodigo] != '') {
                 $arPuesto = new \Brasa\TurnoBundle\Entity\TurPuesto();
@@ -508,56 +510,56 @@ class MovimientoProgramacionController extends Controller
                     $arProgramacionDetalle->setPuestoRel($arPuesto);
                 }
             }
-            if($arrControles['TxtDia1D'.$intCodigo] != '') {
-                $strTurno = $this->validarTurno($arrControles['TxtDia1D'.$intCodigo]);
+            if($arrControles['TxtDia01D'.$intCodigo] != '') {
+                $strTurno = $this->validarTurno($arrControles['TxtDia01D'.$intCodigo]);
                 $arProgramacionDetalle->setDia1($strTurno);
             } else {
                 $arProgramacionDetalle->setDia1(null);
             }
-            if($arrControles['TxtDia2D'.$intCodigo] != '') {
-                $strTurno = $this->validarTurno($arrControles['TxtDia2D'.$intCodigo]);
+            if($arrControles['TxtDia02D'.$intCodigo] != '') {
+                $strTurno = $this->validarTurno($arrControles['TxtDia02D'.$intCodigo]);
                 $arProgramacionDetalle->setDia2($strTurno);
             } else {
                 $arProgramacionDetalle->setDia2(null);
             }
-            if($arrControles['TxtDia3D'.$intCodigo] != '') {
-                $strTurno = $this->validarTurno($arrControles['TxtDia3D'.$intCodigo]);
+            if($arrControles['TxtDia03D'.$intCodigo] != '') {
+                $strTurno = $this->validarTurno($arrControles['TxtDia03D'.$intCodigo]);
                 $arProgramacionDetalle->setDia3($strTurno);
             } else {
                 $arProgramacionDetalle->setDia3(null);
             }
-            if($arrControles['TxtDia4D'.$intCodigo] != '') {
-                $strTurno = $this->validarTurno($arrControles['TxtDia4D'.$intCodigo]);
+            if($arrControles['TxtDia04D'.$intCodigo] != '') {
+                $strTurno = $this->validarTurno($arrControles['TxtDia04D'.$intCodigo]);
                 $arProgramacionDetalle->setDia4($strTurno);
             } else {
                 $arProgramacionDetalle->setDia4(null);
             }
-            if($arrControles['TxtDia5D'.$intCodigo] != '') {
-                $strTurno = $this->validarTurno($arrControles['TxtDia5D'.$intCodigo]);
+            if($arrControles['TxtDia05D'.$intCodigo] != '') {
+                $strTurno = $this->validarTurno($arrControles['TxtDia05D'.$intCodigo]);
                 $arProgramacionDetalle->setDia5($strTurno);
             } else {
                 $arProgramacionDetalle->setDia5(null);
             }
-            if($arrControles['TxtDia6D'.$intCodigo] != '') {
-                $strTurno = $this->validarTurno($arrControles['TxtDia6D'.$intCodigo]);
+            if($arrControles['TxtDia06D'.$intCodigo] != '') {
+                $strTurno = $this->validarTurno($arrControles['TxtDia06D'.$intCodigo]);
                 $arProgramacionDetalle->setDia6($strTurno);
             } else {
                 $arProgramacionDetalle->setDia6(null);
             }
-            if($arrControles['TxtDia7D'.$intCodigo] != '') {
-                $strTurno = $this->validarTurno($arrControles['TxtDia7D'.$intCodigo]);
+            if($arrControles['TxtDia07D'.$intCodigo] != '') {
+                $strTurno = $this->validarTurno($arrControles['TxtDia07D'.$intCodigo]);
                 $arProgramacionDetalle->setDia7($strTurno);
             } else {
                 $arProgramacionDetalle->setDia7(null);
             }
-            if($arrControles['TxtDia8D'.$intCodigo] != '') {
-                $strTurno = $this->validarTurno($arrControles['TxtDia8D'.$intCodigo]);
+            if($arrControles['TxtDia08D'.$intCodigo] != '') {
+                $strTurno = $this->validarTurno($arrControles['TxtDia08D'.$intCodigo]);
                 $arProgramacionDetalle->setDia8($strTurno);
             } else {
                 $arProgramacionDetalle->setDia8(null);
             }
-            if($arrControles['TxtDia9D'.$intCodigo] != '') {
-                $strTurno = $this->validarTurno($arrControles['TxtDia9D'.$intCodigo]);
+            if($arrControles['TxtDia09D'.$intCodigo] != '') {
+                $strTurno = $this->validarTurno($arrControles['TxtDia09D'.$intCodigo]);
                 $arProgramacionDetalle->setDia9($strTurno);
             } else {
                 $arProgramacionDetalle->setDia9(null);

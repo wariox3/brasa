@@ -297,3 +297,7 @@ brs_tur_buscar_direccion:
 brs_tur_configuracion:
     path:     /tur/configuracion/{codigoConfiguracionPk}
     defaults: { _controller: BrasaTurnoBundle:Configuracion:configuracion }    
+    
+brs_tur_validar_turno:
+  pattern: /turno/validar/turno/{codigoProgramacionDetalle}/{dia}/{codigoTurno}
+  defaults: { _controller: BrasaTurnoBundle:Validacion:turno }    

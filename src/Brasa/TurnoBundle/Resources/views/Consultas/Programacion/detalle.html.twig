@@ -127,10 +127,9 @@
                 <th>29</th>
                 <th>30</th>
                 <th>31</th>
-                <th>HORAS</th>
+                <th>H</th>
                 <th>P.D</th>
-                <th></th>
-                <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
+                <th></th>                
             </tr>
             {% set intCodigoCliente = '' %}
             {% for arProgramacionDetalle in arProgramacionDetalle %}
@@ -142,7 +141,7 @@
                 {% endif %} 
                 <tr>
                     <td>{{ arProgramacionDetalle.codigoProgramacionDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arProgramacionDetalle.codigoProgramacionDetallePk }}"></td>                                        
-                    <td>{{ arProgramacionDetalle.recursoRel.nombreCorto | default('') }}</td>                                                             
+                    <td>({{ arProgramacionDetalle.codigoRecursoFk }}){{ arProgramacionDetalle.recursoRel.nombreCorto | default('') }}</td>                                                             
                     <td>{{ arProgramacionDetalle.puestoRel.nombre | default('') }}</td>                                                                 
                     <td>{{ arProgramacionDetalle.dia1  }}</td>
                     <td>{{ arProgramacionDetalle.dia2  }}</td>
@@ -177,8 +176,7 @@
                     <td>{{ arProgramacionDetalle.dia31  }}</td>                     
                     <td style="text-align: right">{{ arProgramacionDetalle.horas | number_format(0, '.', ',') }}</td> 
                     <td>{{ arProgramacionDetalle.codigoPedidoDetalleFk }}</td>
-                    <td style="text-align: center"><a href="{{ path('brs_tur_programacion_detalle', { 'codigoProgramacion': arProgramacionDetalle.codigoProgramacionFk }) }}" target="_blanck"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                    
-                    <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" /></td>
+                    <td style="text-align: center"><a href="{{ path('brs_tur_programacion_detalle', { 'codigoProgramacion': arProgramacionDetalle.codigoProgramacionFk }) }}" target="_blanck"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                                        
                 </tr>
             {% endfor %}
         </table>
