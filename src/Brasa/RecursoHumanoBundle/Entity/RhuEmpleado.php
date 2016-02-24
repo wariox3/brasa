@@ -318,11 +318,6 @@ class RhuEmpleado
     private $codigoUsuario;
     
     /**
-     * @ORM\Column(name="codigo_pais_fk", type="integer", nullable=true)
-     */    
-    private $codigoPaisFk;
-    
-    /**
      * @ORM\ManyToOne(targetEntity="RhuClasificacionRiesgo", inversedBy="empleadosClasificacionRiesgoRel")
      * @ORM\JoinColumn(name="codigo_clasificacion_riesgo_fk", referencedColumnName="codigo_clasificacion_riesgo_pk")
      */
@@ -423,12 +418,6 @@ class RhuEmpleado
      * @ORM\JoinColumn(name="codigo_subtipo_cotizante_fk", referencedColumnName="codigo_subtipo_cotizante_pk")
      */
     protected $ssoSubtipoCotizanteRel;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenPais", inversedBy="rhuEmpleadosPaisRel")
-     * @ORM\JoinColumn(name="codigo_pais_fk", referencedColumnName="codigo_pais_pk")
-     */
-    protected $paisRel;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuPago", mappedBy="empleadoRel")

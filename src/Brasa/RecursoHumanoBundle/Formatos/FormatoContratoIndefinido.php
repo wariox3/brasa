@@ -32,8 +32,9 @@ class FormatoContratoIndefinido extends \FPDF_FPDF {
         $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuContenidoFormato();
         $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find($arContrato->getCodigoContratoTipoFk());        
         $this->SetXY(10, 10);
-        $this->Cell(185, 7, utf8_decode($arContenidoFormato->getTitulo()), 0, 0, 'C', 1);
-        $this->Text(10, 25, "Contrato numero: " . $arContrato->getCodigoContratoPk());
+        $this->Image('imagenes/logos/logo.jpg', 12, 13, 35, 17);
+        //$this->Cell(185, 7, utf8_decode($arContenidoFormato->getTitulo()), 0, 0, 'C', 1);
+        //$this->Text(10, 25, "Contrato numero: " . $arContrato->getCodigoContratoPk());
         $this->Ln(20);
     }
 
@@ -44,7 +45,11 @@ class FormatoContratoIndefinido extends \FPDF_FPDF {
         $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find($arContrato->getCodigoContratoTipoFk());        
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-        $pdf->SetXY(10, 30);
+        $this->SetXY(10, 40);
+        $this->SetFont('Arial','B',12);
+        $this->Cell(30, 6, "Contrato de trabajo a término  Indefinido" , 1, 0, 'C');
+        
+        $pdf->SetXY(10, 50);
         $pdf->SetFont('Arial', '', 10);  
         //se reemplaza el contenido de la tabla tipo de proceso disciplinario
         $sustitucion1 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion();
@@ -57,7 +62,7 @@ class FormatoContratoIndefinido extends \FPDF_FPDF {
         $sustitucion8 = $arContrato->getEmpleadoRel()->getFechaNacimiento()->format('Y/m/d');
         $sustitucion9 = $arContrato->getEmpleadoRel()->getCiudadNacimientoRel()->getNombre();
         $sustitucion10 = $arContrato->getEmpleadoRel()->getCiudadRel()->getNombre();
-        $sustitucion11 = $arContrato->getEmpleadoRel()->getPaisRel()->getGentilicio();
+        $sustitucion11 = $arContrato->getEmpleadoRel()->getCiudadNacimientoRel()->getDepartamentoRel()->getPaisRel()->getGentilicio();
         $sustitucion12 = $arContrato->getCargoRel()->getNombre();
         $sustitucion13 = number_format($arContrato->getVrSalario(), 2,'.',',');
         $sustitucion14 = $arContrato->getCentroCostoRel()->getPeriodoPagoRel()->getNombre();

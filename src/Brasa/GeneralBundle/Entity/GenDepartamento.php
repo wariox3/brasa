@@ -26,12 +26,23 @@ class GenDepartamento
     /**
      * @ORM\Column(name="codigo_dane", type="string", length=2)
      */
-    private $codigoDane;    
+    private $codigoDane;
+
+    /**
+     * @ORM\Column(name="codigo_pais_fk", type="integer", nullable=true)
+     */
+    private $codigoPaisFk;
     
     /**
      * @ORM\OneToMany(targetEntity="GenCiudad", mappedBy="departamentoRel")
      */
     protected $ciudadesRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="GenPais", inversedBy="detapartamentosRel")
+     * @ORM\JoinColumn(name="codigo_pais_fk", referencedColumnName="codigo_pais_pk")
+     */
+    protected $paisRel;
 
 
     /**
@@ -146,5 +157,53 @@ class GenDepartamento
     public function getCodigoDane()
     {
         return $this->codigoDane;
+    }
+
+    /**
+     * Set codigoPaisFk
+     *
+     * @param integer $codigoPaisFk
+     *
+     * @return GenDepartamento
+     */
+    public function setCodigoPaisFk($codigoPaisFk)
+    {
+        $this->codigoPaisFk = $codigoPaisFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPaisFk
+     *
+     * @return integer
+     */
+    public function getCodigoPaisFk()
+    {
+        return $this->codigoPaisFk;
+    }
+
+    /**
+     * Set paisRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenPais $paisRel
+     *
+     * @return GenDepartamento
+     */
+    public function setPaisRel(\Brasa\GeneralBundle\Entity\GenPais $paisRel = null)
+    {
+        $this->paisRel = $paisRel;
+
+        return $this;
+    }
+
+    /**
+     * Get paisRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenPais
+     */
+    public function getPaisRel()
+    {
+        return $this->paisRel;
     }
 }

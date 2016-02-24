@@ -90,17 +90,7 @@ class RhuEmpleadoType extends AbstractType
             ->add('departamentoEmpresaRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuDepartamentoEmpresa',
                 'property' => 'nombre',
-            )) 
-            ->add('paisRel', 'entity',
-                array('class' => 'BrasaGeneralBundle:GenPais',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('p')
-                    ->orderBy('p.gentilicio', 'ASC');},
-                'property' => 'gentilicio',
-                'required' => false,
-                'empty_data' => 169,
-                'empty_value' => 'COLOMBIANO',
-                ))                
+            ))                 
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

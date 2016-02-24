@@ -57,7 +57,7 @@ class FormatoContratoObraLabor extends \FPDF_FPDF {
         $sustitucion8 = $arContrato->getEmpleadoRel()->getFechaNacimiento()->format('Y/m/d');
         $sustitucion9 = $arContrato->getEmpleadoRel()->getCiudadNacimientoRel()->getNombre();
         $sustitucion10 = $arContrato->getEmpleadoRel()->getCiudadRel()->getNombre();
-        $sustitucion11 = $arContrato->getEmpleadoRel()->getPaisRel()->getGentilicio();
+        $sustitucion11 = $arContrato->getEmpleadoRel()->getCiudadNacimientoRel()->getDepartamentoRel()->getPaisRel()->getGentilicio();
         $sustitucion12 = $arContrato->getCargoRel()->getNombre();
         $sustitucion13 = number_format($arContrato->getVrSalario(), 2,'.',',');
         $sustitucion14 = $arContrato->getCentroCostoRel()->getPeriodoPagoRel()->getNombre();

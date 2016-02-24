@@ -30,17 +30,15 @@ class GenPais
     private $gentilicio;
     
     /**
-     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleado", mappedBy="paisRel")
+     * @ORM\OneToMany(targetEntity="GenDepartamento", mappedBy="paisRel")
      */
-    protected $rhuEmpleadosPaisRel;
-    
-
+    protected $departamentoRel;
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->rhuEmpleadosPaisRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->departamentoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -116,36 +114,36 @@ class GenPais
     }
 
     /**
-     * Add rhuEmpleadosPaisRel
+     * Add departamentoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosPaisRel
+     * @param \Brasa\GeneralBundle\Entity\GenDepartamento $departamentoRel
      *
      * @return GenPais
      */
-    public function addRhuEmpleadosPaisRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosPaisRel)
+    public function addDepartamentoRel(\Brasa\GeneralBundle\Entity\GenDepartamento $departamentoRel)
     {
-        $this->rhuEmpleadosPaisRel[] = $rhuEmpleadosPaisRel;
+        $this->departamentoRel[] = $departamentoRel;
 
         return $this;
     }
 
     /**
-     * Remove rhuEmpleadosPaisRel
+     * Remove departamentoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosPaisRel
+     * @param \Brasa\GeneralBundle\Entity\GenDepartamento $departamentoRel
      */
-    public function removeRhuEmpleadosPaisRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosPaisRel)
+    public function removeDepartamentoRel(\Brasa\GeneralBundle\Entity\GenDepartamento $departamentoRel)
     {
-        $this->rhuEmpleadosPaisRel->removeElement($rhuEmpleadosPaisRel);
+        $this->departamentoRel->removeElement($departamentoRel);
     }
 
     /**
-     * Get rhuEmpleadosPaisRel
+     * Get departamentoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getRhuEmpleadosPaisRel()
+    public function getDepartamentoRel()
     {
-        return $this->rhuEmpleadosPaisRel;
+        return $this->departamentoRel;
     }
 }
