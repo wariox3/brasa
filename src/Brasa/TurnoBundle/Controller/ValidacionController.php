@@ -21,7 +21,7 @@ class ValidacionController extends Controller
             $statement = $connection->prepare($strSql);        
             $statement->execute();
             $results = $statement->fetchAll();
-            if(count($results) > 1) {
+            if(count($results) > 0) {
                 $strRespuesta = 1;
             }            
         }         

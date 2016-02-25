@@ -8,14 +8,14 @@ class TurRecursoTipoRepository extends EntityRepository {
     
     public function ListaDql($strNombre = "", $strCodigo = "") {
         $em = $this->getEntityManager();
-        $dql   = "SELECT r FROM BrasaTurnoBundle:TurRecurso r WHERE r.codigoRecursoPk <> 0";
+        $dql   = "SELECT r FROM BrasaTurnoBundle:TurRecursoTipo r WHERE r.codigoRecursoTipoPk <> 0";
         if($strNombre != "" ) {
-            $dql .= " AND r.nombreCorto LIKE '%" . $strNombre . "%'";
+            $dql .= " AND r.nombre LIKE '%" . $strNombre . "%'";
         }
         if($strCodigo != "" ) {
-            $dql .= " AND r.codigoRecursoPk LIKE '%" . $strCodigo . "%'";
+            $dql .= " AND r.codigoRecursoTipoPk LIKE '%" . $strCodigo . "%'";
         }
-        $dql .= " ORDER BY r.nombreCorto";
+        $dql .= " ORDER BY r.nombre";
         return $dql;
     }        
         
