@@ -119,14 +119,14 @@
                 <td>{{ arSoportesPagosDetalles.codigoTurnoFk  }}</td>
                 <td style="text-align: right">{{ arSoportesPagosDetalles.dias | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagosDetalles.descanso | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arSoportesPagosDetalles.horasDiurnas | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arSoportesPagosDetalles.horasNocturnas | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arSoportesPagosDetalles.horasFestivasDiurnas | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arSoportesPagosDetalles.horasFestivasNocturnas | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arSoportesPagosDetalles.horasExtrasOrdinariasDiurnas | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arSoportesPagosDetalles.horasExtrasOrdinariasNocturnas | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arSoportesPagosDetalles.horasExtrasFestivasDiurnas | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arSoportesPagosDetalles.horasExtrasFestivasNocturnas | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horasDiurnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horasNocturnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horasFestivasDiurnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horasFestivasNocturnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horasExtrasOrdinariasDiurnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horasExtrasOrdinariasNocturnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horasExtrasFestivasDiurnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horasExtrasFestivasNocturnas | number_format(2, '.', ',') }}</td>
             </tr>
 
             {% endfor %}

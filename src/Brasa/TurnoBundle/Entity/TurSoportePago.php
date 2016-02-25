@@ -53,62 +53,62 @@ class TurSoportePago
     private $estadoCerrado = false;    
 
     /**
-     * @ORM\Column(name="descanso", type="integer")
+     * @ORM\Column(name="descanso", type="float")
      */    
     private $descanso = 0;    
 
     /**
-     * @ORM\Column(name="novedad", type="integer")
+     * @ORM\Column(name="novedad", type="float")
      */    
     private $novedad = 0;
     
     /**
-     * @ORM\Column(name="dias", type="integer")
+     * @ORM\Column(name="dias", type="float")
      */    
     private $dias = 0;    
     
     /**
-     * @ORM\Column(name="horas", type="integer")
+     * @ORM\Column(name="horas", type="float")
      */    
     private $horas = 0;    
     
     /**
-     * @ORM\Column(name="horas_diurnas", type="integer")
+     * @ORM\Column(name="horas_diurnas", type="float")
      */    
     private $horasDiurnas = 0;     
 
     /**
-     * @ORM\Column(name="horas_nocturnas", type="integer")
+     * @ORM\Column(name="horas_nocturnas", type="float")
      */    
     private $horasNocturnas = 0;    
     
     /**
-     * @ORM\Column(name="horas_festivas_diurnas", type="integer")
+     * @ORM\Column(name="horas_festivas_diurnas", type="float")
      */    
     private $horasFestivasDiurnas = 0;     
 
     /**
-     * @ORM\Column(name="horas_festivas_nocturnas", type="integer")
+     * @ORM\Column(name="horas_festivas_nocturnas", type="float")
      */    
     private $horasFestivasNocturnas = 0;     
     
     /**
-     * @ORM\Column(name="horas_extras_ordinarias_diurnas", type="integer")
+     * @ORM\Column(name="horas_extras_ordinarias_diurnas", type="float")
      */    
     private $horasExtrasOrdinariasDiurnas = 0;    
 
     /**
-     * @ORM\Column(name="horas_extras_ordinarias_nocturnas", type="integer")
+     * @ORM\Column(name="horas_extras_ordinarias_nocturnas", type="float")
      */    
     private $horasExtrasOrdinariasNocturnas = 0;        
 
     /**
-     * @ORM\Column(name="horas_extras_festivas_diurnas", type="integer")
+     * @ORM\Column(name="horas_extras_festivas_diurnas", type="float")
      */    
     private $horasExtrasFestivasDiurnas = 0;    
 
     /**
-     * @ORM\Column(name="horas_extras_festivas_nocturnas", type="integer")
+     * @ORM\Column(name="horas_extras_festivas_nocturnas", type="float")
      */    
     private $horasExtrasFestivasNocturnas = 0;    
 

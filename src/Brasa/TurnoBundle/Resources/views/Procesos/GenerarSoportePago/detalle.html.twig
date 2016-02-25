@@ -44,15 +44,15 @@
                 <td style="text-align: right">{{ arSoportesPagos.dias | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.descanso | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.novedad | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arSoportesPagos.horas | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arSoportesPagos.horasDiurnas | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arSoportesPagos.horasNocturnas | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arSoportesPagos.horasFestivasDiurnas | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arSoportesPagos.horasFestivasNocturnas | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arSoportesPagos.horasExtrasOrdinariasDiurnas | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arSoportesPagos.horasExtrasOrdinariasNocturnas | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arSoportesPagos.horasExtrasFestivasDiurnas | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arSoportesPagos.horasExtrasFestivasNocturnas | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagos.horas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagos.horasDiurnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagos.horasNocturnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagos.horasFestivasDiurnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagos.horasFestivasNocturnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagos.horasExtrasOrdinariasDiurnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagos.horasExtrasOrdinariasNocturnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagos.horasExtrasFestivasDiurnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagos.horasExtrasFestivasNocturnas | number_format(2, '.', ',') }}</td>
                 <td>{{ arSoportesPagos.codigoContratoFk }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.vrSalario | number_format(0, '.', ',') }}</td>
                 <td style="text-align: center"><a href="{{ path('brs_tur_proceso_generar_soporte_pago_editar', {'codigoSoportePago': arSoportesPagos.codigoSoportePagoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                

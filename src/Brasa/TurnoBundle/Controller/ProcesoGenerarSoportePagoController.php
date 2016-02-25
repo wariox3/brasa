@@ -206,9 +206,10 @@ class ProcesoGenerarSoportePagoController extends Controller
                 $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($strTurnoFijoNomina);
             }                
         }                
-        $intDias = 0;
-
-        $intHoraInicio = $arTurno->getHoraDesde()->format('G');
+        $intDias = 0;                
+        $intMinutoInicio = (($arTurno->getHoraDesde()->format('i') * 100)/60)/100;
+        $intHoraInicio = $arTurno->getHoraDesde()->format('G');        
+        $intHoraInicio += $intMinutoInicio;
         $intHoraFinal = $arTurno->getHoraHasta()->format('G');
         $diaSemana = $dateFecha->format('N');
         $diaSemana2 = $dateFecha2->format('N');
@@ -224,10 +225,10 @@ class ProcesoGenerarSoportePagoController extends Controller
         }        
         $arrHoras1 = null;
         if($intHoraInicio < $intHoraFinal){  
-            $arrHoras = $this->turnoHoras($intHoraInicio, $intHoraFinal, $boolFestivo, 0, $arTurno->getNovedad());
+            $arrHoras = $this->turnoHoras($intHoraInicio, $intMinutoInicio, $intHoraFinal, $boolFestivo, 0, $arTurno->getNovedad());
         } else {
-            $arrHoras = $this->turnoHoras($intHoraInicio, 24, $boolFestivo, 0, $arTurno->getNovedad());
-            $arrHoras1 = $this->turnoHoras(0, $intHoraFinal, $boolFestivo2, $arrHoras['horas'], $arTurno->getNovedad());                 
+            $arrHoras = $this->turnoHoras($intHoraInicio, $intMinutoInicio, 24, $boolFestivo, 0, $arTurno->getNovedad());
+            $arrHoras1 = $this->turnoHoras(0, 0, $intHoraFinal, $boolFestivo2, $arrHoras['horas'], $arTurno->getNovedad());                 
         }
         $arSoportePagoDetalle = new \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle();
         $arSoportePagoDetalle->setSoportePagoPeriodoRel($arSoportePagoPeriodo);
@@ -434,7 +435,7 @@ class ProcesoGenerarSoportePagoController extends Controller
         exit;
     } 
     
-    private function turnoHoras($intHoraInicio, $intHoraFinal, $boolFestivo, $intHoras, $boolNovedad = 0) {
+    private function turnoHoras($intHoraInicio, $intMinutoInicio, $intHoraFinal, $boolFestivo, $intHoras, $boolNovedad = 0) {
         if($boolNovedad == 0) {
             $intHorasNocturnas = $this->calcularTiempo($intHoraInicio, $intHoraFinal, 0, 6);        
             $intHorasExtrasNocturnas = 0;
@@ -451,7 +452,7 @@ class ProcesoGenerarSoportePagoController extends Controller
                 }
             }
 
-            $intHorasDiurnas = $this->calcularTiempo($intHoraInicio, $intHoraFinal, 6, 22);
+            $intHorasDiurnas = $this->calcularTiempo($intHoraInicio, $intHoraFinal, 6, 22);            
             $intHorasExtrasDiurnas = 0;
             $intTotalHoras = $intHoras + $intHorasNocturnas + $intHorasExtrasNocturnas + $intHorasDiurnas;
             if($intTotalHoras > 8) {
@@ -464,9 +465,6 @@ class ProcesoGenerarSoportePagoController extends Controller
                     $intHorasExtrasDiurnas = $intHorasDiurnas;
                     $intHorasDiurnas = 0;
                 }            
-                //$intHorasDiurnasReales = $intHorasDiurnas - $intHorasJornada;
-                //$intHorasDiurnas = $intHorasDiurnas - $intHorasDiurnasReales;
-                //$intHorasExtrasDiurnas = $intHorasDiurnasReales;
             }
 
             $intHorasNocturnasNoche = $this->calcularTiempo($intHoraInicio, $intHoraFinal, 22, 24); 
