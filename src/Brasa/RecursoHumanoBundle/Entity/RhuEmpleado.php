@@ -293,6 +293,11 @@ class RhuEmpleado
     private $codigoContratoActivoFk;     
     
     /**
+     * @ORM\Column(name="codigo_contrato_ultimo_fk", type="integer", nullable=true)
+     */    
+    private $codigoContratoUltimoFk;     
+    
+    /**
      * @ORM\Column(name="ruta_foto", type="string", length=250, nullable=true)
      */    
     private $rutaFoto;
@@ -3543,5 +3548,29 @@ class RhuEmpleado
     public function getCartasEmpleadoRel()
     {
         return $this->cartasEmpleadoRel;
+    }
+
+    /**
+     * Set codigoContratoUltimoFk
+     *
+     * @param integer $codigoContratoUltimoFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoContratoUltimoFk($codigoContratoUltimoFk)
+    {
+        $this->codigoContratoUltimoFk = $codigoContratoUltimoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoUltimoFk
+     *
+     * @return integer
+     */
+    public function getCodigoContratoUltimoFk()
+    {
+        return $this->codigoContratoUltimoFk;
     }
 }

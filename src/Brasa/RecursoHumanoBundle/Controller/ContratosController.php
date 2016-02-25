@@ -336,6 +336,7 @@ class ContratosController extends Controller
                         $arEmpleado->setCodigoEntidadCajaFk(NULL);
                         $arEmpleado->setEstadoContratoActivo(0);
                         $arEmpleado->setCodigoContratoActivoFk(NULL);
+                        $arEmpleado->setCodigoContratoUltimoFk($codigoContrato);
                         $em->persist($arEmpleado);
 
                         //Generar liquidacion
