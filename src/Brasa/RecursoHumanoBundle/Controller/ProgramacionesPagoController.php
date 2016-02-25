@@ -142,7 +142,7 @@ class ProgramacionesPagoController extends Controller
                         }
                     }
 
-                    $arrSeleccionados = $request->request->get('ChkSeleccionarEmpleado');
+                    $arrSeleccionados = $request->request->get('ChkSeleccionarDetalle');
                     if(count($arrSeleccionados) > 0) {
                         foreach ($arrSeleccionados AS $codigo) {
                             $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
