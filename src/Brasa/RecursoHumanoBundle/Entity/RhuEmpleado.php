@@ -588,6 +588,12 @@ class RhuEmpleado
      */
     protected $permisosEmpleadoRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuCarta", mappedBy="empleadoRel")
+     */
+    protected $cartasEmpleadoRel;
+    
+    
     
     /**
      * Constructor
@@ -624,6 +630,7 @@ class RhuEmpleado
         $this->horarioAccesoEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->soportesPagosHorariosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->permisosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cartasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -2005,30 +2012,6 @@ class RhuEmpleado
     }
 
     /**
-     * Set codigoPaisFk
-     *
-     * @param integer $codigoPaisFk
-     *
-     * @return RhuEmpleado
-     */
-    public function setCodigoPaisFk($codigoPaisFk)
-    {
-        $this->codigoPaisFk = $codigoPaisFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoPaisFk
-     *
-     * @return integer
-     */
-    public function getCodigoPaisFk()
-    {
-        return $this->codigoPaisFk;
-    }
-
-    /**
      * Set clasificacionRiesgoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo $clasificacionRiesgoRel
@@ -2434,30 +2417,6 @@ class RhuEmpleado
     public function getSsoSubtipoCotizanteRel()
     {
         return $this->ssoSubtipoCotizanteRel;
-    }
-
-    /**
-     * Set paisRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenPais $paisRel
-     *
-     * @return RhuEmpleado
-     */
-    public function setPaisRel(\Brasa\GeneralBundle\Entity\GenPais $paisRel = null)
-    {
-        $this->paisRel = $paisRel;
-
-        return $this;
-    }
-
-    /**
-     * Get paisRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenPais
-     */
-    public function getPaisRel()
-    {
-        return $this->paisRel;
     }
 
     /**
@@ -3550,5 +3509,39 @@ class RhuEmpleado
     public function getPermisosEmpleadoRel()
     {
         return $this->permisosEmpleadoRel;
+    }
+
+    /**
+     * Add cartasEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCarta $cartasEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addCartasEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCarta $cartasEmpleadoRel)
+    {
+        $this->cartasEmpleadoRel[] = $cartasEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove cartasEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCarta $cartasEmpleadoRel
+     */
+    public function removeCartasEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCarta $cartasEmpleadoRel)
+    {
+        $this->cartasEmpleadoRel->removeElement($cartasEmpleadoRel);
+    }
+
+    /**
+     * Get cartasEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCartasEmpleadoRel()
+    {
+        return $this->cartasEmpleadoRel;
     }
 }

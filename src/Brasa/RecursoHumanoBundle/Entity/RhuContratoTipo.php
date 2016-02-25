@@ -20,13 +20,27 @@ class RhuContratoTipo
     /**
      * @ORM\Column(name="nombre", type="string", length=200, nullable=true)
      */    
-    private $nombre;  
+    private $nombre; 
+    
+    /**
+     * @ORM\Column(name="codigo_contenido_formato_fk", type="integer", nullable=true)
+     */    
+    private $codigoContenidoFormatoFk;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="contratoTipoRel")
      */
-    protected $contratosContratoTipoRel;    
+    protected $contratosContratoTipoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenContenidoFormato", inversedBy="contratosTiposContenidoFormatoRel")
+     * @ORM\JoinColumn(name="codigo_contenido_formato_fk", referencedColumnName="codigo_contenido_formato_pk")
+     */
+    protected $contenidoFormatoRel;
 
+   
+   
+    
     /**
      * Constructor
      */
@@ -70,6 +84,30 @@ class RhuContratoTipo
     }
 
     /**
+     * Set codigoContenidoFormatoFk
+     *
+     * @param integer $codigoContenidoFormatoFk
+     *
+     * @return RhuContratoTipo
+     */
+    public function setCodigoContenidoFormatoFk($codigoContenidoFormatoFk)
+    {
+        $this->codigoContenidoFormatoFk = $codigoContenidoFormatoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContenidoFormatoFk
+     *
+     * @return integer
+     */
+    public function getCodigoContenidoFormatoFk()
+    {
+        return $this->codigoContenidoFormatoFk;
+    }
+
+    /**
      * Add contratosContratoTipoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosContratoTipoRel
@@ -101,5 +139,29 @@ class RhuContratoTipo
     public function getContratosContratoTipoRel()
     {
         return $this->contratosContratoTipoRel;
+    }
+
+    /**
+     * Set contenidoFormatoRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenContenidoFormato $contenidoFormatoRel
+     *
+     * @return RhuContratoTipo
+     */
+    public function setContenidoFormatoRel(\Brasa\GeneralBundle\Entity\GenContenidoFormato $contenidoFormatoRel = null)
+    {
+        $this->contenidoFormatoRel = $contenidoFormatoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get contenidoFormatoRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenContenidoFormato
+     */
+    public function getContenidoFormatoRel()
+    {
+        return $this->contenidoFormatoRel;
     }
 }

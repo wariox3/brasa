@@ -5,58 +5,57 @@ namespace Brasa\RecursoHumanoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="rhu_disciplinario_tipo")
- * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuDisciplinarioTipoRepository")
+ * @ORM\Table(name="rhu_carta_tipo")
+ * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuCartaTipoRepository")
  */
-class RhuDisciplinarioTipo
+class RhuCartaTipo
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_disciplinario_tipo_pk", type="integer")
+     * @ORM\Column(name="codigo_carta_tipo_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoDisciplinarioTipoPk;        
+    private $codigoCartaTipoPk;        
     
     /**
-     * @ORM\Column(name="nombre", type="string", length=50, nullable=true)
+     * @ORM\Column(name="nombre", type="string", length=200, nullable=true)
      */    
-    private $nombre; 
+    private $nombre;
     
     /**
      * @ORM\Column(name="codigo_contenido_formato_fk", type="integer", nullable=true)
      */    
     private $codigoContenidoFormatoFk;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuCarta", mappedBy="cartaTipoRel")
+     */
+    protected $cartasCartaTipoRel;    
+
        
     /**
-     * @ORM\OneToMany(targetEntity="RhuDisciplinario", mappedBy="disciplinarioTipoRel")
-     */
-    protected $disciplinariosDisciplinarioTipoRel;    
-    
-     /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenContenidoFormato", inversedBy="disciplinariosTiposContenidoFormatoRel")
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenContenidoFormato", inversedBy="cartasTiposContenidoFormatoRel")
      * @ORM\JoinColumn(name="codigo_contenido_formato_fk", referencedColumnName="codigo_contenido_formato_pk")
      */
     protected $contenidoFormatoRel;
     
-    
-    
-    
+  
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->disciplinariosDisciplinarioTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cartasCartaTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Get codigoDisciplinarioTipoPk
+     * Get codigoCartaTipoPk
      *
      * @return integer
      */
-    public function getCodigoDisciplinarioTipoPk()
+    public function getCodigoCartaTipoPk()
     {
-        return $this->codigoDisciplinarioTipoPk;
+        return $this->codigoCartaTipoPk;
     }
 
     /**
@@ -64,7 +63,7 @@ class RhuDisciplinarioTipo
      *
      * @param string $nombre
      *
-     * @return RhuDisciplinarioTipo
+     * @return RhuCartaTipo
      */
     public function setNombre($nombre)
     {
@@ -88,7 +87,7 @@ class RhuDisciplinarioTipo
      *
      * @param integer $codigoContenidoFormatoFk
      *
-     * @return RhuDisciplinarioTipo
+     * @return RhuCartaTipo
      */
     public function setCodigoContenidoFormatoFk($codigoContenidoFormatoFk)
     {
@@ -108,37 +107,37 @@ class RhuDisciplinarioTipo
     }
 
     /**
-     * Add disciplinariosDisciplinarioTipoRel
+     * Add cartasCartaTipoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplinariosDisciplinarioTipoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCarta $cartasCartaTipoRel
      *
-     * @return RhuDisciplinarioTipo
+     * @return RhuCartaTipo
      */
-    public function addDisciplinariosDisciplinarioTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplinariosDisciplinarioTipoRel)
+    public function addCartasCartaTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCarta $cartasCartaTipoRel)
     {
-        $this->disciplinariosDisciplinarioTipoRel[] = $disciplinariosDisciplinarioTipoRel;
+        $this->cartasCartaTipoRel[] = $cartasCartaTipoRel;
 
         return $this;
     }
 
     /**
-     * Remove disciplinariosDisciplinarioTipoRel
+     * Remove cartasCartaTipoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplinariosDisciplinarioTipoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCarta $cartasCartaTipoRel
      */
-    public function removeDisciplinariosDisciplinarioTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplinariosDisciplinarioTipoRel)
+    public function removeCartasCartaTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCarta $cartasCartaTipoRel)
     {
-        $this->disciplinariosDisciplinarioTipoRel->removeElement($disciplinariosDisciplinarioTipoRel);
+        $this->cartasCartaTipoRel->removeElement($cartasCartaTipoRel);
     }
 
     /**
-     * Get disciplinariosDisciplinarioTipoRel
+     * Get cartasCartaTipoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getDisciplinariosDisciplinarioTipoRel()
+    public function getCartasCartaTipoRel()
     {
-        return $this->disciplinariosDisciplinarioTipoRel;
+        return $this->cartasCartaTipoRel;
     }
 
     /**
@@ -146,7 +145,7 @@ class RhuDisciplinarioTipo
      *
      * @param \Brasa\GeneralBundle\Entity\GenContenidoFormato $contenidoFormatoRel
      *
-     * @return RhuDisciplinarioTipo
+     * @return RhuCartaTipo
      */
     public function setContenidoFormatoRel(\Brasa\GeneralBundle\Entity\GenContenidoFormato $contenidoFormatoRel = null)
     {

@@ -45,11 +45,18 @@ class FormatoContratoIndefinido extends \FPDF_FPDF {
         $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find($arContrato->getCodigoContratoTipoFk());        
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-        $this->SetXY(10, 40);
-        $this->SetFont('Arial','B',12);
-        $this->Cell(30, 6, "Contrato de trabajo a término  Indefinido" , 1, 0, 'C');
+        $pdf->SetXY(50, 36);
+        $pdf->SetFont('Arial','B',12);
+        $pdf->Cell(110, 6, utf8_decode($arContenidoFormato->getTitulo()) , 0, 0, 'C');
+        $pdf->SetXY(50, 44);
+        $pdf->Cell(110, 6, utf8_decode($arConfiguracion->getNombreEmpresa()) , 0, 0, 'C');
+        $pdf->SetXY(50, 50);
+        $pdf->Cell(110, 6, utf8_decode("REGIONAL " . $arConfiguracion->getCiudadRel()->getDepartamentoRel()->getNombre()) , 0, 0, 'C');
+        $pdf->SetXY(177, 56);
+        $pdf->SetFont('Arial','B',9);
+        $pdf->Cell(25, 6, utf8_decode("N° " . $arContrato->getCodigoContratoPk()) , 0, 0, 'C');
         
-        $pdf->SetXY(10, 50);
+        $pdf->SetXY(10, 72);
         $pdf->SetFont('Arial', '', 10);  
         //se reemplaza el contenido de la tabla tipo de proceso disciplinario
         $sustitucion1 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion();
@@ -145,7 +152,7 @@ class FormatoContratoIndefinido extends \FPDF_FPDF {
         $cadenaCambiada = preg_replace($patron25, $sustitucion25, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron26, $sustitucion26, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron27, $sustitucion27, $cadenaCambiada);
-        $pdf->MultiCell(0,5, $cadenaCambiada);        
+        $pdf->MultiCell(0,5, $cadenaCambiada);
    
     }
 

@@ -32,8 +32,9 @@ class FormatoContratoObraLabor extends \FPDF_FPDF {
         $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuContenidoFormato();
         $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find($arContrato->getCodigoContratoTipoFk());        
         $this->SetXY(10, 10);
-        $this->Cell(185, 7, utf8_decode($arContenidoFormato->getTitulo()), 0, 0, 'C', 1);
-        $this->Text(10, 25, "Contrato numero: " . $arContrato->getCodigoContratoPk());
+        $this->Image('imagenes/logos/logo.jpg', 12, 13, 35, 17);
+        //$this->Cell(185, 7, utf8_decode($arContenidoFormato->getTitulo()), 0, 0, 'C', 1);
+        //$this->Text(10, 25, "Contrato numero: " . $arContrato->getCodigoContratoPk());
         $this->Ln(20);
     }
 
@@ -44,7 +45,17 @@ class FormatoContratoObraLabor extends \FPDF_FPDF {
         $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find($arContrato->getCodigoContratoTipoFk());        
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-        $pdf->SetXY(10, 30);
+        $pdf->SetXY(50, 36);
+        $pdf->SetFont('Arial','B',12);
+        $pdf->Cell(110, 6, utf8_decode($arContenidoFormato->getTitulo()) , 0, 0, 'C');
+        $pdf->SetXY(50, 44);
+        $pdf->Cell(110, 6, utf8_decode($arConfiguracion->getNombreEmpresa()) , 0, 0, 'C');
+        
+        $pdf->SetXY(177, 56);
+        $pdf->SetFont('Arial','B',9);
+        $pdf->Cell(25, 6, utf8_decode("N° " . $arContrato->getCodigoContratoPk()) , 0, 0, 'C');
+        
+        $pdf->SetXY(10, 72);
         $pdf->SetFont('Arial', '', 10);  
         //se reemplaza el contenido de la tabla tipo de proceso disciplinario
         $sustitucion1 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion();

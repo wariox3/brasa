@@ -476,7 +476,23 @@ brs_rhu_base_disciplinario_tipo_lista:
 
 brs_rhu_base_disciplinario_tipo_nuevo:
     path:     /rhu/base/disciplinario/tipo/nuevo/{codigoDisciplinarioTipo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseDisciplinarioTipo:nuevo }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseDisciplinarioTipo:nuevo }
+    
+brs_rhu_base_contrato_tipo_lista:
+    path:     /rhu/base/contrato/tipo/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseContratosTipo:lista } 
+
+brs_rhu_base_contrato_tipo_nuevo:
+    path:     /rhu/base/contrato/tipo/nuevo/{codigoContratoTipo}
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseContratosTipo:nuevo }
+    
+brs_rhu_base_carta_tipo_lista:
+    path:     /rhu/base/carta/tipo/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCartaTipo:lista } 
+
+brs_rhu_base_carta_tipo_nuevo:
+    path:     /rhu/base/carta/tipo/nuevo/{codigoCartaTipo}
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCartaTipo:nuevo }    
     
 brs_rhu_contratos_nuevo:
     path:     /rhu/contratos/nuevo/{codigoContrato}/{codigoEmpleado}

@@ -231,6 +231,10 @@ class RhuCentroCosto
      */
     protected $permisosCentroCostoRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuCarta", mappedBy="centroCostoRel")
+     */
+    protected $cartasCentroCostoRel;
     
     
     /**
@@ -257,6 +261,7 @@ class RhuCentroCosto
         $this->creditosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->disciplinariosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->permisosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cartasCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -723,6 +728,30 @@ class RhuCentroCosto
     public function getGeneraServicioCobrar()
     {
         return $this->generaServicioCobrar;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuCentroCosto
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
     }
 
     /**
@@ -1444,26 +1473,36 @@ class RhuCentroCosto
     }
 
     /**
-     * Set codigoUsuario
+     * Add cartasCentroCostoRel
      *
-     * @param string $codigoUsuario
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCarta $cartasCentroCostoRel
      *
      * @return RhuCentroCosto
      */
-    public function setCodigoUsuario($codigoUsuario)
+    public function addCartasCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCarta $cartasCentroCostoRel)
     {
-        $this->codigoUsuario = $codigoUsuario;
+        $this->cartasCentroCostoRel[] = $cartasCentroCostoRel;
 
         return $this;
     }
 
     /**
-     * Get codigoUsuario
+     * Remove cartasCentroCostoRel
      *
-     * @return string
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCarta $cartasCentroCostoRel
      */
-    public function getCodigoUsuario()
+    public function removeCartasCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCarta $cartasCentroCostoRel)
     {
-        return $this->codigoUsuario;
+        $this->cartasCentroCostoRel->removeElement($cartasCentroCostoRel);
+    }
+
+    /**
+     * Get cartasCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCartasCentroCostoRel()
+    {
+        return $this->cartasCentroCostoRel;
     }
 }
