@@ -16,7 +16,7 @@ class ValidacionController extends Controller
             $strSql = "SELECT dia_$dia
                         FROM tur_programacion_detalle                    
                         WHERE
-                        dia_$dia = '$codigoTurno' AND anio = $strAnio AND mes = $strMes AND codigo_recurso_fk = $codigoRecurso"; 
+                        dia_$dia = '$codigoTurno' AND anio = $strAnio AND mes = $strMes AND codigo_recurso_fk = $codigoRecurso AND codigo_programacion_detalle_fk<> $codigoProgramacionDetalle"; 
             $connection = $em->getConnection();
             $statement = $connection->prepare($strSql);        
             $statement->execute();
