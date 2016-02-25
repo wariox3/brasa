@@ -33,6 +33,7 @@
                 <th>CONTRATO</th>
                 <th>SALARIO</th>
                 <th></th>
+                <th></th>
             </tr>
             {% for arSoportesPagos in arSoportesPagos %}
             <tr>
@@ -54,6 +55,7 @@
                 <td style="text-align: right">{{ arSoportesPagos.horasExtrasFestivasNocturnas | number_format(0, '.', ',') }}</td>
                 <td>{{ arSoportesPagos.codigoContratoFk }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.vrSalario | number_format(0, '.', ',') }}</td>
+                <td style="text-align: center"><a href="{{ path('brs_tur_proceso_generar_soporte_pago_editar', {'codigoSoportePago': arSoportesPagos.codigoSoportePagoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                
                 <td><a href="javascript:abrirVentana3('{{ path('brs_tur_proceso_generar_soporte_pago_detalle_ver', {'codigoSoportePago': arSoportesPagos.codigoSoportePagoPk }) }}', 'VerDetalleSoportePago', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_090_table.png') }}" width=20 height=20 title="Ver"></a></td>                
             </tr>
 

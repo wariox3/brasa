@@ -249,6 +249,10 @@ brs_tur_proceso_generar_soporte_pago:
 brs_tur_proceso_generar_soporte_pago_detalle:
     path:     /tur/proceso/generar/soporte/pago/detalle/{codigoSoportePagoPeriodo}
     defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarSoportePago:detalle }    
+
+brs_tur_proceso_generar_soporte_pago_editar:
+    path:     /tur/proceso/generar/soporte/pago/editar/{codigoSoportePago}
+    defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarSoportePago:editar }    
     
 brs_tur_proceso_generar_soporte_pago_detalle_ver:
     path:     /tur/proceso/generar/soporte/pago/detalle/ver/{codigoSoportePago}

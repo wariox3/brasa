@@ -4,6 +4,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurSoportePagoPeriodoType;
+use Brasa\TurnoBundle\Form\Type\TurSoportePagoType;
 class ProcesoGenerarSoportePagoController extends Controller
 {
     var $strListaDql = "";
@@ -140,6 +141,27 @@ class ProcesoGenerarSoportePagoController extends Controller
         }
         return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:nuevo.html.twig', array(
             'arSoportePagoPeriodo' => $arSoportePagoPeriodo,
+            'form' => $form->createView()));
+    }    
+
+    public function editarAction($codigoSoportePago) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();                 
+        $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+        if($codigoSoportePago != 0) {
+            $arSoportePago = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($codigoSoportePago);
+        }
+        $form = $this->createForm(new TurSoportePagoType, $arSoportePago);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arSoportePago = $form->getData();            
+            $em->persist($arSoportePago);
+            $em->flush();
+            return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago_detalle', array('codigoSoportePagoPeriodo' => $arSoportePago->getCodigoSoportePagoPeriodoFk()) ));                                                                              
+        }
+        return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:editar.html.twig', array(
+            'arSoportePago' => $arSoportePago,
             'form' => $form->createView()));
     }    
     
