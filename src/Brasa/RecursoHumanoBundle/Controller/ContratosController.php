@@ -49,11 +49,11 @@ class ContratosController extends Controller
         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
         if($form->isValid()) {
             if($form->get('BtnImprimir')->isClicked()) {
-                if ($arContrato->getCodigoContratoTipoFk() == 1){
-                    $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContratoObraLabor();
-                    $objFormatoContrato->Generar($this, $codigoContrato);
-                }
-                if ($arContrato->getCodigoContratoTipoFk() == 2){
+                
+                $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContrato();
+                $objFormatoContrato->Generar($this, $codigoContrato);
+                
+                /*if ($arContrato->getCodigoContratoTipoFk() == 2){
                     $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContratoFijo();
                     $objFormatoContrato->Generar($this, $codigoContrato);
                 }
@@ -68,7 +68,7 @@ class ContratosController extends Controller
                 if ($arContrato->getCodigoContratoTipoFk() == 5){
                     $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContratoPracticante();
                     $objFormatoContrato->Generar($this, $codigoContrato);
-                }
+                }*/
 
             }
         }

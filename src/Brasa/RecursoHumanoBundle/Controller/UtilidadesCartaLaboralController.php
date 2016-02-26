@@ -21,58 +21,24 @@ class UtilidadesCartaLaboralController extends Controller
                 $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
                 $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
                 if ($arContrato->getEstadoActivo() == 1){
-                    $objFormatoCartaLaboral = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCartaLaboralVigente();
-                    $objFormatoCartaLaboral->Generar($this, $codigoContrato);
+                    $codigoCartaTipo = 5; //vigente
                 } else {
-                    $objFormatoCartaLaboral = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCartaLaboralRetirado();
-                    $objFormatoCartaLaboral->Generar($this, $codigoContrato);                   
+                    $codigoCartaTipo = 6; //retirado
                 }
+                $objFormatoCarta = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCarta();
+                $objFormatoCarta->Generar($this, $codigoCartaTipo, date('Y-m-d'), "", $codigoContrato);
             }
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form, $request);
                 $this->listar();
             } 
-            /*if($form->get('BtnPdf')->isClicked()) {
-                $this->filtrarLista($form, $request);
-                $this->listar();
-                $objFormatoPagos = new \Brasa\RecursoHumanoBundle\Formatos\FormatoListaPagos();
-                $objFormatoPagos->Generar($this, $this->strDqlLista);
-            }*/
         }       
                 
         $arContratos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);                               
-        return $this->render('BrasaRecursoHumanoBundle:Utilidades/CartaLaboral:lista.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Utilidades/Cartas/CartaLaboral:lista.html.twig', array(
             'arContratos' => $arContratos,
             'form' => $form->createView()));
-    }       
-    
-    public function detalleAction($codigoPago, Request $request) {
-        $em = $this->getDoctrine()->getManager();        
-        $objMensaje = $this->get('mensajes_brasa');        
-        $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-        $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);
-        $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
-        $arPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $codigoPago));
-        $arPagoDetallesSede = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalleSede();
-        $arPagoDetallesSede = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalleSede')->findBy(array('codigoPagoFk' => $codigoPago));        
-        $form = $this->createFormBuilder()
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))           
-            ->getForm();
-        $form->handleRequest($request);
-        if($form->isValid()) {
-            if($form->get('BtnImprimir')->isClicked()) {
-                $objFormatoPago = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPago();
-                $objFormatoPago->Generar($this, $codigoPago);
-            }
-        }        
-        
-        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Pagos:detalle.html.twig', array(
-                    'arPago' => $arPago,
-                    'arPagoDetalles' => $arPagoDetalles,                    
-                    'arPagoDetallesSede' => $arPagoDetallesSede,                    
-                    'form' => $form->createView()
-                    ));
-    }    
+    }         
     
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();        

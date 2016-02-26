@@ -122,22 +122,10 @@ class DisciplinarioController extends Controller
                 }
             }
             if($form->get('BtnImprimir')->isClicked()) {
-                if ($arProcesoDisciplinario->getCodigoDisciplinarioTipoFk() == 6){
-                   $objFormatoDisciplinarioSuspencion = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioSuspension();
-                   $objFormatoDisciplinarioSuspencion->Generar($this, $codigoDisciplinario);
-                }
-                if ($arProcesoDisciplinario->getCodigoDisciplinarioTipoFk() == 7) {
-                    $objFormatoDisciplinarioLlamadoAtencion = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioLlamadoAtencion();
-                    $objFormatoDisciplinarioLlamadoAtencion->Generar($this, $codigoDisciplinario);
-                }
-                if ($arProcesoDisciplinario->getCodigoDisciplinarioTipoFk() == 8) {
-                    $objFormatoDisciplinarioDescargo = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioDescargo();
-                    $objFormatoDisciplinarioDescargo->Generar($this, $codigoDisciplinario);
-                }
-                if ($arProcesoDisciplinario->getCodigoDisciplinarioTipoFk() == 9) {
-                    $objFormatoDisciplinarioVacaciones = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDisciplinarioVacaciones();
-                    $objFormatoDisciplinarioVacaciones->Generar($this, $codigoDisciplinario);
-                }
+                $codigoProcesoDisciplinarioTipo = $arProcesoDisciplinario->getCodigoDisciplinarioTipoFk();
+                $codigoProcesoDisciplinario = $arProcesoDisciplinario->getCodigoDisciplinarioPk();
+                $objFormatoCarta = new \Brasa\RecursoHumanoBundle\Formatos\FormatoProcesoDisciplinario();
+                $objFormatoCarta->Generar($this, $codigoProcesoDisciplinarioTipo, $codigoProcesoDisciplinario);
             }
 
         }

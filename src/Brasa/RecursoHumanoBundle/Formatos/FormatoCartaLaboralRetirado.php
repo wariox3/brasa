@@ -48,8 +48,8 @@ class FormatoCartaLaboralRetirado extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         
-        $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuContenidoFormato();
-        $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find(11);
+        $arContenidoFormato = new \Brasa\GeneralBundle\Entity\GenContenidoFormato();
+        $arContenidoFormato = self::$em->getRepository('BrasaGeneralBundle:GenContenidoFormato')->find(11);
         $this->SetFont('Arial','B','12');
         $this->Text(80, 70, utf8_decode("DEPTARTAMENTO NÓMINA"));
         $this->Text(98, 90, utf8_decode("CERTIFICA"));
@@ -62,8 +62,8 @@ class FormatoCartaLaboralRetirado extends \FPDF_FPDF {
         $pdf->SetFont('Arial', '', 10);  
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find(self::$codigoContrato);
-        $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuContenidoFormato();
-        $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find(10);
+        $arContenidoFormato = new \Brasa\GeneralBundle\Entity\GenContenidoFormato();
+        $arContenidoFormato = self::$em->getRepository('BrasaGeneralBundle:GenContenidoFormato')->find(10);
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         //se reemplaza el contenido de la tabla contenido formato carta laboral

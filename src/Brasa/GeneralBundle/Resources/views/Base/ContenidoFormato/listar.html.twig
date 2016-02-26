@@ -19,7 +19,7 @@
                <tr>
                 <td>{{arContenidoFormatos.codigoContenidoFormatoPk}}</td>
                 <td align="justify">{{arContenidoFormatos.titulo}}</td>
-                <td><a href="{{ path('brs_rhu_base_contenido_formato_nuevo',{'codigoContenidoFormato': arContenidoFormatos.codigoContenidoFormatoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                <td><a href="{{ path('brs_gen_base_contenido_formato_nuevo',{'codigoContenidoFormato': arContenidoFormatos.codigoContenidoFormatoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arContenidoFormatos.codigoContenidoFormatoPk }}" /></td>
             {%endfor%}
             </tr>            
@@ -32,7 +32,7 @@
     </div>
     <div class="btn-toolbar" style="float: right">              
         <div class='btn-group'>
-            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_contenido_formato_nuevo', {'codigoContenidoFormato': 0}) }}">Nuevo</a>
+            <a class="btn btn-default btn-sm" href="{{ path('brs_gen_base_contenido_formato_nuevo', {'codigoContenidoFormato': 0}) }}">Nuevo</a>
         </div>
         <div class="btn-group">
             {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}</td>                   

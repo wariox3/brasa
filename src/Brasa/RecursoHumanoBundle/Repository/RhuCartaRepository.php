@@ -11,5 +11,21 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuCartaRepository extends EntityRepository {
     
-    
+    public function listaDQL($strIdentificacion = "", $codigoCentroCosto = "", $strDesde = "", $strHasta = "") {        
+        $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuCarta c JOIN c.empleadoRel e WHERE c.codigoCartaPk <> 0";
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
+        }
+        if($codigoCentroCosto != "" || $codigoCentroCosto != 0 ) {
+            $dql .= " AND e.codigoCentroCostoFk = " . $codigoCentroCosto;
+        }
+        if ($strDesde != ""){
+            $dql .= " AND c.fecha >='" . date_format($strDesde, ('Y-m-d')) . "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND c.fecha <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        $dql .= " ORDER BY c.fecha";
+        return $dql;
+    }       
 }

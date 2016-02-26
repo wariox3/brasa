@@ -26,7 +26,12 @@ class RhuCarta
     /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
      */    
-    private $fecha;         
+    private $fecha;
+    
+    /**
+     * @ORM\Column(name="fecha_opcional", type="date", nullable=true)
+     */    
+    private $fechaOpcional;
     
     /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer")
@@ -350,5 +355,29 @@ class RhuCarta
     public function getCentroCostoRel()
     {
         return $this->centroCostoRel;
+    }
+
+    /**
+     * Set fechaOpcional
+     *
+     * @param \DateTime $fechaOpcional
+     *
+     * @return RhuCarta
+     */
+    public function setFechaOpcional($fechaOpcional)
+    {
+        $this->fechaOpcional = $fechaOpcional;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaOpcional
+     *
+     * @return \DateTime
+     */
+    public function getFechaOpcional()
+    {
+        return $this->fechaOpcional;
     }
 }

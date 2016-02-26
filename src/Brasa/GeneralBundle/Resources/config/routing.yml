@@ -16,7 +16,15 @@ brs_gen_base_bancos:
     
 brs_gen_base_bancos_nuevo:
     path:     /general/base/bancos/nuevo/{codigoBanco}
-    defaults: { _controller: BrasaGeneralBundle:BaseBancos:nuevo }    
+    defaults: { _controller: BrasaGeneralBundle:BaseBancos:nuevo } 
+    
+brs_gen_base_contenido_formato_lista:
+   path:     /general/base/contenido/formato/lista/
+   defaults: { _controller: BrasaGeneralBundle:BaseContenidoFormato:lista }    
+    
+brs_gen_base_contenido_formato_nuevo:
+   path:     /general/base/contenido/formato/nuevo/{codigoContenidoFormato}
+   defaults: { _controller: BrasaGeneralBundle:BaseContenidoFormato:nuevo }    
 
 brs_gen_base_cuentas:
     path:     /general/base/cuentas

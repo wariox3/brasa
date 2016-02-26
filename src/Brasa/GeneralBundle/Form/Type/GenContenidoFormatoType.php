@@ -1,10 +1,10 @@
 <?php
-namespace Brasa\RecursoHumanoBundle\Form\Type;
+namespace Brasa\GeneralBundle\Form\Type;
  
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class RhuContenidoFormatoType extends AbstractType
+class GenContenidoFormatoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

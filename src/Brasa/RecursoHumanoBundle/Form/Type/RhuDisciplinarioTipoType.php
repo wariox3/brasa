@@ -9,7 +9,11 @@ class RhuDisciplinarioTipoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder                                                                                    
-            ->add('nombre', 'text', array('required' => true))                                                                
+            ->add('nombre', 'text', array('required' => true))
+            ->add('contenidoFormatoRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenContenidoFormato',
+                'property' => 'titulo',
+                'required' => false))    
             ->add('guardar', 'submit');        
     }
  

@@ -22,6 +22,11 @@ class RhuCartaTipo
      */    
     private $nombre;
     
+    /**     
+     * @ORM\Column(name="especial", type="boolean")
+     */    
+    private $especial = 0;
+    
     /**
      * @ORM\Column(name="codigo_contenido_formato_fk", type="integer", nullable=true)
      */    
@@ -80,6 +85,30 @@ class RhuCartaTipo
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set especial
+     *
+     * @param boolean $especial
+     *
+     * @return RhuCartaTipo
+     */
+    public function setEspecial($especial)
+    {
+        $this->especial = $especial;
+
+        return $this;
+    }
+
+    /**
+     * Get especial
+     *
+     * @return boolean
+     */
+    public function getEspecial()
+    {
+        return $this->especial;
     }
 
     /**

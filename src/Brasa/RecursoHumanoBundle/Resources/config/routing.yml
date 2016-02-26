@@ -116,7 +116,11 @@ brs_rhu_utilidades_certificado_ingreso_retencion:
 
 brs_rhu_utilidades_carta_laboral:
     path:     /rhu/utilidades/carta/laboral
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCartaLaboral:lista }     
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCartaLaboral:lista }
+    
+brs_rhu_utilidades_cartas_generar:
+    path:     /rhu/utilidades/cartas/generar
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCartas:generar }    
 
 brs_rhu_utilidades_supervigilancia_parafiscales:
     path:     /rhu/utilidades/supervigilancia/parafiscales
@@ -461,14 +465,6 @@ brs_rhu_base_contratos_lista:
 brs_rhu_base_contratos_detalles:
     path:     /rhu/base/contratos/detalle/{codigoContrato}
     defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:detalle }
-    
-brs_rhu_base_contenido_formato_lista:
-   path:     /rhu/base/contenido/formato/lista/
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseContenidoFormato:lista }    
-    
-brs_rhu_base_contenido_formato_nuevo:
-   path:     /rhu/base/contenido/formato/nuevo/{codigoContenidoFormato}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseContenidoFormato:nuevo }    
     
 brs_rhu_base_disciplinario_tipo_lista:
     path:     /rhu/base/disciplinario/tipo/lista
