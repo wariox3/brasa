@@ -36,16 +36,29 @@ class TurProgramacionDetalleRepository extends EntityRepository {
         return $dql;
     }    
     
-    public function eliminarDetallesSeleccionados($arrSeleccionados) {        
+    public function eliminarDetallesSeleccionados($arrSeleccionados) {      
+        $strResultado = "";
         if(count($arrSeleccionados) > 0) {
             $em = $this->getEntityManager();
-            foreach ($arrSeleccionados AS $codigo) {                
-                $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($codigo);                
-                $em->remove($arProgramacionDetalle);                  
+            foreach ($arrSeleccionados AS $codigo) {
+                $intNumeroRegistros = 0;
+                $dql   = "SELECT COUNT(spd.codigoProgramacionDetalleFk) as numeroRegistros FROM BrasaTurnoBundle:TurSoportePagoDetalle spd "
+                        . "WHERE spd.codigoProgramacionDetalleFk = " . $codigo;
+                $query = $em->createQuery($dql);
+                $arrSoportePagoDetalles = $query->getSingleResult(); 
+                if($arrSoportePagoDetalles) {
+                    $intNumeroRegistros = $arrSoportePagoDetalles['numeroRegistros'];
+                }       
+                if($intNumeroRegistros <= 0) {
+                    $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($codigo);                
+                    $em->remove($arProgramacionDetalle);                                      
+                } else {
+                    $strResultado .= "El detalle " . $codigo . " no se puede eliminar porque tiene soportes de pago asociados ";
+                }
             }                                         
             $em->flush();       
         }
-        
+        return $strResultado;
     }  
     
     public function numeroRegistros($codigo) {

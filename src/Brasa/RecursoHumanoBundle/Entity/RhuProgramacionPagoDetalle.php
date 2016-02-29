@@ -146,6 +146,11 @@ class RhuProgramacionPagoDetalle
     private $salarioIntegral = 0;     
     
     /**
+     * @ORM\Column(name="soporteTurno", type="boolean")
+     */
+    private $soporteTurno = 1;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuProgramacionPago", inversedBy="programacionesPagosDetallesProgramacionPagoRel")
      * @ORM\JoinColumn(name="codigo_programacion_pago_fk", referencedColumnName="codigo_programacion_pago_pk")
      */
@@ -955,5 +960,29 @@ class RhuProgramacionPagoDetalle
     public function getSalarioIntegral()
     {
         return $this->salarioIntegral;
+    }
+
+    /**
+     * Set soporteTurno
+     *
+     * @param boolean $soporteTurno
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setSoporteTurno($soporteTurno)
+    {
+        $this->soporteTurno = $soporteTurno;
+
+        return $this;
+    }
+
+    /**
+     * Get soporteTurno
+     *
+     * @return boolean
+     */
+    public function getSoporteTurno()
+    {
+        return $this->soporteTurno;
     }
 }

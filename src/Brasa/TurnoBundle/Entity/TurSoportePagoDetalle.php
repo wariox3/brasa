@@ -53,6 +53,16 @@ class TurSoportePagoDetalle
     private $novedad = 0;    
     
     /**
+     * @ORM\Column(name="incapacidad", type="integer")
+     */    
+    private $incapacidad = 0;
+    
+    /**
+     * @ORM\Column(name="licencia", type="integer")
+     */    
+    private $licencia = 0;     
+    
+    /**
      * @ORM\Column(name="dias", type="float")
      */    
     private $dias = 0;     
@@ -787,5 +797,53 @@ class TurSoportePagoDetalle
     public function getNovedad()
     {
         return $this->novedad;
+    }
+
+    /**
+     * Set incapacidad
+     *
+     * @param integer $incapacidad
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setIncapacidad($incapacidad)
+    {
+        $this->incapacidad = $incapacidad;
+
+        return $this;
+    }
+
+    /**
+     * Get incapacidad
+     *
+     * @return integer
+     */
+    public function getIncapacidad()
+    {
+        return $this->incapacidad;
+    }
+
+    /**
+     * Set licencia
+     *
+     * @param integer $licencia
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setLicencia($licencia)
+    {
+        $this->licencia = $licencia;
+
+        return $this;
+    }
+
+    /**
+     * Get licencia
+     *
+     * @return integer
+     */
+    public function getLicencia()
+    {
+        return $this->licencia;
     }
 }

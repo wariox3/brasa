@@ -29,8 +29,10 @@
                 <th>NOMBRE</th>
                 <th>H. DESDE</th>
                 <th>H. HASTA</th>                
-                <th>NOVEDAD</th>
-                <th>DESCANSO</th>
+                <th>NOV</th>
+                <th>DES</th>
+                <th>INC</th>
+                <th>LIC</th>
                 <th>HORAS</th>
                 <th>H. NOMINA</th>
                 <th>H. DIURNAS</th>
@@ -47,6 +49,8 @@
                 <td>{{ arTurnos.horaHasta |date("H:i") }}</td>
                 <td>{% if arTurnos.novedad == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arTurnos.descanso == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arTurnos.incapacidad == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arTurnos.licencia == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: right">{{ arTurnos.horas | number_format(0, '.', ',') }}</td>                 
                 <td style="text-align: right">{{ arTurnos.horasNomina | number_format(0, '.', ',') }}</td>                 
                 <td style="text-align: right">{{ arTurnos.horasDiurnas | number_format(0, '.', ',') }}</td> 

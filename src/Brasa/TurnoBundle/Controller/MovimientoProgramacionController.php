@@ -142,7 +142,10 @@ class MovimientoProgramacionController extends Controller
             }
             if($form->get('BtnDetalleEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
+                $strResultado =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
+                if($strResultado != "") {
+                    $objMensaje->Mensaje("error", $strResultado, $this);
+                }
                 $em->getRepository('BrasaTurnoBundle:TurProgramacion')->liquidar($codigoProgramacion);
                 return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
             }
