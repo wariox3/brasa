@@ -50,6 +50,28 @@ class FormatoCarta extends \FPDF_FPDF {
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);        
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find(self::$codigoContrato);        
+        //Inicio promedio mensual
+        $intPeriodo = 0;
+        $strPeriodo = $arContrato->getCentroCostoRel()->getPeriodoPagoRel()->getNombre();
+        if ($strPeriodo == "SEMANAL"){
+            $intPeriodo = 4;
+        }
+        if ($strPeriodo == "DECADAL"){
+            $intPeriodo = 3;
+        }
+        if ($strPeriodo == "CATORCENAL"){
+            $intPeriodo = 2;
+        }
+        if ($strPeriodo == "QUINCENAL"){
+            $intPeriodo = 2;
+        }
+        if ($strPeriodo == "MENSUAL"){
+            $intPeriodo = 1;
+        }
+        $floSuplementario = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->tiempoSuplementarioCartaLaboral($intPeriodo, $arContrato->getCodigoContratoPk());            
+        $floPromedioConSalario = ($floSuplementario / $intPeriodo) + $arContrato->getVrSalario();
+        $floPromedio = $floSuplementario / $intPeriodo;
+        //fin promedio mensual
         $arCartaTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuCartaTipo();
         $arCartaTipo = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCartaTipo')->find(self::$codigoTipoCarta);
         $codigoCartaTipo = $arCartaTipo->getCodigoCartaTipoPk();
@@ -96,6 +118,14 @@ class FormatoCarta extends \FPDF_FPDF {
         $sustitucion10 = self::$fechaProceso;
         setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
         $sustitucion10 = strftime("%d de %B de %Y", strtotime($sustitucion10));
+        $promedioConSalarioLetras = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->numtoletras($floPromedioConSalario);
+        $sustitucion11 = $promedioConSalarioLetras." $(";
+        $sustitucion11 .= number_format($floPromedioConSalario, 2,'.',',');
+        $sustitucion11 .= ")";
+        $promedioLetras = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->numtoletras($floPromedio);
+        $sustitucion12 = $promedioLetras." $(";
+        $sustitucion12 .= number_format($floPromedio, 2,'.',',');
+        $sustitucion12 .= ")";
         //$cadena = $arContenidoFormato->getContenido();
         $patron1 = '/#1/';
         $patron2 = '/#2/';
@@ -107,6 +137,8 @@ class FormatoCarta extends \FPDF_FPDF {
         $patron8 = '/#8/';
         $patron9 = '/#9/';
         $patron10 = '/#a/';
+        $patron11 = '/#b/';
+        $patron12 = '/#c/';
         $cadenaCambiada = preg_replace($patron1, $sustitucion1, $cadena);
         $cadenaCambiada = preg_replace($patron2, $sustitucion2, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron3, $sustitucion3, $cadenaCambiada);
@@ -117,6 +149,8 @@ class FormatoCarta extends \FPDF_FPDF {
         $cadenaCambiada = preg_replace($patron8, $sustitucion8, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron9, $sustitucion9, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron10, $sustitucion10, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron11, $sustitucion11, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron12, $sustitucion12, $cadenaCambiada);
         $pdf->MultiCell(0,5, $cadenaCambiada);
     }
 
