@@ -321,9 +321,9 @@ class PagoBancoController extends Controller
         $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
         // Encabezado
         $strNitEmpresa = $this->RellenarNr($arConfiguracionGeneral->getNitEmpresa(),"0",10,"I");
-        $strNombreEmpresa = $this->RellenarNr($arConfiguracionGeneral->getNombreEmpresa()," ",16,"I");
-        $strTipoPagoSecuencia = $arPagoBanco->getDescripcion();
-        $strSecuencia = $arPagoBanco->getDescripcion();
+        $strNombreEmpresa = substr($arConfiguracionGeneral->getNombreEmpresa(), 1, 16);
+        $strTipoPagoSecuencia = "225PAGO NOMI ";
+        $strSecuencia = $arPagoBanco->getSecuencia();
         $strFechaCreacion = $arPagoBanco->getFechaTrasmision()->format('ymd');                                                                                            
         $strFechaAplicacion = $arPagoBanco->getFechaAplicacion()->format('ymd');
         $strNumeroRegistros = $this->RellenarNr($arPagoBanco->getNumeroRegistros(), "0", 6, "I");        
