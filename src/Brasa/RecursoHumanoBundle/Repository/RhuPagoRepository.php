@@ -306,7 +306,6 @@ class RhuPagoRepository extends EntityRepository {
         $dql   = "SELECT SUM(p.vrIngresoBasePrestacion) as suplementario FROM BrasaRecursoHumanoBundle:RhuPago p  "
                 . "WHERE p.estadoPagado = 1 "
                 . "AND p.codigoContratoFk = " . $codigoContrato . " ";
-        
         $query = $em->createQuery($dql)
                     ->setFirstResult(0)
                     ->setMaxResults($intPeriodo);
