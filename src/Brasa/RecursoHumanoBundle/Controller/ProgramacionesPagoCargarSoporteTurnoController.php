@@ -24,7 +24,7 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                     $arEmpleado = $arSoportePago->getRecursoRel()->getEmpleadoRel();
                     $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-                    $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
+                    $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arSoportePago->getCodigoContratoFk());
                     $floVrDia = $arContrato->getVrSalario() / 30;
                     $floVrHora = $floVrDia / 8;
                     $intHoras = $arSoportePago->getHoras();
@@ -33,6 +33,7 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
                     $arProgramacionPagoDetalle->setContratoRel($arContrato);
                     $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalario());
+                    $arProgramacionPagoDetalle->setSoporteTurno(TRUE);
                     $arProgramacionPagoDetalle->setFechaDesde($arSoportePago->getFechaDesde());
                     $arProgramacionPagoDetalle->setFechaHasta($arSoportePago->getFechaHasta());
                     $arProgramacionPagoDetalle->setFechaDesdePago($arSoportePago->getFechaDesde());
@@ -77,7 +78,7 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
         }  
         
         $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
-        $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->findBy(array('estadoGenerado' => 1));
+        $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->findBy(array('estadoGenerado' => 1, 'estadoCerrado' => 0));
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:cargarSoporteTurno.html.twig', array(
             'arSoportePagoPeriodos' => $arSoportePagoPeriodo,
             'form' => $form->createView()

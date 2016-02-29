@@ -221,7 +221,10 @@ class ProcesoGenerarSoportePagoController extends Controller
                 $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($strTurnoFijoDescanso);
             }
         }
-        $intDias = 0;                
+        /*if($arTurno->getNovedad()) {
+            echo "";
+        }*/
+        $intDias = 0;                       
         $intMinutoInicio = (($arTurno->getHoraDesde()->format('i') * 100)/60)/100;
         $intHoraInicio = $arTurno->getHoraDesde()->format('G');        
         $intHoraInicio += $intMinutoInicio;
@@ -230,8 +233,7 @@ class ProcesoGenerarSoportePagoController extends Controller
         $diaSemana2 = $dateFecha2->format('N');
         if($arTurno->getNovedad() == 0) {
             $intDias += 1;
-        }            
-            
+        }                    
         if($diaSemana == 7) {
             $boolFestivo = 1;
         }
@@ -254,6 +256,7 @@ class ProcesoGenerarSoportePagoController extends Controller
         $arSoportePagoDetalle->setTurnoRel($arTurno);
         $arSoportePagoDetalle->setDescanso($arTurno->getDescanso());
         $arSoportePagoDetalle->setNovedad($arTurno->getNovedad());
+        $arSoportePagoDetalle->setIncapacidad($arTurno->getIncapacidad());
         $arSoportePagoDetalle->setDias($intDias);
         $arSoportePagoDetalle->setHoras($arTurno->getHorasNomina());        
         $arSoportePagoDetalle->setHorasDiurnas($arrHoras['horasDiurnas']);

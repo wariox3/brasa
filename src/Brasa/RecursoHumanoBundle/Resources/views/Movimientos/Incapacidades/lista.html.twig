@@ -68,7 +68,7 @@
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arIncapacidades.codigoIncapacidadPk }}">{{ arIncapacidades.codigoIncapacidadPk }} </td>
                 <td>{{ arIncapacidades.numeroEps }}</td>
-                <td>{{ arIncapacidades.entidadSaludRel.nombre }}</td>
+                <td>{{ arIncapacidades.entidadSaludRel.nombre |default('') }}</td>
                 <td>{{ arIncapacidades.empleadoRel.numeroIdentificacion }}</td>
                 <td>{{ arIncapacidades.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arIncapacidades.centroCostoRel.nombre |default('')  }}</td>

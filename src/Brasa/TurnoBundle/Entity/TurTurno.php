@@ -62,6 +62,16 @@ class TurTurno
     private $descanso = false;           
     
     /**
+     * @ORM\Column(name="incapacidad", type="boolean")
+     */    
+    private $incapacidad = false;    
+    
+    /**
+     * @ORM\Column(name="licencia", type="boolean")
+     */    
+    private $licencia = false;    
+    
+    /**
      * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
      */    
     private $usuario;     
@@ -492,5 +502,53 @@ class TurTurno
     public function getUsuario()
     {
         return $this->usuario;
+    }
+
+    /**
+     * Set incapacidad
+     *
+     * @param boolean $incapacidad
+     *
+     * @return TurTurno
+     */
+    public function setIncapacidad($incapacidad)
+    {
+        $this->incapacidad = $incapacidad;
+
+        return $this;
+    }
+
+    /**
+     * Get incapacidad
+     *
+     * @return boolean
+     */
+    public function getIncapacidad()
+    {
+        return $this->incapacidad;
+    }
+
+    /**
+     * Set licencia
+     *
+     * @param boolean $licencia
+     *
+     * @return TurTurno
+     */
+    public function setLicencia($licencia)
+    {
+        $this->licencia = $licencia;
+
+        return $this;
+    }
+
+    /**
+     * Get licencia
+     *
+     * @return boolean
+     */
+    public function getLicencia()
+    {
+        return $this->licencia;
     }
 }
