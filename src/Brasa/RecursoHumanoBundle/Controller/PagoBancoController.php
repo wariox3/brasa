@@ -316,7 +316,7 @@ class PagoBancoController extends Controller
         //$arPagoBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco();
         $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-        $strNombreArchivo = "ArchivoPagoBancolombia" . date('YmdHis') . ".txt";
+        $strNombreArchivo = "pago" . date('YmdHis') . ".txt";
         $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
         $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
         // Encabezado
