@@ -79,7 +79,7 @@ class FormatoCarta extends \FPDF_FPDF {
         }
         $sustitucion4 = strftime("%d de %B de %Y", strtotime($sustitucion4));
         $sustitucion5 = $arConfiguracion->getNombreEmpresa();
-        if (self::$fechaOpcional == null){
+        if (self::$fechaOpcional == null ){
             $sustitucion6 = "";
         } else {
             $sustitucion6 = self::$fechaOpcional;
