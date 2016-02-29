@@ -108,7 +108,7 @@ class ConfiguracionGeneralController extends Controller
             $em->flush();
             return $this->redirect($this->generateUrl('brs_gen_configuracion_general', array('codigoConfiguracionPk' => 1)));                
         }
-        return $this->render('BrasaGeneralBundle:ConfiguracionGeneral:Configuracion.html.twig', array(
+        return $this->render('BrasaGeneralBundle:Base/ConfiguracionGeneral:Configuracion.html.twig', array(
             'formConfiguracionGeneral' => $formConfiguracionGeneral->createView(),
             'formConfiguracionNotificaciones' => $formConfiguracionNotificaciones->createView(),
         ));

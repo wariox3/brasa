@@ -68,6 +68,7 @@ class PagoBancoController extends Controller
     
     public function detalleAction($codigoPagoBanco) {
         $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $request = $this->getRequest();            
         $arPagoBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco();
         $arPagoBanco = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBanco')->find($codigoPagoBanco);                
@@ -110,6 +111,8 @@ class PagoBancoController extends Controller
             if($form->get('BtnArchivoBancolombia')->isClicked()) {
                 if($arPagoBanco->getEstadoAutorizado() == 1) {
                     $this->generarArchivoBancolombia($arPagoBanco);
+                } else {
+                    $objMensaje->Mensaje('error', 'El pago al banco debe estar autorizado', $this);
                 }
             }
             
@@ -318,7 +321,7 @@ class PagoBancoController extends Controller
         $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
         // Encabezado
         $strNitEmpresa = $this->RellenarNr($arConfiguracionGeneral->getNitEmpresa(),"0",10,"I");
-        $strNombreEmpresa = $arConfiguracionGeneral->getNombreEmpresa();
+        $strNombreEmpresa = $this->RellenarNr($arConfiguracionGeneral->getNombreEmpresa()," ",16,"I");
         $strTipoPagoSecuencia = $arPagoBanco->getDescripcion();
         $strSecuencia = $arPagoBanco->getDescripcion();
         $strFechaCreacion = $arPagoBanco->getFechaTrasmision()->format('ymd');                                                                                            
