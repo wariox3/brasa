@@ -108,13 +108,13 @@ class FormatoPago extends \FPDF_FPDF {
         $this->Cell(24, 6, "EPS:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',6);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(24, 6, utf8_decode($arPago->getEmpleadoRel()->getEntidadSaludRel()->getNombre()) , 1, 0, 'L', 1);
+        $this->Cell(24, 6, utf8_decode($arPago->getContratoRel()->getEntidadSaludRel()->getNombre()) , 1, 0, 'L', 1);
         $this->SetFont('Arial','B',6.5);
         $this->SetFillColor(200, 200, 200);
         $this->Cell(24, 6, utf8_decode("PENSIÓN :") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',6);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(21, 6, utf8_decode($arPago->getEmpleadoRel()->getEntidadPensionRel()->getNombre()) , 1, 0, 'L', 1);
+        $this->Cell(21, 6, utf8_decode($arPago->getContratoRel()->getEntidadPensionRel()->getNombre()) , 1, 0, 'L', 1);
         //FILA 4
         $this->SetXY(10, 55);
         $this->SetFont('Arial','B',6.5);

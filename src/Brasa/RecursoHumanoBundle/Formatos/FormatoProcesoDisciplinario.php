@@ -65,7 +65,7 @@ class FormatoProcesoDisciplinario extends \FPDF_FPDF {
         //se reemplaza el contenido de la tabla tipo de proceso disciplinario
         $sustitucion1 = $arProcesoDisciplinario->getEmpleadoRel()->getNumeroIdentificacion();
         $sustitucion2 = $arProcesoDisciplinario->getEmpleadoRel()->getNombreCorto();
-        $sustitucion3 = $arProcesoDisciplinario->getEmpleadoRel()->getCargoRel()->getNombre();
+        $sustitucion3 = $arProcesoDisciplinario->getCargoRel()->getNombre();
         $sustitucion4 = $arProcesoDisciplinario->getSuspension();
         $sustitucion5 = $arConfiguracion->getNombreEmpresa();
         $sustitucion6 = $arProcesoDisciplinario->getAsunto();

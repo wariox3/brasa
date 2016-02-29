@@ -68,9 +68,15 @@ class FormatoCarta extends \FPDF_FPDF {
         //se reemplaza el contenido de la tabla tipo de proceso disciplinario
         $sustitucion1 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion();
         $sustitucion2 = $arContrato->getEmpleadoRel()->getNombreCorto();
-        $sustitucion3 = $arContrato->getEmpleadoRel()->getCargoRel()->getNombre();
-        $sustitucion4 = $arContrato->getFechaHasta()->format('Y-m-a');
+        $sustitucion3 = $arContrato->getCargoRel()->getNombre();
         setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
+        if ($arContrato->getFechaProrrogaInicio() == null){
+            $sustitucion4 = $arContrato->getFechaDesde()->format('Y-m-d');
+            $sustitucion7 = $arContrato->getFechaHasta()->format('Y-m-d');
+        } else {
+            $sustitucion4 = $arContrato->getFechaProrrogaInicio()->format('Y-m-d');
+            $sustitucion7 = $arContrato->getFechaProrrogaFinal()->format('Y-m-d');
+        }
         $sustitucion4 = strftime("%d de %B de %Y", strtotime($sustitucion4));
         $sustitucion5 = $arConfiguracion->getNombreEmpresa();
         if (self::$fechaOpcional == null){
@@ -80,7 +86,6 @@ class FormatoCarta extends \FPDF_FPDF {
             setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
             $sustitucion6 = strftime("%d de %B de %Y", strtotime($sustitucion6->format('Y-m-d')));
         }
-        $sustitucion7 = $arContrato->getFechaHasta()->format('Y-m-a');
         setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
         $sustitucion7 = strftime("%d de %B de %Y", strtotime($sustitucion7));
         $sustitucion8 = $arContrato->getContratoTipoRel()->getNombre();

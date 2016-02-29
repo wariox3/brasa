@@ -72,6 +72,7 @@ class FormatoContrato extends \FPDF_FPDF {
         $pdf->SetXY(10, 72);
         $pdf->SetFont('Arial', '', 10);  
         //se reemplaza el contenido de la tabla tipo de proceso disciplinario
+        setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
         $sustitucion1 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion();
         $sustitucion2 = $arContrato->getEmpleadoRel()->getNombreCorto();
         $sustitucion3 = $arConfiguracion->getNitEmpresa();
@@ -87,8 +88,13 @@ class FormatoContrato extends \FPDF_FPDF {
         $sustitucion13 = number_format($arContrato->getVrSalario(), 2,'.',',');
         $sustitucion14 = $arContrato->getCentroCostoRel()->getPeriodoPagoRel()->getNombre();
         $sustitucion15 = $arContrato->getCentroCostoRel()->getDiasPago();
-        $sustitucion16 = $arContrato->getFechaDesde()->format('Y/m/d');
-        $sustitucion23 = $arContrato->getFechaHasta()->format('Y/m/d');
+        if ($arContrato->getFechaProrrogaInicio() == null){
+            $sustitucion16 = $arContrato->getFechaDesde()->format('Y/m/d');
+            $sustitucion23 = $arContrato->getFechaHasta()->format('Y/m/d');
+        } else {
+            $sustitucion16 = $arContrato->getFechaProrrogaInicio()->format('Y/m/d');
+            $sustitucion23 = $arContrato->getFechaProrrogaFinal()->format('Y/m/d');
+        }
         $feci = $arContrato->getFechaDesde();
         $fecf = $arContrato->getFechaHasta();
         $sustitucion17 = $arContrato->getCiudadContratoRel()->getNombre();
@@ -96,6 +102,7 @@ class FormatoContrato extends \FPDF_FPDF {
         setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
         $sustitucion19 = strftime("%d de %B de %Y", strtotime($sustitucion16));
         $sustitucion20 = $arContrato->getHorarioTrabajo();
+        setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
         $sustitucion21 = strftime("%d de %B de %Y", strtotime($sustitucion16));
         //calculo meses        
         $interval = $feci->diff($fecf);

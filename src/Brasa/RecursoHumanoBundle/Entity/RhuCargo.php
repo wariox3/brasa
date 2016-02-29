@@ -72,6 +72,11 @@ class RhuCargo
      */
     protected $seleccionesCargoRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuDisciplinario", mappedBy="cargoRel")
+     */
+    protected $disciplianriosCargoRel;
+    
     
     /**
      * Constructor
@@ -88,6 +93,7 @@ class RhuCargo
         $this->permisosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->examenesCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->seleccionesCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->disciplianriosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -462,5 +468,39 @@ class RhuCargo
     public function getSeleccionesCargoRel()
     {
         return $this->seleccionesCargoRel;
+    }
+
+    /**
+     * Add disciplianriosCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplianriosCargoRel
+     *
+     * @return RhuCargo
+     */
+    public function addDisciplianriosCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplianriosCargoRel)
+    {
+        $this->disciplianriosCargoRel[] = $disciplianriosCargoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove disciplianriosCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplianriosCargoRel
+     */
+    public function removeDisciplianriosCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplianriosCargoRel)
+    {
+        $this->disciplianriosCargoRel->removeElement($disciplianriosCargoRel);
+    }
+
+    /**
+     * Get disciplianriosCargoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDisciplianriosCargoRel()
+    {
+        return $this->disciplianriosCargoRel;
     }
 }
