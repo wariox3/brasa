@@ -116,8 +116,8 @@ class FormatoRequisitos extends \FPDF_FPDF {
         }
         $pdf->Ln(12);
         $pdf->SetFont('Arial', '', 10);
-        $arContenidoFormato = new \Brasa\RecursoHumanoBundle\Entity\RhuContenidoFormato();
-        $arContenidoFormato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find(12);
+        $arContenidoFormato = new \Brasa\GeneralBundle\Entity\GenContenidoFormato();
+        $arContenidoFormato = self::$em->getRepository('BrasaGeneralBundle:GenContenidoFormato')->find(12);
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         
