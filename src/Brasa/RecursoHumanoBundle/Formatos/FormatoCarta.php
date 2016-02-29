@@ -121,6 +121,7 @@ class FormatoCarta extends \FPDF_FPDF {
         $sustitucion11 = $promedioSalarioLetras." $(";
         $sustitucion11 .= number_format($floPromedioSalario, 2,'.',',');
         $sustitucion11 .= ")";
+        
         //$cadena = $arContenidoFormato->getContenido();
         $patron1 = '/#1/';
         $patron2 = '/#2/';
