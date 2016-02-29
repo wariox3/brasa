@@ -33,6 +33,17 @@ class TurSoportePagoPeriodo
     private $recursos = 0;    
     
     /**
+     * @ORM\Column(name="festivos", type="integer")
+     */    
+    private $festivos = 0;    
+
+    /**   
+     * Cuando el usuario activa descanso festivos le suma 8 horas por cada festivo  
+     * @ORM\Column(name="descanso_festivo_fijo", type="boolean")
+     */    
+    private $descansoFestivoFijo = false;     
+    
+    /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */    
     private $codigoCentroCostoFk;    
@@ -46,6 +57,11 @@ class TurSoportePagoPeriodo
      * @ORM\Column(name="estado_aprobado", type="boolean")
      */    
     private $estadoAprobado = false;     
+    
+    /**     
+     * @ORM\Column(name="estado_cerrado", type="boolean")
+     */    
+    private $estadoCerrado = false;    
 
     /**
      * @ORM\ManyToOne(targetEntity="TurCentroCosto", inversedBy="soportesPagosPeriodosCentroCostoRel")
@@ -316,5 +332,77 @@ class TurSoportePagoPeriodo
     public function getSoportesPagosDetallesSoportePagoPeriodoRel()
     {
         return $this->soportesPagosDetallesSoportePagoPeriodoRel;
+    }
+
+    /**
+     * Set festivos
+     *
+     * @param integer $festivos
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setFestivos($festivos)
+    {
+        $this->festivos = $festivos;
+
+        return $this;
+    }
+
+    /**
+     * Get festivos
+     *
+     * @return integer
+     */
+    public function getFestivos()
+    {
+        return $this->festivos;
+    }
+
+    /**
+     * Set descansoFestivoFijo
+     *
+     * @param boolean $descansoFestivoFijo
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setDescansoFestivoFijo($descansoFestivoFijo)
+    {
+        $this->descansoFestivoFijo = $descansoFestivoFijo;
+
+        return $this;
+    }
+
+    /**
+     * Get descansoFestivoFijo
+     *
+     * @return boolean
+     */
+    public function getDescansoFestivoFijo()
+    {
+        return $this->descansoFestivoFijo;
+    }
+
+    /**
+     * Set estadoCerrado
+     *
+     * @param boolean $estadoCerrado
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setEstadoCerrado($estadoCerrado)
+    {
+        $this->estadoCerrado = $estadoCerrado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCerrado
+     *
+     * @return boolean
+     */
+    public function getEstadoCerrado()
+    {
+        return $this->estadoCerrado;
     }
 }

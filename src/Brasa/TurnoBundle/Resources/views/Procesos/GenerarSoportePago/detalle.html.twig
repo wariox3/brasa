@@ -17,7 +17,7 @@
                 <th>{{ knp_pagination_sortable(arSoportesPagos, 'CÓDIGO', 'p.codigoSoportePagoPk') }}</th>
                 <th>DESDE</th>
                 <th>HASTA</th>
-                <th>RECURSO</th>
+                <th colspan="3">RECURSO</th>
                 <th>DIAS</th>
                 <th>DSC</th>
                 <th>NOV</th>
@@ -40,7 +40,9 @@
                 <td>{{ arSoportesPagos.codigoSoportePagoPk  }}</td>
                 <td>{{ arSoportesPagos.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arSoportesPagos.fechaHasta |date("Y/m/d")  }}</td>
-                <td>{{ arSoportesPagos.codigoRecursoFk  }}-{{ arSoportesPagos.recursoRel.nombreCorto  }}</td>
+                <td>{{ arSoportesPagos.codigoRecursoFk  }}</td>
+                <td>{{ arSoportesPagos.recursoRel.numeroIdentificacion  }}</td>
+                <td>{{ arSoportesPagos.recursoRel.nombreCorto  }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.dias | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.descanso | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.novedad | number_format(0, '.', ',') }}</td>
@@ -54,8 +56,8 @@
                 <td style="text-align: right">{{ arSoportesPagos.horasExtrasFestivasDiurnas | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horasExtrasFestivasNocturnas | number_format(2, '.', ',') }}</td>
                 <td>{{ arSoportesPagos.codigoContratoFk }}</td>
-                <td style="text-align: right">{{ arSoportesPagos.vrSalario | number_format(0, '.', ',') }}</td>
-                <td style="text-align: center"><a href="{{ path('brs_tur_proceso_generar_soporte_pago_editar', {'codigoSoportePago': arSoportesPagos.codigoSoportePagoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                
+                <td style="text-align: right">{{ arSoportesPagos.vrSalario | number_format(0, '.', ',') }}</td>                
+                <td><a href="javascript:abrirVentana3('{{ path('brs_tur_proceso_generar_soporte_pago_editar', {'codigoSoportePago': arSoportesPagos.codigoSoportePagoPk }) }}', 'Editar', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Ver"></a></td>                                
                 <td><a href="javascript:abrirVentana3('{{ path('brs_tur_proceso_generar_soporte_pago_detalle_ver', {'codigoSoportePago': arSoportesPagos.codigoSoportePagoPk }) }}', 'VerDetalleSoportePago', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_090_table.png') }}" width=20 height=20 title="Ver"></a></td>                
             </tr>
 

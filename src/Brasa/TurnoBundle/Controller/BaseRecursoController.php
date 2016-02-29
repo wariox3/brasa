@@ -7,10 +7,6 @@ use Brasa\TurnoBundle\Form\Type\TurRecursoType;
 class BaseRecursoController extends Controller
 {
     var $strDqlLista = "";
-    var $strCodigo = "";
-    var $strNombre = "";
-    var $codigoCentroCosto = "";
-    var $strNumeroIdentificacion = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -181,26 +177,29 @@ class BaseRecursoController extends Controller
     
     private function lista() {        
         $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
         $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurRecurso')->listaDQL(
-                $this->strNombre,                
-                $this->strCodigo,
-                $this->codigoCentroCosto,
-                $this->strNumeroIdentificacion                
+                $session->get('filtroNombreRecurso'),                
+                $session->get('filtroCodigoRecurso'),
+                $session->get('filtroCodigoCentroCostoRecurso'),
+                $session->get('filtroIdentificacionRecurso')                
                 ); 
     }
 
-    private function filtrar ($form) {        
-        $this->strCodigo = $form->get('TxtCodigo')->getData();
-        $this->strNombre = $form->get('TxtNombre')->getData();
-        $this->strNumeroIdentificacion = $form->get('TxtNumeroIdentificacion')->getData();
+    private function filtrar ($form) {    
+        $session = $this->getRequest()->getSession();
+        $session->set('filtroCodigoRecurso', $form->get('TxtCodigo')->getData());
+        $session->set('filtroNombreRecurso', $form->get('TxtNombre')->getData());
+        $session->set('filtroIdentificacionRecurso', $form->get('TxtNumeroIdentificacion')->getData());                
         $arCentroCosto = $form->get('centroCostoRel')->getData();
         if($arCentroCosto) {
-            $this->codigoCentroCosto = $arCentroCosto->getCodigoCentroCostoPk();
+            $session->set('filtroCodigoCentroCostoRecurso', $arCentroCosto->getCodigoCentroCostoPk());
         }
         $this->lista();
     }
     
     private function formularioFiltro() {
+        $session = $this->getRequest()->getSession();
         $arrayPropiedadesCentroCosto = array(
                 'class' => 'BrasaTurnoBundle:TurCentroCosto',
                 'query_builder' => function (EntityRepository $er) {
@@ -212,14 +211,14 @@ class BaseRecursoController extends Controller
                 'empty_value' => "TODOS",
                 'data' => ""
             );
-        if($this->codigoCentroCosto != "") {
-            $arrayPropiedadesCentroCosto['data'] = $em->getReference("BrasaTurnoBundle:TurCentroCosto", $this->codigoCentroCosto);
+        if($session->get('filtroCodigoCentroCostoRecurso')) {
+            $arrayPropiedadesCentroCosto['data'] = $em->getReference("BrasaTurnoBundle:TurCentroCosto", $session->get('filtroCodigoCentroCostoRecurso'));
         }        
         $form = $this->createFormBuilder()            
             ->add('centroCostoRel', 'entity', $arrayPropiedadesCentroCosto)
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->strNombre))
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->strCodigo))                  
-            ->add('TxtNumeroIdentificacion', 'text', array('label'  => 'NumeroIdentificacion','data' => $this->strNumeroIdentificacion))                            
+            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombreRecurso')))
+            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCodigoRecurso')))                  
+            ->add('TxtNumeroIdentificacion', 'text', array('label'  => 'NumeroIdentificacion','data' => $session->get('filtroIdentificacionRecurso')))                            
             ->add('BtnActivarInactivar', 'submit', array('label'  => 'Activar / Inactivar',))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))

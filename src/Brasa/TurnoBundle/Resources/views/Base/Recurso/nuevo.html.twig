@@ -105,6 +105,13 @@
                     <p style="font-size: 0.8em;">* Independiente del turno programado, se liquida con este turno la nomina</p>
                 </div>                
             </div> 
+            <div class="form-group form-group-sm">
+                <label for="form_codigoTurnoFijoDescansoFk" class="col-sm-3 control-label">Turno fijo descanso:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.codigoTurnoFijoDescansoFk, { 'attr': {'class': 'form-control', 'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}                        
+                    <p style="font-size: 0.8em;">* Cuando el turno es de descanso es reemplazado por este turno</p>
+                </div>                
+            </div>                     
         </div>
     </div>                
     <div class="modal-footer">

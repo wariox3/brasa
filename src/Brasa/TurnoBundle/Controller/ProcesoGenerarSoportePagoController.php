@@ -64,6 +64,15 @@ class ProcesoGenerarSoportePagoController extends Controller
                 $em->getConnection()->executeQuery($strSql);                                                 
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
             }
+            if($request->request->get('OpCerrar')) {
+                $codigoSoportePagoPeriodo = $request->request->get('OpCerrar');
+                $arSoportePagoPeriodo = NEW \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
+                $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
+                $arSoportePagoPeriodo->setEstadoCerrado(1);                
+                $em->persist($arSoportePagoPeriodo);
+                $em->flush();                                                   
+                return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
+            }            
             if ($form->get('BtnEliminar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->eliminar($arrSeleccionados);
@@ -158,7 +167,7 @@ class ProcesoGenerarSoportePagoController extends Controller
             $arSoportePago = $form->getData();            
             $em->persist($arSoportePago);
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago_detalle', array('codigoSoportePagoPeriodo' => $arSoportePago->getCodigoSoportePagoPeriodoFk()) ));                                                                              
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
         return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:editar.html.twig', array(
             'arSoportePago' => $arSoportePago,
@@ -199,13 +208,19 @@ class ProcesoGenerarSoportePagoController extends Controller
     private function insertarSoportePago ($arSoportePagoPeriodo, $arProgramacionDetalle, $dateFechaDesde, $dateFechaHasta, $codigoTurno, $dateFecha, $dateFecha2, $boolFestivo, $boolFestivo2) {
         $em = $this->getDoctrine()->getManager();                
         $strTurnoFijoNomina = $arProgramacionDetalle->getRecursoRel()->getCodigoTurnoFijoNominaFk();
+        $strTurnoFijoDescanso = $arProgramacionDetalle->getRecursoRel()->getCodigoTurnoFijoDescansoFk();
         $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
         $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($codigoTurno);
         if($arTurno->getDescanso() == 0 && $arTurno->getNovedad() == 0) {                
             if($strTurnoFijoNomina) {
                 $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($strTurnoFijoNomina);
             }                
-        }                
+        }     
+        if($arTurno->getDescanso() == 1) {
+            if($strTurnoFijoDescanso) {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($strTurnoFijoDescanso);
+            }
+        }
         $intDias = 0;                
         $intMinutoInicio = (($arTurno->getHoraDesde()->format('i') * 100)/60)/100;
         $intHoraInicio = $arTurno->getHoraDesde()->format('G');        
@@ -224,7 +239,7 @@ class ProcesoGenerarSoportePagoController extends Controller
             $boolFestivo2 = 1;
         }        
         $arrHoras1 = null;
-        if($intHoraInicio < $intHoraFinal){  
+        if(($intHoraInicio + $intMinutoInicio) <= $intHoraFinal){  
             $arrHoras = $this->turnoHoras($intHoraInicio, $intMinutoInicio, $intHoraFinal, $boolFestivo, 0, $arTurno->getNovedad());
         } else {
             $arrHoras = $this->turnoHoras($intHoraInicio, $intMinutoInicio, 24, $boolFestivo, 0, $arTurno->getNovedad());
@@ -435,7 +450,7 @@ class ProcesoGenerarSoportePagoController extends Controller
         exit;
     } 
     
-    private function turnoHoras($intHoraInicio, $intMinutoInicio, $intHoraFinal, $boolFestivo, $intHoras, $boolNovedad = 0) {
+    private function turnoHoras($intHoraInicio, $intMinutoInicio, $intHoraFinal, $boolFestivo, $intHoras, $boolNovedad = 0) {        
         if($boolNovedad == 0) {
             $intHorasNocturnas = $this->calcularTiempo($intHoraInicio, $intHoraFinal, 0, 6);        
             $intHorasExtrasNocturnas = 0;

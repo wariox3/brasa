@@ -69,8 +69,8 @@
                 <td><b>{{ arProgramacionPago.pagoTipoRel.nombre  }}</b></td>
                 <td>{{ arProgramacionPago.centroCostoRel.nombre  }}</td>
                 <td>{{ arProgramacionPago.centroCostoRel.periodoPagoRel.nombre  }}</td>
-                <td>{{ arProgramacionPago.fechaDesde |date("Y/m/d")  }}</td>
-                <td {% if (arProgramacionPago.estadoGenerado == 0 or arProgramacionPago.estadoPagado == 0) and date(arProgramacionPago.fechaHasta) < date() %}class="danger"{% endif %}>{{ arProgramacionPago.fechaHasta |date("Y/m/d")  }}</td>
+                <td><b>{{ arProgramacionPago.fechaDesde |date("Y/m/d")  }}</b></td>
+                <td {% if (arProgramacionPago.estadoGenerado == 0 or arProgramacionPago.estadoPagado == 0) and date(arProgramacionPago.fechaHasta) < date() %}class="danger"{% endif %}><b>{{ arProgramacionPago.fechaHasta |date("Y/m/d")  }}</b></td>
                 <td>{{ arProgramacionPago.dias  }}</td>
                 <td style="text-align: right">{{ arProgramacionPago.vrNeto | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">

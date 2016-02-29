@@ -17,7 +17,9 @@ class TurSoportePagoPeriodoType extends AbstractType
                 'property' => 'nombre',
                 'required' => true))                 
             ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd'))
-            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd'))            
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd'))  
+            ->add('festivos', 'number', array('required' => false))
+            ->add('descansoFestivoFijo', 'checkbox', array('required'  => false))                            
             ->add('guardar', 'submit');
     }
 

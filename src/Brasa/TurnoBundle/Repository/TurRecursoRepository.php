@@ -13,7 +13,7 @@ class TurRecursoRepository extends EntityRepository {
             $dql .= " AND r.nombreCorto LIKE '%" . $strNombre . "%'";
         }
         if($strCodigo != "" ) {
-            $dql .= " AND r.codigoRecursoPk LIKE '%" . $strCodigo . "%'";
+            $dql .= " AND r.codigoRecursoPk = " . $strCodigo;
         }
         if($strNumeroIdentificacion != "" ) {
             $dql .= " AND r.numeroIdentificacion LIKE '%" . $strNumeroIdentificacion . "%'";

@@ -20,6 +20,10 @@
                 <th>DESDE</th>
                 <th>HASTA</th>
                 <th>RECURSOS</th>
+                <th>FES</th>
+                <th>DSC.FIJO</th>
+                <th></th>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -31,13 +35,24 @@
                 <td>{{ arSoportePagoPeriodos.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arSoportePagoPeriodos.fechaHasta |date("Y/m/d")  }}</td>
                 <td style="text-align: right">{{ arSoportePagoPeriodos.recursos | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportePagoPeriodos.festivos | number_format(0, '.', ',') }}</td>                
+                <td>{% if arSoportePagoPeriodos.descansoFestivoFijo == 1 %} SI {% else %} NO {% endif %}</td>
                 {% if arSoportePagoPeriodos.estadoGenerado == 0 %}
                     <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }}">Generar</button></td>
+                    <td></td>                    
+                    <td style="text-align: center"><a href="{{ path('brs_tur_proceso_generar_soporte_pago_nuevo', {'codigoSoportePagoPeriodo': arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
                     <td></td>
                 {% else %}
-                    <td><button class="btn btn-default btn-xs" type="submit" name="OpDeshacer" value="{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }}">Deshacer</button></td>
-                    <td style="text-align: center"><a href="{{ path('brs_tur_proceso_generar_soporte_pago_detalle', { 'codigoSoportePagoPeriodo': arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                    
-                {% endif %}
+                    {% if arSoportePagoPeriodos.estadoCerrado == 0 %}
+                        <td><button class="btn btn-default btn-xs" type="submit" name="OpDeshacer" value="{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }}">Deshacer</button></td>
+                        <td><button class="btn btn-default btn-xs" type="submit" name="OpCerrar" value="{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }}">Cerrar</button></td>
+                    {% else %}                        
+                        <td></td>
+                        <td></td>                        
+                    {% endif %}
+                    <td></td>                                                    
+                    <td style="text-align: center"><a href="{{ path('brs_tur_proceso_generar_soporte_pago_detalle', { 'codigoSoportePagoPeriodo': arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                            
+                {% endif %}                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }}" /></td>                
             </tr>
 
