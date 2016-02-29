@@ -58,6 +58,7 @@ class FormatoPago extends \FPDF_FPDF {
         $this->Cell(35, 8, utf8_decode("VERSIÓN: 01"), 1, 0, 'L', 1);
         //FILA 1
         $this->SetXY(10, 40);
+        $this->SetFillColor(200, 200, 200);
         $this->SetFont('Arial','B',6.5);
         $this->Cell(22, 6, "PAGO:" , 1, 0, 'L', 1);
         $this->SetFillColor(255, 255, 255);

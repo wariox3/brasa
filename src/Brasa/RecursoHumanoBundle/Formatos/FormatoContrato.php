@@ -91,12 +91,16 @@ class FormatoContrato extends \FPDF_FPDF {
         if ($arContrato->getFechaProrrogaInicio() == null){
             $sustitucion16 = $arContrato->getFechaDesde()->format('Y/m/d');
             $sustitucion23 = $arContrato->getFechaHasta()->format('Y/m/d');
+            $feci = $arContrato->getFechaDesde();
+            $fecf = $arContrato->getFechaHasta();
         } else {
             $sustitucion16 = $arContrato->getFechaProrrogaInicio()->format('Y/m/d');
             $sustitucion23 = $arContrato->getFechaProrrogaFinal()->format('Y/m/d');
+            $feci = $arContrato->getFechaProrrogaInicio()->format('Y/m/d');
+            $fecf = $arContrato->getFechaProrrogaFinal()->format('Y/m/d');
         }
-        $feci = $arContrato->getFechaDesde();
-        $fecf = $arContrato->getFechaHasta();
+        
+        
         $sustitucion17 = $arContrato->getCiudadContratoRel()->getNombre();
         $sustitucion18 = $arContrato->getEmpleadoRel()->getCiudadExpedicionRel()->getNombre();
         setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
