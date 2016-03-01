@@ -64,10 +64,10 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                         $this->insertarAdicionalPago($arProgramacionPago, 45, $arSoportePago->getHorasExtrasOrdinariasNocturnas(), $arEmpleado);
                     }                    
                     if($arSoportePago->getHorasExtrasFestivasDiurnas() > 0) {
-                        $this->insertarAdicionalPago($arProgramacionPago, 43, $arSoportePago->getHorasExtrasFestivasDiurnas(), $arEmpleado);
+                        $this->insertarAdicionalPago($arProgramacionPago, 42, $arSoportePago->getHorasExtrasFestivasDiurnas(), $arEmpleado);
                     }
                     if($arSoportePago->getHorasExtrasFestivasNocturnas() > 0) {
-                        $this->insertarAdicionalPago($arProgramacionPago, 45, $arSoportePago->getHorasExtrasFestivasNocturnas(), $arEmpleado);
+                        $this->insertarAdicionalPago($arProgramacionPago, 43, $arSoportePago->getHorasExtrasFestivasNocturnas(), $arEmpleado);
                     }                    
                 }
                 $arProgramacionPago->setEmpleadosGenerados(1);
