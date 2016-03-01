@@ -322,7 +322,7 @@ class PagoBancoController extends Controller
         $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
         // Encabezado
         $strNitEmpresa = $this->RellenarNr($arConfiguracionGeneral->getNitEmpresa(),"0",10);
-        $strNombreEmpresa = substr($arConfiguracionGeneral->getNombreEmpresa(), 0, 16);
+        $strNombreEmpresa = $this->RellenarNr(utf8_decode($arConfiguracionGeneral->getNombreEmpresa()), 0, 16);
         $strTipoPagoSecuencia = "225PAGO NOMI ";
         $strSecuencia = $arPagoBanco->getSecuencia();
         $strFechaCreacion = $arPagoBanco->getFechaTrasmision()->format('ymd');                                                                                            
@@ -330,7 +330,7 @@ class PagoBancoController extends Controller
         $strNumeroRegistros = $this->RellenarNr($arPagoBanco->getNumeroRegistros(), "0", 6);        
         $strValorTotal = $this->RellenarNr(round($arPagoBanco->getVrTotalPago()), "0", 24);
         //Fin encabezado
-        fputs($ar, "1" . $strNitEmpresa . $strNombreEmpresa . $strTipoPagoSecuencia . $strFechaCreacion . $strSecuencia . $strFechaAplicacion . $strNumeroRegistros . $strValorTotal . $arPagoBanco->getCuentaRel()->getCuenta() . $arPagoBanco->getCuentaRel()->getTipo() . "\n");
+        fputs($ar, "1" . $strNitEmpresa . $strNombreEmpresa . $strTipoPagoSecuencia . $strFechaCreacion . $strSecuencia . $strFechaAplicacion . $strNumeroRegistros . $strValorTotal . $arPagoBanco->getCuentaRel()->getCuenta() . $arPagoBanco->getCuentaRel()->getTipo());
         //Inicio cuerpo
         $arPagosBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
         $arPagosBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->findBy(array ('codigoPagoBancoFk' => $arPagoBanco->getCodigoPagoBancoPk()));                        
