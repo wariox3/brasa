@@ -75,6 +75,7 @@ class DisciplinarioController extends Controller
                     $arDisciplinario->setEmpleadoRel($arEmpleado);
                     if($arEmpleado->getCodigoContratoActivoFk() != '') {
                         $arDisciplinario->setCentroCostoRel($arEmpleado->getCentroCostoRel());
+                        $arDisciplinario->setCargoRel($arEmpleado->getCargoRel());
                         $em->persist($arDisciplinario);
                         $em->flush();
                         if($form->get('guardarnuevo')->isClicked()) {
