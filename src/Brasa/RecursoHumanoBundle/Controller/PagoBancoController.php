@@ -317,8 +317,8 @@ class PagoBancoController extends Controller
         $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $strNombreArchivo = "pago" . date('YmdHis') . ".txt";
-        //$strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
-        $strArchivo = "c:/xampp/" . $strNombreArchivo;                                    
+        $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
+        //$strArchivo = "c:/xampp/" . $strNombreArchivo;                                    
         $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
         // Encabezado
         $strNitEmpresa = $this->RellenarNr($arConfiguracionGeneral->getNitEmpresa(),"0",10);
@@ -330,22 +330,21 @@ class PagoBancoController extends Controller
         $strNumeroRegistros = $this->RellenarNr($arPagoBanco->getNumeroRegistros(), "0", 6);        
         $strValorTotal = $this->RellenarNr(round($arPagoBanco->getVrTotalPago()), "0", 24);
         //Fin encabezado
-        fputs($ar, "1" . $strNitEmpresa . $strNombreEmpresa . $strTipoPagoSecuencia . $strFechaCreacion . $strSecuencia . $strFechaAplicacion . $strNumeroRegistros . $strValorTotal . $arPagoBanco->getCuentaRel()->getCuenta() . $arPagoBanco->getCuentaRel()->getTipo() . "\r\n");
+        fputs($ar, "1" . $strNitEmpresa . $strNombreEmpresa . $strTipoPagoSecuencia . $strFechaCreacion . $strSecuencia . $strFechaAplicacion . $strNumeroRegistros . $strValorTotal . $arPagoBanco->getCuentaRel()->getCuenta() . $arPagoBanco->getCuentaRel()->getTipo() . "\n");
         //Inicio cuerpo
         $arPagosBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
         $arPagosBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->findBy(array ('codigoPagoBancoFk' => $arPagoBanco->getCodigoPagoBancoPk()));                        
         foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
-            fputs($ar, "6" . $this->RellenarNr($arPagoBancoDetalle->getNumeroIdentificacion(), "0", 15));
-            //$duoNombreCorto = substr($arPagoBancoDetalle->getNombreCorto(), 0, 18);
-            fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getNombreCorto(),0, 18));
-            fputs($ar, $this->RellenarNr($duoNombreCorto,"0", 18));
+            fputs($ar, "6"); //(1)Tipo registro            
+            fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getNumeroIdentificacion(), "0", 15)); //(15) Nit del beneficiario           
+            fputs($ar, $this->RellenarNr(utf8_decode($arPagoBancoDetalle->getNombreCorto()),0, 18));
             fputs($ar, "005600078");
             fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getCuenta(), "0", 17));
             fputs($ar, "S37");
             $duoValorNetoPagar = round($arPagoBancoDetalle->getVrPago());
             fputs($ar, ($this->RellenarNr($duoValorNetoPagar, "0", 10)));
             fputs($ar, " ");
-            fputs($ar, "\r\n");
+            fputs($ar, "\n");
         }
         $em->flush();
         //Fin cuerpo
