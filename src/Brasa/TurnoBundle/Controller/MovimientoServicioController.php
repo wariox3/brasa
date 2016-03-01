@@ -534,12 +534,13 @@ class MovimientoServicioController extends Controller
                
         $objPHPExcel->setActiveSheetIndex(0)                    
                     ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'CLIENTE')
-                    ->setCellValue('C1', 'SECTOR')                    
-                    ->setCellValue('D1', 'HORAS')
-                    ->setCellValue('E1', 'H.DIURNAS')
-                    ->setCellValue('F1', 'H.NOCTURNAS')
-                    ->setCellValue('G1', 'VALOR');
+                    ->setCellValue('B1', 'NIT')
+                    ->setCellValue('C1', 'CLIENTE')
+                    ->setCellValue('D1', 'SECTOR')                    
+                    ->setCellValue('E1', 'HORAS')
+                    ->setCellValue('F1', 'H.DIURNAS')
+                    ->setCellValue('G1', 'H.NOCTURNAS')
+                    ->setCellValue('H1', 'VALOR');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -548,13 +549,14 @@ class MovimientoServicioController extends Controller
 
         foreach ($arServicios as $arServicio) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arServicio->getCodigoServicioPk())                                        
-                    ->setCellValue('B' . $i, $arServicio->getClienteRel()->getNombreCorto())
-                    ->setCellValue('C' . $i, $arServicio->getSectorRel()->getNombre())                    
-                    ->setCellValue('D' . $i, $arServicio->getHoras())
-                    ->setCellValue('E' . $i, $arServicio->getHorasDiurnas())
-                    ->setCellValue('F' . $i, $arServicio->getHorasNocturnas())
-                    ->setCellValue('G' . $i, $arServicio->getVrTotal());
+                    ->setCellValue('A' . $i, $arServicio->getCodigoServicioPk())  
+                    ->setCellValue('B' . $i, $arServicio->getClienteRel()->getNit())
+                    ->setCellValue('C' . $i, $arServicio->getClienteRel()->getNombreCorto())
+                    ->setCellValue('D' . $i, $arServicio->getSectorRel()->getNombre())                    
+                    ->setCellValue('E' . $i, $arServicio->getHoras())
+                    ->setCellValue('F' . $i, $arServicio->getHorasDiurnas())
+                    ->setCellValue('G' . $i, $arServicio->getHorasNocturnas())
+                    ->setCellValue('H' . $i, $arServicio->getVrTotal());
 
             $i++;
         }
