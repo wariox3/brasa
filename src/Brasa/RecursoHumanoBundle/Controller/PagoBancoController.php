@@ -317,8 +317,8 @@ class PagoBancoController extends Controller
         $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $strNombreArchivo = "pago" . date('YmdHis') . ".txt";
-        $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
-        //$strArchivo = "c:/xampp/" . $strNombreArchivo;                                    
+        //$strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
+        $strArchivo = "c:/xampp/" . $strNombreArchivo;                                    
         $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
         // Encabezado
         $strNitEmpresa = $this->RellenarNr($arConfiguracionGeneral->getNitEmpresa(),"0",10);
@@ -330,6 +330,7 @@ class PagoBancoController extends Controller
         $strNumeroRegistros = $this->RellenarNr($arPagoBanco->getNumeroRegistros(), "0", 6);        
         $strValorTotal = $this->RellenarNr(round($arPagoBanco->getVrTotalPago()), "0", 24);
         //Fin encabezado
+        //(1) Tipo de registro, (10) Nit empresa, (225PAGO NOMI) Tipo pago secuencia secuencia, (yymmdd) fecha creacion, (yymmdd) fecha aplicacion, (), ()
         fputs($ar, "1" . $strNitEmpresa . $strNombreEmpresa . $strTipoPagoSecuencia . $strFechaCreacion . $strSecuencia . $strFechaAplicacion . $strNumeroRegistros . $strValorTotal . $arPagoBanco->getCuentaRel()->getCuenta() . $arPagoBanco->getCuentaRel()->getTipo());
         //Inicio cuerpo
         $arPagosBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
