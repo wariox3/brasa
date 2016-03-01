@@ -60,7 +60,11 @@ class MovimientoProgramacionController extends Controller
         $objMensaje = $this->get('mensajes_brasa');
         $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
         if($codigoProgramacion != 0) {
+            if($em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->numeroRegistros($codigoProgramacion) > 0) {
+                $objMensaje->Mensaje("error", "La programacion tiene detalles y no se puede editar", $this);
+            }
             $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion);
+            
         }else{
             $arProgramacion->setFecha(new \DateTime('now'));
         }
@@ -75,9 +79,12 @@ class MovimientoProgramacionController extends Controller
                 if(count($arCliente) > 0) {
                     $arProgramacion->setClienteRel($arCliente);
                     $arUsuario = $this->getUser();
-                    $arProgramacion->setUsuario($arUsuario->getUserName());                    
-                    $em->persist($arProgramacion);
-                    $em->flush();
+                    $arProgramacion->setUsuario($arUsuario->getUserName()); 
+                    if($em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->numeroRegistros($codigoProgramacion) <= 0) {
+                        $em->persist($arProgramacion);
+                        $em->flush();
+                    }
+
 
                     if($form->get('guardarnuevo')->isClicked()) {
                         return $this->redirect($this->generateUrl('brs_tur_programacion_nuevo', array('codigoProgramacion' => 0 )));
