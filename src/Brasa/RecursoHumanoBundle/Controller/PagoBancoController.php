@@ -317,31 +317,33 @@ class PagoBancoController extends Controller
         $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $strNombreArchivo = "pago" . date('YmdHis') . ".txt";
-        $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
+        //$strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
+        $strArchivo = "c:/xampp/" . $strNombreArchivo;                                    
         $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
         // Encabezado
-        $strNitEmpresa = $this->RellenarNr($arConfiguracionGeneral->getNitEmpresa(),"0",10,"I");
+        $strNitEmpresa = $this->RellenarNr($arConfiguracionGeneral->getNitEmpresa(),"0",10);
         $strNombreEmpresa = substr($arConfiguracionGeneral->getNombreEmpresa(), 0, 16);
         $strTipoPagoSecuencia = "225PAGO NOMI ";
         $strSecuencia = $arPagoBanco->getSecuencia();
         $strFechaCreacion = $arPagoBanco->getFechaTrasmision()->format('ymd');                                                                                            
         $strFechaAplicacion = $arPagoBanco->getFechaAplicacion()->format('ymd');
-        $strNumeroRegistros = $this->RellenarNr($arPagoBanco->getNumeroRegistros(), "0", 6, "I");        
-        $strValorTotal = $this->RellenarNr(round($arPagoBanco->getVrTotalPago()), "0", 24, "I");
+        $strNumeroRegistros = $this->RellenarNr($arPagoBanco->getNumeroRegistros(), "0", 6);        
+        $strValorTotal = $this->RellenarNr(round($arPagoBanco->getVrTotalPago()), "0", 24);
         //Fin encabezado
         fputs($ar, "1" . $strNitEmpresa . $strNombreEmpresa . $strTipoPagoSecuencia . $strFechaCreacion . $strSecuencia . $strFechaAplicacion . $strNumeroRegistros . $strValorTotal . $arPagoBanco->getCuentaRel()->getCuenta() . $arPagoBanco->getCuentaRel()->getTipo() . "\r\n");
         //Inicio cuerpo
         $arPagosBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
         $arPagosBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->findBy(array ('codigoPagoBancoFk' => $arPagoBanco->getCodigoPagoBancoPk()));                        
         foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
-            fputs($ar, "6" . $this->RellenarNr($arPagoBancoDetalle->getNumeroIdentificacion(), "0", 15, "I"));
-            $duoNombreCorto = substr($arPagoBancoDetalle->getNombreCorto(), 0, 18);
-            fputs($ar, $this->RellenarNr($duoNombreCorto,"0", 18, "I"));
+            fputs($ar, "6" . $this->RellenarNr($arPagoBancoDetalle->getNumeroIdentificacion(), "0", 15));
+            //$duoNombreCorto = substr($arPagoBancoDetalle->getNombreCorto(), 0, 18);
+            fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getNombreCorto(),0, 18));
+            fputs($ar, $this->RellenarNr($duoNombreCorto,"0", 18));
             fputs($ar, "005600078");
-            fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getCuenta(), "0", 17, "I"));
+            fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getCuenta(), "0", 17));
             fputs($ar, "S37");
             $duoValorNetoPagar = round($arPagoBancoDetalle->getVrPago());
-            fputs($ar, ($this->RellenarNr($duoValorNetoPagar, "0", 10, "I")));
+            fputs($ar, ($this->RellenarNr($duoValorNetoPagar, "0", 10)));
             fputs($ar, " ");
             fputs($ar, "\r\n");
         }
@@ -360,16 +362,13 @@ class PagoBancoController extends Controller
     }
     
     //Rellenar numeros
-    private function RellenarNr($Nro, $Str, $NroCr, $strPosicion) {
-                     $Longitud = strlen($Nro);
-                     $Nc = $NroCr - $Longitud;
-                     for ($i = 0; $i < $Nc; $i++) {
-                         if($strPosicion == "I") {
-                             $Nro = $Str . $Nro;
-                         } else {
-                             $Nro = $Nro . $Str;
-                         }
-                     }
-                     return (string) $Nro;
-                 }                
+    public static function RellenarNr($Nro, $Str, $NroCr) {
+        $Longitud = strlen($Nro);
+
+        $Nc = $NroCr - $Longitud;
+        for ($i = 0; $i < $Nc; $i++)
+            $Nro = $Str . $Nro;
+
+        return (string) $Nro;
+    }                
 }
