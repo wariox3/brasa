@@ -68,11 +68,9 @@ class FormatoContrato extends \FPDF_FPDF {
         $pdf->SetXY(177, 56);
         $pdf->SetFont('Arial','B',9);
         $pdf->Cell(25, 6, utf8_decode("N° " . $arContrato->getCodigoContratoPk()) , 0, 0, 'C');
-        
         $pdf->SetXY(10, 72);
         $pdf->SetFont('Arial', '', 10);  
         //se reemplaza el contenido de la tabla tipo de proceso disciplinario
-        setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
         $sustitucion1 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion();
         $sustitucion2 = $arContrato->getEmpleadoRel()->getNombreCorto();
         $sustitucion3 = $arConfiguracion->getNitEmpresa();
@@ -103,16 +101,14 @@ class FormatoContrato extends \FPDF_FPDF {
         //$fecf = $arContrato->getFechaHasta();
         $sustitucion17 = $arContrato->getCiudadContratoRel()->getNombre();
         $sustitucion18 = $arContrato->getEmpleadoRel()->getCiudadExpedicionRel()->getNombre();
-        setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
-        $sustitucion19 = strftime("%d de %B de %Y", strtotime($sustitucion16));
+        $sustitucion19 = strftime("%d de ". $this->MesesEspañol($feci->format('m')) ." de %Y", strtotime($sustitucion16));
         $sustitucion20 = $arContrato->getHorarioTrabajo();
-        setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
-        $sustitucion21 = strftime("%d de %B de %Y", strtotime($sustitucion16));
+        $sustitucion21 = strftime("%d de ". $this->MesesEspañol($feci->format('m')) ." de %Y", strtotime($sustitucion16));
         //calculo meses        
         $interval = $feci->diff($fecf);
         $interval = round($interval->format('%a%') / 30);
         $sustitucion22 = $interval; 
-        $sustitucion24 = strftime("%d de %B de %Y", strtotime($sustitucion23));
+        $sustitucion24 = strftime("%d de ". $this->MesesEspañol($feci->format('m')) ." de %Y", strtotime($sustitucion23));
         $sustitucion25 = " - ".$arConfiguracion->getDigitoVerificacionEmpresa();
         $salarioLetras = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->numtoletras($arContrato->getVrSalario());
         $sustitucion26 = $salarioLetras." $(";
@@ -183,7 +179,49 @@ class FormatoContrato extends \FPDF_FPDF {
     public function Footer() {
         //$this->Cell(0,10,'Página '.$this->PageNo(),0,0,'C'); 
         $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
-    }    
+    } 
+    
+    public static function MesesEspañol($mes) {
+        
+        if ($mes == 01){
+            $mesEspañol = "Enero";
+        }
+        if ($mes == 02){
+            $mesEspañol = "Febrero";
+        }
+        if ($mes == 03){
+            $mesEspañol = "Marzo";
+        }
+        if ($mes == 04){
+            $mesEspañol = "Abril";
+        }
+        if ($mes == 05){
+            $mesEspañol = "Mayo";
+        }
+        if ($mes == 06){
+            $mesEspañol = "Junio";
+        }
+        if ($mes == 07){
+            $mesEspañol = "Julio";
+        }
+        if ($mes == 08){
+            $mesEspañol = "Agosto";
+        }
+        if ($mes == 09){
+            $mesEspañol = "Septiembre";
+        }
+        if ($mes == 10){
+            $mesEspañol = "Octubre";
+        }
+        if ($mes == 11){
+            $mesEspañol = "Noviembre";
+        }
+        if ($mes == 12){
+            $mesEspañol = "Diciembre";
+        }
+
+        return $mesEspañol;
+    }
 }
 
 ?>
