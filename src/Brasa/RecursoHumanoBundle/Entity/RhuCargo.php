@@ -75,7 +75,8 @@ class RhuCargo
     /**
      * @ORM\OneToMany(targetEntity="RhuDisciplinario", mappedBy="cargoRel")
      */
-    protected $disciplianriosCargoRel;
+    protected $disciplinariosCargoRel;
+    
     
     
     /**
@@ -93,7 +94,7 @@ class RhuCargo
         $this->permisosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->examenesCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->seleccionesCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->disciplianriosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->disciplinariosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -471,36 +472,36 @@ class RhuCargo
     }
 
     /**
-     * Add disciplianriosCargoRel
+     * Add disciplinariosCargoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplianriosCargoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplinariosCargoRel
      *
      * @return RhuCargo
      */
-    public function addDisciplianriosCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplianriosCargoRel)
+    public function addDisciplinariosCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplinariosCargoRel)
     {
-        $this->disciplianriosCargoRel[] = $disciplianriosCargoRel;
+        $this->disciplinariosCargoRel[] = $disciplinariosCargoRel;
 
         return $this;
     }
 
     /**
-     * Remove disciplianriosCargoRel
+     * Remove disciplinariosCargoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplianriosCargoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplinariosCargoRel
      */
-    public function removeDisciplianriosCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplianriosCargoRel)
+    public function removeDisciplinariosCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplinariosCargoRel)
     {
-        $this->disciplianriosCargoRel->removeElement($disciplianriosCargoRel);
+        $this->disciplinariosCargoRel->removeElement($disciplinariosCargoRel);
     }
 
     /**
-     * Get disciplianriosCargoRel
+     * Get disciplinariosCargoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getDisciplianriosCargoRel()
+    public function getDisciplinariosCargoRel()
     {
-        return $this->disciplianriosCargoRel;
+        return $this->disciplinariosCargoRel;
     }
 }

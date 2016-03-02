@@ -20,12 +20,7 @@ class TurTurnoDetalle
     /**
      * @ORM\Column(name="codigo_turno_fk", type="string", length=5)
      */    
-    private $codigoTurnoFk;     
-    
-    /**
-     * @ORM\Column(name="codigo_pago_concpeto_fk", type="integer", nullable=true)
-     */    
-    private $codigoPagoConceptoFk;    
+    private $codigoTurnoFk;        
     
     /**
      * @ORM\Column(name="cantidad", type="integer")
@@ -38,11 +33,7 @@ class TurTurnoDetalle
      */
     protected $turnoRel;       
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto", inversedBy="turTurnosDetallesPagoConceptoRel")
-     * @ORM\JoinColumn(name="codigo_pago_concepto_fk", referencedColumnName="codigo_pago_concepto_pk")
-     */
-    protected $pagoConceptoRel;      
+    
 
     /**
      * Get codigoTurnoDetallePk
@@ -79,78 +70,6 @@ class TurTurnoDetalle
     }
 
     /**
-     * Set turnoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurTurno $turnoRel
-     *
-     * @return TurTurnoDetalle
-     */
-    public function setTurnoRel(\Brasa\TurnoBundle\Entity\TurTurno $turnoRel = null)
-    {
-        $this->turnoRel = $turnoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get turnoRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurTurno
-     */
-    public function getTurnoRel()
-    {
-        return $this->turnoRel;
-    }
-
-    /**
-     * Set codigoPagoConceptoFk
-     *
-     * @param integer $codigoPagoConceptoFk
-     *
-     * @return TurTurnoDetalle
-     */
-    public function setCodigoPagoConceptoFk($codigoPagoConceptoFk)
-    {
-        $this->codigoPagoConceptoFk = $codigoPagoConceptoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoPagoConceptoFk
-     *
-     * @return integer
-     */
-    public function getCodigoPagoConceptoFk()
-    {
-        return $this->codigoPagoConceptoFk;
-    }
-
-    /**
-     * Set pagoConceptoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel
-     *
-     * @return TurTurnoDetalle
-     */
-    public function setPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel = null)
-    {
-        $this->pagoConceptoRel = $pagoConceptoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get pagoConceptoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto
-     */
-    public function getPagoConceptoRel()
-    {
-        return $this->pagoConceptoRel;
-    }
-
-    /**
      * Set cantidad
      *
      * @param integer $cantidad
@@ -172,5 +91,29 @@ class TurTurnoDetalle
     public function getCantidad()
     {
         return $this->cantidad;
+    }
+
+    /**
+     * Set turnoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurTurno $turnoRel
+     *
+     * @return TurTurnoDetalle
+     */
+    public function setTurnoRel(\Brasa\TurnoBundle\Entity\TurTurno $turnoRel = null)
+    {
+        $this->turnoRel = $turnoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get turnoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurTurno
+     */
+    public function getTurnoRel()
+    {
+        return $this->turnoRel;
     }
 }

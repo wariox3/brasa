@@ -146,7 +146,7 @@ class LiquidacionesController extends Controller
             }
         }
         $arLiquidacionAdicionalesConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionalesConcepto();
-        $arLiquidacionAdicionalesConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionalesConcepto')->findBy(array('codigoLiquidacionAdicionalConceptoPk' => $codigoConcepto));
+        $arLiquidacionAdicionalesConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionalesConcepto')->findBy(array('tipo' => $codigoConcepto));
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Liquidaciones:detalleNuevoConcepto.html.twig', array(
             'arLiquidacion' => $arLiquidacion,
             'arLiquidacionAdicionalesConceptos' => $arLiquidacionAdicionalesConceptos,

@@ -1897,6 +1897,30 @@ class RhuEmpleado
     }
 
     /**
+     * Set codigoContratoUltimoFk
+     *
+     * @param integer $codigoContratoUltimoFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoContratoUltimoFk($codigoContratoUltimoFk)
+    {
+        $this->codigoContratoUltimoFk = $codigoContratoUltimoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoUltimoFk
+     *
+     * @return integer
+     */
+    public function getCodigoContratoUltimoFk()
+    {
+        return $this->codigoContratoUltimoFk;
+    }
+
+    /**
      * Set rutaFoto
      *
      * @param string $rutaFoto
@@ -3548,29 +3572,5 @@ class RhuEmpleado
     public function getCartasEmpleadoRel()
     {
         return $this->cartasEmpleadoRel;
-    }
-
-    /**
-     * Set codigoContratoUltimoFk
-     *
-     * @param integer $codigoContratoUltimoFk
-     *
-     * @return RhuEmpleado
-     */
-    public function setCodigoContratoUltimoFk($codigoContratoUltimoFk)
-    {
-        $this->codigoContratoUltimoFk = $codigoContratoUltimoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoContratoUltimoFk
-     *
-     * @return integer
-     */
-    public function getCodigoContratoUltimoFk()
-    {
-        return $this->codigoContratoUltimoFk;
     }
 }

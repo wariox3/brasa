@@ -11,6 +11,7 @@
         <tr>
             <th>CÓDIGO</th>
             <th>{{ knp_pagination_sortable(arLiquidacionesAdicionalConceptos, 'NOMBRE', 'codigo') }}</th>
+            <th>Tipo</th>
             <th></th>
             <th></th>
         </tr>
@@ -18,6 +19,7 @@
                <tr>
                 <td>{{arLiquidacionesAdicionalConceptos.codigoLiquidacionAdicionalConceptoPk}}</td>
                 <td>{{arLiquidacionesAdicionalConceptos.nombre}}</td>
+                <td>{% if arLiquidacionesAdicionalConceptos.tipo == 1 %}DESCUENTO{% else %}BONIFICACIÓN{% endif %}</td>
                 <td><a href="{{ path('brs_rhu_liquidacion_adicional_concepto_nuevo',{'codigoAdicionalConcepto': arLiquidacionesAdicionalConceptos.codigoLiquidacionAdicionalConceptoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arLiquidacionesAdicionalConceptos.codigoLiquidacionAdicionalConceptoPk }}" /></td>
             {%endfor%}

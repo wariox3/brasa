@@ -45,6 +45,7 @@ class GenDepartamento
     protected $paisRel;
 
 
+    
     /**
      * Constructor
      */
@@ -102,40 +103,6 @@ class GenDepartamento
     }
 
     /**
-     * Add ciudadesRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadesRel
-     *
-     * @return GenDepartamento
-     */
-    public function addCiudadesRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadesRel)
-    {
-        $this->ciudadesRel[] = $ciudadesRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove ciudadesRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadesRel
-     */
-    public function removeCiudadesRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadesRel)
-    {
-        $this->ciudadesRel->removeElement($ciudadesRel);
-    }
-
-    /**
-     * Get ciudadesRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCiudadesRel()
-    {
-        return $this->ciudadesRel;
-    }
-
-    /**
      * Set codigoDane
      *
      * @param string $codigoDane
@@ -181,6 +148,40 @@ class GenDepartamento
     public function getCodigoPaisFk()
     {
         return $this->codigoPaisFk;
+    }
+
+    /**
+     * Add ciudadesRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadesRel
+     *
+     * @return GenDepartamento
+     */
+    public function addCiudadesRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadesRel)
+    {
+        $this->ciudadesRel[] = $ciudadesRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove ciudadesRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadesRel
+     */
+    public function removeCiudadesRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadesRel)
+    {
+        $this->ciudadesRel->removeElement($ciudadesRel);
+    }
+
+    /**
+     * Get ciudadesRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCiudadesRel()
+    {
+        return $this->ciudadesRel;
     }
 
     /**

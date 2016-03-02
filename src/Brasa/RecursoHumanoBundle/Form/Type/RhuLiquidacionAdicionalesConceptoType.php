@@ -14,6 +14,7 @@ class RhuLiquidacionAdicionalesConceptoType extends AbstractType
     {
         $builder
             ->add('nombre', 'text', array('required' => true))
+            ->add('tipo', 'choice', array('choices' => array('1' => 'DESCUENTO', '2' => 'BONIFICACIÓN')))
             ->add('guardar', 'submit', array('label' => 'Guardar'));
     }
 

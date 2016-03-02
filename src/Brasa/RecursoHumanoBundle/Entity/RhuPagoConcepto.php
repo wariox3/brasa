@@ -127,10 +127,6 @@ class RhuPagoConcepto
      */
     protected $incapacidadesTiposPagoConceptoRel;    
     
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurTurnoDetalle", mappedBy="pagoConceptoRel")
-     */
-    protected $turProgramacionesTerceroRel;    
     
     /**
      * Constructor
@@ -296,6 +292,54 @@ class RhuPagoConcepto
     public function getPrestacional()
     {
         return $this->prestacional;
+    }
+
+    /**
+     * Set generaIngresoBasePrestacion
+     *
+     * @param boolean $generaIngresoBasePrestacion
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setGeneraIngresoBasePrestacion($generaIngresoBasePrestacion)
+    {
+        $this->generaIngresoBasePrestacion = $generaIngresoBasePrestacion;
+
+        return $this;
+    }
+
+    /**
+     * Get generaIngresoBasePrestacion
+     *
+     * @return boolean
+     */
+    public function getGeneraIngresoBasePrestacion()
+    {
+        return $this->generaIngresoBasePrestacion;
+    }
+
+    /**
+     * Set generaIngresoBaseCotizacion
+     *
+     * @param boolean $generaIngresoBaseCotizacion
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setGeneraIngresoBaseCotizacion($generaIngresoBaseCotizacion)
+    {
+        $this->generaIngresoBaseCotizacion = $generaIngresoBaseCotizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get generaIngresoBaseCotizacion
+     *
+     * @return boolean
+     */
+    public function getGeneraIngresoBaseCotizacion()
+    {
+        return $this->generaIngresoBaseCotizacion;
     }
 
     /**
@@ -682,87 +726,5 @@ class RhuPagoConcepto
     public function getIncapacidadesTiposPagoConceptoRel()
     {
         return $this->incapacidadesTiposPagoConceptoRel;
-    }
-
-    /**
-     * Add turProgramacionesTerceroRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurTurnoDetalle $turProgramacionesTerceroRel
-     *
-     * @return RhuPagoConcepto
-     */
-    public function addTurProgramacionesTerceroRel(\Brasa\TurnoBundle\Entity\TurTurnoDetalle $turProgramacionesTerceroRel)
-    {
-        $this->turProgramacionesTerceroRel[] = $turProgramacionesTerceroRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove turProgramacionesTerceroRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurTurnoDetalle $turProgramacionesTerceroRel
-     */
-    public function removeTurProgramacionesTerceroRel(\Brasa\TurnoBundle\Entity\TurTurnoDetalle $turProgramacionesTerceroRel)
-    {
-        $this->turProgramacionesTerceroRel->removeElement($turProgramacionesTerceroRel);
-    }
-
-    /**
-     * Get turProgramacionesTerceroRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTurProgramacionesTerceroRel()
-    {
-        return $this->turProgramacionesTerceroRel;
-    }
-
-    /**
-     * Set generaIngresoBasePrestacion
-     *
-     * @param boolean $generaIngresoBasePrestacion
-     *
-     * @return RhuPagoConcepto
-     */
-    public function setGeneraIngresoBasePrestacion($generaIngresoBasePrestacion)
-    {
-        $this->generaIngresoBasePrestacion = $generaIngresoBasePrestacion;
-
-        return $this;
-    }
-
-    /**
-     * Get generaIngresoBasePrestacion
-     *
-     * @return boolean
-     */
-    public function getGeneraIngresoBasePrestacion()
-    {
-        return $this->generaIngresoBasePrestacion;
-    }
-
-    /**
-     * Set generaIngresoBaseCotizacion
-     *
-     * @param boolean $generaIngresoBaseCotizacion
-     *
-     * @return RhuPagoConcepto
-     */
-    public function setGeneraIngresoBaseCotizacion($generaIngresoBaseCotizacion)
-    {
-        $this->generaIngresoBaseCotizacion = $generaIngresoBaseCotizacion;
-
-        return $this;
-    }
-
-    /**
-     * Get generaIngresoBaseCotizacion
-     *
-     * @return boolean
-     */
-    public function getGeneraIngresoBaseCotizacion()
-    {
-        return $this->generaIngresoBaseCotizacion;
     }
 }

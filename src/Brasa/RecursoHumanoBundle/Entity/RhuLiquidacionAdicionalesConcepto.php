@@ -23,6 +23,11 @@ class RhuLiquidacionAdicionalesConcepto
     private $nombre;
     
     /**
+     * @ORM\Column(name="tipo", type="string", length=100, nullable=true)
+     */    
+    private $tipo;
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuLiquidacionAdicionales", mappedBy="liquidacionAdicionalConceptoRel")
      */
     protected $liquidacionesAdicionalesLiquidacionAdicionalConceptoRel;     
@@ -102,5 +107,29 @@ class RhuLiquidacionAdicionalesConcepto
     public function getLiquidacionesAdicionalesLiquidacionAdicionalConceptoRel()
     {
         return $this->liquidacionesAdicionalesLiquidacionAdicionalConceptoRel;
+    }
+
+    /**
+     * Set tipo
+     *
+     * @param string $tipo
+     *
+     * @return RhuLiquidacionAdicionalesConcepto
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return string
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
     }
 }

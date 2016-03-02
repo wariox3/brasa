@@ -137,6 +137,7 @@ class RhuSeleccionRepository extends EntityRepository {
                 $arExamen->setExamenClaseRel($arExamenClase);
                 $arExamen->setEntidadExamenRel($arEntidadExamen);
                 $arExamen->setControlPago($arConfiguracion->getControlPago());
+                $arExamen->setCodigoUsuario($arSeleccion->getCodigoUsuario());
                 $em->persist($arExamen);
                 $arExamenTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo();
                 $arExamenTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->findBy(array('ingreso' => 1));

@@ -194,6 +194,7 @@ class SegUsuariosController extends Controller
                 $arUsuarioPermisoEspecial = new \Brasa\SeguridadBundle\Entity\SegUsuarioPermisoEspecial();
                 $arUsuarioPermisoEspecial->setPermisoEspecialRel($form->get('permisoEspecialRel')->getData());
                 $arUsuarioPermisoEspecial->setUsuarioRel($arUsuario);
+                $arUsuarioPermisoEspecial->setPermitir(1);
                 $em->persist($arUsuarioPermisoEspecial);
                 $em->flush();
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";

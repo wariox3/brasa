@@ -76,6 +76,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $arPago->setProgramacionPagoRel($arProgramacionPagoProcesar);
                         $arPago->setContratoRel($arProgramacionPagoDetalle->getContratoRel());                        
                         $arPago->setDiasPeriodo($arProgramacionPagoDetalle->getDias());
+                        $arPago->setCodigoUsuario($arProgramacionPagoProcesar->getCodigoUsuario());
                         $em->persist($arPago);
 
                         //Parametros generales

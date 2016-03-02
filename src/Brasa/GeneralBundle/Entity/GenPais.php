@@ -32,13 +32,15 @@ class GenPais
     /**
      * @ORM\OneToMany(targetEntity="GenDepartamento", mappedBy="paisRel")
      */
-    protected $departamentoRel;
+    protected $departamentosRel;
+    
+    
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->departamentoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->departamentosRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -114,36 +116,36 @@ class GenPais
     }
 
     /**
-     * Add departamentoRel
+     * Add departamentosRel
      *
-     * @param \Brasa\GeneralBundle\Entity\GenDepartamento $departamentoRel
+     * @param \Brasa\GeneralBundle\Entity\GenDepartamento $departamentosRel
      *
      * @return GenPais
      */
-    public function addDepartamentoRel(\Brasa\GeneralBundle\Entity\GenDepartamento $departamentoRel)
+    public function addDepartamentosRel(\Brasa\GeneralBundle\Entity\GenDepartamento $departamentosRel)
     {
-        $this->departamentoRel[] = $departamentoRel;
+        $this->departamentosRel[] = $departamentosRel;
 
         return $this;
     }
 
     /**
-     * Remove departamentoRel
+     * Remove departamentosRel
      *
-     * @param \Brasa\GeneralBundle\Entity\GenDepartamento $departamentoRel
+     * @param \Brasa\GeneralBundle\Entity\GenDepartamento $departamentosRel
      */
-    public function removeDepartamentoRel(\Brasa\GeneralBundle\Entity\GenDepartamento $departamentoRel)
+    public function removeDepartamentosRel(\Brasa\GeneralBundle\Entity\GenDepartamento $departamentosRel)
     {
-        $this->departamentoRel->removeElement($departamentoRel);
+        $this->departamentosRel->removeElement($departamentosRel);
     }
 
     /**
-     * Get departamentoRel
+     * Get departamentosRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getDepartamentoRel()
+    public function getDepartamentosRel()
     {
-        return $this->departamentoRel;
+        return $this->departamentosRel;
     }
 }

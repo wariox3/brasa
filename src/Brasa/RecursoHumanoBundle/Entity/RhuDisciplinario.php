@@ -97,6 +97,8 @@ class RhuDisciplinario
      */
     protected $cargoRel;
     
+    
+
     /**
      * Get codigoDisciplinarioPk
      *

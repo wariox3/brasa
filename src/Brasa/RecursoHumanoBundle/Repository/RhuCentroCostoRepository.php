@@ -95,6 +95,7 @@ class RhuCentroCostoRepository extends EntityRepository {
                 $arProgramacionPago->setFechaHastaReal(date_create($dateHastaReal));                
                 $arProgramacionPago->setDias($intDiasPeriodo);
                 $arProgramacionPago->setCentroCostoRel($arCentroCostoProceso);
+                $arProgramacionPago->setCodigoUsuario($arCentroCostoProceso->getCodigoUsuario());
                 $em->persist($arProgramacionPago);
                 $arCentroCostoProceso->setPagoAbierto(1);
                 $arCentroCostoProceso->setFechaUltimoPagoProgramado(date_create($dateHasta));                
