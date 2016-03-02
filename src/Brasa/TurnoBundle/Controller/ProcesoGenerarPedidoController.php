@@ -32,7 +32,7 @@ class ProcesoGenerarPedidoController extends Controller
                 $arPedidoNuevo->setPedidoTipoRel($arPedidoTipo);
                 $arPedidoNuevo->setClienteRel($arServicio->getClienteRel());
                 $arPedidoNuevo->setSectorRel($arServicio->getSectorRel());
-                $arPedidoNuevo->setFecha($dateFechaDesde);
+                $arPedidoNuevo->setFecha(new \DateTime('now'));
                 $arPedidoNuevo->setFechaProgramacion($dateFechaDesde);                                        
                 $em->persist($arPedidoNuevo);                    
 

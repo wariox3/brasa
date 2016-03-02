@@ -22,11 +22,12 @@
                 {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}      
-                {{ form_widget(form.BtnAnular, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}            
+                {{ form_widget(form.BtnAnular, { 'attr': {'class': 'btn btn-default btn-sm', 'onclick': 'return confirm("Esta seguro de anular la factura?")'} }) }}            
             </div>
         </div>
         <div style="float:right">
             {% if arFactura.estadoAutorizado == 1 %}<span class="label label-default">Autorizado</span>{% endif %}            
+            {% if arFactura.numero != 0 %}<span class="label label-success">Impreso</span>{% endif %}
             {% if arFactura.estadoAnulado == 1 %}<span class="label label-danger">Anulado</span>{% endif %}
         </div>             
         <br /><br />

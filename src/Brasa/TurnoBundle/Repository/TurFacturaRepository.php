@@ -164,7 +164,7 @@ class TurFacturaRepository extends EntityRepository {
         $em = $this->getEntityManager();                
         $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);            
         $strResultado = "";        
-        if($arFactura->getEstadoAutorizado() == 1 && $arFactura->getEstadoAnulado() == 0) {                                            
+        if($arFactura->getEstadoAutorizado() == 1 && $arFactura->getEstadoAnulado() == 0 && $arFactura->getNumero() == 0) {                                            
             $arFacturaDetalles = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
             $arFacturaDetalles = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura));                
             foreach ($arFacturaDetalles as $arFacturaDetalle) {
@@ -178,7 +178,7 @@ class TurFacturaRepository extends EntityRepository {
             $em->persist($arFactura);
             $em->flush();                                                        
         } else {
-            $strResultado = "La factura debe estas autorizada y no puede estar anulada";
+            $strResultado = "La factura debe estas autorizada y no puede estar anulada o impresa";
         }        
         return $strResultado;
     }     
@@ -215,6 +215,7 @@ class TurFacturaRepository extends EntityRepository {
             $boolAnular = TRUE;
             $arFacturaDetalles = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
             $arFacturaDetalles = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura));      
+            //Devolver saldo a los pedidos
             foreach ($arFacturaDetalles as $arFacturaDetalle) {
                 $arPedidoDetalleAct = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
                 $arPedidoDetalleAct = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($arFacturaDetalle->getCodigoPedidoDetalleFk());                                                    
@@ -222,7 +223,8 @@ class TurFacturaRepository extends EntityRepository {
                 $arPedidoDetalleAct->setVrTotalDetallePendiente($floValorTotalPendiente);                
                 $arPedidoDetalleAct->setEstadoFacturado(0);                
                 $em->persist($arPedidoDetalleAct);                
-            }            
+            } 
+            //Actualizar los detalles de la factura a cero
             foreach ($arFacturaDetalles as $arFacturaDetalle) {
                 $arFacturaDetalleAct = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
                 $arFacturaDetalleAct = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->find($arFacturaDetalle->getCodigoFacturaDetallePk());                                        
