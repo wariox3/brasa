@@ -33,6 +33,7 @@
                 <th>DES</th>
                 <th>INC</th>
                 <th>LIC</th>
+                <th>VAC</th>
                 <th>HORAS</th>
                 <th>H. NOMINA</th>
                 <th>H. DIURNAS</th>
@@ -51,6 +52,7 @@
                 <td>{% if arTurnos.descanso == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arTurnos.incapacidad == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arTurnos.licencia == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arTurnos.vacacion == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: right">{{ arTurnos.horas | number_format(0, '.', ',') }}</td>                 
                 <td style="text-align: right">{{ arTurnos.horasNomina | number_format(0, '.', ',') }}</td>                 
                 <td style="text-align: right">{{ arTurnos.horasDiurnas | number_format(0, '.', ',') }}</td> 

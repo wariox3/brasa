@@ -63,6 +63,11 @@ class TurSoportePagoDetalle
     private $licencia = 0;     
     
     /**
+     * @ORM\Column(name="vacacion", type="integer")
+     */    
+    private $vacacion = 0;    
+    
+    /**
      * @ORM\Column(name="dias", type="float")
      */    
     private $dias = 0;     
@@ -845,5 +850,29 @@ class TurSoportePagoDetalle
     public function getLicencia()
     {
         return $this->licencia;
+    }
+
+    /**
+     * Set vacacion
+     *
+     * @param integer $vacacion
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setVacacion($vacacion)
+    {
+        $this->vacacion = $vacacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vacacion
+     *
+     * @return integer
+     */
+    public function getVacacion()
+    {
+        return $this->vacacion;
     }
 }

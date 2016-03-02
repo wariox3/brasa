@@ -72,6 +72,11 @@ class TurTurno
     private $licencia = false;    
     
     /**
+     * @ORM\Column(name="vacacion", type="boolean")
+     */    
+    private $vacacion = false;    
+    
+    /**
      * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
      */    
     private $usuario;     
@@ -550,5 +555,29 @@ class TurTurno
     public function getLicencia()
     {
         return $this->licencia;
+    }
+
+    /**
+     * Set vacacion
+     *
+     * @param boolean $vacacion
+     *
+     * @return TurTurno
+     */
+    public function setVacacion($vacacion)
+    {
+        $this->vacacion = $vacacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vacacion
+     *
+     * @return boolean
+     */
+    public function getVacacion()
+    {
+        return $this->vacacion;
     }
 }

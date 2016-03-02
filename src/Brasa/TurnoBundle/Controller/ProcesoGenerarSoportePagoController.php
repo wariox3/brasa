@@ -257,6 +257,8 @@ class ProcesoGenerarSoportePagoController extends Controller
         $arSoportePagoDetalle->setDescanso($arTurno->getDescanso());
         $arSoportePagoDetalle->setNovedad($arTurno->getNovedad());
         $arSoportePagoDetalle->setIncapacidad($arTurno->getIncapacidad());
+        $arSoportePagoDetalle->setLicencia($arTurno->getLicencia());
+        $arSoportePagoDetalle->setVacacion($arTurno->getVacacion());
         $arSoportePagoDetalle->setDias($intDias);
         $arSoportePagoDetalle->setHoras($arTurno->getHorasNomina());        
         $arSoportePagoDetalle->setHorasDiurnas($arrHoras['horasDiurnas']);

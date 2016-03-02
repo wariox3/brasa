@@ -73,6 +73,11 @@ class TurSoportePago
     private $licencia = 0;    
     
     /**
+     * @ORM\Column(name="vacacion", type="integer")
+     */    
+    private $vacacion = 0;    
+    
+    /**
      * @ORM\Column(name="dias", type="float")
      */    
     private $dias = 0;    
@@ -81,6 +86,11 @@ class TurSoportePago
      * @ORM\Column(name="horas", type="float")
      */    
     private $horas = 0;    
+    
+    /**
+     * @ORM\Column(name="horas_pago", type="float")
+     */    
+    private $horasPago = 0;    
     
     /**
      * @ORM\Column(name="horas_diurnas", type="float")
@@ -770,5 +780,53 @@ class TurSoportePago
     public function getSoportesPagosDetallesSoportePagoRel()
     {
         return $this->soportesPagosDetallesSoportePagoRel;
+    }
+
+    /**
+     * Set vacacion
+     *
+     * @param integer $vacacion
+     *
+     * @return TurSoportePago
+     */
+    public function setVacacion($vacacion)
+    {
+        $this->vacacion = $vacacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vacacion
+     *
+     * @return integer
+     */
+    public function getVacacion()
+    {
+        return $this->vacacion;
+    }
+
+    /**
+     * Set horasPago
+     *
+     * @param float $horasPago
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasPago($horasPago)
+    {
+        $this->horasPago = $horasPago;
+
+        return $this;
+    }
+
+    /**
+     * Get horasPago
+     *
+     * @return float
+     */
+    public function getHorasPago()
+    {
+        return $this->horasPago;
     }
 }

@@ -23,6 +23,8 @@
                 <th>NOV</th>
                 <th>INC</th>
                 <th>LIC</th>
+                <th>VAC</th>
+                <th>H.P</th>
                 <th>H</th>
                 <th>HD</th>
                 <th>HN</th>
@@ -32,7 +34,7 @@
                 <th>HEON</th>
                 <th>HEFD</th>
                 <th>HEFN</th>
-                <th>CONTRATO</th>
+                <th>CONT</th>
                 <th>SALARIO</th>
                 <th></th>
                 <th></th>
@@ -50,6 +52,8 @@
                 <td style="text-align: right">{{ arSoportesPagos.novedad | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.incapacidad | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.licencia | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagos.vacacion | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagos.horasPago | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horas | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horasDiurnas | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horasNocturnas | number_format(2, '.', ',') }}</td>
