@@ -70,6 +70,7 @@ DELETE FROM rhu_liquidacion;
 DELETE FROM rhu_vacacion_credito;
 DELETE FROM rhu_vacacion;
 DELETE FROM rhu_contrato_sede;
+DELETE FROM rhu_contrato_prorroga;
 DELETE FROM rhu_contrato;
 DELETE FROM rhu_credito;
 DELETE FROM rhu_dotacion_detalle;
