@@ -1993,7 +1993,74 @@ class ConsultasController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
-
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AA')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AC')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AD')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AE')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AF')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AG')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AH')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AI')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AK')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AL')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AM')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AN')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AO')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AP')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'TIPO IDENTIFICACIÓN')
@@ -2068,10 +2135,25 @@ class ConsultasController extends Controller
             }else{
                 $tipoCotizante = $arEmpleado->getSsoTipoCotizanteRel()->getNombre();
             }
+            if ($arEmpleado->getCodigoEntidadSaludFk() == null){
+                $entidadSalud = "";
+            }else{
+                $entidadSalud = $arEmpleado->getEntidadSaludRel()->getNombre();
+            }
+            if ($arEmpleado->getCodigoEntidadPensionFk() == null){
+                $entidadPension = "";
+            }else{
+                $entidadPension = $arEmpleado->getEntidadPensionRel()->getNombre();
+            }
+            if ($arEmpleado->getCodigoEntidadCajaFk() == null){
+                $entidadCaja = "";
+            }else{
+                $entidadCaja = $arEmpleado->getEntidadCajaRel()->getNombre();
+            }
             if ($arEmpleado->getCodigoSubtipoCotizanteFk() == null){
                 $subtipoCotizante = "";
             }else{
-                $subtipoCotizante = $arEmpleado->getSubtipoCotizacion()->getNombre();
+                $subtipoCotizante = $arEmpleado->getSsoSubtipoCotizanteRel()->getNombre();
             }
             if ($arEmpleado->getCodigoSexoFk() == "M"){
                 $sexo = "MASCULINO";
@@ -2121,9 +2203,9 @@ class ConsultasController extends Controller
                     ->setCellValue('T' . $i, $padreFamilia)
                     ->setCellValue('U' . $i, $cabezaHogar)
                     ->setCellValue('V' . $i, $arEmpleado->getEmpleadoEstudioTipoRel()->getNombre())
-                    ->setCellValue('W' . $i, $arEmpleado->getEntidadSaludRel()->getNombre())
-                    ->setCellValue('X' . $i, $arEmpleado->getEntidadPensionRel()->getNombre())
-                    ->setCellValue('Y' . $i, $arEmpleado->getEntidadCajaRel()->getNombre())
+                    ->setCellValue('W' . $i, $entidadSalud)
+                    ->setCellValue('X' . $i, $entidadPension)
+                    ->setCellValue('Y' . $i, $entidadCaja)
                     ->setCellValue('Z' . $i, $clasificacionRiesgo)
                     ->setCellValue('AA' . $i, $arEmpleado->getCuenta())
                     ->setCellValue('AB' . $i, $arEmpleado->getBancoRel()->getNombre())

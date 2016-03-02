@@ -68,8 +68,8 @@ class FormatoCarta extends \FPDF_FPDF {
         if ($strPeriodo == "MENSUAL"){
             $intPeriodo = 1;
         }
-        $floSuplementario = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->tiempoSuplementarioCartaLaboral($intPeriodo, $arContrato->getCodigoContratoPk());            
-        $floPromedioSalario = $floSuplementario;
+        $arSuplementario = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->tiempoSuplementarioCartaLaboral($intPeriodo, $arContrato->getCodigoContratoPk());            
+        $floPromedioSalario = $arSuplementario;
         //fin promedio mensual
         $arCartaTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuCartaTipo();
         $arCartaTipo = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCartaTipo')->find(self::$codigoTipoCarta);
