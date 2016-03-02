@@ -7,13 +7,6 @@ use Brasa\TurnoBundle\Form\Type\TurProgramacionType;
 class MovimientoProgramacionController extends Controller
 {
     var $strListaDql = "";
-    var $numeroProgramacion = "";
-    var $codigoCliente = "";
-    var $estadoAutorizado = "";
-    var $estadoAnulado = "";
-    var $fechaDesde = "";
-    var $fechaHasta = "";
-    var $filtrarFecha = "";
 
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -21,16 +14,8 @@ class MovimientoProgramacionController extends Controller
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
-        $this->lista();
-        $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
+        $this->lista();        
         if ($form->isValid()) {
-            $arrControles = $request->request->All();
-            if($arrControles['txtNit'] != '') {
-                $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));
-                if($arCliente) {
-                    $this->codigoCliente = $arCliente->getCodigoClientePk();
-                }
-            }
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurProgramacion')->eliminar($arrSeleccionados);
@@ -38,10 +23,12 @@ class MovimientoProgramacionController extends Controller
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
+                $form = $this->formularioFiltro();
                 $this->lista();
             }
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
+                $form = $this->formularioFiltro();
                 $this->lista();
                 $this->generarExcel();
             }
@@ -50,7 +37,6 @@ class MovimientoProgramacionController extends Controller
         $arProgramaciones = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
         return $this->render('BrasaTurnoBundle:Movimientos/Programacion:lista.html.twig', array(
             'arProgramaciones' => $arProgramaciones,
-            'arCliente' => $arCliente,
             'form' => $form->createView()));
     }
 
@@ -262,60 +248,79 @@ class MovimientoProgramacionController extends Controller
 
     private function lista() {
         $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
         $strFechaDesde = "";
         $strFechaHasta = "";
-        $filtrarFecha = $this->filtrarFecha;
+        $filtrarFecha = $session->get('filtroProgramacionFiltrarFecha');
         if($filtrarFecha) {
-            $strFechaDesde = $this->fechaDesde;
-            $strFechaHasta = $this->fechaHasta;
+            $strFechaDesde = $session->get('filtroProgramacionFechaDesde');
+            $strFechaHasta = $session->get('filtroProgramacionFechaHasta');
         }
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurProgramacion')->listaDQL(
-                $this->numeroProgramacion,
-                $this->codigoCliente,
-                $this->estadoAutorizado,
+                $session->get('filtroProgramacionCodigo'),
+                $session->get('filtroCodigoCliente'),
+                $session->get('filtroProgramacionEstadoAutorizado'),
                 $strFechaDesde,
                 $strFechaHasta,
-                $this->estadoAnulado);
+                $session->get('filtroProgramacionEstadoAnulado'));
     }
 
     private function filtrar ($form) {
-        $this->numeroPedido = $form->get('TxtNumero')->getData();
-        $this->estadoAutorizado = $form->get('estadoAutorizado')->getData();
-        $this->estadoAnulado = $form->get('estadoAnulado')->getData();
+        $session = $this->getRequest()->getSession();        
+        $session->set('filtroProgramacionCodigo', $form->get('TxtCodigo')->getData());
+        $session->set('filtroProgramacionEstadoAutorizado', $form->get('estadoAutorizado')->getData());          
+        $session->set('filtroProgramacionEstadoAnulado', $form->get('estadoAnulado')->getData());          
+        $session->set('filtroNit', $form->get('TxtNit')->getData());                         
         $dateFechaDesde = $form->get('fechaDesde')->getData();
         $dateFechaHasta = $form->get('fechaHasta')->getData();
-        $this->fechaDesde = $dateFechaDesde->format('Y/m/d');
-        $this->fechaHasta = $dateFechaHasta->format('Y/m/d');
-        $this->filtrarFecha = $form->get('filtrarFecha')->getData();
+        $session->set('filtroProgramacionFechaDesde', $dateFechaDesde->format('Y/m/d'));
+        $session->set('filtroProgramacionFechaHasta', $dateFechaHasta->format('Y/m/d'));                 
+        $session->set('filtroProgramacionFiltrarFecha', $form->get('filtrarFecha')->getData());
     }
 
     private function formularioFiltro() {
+        $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
+        $strNombreCliente = "";
+        if($session->get('filtroNit')) {
+            $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
+            if($arCliente) {
+                $session->set('filtroCodigoCliente', $arCliente->getCodigoClientePk());
+                $strNombreCliente = $arCliente->getNombreCorto();
+            }  else {
+                $session->set('filtroCodigoCliente', null);
+                $session->set('filtroNit', null);
+            }          
+        } else {
+            $session->set('filtroCodigoCliente', null);
+        }       
         $dateFecha = new \DateTime('now');
         $strFechaDesde = $dateFecha->format('Y/m/')."01";
         $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
         $strFechaHasta = $dateFecha->format('Y/m/').$intUltimoDia;
-        if($this->fechaDesde != "") {
-            $strFechaDesde = $this->fechaDesde;
+        if($session->get('filtroProgramacionFechaDesde') != "") {
+            $strFechaDesde = $session->get('filtroProgramacionFechaDesde');
         }
-        if($this->fechaHasta != "") {
-            $strFechaDesde = $this->fechaHasta;
-        }
+        if($session->get('filtroProgramacionFechaHasta') != "") {
+            $strFechaHasta = $session->get('filtroProgramacionFechaHasta');
+        }    
         $dateFechaDesde = date_create($strFechaDesde);
         $dateFechaHasta = date_create($strFechaHasta);
         $form = $this->createFormBuilder()
-            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $this->numeroProgramacion))
-            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $this->estadoAutorizado))
-            ->add('estadoAnulado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ANULADO', '0' => 'SIN ANULAR'), 'data' => $this->estadoAnulado))
-            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))
-            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))
-            ->add('filtrarFecha', 'checkbox', array('required'  => false))
+            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                
+            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroProgramacionCodigo')))
+            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroProgramacionEstadoAutorizado')))                
+            ->add('estadoAnulado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ANULADO', '0' => 'SIN ANULAR'), 'data' => $session->get('filtroProgramacionEstadoAnulado')))                                
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                
+            ->add('filtrarFecha', 'checkbox', array('required'  => false, 'data' => $session->get('filtroProgramacionFiltrarFecha')))                 
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
-    }
+    }    
 
     private function formularioDetalle($ar) {
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);

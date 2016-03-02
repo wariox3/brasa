@@ -21,14 +21,14 @@
                         <div class="row">
                           <div class="col-lg-2">
                             <div class="input-group">
-                              <input id="txtNit"  name="txtNit"  type="text" class="form-control" value="{{ arCliente.nit |default('') }}"/>
+                              {{ form_widget(form.TxtNit, { 'attr': {'class': 'form-control'} }) }}                              
                             </div>
                           </div>
                           <div class="col-lg-10">
-                            <div class="input-group">                                      
-                              <input id="txtNombreCorto"  name="txtNombreCorto"  type="text" class="form-control" value="{{ arCliente.nombreCorto |default('') }}" readOnly="ReadOnly" />
+                            <div class="input-group">     
+                              {{ form_widget(form.TxtNombreCliente, { 'attr': {'class': 'form-control', 'readOnly': 'ReadOnly'} }) }}                              
                               <span class="input-group-btn">                                        
-                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_buscar_cliente', { 'campoCodigo': 'txtNit', 'campoNombre': 'txtNombreCorto' }) }}', 'buscarCliente', 600, 900)">Buscar</a>
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_buscar_cliente', { 'campoCodigo': 'form_TxtNit', 'campoNombre': 'form_TxtNombreCliente' }) }}', 'buscarCliente', 600, 900)">Buscar</a>
                               </span>
                             </div>
                           </div>

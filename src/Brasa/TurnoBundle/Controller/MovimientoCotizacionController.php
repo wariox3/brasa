@@ -16,19 +16,12 @@ class MovimientoCotizacionController extends Controller
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $session = $this->getRequest()->getSession();
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioFiltro();
-        $form->handleRequest($request);
-        $this->lista();
-        $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
-        if ($form->isValid()) {   
-            $arrControles = $request->request->All();
-            if($arrControles['txtNit'] != '') {                
-                $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));
-                if($arCliente) {
-                    $this->codigoCliente = $arCliente->getCodigoClientePk();
-                }
-            }            
+        $form->handleRequest($request);        
+        $this->lista();        
+        if ($form->isValid()) {               
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurCotizacion')->eliminar($arrSeleccionados);
@@ -36,10 +29,12 @@ class MovimientoCotizacionController extends Controller
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
+                $form = $this->formularioFiltro();
                 $this->lista();
             }
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
+                $form = $this->formularioFiltro();
                 $this->lista();
                 $this->generarExcel();
             }
@@ -47,8 +42,7 @@ class MovimientoCotizacionController extends Controller
 
         $arCotizaciones = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
         return $this->render('BrasaTurnoBundle:Movimientos/Cotizacion:lista.html.twig', array(
-            'arCotizaciones' => $arCotizaciones,
-            'arCliente' => $arCliente,
+            'arCotizaciones' => $arCotizaciones,            
             'form' => $form->createView()));
     }
 
@@ -255,25 +249,42 @@ class MovimientoCotizacionController extends Controller
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurCotizacion')->listaDQL(
-                $this->numero, 
-                $this->codigoCliente,
-                $this->estadoAutorizado);
+                $session->get('filtroCotizacionNumero'), 
+                $session->get('filtroCodigoCliente'),
+                $session->get('filtroCotizacionEstadoAutorizado'));
     }
 
-    private function filtrar ($form) {
-        $request = $this->getRequest();
-        $controles = $request->request->get('form');
-        $this->numero = $form->get('TxtNumero')->getData();
-        $this->estadoAutorizado = $form->get('estadoAutorizado')->getData();
+    private function filtrar ($form) {       
+        $session = $this->getRequest()->getSession();        
+        $session->set('filtroCotizacionNumero', $form->get('TxtNumero')->getData());
+        $session->set('filtroCotizacionEstadoAutorizado', $form->get('estadoAutorizado')->getData());          
+        $session->set('filtroNit', $form->get('TxtNit')->getData());   
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
+        $strNombreCliente = "";
+        if($session->get('filtroNit')) {
+            $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
+            if($arCliente) {
+                $session->set('filtroCodigoCliente', $arCliente->getCodigoClientePk());
+                $strNombreCliente = $arCliente->getNombreCorto();
+            }  else {
+                $session->set('filtroCodigoCliente', null);
+                $session->set('filtroNit', null);
+            }          
+        } else {
+            $session->set('filtroCodigoCliente', null);
+        }
+        
         $form = $this->createFormBuilder()
-            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $this->numero))
-            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $this->estadoAutorizado))                
+            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCotizacionNumero')))
+            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))
+            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroCotizacionEstadoAutorizado')))                
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -458,5 +469,5 @@ class MovimientoCotizacionController extends Controller
             $em->getRepository('BrasaTurnoBundle:TurCotizacion')->liquidar($codigoCotizacion);                   
         }
     }
-
+    
 }

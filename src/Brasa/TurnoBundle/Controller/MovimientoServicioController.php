@@ -9,10 +9,6 @@ class MovimientoServicioController extends Controller
 {
     var $strListaDql = "";
     var $strListaDqlRecurso = "";
-    var $codigoServicio = "";  
-    var $codigoCliente = "";
-    var $estadoAutorizado = "";
-    var $estadoCerrado = "";
     var $codigoRecurso = "";
     var $nombreRecurso = "";
     var $codigoCentroCosto = "";    
@@ -23,16 +19,8 @@ class MovimientoServicioController extends Controller
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
-        $this->lista();
-        $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
-        if ($form->isValid()) {    
-            $arrControles = $request->request->All();
-            if($arrControles['txtNit'] != '') {                
-                $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));
-                if($arCliente) {
-                    $this->codigoCliente = $arCliente->getCodigoClientePk();
-                }
-            }            
+        $this->lista();        
+        if ($form->isValid()) {               
             if ($form->get('BtnEliminar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurServicio')->eliminar($arrSeleccionados);
@@ -41,10 +29,12 @@ class MovimientoServicioController extends Controller
             }
             if ($form->get('BtnFiltrar')->isClicked()) {                
                 $this->filtrar($form);
+                $form = $this->formularioFiltro();
                 $this->lista();
             }
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
+                $form = $this->formularioFiltro();
                 $this->lista();
                 $this->generarExcel();
             }
@@ -52,8 +42,7 @@ class MovimientoServicioController extends Controller
 
         $arServicios = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
         return $this->render('BrasaTurnoBundle:Movimientos/Servicio:lista.html.twig', array(
-            'arServicios' => $arServicios,
-            'arCliente' => $arCliente,
+            'arServicios' => $arServicios,            
             'form' => $form->createView()));
     }
 
@@ -409,11 +398,12 @@ class MovimientoServicioController extends Controller
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();        
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurServicio')->listaDQL(
-                $this->codigoServicio, 
-                $this->codigoCliente, 
-                $this->estadoAutorizado,
-                $this->estadoCerrado);
+                $session->get('filtroServicioCodigo'), 
+                $session->get('filtroCodigoCliente'), 
+                $session->get('filtroServicioCodigo'),
+                $session->get('filtroServicioCodigo'));
     }    
 
     private function listaRecurso() {        
@@ -425,10 +415,12 @@ class MovimientoServicioController extends Controller
                 ); 
     }     
     
-    private function filtrar ($form) {                
-        $this->codigoServicio = $form->get('TxtCodigo')->getData();
-        $this->estadoAutorizado = $form->get('estadoAutorizado')->getData();
-        $this->estadoCerrado = $form->get('estadoCerrado')->getData();
+    private function filtrar ($form) {        
+        $session = $this->getRequest()->getSession();        
+        $session->set('filtroServicioCodigo', $form->get('TxtCodigo')->getData());
+        $session->set('filtroServicioEstadoAutorizado', $form->get('estadoAutorizado')->getData());
+        $session->set('filtroServicioEstadoCerrado', $form->get('estadoCerrado')->getData());
+        $session->set('filtroNit', $form->get('TxtNit')->getData());
     }
 
     private function filtrarRecurso($form) {       
@@ -442,10 +434,25 @@ class MovimientoServicioController extends Controller
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
+        $strNombreCliente = "";
+        if($session->get('filtroNit')) {
+            $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
+            if($arCliente) {
+                $session->set('filtroCodigoCliente', $arCliente->getCodigoClientePk());
+                $strNombreCliente = $arCliente->getNombreCorto();
+            }  else {
+                $session->set('filtroCodigoCliente', null);
+                $session->set('filtroNit', null);
+            }          
+        } else {
+            $session->set('filtroCodigoCliente', null);
+        }
         $form = $this->createFormBuilder()
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoServicio)) 
-            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $this->estadoAutorizado))
-            ->add('estadoCerrado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'CERRADO', '0' => 'SIN CERRAR'), 'data' => $this->estadoCerrado))
+            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                
+            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroServicioCodigo'))) 
+            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroServicioEstadoAutorizado')))
+            ->add('estadoCerrado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'CERRADO', '0' => 'SIN CERRAR'), 'data' => $session->get('filtroServicioEstadoCerrado')))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))

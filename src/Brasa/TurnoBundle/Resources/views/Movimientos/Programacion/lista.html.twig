@@ -21,25 +21,25 @@
                         <div class="row">
                           <div class="col-lg-2">
                             <div class="input-group">
-                              <input id="txtNit"  name="txtNit"  type="text" class="form-control" value="{{ arCliente.nit |default('') }}"/>
+                              {{ form_widget(form.TxtNit, { 'attr': {'class': 'form-control'} }) }}                              
                             </div>
                           </div>
                           <div class="col-lg-10">
-                            <div class="input-group">                                      
-                              <input id="txtNombreCorto"  name="txtNombreCorto"  type="text" class="form-control" value="{{ arCliente.nombreCorto |default('') }}" readOnly="ReadOnly" />
+                            <div class="input-group">     
+                              {{ form_widget(form.TxtNombreCliente, { 'attr': {'class': 'form-control', 'readOnly': 'ReadOnly'} }) }}                              
                               <span class="input-group-btn">                                        
-                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_buscar_cliente', { 'campoCodigo': 'txtNit', 'campoNombre': 'txtNombreCorto' }) }}', 'buscarCliente', 600, 900)">Buscar</a>
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_buscar_cliente', { 'campoCodigo': 'form_TxtNit', 'campoNombre': 'form_TxtNombreCliente' }) }}', 'buscarCliente', 600, 900)">Buscar</a>
                               </span>
                             </div>
                           </div>
                         </div>
                     </div>
-                </div>                
+                </div>               
                     
                 <div class="form-group form-group-sm">  
-                    <label for="form_TxtNumero" class="col-sm-2 control-label">Numero:</label>
+                    <label for="form_TxtCodigo" class="col-sm-2 control-label">Codigo:</label>
                     <div class="col-sm-4">
-                        {{ form_widget(form.TxtNumero, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.TxtCodigo, { 'attr': {'class': 'form-control'} }) }}
                     </div>
                     <label for="form_estadoAutorizado" class="col-sm-2 control-label">Autorizado:</label>
                     <div class="col-sm-4">                  
@@ -110,7 +110,7 @@
 
         <!-- Botones Menu Items -->
         <div class="btn-group" style="float: left">
-                <div class="btn btn-default btn-sm">Examenes <span class="badge">{{ arProgramaciones.getTotalItemCount }}</span></div>                        
+                <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arProgramaciones.getTotalItemCount }}</span></div>                        
         </div>
         <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
                 {{ knp_pagination_render(arProgramaciones) }}       

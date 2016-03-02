@@ -8,6 +8,9 @@ class TurServicioRepository extends EntityRepository {
     
     public function listaDql($codigoServicio = "", $codigoCliente = "", $boolEstadoAutorizado = "", $boolEstadoCerrado = "") {
         $dql   = "SELECT s FROM BrasaTurnoBundle:TurServicio s WHERE s.codigoServicioPk <> 0 ";
+        if($codigoServicio != "") {
+            $dql .= " AND s.codigoServicioPk = " . $codigoServicio;  
+        }        
         if($codigoCliente != "") {
             $dql .= " AND s.codigoClienteFk = " . $codigoCliente;  
         }    

@@ -6,11 +6,6 @@ use Symfony\Component\HttpFoundation\Request;
 class ConsultasPedidosDetallesController extends Controller
 {
     var $strListaDql = "";
-    var $codigoPedido = "";
-    var $codigoCliente = "";
-    var $estadoProgramado = "";
-    var $estadoFacturado = "";
-    var $estadoAnulado = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -23,10 +18,12 @@ class ConsultasPedidosDetallesController extends Controller
         if ($form->isValid()) {            
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
+                $form = $this->formularioFiltro();
                 $this->lista();
             }
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
+                $form = $this->formularioFiltro();
                 $this->lista();
                 $this->generarExcel();
             }
@@ -39,34 +36,86 @@ class ConsultasPedidosDetallesController extends Controller
     }
             
     private function lista() {
+        $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
+        $strFechaDesde = "";
+        $strFechaHasta = "";        
+        $filtrarFecha = $session->get('filtroPedidoFiltrarFecha');
+        if($filtrarFecha) {
+            $strFechaDesde = $session->get('filtroPedidoFechaDesde');
+            $strFechaHasta = $session->get('filtroPedidoFechaHasta');                    
+        }
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->listaConsultaDql(
-                $this->codigoCliente,
-                $this->estadoProgramado,
-                $this->estadoFacturado,
-                $this->estadoAnulado);
+                $session->get('filtroPedidoNumero'), 
+                $session->get('filtroCodigoCliente'), 
+                $session->get('filtroPedidoEstadoAutorizado'), 
+                $session->get('filtroPedidoEstadoProgramado'),
+                $session->get('filtroPedidoEstadoFacturado'),
+                $session->get('filtroPedidoEstadoAnulado'),
+                $strFechaDesde,
+                $strFechaHasta);
     }
 
-    private function filtrar ($form) {                
-        $this->codigoPedido = $form->get('TxtCodigo')->getData();
-        $this->estadoProgramado = $form->get('estadoProgramado')->getData();
-        $this->estadoFacturado = $form->get('estadoFacturado')->getData();
-        $this->estadoAnulado = $form->get('estadoAnulado')->getData();
+    private function filtrar ($form) {
+        $session = $this->getRequest()->getSession();        
+        $session->set('filtroPedidoNumero', $form->get('TxtNumero')->getData());
+        $session->set('filtroPedidoEstadoAutorizado', $form->get('estadoAutorizado')->getData());          
+        $session->set('filtroPedidoEstadoProgramado', $form->get('estadoProgramado')->getData());          
+        $session->set('filtroPedidoEstadoFacturado', $form->get('estadoFacturado')->getData());          
+        $session->set('filtroPedidoEstadoAnulado', $form->get('estadoAnulado')->getData());          
+        $session->set('filtroNit', $form->get('TxtNit')->getData());                         
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        $session->set('filtroPedidoFechaDesde', $dateFechaDesde->format('Y/m/d'));
+        $session->set('filtroPedidoFechaHasta', $dateFechaHasta->format('Y/m/d'));                 
+        $session->set('filtroPedidoFiltrarFecha', $form->get('filtrarFecha')->getData());
+        
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
+        $strNombreCliente = "";
+        if($session->get('filtroNit')) {
+            $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
+            if($arCliente) {
+                $session->set('filtroCodigoCliente', $arCliente->getCodigoClientePk());
+                $strNombreCliente = $arCliente->getNombreCorto();
+            }  else {
+                $session->set('filtroCodigoCliente', null);
+                $session->set('filtroNit', null);
+            }          
+        } else {
+            $session->set('filtroCodigoCliente', null);
+        }       
+        $dateFecha = new \DateTime('now');
+        $strFechaDesde = $dateFecha->format('Y/m/')."01";
+        $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
+        $strFechaHasta = $dateFecha->format('Y/m/').$intUltimoDia;
+        if($session->get('filtroPedidoFechaDesde') != "") {
+            $strFechaDesde = $session->get('filtroPedidoFechaDesde');
+        }
+        if($session->get('filtroPedidoFechaHasta') != "") {
+            $strFechaHasta = $session->get('filtroPedidoFechaHasta');
+        }    
+        $dateFechaDesde = date_create($strFechaDesde);
+        $dateFechaHasta = date_create($strFechaHasta);
         $form = $this->createFormBuilder()
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoPedido))     
-            ->add('estadoProgramado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'PROGRAMADO', '0' => 'SIN PROGRAMAR'), 'data' => $this->estadoProgramado))                
-            ->add('estadoFacturado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'FACTURADO', '0' => 'SIN FACTURAR'), 'data' => $this->estadoFacturado))                                
-            ->add('estadoAnulado', 'choice', array('choices'   => array('0' => 'SIN ANULAR','2' => 'TODOS', '1' => 'ANULADO'), 'data' => $this->estadoAnulado))                                
+            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                
+            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroPedidoNumero')))
+            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroPedidoEstadoAutorizado')))                
+            ->add('estadoProgramado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'PROGRAMADO', '0' => 'SIN PROGRAMAR'), 'data' => $session->get('filtroPedidoEstadoProgramado')))                                
+            ->add('estadoFacturado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'FACTURADO', '0' => 'SIN FACTURAR'), 'data' => $session->get('filtroPedidoEstadoFacturado')))                                
+            ->add('estadoAnulado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ANULADO', '0' => 'SIN ANULAR'), 'data' => $session->get('filtroPedidoEstadoAnulado')))                                
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                
+            ->add('filtrarFecha', 'checkbox', array('required'  => false, 'data' => $session->get('filtroPedidoFiltrarFecha')))                             
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
-    }    
+    }   
 
     private function generarExcel() {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();

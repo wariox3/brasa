@@ -6,14 +6,35 @@ use Doctrine\ORM\EntityRepository;
 
 class TurFacturaRepository extends EntityRepository {
     
-    public function listaDql($numeroFactura = "") {
-        $dql   = "SELECT f FROM BrasaTurnoBundle:TurFactura f WHERE f.codigoFacturaPk <> 0 ";
+    public function listaDql($numeroFactura = "", $codigoCliente = "", $boolEstadoAutorizado = "", $strFechaDesde = "", $strFechaHasta = "", $boolEstadoAnulado = "") {
+        $dql   = "SELECT f FROM BrasaTurnoBundle:TurFactura f WHERE f.codigoFacturaPk <> 0";
         if($numeroFactura != "") {
             $dql .= " AND f.numero = " . $numeroFactura;  
+        }        
+        if($codigoCliente != "") {
+            $dql .= " AND f.codigoClienteFk = " . $codigoCliente;  
+        }    
+        if($boolEstadoAutorizado == 1 ) {
+            $dql .= " AND f.estadoAutorizado = 1";
         }
+        if($boolEstadoAutorizado == "0") {
+            $dql .= " AND f.estadoAutorizado = 0";
+        } 
+        if($boolEstadoAnulado == 1 ) {
+            $dql .= " AND f.estadoAnulado = 1";
+        }
+        if($boolEstadoAnulado == "0") {
+            $dql .= " AND f.estadoAnulado = 0";
+        }        
+        if($strFechaDesde != "") {
+            $dql .= " AND f.fecha >= '" . $strFechaDesde . " 00:00:00'";
+        }
+        if($strFechaHasta != "") {
+            $dql .= " AND f.fecha <= '" . $strFechaHasta . " 23:59:59'";
+        }    
         $dql .= " ORDER BY f.numero";
         return $dql;
-    }
+    }           
     
     public function pedidoMaestroDql() {
         $dql   = "SELECT p FROM BrasaTurnoBundle:TurPedido p WHERE p.codigoPedidoTipoFk = 2";

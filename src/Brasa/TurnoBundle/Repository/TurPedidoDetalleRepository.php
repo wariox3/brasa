@@ -6,19 +6,26 @@ use Doctrine\ORM\EntityRepository;
 
 class TurPedidoDetalleRepository extends EntityRepository {
 
-    public function listaConsultaDql($codigoCliente = "", $boolEstadoProgramado = "", $boolEstadoFacturado = "", $boolEstadoAnulado = "") {
+    public function listaConsultaDql($numeroPedido = "", $codigoCliente = "", $boolEstadoAutorizado = "", $boolEstadoProgramado = "", $boolEstadoFacturado = "", $boolEstadoAnulado = "", $strFechaDesde = "", $strFechaHasta = "") {
         $dql   = "SELECT pd FROM BrasaTurnoBundle:TurPedidoDetalle pd JOIN pd.pedidoRel p WHERE pd.codigoPedidoDetallePk <> 0 ";
+        if($numeroPedido != "") {
+            $dql .= " AND p.numero = " . $numeroPedido;  
+        }
         if($codigoCliente != "") {
             $dql .= " AND p.codigoClienteFk = " . $codigoCliente;  
-        }
-        
+        } 
         if($boolEstadoProgramado == 1 ) {
             $dql .= " AND pd.estadoProgramado = 1";
         }
         if($boolEstadoProgramado == "0") {
             $dql .= " AND pd.estadoProgramado = 0";
         }  
-        
+        if($boolEstadoAutorizado == 1 ) {
+            $dql .= " AND p.estadoAutorizado = 1";
+        }
+        if($boolEstadoAutorizado == "0") {
+            $dql .= " AND p.estadoAutorizado = 0";
+        }         
         if($boolEstadoFacturado == 1 ) {
             $dql .= " AND pd.estadoFacturado = 1";
         }
@@ -30,7 +37,13 @@ class TurPedidoDetalleRepository extends EntityRepository {
         }
         if($boolEstadoAnulado == "0") {
             $dql .= " AND p.estadoAnulado = 0";
-        }         
+        }
+        if($strFechaDesde != "") {
+            $dql .= " AND p.fechaProgramacion >= '" . $strFechaDesde . "'";
+        }        
+        if($strFechaHasta != "") {
+            $dql .= " AND p.fechaProgramacion <= '" . $strFechaHasta . "'";
+        }        
         return $dql;
     }     
     

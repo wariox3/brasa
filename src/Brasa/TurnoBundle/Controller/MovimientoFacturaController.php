@@ -6,8 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurFacturaType;
 class MovimientoFacturaController extends Controller
 {
-    var $strListaDql = "";
-    var $codigoFactura = "";
+    var $strListaDql = "";    
     var $boolMostrarTodo = "";
     
     public function listaAction() {
@@ -205,7 +204,21 @@ class MovimientoFacturaController extends Controller
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurFactura')->listaDql($this->codigoFactura);
+        $session = $this->getRequest()->getSession();
+        $strFechaDesde = "";
+        $strFechaHasta = "";
+        $filtrarFecha = $session->get('filtroFacturaFiltrarFecha');
+        if($filtrarFecha) {
+            $strFechaDesde = $session->get('filtroFacturaFechaDesde');
+            $strFechaHasta = $session->get('filtroFacturaFechaHasta');
+        }
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurFactura')->listaDql(
+                $session->get('filtroFacturaNumero'),
+                $session->get('filtroCodigoCliente'),
+                $session->get('filtroFacturaEstadoAutorizado'),
+                $strFechaDesde,
+                $strFechaHasta,
+                $session->get('filtroFacturaEstadoAnulado'));
     }   
     
     private function listaDetalleNuevo($codigoCliente) {
@@ -215,7 +228,16 @@ class MovimientoFacturaController extends Controller
     }
 
     private function filtrar ($form) {                
-        $this->codigoFactura = $form->get('TxtCodigo')->getData();
+        $session = $this->getRequest()->getSession();        
+        $session->set('filtroFacturaNumero', $form->get('TxtNumero')->getData());
+        $session->set('filtroFacturaEstadoAutorizado', $form->get('estadoAutorizado')->getData());          
+        $session->set('filtroFacturaEstadoAnulado', $form->get('estadoAnulado')->getData());          
+        $session->set('filtroNit', $form->get('TxtNit')->getData());                         
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        $session->set('filtroFacturaFechaDesde', $dateFechaDesde->format('Y/m/d'));
+        $session->set('filtroFacturaFechaHasta', $dateFechaHasta->format('Y/m/d'));                 
+        $session->set('filtroFacturaFiltrarFecha', $form->get('filtrarFecha')->getData());
     }
 
     private function filtrarDetalleNuevo ($form) {                
@@ -225,8 +247,40 @@ class MovimientoFacturaController extends Controller
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
+        $strNombreCliente = "";
+        if($session->get('filtroNit')) {
+            $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
+            if($arCliente) {
+                $session->set('filtroCodigoCliente', $arCliente->getCodigoClientePk());
+                $strNombreCliente = $arCliente->getNombreCorto();
+            }  else {
+                $session->set('filtroCodigoCliente', null);
+                $session->set('filtroNit', null);
+            }          
+        } else {
+            $session->set('filtroCodigoCliente', null);
+        }       
+        $dateFecha = new \DateTime('now');
+        $strFechaDesde = $dateFecha->format('Y/m/')."01";
+        $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
+        $strFechaHasta = $dateFecha->format('Y/m/').$intUltimoDia;
+        if($session->get('filtroFacturaFechaDesde') != "") {
+            $strFechaDesde = $session->get('filtroFacturaFechaDesde');
+        }
+        if($session->get('filtroFacturaFechaHasta') != "") {
+            $strFechaHasta = $session->get('filtroFacturaFechaHasta');
+        }    
+        $dateFechaDesde = date_create($strFechaDesde);
+        $dateFechaHasta = date_create($strFechaHasta);
         $form = $this->createFormBuilder()
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoFactura))            
+            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                
+            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroFacturaNumero')))
+            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroFacturaEstadoAutorizado')))                
+            ->add('estadoAnulado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ANULADO', '0' => 'SIN ANULAR'), 'data' => $session->get('filtroFacturaEstadoAnulado')))                                
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                
+            ->add('filtrarFecha', 'checkbox', array('required'  => false, 'data' => $session->get('filtroFacturaFiltrarFecha')))                 
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
