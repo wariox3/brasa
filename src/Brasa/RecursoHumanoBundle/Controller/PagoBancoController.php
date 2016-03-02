@@ -48,6 +48,8 @@ class PagoBancoController extends Controller
         $arPagoBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco();
         if($codigoPagoBanco != 0) {
             $arPagoBanco = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBanco')->find($codigoPagoBanco);
+            $arPagoBanco->getFechaAplicacion();
+            $arPagoBanco->getFechaTrasmision();
         }
         $form = $this->createForm(new RhuPagoBancoType, $arPagoBanco);
         $form->handleRequest($request);

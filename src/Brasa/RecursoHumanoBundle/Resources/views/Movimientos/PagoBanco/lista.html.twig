@@ -43,6 +43,7 @@
                 <th>SECUENCIA</th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
             {% for arPagoBancos in arPagoBancos %}
             <tr>                
@@ -52,6 +53,7 @@
                 <td>{{ arPagoBancos.fechaTrasmision|date('Y/m/d') }}</td>
                 <td>{{ arPagoBancos.fechaAplicacion|date('Y/m/d') }}</td>
                 <td>{{ arPagoBancos.secuencia  }}</td>                
+                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_pago_banco_nuevo', { 'codigoPagoBanco':  arPagoBancos.codigoPagoBancoPk }) }}', 'PagoBanco', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_pago_banco_detalle', { 'codigoPagoBanco':  arPagoBancos.codigoPagoBancoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagoBancos.codigoPagoBancoPk }}" /></td>
             </tr>

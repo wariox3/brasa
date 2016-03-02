@@ -39,7 +39,7 @@ class GenDepartamento
     protected $ciudadesRel;
     
     /**
-     * @ORM\ManyToOne(targetEntity="GenPais", inversedBy="detapartamentosRel")
+     * @ORM\ManyToOne(targetEntity="GenPais", inversedBy="departamentosRel")
      * @ORM\JoinColumn(name="codigo_pais_fk", referencedColumnName="codigo_pais_pk")
      */
     protected $paisRel;
