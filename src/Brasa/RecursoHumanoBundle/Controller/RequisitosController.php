@@ -215,7 +215,9 @@ class RequisitosController extends Controller
         $form = $this->createForm(new RhuRequisitoType(), $arRequisito);
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arRequisito = $form->getData();
+            $arRequisito->setCodigoUsuario($arUsuario->getId());
             $em->persist($arRequisito);
             $arRequisitosConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoConcepto();
             $arRequisitosConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoConcepto')->findBy(array('general' => 1));

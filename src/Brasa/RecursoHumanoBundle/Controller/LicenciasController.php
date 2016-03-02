@@ -61,7 +61,8 @@ class LicenciasController extends Controller
         }
         $form = $this->createForm(new RhuLicenciaType(), $arLicencia);                     
         $form->handleRequest($request);
-        if ($form->isValid()) {            
+        if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();            
             $arLicencia = $form->getData(); 
             $arrControles = $request->request->All();
             if($arrControles['txtNumeroIdentificacion'] != '') {
@@ -77,8 +78,10 @@ class LicenciasController extends Controller
                                     $intDias = $arLicencia->getFechaDesde()->diff($arLicencia->getFechaHasta());
                                     $intDias = $intDias->format('%a');
                                     $intDias = $intDias + 1;
-                                    
-                                    $arLicencia->setCantidad($intDias);                            
+                                    $arLicencia->setCantidad($intDias);
+                                    if($codigoLicencia == 0) {
+                                        $arLicencia->setCodigoUsuario($arUsuario->getId());
+                                    }
                                     $em->persist($arLicencia);
                                     $em->flush();                        
                                     if($form->get('guardarnuevo')->isClicked()) {

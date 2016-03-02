@@ -68,7 +68,9 @@ class RhuExamenRepository extends EntityRepository {
     }
 
     public function aprobarExamen($codigoExamen) {
-        $em = $this->getEntityManager();        
+        
+        $em = $this->getEntityManager(); 
+        $arUsuario = $this->get('security.context')->getToken()->getUser();
         $strRespuesta = '';
         $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
         $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);        
@@ -84,6 +86,7 @@ class RhuExamenRepository extends EntityRepository {
                 $arRequisito->setCargoRel($arExamen->getCargoRel());
                 $arRequisito->setNumeroIdentificacion($arExamen->getIdentificacion());
                 $arRequisito->setNombreCorto($arExamen->getNombreCorto());
+                $arRequisito->setCodigoUsuario($arUsuario->getId());
                 $em->persist($arRequisito);
                 $arRequisitoConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoConcepto();
                 $arRequisitoConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoConcepto')->findBy(array('general' => 1));

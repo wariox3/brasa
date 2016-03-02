@@ -66,6 +66,7 @@ class DisciplinarioController extends Controller
         $form = $this->createForm(new RhuDisciplinarioType, $arDisciplinario);
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arrControles = $request->request->All();
             $arDisciplinario = $form->getData();
             if($arrControles['txtNumeroIdentificacion'] != '') {
@@ -76,6 +77,9 @@ class DisciplinarioController extends Controller
                     if($arEmpleado->getCodigoContratoActivoFk() != '') {
                         $arDisciplinario->setCentroCostoRel($arEmpleado->getCentroCostoRel());
                         $arDisciplinario->setCargoRel($arEmpleado->getCargoRel());
+                        if($codigoDisciplinario == 0) {
+                            $arDisciplinario->setCodigoUsuario($arUsuario->getId());
+                        }
                         $em->persist($arDisciplinario);
                         $em->flush();
                         if($form->get('guardarnuevo')->isClicked()) {

@@ -52,7 +52,11 @@ class ExamenController extends Controller
         $form = $this->createForm(new RhuExamenType, $arExamen);
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arExamen = $form->getData();
+            if($codigoExamen == 0) {
+                $arExamen->setCodigoUsuario($arUsuario->getId());
+            }
             if($arExamen->getExamenClaseRel()->getCodigoExamenClasePk() == 1 && $codigoExamen == 0) {
                 $arExamenTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo();
                 $arExamenTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->findBy(array('ingreso' => 1));

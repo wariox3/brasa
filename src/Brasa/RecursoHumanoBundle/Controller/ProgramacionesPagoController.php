@@ -98,9 +98,11 @@ class ProgramacionesPagoController extends Controller
         $form = $this->createForm(new RhuProgramacionPagoType(), $arProgramacionPago);
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arProgramacionPago = $form->getData();
             $arProgramacionPago->setFechaHastaReal($arProgramacionPago->getFechaHasta());
             $arProgramacionPago->setNoGeneraPeriodo(1);
+            $arProgramacionPago->setCodigoUsuario($arUsuario->getId());
             $em->persist($arProgramacionPago);
             $em->flush();
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";

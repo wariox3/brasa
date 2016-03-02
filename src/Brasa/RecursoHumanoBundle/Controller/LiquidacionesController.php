@@ -111,6 +111,7 @@ class LiquidacionesController extends Controller
         $form->handleRequest($request);
 
         if($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             if($form->get('BtnAgregar')->isClicked()) {
                 $arrControles = $request->request->All();
                 if (isset($arrControles['TxtValor'])) {
@@ -126,10 +127,12 @@ class LiquidacionesController extends Controller
                                 $floValor = $arrControles['TxtValor'][$intIndice];
                                 $arLiquidacionAdicional->setVrDeduccion($floValor);
                                 $arLiquidacionAdicional->setDetalle($arrControles['TxtDetalle'][$intIndice]);
+                                $arLiquidacionAdicional->setCodigoUsuario($arUsuario->getId());
                             }else {
                                 $floValor = $arrControles['TxtValor'][$intIndice];
                                 $arLiquidacionAdicional->setVrBonificacion($floValor);
                                 $arLiquidacionAdicional->setDetalle($arrControles['TxtDetalle'][$intIndice]);
+                                $arLiquidacionAdicional->setCodigoUsuario($arUsuario->getId());
                             }
                             
                             $em->persist($arLiquidacionAdicional);

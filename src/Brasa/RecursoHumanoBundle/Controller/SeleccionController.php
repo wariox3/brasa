@@ -79,9 +79,13 @@ class SeleccionController extends Controller
         $form = $this->createForm(new RhuSeleccionType, $arSeleccion);
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arSeleccion = $form->getData();
             $arSeleccion->setNombreCorto($arSeleccion->getNombre1() . " " . $arSeleccion->getNombre2() . " " .$arSeleccion->getApellido1() . " " . $arSeleccion->getApellido2());
             $arSeleccion->setFecha(new \DateTime('now'));
+            if($codigoSeleccion == 0) {
+                $arSeleccion->setCodigoUsuario($arUsuario->getId());
+            }
             $em->persist($arSeleccion);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {

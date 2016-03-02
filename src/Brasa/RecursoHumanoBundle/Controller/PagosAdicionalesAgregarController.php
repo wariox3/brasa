@@ -30,6 +30,7 @@ class PagosAdicionalesAgregarController extends Controller
         $form->handleRequest($request);
     
         if($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arrControles = $request->request->All();
             if($form->get('BtnAgregar')->isClicked()) {
                 if (isset($arrControles['TxtHoras'])) {
@@ -45,6 +46,7 @@ class PagosAdicionalesAgregarController extends Controller
                             $arPagoAdicional->setCantidad($intHoras);
                             $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);                            
                             $arPagoAdicional->setTipoAdicional(4);
+                            $arPagoAdicional->setCodigoUsuario($arUsuario->getId());
                             $em->persist($arPagoAdicional);                                
                         }                        
                         $intIndice++;
@@ -133,6 +135,7 @@ class PagosAdicionalesAgregarController extends Controller
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arrControles = $request->request->All();
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
             if ($arrControles['txtNumeroIdentificacion'] == ""){
@@ -158,6 +161,7 @@ class PagosAdicionalesAgregarController extends Controller
                                     $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);                            
                                     $arPagoAdicional->setTipoAdicional(4);
                                     $arPagoAdicional->setpermanente(1);
+                                    $arPagoAdicional->setCodigoUsuario($arUsuario->getId());
                                     $em->persist($arPagoAdicional);                                
                                 }                        
                                 $intIndice++;
@@ -277,7 +281,8 @@ class PagosAdicionalesAgregarController extends Controller
             ->getForm();
         $form->handleRequest($request);
     
-        if($form->isValid()) {            
+        if($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             if($form->get('BtnAgregar')->isClicked()) {                
                 if($form->get('TxtValor')->getData() != "" && $form->get('TxtValor')->getData() != 0) {                    
                     $boolError = FALSE;
@@ -308,6 +313,7 @@ class PagosAdicionalesAgregarController extends Controller
                         $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);                    
                         $arPagoAdicional->setPrestacional($arPagoConcepto->getPrestacional());
                         $arPagoAdicional->setTipoAdicional($tipo);
+                        $arPagoAdicional->setCodigoUsuario($arUsuario->getId());
                         $em->persist($arPagoAdicional);                                                        
                         $em->flush();                        
                         echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                        
@@ -431,6 +437,7 @@ class PagosAdicionalesAgregarController extends Controller
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arrControles = $request->request->All();
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
             if ($arrControles['txtNumeroIdentificacion'] == ""){
@@ -491,6 +498,7 @@ class PagosAdicionalesAgregarController extends Controller
                                 $arPagoAdicional->setTipoAdicional($tipo);
                                 $arPagoAdicional->setpermanente(1);
                                 $arPagoAdicional->setAplicaDiaLaborado($form->get('aplicarDiaLaborado')->getData());
+                                $arPagoAdicional->setCodigoUsuario($arUsuario->getId());
                                 $em->persist($arPagoAdicional);                                                        
                                 $em->flush();
                             }

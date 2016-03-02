@@ -221,9 +221,13 @@ class BaseEmpleadoController extends Controller
         $form = $this->createForm(new RhuEmpleadoType(), $arEmpleado);
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             $boolErrores = 0;
             $arrControles = $request->request->All();
             $arEmpleado = $form->getData();
+            if($codigoEmpleado == 0) {
+                $arEmpleado->setCodigoUsuario($arUsuario->getId());
+            }
             $arEmpleado->setNombreCorto($arEmpleado->getNombre1() . " " . $arEmpleado->getNombre2() . " " .$arEmpleado->getApellido1() . " " . $arEmpleado->getApellido2());
             if ($arEmpleado->getLibretaMilitar() <> 0){
                 $arEmpleado->setLibretaMilitar($arEmpleado->getNumeroIdentificacion());

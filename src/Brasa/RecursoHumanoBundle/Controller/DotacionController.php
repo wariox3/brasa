@@ -73,7 +73,8 @@ class DotacionController extends Controller
         }
         $form = $this->createForm(new RhuDotacionType, $arDotacion);         
         $form->handleRequest($request);
-        if ($form->isValid()) {            
+        if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arrControles = $request->request->All();
             $arDotacion = $form->getData();
             if($arrControles['txtNumeroIdentificacion'] != '') {
@@ -84,6 +85,9 @@ class DotacionController extends Controller
                     if($arEmpleado->getCodigoContratoActivoFk() != '') {                        
                         $arDotacion->setCentroCostoRel($arEmpleado->getCentroCostoRel());
                         $arDotacion->setFecha(new \DateTime('now'));
+                        if($codigoDotacion == 0) {
+                            $arDotacion->setCodigoUsuario($arUsuario->getId());
+                        }
                         $em->persist($arDotacion);
                         $em->flush();
                         if($form->get('guardarnuevo')->isClicked()) {

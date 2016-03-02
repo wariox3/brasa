@@ -71,6 +71,7 @@ class IncapacidadesController extends Controller
         $form = $this->createForm(new RhuIncapacidadType(), $arIncapacidad);                     
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arIncapacidad = $form->getData();                          
             $arrControles = $request->request->All();
             if($arrControles['txtNumeroIdentificacion'] != '') {
@@ -111,7 +112,10 @@ class IncapacidadesController extends Controller
                                     }     
                                     $arIncapacidad->setVrIncapacidad($floVrIncapacidad);
                                     $arIncapacidad->setVrSaldo($floVrIncapacidad);
-                                    $arIncapacidad->setCentroCostoRel($arEmpleado->getCentroCostoRel());                                                    
+                                    $arIncapacidad->setCentroCostoRel($arEmpleado->getCentroCostoRel());
+                                    if($codigoIncapacidad == 0) {
+                                        $arIncapacidad->setCodigoUsuario($arUsuario->getId());
+                                    }
                                     $em->persist($arIncapacidad);
                                     $em->flush();
 

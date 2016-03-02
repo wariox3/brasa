@@ -90,7 +90,7 @@ class FormatoCarta extends \FPDF_FPDF {
         $sustitucion1 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion();
         $sustitucion2 = $arContrato->getEmpleadoRel()->getNombreCorto();
         $sustitucion3 = $arContrato->getCargoRel()->getNombre();
-        setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
+        setlocale(LC_TIME,"es_ES");
         if ($arContrato->getFechaProrrogaInicio() == null){
             $sustitucion4 = $arContrato->getFechaDesde()->format('Y-m-d');
             $sustitucion7 = $arContrato->getFechaHasta()->format('Y-m-d');
@@ -104,10 +104,10 @@ class FormatoCarta extends \FPDF_FPDF {
             $sustitucion6 = "";
         } else {
             $sustitucion6 = self::$fechaOpcional;
-            setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
+            setlocale(LC_TIME,"es_ES");
             $sustitucion6 = strftime("%d de %B de %Y", strtotime($sustitucion6->format('Y-m-d')));
         }
-        setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
+        setlocale(LC_TIME,"es_ES");
         $sustitucion7 = strftime("%d de %B de %Y", strtotime($sustitucion7));
         $sustitucion8 = $arContrato->getContratoTipoRel()->getNombre();
         $salarioLetras = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->numtoletras($arContrato->getVrSalario());
@@ -115,7 +115,7 @@ class FormatoCarta extends \FPDF_FPDF {
         $sustitucion9 .= number_format($arContrato->getVrSalario(), 2,'.',',');
         $sustitucion9 .= ")";
         $sustitucion10 = self::$fechaProceso;
-        setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
+        setlocale(LC_TIME,"es_ES");
         $sustitucion10 = strftime("%d de %B de %Y", strtotime($sustitucion10));
         $promedioSalarioLetras = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->numtoletras($floPromedioSalario);
         $sustitucion11 = $promedioSalarioLetras." $(";

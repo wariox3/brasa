@@ -123,7 +123,8 @@ class VacacionesController extends Controller
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $form = $this->createForm(new RhuVacacionType, $arVacacion);         
         $form->handleRequest($request);
-        if ($form->isValid()) { 
+        if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arrControles = $request->request->All();
             $arVacacion = $form->getData();
             if($form->get('guardar')->isClicked()) {
@@ -147,7 +148,10 @@ class VacacionesController extends Controller
                             $intDias = $arVacacion->getFechaDesdeDisfrute()->diff($arVacacion->getFechaHastaDisfrute());
                             $intDias = $intDias->format('%a');
                             $intDiasDevolver = ($intDias + 1) + $arVacacion->getDiasPagados();            
-                            $arVacacion->setDiasVacaciones($intDiasDevolver);            
+                            $arVacacion->setDiasVacaciones($intDiasDevolver);
+                            if($codigoVacacion == 0) {
+                                $arVacacion->setCodigoUsuario($arUsuario->getId());
+                            }
                             $em->persist($arVacacion);
                             //Calcular deducciones credito
                             $floVrDeducciones = 0;

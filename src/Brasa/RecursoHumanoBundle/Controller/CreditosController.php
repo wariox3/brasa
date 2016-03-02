@@ -191,6 +191,7 @@ class CreditosController extends Controller
         $form = $this->createForm(new RhuCreditoType, $arCredito);         
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             if ($form->get('vrPagar')->getData() == 0 || $form->get('numeroCuotas')->getData() == 0){
                 $objMensaje->Mensaje("error", "El total a pagar y/o las cuotas no pueden estar en cero", $this);
             } else {
@@ -212,6 +213,9 @@ class CreditosController extends Controller
                             $arCredito->setVrCuota($douVrCuota);
                             $arCredito->setSaldo($vrSaltoTotal);
                             $arCredito->setSaldoTotal($vrSaltoTotal);
+                            if($codigoCredito == 0) {
+                                $arCredito->setCodigoUsuario($arUsuario->getId());
+                            }
                             $em->persist($arCredito);
                             $em->flush();
                             if($form->get('guardarnuevo')->isClicked()) {

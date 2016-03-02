@@ -306,6 +306,7 @@ class ContratosController extends Controller
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
         if ($formContrato->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             $dateFechaHasta = $formContrato->get('fechaTerminacion')->getData();
             $arMotivoTerminacion = new \Brasa\RecursoHumanoBundle\Entity\RhuMotivoTerminacionContrato();
             $codigoMotivoContrato = $formContrato->get('terminacionContratoRel')->getData();
@@ -356,6 +357,7 @@ class ContratosController extends Controller
                             $arLiquidacion->setLiquidarCesantias(1);
                             $arLiquidacion->setLiquidarPrima(1);
                             $arLiquidacion->setLiquidarVacaciones(1);
+                            $arLiquidacion->setCodigoUsuario($arUsuario->getId());
                             $em->persist($arLiquidacion);
                             //Verificar creditos
                             $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();

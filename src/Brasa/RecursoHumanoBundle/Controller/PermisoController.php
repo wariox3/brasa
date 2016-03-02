@@ -80,7 +80,9 @@ class PermisoController extends Controller
                         $arPermiso->setCargoRel($arEmpleado->getCargoRel());
                         $srtTotalHoras = date_diff($arPermiso->getHoraLlegada(),$arPermiso->getHoraSalida());
                         $arPermiso->setHorasPermiso($srtTotalHoras->format('%H'));
-                        $arPermiso->setCodigoUsuario($arUsuario->getId());
+                        if ($codigoPermiso == 0){
+                            $arPermiso->setCodigoUsuario($arUsuario->getId());
+                        }
                         $em->persist($arPermiso);
                         $em->flush();
                         if($form->get('guardarnuevo')->isClicked()) {
