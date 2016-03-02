@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 
 class TurCotizacionRepository extends EntityRepository {
     
-    public function listaDQL($numero, $codigoCliente = "", $boolEstadoAutorizado = "") {
+    public function listaDql($numero, $codigoCliente = "", $boolEstadoAutorizado = "") {
         $dql   = "SELECT c FROM BrasaTurnoBundle:TurCotizacion c WHERE c.codigoCotizacionPk <> 0";
         if($numero != "") {
             $dql .= " AND c.numero = " . $numero;  
@@ -20,6 +20,7 @@ class TurCotizacionRepository extends EntityRepository {
         if($boolEstadoAutorizado == "0") {
             $dql .= " AND c.estadoAutorizado = 0";
         }        
+        $dql .= " ORDER BY c.fecha DESC";
         return $dql;
     }
     

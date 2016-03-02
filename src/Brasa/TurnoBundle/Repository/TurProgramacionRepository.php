@@ -32,7 +32,7 @@ class TurProgramacionRepository extends EntityRepository {
         if($strFechaHasta != "") {
             $dql .= " AND p.fecha <= '" . $strFechaHasta . " 23:59:59'";
         }    
-        $dql .= " ORDER BY p.fecha";
+        $dql .= " ORDER BY p.fecha DESC";
         return $dql;
     }    
     

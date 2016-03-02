@@ -26,7 +26,8 @@ class TurServicioRepository extends EntityRepository {
         }
         if($boolEstadoCerrado == "0") {
             $dql .= " AND s.estadoCerrado = 0";
-        }         
+        }  
+        $dql .= " ORDER BY s.codigoServicioPk";
         return $dql;
     }
     

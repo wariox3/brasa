@@ -92,14 +92,17 @@ class FormatoFactura extends \FPDF_FPDF {
             $this->Ln();
         }
 
-        $List1 = array($arFactura->getNumero(),
+        $List1 = array('',
             $arFactura->getFecha()->format('Y-m-d'),
             $arFactura->getFechaVence()->format('Y-m-d'),
             $arFactura->getClienteRel()->getFormaPagoRel()->getNombre(),
             $arFactura->getClienteRel()->getPlazoPago(),
             $arFactura->getSoporte());
-        $this->SetFont('Arial', '', 8);
+        $this->SetXY(175,25);
+        $this->SetFont('Arial', '', 14);        
+        $this->Cell(30, 3, $arFactura->getNumero(), 0, 0, 'R'); 
         $this->SetY(27);
+        $this->SetFont('Arial', '', 8);        
         foreach ($List1 as $col) {
             $this->SetX(175);
             $this->Cell(30, 3, $col, 0, 0, 'R');

@@ -44,6 +44,7 @@ class TurPedidoRepository extends EntityRepository {
         if($strFechaHasta != "") {
             $dql .= " AND p.fechaProgramacion <= '" . $strFechaHasta . "'";
         }        
+        $dql .= " ORDER BY p.fecha DESC";
         return $dql;
     }
     

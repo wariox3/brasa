@@ -32,7 +32,7 @@ class TurFacturaRepository extends EntityRepository {
         if($strFechaHasta != "") {
             $dql .= " AND f.fecha <= '" . $strFechaHasta . " 23:59:59'";
         }    
-        $dql .= " ORDER BY f.numero";
+        $dql .= " ORDER BY f.fecha DESC, f.numero DESC";
         return $dql;
     }           
     
