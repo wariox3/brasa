@@ -23,6 +23,11 @@ class TurPuesto
     private $nombre;      
     
     /**
+     * @ORM\Column(name="direccion", type="string", length=80)
+     */
+    private $direccion;    
+    
+    /**
      * @ORM\Column(name="telefono", type="string", length=30, nullable=true)
      */
     private $telefono;     
@@ -414,5 +419,29 @@ class TurPuesto
     public function getProgramacionesDetallesPuestoRel()
     {
         return $this->programacionesDetallesPuestoRel;
+    }
+
+    /**
+     * Set direccion
+     *
+     * @param string $direccion
+     *
+     * @return TurPuesto
+     */
+    public function setDireccion($direccion)
+    {
+        $this->direccion = $direccion;
+
+        return $this;
+    }
+
+    /**
+     * Get direccion
+     *
+     * @return string
+     */
+    public function getDireccion()
+    {
+        return $this->direccion;
     }
 }

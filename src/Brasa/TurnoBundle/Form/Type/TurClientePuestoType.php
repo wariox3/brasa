@@ -11,6 +11,7 @@ class TurClientePuestoType extends AbstractType
     {
         $builder
             ->add('nombre', 'text', array('required'  => true))
+            ->add('direccion', 'text', array('required'  => false))
             ->add('telefono', 'text', array('required'  => false))
             ->add('celular', 'text', array('required'  => false))
             ->add('contacto', 'text', array('required'  => false))
