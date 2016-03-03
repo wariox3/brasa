@@ -27,10 +27,8 @@ class SegUsuarioPermisoEspecialRepository extends EntityRepository {
           $boolPermiso = 1;  
         } else {
             $arUsuarioPermisoEspecial = $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->findOneBy(array('codigoUsuarioFk' => $arUsuario->getId(), 'codigoPermisoEspecialFk' => $codigoPermisoEspecial));
-            if(count($arUsuarioPermisoEspecial) > 0) {
-                if($arUsuarioPermisoEspecial->getPermitir() == 1) {
-                    $boolPermiso = true;
-                }
+            if(count($arUsuarioPermisoEspecial) > 0) {                
+                $boolPermiso = true;                
             }            
         }                        
         return $boolPermiso;        

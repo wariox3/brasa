@@ -59,11 +59,14 @@
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidosDetalle.codigoPedidoDetallePk }}" /></td>
             {%endfor%}
             </tr>            
-    </table>                 
-                
+    </table>                                 
     <div class="modal-footer">            
             {{ form_widget(form.BtnGuardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
     </div>
+        <blockquote>
+          <p>Recuerde que para agregar un pedido debe estas autorizado y no puede estar anulado.</p>
+          <footer>Requiere <cite title="Source Title">pedido autorizado, sin anular</cite></footer>
+        </blockquote>     
     {{ form_end(form) }}
 </div>
 {% endblock %}
