@@ -141,6 +141,7 @@ class ContratosController extends Controller
             if($arContrato->getContratoTipoRel()->getCodigoContratoTipoPk() == 5 && ($arContrato->getSsoTipoCotizanteRel()->getCodigoTipoCotizantePk() != 19 || $arContrato->getSsoSubtipoCotizanteRel()->getCodigoSubtipoCotizantePk() != 0)) {
                 $boolValidarTipoContrato = FALSE;
             }
+            //valida si el contrato es fijo, valida si es mayor o igual a un año
             $arContratoTipo = $form->get('contratoTipoRel')->getData();
             if($arContratoTipo->getCodigoContratoTipoPk() == 2) {
                 $fechaDesde = $form->get('fechaDesde')->getData();
@@ -151,7 +152,7 @@ class ContratosController extends Controller
                     $boolValidarContratoFijo = FALSE;
                 }
             }
-            
+            //fin validación
             if ($codigoContrato == 0){
                 $douValidarEmpleadoContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->validarEmpleadoContrato($codigoEmpleado);
                 if ($douValidarEmpleadoContrato >= 1){
@@ -248,7 +249,7 @@ class ContratosController extends Controller
                             $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
                             $douSalarioMinimo = $arConfiguracion->getVrSalario();
                             //$douSalarioMinimo = 644350;
-                            if($codigoContrato == 0 && $arContrato->getVrSalario() <= $douSalarioMinimo * 2) {
+                            if($arContrato->getVrSalario() <= $douSalarioMinimo * 2) {
                                 $arEmpleado->setAuxilioTransporte(1);
                             } else {
                                 $arEmpleado->setAuxilioTransporte(0);

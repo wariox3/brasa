@@ -38,6 +38,12 @@
                     </div>
                 
                 <div class="form-group form-group-sm">
+                    <label for="form_centroCostoRel" class="col-sm-2 control-label">Centro costo:</label>
+                    <div class="col-sm-10">
+                        {{ form_widget(form.centroCostoRel, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
                     <label for="form_aplicarDiaLaborado" class="col-sm-2 control-label">Aplica día laborado:</label>
                     <div class="col-sm-10">
                         {{ form_widget(form.aplicarDiaLaborado, { 'attr': {'class': 'form-control'} }) }}
@@ -55,6 +61,7 @@
                 <th>CÓDIGO</th>
                 <th>CONCEPTO</th>
                 <th>DETALLE</th>
+                <th>CENTRO COSTO</th>
                 <th>IDENTIFICACIÓN</th>
                 <th>EMPLEADO</th>
                 <th>CANTIDAD</th>
@@ -65,25 +72,27 @@
                 <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
             </tr>
             {% for arPagosAdicionales in arPagosAdicionales %}
+                {% if arPagosAdicionales.empleadoRel.codigoCentroCostoFk == null %}{% set class = 'danger' %}{% else %}{% set class = '' %}{% endif %}    
             <tr>
-                <td>
+                <td class="{{ class }}">
                     <input type="hidden" name="LblCodigoGuia[]" value="{{ arPagosAdicionales.codigoPagoAdicionalPk }}">
                     <span class="badge">{{ arPagosAdicionales.codigoPagoAdicionalPk }}</span>
                 </td>
-                <td>{{ arPagosAdicionales.pagoConceptoRel.nombre}}</td>                        
-                <td>{{ arPagosAdicionales.detalle }}</td>
-                <td>{{ arPagosAdicionales.empleadoRel.numeroIdentificacion }}</td>
-                <td>{{ arPagosAdicionales.empleadoRel.nombreCorto|default('Sin nombre') }}</td>
-                <td style="text-align: right">{{ arPagosAdicionales.cantidad | number_format(1, '.', ',') }}</td>                            
-                <td style="text-align: right">{{ arPagosAdicionales.valor | number_format(2, '.', ',') }}</td>                                                        
-                <td>{% if arPagosAdicionales.permanente == 1 %} SI {% else %} NO {% endif %}</td>                        
-                <td>{% if arPagosAdicionales.aplicaDiaLaborado == 1 %} SI {% else %} NO {% endif %}</td>                        
+                <td class="{{ class }}">{{ arPagosAdicionales.pagoConceptoRel.nombre}}</td>                        
+                <td class="{{ class }}">{{ arPagosAdicionales.detalle }}</td>
+                <td class="{{ class }}">{{ arPagosAdicionales.empleadoRel.centroCostoRel.nombre | default('Sin definir') }}</td>
+                <td class="{{ class }}">{{ arPagosAdicionales.empleadoRel.numeroIdentificacion }}</td>
+                <td class="{{ class }}">{{ arPagosAdicionales.empleadoRel.nombreCorto|default('Sin nombre') }}</td>
+                <td class="{{ class }}" style="text-align: right">{{ arPagosAdicionales.cantidad | number_format(1, '.', ',') }}</td>                            
+                <td class="{{ class }}" style="text-align: right">{{ arPagosAdicionales.valor | number_format(2, '.', ',') }}</td>                                                        
+                <td class="{{ class }}">{% if arPagosAdicionales.permanente == 1 %} SI {% else %} NO {% endif %}</td>                        
+                <td class="{{ class }}">{% if arPagosAdicionales.aplicaDiaLaborado == 1 %} SI {% else %} NO {% endif %}</td>                        
                 {% if  arPagosAdicionales.tipoAdicional != 4 %}
-                    <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_agregar_valoradicionaleditar', { 'tipo': arPagosAdicionales.tipoAdicional, 'codigoPagoAdicional': arPagosAdicionales.codigoPagoAdicionalPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                
+                    <td class="{{ class }}" style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_agregar_valoradicionaleditar', { 'tipo': arPagosAdicionales.tipoAdicional, 'codigoPagoAdicional': arPagosAdicionales.codigoPagoAdicionalPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                
                 {% else %}
-                    <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_agregar_tiempoadicionaleditar', { 'tipo': arPagosAdicionales.tipoAdicional, 'codigoPagoAdicional': arPagosAdicionales.codigoPagoAdicionalPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                            
+                    <td class="{{ class }}" style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_agregar_tiempoadicionaleditar', { 'tipo': arPagosAdicionales.tipoAdicional, 'codigoPagoAdicional': arPagosAdicionales.codigoPagoAdicionalPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                            
                 {% endif %}
-                <td style="text-align: center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagosAdicionales.codigoPagoAdicionalPk }}" /></td>
+                <td class="{{ class }}" style="text-align: center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagosAdicionales.codigoPagoAdicionalPk }}" /></td>
             </tr>
             {% endfor %}
         </table>

@@ -278,7 +278,6 @@ class ExamenController extends Controller
     }    
     
     private function listar() {
-        $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->listaDQL(

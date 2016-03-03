@@ -124,21 +124,25 @@ class PagosAdicionalesController extends Controller
                     ));
     }
     
-    private function listar($form) {
-        $session = $this->getRequest()->getSession();         
-        $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->listaAdicionalesDql(                    
-            $this->nombre,
-            $this->identificacion,
-            $this->aplicarDiaLaborado);
-    }
-
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();            
+        $session = $this->getRequest()->getSession();
+        $arrayPropiedades = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoCentroCosto')) {
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
+        }            
         $form = $this->createFormBuilder()
-            //->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->nombre, 'required' => false))
-            //->add('TxtIdentificacion', 'text', array('label'  => 'Identificación','data' => $this->identificacion, 'required' => false))
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)    
             ->add('BtnRetirarConcepto', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnAplicaDiaLaborado', 'submit', array('label'  => 'Aplicar a dia laborado',))
             ->add('aplicarDiaLaborado', 'choice', array('choices' => array('2' => 'TODOS', '0' => 'NO', '1' => 'SI')))                
@@ -147,11 +151,23 @@ class PagosAdicionalesController extends Controller
             ->getForm();
         return $form;
     }
+    
+    private function listar($form) {
+        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->listaAdicionalesDql(                    
+            $this->nombre,
+            $this->identificacion,
+            $this->aplicarDiaLaborado,
+            $session->get('filtroCodigoCentroCosto'));
+    }
 
     private function filtrarLista($form) {
         $request = $this->getRequest();
+        $session = $this->getRequest()->getSession();
+        $controles = $request->request->get('form');
         $arrControles = $request->request->All();
-        
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $this->nombre = $arrControles['txtNombreCorto'];
         $this->identificacion = $arrControles['txtNumeroIdentificacion'];
         $this->aplicarDiaLaborado = $form->get('aplicarDiaLaborado')->getData();
@@ -437,33 +453,40 @@ class PagosAdicionalesController extends Controller
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'CONCEPTO')
                     ->setCellValue('C1', 'DETALLE')
-                    ->setCellValue('D1', 'IDENTIFICACIÓN')
-                    ->setCellValue('E1', 'EMPLEADO')
-                    ->setCellValue('F1', 'CANTIDAD')
-                    ->setCellValue('G1', 'VALOR')                    
-                    ->setCellValue('H1', 'PERMANENTE')
-                    ->setCellValue('I1', 'APLICA DIA LABORADO');
+                    ->setCellValue('D1', 'CENTRO COSTO')
+                    ->setCellValue('E1', 'IDENTIFICACIÓN')
+                    ->setCellValue('F1', 'EMPLEADO')
+                    ->setCellValue('G1', 'CANTIDAD')
+                    ->setCellValue('H1', 'VALOR')                    
+                    ->setCellValue('I1', 'PERMANENTE')
+                    ->setCellValue('J1', 'APLICA DIA LABORADO');
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
         $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
         $arPagoAdicional = $query->getResult();
         foreach ($arPagoAdicional as $arPagoAdicional) {
-            
+            if ($arPagoAdicional->getEmpleadoRel()->getCodigoCentroCostoFk() == null){
+                $srtCentroCosto = "";
+            } else {
+                $srtCentroCosto = $arPagoAdicional->getEmpleadoRel()->getCentroCostoRel()->getNombre();
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A' . $i, $arPagoAdicional->getCodigoPagoAdicionalPk())    
                 ->setCellValue('B' . $i, $arPagoAdicional->getPagoConceptoRel()->getNombre())
                 ->setCellValue('C' . $i, $arPagoAdicional->getDetalle())
-                ->setCellValue('D' . $i, $arPagoAdicional->getEmpleadoRel()->getNumeroIdentificacion())                        
-                ->setCellValue('E' . $i, $arPagoAdicional->getEmpleadoRel()->getNombreCorto())                    
-                ->setCellValue('F' . $i, $arPagoAdicional->getCantidad())                    
-                ->setCellValue('G' . $i, $arPagoAdicional->getValor())
-                ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arPagoAdicional->getPermanente()))
-                ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arPagoAdicional->getAplicaDiaLaborado()));
+                ->setCellValue('D' . $i, $srtCentroCosto)    
+                ->setCellValue('E' . $i, $arPagoAdicional->getEmpleadoRel()->getNumeroIdentificacion())                        
+                ->setCellValue('F' . $i, $arPagoAdicional->getEmpleadoRel()->getNombreCorto())                    
+                ->setCellValue('G' . $i, $arPagoAdicional->getCantidad())                    
+                ->setCellValue('H' . $i, $arPagoAdicional->getValor())
+                ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arPagoAdicional->getPermanente()))
+                ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arPagoAdicional->getAplicaDiaLaborado()));
             $i++;
         }
 

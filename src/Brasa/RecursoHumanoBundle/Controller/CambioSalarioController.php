@@ -48,9 +48,16 @@ class CambioSalarioController extends Controller
                 $arEmpleadoActualizar->setVrSalario($form->get('salarioNuevo')->getData());
                 $arContrato->setVrSalario($form->get('salarioNuevo')->getData());
                 $arContrato->setVrSalarioPago($form->get('salarioNuevo')->getData());
-                $em->persist($arEmpleadoActualizar);
                 $em->persist($arCambioSalario);
                 $em->persist($arContrato);
+                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
+                $douSalarioMinimo = $arConfiguracion->getVrSalario();
+                if($arContrato->getVrSalario() <= $douSalarioMinimo * 2) {
+                    $arEmpleadoActualizar->setAuxilioTransporte(1);
+                } else {
+                    $arEmpleadoActualizar->setAuxilioTransporte(0);
+                }
+                $em->persist($arEmpleadoActualizar);
                 $em->flush();
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                 
             }
