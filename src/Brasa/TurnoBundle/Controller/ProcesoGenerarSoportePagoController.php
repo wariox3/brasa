@@ -52,16 +52,17 @@ class ProcesoGenerarSoportePagoController extends Controller
             }
             if($request->request->get('OpDeshacer')) {
                 $codigoSoportePagoPeriodo = $request->request->get('OpDeshacer');
-                $arSoportePagoPeriodo = NEW \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
+                $strSql = "DELETE FROM tur_soporte_pago_detalle WHERE codigo_soporte_pago_periodo_fk = " . $codigoSoportePagoPeriodo;           
+                $em->getConnection()->executeQuery($strSql);
+                $strSql = "DELETE FROM tur_soporte_pago WHERE codigo_soporte_pago_periodo_fk = " . $codigoSoportePagoPeriodo;           
+                $em->getConnection()->executeQuery($strSql); 
+                
+                $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
                 $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
                 $arSoportePagoPeriodo->setEstadoGenerado(0);
                 $arSoportePagoPeriodo->setRecursos(0);
                 $em->persist($arSoportePagoPeriodo);
-                $em->flush();  
-                $strSql = "DELETE FROM tur_soporte_pago_detalle WHERE codigo_soporte_pago_periodo_fk = " . $codigoSoportePagoPeriodo;           
-                $em->getConnection()->executeQuery($strSql);
-                $strSql = "DELETE FROM tur_soporte_pago WHERE codigo_soporte_pago_periodo_fk = " . $codigoSoportePagoPeriodo;           
-                $em->getConnection()->executeQuery($strSql);                                                 
+                $em->flush();                                                  
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
             }
             if($request->request->get('OpCerrar')) {
@@ -444,9 +445,108 @@ class ProcesoGenerarSoportePagoController extends Controller
 
             $i++;
         }
-        $objPHPExcel->getActiveSheet()->setTitle('Detalle');        
-        
+        $objPHPExcel->getActiveSheet()->setTitle('Detalle');                
         $objPHPExcel->setActiveSheetIndex(0);
+        
+        //Hoja con las programaciones de los recursos                
+        $objPHPExcel->createSheet(3)->setTitle('RecursoProgramacion')
+                    ->setCellValue('A1', 'CODIGO')
+                    ->setCellValue('B1', 'COD.REC')
+                    ->setCellValue('C1', 'IDENT')
+                    ->setCellValue('D1', 'RECURSO')
+                    ->setCellValue('E1', 'CLIENTE')
+                    ->setCellValue('F1', 'PUESTO')
+                    ->setCellValue('G1', 'D1')
+                    ->setCellValue('H1', 'D2')
+                    ->setCellValue('I1', 'D3')
+                    ->setCellValue('J1', 'D4')
+                    ->setCellValue('K1', 'D5')
+                    ->setCellValue('L1', 'D6')    
+                    ->setCellValue('M1', 'D7')
+                    ->setCellValue('N1', 'D8')
+                    ->setCellValue('O1', 'D9')
+                    ->setCellValue('P1', 'D10')                
+                    ->setCellValue('Q1', 'D11')
+                    ->setCellValue('R1', 'D12')
+                    ->setCellValue('S1', 'D13')
+                    ->setCellValue('T1', 'D14')
+                    ->setCellValue('U1', 'D15')
+                    ->setCellValue('V1', 'D16')
+                    ->setCellValue('W1', 'D17')
+                    ->setCellValue('X1', 'D18')
+                    ->setCellValue('Y1', 'D19')
+                    ->setCellValue('Z1', 'D20')
+                    ->setCellValue('AA1', 'D21')
+                    ->setCellValue('AB1', 'D22')
+                    ->setCellValue('AC1', 'D23')
+                    ->setCellValue('AD1', 'D24')
+                    ->setCellValue('AE1', 'D25')
+                    ->setCellValue('AF1', 'D26')
+                    ->setCellValue('AG1', 'D27')
+                    ->setCellValue('AH1', 'D28')
+                    ->setCellValue('AI1', 'D29')
+                    ->setCellValue('AJ1', 'D30')
+                    ->setCellValue('AK1', 'D31');
+
+        $i = 2;
+        $query = $em->createQuery($this->strListaDql);
+        $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+        $arSoportesPago = $query->getResult();
+        foreach ($arSoportesPago as $arSoportePago) { 
+            $strAnio = $arSoportePago->getFechaDesde()->format('Y');
+            $strMes = $arSoportePago->getFechaDesde()->format('m');            
+            $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+            $arProgramacionDetalles =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arSoportePago->getCodigoRecursoFk()));                                    
+            foreach($arProgramacionDetalles as $arProgramacionDetalle) {
+                $objPHPExcel->setActiveSheetIndex(2)
+                        ->setCellValue('A' . $i, $arSoportePago->getCodigoSoportePagoPk())
+                        ->setCellValue('B' . $i, $arSoportePago->getCodigoRecursoFk())
+                        ->setCellValue('C' . $i, $arSoportePago->getRecursoRel()->getNumeroIdentificacion())
+                        ->setCellValue('D' . $i, $arSoportePago->getRecursoRel()->getNombreCorto())
+                        ->setCellValue('E' . $i, $arProgramacionDetalle->getProgramacionRel()->getClienteRel()->getNombreCorto())
+                        ->setCellValue('F' . $i, $arProgramacionDetalle->getPuestoRel()->getNombre())
+                        ->setCellValue('G' . $i, $arProgramacionDetalle->getDia1())
+                        ->setCellValue('H' . $i, $arProgramacionDetalle->getDia2())
+                        ->setCellValue('I' . $i, $arProgramacionDetalle->getDia3())
+                        ->setCellValue('J' . $i, $arProgramacionDetalle->getDia4())
+                        ->setCellValue('K' . $i, $arProgramacionDetalle->getDia5())
+                        ->setCellValue('L' . $i, $arProgramacionDetalle->getDia6())
+                        ->setCellValue('M' . $i, $arProgramacionDetalle->getDia7())
+                        ->setCellValue('N' . $i, $arProgramacionDetalle->getDia8())
+                        ->setCellValue('O' . $i, $arProgramacionDetalle->getDia9())
+                        ->setCellValue('P' . $i, $arProgramacionDetalle->getDia10())
+                        ->setCellValue('Q' . $i, $arProgramacionDetalle->getDia11())
+                        ->setCellValue('R' . $i, $arProgramacionDetalle->getDia12())
+                        ->setCellValue('S' . $i, $arProgramacionDetalle->getDia13())
+                        ->setCellValue('T' . $i, $arProgramacionDetalle->getDia14())
+                        ->setCellValue('U' . $i, $arProgramacionDetalle->getDia15())
+                        ->setCellValue('V' . $i, $arProgramacionDetalle->getDia16())
+                        ->setCellValue('W' . $i, $arProgramacionDetalle->getDia17())
+                        ->setCellValue('X' . $i, $arProgramacionDetalle->getDia18())
+                        ->setCellValue('Y' . $i, $arProgramacionDetalle->getDia19())
+                        ->setCellValue('Z' . $i, $arProgramacionDetalle->getDia20())
+                        ->setCellValue('AA' . $i, $arProgramacionDetalle->getDia21())
+                        ->setCellValue('AB' . $i, $arProgramacionDetalle->getDia22())
+                        ->setCellValue('AC' . $i, $arProgramacionDetalle->getDia23())
+                        ->setCellValue('AD' . $i, $arProgramacionDetalle->getDia24())
+                        ->setCellValue('AE' . $i, $arProgramacionDetalle->getDia25())
+                        ->setCellValue('AF' . $i, $arProgramacionDetalle->getDia26())
+                        ->setCellValue('AG' . $i, $arProgramacionDetalle->getDia27())
+                        ->setCellValue('AH' . $i, $arProgramacionDetalle->getDia28())
+                        ->setCellValue('AI' . $i, $arProgramacionDetalle->getDia29())
+                        ->setCellValue('AJ' . $i, $arProgramacionDetalle->getDia30())
+                        ->setCellValue('AK' . $i, $arProgramacionDetalle->getDia31());
+
+                $i++;                
+            }
+        }
+        for($col = 'A'; $col !== 'AK'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);            
+        }        
+        $objPHPExcel->getActiveSheet()->setTitle('RecursoProgramacion');     
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        
+        
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="SoportesPagoTurnos.xlsx"');

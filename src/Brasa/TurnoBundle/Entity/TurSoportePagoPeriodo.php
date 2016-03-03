@@ -36,6 +36,11 @@ class TurSoportePagoPeriodo
      * @ORM\Column(name="festivos", type="integer")
      */    
     private $festivos = 0;    
+    
+    /**
+     * @ORM\Column(name="dias_adicionales", type="integer")
+     */    
+    private $diasAdicionales = 0;    
 
     /**   
      * Cuando el usuario activa descanso festivos le suma 8 horas por cada festivo  
@@ -404,5 +409,29 @@ class TurSoportePagoPeriodo
     public function getEstadoCerrado()
     {
         return $this->estadoCerrado;
+    }
+
+    /**
+     * Set diasAdicionales
+     *
+     * @param integer $diasAdicionales
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setDiasAdicionales($diasAdicionales)
+    {
+        $this->diasAdicionales = $diasAdicionales;
+
+        return $this;
+    }
+
+    /**
+     * Get diasAdicionales
+     *
+     * @return integer
+     */
+    public function getDiasAdicionales()
+    {
+        return $this->diasAdicionales;
     }
 }

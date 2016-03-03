@@ -49,7 +49,11 @@ class TurSoportePagoRepository extends EntityRepository {
                 if($arEmpleado->getCodigoContratoUltimoFk()) {
                     $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoUltimoFk());       
                 }
-            }  
+            } 
+            if($arSoportePagoPeriodo->getDiasAdicionales() > 0) {
+                $arrayResultado[$i]['dias'] += $arSoportePagoPeriodo->getDiasAdicionales();
+                $arrayResultado[$i]['horasDiurnas'] += $arSoportePagoPeriodo->getDiasAdicionales() * 8;                
+            }
             $intHorasPago = $arrayResultado[$i]['horasDiurnas'] + $arrayResultado[$i]['horasNocturnas'] + $arrayResultado[$i]['horasFestivasDiurnas'] + $arrayResultado[$i]['horasFestivasNocturnas'];
             if($arrayResultado[$i]['incapacidad'] > 0) {
                 $arrayResultado[$i]['dias'] += $arrayResultado[$i]['incapacidad'];

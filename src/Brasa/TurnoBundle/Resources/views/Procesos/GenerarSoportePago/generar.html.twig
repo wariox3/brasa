@@ -20,8 +20,9 @@
                 <th>DESDE</th>
                 <th>HASTA</th>
                 <th>RECURSOS</th>
-                <th>FES</th>
-                <th>DSC.FIJO</th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Dias festivos">D.F</p></th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Dias adicionales">D.A</p></th>
+                <th>DESCANSO FIJO</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -36,6 +37,7 @@
                 <td>{{ arSoportePagoPeriodos.fechaHasta |date("Y/m/d")  }}</td>
                 <td style="text-align: right">{{ arSoportePagoPeriodos.recursos | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportePagoPeriodos.festivos | number_format(0, '.', ',') }}</td>                
+                <td style="text-align: right">{{ arSoportePagoPeriodos.diasAdicionales | number_format(0, '.', ',') }}</td>                
                 <td>{% if arSoportePagoPeriodos.descansoFestivoFijo == 1 %} SI {% else %} NO {% endif %}</td>
                 {% if arSoportePagoPeriodos.estadoGenerado == 0 %}
                     <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }}">Generar</button></td>
