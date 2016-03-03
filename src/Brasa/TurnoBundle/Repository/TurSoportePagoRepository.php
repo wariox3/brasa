@@ -106,7 +106,7 @@ class TurSoportePagoRepository extends EntityRepository {
         $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
         $arSoportesPago = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $arSoportePagoPeriodo->getCodigoSoportePagoPeriodoPk()));
         foreach ($arSoportesPago as $arSoportePago) {
-            $strSql = "UPDATE tur_soporte_pago_detalle SET codigo_soporte_pago_fk = " . $arSoportePago->getCodigoSoportePagoPk() . " WHERE codigo_recurso_fk = " . $arSoportePago->getRecursoRel()->getCodigoRecursoPk();           
+            $strSql = "UPDATE tur_soporte_pago_detalle SET codigo_soporte_pago_fk = " . $arSoportePago->getCodigoSoportePagoPk() . " WHERE codigo_recurso_fk = " . $arSoportePago->getRecursoRel()->getCodigoRecursoPk() . " AND codigo_soporte_pago_periodo_fk = " . $arSoportePagoPeriodo->getCodigoSoportePagoPeriodoPk();           
             $em->getConnection()->executeQuery($strSql);            
         }
         

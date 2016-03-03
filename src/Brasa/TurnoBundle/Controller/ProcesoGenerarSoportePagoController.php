@@ -229,7 +229,9 @@ class ProcesoGenerarSoportePagoController extends Controller
         $intMinutoInicio = (($arTurno->getHoraDesde()->format('i') * 100)/60)/100;
         $intHoraInicio = $arTurno->getHoraDesde()->format('G');        
         $intHoraInicio += $intMinutoInicio;
+        $intMinutoFinal = (($arTurno->getHoraHasta()->format('i') * 100)/60)/100;
         $intHoraFinal = $arTurno->getHoraHasta()->format('G');
+        $intHoraFinal += $intMinutoFinal;
         $diaSemana = $dateFecha->format('N');
         $diaSemana2 = $dateFecha2->format('N');
         if($arTurno->getNovedad() == 0) {
