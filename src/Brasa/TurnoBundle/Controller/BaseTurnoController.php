@@ -217,6 +217,7 @@ class BaseTurnoController extends Controller
     }
 
     private function generarExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -236,12 +237,15 @@ class BaseTurnoController extends Controller
                     ->setCellValue('B1', 'NOMBRE')
                     ->setCellValue('C1', 'H.DESDE')
                     ->setCellValue('D1', 'H.HASTA')
-                    ->setCellValue('E1', 'NOVEDAD')
-                    ->setCellValue('F1', 'DESCANSO')
-                    ->setCellValue('G1', 'HORAS')
-                    ->setCellValue('H1', 'H.DIURNAS')
-                    ->setCellValue('I1', 'H.NOCTURNAS');
-
+                    ->setCellValue('E1', 'NOV')
+                    ->setCellValue('F1', 'DES')
+                    ->setCellValue('G1', 'INC')
+                    ->setCellValue('H1', 'LIC')
+                    ->setCellValue('I1', 'VAC')
+                    ->setCellValue('J1', 'HORAS')
+                    ->setCellValue('K1', 'H.NOMINA')
+                    ->setCellValue('L1', 'H.DIURNAS')
+                    ->setCellValue('M1', 'H.NOCTURNAS');
         $i = 2;
         
         $query = $em->createQuery($this->strListaDql);
@@ -254,11 +258,15 @@ class BaseTurnoController extends Controller
                     ->setCellValue('B' . $i, $arTurno->getNombre())
                     ->setCellValue('C' . $i, $arTurno->getHoraDesde()->format('H:i'))
                     ->setCellValue('D' . $i, $arTurno->getHoraHasta()->format('H:i'))
-                    ->setCellValue('E' . $i, $arTurno->getNovedad()*1)
-                    ->setCellValue('F' . $i, $arTurno->getDescanso()*1)
-                    ->setCellValue('G' . $i, $arTurno->getHoras())
-                    ->setCellValue('H' . $i, $arTurno->getHorasDiurnas())
-                    ->setCellValue('I' . $i, $arTurno->getHorasNocturnas());
+                    ->setCellValue('E' . $i, $objFunciones->devuelveBoolean($arTurno->getNovedad()))
+                    ->setCellValue('F' . $i, $objFunciones->devuelveBoolean($arTurno->getDescanso()))
+                    ->setCellValue('G' . $i, $objFunciones->devuelveBoolean($arTurno->getIncapacidad()))
+                    ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arTurno->getLicencia()))
+                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arTurno->getVacacion()))
+                    ->setCellValue('J' . $i, $arTurno->getHoras())
+                    ->setCellValue('K' . $i, $arTurno->getHorasNomina())
+                    ->setCellValue('L' . $i, $arTurno->getHorasDiurnas())
+                    ->setCellValue('M' . $i, $arTurno->getHorasNocturnas());
                         
             $i++;
         }
