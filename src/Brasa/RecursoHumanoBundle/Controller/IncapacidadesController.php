@@ -82,58 +82,65 @@ class IncapacidadesController extends Controller
                     $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
                     $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);                        
                     if($arIncapacidad->getFechaDesde() <= $arIncapacidad->getFechaHasta()) {
-                        if($em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->validarFecha($arIncapacidad->getFechaDesde(), $arIncapacidad->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(), $arIncapacidad->getCodigoIncapacidadPk())) {                    
-                            if($em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->validarFecha($arIncapacidad->getFechaDesde(), $arIncapacidad->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(),"")) {
-                                if($arIncapacidad->getFechaDesde() >= $arEmpleado->getFechaContrato()) {
-                                    $intDias = $arIncapacidad->getFechaDesde()->diff($arIncapacidad->getFechaHasta());
-                                    $intDias = $intDias->format('%a');
-                                    $intDias = $intDias + 1;
-                                    $arIncapacidad->setCantidad($intDias);                                                                                                                                    
-                                    $arIncapacidad->setEntidadSaludRel($arEmpleado->getEntidadSaludRel());
-                                    $floVrIncapacidad = 0;
-                                    $douVrDia = $arEmpleado->getVrSalario() / 30;
-                                    $douVrDiaSalarioMinimo = $arConfiguracion->getVrSalario() / 30;
-                                    $douPorcentajePago = $arIncapacidad->getIncapacidadTipoRel()->getPagoConceptoRel()->getPorPorcentaje();
-                                    $arIncapacidad->setPorcentajePago($douPorcentajePago);
-                                    if($arIncapacidad->getIncapacidadTipoRel()->getCodigoIncapacidadTipoPk() == 1) {
-                                        if($arEmpleado->getVrSalario() <= $arConfiguracion->getVrSalario()) {
-                                            $floVrIncapacidad = $intDias * $douVrDia;                    
-                                        }
-                                        if($arEmpleado->getVrSalario() > $arConfiguracion->getVrSalario() && $arEmpleado->getVrSalario() <= $arConfiguracion->getVrSalario() * 1.5) {
-                                            $floVrIncapacidad = $intDias * $douVrDiaSalarioMinimo;                    
-                                        }
-                                        if($arEmpleado->getVrSalario() > ($arConfiguracion->getVrSalario() * 1.5)) {
+                        $diasIncapacidad = $arIncapacidad->getFechaDesde()->diff($arIncapacidad->getFechaHasta());
+                        $diasIncapacidad = $diasIncapacidad->format('%a');
+                        $diasIncapacidad = $diasIncapacidad + 1;
+                        if ($diasIncapacidad < 180){
+                            if($em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->validarFecha($arIncapacidad->getFechaDesde(), $arIncapacidad->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(), $arIncapacidad->getCodigoIncapacidadPk())) {                    
+                                if($em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->validarFecha($arIncapacidad->getFechaDesde(), $arIncapacidad->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(),"")) {
+                                    if($arIncapacidad->getFechaDesde() >= $arEmpleado->getFechaContrato()) {
+                                        $intDias = $arIncapacidad->getFechaDesde()->diff($arIncapacidad->getFechaHasta());
+                                        $intDias = $intDias->format('%a');
+                                        $intDias = $intDias + 1;
+                                        $arIncapacidad->setCantidad($intDias);                                                                                                                                    
+                                        $arIncapacidad->setEntidadSaludRel($arEmpleado->getEntidadSaludRel());
+                                        $floVrIncapacidad = 0;
+                                        $douVrDia = $arEmpleado->getVrSalario() / 30;
+                                        $douVrDiaSalarioMinimo = $arConfiguracion->getVrSalario() / 30;
+                                        $douPorcentajePago = $arIncapacidad->getIncapacidadTipoRel()->getPagoConceptoRel()->getPorPorcentaje();
+                                        $arIncapacidad->setPorcentajePago($douPorcentajePago);
+                                        if($arIncapacidad->getIncapacidadTipoRel()->getCodigoIncapacidadTipoPk() == 1) {
+                                            if($arEmpleado->getVrSalario() <= $arConfiguracion->getVrSalario()) {
+                                                $floVrIncapacidad = $intDias * $douVrDia;                    
+                                            }
+                                            if($arEmpleado->getVrSalario() > $arConfiguracion->getVrSalario() && $arEmpleado->getVrSalario() <= $arConfiguracion->getVrSalario() * 1.5) {
+                                                $floVrIncapacidad = $intDias * $douVrDiaSalarioMinimo;                    
+                                            }
+                                            if($arEmpleado->getVrSalario() > ($arConfiguracion->getVrSalario() * 1.5)) {
+                                                $floVrIncapacidad = $intDias * $douVrDia;
+                                                $floVrIncapacidad = ($floVrIncapacidad * $douPorcentajePago)/100;                    
+                                            }
+                                        } else {
                                             $floVrIncapacidad = $intDias * $douVrDia;
-                                            $floVrIncapacidad = ($floVrIncapacidad * $douPorcentajePago)/100;                    
+                                            $floVrIncapacidad = ($floVrIncapacidad * $douPorcentajePago)/100;                
+                                        }     
+                                        $arIncapacidad->setVrIncapacidad($floVrIncapacidad);
+                                        $arIncapacidad->setVrSaldo($floVrIncapacidad);
+                                        $arIncapacidad->setCentroCostoRel($arEmpleado->getCentroCostoRel());
+                                        if($codigoIncapacidad == 0) {
+                                            $arIncapacidad->setCodigoUsuario($arUsuario->getId());
                                         }
-                                    } else {
-                                        $floVrIncapacidad = $intDias * $douVrDia;
-                                        $floVrIncapacidad = ($floVrIncapacidad * $douPorcentajePago)/100;                
-                                    }     
-                                    $arIncapacidad->setVrIncapacidad($floVrIncapacidad);
-                                    $arIncapacidad->setVrSaldo($floVrIncapacidad);
-                                    $arIncapacidad->setCentroCostoRel($arEmpleado->getCentroCostoRel());
-                                    if($codigoIncapacidad == 0) {
-                                        $arIncapacidad->setCodigoUsuario($arUsuario->getId());
-                                    }
-                                    $em->persist($arIncapacidad);
-                                    $em->flush();
+                                        $em->persist($arIncapacidad);
+                                        $em->flush();
 
-                                    if($form->get('guardarnuevo')->isClicked()) {                                                        
-                                        return $this->redirect($this->generateUrl('brs_rhu_incapacidades_nuevo', array('codigoIncapacidad' => 0)));                                        
-                                    } else {
-                                        return $this->redirect($this->generateUrl('brs_rhu_incapacidades_lista'));
-                                    }                             
-                                } else {                                    
-                                    $objMensaje->Mensaje("error", "No puede ingresar novedades antes de la fecha de inicio del contrato", $this);
-                                }                  
+                                        if($form->get('guardarnuevo')->isClicked()) {                                                        
+                                            return $this->redirect($this->generateUrl('brs_rhu_incapacidades_nuevo', array('codigoIncapacidad' => 0)));                                        
+                                        } else {
+                                            return $this->redirect($this->generateUrl('brs_rhu_incapacidades_lista'));
+                                        }                             
+                                    } else {                                    
+                                        $objMensaje->Mensaje("error", "No puede ingresar novedades antes de la fecha de inicio del contrato", $this);
+                                    }                  
+                                } else {
+                                    $objMensaje->Mensaje("error", "Existe una licencia en este periodo de fechas", $this);
+                                }                                                           
                             } else {
-                                $objMensaje->Mensaje("error", "Existe una licencia en este periodo de fechas", $this);
-                            }                                                           
+                                $objMensaje->Mensaje("error", "Existe otra incapaciad del empleado en esta fecha", $this);
+                            }               
                         } else {
-                            $objMensaje->Mensaje("error", "Existe otra incapaciad del empleado en esta fecha", $this);
-                        }               
-                    } else {
+                            $objMensaje->Mensaje("error", "La incapacidad no debe ser mayor 180 dias", $this);
+                        }
+                    }else {
                         $objMensaje->Mensaje("error", "La fecha desde debe ser inferior o igual a la fecha hasta de la incapacidad", $this);
                     }                    
                 } else {

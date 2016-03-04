@@ -146,7 +146,12 @@ class RhuEmpleado
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */    
-    private $codigoCentroCostoFk;           
+    private $codigoCentroCostoFk; 
+    
+    /**
+     * @ORM\Column(name="codigo_centro_costo_ultimo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCentroCostoUltimoFk;
     
     /**
      * @ORM\Column(name="codigo_cargo_fk", type="integer", nullable=true)

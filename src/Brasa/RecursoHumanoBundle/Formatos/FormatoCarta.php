@@ -98,8 +98,8 @@ class FormatoCarta extends \FPDF_FPDF {
         } else {
             $sustitucion4 = $arContrato->getFechaProrrogaInicio()->format('Y-m-d');
             $sustitucion7 = $arContrato->getFechaProrrogaFinal()->format('Y-m-d');
-            $fechai = $arContrato->getFechaProrrogaInicio();
-            $fechaf = $arContrato->getFechaProrrogaFinal();
+            $feci = $arContrato->getFechaProrrogaInicio();
+            $fecf = $arContrato->getFechaProrrogaFinal();
         }
         $sustitucion4 = strftime("%d de ". $this->MesesEspañol($feci->format('m')) ." de %Y", strtotime($sustitucion4));
         $sustitucion5 = $arConfiguracion->getNombreEmpresa();

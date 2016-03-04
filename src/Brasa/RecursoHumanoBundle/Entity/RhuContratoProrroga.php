@@ -62,6 +62,11 @@ class RhuContratoProrroga
      */    
     private $detalle;
     
+    /**     
+     * @ORM\Column(name="estado_vigente", type="boolean")
+     */    
+    private $estadoVigente = 0;
+    
     /**
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
      */    
@@ -347,5 +352,29 @@ class RhuContratoProrroga
     public function getCodigoUsuario()
     {
         return $this->codigoUsuario;
+    }
+
+    /**
+     * Set estadoVigente
+     *
+     * @param boolean $estadoVigente
+     *
+     * @return RhuContratoProrroga
+     */
+    public function setEstadoVigente($estadoVigente)
+    {
+        $this->estadoVigente = $estadoVigente;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoVigente
+     *
+     * @return boolean
+     */
+    public function getEstadoVigente()
+    {
+        return $this->estadoVigente;
     }
 }

@@ -11,16 +11,19 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuContratoProrrogaRepository extends EntityRepository {
     
-    /*public function contratoProrroga($codigoContrato = "", $fechaDesde = "", $fechaHasta = "") {        
+    public function contratoProrroga($codigoContrato = "", $fechaDesde = "", $fechaHasta = "", $codigoContratoProrroga = "") {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT cs FROM BrasaRecursoHumanoBundle:RhuCambioSalario cs "
-                ." WHERE (cs.fecha >= '" . $fechaDesde . "' "
-                . "AND cs.fecha <= '" . $fechaHasta . "') "
-                . "AND cs.codigoContratoFk = " . $codigoContrato . " "
-                . "ORDER BY cs.codigoCambioSalarioPk ASC";
+        $dql   = "SELECT cp FROM BrasaRecursoHumanoBundle:RhuContratoProrroga cp "
+                ." WHERE (cp.fechaFinalNueva >= '" . date_format($fechaDesde, ('Y-m-d')) . "' "
+                . "OR cp.fechaFinalNueva >= '" . date_format($fechaHasta, ('Y-m-d')) . "') "
+                . "AND cp.codigoContratoFk = " . $codigoContrato . " ";
+        if($codigoContratoProrroga != "" ) {
+            $dql .= " AND cp.codigoContratoProrrogaPk <> " . $codigoContratoProrroga . " ";
+        }
+        $dql .= " ORDER BY cp.codigoContratoProrrogaPk DESC";
+                //. "ORDER BY cp.codigoContratoProrrogaPk ASC";
         $query = $em->createQuery($dql);        
-        $arCambioSalario = $query->getResult();        
-        return $arCambioSalario;
-    } */ 
-    
+        $arContratoProrroga = $query->getResult();        
+        return $arContratoProrroga;
+    }
 }
