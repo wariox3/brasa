@@ -145,7 +145,7 @@ class PagosAdicionalesAgregarController extends Controller
                 if ($arEmpleado == null){
                     $objMensaje->Mensaje("error", "El empleado no existe", $this);
                 } else {
-                    if ($arEmpleado->getCodigoContratoActivoFk() == null){
+                    if ($arEmpleado->getCodigoContratoActivoFk() != null){
                         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
                     }else {
                         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoUltimoFk());
@@ -451,9 +451,9 @@ class PagosAdicionalesAgregarController extends Controller
                 if ($arEmpleado == null){
                     $objMensaje->Mensaje("error", "El empleado no existe", $this);
                 } else {
-                    if ($arEmpleado->getCodigoContratoActivoFk() == null){
+                    if ($arEmpleado->getCodigoContratoActivoFk() != null){
                         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
-                    }else {
+                    }else {                       
                         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoUltimoFk());
                     }
                     if ($arContrato == null){
