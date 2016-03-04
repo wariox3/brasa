@@ -97,9 +97,12 @@
             {% endfor %}
         </table>
         <!-- Botones Menu Items -->
-        <div class="btn-toolbar" style="float:left">
-            <div class="btn-group">
-
+        <div class="btn-toolbar" style="float: left">
+            <div class="btn-group" style="float: left">
+                <div class="btn btn-default btn-sm">Adicionales al pago <span class="badge">{{ arPagosAdicionales.getTotalItemCount }}</span></div>                        
+            </div>
+            <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
+                {{ knp_pagination_render(arPagosAdicionales) }}       
             </div>
         </div>
 

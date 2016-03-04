@@ -41,35 +41,48 @@ class ContratosController extends Controller
         $paginator  = $this->get('knp_paginator');
         $request = $this->getRequest();
         $mensaje = 0;
-        $form = $this->createFormBuilder()
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
-            ->getForm();
-        $form->handleRequest($request);
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
+        if ($arContrato->getEstadoActivo() == 1 || $arContrato->getIndefinido() == 1){
+            $disabled = FALSE;
+        } else {
+            $disabled = TRUE;
+        }
+        $form = $this->createFormBuilder()
+            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir'))
+            ->add('BtnInactivarContrato', 'submit', array('label'  => 'Inactivar', 'disabled' => $disabled))    
+            ->getForm();
+        $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnImprimir')->isClicked()) {
-                
                 $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContrato();
                 $objFormatoContrato->Generar($this, $codigoContrato);
-                
-                /*if ($arContrato->getCodigoContratoTipoFk() == 2){
-                    $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContratoFijo();
-                    $objFormatoContrato->Generar($this, $codigoContrato);
-                }
-                if ($arContrato->getCodigoContratoTipoFk() == 3){
-                    $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContratoIndefinido();
-                    $objFormatoContrato->Generar($this, $codigoContrato);
-                }
-                if ($arContrato->getCodigoContratoTipoFk() == 4){
-                    $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContratoAprendiz();
-                    $objFormatoContrato->Generar($this, $codigoContrato);
-                }
-                if ($arContrato->getCodigoContratoTipoFk() == 5){
-                    $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContratoPracticante();
-                    $objFormatoContrato->Generar($this, $codigoContrato);
-                }*/
-
+            }
+            if($form->get('BtnInactivarContrato')->isClicked()) {
+                $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato->getCodigoEmpleadoFk());
+                $arContrato->setEstadoActivo(0);
+                $arContrato->setIndefinido(0);
+                $arContrato->setEstadoLiquidado(0);
+                $arContrato->setCodigoMotivoTerminacionContratoFk(8);
+                $arEmpleado->setCodigoCentroCostoFk(NULL);
+                $arEmpleado->setCodigoTipoTiempoFk(NULL);
+                $arEmpleado->setVrSalario(0);
+                $arEmpleado->setCodigoClasificacionRiesgoFk(NULL);
+                $arEmpleado->setCodigoCargoFk(NULL);
+                $arEmpleado->setCargoDescripcion(NULL);
+                $arEmpleado->setCodigoTipoPensionFk(NULL);
+                $arEmpleado->setCodigoTipoCotizanteFk(NULL);
+                $arEmpleado->setCodigoSubtipoCotizanteFk(NULL);
+                $arEmpleado->setCodigoEntidadSaludFk(NULL);
+                $arEmpleado->setCodigoEntidadPensionFk(NULL);
+                $arEmpleado->setCodigoEntidadCajaFk(NULL);
+                $arEmpleado->setEstadoContratoActivo(0);
+                $arEmpleado->setCodigoContratoActivoFk(NULL);
+                $arEmpleado->setCodigoContratoUltimoFk($codigoContrato);
+                $em->persist($arContrato);
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_rhu_base_contratos_detalles', array('codigoContrato' => $codigoContrato)));
             }
         }
         $arCambiosSalario = new \Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario();
@@ -210,6 +223,8 @@ class ContratosController extends Controller
                                 $arEmpleado->setEntidadPensionRel($arContrato->getEntidadPensionRel());
                                 $arEmpleado->setEntidadSaludRel($arContrato->getEntidadSaludRel());
                                 $arEmpleado->setEntidadCajaRel($arContrato->getEntidadCajaRel());
+                                $arEmpleado->setCodigoContratoUltimoFk($arContrato->getCodigoContratoPk());
+                                $arEmpleado->setCodigoCentroCostoUltimoFk($arContrato->getCentroCostoRel()->getCodigoCentroCostoPk());
                                 $em->persist($arEmpleado);
                                 $em->flush();
                                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
@@ -271,6 +286,7 @@ class ContratosController extends Controller
                             $arEmpleado->setEntidadPensionRel($arContrato->getEntidadPensionRel());
                             $arEmpleado->setEntidadSaludRel($arContrato->getEntidadSaludRel());
                             $arEmpleado->setEntidadCajaRel($arContrato->getEntidadCajaRel());
+                            $arEmpleado->setCodigoCentroCostoUltimoFk($arContrato->getCentroCostoRel()->getCodigoCentroCostoPk());
                             $em->persist($arEmpleado);
                             $em->flush();
                             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
@@ -321,7 +337,6 @@ class ContratosController extends Controller
                         $arContrato->setEstadoLiquidado(1);
                         $arContrato->setTerminacionContratoRel($codigoMotivoContrato);
                         $em->persist($arContrato);
-
                         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato->getCodigoEmpleadoFk());
                         $arEmpleado->setCodigoCentroCostoFk(NULL);
