@@ -148,7 +148,7 @@ class PagosAdicionalesAgregarController extends Controller
                     if ($arEmpleado->getCodigoContratoActivoFk() == null){
                         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
                     }else {
-                        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());$arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoUltimoFk());
+                        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoUltimoFk());
                     }
                     if (!$arContrato){
                         $objMensaje->Mensaje("error", "El empleado no tiene contrato ", $this);
@@ -454,9 +454,9 @@ class PagosAdicionalesAgregarController extends Controller
                     if ($arEmpleado->getCodigoContratoActivoFk() == null){
                         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
                     }else {
-                        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());$arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoUltimoFk());
+                        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoUltimoFk());
                     }
-                    if (!$arContrato){
+                    if ($arContrato == null){
                         $objMensaje->Mensaje("error", "El empleado no tiene contrato", $this);
                     } else {
                         if($form->get('TxtValor')->getData() != "" && $form->get('TxtValor')->getData() != 0) {                    
