@@ -84,6 +84,11 @@ class TurPuesto
     protected $programacionesDetallesPuestoRel;        
 
     /**
+     * @ORM\OneToMany(targetEntity="TurCierreMesServicio", mappedBy="puestoRel")
+     */
+    protected $cierresMesServiciosPuestoRel; 
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -443,5 +448,39 @@ class TurPuesto
     public function getDireccion()
     {
         return $this->direccion;
+    }
+
+    /**
+     * Add cierresMesServiciosPuestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosPuestoRel
+     *
+     * @return TurPuesto
+     */
+    public function addCierresMesServiciosPuestoRel(\Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosPuestoRel)
+    {
+        $this->cierresMesServiciosPuestoRel[] = $cierresMesServiciosPuestoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove cierresMesServiciosPuestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosPuestoRel
+     */
+    public function removeCierresMesServiciosPuestoRel(\Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosPuestoRel)
+    {
+        $this->cierresMesServiciosPuestoRel->removeElement($cierresMesServiciosPuestoRel);
+    }
+
+    /**
+     * Get cierresMesServiciosPuestoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCierresMesServiciosPuestoRel()
+    {
+        return $this->cierresMesServiciosPuestoRel;
     }
 }

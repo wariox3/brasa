@@ -63,6 +63,11 @@ class TurConceptoServicio
     protected $facturasDetallesConceptoServicioRel;      
 
     /**
+     * @ORM\OneToMany(targetEntity="TurCierreMesServicio", mappedBy="conceptoServicioRel")
+     */
+    protected $cierresMesServiciosConceptoServicioRel;    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -336,5 +341,39 @@ class TurConceptoServicio
     public function getFacturasDetallesConceptoServicioRel()
     {
         return $this->facturasDetallesConceptoServicioRel;
+    }
+
+    /**
+     * Add cierresMesServiciosConceptoServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosConceptoServicioRel
+     *
+     * @return TurConceptoServicio
+     */
+    public function addCierresMesServiciosConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosConceptoServicioRel)
+    {
+        $this->cierresMesServiciosConceptoServicioRel[] = $cierresMesServiciosConceptoServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove cierresMesServiciosConceptoServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosConceptoServicioRel
+     */
+    public function removeCierresMesServiciosConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosConceptoServicioRel)
+    {
+        $this->cierresMesServiciosConceptoServicioRel->removeElement($cierresMesServiciosConceptoServicioRel);
+    }
+
+    /**
+     * Get cierresMesServiciosConceptoServicioRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCierresMesServiciosConceptoServicioRel()
+    {
+        return $this->cierresMesServiciosConceptoServicioRel;
     }
 }

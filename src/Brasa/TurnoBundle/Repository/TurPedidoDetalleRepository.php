@@ -57,6 +57,17 @@ class TurPedidoDetalleRepository extends EntityRepository {
         return $arResultado;                
     }
     
+    public function fecha($strFechaDesde = "", $strFechaHasta = "") {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT pd "
+                . "FROM BrasaTurnoBundle:TurPedidoDetalle pd "
+                . "JOIN pd.pedidoRel p "                
+                . "WHERE p.fechaProgramacion >= '" . $strFechaDesde . "' AND p.fechaProgramacion <='" . $strFechaHasta . "'";                
+        $query = $em->createQuery($dql);
+        $arResultado = $query->getResult();
+        return $arResultado;                
+    }    
+    
     public function listaCliente($codigoCliente) {
         $em = $this->getEntityManager();
         $dql   = "SELECT pd FROM BrasaTurnoBundle:TurPedidoDetalle pd JOIN pd.pedidoRel p "

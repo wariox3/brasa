@@ -252,197 +252,236 @@ class BasePlantillaController extends Controller {
                     $arPlantillaDetalle->setPosicion(0);
                 }
                 if ($arrControles['TxtDia1' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia1($arrControles['TxtDia1' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia1' . $intCodigo]);
+                    $arPlantillaDetalle->setDia1($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia1(null);
                 }
                 if ($arrControles['TxtDia2' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia2($arrControles['TxtDia2' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia2' . $intCodigo]);
+                    $arPlantillaDetalle->setDia2($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia2(null);
                 }
                 if ($arrControles['TxtDia3' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia3($arrControles['TxtDia3' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia3' . $intCodigo]);
+                    $arPlantillaDetalle->setDia3($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia3(null);
                 }
                 if ($arrControles['TxtDia4' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia4($arrControles['TxtDia4' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia4' . $intCodigo]);
+                    $arPlantillaDetalle->setDia4($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia4(null);
                 }
                 if ($arrControles['TxtDia5' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia5($arrControles['TxtDia5' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia5' . $intCodigo]);
+                    $arPlantillaDetalle->setDia5($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia5(null);
                 }
                 if ($arrControles['TxtDia6' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia6($arrControles['TxtDia6' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia6' . $intCodigo]);
+                    $arPlantillaDetalle->setDia6($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia6(null);
                 }
                 if ($arrControles['TxtDia7' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia7($arrControles['TxtDia7' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia7' . $intCodigo]);
+                    $arPlantillaDetalle->setDia7($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia7(null);
                 }
                 if ($arrControles['TxtDia8' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia8($arrControles['TxtDia8' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia8' . $intCodigo]);
+                    $arPlantillaDetalle->setDia8($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia8(null);
                 }
                 if ($arrControles['TxtDia9' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia9($arrControles['TxtDia9' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia9' . $intCodigo]);
+                    $arPlantillaDetalle->setDia9($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia9(null);
                 }
                 if ($arrControles['TxtDia10' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia10($arrControles['TxtDia10' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia10' . $intCodigo]);
+                    $arPlantillaDetalle->setDia10($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia10(null);
                 }
                 if ($arrControles['TxtDia11' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia11($arrControles['TxtDia11' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia11' . $intCodigo]);
+                    $arPlantillaDetalle->setDia11($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia11(null);
                 }
                 if ($arrControles['TxtDia12' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia12($arrControles['TxtDia12' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia12' . $intCodigo]);
+                    $arPlantillaDetalle->setDia12($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia12(null);
                 }
                 if ($arrControles['TxtDia13' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia13($arrControles['TxtDia13' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia13' . $intCodigo]);
+                    $arPlantillaDetalle->setDia13($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia13(null);
                 }
                 if ($arrControles['TxtDia14' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia14($arrControles['TxtDia14' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia14' . $intCodigo]);
+                    $arPlantillaDetalle->setDia14($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia14(null);
                 }
                 if ($arrControles['TxtDia15' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia15($arrControles['TxtDia15' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia15' . $intCodigo]);
+                    $arPlantillaDetalle->setDia15($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia15(null);
                 }
                 if ($arrControles['TxtDia16' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia16($arrControles['TxtDia16' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia16' . $intCodigo]);
+                    $arPlantillaDetalle->setDia16($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia16(null);
                 }
                 if ($arrControles['TxtDia17' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia17($arrControles['TxtDia17' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia17' . $intCodigo]);
+                    $arPlantillaDetalle->setDia17($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia17(null);
                 }
                 if ($arrControles['TxtDia18' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia18($arrControles['TxtDia18' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia18' . $intCodigo]);
+                    $arPlantillaDetalle->setDia18($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia18(null);
                 }
                 if ($arrControles['TxtDia19' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia19($arrControles['TxtDia19' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia19' . $intCodigo]);
+                    $arPlantillaDetalle->setDia19($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia19(null);
                 }
                 if ($arrControles['TxtDia20' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia20($arrControles['TxtDia20' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia20' . $intCodigo]);
+                    $arPlantillaDetalle->setDia20($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia20(null);
                 }
                 if ($arrControles['TxtDia21' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia21($arrControles['TxtDia21' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia21' . $intCodigo]);
+                    $arPlantillaDetalle->setDia21($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia21(null);
                 }
                 if ($arrControles['TxtDia22' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia22($arrControles['TxtDia22' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia22' . $intCodigo]);
+                    $arPlantillaDetalle->setDia22($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia22(null);
                 }
                 if ($arrControles['TxtDia23' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia23($arrControles['TxtDia23' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia23' . $intCodigo]);
+                    $arPlantillaDetalle->setDia23($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia23(null);
                 }
                 if ($arrControles['TxtDia24' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia24($arrControles['TxtDia24' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia24' . $intCodigo]);
+                    $arPlantillaDetalle->setDia24($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia24(null);
                 }
                 if ($arrControles['TxtDia25' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia25($arrControles['TxtDia25' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia25' . $intCodigo]);
+                    $arPlantillaDetalle->setDia25($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia25(null);
                 }
                 if ($arrControles['TxtDia26' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia26($arrControles['TxtDia26' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia26' . $intCodigo]);
+                    $arPlantillaDetalle->setDia26($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia26(null);
                 }
                 if ($arrControles['TxtDia27' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia27($arrControles['TxtDia27' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia27' . $intCodigo]);
+                    $arPlantillaDetalle->setDia27($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia27(null);
                 }
                 if ($arrControles['TxtDia28' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia28($arrControles['TxtDia28' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia28' . $intCodigo]);
+                    $arPlantillaDetalle->setDia28($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia28(null);
                 }
                 if ($arrControles['TxtDia29' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia29($arrControles['TxtDia29' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia29' . $intCodigo]);
+                    $arPlantillaDetalle->setDia29($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia29(null);
                 }
                 if ($arrControles['TxtDia30' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia30($arrControles['TxtDia30' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia30' . $intCodigo]);
+                    $arPlantillaDetalle->setDia30($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia30(null);
                 }
                 if ($arrControles['TxtDia31' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDia31($arrControles['TxtDia31' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDia31' . $intCodigo]);
+                    $arPlantillaDetalle->setDia31($strTurno);
                 } else {
                     $arPlantillaDetalle->setDia31(null);
                 }
                 if ($arrControles['TxtLunes' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setLunes($arrControles['TxtLunes' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtLunes' . $intCodigo]);
+                    $arPlantillaDetalle->setLunes($strTurno);
                 } else {
                     $arPlantillaDetalle->setLunes(null);
                 }
                 if ($arrControles['TxtMartes' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setMartes($arrControles['TxtMartes' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtMartes' . $intCodigo]);
+                    $arPlantillaDetalle->setMartes($strTurno);
                 } else {
                     $arPlantillaDetalle->setMartes(null);
                 }
                 if ($arrControles['TxtMiercoles' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setMiercoles($arrControles['TxtMiercoles' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtMiercoles' . $intCodigo]);
+                    $arPlantillaDetalle->setMiercoles($strTurno);
                 } else {
                     $arPlantillaDetalle->setMiercoles(null);
                 }
                 if ($arrControles['TxtJueves' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setJueves($arrControles['TxtJueves' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtJueves' . $intCodigo]);
+                    $arPlantillaDetalle->setJueves($strTurno);
                 } else {
                     $arPlantillaDetalle->setJueves(null);
                 }
                 if ($arrControles['TxtViernes' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setViernes($arrControles['TxtViernes' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtViernes' . $intCodigo]);
+                    $arPlantillaDetalle->setViernes($strTurno);
                 } else {
                     $arPlantillaDetalle->setViernes(null);
                 }
                 if ($arrControles['TxtSabado' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setSabado($arrControles['TxtSabado' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtSabado' . $intCodigo]);
+                    $arPlantillaDetalle->setSabado($strTurno);
                 } else {
                     $arPlantillaDetalle->setSabado(null);
                 }
                 if ($arrControles['TxtDomingo' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setDomingo($arrControles['TxtDomingo' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtDomingo' . $intCodigo]);
+                    $arPlantillaDetalle->setDomingo($strTurno);
                 } else {
                     $arPlantillaDetalle->setDomingo(null);
                 }
                 if ($arrControles['TxtFestivo' . $intCodigo] != '') {
-                    $arPlantillaDetalle->setFestivo($arrControles['TxtFestivo' . $intCodigo]);
+                    $strTurno = $this->validarTurno($arrControles['TxtFestivo' . $intCodigo]);
+                    $arPlantillaDetalle->setFestivo($strTurno);
                 } else {
                     $arPlantillaDetalle->setFestivo(null);
                 }
@@ -452,4 +491,18 @@ class BasePlantillaController extends Controller {
 
         $em->flush();
     }
+    
+    private function validarTurno($strTurno) {
+        $em = $this->getDoctrine()->getManager();
+        $strTurnoDevolver = NUll;
+        if($strTurno != "") {
+            $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
+            $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($strTurno);
+            if($arTurno) {
+                $strTurnoDevolver = $strTurno;
+            }
+        }
+
+        return $strTurnoDevolver;
+    }    
 }

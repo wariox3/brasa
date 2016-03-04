@@ -41,6 +41,16 @@ class TurProgramacionDetalleRepository extends EntityRepository {
         $dql .= " ORDER BY p.codigoClienteFk";
         return $dql;
     }    
+
+    public function pedido($codigoPedidoDetalle) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT SUM(pd.horas) as horas "
+                . "FROM BrasaTurnoBundle:TurProgramacionDetalle pd "                
+                . "WHERE pd.codigoPedidoDetalleFk = " . $codigoPedidoDetalle;                
+        $query = $em->createQuery($dql);
+        $arResultado = $query->getResult();
+        return $arResultado[0];                
+    }    
     
     public function eliminarDetallesSeleccionados($arrSeleccionados) {      
         $strResultado = "";
