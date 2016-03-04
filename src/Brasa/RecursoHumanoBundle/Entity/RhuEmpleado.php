@@ -3578,4 +3578,28 @@ class RhuEmpleado
     {
         return $this->cartasEmpleadoRel;
     }
+
+    /**
+     * Set codigoCentroCostoUltimoFk
+     *
+     * @param integer $codigoCentroCostoUltimoFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoCentroCostoUltimoFk($codigoCentroCostoUltimoFk)
+    {
+        $this->codigoCentroCostoUltimoFk = $codigoCentroCostoUltimoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCentroCostoUltimoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCentroCostoUltimoFk()
+    {
+        return $this->codigoCentroCostoUltimoFk;
+    }
 }

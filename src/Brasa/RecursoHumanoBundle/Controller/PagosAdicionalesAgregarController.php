@@ -137,6 +137,7 @@ class PagosAdicionalesAgregarController extends Controller
         if($form->isValid()) {
             $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arrControles = $request->request->All();
+            $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
             if ($arrControles['txtNumeroIdentificacion'] == ""){
                 $objMensaje->Mensaje("error", "Digite el número de identificación", $this);
@@ -144,9 +145,13 @@ class PagosAdicionalesAgregarController extends Controller
                 if ($arEmpleado == null){
                     $objMensaje->Mensaje("error", "El empleado no existe", $this);
                 } else {
-                    $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findOneBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk(), 'estadoActivo' => 1));
-                    if ($arContrato == null){
-                        $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
+                    if ($arEmpleado->getCodigoContratoActivoFk() == null){
+                        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
+                    }else {
+                        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());$arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoUltimoFk());
+                    }
+                    if (!$arContrato){
+                        $objMensaje->Mensaje("error", "El empleado no tiene contrato ", $this);
                     } else {
                         if (isset($arrControles['TxtHoras'])) {
                             $intIndice = 0;
