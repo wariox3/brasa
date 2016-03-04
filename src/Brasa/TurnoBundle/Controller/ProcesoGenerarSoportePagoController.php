@@ -505,8 +505,7 @@ class ProcesoGenerarSoportePagoController extends Controller
                         ->setCellValue('B' . $i, $arSoportePago->getCodigoRecursoFk())
                         ->setCellValue('C' . $i, $arSoportePago->getRecursoRel()->getNumeroIdentificacion())
                         ->setCellValue('D' . $i, $arSoportePago->getRecursoRel()->getNombreCorto())
-                        ->setCellValue('E' . $i, $arProgramacionDetalle->getProgramacionRel()->getClienteRel()->getNombreCorto())
-                        ->setCellValue('F' . $i, $arProgramacionDetalle->getPuestoRel()->getNombre())
+                        ->setCellValue('E' . $i, $arProgramacionDetalle->getProgramacionRel()->getClienteRel()->getNombreCorto())                        
                         ->setCellValue('G' . $i, $arProgramacionDetalle->getDia1())
                         ->setCellValue('H' . $i, $arProgramacionDetalle->getDia2())
                         ->setCellValue('I' . $i, $arProgramacionDetalle->getDia3())
@@ -538,7 +537,9 @@ class ProcesoGenerarSoportePagoController extends Controller
                         ->setCellValue('AI' . $i, $arProgramacionDetalle->getDia29())
                         ->setCellValue('AJ' . $i, $arProgramacionDetalle->getDia30())
                         ->setCellValue('AK' . $i, $arProgramacionDetalle->getDia31());
-
+                if($arProgramacionDetalle->getPuestoRel()) {
+                    $objPHPExcel->setActiveSheetIndex(2)->setCellValue('F' . $i, $arProgramacionDetalle->getPuestoRel()->getNombre());
+                }
                 $i++;                
             }
         }
