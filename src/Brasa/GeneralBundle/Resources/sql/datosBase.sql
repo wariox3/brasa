@@ -5282,6 +5282,9 @@ INSERT INTO `rhu_seleccion_prueba_tipo` (`codigo_seleccion_prueba_tipo_pk`, `nom
 INSERT INTO `rhu_seleccion_prueba_tipo` (`codigo_seleccion_prueba_tipo_pk`, `nombre`) VALUES('8','VALANTI');
 INSERT INTO `rhu_seleccion_prueba_tipo` (`codigo_seleccion_prueba_tipo_pk`, `nombre`) VALUES('9','WARTEGG');
 
+insert into `rhu_seleccion_entrevista_tipo` (`codigo_seleccion_entrevista_tipo_pk`, `nombre`) values('1','ENTREVISTA PRELIMINAR');
+insert into `rhu_seleccion_entrevista_tipo` (`codigo_seleccion_entrevista_tipo_pk`, `nombre`) values('2','ENTREVISTA POR COMPETENCIAS');
+
 insert into `rhu_seleccion_tipo` (`codigo_seleccion_tipo_pk`, `nombre`) values('1','SERVICIOS DE SELECCIÓN');
 insert into `rhu_seleccion_tipo` (`codigo_seleccion_tipo_pk`, `nombre`) values('2','AUTORIZACIÓN DE INGRESO');
 insert into `rhu_seleccion_tipo` (`codigo_seleccion_tipo_pk`, `nombre`) values('3','SELECCIÓN DE PERSONAL');
