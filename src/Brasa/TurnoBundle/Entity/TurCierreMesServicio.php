@@ -139,6 +139,11 @@ class TurCierreMesServicio
     
 
     /**
+     * @ORM\OneToMany(targetEntity="TurCierreMesServicioDetalle", mappedBy="cierreMesServicioRel", cascade={"persist", "remove"})
+     */
+    protected $cierresMesServiciosDetallesCierreMesServicioRel;     
+    
+    /**
      * Get codigoCierreMesServicioPk
      *
      * @return integer
@@ -698,5 +703,46 @@ class TurCierreMesServicio
     public function getHorasNocturnasProgramadas()
     {
         return $this->horasNocturnasProgramadas;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->cierresMesServiciosDetallesCierreMesServicioRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add cierresMesServiciosDetallesCierreMesServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCierreMesServicioDetalle $cierresMesServiciosDetallesCierreMesServicioRel
+     *
+     * @return TurCierreMesServicio
+     */
+    public function addCierresMesServiciosDetallesCierreMesServicioRel(\Brasa\TurnoBundle\Entity\TurCierreMesServicioDetalle $cierresMesServiciosDetallesCierreMesServicioRel)
+    {
+        $this->cierresMesServiciosDetallesCierreMesServicioRel[] = $cierresMesServiciosDetallesCierreMesServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove cierresMesServiciosDetallesCierreMesServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCierreMesServicioDetalle $cierresMesServiciosDetallesCierreMesServicioRel
+     */
+    public function removeCierresMesServiciosDetallesCierreMesServicioRel(\Brasa\TurnoBundle\Entity\TurCierreMesServicioDetalle $cierresMesServiciosDetallesCierreMesServicioRel)
+    {
+        $this->cierresMesServiciosDetallesCierreMesServicioRel->removeElement($cierresMesServiciosDetallesCierreMesServicioRel);
+    }
+
+    /**
+     * Get cierresMesServiciosDetallesCierreMesServicioRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCierresMesServiciosDetallesCierreMesServicioRel()
+    {
+        return $this->cierresMesServiciosDetallesCierreMesServicioRel;
     }
 }

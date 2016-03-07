@@ -21,6 +21,7 @@ class ProcesoCierreMesController extends Controller
                 $strUltimoDiaMes = date("d",(mktime(0,0,0,$arCierreMes->getMes()+1,1,$arCierreMes->getAnio())-1));
                 $strFechaDesde = $arCierreMes->getAnio() . "/" . $arCierreMes->getMes() . "/01";
                 $strFechaHasta = $arCierreMes->getAnio() . "/" . $arCierreMes->getMes() . "/" . $strUltimoDiaMes;
+                //Creo los servicios (Detalles de pedido)
                 $arPedidosDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();                
                 $arPedidosDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->fecha($strFechaDesde, $strFechaHasta);                                
                 foreach ($arPedidosDetalles as $arPedidoDetalle) {
@@ -40,13 +41,16 @@ class ProcesoCierreMesController extends Controller
                     $arCierreMesServicio->setHorasNocturnas($arPedidoDetalle->getHorasNocturnas());
                     $arCierreMesServicio->setCantidad($arPedidoDetalle->getCantidad());
                     $arCierreMesServicio->setVrTotal($arPedidoDetalle->getVrTotalDetalle());                    
-                    $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->pedido($arPedidoDetalle->getCodigoPedidoDetallePk());                                
-                    if($arProgramacionDetalle['horas'] != null) {
+                    //$arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoPedidoDetalleFk' => $arPedidoDetalle->getCodigoPedidoDetallePk()));                                
+                    /*if($arProgramacionDetalle['horas'] != null) {
                         $arCierreMesServicio->setHorasProgramadas($arProgramacionDetalle['horas']);
-                    }                    
+                    }*/                    
                     $em->persist($arCierreMesServicio);                    
                 }
-                $em->flush();                
+                $em->flush(); 
+                //Creo los soportes de cada servicio (Detalles de programacion)
+                $arCierreMesServicio = new \Brasa\TurnoBundle\Entity\TurCierreMesServicio();
+                $arCierreMesServicio = $em->getRepository('BrasaTurnoBundle:TurCierreMesServicio')->findBy(array('codigoCierreMesFk' => $arCierreMes->getCodigoCierreMesPk()));                                
                 return $this->redirect($this->generateUrl('brs_tur_proceso_cierre_mes'));
             }
             /*if($request->request->get('OpDeshacer')) {
