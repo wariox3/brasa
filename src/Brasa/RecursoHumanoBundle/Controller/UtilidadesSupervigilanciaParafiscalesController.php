@@ -22,30 +22,35 @@ class UtilidadesSupervigilanciaParafiscalesController extends Controller
                 $this->filtrarLista($form);
                 $this->generarExcel();
             }
-            if($form->get('BtnGenerar')->isClicked()) {                                 
-                $fechaDesde = $form->get('fechaDesde')->getData()->format('Y-m-d');
-                $fechaHasta = $form->get('fechaHasta')->getData()->format('Y-m-d');
-                if($fechaDesde != null && $fechaHasta != null) {
-                    $strSql = "DELETE FROM rhu_supervigilancia_parafiscales WHERE 1";
-                    $em->getConnection()->executeQuery($strSql);    
-                    $arrAportes = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoAporte')->parafiscalesSupervigilancia($fechaDesde, $fechaHasta);
-                    foreach ($arrAportes as $arAporte) {
-                        $arSupervigilanciaParafiscales = new \Brasa\RecursoHumanoBundle\Entity\RhuSupervigilanciaParafiscales();
-                        $arSupervigilanciaParafiscales->setMes($arAporte['mes']);
-                        $arSupervigilanciaParafiscales->setEmpleados($arAporte['numeroEmpleados']);
-                        $arSupervigilanciaParafiscales->setCargo($arAporte['nombre']);
-                        $arSupervigilanciaParafiscales->setVrEps($arAporte['eps']);
-                        $arSupervigilanciaParafiscales->setVrPension($arAporte['pension']);
-                        $arSupervigilanciaParafiscales->setVrArl($arAporte['arl']);
-                        $arSupervigilanciaParafiscales->setVrCcf($arAporte['ccf']);
-                        $arSupervigilanciaParafiscales->setVrSena($arAporte['sena']);
-                        $arSupervigilanciaParafiscales->setVrIcbf($arAporte['icbf']);
-                        $arSupervigilanciaParafiscales->setVrNomina($arAporte['nomina']);
-                        $em->persist($arSupervigilanciaParafiscales);
+            if($form->get('BtnGenerar')->isClicked()) { 
+                $fechaDesde = $form->get('fechaDesde')->getData();
+                $fechaHasta = $form->get('fechaHasta')->getData();
+                if($fechaDesde && $fechaHasta) {
+                    $fechaDesde = $form->get('fechaDesde')->getData()->format('Y-m-d');
+                    $fechaHasta = $form->get('fechaHasta')->getData()->format('Y-m-d');
+                
+                    if($fechaDesde != null && $fechaHasta != null) {
+                        $strSql = "DELETE FROM rhu_supervigilancia_parafiscales WHERE 1";
+                        $em->getConnection()->executeQuery($strSql);    
+                        $arrAportes = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoAporte')->parafiscalesSupervigilancia($fechaDesde, $fechaHasta);
+                        foreach ($arrAportes as $arAporte) {
+                            $arSupervigilanciaParafiscales = new \Brasa\RecursoHumanoBundle\Entity\RhuSupervigilanciaParafiscales();
+                            $arSupervigilanciaParafiscales->setMes($arAporte['mes']);
+                            $arSupervigilanciaParafiscales->setEmpleados($arAporte['numeroEmpleados']);
+                            $arSupervigilanciaParafiscales->setCargo($arAporte['nombre']);
+                            $arSupervigilanciaParafiscales->setVrEps($arAporte['eps']);
+                            $arSupervigilanciaParafiscales->setVrPension($arAporte['pension']);
+                            $arSupervigilanciaParafiscales->setVrArl($arAporte['arl']);
+                            $arSupervigilanciaParafiscales->setVrCcf($arAporte['ccf']);
+                            $arSupervigilanciaParafiscales->setVrSena($arAporte['sena']);
+                            $arSupervigilanciaParafiscales->setVrIcbf($arAporte['icbf']);
+                            $arSupervigilanciaParafiscales->setVrNomina($arAporte['nomina']);
+                            $em->persist($arSupervigilanciaParafiscales);
+                        }
+                        $em->flush();
                     }
-                    $em->flush();
+                    //return $this->redirect($this->generateUrl('brs_rhu_utilidades_supervigilancia_parafiscales'));                               
                 }
-                //return $this->redirect($this->generateUrl('brs_rhu_utilidades_supervigilancia_parafiscales'));           
             }            
                         
             if($form->get('BtnFiltrar')->isClicked()) {

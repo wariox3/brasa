@@ -226,6 +226,7 @@ class ExamenController extends Controller
 
     public function detalleNuevoAction($codigoExamen) {
         $request = $this->getRequest();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $em = $this->getDoctrine()->getManager();
         $arExamenTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->findAll();
         $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
@@ -250,9 +251,12 @@ class ExamenController extends Controller
                     }
                     $em->flush();
                     $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->liquidar($codigoExamen);
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
                 }
-            }
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                else {
+                    $objMensaje->Mensaje("error", "No selecciono ningun dato para grabar", $this);
+                }
+            }            
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Examen:detalleNuevo.html.twig', array(
             'arExamenTipos' => $arExamenTipos,

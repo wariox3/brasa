@@ -150,9 +150,10 @@ class TurSoportePago
     protected $recursoRel;   
     
    /**
-     * @ORM\OneToMany(targetEntity="TurSoportePagoDetalle", mappedBy="soportePagoRel")
+     * @ORM\OneToMany(targetEntity="TurSoportePagoDetalle", mappedBy="soportePagoRel", cascade={"persist", "remove"})
      */
     protected $soportesPagosDetallesSoportePagoRel;     
+
 
     /**
      * Constructor
@@ -437,6 +438,30 @@ class TurSoportePago
     }
 
     /**
+     * Set vacacion
+     *
+     * @param integer $vacacion
+     *
+     * @return TurSoportePago
+     */
+    public function setVacacion($vacacion)
+    {
+        $this->vacacion = $vacacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vacacion
+     *
+     * @return integer
+     */
+    public function getVacacion()
+    {
+        return $this->vacacion;
+    }
+
+    /**
      * Set dias
      *
      * @param float $dias
@@ -482,6 +507,30 @@ class TurSoportePago
     public function getHoras()
     {
         return $this->horas;
+    }
+
+    /**
+     * Set horasPago
+     *
+     * @param float $horasPago
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasPago($horasPago)
+    {
+        $this->horasPago = $horasPago;
+
+        return $this;
+    }
+
+    /**
+     * Get horasPago
+     *
+     * @return float
+     */
+    public function getHorasPago()
+    {
+        return $this->horasPago;
     }
 
     /**
@@ -780,53 +829,5 @@ class TurSoportePago
     public function getSoportesPagosDetallesSoportePagoRel()
     {
         return $this->soportesPagosDetallesSoportePagoRel;
-    }
-
-    /**
-     * Set vacacion
-     *
-     * @param integer $vacacion
-     *
-     * @return TurSoportePago
-     */
-    public function setVacacion($vacacion)
-    {
-        $this->vacacion = $vacacion;
-
-        return $this;
-    }
-
-    /**
-     * Get vacacion
-     *
-     * @return integer
-     */
-    public function getVacacion()
-    {
-        return $this->vacacion;
-    }
-
-    /**
-     * Set horasPago
-     *
-     * @param float $horasPago
-     *
-     * @return TurSoportePago
-     */
-    public function setHorasPago($horasPago)
-    {
-        $this->horasPago = $horasPago;
-
-        return $this;
-    }
-
-    /**
-     * Get horasPago
-     *
-     * @return float
-     */
-    public function getHorasPago()
-    {
-        return $this->horasPago;
     }
 }

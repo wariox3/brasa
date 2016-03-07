@@ -328,18 +328,19 @@ class BaseEmpleadoController extends Controller
                 $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
                 $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
                 $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-                $strRuta = $arConfiguracion->getRutaAlmacenamiento() . "imagenes/empleados/" . $objArchivo->getClientOriginalName();
+                $strNombreArchivo = $arEmpleado->getCodigoEmpleadoPk() . "_" . $objArchivo->getClientOriginalName();
+                $strRuta = $arConfiguracion->getRutaAlmacenamiento() . "imagenes/empleados/" . $strNombreArchivo;
                 if(!file_exists($strRuta)) {
-                    $form['attachment']->getData()->move($arConfiguracion->getRutaAlmacenamiento() . "imagenes/empleados", $objArchivo->getClientOriginalName());
-                    $arEmpleado->setRutaFoto($objArchivo->getClientOriginalName());
+                    $form['attachment']->getData()->move($arConfiguracion->getRutaAlmacenamiento() . "imagenes/empleados", $strNombreArchivo);
+                    $arEmpleado->setRutaFoto($strNombreArchivo);
                     $em->persist($arEmpleado);
                     $em->flush();
                     echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
                 } else {
-                    $arEmpleado->setRutaFoto($objArchivo->getClientOriginalName());
+                    $arEmpleado->setRutaFoto($strNombreArchivo);
                     $em->persist($arEmpleado);
                     $em->flush();
-                    echo "El archivo " . $strRuta . " ya existe";
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
                 }
 
             }

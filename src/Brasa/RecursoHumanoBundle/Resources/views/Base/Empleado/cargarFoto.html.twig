@@ -20,6 +20,10 @@
     <div class="modal-footer">        
             {{ form_widget(form.BtnCargar, { 'attr': {'class': 'btn btn-sm btn-primary'} }) }}            
     </div>    
+    <blockquote>
+      <p>Recuerde: El formato del archivo debe ser *.jpg y debe ser maximo de 5mb</p>
+      <footer>Tipo <cite title="Source Title">archivos</cite></footer>
+    </blockquote>     
     {{ form_end(form) }}
 </div>
 {% endblock %}

@@ -101,6 +101,13 @@ class ProcesoGenerarSoportePagoController extends Controller
                 $this->listaDetalle("", $codigoSoportePagoPeriodo);
                 $this->generarExcel();
             }
+            if ($form->get('BtnEliminar')->isClicked()) {                
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurSoportePago')->eliminar($arrSeleccionados);
+                $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->liquidar($codigoSoportePagoPeriodo);
+                return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago_detalle', array('codigoSoportePagoPeriodo' => $codigoSoportePagoPeriodo)));                
+                
+            }             
         }
         $arSoportesPago = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 200);        
         return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:detalle.html.twig', array(            
@@ -127,6 +134,7 @@ class ProcesoGenerarSoportePagoController extends Controller
         return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:ver.html.twig', array(                        
             'arProgramacionDetalle' => $arProgramacionDetalle,
             'arSoportesPagosDetalles' => $arSoportesPagoDetalle,
+            'arSoportePago' => $arSoportePago,
             'form' => $form->createView()));
     }     
     
@@ -195,13 +203,13 @@ class ProcesoGenerarSoportePagoController extends Controller
     private function formularioDetalle() {
         $form = $this->createFormBuilder()
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))                        
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar')) 
             ->getForm();
         return $form;
     }
     
     private function formularioVer() {
-        $form = $this->createFormBuilder()
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))                        
+        $form = $this->createFormBuilder()                                   
             ->getForm();
         return $form;
     }
@@ -573,7 +581,7 @@ class ProcesoGenerarSoportePagoController extends Controller
             $intTotalHoras = $intHorasNocturnas + $intHoras;
             if($intTotalHoras > 8) {
                 $intHorasJornada = 8 - $intHoras;
-                if($intHorasJornada > 1) {
+                if($intHorasJornada >= 1) {
                     $intHorasNocturnasReales = $intHorasNocturnas - $intHorasJornada;
                     $intHorasNocturnas = $intHorasNocturnas - $intHorasNocturnasReales;
                     $intHorasExtrasNocturnas = $intHorasNocturnasReales;

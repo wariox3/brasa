@@ -303,7 +303,7 @@ class TurSoportePagoDetalle
     /**
      * Set descanso
      *
-     * @param integer $descanso
+     * @param float $descanso
      *
      * @return TurSoportePagoDetalle
      */
@@ -317,7 +317,7 @@ class TurSoportePagoDetalle
     /**
      * Get descanso
      *
-     * @return integer
+     * @return float
      */
     public function getDescanso()
     {
@@ -325,9 +325,105 @@ class TurSoportePagoDetalle
     }
 
     /**
+     * Set novedad
+     *
+     * @param float $novedad
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setNovedad($novedad)
+    {
+        $this->novedad = $novedad;
+
+        return $this;
+    }
+
+    /**
+     * Get novedad
+     *
+     * @return float
+     */
+    public function getNovedad()
+    {
+        return $this->novedad;
+    }
+
+    /**
+     * Set incapacidad
+     *
+     * @param integer $incapacidad
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setIncapacidad($incapacidad)
+    {
+        $this->incapacidad = $incapacidad;
+
+        return $this;
+    }
+
+    /**
+     * Get incapacidad
+     *
+     * @return integer
+     */
+    public function getIncapacidad()
+    {
+        return $this->incapacidad;
+    }
+
+    /**
+     * Set licencia
+     *
+     * @param integer $licencia
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setLicencia($licencia)
+    {
+        $this->licencia = $licencia;
+
+        return $this;
+    }
+
+    /**
+     * Get licencia
+     *
+     * @return integer
+     */
+    public function getLicencia()
+    {
+        return $this->licencia;
+    }
+
+    /**
+     * Set vacacion
+     *
+     * @param integer $vacacion
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setVacacion($vacacion)
+    {
+        $this->vacacion = $vacacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vacacion
+     *
+     * @return integer
+     */
+    public function getVacacion()
+    {
+        return $this->vacacion;
+    }
+
+    /**
      * Set dias
      *
-     * @param integer $dias
+     * @param float $dias
      *
      * @return TurSoportePagoDetalle
      */
@@ -341,7 +437,7 @@ class TurSoportePagoDetalle
     /**
      * Get dias
      *
-     * @return integer
+     * @return float
      */
     public function getDias()
     {
@@ -351,7 +447,7 @@ class TurSoportePagoDetalle
     /**
      * Set horas
      *
-     * @param integer $horas
+     * @param float $horas
      *
      * @return TurSoportePagoDetalle
      */
@@ -365,7 +461,7 @@ class TurSoportePagoDetalle
     /**
      * Get horas
      *
-     * @return integer
+     * @return float
      */
     public function getHoras()
     {
@@ -375,7 +471,7 @@ class TurSoportePagoDetalle
     /**
      * Set horasDiurnas
      *
-     * @param integer $horasDiurnas
+     * @param float $horasDiurnas
      *
      * @return TurSoportePagoDetalle
      */
@@ -389,7 +485,7 @@ class TurSoportePagoDetalle
     /**
      * Get horasDiurnas
      *
-     * @return integer
+     * @return float
      */
     public function getHorasDiurnas()
     {
@@ -399,7 +495,7 @@ class TurSoportePagoDetalle
     /**
      * Set horasNocturnas
      *
-     * @param integer $horasNocturnas
+     * @param float $horasNocturnas
      *
      * @return TurSoportePagoDetalle
      */
@@ -413,7 +509,7 @@ class TurSoportePagoDetalle
     /**
      * Get horasNocturnas
      *
-     * @return integer
+     * @return float
      */
     public function getHorasNocturnas()
     {
@@ -423,7 +519,7 @@ class TurSoportePagoDetalle
     /**
      * Set horasFestivasDiurnas
      *
-     * @param integer $horasFestivasDiurnas
+     * @param float $horasFestivasDiurnas
      *
      * @return TurSoportePagoDetalle
      */
@@ -437,7 +533,7 @@ class TurSoportePagoDetalle
     /**
      * Get horasFestivasDiurnas
      *
-     * @return integer
+     * @return float
      */
     public function getHorasFestivasDiurnas()
     {
@@ -447,7 +543,7 @@ class TurSoportePagoDetalle
     /**
      * Set horasFestivasNocturnas
      *
-     * @param integer $horasFestivasNocturnas
+     * @param float $horasFestivasNocturnas
      *
      * @return TurSoportePagoDetalle
      */
@@ -461,7 +557,7 @@ class TurSoportePagoDetalle
     /**
      * Get horasFestivasNocturnas
      *
-     * @return integer
+     * @return float
      */
     public function getHorasFestivasNocturnas()
     {
@@ -471,7 +567,7 @@ class TurSoportePagoDetalle
     /**
      * Set horasExtrasOrdinariasDiurnas
      *
-     * @param integer $horasExtrasOrdinariasDiurnas
+     * @param float $horasExtrasOrdinariasDiurnas
      *
      * @return TurSoportePagoDetalle
      */
@@ -485,7 +581,7 @@ class TurSoportePagoDetalle
     /**
      * Get horasExtrasOrdinariasDiurnas
      *
-     * @return integer
+     * @return float
      */
     public function getHorasExtrasOrdinariasDiurnas()
     {
@@ -495,7 +591,7 @@ class TurSoportePagoDetalle
     /**
      * Set horasExtrasOrdinariasNocturnas
      *
-     * @param integer $horasExtrasOrdinariasNocturnas
+     * @param float $horasExtrasOrdinariasNocturnas
      *
      * @return TurSoportePagoDetalle
      */
@@ -509,7 +605,7 @@ class TurSoportePagoDetalle
     /**
      * Get horasExtrasOrdinariasNocturnas
      *
-     * @return integer
+     * @return float
      */
     public function getHorasExtrasOrdinariasNocturnas()
     {
@@ -519,7 +615,7 @@ class TurSoportePagoDetalle
     /**
      * Set horasExtrasFestivasDiurnas
      *
-     * @param integer $horasExtrasFestivasDiurnas
+     * @param float $horasExtrasFestivasDiurnas
      *
      * @return TurSoportePagoDetalle
      */
@@ -533,7 +629,7 @@ class TurSoportePagoDetalle
     /**
      * Get horasExtrasFestivasDiurnas
      *
-     * @return integer
+     * @return float
      */
     public function getHorasExtrasFestivasDiurnas()
     {
@@ -543,7 +639,7 @@ class TurSoportePagoDetalle
     /**
      * Set horasExtrasFestivasNocturnas
      *
-     * @param integer $horasExtrasFestivasNocturnas
+     * @param float $horasExtrasFestivasNocturnas
      *
      * @return TurSoportePagoDetalle
      */
@@ -557,7 +653,7 @@ class TurSoportePagoDetalle
     /**
      * Get horasExtrasFestivasNocturnas
      *
-     * @return integer
+     * @return float
      */
     public function getHorasExtrasFestivasNocturnas()
     {
@@ -778,101 +874,5 @@ class TurSoportePagoDetalle
     public function getTurnoRel()
     {
         return $this->turnoRel;
-    }
-
-    /**
-     * Set novedad
-     *
-     * @param integer $novedad
-     *
-     * @return TurSoportePagoDetalle
-     */
-    public function setNovedad($novedad)
-    {
-        $this->novedad = $novedad;
-
-        return $this;
-    }
-
-    /**
-     * Get novedad
-     *
-     * @return integer
-     */
-    public function getNovedad()
-    {
-        return $this->novedad;
-    }
-
-    /**
-     * Set incapacidad
-     *
-     * @param integer $incapacidad
-     *
-     * @return TurSoportePagoDetalle
-     */
-    public function setIncapacidad($incapacidad)
-    {
-        $this->incapacidad = $incapacidad;
-
-        return $this;
-    }
-
-    /**
-     * Get incapacidad
-     *
-     * @return integer
-     */
-    public function getIncapacidad()
-    {
-        return $this->incapacidad;
-    }
-
-    /**
-     * Set licencia
-     *
-     * @param integer $licencia
-     *
-     * @return TurSoportePagoDetalle
-     */
-    public function setLicencia($licencia)
-    {
-        $this->licencia = $licencia;
-
-        return $this;
-    }
-
-    /**
-     * Get licencia
-     *
-     * @return integer
-     */
-    public function getLicencia()
-    {
-        return $this->licencia;
-    }
-
-    /**
-     * Set vacacion
-     *
-     * @param integer $vacacion
-     *
-     * @return TurSoportePagoDetalle
-     */
-    public function setVacacion($vacacion)
-    {
-        $this->vacacion = $vacacion;
-
-        return $this;
-    }
-
-    /**
-     * Get vacacion
-     *
-     * @return integer
-     */
-    public function getVacacion()
-    {
-        return $this->vacacion;
     }
 }

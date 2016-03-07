@@ -112,5 +112,16 @@ class TurSoportePagoRepository extends EntityRepository {
         
         return $arrayResultado;        
     }
+    
+    public function eliminar($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigo) {
+                $arSoportePago = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($codigo);
+                $em->remove($arSoportePago);
+            }
+            $em->flush();
+        }
+    }     
 
 }
