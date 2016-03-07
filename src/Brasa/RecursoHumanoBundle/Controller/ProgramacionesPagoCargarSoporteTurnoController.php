@@ -71,6 +71,7 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     }                    
                 }
                 $arProgramacionPago->setEmpleadosGenerados(1);
+                $arProgramacionPago->setNumeroEmpleados(count($arSoportesPago));
                 $em->persist($arProgramacionPago);
                 $em->flush();             
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                

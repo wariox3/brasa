@@ -151,6 +151,7 @@ class BaseRecursoController extends Controller
     }    
     
     public function enlazarAction() {
+        $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $form = $this->formularioEnlazar();
@@ -162,6 +163,7 @@ class BaseRecursoController extends Controller
                 $codigoCentroCosto = "";
                 if($arCentroCosto) {
                     $codigoCentroCosto = $arCentroCosto->getCodigoCentroCostoPk();
+                    $session->set('filtroCodigoCentroCosto', $arCentroCosto->getCodigoCentroCostoPk());
                 }
                 $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaDQL(
                         $form->get('TxtNombreCorto')->getData(), 
@@ -237,14 +239,22 @@ class BaseRecursoController extends Controller
     private function formularioEnlazar() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $form = $this->createFormBuilder()
-            ->add('centroCostoRel', 'entity', array(
+        $arrayPropiedades = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('cc')
                     ->orderBy('cc.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => false))                
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );        
+        if($session->get('filtroCodigoCentroCosto')) {
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
+        }        
+        $form = $this->createFormBuilder()
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)   
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacionSeleccion')))
             ->add('TxtNombreCorto', 'text', array('label'  => 'Nombre'))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))

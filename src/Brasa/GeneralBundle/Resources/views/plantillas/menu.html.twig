@@ -321,13 +321,7 @@
                         </li>
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Turno</a>
-                            <ul class="dropdown-menu">
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Cerrar mes</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_tur_proceso_cierre_mes') }}">Lista</a></li>
-                                    </ul>
-                                </li>                                
+                            <ul class="dropdown-menu">                                
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Generar pedidos</a>
                                     <ul class="dropdown-menu">
@@ -344,6 +338,12 @@
                                     <a tabindex="-1" href="#">Generar soporte pago</a>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_tur_proceso_generar_soporte_pago') }}">Lista</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Cerrar mes</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_tur_proceso_cierre_mes') }}">Lista</a></li>
                                     </ul>
                                 </li>                                
                             </ul>
