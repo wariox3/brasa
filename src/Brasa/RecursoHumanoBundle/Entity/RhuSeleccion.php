@@ -280,6 +280,12 @@ class RhuSeleccion
      */
     protected $seleccionesVisitasSeleccionRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSeleccionEntrevista", mappedBy="seleccionRel")
+     */
+    protected $seleccionesEntrevistasSeleccionRel;
+    
+    
     
     /**
      * Constructor
@@ -289,6 +295,7 @@ class RhuSeleccion
         $this->seleccionesReferenciasSeleccionRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->seleccionesPruebasSeleccionRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->seleccionesVisitasSeleccionRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->seleccionesEntrevistasSeleccionRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1142,6 +1149,30 @@ class RhuSeleccion
     }
 
     /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuSeleccion
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
+    }
+
+    /**
      * Set seleccionTipoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionTipo $seleccionTipoRel
@@ -1508,26 +1539,36 @@ class RhuSeleccion
     }
 
     /**
-     * Set codigoUsuario
+     * Add seleccionesEntrevistasSeleccionRel
      *
-     * @param string $codigoUsuario
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionEntrevista $seleccionesEntrevistasSeleccionRel
      *
      * @return RhuSeleccion
      */
-    public function setCodigoUsuario($codigoUsuario)
+    public function addSeleccionesEntrevistasSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionEntrevista $seleccionesEntrevistasSeleccionRel)
     {
-        $this->codigoUsuario = $codigoUsuario;
+        $this->seleccionesEntrevistasSeleccionRel[] = $seleccionesEntrevistasSeleccionRel;
 
         return $this;
     }
 
     /**
-     * Get codigoUsuario
+     * Remove seleccionesEntrevistasSeleccionRel
      *
-     * @return string
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionEntrevista $seleccionesEntrevistasSeleccionRel
      */
-    public function getCodigoUsuario()
+    public function removeSeleccionesEntrevistasSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionEntrevista $seleccionesEntrevistasSeleccionRel)
     {
-        return $this->codigoUsuario;
+        $this->seleccionesEntrevistasSeleccionRel->removeElement($seleccionesEntrevistasSeleccionRel);
+    }
+
+    /**
+     * Get seleccionesEntrevistasSeleccionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeleccionesEntrevistasSeleccionRel()
+    {
+        return $this->seleccionesEntrevistasSeleccionRel;
     }
 }

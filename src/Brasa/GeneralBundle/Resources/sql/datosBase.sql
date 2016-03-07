@@ -1208,6 +1208,7 @@ INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('10','EMPLEA
 INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('11','SELECCION VISITAS');
 INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('12','PERMISOS');
 INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('13','CARTAS');
+INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('14','SELECCION ENTREVISTAS');
 /** Contabilidad **/
 
 insert into `ctb_tercero` (`codigo_tercero_pk`, `codigo_ciudad_fk`, `codigo_tipo_identificacion_fk`, `numero_identificacion`, `digito_verificacion`, `nombre_corto`, `nombre1`, `nombre2`, `apellido1`, `apellido2`, `razon_social`, `direccion`, `telefono`, `celular`, `fax`, `email`) values('1','2240','13','44421212','2','PACO ANDRES PIN ATUESTA','PACO','ANDRES','PIN','ATUESTA','AS','CARRERA 20 N 40-20','3384244','3012547854','111','lon@hotmail.com');

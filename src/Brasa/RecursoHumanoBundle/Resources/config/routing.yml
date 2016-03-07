@@ -80,7 +80,15 @@ brs_rhu_base_seleccion_prueba_tipo_listar:
    
 brs_rhu_base_seleccion_prueba_tipo_nuevo:
    path:     /rhu/base/seleccion/prueba/tipo/nuevo{codigoSeleccionPruebaTipo}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSeleccionPruebaTipo:nuevo }   
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSeleccionPruebaTipo:nuevo }
+   
+brs_rhu_base_seleccion_entrevista_tipo_listar:
+   path:     /rhu/base/seleccion/entrevista/tipo/listar
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSeleccionEntrevistaTipo:listar }
+   
+brs_rhu_base_seleccion_entrevista_tipo_nuevo:
+   path:     /rhu/base/seleccion/entrevista/tipo/nuevo{codigoSeleccionEntrevistaTipo}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSeleccionEntrevistaTipo:nuevo }   
    
 brs_rhu_empleado_informacion_interna_lista:
     path:     /rhu/empleado/informacion/interna/lista
@@ -716,7 +724,11 @@ brs_rhu_seleccion_agregar_prueba:
     
 brs_rhu_seleccion_agregar_visita:
     path:     /rhu/seleccion/agregar/visita/{codigoSeleccion}/{codigoSeleccionVisita}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:agregarVisita }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:agregarVisita }
+    
+brs_rhu_seleccion_agregar_entrevista:
+    path:     /rhu/seleccion/agregar/entrevista/{codigoSeleccion}/{codigoSeleccionEntrevista}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:agregarEntrevista }    
 
 brs_rhu_seleccion_detalle:
     path:     /rhu/seleccion/detalle/{codigoSeleccion}
