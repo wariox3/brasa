@@ -35,6 +35,14 @@
                         <td class="titulo">CARGO</td>
                         <td class="td-in-well">{{ arAccidenteTrabajo.empleadoRel.cargoDescripcion }}</td>
                     </tr>
+                    <tr>
+                        <td class="titulo">TIEMPO DE SERVICIO EMPLEADO:</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.tiempoServicioEmpleado }}</td>
+                        <td class="titulo">OFICIO HABITUAL:</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.oficioHabitual }}</td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                    </tr>    
                 </table>
                 <div class="panel-heading">Información del accidente</div>
                 <table widtd="100%" class="table table-condensed table-bordered">
@@ -49,8 +57,8 @@
                     <tr>
                         <td class="titulo">ARL</td>
                         <td class="td-in-well">{{ arAccidenteTrabajo.entidadRiesgoProfesionalRel.nombre }}</td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">TAREA DESARROLLA AL MOMENTO DEL ACCIDENTE</td>
+                        <td class="td-in-well">{{ arAccidenteTrabajo.tareaDesarrolladaMomentoAccidente }}</td>
                         <td class="titulo">ESTADO  </td>
                         <td class="td-in-well">{% if arAccidenteTrabajo.estadoAccidente == 1%}CERRADO {% else %}ABIERTO{% endif %}</td>
                     </tr>

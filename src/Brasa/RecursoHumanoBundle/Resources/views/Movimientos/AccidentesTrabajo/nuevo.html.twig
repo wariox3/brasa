@@ -38,11 +38,23 @@
                 </div>
             </div>     
             <div class="form-group">
-                <label for="form_codigoFurat" class="col-sm-3 control-label">Código:</label>
+                <label for="form_codigoFurat" class="col-sm-3 control-label">Código furat:</label>
                 <div class="col-sm-9">
                             {{ form_widget(form.codigoFurat, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>
+            <div class="form-group">
+                <label for="form_coordinadorEncargado" class="col-sm-3 control-label">Coordinador encargado:</label>
+                <div class="col-sm-9">
+                            {{ form_widget(form.coordinadorEncargado, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="form_cargoCoordinadorEncargado" class="col-sm-3 control-label">Cargo coordinador encargado:</label>
+                <div class="col-sm-9">
+                            {{ form_widget(form.cargoCoordinadorEncargado, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                </div>
+            </div>    
             <div class="form-group">
                 <label for="form_fechaAccidente" class="col-sm-3 control-label">Fecha accidente:</label>
                 <div class="col-sm-9">
@@ -80,6 +92,18 @@
                 </div>
             </div>
             <div class="form-group">
+                <label for="form_tiempoServicioEmpleado" class="col-sm-3 control-label">Tiempo servicio empleado:</label>
+                <div class="col-sm-9">
+                            {{ form_widget(form.tiempoServicioEmpleado, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="form_oficioHabitual" class="col-sm-3 control-label">Oficio habitual:</label>
+                <div class="col-sm-9">
+                            {{ form_widget(form.oficioHabitual, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                </div>
+            </div>    
+            <div class="form-group">
                 <label for="form_cie10" class="col-sm-3 control-label">Cie10:</label>
                 <div class="col-sm-9">
                             {{ form_widget(form.cie10, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
@@ -115,6 +139,12 @@
                             {{ form_widget(form.mecanismoAccidente, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
                 </div>
             </div>
+            <div class="form-group">
+                <label for="form_tareaDesarrolladaMomentoAccidente" class="col-sm-3 control-label">Tarea desarrollada momento accidente:</label>
+                <div class="col-sm-9">
+                            {{ form_widget(form.tareaDesarrolladaMomentoAccidente, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                </div>
+            </div>    
             <div class="form-group">
                 <label for="form_lugarAccidente" class="col-sm-3 control-label">Lugar accidente:</label>
                 <div class="col-sm-9">

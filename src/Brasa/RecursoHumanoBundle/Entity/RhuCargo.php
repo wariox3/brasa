@@ -77,6 +77,15 @@ class RhuCargo
      */
     protected $disciplinariosCargoRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuExamenCargo", mappedBy="cargoRel")
+     */
+    protected $examenesCargosCargoRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuDotacionCargo", mappedBy="cargoRel")
+     */
+    protected $dotacionesCargosCargoRel;
     
     
     /**
@@ -95,6 +104,8 @@ class RhuCargo
         $this->examenesCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->seleccionesCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->disciplinariosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->examenesCargosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->dotacionesCargosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -503,5 +514,73 @@ class RhuCargo
     public function getDisciplinariosCargoRel()
     {
         return $this->disciplinariosCargoRel;
+    }
+
+    /**
+     * Add examenesCargosCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamenCargo $examenesCargosCargoRel
+     *
+     * @return RhuCargo
+     */
+    public function addExamenesCargosCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamenCargo $examenesCargosCargoRel)
+    {
+        $this->examenesCargosCargoRel[] = $examenesCargosCargoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove examenesCargosCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamenCargo $examenesCargosCargoRel
+     */
+    public function removeExamenesCargosCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamenCargo $examenesCargosCargoRel)
+    {
+        $this->examenesCargosCargoRel->removeElement($examenesCargosCargoRel);
+    }
+
+    /**
+     * Get examenesCargosCargoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExamenesCargosCargoRel()
+    {
+        return $this->examenesCargosCargoRel;
+    }
+
+    /**
+     * Add dotacionesCargosCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDotacionCargo $dotacionesCargosCargoRel
+     *
+     * @return RhuCargo
+     */
+    public function addDotacionesCargosCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDotacionCargo $dotacionesCargosCargoRel)
+    {
+        $this->dotacionesCargosCargoRel[] = $dotacionesCargosCargoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove dotacionesCargosCargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDotacionCargo $dotacionesCargosCargoRel
+     */
+    public function removeDotacionesCargosCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDotacionCargo $dotacionesCargosCargoRel)
+    {
+        $this->dotacionesCargosCargoRel->removeElement($dotacionesCargosCargoRel);
+    }
+
+    /**
+     * Get dotacionesCargosCargoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDotacionesCargosCargoRel()
+    {
+        return $this->dotacionesCargosCargoRel;
     }
 }

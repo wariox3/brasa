@@ -340,7 +340,19 @@ brs_rhu_base_dotacionElemento_lista:
     
 brs_rhu_base_dotacionElemento_nuevo:
     path:     /rhu/base/dotacion/elemento/nuevo/{codigoDotacionElemento}
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseDotacionElemento:nuevo }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseDotacionElemento:nuevo }
+    
+brs_rhu_base_dotacion_cargo_lista:
+   path:     /rhu/base/dotacion/cargo/lista
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseDotacionCargo:lista }
+   
+brs_rhu_base_dotacion_cargo_nuevo:
+   path:     /rhu/base/dotacion/cargo/nuevo/{codigoDotacionCargo}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseDotacionCargo:nuevo }
+   
+brs_rhu_base_dotacion_cargo_nuevomultiple:
+   path:     /rhu/base/dotacion/cargo/nuevomultiple/{codigoDotacionCargo}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseDotacionCargo:nuevoMultiple }
     
 brs_rhu_creditos_lista:
     path:     /rhu/creditos/lista
@@ -672,7 +684,19 @@ brs_rhu_base_examentipo_listar:
    
 brs_rhu_base_examentipo_nuevo:
    path:     /rhu/base/examentipo/nuevo/{codigoExamenTipoPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseExamenTipo:nuevo }   
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseExamenTipo:nuevo } 
+   
+brs_rhu_base_examen_cargo_lista:
+   path:     /rhu/base/examen/cargo/lista
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseExamenCargo:lista }
+   
+brs_rhu_base_examen_cargo_nuevo:
+   path:     /rhu/base/examen/cargo/nuevo/{codigoExamenCargo}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseExamenCargo:nuevo }
+   
+brs_rhu_base_examen_cargo_nuevomultiple:
+   path:     /rhu/base/examen/cargo/nuevomultiple/{codigoExamenCargo}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseExamenCargo:nuevoMultiple }  
 
 brs_rhu_base_pension_listar:
    path:     /rhu/base/pension/listar
@@ -689,6 +713,10 @@ brs_rhu_base_requisito_cargo_lista:
 brs_rhu_base_requisito_cargo_nuevo:
    path:     /rhu/base/requisito/cargo/nuevo/{codigoRequisitoCargo}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseRequisitoCargo:nuevo }
+   
+brs_rhu_base_requisito_cargo_nuevomultiple:
+   path:     /rhu/base/requisito/cargo/nuevomultiple/{codigoRequisitoCargo}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseRequisitoCargo:nuevoMultiple }   
    
 brs_rhu_base_requisito_concepto_lista:
    path:     /rhu/base/requisito/concepto/lista

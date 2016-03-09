@@ -27,13 +27,17 @@ class RhuDotacionElemento
      */
     protected $elementosDotacionesDetalleDotacionElementoRel;
     
-
+    /**
+     * @ORM\OneToMany(targetEntity="RhuDotacionCargo", mappedBy="dotacionElementoRel")
+     */
+    protected $dotacionesCargosDotacionElementoRel;
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->elementosDotacionesDetalleDotacionElementoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->dotacionesCargosDotacionElementoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -102,5 +106,39 @@ class RhuDotacionElemento
     public function getElementosDotacionesDetalleDotacionElementoRel()
     {
         return $this->elementosDotacionesDetalleDotacionElementoRel;
+    }
+
+    /**
+     * Add dotacionesCargosDotacionElementoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDotacionCargo $dotacionesCargosDotacionElementoRel
+     *
+     * @return RhuDotacionElemento
+     */
+    public function addDotacionesCargosDotacionElementoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDotacionCargo $dotacionesCargosDotacionElementoRel)
+    {
+        $this->dotacionesCargosDotacionElementoRel[] = $dotacionesCargosDotacionElementoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove dotacionesCargosDotacionElementoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDotacionCargo $dotacionesCargosDotacionElementoRel
+     */
+    public function removeDotacionesCargosDotacionElementoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDotacionCargo $dotacionesCargosDotacionElementoRel)
+    {
+        $this->dotacionesCargosDotacionElementoRel->removeElement($dotacionesCargosDotacionElementoRel);
+    }
+
+    /**
+     * Get dotacionesCargosDotacionElementoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDotacionesCargosDotacionElementoRel()
+    {
+        return $this->dotacionesCargosDotacionElementoRel;
     }
 }

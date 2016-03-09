@@ -25,7 +25,7 @@ class RhuDotacionTipo
     /**
      * @ORM\OneToMany(targetEntity="RhuDotacion", mappedBy="dotacionTipoRel")
      */
-    protected $dotacionesDotacionTipoRel;    
+    protected $dotacionesDotacionTipoRel;
     
     
     /**

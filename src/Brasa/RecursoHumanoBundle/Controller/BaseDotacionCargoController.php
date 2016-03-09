@@ -4,14 +4,14 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Brasa\RecursoHumanoBundle\Form\Type\RhuRequisitoCargoType;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuDotacionCargoType;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * RhuRequisitoCargo controller.
+ * RhuDotacionCargo controller.
  *
  */
-class BaseRequisitoCargoController extends Controller
+class BaseDotacionCargoController extends Controller
 {
     var $strDqlLista = "";
     public function listaAction() {
@@ -22,58 +22,57 @@ class BaseRequisitoCargoController extends Controller
         $form->handleRequest($request);     
         $this->listar();
         if($form->isValid()) {
-            if($form->get('BtnFiltrar')->isClicked()) {                           
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if($form->get('BtnFiltrar')->isClicked()) {
-                    $this->filtrar($form);
-                    $this->listar();
-                }
+            if($form->get('BtnFiltrar')->isClicked()) {
+                $this->filtrar($form);
+                $this->listar();
+            }
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');
+            if($form->get('BtnEliminar')->isClicked()) {
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoRequisitoCargo) {
-                        $arRequisitoCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoCargo')->find($codigoRequisitoCargo);
-                        $em->remove($arRequisitoCargo);
+                    foreach ($arrSeleccionados AS $codigoDotacionCargo) {
+                        $arDotacionCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionCargo')->find($codigoDotacionCargo);
+                        $em->remove($arDotacionCargo);
                         $em->flush();
                     }
                 }                
             }
-            
             if($form->get('BtnExcel')->isClicked()) { 
                 $this->generarExcel();
             }            
         }                
-        $arRequisitosCargos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
-        return $this->render('BrasaRecursoHumanoBundle:Base/RequisitoCargo:lista.html.twig', array(
-                    'arRequisitosCargos' => $arRequisitosCargos,
+        $arDotacionesCargos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
+        return $this->render('BrasaRecursoHumanoBundle:Base/DotacionCargo:lista.html.twig', array(
+                    'arDotacionesCargos' => $arDotacionesCargos,
                     'form'=> $form->createView()
            
         ));
     }
     
-    public function nuevoAction($codigoRequisitoCargo) {
+    public function nuevoAction($codigoDotacionCargo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arRequisitoCargo = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoCargo();
-        if ($codigoRequisitoCargo != 0) {
-            $arRequisitoCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoCargo')->find($codigoRequisitoCargo);
+        $arDotacionCargo = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionCargo();
+        if ($codigoDotacionCargo != 0) {
+            $arDotacionCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionCargo')->find($codigoDotacionCargo);
         }    
-        $form = $this->createForm(new RhuRequisitoCargoType(), $arRequisitoCargo);
+        $form = $this->createForm(new RhuDotacionCargoType(), $arDotacionCargo);
         $form->handleRequest($request);
         if ($form->isValid()) {            
-            $arRequisitoCargo = $form->getData();
-            $em->persist($arRequisitoCargo);            
+            $arDotacionCargo = $form->getData();
+            $em->persist($arDotacionCargo);            
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_base_requisito_cargo_lista'));
+            return $this->redirect($this->generateUrl('brs_rhu_base_dotacion_cargo_lista'));
         }
-        return $this->render('BrasaRecursoHumanoBundle:Base/RequisitoCargo:nuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Base/DotacionCargo:nuevo.html.twig', array(
             'form' => $form->createView(),
         ));
     }
     
-    public function nuevoMultipleAction($codigoRequisitoCargo) {
+    public function nuevoMultipleAction($codigoDotacionCargo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arRequisitosConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoConcepto();
-        $arRequisitosConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoConcepto')->findAll();
+        $arDotacionesElemento = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElemento();
+        $arDotacionesElemento = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->findAll();
         $form = $this->createFormBuilder()
             ->add('cargoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCargo',
@@ -86,23 +85,23 @@ class BaseRequisitoCargoController extends Controller
             if ($form->get('BtnGuardar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoRequisitoConcepto) {                           
-                        $arRequisitoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoConcepto();
-                        $arRequisitoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoConcepto')->find($codigoRequisitoConcepto);                                
+                    foreach ($arrSeleccionados AS $codigoDotacionElemento) {                           
+                        $arDotacionElemento = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElemento();
+                        $arDotacionElemento = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->find($codigoDotacionElemento);                                
                         $arCargo = $form->get('cargoRel')->getData();
-                        $arRequisitoCargo = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoCargo();
-                        $arRequisitoCargo->setCargoRel($arCargo);
-                        $arRequisitoCargo->setRequisitoConceptoRel($arRequisitoConcepto);
-                        $em->persist($arRequisitoCargo); 
+                        $arDotacionCargo = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionCargo();
+                        $arDotacionCargo->setCargoRel($arCargo);
+                        $arDotacionCargo->setDotacionElementoRel($arDotacionElemento);
+                        $em->persist($arDotacionCargo); 
                     }
                     $em->flush();
                 }
-                return $this->redirect($this->generateUrl('brs_rhu_base_requisito_cargo_lista'));
+                return $this->redirect($this->generateUrl('brs_rhu_base_dotacion_cargo_lista'));
             }
         }
-        return $this->render('BrasaRecursoHumanoBundle:Base/RequisitoCargo:nuevoMultiple.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Base/DotacionCargo:nuevoMultiple.html.twig', array(
             'form' => $form->createView(),
-            'arRequisitosConcepto' => $arRequisitosConcepto,
+            'arDotacionesElemento' => $arDotacionesElemento,
         ));
     }
     
@@ -135,7 +134,7 @@ class BaseRequisitoCargoController extends Controller
     private function listar() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoCargo')->listaDql(
+        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionCargo')->listaDql(
         $session->get('filtroCodigoCargo'));         
     }    
     
@@ -162,26 +161,26 @@ class BaseRequisitoCargoController extends Controller
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'CARGO')
-                    ->setCellValue('C1', 'REQUISITO');
+                    ->setCellValue('C1', 'DOTACIÓN');
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
-        $arRequisitosCargos = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoCargo();
-        $arRequisitosCargos = $query->getResult();
-        foreach ($arRequisitosCargos as $arRequisitoCargo) {
+        $arDotacionesCargos = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionCargo();
+        $arDotacionesCargos = $query->getResult();
+        foreach ($arDotacionesCargos as $arDotacionCargo) {
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arRequisitoCargo->getCodigoRequisitoCargoPk())
-                    ->setCellValue('B' . $i, $arRequisitoCargo->getCargoRel()->getNombre())
-                    ->setCellValue('C' . $i, $arRequisitoCargo->getRequisitoConceptoRel()->getNombre());
+                    ->setCellValue('A' . $i, $arDotacionCargo->getCodigoDotacionCargoPk())
+                    ->setCellValue('B' . $i, $arDotacionCargo->getCargoRel()->getNombre())
+                    ->setCellValue('C' . $i, $arDotacionCargo->getDotacionElementoRel()->getDotacion());
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('RequistosCargos');
+        $objPHPExcel->getActiveSheet()->setTitle('DotacionesCargos');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="RequisitosCargos.xlsx"');
+        header('Content-Disposition: attachment;filename="DotacionesCargos.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

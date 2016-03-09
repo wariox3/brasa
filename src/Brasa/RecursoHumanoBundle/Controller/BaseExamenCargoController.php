@@ -4,14 +4,14 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Brasa\RecursoHumanoBundle\Form\Type\RhuRequisitoCargoType;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuExamenCargoType;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * RhuRequisitoCargo controller.
+ * RhuExamenCargo controller.
  *
  */
-class BaseRequisitoCargoController extends Controller
+class BaseExamenCargoController extends Controller
 {
     var $strDqlLista = "";
     public function listaAction() {
@@ -22,58 +22,57 @@ class BaseRequisitoCargoController extends Controller
         $form->handleRequest($request);     
         $this->listar();
         if($form->isValid()) {
-            if($form->get('BtnFiltrar')->isClicked()) {                           
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if($form->get('BtnFiltrar')->isClicked()) {
-                    $this->filtrar($form);
-                    $this->listar();
-                }
+            if($form->get('BtnFiltrar')->isClicked()) {
+                $this->filtrar($form);
+                $this->listar();
+            }
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');
+            if($form->get('BtnEliminar')->isClicked()) {
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoRequisitoCargo) {
-                        $arRequisitoCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoCargo')->find($codigoRequisitoCargo);
-                        $em->remove($arRequisitoCargo);
+                    foreach ($arrSeleccionados AS $codigoExamenCargo) {
+                        $arExamenCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenCargo')->find($codigoExamenCargo);
+                        $em->remove($arExamenCargo);
                         $em->flush();
                     }
                 }                
             }
-            
             if($form->get('BtnExcel')->isClicked()) { 
                 $this->generarExcel();
             }            
         }                
-        $arRequisitosCargos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
-        return $this->render('BrasaRecursoHumanoBundle:Base/RequisitoCargo:lista.html.twig', array(
-                    'arRequisitosCargos' => $arRequisitosCargos,
+        $arExamenesCargos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
+        return $this->render('BrasaRecursoHumanoBundle:Base/ExamenCargo:lista.html.twig', array(
+                    'arExamenesCargos' => $arExamenesCargos,
                     'form'=> $form->createView()
            
         ));
     }
     
-    public function nuevoAction($codigoRequisitoCargo) {
+    public function nuevoAction($codigoExamenCargo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arRequisitoCargo = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoCargo();
-        if ($codigoRequisitoCargo != 0) {
-            $arRequisitoCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoCargo')->find($codigoRequisitoCargo);
+        $arExamenCargo = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenCargo();
+        if ($codigoExamenCargo != 0) {
+            $arExamenCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenCargo')->find($codigoExamenCargo);
         }    
-        $form = $this->createForm(new RhuRequisitoCargoType(), $arRequisitoCargo);
+        $form = $this->createForm(new RhuExamenCargoType(), $arExamenCargo);
         $form->handleRequest($request);
         if ($form->isValid()) {            
-            $arRequisitoCargo = $form->getData();
-            $em->persist($arRequisitoCargo);            
+            $arExamenCargo = $form->getData();
+            $em->persist($arExamenCargo);            
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_base_requisito_cargo_lista'));
+            return $this->redirect($this->generateUrl('brs_rhu_base_examen_cargo_lista'));
         }
-        return $this->render('BrasaRecursoHumanoBundle:Base/RequisitoCargo:nuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Base/ExamenCargo:nuevo.html.twig', array(
             'form' => $form->createView(),
         ));
     }
     
-    public function nuevoMultipleAction($codigoRequisitoCargo) {
+    public function nuevoMultipleAction($codigoExamenCargo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arRequisitosConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoConcepto();
-        $arRequisitosConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoConcepto')->findAll();
+        $arExamenesTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo();
+        $arExamenesTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->findAll();
         $form = $this->createFormBuilder()
             ->add('cargoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCargo',
@@ -86,23 +85,23 @@ class BaseRequisitoCargoController extends Controller
             if ($form->get('BtnGuardar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoRequisitoConcepto) {                           
-                        $arRequisitoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoConcepto();
-                        $arRequisitoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoConcepto')->find($codigoRequisitoConcepto);                                
+                    foreach ($arrSeleccionados AS $codigoExamenTipo) {                           
+                        $arExamenTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo();
+                        $arExamenTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->find($codigoExamenTipo);                                
                         $arCargo = $form->get('cargoRel')->getData();
-                        $arRequisitoCargo = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoCargo();
-                        $arRequisitoCargo->setCargoRel($arCargo);
-                        $arRequisitoCargo->setRequisitoConceptoRel($arRequisitoConcepto);
-                        $em->persist($arRequisitoCargo); 
+                        $arExamenCargo = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenCargo();
+                        $arExamenCargo->setCargoRel($arCargo);
+                        $arExamenCargo->setExamenTipoRel($arExamenTipo);
+                        $em->persist($arExamenCargo); 
                     }
                     $em->flush();
                 }
-                return $this->redirect($this->generateUrl('brs_rhu_base_requisito_cargo_lista'));
+                return $this->redirect($this->generateUrl('brs_rhu_base_examen_cargo_lista'));
             }
         }
-        return $this->render('BrasaRecursoHumanoBundle:Base/RequisitoCargo:nuevoMultiple.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Base/ExamenCargo:nuevoMultiple.html.twig', array(
             'form' => $form->createView(),
-            'arRequisitosConcepto' => $arRequisitosConcepto,
+            'arExamenesTipo' => $arExamenesTipo,
         ));
     }
     
@@ -135,7 +134,7 @@ class BaseRequisitoCargoController extends Controller
     private function listar() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoCargo')->listaDql(
+        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenCargo')->listaDql(
         $session->get('filtroCodigoCargo'));         
     }    
     
@@ -162,26 +161,26 @@ class BaseRequisitoCargoController extends Controller
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'CARGO')
-                    ->setCellValue('C1', 'REQUISITO');
+                    ->setCellValue('C1', 'EXAMEN');
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
-        $arRequisitosCargos = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoCargo();
-        $arRequisitosCargos = $query->getResult();
-        foreach ($arRequisitosCargos as $arRequisitoCargo) {
+        $arExamenesCargos = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenCargo();
+        $arExamenesCargos = $query->getResult();
+        foreach ($arExamenesCargos as $arExamenCargo) {
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arRequisitoCargo->getCodigoRequisitoCargoPk())
-                    ->setCellValue('B' . $i, $arRequisitoCargo->getCargoRel()->getNombre())
-                    ->setCellValue('C' . $i, $arRequisitoCargo->getRequisitoConceptoRel()->getNombre());
+                    ->setCellValue('A' . $i, $arExamenCargo->getCodigoExamenCargoPk())
+                    ->setCellValue('B' . $i, $arExamenCargo->getCargoRel()->getNombre())
+                    ->setCellValue('C' . $i, $arExamenCargo->getExamenTipoRel()->getNombre());
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('RequistosCargos');
+        $objPHPExcel->getActiveSheet()->setTitle('ExamenesCargos');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="RequisitosCargos.xlsx"');
+        header('Content-Disposition: attachment;filename="ExamenesCargos.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

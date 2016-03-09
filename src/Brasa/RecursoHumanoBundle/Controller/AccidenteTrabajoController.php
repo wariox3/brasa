@@ -86,16 +86,17 @@ class AccidenteTrabajoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $form = $this->createFormBuilder()
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
-                        
+            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))    
             ->getForm();
         $form->handleRequest($request);
 
         $arAccidenteTrabajo = new \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo();
         $arAccidenteTrabajo = $em->getRepository('BrasaRecursoHumanoBundle:RhuAccidenteTrabajo')->find($codigoAccidenteTrabajo);
         if($form->isValid()) {
-            
-            
+            if($form->get('BtnImprimir')->isClicked()) {
+                $objFormatoAccidenteTrabajo = new \Brasa\RecursoHumanoBundle\Formatos\FormatoAccidenteTrabajo();
+                $objFormatoAccidenteTrabajo->Generar($this, $codigoAccidenteTrabajo);
+            }
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/AccidentesTrabajo:detalle.html.twig', array(
                     'arAccidenteTrabajo' => $arAccidenteTrabajo,

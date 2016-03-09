@@ -85,6 +85,7 @@ class RhuDotacion
      */
     protected $dotacionTipoRel;
     
+    
     /**
      * @ORM\OneToMany(targetEntity="RhuDotacionDetalle", mappedBy="dotacionRel")
      */
@@ -230,6 +231,30 @@ class RhuDotacion
     }
 
     /**
+     * Set fechaEntrega
+     *
+     * @param \DateTime $fechaEntrega
+     *
+     * @return RhuDotacion
+     */
+    public function setFechaEntrega($fechaEntrega)
+    {
+        $this->fechaEntrega = $fechaEntrega;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaEntrega
+     *
+     * @return \DateTime
+     */
+    public function getFechaEntrega()
+    {
+        return $this->fechaEntrega;
+    }
+
+    /**
      * Set estadoCerrado
      *
      * @param boolean $estadoCerrado
@@ -254,6 +279,30 @@ class RhuDotacion
     }
 
     /**
+     * Set estadoAutorizado
+     *
+     * @param boolean $estadoAutorizado
+     *
+     * @return RhuDotacion
+     */
+    public function setEstadoAutorizado($estadoAutorizado)
+    {
+        $this->estadoAutorizado = $estadoAutorizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAutorizado
+     *
+     * @return boolean
+     */
+    public function getEstadoAutorizado()
+    {
+        return $this->estadoAutorizado;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -275,6 +324,30 @@ class RhuDotacion
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuDotacion
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
     }
 
     /**
@@ -381,77 +454,5 @@ class RhuDotacion
     public function getDotacionesDetallesDotacionRel()
     {
         return $this->dotacionesDetallesDotacionRel;
-    }
-
-    /**
-     * Set estadoAutorizado
-     *
-     * @param boolean $estadoAutorizado
-     *
-     * @return RhuDotacion
-     */
-    public function setEstadoAutorizado($estadoAutorizado)
-    {
-        $this->estadoAutorizado = $estadoAutorizado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoAutorizado
-     *
-     * @return boolean
-     */
-    public function getEstadoAutorizado()
-    {
-        return $this->estadoAutorizado;
-    }
-
-    /**
-     * Set fechaEntrega
-     *
-     * @param \DateTime $fechaEntrega
-     *
-     * @return RhuDotacion
-     */
-    public function setFechaEntrega($fechaEntrega)
-    {
-        $this->fechaEntrega = $fechaEntrega;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaEntrega
-     *
-     * @return \DateTime
-     */
-    public function getFechaEntrega()
-    {
-        return $this->fechaEntrega;
-    }
-
-    /**
-     * Set codigoUsuario
-     *
-     * @param string $codigoUsuario
-     *
-     * @return RhuDotacion
-     */
-    public function setCodigoUsuario($codigoUsuario)
-    {
-        $this->codigoUsuario = $codigoUsuario;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoUsuario
-     *
-     * @return string
-     */
-    public function getCodigoUsuario()
-    {
-        return $this->codigoUsuario;
     }
 }

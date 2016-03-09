@@ -54,6 +54,16 @@ class RhuAccidenteTrabajo
     private $fechaEnviaInvestigacion;
     
     /**
+     * @ORM\Column(name="coordinador_encargado", type="string", length=100, nullable=true)
+     */    
+    private $coordinadorEncargado;
+    
+    /**
+     * @ORM\Column(name="cargo_coordinador_encargado", type="string", length=100, nullable=true)
+     */    
+    private $cargoCoordinadorEncargado;
+    
+    /**
      * @ORM\Column(name="codigo_ciudad_accidente_fk", type="integer", nullable=true)
      */    
     private $codigoCiudadAccidenteFk;
@@ -104,9 +114,29 @@ class RhuAccidenteTrabajo
     private $mecanismoAccidente;
     
     /**
+     * @ORM\Column(name="oficio_habitual", type="string", length=120, nullable=true)
+     */    
+    private $oficioHabitual;
+    
+    /**
      * @ORM\Column(name="lugar_accidente", type="string", length=100, nullable=true)
      */    
     private $lugarAccidente;
+    
+    /**
+     * @ORM\Column(name="tiempo_servicio_empleado", type="string", length=20, nullable=true)
+     */    
+    private $tiempoServicioEmpleado;
+    
+    /**
+     * @ORM\Column(name="tarea_desarrollada_momento_accidente", type="string", length=120, nullable=true)
+     */    
+    private $tareaDesarrolladamomentoAccidente;
+    
+    /**
+     * @ORM\Column(name="accidente_ocurrido_lugar_habitual", type="boolean")
+     */    
+    private $accidenteOcurrioLugarHabitual = 0;
     
     /**
      * @ORM\Column(name="descripcion_accidente", type="string", length=1000, nullable=true)
@@ -1661,5 +1691,149 @@ class RhuAccidenteTrabajo
     public function getCodigoUsuario()
     {
         return $this->codigoUsuario;
+    }
+
+    /**
+     * Set coordinadorEncargado
+     *
+     * @param string $coordinadorEncargado
+     *
+     * @return RhuAccidenteTrabajo
+     */
+    public function setCoordinadorEncargado($coordinadorEncargado)
+    {
+        $this->coordinadorEncargado = $coordinadorEncargado;
+
+        return $this;
+    }
+
+    /**
+     * Get coordinadorEncargado
+     *
+     * @return string
+     */
+    public function getCoordinadorEncargado()
+    {
+        return $this->coordinadorEncargado;
+    }
+
+    /**
+     * Set cargoCoordinadorEncargado
+     *
+     * @param string $cargoCoordinadorEncargado
+     *
+     * @return RhuAccidenteTrabajo
+     */
+    public function setCargoCoordinadorEncargado($cargoCoordinadorEncargado)
+    {
+        $this->cargoCoordinadorEncargado = $cargoCoordinadorEncargado;
+
+        return $this;
+    }
+
+    /**
+     * Get cargoCoordinadorEncargado
+     *
+     * @return string
+     */
+    public function getCargoCoordinadorEncargado()
+    {
+        return $this->cargoCoordinadorEncargado;
+    }
+
+    /**
+     * Set oficioHabitual
+     *
+     * @param string $oficioHabitual
+     *
+     * @return RhuAccidenteTrabajo
+     */
+    public function setOficioHabitual($oficioHabitual)
+    {
+        $this->oficioHabitual = $oficioHabitual;
+
+        return $this;
+    }
+
+    /**
+     * Get oficioHabitual
+     *
+     * @return string
+     */
+    public function getOficioHabitual()
+    {
+        return $this->oficioHabitual;
+    }
+
+    /**
+     * Set tiempoServicioEmpleado
+     *
+     * @param string $tiempoServicioEmpleado
+     *
+     * @return RhuAccidenteTrabajo
+     */
+    public function setTiempoServicioEmpleado($tiempoServicioEmpleado)
+    {
+        $this->tiempoServicioEmpleado = $tiempoServicioEmpleado;
+
+        return $this;
+    }
+
+    /**
+     * Get tiempoServicioEmpleado
+     *
+     * @return string
+     */
+    public function getTiempoServicioEmpleado()
+    {
+        return $this->tiempoServicioEmpleado;
+    }
+
+    /**
+     * Set tareaDesarrolladamomentoAccidente
+     *
+     * @param string $tareaDesarrolladamomentoAccidente
+     *
+     * @return RhuAccidenteTrabajo
+     */
+    public function setTareaDesarrolladamomentoAccidente($tareaDesarrolladamomentoAccidente)
+    {
+        $this->tareaDesarrolladamomentoAccidente = $tareaDesarrolladamomentoAccidente;
+
+        return $this;
+    }
+
+    /**
+     * Get tareaDesarrolladamomentoAccidente
+     *
+     * @return string
+     */
+    public function getTareaDesarrolladamomentoAccidente()
+    {
+        return $this->tareaDesarrolladamomentoAccidente;
+    }
+
+    /**
+     * Set accidenteOcurrioLugarHabitual
+     *
+     * @param boolean $accidenteOcurrioLugarHabitual
+     *
+     * @return RhuAccidenteTrabajo
+     */
+    public function setAccidenteOcurrioLugarHabitual($accidenteOcurrioLugarHabitual)
+    {
+        $this->accidenteOcurrioLugarHabitual = $accidenteOcurrioLugarHabitual;
+
+        return $this;
+    }
+
+    /**
+     * Get accidenteOcurrioLugarHabitual
+     *
+     * @return boolean
+     */
+    public function getAccidenteOcurrioLugarHabitual()
+    {
+        return $this->accidenteOcurrioLugarHabitual;
     }
 }
