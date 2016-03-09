@@ -149,11 +149,6 @@ class RhuEmpleado
     private $codigoCentroCostoFk; 
     
     /**
-     * @ORM\Column(name="codigo_centro_costo_ultimo_fk", type="integer", nullable=true)
-     */    
-    private $codigoCentroCostoUltimoFk;
-    
-    /**
      * @ORM\Column(name="codigo_cargo_fk", type="integer", nullable=true)
      */    
     private $codigoCargoFk;    
@@ -613,7 +608,6 @@ class RhuEmpleado
      * @ORM\OneToMany(targetEntity="RhuCarta", mappedBy="empleadoRel")
      */
     protected $cartasEmpleadoRel;
-    
     
     
     /**
@@ -1238,30 +1232,6 @@ class RhuEmpleado
     public function getCodigoCentroCostoFk()
     {
         return $this->codigoCentroCostoFk;
-    }
-
-    /**
-     * Set codigoCentroCostoUltimoFk
-     *
-     * @param integer $codigoCentroCostoUltimoFk
-     *
-     * @return RhuEmpleado
-     */
-    public function setCodigoCentroCostoUltimoFk($codigoCentroCostoUltimoFk)
-    {
-        $this->codigoCentroCostoUltimoFk = $codigoCentroCostoUltimoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCentroCostoUltimoFk
-     *
-     * @return integer
-     */
-    public function getCodigoCentroCostoUltimoFk()
-    {
-        return $this->codigoCentroCostoUltimoFk;
     }
 
     /**

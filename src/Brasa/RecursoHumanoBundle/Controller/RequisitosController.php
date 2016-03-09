@@ -217,7 +217,7 @@ class RequisitosController extends Controller
         if ($form->isValid()) {
             $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arRequisito = $form->getData();
-            $arRequisito->setCodigoUsuario($arUsuario->getId());
+            $arRequisito->setCodigoUsuario($arUsuario->getUserName());
             $em->persist($arRequisito);
             $arRequisitosConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoConcepto();
             $arRequisitosConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoConcepto')->findBy(array('general' => 1));

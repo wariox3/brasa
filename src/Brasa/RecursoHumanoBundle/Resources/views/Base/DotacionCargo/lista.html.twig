@@ -28,6 +28,7 @@
             <th>CÓDIGO</th>
             <th>CARGO</th>
             <th>ELEMENTO</th>
+            <th>CANTIDAD</th>
             <th></th>
             <th></th>
         </tr>
@@ -36,6 +37,7 @@
                 <td>{{arDotacionesCargos.codigoDotacionCargoPk}}</td>
                 <td>{{arDotacionesCargos.cargoRel.nombre}}</td>
                 <td>{{arDotacionesCargos.dotacionElementoRel.dotacion}}</td>
+                <td>{{arDotacionesCargos.cantidadAsignada}}</td>
                 <td><a href="{{ path('brs_rhu_base_dotacion_cargo_nuevo',{'codigoDotacionCargo': arDotacionesCargos.codigoDotacionCargoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDotacionesCargos.codigoDotacionCargoPk }}" /></td>
             {%endfor%}

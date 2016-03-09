@@ -27,6 +27,7 @@
         <tr>
             <th>CÓDIGO</th>
             <th>CARGO</th> 
+            <th>EXÁMEN</th>
             <th></th>
             <th></th>
         </tr>
@@ -34,6 +35,7 @@
                <tr>
                 <td>{{arExamenesCargos.codigoExamenCargoPk}}</td>
                 <td>{{arExamenesCargos.cargoRel.nombre}}</td>
+                <td>{{arExamenesCargos.examenTipoRel.nombre}}</td>
                 <td><a href="{{ path('brs_rhu_base_examen_cargo_nuevo',{'codigoExamenCargo': arExamenesCargos.codigoExamenCargoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arExamenesCargos.codigoExamenCargoPk }}" /></td>
             {%endfor%}

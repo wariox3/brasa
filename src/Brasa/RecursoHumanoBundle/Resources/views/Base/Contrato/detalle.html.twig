@@ -44,15 +44,15 @@
                 <tr>
                     <td class="titulo">CLASIFICACIÓN RIESGO:</td>
                     <td class="td-in-well">{{ arContrato.clasificacionRiesgoRel.nombre|default('SIN CENTRO COSTO') }}</td>
-                    <td class="titulo">IDENTIFICACION</td>
+                    <td class="titulo">IDENTIFICACIÓN:</td>
                     <td class="td-in-well">{{ arContrato.empleadoRel.numeroIdentificacion }}</td>
-                    <td class="titulo">DESCRIPCION CARGO:</td>
+                    <td class="titulo">DESCRIPCIÓN CARGO:</td>
                     <td class="td-in-well">{{ arContrato.cargoDescripcion }}</td>
                 </tr>
                 <tr>
                     <td class="titulo">ÚLTIMO PAGO:</td>
                     <td>{{ arContrato.fechaUltimoPago|date("Y/m/d") }}</td>
-                    <td class="titulo">EMPLEADO</td>
+                    <td class="titulo">EMPLEADO:</td>
                     <td class="td-in-well">{{ arContrato.empleadoRel.nombreCorto }}</td>
                     <td class="titulo"></td>
                     <td class="td-in-well"></td>
@@ -60,15 +60,15 @@
                 <tr>
                     <td class="titulo">ÚLTIMA PRIMA:</td>
                     <td>{{ arContrato.fechaUltimoPagoPrimas|date("Y/m/d") }}</td>
-                    <td class="titulo">ENTIDAD PENSIÓN</td>
+                    <td class="titulo">ENTIDAD PENSIÓN:</td>
                     <td class="td-in-well">{{ arContrato.entidadPensionRel.nombre|default('SIN CONTRATO') }}</td>
-                    <td class="titulo">ENTIDAD SALUD</td>
+                    <td class="titulo">ENTIDAD SALUD:</td>
                     <td class="td-in-well">{{ arContrato.entidadSaludRel.nombre|default('SIN CONTRATO') }}</td>
                 </tr>                
                 <tr>
                     <td class="titulo">ÚLTIMA CESANTIA:</td>
                     <td>{{ arContrato.fechaUltimoPagoCesantias|date("Y/m/d") }}</td>
-                    <td class="titulo">ENTIDAD CAJA</td>
+                    <td class="titulo">ENTIDAD CAJA:</td>
                     <td class="td-in-well">{{ arContrato.entidadCajaRel.nombre|default('SIN CONTRATO') }}</td>
                     <td class="titulo"></td>
                     <td class="td-in-well"></td>
@@ -76,10 +76,10 @@
                 <tr>
                     <td class="titulo">ÚLTIMA VACACIÓN:</td>
                     <td>{{ arContrato.fechaUltimoPagoVacaciones|date("Y/m/d") }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">TIPO PENSIÓN:</td>
+                    <td class="td-in-well">{{ arContrato.tipoPensionRel.nombre }}</td>
+                    <td class="titulo">TIPO PENSIÓN:</td>
+                    <td class="td-in-well">{{ arContrato.tipoSaludRel.nombre }}</td>
                 </tr>                 
                 <tr>
                     <td colspan="8">COMENTARIOS: {{ arContrato.comentarios }}</td>

@@ -98,6 +98,17 @@ class RhuExamenRepository extends EntityRepository {
                     $arRequisitoDetalle->setCantidadPendiente(1);
                     $em->persist($arRequisitoDetalle);
                 }
+                $arRequisitoCargo = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoCargo();
+                $arRequisitoCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoCargo')->findBy(array('codigoCargoFk' => $arExamen->getCodigoCargoFk()));
+                foreach ($arRequisitoCargo as $arRequisitoCargo) {
+                    $arRequisitoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoDetalle();
+                    $arRequisitoDetalle->setRequisitoRel($arRequisito);
+                    $arRequisitoDetalle->setRequisitoConceptoRel($arRequisitoCargo->getRequisitoConceptoRel());
+                    $arRequisitoDetalle->setTipo('CARGO');
+                    $arRequisitoDetalle->setCantidad(1);
+                    $arRequisitoDetalle->setCantidadPendiente(1);
+                    $em->persist($arRequisitoDetalle);
+                }
                 $em->flush();
             } else {
                 $strRespuesta = "Todos los detalles del examen deben estar aprobados";

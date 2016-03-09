@@ -40,18 +40,18 @@
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">General</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_rhu_base_creditotipo_listar') }}">Tipo de crédito</a></li>                                        
+                                        <li><a href="{{ path('brs_rhu_base_creditotipo_listar') }}">Tipo de crédito</a></li>
                                         <li><a href="{{ path('brs_rhu_base_empleado_estudio_tipo_lista') }}">Tipo de estudio</a></li>
                                         <li><a href="{{ path('brs_rhu_base_examentipo_listar') }}">Tipo de exámen</a></li>
                                         <li><a href="{{ path('brs_rhu_base_examen_cargo_lista') }}">Exámen por cargo</a></li>
                                         <li><a href="{{ path('brs_rhu_base_licenciatipo_listar') }}">Tipo de licencia</a></li>
                                         <li><a href="{{ path('brs_rhu_base_capacitacion_tipo_lista') }}">Tipo de capacitación</a></li>
                                         <li><a href="{{ path('brs_rhu_base_contrato_tipo_lista') }}">Tipo de contratos</a></li>
-                                        <li><a href="{{ path('brs_rhu_base_disciplinario_tipo_lista') }}">Tipo de procesos disciplinarios</a></li>                                        
+                                        <li><a href="{{ path('brs_rhu_base_disciplinario_tipo_lista') }}">Tipo de procesos disciplinarios</a></li>
                                         <li><a href="{{ path('brs_rhu_base_carta_tipo_lista') }}">Tipo de cartas</a></li>
-                                        <li><a href="{{ path('brs_rhu_base_empleado_informacion_interna_tipo_lista') }}">Tipo de información interna empleado</a></li>                                        
+                                        <li><a href="{{ path('brs_rhu_base_empleado_informacion_interna_tipo_lista') }}">Tipo de información interna empleado</a></li>
                                         <li><a href="{{ path('brs_rhu_base_desempeno_concepto_tipo_listar') }}">Tipo de concepto de gestión del desempeño</a></li>
-                                        <li><a href="{{ path('brs_rhu_base_desempeno_concepto_listar') }}">Concepto de gestión del desempeño</a></li>                                        
+                                        <li><a href="{{ path('brs_rhu_base_desempeno_concepto_listar') }}">Concepto de gestión del desempeño</a></li>
                                         <li><a href="{{ path('brs_rhu_liquidacion_adicional_concepto_lista') }}">Concepto de adicionales liquidacion</a></li>
                                         <li><a href="{{ path('brs_rhu_pago_concepto_lista') }}">Concepto de pago</a></li>
                                         <li><a href="{{ path('brs_rhu_base_seleccion_prueba_tipo_listar') }}">Tipo de prueba selección</a></li>
@@ -78,6 +78,8 @@
                                         <li><a href="{{ path('brs_rhu_base_salud_listar') }}">Salud</a></li>
                                         <li><a href="{{ path('brs_rhu_base_pension_listar') }}">Pension</a></li>
                                         <li><a href="{{ path('brs_rhu_base_caja_listar') }}">Caja compensación</a></li>
+                                        <li><a href="{{ path('brs_rhu_base_salud_tipo_lista') }}">Tipo salud</a></li>
+                                        <li><a href="{{ path('brs_rhu_base_pension_tipo_lista') }}">Tipo pensión</a></li>
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
@@ -88,9 +90,9 @@
                                         <li><a href="{{ path('brs_rhu_base_dotacionElemento_lista') }}">Elementos dotación</a></li>
                                         <li><a href="{{ path('brs_rhu_base_dotacion_cargo_lista') }}">Dotación por cargo</a></li>
                                     </ul>
-                                </li>                                
-                                <li><a href="{{ path('brs_rhu_base_entidadexamen_listar') }}">Entidad examen</a></li>                                
-                                <li><a href="{{ path('brs_rhu_base_sede_listar') }}">Sedes</a></li>                                
+                                </li>
+                                <li><a href="{{ path('brs_rhu_base_entidadexamen_listar') }}">Entidad examen</a></li>
+                                <li><a href="{{ path('brs_rhu_base_sede_listar') }}">Sedes</a></li>
                             </ul>
                         </li>
                         <li class="dropdown-submenu">
@@ -108,7 +110,7 @@
                                 <li><a href="{{ path('brs_tur_base_cliente_lista') }}">Cliente</a></li>
                                 <li><a href="{{ path('brs_tur_base_prospecto_lista') }}">Prospecto</a></li>
                                 <li><a href="{{ path('brs_tur_base_recurso_lista') }}">Recurso</a></li>
-                                <li><a href="{{ path('brs_tur_base_turno_lista') }}">Turno</a></li>                                
+                                <li><a href="{{ path('brs_tur_base_turno_lista') }}">Turno</a></li>
                                 <li><a href="{{ path('brs_tur_base_plantilla_lista') }}">Plantilla de turno</a></li>
                                 <li><a href="{{ path('brs_tur_base_concepto_servicio_lista') }}">Concepto servicio</a></li>
                                 <li class="dropdown-submenu">
@@ -116,9 +118,9 @@
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_tur_base_recurso_tipo_lista') }}">Recurso tipo</a></li>
                                     </ul>
-                                </li>                                
+                                </li>
                             </ul>
-                        </li>                        
+                        </li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -219,7 +221,7 @@
                                         <li><a href="{{ path('brs_rhu_consultas_examenes_vencimiento') }}">Vencimiento</a></li>
                                         <li><a href="{{ path('brs_rhu_consultas_examen_cobrar') }}">Por cobrar</a></li>
                                     </ul>
-                                </li>                                
+                                </li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="{{ path('brs_rhu_consultas_procesos_disciplinarios') }}">Procesos disciplinarios</a>
                                 </li>
@@ -244,20 +246,20 @@
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Recursos</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_tur_consultas_recursos_disponibles') }}">Disponibles</a></li>                                        
+                                        <li><a href="{{ path('brs_tur_consultas_recursos_disponibles') }}">Disponibles</a></li>
                                     </ul>
-                                </li>                                
+                                </li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Servicios</a>
-                                    <ul class="dropdown-menu">                                        
+                                    <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_tur_consultas_servicios_detalles') }}">Detalles</a></li>
                                         <li><a href="{{ path('brs_tur_consultas_servicios_detalles_recursos') }}">Detalles y recursos</a></li>
-                                        <li><a href="{{ path('brs_tur_consultas_servicios_costos') }}">Costos</a></li>                                        
+                                        <li><a href="{{ path('brs_tur_consultas_servicios_costos') }}">Costos</a></li>
                                     </ul>
-                                </li>                                
+                                </li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Pedidos</a>
-                                    <ul class="dropdown-menu">                                        
+                                    <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_tur_consultas_pedidos_detalles') }}">Detalles</a></li>
                                     </ul>
                                 </li>
@@ -266,16 +268,16 @@
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_tur_consultas_programaciones_detalles') }}">Detalles</a></li>
                                     </ul>
-                                </li>   
+                                </li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Costos</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_tur_consultas_costo_recurso') }}">Recursos</a></li>                                                                                                                        
-                                        <li><a href="{{ path('brs_tur_consultas_costo_servicio') }}">Servicio</a></li>                                                                                
+                                        <li><a href="{{ path('brs_tur_consultas_costo_recurso') }}">Recursos</a></li>
+                                        <li><a href="{{ path('brs_tur_consultas_costo_servicio') }}">Servicio</a></li>
                                     </ul>
-                                </li>                                
+                                </li>
                             </ul>
-                        </li>                        
+                        </li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -291,7 +293,7 @@
                                     </ul>
                                 </li>
                             </ul>
-                        </li>                        
+                        </li>
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Recurso humano</a>
                             <ul class="dropdown-menu">
@@ -324,13 +326,13 @@
                         </li>
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Turno</a>
-                            <ul class="dropdown-menu">                                
+                            <ul class="dropdown-menu">
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Generar pedidos</a>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_tur_proceso_generar_pedido_lista') }}">Lista</a></li>
                                     </ul>
-                                </li>                                
+                                </li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Generar programacion</a>
                                     <ul class="dropdown-menu">
@@ -348,9 +350,9 @@
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_tur_proceso_cierre_mes') }}">Lista</a></li>
                                     </ul>
-                                </li>                                
+                                </li>
                             </ul>
-                        </li>                        
+                        </li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -465,9 +467,9 @@
                                         <li><a href="{{ path('brs_tur_utilidad_programacion_inconsistencias') }}">Analizar inconsistencias</a></li>
                                         <li><a href="{{ path('brs_tur_utilidad_programacion_descarga_masiva') }}">descarga masiva pdf</a></li>
                                     </ul>
-                                </li>                                
+                                </li>
                             </ul>
-                        </li>                        
+                        </li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -478,21 +480,21 @@
                             <ul class="dropdown-menu">
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Tareas</a>
-                                    <ul class="dropdown-menu">                                        
+                                    <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_gen_mov_tarea_lista') }}">Lista</a></li>
                                     </ul>
-                                </li>                                 
+                                </li>
                             </ul>
-                        </li>                        
+                        </li>
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Contabilidad</a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Asientos</a>
-                                    <ul class="dropdown-menu">                                        
+                                    <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_ctb_mov_asientos_lista') }}">Lista</a></li>
                                     </ul>
-                                </li>                                 
+                                </li>
                             </ul>
                         </li>
                         <li class="dropdown-submenu">
@@ -635,54 +637,54 @@
                             <ul class="dropdown-menu">
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Cotizacion</a>
-                                    <ul class="dropdown-menu">                                        
+                                    <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_tur_cotizacion_lista') }}">Lista</a></li>
                                     </ul>
-                                </li> 
+                                </li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Servicio</a>
-                                    <ul class="dropdown-menu">                                        
+                                    <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_tur_servicio_lista') }}">Lista</a></li>
                                     </ul>
-                                </li>                                
+                                </li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Pedido</a>
-                                    <ul class="dropdown-menu">                                        
+                                    <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_tur_pedido_lista') }}">Lista</a></li>
                                     </ul>
-                                </li>                                
+                                </li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Programacion</a>
-                                    <ul class="dropdown-menu">                                        
+                                    <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_tur_programacion_lista') }}">Lista</a></li>
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Factura</a>
-                                    <ul class="dropdown-menu">                                        
+                                    <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_tur_factura_lista') }}">Lista</a></li>
                                     </ul>
-                                </li>                                
+                                </li>
                             </ul>
-                        </li> 
+                        </li>
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Transporte</a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Recogida</a>
-                                    <ul class="dropdown-menu">                                        
+                                    <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_tte_recogida_lista') }}">Lista</a></li>
                                         <li><a href="{{ path('brs_tte_programacion_recogida_lista') }}">Programacion</a></li>
                                     </ul>
-                                </li>                                 
+                                </li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Guia</a>
-                                    <ul class="dropdown-menu">                                        
+                                    <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_tte_guia_lista') }}">Lista</a></li>
                                     </ul>
-                                </li>                                                                 
+                                </li>
                             </ul>
-                        </li>                        
+                        </li>
                     </ul>
                 </li>
             </ul>

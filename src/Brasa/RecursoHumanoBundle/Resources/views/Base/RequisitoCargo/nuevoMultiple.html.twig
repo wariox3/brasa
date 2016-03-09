@@ -21,12 +21,14 @@
         <tr>            
             <th>CÓDIGO</th>
             <th>REQUISITO</th>
+            <th>GENERAL</th>
             <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
         </tr>        
             {%for arRequisitosConcepto in arRequisitosConcepto %}
                <tr>
                 <td>{{arRequisitosConcepto.codigoRequisitoConceptoPk }}</td>
-                <td>{{arRequisitosConcepto.nombre }}</td>               
+                <td>{{arRequisitosConcepto.nombre }}</td>
+                <td>{% if arRequisitosConcepto.general == 1%}SI{% else %}NO{% endif %}</td>
                 <td align="center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arRequisitosConcepto.codigoRequisitoConceptoPk }}" /></td>
             {%endfor%}
             </tr>            

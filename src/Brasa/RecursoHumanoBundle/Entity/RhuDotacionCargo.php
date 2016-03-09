@@ -26,7 +26,12 @@ class RhuDotacionCargo
     /**
      * @ORM\Column(name="codigo_cargo_fk", type="integer")
      */
-    private $codigoCargoFk; 
+    private $codigoCargoFk;
+    
+    /**
+     * @ORM\Column(name="cantidad_asignada", type="integer", nullable=true)
+     */    
+    private $cantidadAsignada = 0;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuDotacionElemento", inversedBy="dotacionesCargosDotacionElementoRel")
@@ -145,5 +150,29 @@ class RhuDotacionCargo
     public function getCargoRel()
     {
         return $this->cargoRel;
+    }
+
+    /**
+     * Set cantidadAsignada
+     *
+     * @param integer $cantidadAsignada
+     *
+     * @return RhuDotacionCargo
+     */
+    public function setCantidadAsignada($cantidadAsignada)
+    {
+        $this->cantidadAsignada = $cantidadAsignada;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadAsignada
+     *
+     * @return integer
+     */
+    public function getCantidadAsignada()
+    {
+        return $this->cantidadAsignada;
     }
 }

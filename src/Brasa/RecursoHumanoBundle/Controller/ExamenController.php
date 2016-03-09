@@ -55,21 +55,34 @@ class ExamenController extends Controller
             $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arExamen = $form->getData();
             if($codigoExamen == 0) {
-                $arExamen->setCodigoUsuario($arUsuario->getId());
-            }
-            if($arExamen->getExamenClaseRel()->getCodigoExamenClasePk() == 1 && $codigoExamen == 0) {
-                $arExamenTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo();
-                $arExamenTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->findBy(array('ingreso' => 1));
-                foreach ($arExamenTipos as $arExamenTipo) {                    
+                $arExamen->setCodigoUsuario($arUsuario->getUserName());
+                if($arExamen->getExamenClaseRel()->getCodigoExamenClasePk() == 1 && $codigoExamen == 0) {
+                    $arExamenTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo();
+                    $arExamenTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->findBy(array('ingreso' => 1));
+                    foreach ($arExamenTipos as $arExamenTipo) {                    
+                        $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
+                        $arExamenDetalle->setExamenRel($arExamen);
+                        $arExamenDetalle->setExamenTipoRel($arExamenTipo);
+                        $floPrecio = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->devuelvePrecio($arExamen->getEntidadExamenRel()->getCodigoEntidadExamenPk(), $arExamenTipo->getCodigoExamenTipoPk());
+                        $arExamenDetalle->setVrPrecio($floPrecio);                                        
+                        $arExamenDetalle->setFechaVence(new \DateTime('now'));
+                        $em->persist($arExamenDetalle);                    
+                    }                
+                }
+                $arCargo = $form->get('cargoRel')->getData();
+                $arExamenCargo = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenCargo();
+                $arExamenCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenCargo')->findBy(array('codigoCargoFk' => $arCargo->getCodigoCargoPk()));
+                foreach ($arExamenCargo as $arExamenCargo) {                    
                     $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
                     $arExamenDetalle->setExamenRel($arExamen);
-                    $arExamenDetalle->setExamenTipoRel($arExamenTipo);
-                    $floPrecio = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->devuelvePrecio($arExamen->getEntidadExamenRel()->getCodigoEntidadExamenPk(), $arExamenTipo->getCodigoExamenTipoPk());
+                    $arExamenDetalle->setExamenTipoRel($arExamenCargo->getExamenTipoRel());
+                    $floPrecio = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->devuelvePrecio($arExamen->getEntidadExamenRel()->getCodigoEntidadExamenPk(), $arExamenCargo->getCodigoExamenTipoFk());
                     $arExamenDetalle->setVrPrecio($floPrecio);                                        
                     $arExamenDetalle->setFechaVence(new \DateTime('now'));
                     $em->persist($arExamenDetalle);                    
                 }                
             }
+            
             $em->persist($arExamen);
             $em->flush();
             $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->liquidar($arExamen->getCodigoExamenPk());

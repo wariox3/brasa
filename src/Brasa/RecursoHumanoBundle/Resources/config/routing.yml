@@ -494,6 +494,22 @@ brs_rhu_base_disciplinario_tipo_nuevo:
     path:     /rhu/base/disciplinario/tipo/nuevo/{codigoDisciplinarioTipo}
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseDisciplinarioTipo:nuevo }
     
+brs_rhu_base_pension_tipo_lista:
+    path:     /rhu/base/pension/tipo/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:BasePensionTipo:lista } 
+
+brs_rhu_base_pension_tipo_nuevo:
+    path:     /rhu/base/pension/tipo/nuevo/{codigoPensionTipo}
+    defaults: { _controller: BrasaRecursoHumanoBundle:BasePensionTipo:nuevo }
+    
+brs_rhu_base_salud_tipo_lista:
+    path:     /rhu/base/salud/tipo/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseSaludTipo:lista } 
+
+brs_rhu_base_salud_tipo_nuevo:
+    path:     /rhu/base/salud/tipo/nuevo/{codigoSaludTipo}
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseSaludTipo:nuevo }    
+    
 brs_rhu_base_contrato_tipo_lista:
     path:     /rhu/base/contrato/tipo/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseContratosTipo:lista } 

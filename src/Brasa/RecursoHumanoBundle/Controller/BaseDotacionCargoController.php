@@ -71,8 +71,8 @@ class BaseDotacionCargoController extends Controller
     public function nuevoMultipleAction($codigoDotacionCargo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arDotacionesElemento = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElemento();
-        $arDotacionesElemento = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->findAll();
+        $arDotacionesElementos = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElemento();
+        $arDotacionesElementos = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->findAll();
         $form = $this->createFormBuilder()
             ->add('cargoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCargo',
@@ -82,26 +82,31 @@ class BaseDotacionCargoController extends Controller
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $arrControles = $request->request->All();
             if ($form->get('BtnGuardar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoDotacionElemento) {                           
-                        $arDotacionElemento = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElemento();
-                        $arDotacionElemento = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->find($codigoDotacionElemento);                                
-                        $arCargo = $form->get('cargoRel')->getData();
-                        $arDotacionCargo = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionCargo();
-                        $arDotacionCargo->setCargoRel($arCargo);
-                        $arDotacionCargo->setDotacionElementoRel($arDotacionElemento);
-                        $em->persist($arDotacionCargo); 
+                if (isset($arrControles['TxtCantidad'])) {
+                    $intIndice = 0;
+                    foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                        if($arrControles['TxtCantidad'][$intIndice] > 0 ){
+                            $arDotacionElemento = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElemento();
+                            $arDotacionElemento = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->find($intCodigo);
+                            $arDotacionCargo = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionCargo();
+                            $arDotacionCargo->setDotacionElementoRel($arDotacionElemento);
+                            $arDotacionCargo->setCargoRel($form->get('cargoRel')->getData());
+                            $intCantidad = $arrControles['TxtCantidad'][$intIndice];
+                            $arDotacionCargo->setCantidadAsignada($intCantidad);
+                            $em->persist($arDotacionCargo);
+                        }
+                        $intIndice++;
                     }
-                    $em->flush();
+                }
+                $em->flush();
                 }
                 return $this->redirect($this->generateUrl('brs_rhu_base_dotacion_cargo_lista'));
-            }
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/DotacionCargo:nuevoMultiple.html.twig', array(
             'form' => $form->createView(),
-            'arDotacionesElemento' => $arDotacionesElemento,
+            'arDotacionesElementos' => $arDotacionesElementos,
         ));
     }
     

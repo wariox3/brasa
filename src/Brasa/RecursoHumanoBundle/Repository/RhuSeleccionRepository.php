@@ -150,6 +150,18 @@ class RhuSeleccionRepository extends EntityRepository {
                     $arExamenDetalle->setFechaVence(new \DateTime('now'));
                     $em->persist($arExamenDetalle);
                 }
+                //examen por cargo insertar
+                $arExamenCargo = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenCargo();
+                $arExamenCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenCargo')->findBy(array('codigoCargoFk' => $arSeleccion->getCodigoCargoFk()));
+                foreach ($arExamenCargo as $arExamenCargo) {
+                    $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
+                    $arExamenDetalle->setExamenRel($arExamen);
+                    $arExamenDetalle->setExamenTipoRel($arExamenCargo->getExamenTipoRel());
+                    $floPrecio = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->devuelvePrecio($arExamen->getEntidadExamenRel()->getCodigoEntidadExamenPk(), $arExamenCargo->getCodigoExamenTipoFk());
+                    $arExamenDetalle->setVrPrecio($floPrecio); 
+                    $arExamenDetalle->setFechaVence(new \DateTime('now'));
+                    $em->persist($arExamenDetalle);
+                }
                 $em->persist($arSeleccion);
                 $em->flush();
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->liquidar($arExamen->getCodigoExamenPk());

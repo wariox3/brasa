@@ -86,7 +86,19 @@ class DotacionController extends Controller
                         $arDotacion->setCentroCostoRel($arEmpleado->getCentroCostoRel());
                         $arDotacion->setFecha(new \DateTime('now'));
                         if($codigoDotacion == 0) {
-                            $arDotacion->setCodigoUsuario($arUsuario->getId());
+                            $arDotacion->setCodigoUsuario($arUsuario->getUserName());
+                            $codigoCargo = $arEmpleado->getCodigoCargoFk();
+                            $arDotacionCargos = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionCargo();
+                            $arDotacionCargos = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionCargo')->findBy(array('codigoCargoFk' => $codigoCargo));
+                            foreach ($arDotacionCargos as $arDotacionCargo) {
+                                $arDotacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
+                                $arDotacionDetalle->setDotacionRel($arDotacion);
+                                $arDotacionDetalle->setDotacionElementoRel($arDotacionCargo->getDotacionElementoRel());
+                                $arDotacionDetalle->setCantidadAsignada($arDotacionCargo->getCantidadAsignada());
+                                $arDotacionDetalle->setSerie(0);
+                                $arDotacionDetalle->setLote(0);
+                                $em->persist($arDotacionDetalle);
+                            }
                         }
                         $em->persist($arDotacion);
                         $em->flush();
