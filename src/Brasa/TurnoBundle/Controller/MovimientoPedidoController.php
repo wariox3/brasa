@@ -48,6 +48,7 @@ class MovimientoPedidoController extends Controller
     public function nuevoAction($codigoPedido) {
         $request = $this->getRequest();
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $em = $this->getDoctrine()->getManager();
         $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
         if($codigoPedido != 0) {
@@ -863,13 +864,15 @@ class MovimientoPedidoController extends Controller
     private function actualizarDetalleRecurso($arrControles) {
         $em = $this->getDoctrine()->getManager();
         $intIndice = 0;
-        foreach ($arrControles['LblCodigo'] as $intCodigo) {
-            $arPedidoDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso();
-            $arPedidoDetalleRecurso = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->find($intCodigo);
-            $arPedidoDetalleRecurso->setPosicion($arrControles['TxtPosicion'.$intCodigo]);
-            $em->persist($arPedidoDetalleRecurso);
+        if(isset($arrControles['LblCodigo'])) {
+            foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                $arPedidoDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso();
+                $arPedidoDetalleRecurso = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->find($intCodigo);
+                $arPedidoDetalleRecurso->setPosicion($arrControles['TxtPosicion'.$intCodigo]);
+                $em->persist($arPedidoDetalleRecurso);
+            }
+            $em->flush();                                    
         }
-        $em->flush();                        
     }
     
     private function programar($codigoPedido) {

@@ -25,74 +25,74 @@ insert into `gen_contenido_formato` (`codigo_contenido_formato_pk`, `numero_form
 insert into `gen_contenido_formato` (`codigo_contenido_formato_pk`, `numero_formato`, `titulo`, `contenido`) values('11','11','CARTA LABORAL VIGENTE','.                                                                LA DIRECCIÓN DE RECURSOS HUMANOS\r\n\r\n\r\n                                                                                        HACE CONSTAR:\r\n\r\n\r\n\r\nQue el señor (a) #2, identificado  (a)  con C.C.:  N° #1 labora al servicio de nuestra Empresa  desde el día #7 con un #8 desempeñando  el cargo de #3, devengando el salario #9 más recargos de ley. Para un promedio de #b.\r\n\r\nCualquier información adicional con gusto será suministrada en los teléfonos 4124586-4128506.\r\n\r\n\r\nSe expide en Medellín el día #a a solicitud del interesado. \r\n\r\n\r\n\r\nCordialmente,\r\n\r\n\r\n\r\n\r\nJEFE TALENTO HUMANO\r\nTalento Humano.');
 insert into `gen_contenido_formato` (`codigo_contenido_formato_pk`, `numero_formato`, `titulo`, `contenido`) values('12','12','REQUISITOS','\r\nYo, #1, identificado con el N° de identificación #2, declaro conocer todos los requisitos que se necesitan para legalizar la vinculación  como trabajador en misión de la EMPRESA #3; me comprometo que en un termino no mayor a quince (15) días calendario, haré llegar la documentación faltante para completar el proceso de ingreso. El incumplimiento a este compromiso, será causal para dar terminado el contrato suscrito entre las partes.\r\n\r\n\r\nAtentamente,\r\n\r\n\r\n\r\n\r\n\r\n');
 
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('13','AFGANISTAN','AFGANO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('23','ALEMANIA','ALEMÁN\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('53','ARABIA SAUDITA','ÁRABE\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('63','ARGENTINA','ARGENTINO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('69','AUSTRALIA','AUSTRALIANO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('87','BELGICA','BELGA\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('97','BOLIVIA','BOLIVIANO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('105','BRASIL','BRASILERO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('111','BULGARIA','BULGARO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('141','CAMBOYA (KAMPUCHEA)','CAMBOYANO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('145','CAMERUN, REPUBLICA UNIDA DEL','CAMERUNES\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('149','CANADA','CANADIENSE\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('169','COLOMBIA','COLOMBIANO\r');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('13','AFGANISTAN','AFGANO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('23','ALEMANIA','ALEMÁN');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('53','ARABIA SAUDITA','ÁRABE');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('63','ARGENTINA','ARGENTINO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('69','AUSTRALIA','AUSTRALIANO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('87','BELGICA','BELGA');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('97','BOLIVIA','BOLIVIANO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('105','BRASIL','BRASILERO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('111','BULGARIA','BULGARO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('141','CAMBOYA (KAMPUCHEA)','CAMBOYANO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('145','CAMERUN, REPUBLICA UNIDA DEL','CAMERUNES');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('149','CANADA','CANADIENSE');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('169','COLOMBIA','COLOMBIANO');
 insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('187','COREA','COREANO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('196','COSTA RICA','COSTARRICENSE\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('199','CUBA','CUBANO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('211','CHILE','CHILENO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('215','CHINA','CHINO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('218','TAIWAN','TAIWANES\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('232','DINAMARCA','DANÉS\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('239','ECUADOR','ECUATORIANO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('240','EGIPTO','EGIPCIO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('242','EL SALVADOR','SALVADOREÑO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('245','ESPAÑA','ESPAÑOL\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('249','ESTADOS UNIDOS','ESTADOUNIDENSE\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('251','ESTONIA','ESTONIO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('253','ETIOPIA','ETIOPE\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('267','FILIPINAS','FILIPINO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('271','FINLANDIA','FINLANDÉS\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('275','FRANCIA','FRANCÉS\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('301','GRECIA','GRIEGO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('317','GUATEMALA','GUATEMALTECO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('341','HAITI','HAITIANO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('345','HONDURAS','HONDUREÑO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('365','INDONESIA','INDONÉS\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('369','IRAK','IRAQUÍ\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('372','IRAN','IRANÍ\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('375','IRLANDA','IRLANDÉS\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('383','ISRAEL','ISRAELÍ\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('386','ITALIA','ITALIANO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('399','JAPON','JAPONÉS\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('403','JORDANIA','JORDANO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('420','LAOS','LAOSIANO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('429','LETONIA','LETÓN\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('443','LITUANIA','LETONÉS\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('455','MALASIA','MALAYO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('474','MARRUECOS','MARROQUÍ\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('493','MEXICO','MEXICANO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('521','NICARAGUA','NICARAGÜENSE\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('538','NORUEGA','NORUEGO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('548','NUEVA ZELANDIA','NEOZELANDÉS\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('580','PANAMA','PANAMEÑO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('586','PARAGUAY','PARAGUAYO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('589','PERU','PERUANO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('603','POLONIA','POLACO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('607','PORTUGAL','PORTUGUÉS\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('611','PUERTO RICO','PUERTORRIQUEÑO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('647','REPUBLICA DOMINICANA','DOMINICANO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('670','RUMANIA','RUMANO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('676','RUSIA','RUSO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('764','SUECIA','SUECO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('767','SUIZA','SUIZO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('776','TAILANDIA','TAILANDÉS\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('827','TURQUIA','TURCO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('830','UCRANIA','UCRANIANO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('845','URUGUAY','URUGUAYO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('850','VENEZUELA','VENEZOLANO\r');
-insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('855','VIET NAM','VIETNAMITA\r');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('196','COSTA RICA','COSTARRICENSE');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('199','CUBA','CUBANO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('211','CHILE','CHILENO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('215','CHINA','CHINO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('218','TAIWAN','TAIWANES');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('232','DINAMARCA','DANÉS');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('239','ECUADOR','ECUATORIANO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('240','EGIPTO','EGIPCIO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('242','EL SALVADOR','SALVADOREÑO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('245','ESPAÑA','ESPAÑOL');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('249','ESTADOS UNIDOS','ESTADOUNIDENSE');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('251','ESTONIA','ESTONIO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('253','ETIOPIA','ETIOPE');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('267','FILIPINAS','FILIPINO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('271','FINLANDIA','FINLANDÉS');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('275','FRANCIA','FRANCÉS');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('301','GRECIA','GRIEGO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('317','GUATEMALA','GUATEMALTECO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('341','HAITI','HAITIANO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('345','HONDURAS','HONDUREÑO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('365','INDONESIA','INDONÉS');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('369','IRAK','IRAQUÍ');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('372','IRAN','IRANÍ');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('375','IRLANDA','IRLANDÉS');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('383','ISRAEL','ISRAELÍ');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('386','ITALIA','ITALIANO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('399','JAPON','JAPONÉS');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('403','JORDANIA','JORDANO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('420','LAOS','LAOSIANO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('429','LETONIA','LETÓN');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('443','LITUANIA','LETONÉS');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('455','MALASIA','MALAYO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('474','MARRUECOS','MARROQUÍ');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('493','MEXICO','MEXICANO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('521','NICARAGUA','NICARAGÜENSE');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('538','NORUEGA','NORUEGO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('548','NUEVA ZELANDIA','NEOZELANDÉS');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('580','PANAMA','PANAMEÑO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('586','PARAGUAY','PARAGUAYO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('589','PERU','PERUANO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('603','POLONIA','POLACO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('607','PORTUGAL','PORTUGUÉS');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('611','PUERTO RICO','PUERTORRIQUEÑO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('647','REPUBLICA DOMINICANA','DOMINICANO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('670','RUMANIA','RUMANO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('676','RUSIA','RUSO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('764','SUECIA','SUECO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('767','SUIZA','SUIZO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('776','TAILANDIA','TAILANDÉS');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('827','TURQUIA','TURCO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('830','UCRANIA','UCRANIANO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('845','URUGUAY','URUGUAYO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('850','VENEZUELA','VENEZOLANO');
+insert into `gen_pais` (`codigo_pais_pk`, `pais`, `gentilicio`) values('855','VIET NAM','VIETNAMITA');
 
 insert into `gen_departamento` (`codigo_departamento_pk`, `nombre`, `codigo_dane`, `codigo_pais_fk`) values('5','ANTIOQUIA','05','169');
 insert into `gen_departamento` (`codigo_departamento_pk`, `nombre`, `codigo_dane`, `codigo_pais_fk`) values('8','ATLANTICO','08','169');
@@ -1188,10 +1188,6 @@ INSERT INTO `gen_tipo_identificacion` (`codigo_tipo_identificacion_pk`, `nombre`
 INSERT INTO `gen_tipo_identificacion` (`codigo_tipo_identificacion_pk`, `nombre`, `codigo_interface`) VALUES('41','PASAPORTE','PA');
 INSERT INTO `gen_tipo_identificacion` (`codigo_tipo_identificacion_pk`, `nombre`, `codigo_interface`) VALUES('42','TIPO DOCUMENTO EXTRANJERO','TDE');
 
-insert into `gen_tercero` (`codigo_tercero_pk`, `codigo_clasificacion_tributaria_fk`, `codigo_forma_pago_cliente_fk`, `codigo_forma_pago_proveedor_fk`, `codigo_asesor_fk`, `nit`, `digito_verificacion`, `nombre_corto`, `nombres`, `apellido1`, `apellido2`, `codigo_lista_precio_fk`, `codigo_lista_costo_fk`, `plazo_pago`, `plazo_pago_proveedor`, `direccion`, `telefono`, `celular`, `fax`, `email`, `retencion_fuente_ventas`, `retencion_fuente_ventas_sin_base`, `autoretenedor`, `contacto_cliente`, `calular_contacto_cliente`, `contacto_proveedor`, `celular_contacto_proveedor`, `codigo_actividad_economica`, `porcentaje_cree`) values('1','1',NULL,NULL,NULL,'800158747','1','INDUSTRIAS GRECO DE MEDELLIN S.A','INDUSTRIAS GRECO DE MEDELLIN S.A','A',NULL,NULL,NULL,'0','0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'ANA JUOQUINA TIRADO MENDEZ','3254145454',NULL,NULL,NULL,'0');
-insert into `gen_tercero` (`codigo_tercero_pk`, `codigo_clasificacion_tributaria_fk`, `codigo_forma_pago_cliente_fk`, `codigo_forma_pago_proveedor_fk`, `codigo_asesor_fk`, `nit`, `digito_verificacion`, `nombre_corto`, `nombres`, `apellido1`, `apellido2`, `codigo_lista_precio_fk`, `codigo_lista_costo_fk`, `plazo_pago`, `plazo_pago_proveedor`, `direccion`, `telefono`, `celular`, `fax`, `email`, `retencion_fuente_ventas`, `retencion_fuente_ventas_sin_base`, `autoretenedor`, `contacto_cliente`, `calular_contacto_cliente`, `contacto_proveedor`, `celular_contacto_proveedor`, `codigo_actividad_economica`, `porcentaje_cree`) values('2','1',NULL,NULL,NULL,'8112541472','2','FABRICA DE HIELO MORGAN','FABRICA','HIELO',NULL,NULL,NULL,'0','0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'JAIME ANTONIO ORTIZ MENDES','3215475874',NULL,NULL,NULL,'0');
-insert into `gen_tercero` (`codigo_tercero_pk`, `codigo_clasificacion_tributaria_fk`, `codigo_forma_pago_cliente_fk`, `codigo_forma_pago_proveedor_fk`, `codigo_asesor_fk`, `nit`, `digito_verificacion`, `nombre_corto`, `nombres`, `apellido1`, `apellido2`, `codigo_lista_precio_fk`, `codigo_lista_costo_fk`, `plazo_pago`, `plazo_pago_proveedor`, `direccion`, `telefono`, `celular`, `fax`, `email`, `retencion_fuente_ventas`, `retencion_fuente_ventas_sin_base`, `autoretenedor`, `contacto_cliente`, `calular_contacto_cliente`, `contacto_proveedor`, `celular_contacto_proveedor`, `codigo_actividad_economica`, `porcentaje_cree`) values('3','1',NULL,NULL,NULL,'8001452541','4','CAUCHOSOL DE COLOMBIA','CAUCHOSOL DE COLOMBIA','CAUCHOSOL DE COLOMBIA',NULL,NULL,NULL,'0','0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'LISA MONRROY MARTINEZ','3002541478',NULL,NULL,NULL,'0');
-
 /** Administracion documental **/
 INSERT INTO `ad_directorio` (`codigo_directorio_pk`, `numero`, `nombre`, `numeroArchivos`, `ruta_principal`) VALUES('1','1','1','36','/bodegadocumentos/archivos/');
 
@@ -1210,9 +1206,6 @@ INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('12','PERMIS
 INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('13','CARTAS');
 INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('14','SELECCION ENTREVISTAS');
 /** Contabilidad **/
-
-insert into `ctb_tercero` (`codigo_tercero_pk`, `codigo_ciudad_fk`, `codigo_tipo_identificacion_fk`, `numero_identificacion`, `digito_verificacion`, `nombre_corto`, `nombre1`, `nombre2`, `apellido1`, `apellido2`, `razon_social`, `direccion`, `telefono`, `celular`, `fax`, `email`) values('1','2240','13','44421212','2','PACO ANDRES PIN ATUESTA','PACO','ANDRES','PIN','ATUESTA','AS','CARRERA 20 N 40-20','3384244','3012547854','111','lon@hotmail.com');
-insert into `ctb_tercero` (`codigo_tercero_pk`, `codigo_ciudad_fk`, `codigo_tipo_identificacion_fk`, `numero_identificacion`, `digito_verificacion`, `nombre_corto`, `nombre1`, `nombre2`, `apellido1`, `apellido2`, `razon_social`, `direccion`, `telefono`, `celular`, `fax`, `email`) values('2','2240','13','71268830','2','PEDRO ANDRES RIOS BOTERO','PEDRO','ANDRES','RIOS','BOTERO','PRUEBA S.A','CARRERA 20 N 40-20','3012587','3012587412','111','n@hotmail.com');
 
 insert into `ctb_cuenta` (`codigo_cuenta_pk`, `nombre_cuenta`, `codigo_cuenta_padre_fk`, `permite_movimientos`, `exige_nit`, `exige_centro_costos`, `porcentaje_retencion`) values('1','ACTIVO','0','0','0','0','0');
 insert into `ctb_cuenta` (`codigo_cuenta_pk`, `nombre_cuenta`, `codigo_cuenta_padre_fk`, `permite_movimientos`, `exige_nit`, `exige_centro_costos`, `porcentaje_retencion`) values('11','DISPONIBLE','1','0','0','0','0');
@@ -3881,24 +3874,24 @@ insert into `ctb_cuenta` (`codigo_cuenta_pk`, `nombre_cuenta`, `codigo_cuenta_pa
 insert into `ctb_cuenta` (`codigo_cuenta_pk`, `nombre_cuenta`, `codigo_cuenta_padre_fk`, `permite_movimientos`, `exige_nit`, `exige_centro_costos`, `porcentaje_retencion`) values('9601','9601 a 9699','96','0','0','0','0');
 insert into `ctb_cuenta` (`codigo_cuenta_pk`, `nombre_cuenta`, `codigo_cuenta_padre_fk`, `permite_movimientos`, `exige_nit`, `exige_centro_costos`, `porcentaje_retencion`) values('960101','960101 a 969999','9601','0','0','0','0');
 
-insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('1','INGRESOS                      \r');
-insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('2','EGRESOS                       \r');
-insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('3','FACTURACION                   \r');
-insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('4','COMPRAS                       \r');
-insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('5','INDIRECTOS                    \r');
-insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('6','CAUSACION SEGURIDAD SOCIAL    \r');
-insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('7','PRESTACIONES SOCIALES         \r');
-insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('8','CAUSACIONES                   \r');
-insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('9','AMORTIZACIONES                \r');
-insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('10','DEPRECIACIONES                \r');
-insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('11','PROVISION PRESTACION SOCIAL   \r');
+insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('1','INGRESOS');
+insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('2','EGRESOS');
+insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('3','FACTURACION');
+insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('4','COMPRAS');
+insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('5','INDIRECTOS');
+insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('6','CAUSACION SEGURIDAD SOCIAL');
+insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('7','PRESTACIONES SOCIALES');
+insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('8','CAUSACIONES');
+insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('9','AMORTIZACIONES');
+insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('10','DEPRECIACIONES');
+insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('11','PROVISION PRESTACION SOCIAL');
 insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('12','AJUSTES INTEGRALES POR INFLACIÓN');
-insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('13','ASIENTOS DE CIERRE            \r');
-insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('14','CONSIGNACIONES                \r');
-insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('15','NOTAS BANCARIAS               \r');
-insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('16','OTRAS CAUSACIONES             \r');
-insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('17','VACACIONES                    \r');
-insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('18','SALDOS                        \r');
+insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('13','ASIENTOS DE CIERRE');
+insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('14','CONSIGNACIONES');
+insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('15','NOTAS BANCARIAS');
+insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('16','OTRAS CAUSACIONES');
+insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('17','VACACIONES');
+insert into `ctb_comprobante` (`codigo_comprobante_pk`, `nombre`) values('18','SALDOS');
 
 insert into `ctb_asiento_tipo` (`codigo_asiento_tipo_pk`, `codigo_comprobante_fk`, `nombre`, `consecutivo`) values('1','1','DÉBITO','1');
 insert into `ctb_asiento_tipo` (`codigo_asiento_tipo_pk`, `codigo_comprobante_fk`, `nombre`, `consecutivo`) values('2','2','CRÉDITO','2');
@@ -3915,8 +3908,9 @@ insert into `tur_periodo` (`codigo_periodo_pk`, `nombre`, `comentarios`) values(
 insert into `tur_sector` (`codigo_sector_pk`, `nombre`, `porcentaje`, `comentarios`) values('1','COMERCIAL','8.8',NULL);
 insert into `tur_sector` (`codigo_sector_pk`, `nombre`, `porcentaje`, `comentarios`) values('2','RESIDENCIAL','8.6',NULL);
 
-insert into `tur_pedido_tipo` (`codigo_pedido_tipo_pk`, `nombre`) values('1','COMERCIAL');
-insert into `tur_pedido_tipo` (`codigo_pedido_tipo_pk`, `nombre`) values('2','PROGRAMADO');
+insert into `tur_pedido_tipo` (`codigo_pedido_tipo_pk`, `nombre`, `control`) values('1','OCACIONAL', '0');
+insert into `tur_pedido_tipo` (`codigo_pedido_tipo_pk`, `nombre`, `control`) values('2','PROGRAMADO', '1');
+insert into `tur_pedido_tipo` (`codigo_pedido_tipo_pk`, `nombre`, `control`) values('3','REFUERZO', '0');
 
 insert into `tur_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`) values('1','PEDIDO','1');
 insert into `tur_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`) values('2','FACTURA','1');
@@ -5321,8 +5315,13 @@ INSERT INTO `rhu_sso_subtipo_cotizante` (`codigo_subtipo_cotizante_pk`, `nombre`
 INSERT INTO `rhu_sso_subtipo_cotizante` (`codigo_subtipo_cotizante_pk`, `nombre`) VALUES('5','5 Cotizante a quien se le ha reconocido indemnización sustitutiva o devolución de saldos.');
 INSERT INTO `rhu_sso_subtipo_cotizante` (`codigo_subtipo_cotizante_pk`, `nombre`) VALUES('6','6 Cotizante perteneciente a un régimen exceptuado de pensiones o a entidades autorizadas para recibir aportes exclusivamente de un grupo de sus propio');
 
-INSERT INTO `rhu_tipo_pension` (`codigo_tipo_pension_pk`, `nombre`, `porcentajeCotizacion`) VALUES('1','NORMAL','12');
-INSERT INTO `rhu_tipo_pension` (`codigo_tipo_pension_pk`, `nombre`, `porcentajeCotizacion`) VALUES('2','ALTO RIESGO','22');
+insert into `rhu_tipo_pension` (`codigo_tipo_pension_pk`, `codigo_pago_concepto_fk`, `nombre`, `porcentaje_empleado`, `porcentaje_empleador`) values('1','4','NORMAL','4','12');
+insert into `rhu_tipo_pension` (`codigo_tipo_pension_pk`, `codigo_pago_concepto_fk`, `nombre`, `porcentaje_empleado`, `porcentaje_empleador`) values('2','4','ALTO RIESGO','4','22');
+insert into `rhu_tipo_pension` (`codigo_tipo_pension_pk`, `codigo_pago_concepto_fk`, `nombre`, `porcentaje_empleado`, `porcentaje_empleador`) values('3','4','EMPLEADOR NORMAL','0','16');
+insert into `rhu_tipo_pension` (`codigo_tipo_pension_pk`, `codigo_pago_concepto_fk`, `nombre`, `porcentaje_empleado`, `porcentaje_empleador`) values('4','4','EMPLEADOR ALTO RIESGO','0','26');
+
+insert into `rhu_tipo_salud` (`codigo_tipo_salud_pk`, `codigo_pago_concepto_fk`, `nombre`, `porcentaje_empleado`, `porcentaje_empleador`) values('1','3','EMPLEADO','4','0');
+insert into `rhu_tipo_salud` (`codigo_tipo_salud_pk`, `codigo_pago_concepto_fk`, `nombre`, `porcentaje_empleado`, `porcentaje_empleador`) values('2','4','EMPLEADOR','0','4');
 
 INSERT INTO `rhu_tipo_tiempo` (`codigo_tipo_tiempo_pk`, `nombre`, `factor`, `factor_horas_dia`) VALUES('1','TIEMPO COMPLETO','0','8');
 INSERT INTO `rhu_tipo_tiempo` (`codigo_tipo_tiempo_pk`, `nombre`, `factor`, `factor_horas_dia`) VALUES('2','MEDIO TIEMPO','2','4');
@@ -5403,7 +5402,7 @@ CREATE TABLE `emp_users` (
 INSERT INTO `emp_users` (`id`, `username`, `password`, `email`, `is_active`, `codigo_empleado_fk`, `roles`, `nombre`, `numero_identificacion`) VALUES('5','administrador','$2a$04$87ghqV5zf0CrVj7eSO/MQOAWYydhS./8R7GGHb5rRp7cI42RI0xj.','administrador@appsoga.com','1','0','ROLE_ADMIN','Mario Estrada',NULL);
 
 /** Configuraciones **/
-insert into `rhu_configuracion` (`codigo_configuracion_pk`, `codigo_entidad_riesgo_fk`, `vr_salario`, `codigo_auxilio_transporte`, `vr_auxilio_transporte`, `codigo_credito`, `codigo_seguro`, `codigo_tiempo_suplementario`, `codigo_hora_diurna_trabajada`, `codigo_aporte_salud`, `codigo_aporte_pension`, `porcentaje_pension_extra`, `codigo_incapacidad`, `anio_actual`, `porcentaje_iva`, `codigo_retencion_fuente`, `edad_minima_empleado`, `porcentaje_bonificacion_no_prestacional`, `codigo_entidad_Examen_ingreso`, `codigo_comprobante_pago_nomina`, `codigo_comprobante_pago_banco`) values('1','6','689455','18','77700','14','27','5','1','3','4','5','16','2016','16','26','16','40','2','8','15');
+insert into `rhu_configuracion` (`codigo_configuracion_pk`, `codigo_entidad_riesgo_fk`, `vr_salario`, `codigo_auxilio_transporte`, `vr_auxilio_transporte`, `codigo_credito`, `codigo_seguro`, `codigo_tiempo_suplementario`, `codigo_hora_diurna_trabajada`, `porcentaje_pension_extra`, `codigo_incapacidad`, `anio_actual`, `porcentaje_iva`, `codigo_retencion_fuente`, `edad_minima_empleado`, `porcentaje_bonificacion_no_prestacional`, `codigo_entidad_Examen_ingreso`, `codigo_comprobante_pago_nomina`, `codigo_comprobante_pago_banco`) values('1','6','689455','18','77700','14','27','5','1','5','16','2016','16','26','16','40','2','8','15');
 insert into `gen_configuracion` (`codigo_configuracion_pk`, `base_retencion_fuente`, `base_retencion_cree`, `porcentaje_retencion_fuente`, `porcentaje_retencion_cree`, `base_retencion_iva_ventas`, `porcentaje_retencion_iva_ventas`, `fecha_ultimo_cierre`, `nit_ventas_mostrador`, `ruta_temporal`, `ruta_almacenamiento`, `nit_empresa`, `digito_verificacion_empresa`, `nombre_empresa`, `sigla`, `telefono_empresa`, `direccion_empresa`, `ruta_directorio`, `pagina_web`, `codigo_ciudad_fk`) values('1','803000','0','1','0','0','15','2015-09-01','0','/var/www/temporal/','/var/www/html/almacenamiento/','90011111','7','EMPRESA LTDA','EMPRESA','5101010','CARRERA 7 NRO 3D 37','/var/www/html/gestorarchivos/','www.empresaltda.com','2239');
 insert into `gen_configuracion_notificaciones` (`codigo_configuracion_notificaciones_pk`, `correo_turno_inconsistencia`) values('1','');
 insert into `tur_configuracion` (`codigo_configuracion_pk`, `informacion_legal_factura`, `informacion_pago_factura`, `informacion_contacto_factura`, `informacion_resolucion_dian_factura`, `informacion_resolucion_supervigilancia_factura`) values('1','\"Esta factura de venta es un titulo valor negociable (Ley 1231 de 2008) y se asimila en sus efectos legales a una letra de cambio segun articulo 779 del Codigo de Comercio. Acepto el contenido y las condiciones estipuladas en esta factura de venta (Ley 1231/17 de julio de 2008). Se cobran intereses por mora a la tasa máxima legal vigente.\"\r\n* NO SOMOS GRANDES CONTRUBUYENTES NI RETENEDORES DEL IVA. COD ICA 302 TARIFA 3/1000','REALIZAR PAGO EN LA CUENTA CORRIENTE BANCOLOMBIA NUMERO 23439835331 A NOMBRE DE SEGURIDAD PLAZAS LTDA','CRA 78 NUMERO 32D-37 MEDELLIN TEL 4128506 e-mail: seguridadplazas@gmail.com','Numeracion de 0001 al 1000 de Factura de Venta, autorizada por la DIAN\r\nResolucion: 110000627560 de 2015/05/05. Tipo 02. Factura Computador.','Resolucion Supervigilancia 20137200053817 del 4 Agosto 2013');

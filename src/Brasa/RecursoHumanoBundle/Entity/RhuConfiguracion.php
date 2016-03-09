@@ -54,17 +54,7 @@ class RhuConfiguracion
     /**
      * @ORM\Column(name="codigo_hora_diurna_trabajada", type="integer")
      */    
-    private $codigoHoraDiurnaTrabajada;
-    
-    /**
-     * @ORM\Column(name="codigo_aporte_salud", type="integer")
-     */    
-    private $codigoAporteSalud;
-    
-    /**
-     * @ORM\Column(name="codigo_aporte_pension", type="integer")
-     */    
-    private $codigoAportePension;
+    private $codigoHoraDiurnaTrabajada;    
     
     /**
      * @ORM\Column(name="porcentaje_pension_extra", type="float")
@@ -127,8 +117,7 @@ class RhuConfiguracion
      * @ORM\JoinColumn(name="codigo_entidad_riesgo_fk", referencedColumnName="codigo_entidad_riesgo_pk")
      */
     protected $entidadRiesgoProfesionalRel;
-
-    
+  
 
     /**
      * Set codigoConfiguracionPk
@@ -344,54 +333,6 @@ class RhuConfiguracion
     public function getCodigoHoraDiurnaTrabajada()
     {
         return $this->codigoHoraDiurnaTrabajada;
-    }
-
-    /**
-     * Set codigoAporteSalud
-     *
-     * @param integer $codigoAporteSalud
-     *
-     * @return RhuConfiguracion
-     */
-    public function setCodigoAporteSalud($codigoAporteSalud)
-    {
-        $this->codigoAporteSalud = $codigoAporteSalud;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoAporteSalud
-     *
-     * @return integer
-     */
-    public function getCodigoAporteSalud()
-    {
-        return $this->codigoAporteSalud;
-    }
-
-    /**
-     * Set codigoAportePension
-     *
-     * @param integer $codigoAportePension
-     *
-     * @return RhuConfiguracion
-     */
-    public function setCodigoAportePension($codigoAportePension)
-    {
-        $this->codigoAportePension = $codigoAportePension;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoAportePension
-     *
-     * @return integer
-     */
-    public function getCodigoAportePension()
-    {
-        return $this->codigoAportePension;
     }
 
     /**

@@ -7,6 +7,7 @@ use Brasa\TurnoBundle\Form\Type\TurRecursoType;
 class BaseRecursoController extends Controller
 {
     var $strDqlLista = "";
+    var $strDqlListaEmpleados = "";
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -153,25 +154,18 @@ class BaseRecursoController extends Controller
     public function enlazarAction() {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
         $em = $this->getDoctrine()->getManager();
         $form = $this->formularioEnlazar();
-        $form->handleRequest($request);
-        $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+        $form->handleRequest($request);        
+        $this->listaEnlazar();
         if($form->isValid()) {
             if($form->get('BtnFiltrar')->isClicked()) {     
-                $arCentroCosto = $form->get('centroCostoRel')->getData();
-                $codigoCentroCosto = "";
-                if($arCentroCosto) {
-                    $codigoCentroCosto = $arCentroCosto->getCodigoCentroCostoPk();
-                    $session->set('filtroCodigoCentroCosto', $arCentroCosto->getCodigoCentroCostoPk());
-                }
-                $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaDQL(
-                        $form->get('TxtNombreCorto')->getData(), 
-                        $codigoCentroCosto, 1,
-                        $form->get('TxtIdentificacion')->getData(), "", 1));
-                $arEmpleados = $query->getResult();                
+                $this->filtrarEnlazar($form);
+                $this->listaEnlazar();                                
             }
         }
+        $arEmpleados = $paginator->paginate($em->createQuery($this->strDqlListaEmpleados), $request->query->get('page', 1), 20);
         return $this->render('BrasaTurnoBundle:Base/Recurso:enlazar.html.twig', array(
             'arEmpleados' => $arEmpleados,
             'form' => $form->createView()));
@@ -187,7 +181,17 @@ class BaseRecursoController extends Controller
                 $session->get('filtroIdentificacionRecurso')                
                 ); 
     }
-
+    
+    private function listaEnlazar () {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession(); 
+        $this->strDqlListaEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaRecursoDql(
+                        $session->get('filtroEmpleadoNombre'), 
+                        $session->get('filtroCodigoCentroCosto'), 
+                        1,
+                        $session->get('filtroIdentificacion'), "", 1);
+    }
+    
     private function filtrar ($form) {    
         $session = $this->getRequest()->getSession();
         $session->set('filtroCodigoRecurso', $form->get('TxtCodigo')->getData());
@@ -199,6 +203,16 @@ class BaseRecursoController extends Controller
         }
         $this->lista();
     }
+    
+    private function filtrarEnlazar ($form) {    
+        $session = $this->getRequest()->getSession();        
+        $arCentroCosto = $form->get('centroCostoRel')->getData();
+        if($arCentroCosto) {            
+            $session->set('filtroCodigoCentroCosto', $arCentroCosto->getCodigoCentroCostoPk());
+        }
+        $session->set('filtroEmpleadoNombre', $form->get('TxtNombreCorto')->getData());
+        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());        
+    }    
     
     private function formularioFiltro() {
         $session = $this->getRequest()->getSession();

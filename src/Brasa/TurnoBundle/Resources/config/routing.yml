@@ -245,6 +245,10 @@ brs_tur_consultas_recursos_disponibles_programacion:
 brs_tur_consultas_costo_servicio:    
     path:     /tur/consultas/costo/servicio
     defaults: { _controller: BrasaTurnoBundle:ConsultasCostoServicio:lista } 
+
+brs_tur_consultas_costo_recurso:    
+    path:     /tur/consultas/costo/recurso
+    defaults: { _controller: BrasaTurnoBundle:ConsultasCostoRecurso:lista } 
     
 brs_tur_proceso_generar_soporte_pago:
     path:     /tur/proceso/generar/soporte/pago

@@ -36,6 +36,10 @@ class RhuContratoType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuTipoPension',
                 'property' => 'nombre',
             ))                            
+            ->add('tipoSaludRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuTipoSalud',
+                'property' => 'nombre',
+            ))                            
             ->add('cargoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCargo',
                 'property' => 'nombre',

@@ -20,15 +20,6 @@ class ProgramacionesPagoController extends Controller
         $this->listar();
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if($request->request->get('OpGenerarEmpleados')) {
-                $codigoProgramacionPago = $request->request->get('OpGenerarEmpleados');
-                $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->generarEmpleados($codigoProgramacionPago);
-                $arProgramacionPago->setEmpleadosGenerados(1);
-                $em->persist($arProgramacionPago);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));
-            }
             if($request->request->get('OpGenerar')) {
                 $codigoProgramacionPago = $request->request->get('OpGenerar');
                 $strResultado = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->generar($codigoProgramacionPago);
@@ -95,6 +86,7 @@ class ProgramacionesPagoController extends Controller
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago->setFechaDesde(new \DateTime('now'));
         $arProgramacionPago->setFechaHasta(new \DateTime('now'));
+        $arProgramacionPago->setFechaHastaReal(new \DateTime('now'));
         $form = $this->createForm(new RhuProgramacionPagoType(), $arProgramacionPago);
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -367,7 +359,7 @@ class ProgramacionesPagoController extends Controller
         //$arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arrBotonAplicarDiaLaborado = array('label' => 'Aplicar dia laborado', 'disabled' => false);
         $arrBotonRetirarConcepto = array('label' => 'Eliminar', 'disabled' => false);
-        $arrBotonGenerarEmpleados = array('label' => 'Analizar contratos', 'disabled' => false);
+        $arrBotonGenerarEmpleados = array('label' => 'Cargar contratos', 'disabled' => false);
         $arrBotonEliminarEmpleados = array('label' => 'Eliminar', 'disabled' => false);        
         if($arProgramacionPago->getEstadoGenerado() == 1) {            
             $arrBotonGenerarEmpleados['disabled'] = true;         

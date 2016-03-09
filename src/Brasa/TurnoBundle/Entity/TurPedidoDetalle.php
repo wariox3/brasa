@@ -240,6 +240,11 @@ class TurPedidoDetalle
     protected $soportesPagosDetallesPedidoDetalleRel;     
     
     /**
+     * @ORM\OneToMany(targetEntity="TurCierreMesServicio", mappedBy="pedidoDetalleRel")
+     */
+    protected $cierresMesServiciosPedidoDetalleRel;    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -1329,5 +1334,39 @@ class TurPedidoDetalle
     public function getSoportesPagosDetallesPedidoDetalleRel()
     {
         return $this->soportesPagosDetallesPedidoDetalleRel;
+    }
+
+    /**
+     * Add cierresMesServiciosPedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosPedidoDetalleRel
+     *
+     * @return TurPedidoDetalle
+     */
+    public function addCierresMesServiciosPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosPedidoDetalleRel)
+    {
+        $this->cierresMesServiciosPedidoDetalleRel[] = $cierresMesServiciosPedidoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove cierresMesServiciosPedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosPedidoDetalleRel
+     */
+    public function removeCierresMesServiciosPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosPedidoDetalleRel)
+    {
+        $this->cierresMesServiciosPedidoDetalleRel->removeElement($cierresMesServiciosPedidoDetalleRel);
+    }
+
+    /**
+     * Get cierresMesServiciosPedidoDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCierresMesServiciosPedidoDetalleRel()
+    {
+        return $this->cierresMesServiciosPedidoDetalleRel;
     }
 }

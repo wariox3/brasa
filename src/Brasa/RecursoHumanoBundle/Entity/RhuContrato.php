@@ -46,6 +46,11 @@ class RhuContrato
      * @ORM\Column(name="codigo_tipo_pension_fk", type="integer")
      */    
     private $codigoTipoPensionFk;    
+
+    /**
+     * @ORM\Column(name="codigo_tipo_salud_fk", type="integer", nullable=true)
+     */    
+    private $codigoTipoSaludFk; 
     
     /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer")
@@ -240,6 +245,12 @@ class RhuContrato
      */
     protected $tipoPensionRel;     
 
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuTipoSalud", inversedBy="contratosTipoSaludRel")
+     * @ORM\JoinColumn(name="codigo_tipo_salud_fk", referencedColumnName="codigo_tipo_salud_pk")
+     */
+    protected $tipoSaludRel;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuSsoTipoCotizante", inversedBy="contratosSsoTipoCotizanteRel")
      * @ORM\JoinColumn(name="codigo_tipo_cotizante_fk", referencedColumnName="codigo_tipo_cotizante_pk")
@@ -520,6 +531,30 @@ class RhuContrato
     public function getCodigoTipoPensionFk()
     {
         return $this->codigoTipoPensionFk;
+    }
+
+    /**
+     * Set codigoTipoSaludFk
+     *
+     * @param integer $codigoTipoSaludFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoTipoSaludFk($codigoTipoSaludFk)
+    {
+        $this->codigoTipoSaludFk = $codigoTipoSaludFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTipoSaludFk
+     *
+     * @return integer
+     */
+    public function getCodigoTipoSaludFk()
+    {
+        return $this->codigoTipoSaludFk;
     }
 
     /**
@@ -1408,6 +1443,30 @@ class RhuContrato
     public function getTipoPensionRel()
     {
         return $this->tipoPensionRel;
+    }
+
+    /**
+     * Set tipoSaludRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud $tipoSaludRel
+     *
+     * @return RhuContrato
+     */
+    public function setTipoSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud $tipoSaludRel = null)
+    {
+        $this->tipoSaludRel = $tipoSaludRel;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoSaludRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud
+     */
+    public function getTipoSaludRel()
+    {
+        return $this->tipoSaludRel;
     }
 
     /**

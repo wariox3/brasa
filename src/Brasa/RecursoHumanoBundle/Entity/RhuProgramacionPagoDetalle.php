@@ -149,6 +149,7 @@ class RhuProgramacionPagoDetalle
      * @ORM\Column(name="soporteTurno", type="boolean")
      */
     private $soporteTurno = 1;    
+        
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuProgramacionPago", inversedBy="programacionesPagosDetallesProgramacionPagoRel")
@@ -166,7 +167,7 @@ class RhuProgramacionPagoDetalle
      * @ORM\ManyToOne(targetEntity="RhuContrato", inversedBy="programacionesPagosDetallesContratoRel")
      * @ORM\JoinColumn(name="codigo_contrato_fk", referencedColumnName="codigo_contrato_pk")
      */
-    protected $contratoRel;    
+    protected $contratoRel;          
     
     /**
      * @ORM\OneToMany(targetEntity="RhuProgramacionPagoDetalleSede", mappedBy="programacionPagoDetalleRel")
@@ -177,7 +178,6 @@ class RhuProgramacionPagoDetalle
      * @ORM\OneToMany(targetEntity="RhuPagoDetalle", mappedBy="programacionPagoDetalleRel")
      */
     protected $pagosDetallesProgramacionPagoDetalleRel;    
-    
     
     /**
      * Constructor
@@ -487,6 +487,30 @@ class RhuProgramacionPagoDetalle
     }
 
     /**
+     * Set fechaHastaPago
+     *
+     * @param \DateTime $fechaHastaPago
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setFechaHastaPago($fechaHastaPago)
+    {
+        $this->fechaHastaPago = $fechaHastaPago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaHastaPago
+     *
+     * @return \DateTime
+     */
+    public function getFechaHastaPago()
+    {
+        return $this->fechaHastaPago;
+    }
+
+    /**
      * Set indefinido
      *
      * @param boolean $indefinido
@@ -604,6 +628,198 @@ class RhuProgramacionPagoDetalle
     public function getVrNetoPagar()
     {
         return $this->vrNetoPagar;
+    }
+
+    /**
+     * Set vrDia
+     *
+     * @param float $vrDia
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setVrDia($vrDia)
+    {
+        $this->vrDia = $vrDia;
+
+        return $this;
+    }
+
+    /**
+     * Get vrDia
+     *
+     * @return float
+     */
+    public function getVrDia()
+    {
+        return $this->vrDia;
+    }
+
+    /**
+     * Set vrHora
+     *
+     * @param float $vrHora
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setVrHora($vrHora)
+    {
+        $this->vrHora = $vrHora;
+
+        return $this;
+    }
+
+    /**
+     * Get vrHora
+     *
+     * @return float
+     */
+    public function getVrHora()
+    {
+        return $this->vrHora;
+    }
+
+    /**
+     * Set descuentoSalud
+     *
+     * @param boolean $descuentoSalud
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setDescuentoSalud($descuentoSalud)
+    {
+        $this->descuentoSalud = $descuentoSalud;
+
+        return $this;
+    }
+
+    /**
+     * Get descuentoSalud
+     *
+     * @return boolean
+     */
+    public function getDescuentoSalud()
+    {
+        return $this->descuentoSalud;
+    }
+
+    /**
+     * Set descuentoPension
+     *
+     * @param boolean $descuentoPension
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setDescuentoPension($descuentoPension)
+    {
+        $this->descuentoPension = $descuentoPension;
+
+        return $this;
+    }
+
+    /**
+     * Get descuentoPension
+     *
+     * @return boolean
+     */
+    public function getDescuentoPension()
+    {
+        return $this->descuentoPension;
+    }
+
+    /**
+     * Set pagoAuxilioTransporte
+     *
+     * @param boolean $pagoAuxilioTransporte
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setPagoAuxilioTransporte($pagoAuxilioTransporte)
+    {
+        $this->pagoAuxilioTransporte = $pagoAuxilioTransporte;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoAuxilioTransporte
+     *
+     * @return boolean
+     */
+    public function getPagoAuxilioTransporte()
+    {
+        return $this->pagoAuxilioTransporte;
+    }
+
+    /**
+     * Set diasVacaciones
+     *
+     * @param integer $diasVacaciones
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setDiasVacaciones($diasVacaciones)
+    {
+        $this->diasVacaciones = $diasVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get diasVacaciones
+     *
+     * @return integer
+     */
+    public function getDiasVacaciones()
+    {
+        return $this->diasVacaciones;
+    }
+
+    /**
+     * Set salarioIntegral
+     *
+     * @param boolean $salarioIntegral
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setSalarioIntegral($salarioIntegral)
+    {
+        $this->salarioIntegral = $salarioIntegral;
+
+        return $this;
+    }
+
+    /**
+     * Get salarioIntegral
+     *
+     * @return boolean
+     */
+    public function getSalarioIntegral()
+    {
+        return $this->salarioIntegral;
+    }
+
+    /**
+     * Set soporteTurno
+     *
+     * @param boolean $soporteTurno
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setSoporteTurno($soporteTurno)
+    {
+        $this->soporteTurno = $soporteTurno;
+
+        return $this;
+    }
+
+    /**
+     * Get soporteTurno
+     *
+     * @return boolean
+     */
+    public function getSoporteTurno()
+    {
+        return $this->soporteTurno;
     }
 
     /**
@@ -744,245 +960,5 @@ class RhuProgramacionPagoDetalle
     public function getPagosDetallesProgramacionPagoDetalleRel()
     {
         return $this->pagosDetallesProgramacionPagoDetalleRel;
-    }
-
-    /**
-     * Set vrDia
-     *
-     * @param float $vrDia
-     *
-     * @return RhuProgramacionPagoDetalle
-     */
-    public function setVrDia($vrDia)
-    {
-        $this->vrDia = $vrDia;
-
-        return $this;
-    }
-
-    /**
-     * Get vrDia
-     *
-     * @return float
-     */
-    public function getVrDia()
-    {
-        return $this->vrDia;
-    }
-
-    /**
-     * Set vrHora
-     *
-     * @param float $vrHora
-     *
-     * @return RhuProgramacionPagoDetalle
-     */
-    public function setVrHora($vrHora)
-    {
-        $this->vrHora = $vrHora;
-
-        return $this;
-    }
-
-    /**
-     * Get vrHora
-     *
-     * @return float
-     */
-    public function getVrHora()
-    {
-        return $this->vrHora;
-    }
-
-    /**
-     * Set fechaHastaPago
-     *
-     * @param \DateTime $fechaHastaPago
-     *
-     * @return RhuProgramacionPagoDetalle
-     */
-    public function setFechaHastaPago($fechaHastaPago)
-    {
-        $this->fechaHastaPago = $fechaHastaPago;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaHastaPago
-     *
-     * @return \DateTime
-     */
-    public function getFechaHastaPago()
-    {
-        return $this->fechaHastaPago;
-    }
-
-    /**
-     * Set descuentoSalud
-     *
-     * @param boolean $descuentoSalud
-     *
-     * @return RhuProgramacionPagoDetalle
-     */
-    public function setDescuentoSalud($descuentoSalud)
-    {
-        $this->descuentoSalud = $descuentoSalud;
-
-        return $this;
-    }
-
-    /**
-     * Get descuentoSalud
-     *
-     * @return boolean
-     */
-    public function getDescuentoSalud()
-    {
-        return $this->descuentoSalud;
-    }
-
-    /**
-     * Set descuentoPension
-     *
-     * @param boolean $descuentoPension
-     *
-     * @return RhuProgramacionPagoDetalle
-     */
-    public function setDescuentoPension($descuentoPension)
-    {
-        $this->descuentoPension = $descuentoPension;
-
-        return $this;
-    }
-
-    /**
-     * Get descuentoPension
-     *
-     * @return boolean
-     */
-    public function getDescuentoPension()
-    {
-        return $this->descuentoPension;
-    }
-
-    /**
-     * Set pagoAuxilio
-     *
-     * @param boolean $pagoAuxilio
-     *
-     * @return RhuProgramacionPagoDetalle
-     */
-    public function setPagoAuxilio($pagoAuxilio)
-    {
-        $this->pagoAuxilio = $pagoAuxilio;
-
-        return $this;
-    }
-
-    /**
-     * Get pagoAuxilio
-     *
-     * @return boolean
-     */
-    public function getPagoAuxilio()
-    {
-        return $this->pagoAuxilio;
-    }
-
-    /**
-     * Set pagoAuxilioTransporte
-     *
-     * @param boolean $pagoAuxilioTransporte
-     *
-     * @return RhuProgramacionPagoDetalle
-     */
-    public function setPagoAuxilioTransporte($pagoAuxilioTransporte)
-    {
-        $this->pagoAuxilioTransporte = $pagoAuxilioTransporte;
-
-        return $this;
-    }
-
-    /**
-     * Get pagoAuxilioTransporte
-     *
-     * @return boolean
-     */
-    public function getPagoAuxilioTransporte()
-    {
-        return $this->pagoAuxilioTransporte;
-    }
-
-    /**
-     * Set diasVacaciones
-     *
-     * @param integer $diasVacaciones
-     *
-     * @return RhuProgramacionPagoDetalle
-     */
-    public function setDiasVacaciones($diasVacaciones)
-    {
-        $this->diasVacaciones = $diasVacaciones;
-
-        return $this;
-    }
-
-    /**
-     * Get diasVacaciones
-     *
-     * @return integer
-     */
-    public function getDiasVacaciones()
-    {
-        return $this->diasVacaciones;
-    }
-
-    /**
-     * Set salarioIntegral
-     *
-     * @param boolean $salarioIntegral
-     *
-     * @return RhuProgramacionPagoDetalle
-     */
-    public function setSalarioIntegral($salarioIntegral)
-    {
-        $this->salarioIntegral = $salarioIntegral;
-
-        return $this;
-    }
-
-    /**
-     * Get salarioIntegral
-     *
-     * @return boolean
-     */
-    public function getSalarioIntegral()
-    {
-        return $this->salarioIntegral;
-    }
-
-    /**
-     * Set soporteTurno
-     *
-     * @param boolean $soporteTurno
-     *
-     * @return RhuProgramacionPagoDetalle
-     */
-    public function setSoporteTurno($soporteTurno)
-    {
-        $this->soporteTurno = $soporteTurno;
-
-        return $this;
-    }
-
-    /**
-     * Get soporteTurno
-     *
-     * @return boolean
-     */
-    public function getSoporteTurno()
-    {
-        return $this->soporteTurno;
     }
 }

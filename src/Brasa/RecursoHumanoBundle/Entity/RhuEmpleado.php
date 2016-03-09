@@ -196,6 +196,11 @@ class RhuEmpleado
     private $codigoTipoPensionFk;     
 
     /**
+     * @ORM\Column(name="codigo_tipo_salud_fk", type="integer", nullable=true)
+     */    
+    private $codigoTipoSaludFk;     
+    
+    /**
      * @ORM\Column(name="codigo_entidad_caja_fk", type="integer", nullable=true)
      */    
     private $codigoEntidadCajaFk;     
@@ -417,6 +422,12 @@ class RhuEmpleado
      */
     protected $tipoPensionRel;         
 
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuTipoSalud", inversedBy="empleadosTipoSaludRel")
+     * @ORM\JoinColumn(name="codigo_tipo_salud_fk", referencedColumnName="codigo_tipo_salud_pk")
+     */
+    protected $tipoSaludRel;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuSsoTipoCotizante", inversedBy="empleadosSsoTipoCotizanteRel")
      * @ORM\JoinColumn(name="codigo_tipo_cotizante_fk", referencedColumnName="codigo_tipo_cotizante_pk")
@@ -1230,6 +1241,30 @@ class RhuEmpleado
     }
 
     /**
+     * Set codigoCentroCostoUltimoFk
+     *
+     * @param integer $codigoCentroCostoUltimoFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoCentroCostoUltimoFk($codigoCentroCostoUltimoFk)
+    {
+        $this->codigoCentroCostoUltimoFk = $codigoCentroCostoUltimoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCentroCostoUltimoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCentroCostoUltimoFk()
+    {
+        return $this->codigoCentroCostoUltimoFk;
+    }
+
+    /**
      * Set codigoCargoFk
      *
      * @param integer $codigoCargoFk
@@ -1419,6 +1454,30 @@ class RhuEmpleado
     public function getCodigoTipoPensionFk()
     {
         return $this->codigoTipoPensionFk;
+    }
+
+    /**
+     * Set codigoTipoSaludFk
+     *
+     * @param integer $codigoTipoSaludFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoTipoSaludFk($codigoTipoSaludFk)
+    {
+        $this->codigoTipoSaludFk = $codigoTipoSaludFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTipoSaludFk
+     *
+     * @return integer
+     */
+    public function getCodigoTipoSaludFk()
+    {
+        return $this->codigoTipoSaludFk;
     }
 
     /**
@@ -2403,6 +2462,30 @@ class RhuEmpleado
     public function getTipoPensionRel()
     {
         return $this->tipoPensionRel;
+    }
+
+    /**
+     * Set tipoSaludRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud $tipoSaludRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setTipoSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud $tipoSaludRel = null)
+    {
+        $this->tipoSaludRel = $tipoSaludRel;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoSaludRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud
+     */
+    public function getTipoSaludRel()
+    {
+        return $this->tipoSaludRel;
     }
 
     /**
@@ -3577,29 +3660,5 @@ class RhuEmpleado
     public function getCartasEmpleadoRel()
     {
         return $this->cartasEmpleadoRel;
-    }
-
-    /**
-     * Set codigoCentroCostoUltimoFk
-     *
-     * @param integer $codigoCentroCostoUltimoFk
-     *
-     * @return RhuEmpleado
-     */
-    public function setCodigoCentroCostoUltimoFk($codigoCentroCostoUltimoFk)
-    {
-        $this->codigoCentroCostoUltimoFk = $codigoCentroCostoUltimoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCentroCostoUltimoFk
-     *
-     * @return integer
-     */
-    public function getCodigoCentroCostoUltimoFk()
-    {
-        return $this->codigoCentroCostoUltimoFk;
     }
 }

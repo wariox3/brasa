@@ -54,8 +54,7 @@
                 <th>HASTA</th>
                 <th>DIAS</th>
                 <th>NETO</th>
-                <th>N.C</th>
-                <th><p style="margin: 0" data-toggle="tooltip" data-placement="top" title="Indica si ya estan generados los empleados">CONTRATOS</p></th>                
+                <th><p style="margin: 0" data-toggle="tooltip" data-placement="top" title="Numero de empleados y/o contratos a procesar">#</p></th>                
                 <th>GENERADO</th>
                 <th></th>
                 <th>PAGADO</th>
@@ -76,9 +75,7 @@
                 <td style="text-align: right">
                     {{ arProgramacionPago.numeroEmpleados | number_format(0, '.', ',') }}
                     {% if arProgramacionPago.inconsistencias == 1 %} SI (<a href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_inconsistencias', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'VerInconsistencias', 600, 900)" >Inconsistencias</a>{% endif %}
-                </td>
-                <td>{% if arProgramacionPago.estadoGenerado == 0 %}<button class="btn btn-default btn-xs" type="submit" name="OpGenerarEmpleados" value="{{ arProgramacionPago.codigoProgramacionPagoPk }}" >Analizar</button>{% endif %}</td>
-                                
+                </td>                                                
                 <td>
                     {% if arProgramacionPago.estadoGenerado == 0 %}
                         {% if arProgramacionPago.empleadosGenerados == 1 %}

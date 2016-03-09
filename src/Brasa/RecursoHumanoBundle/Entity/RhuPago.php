@@ -117,12 +117,7 @@ class RhuPago
     /**
      * @ORM\Column(name="vr_auxilio_transporte_cotizacion", type="float")
      */
-    private $vrAuxilioTransporteCotizacion = 0;    
-    
-    /**
-     * @ORM\Column(name="vr_arp", type="float")
-     */
-    private $vrArp = 0;    
+    private $vrAuxilioTransporteCotizacion = 0;        
     
     /**
      * @ORM\Column(name="vr_eps", type="float")
@@ -132,7 +127,17 @@ class RhuPago
     /**
      * @ORM\Column(name="vr_pension", type="float")
      */
-    private $vrPension = 0;    
+    private $vrPension = 0;        
+    
+    /**
+     * @ORM\Column(name="vr_pension_empleador", type="float")
+     */
+    private $vrPensionEmpleador = 0;        
+    
+    /**
+     * @ORM\Column(name="vr_arp", type="float")
+     */
+    private $vrArp = 0;     
     
     /**
      * @ORM\Column(name="vr_caja", type="float")
@@ -1728,5 +1733,29 @@ class RhuPago
     public function getCodigoUsuario()
     {
         return $this->codigoUsuario;
+    }
+
+    /**
+     * Set vrPensionEmpleador
+     *
+     * @param float $vrPensionEmpleador
+     *
+     * @return RhuPago
+     */
+    public function setVrPensionEmpleador($vrPensionEmpleador)
+    {
+        $this->vrPensionEmpleador = $vrPensionEmpleador;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPensionEmpleador
+     *
+     * @return float
+     */
+    public function getVrPensionEmpleador()
+    {
+        return $this->vrPensionEmpleador;
     }
 }

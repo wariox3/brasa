@@ -159,6 +159,11 @@ class TurRecurso
     protected $serviciosDetallesRecursosRecursoRel;     
     
     /**
+     * @ORM\OneToMany(targetEntity="TurCostoRecurso", mappedBy="recursoRel")
+     */
+    protected $costosRecursosRecursoRel;    
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -202,6 +207,30 @@ class TurRecurso
     public function getCodigoRecursoTipoFk()
     {
         return $this->codigoRecursoTipoFk;
+    }
+
+    /**
+     * Set codigoCentroCostoFk
+     *
+     * @param integer $codigoCentroCostoFk
+     *
+     * @return TurRecurso
+     */
+    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
+    {
+        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCentroCostoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCentroCostoFk()
+    {
+        return $this->codigoCentroCostoFk;
     }
 
     /**
@@ -517,6 +546,78 @@ class TurRecurso
     }
 
     /**
+     * Set codigoTurnoFijoNominaFk
+     *
+     * @param string $codigoTurnoFijoNominaFk
+     *
+     * @return TurRecurso
+     */
+    public function setCodigoTurnoFijoNominaFk($codigoTurnoFijoNominaFk)
+    {
+        $this->codigoTurnoFijoNominaFk = $codigoTurnoFijoNominaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTurnoFijoNominaFk
+     *
+     * @return string
+     */
+    public function getCodigoTurnoFijoNominaFk()
+    {
+        return $this->codigoTurnoFijoNominaFk;
+    }
+
+    /**
+     * Set codigoTurnoFijoDescansoFk
+     *
+     * @param string $codigoTurnoFijoDescansoFk
+     *
+     * @return TurRecurso
+     */
+    public function setCodigoTurnoFijoDescansoFk($codigoTurnoFijoDescansoFk)
+    {
+        $this->codigoTurnoFijoDescansoFk = $codigoTurnoFijoDescansoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTurnoFijoDescansoFk
+     *
+     * @return string
+     */
+    public function getCodigoTurnoFijoDescansoFk()
+    {
+        return $this->codigoTurnoFijoDescansoFk;
+    }
+
+    /**
+     * Set usuario
+     *
+     * @param string $usuario
+     *
+     * @return TurRecurso
+     */
+    public function setUsuario($usuario)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return string
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -586,6 +687,30 @@ class TurRecurso
     public function getRecursoTipoRel()
     {
         return $this->recursoTipoRel;
+    }
+
+    /**
+     * Set centroCostoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCentroCosto $centroCostoRel
+     *
+     * @return TurRecurso
+     */
+    public function setCentroCostoRel(\Brasa\TurnoBundle\Entity\TurCentroCosto $centroCostoRel = null)
+    {
+        $this->centroCostoRel = $centroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurCentroCosto
+     */
+    public function getCentroCostoRel()
+    {
+        return $this->centroCostoRel;
     }
 
     /**
@@ -759,122 +884,36 @@ class TurRecurso
     }
 
     /**
-     * Set codigoCentroCostoFk
+     * Add costosRecursosRecursoRel
      *
-     * @param integer $codigoCentroCostoFk
+     * @param \Brasa\TurnoBundle\Entity\TurCostoRecurso $costosRecursosRecursoRel
      *
      * @return TurRecurso
      */
-    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
+    public function addCostosRecursosRecursoRel(\Brasa\TurnoBundle\Entity\TurCostoRecurso $costosRecursosRecursoRel)
     {
-        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
+        $this->costosRecursosRecursoRel[] = $costosRecursosRecursoRel;
 
         return $this;
     }
 
     /**
-     * Get codigoCentroCostoFk
+     * Remove costosRecursosRecursoRel
      *
-     * @return integer
+     * @param \Brasa\TurnoBundle\Entity\TurCostoRecurso $costosRecursosRecursoRel
      */
-    public function getCodigoCentroCostoFk()
+    public function removeCostosRecursosRecursoRel(\Brasa\TurnoBundle\Entity\TurCostoRecurso $costosRecursosRecursoRel)
     {
-        return $this->codigoCentroCostoFk;
+        $this->costosRecursosRecursoRel->removeElement($costosRecursosRecursoRel);
     }
 
     /**
-     * Set centroCostoRel
+     * Get costosRecursosRecursoRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurCentroCosto $centroCostoRel
-     *
-     * @return TurRecurso
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setCentroCostoRel(\Brasa\TurnoBundle\Entity\TurCentroCosto $centroCostoRel = null)
+    public function getCostosRecursosRecursoRel()
     {
-        $this->centroCostoRel = $centroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurCentroCosto
-     */
-    public function getCentroCostoRel()
-    {
-        return $this->centroCostoRel;
-    }
-
-    /**
-     * Set codigoTurnoFijoNominaFk
-     *
-     * @param string $codigoTurnoFijoNominaFk
-     *
-     * @return TurRecurso
-     */
-    public function setCodigoTurnoFijoNominaFk($codigoTurnoFijoNominaFk)
-    {
-        $this->codigoTurnoFijoNominaFk = $codigoTurnoFijoNominaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoTurnoFijoNominaFk
-     *
-     * @return string
-     */
-    public function getCodigoTurnoFijoNominaFk()
-    {
-        return $this->codigoTurnoFijoNominaFk;
-    }
-
-    /**
-     * Set usuario
-     *
-     * @param string $usuario
-     *
-     * @return TurRecurso
-     */
-    public function setUsuario($usuario)
-    {
-        $this->usuario = $usuario;
-
-        return $this;
-    }
-
-    /**
-     * Get usuario
-     *
-     * @return string
-     */
-    public function getUsuario()
-    {
-        return $this->usuario;
-    }
-
-    /**
-     * Set codigoTurnoFijoDescansoFk
-     *
-     * @param string $codigoTurnoFijoDescansoFk
-     *
-     * @return TurRecurso
-     */
-    public function setCodigoTurnoFijoDescansoFk($codigoTurnoFijoDescansoFk)
-    {
-        $this->codigoTurnoFijoDescansoFk = $codigoTurnoFijoDescansoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoTurnoFijoDescansoFk
-     *
-     * @return string
-     */
-    public function getCodigoTurnoFijoDescansoFk()
-    {
-        return $this->codigoTurnoFijoDescansoFk;
+        return $this->costosRecursosRecursoRel;
     }
 }

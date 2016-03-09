@@ -41,7 +41,21 @@ class TurCierreMes
      * @ORM\OneToMany(targetEntity="TurCierreMesServicioDetalle", mappedBy="cierreMesRel", cascade={"persist", "remove"})
      */
     protected $cierresMesServiciosDetallesCierreMesRel;     
+
+    /**
+     * @ORM\OneToMany(targetEntity="TurCostoRecurso", mappedBy="cierreMesRel", cascade={"persist", "remove"})
+     */
+    protected $costosRecursosCierreMesRel;
     
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->cierresMesServiciosCierreMesRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cierresMesServiciosDetallesCierreMesRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get codigoCierreMesPk
      *
@@ -123,13 +137,6 @@ class TurCierreMes
     {
         return $this->estadoCerrado;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->cierresMesServiciosCierreMesRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Add cierresMesServiciosCierreMesRel
@@ -197,5 +204,39 @@ class TurCierreMes
     public function getCierresMesServiciosDetallesCierreMesRel()
     {
         return $this->cierresMesServiciosDetallesCierreMesRel;
+    }
+
+    /**
+     * Add costosRecursosCierreMesRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCostoRecurso $costosRecursosCierreMesRel
+     *
+     * @return TurCierreMes
+     */
+    public function addCostosRecursosCierreMesRel(\Brasa\TurnoBundle\Entity\TurCostoRecurso $costosRecursosCierreMesRel)
+    {
+        $this->costosRecursosCierreMesRel[] = $costosRecursosCierreMesRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove costosRecursosCierreMesRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCostoRecurso $costosRecursosCierreMesRel
+     */
+    public function removeCostosRecursosCierreMesRel(\Brasa\TurnoBundle\Entity\TurCostoRecurso $costosRecursosCierreMesRel)
+    {
+        $this->costosRecursosCierreMesRel->removeElement($costosRecursosCierreMesRel);
+    }
+
+    /**
+     * Get costosRecursosCierreMesRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCostosRecursosCierreMesRel()
+    {
+        return $this->costosRecursosCierreMesRel;
     }
 }

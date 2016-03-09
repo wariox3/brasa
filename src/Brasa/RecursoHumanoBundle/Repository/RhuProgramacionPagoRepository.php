@@ -60,9 +60,11 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arProgramacionPagoProcesar->getCodigoCentroCostoFk());
                 
                 if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 1) {
+                    $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
                     $arProgramacionPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                     $arProgramacionPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $arProgramacionPagoProcesar->getCodigoProgramacionPagoPk()));
-                    foreach ($arProgramacionPagoDetalles as $arProgramacionPagoDetalle) {
+                    foreach ($arProgramacionPagoDetalles as $arProgramacionPagoDetalle) {                        
+                        $arContrato = $arProgramacionPagoDetalle->getContratoRel();
                         $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
                         $arPago->setPagoTipoRel($arProgramacionPagoProcesar->getPagoTipoRel());                        
                         $arPago->setEmpleadoRel($arProgramacionPagoDetalle->getEmpleadoRel());
@@ -74,7 +76,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $arPago->setVrSalarioEmpleado($arProgramacionPagoDetalle->getVrSalario());
                         $arPago->setVrSalarioPeriodo($arProgramacionPagoDetalle->getVrDevengado());
                         $arPago->setProgramacionPagoRel($arProgramacionPagoProcesar);
-                        $arPago->setContratoRel($arProgramacionPagoDetalle->getContratoRel());                        
+                        $arPago->setContratoRel($arContrato);                        
                         $arPago->setDiasPeriodo($arProgramacionPagoDetalle->getDias());
                         $arPago->setCodigoUsuario($arProgramacionPagoProcesar->getCodigoUsuario());
                         $em->persist($arPago);
@@ -324,13 +326,9 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                 }
                             }
                         }
-
-                        $intPagoConceptoSalario = $arConfiguracion->getCodigoHoraDiurnaTrabajada();
-                        $intPagoConceptoSalud = $arConfiguracion->getCodigoAporteSalud();
-                        $intPagoConceptoPension = $arConfiguracion->getCodigoAportePension();
-                        $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-
+                                               
                         //Liquidar salario
+                        $intPagoConceptoSalario = $arConfiguracion->getCodigoHoraDiurnaTrabajada();
                         $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConceptoSalario);
                         $douPagoDetalle = $intHorasLaboradas * $douVrHora;
                         $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
@@ -350,57 +348,60 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $douIngresoBaseCotizacion += $douPagoDetalle;                        
                         $arPagoDetalle->setVrIngresoBasePrestacion($douPagoDetalle);
                         $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);
-                        /*if($arProgramacionPagoDetalle->getCodigoEmpleadoFk() == 507) {
-                            echo "hola";
-                        }*/
+
                         //Liquidar salud
-                        if($arProgramacionPagoDetalle->getDescuentoSalud() == 1) {
-                            $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConceptoSalud);
+                        if($arProgramacionPagoDetalle->getDescuentoSalud() == 1) {                            
                             $intDias = $intHorasLaboradas / 8;
-                            if($arProgramacionPagoDetalle->getSalarioIntegral() == 1) {
-                                $douPagoDetalle = (($douIngresoBaseCotizacion / 1.3) * $arPagoConcepto->getPorPorcentaje())/100;                                                                
-                            } else {
-                                $douPagoDetalle = ($douIngresoBaseCotizacion * $arPagoConcepto->getPorPorcentaje())/100;                                                            
-                            }
-                            
-                            $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
-                            $arPagoDetalle->setPagoRel($arPago);
-                            $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
-                            $arPagoDetalle->setPorcentajeAplicado($arPagoConcepto->getPorPorcentaje());
-                            $arPagoDetalle->setVrDia($douVrDia);
-                            $arPagoDetalle->setVrPago($douPagoDetalle);
-                            $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
-                            $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConcepto->getOperacion());
-                            $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
-                            $em->persist($arPagoDetalle);                                                        
+                            $floPorcentaje = $arContrato->getTipoSaludRel()->getPorcentajeEmpleado();
+                            $intOperacion = -1;
+                            if($floPorcentaje > 0) {
+                                if($arProgramacionPagoDetalle->getSalarioIntegral() == 1) {
+                                    $douPagoDetalle = (($douIngresoBaseCotizacion / 1.3) * $floPorcentaje)/100;                                                                
+                                } else {
+                                    $douPagoDetalle = ($douIngresoBaseCotizacion * $floPorcentaje)/100;                                                            
+                                }
+
+                                $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                                $arPagoDetalle->setPagoRel($arPago);
+                                $arPagoDetalle->setPagoConceptoRel($arContrato->getTipoSaludRel()->getPagoConceptoRel());
+                                $arPagoDetalle->setPorcentajeAplicado($floPorcentaje);
+                                $arPagoDetalle->setVrDia($douVrDia);
+                                $arPagoDetalle->setVrPago($douPagoDetalle);
+                                $arPagoDetalle->setOperacion($intOperacion);
+                                $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $intOperacion);
+                                $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
+                                $em->persist($arPagoDetalle);                                
+                            }                                                        
                         }                        
 
                         //Liquidar pension
-                        if($arProgramacionPagoDetalle->getDescuentoPension() == 1) {
-                            $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConceptoPension);
-                            $douPorcentaje = $arPagoConcepto->getPorPorcentaje();
-                            if($intHorasLaboradas > 0) {                                
-                                $douValorHoraMinimo = ($douVrSalarioMinimo / 240) * 4;
-                                if($douVrHora > $douValorHoraMinimo) {
-                                    $douPorcentaje = $arConfiguracion->getPorcentajePensionExtra(); //PORCENTAJE PENSION EXTRA DEL 5%
-                                }                                        
-                            }
-                            if($arProgramacionPagoDetalle->getSalarioIntegral() == 1) {
-                                $douPagoDetalle = (($douIngresoBaseCotizacion / 1.3) * $douPorcentaje)/100;
-                            } else {
-                                $douPagoDetalle = ($douIngresoBaseCotizacion * $douPorcentaje)/100;
-                            }
-                            
-                            $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
-                            $arPagoDetalle->setPagoRel($arPago);
-                            $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
-                            $arPagoDetalle->setPorcentajeAplicado($douPorcentaje);
-                            $arPagoDetalle->setVrDia($douVrDia);
-                            $arPagoDetalle->setVrPago($douPagoDetalle);
-                            $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
-                            $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConcepto->getOperacion());
-                            $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
-                            $em->persist($arPagoDetalle);                            
+                        if($arProgramacionPagoDetalle->getDescuentoPension() == 1) {                            
+                            $douPorcentaje = $arContrato->getTipoPensionRel()->getPorcentajeEmpleado();
+                            $intOperacion = -1;
+                            if($douPorcentaje > 0) {
+                                if($intHorasLaboradas > 0) {                                
+                                    $douValorHoraMinimo = ($douVrSalarioMinimo / 240) * 4;
+                                    if($douVrHora > $douValorHoraMinimo) {
+                                        $douPorcentaje = $arConfiguracion->getPorcentajePensionExtra(); //PORCENTAJE PENSION EXTRA DEL 5%
+                                    }                                        
+                                }
+                                if($arProgramacionPagoDetalle->getSalarioIntegral() == 1) {
+                                    $douPagoDetalle = (($douIngresoBaseCotizacion / 1.3) * $douPorcentaje)/100;
+                                } else {
+                                    $douPagoDetalle = ($douIngresoBaseCotizacion * $douPorcentaje)/100;
+                                }
+
+                                $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                                $arPagoDetalle->setPagoRel($arPago);
+                                $arPagoDetalle->setPagoConceptoRel($arContrato->getTipoPensionRel()->getPagoConceptoRel());
+                                $arPagoDetalle->setPorcentajeAplicado($douPorcentaje);
+                                $arPagoDetalle->setVrDia($douVrDia);
+                                $arPagoDetalle->setVrPago($douPagoDetalle);
+                                $arPagoDetalle->setOperacion($intOperacion);
+                                $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $intOperacion);
+                                $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
+                                $em->persist($arPagoDetalle);                                
+                            }                            
                         }
 
                         //Subsidio transporte
@@ -740,15 +741,15 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $douIngresoBaseCotizacion = $douIngresoBaseCotizacion + $arPagoDetalle->getVrIngresoBaseCotizacion();                            
                     $douIngresoBasePrestacion = $douIngresoBasePrestacion + $arPagoDetalle->getVrIngresoBasePrestacion();                                                
                 }
-                if($arPagoProcesar->getCodigoEmpleadoFk() == 855) {
+                /*if($arPagoProcesar->getCodigoEmpleadoFk() == 855) {
                     echo "hola";
-                }
+                }*/
                 $douSalarioPeriodo = $arPagoProcesar->getVrSalarioPeriodo();                
                 $douIBS = $douSalarioPeriodo + $douAdicionTiempo + $douAdicionValor;
                 $douDiaAuxilioTransporte = 74000 / 30;
                 $douAuxilioTransporteCotizacion = $arPagoProcesar->getDiasPeriodo() * $douDiaAuxilioTransporte;
                 $douArp = ($douIBS * $arPagoProcesar->getContratoRel()->getClasificacionRiesgoRel()->getPorcentaje())/100;        
-                $douPension = ($douIBS * $arPagoProcesar->getContratoRel()->getTipoPensionRel()->getPorcentajeCotizacion()) / 100; 
+                $douPension = ($douIBS * $arPagoProcesar->getContratoRel()->getTipoPensionRel()->getPorcentajeEmpleador()) / 100; 
                 $douSalud = 0;
                 $douCaja = ($douIBS * 4) / 100; // este porcentaje debe parametrizarse en configuracion                
                 $douCesantias = (($douIBS + $douAuxilioTransporteCotizacion) * 17.66) / 100; // este porcentaje debe parametrizarse en configuracion                
@@ -843,7 +844,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     }                    
                 }
             }
-
+            //Actualizar los contratos
             $arProgramacionPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
             $arProgramacionPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
             foreach ($arProgramacionPagoDetalles as $arProgramacionPagoDetalle) {
@@ -871,6 +872,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $em->persist($arContrato);                            
                 }                        
             }
+            
+            //Actualizar centros de costos
             if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 1) {
                 $arCentroCosto->setFechaUltimoPago($arProgramacionPagoProcesar->getFechaHasta());
             }

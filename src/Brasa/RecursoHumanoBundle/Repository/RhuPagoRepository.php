@@ -81,9 +81,8 @@ class RhuPagoRepository extends EntityRepository {
         }
         
         $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();        
-        $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);
-                
-
+        $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);                                
+        
         $arPago->setVrDevengado($douDevengado);
         $arPago->setVrDeducciones($douDeducciones);
         $douNeto = $douDevengado - $douDeducciones;
@@ -94,7 +93,7 @@ class RhuPagoRepository extends EntityRepository {
         $arPago->setVrAdicionalTiempo($douAdicionTiempo);
         $arPago->setVrAdicionalValor($douAdicionValor);
         $arPago->setVrAdicionalValorNoPrestasional($douAdicionValorNoPrestacional);
-        $arPago->setVrAdicionalCotizacion($douAdicionCotizacion);
+        $arPago->setVrAdicionalCotizacion($douAdicionCotizacion);        
         $arPago->setVrArp(0);
         $arPago->setVrPension($douPension);
         $arPago->setVrEps($douEps);
@@ -108,6 +107,12 @@ class RhuPagoRepository extends EntityRepository {
         $arPago->setVrIngresoBaseCotizacion($douIngresoBaseCotizacion);
         $arPago->setVrIngresoBasePrestacion($douIngresoBasePrestacion);
         $arPago->setDiasAusentismo($intDiasAusentismo);
+        
+        //Liquidar aportes
+        
+        
+        //Liquidar prestaciones
+        
         $em->persist($arPago);
         $em->flush();
         return $douNeto;
@@ -376,5 +381,20 @@ class RhuPagoRepository extends EntityRepository {
 
         return $dql;
     }
-    
+ 
+    public function pagosFecha($strDesde = "", $strHasta = "", $codigoEmpleado = "") {
+        $em = $this->getEntityManager();             
+        $strSql = "SELECT
+                    COUNT(codigo_pago_pk) as numeroPagos,
+                    SUM(vr_neto) as vrNeto
+                    FROM rhu_pago                                                            
+                    WHERE rhu_pago.codigo_empleado_fk = $codigoEmpleado AND (rhu_pago.fecha_desde >='$strDesde' AND rhu_pago.fecha_hasta <='$strHasta')
+                    GROUP BY codigo_empleado_fk"; 
+        $connection = $em->getConnection();
+        $statement = $connection->prepare($strSql);        
+        $statement->execute();
+        $results = $statement->fetchAll();        
+        
+        return $results;        
+    }
 }

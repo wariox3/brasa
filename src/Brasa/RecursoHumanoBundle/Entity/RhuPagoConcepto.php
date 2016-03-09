@@ -127,7 +127,18 @@ class RhuPagoConcepto
      */
     protected $incapacidadesTiposPagoConceptoRel;    
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuTipoPension", mappedBy="pagoConceptoRel")
+     */
+    protected $tiposPensionesPagoConceptoRel;     
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuTipoSalud", mappedBy="pagoConceptoRel")
+     */
+    protected $tiposSaludPagoConceptoRel;    
+    
+    
+
     /**
      * Constructor
      */
@@ -138,6 +149,8 @@ class RhuPagoConcepto
         $this->pagosAdicionalesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->licenciasTiposPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->incapacidadesTiposPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tiposPensionesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tiposSaludPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -726,5 +739,73 @@ class RhuPagoConcepto
     public function getIncapacidadesTiposPagoConceptoRel()
     {
         return $this->incapacidadesTiposPagoConceptoRel;
+    }
+
+    /**
+     * Add tiposPensionesPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoPension $tiposPensionesPagoConceptoRel
+     *
+     * @return RhuPagoConcepto
+     */
+    public function addTiposPensionesPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoPension $tiposPensionesPagoConceptoRel)
+    {
+        $this->tiposPensionesPagoConceptoRel[] = $tiposPensionesPagoConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove tiposPensionesPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoPension $tiposPensionesPagoConceptoRel
+     */
+    public function removeTiposPensionesPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoPension $tiposPensionesPagoConceptoRel)
+    {
+        $this->tiposPensionesPagoConceptoRel->removeElement($tiposPensionesPagoConceptoRel);
+    }
+
+    /**
+     * Get tiposPensionesPagoConceptoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTiposPensionesPagoConceptoRel()
+    {
+        return $this->tiposPensionesPagoConceptoRel;
+    }
+
+    /**
+     * Add tiposSaludPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud $tiposSaludPagoConceptoRel
+     *
+     * @return RhuPagoConcepto
+     */
+    public function addTiposSaludPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud $tiposSaludPagoConceptoRel)
+    {
+        $this->tiposSaludPagoConceptoRel[] = $tiposSaludPagoConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove tiposSaludPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud $tiposSaludPagoConceptoRel
+     */
+    public function removeTiposSaludPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud $tiposSaludPagoConceptoRel)
+    {
+        $this->tiposSaludPagoConceptoRel->removeElement($tiposSaludPagoConceptoRel);
+    }
+
+    /**
+     * Get tiposSaludPagoConceptoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTiposSaludPagoConceptoRel()
+    {
+        return $this->tiposSaludPagoConceptoRel;
     }
 }

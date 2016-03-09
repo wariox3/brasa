@@ -5,17 +5,17 @@ namespace Brasa\RecursoHumanoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="rhu_tipo_pension")
- * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuTipoPensionRepository")
+ * @ORM\Table(name="rhu_tipo_salud")
+ * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuTipoSaludRepository")
  */
-class RhuTipoPension
+class RhuTipoSalud
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_tipo_pension_pk", type="integer")
+     * @ORM\Column(name="codigo_tipo_salud_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoTipoPensionPk;
+    private $codigoTipoSaludPk;
     
     /**
      * @ORM\Column(name="nombre", type="string", length=80, nullable=true)
@@ -35,23 +35,23 @@ class RhuTipoPension
     /**
      * @ORM\Column(name="codigo_pago_concepto_fk", type="integer", nullable=true)
      */    
-    private $codigoPagoConceptoFk;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="RhuPagoConcepto", inversedBy="tiposPensionesPagoConceptoRel")
-     * @ORM\JoinColumn(name="codigo_pago_concepto_fk", referencedColumnName="codigo_pago_concepto_pk")
-     */
-    protected $pagoConceptoRel;    
+    private $codigoPagoConceptoFk;    
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="tipoPensionRel")
+     * @ORM\ManyToOne(targetEntity="RhuPagoConcepto", inversedBy="tiposSaludPagoConceptoRel")
+     * @ORM\JoinColumn(name="codigo_pago_concepto_fk", referencedColumnName="codigo_pago_concepto_pk")
      */
-    protected $contratosTipoPensionRel;    
+    protected $pagoConceptoRel;     
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="tipoSaludRel")
+     */
+    protected $contratosTipoSaludRel;    
 
     /**
-     * @ORM\OneToMany(targetEntity="RhuEmpleado", mappedBy="tipoPensionRel")
+     * @ORM\OneToMany(targetEntity="RhuEmpleado", mappedBy="tipoSaludRel")
      */
-    protected $empleadosTipoPensionRel;             
+    protected $empleadosTipoSaludRel;     
     
 
     /**
@@ -59,18 +59,18 @@ class RhuTipoPension
      */
     public function __construct()
     {
-        $this->contratosTipoPensionRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->empleadosTipoPensionRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contratosTipoSaludRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->empleadosTipoSaludRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Get codigoTipoPensionPk
+     * Get codigoTipoSaludPk
      *
      * @return integer
      */
-    public function getCodigoTipoPensionPk()
+    public function getCodigoTipoSaludPk()
     {
-        return $this->codigoTipoPensionPk;
+        return $this->codigoTipoSaludPk;
     }
 
     /**
@@ -78,7 +78,7 @@ class RhuTipoPension
      *
      * @param string $nombre
      *
-     * @return RhuTipoPension
+     * @return RhuTipoSalud
      */
     public function setNombre($nombre)
     {
@@ -102,7 +102,7 @@ class RhuTipoPension
      *
      * @param float $porcentajeEmpleado
      *
-     * @return RhuTipoPension
+     * @return RhuTipoSalud
      */
     public function setPorcentajeEmpleado($porcentajeEmpleado)
     {
@@ -126,7 +126,7 @@ class RhuTipoPension
      *
      * @param float $porcentajeEmpleador
      *
-     * @return RhuTipoPension
+     * @return RhuTipoSalud
      */
     public function setPorcentajeEmpleador($porcentajeEmpleador)
     {
@@ -150,7 +150,7 @@ class RhuTipoPension
      *
      * @param integer $codigoPagoConceptoFk
      *
-     * @return RhuTipoPension
+     * @return RhuTipoSalud
      */
     public function setCodigoPagoConceptoFk($codigoPagoConceptoFk)
     {
@@ -174,7 +174,7 @@ class RhuTipoPension
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel
      *
-     * @return RhuTipoPension
+     * @return RhuTipoSalud
      */
     public function setPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel = null)
     {
@@ -194,70 +194,70 @@ class RhuTipoPension
     }
 
     /**
-     * Add contratosTipoPensionRel
+     * Add contratosTipoSaludRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosTipoPensionRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosTipoSaludRel
      *
-     * @return RhuTipoPension
+     * @return RhuTipoSalud
      */
-    public function addContratosTipoPensionRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosTipoPensionRel)
+    public function addContratosTipoSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosTipoSaludRel)
     {
-        $this->contratosTipoPensionRel[] = $contratosTipoPensionRel;
+        $this->contratosTipoSaludRel[] = $contratosTipoSaludRel;
 
         return $this;
     }
 
     /**
-     * Remove contratosTipoPensionRel
+     * Remove contratosTipoSaludRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosTipoPensionRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosTipoSaludRel
      */
-    public function removeContratosTipoPensionRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosTipoPensionRel)
+    public function removeContratosTipoSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosTipoSaludRel)
     {
-        $this->contratosTipoPensionRel->removeElement($contratosTipoPensionRel);
+        $this->contratosTipoSaludRel->removeElement($contratosTipoSaludRel);
     }
 
     /**
-     * Get contratosTipoPensionRel
+     * Get contratosTipoSaludRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getContratosTipoPensionRel()
+    public function getContratosTipoSaludRel()
     {
-        return $this->contratosTipoPensionRel;
+        return $this->contratosTipoSaludRel;
     }
 
     /**
-     * Add empleadosTipoPensionRel
+     * Add empleadosTipoSaludRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosTipoPensionRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosTipoSaludRel
      *
-     * @return RhuTipoPension
+     * @return RhuTipoSalud
      */
-    public function addEmpleadosTipoPensionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosTipoPensionRel)
+    public function addEmpleadosTipoSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosTipoSaludRel)
     {
-        $this->empleadosTipoPensionRel[] = $empleadosTipoPensionRel;
+        $this->empleadosTipoSaludRel[] = $empleadosTipoSaludRel;
 
         return $this;
     }
 
     /**
-     * Remove empleadosTipoPensionRel
+     * Remove empleadosTipoSaludRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosTipoPensionRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosTipoSaludRel
      */
-    public function removeEmpleadosTipoPensionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosTipoPensionRel)
+    public function removeEmpleadosTipoSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadosTipoSaludRel)
     {
-        $this->empleadosTipoPensionRel->removeElement($empleadosTipoPensionRel);
+        $this->empleadosTipoSaludRel->removeElement($empleadosTipoSaludRel);
     }
 
     /**
-     * Get empleadosTipoPensionRel
+     * Get empleadosTipoSaludRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getEmpleadosTipoPensionRel()
+    public function getEmpleadosTipoSaludRel()
     {
-        return $this->empleadosTipoPensionRel;
+        return $this->empleadosTipoSaludRel;
     }
 }

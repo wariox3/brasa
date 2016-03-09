@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuEmpleadoRepository extends EntityRepository {
 
-    public function ListaDQL($strNombre = "", $strCodigoCentroCosto = "", $boolMostrarActivos = 2, $strIdentificacion = "", $boolMostrarPagadosEntidadSalud = "", $boolMostrarContratados = 2) {
+    public function ListaDql($strNombre = "", $strCodigoCentroCosto = "", $boolMostrarActivos = 2, $strIdentificacion = "", $boolMostrarPagadosEntidadSalud = "", $boolMostrarContratados = 2) {
         $em = $this->getEntityManager();
         $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuEmpleado e WHERE e.codigoEmpleadoPk <> 0";
         if($strNombre != "" ) {
@@ -74,6 +74,34 @@ class RhuEmpleadoRepository extends EntityRepository {
         $dql .= " ORDER BY e.nombreCorto";
         return $dql;
     }
+    
+    public function ListaRecursoDql($strNombre = "", $strCodigoCentroCosto = "", $boolMostrarActivos = 2, $strIdentificacion = "", $boolMostrarPagadosEntidadSalud = "", $boolMostrarContratados = 2) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuEmpleado e WHERE e.codigoEmpleadoPk <> 0";
+        if($strNombre != "" ) {
+            $dql .= " AND e.nombreCorto LIKE '%" . $strNombre . "%'";
+        }
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }
+        if($boolMostrarActivos == 1 ) {
+            $dql .= " AND e.estadoActivo = 1";
+        }
+        if($boolMostrarActivos == "0") {
+            $dql .= " AND e.estadoActivo = 0";
+        }
+        if($boolMostrarContratados == 1 ) {
+            $dql .= " AND e.estadoContratoActivo = 1";
+        }
+        if($boolMostrarContratados == "0") {
+            $dql .= " AND e.estadoContratoActivo = 0";
+        }
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
+        }
+        $dql .= " ORDER BY e.nombreCorto";
+        return $dql;
+    }    
     
     public function buscarNombre($strNombre) {        
         $em = $this->getEntityManager();

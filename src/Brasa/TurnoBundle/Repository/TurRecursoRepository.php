@@ -67,4 +67,21 @@ class TurRecursoRepository extends EntityRepository {
             $em->flush();
         }
     }     
+    
+    public function programacionFecha($strAnio, $strMes) {
+        $em = $this->getEntityManager();             
+        $strSql = "SELECT
+                    tur_programacion_detalle.codigo_recurso_fk,
+                    tur_recurso.codigo_empleado_fk
+                    FROM tur_programacion_detalle                                        
+                    LEFT JOIN tur_recurso ON tur_programacion_detalle.codigo_recurso_fk = tur_recurso.codigo_recurso_pk 
+                    WHERE tur_programacion_detalle.anio = $strAnio AND tur_programacion_detalle.mes = $strMes
+                    GROUP BY codigo_recurso_fk"; 
+        $connection = $em->getConnection();
+        $statement = $connection->prepare($strSql);        
+        $statement->execute();
+        $results = $statement->fetchAll();        
+        
+        return $results;
+    }                    
 }

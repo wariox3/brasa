@@ -45,19 +45,7 @@
                 <div class="col-sm-9">
                         {{ form_widget(form.tipoTiempoRel, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>      
-            <div class="form-group form-group-sm">
-                <label for="form_clasificacionRiesgoRel" class="col-sm-3 control-label">Clasificacion riesgo:</label>
-                <div class="col-sm-9">
-                        {{ form_widget(form.clasificacionRiesgoRel, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>    
-            <div class="form-group form-group-sm">
-                <label for="form_tipoPensionRel" class="col-sm-3 control-label">Tipo pension:</label>
-                <div class="col-sm-9">
-                        {{ form_widget(form.tipoPensionRel, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>                 
+            </div>                          
             <div class="form-group form-group-sm">
                 <label for="form_cargoRel" class="col-sm-3 control-label">Cargo:</label>
                 <div class="col-sm-9">
@@ -125,11 +113,29 @@
         <div class="panel-heading">Informacion seguridad social</div>
         <div class="panel-body">
             <div class="form-group form-group-sm">
+                <label for="form_clasificacionRiesgoRel" class="col-sm-3 control-label">Clasificacion riesgo:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.clasificacionRiesgoRel, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>             
+            <div class="form-group form-group-sm">
+                <label for="form_tipoSaludRel" class="col-sm-3 control-label">Tipo salud:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.tipoSaludRel, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>            
+            <div class="form-group form-group-sm">
                 <label for="form_entidadSaludRel" class="col-sm-3 control-label">Salud:</label>
                 <div class="col-sm-9">
                         {{ form_widget(form.entidadSaludRel, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>                               
+            </div>   
+            <div class="form-group form-group-sm">
+                <label for="form_tipoPensionRel" class="col-sm-3 control-label">Tipo pension:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.tipoPensionRel, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                
             <div class="form-group form-group-sm">
                 <label for="form_entidadPensionRel" class="col-sm-3 control-label">Pensión:</label>
                 <div class="col-sm-9">

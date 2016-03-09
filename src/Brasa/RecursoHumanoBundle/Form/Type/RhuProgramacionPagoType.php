@@ -24,8 +24,9 @@ class RhuProgramacionPagoType extends AbstractType
                     ->orderBy('pt.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                                         
-            ->add('fechaDesde', 'date')                
-            ->add('fechaHasta', 'date')
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd'))                
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd'))
+            ->add('fechaHastaReal', 'date', array('format' => 'yyyyMMdd'))
             ->add('dias', 'number', array('required' => true))                                               
             ->add('guardar', 'submit');        
     }
