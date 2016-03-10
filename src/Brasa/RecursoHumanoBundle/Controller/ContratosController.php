@@ -286,7 +286,6 @@ class ContratosController extends Controller
                             $arEmpleado->setEntidadPensionRel($arContrato->getEntidadPensionRel());
                             $arEmpleado->setEntidadSaludRel($arContrato->getEntidadSaludRel());
                             $arEmpleado->setEntidadCajaRel($arContrato->getEntidadCajaRel());
-                            $arEmpleado->setCodigoCentroCostoUltimoFk($arContrato->getCentroCostoRel()->getCodigoCentroCostoPk());
                             $em->persist($arEmpleado);
                             $em->flush();
                             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
