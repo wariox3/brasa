@@ -90,14 +90,18 @@ class DotacionController extends Controller
                             $codigoCargo = $arEmpleado->getCodigoCargoFk();
                             $arDotacionCargos = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionCargo();
                             $arDotacionCargos = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionCargo')->findBy(array('codigoCargoFk' => $codigoCargo));
-                            foreach ($arDotacionCargos as $arDotacionCargo) {
-                                $arDotacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
-                                $arDotacionDetalle->setDotacionRel($arDotacion);
-                                $arDotacionDetalle->setDotacionElementoRel($arDotacionCargo->getDotacionElementoRel());
-                                $arDotacionDetalle->setCantidadAsignada($arDotacionCargo->getCantidadAsignada());
-                                $arDotacionDetalle->setSerie(0);
-                                $arDotacionDetalle->setLote(0);
-                                $em->persist($arDotacionDetalle);
+                            $arDotacionTipo = $form->get('dotacionTipoRel')->getData();
+                            if ($arDotacionTipo->getCodigoDotacionTipoPk() == 1){
+                                foreach ($arDotacionCargos as $arDotacionCargo) {
+                                    $arDotacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
+                                    $arDotacionDetalle->setDotacionRel($arDotacion);
+                                    $arDotacionDetalle->setDotacionElementoRel($arDotacionCargo->getDotacionElementoRel());
+                                    $arDotacionDetalle->setCantidadAsignada($arDotacionCargo->getCantidadAsignada());
+                                    $arDotacionDetalle->setSerie(0);
+                                    $arDotacionDetalle->setLote(0);
+                                    $em->persist($arDotacionDetalle);
+                                }
+                            
                             }
                         }
                         $em->persist($arDotacion);
@@ -105,7 +109,7 @@ class DotacionController extends Controller
                         if($form->get('guardarnuevo')->isClicked()) {
                             return $this->redirect($this->generateUrl('brs_rhu_dotacion_nuevo', array('codigoDotacion' => 0 )));
                         } else {
-                            return $this->redirect($this->generateUrl('brs_rhu_dotacion_lista'));
+                            return $this->redirect($this->generateUrl('brs_rhu_dotacion_detalle', array('codigoDotacion' => $arDotacion->getCodigoDotacionPk() )));
                         }                        
                     } else {
                         $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);

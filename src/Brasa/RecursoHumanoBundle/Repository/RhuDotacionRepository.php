@@ -19,7 +19,7 @@ class RhuDotacionRepository extends EntityRepository {
         if($codigoCentroCosto != "" ) {
             $dql .= " AND e.codigoCentroCostoFk = " . $codigoCentroCosto;
         }
-        $dql .= " ORDER BY d.fecha";
+        $dql .= " ORDER BY d.codigoDotacionPk DESC";
         return $dql;
     }
 
