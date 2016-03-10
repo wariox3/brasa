@@ -14,9 +14,10 @@ class RhuSeleccionEntrevistaType extends AbstractType
             ->add('seleccionEntrevistaTipoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSeleccionEntrevistaTipo',
                 'property' => 'nombre',
+                'required' => true,
             ))    
             ->add('resultado', 'text', array('required' => false))
-            ->add('resultadoCuantitativo', 'number', array('required' => true))
+            ->add('resultadoCuantitativo', 'number', array('required' => false))
             ->add('fecha', 'datetime', array('required' => true, 'data' => new \DateTime('now')))    
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')

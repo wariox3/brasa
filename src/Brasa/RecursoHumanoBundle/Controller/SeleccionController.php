@@ -313,6 +313,7 @@ class SeleccionController extends Controller
     public function agregarEntrevistaAction($codigoSeleccion, $codigoSeleccionEntrevista) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arSeleccion = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
         $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);
         $arSeleccionEntrevista = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionEntrevista();
@@ -322,15 +323,20 @@ class SeleccionController extends Controller
         $form = $this->createForm(new RhuSeleccionEntrevistaType(), $arSeleccionEntrevista);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arSeleccionEntrevista = $form->getData();
-            $arSeleccionEntrevista->setSeleccionRel($arSeleccion);
-            $em->persist($arSeleccionEntrevista);
-            $em->flush();
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_seleccion_agregar_entrevista', array('codigoSeleccion' => $codigoSeleccion, 'codigoSeleccionEntrevista' => 0)));
+            if ($form->get('seleccionEntrevistaTipoRel')->getData() == null){
+                $objMensaje->Mensaje("error", "Debe selecionar un tipo de entrevista", $this);
             } else {
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                $arSeleccionEntrevista = $form->getData();
+                $arSeleccionEntrevista->setSeleccionRel($arSeleccion);
+                $em->persist($arSeleccionEntrevista);
+                $em->flush();
+                if($form->get('guardarnuevo')->isClicked()) {
+                    return $this->redirect($this->generateUrl('brs_rhu_seleccion_agregar_entrevista', array('codigoSeleccion' => $codigoSeleccion, 'codigoSeleccionEntrevista' => 0)));
+                } else {
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                }
             }
+            
 
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Seleccion:agregarEntrevista.html.twig', array('form' => $form->createView()));
