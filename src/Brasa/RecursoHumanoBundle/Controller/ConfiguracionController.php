@@ -24,127 +24,130 @@ class ConfiguracionController extends Controller
         $arrayPropiedadesConceptoAuxilioTransporte = array(
             'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
             'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('cc')                                        
+                return $er->createQueryBuilder('cc')
                 ->orderBy('cc.codigoPagoConceptoPk', 'ASC');},
             'property' => 'nombre',
-            'required' => false);                   
-        $arrayPropiedadesConceptoAuxilioTransporte['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $arConfiguracion->getCodigoAuxilioTransporte());                                    
-        
+            'required' => false);
+        $arrayPropiedadesConceptoAuxilioTransporte['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $arConfiguracion->getCodigoAuxilioTransporte());
+
         $arrayPropiedadesConceptoCredito = array(
             'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
             'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('cc')                                        
+                return $er->createQueryBuilder('cc')
                 ->orderBy('cc.codigoPagoConceptoPk', 'ASC');},
             'property' => 'nombre',
-            'required' => false);                   
-        $arrayPropiedadesConceptoCredito['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $arConfiguracion->getCodigoCredito());                                    
-        
+            'required' => false);
+        $arrayPropiedadesConceptoCredito['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $arConfiguracion->getCodigoCredito());
+
         $arrayPropiedadesConceptoSeguro = array(
             'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
             'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('cc')                                        
+                return $er->createQueryBuilder('cc')
                 ->orderBy('cc.codigoPagoConceptoPk', 'ASC');},
             'property' => 'nombre',
-            'required' => false);                   
-        $arrayPropiedadesConceptoSeguro['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $arConfiguracion->getCodigoSeguro());                                            
-        
+            'required' => false);
+        $arrayPropiedadesConceptoSeguro['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $arConfiguracion->getCodigoSeguro());
+
         $arrayPropiedadesConceptoHoraDiurnaTrabajada = array(
             'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
             'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('cc')                                        
+                return $er->createQueryBuilder('cc')
                 ->orderBy('cc.codigoPagoConceptoPk', 'ASC');},
             'property' => 'nombre',
-            'required' => false);                   
-        $arrayPropiedadesConceptoHoraDiurnaTrabajada['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $arConfiguracion->getCodigoHoraDiurnaTrabajada());                                            
-        
+            'required' => false);
+        $arrayPropiedadesConceptoHoraDiurnaTrabajada['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $arConfiguracion->getCodigoHoraDiurnaTrabajada());
+
         $arrayPropiedadesConceptoRiesgoProfesional = array(
             'class' => 'BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional',
             'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('rp')                                        
+                return $er->createQueryBuilder('rp')
                 ->orderBy('rp.codigoEntidadRiesgoPk', 'ASC');},
             'property' => 'nombre',
-            'required' => false);                   
-        $arrayPropiedadesConceptoRiesgoProfesional['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional", $arConfiguracion->getCodigoEntidadRiesgoFk());                                    
-        
+            'required' => false);
+        $arrayPropiedadesConceptoRiesgoProfesional['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional", $arConfiguracion->getCodigoEntidadRiesgoFk());
+
         $arrayPropiedadesConceptoIncapacidad = array(
             'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
             'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('cc')                                        
+                return $er->createQueryBuilder('cc')
                 ->orderBy('cc.codigoPagoConceptoPk', 'ASC');},
             'property' => 'nombre',
-            'required' => false);                   
+            'required' => false);
         $arrayPropiedadesConceptoIncapacidad['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $arConfiguracion->getCodigoIncapacidad());
-        
+
         $arrayPropiedadesConceptoRetencionFuente = array(
             'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
             'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('cc')                                        
+                return $er->createQueryBuilder('cc')
                 ->orderBy('cc.codigoPagoConceptoPk', 'ASC');},
             'property' => 'nombre',
-            'required' => false);                   
+            'required' => false);
         $arrayPropiedadesConceptoRetencionFuente['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $arConfiguracion->getCodigoRetencionFuente());
-        
+
         $arrayPropiedadesConceptoEntidadExamenIngreso = array(
             'class' => 'BrasaRecursoHumanoBundle:RhuEntidadExamen',
             'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('ee')                                        
+                return $er->createQueryBuilder('ee')
                 ->orderBy('ee.codigoEntidadExamenPk', 'ASC');},
             'property' => 'nombre',
-            'required' => false);                   
+            'required' => false);
         $arrayPropiedadesConceptoEntidadExamenIngreso['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuEntidadExamen", $arConfiguracion->getCodigoEntidadExamenIngreso());
-        
+
         $arrayPropiedadesConceptoEntidadComprobanteNomina = array(
             'class' => 'BrasaContabilidadBundle:CtbComprobante',
             'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('c')                                        
+                return $er->createQueryBuilder('c')
                 ->orderBy('c.codigoComprobantePk', 'ASC');},
             'property' => 'nombre',
-            'required' => false);                   
+            'required' => false);
         $arrayPropiedadesConceptoEntidadComprobanteNomina['data'] = $em->getReference("BrasaContabilidadBundle:CtbComprobante", $arConfiguracion->getCodigoComprobantePagoNomina());
-        
+
         $arrayPropiedadesConceptoEntidadComprobanteBanco = array(
             'class' => 'BrasaContabilidadBundle:CtbComprobante',
             'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('c')                                        
+                return $er->createQueryBuilder('c')
                 ->orderBy('c.codigoComprobantePk', 'ASC');},
             'property' => 'nombre',
-            'required' => false);                   
+            'required' => false);
         $arrayPropiedadesConceptoEntidadComprobanteBanco['data'] = $em->getReference("BrasaContabilidadBundle:CtbComprobante", $arConfiguracion->getCodigoComprobantePagoBanco());
         if ($arConfiguracion->getControlPago() == 1){
             $srtControlPago = "SI";
         } else {
             $srtControlPago = "NO";
         }
-        $formConfiguracion = $this->createFormBuilder() 
-            ->add('conceptoAuxilioTransporte', 'entity', $arrayPropiedadesConceptoAuxilioTransporte)    
+        $formConfiguracion = $this->createFormBuilder()
+            ->add('conceptoAuxilioTransporte', 'entity', $arrayPropiedadesConceptoAuxilioTransporte)
             ->add('vrAuxilioTransporte', 'number', array('data' => $arConfiguracion->getVrAuxilioTransporte(), 'required' => true))
             ->add('vrSalario', 'number', array('data' => $arConfiguracion->getVrSalario(), 'required' => true))
-            ->add('conceptoCredito', 'entity', $arrayPropiedadesConceptoCredito, array('required' => true))    
-            ->add('conceptoSeguro', 'entity', $arrayPropiedadesConceptoSeguro, array('required' => true))                
+            ->add('conceptoCredito', 'entity', $arrayPropiedadesConceptoCredito, array('required' => true))
+            ->add('conceptoSeguro', 'entity', $arrayPropiedadesConceptoSeguro, array('required' => true))
             ->add('conceptoHoraDiurnaTrabajada', 'entity', $arrayPropiedadesConceptoHoraDiurnaTrabajada, array('required' => true))
             ->add('conceptoRiesgoProfesional', 'entity', $arrayPropiedadesConceptoRiesgoProfesional, array('required' => true))
-            ->add('porcentajePensionExtra', 'number', array('data' => $arConfiguracion->getPorcentajePensionExtra(), 'required' => true))    
-            ->add('conceptoIncapacidad', 'entity', $arrayPropiedadesConceptoIncapacidad, array('required' => true))    
+            ->add('porcentajePensionExtra', 'number', array('data' => $arConfiguracion->getPorcentajePensionExtra(), 'required' => true))
+            ->add('conceptoIncapacidad', 'entity', $arrayPropiedadesConceptoIncapacidad, array('required' => true))
             ->add('porcentajeIva', 'number', array('data' => $arConfiguracion->getPorcentajeIva(), 'required' => true))
-            ->add('conceptoRetencionFuente', 'entity', $arrayPropiedadesConceptoRetencionFuente, array('required' => true))        
+            ->add('conceptoRetencionFuente', 'entity', $arrayPropiedadesConceptoRetencionFuente, array('required' => true))
             ->add('porcentajeBonificacionNoPrestacional', 'number', array('data' => $arConfiguracion->getPorcentajeBonificacionNoPrestacional(), 'required' => true))
-            ->add('edadMinimaEmpleado', 'number', array('data' => $arConfiguracion->getEdadMinimaEmpleado(), 'required' => true))    
-            ->add('entidadExamenIngreso', 'entity', $arrayPropiedadesConceptoEntidadExamenIngreso, array('required' => true))        
-            ->add('comprobantePagoNomina', 'entity', $arrayPropiedadesConceptoEntidadComprobanteNomina, array('required' => true))            
-            ->add('comprobantePagoBanco', 'entity', $arrayPropiedadesConceptoEntidadComprobanteBanco, array('required' => true))            
+            ->add('edadMinimaEmpleado', 'number', array('data' => $arConfiguracion->getEdadMinimaEmpleado(), 'required' => true))
+            ->add('entidadExamenIngreso', 'entity', $arrayPropiedadesConceptoEntidadExamenIngreso, array('required' => true))
+            ->add('comprobantePagoNomina', 'entity', $arrayPropiedadesConceptoEntidadComprobanteNomina, array('required' => true))
+            ->add('comprobantePagoBanco', 'entity', $arrayPropiedadesConceptoEntidadComprobanteBanco, array('required' => true))
             ->add('controlPago', 'choice', array('choices'   => array($arConfiguracion->getControlPago() => $srtControlPago, '1' => 'SI', '0' => 'NO')))
+            ->add('prestacionesPorcentajeCesantias', 'number', array('data' => $arConfiguracion->getPrestacionesPorcentajeCesantias(), 'required' => true))
+            ->add('prestacionesPorcentajeVacaciones', 'number', array('data' => $arConfiguracion->getPrestacionesPorcentajeVacaciones(), 'required' => true))
+            ->add('aportesPorcentajeCaja', 'number', array('data' => $arConfiguracion->getAportesPorcentajeCaja(), 'required' => true))                                
             ->add('guardar', 'submit', array('label' => 'Actualizar'))
             ->getForm();
         $formConfiguracion->handleRequest($request);
         if ($formConfiguracion->isValid()) {
-            $controles = $request->request->get('form');                        
+            $controles = $request->request->get('form');
             $codigoConceptoAuxilioTransporte = $controles['conceptoAuxilioTransporte'];
             $ValorAuxilioTransporte = $controles['vrAuxilioTransporte'];
             $porcentajePensionExtra = $controles['porcentajePensionExtra'];
             $ValorSalario = $controles['vrSalario'];
             $codigoConceptoCredito = $controles['conceptoCredito'];
             $codigoConceptoIncapacidad = $controles['conceptoIncapacidad'];
-            $codigoConceptoSeguro = $controles['conceptoSeguro'];            
+            $codigoConceptoSeguro = $controles['conceptoSeguro'];
             $codigoConceptoHoraDiurnaTrabajada = $controles['conceptoHoraDiurnaTrabajada'];
             $codigoConceptoRiesgoProfesional = $controles['conceptoRiesgoProfesional'];
             $codigoConceptoRetencionFuente = $controles['conceptoRetencionFuente'];
@@ -155,6 +158,9 @@ class ConfiguracionController extends Controller
             $comprobantePagoNomina = $controles['comprobantePagoNomina'];
             $comprobantePagoBanco = $controles['comprobantePagoBanco'];
             $controlPago = $controles['controlPago'];
+            $prestacionesPorcentajeCesantias = $controles['prestacionesPorcentajeCesantias'];
+            $prestacionesPorcentajeVacaciones = $controles['prestacionesPorcentajeVacaciones'];
+            $aportesPorcentajeCaja = $controles['aportesPorcentajeCaja'];
             // guardar la tarea en la base de datos
             $arConfiguracion->setCodigoAuxilioTransporte($codigoConceptoAuxilioTransporte);
             $arConfiguracion->setVrAuxilioTransporte($ValorAuxilioTransporte);
@@ -163,10 +169,8 @@ class ConfiguracionController extends Controller
             $arConfiguracion->setVrSalario($ValorSalario);
             $arConfiguracion->setCodigoCredito($codigoConceptoCredito);
             $arConfiguracion->setCodigoIncapacidad($codigoConceptoIncapacidad);
-            $arConfiguracion->setCodigoSeguro($codigoConceptoSeguro);            
+            $arConfiguracion->setCodigoSeguro($codigoConceptoSeguro);
             $arConfiguracion->setCodigoHoraDiurnaTrabajada($codigoConceptoHoraDiurnaTrabajada);
-            $arConfiguracion->setCodigoAportePension($codigoConceptoAportePension);
-            $arConfiguracion->setCodigoAporteSalud($codigoConceptoAporteSalud);
             $arConfiguracion->setCodigoEntidadRiesgoFk($codigoConceptoRiesgoProfesional);
             $arConfiguracion->setCodigoRetencionFuente($codigoConceptoRetencionFuente);
             $arConfiguracion->setPorcentajeBonificacionNoPrestacional($porcentajeBonificacionNoPrestacional);
@@ -175,20 +179,23 @@ class ConfiguracionController extends Controller
             $arConfiguracion->setCodigoComprobantePagoNomina($comprobantePagoNomina);
             $arConfiguracion->setCodigoComprobantepagoBanco($comprobantePagoBanco);
             $arConfiguracion->setControlPago($controlPago);
+            $arConfiguracion->setPrestacionesPorcentajeCesantias($prestacionesPorcentajeCesantias);
+            $arConfiguracion->setPrestacionesPorcentajeVacaciones($prestacionesPorcentajeVacaciones);
+            $arConfiguracion->setAportesPorcentajeCaja($aportesPorcentajeCaja);
             $arrControles = $request->request->All();
             $intIndiceConsecutivo = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {
                         $arConsecutivo = new \Brasa\RecursoHumanoBundle\Entity\RhuConsecutivo();
                         $arConsecutivo = $em->getRepository('BrasaRecursoHumanoBundle:RhuConsecutivo')->find($intCodigo);
-                        if(count($arConsecutivo) > 0) {                                            
+                        if(count($arConsecutivo) > 0) {
                                 $intConsecutivo = $arrControles['TxtConsecutivo'.$intCodigo];
                                 $arConsecutivo->setConsecutivo($intConsecutivo);
                                 $em->persist($arConsecutivo);
-                            
+
                         }
                         $intIndiceConsecutivo++;
                     }
-                    
+
             $em->persist($arConfiguracion);
             $em->flush();
             return $this->redirect($this->generateUrl('brs_rhu_configuracion_nomina', array('codigoConfiguracionPk' => 1)));
@@ -199,5 +206,5 @@ class ConfiguracionController extends Controller
             'arPagoConcepto' => $arPagoConcepto
         ));
     }
-    
+
 }

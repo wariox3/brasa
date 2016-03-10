@@ -644,13 +644,15 @@ class RhuProgramacionPagoRepository extends EntityRepository {
     public function liquidar($codigoProgramacionPago) {
         $em = $this->getEntityManager();
         set_time_limit(0);
+        $douNeto = 0;
+        $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+        $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);        
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
         $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-        $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
-        $douNeto = 0;
+        $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));        
         foreach ($arPagos as $arPago) {
-            $douNeto += $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->Liquidar($arPago->getCodigoPagoPk());
+            $douNeto += $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->Liquidar($arPago->getCodigoPagoPk(), $arConfiguracion);
         }
         $arProgramacionPago->setVrNeto($douNeto);
         $em->persist($arProgramacionPago);

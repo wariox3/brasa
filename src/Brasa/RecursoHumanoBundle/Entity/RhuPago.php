@@ -133,6 +133,11 @@ class RhuPago
      * @ORM\Column(name="vr_pension_empleador", type="float")
      */
     private $vrPensionEmpleador = 0;        
+
+    /**
+     * @ORM\Column(name="vr_eps_empleador", type="float")
+     */
+    private $vrEpsEmpleador = 0;
     
     /**
      * @ORM\Column(name="vr_arp", type="float")
@@ -160,14 +165,19 @@ class RhuPago
     private $vrCesantias = 0;    
     
     /**
-     * @ORM\Column(name="vr_vacaciones", type="float")
+     * @ORM\Column(name="vr_intereses_cesantias", type="float")
      */
-    private $vrVacaciones = 0;    
+    private $vrInteresesCesantias = 0;    
     
     /**
-     * @ORM\Column(name="vr_administracion", type="float")
+     * @ORM\Column(name="vr_vacaciones", type="float")
      */
-    private $vrAdministracion = 0;    
+    private $vrVacaciones = 0;           
+    
+    /**
+     * @ORM\Column(name="vr_primas", type="float")
+     */
+    private $vrPrimas = 0;     
     
     /**
      * @ORM\Column(name="vr_neto", type="float")
@@ -177,12 +187,7 @@ class RhuPago
     /**
      * @ORM\Column(name="vr_bruto", type="float")
      */
-    private $vrBruto = 0;                
-    
-    /**
-     * @ORM\Column(name="vr_total_cobrar", type="float")
-     */
-    private $vrTotalCobrar = 0;    
+    private $vrBruto = 0;                       
 
     /**
      * @ORM\Column(name="vr_costo", type="float")
@@ -309,6 +314,7 @@ class RhuPago
      */
     protected $pagosBancosDetallePagoRel;    
 
+
     /**
      * Constructor
      */
@@ -319,6 +325,7 @@ class RhuPago
         $this->serviciosCobrarPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->facturasDetallesPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->creditosPagosPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosBancosDetallePagoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -716,6 +723,54 @@ class RhuPago
     }
 
     /**
+     * Set vrAdicionalValorNoPrestasional
+     *
+     * @param float $vrAdicionalValorNoPrestasional
+     *
+     * @return RhuPago
+     */
+    public function setVrAdicionalValorNoPrestasional($vrAdicionalValorNoPrestasional)
+    {
+        $this->vrAdicionalValorNoPrestasional = $vrAdicionalValorNoPrestasional;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAdicionalValorNoPrestasional
+     *
+     * @return float
+     */
+    public function getVrAdicionalValorNoPrestasional()
+    {
+        return $this->vrAdicionalValorNoPrestasional;
+    }
+
+    /**
+     * Set vrAdicionalCotizacion
+     *
+     * @param float $vrAdicionalCotizacion
+     *
+     * @return RhuPago
+     */
+    public function setVrAdicionalCotizacion($vrAdicionalCotizacion)
+    {
+        $this->vrAdicionalCotizacion = $vrAdicionalCotizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAdicionalCotizacion
+     *
+     * @return float
+     */
+    public function getVrAdicionalCotizacion()
+    {
+        return $this->vrAdicionalCotizacion;
+    }
+
+    /**
      * Set vrAuxilioTransporte
      *
      * @param float $vrAuxilioTransporte
@@ -764,30 +819,6 @@ class RhuPago
     }
 
     /**
-     * Set vrArp
-     *
-     * @param float $vrArp
-     *
-     * @return RhuPago
-     */
-    public function setVrArp($vrArp)
-    {
-        $this->vrArp = $vrArp;
-
-        return $this;
-    }
-
-    /**
-     * Get vrArp
-     *
-     * @return float
-     */
-    public function getVrArp()
-    {
-        return $this->vrArp;
-    }
-
-    /**
      * Set vrEps
      *
      * @param float $vrEps
@@ -833,6 +864,78 @@ class RhuPago
     public function getVrPension()
     {
         return $this->vrPension;
+    }
+
+    /**
+     * Set vrPensionEmpleador
+     *
+     * @param float $vrPensionEmpleador
+     *
+     * @return RhuPago
+     */
+    public function setVrPensionEmpleador($vrPensionEmpleador)
+    {
+        $this->vrPensionEmpleador = $vrPensionEmpleador;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPensionEmpleador
+     *
+     * @return float
+     */
+    public function getVrPensionEmpleador()
+    {
+        return $this->vrPensionEmpleador;
+    }
+
+    /**
+     * Set vrEpsEmpleador
+     *
+     * @param float $vrEpsEmpleador
+     *
+     * @return RhuPago
+     */
+    public function setVrEpsEmpleador($vrEpsEmpleador)
+    {
+        $this->vrEpsEmpleador = $vrEpsEmpleador;
+
+        return $this;
+    }
+
+    /**
+     * Get vrEpsEmpleador
+     *
+     * @return float
+     */
+    public function getVrEpsEmpleador()
+    {
+        return $this->vrEpsEmpleador;
+    }
+
+    /**
+     * Set vrArp
+     *
+     * @param float $vrArp
+     *
+     * @return RhuPago
+     */
+    public function setVrArp($vrArp)
+    {
+        $this->vrArp = $vrArp;
+
+        return $this;
+    }
+
+    /**
+     * Get vrArp
+     *
+     * @return float
+     */
+    public function getVrArp()
+    {
+        return $this->vrArp;
     }
 
     /**
@@ -956,30 +1059,6 @@ class RhuPago
     }
 
     /**
-     * Set vrAdministracion
-     *
-     * @param float $vrAdministracion
-     *
-     * @return RhuPago
-     */
-    public function setVrAdministracion($vrAdministracion)
-    {
-        $this->vrAdministracion = $vrAdministracion;
-
-        return $this;
-    }
-
-    /**
-     * Get vrAdministracion
-     *
-     * @return float
-     */
-    public function getVrAdministracion()
-    {
-        return $this->vrAdministracion;
-    }
-
-    /**
      * Set vrNeto
      *
      * @param float $vrNeto
@@ -1025,30 +1104,6 @@ class RhuPago
     public function getVrBruto()
     {
         return $this->vrBruto;
-    }
-
-    /**
-     * Set vrTotalCobrar
-     *
-     * @param float $vrTotalCobrar
-     *
-     * @return RhuPago
-     */
-    public function setVrTotalCobrar($vrTotalCobrar)
-    {
-        $this->vrTotalCobrar = $vrTotalCobrar;
-
-        return $this;
-    }
-
-    /**
-     * Get vrTotalCobrar
-     *
-     * @return float
-     */
-    public function getVrTotalCobrar()
-    {
-        return $this->vrTotalCobrar;
     }
 
     /**
@@ -1220,6 +1275,30 @@ class RhuPago
     }
 
     /**
+     * Set estadoPagadoBanco
+     *
+     * @param boolean $estadoPagadoBanco
+     *
+     * @return RhuPago
+     */
+    public function setEstadoPagadoBanco($estadoPagadoBanco)
+    {
+        $this->estadoPagadoBanco = $estadoPagadoBanco;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagadoBanco
+     *
+     * @return boolean
+     */
+    public function getEstadoPagadoBanco()
+    {
+        return $this->estadoPagadoBanco;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -1289,6 +1368,54 @@ class RhuPago
     public function getArchivoExportadoBanco()
     {
         return $this->archivoExportadoBanco;
+    }
+
+    /**
+     * Set diasAusentismo
+     *
+     * @param integer $diasAusentismo
+     *
+     * @return RhuPago
+     */
+    public function setDiasAusentismo($diasAusentismo)
+    {
+        $this->diasAusentismo = $diasAusentismo;
+
+        return $this;
+    }
+
+    /**
+     * Get diasAusentismo
+     *
+     * @return integer
+     */
+    public function getDiasAusentismo()
+    {
+        return $this->diasAusentismo;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuPago
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
     }
 
     /**
@@ -1616,146 +1743,50 @@ class RhuPago
     }
 
     /**
-     * Set estadoPagadoBanco
+     * Set vrInteresesCesantias
      *
-     * @param boolean $estadoPagadoBanco
+     * @param float $vrInteresesCesantias
      *
      * @return RhuPago
      */
-    public function setEstadoPagadoBanco($estadoPagadoBanco)
+    public function setVrInteresesCesantias($vrInteresesCesantias)
     {
-        $this->estadoPagadoBanco = $estadoPagadoBanco;
+        $this->vrInteresesCesantias = $vrInteresesCesantias;
 
         return $this;
     }
 
     /**
-     * Get estadoPagadoBanco
-     *
-     * @return boolean
-     */
-    public function getEstadoPagadoBanco()
-    {
-        return $this->estadoPagadoBanco;
-    }
-
-    /**
-     * Set diasAusentismo
-     *
-     * @param integer $diasAusentismo
-     *
-     * @return RhuPago
-     */
-    public function setDiasAusentismo($diasAusentismo)
-    {
-        $this->diasAusentismo = $diasAusentismo;
-
-        return $this;
-    }
-
-    /**
-     * Get diasAusentismo
-     *
-     * @return integer
-     */
-    public function getDiasAusentismo()
-    {
-        return $this->diasAusentismo;
-    }
-
-    /**
-     * Set vrAdicionalValorNoPrestasional
-     *
-     * @param float $vrAdicionalValorNoPrestasional
-     *
-     * @return RhuPago
-     */
-    public function setVrAdicionalValorNoPrestasional($vrAdicionalValorNoPrestasional)
-    {
-        $this->vrAdicionalValorNoPrestasional = $vrAdicionalValorNoPrestasional;
-
-        return $this;
-    }
-
-    /**
-     * Get vrAdicionalValorNoPrestasional
+     * Get vrInteresesCesantias
      *
      * @return float
      */
-    public function getVrAdicionalValorNoPrestasional()
+    public function getVrInteresesCesantias()
     {
-        return $this->vrAdicionalValorNoPrestasional;
+        return $this->vrInteresesCesantias;
     }
 
     /**
-     * Set vrAdicionalCotizacion
+     * Set vrPrimas
      *
-     * @param float $vrAdicionalCotizacion
+     * @param float $vrPrimas
      *
      * @return RhuPago
      */
-    public function setVrAdicionalCotizacion($vrAdicionalCotizacion)
+    public function setVrPrimas($vrPrimas)
     {
-        $this->vrAdicionalCotizacion = $vrAdicionalCotizacion;
+        $this->vrPrimas = $vrPrimas;
 
         return $this;
     }
 
     /**
-     * Get vrAdicionalCotizacion
+     * Get vrPrimas
      *
      * @return float
      */
-    public function getVrAdicionalCotizacion()
+    public function getVrPrimas()
     {
-        return $this->vrAdicionalCotizacion;
-    }
-
-    /**
-     * Set codigoUsuario
-     *
-     * @param string $codigoUsuario
-     *
-     * @return RhuPago
-     */
-    public function setCodigoUsuario($codigoUsuario)
-    {
-        $this->codigoUsuario = $codigoUsuario;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoUsuario
-     *
-     * @return string
-     */
-    public function getCodigoUsuario()
-    {
-        return $this->codigoUsuario;
-    }
-
-    /**
-     * Set vrPensionEmpleador
-     *
-     * @param float $vrPensionEmpleador
-     *
-     * @return RhuPago
-     */
-    public function setVrPensionEmpleador($vrPensionEmpleador)
-    {
-        $this->vrPensionEmpleador = $vrPensionEmpleador;
-
-        return $this;
-    }
-
-    /**
-     * Get vrPensionEmpleador
-     *
-     * @return float
-     */
-    public function getVrPensionEmpleador()
-    {
-        return $this->vrPensionEmpleador;
+        return $this->vrPrimas;
     }
 }

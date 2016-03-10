@@ -155,11 +155,30 @@
                         <div class="panel-heading">Información de la seguridad social</div>
                             <div class="panel-body">
                                 <div class="form-group form-group-sm">
-                                <label class="col-sm-3 control-label">Control pago:</label>
+                                <label class="col-sm-3 control-label">Control pago examen:</label>
                                 <div class="col-sm-9">
                                         {{ form_widget(formConfiguracion.controlPago, { 'attr': {'class': 'form-control'} }) }}
+                                        <p style="font-size: 0.8em;">- Dato para determinar pago examen</p>
+                                </div>                                        
                                 </div>
-                            </div>
+                                <div class="form-group form-group-sm">    
+                                    <label class="col-sm-3 control-label">Porcentaje cesantias:</label>
+                                    <div class="col-sm-9">
+                                            {{ form_widget(formConfiguracion.prestacionesPorcentajeCesantias, { 'attr': {'class': 'form-control'} }) }}
+                                    </div>
+                                </div>                                        
+                                <div class="form-group form-group-sm">    
+                                    <label class="col-sm-3 control-label">Porcentaje vacaciones:</label>
+                                    <div class="col-sm-9">
+                                            {{ form_widget(formConfiguracion.prestacionesPorcentajeVacaciones, { 'attr': {'class': 'form-control'} }) }}
+                                    </div>
+                                </div>                                    
+                                <div class="form-group form-group-sm">    
+                                    <label class="col-sm-3 control-label">Porcentaje caja:</label>
+                                    <div class="col-sm-9">
+                                            {{ form_widget(formConfiguracion.aportesPorcentajeCaja, { 'attr': {'class': 'form-control'} }) }}
+                                    </div>
+                                </div>                                    
                             </div>
                     </div>            
                 </div> 

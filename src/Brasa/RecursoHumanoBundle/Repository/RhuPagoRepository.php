@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuPagoRepository extends EntityRepository {
     
-    public function liquidar($codigoPago) {        
+    public function liquidar($codigoPago, $arConfiguracion) {        
         $em = $this->getEntityManager();
         $douSalario = 0;
         $douAuxilioTransporte = 0;
@@ -21,10 +21,6 @@ class RhuPagoRepository extends EntityRepository {
         $douAdicionCotizacion = 0;
         $douPension = 0;
         $douEps = 0;
-        $douCaja = 0;
-        $douCesantias = 0;
-        $douVacaciones = 0;
-        $douAdministracion = 0;
         $douDeducciones = 0;
         $douDevengado = 0;        
         $douNeto = 0;
@@ -80,9 +76,11 @@ class RhuPagoRepository extends EntityRepository {
             $intDiasAusentismo += $arPagoDetalle->getDiasAusentismo();
         }
         
-        $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();        
+        //$arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();                        
         $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);                                
         
+        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $arContrato = $arPago->getContratoRel();
         $arPago->setVrDevengado($douDevengado);
         $arPago->setVrDeducciones($douDeducciones);
         $douNeto = $douDevengado - $douDeducciones;
@@ -93,26 +91,44 @@ class RhuPagoRepository extends EntityRepository {
         $arPago->setVrAdicionalTiempo($douAdicionTiempo);
         $arPago->setVrAdicionalValor($douAdicionValor);
         $arPago->setVrAdicionalValorNoPrestasional($douAdicionValorNoPrestacional);
-        $arPago->setVrAdicionalCotizacion($douAdicionCotizacion);        
-        $arPago->setVrArp(0);
-        $arPago->setVrPension($douPension);
-        $arPago->setVrEps($douEps);
-        $arPago->setVrCaja($douCaja);
-        $arPago->setVrCesantias($douCesantias);
-        $arPago->setVrVacaciones($douVacaciones);
-        $arPago->setVrAdministracion($douAdministracion);
-        //Tambien llamado total ejercicio
-        $arPago->setVrCosto(0);
-        $arPago->setVrTotalCobrar(0);        
+        $arPago->setVrAdicionalCotizacion($douAdicionCotizacion);                
         $arPago->setVrIngresoBaseCotizacion($douIngresoBaseCotizacion);
         $arPago->setVrIngresoBasePrestacion($douIngresoBasePrestacion);
         $arPago->setDiasAusentismo($intDiasAusentismo);
         
+        $floPorcentajeRiesgos = $arContrato->getClasificacionRiesgoRel()->getPorcentaje();
+        $floPorcentajePension = $arContrato->getTipoPensionRel()->getPorcentajeEmpleador();
+        $floPorcentajeSalud = $arContrato->getTipoSaludRel()->getPorcentajeEmpleador();
+        $floPorcentajeCaja = $arConfiguracion->getAportesPorcentajeCaja();
+        $floPorcentajeCesantias = $arConfiguracion->getPrestacionesPorcentajeCesantias();
+        $floPorcentajeVacaciones = $arConfiguracion->getPrestacionesPorcentajeVacaciones();
+        $douArp = ($douIngresoBaseCotizacion * $floPorcentajeRiesgos)/100;        
+        $douPensionEmpleador = ($douIngresoBaseCotizacion * $floPorcentajePension) / 100; 
+        $douSaludEmpleador = ($douIngresoBaseCotizacion * $floPorcentajeSalud) / 100;         
+        $douCaja = ($douIngresoBaseCotizacion * $floPorcentajeCaja) / 100; //Porcentaje 4
+        $douCesantias = (($douIngresoBaseCotizacion + $arPago->getVrAuxilioTransporteCotizacion()) * $floPorcentajeCesantias) / 100; // Porcentaje 17.66                
+        $douVacaciones = ($arPago->getVrSalarioPeriodo() * $floPorcentajeVacaciones) / 100; // 4.5
+        
+        //Aportes empleado
+        $arPago->setVrPension($douPensionEmpleador);
+        $arPago->setVrEps($douEps);                                                
+        
         //Liquidar aportes
+        $arPago->setVrPensionEmpleador($douPensionEmpleador);
+        $arPago->setVrEpsEmpleador($douSaludEmpleador);
+        $arPago->setVrArp($douArp);
+        $arPago->setVrCaja($douCaja);
+        $arPago->setvrSena(0);
+        $arPago->setvrIcbf(0);
         
         
         //Liquidar prestaciones
-        
+        $arPago->setVrPrimas(0);
+        $arPago->setVrCesantias($douCesantias);
+        $arPago->setVrInteresesCesantias(0);
+        $arPago->setVrVacaciones($douVacaciones);        
+                
+        $arPago->setVrCosto(0);                       
         $em->persist($arPago);
         $em->flush();
         return $douNeto;

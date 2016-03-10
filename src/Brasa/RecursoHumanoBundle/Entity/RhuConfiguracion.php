@@ -109,8 +109,22 @@ class RhuConfiguracion
     /**     
      * @ORM\Column(name="control_pago", type="boolean")
      */    
-    private $controlPago = 0;
+    private $controlPago = 0;        
+
+    /**
+     * @ORM\Column(name="prestaciones_porcentaje_cesantias", type="float")
+     */    
+    private $prestacionesPorcentajeCesantias = 0;
     
+    /**
+     * @ORM\Column(name="prestaciones_porcentaje_vacaciones", type="float")
+     */    
+    private $prestacionesPorcentajeVacaciones = 0;        
+    
+    /**
+     * @ORM\Column(name="aportes_porcentaje_caja", type="float")
+     */    
+    private $aportesPorcentajeCaja = 0;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="configuracionEntidadRiesgoProfesionalRel")
@@ -621,5 +635,77 @@ class RhuConfiguracion
     public function getEntidadRiesgoProfesionalRel()
     {
         return $this->entidadRiesgoProfesionalRel;
+    }
+
+    /**
+     * Set prestacionesPorcentajeCesantias
+     *
+     * @param float $prestacionesPorcentajeCesantias
+     *
+     * @return RhuConfiguracion
+     */
+    public function setPrestacionesPorcentajeCesantias($prestacionesPorcentajeCesantias)
+    {
+        $this->prestacionesPorcentajeCesantias = $prestacionesPorcentajeCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get prestacionesPorcentajeCesantias
+     *
+     * @return float
+     */
+    public function getPrestacionesPorcentajeCesantias()
+    {
+        return $this->prestacionesPorcentajeCesantias;
+    }
+
+    /**
+     * Set prestacionesPorcentajeVacaciones
+     *
+     * @param float $prestacionesPorcentajeVacaciones
+     *
+     * @return RhuConfiguracion
+     */
+    public function setPrestacionesPorcentajeVacaciones($prestacionesPorcentajeVacaciones)
+    {
+        $this->prestacionesPorcentajeVacaciones = $prestacionesPorcentajeVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get prestacionesPorcentajeVacaciones
+     *
+     * @return float
+     */
+    public function getPrestacionesPorcentajeVacaciones()
+    {
+        return $this->prestacionesPorcentajeVacaciones;
+    }
+
+    /**
+     * Set aportesPorcentajeCaja
+     *
+     * @param float $aportesPorcentajeCaja
+     *
+     * @return RhuConfiguracion
+     */
+    public function setAportesPorcentajeCaja($aportesPorcentajeCaja)
+    {
+        $this->aportesPorcentajeCaja = $aportesPorcentajeCaja;
+
+        return $this;
+    }
+
+    /**
+     * Get aportesPorcentajeCaja
+     *
+     * @return float
+     */
+    public function getAportesPorcentajeCaja()
+    {
+        return $this->aportesPorcentajeCaja;
     }
 }
