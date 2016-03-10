@@ -1,7 +1,11 @@
 {% extends '::base_sin_menu.html.twig' %}
 {% block title %}Contrato prorroga nuevo - Soga App{% endblock %} 
 {% block content %}
-<div class="container">    
+<div class="container">
+    <script type="text/javascript">
+    $(document).ready(function() {
+    $('.date').datepicker({ dateFormat: 'yy-mm-dd' ,dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Deciembre" ], monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]})  });
+    </script>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
     {{ form_errors(form) }}
     <h3>Nuevo contrato prorroga</h3>
@@ -11,13 +15,13 @@
             <div class="form-group form-group-sm">
                 <label for="form_fechaInicioNueva" class="col-sm-5 control-label">Fecha desde:</label>
                 <div class="col-sm-7">
-                        {{ form_widget(form.fechaInicioNueva, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.fechaInicioNueva) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">
                 <label for="form_fechaFinalNueva" class="col-sm-5 control-label">Fecha hasta:</label>
                 <div class="col-sm-7">
-                        {{ form_widget(form.fechaFinalNueva, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.fechaFinalNueva) }}
                 </div>
             </div>    
             <div class="form-group form-group-sm">

@@ -26,8 +26,8 @@ class ContratoProrrogaController extends Controller
             $detalle = $arContratoProrroga->getDetalle();
         }    
         $form = $this->createFormBuilder()
-            ->add('fechaInicioNueva', 'date', array('data' => $fechaDesdeProrroga))
-            ->add('fechaFinalNueva', 'date', array('data' => $fechaHastaProrroga))    
+            ->add('fechaInicioNueva','date',array('data' => $fechaDesdeProrroga, 'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date')))
+            ->add('fechaFinalNueva','date',array('data' => $fechaHastaProrroga, 'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date')))
             ->add('detalle', 'text', array('data' => $detalle,'required' => true))
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
