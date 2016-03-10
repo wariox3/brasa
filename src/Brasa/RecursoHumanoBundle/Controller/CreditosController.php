@@ -214,7 +214,7 @@ class CreditosController extends Controller
                             $arCredito->setSaldo($vrSaltoTotal);
                             $arCredito->setSaldoTotal($vrSaltoTotal);
                             if($codigoCredito == 0) {
-                                $arCredito->setCodigoUsuario($arUsuario->getId());
+                                $arCredito->setCodigoUsuario($arUsuario->getUserName());
                             }
                             $em->persist($arCredito);
                             $em->flush();

@@ -46,7 +46,7 @@ class PagosAdicionalesAgregarController extends Controller
                             $arPagoAdicional->setCantidad($intHoras);
                             $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);                            
                             $arPagoAdicional->setTipoAdicional(4);
-                            $arPagoAdicional->setCodigoUsuario($arUsuario->getId());
+                            $arPagoAdicional->setCodigoUsuario($arUsuario->getUserName());
                             $em->persist($arPagoAdicional);                                
                         }                        
                         $intIndice++;
@@ -166,7 +166,7 @@ class PagosAdicionalesAgregarController extends Controller
                                     $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);                            
                                     $arPagoAdicional->setTipoAdicional(4);
                                     $arPagoAdicional->setpermanente(1);
-                                    $arPagoAdicional->setCodigoUsuario($arUsuario->getId());
+                                    $arPagoAdicional->setCodigoUsuario($arUsuario->getUserName());
                                     $em->persist($arPagoAdicional);                                
                                 }                        
                                 $intIndice++;
@@ -318,7 +318,7 @@ class PagosAdicionalesAgregarController extends Controller
                         $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);                    
                         $arPagoAdicional->setPrestacional($arPagoConcepto->getPrestacional());
                         $arPagoAdicional->setTipoAdicional($tipo);
-                        $arPagoAdicional->setCodigoUsuario($arUsuario->getId());
+                        $arPagoAdicional->setCodigoUsuario($arUsuario->getUserName());
                         $em->persist($arPagoAdicional);                                                        
                         $em->flush();                        
                         echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                        
@@ -507,7 +507,7 @@ class PagosAdicionalesAgregarController extends Controller
                                 $arPagoAdicional->setTipoAdicional($tipo);
                                 $arPagoAdicional->setpermanente(1);
                                 $arPagoAdicional->setAplicaDiaLaborado($form->get('aplicarDiaLaborado')->getData());
-                                $arPagoAdicional->setCodigoUsuario($arUsuario->getId());
+                                $arPagoAdicional->setCodigoUsuario($arUsuario->getUserName());
                                 $em->persist($arPagoAdicional);                                                        
                                 $em->flush();
                             }

@@ -128,7 +128,7 @@ class BaseEntidadExamenController extends Controller
             // guardar la tarea en la base de datos
             $arUsuario = $this->get('security.context')->getToken()->getUser();
             if($codigoEntidadExamenPk == 0) {
-               $arEntidadExamen->setCodigoUsuario($arUsuario->getId());
+               $arEntidadExamen->setCodigoUsuario($arUsuario->getUserName());
             }
             $em->persist($arEntidadExamen);
             $arEntidadExamen = $formEntidadExamen->getData();
@@ -223,7 +223,7 @@ class BaseEntidadExamenController extends Controller
                                 $arEntidadExamenDetalle->setExamenTipoRel($arExamenTipos);
                                 $duoPrecio = $arrControles['TxtPrecio'][$intIndice];
                                 $arEntidadExamenDetalle->setPrecio($duoPrecio);
-                                $arEntidadExamenDetalle->setCodigoUsuario($arUsuario->getId());
+                                $arEntidadExamenDetalle->setCodigoUsuario($arUsuario->getUserName());
                                 $em->persist($arEntidadExamenDetalle);
                             }
                                                             

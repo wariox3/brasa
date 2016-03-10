@@ -118,7 +118,7 @@ class IncapacidadesController extends Controller
                                         $arIncapacidad->setVrSaldo($floVrIncapacidad);
                                         $arIncapacidad->setCentroCostoRel($arEmpleado->getCentroCostoRel());
                                         if($codigoIncapacidad == 0) {
-                                            $arIncapacidad->setCodigoUsuario($arUsuario->getId());
+                                            $arIncapacidad->setCodigoUsuario($arUsuario->getUserName());
                                         }
                                         $em->persist($arIncapacidad);
                                         $em->flush();

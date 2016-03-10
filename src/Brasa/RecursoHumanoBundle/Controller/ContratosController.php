@@ -195,7 +195,7 @@ class ContratosController extends Controller
                                     $arContrato->setVrSalarioPago($arContrato->getVrSalario());
                                 }
 
-                                $arContrato->setCodigoUsuario($arUsuario->getId());
+                                $arContrato->setCodigoUsuario($arUsuario->getUserName());
                                 $em->persist($arContrato);
                                 $em->flush();
                                 $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
@@ -374,7 +374,7 @@ class ContratosController extends Controller
                             $arLiquidacion->setLiquidarCesantias(1);
                             $arLiquidacion->setLiquidarPrima(1);
                             $arLiquidacion->setLiquidarVacaciones(1);
-                            $arLiquidacion->setCodigoUsuario($arUsuario->getId());
+                            $arLiquidacion->setCodigoUsuario($arUsuario->getUserName());
                             $em->persist($arLiquidacion);
                             //Verificar creditos
                             $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();

@@ -40,7 +40,7 @@ class CambioSalarioController extends Controller
                 $arCambioSalario->setVrSalarioNuevo($form->get('salarioNuevo')->getData());    
                 if ($codigoCambioSalario == 0){
                     $arCambioSalario->setVrSalarioAnterior($arContrato->getVrSalario());
-                    $arCambioSalario->setCodigoUsuario($arUsuario->getId());
+                    $arCambioSalario->setCodigoUsuario($arUsuario->getUserName());
                 }
                 $arCambioSalario->setDetalle($form->get('detalle')->getData());
                 $arEmpleadoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();

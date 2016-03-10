@@ -250,7 +250,7 @@ class BaseEmpleadoController extends Controller
             $arrControles = $request->request->All();
             $arEmpleado = $form->getData();
             if($codigoEmpleado == 0) {
-                $arEmpleado->setCodigoUsuario($arUsuario->getId());
+                $arEmpleado->setCodigoUsuario($arUsuario->getUserName());
             }
             $arEmpleado->setNombreCorto($arEmpleado->getNombre1() . " " . $arEmpleado->getNombre2() . " " .$arEmpleado->getApellido1() . " " . $arEmpleado->getApellido2());
             if ($arEmpleado->getLibretaMilitar() <> 0){

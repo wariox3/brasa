@@ -77,7 +77,7 @@ class ContratoProrrogaController extends Controller
                                 $arContratoProrroga->setMeses($interval);
                                 $arContratoProrroga->setDetalle($form->get('detalle')->getData());
                                 $arContratoProrroga->setEstadoVigente(1);
-                                $arContratoProrroga->setCodigoUsuario($arUsuario->getId());
+                                $arContratoProrroga->setCodigoUsuario($arUsuario->getUserName());
                                 $arContrato->setFechaHasta($form->get('fechaFinalNueva')->getData());
                                 $arContrato->setFechaProrrogaInicio($form->get('fechaInicioNueva')->getData());
                                 $arContrato->setFechaProrrogaFinal($form->get('fechaFinalNueva')->getData());
@@ -112,7 +112,7 @@ class ContratoProrrogaController extends Controller
                             $arContratoProrroga->setMeses($interval);
                             $arContratoProrroga->setDetalle($form->get('detalle')->getData());
                             $arContratoProrroga->setEstadoVigente(1);
-                            $arContratoProrroga->setCodigoUsuario($arUsuario->getId());
+                            $arContratoProrroga->setCodigoUsuario($arUsuario->getUserName());
                             $arContrato->setFechaHasta($form->get('fechaFinalNueva')->getData());
                             $arContrato->setFechaProrrogaInicio($form->get('fechaInicioNueva')->getData());
                             $arContrato->setFechaProrrogaFinal($form->get('fechaFinalNueva')->getData());

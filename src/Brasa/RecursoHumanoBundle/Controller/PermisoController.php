@@ -81,7 +81,7 @@ class PermisoController extends Controller
                         $srtTotalHoras = date_diff($arPermiso->getHoraLlegada(),$arPermiso->getHoraSalida());
                         $arPermiso->setHorasPermiso($srtTotalHoras->format('%H'));
                         if ($codigoPermiso == 0){
-                            $arPermiso->setCodigoUsuario($arUsuario->getId());
+                            $arPermiso->setCodigoUsuario($arUsuario->getUserName());
                         }
                         $em->persist($arPermiso);
                         $em->flush();

@@ -80,7 +80,7 @@ class LicenciasController extends Controller
                                     $intDias = $intDias + 1;
                                     $arLicencia->setCantidad($intDias);
                                     if($codigoLicencia == 0) {
-                                        $arLicencia->setCodigoUsuario($arUsuario->getId());
+                                        $arLicencia->setCodigoUsuario($arUsuario->getUserName());
                                     }
                                     $em->persist($arLicencia);
                                     $em->flush();                        

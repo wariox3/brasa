@@ -184,7 +184,7 @@ class AccidenteTrabajoController extends Controller
                         $arAccidenteTrabajo->setCentroCostoRel($arEmpleado->getCentroCostoRel());
                         $arAccidenteTrabajo->setEntidadRiesgoProfesionalRel(($arEntidadRiesgo));
                         if($codigoAccidenteTrabajo == 0) {
-                            $arAccidenteTrabajo->setCodigoUsuario($arUsuario->getId());
+                            $arAccidenteTrabajo->setCodigoUsuario($arUsuario->getUserName());
                         }
                         $em->persist($arAccidenteTrabajo);
                         $em->flush();

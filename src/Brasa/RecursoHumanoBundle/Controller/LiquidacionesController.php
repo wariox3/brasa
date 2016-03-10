@@ -127,12 +127,12 @@ class LiquidacionesController extends Controller
                                 $floValor = $arrControles['TxtValor'][$intIndice];
                                 $arLiquidacionAdicional->setVrDeduccion($floValor);
                                 $arLiquidacionAdicional->setDetalle($arrControles['TxtDetalle'][$intIndice]);
-                                $arLiquidacionAdicional->setCodigoUsuario($arUsuario->getId());
+                                $arLiquidacionAdicional->setCodigoUsuario($arUsuario->getUserName());
                             }else {
                                 $floValor = $arrControles['TxtValor'][$intIndice];
                                 $arLiquidacionAdicional->setVrBonificacion($floValor);
                                 $arLiquidacionAdicional->setDetalle($arrControles['TxtDetalle'][$intIndice]);
-                                $arLiquidacionAdicional->setCodigoUsuario($arUsuario->getId());
+                                $arLiquidacionAdicional->setCodigoUsuario($arUsuario->getUserName());
                             }
                             
                             $em->persist($arLiquidacionAdicional);

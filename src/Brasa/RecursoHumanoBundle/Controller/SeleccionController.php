@@ -85,7 +85,7 @@ class SeleccionController extends Controller
             $arSeleccion->setNombreCorto($arSeleccion->getNombre1() . " " . $arSeleccion->getNombre2() . " " .$arSeleccion->getApellido1() . " " . $arSeleccion->getApellido2());
             $arSeleccion->setFecha(new \DateTime('now'));
             if($codigoSeleccion == 0) {
-                $arSeleccion->setCodigoUsuario($arUsuario->getId());
+                $arSeleccion->setCodigoUsuario($arUsuario->getUserName());
             }
             $em->persist($arSeleccion);
             $em->flush();

@@ -78,7 +78,7 @@ class DisciplinarioController extends Controller
                         $arDisciplinario->setCentroCostoRel($arEmpleado->getCentroCostoRel());
                         $arDisciplinario->setCargoRel($arEmpleado->getCargoRel());
                         if($codigoDisciplinario == 0) {
-                            $arDisciplinario->setCodigoUsuario($arUsuario->getId());
+                            $arDisciplinario->setCodigoUsuario($arUsuario->getUserName());
                         }
                         $em->persist($arDisciplinario);
                         $em->flush();
