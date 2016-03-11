@@ -79,22 +79,22 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $arPago->setContratoRel($arContrato);                        
                         $arPago->setDiasPeriodo($arProgramacionPagoDetalle->getDias());
                         $arPago->setCodigoUsuario($arProgramacionPagoProcesar->getCodigoUsuario());
-                        $em->persist($arPago);
+                        
 
                         //Parametros generales
                         $intHorasLaboradas = $arProgramacionPagoDetalle->getHorasPeriodoReales();
-                        $intDiasTransporte = $arProgramacionPagoDetalle->getDiasReales();
+                        $intDiasTransporte = $arProgramacionPagoDetalle->getDiasReales(); 
+                        $intFactorDia = $arProgramacionPagoDetalle->getFactorDia();
                         $douVrDia = $arProgramacionPagoDetalle->getVrDia();
                         $douVrHora = $arProgramacionPagoDetalle->getVrHora();
                         $douVrSalarioMinimo = $arConfiguracion->getVrSalario();
                         $douVrHoraSalarioMinimo = ($douVrSalarioMinimo / 30) / 8;
-                        $douDevengado = 0;
                         $douIngresoBasePrestacional = 0;
                         $douIngresoBaseCotizacion = 0;                        
                         
                         //Procesar vacaciones
                         $intDiasVacaciones = $arProgramacionPagoDetalle->getDiasVacaciones();
-                        $intHorasVacaciones = $intDiasVacaciones * 8;
+                        $intHorasVacaciones = $intDiasVacaciones * $intFactorDia;
                         if($intDiasVacaciones > 0) {
                             $intHorasLaboradas = $intHorasLaboradas - $intHorasVacaciones;
                             $intDiasTransporte = $intDiasTransporte - $intDiasVacaciones;                                        
@@ -106,7 +106,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                             $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
                             $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
                             $arPagoDetalle->setNumeroHoras($intHorasVacaciones);
-                            $arPagoDetalle->setNumeroDias($intHorasVacaciones / 8);
+                            $arPagoDetalle->setNumeroDias($intHorasVacaciones / $intFactorDia);
                             $arPagoDetalle->setVrIngresoBasePrestacion($douIngresoBaseCotizacionVacaciones);
                             $arPagoDetalle->setVrIngresoBaseCotizacion($douIngresoBaseCotizacionVacaciones);
                             $em->persist($arPagoDetalle);                                         
@@ -132,11 +132,11 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                 $intDias = $fechaDesde->diff($fechaHasta);
                                 $intDias = $intDias->format('%a');   
                                 $intDias += 1;
-                                $intHorasProcesarIncapacidad = $intDias * 8;                                                                                                
+                                $intHorasProcesarIncapacidad = $intDias * $intFactorDia;                                                                                                
                                 $intHorasLaboradas = $intHorasLaboradas - $intHorasProcesarIncapacidad;                                
                                 $douPagoDetalle = 0;
                                 $douIngresoBaseCotizacionIncapacidad = 0;
-                                $intDiasTransporte = $intDiasTransporte - ($intHorasProcesarIncapacidad / $arProgramacionPagoDetalle->getFactorDia());
+                                $intDiasTransporte = $intDiasTransporte - ($intHorasProcesarIncapacidad / $intFactorDia);
 
                                 if($arIncapacidad->getCodigoIncapacidadTipoFk() == 1) {
                                     if($arProgramacionPagoDetalle->getVrSalario() <= $douVrSalarioMinimo) {
@@ -166,7 +166,6 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                 $arPagoDetalle->setOperacion(1);
                                 $arPagoDetalle->setVrPagoOperado($douPagoDetalle * 1);
                                 $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
-                                $douDevengado = $douDevengado + $douPagoDetalle;
                                 $douIngresoBasePrestacional += $douIngresoBaseCotizacionIncapacidad;                                        
                                 $douIngresoBaseCotizacion  += $douPagoDetalle;                                                                        
                                 $arPagoDetalle->setVrIngresoBasePrestacion($douIngresoBaseCotizacionIncapacidad);                                                                            
@@ -194,7 +193,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                 $intDias = $fechaDesde->diff($fechaHasta);
                                 $intDias = $intDias->format('%a');
                                 $intDias += 1;
-                                $intHorasProcesarLicencia = $intDias * 8;
+                                $intHorasProcesarLicencia = $intDias * $intFactorDia;
 
                                 $intHorasLaboradas = $intHorasLaboradas - $intHorasProcesarLicencia;                                                                    
                                 $douPagoDetalle = $intHorasProcesarLicencia * $douVrHora;
@@ -209,8 +208,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                 }
                                 if($arLicencia->getLicenciaTipoRel()->getPagoConceptoRel()->getOperacion() == 0) {
                                     $douPagoDetalle = 0;
-                                }
-                                $douDevengado = $douDevengado + $douPagoDetalle;
+                                }                                
                                 $arPagoDetalle->setVrPago($douPagoDetalle);
                                 $arPagoDetalle->setOperacion($arLicencia->getLicenciaTipoRel()->getPagoConceptoRel()->getOperacion());
                                 $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arLicencia->getLicenciaTipoRel()->getPagoConceptoRel()->getOperacion());                               
@@ -219,7 +217,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                 $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);                                    
                                 $em->persist($arPagoDetalle);
                                 if($arLicencia->getAfectaTransporte() == 1){
-                                    $intDiasLicenciaProcesar = intval($intHorasProcesarLicencia / $arProgramacionPagoDetalle->getFactorDia());
+                                    $intDiasLicenciaProcesar = intval($intHorasProcesarLicencia / $intFactorDia);
                                     $intDiasTransporte = $intDiasTransporte - $intDiasLicenciaProcesar;
                                 }
                             }
@@ -244,7 +242,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                             if($arPagoAdicional->getPagoConceptoRel()->getComponeValor() == 1) {
                                 $douPagoDetalle = $arPagoAdicional->getValor();
                                 if($arPagoAdicional->getAplicaDiaLaborado() == 1) {
-                                    $douPagoDetalle = $arPagoAdicional->getValor() * ($intHorasLaboradas / 8);
+                                    $douPagoDetalle = $arPagoAdicional->getValor() * ($intHorasLaboradas / $intFactorDia);
                                 }
                                 $arPagoDetalle->setVrDia($douVrDia);
                             }
@@ -256,7 +254,6 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                             $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);                            
                             
                             if($arPagoAdicional->getPagoConceptoRel()->getPrestacional() == 1) {
-                                $douDevengado = $douDevengado + $douPagoDetalle;
                                 if($arPagoAdicional->getPagoConceptoRel()->getGeneraIngresoBaseCotizacion() == 1) {
                                     $douIngresoBaseCotizacion += $douPagoDetalle;    
                                     $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);
@@ -337,13 +334,12 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $arPagoDetalle->setVrHora($douVrHora);
                         $arPagoDetalle->setVrDia($douVrDia);
                         $arPagoDetalle->setNumeroHoras($intHorasLaboradas);
-                        $arPagoDetalle->setNumeroDias($intHorasLaboradas / $arProgramacionPagoDetalle->getFactorDia());
+                        $arPagoDetalle->setNumeroDias($intHorasLaboradas / $intFactorDia);
                         $arPagoDetalle->setVrPago($douPagoDetalle);
                         $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
                         $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConcepto->getOperacion());
                         $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
                         $em->persist($arPagoDetalle);
-                        $douDevengado = $douDevengado + $douPagoDetalle;
                         $douIngresoBasePrestacional += $douPagoDetalle;                        
                         $douIngresoBaseCotizacion += $douPagoDetalle;                        
                         $arPagoDetalle->setVrIngresoBasePrestacion($douPagoDetalle);
@@ -428,6 +424,12 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                 }
                             }                            
                         }
+                        
+                        $intDiasLaborados = $intHorasLaboradas / $intFactorDia;                        
+                        $douAuxilioTransporteCotizacion = $arProgramacionPagoDetalle->getDiasReales() * ($arConfiguracion->getVrAuxilioTransporte() / 30);
+                        $arPago->setVrAuxilioTransporteCotizacion($douAuxilioTransporteCotizacion);
+                        $arPago->setDiasLaborados($intDiasLaborados);
+                        $em->persist($arPago);
                     }
                     $arProgramacionPagoProcesar->setEstadoGenerado(1);
                     $em->persist($arProgramacionPagoProcesar);
@@ -681,7 +683,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             foreach ($arPagos as $arPago) {
                 $arPagoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
                 $arPagoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($arPago->getCodigoPagoPk());                        
-                $douSalario = 0;
+                /*$douSalario = 0;
                 $douAuxilioTransporte = 0;
                 $douAdicionTiempo = 0;
                 $douAdicionValor = 0;
@@ -695,6 +697,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $douNeto = 0;
                 $douIngresoBaseCotizacion = 0;
                 $douIngresoBasePrestacion = 0;
+                 * 
+                 */
                 $arPagosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                 $arPagosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $arPago->getCodigoPagoPk()));
                 foreach ($arPagosDetalles AS $arPagoDetalle) {
@@ -721,7 +725,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $em->persist($arCredito);
                     }
                     //Liquidacion
-                    if($arPagoDetalle->getOperacion() == 1) {
+                    /*if($arPagoDetalle->getOperacion() == 1) {
                         $douDevengado = $douDevengado + $arPagoDetalle->getVrPago();
                     }
                     if($arPagoDetalle->getOperacion() == -1) {
@@ -742,11 +746,14 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     }
                     $douIngresoBaseCotizacion = $douIngresoBaseCotizacion + $arPagoDetalle->getVrIngresoBaseCotizacion();                            
                     $douIngresoBasePrestacion = $douIngresoBasePrestacion + $arPagoDetalle->getVrIngresoBasePrestacion();                                                
+                    
+                     * 
+                     */
                 }
                 /*if($arPagoProcesar->getCodigoEmpleadoFk() == 855) {
                     echo "hola";
                 }*/
-                $douSalarioPeriodo = $arPagoProcesar->getVrSalarioPeriodo();                
+                /*$douSalarioPeriodo = $arPagoProcesar->getVrSalarioPeriodo();                
                 $douIBS = $douSalarioPeriodo + $douAdicionTiempo + $douAdicionValor;
                 $douDiaAuxilioTransporte = 74000 / 30;
                 $douAuxilioTransporteCotizacion = $arPagoProcesar->getDiasPeriodo() * $douDiaAuxilioTransporte;
@@ -756,7 +763,9 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $douCaja = ($douIBS * 4) / 100; // este porcentaje debe parametrizarse en configuracion                
                 $douCesantias = (($douIBS + $douAuxilioTransporteCotizacion) * 17.66) / 100; // este porcentaje debe parametrizarse en configuracion                
                 $douVacaciones = ($douSalarioPeriodo * 4.5) / 100; // este porcentaje debe parametrizarse en configuracion                        
-                $douTotalEjercicio = $douSalario+$douAdicionTiempo+$douAdicionValor+$douAuxilioTransporte+$douArp+$douPension+$douSalud+$douCaja+$douCesantias+$douVacaciones;
+                 * 
+                 */
+                /*$douTotalEjercicio = $douSalario+$douAdicionTiempo+$douAdicionValor+$douAuxilioTransporte+$douArp+$douPension+$douSalud+$douCaja+$douCesantias+$douVacaciones;
                 if($arPagoProcesar->getCentroCostoRel()->getPorcentajeAdministracion() != 0 ) {
                     $douAdministracion = ($douTotalEjercicio * $arPagoProcesar->getCentroCostoRel()->getPorcentajeAdministracion()) / 100;            
                 } else {
@@ -795,12 +804,16 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $arServicioCobrar->setVrIngresoBaseCotizacion($douIngresoBaseCotizacion);
                     $em->persist($arServicioCobrar);
                 }
+                 * 
+                 */
                                       
 
                 $arPagoProcesar->setNumero($em->getRepository('BrasaRecursoHumanoBundle:RhuConsecutivo')->consecutivo(1));
                 $arPagoProcesar->setEstadoPagado(1);
                 $em->persist($arPagoProcesar); 
                 
+                $douIngresoBaseCotizacion = $arPagoProcesar->getVrIngresoBaseCotizacion();
+                $douIngresoBasePrestacion = $arPagoProcesar->getVrIngresoBasePrestacion();
                 if($arPagoProcesar->getCodigoPagoTipoFk() == 1) {
                     if($arPagoProcesar->getFechaDesdePago()->format('m') == $arPagoProcesar->getFechaHastaPago()->format('m')) {
                         $arIngresoBase = new \Brasa\RecursoHumanoBundle\Entity\RhuIngresoBase();

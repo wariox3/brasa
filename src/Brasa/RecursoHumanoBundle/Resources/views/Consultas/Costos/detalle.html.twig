@@ -31,6 +31,10 @@
                     <td style="text-align: right">{{ arPago.vrDevengado | number_format(0, '.', ',') }}</td>
                 </tr>                
                 <tr>
+                    <td class="titulo">DIAS:</td>
+                    <td style="text-align: right">Periodo({{ arPago.diasPeriodo }}) - Laborados({{ arPago.diasLaborados }})</td>
+                </tr>                 
+                <tr>
                     <td class="titulo">IBC:</td>
                     <td style="text-align: right">{{ arPago.vrIngresoBaseCotizacion | number_format(0, '.', ',') }}</td>
                 </tr>                 
@@ -54,6 +58,10 @@
                     <td class="titulo">AUXILIO TRANSPORTE:</td>
                     <td style="text-align: right">{{ arPago.vrAuxilioTransporte | number_format(0, '.', ',') }}</td>
                 </tr>                 
+                <tr>
+                    <td class="titulo">AUXILIO TRANSPORTE COTIZACION:</td>
+                    <td style="text-align: right">{{ arPago.vrAuxilioTransporteCotizacion | number_format(0, '.', ',') }}</td>
+                </tr>                                 
             </table> 
                 
             <table width="100%" class="table table-condensed table-bordered">                

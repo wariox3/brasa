@@ -85,8 +85,7 @@ class RhuPagoRepository extends EntityRepository {
         $douNeto = $douDevengado - $douDeducciones;
         $arPago->setVrNeto($douNeto);
         $arPago->setVrSalario($douSalario);        
-        $arPago->setVrAuxilioTransporte($douAuxilioTransporte);
-        $arPago->setVrAuxilioTransporteCotizacion(0);
+        $arPago->setVrAuxilioTransporte($douAuxilioTransporte);        
         $arPago->setVrAdicionalTiempo($douAdicionTiempo);
         $arPago->setVrAdicionalValor($douAdicionValor);
         $arPago->setVrAdicionalValorNoPrestasional($douAdicionValorNoPrestacional);
@@ -95,10 +94,19 @@ class RhuPagoRepository extends EntityRepository {
         $arPago->setVrIngresoBasePrestacion($douIngresoBasePrestacion);
         $arPago->setDiasAusentismo($intDiasAusentismo);
         
+        $floSalarioMinimo = $arConfiguracion->getVrSalario();
+        $floVrDiaMinimo = $floSalarioMinimo/30;        
+        $douIngresoBaseCotizacionMinimo = $floVrDiaMinimo * $arPago->getDiasPeriodo();
+        if($douIngresoBaseCotizacion < $douIngresoBaseCotizacionMinimo) {
+            $douIngresoBaseCotizacion = $douIngresoBaseCotizacionMinimo;
+        }
+        $floAuxilioTransporteCotizacion = $arPago->getVrAuxilioTransporteCotizacion();
         $intTipoBaseVacaciones = $arConfiguracion->getTipoBasePagoVacaciones();
         $floPorcentajeRiesgos = $arContrato->getClasificacionRiesgoRel()->getPorcentaje();
         $floPorcentajePension = $arContrato->getTipoPensionRel()->getPorcentajeEmpleador();
+        $floPorcentajePensionEmpleado = $arContrato->getTipoPensionRel()->getPorcentajeEmpleado();
         $floPorcentajeSalud = $arContrato->getTipoSaludRel()->getPorcentajeEmpleador();        
+        $floPorcentajeSaludEmpleado = $arContrato->getTipoSaludRel()->getPorcentajeEmpleado();        
         $floPorcentajeCaja = $arConfiguracion->getAportesPorcentajeCaja();
         $floPorcentajeAporteVacaciones = $arConfiguracion->getAportesPorcentajeVacaciones();        
         $floPorcentajeCesantias = $arConfiguracion->getPrestacionesPorcentajeCesantias();        
@@ -114,8 +122,8 @@ class RhuPagoRepository extends EntityRepository {
         $douIcbf = 0;
         
         //Seguridad social
-        $douCesantias = (($douIngresoBaseCotizacion + $douAuxilioTransporte) * $floPorcentajeCesantias) / 100; // Porcentaje 8.33                
-         $douInteresesCesantias = ($douCesantias * $floPorcentajeInteresesCesantias) / 100; // Porcentaje 1 sobre las cesantias                        
+        $douCesantias = (($douIngresoBasePrestacion + $floAuxilioTransporteCotizacion) * $floPorcentajeCesantias) / 100; // Porcentaje 8.33                
+        $douInteresesCesantias = ($douCesantias * $floPorcentajeInteresesCesantias) / 100; // Porcentaje 1 sobre las cesantias                        
         $douBaseVacaciones = 0;
         if($intTipoBaseVacaciones == 1) {
             $douBaseVacaciones = $douSalario;
@@ -128,11 +136,10 @@ class RhuPagoRepository extends EntityRepository {
         }        
         $douVacaciones = ($douBaseVacaciones * $floPorcentajeVacaciones) / 100; // 4.17
         $douAporteVacaciones = ($floPorcentajeAporteVacaciones * $douVacaciones) / 100;
-        $douPrimas = (($douIngresoBaseCotizacion + $douAuxilioTransporte) * $floPorcentajePrimas) / 100; // 8.33
+        $douPrimas = (($douIngresoBasePrestacion + $floAuxilioTransporteCotizacion) * $floPorcentajePrimas) / 100; // 8.33
         
         //12 aprendiz y 19 practicante        
-        if($arContrato->getCodigoTipoCotizanteFk() == '19' || $arContrato->getCodigoTipoCotizanteFk() == '12') {
-            $floPorcentajeSalud = $arContrato->getTipoSaludRel()->getPorcentajeEmpleador() + $arContrato->getTipoSaludRel()->getPorcentajeEmpleador();
+        if($arContrato->getCodigoTipoCotizanteFk() == '19' || $arContrato->getCodigoTipoCotizanteFk() == '12') {            
             $douSaludEmpleador = ($douIngresoBaseCotizacion * $floPorcentajeSalud) / 100;
             $douPensionEmpleador = 0;            
             $douCaja = 0;
@@ -147,7 +154,16 @@ class RhuPagoRepository extends EntityRepository {
         }
         if($arContrato->getCodigoTipoCotizanteFk() == '12') {
             $douArp = 0;
-        }        
+        }  
+        
+        //Medios tiempos
+        if($arContrato->getCodigoTipoTiempoFk() == 2) {
+            $douPensionEmpleador = ($douIngresoBaseCotizacion * ($floPorcentajePension+$floPorcentajePensionEmpleado)) / 100; 
+            $douPensionEmpleador = $douPensionEmpleador - $douPension;
+            $douSaludEmpleador = ($douIngresoBaseCotizacion * ($floPorcentajeSalud+$floPorcentajeSaludEmpleado)) / 100;            
+            $douSaludEmpleador = $douSaludEmpleador - $douEps;
+        }
+        
         $douPrestaciones = $douCesantias + $douInteresesCesantias + $douVacaciones + $douPrimas;
         $douAportes = $douPensionEmpleador + $douSaludEmpleador + $douArp + $douCaja + $douAporteVacaciones;        
         

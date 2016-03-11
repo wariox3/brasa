@@ -233,6 +233,11 @@ class RhuPago
      * @ORM\Column(name="dias_periodo", type="integer")
      */
     private $diasPeriodo = 0;   
+
+    /**
+     * @ORM\Column(name="dias_laborados", type="integer")
+     */
+    private $diasLaborados = 0;
     
     /**
      * @ORM\Column(name="estado_pagado", type="boolean")
@@ -1026,6 +1031,54 @@ class RhuPago
     }
 
     /**
+     * Set vrAporteVacaciones
+     *
+     * @param float $vrAporteVacaciones
+     *
+     * @return RhuPago
+     */
+    public function setVrAporteVacaciones($vrAporteVacaciones)
+    {
+        $this->vrAporteVacaciones = $vrAporteVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAporteVacaciones
+     *
+     * @return float
+     */
+    public function getVrAporteVacaciones()
+    {
+        return $this->vrAporteVacaciones;
+    }
+
+    /**
+     * Set vrAportes
+     *
+     * @param float $vrAportes
+     *
+     * @return RhuPago
+     */
+    public function setVrAportes($vrAportes)
+    {
+        $this->vrAportes = $vrAportes;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAportes
+     *
+     * @return float
+     */
+    public function getVrAportes()
+    {
+        return $this->vrAportes;
+    }
+
+    /**
      * Set vrCesantias
      *
      * @param float $vrCesantias
@@ -1050,6 +1103,30 @@ class RhuPago
     }
 
     /**
+     * Set vrInteresesCesantias
+     *
+     * @param float $vrInteresesCesantias
+     *
+     * @return RhuPago
+     */
+    public function setVrInteresesCesantias($vrInteresesCesantias)
+    {
+        $this->vrInteresesCesantias = $vrInteresesCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get vrInteresesCesantias
+     *
+     * @return float
+     */
+    public function getVrInteresesCesantias()
+    {
+        return $this->vrInteresesCesantias;
+    }
+
+    /**
      * Set vrVacaciones
      *
      * @param float $vrVacaciones
@@ -1071,6 +1148,54 @@ class RhuPago
     public function getVrVacaciones()
     {
         return $this->vrVacaciones;
+    }
+
+    /**
+     * Set vrPrimas
+     *
+     * @param float $vrPrimas
+     *
+     * @return RhuPago
+     */
+    public function setVrPrimas($vrPrimas)
+    {
+        $this->vrPrimas = $vrPrimas;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPrimas
+     *
+     * @return float
+     */
+    public function getVrPrimas()
+    {
+        return $this->vrPrimas;
+    }
+
+    /**
+     * Set vrPrestaciones
+     *
+     * @param float $vrPrestaciones
+     *
+     * @return RhuPago
+     */
+    public function setVrPrestaciones($vrPrestaciones)
+    {
+        $this->vrPrestaciones = $vrPrestaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPrestaciones
+     *
+     * @return float
+     */
+    public function getVrPrestaciones()
+    {
+        return $this->vrPrestaciones;
     }
 
     /**
@@ -1263,6 +1388,30 @@ class RhuPago
     public function getDiasPeriodo()
     {
         return $this->diasPeriodo;
+    }
+
+    /**
+     * Set diasLaborados
+     *
+     * @param integer $diasLaborados
+     *
+     * @return RhuPago
+     */
+    public function setDiasLaborados($diasLaborados)
+    {
+        $this->diasLaborados = $diasLaborados;
+
+        return $this;
+    }
+
+    /**
+     * Get diasLaborados
+     *
+     * @return integer
+     */
+    public function getDiasLaborados()
+    {
+        return $this->diasLaborados;
     }
 
     /**
@@ -1755,125 +1904,5 @@ class RhuPago
     public function getPagosBancosDetallePagoRel()
     {
         return $this->pagosBancosDetallePagoRel;
-    }
-
-    /**
-     * Set vrInteresesCesantias
-     *
-     * @param float $vrInteresesCesantias
-     *
-     * @return RhuPago
-     */
-    public function setVrInteresesCesantias($vrInteresesCesantias)
-    {
-        $this->vrInteresesCesantias = $vrInteresesCesantias;
-
-        return $this;
-    }
-
-    /**
-     * Get vrInteresesCesantias
-     *
-     * @return float
-     */
-    public function getVrInteresesCesantias()
-    {
-        return $this->vrInteresesCesantias;
-    }
-
-    /**
-     * Set vrPrimas
-     *
-     * @param float $vrPrimas
-     *
-     * @return RhuPago
-     */
-    public function setVrPrimas($vrPrimas)
-    {
-        $this->vrPrimas = $vrPrimas;
-
-        return $this;
-    }
-
-    /**
-     * Get vrPrimas
-     *
-     * @return float
-     */
-    public function getVrPrimas()
-    {
-        return $this->vrPrimas;
-    }
-
-    /**
-     * Set vrPrestaciones
-     *
-     * @param float $vrPrestaciones
-     *
-     * @return RhuPago
-     */
-    public function setVrPrestaciones($vrPrestaciones)
-    {
-        $this->vrPrestaciones = $vrPrestaciones;
-
-        return $this;
-    }
-
-    /**
-     * Get vrPrestaciones
-     *
-     * @return float
-     */
-    public function getVrPrestaciones()
-    {
-        return $this->vrPrestaciones;
-    }
-
-    /**
-     * Set vrAportes
-     *
-     * @param float $vrAportes
-     *
-     * @return RhuPago
-     */
-    public function setVrAportes($vrAportes)
-    {
-        $this->vrAportes = $vrAportes;
-
-        return $this;
-    }
-
-    /**
-     * Get vrAportes
-     *
-     * @return float
-     */
-    public function getVrAportes()
-    {
-        return $this->vrAportes;
-    }
-
-    /**
-     * Set vrAporteVacaciones
-     *
-     * @param float $vrAporteVacaciones
-     *
-     * @return RhuPago
-     */
-    public function setVrAporteVacaciones($vrAporteVacaciones)
-    {
-        $this->vrAporteVacaciones = $vrAporteVacaciones;
-
-        return $this;
-    }
-
-    /**
-     * Get vrAporteVacaciones
-     *
-     * @return float
-     */
-    public function getVrAporteVacaciones()
-    {
-        return $this->vrAporteVacaciones;
     }
 }

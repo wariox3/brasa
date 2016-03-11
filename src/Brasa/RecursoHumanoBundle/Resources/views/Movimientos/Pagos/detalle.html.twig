@@ -65,13 +65,23 @@
                 <tr>
                     <td class="titulo">CONTRATO:</td>
                     <td><a href="{{ path('brs_rhu_base_contratos_detalles', { 'codigoContrato': arPago.codigoContratoFk }) }}" target="_blanck" >{{ arPago.codigoContratoFk }}</a></td>                                            
+                    <td class="titulo">DIAS PERIODO:</td>
+                    <td class="td-in-well">{{ arPago.diasPeriodo }}</td>
                     <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="td-in-well-numerico" align="right"></td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well-numerico" align="right"></td>
+                </tr>   
+                <tr>
+                    <td class="titulo"></td>
+                    <td></td>                                            
+                    <td class="titulo">DIAS LABORADOS:</td>
+                    <td class="td-in-well">{{ arPago.diasLaborados }}</td>
                     <td class="titulo"></td>
                     <td class="td-in-well-numerico" align="right"></td>
                     <td class="titulo"></td>
                     <td class="td-in-well-numerico" align="right"></td>
-                </tr>                
+                </tr>                 
                 <tr>
                     <td class="titulo">COMENTARIOS:</td>
                     <td colspan="7">{{ arPago.comentarios }}</td>
