@@ -172,7 +172,7 @@ class ConsultasCostosController extends Controller
                     ->setCellValue('P' . $i, $arPago->getVrSena())
                     ->setCellValue('Q' . $i, $arPago->getVrCesantias())
                     ->setCellValue('R' . $i, $arPago->getVrVacaciones())
-                    ->setCellValue('S' . $i, $arPago->getVrAdministracion())
+                    ->setCellValue('S' . $i, 0)
                     ->setCellValue('T' . $i, $arPago->getVrCosto())
                     ->setCellValue('U' . $i, $arPago->getVrTotalCobrar())
                     ->setCellValue('W' . $i, $arPago->getVrNeto())
