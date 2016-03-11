@@ -27,4 +27,81 @@ class CarCuentaCobrarTipo
      * @ORM\OneToMany(targetEntity="CarCuentaCobrar", mappedBy="cuentaCobrarTipoRel")
      */
     protected $cuentasCobrarCuentaCobrarTipoRel;
+    
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->cuentasCobrarCuentaCobrarTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Get codigoCuentaCobrarTipoPk
+     *
+     * @return integer
+     */
+    public function getCodigoCuentaCobrarTipoPk()
+    {
+        return $this->codigoCuentaCobrarTipoPk;
+    }
+
+    /**
+     * Set nombre
+     *
+     * @param string $nombre
+     *
+     * @return CarCuentaCobrarTipo
+     */
+    public function setNombre($nombre)
+    {
+        $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    /**
+     * Get nombre
+     *
+     * @return string
+     */
+    public function getNombre()
+    {
+        return $this->nombre;
+    }
+
+    /**
+     * Add cuentasCobrarCuentaCobrarTipoRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarCuentaCobrar $cuentasCobrarCuentaCobrarTipoRel
+     *
+     * @return CarCuentaCobrarTipo
+     */
+    public function addCuentasCobrarCuentaCobrarTipoRel(\Brasa\CarteraBundle\Entity\CarCuentaCobrar $cuentasCobrarCuentaCobrarTipoRel)
+    {
+        $this->cuentasCobrarCuentaCobrarTipoRel[] = $cuentasCobrarCuentaCobrarTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove cuentasCobrarCuentaCobrarTipoRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarCuentaCobrar $cuentasCobrarCuentaCobrarTipoRel
+     */
+    public function removeCuentasCobrarCuentaCobrarTipoRel(\Brasa\CarteraBundle\Entity\CarCuentaCobrar $cuentasCobrarCuentaCobrarTipoRel)
+    {
+        $this->cuentasCobrarCuentaCobrarTipoRel->removeElement($cuentasCobrarCuentaCobrarTipoRel);
+    }
+
+    /**
+     * Get cuentasCobrarCuentaCobrarTipoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCuentasCobrarCuentaCobrarTipoRel()
+    {
+        return $this->cuentasCobrarCuentaCobrarTipoRel;
+    }
 }

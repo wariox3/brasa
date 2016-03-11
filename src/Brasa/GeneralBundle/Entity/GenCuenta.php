@@ -52,15 +52,22 @@ class GenCuenta
     /**
      * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco", mappedBy="cuentaRel")
      */
-    protected $rhuPagosBancosCuentaRel;    
+    protected $rhuPagosBancosCuentaRel; 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\CarteraBundle\Entity\CarRecibo", mappedBy="cuentaRel")
+     */
+    protected $carRecibosCuentaRel;
     
 
+    
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->rhuPagosBancosCuentaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->carRecibosCuentaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -249,5 +256,39 @@ class GenCuenta
     public function getRhuPagosBancosCuentaRel()
     {
         return $this->rhuPagosBancosCuentaRel;
+    }
+
+    /**
+     * Add carRecibosCuentaRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarRecibo $carRecibosCuentaRel
+     *
+     * @return GenCuenta
+     */
+    public function addCarRecibosCuentaRel(\Brasa\CarteraBundle\Entity\CarRecibo $carRecibosCuentaRel)
+    {
+        $this->carRecibosCuentaRel[] = $carRecibosCuentaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove carRecibosCuentaRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarRecibo $carRecibosCuentaRel
+     */
+    public function removeCarRecibosCuentaRel(\Brasa\CarteraBundle\Entity\CarRecibo $carRecibosCuentaRel)
+    {
+        $this->carRecibosCuentaRel->removeElement($carRecibosCuentaRel);
+    }
+
+    /**
+     * Get carRecibosCuentaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCarRecibosCuentaRel()
+    {
+        return $this->carRecibosCuentaRel;
     }
 }

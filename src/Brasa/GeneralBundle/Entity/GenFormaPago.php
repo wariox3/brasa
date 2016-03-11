@@ -42,7 +42,12 @@ class GenFormaPago
     /**
      * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurCliente", mappedBy="formaPagoRel")
      */
-    protected $turClientesFormaPagoRel;    
+    protected $turClientesFormaPagoRel;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\CarteraBundle\Entity\CarCliente", mappedBy="formaPagoRel")
+     */
+    protected $carClientesFormaPagoRel;
     
 
     /**
@@ -224,5 +229,39 @@ class GenFormaPago
     public function getTurClientesFormaPagoRel()
     {
         return $this->turClientesFormaPagoRel;
+    }
+
+    /**
+     * Add carClientesFormaPagoRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarCliente $carClientesFormaPagoRel
+     *
+     * @return GenFormaPago
+     */
+    public function addCarClientesFormaPagoRel(\Brasa\CarteraBundle\Entity\CarCliente $carClientesFormaPagoRel)
+    {
+        $this->carClientesFormaPagoRel[] = $carClientesFormaPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove carClientesFormaPagoRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarCliente $carClientesFormaPagoRel
+     */
+    public function removeCarClientesFormaPagoRel(\Brasa\CarteraBundle\Entity\CarCliente $carClientesFormaPagoRel)
+    {
+        $this->carClientesFormaPagoRel->removeElement($carClientesFormaPagoRel);
+    }
+
+    /**
+     * Get carClientesFormaPagoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCarClientesFormaPagoRel()
+    {
+        return $this->carClientesFormaPagoRel;
     }
 }

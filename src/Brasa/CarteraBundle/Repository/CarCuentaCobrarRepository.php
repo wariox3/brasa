@@ -16,7 +16,7 @@ class CarCuentaCobrarRepository extends EntityRepository
      * Aplicar cartera: Este metodo efectua el movimiento de cartera respectivo para un movimiento
      * @param integer $codigoMovimiento Codigo del movimiento
      * */
-    public function Aplicar($codigoMovimiento) { 
+    /*public function Aplicar($codigoMovimiento) { 
         $em = $this->getEntityManager();
         $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();        
         $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->find($codigoMovimiento);                
@@ -36,7 +36,7 @@ class CarCuentaCobrarRepository extends EntityRepository
          * Las facturas van al debito
          * Las NC van al credito
          */      
-        
+        /*
         if($arMovimiento->getDocumentoRel()->getTipoAsientoCartera() == 1) {
             $arCuentaCobrar->setDebitos ($arMovimiento->getTotal());
             $arCuentaCobrar->setSaldo ($arMovimiento->getTotal());
@@ -48,9 +48,9 @@ class CarCuentaCobrarRepository extends EntityRepository
             
         $em->persist($arCuentaCobrar);
         $em->flush();                                  
-    }     
+    }     */
     
-    public function DevCuentasCobrar ($intCodigoTercero) {
+    /*public function DevCuentasCobrar ($intCodigoTercero) {
         $em = $this->getEntityManager();         
         $query = $em->createQueryBuilder()            
             ->select('(cc.saldo - cc.creditos) as saldo, cc.valorOriginal, cc.codigoMovimientoFk, cc.fecha, (CURRENT_DATE() - cc.fecha) as nroDias, m.numeroMovimiento, doc.abreviatura, ter.nombreCortoTercero ')                
@@ -61,5 +61,5 @@ class CarCuentaCobrarRepository extends EntityRepository
             ->where("cc.codigoTerceroFk = $intCodigoTercero")
             ->getQuery();
         return $query->getResult();        
-    }       
+    }*/       
 }
