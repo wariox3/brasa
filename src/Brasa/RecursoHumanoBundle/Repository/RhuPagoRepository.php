@@ -98,19 +98,24 @@ class RhuPagoRepository extends EntityRepository {
         $intTipoBaseVacaciones = $arConfiguracion->getTipoBasePagoVacaciones();
         $floPorcentajeRiesgos = $arContrato->getClasificacionRiesgoRel()->getPorcentaje();
         $floPorcentajePension = $arContrato->getTipoPensionRel()->getPorcentajeEmpleador();
-        $floPorcentajeSalud = $arContrato->getTipoSaludRel()->getPorcentajeEmpleador();
+        $floPorcentajeSalud = $arContrato->getTipoSaludRel()->getPorcentajeEmpleador();        
         $floPorcentajeCaja = $arConfiguracion->getAportesPorcentajeCaja();
         $floPorcentajeAporteVacaciones = $arConfiguracion->getAportesPorcentajeVacaciones();        
         $floPorcentajeCesantias = $arConfiguracion->getPrestacionesPorcentajeCesantias();        
         $floPorcentajeInteresesCesantias = $arConfiguracion->getPrestacionesPorcentajeInteresesCesantias();
         $floPorcentajeVacaciones = $arConfiguracion->getPrestacionesPorcentajeVacaciones();
         $floPorcentajePrimas = $arConfiguracion->getPrestacionesPorcentajePrimas();
+        //Aportes sociales
         $douArp = ($douIngresoBaseCotizacion * $floPorcentajeRiesgos)/100;        
         $douPensionEmpleador = ($douIngresoBaseCotizacion * $floPorcentajePension) / 100; 
         $douSaludEmpleador = ($douIngresoBaseCotizacion * $floPorcentajeSalud) / 100;         
         $douCaja = ($douIngresoBaseCotizacion * $floPorcentajeCaja) / 100; //Porcentaje 4        
+        $douSena = 0;
+        $douIcbf = 0;
+        
+        //Seguridad social
         $douCesantias = (($douIngresoBaseCotizacion + $douAuxilioTransporte) * $floPorcentajeCesantias) / 100; // Porcentaje 8.33                
-        $douInteresesCesantias = ($douCesantias * $floPorcentajeInteresesCesantias) / 100; // Porcentaje 1 sobre las cesantias                        
+         $douInteresesCesantias = ($douCesantias * $floPorcentajeInteresesCesantias) / 100; // Porcentaje 1 sobre las cesantias                        
         $douBaseVacaciones = 0;
         if($intTipoBaseVacaciones == 1) {
             $douBaseVacaciones = $douSalario;
@@ -124,8 +129,27 @@ class RhuPagoRepository extends EntityRepository {
         $douVacaciones = ($douBaseVacaciones * $floPorcentajeVacaciones) / 100; // 4.17
         $douAporteVacaciones = ($floPorcentajeAporteVacaciones * $douVacaciones) / 100;
         $douPrimas = (($douIngresoBaseCotizacion + $douAuxilioTransporte) * $floPorcentajePrimas) / 100; // 8.33
+        
+        //12 aprendiz y 19 practicante        
+        if($arContrato->getCodigoTipoCotizanteFk() == '19' || $arContrato->getCodigoTipoCotizanteFk() == '12') {
+            $floPorcentajeSalud = $arContrato->getTipoSaludRel()->getPorcentajeEmpleador() + $arContrato->getTipoSaludRel()->getPorcentajeEmpleador();
+            $douSaludEmpleador = ($douIngresoBaseCotizacion * $floPorcentajeSalud) / 100;
+            $douPensionEmpleador = 0;            
+            $douCaja = 0;
+            $douCesantias = 0;
+            $douInteresesCesantias = 0;
+            $douBaseVacaciones = 0;
+            $douVacaciones = 0;
+            $douAporteVacaciones = 0;
+            $douPrimas = 0;
+            $douPrestaciones = 0;
+            $douAportes = 0;
+        }
+        if($arContrato->getCodigoTipoCotizanteFk() == '12') {
+            $douArp = 0;
+        }        
         $douPrestaciones = $douCesantias + $douInteresesCesantias + $douVacaciones + $douPrimas;
-        $douAportes = $douPensionEmpleador + $douSaludEmpleador + $douArp + $douCaja + $douAporteVacaciones;
+        $douAportes = $douPensionEmpleador + $douSaludEmpleador + $douArp + $douCaja + $douAporteVacaciones;        
         
         //Aportes empleado
         $arPago->setVrPension($douPensionEmpleador);
@@ -136,8 +160,8 @@ class RhuPagoRepository extends EntityRepository {
         $arPago->setVrEpsEmpleador($douSaludEmpleador);
         $arPago->setVrArp($douArp);
         $arPago->setVrCaja($douCaja);
-        $arPago->setvrSena(0);
-        $arPago->setvrIcbf(0);
+        $arPago->setvrSena($douSena);
+        $arPago->setvrIcbf($douIcbf);
         $arPago->setVrAportes($douAportes);
         $arPago->setVrAporteVacaciones($douAporteVacaciones);
         

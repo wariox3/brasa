@@ -68,18 +68,19 @@
                 <tr>
                     <td class="titulo">ÚLTIMA CESANTIA:</td>
                     <td>{{ arContrato.fechaUltimoPagoCesantias|date("Y/m/d") }}</td>
-                    <td class="titulo">ENTIDAD CAJA:</td>
-                    <td class="td-in-well">{{ arContrato.entidadCajaRel.nombre|default('SIN CONTRATO') }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">TIPO PENSIÓN:</td>
+                    <td class="td-in-well">{{ arContrato.tipoPensionRel.nombre }}</td>
+                    <td class="titulo">TIPO SALUD:</td>
+                    <td class="td-in-well">{{ arContrato.tipoSaludRel.nombre }}</td>
+
                 </tr>                
                 <tr>
                     <td class="titulo">ÚLTIMA VACACIÓN:</td>
                     <td>{{ arContrato.fechaUltimoPagoVacaciones|date("Y/m/d") }}</td>
-                    <td class="titulo">TIPO PENSIÓN:</td>
-                    <td class="td-in-well">{{ arContrato.tipoPensionRel.nombre }}</td>
-                    <td class="titulo">TIPO PENSIÓN:</td>
-                    <td class="td-in-well">{{ arContrato.tipoSaludRel.nombre }}</td>
+                    <td class="titulo">ENTIDAD CAJA:</td>
+                    <td class="td-in-well">{{ arContrato.entidadCajaRel.nombre|default('SIN CONTRATO') }}</td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
                 </tr>                 
                 <tr>
                     <td colspan="8">COMENTARIOS: {{ arContrato.comentarios }}</td>

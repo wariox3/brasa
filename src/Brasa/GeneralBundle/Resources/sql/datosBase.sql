@@ -5320,8 +5320,8 @@ insert into `rhu_tipo_pension` (`codigo_tipo_pension_pk`, `codigo_pago_concepto_
 insert into `rhu_tipo_pension` (`codigo_tipo_pension_pk`, `codigo_pago_concepto_fk`, `nombre`, `porcentaje_empleado`, `porcentaje_empleador`) values('3','4','EMPLEADOR NORMAL','0','16');
 insert into `rhu_tipo_pension` (`codigo_tipo_pension_pk`, `codigo_pago_concepto_fk`, `nombre`, `porcentaje_empleado`, `porcentaje_empleador`) values('4','4','EMPLEADOR ALTO RIESGO','0','26');
 
-insert into `rhu_tipo_salud` (`codigo_tipo_salud_pk`, `codigo_pago_concepto_fk`, `nombre`, `porcentaje_empleado`, `porcentaje_empleador`) values('1','3','EMPLEADO','4','0');
-insert into `rhu_tipo_salud` (`codigo_tipo_salud_pk`, `codigo_pago_concepto_fk`, `nombre`, `porcentaje_empleado`, `porcentaje_empleador`) values('2','4','EMPLEADOR','0','4');
+insert into `rhu_tipo_salud` (`codigo_tipo_salud_pk`, `codigo_pago_concepto_fk`, `nombre`, `porcentaje_empleado`, `porcentaje_empleador`) values('1','3','EMPLEADO','4','4');
+insert into `rhu_tipo_salud` (`codigo_tipo_salud_pk`, `codigo_pago_concepto_fk`, `nombre`, `porcentaje_empleado`, `porcentaje_empleador`) values('2','3','EMPLEADOR','0','8');
 
 INSERT INTO `rhu_tipo_tiempo` (`codigo_tipo_tiempo_pk`, `nombre`, `factor`, `factor_horas_dia`) VALUES('1','TIEMPO COMPLETO','0','8');
 INSERT INTO `rhu_tipo_tiempo` (`codigo_tipo_tiempo_pk`, `nombre`, `factor`, `factor_horas_dia`) VALUES('2','MEDIO TIEMPO','2','4');
