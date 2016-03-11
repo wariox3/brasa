@@ -121,6 +121,19 @@
                                 </li>
                             </ul>
                         </li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">Cartera</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ path('brs_cartera_base_cliente_listar') }}">Clientes</a></li>
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">General</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_cartera_base_recibo_tipo_listar') }}">Recibo tipo</a></li>
+                                        <li><a href="{{ path('brs_cartera_base_cuentacobrar_tipo_listar') }}">Cuenta cobro tipo</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -681,6 +694,17 @@
                                     <a tabindex="-1" href="#">Guia</a>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_tte_guia_lista') }}">Lista</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">Cartera</a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Recibo</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_cartera_movimiento_recibo_listar') }}">Lista</a></li>
                                     </ul>
                                 </li>
                             </ul>

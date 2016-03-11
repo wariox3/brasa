@@ -12,5 +12,57 @@ use Doctrine\ORM\EntityRepository;
  */
 class CarReciboRepository extends EntityRepository
 {
-           
+   public function listaDql($numero, $codigoCliente = "", $boolEstadoImpreso = "") {
+        $dql   = "SELECT r FROM BrasaCarteraBundle:CarRecibo r WHERE r.codigoReciboPk <> 0";
+        if($numero != "") {
+            $dql .= " AND r.numero = " . $numero;  
+        }        
+        if($codigoCliente != "") {
+            $dql .= " AND r.codigoClienteFk = " . $codigoCliente;  
+        }    
+        if($boolEstadoImpreso == 1 ) {
+            $dql .= " AND r.estadoImpreso = 1";
+        }
+        if($boolEstadoImpreso == "0") {
+            $dql .= " AND c.estadoImpreso = 0";
+        }        
+        $dql .= " ORDER BY r.fecha DESC";
+        return $dql;
+    }
+    
+   public function imprimir($codigo) {
+        $em = $this->getEntityManager();  
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
+        $strResultado = "";
+        $arCotizacion = new \Brasa\TurnoBundle\Entity\TurCotizacion();        
+        $arCotizacion = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->find($codigo);        
+        if($arCotizacion->getEstadoAutorizado() == 1) {
+            if($arCotizacion->getNumero() == 0) {            
+                $intNumero = $em->getRepository('BrasaTurnoBundle:TurConsecutivo')->consecutivo(3);
+                $arCotizacion->setNumero($intNumero);
+                $arCotizacion->setFecha(new \DateTime('now'));                
+            }   
+            
+            $em->persist($arCotizacion);
+            $em->flush();
+        } else {
+            $strResultado = "Debe autorizar la cotizacion para imprimirla";
+        }
+        return $strResultado;
+    }    
+    
+    public function eliminar($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigo) {                
+                if($em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->numeroRegistros($codigo) <= 0) {
+                    $arCotizacion = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->find($codigo);                    
+                    if($arCotizacion->getEstadoAutorizado() == 0 && $arCotizacion->getNumero() == 0) {
+                        $em->remove($arCotizacion);                    
+                    }                     
+                }               
+            }
+            $em->flush();
+        }
+    } 
 }

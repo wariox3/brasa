@@ -12,5 +12,27 @@ use Doctrine\ORM\EntityRepository;
  */
 class CarCuentaCobrarTipoRepository extends EntityRepository
 {
-           
+   public function ListaDql($strNombre = "", $strCodigo = "") {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT cct FROM BrasaCarteraBundle:CarCuentaCobrarTipo cct WHERE cct.codigoCuentaCobrarTipoPk <> 0";
+        if($strNombre != "" ) {
+            $dql .= " AND cct.nombre LIKE '%" . $strNombre . "%'";
+        }
+        if($strCodigo != "" ) {
+            $dql .= " AND cct.codigoCuentaCobrarTipoPk LIKE '%" . $strCodigo . "%'";
+        }
+        $dql .= " ORDER BY cct.nombre";
+        return $dql;
+    }            
+    
+   public function eliminar($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigo) {
+                $ar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrarTipo')->find($codigo);
+                $em->remove($ar);
+            }
+            $em->flush();
+        }
+    }        
 }

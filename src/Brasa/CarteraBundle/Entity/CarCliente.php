@@ -46,12 +46,7 @@ class CarCliente
     /**
      * @ORM\Column(name="direccion", type="string", length=120, nullable=true)
      */
-    private $direccion;
-
-    /**
-     * @ORM\Column(name="barrio", type="string", length=120, nullable=true)
-     */
-    private $barrio;    
+    private $direccion;   
     
     /**
      * @ORM\Column(name="codigo_ciudad_fk", type="integer", nullable=true)
@@ -79,6 +74,11 @@ class CarCliente
     private $email;
     
     /**
+     * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
+     */    
+    private $usuario;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenFormaPago", inversedBy="carClientesFormaPagoRel")
      * @ORM\JoinColumn(name="codigo_forma_pago_fk", referencedColumnName="codigo_forma_pago_pk")
      */
@@ -96,10 +96,19 @@ class CarCliente
     protected $cuentasCobrarTiposClienteRel;
     
     /**
-     * @ORM\OneToMany(targetEntity="CarCliente", mappedBy="clienteRel")
+     * @ORM\OneToMany(targetEntity="CarRecibo", mappedBy="clienteRel")
      */
     protected $recibosClienteRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="CarNotaDebito", mappedBy="clienteRel")
+     */
+    protected $notasDebitosClienteRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="CarNotaCredito", mappedBy="clienteRel")
+     */
+    protected $notasCreditosClienteRel;
     
     /**
      * Constructor
@@ -108,6 +117,8 @@ class CarCliente
     {
         $this->cuentasCobrarTiposClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->recibosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->notasDebitosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->notasCreditosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -262,30 +273,6 @@ class CarCliente
     public function getDireccion()
     {
         return $this->direccion;
-    }
-
-    /**
-     * Set barrio
-     *
-     * @param string $barrio
-     *
-     * @return CarCliente
-     */
-    public function setBarrio($barrio)
-    {
-        $this->barrio = $barrio;
-
-        return $this;
-    }
-
-    /**
-     * Get barrio
-     *
-     * @return string
-     */
-    public function getBarrio()
-    {
-        return $this->barrio;
     }
 
     /**
@@ -493,11 +480,11 @@ class CarCliente
     /**
      * Add recibosClienteRel
      *
-     * @param \Brasa\CarteraBundle\Entity\CarCliente $recibosClienteRel
+     * @param \Brasa\CarteraBundle\Entity\CarRecibo $recibosClienteRel
      *
      * @return CarCliente
      */
-    public function addRecibosClienteRel(\Brasa\CarteraBundle\Entity\CarCliente $recibosClienteRel)
+    public function addRecibosClienteRel(\Brasa\CarteraBundle\Entity\CarRecibo $recibosClienteRel)
     {
         $this->recibosClienteRel[] = $recibosClienteRel;
 
@@ -507,9 +494,9 @@ class CarCliente
     /**
      * Remove recibosClienteRel
      *
-     * @param \Brasa\CarteraBundle\Entity\CarCliente $recibosClienteRel
+     * @param \Brasa\CarteraBundle\Entity\CarRecibo $recibosClienteRel
      */
-    public function removeRecibosClienteRel(\Brasa\CarteraBundle\Entity\CarCliente $recibosClienteRel)
+    public function removeRecibosClienteRel(\Brasa\CarteraBundle\Entity\CarRecibo $recibosClienteRel)
     {
         $this->recibosClienteRel->removeElement($recibosClienteRel);
     }
@@ -522,5 +509,97 @@ class CarCliente
     public function getRecibosClienteRel()
     {
         return $this->recibosClienteRel;
+    }
+
+    /**
+     * Add notasDebitosClienteRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarNotaDebito $notasDebitosClienteRel
+     *
+     * @return CarCliente
+     */
+    public function addNotasDebitosClienteRel(\Brasa\CarteraBundle\Entity\CarNotaDebito $notasDebitosClienteRel)
+    {
+        $this->notasDebitosClienteRel[] = $notasDebitosClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove notasDebitosClienteRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarNotaDebito $notasDebitosClienteRel
+     */
+    public function removeNotasDebitosClienteRel(\Brasa\CarteraBundle\Entity\CarNotaDebito $notasDebitosClienteRel)
+    {
+        $this->notasDebitosClienteRel->removeElement($notasDebitosClienteRel);
+    }
+
+    /**
+     * Get notasDebitosClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNotasDebitosClienteRel()
+    {
+        return $this->notasDebitosClienteRel;
+    }
+
+    /**
+     * Add notasCreditosClienteRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarNotaCredito $notasCreditosClienteRel
+     *
+     * @return CarCliente
+     */
+    public function addNotasCreditosClienteRel(\Brasa\CarteraBundle\Entity\CarNotaCredito $notasCreditosClienteRel)
+    {
+        $this->notasCreditosClienteRel[] = $notasCreditosClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove notasCreditosClienteRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarNotaCredito $notasCreditosClienteRel
+     */
+    public function removeNotasCreditosClienteRel(\Brasa\CarteraBundle\Entity\CarNotaCredito $notasCreditosClienteRel)
+    {
+        $this->notasCreditosClienteRel->removeElement($notasCreditosClienteRel);
+    }
+
+    /**
+     * Get notasCreditosClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNotasCreditosClienteRel()
+    {
+        return $this->notasCreditosClienteRel;
+    }
+
+    /**
+     * Set usuario
+     *
+     * @param string $usuario
+     *
+     * @return CarCliente
+     */
+    public function setUsuario($usuario)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return string
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
     }
 }

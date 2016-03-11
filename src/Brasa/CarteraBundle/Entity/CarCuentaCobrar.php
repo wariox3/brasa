@@ -85,7 +85,25 @@ class CarCuentaCobrar
      */
     protected $cuentaCobrarTipoRel;
 
+    /**
+     * @ORM\OneToMany(targetEntity="CarNotaCreditoDetalle", mappedBy="cuentaCobrarRel")
+     */
+    protected $notasCreditosDetallesCuentaCobrarRel;
     
+     /**
+     * @ORM\OneToMany(targetEntity="CarNotaDebitoDetalle", mappedBy="cuentaCobrarRel")
+     */
+    protected $notasDebitosDetallesCuentaCobrarRel;
+
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->notasCreditosDetallesCuentaCobrarRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->notasDebitosDetallesCuentaCobrarRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoCuentaCobrarPk
@@ -407,5 +425,73 @@ class CarCuentaCobrar
     public function getCuentaCobrarTipoRel()
     {
         return $this->cuentaCobrarTipoRel;
+    }
+
+    /**
+     * Add notasCreditosDetallesCuentaCobrarRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarNotaCreditoDetalle $notasCreditosDetallesCuentaCobrarRel
+     *
+     * @return CarCuentaCobrar
+     */
+    public function addNotasCreditosDetallesCuentaCobrarRel(\Brasa\CarteraBundle\Entity\CarNotaCreditoDetalle $notasCreditosDetallesCuentaCobrarRel)
+    {
+        $this->notasCreditosDetallesCuentaCobrarRel[] = $notasCreditosDetallesCuentaCobrarRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove notasCreditosDetallesCuentaCobrarRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarNotaCreditoDetalle $notasCreditosDetallesCuentaCobrarRel
+     */
+    public function removeNotasCreditosDetallesCuentaCobrarRel(\Brasa\CarteraBundle\Entity\CarNotaCreditoDetalle $notasCreditosDetallesCuentaCobrarRel)
+    {
+        $this->notasCreditosDetallesCuentaCobrarRel->removeElement($notasCreditosDetallesCuentaCobrarRel);
+    }
+
+    /**
+     * Get notasCreditosDetallesCuentaCobrarRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNotasCreditosDetallesCuentaCobrarRel()
+    {
+        return $this->notasCreditosDetallesCuentaCobrarRel;
+    }
+
+    /**
+     * Add notasDebitosDetallesCuentaCobrarRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarNotaDebitoDetalle $notasDebitosDetallesCuentaCobrarRel
+     *
+     * @return CarCuentaCobrar
+     */
+    public function addNotasDebitosDetallesCuentaCobrarRel(\Brasa\CarteraBundle\Entity\CarNotaDebitoDetalle $notasDebitosDetallesCuentaCobrarRel)
+    {
+        $this->notasDebitosDetallesCuentaCobrarRel[] = $notasDebitosDetallesCuentaCobrarRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove notasDebitosDetallesCuentaCobrarRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarNotaDebitoDetalle $notasDebitosDetallesCuentaCobrarRel
+     */
+    public function removeNotasDebitosDetallesCuentaCobrarRel(\Brasa\CarteraBundle\Entity\CarNotaDebitoDetalle $notasDebitosDetallesCuentaCobrarRel)
+    {
+        $this->notasDebitosDetallesCuentaCobrarRel->removeElement($notasDebitosDetallesCuentaCobrarRel);
+    }
+
+    /**
+     * Get notasDebitosDetallesCuentaCobrarRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNotasDebitosDetallesCuentaCobrarRel()
+    {
+        return $this->notasDebitosDetallesCuentaCobrarRel;
     }
 }
