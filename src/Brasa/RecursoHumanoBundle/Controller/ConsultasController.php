@@ -7,7 +7,6 @@ use Doctrine\ORM\EntityRepository;
 
 class ConsultasController extends Controller
 {
-    var $strSqlLista = "";
     var $strSqlCreditoLista = "";
     var $strSqlServiciosPorCobrarLista = "";
     var $strSqlProgramacionesPagoLista = "";
@@ -20,40 +19,7 @@ class ConsultasController extends Controller
     var $strSqlPagoPendientesBancoLista = "";
     var $strSqlEmpleadosLista = "";
     var $strSqlDotacionesPendientesLista = "";
-    var $strSqlProcesosDisciplinariosLista = "";
-    public function costosGeneralAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
-        $paginator  = $this->get('knp_paginator');
-        $form = $this->formularioLista();
-        $form->handleRequest($request);
-        $this->listarCostosGeneral();
-        if ($form->isValid())
-        {
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if($form->get('BtnExcel')->isClicked()) {
-                $this->filtrarLista($form);
-                $this->listarCostosGeneral();
-                $this->generarExcel();
-            }
-            if($form->get('BtnPDF')->isClicked()) {
-                $this->filtrarLista($form);
-                $this->listarCostosGeneral();
-                $objReporteCostos = new \Brasa\RecursoHumanoBundle\Reportes\ReporteCostos();
-                $objReporteCostos->Generar($this, $this->strSqlLista);
-            }
-            if($form->get('BtnFiltrar')->isClicked()) {
-                $this->filtrarLista($form);
-                $this->listarCostosGeneral();
-            }
-
-        }
-        $arPagos = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 40);
-        return $this->render('BrasaRecursoHumanoBundle:Consultas/Costos:general.html.twig', array(
-            'arPagos' => $arPagos,
-            'form' => $form->createView()
-            ));
-    }
+    var $strSqlProcesosDisciplinariosLista = "";    
 
     public function PagoPendientesBancoAction() {
         $em = $this->getDoctrine()->getManager();
@@ -501,18 +467,7 @@ class ConsultasController extends Controller
                     'arEmpleadoDotacion' => $arEmpleadoDotacion,
                     'form' => $form->createView()
                     ));
-    }
-
-    private function listarCostosGeneral() {
-        $session = $this->getRequest()->getSession();
-        $em = $this->getDoctrine()->getManager();
-        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaDqlCostos(
-                    $session->get('filtroCodigoCentroCosto'),
-                    $session->get('filtroIdentificacion'),
-                    $session->get('filtroDesde'),
-                    $session->get('filtroHasta')
-                    );
-    }
+    }  
 
     private function listarPagoPendientesBanco() {
         $session = $this->getRequest()->getSession();
@@ -1030,17 +985,7 @@ class ConsultasController extends Controller
             ->add('BtnExcelFechaTerminacion', 'submit', array('label'  => 'Excel',))
             ->getForm();
         return $form;
-    }
-
-    private function filtrarLista($form) {
-        $session = $this->getRequest()->getSession();
-        $request = $this->getRequest();
-        $controles = $request->request->get('form');
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
-    }
+    }    
 
     private function filtrarPagoPendientesBancoLista($form) {
         $session = $this->getRequest()->getSession();

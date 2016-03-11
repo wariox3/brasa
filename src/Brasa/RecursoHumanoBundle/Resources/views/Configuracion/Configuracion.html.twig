@@ -168,9 +168,21 @@
                                     </div>
                                 </div>                                        
                                 <div class="form-group form-group-sm">    
+                                    <label class="col-sm-3 control-label">Porcentaje int cesantias:</label>
+                                    <div class="col-sm-9">
+                                            {{ form_widget(formConfiguracion.prestacionesPorcentajeInteresesCesantias, { 'attr': {'class': 'form-control'} }) }}
+                                    </div>
+                                </div>                                    
+                                <div class="form-group form-group-sm">    
                                     <label class="col-sm-3 control-label">Porcentaje vacaciones:</label>
                                     <div class="col-sm-9">
                                             {{ form_widget(formConfiguracion.prestacionesPorcentajeVacaciones, { 'attr': {'class': 'form-control'} }) }}
+                                    </div>
+                                </div>                                    
+                                <div class="form-group form-group-sm">    
+                                    <label class="col-sm-3 control-label">Porcentaje primas:</label>
+                                    <div class="col-sm-9">
+                                            {{ form_widget(formConfiguracion.prestacionesPorcentajePrimas, { 'attr': {'class': 'form-control'} }) }}
                                     </div>
                                 </div>                                    
                                 <div class="form-group form-group-sm">    
@@ -179,6 +191,18 @@
                                             {{ form_widget(formConfiguracion.aportesPorcentajeCaja, { 'attr': {'class': 'form-control'} }) }}
                                     </div>
                                 </div>                                    
+                                <div class="form-group form-group-sm">    
+                                    <label class="col-sm-3 control-label">Porcentaje aportes vacaciones:</label>
+                                    <div class="col-sm-9">
+                                            {{ form_widget(formConfiguracion.aportesPorcentajeVacaciones, { 'attr': {'class': 'form-control'} }) }}
+                                    </div>
+                                </div> 
+                                <div class="form-group form-group-sm">    
+                                    <label class="col-sm-3 control-label">Tipo base pago vacaciones:</label>
+                                    <div class="col-sm-9">
+                                            {{ form_widget(formConfiguracion.tipoBasePagoVacaciones, { 'attr': {'class': 'form-control'} }) }}
+                                    </div>
+                                </div>                                     
                             </div>
                     </div>            
                 </div> 

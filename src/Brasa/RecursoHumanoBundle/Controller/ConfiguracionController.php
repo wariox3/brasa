@@ -134,8 +134,12 @@ class ConfiguracionController extends Controller
             ->add('comprobantePagoBanco', 'entity', $arrayPropiedadesConceptoEntidadComprobanteBanco, array('required' => true))
             ->add('controlPago', 'choice', array('choices'   => array($arConfiguracion->getControlPago() => $srtControlPago, '1' => 'SI', '0' => 'NO')))
             ->add('prestacionesPorcentajeCesantias', 'number', array('data' => $arConfiguracion->getPrestacionesPorcentajeCesantias(), 'required' => true))
+            ->add('prestacionesPorcentajeInteresesCesantias', 'number', array('data' => $arConfiguracion->getPrestacionesPorcentajeInteresesCesantias(), 'required' => true))
             ->add('prestacionesPorcentajeVacaciones', 'number', array('data' => $arConfiguracion->getPrestacionesPorcentajeVacaciones(), 'required' => true))
-            ->add('aportesPorcentajeCaja', 'number', array('data' => $arConfiguracion->getAportesPorcentajeCaja(), 'required' => true))                                
+            ->add('prestacionesPorcentajePrimas', 'number', array('data' => $arConfiguracion->getPrestacionesPorcentajePrimas(), 'required' => true))
+            ->add('aportesPorcentajeCaja', 'number', array('data' => $arConfiguracion->getAportesPorcentajeCaja(), 'required' => true))
+            ->add('aportesPorcentajeVacaciones', 'number', array('data' => $arConfiguracion->getAportesPorcentajeVacaciones(), 'required' => true))
+            ->add('tipoBasePagoVacaciones', 'choice', array('choices' => array('1' => 'SALARIO', '2' => 'SALARIO+PRESTACIONES', '3' => 'SALARIO+RECARGOS NOCTURNOS', '0' => 'SIN ASIGNAR'), 'data' => $arConfiguracion->getTipoBasePagoVacaciones()))                
             ->add('guardar', 'submit', array('label' => 'Actualizar'))
             ->getForm();
         $formConfiguracion->handleRequest($request);
@@ -159,8 +163,12 @@ class ConfiguracionController extends Controller
             $comprobantePagoBanco = $controles['comprobantePagoBanco'];
             $controlPago = $controles['controlPago'];
             $prestacionesPorcentajeCesantias = $controles['prestacionesPorcentajeCesantias'];
+            $prestacionesPorcentajeInteresesCesantias = $controles['prestacionesPorcentajeInteresesCesantias'];
             $prestacionesPorcentajeVacaciones = $controles['prestacionesPorcentajeVacaciones'];
+            $prestacionesPorcentajePrimas = $controles['prestacionesPorcentajePrimas'];
             $aportesPorcentajeCaja = $controles['aportesPorcentajeCaja'];
+            $aportesPorcentajeVacaciones = $controles['aportesPorcentajeVacaciones'];
+            $tipoBasePagoVacaciones = $controles['tipoBasePagoVacaciones'];
             // guardar la tarea en la base de datos
             $arConfiguracion->setCodigoAuxilioTransporte($codigoConceptoAuxilioTransporte);
             $arConfiguracion->setVrAuxilioTransporte($ValorAuxilioTransporte);
@@ -180,8 +188,12 @@ class ConfiguracionController extends Controller
             $arConfiguracion->setCodigoComprobantepagoBanco($comprobantePagoBanco);
             $arConfiguracion->setControlPago($controlPago);
             $arConfiguracion->setPrestacionesPorcentajeCesantias($prestacionesPorcentajeCesantias);
+            $arConfiguracion->setPrestacionesPorcentajeInteresesCesantias($prestacionesPorcentajeInteresesCesantias);
             $arConfiguracion->setPrestacionesPorcentajeVacaciones($prestacionesPorcentajeVacaciones);
+            $arConfiguracion->setPrestacionesPorcentajePrimas($prestacionesPorcentajePrimas);
             $arConfiguracion->setAportesPorcentajeCaja($aportesPorcentajeCaja);
+            $arConfiguracion->setAportesPorcentajeVacaciones($aportesPorcentajeVacaciones);
+            $arConfiguracion->setTipoBasePagoVacaciones($tipoBasePagoVacaciones);
             $arrControles = $request->request->All();
             $intIndiceConsecutivo = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {

@@ -160,6 +160,16 @@ class RhuPago
     private $vrIcbf = 0;    
     
     /**
+     * @ORM\Column(name="vr_aporte_vacaciones", type="float")
+     */
+    private $vrAporteVacaciones = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_aportes", type="float")
+     */
+    private $vrAportes = 0;        
+    
+    /**
      * @ORM\Column(name="vr_cesantias", type="float")
      */
     private $vrCesantias = 0;    
@@ -178,6 +188,11 @@ class RhuPago
      * @ORM\Column(name="vr_primas", type="float")
      */
     private $vrPrimas = 0;     
+    
+    /**
+     * @ORM\Column(name="vr_prestaciones", type="float")
+     */
+    private $vrPrestaciones = 0;         
     
     /**
      * @ORM\Column(name="vr_neto", type="float")
@@ -1788,5 +1803,77 @@ class RhuPago
     public function getVrPrimas()
     {
         return $this->vrPrimas;
+    }
+
+    /**
+     * Set vrPrestaciones
+     *
+     * @param float $vrPrestaciones
+     *
+     * @return RhuPago
+     */
+    public function setVrPrestaciones($vrPrestaciones)
+    {
+        $this->vrPrestaciones = $vrPrestaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPrestaciones
+     *
+     * @return float
+     */
+    public function getVrPrestaciones()
+    {
+        return $this->vrPrestaciones;
+    }
+
+    /**
+     * Set vrAportes
+     *
+     * @param float $vrAportes
+     *
+     * @return RhuPago
+     */
+    public function setVrAportes($vrAportes)
+    {
+        $this->vrAportes = $vrAportes;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAportes
+     *
+     * @return float
+     */
+    public function getVrAportes()
+    {
+        return $this->vrAportes;
+    }
+
+    /**
+     * Set vrAporteVacaciones
+     *
+     * @param float $vrAporteVacaciones
+     *
+     * @return RhuPago
+     */
+    public function setVrAporteVacaciones($vrAporteVacaciones)
+    {
+        $this->vrAporteVacaciones = $vrAporteVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAporteVacaciones
+     *
+     * @return float
+     */
+    public function getVrAporteVacaciones()
+    {
+        return $this->vrAporteVacaciones;
     }
 }

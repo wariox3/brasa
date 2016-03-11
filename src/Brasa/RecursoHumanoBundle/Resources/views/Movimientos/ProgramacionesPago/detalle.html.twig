@@ -253,8 +253,8 @@
         </div>
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
-                {% if arProgramacionPago.estadoGenerado == 0 %} 
-                    {{ form_widget(form.BtnGenerarEmpleados, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnGenerarEmpleados, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {% if arProgramacionPago.estadoGenerado == 0 %}                     
                     <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_cargar_soporte_turno', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar turnos</a>                    
                     <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_cargar_soporte_horario', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar horarios</a>                                        
                     <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_cargar_tiempo_sede', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar sedes</a>

@@ -848,7 +848,7 @@ brs_rhu_consultas_empleado_requisitos_pendientes:
 
 brs_rhu_consultas_costos_general:    
     path:     /rhu/consultas/costos/general
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:costosGeneral }
+    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasCostos:lista }
     
 brs_rhu_consultas_costos_ingresos_empleado:    
     path:     /rhu/consultas/costos/ingresos/empleado

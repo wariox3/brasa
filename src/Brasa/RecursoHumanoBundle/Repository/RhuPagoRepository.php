@@ -78,14 +78,13 @@ class RhuPagoRepository extends EntityRepository {
         
         //$arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();                        
         $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);                                
-        
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = $arPago->getContratoRel();
         $arPago->setVrDevengado($douDevengado);
         $arPago->setVrDeducciones($douDeducciones);
         $douNeto = $douDevengado - $douDeducciones;
         $arPago->setVrNeto($douNeto);
-        $arPago->setVrSalario($douSalario);
+        $arPago->setVrSalario($douSalario);        
         $arPago->setVrAuxilioTransporte($douAuxilioTransporte);
         $arPago->setVrAuxilioTransporteCotizacion(0);
         $arPago->setVrAdicionalTiempo($douAdicionTiempo);
@@ -96,18 +95,37 @@ class RhuPagoRepository extends EntityRepository {
         $arPago->setVrIngresoBasePrestacion($douIngresoBasePrestacion);
         $arPago->setDiasAusentismo($intDiasAusentismo);
         
+        $intTipoBaseVacaciones = $arConfiguracion->getTipoBasePagoVacaciones();
         $floPorcentajeRiesgos = $arContrato->getClasificacionRiesgoRel()->getPorcentaje();
         $floPorcentajePension = $arContrato->getTipoPensionRel()->getPorcentajeEmpleador();
         $floPorcentajeSalud = $arContrato->getTipoSaludRel()->getPorcentajeEmpleador();
         $floPorcentajeCaja = $arConfiguracion->getAportesPorcentajeCaja();
-        $floPorcentajeCesantias = $arConfiguracion->getPrestacionesPorcentajeCesantias();
+        $floPorcentajeAporteVacaciones = $arConfiguracion->getAportesPorcentajeVacaciones();        
+        $floPorcentajeCesantias = $arConfiguracion->getPrestacionesPorcentajeCesantias();        
+        $floPorcentajeInteresesCesantias = $arConfiguracion->getPrestacionesPorcentajeInteresesCesantias();
         $floPorcentajeVacaciones = $arConfiguracion->getPrestacionesPorcentajeVacaciones();
+        $floPorcentajePrimas = $arConfiguracion->getPrestacionesPorcentajePrimas();
         $douArp = ($douIngresoBaseCotizacion * $floPorcentajeRiesgos)/100;        
         $douPensionEmpleador = ($douIngresoBaseCotizacion * $floPorcentajePension) / 100; 
         $douSaludEmpleador = ($douIngresoBaseCotizacion * $floPorcentajeSalud) / 100;         
-        $douCaja = ($douIngresoBaseCotizacion * $floPorcentajeCaja) / 100; //Porcentaje 4
-        $douCesantias = (($douIngresoBaseCotizacion + $arPago->getVrAuxilioTransporteCotizacion()) * $floPorcentajeCesantias) / 100; // Porcentaje 17.66                
-        $douVacaciones = ($arPago->getVrSalarioPeriodo() * $floPorcentajeVacaciones) / 100; // 4.5
+        $douCaja = ($douIngresoBaseCotizacion * $floPorcentajeCaja) / 100; //Porcentaje 4        
+        $douCesantias = (($douIngresoBaseCotizacion + $douAuxilioTransporte) * $floPorcentajeCesantias) / 100; // Porcentaje 8.33                
+        $douInteresesCesantias = ($douCesantias * $floPorcentajeInteresesCesantias) / 100; // Porcentaje 1 sobre las cesantias                        
+        $douBaseVacaciones = 0;
+        if($intTipoBaseVacaciones == 1) {
+            $douBaseVacaciones = $douSalario;
+        } 
+        if($intTipoBaseVacaciones == 2) {
+            $douBaseVacaciones = $douSalario + $douAdicionTiempo + $douAdicionValor;
+        }        
+        if($intTipoBaseVacaciones == 3) {
+            $douBaseVacaciones = $douSalario + $douAdicionTiempo + $douAdicionValor;
+        }        
+        $douVacaciones = ($douBaseVacaciones * $floPorcentajeVacaciones) / 100; // 4.17
+        $douAporteVacaciones = ($floPorcentajeAporteVacaciones * $douVacaciones) / 100;
+        $douPrimas = (($douIngresoBaseCotizacion + $douAuxilioTransporte) * $floPorcentajePrimas) / 100; // 8.33
+        $douPrestaciones = $douCesantias + $douInteresesCesantias + $douVacaciones + $douPrimas;
+        $douAportes = $douPensionEmpleador + $douSaludEmpleador + $douArp + $douCaja + $douAporteVacaciones;
         
         //Aportes empleado
         $arPago->setVrPension($douPensionEmpleador);
@@ -120,14 +138,17 @@ class RhuPagoRepository extends EntityRepository {
         $arPago->setVrCaja($douCaja);
         $arPago->setvrSena(0);
         $arPago->setvrIcbf(0);
+        $arPago->setVrAportes($douAportes);
+        $arPago->setVrAporteVacaciones($douAporteVacaciones);
         
         
-        //Liquidar prestaciones
-        $arPago->setVrPrimas(0);
+        //Liquidar prestaciones        
         $arPago->setVrCesantias($douCesantias);
-        $arPago->setVrInteresesCesantias(0);
+        $arPago->setVrInteresesCesantias($douInteresesCesantias);
         $arPago->setVrVacaciones($douVacaciones);        
-                
+        $arPago->setVrPrimas($douPrimas);        
+        $arPago->setVrPrestaciones($douPrestaciones);
+        
         $arPago->setVrCosto(0);                       
         $em->persist($arPago);
         $em->flush();
@@ -201,7 +222,7 @@ class RhuPagoRepository extends EntityRepository {
 
     public function listaDqlCostos($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT p, e FROM BrasaRecursoHumanoBundle:RhuPago p JOIN p.empleadoRel e WHERE p.codigoPagoTipoFk = 1 AND p.estadoPagado = 1";
+        $dql   = "SELECT p, e FROM BrasaRecursoHumanoBundle:RhuPago p JOIN p.empleadoRel e WHERE p.codigoPagoTipoFk = 1 ";
         if($strCodigoCentroCosto != "") {
             $dql .= " AND p.codigoCentroCostoFk = " . $strCodigoCentroCosto;
         }   
