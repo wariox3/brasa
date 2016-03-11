@@ -19,8 +19,8 @@ brasa_transporte:
     prefix:   /
 
 brasa_cartera:
-    resource: "@BrasaCarteraBundle/Resources/config/routing.yml"
-    prefix:   /
+    resource: "@BrasaCarteraBundle/Controller/"
+    type:     annotation 
 
 brasa_contabilidad:
     resource: "@BrasaContabilidadBundle/Resources/config/routing.yml"

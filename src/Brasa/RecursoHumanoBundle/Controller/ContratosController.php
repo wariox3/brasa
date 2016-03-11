@@ -161,7 +161,7 @@ class ContratosController extends Controller
                 }
             } 
             //valida si el contrato es fijo, valida si es mayor o igual a un año
-            $arContratoTipo = $form->get('contratoTipoRel')->getData();
+            /*$arContratoTipo = $form->get('contratoTipoRel')->getData();
             if($arContratoTipo->getCodigoContratoTipoPk() == 2) {
                 $fechaDesde = $form->get('fechaDesde')->getData();
                 $fechaHasta = $form->get('fechaHasta')->getData();
@@ -170,7 +170,7 @@ class ContratosController extends Controller
                 if ($fechaHasta->format('Y-m-d') >= $nuevafecha){
                     $boolValidarContratoFijo = FALSE;
                 }
-            }
+            }*/
             //fin validación
             if ($codigoContrato == 0){
                 $douValidarEmpleadoContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->validarEmpleadoContrato($codigoEmpleado);
@@ -178,9 +178,9 @@ class ContratosController extends Controller
                     $objMensaje->Mensaje("error", "El empleado tiene contrato abierto, no se puede generar otro contrato", $this);
                     $intEstado = 1;
                 } else{
-                    if ($boolValidarContratoFijo == FALSE){
+                    /*if ($boolValidarContratoFijo == FALSE){
                         $objMensaje->Mensaje("error", "La duración del contrato no puede ser mayor o igual a un año", $this);
-                    } else {    
+                    } else {*/    
                         if($boolValidarTipoContrato == TRUE) {
                             if($boolValidarTipoContratoSalud == TRUE) {
                                 if($arContrato->getCentroCostoRel()->getFechaUltimoPago() < $arContrato->getFechaDesde() || $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(),1)) {
@@ -244,7 +244,7 @@ class ContratosController extends Controller
                         } else {
                             echo "Verifique el tipo de contrato con el tipo y subtipo de cotizante a seguridad social";
                         }
-                    }
+                    //}
                 }
             } else{
                 if ($boolValidarContratoFijo == FALSE){

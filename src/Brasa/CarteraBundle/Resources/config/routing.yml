@@ -1,3 +1,1 @@
-brasa_cartera_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: BrasaCarteraBundle:Default:index }
+
