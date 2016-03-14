@@ -1,12 +1,17 @@
 <?php
 namespace Brasa\TurnoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-class ConsultasCostoServicioController extends Controller
+class ConsultaProgramacionesDetallesController extends Controller
 {
-    var $strListaDql = "";    
-    
+    var $strListaDql = "";
+    var $codigoRecurso = "";
+    /**
+     * @Route("/tur/consulta/programaciones/detalles", name="brs_tur_consulta_programaciones_detalles")
+     */     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -29,15 +34,29 @@ class ConsultasCostoServicioController extends Controller
             }
         }
 
-        $arCierreMesServicio = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 200);
-        return $this->render('BrasaTurnoBundle:Consultas/Costo:servicio.html.twig', array(
-            'arCierreMesServicio' => $arCierreMesServicio,                        
+        $arProgramacionDetalle = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 200);
+        return $this->render('BrasaTurnoBundle:Consultas/Programacion:detalle.html.twig', array(
+            'arProgramacionDetalle' => $arProgramacionDetalle,                        
             'form' => $form->createView()));
     }        
     
     private function lista() {
-        $em = $this->getDoctrine()->getManager();        
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurCierreMesServicio')->listaDql();                    
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $strFechaDesde = "";
+        $strFechaHasta = "";
+        $filtrarFecha = $session->get('filtroProgramacionFiltrarFecha');
+        if($filtrarFecha) {
+            $strFechaDesde = $session->get('filtroProgramacionFechaDesde');
+            $strFechaHasta = $session->get('filtroProgramacionFechaHasta');
+        }       
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->consultaDetalleDql(
+                $session->get('filtroCodigoCliente'),
+                $session->get('filtroCodigoRecurso'),
+                $session->get('filtroCodigoCentroCostos'),
+                $strFechaDesde,
+                $strFechaHasta, 
+                $session->get('filtroProgramacionEstadoAutorizado'));                    
     }
 
     private function filtrar ($form) {
@@ -78,12 +97,28 @@ class ConsultasCostoServicioController extends Controller
                 $session->set('filtroCodigoRecurso', null);
             }          
         }
-
+        $dateFecha = new \DateTime('now');
+        $strFechaDesde = $dateFecha->format('Y/m/')."01";
+        $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
+        $strFechaHasta = $dateFecha->format('Y/m/').$intUltimoDia;
+        if($session->get('filtroProgramacionFechaDesde') != "") {
+            $strFechaDesde = $session->get('filtroProgramacionFechaDesde');
+        }
+        if($session->get('filtroProgramacionFechaHasta') != "") {
+            $strFechaHasta = $session->get('filtroProgramacionFechaHasta');
+        }    
+        $dateFechaDesde = date_create($strFechaDesde);
+        $dateFechaHasta = date_create($strFechaHasta);
         $form = $this->createFormBuilder()
             ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
             ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                
             ->add('TxtCodigoRecurso', 'text', array('label'  => 'Nit','data' => $session->get('filtroCodigoRecurso')))
-            ->add('TxtNombreRecurso', 'text', array('label'  => 'NombreCliente','data' => $strNombreRecurso))                                                                    
+            ->add('TxtNombreRecurso', 'text', array('label'  => 'NombreCliente','data' => $strNombreRecurso))                                
+            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroProgramacionCodigo')))
+            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroProgramacionEstadoAutorizado')))                
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                
+            ->add('filtrarFecha', 'checkbox', array('required'  => false, 'data' => $session->get('filtroProgramacionFiltrarFecha')))                             
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();

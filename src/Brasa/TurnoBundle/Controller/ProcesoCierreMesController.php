@@ -1,10 +1,14 @@
 <?php
 namespace Brasa\TurnoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 class ProcesoCierreMesController extends Controller
 {
+    /**
+     * @Route("/tur/proceso/cierre/mes", name="brs_tur_proceso_cierre_mes")
+     */    
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -33,11 +37,16 @@ class ProcesoCierreMesController extends Controller
                         $arCostoRecurso->setRecursoRel($arRecurso);
                         $arCostoRecurso->setAnio($arCierreMes->getAnio());
                         $arCostoRecurso->setMes($arCierreMes->getMes());
-                        $arCostoRecurso->setVrNomina($arrPagos[0]['vrNeto']);                        
+                        $arCostoRecurso->setVrNomina($arrPagos[0]['vrNeto']); 
+                        $arCostoRecurso->setVrPrestaciones($arrPagos[0]['vrPrestaciones']);
+                        $arCostoRecurso->setVrAportesSociales($arrPagos[0]['vrAportes']);
+                        $floTotal = $arrPagos[0]['vrNeto'] + $arrPagos[0]['vrPrestaciones'] + $arrPagos[0]['vrAportes'];
+                        $arCostoRecurso->setVrCostoTotal($floTotal);
                         $em->persist($arCostoRecurso);                        
                     }                    
                 }
                 $em->flush();
+                
                 //Creo los servicios (Detalles de pedido)
                 $arPedidosDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();                
                 $arPedidosDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->fecha($strFechaDesde, $strFechaHasta);                                
@@ -59,6 +68,7 @@ class ProcesoCierreMesController extends Controller
                     $arCierreMesServicio->setHorasNocturnas($arPedidoDetalle->getHorasNocturnas());
                     $arCierreMesServicio->setCantidad($arPedidoDetalle->getCantidad());
                     $arCierreMesServicio->setVrTotal($arPedidoDetalle->getVrTotalDetalle());                                        
+                    $arrProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->detallesPedido($arPedidoDetalle->getCodigoPedidoDetallePk());                    
                     $em->persist($arCierreMesServicio);  
                     /*$arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoPedidoDetalleFk' => $arPedidoDetalle->getCodigoPedidoDetallePk()));                                                    
                     $arCierreMesServicioDetalle = new \Brasa\TurnoBundle\Entity\TurCierreMesServicioDetalle();
@@ -68,7 +78,9 @@ class ProcesoCierreMesController extends Controller
                      */
                 }
                 $em->flush(); 
-                
+                $arCierreMes->setEstadoGenerado(1);
+                $em->persist($arCierreMes);
+                $em->flush();
                 //Creo los soportes de cada servicio (Detalles de programacion)
                 /*$arCierreMesServicios = new \Brasa\TurnoBundle\Entity\TurCierreMesServicio();
                 $arCierreMesServicios = $em->getRepository('BrasaTurnoBundle:TurCierreMesServicio')->findBy(array('codigoCierreMesFk' => $arCierreMes->getCodigoCierreMesPk()));                                
@@ -79,21 +91,23 @@ class ProcesoCierreMesController extends Controller
                 }*/
                 return $this->redirect($this->generateUrl('brs_tur_proceso_cierre_mes'));
             }
-            /*if($request->request->get('OpDeshacer')) {
-                $codigoSoportePagoPeriodo = $request->request->get('OpDeshacer');
-                $strSql = "DELETE FROM tur_soporte_pago_detalle WHERE codigo_soporte_pago_periodo_fk = " . $codigoSoportePagoPeriodo;           
-                $em->getConnection()->executeQuery($strSql);
-                $strSql = "DELETE FROM tur_soporte_pago WHERE codigo_soporte_pago_periodo_fk = " . $codigoSoportePagoPeriodo;           
-                $em->getConnection()->executeQuery($strSql); 
+            if($request->request->get('OpDeshacer')) {                
+                $codigoCierreMes = $request->request->get('OpDeshacer');
+                $arCierreMes = new \Brasa\TurnoBundle\Entity\TurCierreMes();
+                $arCierreMes = $em->getRepository('BrasaTurnoBundle:TurCierreMes')->find($codigoCierreMes);
                 
-                $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
-                $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
-                $arSoportePagoPeriodo->setEstadoGenerado(0);
-                $arSoportePagoPeriodo->setRecursos(0);
-                $em->persist($arSoportePagoPeriodo);
+                $strSql = "DELETE FROM tur_costo_recurso WHERE codigo_cierre_mes_fk = " . $codigoCierreMes;           
+                $em->getConnection()->executeQuery($strSql);
+                $strSql = "DELETE FROM tur_cierre_mes_servicio_detalle WHERE codigo_cierre_mes_fk = " . $codigoCierreMes;           
+                $em->getConnection()->executeQuery($strSql); 
+                $strSql = "DELETE FROM tur_cierre_mes_servicio WHERE codigo_cierre_mes_fk = " . $codigoCierreMes;           
+                $em->getConnection()->executeQuery($strSql); 
+                $arCierreMes->setEstadoGenerado(0);
+                $em->persist($arCierreMes);
                 $em->flush();                                                  
-                return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
+                return $this->redirect($this->generateUrl('brs_tur_proceso_cierre_mes'));                
             }
+            /*
             if($request->request->get('OpCerrar')) {
                 $codigoSoportePagoPeriodo = $request->request->get('OpCerrar');
                 $arSoportePagoPeriodo = NEW \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();

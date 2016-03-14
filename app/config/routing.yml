@@ -2,6 +2,10 @@ brasa_turno:
     resource: "@BrasaTurnoBundle/Resources/config/routing.yml"
     prefix:   /
 
+brasa_turno_annotation:
+    resource: "@BrasaTurnoBundle/Controller/"
+    type:     annotation 
+
 brasa_administracion_documental:
     resource: "@BrasaAdministracionDocumentalBundle/Resources/config/routing.yml"
     prefix:   /

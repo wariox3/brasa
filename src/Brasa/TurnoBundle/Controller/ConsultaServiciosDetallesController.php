@@ -1,14 +1,19 @@
 <?php
 namespace Brasa\TurnoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-class ConsultasServiciosCostosController extends Controller
+class ConsultaServiciosDetallesController extends Controller
 {
     var $strListaDql = "";
     var $codigoServicio = "";
     var $codigoCliente = "";
     
+    /**
+     * @Route("/tur/consulta/servicios/detalles", name="brs_tur_consulta_servicios_detalles")
+     */     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -36,7 +41,7 @@ class ConsultasServiciosCostosController extends Controller
             }
         }
         $arServiciosDetalles = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 100);
-        return $this->render('BrasaTurnoBundle:Consultas/Servicio:costos.html.twig', array(
+        return $this->render('BrasaTurnoBundle:Consultas/Servicio:detalle.html.twig', array(
             'arServiciosDetalles' => $arServiciosDetalles,
             'form' => $form->createView()));
     }
@@ -83,7 +88,7 @@ class ConsultasServiciosCostosController extends Controller
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
         }     
-        for($col = 'Y'; $col !== 'AD'; $col++) {
+        for($col = 'Y'; $col !== 'Y'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }        
@@ -112,12 +117,7 @@ class ConsultasServiciosCostosController extends Controller
                     ->setCellValue('U1', 'H')
                     ->setCellValue('V1', 'H.D')
                     ->setCellValue('W1', 'H.N')
-                    ->setCellValue('X1', 'DIAS')
-                    ->setCellValue('Y1', 'COSTO')
-                    ->setCellValue('Z1', 'P.MINIMO')
-                    ->setCellValue('AA1', 'P.AJUSTADO')
-                    ->setCellValue('AB1', 'TOTAL')
-                    ->setCellValue('AC1', 'RENTABILIDAD');
+                    ->setCellValue('X1', 'DIAS');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -147,12 +147,7 @@ class ConsultasServiciosCostosController extends Controller
                     ->setCellValue('U' . $i, $arServicioDetalle->getHoras())
                     ->setCellValue('V' . $i, $arServicioDetalle->getHorasDiurnas())
                     ->setCellValue('W' . $i, $arServicioDetalle->getHorasNocturnas())
-                    ->setCellValue('X' . $i, $arServicioDetalle->getDias())
-                    ->setCellValue('Y' . $i, $arServicioDetalle->getVrCosto())
-                    ->setCellValue('Z' . $i, $arServicioDetalle->getVrPrecioMinimo())
-                    ->setCellValue('AA' . $i, $arServicioDetalle->getVrPrecioAjustado())
-                    ->setCellValue('AB' . $i, $arServicioDetalle->getVrTotalDetalle())
-                    ->setCellValue('AC' . $i, $arServicioDetalle->getVrTotalDetalle()-$arServicioDetalle->getVrCosto());
+                    ->setCellValue('X' . $i, $arServicioDetalle->getDias());
             if($arServicioDetalle->getPuestoRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('D' . $i, $arServicioDetalle->getPuestoRel()->getNombre());

@@ -1,13 +1,18 @@
 <?php
 namespace Brasa\TurnoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-class ConsultasServiciosDetallesRecursosController extends Controller
+class ConsultaServiciosDetallesRecursosController extends Controller
 {
     var $strListaDql = "";
     var $codigoCliente = "";
     
+    /**
+     * @Route("/tur/consulta/servicios/detalles/recursos", name="brs_tur_consulta_servicios_detalles_recursos")
+     */     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

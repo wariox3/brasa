@@ -32,6 +32,11 @@ class TurCierreMes
      */    
     private $estadoCerrado = false;    
 
+    /**     
+     * @ORM\Column(name="estado_generado", type="boolean")
+     */    
+    private $estadoGenerado = false;     
+    
     /**
      * @ORM\OneToMany(targetEntity="TurCierreMesServicio", mappedBy="cierreMesRel", cascade={"persist", "remove"})
      */
@@ -238,5 +243,29 @@ class TurCierreMes
     public function getCostosRecursosCierreMesRel()
     {
         return $this->costosRecursosCierreMesRel;
+    }
+
+    /**
+     * Set estadoGenerado
+     *
+     * @param boolean $estadoGenerado
+     *
+     * @return TurCierreMes
+     */
+    public function setEstadoGenerado($estadoGenerado)
+    {
+        $this->estadoGenerado = $estadoGenerado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoGenerado
+     *
+     * @return boolean
+     */
+    public function getEstadoGenerado()
+    {
+        return $this->estadoGenerado;
     }
 }

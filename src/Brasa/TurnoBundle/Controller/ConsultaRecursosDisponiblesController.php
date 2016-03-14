@@ -1,13 +1,18 @@
 <?php
 namespace Brasa\TurnoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-class ConsultasRecursosDisponiblesController extends Controller
+class ConsultaRecursosDisponiblesController extends Controller
 {
     var $strListaDql = "";
     var $codigoPedido = "";
     
+    /**
+     * @Route("/tur/consulta/recursos/disponibles", name="brs_tur_consulta_recursos_disponibles")
+     */     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -96,7 +101,10 @@ class ConsultasRecursosDisponiblesController extends Controller
             'mes' => $mes,
             'form' => $form->createView()));
     }        
-    
+        
+    /**
+     * @Route("/tur/consultas/recursos/disponibles/programacion/{anio}/{mes}/{codigoRecurso}", name="brs_tur_consultas_recursos_disponibles_programacion")
+     */         
     public function programacionAction($anio, $mes, $codigoRecurso) {
         $em = $this->getDoctrine()->getManager();        
         $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();

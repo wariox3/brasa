@@ -139,7 +139,7 @@ class ConfiguracionController extends Controller
             ->add('prestacionesPorcentajePrimas', 'number', array('data' => $arConfiguracion->getPrestacionesPorcentajePrimas(), 'required' => true))
             ->add('aportesPorcentajeCaja', 'number', array('data' => $arConfiguracion->getAportesPorcentajeCaja(), 'required' => true))
             ->add('aportesPorcentajeVacaciones', 'number', array('data' => $arConfiguracion->getAportesPorcentajeVacaciones(), 'required' => true))
-            ->add('tipoBasePagoVacaciones', 'choice', array('choices' => array('1' => 'SALARIO', '2' => 'SALARIO+PRESTACIONES', '3' => 'SALARIO+RECARGOS NOCTURNOS', '0' => 'SIN ASIGNAR'), 'data' => $arConfiguracion->getTipoBasePagoVacaciones()))                
+            ->add('tipoBasePagoVacaciones', 'choice', array('choices' => array('1' => 'SALARIO', '2' => 'SALARIO PRESTACIONAL', '3' => 'SALARIO+RECARGOS NOCTURNOS', '0' => 'SIN ASIGNAR'), 'data' => $arConfiguracion->getTipoBasePagoVacaciones()))                
             ->add('guardar', 'submit', array('label' => 'Actualizar'))
             ->getForm();
         $formConfiguracion->handleRequest($request);

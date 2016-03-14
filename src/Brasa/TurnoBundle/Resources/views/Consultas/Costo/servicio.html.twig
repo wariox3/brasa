@@ -8,7 +8,7 @@
 </script>    
 <div class="container">
     <div class="page-header">
-        <h3>Resumen costos de servicio</h3>
+        <h3>Consulta costo servicio</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
@@ -75,11 +75,7 @@
                 <th>HAS</th>
                 <th>D</th>
                 <th>H</th>
-                <th>H.D</th>
-                <th>H.N</th>
                 <th>H.P</th>
-                <th>H.D.P</th>
-                <th>H.N.P</th>                
                 <th>CANT</th>
                 <th>VALOR</th>
             </tr>            
@@ -96,11 +92,7 @@
                     <td>{{ arCierreMesServicio.diaHasta }}</td>
                     <td style="text-align: right">{{ arCierreMesServicio.dias | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arCierreMesServicio.horas | number_format(1, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arCierreMesServicio.horasDiurnas | number_format(1, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arCierreMesServicio.horasNocturnas | number_format(1, '.', ',') }}</td>                     
                     <td style="text-align: right">{{ arCierreMesServicio.horasProgramadas | number_format(1, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arCierreMesServicio.horasDiurnasProgramadas | number_format(1, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arCierreMesServicio.horasNocturnasProgramadas | number_format(1, '.', ',') }}</td>                                         
                     <td style="text-align: right">{{ arCierreMesServicio.cantidad | number_format(0, '.', ',') }}</td>                     
                     <td style="text-align: right">{{ arCierreMesServicio.vrTotal | number_format(1, '.', ',') }}</td>                     
                 </tr>

@@ -160,7 +160,7 @@ class RhuPagoRepository extends EntityRepository {
         if($arContrato->getCodigoTipoTiempoFk() == 2) {
             $douPensionEmpleador = ($douIngresoBaseCotizacion * ($floPorcentajePension+$floPorcentajePensionEmpleado)) / 100; 
             $douPensionEmpleador = $douPensionEmpleador - $douPension;
-            $douSaludEmpleador = ($douIngresoBaseCotizacion * ($floPorcentajeSalud+$floPorcentajeSaludEmpleado)) / 100;            
+            $douSaludEmpleador = ($douIngresoBaseCotizacion * $floPorcentajeSaludEmpleado) / 100;            
             $douSaludEmpleador = $douSaludEmpleador - $douEps;
         }
         
@@ -463,7 +463,9 @@ class RhuPagoRepository extends EntityRepository {
         $em = $this->getEntityManager();             
         $strSql = "SELECT
                     COUNT(codigo_pago_pk) as numeroPagos,
-                    SUM(vr_neto) as vrNeto
+                    SUM(vr_neto) as vrNeto,
+                    SUM(vr_prestaciones) as vrPrestaciones,
+                    SUM(vr_aportes) as vrAportes
                     FROM rhu_pago                                                            
                     WHERE rhu_pago.codigo_empleado_fk = $codigoEmpleado AND (rhu_pago.fecha_desde >='$strDesde' AND rhu_pago.fecha_hasta <='$strHasta')
                     GROUP BY codigo_empleado_fk"; 

@@ -19,13 +19,22 @@
                 <th>ANIO</th>
                 <th>MES</th>
                 <th></th>
+                <th></th>
             </tr>
             {% for arCierreMes in arCierreMes %}
             <tr>
                 <td>{{ arCierreMes.codigoCierreMesPk  }}</td>
                 <td>{{ arCierreMes.anio  }}</td>
                 <td>{{ arCierreMes.mes }}</td>
-                <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arCierreMes.codigoCierreMesPk }}">Generar</button></td>                
+                {% if arCierreMes.estadoGenerado == 0 %}
+                    <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arCierreMes.codigoCierreMesPk }}">Generar</button></td>
+                    <td></td>                                        
+                {% else %}
+                    {% if arCierreMes.estadoCerrado == 0 %}
+                        <td><button class="btn btn-default btn-xs" type="submit" name="OpDeshacer" value="{{ arCierreMes.codigoCierreMesPk }}">Deshacer</button></td>
+                        <td><button class="btn btn-default btn-xs" type="submit" name="OpCerrar" value="{{ arCierreMes.codigoCierreMesPk }}">Cerrar</button></td>                        
+                    {% endif %}                                                                       
+                {% endif %}                                                 
             </tr>
             {% endfor %}
         </table>     

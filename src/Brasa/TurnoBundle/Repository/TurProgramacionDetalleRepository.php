@@ -573,4 +573,8 @@ class TurProgramacionDetalleRepository extends EntityRepository {
         return $strCodigoReal;
     }
     
+    private function detallesPedido($codigoPedidoDetalle) {
+        
+    }
+    
 }

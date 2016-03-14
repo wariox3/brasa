@@ -212,43 +212,7 @@ brs_tur_factura_detalle:
    
 brs_tur_factura_detalle_nuevo:
    path:     /tur/factura/detalle/nuevo/{codigoFactura}
-   defaults: { _controller: BrasaTurnoBundle:MovimientoFactura:detalleNuevo }                    
-
-brs_tur_consultas_servicios_costos:    
-    path:     /tur/consultas/servicios/costos
-    defaults: { _controller: BrasaTurnoBundle:ConsultasServiciosCostos:lista }
-
-brs_tur_consultas_servicios_detalles:    
-    path:     /tur/consultas/servicios/detalles
-    defaults: { _controller: BrasaTurnoBundle:ConsultasServiciosDetalles:lista }
-
-brs_tur_consultas_servicios_detalles_recursos:    
-    path:     /tur/consultas/servicios/detalles/recursos
-    defaults: { _controller: BrasaTurnoBundle:ConsultasServiciosDetallesRecursos:lista }    
-
-brs_tur_consultas_pedidos_detalles:    
-    path:     /tur/consultas/pedidos/detalles
-    defaults: { _controller: BrasaTurnoBundle:ConsultasPedidosDetalles:lista }
-
-brs_tur_consultas_programaciones_detalles:    
-    path:     /tur/consultas/programaciones/detalles
-    defaults: { _controller: BrasaTurnoBundle:ConsultasProgramacionesDetalles:lista }             
-    
-brs_tur_consultas_recursos_disponibles:    
-    path:     /tur/consultas/recursos/disponibles
-    defaults: { _controller: BrasaTurnoBundle:ConsultasRecursosDisponibles:lista }         
-
-brs_tur_consultas_recursos_disponibles_programacion:    
-    path:     /tur/consultas/recursos/disponibles/programacion/{anio}/{mes}/{codigoRecurso}
-    defaults: { _controller: BrasaTurnoBundle:ConsultasRecursosDisponibles:programacion }     
- 
-brs_tur_consultas_costo_servicio:    
-    path:     /tur/consultas/costo/servicio
-    defaults: { _controller: BrasaTurnoBundle:ConsultasCostoServicio:lista } 
-
-brs_tur_consultas_costo_recurso:    
-    path:     /tur/consultas/costo/recurso
-    defaults: { _controller: BrasaTurnoBundle:ConsultasCostoRecurso:lista } 
+   defaults: { _controller: BrasaTurnoBundle:MovimientoFactura:detalleNuevo }                                                  
     
 brs_tur_proceso_generar_soporte_pago:
     path:     /tur/proceso/generar/soporte/pago
@@ -276,11 +240,7 @@ brs_tur_proceso_generar_programacion_lista:
     
 brs_tur_proceso_generar_pedido_lista:
     path:     /tur/proceso/generar/pedido/lista
-    defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarPedido:lista }             
-    
-brs_tur_proceso_cierre_mes:
-    path:     /tur/proceso/cierre/mes/
-    defaults: { _controller: BrasaTurnoBundle:ProcesoCierreMes:lista }     
+    defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarPedido:lista }                     
     
 brs_tur_utilidad_aplicar_novedad:    
     path:     /tur/utilidad/aplicar/novedad
