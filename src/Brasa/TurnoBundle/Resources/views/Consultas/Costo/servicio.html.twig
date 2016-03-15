@@ -77,7 +77,8 @@
                 <th>H</th>
                 <th>H.P</th>
                 <th>CANT</th>
-                <th>VALOR</th>
+                <th>COSTO</th>
+                <th>PRECIO</th>
             </tr>            
             {% for arCierreMesServicio in arCierreMesServicio %}
                 <tr>
@@ -94,7 +95,8 @@
                     <td style="text-align: right">{{ arCierreMesServicio.horas | number_format(1, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arCierreMesServicio.horasProgramadas | number_format(1, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arCierreMesServicio.cantidad | number_format(0, '.', ',') }}</td>                     
-                    <td style="text-align: right">{{ arCierreMesServicio.vrTotal | number_format(1, '.', ',') }}</td>                     
+                    <td style="text-align: right">{{ arCierreMesServicio.vrCostoRecurso | number_format(0, '.', ',') }}</td>                     
+                    <td style="text-align: right">{{ arCierreMesServicio.vrTotal | number_format(0, '.', ',') }}</td>                     
                 </tr>
             {% endfor %}
         </table>

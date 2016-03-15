@@ -5,13 +5,13 @@ namespace Brasa\TurnoBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 class TurProgramacionDetalleRepository extends EntityRepository {
-    
+
     public function ListaDql() {
         $em = $this->getEntityManager();
         $dql   = "SELECT pd FROM BrasaTurnoBundle:TurProgramacionDetalle pd WHERE pd.codigoProgramacionDetallePk <> 0";
         $dql .= " ORDER BY pd.codigoProgramacionDetallePk";
         return $dql;
-    }                
+    }
 
     public function consultaDetalleDql($codigoCliente, $codigoRecurso, $codigoCentroCosto, $strFechaDesde = "", $strFechaHasta = "", $boolEstadoAutorizado = "") {
         $em = $this->getEntityManager();
@@ -22,13 +22,13 @@ class TurProgramacionDetalleRepository extends EntityRepository {
         }
         if($codigoRecurso != '') {
             $dql = $dql . "AND pd.codigoRecursoFk = " . $codigoRecurso;
-        }        
+        }
         if($codigoCentroCosto != '') {
             $dql = $dql . "AND r.codigoCentroCostoFk = " . $codigoCentroCosto;
-        }    
+        }
         if($strFechaDesde != "") {
             $dql .= " AND p.fecha >= '" . $strFechaDesde . "'";
-        }        
+        }
         if($strFechaHasta != "") {
             $dql .= " AND p.fecha <= '" . $strFechaHasta . "'";
         }
@@ -37,22 +37,22 @@ class TurProgramacionDetalleRepository extends EntityRepository {
         }
         if($boolEstadoAutorizado == "0") {
             $dql .= " AND p.estadoAutorizado = 0";
-        }        
+        }
         $dql .= " ORDER BY p.codigoClienteFk";
         return $dql;
-    }    
+    }
 
     public function pedido($codigoPedidoDetalle) {
         $em = $this->getEntityManager();
         $dql   = "SELECT SUM(pd.horas) as horas "
-                . "FROM BrasaTurnoBundle:TurProgramacionDetalle pd "                
-                . "WHERE pd.codigoPedidoDetalleFk = " . $codigoPedidoDetalle;                
+                . "FROM BrasaTurnoBundle:TurProgramacionDetalle pd "
+                . "WHERE pd.codigoPedidoDetalleFk = " . $codigoPedidoDetalle;
         $query = $em->createQuery($dql);
         $arResultado = $query->getResult();
-        return $arResultado[0];                
-    }    
-    
-    public function eliminarDetallesSeleccionados($arrSeleccionados) {      
+        return $arResultado[0];
+    }
+
+    public function eliminarDetallesSeleccionados($arrSeleccionados) {
         $strResultado = "";
         if(count($arrSeleccionados) > 0) {
             $em = $this->getEntityManager();
@@ -61,88 +61,88 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                 $dql   = "SELECT COUNT(spd.codigoProgramacionDetalleFk) as numeroRegistros FROM BrasaTurnoBundle:TurSoportePagoDetalle spd "
                         . "WHERE spd.codigoProgramacionDetalleFk = " . $codigo;
                 $query = $em->createQuery($dql);
-                $arrSoportePagoDetalles = $query->getSingleResult(); 
+                $arrSoportePagoDetalles = $query->getSingleResult();
                 if($arrSoportePagoDetalles) {
                     $intNumeroRegistros = $arrSoportePagoDetalles['numeroRegistros'];
-                }       
+                }
                 if($intNumeroRegistros <= 0) {
-                    $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($codigo);                
-                    $em->remove($arProgramacionDetalle);                                      
+                    $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($codigo);
+                    $em->remove($arProgramacionDetalle);
                 } else {
                     $strResultado .= "El detalle " . $codigo . " no se puede eliminar porque tiene soportes de pago asociados ";
                 }
-            }                                         
-            $em->flush();       
+            }
+            $em->flush();
         }
         return $strResultado;
-    }  
-    
+    }
+
     public function numeroRegistros($codigo) {
         $em = $this->getEntityManager();
         $arDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoProgramacionFk' => $codigo));
         return count($arDetalles);
-    }  
-    
+    }
+
     public function periodo($strFechaDesde, $strFechaHasta, $codigoCentroCosto) {
         $em = $this->getEntityManager();
         $dql   = "SELECT pd FROM BrasaTurnoBundle:TurProgramacionDetalle pd JOIN pd.programacionRel p JOIN pd.recursoRel r "
                 . "WHERE p.fecha >= '" . $strFechaDesde . "' AND p.fecha <='" . $strFechaHasta . "' AND r.codigoCentroCostoFk = " . $codigoCentroCosto;
         $query = $em->createQuery($dql);
         $arResultado = $query->getResult();
-        return $arResultado;                
-    }    
-    
+        return $arResultado;
+    }
+
     public function validarRecurso($codigoProgramacion) {
         $em = $this->getEntityManager();
         $boolResultado = TRUE;
         $dql   = "SELECT pd.codigoProgramacionDetallePk FROM BrasaTurnoBundle:TurProgramacionDetalle pd "
                 . "WHERE pd.codigoProgramacionFk = " . $codigoProgramacion . " AND pd.codigoRecursoFk IS NULL";
-        $query = $em->createQuery($dql);        
+        $query = $em->createQuery($dql);
         $arResultado = $query->getResult();
         if(count($arResultado) > 0) {
             $boolResultado = FALSE;
         }
-        return $boolResultado;                
-    }    
-    
+        return $boolResultado;
+    }
+
     public function nuevo($codigoPedidoDetalle, $arProgramacion) {
         $em = $this->getEntityManager();
-        $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();        
-        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);                        
+        $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);
         $intDiaInicial = $arPedidoDetalle->getDiaDesde();
         $intDiaFinal = $arPedidoDetalle->getDiaHasta();
         $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arProgramacion->getFecha()->format('Y-m-') . $intDiaInicial, $arProgramacion->getFecha()->format('Y-m-') . $intDiaFinal);
         $strMesAnio = $arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('Y/m');
         for($j = 1; $j <= $arPedidoDetalle->getCantidad(); $j++) {
-            if($arPedidoDetalle->getPlantillaRel()) { 
+            if($arPedidoDetalle->getPlantillaRel()) {
                 if($arPedidoDetalle->getPlantillaRel()) {
                     $arPlantilla = $arPedidoDetalle->getPlantillaRel();
-                }                
+                }
                 $arPlantillaDetalles = new \Brasa\TurnoBundle\Entity\TurPlantillaDetalle();
-                $arPlantillaDetalles = $em->getRepository('BrasaTurnoBundle:TurPlantillaDetalle')->findBy(array('codigoPlantillaFk' => $arPlantilla->getCodigoPlantillaPk()));                
+                $arPlantillaDetalles = $em->getRepository('BrasaTurnoBundle:TurPlantillaDetalle')->findBy(array('codigoPlantillaFk' => $arPlantilla->getCodigoPlantillaPk()));
                 foreach ($arPlantillaDetalles as $arPlantillaDetalle) {
                     $strFechaDesde = $arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('Y/m') . "/" . $arPedidoDetalle->getDiaDesde();
                     $strAnio = $arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('Y');
-                    $intPosicion = $this->devuelvePosicionInicialMatrizPlantilla($strAnio, $arPlantilla->getDiasSecuencia(), $strFechaDesde, $arPedidoDetalle->getFechaIniciaPlantilla());                                                                    
+                    $intPosicion = $this->devuelvePosicionInicialMatrizPlantilla($strAnio, $arPlantilla->getDiasSecuencia(), $strFechaDesde, $arPedidoDetalle->getFechaIniciaPlantilla());
                     $arrTurnos = $this->devuelveTurnosMes($arPlantillaDetalle);
                     $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                     $arProgramacionDetalle->setProgramacionRel($arProgramacion);
                     $arProgramacionDetalle->setPedidoDetalleRel($arPedidoDetalle);
                     $arProgramacionDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
                     $arProgramacionDetalle->setAnio($arProgramacion->getFecha()->format('Y'));
-                    $arProgramacionDetalle->setMes($arProgramacion->getFecha()->format('m'));                    
+                    $arProgramacionDetalle->setMes($arProgramacion->getFecha()->format('m'));
                     $arPedidoDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso();
-                    $arPedidoDetalleRecurso = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->findOneBy(array('codigoPedidoDetalleFk' => $codigoPedidoDetalle, 'posicion' => $arPlantillaDetalle->getPosicion()));                
+                    $arPedidoDetalleRecurso = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->findOneBy(array('codigoPedidoDetalleFk' => $codigoPedidoDetalle, 'posicion' => $arPlantillaDetalle->getPosicion()));
                     if(count($arPedidoDetalleRecurso) > 0) {
                         $arProgramacionDetalle->setRecursoRel($arPedidoDetalleRecurso->getRecursoRel());
                     }
                     for($i = 1; $i < 32; $i++) {
                         $boolAplica = $this->aplicaPlantilla($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle);
-                        $strTurno = $arrTurnos[$intPosicion];                        
+                        $strTurno = $arrTurnos[$intPosicion];
                         $strFechaDia = $arProgramacion->getFecha()->format('Y-m-') . $i;
-                        $dateFechaDia = date_create($strFechaDia); 
+                        $dateFechaDia = date_create($strFechaDia);
                         $diaSemana = $dateFechaDia->format('N');
-                        
+
                         $boolFestivo = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->festivo($arFestivos, $dateFechaDia);
                         if($diaSemana == 1 && isset($arrTurnos['lunes'])) {
                             $strTurno = $arrTurnos['lunes'];
@@ -158,22 +158,22 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                         }
                         if($diaSemana == 5 && isset($arrTurnos['viernes'])) {
                             $strTurno = $arrTurnos['viernes'];
-                        }                        
+                        }
                         if($diaSemana == 6 && isset($arrTurnos['sabado'])) {
                             $strTurno = $arrTurnos['sabado'];
                         }
                         if($diaSemana == 7 && isset($arrTurnos['domingo'])) {
                             $strTurno = $arrTurnos['domingo'];
-                        }                        
+                        }
                         if($boolFestivo == 1 && isset($arrTurnos['festivo'])) {
                             $strTurno = $arrTurnos['festivo'];
                         }
-                        
+
                         if($arPlantilla->getHomologarCodigoTurno() == 1) {
                             $strTurno = $this->devuelveCodigoTurno($arrTurnos[$intPosicion]);
                         }
                         if($boolAplica == TRUE) {
-                            if($i == 1) {                                
+                            if($i == 1) {
                                 $arProgramacionDetalle->setDia1($strTurno);
                             }
                             if($i == 2) {
@@ -265,14 +265,14 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                             }
                             if($i == 31) {
                                 $arProgramacionDetalle->setDia31($strTurno);
-                            }                            
+                            }
                         }
                         $intPosicion++;
                         if($intPosicion == ($arPlantilla->getDiasSecuencia() + 1)) {
                             $intPosicion = 1;
                         }
                     }
-                    $em->persist($arProgramacionDetalle);                    
+                    $em->persist($arProgramacionDetalle);
                 }
             } else {
                 if($arPedidoDetalle->getCodigoServicioDetalleFk()) {
@@ -281,22 +281,22 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                     foreach ($arPlantillaDetalles as $arPlantillaDetalle) {
                         $strFechaDesde = $arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('Y/m') . "/" . $arPedidoDetalle->getDiaDesde();
                         $strAnio = $arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('Y');
-                        $intPosicion = $this->devuelvePosicionInicialMatrizPlantilla($strAnio, $arPedidoDetalle->getServicioDetalleRel()->getDiasSecuencia(), $strFechaDesde, $arPedidoDetalle->getFechaIniciaPlantilla());                                                                    
+                        $intPosicion = $this->devuelvePosicionInicialMatrizPlantilla($strAnio, $arPedidoDetalle->getServicioDetalleRel()->getDiasSecuencia(), $strFechaDesde, $arPedidoDetalle->getFechaIniciaPlantilla());
                         $arrTurnos = $this->devuelveTurnosMes($arPlantillaDetalle);
                         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                         $arProgramacionDetalle->setProgramacionRel($arProgramacion);
                         $arProgramacionDetalle->setPedidoDetalleRel($arPedidoDetalle);
                         $arProgramacionDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
                         $arPedidoDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso();
-                        $arPedidoDetalleRecurso = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->findOneBy(array('codigoPedidoDetalleFk' => $codigoPedidoDetalle, 'posicion' => $arPlantillaDetalle->getPosicion()));                
+                        $arPedidoDetalleRecurso = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->findOneBy(array('codigoPedidoDetalleFk' => $codigoPedidoDetalle, 'posicion' => $arPlantillaDetalle->getPosicion()));
                         if(count($arPedidoDetalleRecurso) > 0) {
                             $arProgramacionDetalle->setRecursoRel($arPedidoDetalleRecurso->getRecursoRel());
                         }
                         for($i = 1; $i < 32; $i++) {
                             $boolAplica = $this->aplicaPlantilla($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle);
-                            $strTurno = $arrTurnos[$intPosicion];                        
+                            $strTurno = $arrTurnos[$intPosicion];
                             $strFechaDia = $arProgramacion->getFecha()->format('Y-m-') . $i;
-                            $dateFechaDia = date_create($strFechaDia); 
+                            $dateFechaDia = date_create($strFechaDia);
                             $diaSemana = $dateFechaDia->format('N');
 
                             $boolFestivo = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->festivo($arFestivos, $dateFechaDia);
@@ -314,19 +314,19 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                             }
                             if($diaSemana == 5 && isset($arrTurnos['viernes'])) {
                                 $strTurno = $arrTurnos['viernes'];
-                            }                        
+                            }
                             if($diaSemana == 6 && isset($arrTurnos['sabado'])) {
                                 $strTurno = $arrTurnos['sabado'];
                             }
                             if($diaSemana == 7 && isset($arrTurnos['domingo'])) {
                                 $strTurno = $arrTurnos['domingo'];
-                            }                        
+                            }
                             if($boolFestivo == 1 && isset($arrTurnos['festivo'])) {
                                 $strTurno = $arrTurnos['festivo'];
                             }
 
                             if($boolAplica == TRUE) {
-                                if($i == 1) {                                
+                                if($i == 1) {
                                     $arProgramacionDetalle->setDia1($strTurno);
                                 }
                                 if($i == 2) {
@@ -418,15 +418,15 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                                 }
                                 if($i == 31) {
                                     $arProgramacionDetalle->setDia31($strTurno);
-                                }                            
+                                }
                             }
                             $intPosicion++;
                             if($intPosicion == ($arPedidoDetalle->getServicioDetalleRel()->getDiasSecuencia() + 1)) {
                                 $intPosicion = 1;
                             }
                         }
-                        $em->persist($arProgramacionDetalle);                    
-                    }                            
+                        $em->persist($arProgramacionDetalle);
+                    }
                 } else {
                     if($arPedidoDetalle->getCantidadRecurso() != 0) {
                         $intCantidad = $arPedidoDetalle->getCantidadRecurso();
@@ -437,15 +437,15 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                             $arProgramacionDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
                             $em->persist($arProgramacionDetalle);
                         }
-                    }                    
+                    }
                 }
             }
-        }      
+        }
         $arPedidoDetalle->setEstadoProgramado(1);
         $em->persist($arPedidoDetalle);
         $em->flush();
     }
-    
+
     private function aplicaPlantilla ($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle) {
         $boolResultado = FALSE;
         if($i >= $intDiaInicial && $i <= $intDiaFinal) {
@@ -489,14 +489,14 @@ class TurProgramacionDetalleRepository extends EntityRepository {
             }
         }
         return $boolResultado;
-    }    
+    }
 
     private function devuelvePosicionInicialMatrizPlantilla($strAnio, $intPosiciones, $strFechaHasta, $dateFechaDesde) {
         if($intPosiciones == 0) {
             $intPosiciones = 1;
         }
-        $intPos = 1;      
-        
+        $intPos = 1;
+
         $dateFechaHasta = date_create($strFechaHasta);
         //$strFecha = $strAnio."/01/1";
         $strFecha = $dateFechaDesde->format('Y/m/j');
@@ -510,11 +510,11 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                 if($intPos == ($intPosiciones+1)) {
                     $intPos = 1;
                 }
-            }            
+            }
         }
         return $intPos;
-    }    
-    
+    }
+
     private function devuelveTurnosMes($arPlantillaDetalle) {
         $arrTurnos = array(
             '1' => $arPlantillaDetalle->getDia1(),
@@ -555,10 +555,10 @@ class TurProgramacionDetalleRepository extends EntityRepository {
             'viernes' => $arPlantillaDetalle->getViernes(),
             'sabado' => $arPlantillaDetalle->getSabado(),
             'domingo' => $arPlantillaDetalle->getDomingo(),
-            'festivo' => $arPlantillaDetalle->getFestivo(),);        
+            'festivo' => $arPlantillaDetalle->getFestivo(),);
         return $arrTurnos;
     }
-    
+
     private function devuelveCodigoTurno ($strCodigo) {
         $strCodigoReal = "";
         if($strCodigo == 'A') {
@@ -572,9 +572,34 @@ class TurProgramacionDetalleRepository extends EntityRepository {
         }
         return $strCodigoReal;
     }
+
+    public function detallesPedido ($codigoPedidoDetalle, $strAnio, $strMes) {
+        $em = $this->getEntityManager();
+        $strSql = "SELECT
+                    COUNT(codigo_programacion_detalle_pk) as numeroRegistros,
+                    SUM(horas) as horas,                    
+                    SUM(horas * vr_hora_recurso) as vrRecurso
+                    FROM tur_programacion_detalle
+                    WHERE codigo_pedido_detalle_fk = $codigoPedidoDetalle AND anio = $strAnio AND mes = $strMes";        
+        $connection = $em->getConnection();
+        $statement = $connection->prepare($strSql);
+        $statement->execute();
+        $results = $statement->fetchAll();
+        return $results[0];        
+    }
     
-    private function detallesPedido($codigoPedidoDetalle) {
-        
+    public function detallesRecurso ($codigoRecurso, $strAnio, $strMes) {
+        $em = $this->getEntityManager();
+        $strSql = "SELECT
+                    COUNT(codigo_programacion_detalle_pk) as numeroRegistros,
+                    SUM(horas) as horas
+                    FROM tur_programacion_detalle
+                    WHERE codigo_recurso_fk = $codigoRecurso AND anio = $strAnio AND mes = $strMes";        
+        $connection = $em->getConnection();
+        $statement = $connection->prepare($strSql);
+        $statement->execute();
+        $results = $statement->fetchAll();
+        return $results[0];        
     }
     
 }

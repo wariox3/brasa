@@ -108,9 +108,16 @@ class TurCierreMesServicio
     private $cantidad = 0;    
     
     /**
+     * @ORM\Column(name="vr_costo_recurso", type="float")
+     */
+    private $vrCostoRecurso = 0;
+    
+    /**
      * @ORM\Column(name="vr_total", type="float")
      */
     private $vrTotal = 0;     
+    
+    
     
     /**
      * @ORM\ManyToOne(targetEntity="TurCierreMes", inversedBy="cierresMesServiciosCierreMesRel")
@@ -803,5 +810,29 @@ class TurCierreMesServicio
     public function getPedidoDetalleRel()
     {
         return $this->pedidoDetalleRel;
+    }
+
+    /**
+     * Set vrCostoRecurso
+     *
+     * @param float $vrCostoRecurso
+     *
+     * @return TurCierreMesServicio
+     */
+    public function setVrCostoRecurso($vrCostoRecurso)
+    {
+        $this->vrCostoRecurso = $vrCostoRecurso;
+
+        return $this;
+    }
+
+    /**
+     * Get vrCostoRecurso
+     *
+     * @return float
+     */
+    public function getVrCostoRecurso()
+    {
+        return $this->vrCostoRecurso;
     }
 }

@@ -208,6 +208,11 @@ class TurProgramacionDetalle
     private $horas = 0;    
     
     /**
+     * @ORM\Column(name="vr_hora_recurso", type="float")
+     */
+    private $vrHoraRecurso = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurProgramacion", inversedBy="programacionesDetallesProgramacionRel")
      * @ORM\JoinColumn(name="codigo_programacion_fk", referencedColumnName="codigo_programacion_pk")
      */
@@ -1295,5 +1300,29 @@ class TurProgramacionDetalle
     public function getMes()
     {
         return $this->mes;
+    }
+
+    /**
+     * Set vrHoraRecurso
+     *
+     * @param float $vrHoraRecurso
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setVrHoraRecurso($vrHoraRecurso)
+    {
+        $this->vrHoraRecurso = $vrHoraRecurso;
+
+        return $this;
+    }
+
+    /**
+     * Get vrHoraRecurso
+     *
+     * @return float
+     */
+    public function getVrHoraRecurso()
+    {
+        return $this->vrHoraRecurso;
     }
 }

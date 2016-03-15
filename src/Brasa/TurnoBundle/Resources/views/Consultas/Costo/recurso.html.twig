@@ -52,6 +52,8 @@
                 <th>PRESTACIONES</th>
                 <th>APORTES</th>
                 <th>TOTAL</th>
+                <th>HORAS</th>
+                <th>VR.HORA</th>
             </tr>            
             {% for arCostoRecurso in arCostoRecurso %}
                 <tr>
@@ -63,6 +65,8 @@
                     <td style="text-align: right">{{ arCostoRecurso.vrPrestaciones | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arCostoRecurso.vrAportesSociales | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arCostoRecurso.vrCostoTotal | number_format(0, '.', ',') }}</td> 
+                    <td style="text-align: right">{{ arCostoRecurso.horas | number_format(0, '.', ',') }}</td> 
+                    <td style="text-align: right">{{ arCostoRecurso.vrHora | number_format(0, '.', ',') }}</td> 
                 </tr>
             {% endfor %}
         </table>

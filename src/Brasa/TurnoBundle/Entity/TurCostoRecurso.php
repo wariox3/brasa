@@ -58,6 +58,16 @@ class TurCostoRecurso
     private $vrCostoTotal = 0;
     
     /**
+     * @ORM\Column(name="horas", type="integer")
+     */    
+    private $horas = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_hora", type="float")
+     */
+    private $vrHora = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurCierreMes", inversedBy="costosRecursosCierreMesRel")
      * @ORM\JoinColumn(name="codigo_cierre_mes_fk", referencedColumnName="codigo_cierre_mes_pk")
      */
@@ -318,5 +328,53 @@ class TurCostoRecurso
     public function getVrCostoTotal()
     {
         return $this->vrCostoTotal;
+    }
+
+    /**
+     * Set horas
+     *
+     * @param integer $horas
+     *
+     * @return TurCostoRecurso
+     */
+    public function setHoras($horas)
+    {
+        $this->horas = $horas;
+
+        return $this;
+    }
+
+    /**
+     * Get horas
+     *
+     * @return integer
+     */
+    public function getHoras()
+    {
+        return $this->horas;
+    }
+
+    /**
+     * Set vrHora
+     *
+     * @param float $vrHora
+     *
+     * @return TurCostoRecurso
+     */
+    public function setVrHora($vrHora)
+    {
+        $this->vrHora = $vrHora;
+
+        return $this;
+    }
+
+    /**
+     * Get vrHora
+     *
+     * @return float
+     */
+    public function getVrHora()
+    {
+        return $this->vrHora;
     }
 }
