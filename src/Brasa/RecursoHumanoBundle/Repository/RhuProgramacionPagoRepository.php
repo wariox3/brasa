@@ -91,7 +91,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $douVrHoraSalarioMinimo = ($douVrSalarioMinimo / 30) / 8;
                         $douIngresoBasePrestacional = 0;
                         $douIngresoBaseCotizacion = 0;                        
-                        
+
                         //Procesar vacaciones
                         $intDiasVacaciones = $arProgramacionPagoDetalle->getDiasVacaciones();
                         $intHorasVacaciones = $intDiasVacaciones * $intFactorDia;

@@ -46,6 +46,11 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     $arProgramacionPagoDetalle->setFactorDia($arContrato->getFactorHorasDia());
                     $arProgramacionPagoDetalle->setVrDia($floVrDia);
                     $arProgramacionPagoDetalle->setVrHora($floVrHora);
+                    //dias vacaciones
+                    $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                
+                    if($intDiasVacaciones > 0) {                                        
+                        $arProgramacionPagoDetalle->setDiasVacaciones($intDiasVacaciones);
+                    }                     
                     $em->persist($arProgramacionPagoDetalle);
 
                     if($arSoportePago->getHorasNocturnas() > 0) {
