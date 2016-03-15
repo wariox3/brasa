@@ -67,6 +67,7 @@
                 <th>COD</th>
                 <th>AÑO</th>                
                 <th>MES</th>
+                <th>CLIENTE</th>
                 <th>PUESTO</th>
                 <th>CONCEPTO</th>
                 <th>MODALIDAD</th>
@@ -85,6 +86,7 @@
                     <td>{{ arCierreMesServicio.codigoCierreMesServicioPk  }}<input type="hidden" name="LblCodigo[]" value="{{ arCierreMesServicio.codigoCierreMesServicioPk }}"></td>                                        
                     <td>{{ arCierreMesServicio.anio }}</td>
                     <td>{{ arCierreMesServicio.mes }}</td>
+                    <td>{{ arCierreMesServicio.clienteRel.nombreCorto |default('') }}</td>
                     <td>{{ arCierreMesServicio.puestoRel.nombre |default('') }}</td>
                     <td>{{ arCierreMesServicio.conceptoServicioRel.nombre |default('') }}</td>
                     <td>{{ arCierreMesServicio.modalidadServicioRel.nombre |default('') }}</td>

@@ -1,6 +1,7 @@
 <?php
 namespace Brasa\TurnoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurServicioType;
@@ -13,6 +14,9 @@ class MovimientoServicioController extends Controller
     var $nombreRecurso = "";
     var $codigoCentroCosto = "";    
     
+    /**
+     * @Route("/tur/movimiento/servicio", name="brs_tur_movimiento_servicio")
+     */    
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -24,7 +28,7 @@ class MovimientoServicioController extends Controller
             if ($form->get('BtnEliminar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurServicio')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_servicio_lista'));                 
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio'));                 
                 
             }
             if ($form->get('BtnFiltrar')->isClicked()) {                

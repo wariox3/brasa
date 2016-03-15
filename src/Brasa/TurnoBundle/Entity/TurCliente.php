@@ -185,6 +185,10 @@ class TurCliente
      */
     protected $clientesDireccionesClienteRel; 
     
+    /**
+     * @ORM\OneToMany(targetEntity="TurCierreMesServicio", mappedBy="clienteRel")
+     */
+    protected $cierresMesServiciosClienteRel;     
 
     /**
      * Constructor
@@ -198,6 +202,7 @@ class TurCliente
         $this->programacionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->puestosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->clientesDireccionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cierresMesServiciosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -400,6 +405,54 @@ class TurCliente
     public function getDireccion()
     {
         return $this->direccion;
+    }
+
+    /**
+     * Set barrio
+     *
+     * @param string $barrio
+     *
+     * @return TurCliente
+     */
+    public function setBarrio($barrio)
+    {
+        $this->barrio = $barrio;
+
+        return $this;
+    }
+
+    /**
+     * Get barrio
+     *
+     * @return string
+     */
+    public function getBarrio()
+    {
+        return $this->barrio;
+    }
+
+    /**
+     * Set codigoCiudadFk
+     *
+     * @param integer $codigoCiudadFk
+     *
+     * @return TurCliente
+     */
+    public function setCodigoCiudadFk($codigoCiudadFk)
+    {
+        $this->codigoCiudadFk = $codigoCiudadFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCiudadFk
+     *
+     * @return integer
+     */
+    public function getCodigoCiudadFk()
+    {
+        return $this->codigoCiudadFk;
     }
 
     /**
@@ -667,6 +720,30 @@ class TurCliente
     }
 
     /**
+     * Set usuario
+     *
+     * @param string $usuario
+     *
+     * @return TurCliente
+     */
+    public function setUsuario($usuario)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return string
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -736,6 +813,30 @@ class TurCliente
     public function getFormaPagoRel()
     {
         return $this->formaPagoRel;
+    }
+
+    /**
+     * Set ciudadRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
+     *
+     * @return TurCliente
+     */
+    public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
+    {
+        $this->ciudadRel = $ciudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     */
+    public function getCiudadRel()
+    {
+        return $this->ciudadRel;
     }
 
     /**
@@ -977,98 +1078,36 @@ class TurCliente
     }
 
     /**
-     * Set barrio
+     * Add cierresMesServiciosClienteRel
      *
-     * @param string $barrio
+     * @param \Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosClienteRel
      *
      * @return TurCliente
      */
-    public function setBarrio($barrio)
+    public function addCierresMesServiciosClienteRel(\Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosClienteRel)
     {
-        $this->barrio = $barrio;
+        $this->cierresMesServiciosClienteRel[] = $cierresMesServiciosClienteRel;
 
         return $this;
     }
 
     /**
-     * Get barrio
+     * Remove cierresMesServiciosClienteRel
      *
-     * @return string
+     * @param \Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosClienteRel
      */
-    public function getBarrio()
+    public function removeCierresMesServiciosClienteRel(\Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosClienteRel)
     {
-        return $this->barrio;
+        $this->cierresMesServiciosClienteRel->removeElement($cierresMesServiciosClienteRel);
     }
 
     /**
-     * Set codigoCiudadFk
+     * Get cierresMesServiciosClienteRel
      *
-     * @param integer $codigoCiudadFk
-     *
-     * @return TurCliente
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setCodigoCiudadFk($codigoCiudadFk)
+    public function getCierresMesServiciosClienteRel()
     {
-        $this->codigoCiudadFk = $codigoCiudadFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCiudadFk
-     *
-     * @return integer
-     */
-    public function getCodigoCiudadFk()
-    {
-        return $this->codigoCiudadFk;
-    }
-
-    /**
-     * Set ciudadRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
-     *
-     * @return TurCliente
-     */
-    public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
-    {
-        $this->ciudadRel = $ciudadRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudadRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenCiudad
-     */
-    public function getCiudadRel()
-    {
-        return $this->ciudadRel;
-    }
-
-    /**
-     * Set usuario
-     *
-     * @param string $usuario
-     *
-     * @return TurCliente
-     */
-    public function setUsuario($usuario)
-    {
-        $this->usuario = $usuario;
-
-        return $this;
-    }
-
-    /**
-     * Get usuario
-     *
-     * @return string
-     */
-    public function getUsuario()
-    {
-        return $this->usuario;
+        return $this->cierresMesServiciosClienteRel;
     }
 }

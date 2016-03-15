@@ -1,6 +1,7 @@
 <?php
 namespace Brasa\TurnoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurCotizacionType;
@@ -12,7 +13,10 @@ class MovimientoCotizacionController extends Controller
     var $numero = "";
     var $codigoCliente = "";
     var $estadoAutorizado = "";
-
+    
+    /**
+     * @Route("/tur/movimiento/cotizacion", name="brs_tur_movimiento_cotizacion")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -25,7 +29,7 @@ class MovimientoCotizacionController extends Controller
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurCotizacion')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_cotizacion_lista'));                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_cotizacion'));                
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);

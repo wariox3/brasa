@@ -4,18 +4,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Brasa\TurnoBundle\Form\Type\TurPedidoType;
-use Brasa\TurnoBundle\Form\Type\TurPedidoDetalleType;
-class MovimientoPedidoController extends Controller
+//use Brasa\TurnoBundle\Form\Type\TurPedidoType;
+//use Brasa\TurnoBundle\Form\Type\TurPedidoDetalleType;
+class MovimientoNovedadController extends Controller
 {
-    var $strListaDql = ""; 
-    var $strListaDqlRecurso = "";   
-    var $codigoRecurso = "";
-    var $nombreRecurso = "";    
+    var $strListaDql = "";   
     
     /**
-     * @Route("/tur/movimiento/pedido", name="brs_tur_movimiento_pedido")
-     */    
+     * @Route("/tur/movimiento/novedad", name="brs_tur_movimiento_novedad")
+     */        
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

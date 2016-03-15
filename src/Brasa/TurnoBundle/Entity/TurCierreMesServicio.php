@@ -38,6 +38,11 @@ class TurCierreMesServicio
     private $codigoPedidoDetalleFk;    
     
     /**
+     * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
+     */    
+    private $codigoClienteFk;     
+    
+    /**
      * @ORM\Column(name="codigo_puesto_fk", type="integer", nullable=true)
      */    
     private $codigoPuestoFk;           
@@ -130,6 +135,12 @@ class TurCierreMesServicio
      * @ORM\JoinColumn(name="codigo_pedido_detalle_fk", referencedColumnName="codigo_pedido_detalle_pk")
      */
     protected $pedidoDetalleRel;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TurCliente", inversedBy="cierresMesServiciosClienteRel")
+     * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
+     */
+    protected $clienteRel;
     
     /**
      * @ORM\ManyToOne(targetEntity="TurPuesto", inversedBy="cierresMesServiciosPuestoRel")
@@ -162,6 +173,14 @@ class TurCierreMesServicio
     protected $cierresMesServiciosDetallesCierreMesServicioRel;     
     
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->cierresMesServiciosDetallesCierreMesServicioRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * Get codigoCierreMesServicioPk
      *
      * @return integer
@@ -169,6 +188,30 @@ class TurCierreMesServicio
     public function getCodigoCierreMesServicioPk()
     {
         return $this->codigoCierreMesServicioPk;
+    }
+
+    /**
+     * Set codigoCierreMesFk
+     *
+     * @param integer $codigoCierreMesFk
+     *
+     * @return TurCierreMesServicio
+     */
+    public function setCodigoCierreMesFk($codigoCierreMesFk)
+    {
+        $this->codigoCierreMesFk = $codigoCierreMesFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCierreMesFk
+     *
+     * @return integer
+     */
+    public function getCodigoCierreMesFk()
+    {
+        return $this->codigoCierreMesFk;
     }
 
     /**
@@ -220,51 +263,51 @@ class TurCierreMesServicio
     }
 
     /**
-     * Set codigoCierreMesFk
+     * Set codigoPedidoDetalleFk
      *
-     * @param integer $codigoCierreMesFk
+     * @param integer $codigoPedidoDetalleFk
      *
      * @return TurCierreMesServicio
      */
-    public function setCodigoCierreMesFk($codigoCierreMesFk)
+    public function setCodigoPedidoDetalleFk($codigoPedidoDetalleFk)
     {
-        $this->codigoCierreMesFk = $codigoCierreMesFk;
+        $this->codigoPedidoDetalleFk = $codigoPedidoDetalleFk;
 
         return $this;
     }
 
     /**
-     * Get codigoCierreMesFk
+     * Get codigoPedidoDetalleFk
      *
      * @return integer
      */
-    public function getCodigoCierreMesFk()
+    public function getCodigoPedidoDetalleFk()
     {
-        return $this->codigoCierreMesFk;
+        return $this->codigoPedidoDetalleFk;
     }
 
     /**
-     * Set cierreMesRel
+     * Set codigoClienteFk
      *
-     * @param \Brasa\TurnoBundle\Entity\TurCierreMes $cierreMesRel
+     * @param integer $codigoClienteFk
      *
      * @return TurCierreMesServicio
      */
-    public function setCierreMesRel(\Brasa\TurnoBundle\Entity\TurCierreMes $cierreMesRel = null)
+    public function setCodigoClienteFk($codigoClienteFk)
     {
-        $this->cierreMesRel = $cierreMesRel;
+        $this->codigoClienteFk = $codigoClienteFk;
 
         return $this;
     }
 
     /**
-     * Get cierreMesRel
+     * Get codigoClienteFk
      *
-     * @return \Brasa\TurnoBundle\Entity\TurCierreMes
+     * @return integer
      */
-    public function getCierreMesRel()
+    public function getCodigoClienteFk()
     {
-        return $this->cierreMesRel;
+        return $this->codigoClienteFk;
     }
 
     /**
@@ -361,102 +404,6 @@ class TurCierreMesServicio
     public function getCodigoPeriodoFk()
     {
         return $this->codigoPeriodoFk;
-    }
-
-    /**
-     * Set puestoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurPuesto $puestoRel
-     *
-     * @return TurCierreMesServicio
-     */
-    public function setPuestoRel(\Brasa\TurnoBundle\Entity\TurPuesto $puestoRel = null)
-    {
-        $this->puestoRel = $puestoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get puestoRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurPuesto
-     */
-    public function getPuestoRel()
-    {
-        return $this->puestoRel;
-    }
-
-    /**
-     * Set conceptoServicioRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel
-     *
-     * @return TurCierreMesServicio
-     */
-    public function setConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel = null)
-    {
-        $this->conceptoServicioRel = $conceptoServicioRel;
-
-        return $this;
-    }
-
-    /**
-     * Get conceptoServicioRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurConceptoServicio
-     */
-    public function getConceptoServicioRel()
-    {
-        return $this->conceptoServicioRel;
-    }
-
-    /**
-     * Set modalidadServicioRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurModalidadServicio $modalidadServicioRel
-     *
-     * @return TurCierreMesServicio
-     */
-    public function setModalidadServicioRel(\Brasa\TurnoBundle\Entity\TurModalidadServicio $modalidadServicioRel = null)
-    {
-        $this->modalidadServicioRel = $modalidadServicioRel;
-
-        return $this;
-    }
-
-    /**
-     * Get modalidadServicioRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurModalidadServicio
-     */
-    public function getModalidadServicioRel()
-    {
-        return $this->modalidadServicioRel;
-    }
-
-    /**
-     * Set periodoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurPeriodo $periodoRel
-     *
-     * @return TurCierreMesServicio
-     */
-    public function setPeriodoRel(\Brasa\TurnoBundle\Entity\TurPeriodo $periodoRel = null)
-    {
-        $this->periodoRel = $periodoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get periodoRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurPeriodo
-     */
-    public function getPeriodoRel()
-    {
-        return $this->periodoRel;
     }
 
     /**
@@ -604,54 +551,6 @@ class TurCierreMesServicio
     }
 
     /**
-     * Set cantidad
-     *
-     * @param integer $cantidad
-     *
-     * @return TurCierreMesServicio
-     */
-    public function setCantidad($cantidad)
-    {
-        $this->cantidad = $cantidad;
-
-        return $this;
-    }
-
-    /**
-     * Get cantidad
-     *
-     * @return integer
-     */
-    public function getCantidad()
-    {
-        return $this->cantidad;
-    }
-
-    /**
-     * Set vrTotal
-     *
-     * @param float $vrTotal
-     *
-     * @return TurCierreMesServicio
-     */
-    public function setVrTotal($vrTotal)
-    {
-        $this->vrTotal = $vrTotal;
-
-        return $this;
-    }
-
-    /**
-     * Get vrTotal
-     *
-     * @return float
-     */
-    public function getVrTotal()
-    {
-        return $this->vrTotal;
-    }
-
-    /**
      * Set horasProgramadas
      *
      * @param integer $horasProgramadas
@@ -722,12 +621,245 @@ class TurCierreMesServicio
     {
         return $this->horasNocturnasProgramadas;
     }
+
     /**
-     * Constructor
+     * Set cantidad
+     *
+     * @param integer $cantidad
+     *
+     * @return TurCierreMesServicio
      */
-    public function __construct()
+    public function setCantidad($cantidad)
     {
-        $this->cierresMesServiciosDetallesCierreMesServicioRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cantidad = $cantidad;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidad
+     *
+     * @return integer
+     */
+    public function getCantidad()
+    {
+        return $this->cantidad;
+    }
+
+    /**
+     * Set vrCostoRecurso
+     *
+     * @param float $vrCostoRecurso
+     *
+     * @return TurCierreMesServicio
+     */
+    public function setVrCostoRecurso($vrCostoRecurso)
+    {
+        $this->vrCostoRecurso = $vrCostoRecurso;
+
+        return $this;
+    }
+
+    /**
+     * Get vrCostoRecurso
+     *
+     * @return float
+     */
+    public function getVrCostoRecurso()
+    {
+        return $this->vrCostoRecurso;
+    }
+
+    /**
+     * Set vrTotal
+     *
+     * @param float $vrTotal
+     *
+     * @return TurCierreMesServicio
+     */
+    public function setVrTotal($vrTotal)
+    {
+        $this->vrTotal = $vrTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotal
+     *
+     * @return float
+     */
+    public function getVrTotal()
+    {
+        return $this->vrTotal;
+    }
+
+    /**
+     * Set cierreMesRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCierreMes $cierreMesRel
+     *
+     * @return TurCierreMesServicio
+     */
+    public function setCierreMesRel(\Brasa\TurnoBundle\Entity\TurCierreMes $cierreMesRel = null)
+    {
+        $this->cierreMesRel = $cierreMesRel;
+
+        return $this;
+    }
+
+    /**
+     * Get cierreMesRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurCierreMes
+     */
+    public function getCierreMesRel()
+    {
+        return $this->cierreMesRel;
+    }
+
+    /**
+     * Set pedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidoDetalleRel
+     *
+     * @return TurCierreMesServicio
+     */
+    public function setPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidoDetalleRel = null)
+    {
+        $this->pedidoDetalleRel = $pedidoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pedidoDetalleRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPedidoDetalle
+     */
+    public function getPedidoDetalleRel()
+    {
+        return $this->pedidoDetalleRel;
+    }
+
+    /**
+     * Set clienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCliente $clienteRel
+     *
+     * @return TurCierreMesServicio
+     */
+    public function setClienteRel(\Brasa\TurnoBundle\Entity\TurCliente $clienteRel = null)
+    {
+        $this->clienteRel = $clienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get clienteRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurCliente
+     */
+    public function getClienteRel()
+    {
+        return $this->clienteRel;
+    }
+
+    /**
+     * Set puestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPuesto $puestoRel
+     *
+     * @return TurCierreMesServicio
+     */
+    public function setPuestoRel(\Brasa\TurnoBundle\Entity\TurPuesto $puestoRel = null)
+    {
+        $this->puestoRel = $puestoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get puestoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPuesto
+     */
+    public function getPuestoRel()
+    {
+        return $this->puestoRel;
+    }
+
+    /**
+     * Set conceptoServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel
+     *
+     * @return TurCierreMesServicio
+     */
+    public function setConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel = null)
+    {
+        $this->conceptoServicioRel = $conceptoServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Get conceptoServicioRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurConceptoServicio
+     */
+    public function getConceptoServicioRel()
+    {
+        return $this->conceptoServicioRel;
+    }
+
+    /**
+     * Set modalidadServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurModalidadServicio $modalidadServicioRel
+     *
+     * @return TurCierreMesServicio
+     */
+    public function setModalidadServicioRel(\Brasa\TurnoBundle\Entity\TurModalidadServicio $modalidadServicioRel = null)
+    {
+        $this->modalidadServicioRel = $modalidadServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Get modalidadServicioRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurModalidadServicio
+     */
+    public function getModalidadServicioRel()
+    {
+        return $this->modalidadServicioRel;
+    }
+
+    /**
+     * Set periodoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPeriodo $periodoRel
+     *
+     * @return TurCierreMesServicio
+     */
+    public function setPeriodoRel(\Brasa\TurnoBundle\Entity\TurPeriodo $periodoRel = null)
+    {
+        $this->periodoRel = $periodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get periodoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPeriodo
+     */
+    public function getPeriodoRel()
+    {
+        return $this->periodoRel;
     }
 
     /**
@@ -762,77 +894,5 @@ class TurCierreMesServicio
     public function getCierresMesServiciosDetallesCierreMesServicioRel()
     {
         return $this->cierresMesServiciosDetallesCierreMesServicioRel;
-    }
-
-    /**
-     * Set codigoPedidoDetalleFk
-     *
-     * @param integer $codigoPedidoDetalleFk
-     *
-     * @return TurCierreMesServicio
-     */
-    public function setCodigoPedidoDetalleFk($codigoPedidoDetalleFk)
-    {
-        $this->codigoPedidoDetalleFk = $codigoPedidoDetalleFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoPedidoDetalleFk
-     *
-     * @return integer
-     */
-    public function getCodigoPedidoDetalleFk()
-    {
-        return $this->codigoPedidoDetalleFk;
-    }
-
-    /**
-     * Set pedidoDetalleRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidoDetalleRel
-     *
-     * @return TurCierreMesServicio
-     */
-    public function setPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidoDetalleRel = null)
-    {
-        $this->pedidoDetalleRel = $pedidoDetalleRel;
-
-        return $this;
-    }
-
-    /**
-     * Get pedidoDetalleRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurPedidoDetalle
-     */
-    public function getPedidoDetalleRel()
-    {
-        return $this->pedidoDetalleRel;
-    }
-
-    /**
-     * Set vrCostoRecurso
-     *
-     * @param float $vrCostoRecurso
-     *
-     * @return TurCierreMesServicio
-     */
-    public function setVrCostoRecurso($vrCostoRecurso)
-    {
-        $this->vrCostoRecurso = $vrCostoRecurso;
-
-        return $this;
-    }
-
-    /**
-     * Get vrCostoRecurso
-     *
-     * @return float
-     */
-    public function getVrCostoRecurso()
-    {
-        return $this->vrCostoRecurso;
     }
 }

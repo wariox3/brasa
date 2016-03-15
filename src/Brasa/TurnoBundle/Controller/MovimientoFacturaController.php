@@ -1,6 +1,7 @@
 <?php
 namespace Brasa\TurnoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurFacturaType;
@@ -9,6 +10,9 @@ class MovimientoFacturaController extends Controller
     var $strListaDql = "";    
     var $boolMostrarTodo = "";
     
+    /**
+     * @Route("/tur/movimiento/factura", name="brs_tur_movimiento_factura")
+     */    
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -20,7 +24,7 @@ class MovimientoFacturaController extends Controller
             if ($form->get('BtnEliminar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurFactura')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_factura_lista'));                                 
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_factura'));                                 
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);

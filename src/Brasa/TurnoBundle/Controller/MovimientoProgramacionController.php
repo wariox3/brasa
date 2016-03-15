@@ -1,13 +1,17 @@
 <?php
 namespace Brasa\TurnoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurProgramacionType;
 class MovimientoProgramacionController extends Controller
 {
     var $strListaDql = "";
-
+    
+    /**
+     * @Route("/tur/movimiento/programacion", name="brs_tur_movimiento_programacion")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -19,7 +23,7 @@ class MovimientoProgramacionController extends Controller
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurProgramacion')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_programacion_lista'));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion'));
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);

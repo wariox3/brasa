@@ -67,6 +67,7 @@ class ProcesoCierreMesController extends Controller
                     $arCierreMesServicio->setAnio($arCierreMes->getAnio());
                     $arCierreMesServicio->setMes($arCierreMes->getMes());
                     $arCierreMesServicio->setPedidoDetalleRel($arPedidoDetalle);
+                    $arCierreMesServicio->setClienteRel($arPedidoDetalle->getPedidoRel()->getClienteRel());
                     $arCierreMesServicio->setPuestoRel($arPedidoDetalle->getPuestoRel());
                     $arCierreMesServicio->setConceptoServicioRel($arPedidoDetalle->getConceptoServicioRel());
                     $arCierreMesServicio->setModalidadServicioRel($arPedidoDetalle->getModalidadServicioRel());

@@ -468,12 +468,6 @@
                             <a tabindex="-1" href="#">Turnos</a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Aplicar novedades</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_tur_utilidad_aplicar_novedad') }}">Lista</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Programaciones</a>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_tur_utilidad_programacion_inconsistencias') }}">Analizar inconsistencias</a></li>
@@ -650,33 +644,39 @@
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Cotizacion</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_tur_cotizacion_lista') }}">Lista</a></li>
+                                        <li><a href="{{ path('brs_tur_movimiento_cotizacion') }}">Lista</a></li>
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Servicio</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_tur_servicio_lista') }}">Lista</a></li>
+                                        <li><a href="{{ path('brs_tur_movimiento_servicio') }}">Lista</a></li>
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Pedido</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_tur_pedido_lista') }}">Lista</a></li>
+                                        <li><a href="{{ path('brs_tur_movimiento_pedido') }}">Lista</a></li>
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Programacion</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_tur_programacion_lista') }}">Lista</a></li>
+                                        <li><a href="{{ path('brs_tur_movimiento_programacion') }}">Lista</a></li>
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Factura</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_tur_factura_lista') }}">Lista</a></li>
+                                        <li><a href="{{ path('brs_tur_movimiento_factura') }}">Lista</a></li>
                                     </ul>
                                 </li>
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Novedad</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_tur_movimiento_novedad') }}">Lista</a></li>
+                                    </ul>
+                                </li>                                
                             </ul>
                         </li>
                         <li class="dropdown-submenu">
