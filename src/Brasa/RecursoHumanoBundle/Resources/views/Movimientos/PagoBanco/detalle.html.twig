@@ -87,7 +87,8 @@
                             <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                         </tr>
                         {% for arPagoBancoDetalle in arPagoBancoDetalle %}
-                            <tr>
+                            {% if arPagoBancoDetalle.cuenta == null %}{% set class = 'danger' %}{% else %}{% set class = '' %}{% endif %}    
+                            <tr class="{{ class }}">
                                 <td>{{ arPagoBancoDetalle.codigoPagoBancoDetallePk  }}</td>
                                 <td>{{ arPagoBancoDetalle.codigoPagoFk  }}</td>
                                 <td>{{ arPagoBancoDetalle.pagoRel.numero  }}</td>

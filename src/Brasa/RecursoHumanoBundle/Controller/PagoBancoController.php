@@ -50,6 +50,9 @@ class PagoBancoController extends Controller
             $arPagoBanco = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBanco')->find($codigoPagoBanco);
             $arPagoBanco->getFechaAplicacion();
             $arPagoBanco->getFechaTrasmision();
+        } else {
+            $arPagoBanco->setFechaAplicacion(new \DateTime('now'));
+            $arPagoBanco->setFechaTrasmision(new \DateTime('now'));
         }
         $form = $this->createForm(new RhuPagoBancoType, $arPagoBanco);
         $form->handleRequest($request);
@@ -134,7 +137,7 @@ class PagoBancoController extends Controller
         $arPagoBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco();
         $arPagoBanco = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBanco')->find($codigoPagoBanco);
         $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-        $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('estadoPagadoBanco' => 0));
+        $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('estadoPagado' => 1, 'estadoPagadoBanco' => 0));
         $arProgramacionesPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionesPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->findBy(array('estadoPagado' => 1, 'estadoPagadoBanco' => 0));        
         $form = $this->createFormBuilder()

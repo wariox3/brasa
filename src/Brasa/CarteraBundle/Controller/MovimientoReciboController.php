@@ -5,6 +5,7 @@ use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\CarteraBundle\Form\Type\CarReciboType;
+use Brasa\CarteraBundle\Form\Type\CarReciboDetalleType;
 
 class MovimientoReciboController extends Controller
 {
@@ -12,6 +13,7 @@ class MovimientoReciboController extends Controller
     var $numero = "";
     var $codigoCliente = "";
     var $estadoAutorizado = "";
+    
     /**
      * @Route("/cartera/movimiento/recibo/lista", name="brs_cartera_movimiento_recibo_listar")
      */
@@ -48,206 +50,149 @@ class MovimientoReciboController extends Controller
             'form' => $form->createView()));
     }
 
-    /*public function nuevoAction($codigoCotizacion) {
+    /**
+     * @Route("/cartera/movimiento/recibo/nuevo/{codigoRecibo}", name="brs_cartera_movimiento_recibo_nuevo")
+     */
+    public function nuevoAction($codigoRecibo) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();                 
-        $arCotizacion = new \Brasa\CarteraBundle\Entity\CarRecibo();
-        if($codigoCotizacion != 0) {
-            $arCotizacion = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigoCotizacion);
+        $arRecibo = new \Brasa\CarteraBundle\Entity\CarRecibo();
+        if($codigoRecibo != 0) {
+            $arRecibo = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigoRecibo);
         }else{
-            $arCotizacion->setFecha(new \DateTime('now'));
-            $arCotizacion->setFechaVence(new \DateTime('now'));
+            $arRecibo->setFecha(new \DateTime('now'));
+            $arRecibo->setFechaPago(new \DateTime('now'));
         }
-        $form = $this->createForm(new CarReciboType, $arCotizacion);
+        $form = $this->createForm(new CarReciboType, $arRecibo);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arCotizacion = $form->getData();
+            $arRecibo = $form->getData();
             $arrControles = $request->request->All();
-            $arCliente = new \Brasa\CarteraBundle\Entity\TurCliente();
+            $arCliente = new \Brasa\CarteraBundle\Entity\CarCliente();
             if($arrControles['txtNit'] != '') {                
-                $arCliente = $em->getRepository('BrasaCarteraBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));                
+                $arCliente = $em->getRepository('BrasaCarteraBundle:CarCliente')->findOneBy(array('nit' => $arrControles['txtNit']));                
                 if(count($arCliente) > 0) {
-                    $arCotizacion->setClienteRel($arCliente);
+                    $arRecibo->setClienteRel($arCliente);
                 }
             }
             $arUsuario = $this->getUser();
-            $arCotizacion->setUsuario($arUsuario->getUserName());            
-            $em->persist($arCotizacion);
+            $arRecibo->setUsuario($arUsuario->getUserName());            
+            $em->persist($arRecibo);
             $em->flush();
 
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_cotizacion_nuevo', array('codigoCotizacion' => 0 )));
+                return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_nuevo', array('codigoRecibo' => 0 )));
             } else {
-                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $arCotizacion->getCodigoCotizacionPk())));
+                return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_listar'));
             }                       
-                               
-             
             
         }
-        return $this->render('BrasaCarteraBundle:Movimientos/Cotizacion:nuevo.html.twig', array(
-            'arCotizacion' => $arCotizacion,
+        return $this->render('BrasaCarteraBundle:Movimientos/Recibo:nuevo.html.twig', array(
+            'arRecibo' => $arRecibo,
             'form' => $form->createView()));
     }
 
-    public function detalleAction($codigoCotizacion) {
+    /**
+     * @Route("/cartera/movimiento/recibo/detalle/{codigoRecibo}", name="brs_cartera_movimiento_recibo_detalle")
+     */
+    public function detalleAction($codigoRecibo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
-        $arCotizacion = new \Brasa\CarteraBundle\Entity\CarRecibo();
-        $arCotizacion = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigoCotizacion);
-        $form = $this->formularioDetalle($arCotizacion);
+        $arRecibo = new \Brasa\CarteraBundle\Entity\CarRecibo();
+        $arRecibo = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigoRecibo);
+        $form = $this->formularioDetalle($arRecibo);
         $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnAutorizar')->isClicked()) {  
                 $arrControles = $request->request->All();
-                $this->actualizarDetalle($arrControles, $codigoCotizacion);                
-                if($arCotizacion->getEstadoAutorizado() == 0) {
-                    if($em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->numeroRegistros($codigoCotizacion) > 0) {
-                        $arCotizacion->setEstadoAutorizado(1);
-                        $em->persist($arCotizacion);
+                $this->actualizarDetalle($arrControles, $codigoRecibo);                
+                if($arRecibo->getEstadoAutorizado() == 0) {
+                    if($em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->numeroRegistros($codigoRecibo) > 0) {
+                        $arRecibo->setEstadoAutorizado(1);
+                        $em->persist($arRecibo);
                         $em->flush();                        
                     } else {
-                        $objMensaje->Mensaje('error', 'Debe adicionar detalles a la cotizacion', $this);
+                        $objMensaje->Mensaje('error', 'Debe adicionar detalles al recibo de caja', $this);
                     }                    
                 }
-                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));                
+                return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));                
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {            
-                if($arCotizacion->getEstadoAutorizado() == 1) {
-                    $arCotizacion->setEstadoAutorizado(0);
-                    $em->persist($arCotizacion);
+                if($arRecibo->getEstadoAutorizado() == 1) {
+                    $arRecibo->setEstadoAutorizado(0);
+                    $em->persist($arRecibo);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));                
+                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));                
                 }
-            }   
-            if($form->get('BtnAprobar')->isClicked()) {            
-                if($arCotizacion->getEstadoAutorizado() == 1) {
-                    $arCotizacion->setEstadoAprobado(1);
-                    $em->persist($arCotizacion);
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));                
-                }
-            }            
+            }              
             if($form->get('BtnDetalleActualizar')->isClicked()) {
                 $arrControles = $request->request->All();
-                $this->actualizarDetalle($arrControles, $codigoCotizacion);                
-                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));
+                $this->actualizarDetalle($arrControles, $codigoRecibo);                
+                return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));
             }
             if($form->get('BtnDetalleEliminar')->isClicked()) {   
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->eliminarSeleccionados($arrSeleccionados);
-                $em->getRepository('BrasaCarteraBundle:CarRecibo')->liquidar($codigoCotizacion);
-                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));
-            }  
-            if($form->get('BtnOtroActualizar')->isClicked()) {
-                $arrControles = $request->request->All();
-                $intIndice = 0;
-                foreach ($arrControles['LblCodigoCotizacionOtro'] as $intCodigo) {
-                    $arCotizacionOtro = new \Brasa\CarteraBundle\Entity\CarReciboOtro();
-                    $arCotizacionOtro = $em->getRepository('BrasaCarteraBundle:CarReciboOtro')->find($intCodigo);
-                    $arCotizacionDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);                                                          
-                    $em->persist($arCotizacionDetalle);
-                }
-                $em->flush();
-                $em->getRepository('BrasaCarteraBundle:CarRecibo')->liquidar($codigoCotizacion);
-                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));
-            }
-            if($form->get('BtnOtroEliminar')->isClicked()) {   
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->eliminarSeleccionados($arrSeleccionados);
-                $em->getRepository('BrasaCarteraBundle:CarRecibo')->liquidar($codigoCotizacion);
-                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));
-            }   
+                //$em->getRepository('BrasaCarteraBundle:CarRecibo')->liquidar($codigoRecibo);
+                return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));
+            }    
             if($form->get('BtnImprimir')->isClicked()) {
-                $strResultado = $em->getRepository('BrasaCarteraBundle:CarRecibo')->imprimir($codigoCotizacion);
+                $strResultado = $em->getRepository('BrasaCarteraBundle:CarRecibo')->imprimir($codigoRecibo);
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 } else {
-                    $objCotizacion = new \Brasa\CarteraBundle\Formatos\FormatoCotizacion();
-                    $objCotizacion->Generar($this, $codigoCotizacion);                   
+                    $objRecibo = new \Brasa\CarteraBundle\Formatos\FormatoRecibo();
+                    $objRecibo->Generar($this, $codigoRecibo);                   
                 }                
             }                        
         }
 
-        $arCotizacionDetalle = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
-        $arCotizacionDetalle = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->findBy(array ('codigoCotizacionFk' => $codigoCotizacion));
-        $arCotizacionOtros = new \Brasa\CarteraBundle\Entity\CarReciboOtro();
-        $arCotizacionOtros = $em->getRepository('BrasaCarteraBundle:CarReciboOtro')->findBy(array ('codigoCotizacionFk' => $codigoCotizacion));        
-        return $this->render('BrasaCarteraBundle:Movimientos/Cotizacion:detalle.html.twig', array(
-                    'arCotizacion' => $arCotizacion,
-                    'arCotizacionDetalle' => $arCotizacionDetalle,
-                    'arCotizacionOtros' => $arCotizacionOtros,
+        $arReciboDetalle = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
+        $arReciboDetalle = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->findBy(array ('codigoReciboFk' => $codigoRecibo));
+        return $this->render('BrasaCarteraBundle:Movimientos/Recibo:detalle.html.twig', array(
+                    'arRecibo' => $arRecibo,
+                    'arReciboDetalle' => $arReciboDetalle,
                     'form' => $form->createView()
                     ));
     }
-
-    public function detalleNuevoAction($codigoCotizacion, $codigoCotizacionDetalle = 0) {
+    
+    /**
+     * @Route("/cartera/movimiento/recibo/detalle/nuevo/{codigoRecibo}/{codigoReciboDetalle}", name="brs_cartera_movimiento_recibo_detalle_nuevo")
+     */
+    public function detalleNuevoAction($codigoRecibo, $codigoReciboDetalle = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $arCotizacion = new \Brasa\CarteraBundle\Entity\CarRecibo();
-        $arCotizacion = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigoCotizacion);
-        $arCotizacionDetalle = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
-        if($codigoCotizacionDetalle != 0) {
-            $arCotizacionDetalle = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->find($codigoCotizacionDetalle);
-        } else {
-            $arCotizacionDetalle->setLunes(true);
-            $arCotizacionDetalle->setMartes(true);
-            $arCotizacionDetalle->setMiercoles(true);
-            $arCotizacionDetalle->setJueves(true);
-            $arCotizacionDetalle->setViernes(true);
-            $arCotizacionDetalle->setSabado(true);
-            $arCotizacionDetalle->setDomingo(true);
-            $arCotizacionDetalle->setFestivo(true);            
-            $arCotizacionDetalle->setCantidad(1);
-            $arCotizacionDetalle->setFechaDesde(new \DateTime('now'));
-            $arCotizacionDetalle->setFechaHasta(new \DateTime('now'));
+        $arRecibo = new \Brasa\CarteraBundle\Entity\CarRecibo();
+        $arRecibo = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigoRecibo);
+        $arCuentasCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
+        $arCuentasCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->cuentasCobrar();
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        $form->handleRequest($request); 
+        if ($form->isValid()) { 
+            if ($form->get('BtnGuardar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoCuentaCobrar) {
+                        $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($codigoCuentaCobrar);
+                        $arReciboDetalle = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
+                        $arReciboDetalle->setReciboRel($arRecibo);
+                        $arReciboDetalle->setCuentaCobrarRel($arCuentaCobrar);
+                        $em->persist($arReciboDetalle); 
+                    }
+                    $em->flush();
+                }
+                $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->liquidar($codigoRecibo);
+            }            
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
         }
-        $form = $this->createForm(new CarReciboDetalleType, $arCotizacionDetalle);
-        $form->handleRequest($request);
-        if ($form->isValid()) {            
-            $arCotizacionDetalle = $form->getData();
-            $arCotizacionDetalle->setCotizacionRel($arCotizacion);
-            $em->persist($arCotizacionDetalle);
-            $em->flush();
-            $em->getRepository('BrasaCarteraBundle:CarRecibo')->liquidar($codigoCotizacion);
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle_nuevo', array('codigoCotizacion' => $codigoCotizacion, 'codigoCotizacionDetalle' => 0 )));
-            } else {
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-            }
-        }
-        return $this->render('BrasaCarteraBundle:Movimientos/Cotizacion:detalleNuevo.html.twig', array(
-            'arCotizacion' => $arCotizacion,
+        return $this->render('BrasaCarteraBundle:Movimientos/Recibo:detalleNuevo.html.twig', array(
+            'arCuentasCobrar' => $arCuentasCobrar,
             'form' => $form->createView()));
-    }
-
-    public function otroNuevoAction($codigoCotizacion, $codigoCotizacionOtro = 0) {
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();
-        $arCotizacion = new \Brasa\CarteraBundle\Entity\CarRecibo();
-        $arCotizacion = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigoCotizacion);
-        $arCotizacionOtro = new \Brasa\CarteraBundle\Entity\CarReciboOtro();
-        if($codigoCotizacionOtro != 0) {
-            $arCotizacionOtro = $em->getRepository('BrasaCarteraBundle:CarReciboOtro')->find($codigoCotizacionOtro);
-        }
-        $form = $this->createForm(new CarReciboOtroType, $arCotizacionOtro);
-        $form->handleRequest($request);
-        if ($form->isValid()) {            
-            $arCotizacionOtro = $form->getData();
-            $arCotizacionOtro->setCotizacionRel($arCotizacion);
-            $em->persist($arCotizacionOtro);
-            $em->flush();            
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle_nuevo', array('codigoCotizacion' => $codigoCotizacion, 'codigoCotizacionDetalle' => 0 )));
-            } else {
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-            }
-        }
-        return $this->render('BrasaCarteraBundle:Movimientos/Cotizacion:otroNuevo.html.twig', array(
-            'arCotizacion' => $arCotizacion,
-            'form' => $form->createView()));
-    } */   
+    } 
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
@@ -270,7 +215,7 @@ class MovimientoReciboController extends Controller
         $session = $this->getRequest()->getSession();
         $strNombreCliente = "";
         if($session->get('filtroNit')) {
-            $arCliente = $em->getRepository('BrasaCarteraBundle:TurCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
+            $arCliente = $em->getRepository('BrasaCarteraBundle:CarCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
             if($arCliente) {
                 $session->set('filtroCodigoCliente', $arCliente->getCodigoClientePk());
                 $strNombreCliente = $arCliente->getNombreCorto();
@@ -286,7 +231,7 @@ class MovimientoReciboController extends Controller
             ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCotizacionNumero')))
             ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
             ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))
-            ->add('estadoImpreso', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'IMPRESO', '0' => 'SIN IMPROMIR'), 'data' => $session->get('filtroReciboEstadoImpreso')))                
+            ->add('estadoImpreso', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'IMPRESO', '0' => 'SIN IMPRIMIR'), 'data' => $session->get('filtroReciboEstadoImpreso')))                
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -294,44 +239,33 @@ class MovimientoReciboController extends Controller
         return $form;
     }
 
-    /*private function formularioDetalle($ar) {        
+    private function formularioDetalle($ar) {        
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);        
-        $arrBotonAprobar = array('label' => 'Aprobar', 'disabled' => true);        
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
-        $arrBotonOtroActualizar = array('label' => 'Actualizar', 'disabled' => false);
-        $arrBotonOtroEliminar = array('label' => 'Eliminar', 'disabled' => false);
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;            
             $arrBotonAprobar['disabled'] = false;            
             $arrBotonDetalleEliminar['disabled'] = true;
-            $arrBotonOtroEliminar['disabled'] = true;
             $arrBotonDetalleActualizar['disabled'] = true;
-            $arrBotonOtroActualizar['disabled'] = true;
         } else {
             $arrBotonDesAutorizar['disabled'] = true;            
             $arrBotonImprimir['disabled'] = true;
         }
-        if($ar->getEstadoAprobado() == 1) {
-            $arrBotonDesAutorizar['disabled'] = true;            
-            $arrBotonAprobar['disabled'] = true;            
-        } 
         $form = $this->createFormBuilder()
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                 
-                    ->add('BtnAprobar', 'submit', $arrBotonAprobar)                 
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
-                    ->add('BtnOtroActualizar', 'submit', $arrBotonOtroActualizar)
-                    ->add('BtnOtroEliminar', 'submit', $arrBotonOtroEliminar)
                     ->getForm();
         return $form;
-    }*/
+    }
 
     private function generarExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
@@ -355,52 +289,52 @@ class MovimientoReciboController extends Controller
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'NUMERO')
-                    ->setCellValue('C1', 'FECHA')
-                    ->setCellValue('D1', 'VENCE')                
-                    ->setCellValue('E1', 'CLIENTE')
-                    ->setCellValue('F1', 'PROSPECTO')
-                    ->setCellValue('G1', 'SECTOR')
-                    ->setCellValue('H1', 'HORAS')
-                    ->setCellValue('I1', 'H.DIURNAS')
-                    ->setCellValue('J1', 'H.NOCTURNAS')
-                    ->setCellValue('K1', 'P.MINIMO')
-                    ->setCellValue('L1', 'P.AJUSTADO')
-                    ->setCellValue('M1', 'TOTAL');
+                    ->setCellValue('C1', 'NIT')                
+                    ->setCellValue('D1', 'CLIENTE')
+                    ->setCellValue('E1', 'CUENTA')
+                    ->setCellValue('F1', 'TIPO RECIBO')
+                    ->setCellValue('G1', 'FECHA PAGO')
+                    ->setCellValue('H1', 'TOTAL')
+                    ->setCellValue('I1', 'IMPRESO')
+                    ->setCellValue('J1', 'ANULADO')
+                    ->setCellValue('K1', 'EXPORTADO')
+                    ->setCellValue('L1', 'AUTORIZADO')
+                    ->setCellValue('M1', 'COMENTARIOS');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
-        $arCotizaciones = new \Brasa\CarteraBundle\Entity\CarRecibo();
-        $arCotizaciones = $query->getResult();
+        $arRecibos = new \Brasa\CarteraBundle\Entity\CarRecibo();
+        $arRecibos = $query->getResult();
 
-        foreach ($arCotizaciones as $arCotizacion) {            
+        foreach ($arRecibos as $arRecibo) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arCotizacion->getCodigoCotizacionPk())
-                    ->setCellValue('B' . $i, $arCotizacion->getNumero())
-                    ->setCellValue('C' . $i, $arCotizacion->getFecha()->format('Y/m/d'))
-                    ->setCellValue('D' . $i, $arCotizacion->getFechaVence()->format('Y/m/d'))
-                    ->setCellValue('G' . $i, $arCotizacion->getSectorRel()->getNombre())
-                    ->setCellValue('H' . $i, $arCotizacion->getHoras())
-                    ->setCellValue('I' . $i, $arCotizacion->getHorasDiurnas())
-                    ->setCellValue('J' . $i, $arCotizacion->getHorasNocturnas())
-                    ->setCellValue('K' . $i, $arCotizacion->getVrTotalPrecioMinimo())
-                    ->setCellValue('L' . $i, $arCotizacion->getVrTotalPrecioAjustado())
-                    ->setCellValue('M' . $i, $arCotizacion->getVrTotal());
-            if($arCotizacion->getClienteRel()) {
+                    ->setCellValue('A' . $i, $arRecibo->getCodigoReciboPk())
+                    ->setCellValue('B' . $i, $arRecibo->getNumero())
+                    ->setCellValue('E' . $i, $arRecibo->getCuentaRel()->getNombre())
+                    ->setCellValue('F' . $i, $arRecibo->getReciboTipoRel()->getNombre())
+                    ->setCellValue('G' . $i, $arRecibo->getFechaPago()->format('Y-m-d'))
+                    ->setCellValue('H' . $i, $arRecibo->getVrTotal())
+                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoImpreso()))
+                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoAnulado()))
+                    ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoExportado()))
+                    ->setCellValue('L' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoAutorizado()))
+                    ->setCellValue('M' . $i, $arRecibo->getComentarios());
+            if($arRecibo->getClienteRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('E' . $i, $arCotizacion->getClienteRel()->getNombreCorto());
+                    ->setCellValue('C' . $i, $arRecibo->getClienteRel()->getNit());
             }
-            if($arCotizacion->getProspectoRel()) {
+            if($arRecibo->getClienteRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('F' . $i, $arCotizacion->getProspectoRel()->getNombreCorto());
+                    ->setCellValue('D' . $i, $arRecibo->getClienteRel()->getNombreCorto());
             }            
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('Cotizaciones');
+        $objPHPExcel->getActiveSheet()->setTitle('Recibos');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Cotizaciones.xlsx"');
+        header('Content-Disposition: attachment;filename="Recibos.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -414,62 +348,23 @@ class MovimientoReciboController extends Controller
         exit;
     }
 
-    /*private function actualizarDetalle($arrControles, $codigoCotizacion) {
+    private function actualizarDetalle($arrControles, $codigoRecibo) {
         $em = $this->getDoctrine()->getManager();
         $intIndice = 0;
         if(isset($arrControles['LblCodigo'])) {
             foreach ($arrControles['LblCodigo'] as $intCodigo) {
-                $arCotizacionDetalle = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
-                $arCotizacionDetalle = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->find($intCodigo);
-                $arCotizacionDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);
-                if($arrControles['TxtValorAjustado'.$intCodigo] != '') {
-                    $arCotizacionDetalle->setVrPrecioAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
-                }                     
-                if(isset($arrControles['chkLunes'.$intCodigo])) {
-                    $arCotizacionDetalle->setLunes(1);
-                } else {
-                    $arCotizacionDetalle->setLunes(0);
-                }
-                if(isset($arrControles['chkMartes'.$intCodigo])) {
-                    $arCotizacionDetalle->setMartes(1);
-                } else {
-                    $arCotizacionDetalle->setMartes(0);
-                }
-                if(isset($arrControles['chkMiercoles'.$intCodigo])) {
-                    $arCotizacionDetalle->setMiercoles(1);
-                } else {
-                    $arCotizacionDetalle->setMiercoles(0);
-                }
-                if(isset($arrControles['chkJueves'.$intCodigo])) {
-                    $arCotizacionDetalle->setJueves(1);
-                } else {
-                    $arCotizacionDetalle->setJueves(0);
-                }
-                if(isset($arrControles['chkViernes'.$intCodigo])) {
-                    $arCotizacionDetalle->setViernes(1);
-                } else {
-                    $arCotizacionDetalle->setViernes(0);
-                }
-                if(isset($arrControles['chkSabado'.$intCodigo])) {
-                    $arCotizacionDetalle->setSabado(1);
-                } else {
-                    $arCotizacionDetalle->setSabado(0);
-                }
-                if(isset($arrControles['chkDomingo'.$intCodigo])) {
-                    $arCotizacionDetalle->setDomingo(1);
-                } else {
-                    $arCotizacionDetalle->setDomingo(0);
-                }
-                if(isset($arrControles['chkFestivo'.$intCodigo])) {
-                    $arCotizacionDetalle->setFestivo(1);
-                } else {
-                    $arCotizacionDetalle->setFestivo(0);
-                }                    
-                $em->persist($arCotizacionDetalle);
+                $arReciboDetalle = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
+                $arReciboDetalle = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->find($intCodigo);
+                $arReciboDetalle->setVrDescuento($arrControles['TxtVrDescuento'.$intCodigo]);
+                $arReciboDetalle->setVrAjustePeso($arrControles['TxtVrAjustePeso'.$intCodigo]);
+                $arReciboDetalle->setVrReteIca($arrControles['TxtVrReteIca'.$intCodigo]);
+                $arReciboDetalle->setVrReteIva($arrControles['TxtVrReteIva'.$intCodigo]);
+                $arReciboDetalle->setValor($arrControles['TxtValor'.$intCodigo]);
+                $em->persist($arReciboDetalle);
             }
             $em->flush();
-            $em->getRepository('BrasaCarteraBundle:CarRecibo')->liquidar($codigoCotizacion);                   
+            $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->liquidar($codigoRecibo);                   
         }
-    }*/
+    }
     
 }

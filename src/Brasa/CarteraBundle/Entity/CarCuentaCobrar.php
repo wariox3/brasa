@@ -80,7 +80,7 @@ class CarCuentaCobrar
     protected $clienteRel;
     
     /**
-     * @ORM\ManyToOne(targetEntity="CarCuentaCobrarTipo", inversedBy="cuentasCobrarTiposClienteRel")
+     * @ORM\ManyToOne(targetEntity="CarCuentaCobrarTipo", inversedBy="cuentasCobrarTiposCuentaCobrarRel")
      * @ORM\JoinColumn(name="codigo_cuenta_cobrar_tipo_fk", referencedColumnName="codigo_cuenta_cobrar_tipo_pk")
      */
     protected $cuentaCobrarTipoRel;
@@ -94,6 +94,11 @@ class CarCuentaCobrar
      * @ORM\OneToMany(targetEntity="CarNotaDebitoDetalle", mappedBy="cuentaCobrarRel")
      */
     protected $notasDebitosDetallesCuentaCobrarRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="CarReciboDetalle", mappedBy="cuentaCobrarRel")
+     */
+    protected $recibosDetallesCuentaCobrarRel;
 
     
     /**
@@ -103,6 +108,7 @@ class CarCuentaCobrar
     {
         $this->notasCreditosDetallesCuentaCobrarRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->notasDebitosDetallesCuentaCobrarRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->recibosDetallesCuentaCobrarRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -493,5 +499,39 @@ class CarCuentaCobrar
     public function getNotasDebitosDetallesCuentaCobrarRel()
     {
         return $this->notasDebitosDetallesCuentaCobrarRel;
+    }
+
+    /**
+     * Add recibosDetallesCuentaCobrarRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarReciboDetalle $recibosDetallesCuentaCobrarRel
+     *
+     * @return CarCuentaCobrar
+     */
+    public function addRecibosDetallesCuentaCobrarRel(\Brasa\CarteraBundle\Entity\CarReciboDetalle $recibosDetallesCuentaCobrarRel)
+    {
+        $this->recibosDetallesCuentaCobrarRel[] = $recibosDetallesCuentaCobrarRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove recibosDetallesCuentaCobrarRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarReciboDetalle $recibosDetallesCuentaCobrarRel
+     */
+    public function removeRecibosDetallesCuentaCobrarRel(\Brasa\CarteraBundle\Entity\CarReciboDetalle $recibosDetallesCuentaCobrarRel)
+    {
+        $this->recibosDetallesCuentaCobrarRel->removeElement($recibosDetallesCuentaCobrarRel);
+    }
+
+    /**
+     * Get recibosDetallesCuentaCobrarRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRecibosDetallesCuentaCobrarRel()
+    {
+        return $this->recibosDetallesCuentaCobrarRel;
     }
 }

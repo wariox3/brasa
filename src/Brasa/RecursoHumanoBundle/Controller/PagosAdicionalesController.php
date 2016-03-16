@@ -156,9 +156,12 @@ class PagosAdicionalesController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->listaAdicionalesDql(                    
-            $this->nombre,
-            $this->identificacion,
-            $this->aplicarDiaLaborado,
+            //$this->nombre,
+            $session->get('filtroNombre'),    
+            $session->get('filtroIdentificacion'),
+            $session->get('filtroAplicarDiaLaborado'),        
+            //$this->identificacion,
+            //$this->aplicarDiaLaborado,
             $session->get('filtroCodigoCentroCosto'));
     }
 
@@ -168,9 +171,12 @@ class PagosAdicionalesController extends Controller
         $controles = $request->request->get('form');
         $arrControles = $request->request->All();
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
-        $this->nombre = $arrControles['txtNombreCorto'];
-        $this->identificacion = $arrControles['txtNumeroIdentificacion'];
-        $this->aplicarDiaLaborado = $form->get('aplicarDiaLaborado')->getData();
+        $session->set('filtroNombre', $arrControles['txtNombreCorto']);
+        //$this->nombre = $arrControles['txtNombreCorto'];
+        //$this->identificacion = $arrControles['txtNumeroIdentificacion'];
+        $session->set('filtroIdentificacion', $arrControles['txtNumeroIdentificacion']);
+        $session->set('filtroAplicarDiaLaborado', $controles['aplicarDiaLaborado']);
+        //$this->aplicarDiaLaborado = $form->get('aplicarDiaLaborado')->getData();
     }
 
     public function detalleAction($codigoProgramacionPago) {

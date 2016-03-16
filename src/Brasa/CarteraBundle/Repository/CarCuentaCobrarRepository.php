@@ -12,6 +12,18 @@ use Doctrine\ORM\EntityRepository;
  */
 class CarCuentaCobrarRepository extends EntityRepository
 {
+    
+    public function cuentasCobrar() {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT cc FROM BrasaCarteraBundle:CarCuentaCobrar cc where cc.codigoCuentaCobrarPk <> 0 and cc.saldo > 0";        
+        $query = $em->createQuery($dql);        
+        $arCuentasCobro = $query->getResult();        
+        
+        return $arCuentasCobro;
+        
+    }
+        
+        
     /**
      * Aplicar cartera: Este metodo efectua el movimiento de cartera respectivo para un movimiento
      * @param integer $codigoMovimiento Codigo del movimiento

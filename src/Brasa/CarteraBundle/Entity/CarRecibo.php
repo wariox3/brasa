@@ -49,9 +49,9 @@ class CarRecibo
     private $fechaPago;
     
     /**
-     * @ORM\Column(name="valor", type="float")
+     * @ORM\Column(name="vr_total", type="float")
      */    
-    private $valor = 0;      
+    private $vrTotal = 0;      
       
     /**     
      * @ORM\Column(name="estado_impreso", type="boolean")
@@ -68,10 +68,20 @@ class CarRecibo
      */    
     private $estadoExportado = 0;
     
+    /**     
+     * @ORM\Column(name="estado_autorizado", type="boolean")
+     */    
+    private $estadoAutorizado = 0;
+    
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;
+    
+    /**
+     * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
+     */    
+    private $usuario;
     
     /**
      * @ORM\ManyToOne(targetEntity="CarCliente", inversedBy="recibosClienteRel")
@@ -91,8 +101,17 @@ class CarRecibo
      */
     protected $cuentaRel;
          
-   
-
+   /**
+     * @ORM\OneToMany(targetEntity="CarReciboDetalle", mappedBy="reciboRel")
+     */
+    protected $recibosDetallesRecibosRel;
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->recibosDetallesRecibosRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoReciboPk
@@ -249,27 +268,27 @@ class CarRecibo
     }
 
     /**
-     * Set valor
+     * Set vrTotal
      *
-     * @param float $valor
+     * @param float $vrTotal
      *
      * @return CarRecibo
      */
-    public function setValor($valor)
+    public function setVrTotal($vrTotal)
     {
-        $this->valor = $valor;
+        $this->vrTotal = $vrTotal;
 
         return $this;
     }
 
     /**
-     * Get valor
+     * Get vrTotal
      *
      * @return float
      */
-    public function getValor()
+    public function getVrTotal()
     {
-        return $this->valor;
+        return $this->vrTotal;
     }
 
     /**
@@ -345,6 +364,30 @@ class CarRecibo
     }
 
     /**
+     * Set estadoAutorizado
+     *
+     * @param boolean $estadoAutorizado
+     *
+     * @return CarRecibo
+     */
+    public function setEstadoAutorizado($estadoAutorizado)
+    {
+        $this->estadoAutorizado = $estadoAutorizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAutorizado
+     *
+     * @return boolean
+     */
+    public function getEstadoAutorizado()
+    {
+        return $this->estadoAutorizado;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -366,6 +409,30 @@ class CarRecibo
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Set usuario
+     *
+     * @param string $usuario
+     *
+     * @return CarRecibo
+     */
+    public function setUsuario($usuario)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return string
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
     }
 
     /**
@@ -438,5 +505,39 @@ class CarRecibo
     public function getCuentaRel()
     {
         return $this->cuentaRel;
+    }
+
+    /**
+     * Add recibosDetallesRecibosRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarReciboDetalle $recibosDetallesRecibosRel
+     *
+     * @return CarRecibo
+     */
+    public function addRecibosDetallesRecibosRel(\Brasa\CarteraBundle\Entity\CarReciboDetalle $recibosDetallesRecibosRel)
+    {
+        $this->recibosDetallesRecibosRel[] = $recibosDetallesRecibosRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove recibosDetallesRecibosRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarReciboDetalle $recibosDetallesRecibosRel
+     */
+    public function removeRecibosDetallesRecibosRel(\Brasa\CarteraBundle\Entity\CarReciboDetalle $recibosDetallesRecibosRel)
+    {
+        $this->recibosDetallesRecibosRel->removeElement($recibosDetallesRecibosRel);
+    }
+
+    /**
+     * Get recibosDetallesRecibosRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRecibosDetallesRecibosRel()
+    {
+        return $this->recibosDetallesRecibosRel;
     }
 }

@@ -177,6 +177,7 @@ class GenCiudad
     protected $carClientesCiudadRel;
     
     
+    
     /**
      * Constructor
      */
@@ -204,6 +205,8 @@ class GenCiudad
         $this->turClientesDireccionesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->turClientesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuContratosCiudadContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->configuracionesRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->carClientesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

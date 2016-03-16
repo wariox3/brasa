@@ -26,7 +26,8 @@ class CarCuentaCobrarTipo
     /**
      * @ORM\OneToMany(targetEntity="CarCuentaCobrar", mappedBy="cuentaCobrarTipoRel")
      */
-    protected $cuentasCobrarCuentaCobrarTipoRel;
+    protected $cuentasCobrarTiposCuentaCobrarRel;
+    
     
     
     /**
@@ -34,7 +35,7 @@ class CarCuentaCobrarTipo
      */
     public function __construct()
     {
-        $this->cuentasCobrarCuentaCobrarTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cuentasCobrarTiposCuentaCobrarRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -72,36 +73,36 @@ class CarCuentaCobrarTipo
     }
 
     /**
-     * Add cuentasCobrarCuentaCobrarTipoRel
+     * Add cuentasCobrarTiposCuentaCobrarRel
      *
-     * @param \Brasa\CarteraBundle\Entity\CarCuentaCobrar $cuentasCobrarCuentaCobrarTipoRel
+     * @param \Brasa\CarteraBundle\Entity\CarCuentaCobrar $cuentasCobrarTiposCuentaCobrarRel
      *
      * @return CarCuentaCobrarTipo
      */
-    public function addCuentasCobrarCuentaCobrarTipoRel(\Brasa\CarteraBundle\Entity\CarCuentaCobrar $cuentasCobrarCuentaCobrarTipoRel)
+    public function addCuentasCobrarTiposCuentaCobrarRel(\Brasa\CarteraBundle\Entity\CarCuentaCobrar $cuentasCobrarTiposCuentaCobrarRel)
     {
-        $this->cuentasCobrarCuentaCobrarTipoRel[] = $cuentasCobrarCuentaCobrarTipoRel;
+        $this->cuentasCobrarTiposCuentaCobrarRel[] = $cuentasCobrarTiposCuentaCobrarRel;
 
         return $this;
     }
 
     /**
-     * Remove cuentasCobrarCuentaCobrarTipoRel
+     * Remove cuentasCobrarTiposCuentaCobrarRel
      *
-     * @param \Brasa\CarteraBundle\Entity\CarCuentaCobrar $cuentasCobrarCuentaCobrarTipoRel
+     * @param \Brasa\CarteraBundle\Entity\CarCuentaCobrar $cuentasCobrarTiposCuentaCobrarRel
      */
-    public function removeCuentasCobrarCuentaCobrarTipoRel(\Brasa\CarteraBundle\Entity\CarCuentaCobrar $cuentasCobrarCuentaCobrarTipoRel)
+    public function removeCuentasCobrarTiposCuentaCobrarRel(\Brasa\CarteraBundle\Entity\CarCuentaCobrar $cuentasCobrarTiposCuentaCobrarRel)
     {
-        $this->cuentasCobrarCuentaCobrarTipoRel->removeElement($cuentasCobrarCuentaCobrarTipoRel);
+        $this->cuentasCobrarTiposCuentaCobrarRel->removeElement($cuentasCobrarTiposCuentaCobrarRel);
     }
 
     /**
-     * Get cuentasCobrarCuentaCobrarTipoRel
+     * Get cuentasCobrarTiposCuentaCobrarRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getCuentasCobrarCuentaCobrarTipoRel()
+    public function getCuentasCobrarTiposCuentaCobrarRel()
     {
-        return $this->cuentasCobrarCuentaCobrarTipoRel;
+        return $this->cuentasCobrarTiposCuentaCobrarRel;
     }
 }

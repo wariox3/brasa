@@ -191,8 +191,10 @@ class ProgramacionesPagoController extends Controller
         } else {
             $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
             $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->periodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                       
+            $arIncapacidades = $paginator->paginate($arIncapacidades, $request->query->get('page', 1), 200);
             $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
             $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->periodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                       
+            $arLicencias = $paginator->paginate($arLicencias, $request->query->get('page', 1), 200);
         }
 
         $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->listaDQL($codigoProgramacionPago));

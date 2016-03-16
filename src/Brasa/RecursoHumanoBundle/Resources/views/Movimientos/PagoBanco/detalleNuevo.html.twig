@@ -19,6 +19,7 @@
                     <th>CÓDIGO</th>
                     <th>TIPO PAGO</th>
                     <th>NÚMERO</th>
+                    <th>CENTRO COSTO</th>
                     <th>EMPLEADO</th>            
                     <th>DESDE</th>
                     <th>HASTA</th>
@@ -30,9 +31,10 @@
                         <td>{{arPagos.codigoPagoPk }}</td>
                         <td>{{arPagos.programacionPagoRel.pagoTipoRel.nombre }}</td>
                         <td>{{arPagos.numero }}</td>
+                        <td>{{arPagos.centroCostoRel.nombre }}</td>
+                        <td>{{arPagos.empleadoRel.nombreCorto }}</td>
                         <td>{{ arPagos.fechaDesde |date("Y/m/d")  }}</td>
-                        <td>{{ arPagos.fechaHasta |date("Y/m/d")  }}</td>                
-                        <td>{{arPagos.empleadoRel.nombreCorto }}</td>                
+                        <td>{{ arPagos.fechaHasta |date("Y/m/d")  }}</td>                                
                         <td style="text-align: right">{{ arPagos.vrNeto | number_format(2, '.', ',') }}</td>
                         <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagos.codigoPagoPk }}" /></td>
                     {%endfor%}
@@ -47,6 +49,7 @@
                 <tr>            
                     <th>CÓDIGO</th>
                     <th>TIPO PAGO</th>
+                    <th>CENTRO COSTO</th>
                     <th>DESDE</th>
                     <th>HASTA</th>
                     <th style="text-align: right">NETO</th>
@@ -56,6 +59,7 @@
                        <tr>
                         <td>{{arProgramacionesPago.codigoProgramacionPagoPk }}</td>
                         <td>{{arProgramacionesPago.pagoTipoRel.nombre }}</td>
+                        <td>{{arProgramacionesPago.centroCostoRel.nombre }}</td>
                         <td>{{ arProgramacionesPago.fechaDesde |date("Y/m/d")  }}</td>
                         <td>{{ arProgramacionesPago.fechaHasta |date("Y/m/d")  }}</td>                                        
                         <td style="text-align: right">{{ arProgramacionesPago.vrNeto | number_format(2, '.', ',') }}</td>
