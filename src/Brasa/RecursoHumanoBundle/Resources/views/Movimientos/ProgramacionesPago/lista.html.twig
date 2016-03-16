@@ -63,7 +63,11 @@
                 <th></th>
             </tr>
             {% for arProgramacionPago in arProgramacionPago %}
-            <tr>
+                {% if arProgramacionPago.inconsistencias %}
+                    <tr class="danger">
+                {% else %}
+                    <tr>
+                {% endif %}                               
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arProgramacionPago.codigoProgramacionPagoPk }}">{{ arProgramacionPago.codigoProgramacionPagoPk }} </td>
                 <td><b>{{ arProgramacionPago.pagoTipoRel.nombre  }}</b></td>
                 <td>{{ arProgramacionPago.centroCostoRel.nombre  }}</td>
@@ -74,7 +78,7 @@
                 <td style="text-align: right">{{ arProgramacionPago.vrNeto | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">
                     {{ arProgramacionPago.numeroEmpleados | number_format(0, '.', ',') }}
-                    {% if arProgramacionPago.inconsistencias == 1 %} SI (<a href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_inconsistencias', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'VerInconsistencias', 600, 900)" >Inconsistencias</a>{% endif %}
+                    {% if arProgramacionPago.inconsistencias == 1 %} (<a href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_inconsistencias', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'VerInconsistencias', 600, 900)" >Inconsistencias)</a>{% endif %}
                 </td>                                                
                 <td>
                     {% if arProgramacionPago.estadoGenerado == 0 %}

@@ -17,7 +17,9 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             if($request->request->get('OpCargar')) {
-                $codigoSoportePagoPeriodo = $request->request->get('OpCargar');                
+                $codigoSoportePagoPeriodo = $request->request->get('OpCargar');  
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoInconsistencia')->eliminarProgramacionPago($codigoProgramacionPago);
+                $arrInconsistencias = array();                
                 $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();                       
                 $arSoportesPago = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));
                 foreach ($arSoportesPago as $arSoportePago) {                    
@@ -50,7 +52,18 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                
                     if($intDiasVacaciones > 0) {                                        
                         $arProgramacionPagoDetalle->setDiasVacaciones($intDiasVacaciones);
-                    }                     
+                    }
+                    
+                    //dias licencia
+                    $intDiasLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), $arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk());                
+                    if($intDiasLicencia > 0) {                                        
+                        $arProgramacionPagoDetalle->setDiasLicencia($intDiasLicencia);
+                    }                    
+                    
+                    if($intDiasVacaciones != $arSoportePago->getVacacion()) {
+                        $arrInconsistencias[] = array('inconsistencia' => "El empleado " . $arEmpleado->getNombreCorto() . " tiene vacaciones registradas de " . $arSoportePago->getVacacion() . " en turnos y de " . $intDiasVacaciones . " en recurso humano");
+                    }
+                        
                     $em->persist($arProgramacionPagoDetalle);
 
                     if($arSoportePago->getHorasNocturnas() > 0) {
@@ -74,9 +87,19 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     if($arSoportePago->getHorasExtrasFestivasNocturnas() > 0) {
                         $this->insertarAdicionalPago($arProgramacionPago, 43, $arSoportePago->getHorasExtrasFestivasNocturnas(), $arEmpleado);
                     }                    
+                }                
+                if(count($arrInconsistencias) > 0) {
+                    $arProgramacionPago->setInconsistencias(1);
+                    foreach ($arrInconsistencias as $arrInconsistencia) {
+                        $arProgramacionPagoInconsistencia = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoInconsistencia();
+                        $arProgramacionPagoInconsistencia->setProgramacionPagoRel($arProgramacionPago);
+                        $arProgramacionPagoInconsistencia->setInconsistencia($arrInconsistencia['inconsistencia']);
+                        $em->persist($arProgramacionPagoInconsistencia);                        
+                    }
                 }
                 $arProgramacionPago->setEmpleadosGenerados(1);
                 $arProgramacionPago->setNumeroEmpleados(count($arSoportesPago));
+                
                 $em->persist($arProgramacionPago);
                 $em->flush();             
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                

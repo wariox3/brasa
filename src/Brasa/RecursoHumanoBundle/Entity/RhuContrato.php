@@ -329,6 +329,16 @@ class RhuContrato
     protected $vacacionesContratoRel;             
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuLicencia", mappedBy="contratoRel")
+     */
+    protected $licenciasContratoRel;  
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuIncapacidad", mappedBy="contratoRel")
+     */
+    protected $incapacidadesContratoRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuIngresoBase", mappedBy="contratoRel")
      */
     protected $ingresosBasesContratoRel;     
@@ -2077,5 +2087,73 @@ class RhuContrato
     public function getContratosProrrogasContratoRel()
     {
         return $this->contratosProrrogasContratoRel;
+    }
+
+    /**
+     * Add licenciasContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addLicenciasContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasContratoRel)
+    {
+        $this->licenciasContratoRel[] = $licenciasContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove licenciasContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasContratoRel
+     */
+    public function removeLicenciasContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasContratoRel)
+    {
+        $this->licenciasContratoRel->removeElement($licenciasContratoRel);
+    }
+
+    /**
+     * Get licenciasContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLicenciasContratoRel()
+    {
+        return $this->licenciasContratoRel;
+    }
+
+    /**
+     * Add incapacidadesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadesContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addIncapacidadesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadesContratoRel)
+    {
+        $this->incapacidadesContratoRel[] = $incapacidadesContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove incapacidadesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadesContratoRel
+     */
+    public function removeIncapacidadesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadesContratoRel)
+    {
+        $this->incapacidadesContratoRel->removeElement($incapacidadesContratoRel);
+    }
+
+    /**
+     * Get incapacidadesContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getIncapacidadesContratoRel()
+    {
+        return $this->incapacidadesContratoRel;
     }
 }

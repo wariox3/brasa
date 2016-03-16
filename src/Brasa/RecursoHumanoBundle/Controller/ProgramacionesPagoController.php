@@ -13,10 +13,12 @@ class ProgramacionesPagoController extends Controller
     var $intNumero = 0;
     public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
+        $session = $this->get('session');
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $session->set('filtroEstadoPagado', 0);
         $form = $this->formularioLista();
-        $form->handleRequest($request);
+        $form->handleRequest($request);        
         $this->listar();
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');

@@ -134,6 +134,16 @@ class RhuProgramacionPagoDetalle
      * @ORM\Column(name="pago_auxilio_transporte", type="boolean")
      */
     private $pagoAuxilioTransporte = 1;            
+
+    /**     
+     * @ORM\Column(name="dias_incapacidad", type="integer")
+     */
+    private $diasIncapacidad = 0;
+    
+    /**     
+     * @ORM\Column(name="dias_licencia", type="integer")
+     */
+    private $diasLicencia = 0;    
     
     /**     
      * @ORM\Column(name="dias_vacaciones", type="integer")
@@ -960,5 +970,53 @@ class RhuProgramacionPagoDetalle
     public function getPagosDetallesProgramacionPagoDetalleRel()
     {
         return $this->pagosDetallesProgramacionPagoDetalleRel;
+    }
+
+    /**
+     * Set diasIncapacidad
+     *
+     * @param integer $diasIncapacidad
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setDiasIncapacidad($diasIncapacidad)
+    {
+        $this->diasIncapacidad = $diasIncapacidad;
+
+        return $this;
+    }
+
+    /**
+     * Get diasIncapacidad
+     *
+     * @return integer
+     */
+    public function getDiasIncapacidad()
+    {
+        return $this->diasIncapacidad;
+    }
+
+    /**
+     * Set diasLicencia
+     *
+     * @param integer $diasLicencia
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setDiasLicencia($diasLicencia)
+    {
+        $this->diasLicencia = $diasLicencia;
+
+        return $this;
+    }
+
+    /**
+     * Get diasLicencia
+     *
+     * @return integer
+     */
+    public function getDiasLicencia()
+    {
+        return $this->diasLicencia;
     }
 }

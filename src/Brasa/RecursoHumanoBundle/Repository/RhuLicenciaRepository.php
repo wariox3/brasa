@@ -103,6 +103,42 @@ class RhuLicenciaRepository extends EntityRepository {
         return $intDiasLicencia;
     }                
     
+    public function diasLicenciaPeriodo($fechaDesde, $fechaHasta, $codigoEmpleado, $codigoContrato) {
+        $em = $this->getEntityManager();
+        $strFechaDesde = $fechaDesde->format('Y-m-d');
+        $strFechaHasta = $fechaHasta->format('Y-m-d');
+        $dql = "SELECT licencia FROM BrasaRecursoHumanoBundle:RhuLicencia licencia "
+                . "WHERE (((licencia.fechaDesde BETWEEN '$strFechaDesde' AND '$strFechaHasta') OR (licencia.fechaHasta BETWEEN '$strFechaDesde' AND '$strFechaHasta')) "
+                . "OR (licencia.fechaDesde >= '$strFechaDesde' AND licencia.fechaDesde <= '$strFechaHasta') "
+                . "OR (licencia.fechaHasta >= '$strFechaHasta' AND licencia.fechaDesde <= '$strFechaDesde')) "
+                . "AND licencia.codigoEmpleadoFk = " . $codigoEmpleado . " AND licencia.codigoContratoFk = " . $codigoContrato . " ";
+        $objQuery = $em->createQuery($dql);  
+        $arLicencias = $objQuery->getResult();         
+        $intDiasLicencia = 0;
+        foreach ($arLicencias as $arLicencia) {
+            $intDiaInicio = 1;            
+            $intDiaFin = 30;
+            if($arLicencia->getFechaDesde() <  $fechaDesde) {
+                $intDiaInicio = 1;                
+            } else {
+                $intDiaInicio = $arLicencia->getFechaDesde()->format('j');
+            }
+            if($arLicencia->getFechaHasta() > $fechaHasta) {
+                $intDiaFin = 30;                
+            } else {
+                $intDiaFin = $arLicencia->getFechaHasta()->format('j');
+                if($intDiaFin == 31) {
+                    $intDiaFin = 30;
+                }                
+            }            
+            $intDiasLicencia += (($intDiaFin - $intDiaInicio)+1);
+        }
+        if($intDiasLicencia > 30) {
+            $intDiasLicencia = 30;
+        }
+        return $intDiasLicencia;
+    }                    
+    
     public function validarFecha($fechaDesde, $fechaHasta, $codigoEmpleado, $codigoLicencia = "") {
         $em = $this->getEntityManager();
         $strFechaDesde = $fechaDesde->format('Y-m-d');
