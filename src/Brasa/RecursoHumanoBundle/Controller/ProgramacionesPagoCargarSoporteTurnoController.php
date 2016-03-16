@@ -101,6 +101,7 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                         $this->insertarAdicionalPago($arProgramacionPago, 43, $arSoportePago->getHorasExtrasFestivasNocturnas(), $arEmpleado);
                     }                    
                 }                
+                $arProgramacionPago->setInconsistencias(0);
                 if(count($arrInconsistencias) > 0) {
                     $arProgramacionPago->setInconsistencias(1);
                     foreach ($arrInconsistencias as $arrInconsistencia) {

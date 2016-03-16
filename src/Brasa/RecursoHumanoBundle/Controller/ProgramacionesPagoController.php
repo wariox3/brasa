@@ -304,13 +304,29 @@ class ProgramacionesPagoController extends Controller
             'form' => $form->createView()));
     }
 
-    public function inconsistenciasAction ($codigoProgramacionPago) {
+    public function inconsistenciasAction ($codigoProgramacionPago, Request $request) {
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');
+        $form = $this->createFormBuilder()    
+                    ->add('BtnLimpiar', 'submit', array('label'  => 'Limpiar',))
+                    ->getForm();    
+        $form->handleRequest($request);
+        if($form->isValid()) {
+            if($form->get('BtnLimpiar')->isClicked()) {
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoInconsistencia')->eliminarProgramacionPago($codigoProgramacionPago);
+                $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+                $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);            
+                $arProgramacionPago->setInconsistencias(0);
+                $em->persist($arProgramacionPago);
+                $em->flush();                                
+                echo "<script languaje='javascript' type='text/javascript'>window.close();</script>";                                
+            }   
+        }
         $arProgramacionPagoInconsistencias = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoInconsistencia();
         $arProgramacionPagoInconsistencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoInconsistencia')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:inconsistencias.html.twig', array(
-            'arProgramacionPagoInconsistencias' => $arProgramacionPagoInconsistencias
+            'arProgramacionPagoInconsistencias' => $arProgramacionPagoInconsistencias,
+            'form' => $form->createView()
             ));
     }
 

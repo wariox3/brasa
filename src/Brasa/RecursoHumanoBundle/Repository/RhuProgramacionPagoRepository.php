@@ -1007,6 +1007,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->eliminarEmpleados($codigoProgramacionPago);
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);        
+        $arProgramacionPago->setInconsistencias(0);
         if($arProgramacionPago->getCodigoPagoTipoFk() == 1) {             
             $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
                     . "WHERE c.codigoCentroCostoFk = " . $arProgramacionPago->getCodigoCentroCostoFk()
