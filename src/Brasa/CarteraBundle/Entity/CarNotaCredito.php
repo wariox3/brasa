@@ -49,7 +49,7 @@ class CarNotaCredito
     private $usuario;
     
     /**
-     * @ORM\ManyToOne(targetEntity="CarCliente", inversedBy="NotasCreditosClienteRel")
+     * @ORM\ManyToOne(targetEntity="CarCliente", inversedBy="notasCreditosClienteRel")
      * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
      */
     protected $clienteRel;
@@ -58,6 +58,7 @@ class CarNotaCredito
      * @ORM\OneToMany(targetEntity="CarNotaCreditoDetalle", mappedBy="notaCreditoRel")
      */
     protected $notasCreditosDetallesNotaCreditoRel;
+    
     
     
     /**
@@ -199,6 +200,30 @@ class CarNotaCredito
     }
 
     /**
+     * Set usuario
+     *
+     * @param string $usuario
+     *
+     * @return CarNotaCredito
+     */
+    public function setUsuario($usuario)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return string
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
+    }
+
+    /**
      * Set clienteRel
      *
      * @param \Brasa\CarteraBundle\Entity\CarCliente $clienteRel
@@ -254,29 +279,5 @@ class CarNotaCredito
     public function getNotasCreditosDetallesNotaCreditoRel()
     {
         return $this->notasCreditosDetallesNotaCreditoRel;
-    }
-
-    /**
-     * Set usuario
-     *
-     * @param string $usuario
-     *
-     * @return CarNotaCredito
-     */
-    public function setUsuario($usuario)
-    {
-        $this->usuario = $usuario;
-
-        return $this;
-    }
-
-    /**
-     * Get usuario
-     *
-     * @return string
-     */
-    public function getUsuario()
-    {
-        return $this->usuario;
     }
 }

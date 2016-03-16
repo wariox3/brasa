@@ -93,7 +93,7 @@ class CarCliente
     /**
      * @ORM\OneToMany(targetEntity="CarCuentaCobrar", mappedBy="clienteRel")
      */
-    protected $cuentasCobrarTiposClienteRel;
+    protected $cuentaCobrarClientesRel;
     
     /**
      * @ORM\OneToMany(targetEntity="CarRecibo", mappedBy="clienteRel")
@@ -110,12 +110,13 @@ class CarCliente
      */
     protected $notasCreditosClienteRel;
     
+    
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->cuentasCobrarTiposClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cuentaCobrarClientesRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->recibosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->notasDebitosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->notasCreditosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -396,6 +397,30 @@ class CarCliente
     }
 
     /**
+     * Set usuario
+     *
+     * @param string $usuario
+     *
+     * @return CarCliente
+     */
+    public function setUsuario($usuario)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return string
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
+    }
+
+    /**
      * Set formaPagoRel
      *
      * @param \Brasa\GeneralBundle\Entity\GenFormaPago $formaPagoRel
@@ -444,37 +469,37 @@ class CarCliente
     }
 
     /**
-     * Add cuentasCobrarTiposClienteRel
+     * Add cuentaCobrarClientesRel
      *
-     * @param \Brasa\CarteraBundle\Entity\CarCuentaCobrar $cuentasCobrarTiposClienteRel
+     * @param \Brasa\CarteraBundle\Entity\CarCuentaCobrar $cuentaCobrarClientesRel
      *
      * @return CarCliente
      */
-    public function addCuentasCobrarTiposClienteRel(\Brasa\CarteraBundle\Entity\CarCuentaCobrar $cuentasCobrarTiposClienteRel)
+    public function addCuentaCobrarClientesRel(\Brasa\CarteraBundle\Entity\CarCuentaCobrar $cuentaCobrarClientesRel)
     {
-        $this->cuentasCobrarTiposClienteRel[] = $cuentasCobrarTiposClienteRel;
+        $this->cuentaCobrarClientesRel[] = $cuentaCobrarClientesRel;
 
         return $this;
     }
 
     /**
-     * Remove cuentasCobrarTiposClienteRel
+     * Remove cuentaCobrarClientesRel
      *
-     * @param \Brasa\CarteraBundle\Entity\CarCuentaCobrar $cuentasCobrarTiposClienteRel
+     * @param \Brasa\CarteraBundle\Entity\CarCuentaCobrar $cuentaCobrarClientesRel
      */
-    public function removeCuentasCobrarTiposClienteRel(\Brasa\CarteraBundle\Entity\CarCuentaCobrar $cuentasCobrarTiposClienteRel)
+    public function removeCuentaCobrarClientesRel(\Brasa\CarteraBundle\Entity\CarCuentaCobrar $cuentaCobrarClientesRel)
     {
-        $this->cuentasCobrarTiposClienteRel->removeElement($cuentasCobrarTiposClienteRel);
+        $this->cuentaCobrarClientesRel->removeElement($cuentaCobrarClientesRel);
     }
 
     /**
-     * Get cuentasCobrarTiposClienteRel
+     * Get cuentaCobrarClientesRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getCuentasCobrarTiposClienteRel()
+    public function getCuentaCobrarClientesRel()
     {
-        return $this->cuentasCobrarTiposClienteRel;
+        return $this->cuentaCobrarClientesRel;
     }
 
     /**
@@ -577,29 +602,5 @@ class CarCliente
     public function getNotasCreditosClienteRel()
     {
         return $this->notasCreditosClienteRel;
-    }
-
-    /**
-     * Set usuario
-     *
-     * @param string $usuario
-     *
-     * @return CarCliente
-     */
-    public function setUsuario($usuario)
-    {
-        $this->usuario = $usuario;
-
-        return $this;
-    }
-
-    /**
-     * Get usuario
-     *
-     * @return string
-     */
-    public function getUsuario()
-    {
-        return $this->usuario;
     }
 }

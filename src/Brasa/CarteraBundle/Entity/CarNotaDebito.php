@@ -49,7 +49,7 @@ class CarNotaDebito
     private $usuario;
     
     /**
-     * @ORM\ManyToOne(targetEntity="CarCliente", inversedBy="NotasDebitosClienteRel")
+     * @ORM\ManyToOne(targetEntity="CarCliente", inversedBy="notasDebitosClienteRel")
      * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
      */
     protected $clienteRel;
@@ -199,6 +199,30 @@ class CarNotaDebito
     }
 
     /**
+     * Set usuario
+     *
+     * @param string $usuario
+     *
+     * @return CarNotaDebito
+     */
+    public function setUsuario($usuario)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return string
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
+    }
+
+    /**
      * Set clienteRel
      *
      * @param \Brasa\CarteraBundle\Entity\CarCliente $clienteRel
@@ -254,29 +278,5 @@ class CarNotaDebito
     public function getNotasDebitosDetallesNotaDebitoRel()
     {
         return $this->notasDebitosDetallesNotaDebitoRel;
-    }
-
-    /**
-     * Set usuario
-     *
-     * @param string $usuario
-     *
-     * @return CarNotaDebito
-     */
-    public function setUsuario($usuario)
-    {
-        $this->usuario = $usuario;
-
-        return $this;
-    }
-
-    /**
-     * Get usuario
-     *
-     * @return string
-     */
-    public function getUsuario()
-    {
-        return $this->usuario;
     }
 }

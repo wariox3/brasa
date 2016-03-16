@@ -101,6 +101,7 @@ class CarCuentaCobrar
     protected $recibosDetallesCuentaCobrarRel;
 
     
+    
     /**
      * Constructor
      */

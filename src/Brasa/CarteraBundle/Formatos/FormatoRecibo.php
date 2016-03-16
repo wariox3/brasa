@@ -86,12 +86,63 @@ class FormatoRecibo extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(32, 4, utf8_decode("IMPRESO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        if ($arRecibo->getEstadoAnulado() == 1){
-            $estadoAnulado = "SI";
+        if ($arRecibo->getEstadoImpreso() == 1){
+            $estadoImpreso = "SI";
         } else {
-            $estadoAnulado = "NO";
+            $estadoImpreso = "NO";
         }
-        $this->Cell(32, 4, $estadoAnulado, 1, 0, 'L', 1);
+        $this->Cell(32, 4, $estadoImpreso, 1, 0, 'L', 1);
+        //linea 3
+        $this->SetXY(10, $intY+8);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(26, 4, utf8_decode("CUENTA BANCO:") , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(42, 4, $arRecibo->getCuentaRel()->getNombre(), 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(26, 4, utf8_decode("TIPO RECIBO:") , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',7);
+        $this->Cell(42, 4, $arRecibo->getReciboTipoRel()->getNombre(), 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(24, 4, utf8_decode("EXPORTADO:") , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',7);
+        if ($arRecibo->getEstadoExportado() == 1){
+            $estadoExportado = "SI";
+        } else {
+            $estadoExportado = "NO";
+        }
+        $this->Cell(24, 4, $estadoExportado, 1, 0, 'L', 1);
+        //linea 4
+        $this->SetXY(10, $intY+12);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(33, 4, utf8_decode("FECHA:") , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(33, 4, $arRecibo->getFecha()->format('Y-m-d'), 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(33, 4, utf8_decode("FECHA PAGO:") , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',7);
+        $this->Cell(31, 4, $arRecibo->getFechaPago()->format('Y-m-d'), 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(32, 4, utf8_decode("AUTORIZADO:") , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',7);
+        if ($arRecibo->getEstadoAutorizado() == 1){
+            $estadoAutorizado = "SI";
+        } else {
+            $estadoAutorizado = "NO";
+        }
+        $this->Cell(32, 4, $estadoAutorizado, 1, 0, 'L', 1);
+        //linea 5
+        $this->SetXY(10, $intY+16);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(130, 4, "" , 1, 0, 'L', 1);
+        $this->Cell(32, 4, utf8_decode("TOTAL:") , 1, 0, 'R', 1);
+        $this->SetFont('Arial','',7);
+        $this->Cell(32, 4, number_format($arRecibo->getVrTotal(), 0, '.', ','), 1, 0, 'R', 1);
+        //linea 6
+        $this->SetXY(10, $intY+20);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(33, 4, utf8_decode("COMENTARIOS:") , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',7);
+        $this->Cell(161, 4, $arRecibo->getComentarios(), 1, 0, 'L', 1);
         
         $this->EncabezadoDetalles();
         

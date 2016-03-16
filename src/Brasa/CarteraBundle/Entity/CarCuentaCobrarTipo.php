@@ -29,7 +29,6 @@ class CarCuentaCobrarTipo
     protected $cuentasCobrarTiposCuentaCobrarRel;
     
     
-    
     /**
      * Constructor
      */

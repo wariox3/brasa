@@ -190,6 +190,7 @@ class TurCliente
      */
     protected $cierresMesServiciosClienteRel;     
 
+    
     /**
      * Constructor
      */

@@ -172,12 +172,11 @@ class GenCiudad
     protected $configuracionesRel;
     
     /**
-     * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurCliente", mappedBy="ciudadRel")
+     * @ORM\OneToMany(targetEntity="Brasa\CarteraBundle\Entity\CarCliente", mappedBy="ciudadRel")
      */
     protected $carClientesCiudadRel;
     
-    
-    
+   
     /**
      * Constructor
      */
@@ -1172,11 +1171,11 @@ class GenCiudad
     /**
      * Add carClientesCiudadRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurCliente $carClientesCiudadRel
+     * @param \Brasa\CarteraBundle\Entity\CarCliente $carClientesCiudadRel
      *
      * @return GenCiudad
      */
-    public function addCarClientesCiudadRel(\Brasa\TurnoBundle\Entity\TurCliente $carClientesCiudadRel)
+    public function addCarClientesCiudadRel(\Brasa\CarteraBundle\Entity\CarCliente $carClientesCiudadRel)
     {
         $this->carClientesCiudadRel[] = $carClientesCiudadRel;
 
@@ -1186,9 +1185,9 @@ class GenCiudad
     /**
      * Remove carClientesCiudadRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurCliente $carClientesCiudadRel
+     * @param \Brasa\CarteraBundle\Entity\CarCliente $carClientesCiudadRel
      */
-    public function removeCarClientesCiudadRel(\Brasa\TurnoBundle\Entity\TurCliente $carClientesCiudadRel)
+    public function removeCarClientesCiudadRel(\Brasa\CarteraBundle\Entity\CarCliente $carClientesCiudadRel)
     {
         $this->carClientesCiudadRel->removeElement($carClientesCiudadRel);
     }
