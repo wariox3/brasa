@@ -1114,12 +1114,26 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $floNeto = $floDevengado - $floDeducciones;
                 $arProgramacionPagoDetalle->setVrNetoPagar($floNeto);
                 
+                if($arContrato->getCodigoEmpleadoFk() == 1135) {
+                    echo "";
+                }
+                
                 //dias vacaciones
                 $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                
                 if($intDiasVacaciones > 0) {                                        
                     $arProgramacionPagoDetalle->setDiasVacaciones($intDiasVacaciones);
                 }                
-                
+                //Licencias
+                $intDiasLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicenciaPeriodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), $arContrato->getCodigoEmpleadoFk());                
+                if($intDiasLicencia > 0) {                                        
+                    $arProgramacionPagoDetalle->setDiasLicencia($intDiasLicencia);
+                }     
+                //dias incapacidad
+                $intDiasIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->diasIncapacidadPeriodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), $arContrato->getCodigoEmpleadoFk());                
+                if($intDiasIncapacidad > 0) {                                        
+                    $arProgramacionPagoDetalle->setDiasIncapacidad($intDiasIncapacidad);
+                }                
+                                
                 $em->persist($arProgramacionPagoDetalle);
                 if($floNeto < 0) {
                     $boolInconsistencias = 1;

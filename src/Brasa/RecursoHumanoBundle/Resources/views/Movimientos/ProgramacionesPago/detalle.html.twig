@@ -9,7 +9,7 @@
     {{ form_errors(form) }}
     <div class="btn-toolbar" style="float:left">
         <div class="btn-group">                               
-            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_inconsistencias', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'VerInconsistencias', 500, 700)" >Inconsistencias</a>                                    
+            <a {% if  arProgramacionPago.inconsistencias == 0 %} class="btn btn-default btn-sm" {% else %} class="btn btn-default btn-sm btn-danger" {% endif %}  href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_inconsistencias', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'VerInconsistencias', 500, 700)" >Inconsistencias</a>                                    
             <!-- Split button -->
             <div class="btn-group">
                 <button type="button" class="btn btn-default btn-sm">Utilidades</button>
@@ -200,7 +200,9 @@
                 <th>NETO</th>
                 <th>HORAS</th>                
                 <th>DÍAS</th>
-                <th>VAC</th>                
+                <th>VAC</th>
+                <th>LIC</th>                
+                <th>INC</th>
                 <th>FAC</th>
                 <th></th>
                 <th><input type="checkbox" name="ChkSeleccionarEmpleado" OnClick="ChequearTodosTabla(this, 'ChkSeleccionarDetalle[]');"/></th>
@@ -224,6 +226,8 @@
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.horasPeriodo | number_format(0, '.', ',') }}</td>               
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.dias | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.diasVacaciones | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.diasLicencia | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.diasIncapacidad | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.factorDia | number_format(0, '.', ',') }}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_base_empleados_detalles', { 'codigoEmpleado': arProgramacionPagoDetalles.codigoEmpleadoFk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionarDetalle[]" value="{{ arProgramacionPagoDetalles.codigoProgramacionPagoDetallePk }}" /></td>

@@ -81,6 +81,13 @@ class LicenciasController extends Controller
                                     $arLicencia->setCantidad($intDias);
                                     if($codigoLicencia == 0) {
                                         $arLicencia->setCodigoUsuario($arUsuario->getUserName());
+                                        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                                        if($arEmpleado->getCodigoContratoActivoFk() != '') {
+                                            $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
+                                        } else {
+                                            $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoUltimoFk());
+                                        }
+                                        $arLicencia->setContratoRel($arContrato);                                        
                                     }
                                     $em->persist($arLicencia);
                                     $em->flush();                        

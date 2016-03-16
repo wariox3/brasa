@@ -52,18 +52,31 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                
                     if($intDiasVacaciones > 0) {                                        
                         $arProgramacionPagoDetalle->setDiasVacaciones($intDiasVacaciones);
-                    }
-                    
+                    }                        
                     //dias licencia
-                    $intDiasLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), $arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk());                
+                    $intDiasLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicenciaPeriodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), $arContrato->getCodigoEmpleadoFk());                
                     if($intDiasLicencia > 0) {                                        
                         $arProgramacionPagoDetalle->setDiasLicencia($intDiasLicencia);
+                    }     
+                    //dias incapacidad
+                    $intDiasIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->diasIncapacidadPeriodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), $arContrato->getCodigoEmpleadoFk());                
+                    if($intDiasIncapacidad > 0) {                                        
+                        $arProgramacionPagoDetalle->setDiasIncapacidad($intDiasIncapacidad);
                     }                    
                     
                     if($intDiasVacaciones != $arSoportePago->getVacacion()) {
-                        $arrInconsistencias[] = array('inconsistencia' => "El empleado " . $arEmpleado->getNombreCorto() . " tiene vacaciones registradas de " . $arSoportePago->getVacacion() . " en turnos y de " . $intDiasVacaciones . " en recurso humano");
+                        $arrInconsistencias[] = array('inconsistencia' => "El empleado " . $arEmpleado->getNombreCorto() . " tiene vacaciones de " . $arSoportePago->getVacacion() . " dias en turnos y de " . $intDiasVacaciones . " en recurso humano");
                     }
-                        
+                    
+                    if($intDiasLicencia != $arSoportePago->getLicencia()) {
+                        $arrInconsistencias[] = array('inconsistencia' => "El empleado " . $arEmpleado->getNombreCorto() . " tiene licencias de " . $arSoportePago->getLicencia() . " dias en turnos y de " . $intDiasLicencia . " en recurso humano");
+                    }
+                    
+                    if($intDiasIncapacidad != $arSoportePago->getIncapacidad()) {
+                        $arrInconsistencias[] = array('inconsistencia' => "El empleado " . $arEmpleado->getNombreCorto() . " tiene incapacidades de " . $arSoportePago->getIncapacidad() . " dias en turnos y de " . $intDiasIncapacidad . " en recurso humano");
+                    }                    
+                    
+                    
                     $em->persist($arProgramacionPagoDetalle);
 
                     if($arSoportePago->getHorasNocturnas() > 0) {

@@ -44,7 +44,7 @@ class RhuLicenciaRepository extends EntityRepository {
         return $arLicenciasPendientesEmpleado;        
     }        
     
-    public function periodo($fechaDesde, $fechaHasta, $codigoEmpleado = "") {
+    public function periodo($fechaDesde, $fechaHasta, $codigoEmpleado = "", $codigoCentroCosto = "") {
         $em = $this->getEntityManager();
         $strFechaDesde = $fechaDesde->format('Y-m-d');
         $strFechaHasta = $fechaHasta->format('Y-m-d');
@@ -55,6 +55,9 @@ class RhuLicenciaRepository extends EntityRepository {
         if($codigoEmpleado != "") {
             $dql = $dql . "AND licencia.codigoEmpleadoFk = '" . $codigoEmpleado . "' ";
         }
+        if($codigoCentroCosto != "") {
+            $dql = $dql . "AND licencia.codigoCentroCostoFk = " . $codigoCentroCosto . " ";
+        }        
 
         $objQuery = $em->createQuery($dql);  
         $arLicencias = $objQuery->getResult();         
@@ -88,12 +91,12 @@ class RhuLicenciaRepository extends EntityRepository {
                 $intDiaInicio = $arLicencia->getFechaDesde()->format('j');
             }
             if($arLicencia->getFechaHasta() > $fechaHasta) {
-                $intDiaFin = 30;                
+                $intDiaFin = $fechaHasta->format('j');               
             } else {
-                $intDiaFin = $arLicencia->getFechaHasta()->format('j');
-                if($intDiaFin == 31) {
-                    $intDiaFin = 30;
-                }                
+                $intDiaFin = $arLicencia->getFechaHasta()->format('j');                
+            }            
+            if($intDiaFin == 31) {
+                $intDiaFin = 30;
             }            
             $intDiasLicencia += (($intDiaFin - $intDiaInicio)+1);
         }
@@ -103,7 +106,7 @@ class RhuLicenciaRepository extends EntityRepository {
         return $intDiasLicencia;
     }                
     
-    public function diasLicenciaPeriodo($fechaDesde, $fechaHasta, $codigoEmpleado, $codigoContrato) {
+    public function diasLicenciaPeriodo($fechaDesde, $fechaHasta, $codigoEmpleado) {
         $em = $this->getEntityManager();
         $strFechaDesde = $fechaDesde->format('Y-m-d');
         $strFechaHasta = $fechaHasta->format('Y-m-d');
@@ -111,7 +114,7 @@ class RhuLicenciaRepository extends EntityRepository {
                 . "WHERE (((licencia.fechaDesde BETWEEN '$strFechaDesde' AND '$strFechaHasta') OR (licencia.fechaHasta BETWEEN '$strFechaDesde' AND '$strFechaHasta')) "
                 . "OR (licencia.fechaDesde >= '$strFechaDesde' AND licencia.fechaDesde <= '$strFechaHasta') "
                 . "OR (licencia.fechaHasta >= '$strFechaHasta' AND licencia.fechaDesde <= '$strFechaDesde')) "
-                . "AND licencia.codigoEmpleadoFk = " . $codigoEmpleado . " AND licencia.codigoContratoFk = " . $codigoContrato . " ";
+                . "AND licencia.codigoEmpleadoFk = " . $codigoEmpleado ." ";
         $objQuery = $em->createQuery($dql);  
         $arLicencias = $objQuery->getResult();         
         $intDiasLicencia = 0;

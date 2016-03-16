@@ -119,6 +119,13 @@ class IncapacidadesController extends Controller
                                         $arIncapacidad->setCentroCostoRel($arEmpleado->getCentroCostoRel());
                                         if($codigoIncapacidad == 0) {
                                             $arIncapacidad->setCodigoUsuario($arUsuario->getUserName());
+                                            $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                                            if($arEmpleado->getCodigoContratoActivoFk() != '') {
+                                                $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
+                                            } else {
+                                                $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoUltimoFk());
+                                            }
+                                            $arIncapacidad->setContratoRel($arContrato);                                            
                                         }
                                         $em->persist($arIncapacidad);
                                         $em->flush();
