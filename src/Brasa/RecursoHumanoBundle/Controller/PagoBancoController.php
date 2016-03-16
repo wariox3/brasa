@@ -326,6 +326,12 @@ class PagoBancoController extends Controller
         //$strArchivo = "c:/xampp/" . $strNombreArchivo;                                    
         ob_clean();
         $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
+        $strValorTotal = 0;
+        $arPagosBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
+        $arPagosBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->findBy(array ('codigoPagoBancoFk' => $arPagoBanco->getCodigoPagoBancoPk()));                        
+        foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
+            $strValorTotal += round($arPagoBancoDetalle->getVrPago());
+        }        
         // Encabezado
         $strNitEmpresa = $this->RellenarNr(utf8_decode($arConfiguracionGeneral->getNitEmpresa()),"0",10);
         $strNombreEmpresa = $this->RellenarNr(utf8_decode(substr($arConfiguracionGeneral->getNombreEmpresa(), 0, 16)), 0, 16);
@@ -334,13 +340,11 @@ class PagoBancoController extends Controller
         $strFechaCreacion = $arPagoBanco->getFechaTrasmision()->format('ymd');                                                                                            
         $strFechaAplicacion = $arPagoBanco->getFechaAplicacion()->format('ymd');
         $strNumeroRegistros = $this->RellenarNr($arPagoBanco->getNumeroRegistros(), "0", 6);        
-        $strValorTotal = $this->RellenarNr(round($arPagoBanco->getVrTotalPago()), "0", 24);
+        $strValorTotal = $this->RellenarNr($strValorTotal, "0", 24);
         //Fin encabezado
         //(1) Tipo de registro, (10) Nit empresa, (225PAGO NOMI) descripcion transacion, (yymmdd) fecha creacion, (yymmdd) fecha aplicacion, (6) Numero de registros, (17) sumatoria de creditos, (11) Cuenta cliente a debitar, (1) Tipo de cuenta a debitar         
         fputs($ar, "1" . $strNitEmpresa . $strNombreEmpresa . $strTipoPagoSecuencia . $strFechaCreacion . $strSecuencia . $strFechaAplicacion . $strNumeroRegistros . $strValorTotal . $arPagoBanco->getCuentaRel()->getCuenta() . $arPagoBanco->getCuentaRel()->getTipo() . "\n");
         //Inicio cuerpo
-        $arPagosBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
-        $arPagosBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->findBy(array ('codigoPagoBancoFk' => $arPagoBanco->getCodigoPagoBancoPk()));                        
         foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
             fputs($ar, "6"); //(1)Tipo registro            
             fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getNumeroIdentificacion(), "0", 15)); //(15) Nit del beneficiario           
