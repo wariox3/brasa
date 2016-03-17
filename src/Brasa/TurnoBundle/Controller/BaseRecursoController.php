@@ -215,6 +215,7 @@ class BaseRecursoController extends Controller
     }    
     
     private function formularioFiltro() {
+        $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $arrayPropiedadesCentroCosto = array(
                 'class' => 'BrasaTurnoBundle:TurCentroCosto',
