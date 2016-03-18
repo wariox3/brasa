@@ -1170,6 +1170,7 @@ insert into `gen_ciudad` (`codigo_ciudad_pk`, `codigo_departamento_fk`, `codigo_
 insert into `gen_ciudad` (`codigo_ciudad_pk`, `codigo_departamento_fk`, `codigo_ruta_predeterminada_fk`, `nombre`, `codigo_interface`, `codigo_dane`) values('3279','76',NULL,'YOTOCO - VALLE','76890','890');
 insert into `gen_ciudad` (`codigo_ciudad_pk`, `codigo_departamento_fk`, `codigo_ruta_predeterminada_fk`, `nombre`, `codigo_interface`, `codigo_dane`) values('3280','76',NULL,'YUMBO - VALLE','76892','892');
 insert into `gen_ciudad` (`codigo_ciudad_pk`, `codigo_departamento_fk`, `codigo_ruta_predeterminada_fk`, `nombre`, `codigo_interface`, `codigo_dane`) values('3281','76',NULL,'ZARZAL - VALLE','76895','895');
+insert into `gen_ciudad` (`codigo_ciudad_pk`, `codigo_departamento_fk`, `codigo_ruta_predeterminada_fk`, `nombre`, `codigo_interface`, `codigo_dane`) values('3282','97',NULL,'MITÚ - VAUPES','97001','001');
 
 INSERT INTO `gen_directorio` (`codigo_directorio_pk`, `codigo_directorio_padre_fk`, `ruta`, `nombre`) VALUES('4','0','formatos/','FORMATOS');
 INSERT INTO `gen_directorio` (`codigo_directorio_pk`, `codigo_directorio_padre_fk`, `ruta`, `nombre`) VALUES('6','0','actas/','ACTAS');

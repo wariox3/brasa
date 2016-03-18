@@ -64,8 +64,8 @@
                     <tr>
                         <td class="titulo">DISFRUTE HASTA</td>
                         <td class="td-in-well">{{ arVacaciones.fechaHastaDisfrute |date("Y/m/d") }}</td>
-                        <td class="titulo"></td>
-                        <td></td>
+                        <td class="titulo">USUARIO</td>
+                        <td class="td-in-well">{{ arVacaciones.codigoUsuario }}</td>
                         <td class="titulo">OTRAS DEDUCCIONES:</td>
                         <td class="td-in-well" align="right">{{ arVacaciones.vrDeduccion | number_format(0, '.', ',')}}</td>                                                
                     </tr>

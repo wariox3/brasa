@@ -140,9 +140,24 @@ class PagosAdicionalesController extends Controller
             );
         if($session->get('filtroCodigoCentroCosto')) {
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
-        }            
+        }
+        $arrayPropiedadesConcepto = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('pc')
+                    ->orderBy('pc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoPagoConcepto')) {
+            $arrayPropiedadesConcepto['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $session->get('filtroCodigoPagoConcepto'));
+        }
         $form = $this->createFormBuilder()
-            ->add('centroCostoRel', 'entity', $arrayPropiedades)    
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('pagoConceptoRel', 'entity', $arrayPropiedadesConcepto)    
             ->add('BtnRetirarConcepto', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnAplicaDiaLaborado', 'submit', array('label'  => 'Aplicar a dia laborado',))
             ->add('aplicarDiaLaborado', 'choice', array('choices' => array('2' => 'TODOS', '0' => 'NO', '1' => 'SI')))                
@@ -156,13 +171,11 @@ class PagosAdicionalesController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->listaAdicionalesDql(                    
-            //$this->nombre,
             $session->get('filtroNombre'),    
             $session->get('filtroIdentificacion'),
             $session->get('filtroAplicarDiaLaborado'),        
-            //$this->identificacion,
-            //$this->aplicarDiaLaborado,
-            $session->get('filtroCodigoCentroCosto'));
+            $session->get('filtroCodigoCentroCosto'),
+            $session->get('filtroCodigoPagoConcepto'));
     }
 
     private function filtrarLista($form) {
@@ -172,11 +185,9 @@ class PagosAdicionalesController extends Controller
         $arrControles = $request->request->All();
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroNombre', $arrControles['txtNombreCorto']);
-        //$this->nombre = $arrControles['txtNombreCorto'];
-        //$this->identificacion = $arrControles['txtNumeroIdentificacion'];
         $session->set('filtroIdentificacion', $arrControles['txtNumeroIdentificacion']);
         $session->set('filtroAplicarDiaLaborado', $controles['aplicarDiaLaborado']);
-        //$this->aplicarDiaLaborado = $form->get('aplicarDiaLaborado')->getData();
+        $session->set('filtroCodigoPagoConcepto', $controles['pagoConceptoRel']);
     }
 
     public function detalleAction($codigoProgramacionPago) {
