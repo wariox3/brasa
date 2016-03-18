@@ -74,22 +74,20 @@ class ProcesoGenerarHorarioPeriodoController extends Controller
         $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arHorarioPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioPeriodo();
-        if ($codigoHorarioPeriodo != 0)
-        {
+        if ($codigoHorarioPeriodo != 0) {
             $arHorarioPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioPeriodo')->find($codigoHorarioPeriodo);
         }    
         $form = $this->createFormBuilder()
-            ->add('periodo', 'date', array('data' => new \DateTime('now')))
+            ->add('fechaPeriodo', 'date', array('data' => new \DateTime('now')))
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $form->handleRequest($request);
-        if ($form->isValid())
-        {
-            $arHorarioPeriodoValidar = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioPeriodo')->findOneBy(array('periodo' => $form->get('periodo')->getData()));
+        if ($form->isValid()) {
+            $arHorarioPeriodoValidar = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioPeriodo')->findOneBy(array('fechaPeriodo' => $form->get('fechaPeriodo')->getData()));
             if (count($arHorarioPeriodoValidar) > 0){
                 $objMensaje->Mensaje("error", "Ya existe el periodo", $this);
             }else {
-                $arHorarioPeriodo->setPeriodo($form->get('periodo')->getData());
+                $arHorarioPeriodo->setFechaPeriodo($form->get('fechaPeriodo')->getData());
                 $em->persist($arHorarioPeriodo);  
                 $em->flush();
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                 

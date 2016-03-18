@@ -20,8 +20,9 @@ class RhuTurnoType extends AbstractType
             ->add('horas', 'text', array('required' => true))    
             ->add('horasDiurnas', 'text', array('required' => true))        
             ->add('horasNocturnas', 'text', array('required' => true))        
-            ->add('novedad', 'text', array('required' => false))        
-            ->add('descanso', 'text', array('required' => false))        
+            ->add('descanso', 'checkbox', array('required'  => false))                
+            ->add('novedad', 'checkbox', array('required'  => false))                
+            ->add('salidaDiaSiguiente', 'checkbox', array('required'  => false))
             ->add('comentarios', 'textarea', array('required' => false))        
             ->add('guardar', 'submit', array('label' => 'Guardar'));
     }

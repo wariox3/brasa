@@ -16,6 +16,11 @@ class RhuHorarioAcceso
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $codigoHorarioAccesoPk;                         
+
+    /**
+     * @ORM\Column(name="codigo_horario_periodo_fk", type="integer")
+     */    
+    private $codigoHorarioPeriodoFk;
     
     /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
@@ -43,19 +48,19 @@ class RhuHorarioAcceso
     private $comentarios;
        
     /**
-     * @ORM\Column(name="duracion_registro", type="string", length=15, nullable=true)
+     * @ORM\Column(name="duracion_registro", type="integer")
      */    
-    private $duracionRegistro;
+    private $duracionRegistro = 0;
     
     /**
-     * @ORM\Column(name="duracion_llegada_tarde", type="string", length=15, nullable=true)
+     * @ORM\Column(name="duracion_llegada_tarde", type="integer")
      */    
-    private $duracionLlegadaTarde;
+    private $duracionLlegadaTarde = 0;
     
     /**
-     * @ORM\Column(name="duracion_salida_antes", type="string", length=15, nullable=true)
+     * @ORM\Column(name="duracion_salida_antes", type="integer")
      */    
-    private $duracionSalidaAntes;
+    private $duracionSalidaAntes = 0;
     
     /**     
      * @ORM\Column(name="estado_entrada", type="boolean")
@@ -68,9 +73,9 @@ class RhuHorarioAcceso
     private $estadoSalida = FALSE;
     
     /**     
-     * @ORM\Column(name="llegada_tarde", type="boolean")
+     * @ORM\Column(name="entrada_tarde", type="boolean")
      */    
-    private $llegadaTarde = FALSE;
+    private $entradaTarde = FALSE;
     
     /**     
      * @ORM\Column(name="salida_antes", type="boolean")
@@ -96,7 +101,18 @@ class RhuHorarioAcceso
      * @ORM\Column(name="hora_salida_turno", type="time", nullable=true)
      */    
     private $horaSalidaTurno;
-   
+
+    /**
+     * @ORM\Column(name="salida_dia_siguiente", type="boolean")
+     */    
+    private $salidaDiaSiguiente = false;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuHorarioPeriodo", inversedBy="horariosAccesosHorarioPeriodoRel")
+     * @ORM\JoinColumn(name="codigo_horario_periodo_fk", referencedColumnName="codigo_horario_periodo_pk")
+     */
+    protected $horarioPeriodoRel;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="horarioAccesoEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
@@ -108,8 +124,8 @@ class RhuHorarioAcceso
      * @ORM\JoinColumn(name="codigo_turno_fk", referencedColumnName="codigo_turno_pk")
      */
     protected $turnoRel;
-    
-    
+        
+
 
     /**
      * Get codigoHorarioAccesoPk
@@ -119,6 +135,30 @@ class RhuHorarioAcceso
     public function getCodigoHorarioAccesoPk()
     {
         return $this->codigoHorarioAccesoPk;
+    }
+
+    /**
+     * Set codigoHorarioPeriodoFk
+     *
+     * @param integer $codigoHorarioPeriodoFk
+     *
+     * @return RhuHorarioAcceso
+     */
+    public function setCodigoHorarioPeriodoFk($codigoHorarioPeriodoFk)
+    {
+        $this->codigoHorarioPeriodoFk = $codigoHorarioPeriodoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoHorarioPeriodoFk
+     *
+     * @return integer
+     */
+    public function getCodigoHorarioPeriodoFk()
+    {
+        return $this->codigoHorarioPeriodoFk;
     }
 
     /**
@@ -244,7 +284,7 @@ class RhuHorarioAcceso
     /**
      * Set duracionRegistro
      *
-     * @param string $duracionRegistro
+     * @param integer $duracionRegistro
      *
      * @return RhuHorarioAcceso
      */
@@ -258,7 +298,7 @@ class RhuHorarioAcceso
     /**
      * Get duracionRegistro
      *
-     * @return string
+     * @return integer
      */
     public function getDuracionRegistro()
     {
@@ -268,7 +308,7 @@ class RhuHorarioAcceso
     /**
      * Set duracionLlegadaTarde
      *
-     * @param string $duracionLlegadaTarde
+     * @param integer $duracionLlegadaTarde
      *
      * @return RhuHorarioAcceso
      */
@@ -282,7 +322,7 @@ class RhuHorarioAcceso
     /**
      * Get duracionLlegadaTarde
      *
-     * @return string
+     * @return integer
      */
     public function getDuracionLlegadaTarde()
     {
@@ -292,7 +332,7 @@ class RhuHorarioAcceso
     /**
      * Set duracionSalidaAntes
      *
-     * @param string $duracionSalidaAntes
+     * @param integer $duracionSalidaAntes
      *
      * @return RhuHorarioAcceso
      */
@@ -306,7 +346,7 @@ class RhuHorarioAcceso
     /**
      * Get duracionSalidaAntes
      *
-     * @return string
+     * @return integer
      */
     public function getDuracionSalidaAntes()
     {
@@ -362,27 +402,27 @@ class RhuHorarioAcceso
     }
 
     /**
-     * Set llegadaTarde
+     * Set entradaTarde
      *
-     * @param boolean $llegadaTarde
+     * @param boolean $entradaTarde
      *
      * @return RhuHorarioAcceso
      */
-    public function setLlegadaTarde($llegadaTarde)
+    public function setEntradaTarde($entradaTarde)
     {
-        $this->llegadaTarde = $llegadaTarde;
+        $this->entradaTarde = $entradaTarde;
 
         return $this;
     }
 
     /**
-     * Get llegadaTarde
+     * Get entradaTarde
      *
      * @return boolean
      */
-    public function getLlegadaTarde()
+    public function getEntradaTarde()
     {
-        return $this->llegadaTarde;
+        return $this->entradaTarde;
     }
 
     /**
@@ -503,6 +543,54 @@ class RhuHorarioAcceso
     public function getHoraSalidaTurno()
     {
         return $this->horaSalidaTurno;
+    }
+
+    /**
+     * Set salidaDiaSiguiente
+     *
+     * @param boolean $salidaDiaSiguiente
+     *
+     * @return RhuHorarioAcceso
+     */
+    public function setSalidaDiaSiguiente($salidaDiaSiguiente)
+    {
+        $this->salidaDiaSiguiente = $salidaDiaSiguiente;
+
+        return $this;
+    }
+
+    /**
+     * Get salidaDiaSiguiente
+     *
+     * @return boolean
+     */
+    public function getSalidaDiaSiguiente()
+    {
+        return $this->salidaDiaSiguiente;
+    }
+
+    /**
+     * Set horarioPeriodoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuHorarioPeriodo $horarioPeriodoRel
+     *
+     * @return RhuHorarioAcceso
+     */
+    public function setHorarioPeriodoRel(\Brasa\RecursoHumanoBundle\Entity\RhuHorarioPeriodo $horarioPeriodoRel = null)
+    {
+        $this->horarioPeriodoRel = $horarioPeriodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get horarioPeriodoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuHorarioPeriodo
+     */
+    public function getHorarioPeriodoRel()
+    {
+        return $this->horarioPeriodoRel;
     }
 
     /**

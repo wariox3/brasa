@@ -25,7 +25,7 @@
             {% for arHorariosPeriodos in arHorariosPeriodos %}
             <tr>
                 <td>{{ arHorariosPeriodos.codigoHorarioPeriodoPk  }}</td>
-                <td>{{ arHorariosPeriodos.periodo |date("Y/m/d")  }}</td>
+                <td>{{ arHorariosPeriodos.fechaPeriodo |date("Y/m/d")  }}</td>
                 <td>{% if arHorariosPeriodos.estadoGenerado == 1%}SI{% else %}NO{% endif %}</td>
                 <td>{% if arHorariosPeriodos.estadoCerrado == 1%}SI{% else %}NO{% endif %}</td>
                 <td>

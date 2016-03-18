@@ -132,11 +132,7 @@ brs_rhu_utilidades_cartas_generar:
 
 brs_rhu_utilidades_supervigilancia_parafiscales:
     path:     /rhu/utilidades/supervigilancia/parafiscales
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesSupervigilanciaParafiscales:lista }  
-    
-brs_rhu_utilidades_control_acceso_empleado:
-    path:     /rhu/utilidades/control/acceso/empleado
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesHorarioAcceso:registro }
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesSupervigilanciaParafiscales:lista }      
     
 brs_rhu_utilidades_control_acceso_visitante:
     path:     /rhu/utilidades/control/acceso/visitante

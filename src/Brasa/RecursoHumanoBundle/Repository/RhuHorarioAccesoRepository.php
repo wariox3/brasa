@@ -90,6 +90,35 @@ class RhuHorarioAccesoRepository extends EntityRepository {
         $dql .= " ORDER BY ha.fechaEntrada";
         return $dql;
     }
+
+    public function listaDql2($codigoHorarioPeriodo = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT ha FROM BrasaRecursoHumanoBundle:RhuHorarioAcceso ha WHERE ha.codigoHorarioAccesoPk <> 0 ";   
+        if($codigoHorarioPeriodo != "") {
+            $dql .= " AND ha.codigoHorarioPeriodoFk = " . $codigoHorarioPeriodo;
+        }   
+
+        return $dql;
+    }
+    
+    public function listaDql3($codigoHorarioPeriodo = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT ha FROM BrasaRecursoHumanoBundle:RhuHorarioAcceso ha WHERE ha.codigoHorarioAccesoPk <> 0 ";   
+        if($codigoHorarioPeriodo != "") {
+            $dql .= " AND ha.codigoHorarioPeriodoFk = " . $codigoHorarioPeriodo . " AND ha.salidaDiaSiguiente = 1 AND ha.estadoEntrada = 1 AND ha.estadoSalida = 0";
+        }   
+
+        return $dql;
+    }    
+
+    public function verificarSalidaPendiente($codigoHorarioPeriodo = "", $codigoEmpleado = "") { 
+        $em = $this->getEntityManager();        
+        $dql   = "SELECT ha FROM BrasaRecursoHumanoBundle:RhuHorarioAcceso ha WHERE ha.codigoHorarioAccesoPk <> 0 ";   
+        $dql .= " AND ha.codigoHorarioPeriodoFk = " . $codigoHorarioPeriodo . " AND ha.codigoEmpleadoFk = " . $codigoEmpleado . " AND ha.salidaDiaSiguiente = 1 AND ha.estadoEntrada = 1 AND ha.estadoSalida = 0";        
+        $query = $em->createQuery($dql);
+        $arHorarioAcceso = $query->getResult();                   
+        return $arHorarioAcceso;
+    }    
     
     public function listaConsultaDql($strNombre = "", $strIdentificacion = "", $codigoCentroCosto = "", $codigoCargo = "", $codigoDepartametoEmpresa = "", $estadoEntrada, $estadoSalida, $strDesde = "", $strHasta = "", $entradaTarde, $salidaAntes) {        
         $em = $this->getEntityManager();

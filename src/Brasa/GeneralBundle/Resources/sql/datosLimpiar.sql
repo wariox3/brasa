@@ -52,6 +52,7 @@ DELETE FROM rhu_factura;
 DELETE FROM rhu_sso_aporte;
 DELETE FROM rhu_sso_periodo_empleado;
 DELETE FROM rhu_sso_periodo_detalle;
+DELETE FROM rhu_seleccion_entrevista;
 DELETE FROM rhu_seleccion_referencia;
 DELETE FROM rhu_seleccion_prueba;
 DELETE FROM rhu_seleccion_visita;

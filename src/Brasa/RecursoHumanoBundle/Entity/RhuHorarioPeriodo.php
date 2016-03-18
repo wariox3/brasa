@@ -18,9 +18,9 @@ class RhuHorarioPeriodo
     private $codigoHorarioPeriodoPk;
     
     /**
-     * @ORM\Column(name="periodo", type="date")
+     * @ORM\Column(name="fecha_periodo", type="date")
      */    
-    private $periodo;
+    private $fechaPeriodo;
     
     /**     
      * @ORM\Column(name="estado_generado", type="boolean")
@@ -33,6 +33,20 @@ class RhuHorarioPeriodo
     private $estadoCerrado = FALSE;
 
     /**
+     * @ORM\OneToMany(targetEntity="RhuHorarioAcceso", mappedBy="horarioPeriodoRel")
+     */
+    protected $horariosAccesosHorarioPeriodoRel;     
+    
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->horariosAccesosHorarioPeriodoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * Get codigoHorarioPeriodoPk
      *
      * @return integer
@@ -43,27 +57,27 @@ class RhuHorarioPeriodo
     }
 
     /**
-     * Set periodo
+     * Set fechaPeriodo
      *
-     * @param \DateTime $periodo
+     * @param \DateTime $fechaPeriodo
      *
      * @return RhuHorarioPeriodo
      */
-    public function setPeriodo($periodo)
+    public function setFechaPeriodo($fechaPeriodo)
     {
-        $this->periodo = $periodo;
+        $this->fechaPeriodo = $fechaPeriodo;
 
         return $this;
     }
 
     /**
-     * Get periodo
+     * Get fechaPeriodo
      *
      * @return \DateTime
      */
-    public function getPeriodo()
+    public function getFechaPeriodo()
     {
-        return $this->periodo;
+        return $this->fechaPeriodo;
     }
 
     /**
@@ -112,5 +126,39 @@ class RhuHorarioPeriodo
     public function getEstadoCerrado()
     {
         return $this->estadoCerrado;
+    }
+
+    /**
+     * Add horariosAccesosHorarioPeriodoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso $horariosAccesosHorarioPeriodoRel
+     *
+     * @return RhuHorarioPeriodo
+     */
+    public function addHorariosAccesosHorarioPeriodoRel(\Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso $horariosAccesosHorarioPeriodoRel)
+    {
+        $this->horariosAccesosHorarioPeriodoRel[] = $horariosAccesosHorarioPeriodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove horariosAccesosHorarioPeriodoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso $horariosAccesosHorarioPeriodoRel
+     */
+    public function removeHorariosAccesosHorarioPeriodoRel(\Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso $horariosAccesosHorarioPeriodoRel)
+    {
+        $this->horariosAccesosHorarioPeriodoRel->removeElement($horariosAccesosHorarioPeriodoRel);
+    }
+
+    /**
+     * Get horariosAccesosHorarioPeriodoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getHorariosAccesosHorarioPeriodoRel()
+    {
+        return $this->horariosAccesosHorarioPeriodoRel;
     }
 }

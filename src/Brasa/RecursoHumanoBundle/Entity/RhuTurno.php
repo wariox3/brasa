@@ -58,6 +58,11 @@ class RhuTurno
      * @ORM\Column(name="descanso", type="boolean", nullable=true)
      */    
     private $descanso = false;           
+
+    /**
+     * @ORM\Column(name="salida_dia_siguiente", type="boolean")
+     */    
+    private $salidaDiaSiguiente = false;
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -68,7 +73,6 @@ class RhuTurno
      * @ORM\OneToMany(targetEntity="RhuHorarioAcceso", mappedBy="turnoRel")
      */
     protected $horariosAccesosTurnoRel;
-    
     
     /**
      * Constructor
@@ -292,6 +296,30 @@ class RhuTurno
     public function getDescanso()
     {
         return $this->descanso;
+    }
+
+    /**
+     * Set salidaDiaSiguiente
+     *
+     * @param boolean $salidaDiaSiguiente
+     *
+     * @return RhuTurno
+     */
+    public function setSalidaDiaSiguiente($salidaDiaSiguiente)
+    {
+        $this->salidaDiaSiguiente = $salidaDiaSiguiente;
+
+        return $this;
+    }
+
+    /**
+     * Get salidaDiaSiguiente
+     *
+     * @return boolean
+     */
+    public function getSalidaDiaSiguiente()
+    {
+        return $this->salidaDiaSiguiente;
     }
 
     /**
