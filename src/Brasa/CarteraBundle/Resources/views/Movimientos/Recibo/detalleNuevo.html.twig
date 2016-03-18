@@ -9,25 +9,29 @@
         <tr>            
             <th>CÓDIGO</th>
             <th>CLIENTE</th>
-            <th>FECHA VENCE</th>
-            <th>NUMERO</th>
+            <th>FORMA PAGO</th>
+            <th>PLAZO</th>
             <th>TIPO CUENTA COBRAR</th>
+            <th>NUMERO</th>
+            <th>FECHA</th>
+            <th>VENCE</th>
             <th style="text-align: right">VALOR</th>
             <th style="text-align: right">SALDO</th>
-            <th>PLAZO</th>
             <th></th>
         </tr>        
             {%for arCuentasCobrar in arCuentasCobrar %}
                <tr>
                 <td>{{arCuentasCobrar.codigoCuentaCobrarPk}}</td>
                 <td>{{arCuentasCobrar.clienteRel.nombreCorto}}</td>
-                <td>{{arCuentasCobrar.fechaVence | date('Y-m-d')}}</td>
-                <td>{{arCuentasCobrar.numeroDocumento}}</td>
-                <td>{{arCuentasCobrar.cuentaCobrarTipoRel.nombre }}</td>
-                <td style="text-align: right">{{ arCuentasCobrar.valorOriginal | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arCuentasCobrar.saldo | number_format(2, '.', ',') }}</td>
+                <td>{{arCuentasCobrar.clienteRel.formaPagoRel.nombre}}</td>
                 <td>{{arCuentasCobrar.plazo}}</td>
-                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCuentasCobrar.codigoCuentaCobrarPk }}" /></td>
+                <td>{{arCuentasCobrar.cuentaCobrarTipoRel.nombre }}</td>
+                <td>{{arCuentasCobrar.numeroDocumento}}</td>
+                <td>{{arCuentasCobrar.fecha | date('Y-m-d')}}</td>
+                <td>{{arCuentasCobrar.fechaVence | date('Y-m-d')}}</td>
+                <td style="text-align: right">{{ arCuentasCobrar.valorOriginal | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right"><input class="input-grid" type="text" name="TxtSaldo{{ arCuentasCobrar.codigoCuentaCobrarPk }}" value="{{ arCuentasCobrar.saldo  }}" size="8" style="width:65px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
+                <td style="text-align: right"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCuentasCobrar.codigoCuentaCobrarPk }}" /></td>
             {%endfor%}
             </tr>            
     </table>    

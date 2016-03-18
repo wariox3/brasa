@@ -84,7 +84,12 @@ class MovimientoReciboController extends Controller
             if($form->get('guardarnuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_nuevo', array('codigoRecibo' => 0 )));
             } else {
-                return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_listar'));
+                if ($codigoRecibo != 0){
+                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_listar'));
+                } else {
+                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $arRecibo->getCodigoReciboPk())));
+                }
+                
             }                       
             
         }
@@ -135,7 +140,7 @@ class MovimientoReciboController extends Controller
             if($form->get('BtnDetalleEliminar')->isClicked()) {   
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->eliminarSeleccionados($arrSeleccionados);
-                //$em->getRepository('BrasaCarteraBundle:CarRecibo')->liquidar($codigoRecibo);
+                $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->liquidar($codigoRecibo);
                 return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));
             }    
             if($form->get('BtnImprimir')->isClicked()) {
@@ -164,27 +169,34 @@ class MovimientoReciboController extends Controller
     public function detalleNuevoAction($codigoRecibo, $codigoReciboDetalle = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arRecibo = new \Brasa\CarteraBundle\Entity\CarRecibo();
         $arRecibo = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigoRecibo);
         $arCuentasCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
-        $arCuentasCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->cuentasCobrar();
+        $arCuentasCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->cuentasCobrar($arRecibo->getCodigoClienteFk());
         $form = $this->createFormBuilder()
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->getForm();
         $form->handleRequest($request); 
-        if ($form->isValid()) { 
+        if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             if ($form->get('BtnGuardar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $arrControles = $request->request->All();
+                $intIndice = 0;
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoCuentaCobrar) {
                         $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($codigoCuentaCobrar);
                         $arReciboDetalle = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
                         $arReciboDetalle->setReciboRel($arRecibo);
                         $arReciboDetalle->setCuentaCobrarRel($arCuentaCobrar);
+                        $arReciboDetalle->setValor($arrControles['TxtSaldo'.$codigoCuentaCobrar]);
+                        $arReciboDetalle->setUsuario($arUsuario->getUserName());
+                        $arReciboDetalle->setCuentaCobrarTipoRel($arCuentaCobrar->getCuentaCobrarTipoRel());
                         $em->persist($arReciboDetalle); 
                     }
                     $em->flush();
-                }
+                } 
                 $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->liquidar($codigoRecibo);
             }            
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
@@ -295,11 +307,8 @@ class MovimientoReciboController extends Controller
                     ->setCellValue('F1', 'TIPO RECIBO')
                     ->setCellValue('G1', 'FECHA PAGO')
                     ->setCellValue('H1', 'TOTAL')
-                    ->setCellValue('I1', 'IMPRESO')
-                    ->setCellValue('J1', 'ANULADO')
-                    ->setCellValue('K1', 'EXPORTADO')
-                    ->setCellValue('L1', 'AUTORIZADO')
-                    ->setCellValue('M1', 'COMENTARIOS');
+                    ->setCellValue('I1', 'ANULADO')
+                    ->setCellValue('J1', 'AUTORIZADO');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -314,11 +323,8 @@ class MovimientoReciboController extends Controller
                     ->setCellValue('F' . $i, $arRecibo->getReciboTipoRel()->getNombre())
                     ->setCellValue('G' . $i, $arRecibo->getFechaPago()->format('Y-m-d'))
                     ->setCellValue('H' . $i, $arRecibo->getVrTotal())
-                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoImpreso()))
-                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoAnulado()))
-                    ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoExportado()))
-                    ->setCellValue('L' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoAutorizado()))
-                    ->setCellValue('M' . $i, $arRecibo->getComentarios());
+                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoAnulado()))
+                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoAutorizado()));
             if($arRecibo->getClienteRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('C' . $i, $arRecibo->getClienteRel()->getNit());

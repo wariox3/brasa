@@ -28,6 +28,10 @@ class CarCuentaCobrarTipo
      */
     protected $cuentasCobrarTiposCuentaCobrarRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="CarReciboDetalle", mappedBy="cuentaCobrarTipoRel")
+     */
+    protected $cuentasCobrarTiposReciboDetalleRel;
     
     /**
      * Constructor
@@ -35,6 +39,7 @@ class CarCuentaCobrarTipo
     public function __construct()
     {
         $this->cuentasCobrarTiposCuentaCobrarRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cuentasCobrarTiposReciboDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -103,5 +108,39 @@ class CarCuentaCobrarTipo
     public function getCuentasCobrarTiposCuentaCobrarRel()
     {
         return $this->cuentasCobrarTiposCuentaCobrarRel;
+    }
+
+    /**
+     * Add cuentasCobrarTiposReciboDetalleRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarReciboDetalle $cuentasCobrarTiposReciboDetalleRel
+     *
+     * @return CarCuentaCobrarTipo
+     */
+    public function addCuentasCobrarTiposReciboDetalleRel(\Brasa\CarteraBundle\Entity\CarReciboDetalle $cuentasCobrarTiposReciboDetalleRel)
+    {
+        $this->cuentasCobrarTiposReciboDetalleRel[] = $cuentasCobrarTiposReciboDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove cuentasCobrarTiposReciboDetalleRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarReciboDetalle $cuentasCobrarTiposReciboDetalleRel
+     */
+    public function removeCuentasCobrarTiposReciboDetalleRel(\Brasa\CarteraBundle\Entity\CarReciboDetalle $cuentasCobrarTiposReciboDetalleRel)
+    {
+        $this->cuentasCobrarTiposReciboDetalleRel->removeElement($cuentasCobrarTiposReciboDetalleRel);
+    }
+
+    /**
+     * Get cuentasCobrarTiposReciboDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCuentasCobrarTiposReciboDetalleRel()
+    {
+        return $this->cuentasCobrarTiposReciboDetalleRel;
     }
 }

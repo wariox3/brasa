@@ -65,14 +65,9 @@ class FormatoRecibo extends \FPDF_FPDF {
         $this->SetFont('Arial','',7);
         $this->Cell(52, 5, $arRecibo->getNumero(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
-        $this->Cell(23, 5, utf8_decode("ANULADO:") , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',7);
-        if ($arRecibo->getEstadoAnulado() == 1){
-            $estadoAnulado = "SI";
-        } else {
-            $estadoAnulado = "NO";
-        }
-        $this->Cell(20, 5, $estadoAnulado, 1, 0, 'L', 1);
+        $this->Cell(23, 5, utf8_decode("TOTAL DCTO:") , 1, 0, 'R', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(20, 5, number_format($arRecibo->getVrTotal(), 0, '.', ','), 1, 0, 'R', 1);
         //linea 2
         $this->SetXY(10, $intY+5);
         $this->SetFont('Arial','B',8);
@@ -84,14 +79,9 @@ class FormatoRecibo extends \FPDF_FPDF {
         $this->SetFont('Arial','',8);
         $this->Cell(52, 5, $arRecibo->getNumero(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
-        $this->Cell(23, 5, utf8_decode("IMPRESO:") , 1, 0, 'L', 1);
+        $this->Cell(23, 5, utf8_decode("T. AJ. PESO:") , 1, 0, 'R', 1);
         $this->SetFont('Arial','',8);
-        if ($arRecibo->getEstadoImpreso() == 1){
-            $estadoImpreso = "SI";
-        } else {
-            $estadoImpreso = "NO";
-        }
-        $this->Cell(20, 5, $estadoImpreso, 1, 0, 'L', 1);
+        $this->Cell(20, 5, number_format($arRecibo->getVrTotal(), 0, '.', ','), 1, 0, 'R', 1);
         //linea 3
         $this->SetXY(10, $intY+10);
         $this->SetFont('Arial','B',8);
@@ -103,14 +93,9 @@ class FormatoRecibo extends \FPDF_FPDF {
         $this->SetFont('Arial','',7);
         $this->Cell(52, 5, $arRecibo->getReciboTipoRel()->getNombre(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
-        $this->Cell(23, 5, utf8_decode("EXPORTADO:") , 1, 0, 'L', 1);
+        $this->Cell(23, 5, utf8_decode("T. RETE ICA:") , 1, 0, 'R', 1);
         $this->SetFont('Arial','',8);
-        if ($arRecibo->getEstadoExportado() == 1){
-            $estadoExportado = "SI";
-        } else {
-            $estadoExportado = "NO";
-        }
-        $this->Cell(20, 5, $estadoExportado, 1, 0, 'L', 1);
+        $this->Cell(20, 5, number_format($arRecibo->getVrTotal(), 0, '.', ','), 1, 0, 'R', 1);
         //linea 4
         $this->SetXY(10, $intY+15);
         $this->SetFont('Arial','B',8);
@@ -122,23 +107,59 @@ class FormatoRecibo extends \FPDF_FPDF {
         $this->SetFont('Arial','',8);
         $this->Cell(52, 5, $arRecibo->getFechaPago()->format('Y-m-d'), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
-        $this->Cell(23, 5, utf8_decode("AUTORIZADO:") , 1, 0, 'L', 1);
+        $this->Cell(23, 5, utf8_decode("T. RETE IVA:") , 1, 0, 'R', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(20, 5, number_format($arRecibo->getVrTotal(), 0, '.', ','), 1, 0, 'R', 1);
+        //linea 5
+        $this->SetXY(10, $intY+20);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(26, 5, utf8_decode("ANULADO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
         if ($arRecibo->getEstadoAutorizado() == 1){
             $estadoAutorizado = "SI";
         } else {
             $estadoAutorizado = "NO";
         }
-        $this->Cell(20, 5, $estadoAutorizado, 1, 0, 'L', 1);
-        //linea 5
-        $this->SetXY(10, $intY+20);
+        $this->Cell(52, 5, $estadoAutorizado, 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
-        $this->Cell(151, 5, "" , 1, 0, 'L', 1);
-        $this->Cell(23, 5, utf8_decode("TOTAL:") , 1, 0, 'R', 1);
+        $this->Cell(21, 5, utf8_decode("IMPRESO:") , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        if ($arRecibo->getEstadoAutorizado() == 1){
+            $estadoAutorizado = "SI";
+        } else {
+            $estadoAutorizado = "NO";
+        }
+        $this->Cell(52, 5, $estadoAutorizado, 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(23, 5, utf8_decode("T. RET FUENTE:") , 1, 0, 'R', 1);
         $this->SetFont('Arial','',8);
         $this->Cell(20, 5, number_format($arRecibo->getVrTotal(), 0, '.', ','), 1, 0, 'R', 1);
         //linea 6
         $this->SetXY(10, $intY+25);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(26, 5, utf8_decode("EXPORTADO:") , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        if ($arRecibo->getEstadoAutorizado() == 1){
+            $estadoAutorizado = "SI";
+        } else {
+            $estadoAutorizado = "NO";
+        }
+        $this->Cell(52, 5, $estadoAutorizado, 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(21, 5, utf8_decode("AUTORIZADO:") , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        if ($arRecibo->getEstadoAutorizado() == 1){
+            $estadoAutorizado = "SI";
+        } else {
+            $estadoAutorizado = "NO";
+        }
+        $this->Cell(52, 5, $estadoAutorizado, 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(23, 5, utf8_decode("TOTAL:") , 1, 0, 'R', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(20, 5, number_format($arRecibo->getVrTotal(), 0, '.', ','), 1, 0, 'R', 1);
+        //linea 7
+        $this->SetXY(10, $intY+30);
         $this->SetFont('Arial','B',8);
         $this->Cell(26, 5, utf8_decode("COMENTARIOS:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
@@ -150,15 +171,15 @@ class FormatoRecibo extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(14);
-        $header = array('CODIGO', 'RECIBO', 'CUENTA COBRAR', 'DESCUENTO', 'AJUSTE PESO', 'RETE ICA', 'RETE IVA', 'VALOR');
+        $header = array('COD', 'NUMERO', 'CTA COB', 'TIPO CXC','DESCUENTO', 'AJUSTE PESO', 'RETE ICA', 'RETE IVA', 'RETE FUENTE', 'VALOR');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
         $this->SetLineWidth(.2);
-        $this->SetFont('', 'B', 8);
+        $this->SetFont('', 'B', 7.5);
 
         //creamos la cabecera de la tabla.
-        $w = array(14, 20, 30, 26, 26, 26, 26,26);
+        $w = array(11, 14, 14, 45, 19, 20, 18, 18,20,20);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -178,14 +199,18 @@ class FormatoRecibo extends \FPDF_FPDF {
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
         foreach ($arReciboDetalles as $arReciboDetalle) {            
-            $pdf->Cell(14, 4, $arReciboDetalle->getCodigoReciboDetallePk(), 1, 0, 'L');
-            $pdf->Cell(20, 4, $arReciboDetalle->getCodigoReciboFk(), 1, 0, 'L');
-            $pdf->Cell(30, 4, $arReciboDetalle->getCodigoCuentaCobrarFk(), 1, 0, 'L');                
-            $pdf->Cell(26, 4, $arReciboDetalle->getVrDescuento(), 1, 0, 'L');                
-            $pdf->Cell(26, 4, $arReciboDetalle->getVrAjustePeso(), 1, 0, 'L');                
-            $pdf->Cell(26, 4, $arReciboDetalle->getVrReteIca(), 1, 0, 'L');
-            $pdf->Cell(26, 4, $arReciboDetalle->getVrReteIva(), 1, 0, 'L');
-            $pdf->Cell(26, 4, number_format($arReciboDetalle->getValor(), 0, '.', ','), 1, 0, 'R');                
+            $pdf->Cell(11, 4, $arReciboDetalle->getCodigoReciboDetallePk(), 1, 0, 'L');
+            $pdf->Cell(14, 4, $arReciboDetalle->getNumeroFactura(), 1, 0, 'L');
+            $pdf->Cell(14, 4, $arReciboDetalle->getCodigoCuentaCobrarFk(), 1, 0, 'L');
+            $pdf->SetFont('Arial', '', 6.5);
+            $pdf->Cell(45, 4, $arReciboDetalle->getCuentaCobrarTipoRel()->getNombre(), 1, 0, 'L');
+            $pdf->SetFont('Arial', '', 7);
+            $pdf->Cell(19, 4, number_format($arReciboDetalle->getVrDescuento(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(20, 4, number_format($arReciboDetalle->getVrAjustePeso(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(18, 4, number_format($arReciboDetalle->getVrReteIca(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(18, 4, number_format($arReciboDetalle->getVrReteIva(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(20, 4, number_format($arReciboDetalle->getVrReteFuente(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(20, 4, number_format($arReciboDetalle->getValor(), 0, '.', ','), 1, 0, 'R');
                                              
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);

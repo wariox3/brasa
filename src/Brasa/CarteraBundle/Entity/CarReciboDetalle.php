@@ -29,6 +29,16 @@ class CarReciboDetalle
     private $codigoCuentaCobrarFk;
     
     /**
+     * @ORM\Column(name="codigo_cuenta_cobrar_tipo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCuentCobrarTipoFk;
+    
+    /**
+     * @ORM\Column(name="numero_factura", type="integer", nullable=true)
+     */     
+    private $numeroFactura;
+    
+    /**
      * @ORM\Column(name="valor", type="float")
      */    
     private $valor = 0;
@@ -54,6 +64,11 @@ class CarReciboDetalle
     private $vrReteIva = 0;
     
     /**
+     * @ORM\Column(name="vr_rete_fuente", type="float")
+     */    
+    private $vrReteFuente = 0;
+    
+    /**
      * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
      */    
     private $usuario;
@@ -69,6 +84,12 @@ class CarReciboDetalle
      * @ORM\JoinColumn(name="codigo_cuenta_cobrar_fk", referencedColumnName="codigo_cuenta_cobrar_pk")
      */
     protected $cuentaCobrarRel;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="CarCuentaCobrarTipo", inversedBy="cuentasCobrarTiposReciboDetalleRel")
+     * @ORM\JoinColumn(name="codigo_cuenta_cobrar_tipo_fk", referencedColumnName="codigo_cuenta_cobrar_tipo_pk")
+     */
+    protected $cuentaCobrarTipoRel;
 
     
 
@@ -128,6 +149,54 @@ class CarReciboDetalle
     public function getCodigoCuentaCobrarFk()
     {
         return $this->codigoCuentaCobrarFk;
+    }
+
+    /**
+     * Set codigoCuentCobrarTipoFk
+     *
+     * @param integer $codigoCuentCobrarTipoFk
+     *
+     * @return CarReciboDetalle
+     */
+    public function setCodigoCuentCobrarTipoFk($codigoCuentCobrarTipoFk)
+    {
+        $this->codigoCuentCobrarTipoFk = $codigoCuentCobrarTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCuentCobrarTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCuentCobrarTipoFk()
+    {
+        return $this->codigoCuentCobrarTipoFk;
+    }
+
+    /**
+     * Set numeroFactura
+     *
+     * @param integer $numeroFactura
+     *
+     * @return CarReciboDetalle
+     */
+    public function setNumeroFactura($numeroFactura)
+    {
+        $this->numeroFactura = $numeroFactura;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroFactura
+     *
+     * @return integer
+     */
+    public function getNumeroFactura()
+    {
+        return $this->numeroFactura;
     }
 
     /**
@@ -251,6 +320,30 @@ class CarReciboDetalle
     }
 
     /**
+     * Set vrReteFuente
+     *
+     * @param float $vrReteFuente
+     *
+     * @return CarReciboDetalle
+     */
+    public function setVrReteFuente($vrReteFuente)
+    {
+        $this->vrReteFuente = $vrReteFuente;
+
+        return $this;
+    }
+
+    /**
+     * Get vrReteFuente
+     *
+     * @return float
+     */
+    public function getVrReteFuente()
+    {
+        return $this->vrReteFuente;
+    }
+
+    /**
      * Set usuario
      *
      * @param string $usuario
@@ -320,5 +413,29 @@ class CarReciboDetalle
     public function getCuentaCobrarRel()
     {
         return $this->cuentaCobrarRel;
+    }
+
+    /**
+     * Set cuentaCobrarTipoRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarCuentaCobrarTipo $cuentaCobrarTipoRel
+     *
+     * @return CarReciboDetalle
+     */
+    public function setCuentaCobrarTipoRel(\Brasa\CarteraBundle\Entity\CarCuentaCobrarTipo $cuentaCobrarTipoRel = null)
+    {
+        $this->cuentaCobrarTipoRel = $cuentaCobrarTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get cuentaCobrarTipoRel
+     *
+     * @return \Brasa\CarteraBundle\Entity\CarCuentaCobrarTipo
+     */
+    public function getCuentaCobrarTipoRel()
+    {
+        return $this->cuentaCobrarTipoRel;
     }
 }

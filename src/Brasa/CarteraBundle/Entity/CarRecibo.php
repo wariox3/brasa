@@ -49,6 +49,31 @@ class CarRecibo
     private $fechaPago;
     
     /**
+     * @ORM\Column(name="vr_total_descueto", type="float")
+     */    
+    private $vrTotalDescuento = 0;
+    
+    /**
+     * @ORM\Column(name="vr_total_ajuste_peso", type="float")
+     */    
+    private $vrTotalAjustePeso = 0;
+    
+    /**
+     * @ORM\Column(name="vr_total_rete_ica", type="float")
+     */    
+    private $vrTotalReteIca = 0;
+    
+    /**
+     * @ORM\Column(name="vr_total_rete_iva", type="float")
+     */    
+    private $vrTotalReteIva = 0;
+    
+    /**
+     * @ORM\Column(name="vr_total_rete_fuente", type="float")
+     */    
+    private $vrTotalReteFuente = 0;
+    
+    /**
      * @ORM\Column(name="vr_total", type="float")
      */    
     private $vrTotal = 0;      
@@ -105,6 +130,8 @@ class CarRecibo
      * @ORM\OneToMany(targetEntity="CarReciboDetalle", mappedBy="reciboRel")
      */
     protected $recibosDetallesRecibosRel;
+    
+    
     /**
      * Constructor
      */
@@ -265,6 +292,126 @@ class CarRecibo
     public function getFechaPago()
     {
         return $this->fechaPago;
+    }
+
+    /**
+     * Set vrTotalDescuento
+     *
+     * @param float $vrTotalDescuento
+     *
+     * @return CarRecibo
+     */
+    public function setVrTotalDescuento($vrTotalDescuento)
+    {
+        $this->vrTotalDescuento = $vrTotalDescuento;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalDescuento
+     *
+     * @return float
+     */
+    public function getVrTotalDescuento()
+    {
+        return $this->vrTotalDescuento;
+    }
+
+    /**
+     * Set vrTotalAjustePeso
+     *
+     * @param float $vrTotalAjustePeso
+     *
+     * @return CarRecibo
+     */
+    public function setVrTotalAjustePeso($vrTotalAjustePeso)
+    {
+        $this->vrTotalAjustePeso = $vrTotalAjustePeso;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalAjustePeso
+     *
+     * @return float
+     */
+    public function getVrTotalAjustePeso()
+    {
+        return $this->vrTotalAjustePeso;
+    }
+
+    /**
+     * Set vrTotalReteIca
+     *
+     * @param float $vrTotalReteIca
+     *
+     * @return CarRecibo
+     */
+    public function setVrTotalReteIca($vrTotalReteIca)
+    {
+        $this->vrTotalReteIca = $vrTotalReteIca;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalReteIca
+     *
+     * @return float
+     */
+    public function getVrTotalReteIca()
+    {
+        return $this->vrTotalReteIca;
+    }
+
+    /**
+     * Set vrTotalReteIva
+     *
+     * @param float $vrTotalReteIva
+     *
+     * @return CarRecibo
+     */
+    public function setVrTotalReteIva($vrTotalReteIva)
+    {
+        $this->vrTotalReteIva = $vrTotalReteIva;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalReteIva
+     *
+     * @return float
+     */
+    public function getVrTotalReteIva()
+    {
+        return $this->vrTotalReteIva;
+    }
+
+    /**
+     * Set vrTotalReteFuente
+     *
+     * @param float $vrTotalReteFuente
+     *
+     * @return CarRecibo
+     */
+    public function setVrTotalReteFuente($vrTotalReteFuente)
+    {
+        $this->vrTotalReteFuente = $vrTotalReteFuente;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalReteFuente
+     *
+     * @return float
+     */
+    public function getVrTotalReteFuente()
+    {
+        return $this->vrTotalReteFuente;
     }
 
     /**

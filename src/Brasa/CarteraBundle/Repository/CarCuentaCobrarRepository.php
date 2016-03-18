@@ -13,9 +13,9 @@ use Doctrine\ORM\EntityRepository;
 class CarCuentaCobrarRepository extends EntityRepository
 {
     
-    public function cuentasCobrar() {        
+    public function cuentasCobrar($codigCliente = "") {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT cc FROM BrasaCarteraBundle:CarCuentaCobrar cc where cc.codigoCuentaCobrarPk <> 0 and cc.saldo > 0";        
+        $dql   = "SELECT cc FROM BrasaCarteraBundle:CarCuentaCobrar cc where cc.codigoCuentaCobrarPk <> 0 and cc.saldo > 0 and cc.codigoClienteFk = " . $codigCliente . "";        
         $query = $em->createQuery($dql);        
         $arCuentasCobro = $query->getResult();        
         

@@ -10,7 +10,6 @@ class CarReciboType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder    
-            ->add('numero', 'number', array('required' => true))
             ->add('fechaPago', 'date', array('format' => 'yyyyMMdd'))
             ->add('cuentaRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCuenta',

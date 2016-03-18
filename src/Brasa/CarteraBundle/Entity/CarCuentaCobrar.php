@@ -61,17 +61,7 @@ class CarCuentaCobrar
     /**
      * @ORM\Column(name="saldo", type="float")
      */    
-    private $saldo = 0;        
-    
-    /**
-     * @ORM\Column(name="debitos", type="float")
-     */    
-    private $debitos = 0;
-    
-    /**
-     * @ORM\Column(name="creditos", type="float")
-     */    
-    private $creditos = 0;              
+    private $saldo = 0;                     
     
     /**
      * @ORM\ManyToOne(targetEntity="CarCliente", inversedBy="cuentaCobrarClientesRel")
@@ -100,8 +90,7 @@ class CarCuentaCobrar
      */
     protected $recibosDetallesCuentaCobrarRel;
 
-    
-    
+   
     /**
      * Constructor
      */
@@ -336,54 +325,6 @@ class CarCuentaCobrar
     public function getSaldo()
     {
         return $this->saldo;
-    }
-
-    /**
-     * Set debitos
-     *
-     * @param float $debitos
-     *
-     * @return CarCuentaCobrar
-     */
-    public function setDebitos($debitos)
-    {
-        $this->debitos = $debitos;
-
-        return $this;
-    }
-
-    /**
-     * Get debitos
-     *
-     * @return float
-     */
-    public function getDebitos()
-    {
-        return $this->debitos;
-    }
-
-    /**
-     * Set creditos
-     *
-     * @param float $creditos
-     *
-     * @return CarCuentaCobrar
-     */
-    public function setCreditos($creditos)
-    {
-        $this->creditos = $creditos;
-
-        return $this;
-    }
-
-    /**
-     * Get creditos
-     *
-     * @return float
-     */
-    public function getCreditos()
-    {
-        return $this->creditos;
     }
 
     /**
