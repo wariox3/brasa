@@ -29,9 +29,10 @@
                 <th>TURNO</th>
                 <th>HORA TURNO</th>
                 <th>ENTRADA</th>
-                <th>ENT. TARDE</th>                
-                <th>ANULADO</th>
-                <th>COMENTARIOS</th>
+                <th>TARDE</th>                                
+                <th>SALIDA</th>
+                <th>ANTES</th>                                
+                <th>ANU</th>
             </tr>
             {% set contador = 1  %}
             {% for arHorarioAccesos in arHorarioAccesos %}
@@ -44,10 +45,10 @@
                 <td>{{ arHorarioAccesos.codigoTurnoFk }}</td>
                 <td>{{ arHorarioAccesos.horaEntradaTurno|date('H:i:s')  }}</td>
                 <td>{% if arHorarioAccesos.fechaEntrada|date('H:i:s') == "00:00:00" %}SIN ENTRADA{% else %}{{ arHorarioAccesos.fechaEntrada|date('H:i:s')  }}{% endif %}</td>
-                <td>{% if arHorarioAccesos.entradaTarde == 1%}SI ({{ arHorarioAccesos.duracionLlegadaTarde }}min){% else %}NO{% endif %}</td>                
-                <td>{% if arHorarioAccesos.anulado == 1%}SI{% else %}NO{% endif %}</td>
-                <td>{{ arHorarioAccesos.comentarios  }}</td>
-                
+                <td>{% if arHorarioAccesos.entradaTarde == 1%}SI ({{ arHorarioAccesos.duracionLlegadaTarde }}min){% else %}NO{% endif %}</td>                                
+                <td>{% if arHorarioAccesos.fechaSalida|date('H:i:s') == "00:00:00" %}SIN SALIDA{% else %}{{ arHorarioAccesos.fechaSalida|date('H:i:s')  }}{% endif %}</td>                
+                <td>{% if arHorarioAccesos.salidaAntes == 1%}SI ({{ arHorarioAccesos.duracionSalidaAntes }}min){% else %}NO{% endif %}</td>                                                                                
+                <td>{% if arHorarioAccesos.anulado == 1%}SI{% else %}NO{% endif %}</td>                
             </tr>
             {% set contador = contador + 1  %}
             {% endfor %}                        
