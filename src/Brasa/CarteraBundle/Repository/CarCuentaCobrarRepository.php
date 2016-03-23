@@ -13,6 +13,21 @@ use Doctrine\ORM\EntityRepository;
 class CarCuentaCobrarRepository extends EntityRepository
 {
     
+    public function listaDql($numero, $codigoCliente = "", $strCuentaCobrarTipo = "") {
+        $dql   = "SELECT cc FROM BrasaCarteraBundle:CarCuentaCobrar cc WHERE cc.codigoCuentaCobrarPk <> 0";
+        if($numero != "") {
+            $dql .= " AND cc.numeroDocumento = " . $numero;  
+        }        
+        if($codigoCliente != "") {
+            $dql .= " AND cc.codigoClienteFk = " . $codigoCliente;  
+        }    
+        if($strCuentaCobrarTipo != "") {
+            $dql .= " AND cc.codigoCuentaCobrarTipoFk = " . $strCuentaCobrarTipo;
+        }        
+        $dql .= " ORDER BY cc.fecha DESC";
+        return $dql;
+    }
+    
     public function cuentasCobrar($codigCliente = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT cc FROM BrasaCarteraBundle:CarCuentaCobrar cc where cc.codigoCuentaCobrarPk <> 0 and cc.saldo > 0 and cc.codigoClienteFk = " . $codigCliente . "";        
@@ -21,6 +36,26 @@ class CarCuentaCobrarRepository extends EntityRepository
         
         return $arCuentasCobro;
         
+    }
+    
+    public function listaConsultaDql($numero = "", $codigoCliente = "", $codigoCuentaCobrarTipo = "", $strFechaDesde = "", $strFechaHasta = "") {
+        $dql   = "SELECT cc FROM BrasaCarteraBundle:CarCuentaCobrar cc WHERE cc.codigoCuentaCobrarPk <> 0 AND cc.saldo > 0";
+        if($numero != "") {
+            $dql .= " AND cc.numeroDocumento = " . $numero;  
+        }
+        if($codigoCliente != "") {
+            $dql .= " AND cc.codigoClienteFk = " . $codigoCliente;  
+        }
+        if($codigoCuentaCobrarTipo != "") {
+            $dql .= " AND cc.codigoCuentaCobrarTipoFk = " . $codigoCuentaCobrarTipo;  
+        }
+        if ($strFechaDesde != ""){
+            $dql .= " AND cc.fecha >='" . date_format($strFechaDesde, ('Y-m-d')). "'";
+        }
+        if($strFechaHasta != "") {
+            $dql .= " AND cc.fecha <='" . date_format($strFechaHasta, ('Y-m-d')) . "'";
+        }        
+        return $dql;
     }
         
         

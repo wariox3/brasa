@@ -115,7 +115,7 @@
                 <td>{{ arControlAccesosEmpleados.codigoTurnoFk  }}</td>
                 <td>{{ arControlAccesosEmpleados.horaEntradaTurno|date('H:i:s')  }}</td>
                 <td>{% if arControlAccesosEmpleados.fechaEntrada|date('H:i:s') == "00:00:00" %}SIN ENTRADA{% else %}{{ arControlAccesosEmpleados.fechaEntrada|date('H:i:s')  }}{% endif %}</td>
-                <td>{% if arControlAccesosEmpleados.llegadaTarde == 1 %}SI{% else %}NO{% endif %}</td>
+                <td>{% if arControlAccesosEmpleados.entradaTarde == 1 %}SI{% else %}NO{% endif %}</td>
                 <td>{{ arControlAccesosEmpleados.duracionLlegadaTarde }}</td>
                 <td>{{ arControlAccesosEmpleados.horaSalidaTurno|date('H:i:s')  }}</td>
                 <td>{% if arControlAccesosEmpleados.fechaSalida == null %} SIN SALIDA {% else %}{{ arControlAccesosEmpleados.fechaSalida|date('H:i:s')  }}{% endif%}</td>

@@ -290,6 +290,17 @@
                                 </li>
                             </ul>
                         </li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">Cartera</a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Cuentas por cobrar</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_cartera_consulta_cuentacobrar_lista') }}">Lista</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -704,6 +715,12 @@
                                     <a tabindex="-1" href="#">Recibo</a>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_cartera_movimiento_recibo_listar') }}">Lista</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Cuenta cobrar</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_cartera_movimiento_cuentacobrar_listar') }}">Lista</a></li>
                                     </ul>
                                 </li>
                             </ul>

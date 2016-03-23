@@ -21,12 +21,12 @@ class CarCuentaCobrar
     /**
      * @ORM\Column(name="codigo_cuenta_cobrar_tipo_fk", type="integer", nullable=true)
      */    
-    private $codigoCuentCobrarTipoFk;
+    private $codigoCuentaCobrarTipoFk;
     
     /**
      * @ORM\Column(name="numero_documento", type="string", length=30, nullable=true)
      */    
-    private $numero_documento;
+    private $numeroDocumento;
     
     /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
@@ -91,6 +91,8 @@ class CarCuentaCobrar
     protected $recibosDetallesCuentaCobrarRel;
 
    
+    
+   
     /**
      * Constructor
      */
@@ -112,27 +114,27 @@ class CarCuentaCobrar
     }
 
     /**
-     * Set codigoCuentCobrarTipoFk
+     * Set codigoCuentaCobrarTipoFk
      *
-     * @param integer $codigoCuentCobrarTipoFk
+     * @param integer $codigoCuentaCobrarTipoFk
      *
      * @return CarCuentaCobrar
      */
-    public function setCodigoCuentCobrarTipoFk($codigoCuentCobrarTipoFk)
+    public function setCodigoCuentaCobrarTipoFk($codigoCuentaCobrarTipoFk)
     {
-        $this->codigoCuentCobrarTipoFk = $codigoCuentCobrarTipoFk;
+        $this->codigoCuentaCobrarTipoFk = $codigoCuentaCobrarTipoFk;
 
         return $this;
     }
 
     /**
-     * Get codigoCuentCobrarTipoFk
+     * Get codigoCuentaCobrarTipoFk
      *
      * @return integer
      */
-    public function getCodigoCuentCobrarTipoFk()
+    public function getCodigoCuentaCobrarTipoFk()
     {
-        return $this->codigoCuentCobrarTipoFk;
+        return $this->codigoCuentaCobrarTipoFk;
     }
 
     /**
@@ -144,7 +146,7 @@ class CarCuentaCobrar
      */
     public function setNumeroDocumento($numeroDocumento)
     {
-        $this->numero_documento = $numeroDocumento;
+        $this->numeroDocumento = $numeroDocumento;
 
         return $this;
     }
@@ -156,7 +158,7 @@ class CarCuentaCobrar
      */
     public function getNumeroDocumento()
     {
-        return $this->numero_documento;
+        return $this->numeroDocumento;
     }
 
     /**

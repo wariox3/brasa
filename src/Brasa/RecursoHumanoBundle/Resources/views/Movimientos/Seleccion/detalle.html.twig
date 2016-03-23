@@ -110,7 +110,7 @@
                             <th>COMENTARIOS</th>
                             <th></th>
                             <th></th>
-                            <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
+                            <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodosTabla(this,'ChkSeleccionarEntrevista[]');"/></th>
                         </tr>
                         {% for arSeleccionEntrevista in arSeleccionEntrevista %}
                         <tr>
@@ -156,7 +156,7 @@
                             <th>COMENTARIOS</th>
                             <th></th>
                             <th></th>
-                            <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
+                            <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodosTabla(this,'ChkSeleccionarPrueba[]');"/></th>
                         </tr>
                         {% for arSeleccionPruebas in arSeleccionPruebas %}
                         <tr>
@@ -203,7 +203,7 @@
                             <th>CIUDAD</th>
                             <th>VERIFICADA</th>
                             <th></th>
-                            <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
+                            <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodosTabla(this,'ChkSeleccionarReferencia[]');"/></th>
                         </tr>
                         {% for arSeleccionReferencias in arSeleccionReferencias %}
                         <tr>
@@ -249,7 +249,7 @@
                             <th>COMENTARIOS</th>
                             <th></th>
                             <th></th>
-                            <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
+                            <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodosTabla(this,'ChkSeleccionarVisita[]');"/></th>
                         </tr>
                         {% for arSeleccionVisita in arSeleccionVisita %}
                         <tr>

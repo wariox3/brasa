@@ -10,9 +10,6 @@ use Brasa\CarteraBundle\Form\Type\CarReciboDetalleType;
 class MovimientoReciboController extends Controller
 {
     var $strListaDql = "";
-    var $numero = "";
-    var $codigoCliente = "";
-    var $estadoAutorizado = "";
     
     /**
      * @Route("/cartera/movimiento/recibo/lista", name="brs_cartera_movimiento_recibo_listar")
@@ -170,10 +167,12 @@ class MovimientoReciboController extends Controller
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $paginator  = $this->get('knp_paginator');
         $arRecibo = new \Brasa\CarteraBundle\Entity\CarRecibo();
         $arRecibo = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigoRecibo);
         $arCuentasCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
         $arCuentasCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->cuentasCobrar($arRecibo->getCodigoClienteFk());
+        $arCuentasCobrar = $paginator->paginate($arCuentasCobrar, $request->query->get('page', 1), 50);
         $form = $this->createFormBuilder()
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->getForm();

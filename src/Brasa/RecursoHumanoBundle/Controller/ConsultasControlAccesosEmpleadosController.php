@@ -242,15 +242,15 @@ class ConsultasControlAccesosEmpleadosController extends Controller
                 ->setCellValue('H' . $i, $arHorarioAcceso->getCodigoTurnoFk())
                 ->setCellValue('I' . $i, $arHorarioAcceso->getHoraEntradaTurno()->format('H:i:s'))
                 ->setCellValue('J' . $i, $timeHoraEntrada)
-                ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arHorarioAcceso->getLlegadaTarde()))
+                ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arHorarioAcceso->getEntradaTarde()))
                 ->setCellValue('L' . $i, $duracionLLegadaTarde)    
                 ->setCellValue('M' . $i, $arHorarioAcceso->getHoraSalidaTurno()->format('H:i:s'))        
                 ->setCellValue('N' . $i, $timeHoraSalida)
                 ->setCellValue('O' . $i, $objFunciones->devuelveBoolean($arHorarioAcceso->getSalidaAntes()))    
                 ->setCellValue('P' . $i, $duracionSalidaAntes)
                 ->setCellValue('Q' . $i, $arHorarioAcceso->getDuracionRegistro())        
-                ->setCellValue('R' . $i, $objFunciones->devuelveBoolean($arControlAccesoEmpleado->getAnulado()))    
-                ->setCellValue('S' . $i, $arControlAccesoEmpleado->getComentarios());
+                ->setCellValue('R' . $i, $objFunciones->devuelveBoolean($arHorarioAcceso->getAnulado()))    
+                ->setCellValue('S' . $i, $arHorarioAcceso->getComentarios());
             $i++;
             $j++;
         }

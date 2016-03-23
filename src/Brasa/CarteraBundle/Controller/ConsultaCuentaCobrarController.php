@@ -1,36 +1,27 @@
 <?php
 namespace Brasa\CarteraBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-//use Brasa\CarteraBundle\Form\Type\CarCuentaCobrarType;
-//use Brasa\CarteraBundle\Form\Type\CarCuentaCobrarDetalleType;
-
-class MovimientoCuentaCobrarController extends Controller
+class ConsultaCuentaCobrarController extends Controller
 {
     var $strListaDql = "";
-    var $numero = "";
-    var $codigoCliente = "";
-    var $estadoAutorizado = "";
+    var $strFechaDesde = "";
+    var $strFechaHasta = "";
     
     /**
-     * @Route("/cartera/movimiento/cuentacobrar/lista", name="brs_cartera_movimiento_cuentacobrar_listar")
-     */
+     * @Route("/cartera/consulta/cuentacobrar/lista", name="brs_cartera_consulta_cuentacobrar_lista")
+     */    
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $session = $this->getRequest()->getSession();
         $paginator  = $this->get('knp_paginator');
+        //$this->estadoAnulado = 0;
         $form = $this->formularioFiltro();
-        $form->handleRequest($request);        
-        $this->lista();        
-        if ($form->isValid()) {               
-            /*if ($form->get('BtnEliminar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_cartera_movimiento_cuentacobrar_listar'));                
-            }*/
+        $form->handleRequest($request);
+        $this->lista();
+        if ($form->isValid()) {            
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
                 $form = $this->formularioFiltro();
@@ -43,23 +34,27 @@ class MovimientoCuentaCobrarController extends Controller
                 $this->generarExcel();
             }
         }
-
-        $arCuentasCobrar = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
-        return $this->render('BrasaCarteraBundle:Movimientos/CuentaCobrar:lista.html.twig', array(
-            'arCuentasCobrar' => $arCuentasCobrar,            
+        
+        $arCuentasCobrar = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 100);
+        return $this->render('BrasaCarteraBundle:Consultas/CuentasCobrar:lista.html.twig', array(
+            'arCuentasCobrar' => $arCuentasCobrar,
             'form' => $form->createView()));
     }
-    
+            
     private function lista() {
-        $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $this->strListaDql =  $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->listaDQL(
-                $session->get('filtroCuentaCobrarNumero'), 
-                $session->get('filtroCodigoCliente'),
-                $session->get('filtroCuentaCobrarTipo'));
+        $em = $this->getDoctrine()->getManager();
+        $strFechaDesde = "";
+        $strFechaHasta = "";
+        $this->strListaDql =  $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->listaConsultaDql(
+                $session->get('filtroNumero'), 
+                $session->get('filtroCodigoCliente'), 
+                $session->get('filtroCuentaCobrarTipo'),
+                $session->get('filtroDesde'),
+                $session->get('filtroHasta'));
     }
 
-    private function filtrar ($form) {       
+    private function filtrar ($form) {
         $session = $this->getRequest()->getSession(); 
         $arCuentaCobrarTipo = $form->get('cuentaCobrarTipoRel')->getData();
         if ($arCuentaCobrarTipo == null){
@@ -67,10 +62,12 @@ class MovimientoCuentaCobrarController extends Controller
         } else {
             $codigo = $arCuentaCobrarTipo->getCodigoCuentaCobrarTipoPk();
         }
-        $session->set('filtroNit', $form->get('TxtNit')->getData());
-        $session->set('filtroCuentaCobrarNumero', $form->get('TxtNumero')->getData());
+        $session->set('filtroNumero', $form->get('TxtNumero')->getData());           
         $session->set('filtroCuentaCobrarTipo', $codigo);
-           
+        $session->set('filtroNit', $form->get('TxtNit')->getData());                         
+        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        
     }
 
     private function formularioFiltro() {
@@ -88,7 +85,7 @@ class MovimientoCuentaCobrarController extends Controller
             }          
         } else {
             $session->set('filtroCodigoCliente', null);
-        }
+        }       
         $arrayPropiedades = array(
                 'class' => 'BrasaCarteraBundle:CarCuentaCobrarTipo',
                 'query_builder' => function (EntityRepository $er) {
@@ -104,15 +101,19 @@ class MovimientoCuentaCobrarController extends Controller
             $arrayPropiedades['data'] = $em->getReference("BrasaCarteraBundle:CarCuentaCobrarTipo", $session->get('filtroCuentaCobrarTipo'));
         }
         $form = $this->createFormBuilder()
-            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCotizacionNumero')))
             ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
-            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))
+            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                
+            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroPedidoNumero')))            
             ->add('cuentaCobrarTipoRel', 'entity', $arrayPropiedades)
+            //->add('fechaDesde', 'date', array('format' => 'yyyyMMdd'))                            
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date')))
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date')))
+            //->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
-    }
+    }   
 
     private function generarExcel() {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
@@ -195,6 +196,7 @@ class MovimientoCuentaCobrarController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }
-    
+    }     
+
+
 }
