@@ -186,15 +186,17 @@ class MovimientoReciboController extends Controller
                 $intIndice = 0;
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoCuentaCobrar) {
-                        $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($codigoCuentaCobrar);
-                        $arReciboDetalle = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
-                        $arReciboDetalle->setReciboRel($arRecibo);
-                        $arReciboDetalle->setCuentaCobrarRel($arCuentaCobrar);
-                        $arReciboDetalle->setValor($arrControles['TxtSaldo'.$codigoCuentaCobrar]);
-                        $arReciboDetalle->setUsuario($arUsuario->getUserName());
-                        $arReciboDetalle->setNumeroFactura($arCuentaCobrar->getNumeroDocumento());
-                        $arReciboDetalle->setCuentaCobrarTipoRel($arCuentaCobrar->getCuentaCobrarTipoRel());
-                        $em->persist($arReciboDetalle); 
+                        if($em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->validarCuenta($codigoCuentaCobrar)) {
+                            $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($codigoCuentaCobrar);
+                            $arReciboDetalle = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
+                            $arReciboDetalle->setReciboRel($arRecibo);
+                            $arReciboDetalle->setCuentaCobrarRel($arCuentaCobrar);
+                            $arReciboDetalle->setValor($arrControles['TxtSaldo'.$codigoCuentaCobrar]);
+                            $arReciboDetalle->setUsuario($arUsuario->getUserName());
+                            $arReciboDetalle->setNumeroFactura($arCuentaCobrar->getNumeroDocumento());
+                            $arReciboDetalle->setCuentaCobrarTipoRel($arCuentaCobrar->getCuentaCobrarTipoRel());
+                            $em->persist($arReciboDetalle);                            
+                        } 
                     }
                     $em->flush();
                 } 

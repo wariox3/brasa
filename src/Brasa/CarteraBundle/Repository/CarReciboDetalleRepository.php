@@ -63,4 +63,20 @@ class CarReciboDetalleRepository extends EntityRepository {
         $em->flush();
         return true;
     }
+    
+    public function validarCuenta($codigoCuenta) {        
+        $em = $this->getEntityManager();
+        $boolValidar = TRUE;        
+        $dql   = "SELECT COUNT(rd.codigoReciboDetallePk) as numeroRegistros FROM BrasaCarteraBundle:CarReciboDetalle rd "
+                . "WHERE rd.codigoCuentaCobrarFk = " . $codigoCuenta;
+        $query = $em->createQuery($dql);
+        $arrReciboDetalles = $query->getSingleResult(); 
+        if($arrReciboDetalles) {
+            $intNumeroRegistros = $arrReciboDetalles['numeroRegistros'];
+            if($intNumeroRegistros > 0) {
+                $boolValidar = FALSE;
+            }
+        }
+        return $boolValidar;
+    }     
 }
