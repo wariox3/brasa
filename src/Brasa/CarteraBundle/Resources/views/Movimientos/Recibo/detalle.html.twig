@@ -39,7 +39,7 @@
                         <td class="titulo">NÚMERO:</td>
                         <td class="td-in-well">{{ arRecibo.numero }}</td>
                         <td class="titulo" align="right">TOTAL DESCUENTO:</td>
-                        <td align="right">{{ arRecibo.vrTotalDescuento | number_format(0, '.', ',')}}</td>
+                        <td align="right">{{ arRecibo.vrTotalDescuento | number_format(2, '.', ',')}}</td>
                     </tr>
                     <tr>
                         <td class="titulo">CLIENTE:</td>
@@ -47,7 +47,7 @@
                         <td class="titulo">NIT:</td>
                         <td class="td-in-well">{{ arRecibo.clienteRel.nit | default('') }}</td>
                         <td class="titulo" align="right">TOTAL AJUSTE PESO:</td>
-                        <td align="right">{{ arRecibo.vrTotalAjustePeso | number_format(0, '.', ',')}}</td>
+                        <td align="right">{{ arRecibo.vrTotalAjustePeso | number_format(2, '.', ',')}}</td>
                     </tr>                  
                     <tr>
                         <td class="titulo">CUENTA BANCO:</td>
@@ -55,7 +55,7 @@
                         <td class="titulo" >TIPO RECBO:</td>
                         <td class="td-in-well">{{ arRecibo.reciboTipoRel.nombre }}</td>
                         <td class="titulo" align="right">TOTAL RETE ICA:</td>
-                        <td align="right">{{ arRecibo.vrTotalReteIca | number_format(0, '.', ',')}}</td>
+                        <td align="right">{{ arRecibo.vrTotalReteIca | number_format(2, '.', ',')}}</td>
                     </tr>                
                     <tr>
                         <td class="titulo">FECHA:</td>
@@ -63,7 +63,7 @@
                         <td class="titulo" >FECHA PAGO:</td>
                         <td class="td-in-well">{{ arRecibo.fechaPago |date("Y/m/d") }}</td>
                         <td class="titulo" align="right">TOTAL RETE IVA:</td>
-                        <td align="right">{{ arRecibo.vrTotalReteIva | number_format(0, '.', ',')}}</td>
+                        <td align="right">{{ arRecibo.vrTotalReteIva | number_format(2, '.', ',')}}</td>
                     </tr>
                     <tr>
                         <td class="titulo">ANULADO:</td>
@@ -71,7 +71,7 @@
                         <td class="titulo">IMPRESO:</td>
                         <td class="td-in-well">{% if arRecibo.estadoImpreso == 1 %}SI{% else %}NO{% endif %}</td>
                         <td class="titulo" align="right">TOTAL RETE FUENTE:</td>
-                        <td align="right">{{ arRecibo.vrTotalReteFuente | number_format(0, '.', ',')}}</td>
+                        <td align="right">{{ arRecibo.vrTotalReteFuente | number_format(2, '.', ',')}}</td>
                     </tr>
                     <tr>
                         <td class="titulo">EXPORTADO:</td>
@@ -79,7 +79,7 @@
                         <td class="titulo">AUTORIZADO:</td>
                         <td class="td-in-well">{% if arRecibo.estadoAutorizado == 1 %}SI{% else %}NO{% endif %}</td>
                         <td class="titulo" align="right">TOTAL:</td>
-                        <td align="right">{{ arRecibo.vrTotal | number_format(0, '.', ',')}}</td>
+                        <td align="right">{{ arRecibo.vrTotal | number_format(2, '.', ',')}}</td>
                     </tr>
                     <tr>
                         <td class="titulo" >COMENTARIOS: </td>
@@ -100,10 +100,12 @@
                 <th>RETE IVA</th>
                 <th>RETE FUENTE</th>
                 <th>VALOR</th>
+                <th>INCONSISTENCIA</th>
                 <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
             </tr>
             {% for arReciboDetalle in arReciboDetalle %}
-                <tr>
+                {% if arReciboDetalle.estadoInconsistencia == 1 %}{% set class = 'danger' %}{% else %}{% set class = '' %}{% endif %}    
+                <tr class="{{ class }}">
                     <td>{{ arReciboDetalle.codigoReciboDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arReciboDetalle.codigoReciboDetallePk }}"></td>                                                    
                     <td>{{ arReciboDetalle.numeroFactura  }}</td>
                     <td>{{ arReciboDetalle.cuentaCobrarTipoRel.nombre  }}</td>
@@ -122,6 +124,7 @@
                         <td style="text-align: right">{{ arReciboDetalle.vrReteFuente | number_format(0, '.', ',') }}</td> 
                         <td style="text-align: right">{{ arReciboDetalle.valor | number_format(0, '.', ',') }}</td> 
                     {% endif %}
+                    <td>{% if arReciboDetalle.estadoInconsistencia == 1 %}SI{% else %}NO{% endif%}</td>
                     <td style="text-align: center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arReciboDetalle.codigoReciboDetallePk }}" /></td>
                 </tr>
             {% endfor %}

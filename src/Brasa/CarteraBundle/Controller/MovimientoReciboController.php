@@ -172,6 +172,7 @@ class MovimientoReciboController extends Controller
         $arRecibo = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigoRecibo);
         $arCuentasCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
         $arCuentasCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->cuentasCobrar($arRecibo->getCodigoClienteFk());
+        
         $arCuentasCobrar = $paginator->paginate($arCuentasCobrar, $request->query->get('page', 1), 50);
         $form = $this->createFormBuilder()
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
@@ -366,7 +367,7 @@ class MovimientoReciboController extends Controller
                 $floSaldo = $arReciboDetalle->getCuentaCobrarRel()->getSaldo();
                 $floSaldoAfectar = $arrControles['TxtValor'.$intCodigo] + $arrControles['TxtVrDescuento'.$intCodigo] + $arrControles['TxtVrAjustePeso'.$intCodigo] - ($arrControles['TxtVrReteIca'.$intCodigo] + $arrControles['TxtVrReteIva'.$intCodigo] + $arrControles['TxtVrReteFuente'.$intCodigo]);
                 if($floSaldo < $floSaldoAfectar) {
-                    //$arReciboDetalle->setEstadoInconsistencia(1);
+                    $arReciboDetalle->setEstadoInconsistencia(1);
                 }
                 $arReciboDetalle->setVrDescuento($arrControles['TxtVrDescuento'.$intCodigo]);
                 $arReciboDetalle->setVrAjustePeso($arrControles['TxtVrAjustePeso'.$intCodigo]);

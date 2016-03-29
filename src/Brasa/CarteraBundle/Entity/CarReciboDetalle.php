@@ -68,6 +68,11 @@ class CarReciboDetalle
      */    
     private $vrReteFuente = 0;
     
+    /**     
+     * @ORM\Column(name="estado_inconsistencia", type="boolean")
+     */    
+    private $estadoInconsistencia = 0;
+    
     /**
      * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
      */    
@@ -90,8 +95,7 @@ class CarReciboDetalle
      * @ORM\JoinColumn(name="codigo_cuenta_cobrar_tipo_fk", referencedColumnName="codigo_cuenta_cobrar_tipo_pk")
      */
     protected $cuentaCobrarTipoRel;
-
-    
+   
 
     /**
      * Get codigoReciboDetallePk
@@ -341,6 +345,30 @@ class CarReciboDetalle
     public function getVrReteFuente()
     {
         return $this->vrReteFuente;
+    }
+
+    /**
+     * Set estadoInconsistencia
+     *
+     * @param boolean $estadoInconsistencia
+     *
+     * @return CarReciboDetalle
+     */
+    public function setEstadoInconsistencia($estadoInconsistencia)
+    {
+        $this->estadoInconsistencia = $estadoInconsistencia;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoInconsistencia
+     *
+     * @return boolean
+     */
+    public function getEstadoInconsistencia()
+    {
+        return $this->estadoInconsistencia;
     }
 
     /**
