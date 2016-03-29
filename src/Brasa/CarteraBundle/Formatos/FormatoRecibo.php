@@ -67,7 +67,7 @@ class FormatoRecibo extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(23, 5, utf8_decode("TOTAL DCTO:") , 1, 0, 'R', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(20, 5, number_format($arRecibo->getVrTotal(), 0, '.', ','), 1, 0, 'R', 1);
+        $this->Cell(20, 5, number_format($arRecibo->getVrTotalDescuento(), 0, '.', ','), 1, 0, 'R', 1);
         //linea 2
         $this->SetXY(10, $intY+5);
         $this->SetFont('Arial','B',8);
@@ -77,11 +77,11 @@ class FormatoRecibo extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(21, 5, utf8_decode("NIT:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(52, 5, $arRecibo->getNumero(), 1, 0, 'L', 1);
+        $this->Cell(52, 5, $arRecibo->getClienteRel()->getNit(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(23, 5, utf8_decode("T. AJ. PESO:") , 1, 0, 'R', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(20, 5, number_format($arRecibo->getVrTotal(), 0, '.', ','), 1, 0, 'R', 1);
+        $this->Cell(20, 5, number_format($arRecibo->getVrTotalAjustePeso(), 0, '.', ','), 1, 0, 'R', 1);
         //linea 3
         $this->SetXY(10, $intY+10);
         $this->SetFont('Arial','B',8);
@@ -95,7 +95,7 @@ class FormatoRecibo extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(23, 5, utf8_decode("T. RETE ICA:") , 1, 0, 'R', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(20, 5, number_format($arRecibo->getVrTotal(), 0, '.', ','), 1, 0, 'R', 1);
+        $this->Cell(20, 5, number_format($arRecibo->getVrTotalReteIca(), 0, '.', ','), 1, 0, 'R', 1);
         //linea 4
         $this->SetXY(10, $intY+15);
         $this->SetFont('Arial','B',8);
@@ -109,42 +109,42 @@ class FormatoRecibo extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(23, 5, utf8_decode("T. RETE IVA:") , 1, 0, 'R', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(20, 5, number_format($arRecibo->getVrTotal(), 0, '.', ','), 1, 0, 'R', 1);
+        $this->Cell(20, 5, number_format($arRecibo->getVrTotalReteIva(), 0, '.', ','), 1, 0, 'R', 1);
         //linea 5
         $this->SetXY(10, $intY+20);
         $this->SetFont('Arial','B',8);
         $this->Cell(26, 5, utf8_decode("ANULADO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        if ($arRecibo->getEstadoAutorizado() == 1){
-            $estadoAutorizado = "SI";
+        if ($arRecibo->getEstadoAnulado() == 1){
+            $estadoAnulado = "SI";
         } else {
-            $estadoAutorizado = "NO";
+            $estadoAnulado = "NO";
         }
-        $this->Cell(52, 5, $estadoAutorizado, 1, 0, 'L', 1);
+        $this->Cell(52, 5, $estadoAnulado, 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(21, 5, utf8_decode("IMPRESO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        if ($arRecibo->getEstadoAutorizado() == 1){
-            $estadoAutorizado = "SI";
+        if ($arRecibo->getEstadoImpreso() == 1){
+            $estadoImpreso = "SI";
         } else {
-            $estadoAutorizado = "NO";
+            $estadoImpreso = "NO";
         }
-        $this->Cell(52, 5, $estadoAutorizado, 1, 0, 'L', 1);
+        $this->Cell(52, 5, $estadoImpreso, 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(23, 5, utf8_decode("T. RET FUENTE:") , 1, 0, 'R', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(20, 5, number_format($arRecibo->getVrTotal(), 0, '.', ','), 1, 0, 'R', 1);
+        $this->Cell(20, 5, number_format($arRecibo->getVrTotalReteFuente(), 0, '.', ','), 1, 0, 'R', 1);
         //linea 6
         $this->SetXY(10, $intY+25);
         $this->SetFont('Arial','B',8);
         $this->Cell(26, 5, utf8_decode("EXPORTADO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        if ($arRecibo->getEstadoAutorizado() == 1){
-            $estadoAutorizado = "SI";
+        if ($arRecibo->getEstadoExportado() == 1){
+            $estadoExportado = "SI";
         } else {
-            $estadoAutorizado = "NO";
+            $estadoExportado = "NO";
         }
-        $this->Cell(52, 5, $estadoAutorizado, 1, 0, 'L', 1);
+        $this->Cell(52, 5, $estadoExportado, 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(21, 5, utf8_decode("AUTORIZADO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);

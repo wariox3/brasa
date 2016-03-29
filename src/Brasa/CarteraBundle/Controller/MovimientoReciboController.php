@@ -115,6 +115,13 @@ class MovimientoReciboController extends Controller
                     if($arRecibo->getEstadoAutorizado() == 0) {
                         if($em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->numeroRegistros($codigoRecibo) > 0) {
                             $arRecibo->setEstadoAutorizado(1);
+                            $arDetallesRecibo = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->findBy(array('codigoReciboFk' => $codigoRecibo));
+                            foreach ($arDetallesRecibo AS $arDetalleRecibo) {
+                                $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
+                                $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleRecibo->getCodigoCuentaCobrarFk());
+                                $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() - $arDetalleRecibo->getSaldoDetalle());
+                                $em->persist($arCuentaCobrar);
+                            }
                             $em->persist($arRecibo);
                             $em->flush();                        
                         } else {
@@ -130,6 +137,13 @@ class MovimientoReciboController extends Controller
             if($form->get('BtnDesAutorizar')->isClicked()) {            
                 if($arRecibo->getEstadoAutorizado() == 1) {
                     $arRecibo->setEstadoAutorizado(0);
+                    $arDetallesRecibo = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->findBy(array('codigoReciboFk' => $codigoRecibo));
+                    foreach ($arDetallesRecibo AS $arDetalleRecibo) {
+                        $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
+                        $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleRecibo->getCodigoCuentaCobrarFk());
+                        $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleRecibo->getSaldoDetalle());
+                        $em->persist($arCuentaCobrar);
+                    }
                     $em->persist($arRecibo);
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));                
@@ -152,8 +166,8 @@ class MovimientoReciboController extends Controller
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 } else {
                     $objRecibo = new \Brasa\CarteraBundle\Formatos\FormatoRecibo();
-                    $objRecibo->Generar($this, $codigoRecibo);                   
-                }                
+                    $objRecibo->Generar($this, $codigoRecibo);
+                }
             }                        
         }
 
@@ -383,9 +397,8 @@ class MovimientoReciboController extends Controller
                 $arReciboDetalle->setVrReteIca($arrControles['TxtVrReteIca'.$intCodigo]);
                 $arReciboDetalle->setVrReteIva($arrControles['TxtVrReteIva'.$intCodigo]);
                 $arReciboDetalle->setVrReteFuente($arrControles['TxtVrReteFuente'.$intCodigo]);
-                //$floSumar = $arrControles['TxtVrAjustePeso'.$intCodigo] + $arrControles['TxtVrReteIca'.$intCodigo] + $arrControles['TxtVrReteIva'.$intCodigo] + $arrControles['TxtVrReteFuente'.$intCodigo];
-                //$arReciboDetalle->setValor($arrControles['TxtValor'.$intCodigo]);
                 $arReciboDetalle->setValor($arrControles['TxtValor'.$intCodigo]);
+                $arReciboDetalle->setSaldoDetalle($floSaldoAfectar);
                 $em->persist($arReciboDetalle);
             }
             $em->flush();

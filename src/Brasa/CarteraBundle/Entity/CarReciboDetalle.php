@@ -68,6 +68,11 @@ class CarReciboDetalle
      */    
     private $vrReteFuente = 0;
     
+    /**
+     * @ORM\Column(name="saldo_detalle", type="float")
+     */    
+    private $saldoDetalle = 0;
+    
     /**     
      * @ORM\Column(name="estado_inconsistencia", type="boolean")
      */    
@@ -96,6 +101,7 @@ class CarReciboDetalle
      */
     protected $cuentaCobrarTipoRel;
    
+
 
     /**
      * Get codigoReciboDetallePk
@@ -345,6 +351,30 @@ class CarReciboDetalle
     public function getVrReteFuente()
     {
         return $this->vrReteFuente;
+    }
+
+    /**
+     * Set saldoDetalle
+     *
+     * @param float $saldoDetalle
+     *
+     * @return CarReciboDetalle
+     */
+    public function setSaldoDetalle($saldoDetalle)
+    {
+        $this->saldoDetalle = $saldoDetalle;
+
+        return $this;
+    }
+
+    /**
+     * Get saldoDetalle
+     *
+     * @return float
+     */
+    public function getSaldoDetalle()
+    {
+        return $this->saldoDetalle;
     }
 
     /**

@@ -38,8 +38,9 @@ class CarReciboRepository extends EntityRepository
         if($arRecibo->getEstadoAutorizado() == 1) {
            if($arRecibo->getNumero() == 0) {            
                 $intNumero = $em->getRepository('BrasaCarteraBundle:CarConsecutivo')->consecutivo(1);
-                $arRecibo->setNumero($intNumero);
-                //$arCotizacion->setFecha(new \DateTime('now'));                
+                $arRecibo->setNumero($intNumero); 
+                $em->persist($arRecibo);
+                $em->flush();
             } 
         } else {
             $strResultado = "Debe autorizar la cotizacion para imprimirla";

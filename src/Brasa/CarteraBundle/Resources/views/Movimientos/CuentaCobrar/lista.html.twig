@@ -62,10 +62,10 @@
                 <th>CLIENTE</th>
                 <th>CUENTA COBRAR TIPO</th>
                 <th>VENCE</th>
-                <th>VALOR</th>
-                <th>SALDO</th>
                 <th>PLAZO</th>
+                <th>VALOR</th>
                 <th>ABONO</th>
+                <th>SALDO</th>
                 <th></th>
             </tr>
             {% for arCuentasCobrar in arCuentasCobrar %}
@@ -77,10 +77,10 @@
                 <td>{{ arCuentasCobrar.clienteRel.nombreCorto |default('')  }}</td>
                 <td>{{ arCuentasCobrar.cuentaCobrarTipoRel.nombre |default('')  }}</td>
                 <td>{{ arCuentasCobrar.fechaVence |date("Y/m/d")  }}</td>
-                <td style="text-align: right">{{ arCuentasCobrar.valorOriginal | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arCuentasCobrar.saldo | number_format(0, '.', ',') }}</td>
                 <td>{{ arCuentasCobrar.plazo  }}</td>
+                <td style="text-align: right">{{ arCuentasCobrar.valorOriginal | number_format(0, '.', ',') }}</td>
                 <td>{{ arCuentasCobrar.abono  }}</td>
+                <td style="text-align: right">{{ arCuentasCobrar.saldo | number_format(0, '.', ',') }}</td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCuentasCobrar.codigoCuentaCobrarPk }}" /></td>
             </tr>
 
