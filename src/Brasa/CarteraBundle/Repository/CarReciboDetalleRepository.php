@@ -78,5 +78,6 @@ class CarReciboDetalleRepository extends EntityRepository {
             }
         }
         return $boolValidar;
-    }     
+    } 
+
 }

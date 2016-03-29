@@ -109,16 +109,22 @@ class MovimientoReciboController extends Controller
         if($form->isValid()) {
             if($form->get('BtnAutorizar')->isClicked()) {  
                 $arrControles = $request->request->All();
-                $this->actualizarDetalle($arrControles, $codigoRecibo);                
-                if($arRecibo->getEstadoAutorizado() == 0) {
-                    if($em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->numeroRegistros($codigoRecibo) > 0) {
-                        $arRecibo->setEstadoAutorizado(1);
-                        $em->persist($arRecibo);
-                        $em->flush();                        
-                    } else {
-                        $objMensaje->Mensaje('error', 'Debe adicionar detalles al recibo de caja', $this);
-                    }                    
+                $this->actualizarDetalle($arrControles, $codigoRecibo);
+                $arInconsistencias = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->findBy(array('codigoReciboFk' =>$codigoRecibo,'estadoInconsistencia' => 1));
+                if ($arInconsistencias == null){
+                    if($arRecibo->getEstadoAutorizado() == 0) {
+                        if($em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->numeroRegistros($codigoRecibo) > 0) {
+                            $arRecibo->setEstadoAutorizado(1);
+                            $em->persist($arRecibo);
+                            $em->flush();                        
+                        } else {
+                            $objMensaje->Mensaje('error', 'Debe adicionar detalles al recibo de caja', $this);
+                        }                    
+                    }
+                } else {
+                    $objMensaje->Mensaje('error', 'No se puede autorizar, hay inconsistencias', $this);
                 }
+                    
                 return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));                
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {            
@@ -172,7 +178,6 @@ class MovimientoReciboController extends Controller
         $arRecibo = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigoRecibo);
         $arCuentasCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
         $arCuentasCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->cuentasCobrar($arRecibo->getCodigoClienteFk());
-        
         $arCuentasCobrar = $paginator->paginate($arCuentasCobrar, $request->query->get('page', 1), 50);
         $form = $this->createFormBuilder()
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
