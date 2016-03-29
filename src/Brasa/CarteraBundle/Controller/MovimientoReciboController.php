@@ -191,6 +191,7 @@ class MovimientoReciboController extends Controller
                         $arReciboDetalle->setCuentaCobrarRel($arCuentaCobrar);
                         $arReciboDetalle->setValor($arrControles['TxtSaldo'.$codigoCuentaCobrar]);
                         $arReciboDetalle->setUsuario($arUsuario->getUserName());
+                        $arReciboDetalle->setNumeroFactura($arCuentaCobrar->getNumeroDocumento());
                         $arReciboDetalle->setCuentaCobrarTipoRel($arCuentaCobrar->getCuentaCobrarTipoRel());
                         $em->persist($arReciboDetalle); 
                     }
@@ -202,6 +203,7 @@ class MovimientoReciboController extends Controller
         }
         return $this->render('BrasaCarteraBundle:Movimientos/Recibo:detalleNuevo.html.twig', array(
             'arCuentasCobrar' => $arCuentasCobrar,
+            'arRecibo' => $arRecibo,
             'form' => $form->createView()));
     } 
     
@@ -356,6 +358,7 @@ class MovimientoReciboController extends Controller
     private function actualizarDetalle($arrControles, $codigoRecibo) {
         $em = $this->getDoctrine()->getManager();
         $intIndice = 0;
+        $floTotal = 0;
         if(isset($arrControles['LblCodigo'])) {
             foreach ($arrControles['LblCodigo'] as $intCodigo) {
                 $arReciboDetalle = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
@@ -364,7 +367,10 @@ class MovimientoReciboController extends Controller
                 $arReciboDetalle->setVrAjustePeso($arrControles['TxtVrAjustePeso'.$intCodigo]);
                 $arReciboDetalle->setVrReteIca($arrControles['TxtVrReteIca'.$intCodigo]);
                 $arReciboDetalle->setVrReteIva($arrControles['TxtVrReteIva'.$intCodigo]);
-                $arReciboDetalle->setValor($arrControles['TxtValor'.$intCodigo]);
+                $arReciboDetalle->setVrReteFuente($arrControles['TxtVrReteFuente'.$intCodigo]);
+                $floSumar = $arrControles['TxtVrAjustePeso'.$intCodigo] + $arrControles['TxtVrReteIca'.$intCodigo] + $arrControles['TxtVrReteIva'.$intCodigo] + $arrControles['TxtVrReteFuente'.$intCodigo];
+                //$arReciboDetalle->setValor($arrControles['TxtValor'.$intCodigo]);
+                $arReciboDetalle->setValor($arrControles['TxtValor'.$intCodigo] + $floSumar - $arrControles['TxtVrDescuento'.$intCodigo]);
                 $em->persist($arReciboDetalle);
             }
             $em->flush();

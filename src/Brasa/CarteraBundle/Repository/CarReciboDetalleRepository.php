@@ -37,13 +37,28 @@ class CarReciboDetalleRepository extends EntityRepository {
         $arRecibo = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigoRecibo); 
         $intCantidad = 0;
         $floValor = 0;
+        $floDescuento = 0;
+        $floAjustePeso = 0;
+        $floReteIca = 0;
+        $floReteIva = 0;
+        $floReteFuente = 0;
         $arRecibo = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigoRecibo);         
         $arRecibosDetalle = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();        
         $arRecibosDetalle = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->findBy(array('codigoReciboFk' => $codigoRecibo));         
-        foreach ($arRecibosDetalle as $arReciboDetalle) {                       
+        foreach ($arRecibosDetalle as $arReciboDetalle) {         
+            $floDescuento += $arReciboDetalle->getVrDescuento();
+            $floAjustePeso += $arReciboDetalle->getVrAjustePeso();
+            $floReteIca += $arReciboDetalle->getVrReteIca();
+            $floReteIva += $arReciboDetalle->getVrReteIva();
+            $floReteFuente += $arReciboDetalle->getVrReteFuente();
             $floValor += $arReciboDetalle->getValor();
         }                 
         $arRecibo->setVrTotal($floValor);
+        $arRecibo->setVrTotalDescuento($floDescuento);
+        $arRecibo->setVrTotalAjustePeso($floAjustePeso);
+        $arRecibo->setVrTotalReteIca($floReteIca);
+        $arRecibo->setVrTotalReteIva($floReteIva);
+        $arRecibo->setVrTotalReteFuente($floReteFuente);
         $em->persist($arRecibo);
         $em->flush();
         return true;

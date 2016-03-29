@@ -92,8 +92,6 @@
         <table class="table table-striped table-bordered table-condensed">
             <tr>
                 <th>CÓDIGO</th>
-                <th>CÓDIGO RECIBO</th>
-                <th>CÓDIGO CUENTA COBRAR</th>
                 <th>NÚMERO FACTURA</th>
                 <th>TIPO</th>
                 <th>DESCUENTO</th>
@@ -102,13 +100,11 @@
                 <th>RETE IVA</th>
                 <th>RETE FUENTE</th>
                 <th>VALOR</th>
-                <th></th>
+                <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
             </tr>
             {% for arReciboDetalle in arReciboDetalle %}
                 <tr>
-                    <td>{{ arReciboDetalle.codigoReciboDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arReciboDetalle.codigoReciboDetallePk }}"></td>
-                    <td>{{ arReciboDetalle.codigoReciboFk  }}</td>                    
-                    <td>{{ arReciboDetalle.codigoCuentaCobrarFk  }}</td>                                  
+                    <td>{{ arReciboDetalle.codigoReciboDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arReciboDetalle.codigoReciboDetallePk }}"></td>                                                    
                     <td>{{ arReciboDetalle.numeroFactura  }}</td>
                     <td>{{ arReciboDetalle.cuentaCobrarTipoRel.nombre  }}</td>
                     {% if arRecibo.estadoAutorizado == 0 %}                        

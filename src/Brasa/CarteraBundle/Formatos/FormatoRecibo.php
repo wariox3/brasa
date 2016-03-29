@@ -171,7 +171,7 @@ class FormatoRecibo extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(14);
-        $header = array('COD', 'NUMERO', 'CTA COB', 'TIPO CXC','DESCUENTO', 'AJUSTE PESO', 'RETE ICA', 'RETE IVA', 'RETE FUENTE', 'VALOR');
+        $header = array('COD', utf8_decode('N° FACT'), 'TIPO CUENTA COBRAR','DESCUENTO', 'AJUSTE PESO', 'RETE ICA', 'RETE IVA', 'RETE FUENTE', 'VALOR');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -179,7 +179,7 @@ class FormatoRecibo extends \FPDF_FPDF {
         $this->SetFont('', 'B', 7.5);
 
         //creamos la cabecera de la tabla.
-        $w = array(11, 14, 14, 45, 19, 20, 18, 18,20,20);
+        $w = array(11, 14, 55, 19, 20, 18, 18,20,20);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -201,9 +201,8 @@ class FormatoRecibo extends \FPDF_FPDF {
         foreach ($arReciboDetalles as $arReciboDetalle) {            
             $pdf->Cell(11, 4, $arReciboDetalle->getCodigoReciboDetallePk(), 1, 0, 'L');
             $pdf->Cell(14, 4, $arReciboDetalle->getNumeroFactura(), 1, 0, 'L');
-            $pdf->Cell(14, 4, $arReciboDetalle->getCodigoCuentaCobrarFk(), 1, 0, 'L');
             $pdf->SetFont('Arial', '', 6.5);
-            $pdf->Cell(45, 4, $arReciboDetalle->getCuentaCobrarTipoRel()->getNombre(), 1, 0, 'L');
+            $pdf->Cell(55, 4, utf8_decode($arReciboDetalle->getCuentaCobrarTipoRel()->getNombre()), 1, 0, 'L');
             $pdf->SetFont('Arial', '', 7);
             $pdf->Cell(19, 4, number_format($arReciboDetalle->getVrDescuento(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(20, 4, number_format($arReciboDetalle->getVrAjustePeso(), 0, '.', ','), 1, 0, 'R');
