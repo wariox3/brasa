@@ -375,6 +375,8 @@ class MovimientoReciboController extends Controller
                 $floSaldoAfectar = $arrControles['TxtValor'.$intCodigo] + $arrControles['TxtVrDescuento'.$intCodigo] + $arrControles['TxtVrAjustePeso'.$intCodigo] - ($arrControles['TxtVrReteIca'.$intCodigo] + $arrControles['TxtVrReteIva'.$intCodigo] + $arrControles['TxtVrReteFuente'.$intCodigo]);
                 if($floSaldo < $floSaldoAfectar) {
                     $arReciboDetalle->setEstadoInconsistencia(1);
+                }else {
+                    $arReciboDetalle->setEstadoInconsistencia(0);
                 }
                 $arReciboDetalle->setVrDescuento($arrControles['TxtVrDescuento'.$intCodigo]);
                 $arReciboDetalle->setVrAjustePeso($arrControles['TxtVrAjustePeso'.$intCodigo]);
