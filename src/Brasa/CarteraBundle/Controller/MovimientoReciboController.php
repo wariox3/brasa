@@ -363,14 +363,19 @@ class MovimientoReciboController extends Controller
             foreach ($arrControles['LblCodigo'] as $intCodigo) {
                 $arReciboDetalle = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
                 $arReciboDetalle = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->find($intCodigo);
+                $floSaldo = $arReciboDetalle->getCuentaCobrarRel()->getSaldo();
+                $floSaldoAfectar = $arrControles['TxtValor'.$intCodigo] + $arrControles['TxtVrDescuento'.$intCodigo] + $arrControles['TxtVrAjustePeso'.$intCodigo] - ($arrControles['TxtVrReteIca'.$intCodigo] + $arrControles['TxtVrReteIva'.$intCodigo] + $arrControles['TxtVrReteFuente'.$intCodigo]);
+                if($floSaldo < $floSaldoAfectar) {
+                    //$arReciboDetalle->setEstadoInconsistencia(1);
+                }
                 $arReciboDetalle->setVrDescuento($arrControles['TxtVrDescuento'.$intCodigo]);
                 $arReciboDetalle->setVrAjustePeso($arrControles['TxtVrAjustePeso'.$intCodigo]);
                 $arReciboDetalle->setVrReteIca($arrControles['TxtVrReteIca'.$intCodigo]);
                 $arReciboDetalle->setVrReteIva($arrControles['TxtVrReteIva'.$intCodigo]);
                 $arReciboDetalle->setVrReteFuente($arrControles['TxtVrReteFuente'.$intCodigo]);
-                $floSumar = $arrControles['TxtVrAjustePeso'.$intCodigo] + $arrControles['TxtVrReteIca'.$intCodigo] + $arrControles['TxtVrReteIva'.$intCodigo] + $arrControles['TxtVrReteFuente'.$intCodigo];
+                //$floSumar = $arrControles['TxtVrAjustePeso'.$intCodigo] + $arrControles['TxtVrReteIca'.$intCodigo] + $arrControles['TxtVrReteIva'.$intCodigo] + $arrControles['TxtVrReteFuente'.$intCodigo];
                 //$arReciboDetalle->setValor($arrControles['TxtValor'.$intCodigo]);
-                $arReciboDetalle->setValor($arrControles['TxtValor'.$intCodigo] + $floSumar - $arrControles['TxtVrDescuento'.$intCodigo]);
+                $arReciboDetalle->setValor($arrControles['TxtValor'.$intCodigo]);
                 $em->persist($arReciboDetalle);
             }
             $em->flush();
