@@ -6,6 +6,26 @@ use Doctrine\ORM\EntityRepository;
 
 class CarReciboDetalleRepository extends EntityRepository {
     
+    public function detalleConsultaDql($numero = "", $codigoCliente = "", $codigoCuentaCobrarTipo = "", $strFechaDesde = "", $strFechaHasta = "") {
+        $dql   = "SELECT rd FROM BrasaCarteraBundle:CarReciboDetalle rd JOIN rd.reciboRel r  WHERE rd.codigoReciboDetallePk <> 0 ";
+        if($numero != "") {
+            $dql .= " AND rd.numeroFactura = " . $numero;  
+        }
+        if($codigoCliente != "") {
+            $dql .= " AND r.codigoClienteFk = " . $codigoCliente;  
+        }
+        if($codigoCuentaCobrarTipo != "") {
+            $dql .= " AND rd.codigoCuentaCobrarTipoFk = " . $codigoCuentaCobrarTipo;  
+        }
+        if ($strFechaDesde != ""){
+            $dql .= " AND r.fecha >='" . date_format($strFechaDesde, ('Y-m-d')). "'";
+        }
+        if($strFechaHasta != "") {
+            $dql .= " AND r.fecha <='" . date_format($strFechaHasta, ('Y-m-d')) . "'";
+        }        
+        return $dql;
+    } 
+    
     public function eliminarSeleccionados($arrSeleccionados) {        
         if(count($arrSeleccionados) > 0) {
             $em = $this->getEntityManager();

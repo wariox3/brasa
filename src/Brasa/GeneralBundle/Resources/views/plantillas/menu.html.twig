@@ -130,6 +130,8 @@
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_cartera_base_recibo_tipo_listar') }}">Recibo tipo</a></li>
                                         <li><a href="{{ path('brs_cartera_base_cuentacobrar_tipo_listar') }}">Cuenta cobro tipo</a></li>
+                                        <li><a href="{{ path('brs_cartera_base_notacredito_concepto_listar') }}">Nota credito concepto</a></li>
+                                        <li><a href="{{ path('brs_cartera_base_notadebito_concepto_listar') }}">Nota debito concepto</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -297,6 +299,27 @@
                                     <a tabindex="-1" href="#">Cuentas por cobrar</a>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_cartera_consulta_cuentacobrar_lista') }}">Lista</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Recibo</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_cartera_consulta_recibo_lista') }}">Lista</a></li>
+                                        <li><a href="{{ path('brs_cartera_consulta_recibo_detalle') }}">Detalle</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Nota credito</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_cartera_consulta_notacredito_lista') }}">Lista</a></li>
+                                        <li><a href="{{ path('brs_cartera_consulta_notacredito_detalle') }}">Detalle</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Nota debito</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_cartera_consulta_notadebito_lista') }}">Lista</a></li>
+                                        <li><a href="{{ path('brs_cartera_consulta_notadebito_detalle') }}">Detalle</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -721,6 +744,18 @@
                                     <a tabindex="-1" href="#">Cuenta cobrar</a>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_cartera_movimiento_cuentacobrar_listar') }}">Lista</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Nota Credito</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_cartera_movimiento_notacredito_listar') }}">Lista</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Nota Debito</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_cartera_movimiento_notadebito_listar') }}">Lista</a></li>
                                     </ul>
                                 </li>
                             </ul>

@@ -29,6 +29,26 @@ class CarReciboRepository extends EntityRepository
         return $dql;
     }
     
+   public function listaConsultaDql($numero = "", $codigoCliente = "", $codigoReciboTipo = "", $strFechaDesde = "", $strFechaHasta = "") {
+        $dql   = "SELECT r FROM BrasaCarteraBundle:CarRecibo r WHERE r.codigoReciboPk <> 0 ";
+        if($numero != "") {
+            $dql .= " AND r.numero = " . $numero;  
+        }
+        if($codigoCliente != "") {
+            $dql .= " AND r.codigoClienteFk = " . $codigoCliente;  
+        }
+        if($codigoReciboTipo != "") {
+            $dql .= " AND r.codigoReciboTipoFk = " . $codigoReciboTipo;  
+        }
+        if ($strFechaDesde != ""){
+            $dql .= " AND r.fecha >='" . date_format($strFechaDesde, ('Y-m-d')). "'";
+        }
+        if($strFechaHasta != "") {
+            $dql .= " AND r.fecha <='" . date_format($strFechaHasta, ('Y-m-d')) . "'";
+        }        
+        return $dql;
+    } 
+    
    public function imprimir($codigo) {
         $em = $this->getEntityManager();  
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
@@ -38,7 +58,8 @@ class CarReciboRepository extends EntityRepository
         if($arRecibo->getEstadoAutorizado() == 1) {
            if($arRecibo->getNumero() == 0) {            
                 $intNumero = $em->getRepository('BrasaCarteraBundle:CarConsecutivo')->consecutivo(1);
-                $arRecibo->setNumero($intNumero); 
+                $arRecibo->setNumero($intNumero);
+                $arRecibo->setEstadoImpreso(1);
                 $em->persist($arRecibo);
                 $em->flush();
             } 

@@ -34,9 +34,29 @@ class CarNotaDebitoDetalle
     private $codigoCuentaCobrarFk;
     
     /**
+     * @ORM\Column(name="codigo_cuenta_cobrar_tipo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCuentaCobrarTipoFk;
+    
+    /**
+     * @ORM\Column(name="numero_factura", type="integer", nullable=true)
+     */     
+    private $numeroFactura;
+    
+    /**
      * @ORM\Column(name="valor", type="float")
      */    
-    private $valor = 0;  
+    private $valor = 0;
+    
+    /**
+     * @ORM\Column(name="saldo_detalle", type="float")
+     */    
+    private $saldoDetalle = 0;
+    
+    /**     
+     * @ORM\Column(name="estado_inconsistencia", type="boolean")
+     */    
+    private $estadoInconsistencia = 0;
 
     /**
      * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
@@ -54,8 +74,15 @@ class CarNotaDebitoDetalle
      * @ORM\JoinColumn(name="codigo_cuenta_cobrar_fk", referencedColumnName="codigo_cuenta_cobrar_pk")
      */
     protected $cuentaCobrarRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="CarCuentaCobrarTipo", inversedBy="cuentasCobrarTiposNotaDebitoDetalleRel")
+     * @ORM\JoinColumn(name="codigo_cuenta_cobrar_tipo_fk", referencedColumnName="codigo_cuenta_cobrar_tipo_pk")
+     */
+    protected $cuentaCobrarTipoRel;
 
     
+
 
     /**
      * Get codigoNotaDebitoDetallePk
@@ -140,6 +167,54 @@ class CarNotaDebitoDetalle
     }
 
     /**
+     * Set codigoCuentaCobrarTipoFk
+     *
+     * @param integer $codigoCuentaCobrarTipoFk
+     *
+     * @return CarNotaDebitoDetalle
+     */
+    public function setCodigoCuentaCobrarTipoFk($codigoCuentaCobrarTipoFk)
+    {
+        $this->codigoCuentaCobrarTipoFk = $codigoCuentaCobrarTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCuentaCobrarTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCuentaCobrarTipoFk()
+    {
+        return $this->codigoCuentaCobrarTipoFk;
+    }
+
+    /**
+     * Set numeroFactura
+     *
+     * @param integer $numeroFactura
+     *
+     * @return CarNotaDebitoDetalle
+     */
+    public function setNumeroFactura($numeroFactura)
+    {
+        $this->numeroFactura = $numeroFactura;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroFactura
+     *
+     * @return integer
+     */
+    public function getNumeroFactura()
+    {
+        return $this->numeroFactura;
+    }
+
+    /**
      * Set valor
      *
      * @param float $valor
@@ -161,6 +236,78 @@ class CarNotaDebitoDetalle
     public function getValor()
     {
         return $this->valor;
+    }
+
+    /**
+     * Set saldoDetalle
+     *
+     * @param float $saldoDetalle
+     *
+     * @return CarNotaDebitoDetalle
+     */
+    public function setSaldoDetalle($saldoDetalle)
+    {
+        $this->saldoDetalle = $saldoDetalle;
+
+        return $this;
+    }
+
+    /**
+     * Get saldoDetalle
+     *
+     * @return float
+     */
+    public function getSaldoDetalle()
+    {
+        return $this->saldoDetalle;
+    }
+
+    /**
+     * Set estadoInconsistencia
+     *
+     * @param boolean $estadoInconsistencia
+     *
+     * @return CarNotaDebitoDetalle
+     */
+    public function setEstadoInconsistencia($estadoInconsistencia)
+    {
+        $this->estadoInconsistencia = $estadoInconsistencia;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoInconsistencia
+     *
+     * @return boolean
+     */
+    public function getEstadoInconsistencia()
+    {
+        return $this->estadoInconsistencia;
+    }
+
+    /**
+     * Set usuario
+     *
+     * @param string $usuario
+     *
+     * @return CarNotaDebitoDetalle
+     */
+    public function setUsuario($usuario)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return string
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
     }
 
     /**
@@ -212,26 +359,26 @@ class CarNotaDebitoDetalle
     }
 
     /**
-     * Set usuario
+     * Set cuentaCobrarTipoRel
      *
-     * @param string $usuario
+     * @param \Brasa\CarteraBundle\Entity\CarCuentaCobrarTipo $cuentaCobrarTipoRel
      *
      * @return CarNotaDebitoDetalle
      */
-    public function setUsuario($usuario)
+    public function setCuentaCobrarTipoRel(\Brasa\CarteraBundle\Entity\CarCuentaCobrarTipo $cuentaCobrarTipoRel = null)
     {
-        $this->usuario = $usuario;
+        $this->cuentaCobrarTipoRel = $cuentaCobrarTipoRel;
 
         return $this;
     }
 
     /**
-     * Get usuario
+     * Get cuentaCobrarTipoRel
      *
-     * @return string
+     * @return \Brasa\CarteraBundle\Entity\CarCuentaCobrarTipo
      */
-    public function getUsuario()
+    public function getCuentaCobrarTipoRel()
     {
-        return $this->usuario;
+        return $this->cuentaCobrarTipoRel;
     }
 }

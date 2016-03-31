@@ -1,14 +1,18 @@
 {% extends '::base.html.twig' %}
-{% block title %}Cartera recibos lista - Soga App{% endblock %}
+{% block title %}Cartera consulta nota credito lista - Soga App{% endblock %}
 {% block content %}
 <script>
     $(function () {
-      $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="tooltip"]').tooltip()
     })
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+    $('.date').datepicker({ dateFormat: 'yy-mm-dd' ,dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Deciembre" ], monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]})  });
 </script>
 <div class="container">
     <div class="page-header">
-        <h3>Lista recibos</h3>
+        <h3>Consulta notas creditos lista</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
@@ -41,72 +45,71 @@
                     <div class="col-sm-4">
                         {{ form_widget(form.TxtNumero, { 'attr': {'class': 'form-control'} }) }}
                     </div>
-                    <label for="form_estadoAutorizado" class="col-sm-2 control-label">Impreso:</label>
+                    <label for="form_notaCreditoConceptoRel" class="col-sm-2 control-label">Concepto nota credito:</label>
                     <div class="col-sm-4">                  
-                        {{ form_widget(form.estadoImpreso, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.notaCreditoConceptoRel, { 'attr': {'class': 'form-control'} }) }}
                     </div>                    
-                </div>     
+                </div>
+                <div class="form-group form-group-sm">  
+                    <label for="form_fechaDesde" class="col-sm-2 control-label">Desde:</label>
+                    <div class="col-sm-10">                  
+                        {{ form_widget(form.fechaDesde, {'attr': {'maxlength' : 10} }) }}
+                    </div>
+                </div>                     
+                <div class="form-group form-group-sm">  
+                    <label for="form_fechaHasta" class="col-sm-2 control-label">Hasta:</label>
+                    <div class="col-sm-10">                  
+                        {{ form_widget(form.fechaHasta, {'attr': {'maxlength' : 10} }) }}
+                    </div>
+                </div>    
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
-                        {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
+                        {{ form_widget(form.BtnFiltrarLista, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
                     </div>
                 </div>
             </div>
         </div>
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
-                <th>{{ knp_pagination_sortable(arRecibos, 'CÓDIGO', 'r.codigoReciboPk') }}</th>
+                <th>{{ knp_pagination_sortable(arNotaCreditos, 'CÓDIGO', 'nc.codigoNotaCreditoPk') }}</th>
                 <th>NUMERO</th>
                 <th>FECHA</th>
                 <th>NIT</th>
                 <th>CLIENTE</th>
                 <th>CUENTA</th>
-                <th>TIPO</th>
+                <th>CONCEPTO</th>
                 <th>FECHA PAGO</th>
                 <th>TOTAL</th>
                 <th>ANU</th>
                 <th>AUT</th>
-                <th></th>
-                <th></th>
-                <th></th>
             </tr>
-            {% for arRecibos in arRecibos %}
+            {% for arNotaCreditos in arNotaCreditos %}
             <tr>
-                <td>{{ arRecibos.codigoReciboPk  }}</td>
-                <td>{{ arRecibos.numero  }}</td>
-                <td>{{ arRecibos.fecha |date("Y/m/d")  }}</td>
-                <td>{{ arRecibos.clienteRel.nit |default('')  }}</td>
-                <td>{{ arRecibos.clienteRel.nombreCorto |default('')  }}</td>
-                <td>{{ arRecibos.cuentaRel.nombre |default('')  }}</td>
-                <td>{{ arRecibos.reciboTipoRel.nombre |default('')  }}</td>
-                <td>{{ arRecibos.fechaPago |date("Y/m/d")  }}</td>
-                <td style="text-align: right">{{ arRecibos.vrTotal | number_format(0, '.', ',') }}</td>
-                <td>{% if arRecibos.estadoAnulado == 1 %}SI{% else %}NO{% endif %}</td>
-                <td>{% if arRecibos.estadoAutorizado == 1 %}SI{% else %}NO{% endif %}</td>
-                <td style="text-align: center"><a href="{{ path('brs_cartera_movimiento_recibo_nuevo', {'codigoRecibo': arRecibos.codigoReciboPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
-                <td style="text-align: center"><a href="{{ path('brs_cartera_movimiento_recibo_detalle', { 'codigoRecibo': arRecibos.codigoReciboPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
-                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arRecibos.codigoReciboPk }}" /></td>
+                <td>{{ arNotaCreditos.codigoNotaCreditoPk  }}</td>
+                <td>{{ arNotaCreditos.numero  }}</td>
+                <td>{{ arNotaCreditos.fecha |date("Y/m/d")  }}</td>
+                <td>{{ arNotaCreditos.clienteRel.nit |default('')  }}</td>
+                <td>{{ arNotaCreditos.clienteRel.nombreCorto |default('')  }}</td>
+                <td>{{ arNotaCreditos.cuentaRel.nombre |default('')  }}</td>
+                <td>{{ arNotaCreditos.notaCreditoConceptoRel.nombre |default('')  }}</td>
+                <td>{{ arNotaCreditos.fechaPago |date("Y/m/d")  }}</td>
+                <td style="text-align: right">{{ arNotaCreditos.valor | number_format(2, '.', ',') }}</td>
+                <td>{% if arNotaCreditos.estadoAnulado == 1%}SI{% else %}NO{% endif %}</td>
+                <td>{% if arNotaCreditos.estadoAutorizado == 1%}SI{% else %}NO{% endif %}</td>
             </tr>
 
             {% endfor %}
         </table>
-
         <!-- Botones Menu Items -->
         <div class="btn-group" style="float: left">
-                <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arRecibos.getTotalItemCount }}</span></div>
+                <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arNotaCreditos.getTotalItemCount }}</span></div>
         </div>
         <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
-                {{ knp_pagination_render(arRecibos) }}
+                {{ knp_pagination_render(arNotaCreditos) }}
         </div>
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
-                {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            </div>
-            <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="{{ path('brs_cartera_movimiento_recibo_nuevo', {'codigoRecibo': 0}) }}">Nuevo</a>
-            </div>
-            <div class="btn-group">
-                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+                {{ form_widget(form.BtnExcelLista, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
         </div>
         <!-- Fin Botones Menu Items -->

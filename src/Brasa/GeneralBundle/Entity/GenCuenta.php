@@ -59,7 +59,18 @@ class GenCuenta
      */
     protected $carRecibosCuentaRel;
     
-
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\CarteraBundle\Entity\CarNotaDebito", mappedBy="cuentaRel")
+     */
+    protected $carNotasDebitosCuentaRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\CarteraBundle\Entity\CarNotaCredito", mappedBy="cuentaRel")
+     */
+    protected $carNotasCreditosCuentaRel;
+    
+    
+    
     
     /**
      * Constructor
@@ -68,6 +79,8 @@ class GenCuenta
     {
         $this->rhuPagosBancosCuentaRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->carRecibosCuentaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->carNotasDebitosCuentaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->carNotasCreditosCuentaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -290,5 +303,73 @@ class GenCuenta
     public function getCarRecibosCuentaRel()
     {
         return $this->carRecibosCuentaRel;
+    }
+
+    /**
+     * Add carNotasDebitosCuentaRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarNotaDebito $carNotasDebitosCuentaRel
+     *
+     * @return GenCuenta
+     */
+    public function addCarNotasDebitosCuentaRel(\Brasa\CarteraBundle\Entity\CarNotaDebito $carNotasDebitosCuentaRel)
+    {
+        $this->carNotasDebitosCuentaRel[] = $carNotasDebitosCuentaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove carNotasDebitosCuentaRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarNotaDebito $carNotasDebitosCuentaRel
+     */
+    public function removeCarNotasDebitosCuentaRel(\Brasa\CarteraBundle\Entity\CarNotaDebito $carNotasDebitosCuentaRel)
+    {
+        $this->carNotasDebitosCuentaRel->removeElement($carNotasDebitosCuentaRel);
+    }
+
+    /**
+     * Get carNotasDebitosCuentaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCarNotasDebitosCuentaRel()
+    {
+        return $this->carNotasDebitosCuentaRel;
+    }
+
+    /**
+     * Add carNotasCreditosCuentaRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarNotaCredito $carNotasCreditosCuentaRel
+     *
+     * @return GenCuenta
+     */
+    public function addCarNotasCreditosCuentaRel(\Brasa\CarteraBundle\Entity\CarNotaCredito $carNotasCreditosCuentaRel)
+    {
+        $this->carNotasCreditosCuentaRel[] = $carNotasCreditosCuentaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove carNotasCreditosCuentaRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarNotaCredito $carNotasCreditosCuentaRel
+     */
+    public function removeCarNotasCreditosCuentaRel(\Brasa\CarteraBundle\Entity\CarNotaCredito $carNotasCreditosCuentaRel)
+    {
+        $this->carNotasCreditosCuentaRel->removeElement($carNotasCreditosCuentaRel);
+    }
+
+    /**
+     * Get carNotasCreditosCuentaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCarNotasCreditosCuentaRel()
+    {
+        return $this->carNotasCreditosCuentaRel;
     }
 }

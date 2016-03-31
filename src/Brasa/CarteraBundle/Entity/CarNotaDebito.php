@@ -29,6 +29,16 @@ class CarNotaDebito
     private $codigoClienteFk;
     
     /**
+     * @ORM\Column(name="codigo_cuenta_fk", type="integer", nullable=true)
+     */    
+    private $codigoCuentaFk;
+    
+    /**
+     * @ORM\Column(name="codigo_nota_debito_concepto_fk", type="integer", nullable=true)
+     */    
+    private $codigoNotaDebitoConceptoFk;
+    
+    /**
      * @ORM\Column(name="numero", type="string", length=30, nullable=true)
      */    
     private $numero;
@@ -36,7 +46,32 @@ class CarNotaDebito
     /**
      * @ORM\Column(name="valor", type="float")
      */    
-    private $valor = 0;      
+    private $valor = 0;
+    
+    /**
+     * @ORM\Column(name="fecha_pago", type="date", nullable=true)
+     */    
+    private $fechaPago;
+    
+    /**     
+     * @ORM\Column(name="estado_impreso", type="boolean")
+     */    
+    private $estadoImpreso = 0;
+    
+    /**     
+     * @ORM\Column(name="estado_anulado", type="boolean")
+     */    
+    private $estadoAnulado = 0;
+    
+    /**     
+     * @ORM\Column(name="estado_exportado", type="boolean")
+     */    
+    private $estadoExportado = 0;
+    
+    /**     
+     * @ORM\Column(name="estado_autorizado", type="boolean")
+     */    
+    private $estadoAutorizado = 0;
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -59,6 +94,18 @@ class CarNotaDebito
      */
     protected $notasDebitosDetallesNotaDebitoRel;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="CarNotaDebitoConcepto", inversedBy="notasDebitosConceptoRel")
+     * @ORM\JoinColumn(name="codigo_nota_debito_concepto_fk", referencedColumnName="codigo_nota_debito_concepto_pk")
+     */
+    protected $notaDebitoConceptoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCuenta", inversedBy="carNotasDebitosCuentaRel")
+     * @ORM\JoinColumn(name="codigo_cuenta_fk", referencedColumnName="codigo_cuenta_pk")
+     */
+    protected $cuentaRel;
+    
     
     /**
      * Constructor
@@ -127,6 +174,54 @@ class CarNotaDebito
     }
 
     /**
+     * Set codigoCuentaFk
+     *
+     * @param integer $codigoCuentaFk
+     *
+     * @return CarNotaDebito
+     */
+    public function setCodigoCuentaFk($codigoCuentaFk)
+    {
+        $this->codigoCuentaFk = $codigoCuentaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCuentaFk
+     *
+     * @return integer
+     */
+    public function getCodigoCuentaFk()
+    {
+        return $this->codigoCuentaFk;
+    }
+
+    /**
+     * Set codigoNotaDebitoConceptoFk
+     *
+     * @param integer $codigoNotaDebitoConceptoFk
+     *
+     * @return CarNotaDebito
+     */
+    public function setCodigoNotaDebitoConceptoFk($codigoNotaDebitoConceptoFk)
+    {
+        $this->codigoNotaDebitoConceptoFk = $codigoNotaDebitoConceptoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoNotaDebitoConceptoFk
+     *
+     * @return integer
+     */
+    public function getCodigoNotaDebitoConceptoFk()
+    {
+        return $this->codigoNotaDebitoConceptoFk;
+    }
+
+    /**
      * Set numero
      *
      * @param string $numero
@@ -172,6 +267,126 @@ class CarNotaDebito
     public function getValor()
     {
         return $this->valor;
+    }
+
+    /**
+     * Set fechaPago
+     *
+     * @param \DateTime $fechaPago
+     *
+     * @return CarNotaDebito
+     */
+    public function setFechaPago($fechaPago)
+    {
+        $this->fechaPago = $fechaPago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaPago
+     *
+     * @return \DateTime
+     */
+    public function getFechaPago()
+    {
+        return $this->fechaPago;
+    }
+
+    /**
+     * Set estadoImpreso
+     *
+     * @param boolean $estadoImpreso
+     *
+     * @return CarNotaDebito
+     */
+    public function setEstadoImpreso($estadoImpreso)
+    {
+        $this->estadoImpreso = $estadoImpreso;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoImpreso
+     *
+     * @return boolean
+     */
+    public function getEstadoImpreso()
+    {
+        return $this->estadoImpreso;
+    }
+
+    /**
+     * Set estadoAnulado
+     *
+     * @param boolean $estadoAnulado
+     *
+     * @return CarNotaDebito
+     */
+    public function setEstadoAnulado($estadoAnulado)
+    {
+        $this->estadoAnulado = $estadoAnulado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAnulado
+     *
+     * @return boolean
+     */
+    public function getEstadoAnulado()
+    {
+        return $this->estadoAnulado;
+    }
+
+    /**
+     * Set estadoExportado
+     *
+     * @param boolean $estadoExportado
+     *
+     * @return CarNotaDebito
+     */
+    public function setEstadoExportado($estadoExportado)
+    {
+        $this->estadoExportado = $estadoExportado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoExportado
+     *
+     * @return boolean
+     */
+    public function getEstadoExportado()
+    {
+        return $this->estadoExportado;
+    }
+
+    /**
+     * Set estadoAutorizado
+     *
+     * @param boolean $estadoAutorizado
+     *
+     * @return CarNotaDebito
+     */
+    public function setEstadoAutorizado($estadoAutorizado)
+    {
+        $this->estadoAutorizado = $estadoAutorizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAutorizado
+     *
+     * @return boolean
+     */
+    public function getEstadoAutorizado()
+    {
+        return $this->estadoAutorizado;
     }
 
     /**
@@ -278,5 +493,53 @@ class CarNotaDebito
     public function getNotasDebitosDetallesNotaDebitoRel()
     {
         return $this->notasDebitosDetallesNotaDebitoRel;
+    }
+
+    /**
+     * Set notaDebitoConceptoRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarNotaDebitoConcepto $notaDebitoConceptoRel
+     *
+     * @return CarNotaDebito
+     */
+    public function setNotaDebitoConceptoRel(\Brasa\CarteraBundle\Entity\CarNotaDebitoConcepto $notaDebitoConceptoRel = null)
+    {
+        $this->notaDebitoConceptoRel = $notaDebitoConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get notaDebitoConceptoRel
+     *
+     * @return \Brasa\CarteraBundle\Entity\CarNotaDebitoConcepto
+     */
+    public function getNotaDebitoConceptoRel()
+    {
+        return $this->notaDebitoConceptoRel;
+    }
+
+    /**
+     * Set cuentaRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCuenta $cuentaRel
+     *
+     * @return CarNotaDebito
+     */
+    public function setCuentaRel(\Brasa\GeneralBundle\Entity\GenCuenta $cuentaRel = null)
+    {
+        $this->cuentaRel = $cuentaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get cuentaRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCuenta
+     */
+    public function getCuentaRel()
+    {
+        return $this->cuentaRel;
     }
 }

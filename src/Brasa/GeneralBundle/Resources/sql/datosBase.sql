@@ -5410,7 +5410,9 @@ insert into `tur_configuracion` (`codigo_configuracion_pk`, `informacion_legal_f
 
 /** Cartera **/
 
-insert into `car_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`) values('1','RECIBO','10');
+insert into `car_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`) values('1','RECIBO','1');
+insert into `car_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`) values('2','NOTA DEBITO','1');
+insert into `car_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`) values('3','NOTA CREDITO','1');
 
 insert into `car_recibo_tipo` (`codigo_recibo_tipo_pk`, `nombre`) values('1','INGRESO');
 insert into `car_recibo_tipo` (`codigo_recibo_tipo_pk`, `nombre`) values('2','EGRESO');

@@ -4,15 +4,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Brasa\CarteraBundle\Form\Type\CarReciboType;
-use Brasa\CarteraBundle\Form\Type\CarReciboDetalleType;
+use Brasa\CarteraBundle\Form\Type\CarNotaCreditoType;
+use Brasa\CarteraBundle\Form\Type\CarNotaCreditoDetalleType;
 
-class MovimientoReciboController extends Controller
+class MovimientoNotaCreditoController extends Controller
 {
     var $strListaDql = "";
     
     /**
-     * @Route("/cartera/movimiento/recibo/lista", name="brs_cartera_movimiento_recibo_listar")
+     * @Route("/cartera/movimiento/notacredito/lista", name="brs_cartera_movimiento_notacredito_listar")
      */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -25,8 +25,8 @@ class MovimientoReciboController extends Controller
         if ($form->isValid()) {               
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaCarteraBundle:CarRecibo')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_listar'));                
+                $em->getRepository('BrasaCarteraBundle:CarNotaCredito')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_listar'));                
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
@@ -41,89 +41,89 @@ class MovimientoReciboController extends Controller
             }
         }
 
-        $arRecibos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
-        return $this->render('BrasaCarteraBundle:Movimientos/Recibo:lista.html.twig', array(
-            'arRecibos' => $arRecibos,            
+        $arNotasCreditos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
+        return $this->render('BrasaCarteraBundle:Movimientos/NotaCredito:lista.html.twig', array(
+            'arNotasCreditos' => $arNotasCreditos,            
             'form' => $form->createView()));
     }
 
     /**
-     * @Route("/cartera/movimiento/recibo/nuevo/{codigoRecibo}", name="brs_cartera_movimiento_recibo_nuevo")
+     * @Route("/cartera/movimiento/notacredito/nuevo/{codigoNotaCredito}", name="brs_cartera_movimiento_notacredito_nuevo")
      */
-    public function nuevoAction($codigoRecibo) {
+    public function nuevoAction($codigoNotaCredito) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();                 
-        $arRecibo = new \Brasa\CarteraBundle\Entity\CarRecibo();
-        if($codigoRecibo != 0) {
-            $arRecibo = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigoRecibo);
+        $arNotaCredito = new \Brasa\CarteraBundle\Entity\CarNotaCredito();
+        if($codigoNotaCredito != 0) {
+            $arNotaCredito = $em->getRepository('BrasaCarteraBundle:CarNotaCredito')->find($codigoNotaCredito);
         }else{
-            $arRecibo->setFecha(new \DateTime('now'));
-            $arRecibo->setFechaPago(new \DateTime('now'));
+            $arNotaCredito->setFecha(new \DateTime('now'));
+            $arNotaCredito->setFechaPago(new \DateTime('now'));
         }
-        $form = $this->createForm(new CarReciboType, $arRecibo);
+        $form = $this->createForm(new CarNotaCreditoType, $arNotaCredito);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arRecibo = $form->getData();
+            $arNotaCredito = $form->getData();
             $arrControles = $request->request->All();
             $arCliente = new \Brasa\CarteraBundle\Entity\CarCliente();
             if($arrControles['txtNit'] != '') {                
                 $arCliente = $em->getRepository('BrasaCarteraBundle:CarCliente')->findOneBy(array('nit' => $arrControles['txtNit']));                
                 if(count($arCliente) > 0) {
-                    $arRecibo->setClienteRel($arCliente);
+                    $arNotaCredito->setClienteRel($arCliente);
                 }
             }
             $arUsuario = $this->getUser();
-            $arRecibo->setUsuario($arUsuario->getUserName());            
-            $em->persist($arRecibo);
+            $arNotaCredito->setUsuario($arUsuario->getUserName());            
+            $em->persist($arNotaCredito);
             $em->flush();
 
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_nuevo', array('codigoRecibo' => 0 )));
+                return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_nuevo', array('codigoNotaCredito' => 0 )));
             } else {
-                if ($codigoRecibo != 0){
-                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_listar'));
+                if ($codigoNotaCredito != 0){
+                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_listar'));
                 } else {
-                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $arRecibo->getCodigoReciboPk())));
+                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_detalle', array('codigoNotaCredito' => $arNotaCredito->getCodigoNotaCreditoPk())));
                 }
                 
             }                       
             
         }
-        return $this->render('BrasaCarteraBundle:Movimientos/Recibo:nuevo.html.twig', array(
-            'arRecibo' => $arRecibo,
+        return $this->render('BrasaCarteraBundle:Movimientos/NotaCredito:nuevo.html.twig', array(
+            'arNotaCredito' => $arNotaCredito,
             'form' => $form->createView()));
     }
 
     /**
-     * @Route("/cartera/movimiento/recibo/detalle/{codigoRecibo}", name="brs_cartera_movimiento_recibo_detalle")
+     * @Route("/cartera/movimiento/notacredito/detalle/{codigoNotaCredito}", name="brs_cartera_movimiento_notacredito_detalle")
      */
-    public function detalleAction($codigoRecibo) {
+    public function detalleAction($codigoNotaCredito) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
-        $arRecibo = new \Brasa\CarteraBundle\Entity\CarRecibo();
-        $arRecibo = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigoRecibo);
-        $form = $this->formularioDetalle($arRecibo);
+        $arNotaCredito = new \Brasa\CarteraBundle\Entity\CarNotaCredito();
+        $arNotaCredito = $em->getRepository('BrasaCarteraBundle:CarNotaCredito')->find($codigoNotaCredito);
+        $form = $this->formularioDetalle($arNotaCredito);
         $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnAutorizar')->isClicked()) {  
                 $arrControles = $request->request->All();
-                $this->actualizarDetalle($arrControles, $codigoRecibo);
-                $arInconsistencias = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->findBy(array('codigoReciboFk' =>$codigoRecibo,'estadoInconsistencia' => 1));
+                $this->actualizarDetalle($arrControles, $codigoNotaCredito);
+                $arInconsistencias = $em->getRepository('BrasaCarteraBundle:CarNotaCreditoDetalle')->findBy(array('codigoNotaCreditoFk' =>$codigoNotaCredito,'estadoInconsistencia' => 1));
                 if ($arInconsistencias == null){
-                    if($arRecibo->getEstadoAutorizado() == 0) {
-                        if($em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->numeroRegistros($codigoRecibo) > 0) {
-                            $arRecibo->setEstadoAutorizado(1);
-                            $arDetallesRecibo = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->findBy(array('codigoReciboFk' => $codigoRecibo));
-                            foreach ($arDetallesRecibo AS $arDetalleRecibo) {
+                    if($arNotaCredito->getEstadoAutorizado() == 0) {
+                        if($em->getRepository('BrasaCarteraBundle:CarNotaCreditoDetalle')->numeroRegistros($codigoNotaCredito) > 0) {
+                            $arNotaCredito->setEstadoAutorizado(1);
+                            $arDetallesNotaCredito = $em->getRepository('BrasaCarteraBundle:CarNotaCreditoDetalle')->findBy(array('codigoNotaCreditoFk' => $codigoNotaCredito));
+                            foreach ($arDetallesNotaCredito AS $arDetalleNotaCredito) {
                                 $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
-                                $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleRecibo->getCodigoCuentaCobrarFk());
-                                $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() - $arDetalleRecibo->getSaldoDetalle());
-                                $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() + $arDetalleRecibo->getSaldoDetalle());
+                                $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleNotaCredito->getCodigoCuentaCobrarFk());
+                                $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() - $arDetalleNotaCredito->getSaldoDetalle());
+                                $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() + $arDetalleNotaCredito->getSaldoDetalle());
                                 $em->persist($arCuentaCobrar);
                             }
-                            $em->persist($arRecibo);
+                            $em->persist($arNotaCredito);
                             $em->flush();                        
                         } else {
                             $objMensaje->Mensaje('error', 'Debe adicionar detalles al recibo de caja', $this);
@@ -133,67 +133,67 @@ class MovimientoReciboController extends Controller
                     $objMensaje->Mensaje('error', 'No se puede autorizar, hay inconsistencias', $this);
                 }
                     
-                return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));                
+                return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_detalle', array('codigoNotaCredito' => $codigoNotaCredito)));                
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {            
-                if($arRecibo->getEstadoAutorizado() == 1) {
-                    $arRecibo->setEstadoAutorizado(0);
-                    $arDetallesRecibo = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->findBy(array('codigoReciboFk' => $codigoRecibo));
-                    foreach ($arDetallesRecibo AS $arDetalleRecibo) {
+                if($arNotaCredito->getEstadoAutorizado() == 1) {
+                    $arNotaCredito->setEstadoAutorizado(0);
+                    $arDetallesNotaCredito = $em->getRepository('BrasaCarteraBundle:CarNotaCreditoDetalle')->findBy(array('codigoNotaCreditoFk' => $codigoNotaCredito));
+                    foreach ($arDetallesNotaCredito AS $arDetalleNotaCredito) {
                         $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
-                        $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleRecibo->getCodigoCuentaCobrarFk());
-                        $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleRecibo->getSaldoDetalle());
-                        $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleRecibo->getSaldoDetalle());
+                        $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleNotaCredito->getCodigoCuentaCobrarFk());
+                        $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleNotaCredito->getSaldoDetalle());
+                        $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleNotaCredito->getSaldoDetalle());
                         $em->persist($arCuentaCobrar);
                     }
-                    $em->persist($arRecibo);
+                    $em->persist($arNotaCredito);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));                
+                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_detalle', array('codigoNotaCredito' => $codigoNotaCredito)));                
                 }
             }              
             if($form->get('BtnDetalleActualizar')->isClicked()) {
                 $arrControles = $request->request->All();
-                $this->actualizarDetalle($arrControles, $codigoRecibo);                
-                return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));
+                $this->actualizarDetalle($arrControles, $codigoNotaCredito);                
+                return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_detalle', array('codigoNotaCredito' => $codigoNotaCredito)));
             }
             if($form->get('BtnDetalleEliminar')->isClicked()) {   
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->eliminarSeleccionados($arrSeleccionados);
-                $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->liquidar($codigoRecibo);
-                return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));
+                $em->getRepository('BrasaCarteraBundle:CarNotaCreditoDetalle')->eliminarSeleccionados($arrSeleccionados);
+                $em->getRepository('BrasaCarteraBundle:CarNotaCreditoDetalle')->liquidar($codigoNotaCredito);
+                return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_detalle', array('codigoNotaCredito' => $codigoNotaCredito)));
             }    
             if($form->get('BtnImprimir')->isClicked()) {
-                $strResultado = $em->getRepository('BrasaCarteraBundle:CarRecibo')->imprimir($codigoRecibo);
+                $strResultado = $em->getRepository('BrasaCarteraBundle:CarNotaCredito')->imprimir($codigoNotaCredito);
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 } else {
-                    $objRecibo = new \Brasa\CarteraBundle\Formatos\FormatoRecibo();
-                    $objRecibo->Generar($this, $codigoRecibo);
+                    $objNotaCredito = new \Brasa\CarteraBundle\Formatos\FormatoNotaCredito();
+                    $objNotaCredito->Generar($this, $codigoNotaCredito);
                 }
             }                        
         }
 
-        $arReciboDetalle = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
-        $arReciboDetalle = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->findBy(array ('codigoReciboFk' => $codigoRecibo));
-        return $this->render('BrasaCarteraBundle:Movimientos/Recibo:detalle.html.twig', array(
-                    'arRecibo' => $arRecibo,
-                    'arReciboDetalle' => $arReciboDetalle,
+        $arNotaCreditoDetalle = new \Brasa\CarteraBundle\Entity\CarNotaCreditoDetalle();
+        $arNotaCreditoDetalle = $em->getRepository('BrasaCarteraBundle:CarNotaCreditoDetalle')->findBy(array ('codigoNotaCreditoFk' => $codigoNotaCredito));
+        return $this->render('BrasaCarteraBundle:Movimientos/NotaCredito:detalle.html.twig', array(
+                    'arNotaCredito' => $arNotaCredito,
+                    'arNotaCreditoDetalle' => $arNotaCreditoDetalle,
                     'form' => $form->createView()
                     ));
     }
     
     /**
-     * @Route("/cartera/movimiento/recibo/detalle/nuevo/{codigoRecibo}/{codigoReciboDetalle}", name="brs_cartera_movimiento_recibo_detalle_nuevo")
+     * @Route("/cartera/movimiento/notacredito/detalle/nuevo/{codigoNotaCredito}/{codigoNotaCreditoDetalle}", name="brs_cartera_movimiento_notacredito_detalle_nuevo")
      */
-    public function detalleNuevoAction($codigoRecibo, $codigoReciboDetalle = 0) {
+    public function detalleNuevoAction($codigoNotaCredito, $codigoNotaCreditoDetalle = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $paginator  = $this->get('knp_paginator');
-        $arRecibo = new \Brasa\CarteraBundle\Entity\CarRecibo();
-        $arRecibo = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigoRecibo);
+        $arNotaCredito = new \Brasa\CarteraBundle\Entity\CarNotaCredito();
+        $arNotaCredito = $em->getRepository('BrasaCarteraBundle:CarNotaCredito')->find($codigoNotaCredito);
         $arCuentasCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
-        $arCuentasCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->cuentasCobrar($arRecibo->getCodigoClienteFk());
+        $arCuentasCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->cuentasCobrar($arNotaCredito->getCodigoClienteFk());
         $arCuentasCobrar = $paginator->paginate($arCuentasCobrar, $request->query->get('page', 1), 50);
         $form = $this->createFormBuilder()
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
@@ -207,43 +207,43 @@ class MovimientoReciboController extends Controller
                 $intIndice = 0;
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoCuentaCobrar) {
-                        if($em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->validarCuenta($codigoCuentaCobrar)) {
+                        if($em->getRepository('BrasaCarteraBundle:CarNotaCreditoDetalle')->validarCuenta($codigoCuentaCobrar)) {
                             $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($codigoCuentaCobrar);
-                            $arReciboDetalle = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
-                            $arReciboDetalle->setReciboRel($arRecibo);
-                            $arReciboDetalle->setCuentaCobrarRel($arCuentaCobrar);
-                            $arReciboDetalle->setValor($arrControles['TxtSaldo'.$codigoCuentaCobrar]);
-                            $arReciboDetalle->setUsuario($arUsuario->getUserName());
-                            $arReciboDetalle->setNumeroFactura($arCuentaCobrar->getNumeroDocumento());
-                            $arReciboDetalle->setCuentaCobrarTipoRel($arCuentaCobrar->getCuentaCobrarTipoRel());
-                            $em->persist($arReciboDetalle);                            
+                            $arNotaCreditoDetalle = new \Brasa\CarteraBundle\Entity\CarNotaCreditoDetalle();
+                            $arNotaCreditoDetalle->setNotaCreditoRel($arNotaCredito);
+                            $arNotaCreditoDetalle->setCuentaCobrarRel($arCuentaCobrar);
+                            $arNotaCreditoDetalle->setValor($arrControles['TxtSaldo'.$codigoCuentaCobrar]);
+                            $arNotaCreditoDetalle->setUsuario($arUsuario->getUserName());
+                            $arNotaCreditoDetalle->setNumeroFactura($arCuentaCobrar->getNumeroDocumento());
+                            $arNotaCreditoDetalle->setCuentaCobrarTipoRel($arCuentaCobrar->getCuentaCobrarTipoRel());
+                            $em->persist($arNotaCreditoDetalle);                            
                         } 
                     }
                     $em->flush();
                 } 
-                $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->liquidar($codigoRecibo);
+                $em->getRepository('BrasaCarteraBundle:CarNotaCreditoDetalle')->liquidar($codigoNotaCredito);
             }            
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
         }
-        return $this->render('BrasaCarteraBundle:Movimientos/Recibo:detalleNuevo.html.twig', array(
+        return $this->render('BrasaCarteraBundle:Movimientos/NotaCredito:detalleNuevo.html.twig', array(
             'arCuentasCobrar' => $arCuentasCobrar,
-            'arRecibo' => $arRecibo,
+            'arNotaCredito' => $arNotaCredito,
             'form' => $form->createView()));
     } 
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $this->strListaDql =  $em->getRepository('BrasaCarteraBundle:CarRecibo')->listaDQL(
-                $session->get('filtroReciboNumero'), 
+        $this->strListaDql =  $em->getRepository('BrasaCarteraBundle:CarNotaCredito')->listaDQL(
+                $session->get('filtroNotaCreditoNumero'), 
                 $session->get('filtroCodigoCliente'),
-                $session->get('filtroReciboEstadoImpreso'));
+                $session->get('filtroNotaCreditoEstadoImpreso'));
     }
 
     private function filtrar ($form) {       
         $session = $this->getRequest()->getSession();        
-        $session->set('filtroReciboNumero', $form->get('TxtNumero')->getData());
-        $session->set('filtroReciboEstadoImpreso', $form->get('estadoImpreso')->getData());          
+        $session->set('filtroNotaCreditoNumero', $form->get('TxtNumero')->getData());
+        $session->set('filtroNotaCreditoEstadoImpreso', $form->get('estadoImpreso')->getData());          
         $session->set('filtroNit', $form->get('TxtNit')->getData());   
     }
 
@@ -268,7 +268,7 @@ class MovimientoReciboController extends Controller
             ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCotizacionNumero')))
             ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
             ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))
-            ->add('estadoImpreso', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'IMPRESO', '0' => 'SIN IMPRIMIR'), 'data' => $session->get('filtroReciboEstadoImpreso')))                
+            ->add('estadoImpreso', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'IMPRESO', '0' => 'SIN IMPRIMIR'), 'data' => $session->get('filtroNotaCreditoEstadoImpreso')))                
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -332,7 +332,7 @@ class MovimientoReciboController extends Controller
                     ->setCellValue('C1', 'NIT')                
                     ->setCellValue('D1', 'CLIENTE')
                     ->setCellValue('E1', 'CUENTA')
-                    ->setCellValue('F1', 'TIPO RECIBO')
+                    ->setCellValue('F1', 'CONCEPTO')
                     ->setCellValue('G1', 'FECHA PAGO')
                     ->setCellValue('H1', 'TOTAL')
                     ->setCellValue('I1', 'ANULADO')
@@ -340,35 +340,35 @@ class MovimientoReciboController extends Controller
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
-        $arRecibos = new \Brasa\CarteraBundle\Entity\CarRecibo();
-        $arRecibos = $query->getResult();
+        $arNotaCreditos = new \Brasa\CarteraBundle\Entity\CarNotaCredito();
+        $arNotaCreditos = $query->getResult();
 
-        foreach ($arRecibos as $arRecibo) {            
+        foreach ($arNotaCreditos as $arNotaCredito) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arRecibo->getCodigoReciboPk())
-                    ->setCellValue('B' . $i, $arRecibo->getNumero())
-                    ->setCellValue('E' . $i, $arRecibo->getCuentaRel()->getNombre())
-                    ->setCellValue('F' . $i, $arRecibo->getReciboTipoRel()->getNombre())
-                    ->setCellValue('G' . $i, $arRecibo->getFechaPago()->format('Y-m-d'))
-                    ->setCellValue('H' . $i, $arRecibo->getVrTotal())
-                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoAnulado()))
-                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoAutorizado()));
-            if($arRecibo->getClienteRel()) {
+                    ->setCellValue('A' . $i, $arNotaCredito->getCodigoNotaCreditoPk())
+                    ->setCellValue('B' . $i, $arNotaCredito->getNumero())
+                    ->setCellValue('E' . $i, $arNotaCredito->getCuentaRel()->getNombre())
+                    ->setCellValue('F' . $i, $arNotaCredito->getNotaCreditoConceptoRel()->getNombre())
+                    ->setCellValue('G' . $i, $arNotaCredito->getFechaPago()->format('Y-m-d'))
+                    ->setCellValue('H' . $i, $arNotaCredito->getValor())
+                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arNotaCredito->getEstadoAnulado()))
+                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arNotaCredito->getEstadoAutorizado()));
+            if($arNotaCredito->getClienteRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('C' . $i, $arRecibo->getClienteRel()->getNit());
+                    ->setCellValue('C' . $i, $arNotaCredito->getClienteRel()->getNit());
             }
-            if($arRecibo->getClienteRel()) {
+            if($arNotaCredito->getClienteRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('D' . $i, $arRecibo->getClienteRel()->getNombreCorto());
+                    ->setCellValue('D' . $i, $arNotaCredito->getClienteRel()->getNombreCorto());
             }            
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('Recibos');
+        $objPHPExcel->getActiveSheet()->setTitle('NotaCreditos');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Recibos.xlsx"');
+        header('Content-Disposition: attachment;filename="NotaCreditos.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -382,32 +382,27 @@ class MovimientoReciboController extends Controller
         exit;
     }
 
-    private function actualizarDetalle($arrControles, $codigoRecibo) {
+    private function actualizarDetalle($arrControles, $codigoNotaCredito) {
         $em = $this->getDoctrine()->getManager();
         $intIndice = 0;
         $floTotal = 0;
         if(isset($arrControles['LblCodigo'])) {
             foreach ($arrControles['LblCodigo'] as $intCodigo) {
-                $arReciboDetalle = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
-                $arReciboDetalle = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->find($intCodigo);
-                $floSaldo = $arReciboDetalle->getCuentaCobrarRel()->getSaldo();
-                $floSaldoAfectar = $arrControles['TxtValor'.$intCodigo] + $arrControles['TxtVrDescuento'.$intCodigo] + $arrControles['TxtVrAjustePeso'.$intCodigo] - ($arrControles['TxtVrReteIca'.$intCodigo] + $arrControles['TxtVrReteIva'.$intCodigo] + $arrControles['TxtVrReteFuente'.$intCodigo]);
+                $arNotaCreditoDetalle = new \Brasa\CarteraBundle\Entity\CarNotaCreditoDetalle();
+                $arNotaCreditoDetalle = $em->getRepository('BrasaCarteraBundle:CarNotaCreditoDetalle')->find($intCodigo);
+                $floSaldo = $arNotaCreditoDetalle->getCuentaCobrarRel()->getSaldo();
+                $floSaldoAfectar = $arrControles['TxtValor'.$intCodigo];
                 if($floSaldo < $floSaldoAfectar) {
-                    $arReciboDetalle->setEstadoInconsistencia(1);
+                    $arNotaCreditoDetalle->setEstadoInconsistencia(1);
                 }else {
-                    $arReciboDetalle->setEstadoInconsistencia(0);
+                    $arNotaCreditoDetalle->setEstadoInconsistencia(0);
                 }
-                $arReciboDetalle->setVrDescuento($arrControles['TxtVrDescuento'.$intCodigo]);
-                $arReciboDetalle->setVrAjustePeso($arrControles['TxtVrAjustePeso'.$intCodigo]);
-                $arReciboDetalle->setVrReteIca($arrControles['TxtVrReteIca'.$intCodigo]);
-                $arReciboDetalle->setVrReteIva($arrControles['TxtVrReteIva'.$intCodigo]);
-                $arReciboDetalle->setVrReteFuente($arrControles['TxtVrReteFuente'.$intCodigo]);
-                $arReciboDetalle->setValor($arrControles['TxtValor'.$intCodigo]);
-                $arReciboDetalle->setSaldoDetalle($floSaldoAfectar);
-                $em->persist($arReciboDetalle);
+                $arNotaCreditoDetalle->setValor($arrControles['TxtValor'.$intCodigo]);
+                $arNotaCreditoDetalle->setSaldoDetalle($floSaldoAfectar);
+                $em->persist($arNotaCreditoDetalle);
             }
             $em->flush();
-            $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->liquidar($codigoRecibo);                   
+            $em->getRepository('BrasaCarteraBundle:CarNotaCreditoDetalle')->liquidar($codigoNotaCredito);                   
         }
     }
     
