@@ -117,7 +117,7 @@ class ProcesoGenerarPedidoController extends Controller
             }
             if ($form->get('BtnGenerar')->isClicked()) {                 
                 $arServicios = new \Brasa\TurnoBundle\Entity\TurServicio();
-                $strDql = $em->getRepository('BrasaTurnoBundle:TurServicio')->listaDql("", "", 1);
+                $strDql = $em->getRepository('BrasaTurnoBundle:TurServicio')->listaDql("", "", 1, 0);
                 $query = $em->createQuery($strDql);
                 $arServicios = $query->getResult();
                 foreach ($arServicios as $arServicio) {
@@ -138,7 +138,6 @@ class ProcesoGenerarPedidoController extends Controller
                     foreach ($arServicioDetalles as $arServicioDetalle) {
                         $arPedidoDetalleNuevo = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
                         $arPedidoDetalleNuevo->setPedidoRel($arPedidoNuevo);
-
                         $intDiaInicial = 0;
                         $intDiaFinal = 0;
                         $dateFechaProceso = $dateFechaDesde;
@@ -224,7 +223,7 @@ class ProcesoGenerarPedidoController extends Controller
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurServicio')->listaDql("","","",0);
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurServicio')->listaDql("","",1,0);
     }
     
     private function formularioLista() {  

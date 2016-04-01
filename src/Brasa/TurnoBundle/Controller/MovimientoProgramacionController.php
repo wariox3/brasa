@@ -249,7 +249,22 @@ class MovimientoProgramacionController extends Controller
             'arPedidosDetalle' => $arPedidosDetalle,
             'form' => $form->createView()));
     }
-
+    /**
+     * @Route("/tur/movimiento/programacion/detalle/resumen/{codigoProgramacionDetalle}", name="brs_tur_movimiento_programacion_detalle_resumen")
+     */
+    public function detalleResumenAction($codigoProgramacionDetalle) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();        
+        $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+        $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($codigoProgramacionDetalle);
+        $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();       
+        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($arProgramacionDetalle->getCodigoPedidoDetalleFk());
+        return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalleResumen.html.twig', array(
+                    'arProgramacionDetalle' => $arProgramacionDetalle,
+                    'arPedidoDetalle' => $arPedidoDetalle,
+                    ));
+    }    
+    
     private function lista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();

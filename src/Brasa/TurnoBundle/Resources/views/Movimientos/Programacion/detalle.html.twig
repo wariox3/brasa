@@ -113,7 +113,6 @@
                                 <th>{{ arrDiaSemana.dia }}{{ arrDiaSemana.diaSemana }}</th>
                                 {% endfor %}
                             <th>HORAS</th>
-                            <th>P.D</th>
                             <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                         </tr>
                         {% for arProgramacionDetalle in arProgramacionDetalle %}
@@ -140,7 +139,8 @@
                                 {% endif %}
                             </tr>    
                             <tr>
-                                <td>{{ arProgramacionDetalle.codigoProgramacionDetallePk }}<input type="hidden" name="LblCodigo[]" value="{{ arProgramacionDetalle.codigoProgramacionDetallePk }}"></td>                                
+                                <td><a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_programacion_detalle_resumen', {'codigoProgramacionDetalle': arProgramacionDetalle.codigoProgramacionDetallePk }) }}', 'pedidoDetalleResumen', 600, 900)">{{ arProgramacionDetalle.codigoProgramacionDetallePk }}</a><input type="hidden" name="LblCodigo[]" value="{{ arProgramacionDetalle.codigoProgramacionDetallePk }}"></td>                                
+                                
                                     {% if arProgramacion.estadoAutorizado == 0 %}                                    
                                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia01D{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia1  }}" size="5" style="text-transform: uppercase; width:25px" onkeyup="javascript:this.value = this.value.toUpperCase();" onBlur="validarTurno(this)"/></td>
                                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia02D{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia2  }}" size="5" style="text-transform: uppercase; width:25px" onkeyup="javascript:this.value = this.value.toUpperCase();" onBlur="validarTurno(this)"/></td>
@@ -207,8 +207,7 @@
                                     <td>{{ arProgramacionDetalle.dia31  }}</td>
                                 {% endif %}
 
-                                <td style="text-align: right">{{ arProgramacionDetalle.horas | number_format(0, '.', ',') }}</td> 
-                                <td>{{ arProgramacionDetalle.codigoPedidoDetalleFk }}</td>
+                                <td style="text-align: right">{{ arProgramacionDetalle.horas | number_format(0, '.', ',') }}</td>                                 
                                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" /></td>
                             </tr>
                         {% endfor %}
