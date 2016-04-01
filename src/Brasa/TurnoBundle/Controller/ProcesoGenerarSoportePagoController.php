@@ -147,7 +147,8 @@ class ProcesoGenerarSoportePagoController extends Controller
             $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);
         }else{
             $arSoportePagoPeriodo->setFechaDesde(new \DateTime('now'));            
-            $arSoportePagoPeriodo->setFechaHasta(new \DateTime('now'));            
+            $arSoportePagoPeriodo->setFechaHasta(new \DateTime('now'));  
+            $arSoportePagoPeriodo->setDiasPeriodo(15);
         }
         $form = $this->createForm(new TurSoportePagoPeriodoType, $arSoportePagoPeriodo);
         $form->handleRequest($request);

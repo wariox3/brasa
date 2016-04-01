@@ -345,4 +345,39 @@ class TurPedidoRepository extends EntityRepository {
         }        
         return $strResultado;
     }    
+
+    public function facturar($codigoPedido, $usuario) {
+        $em = $this->getEntityManager();
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
+        $codigoFactura = 0;
+        $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
+        $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido); 
+        $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+        $arPedidoDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigoPedido, 'estadoFacturado' => 0));         
+        if(count($arPedidoDetalles) > 0) {            
+            $arPedido->setEstadoFacturado(1);
+            $em->persist($arPedido);            
+            $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
+            $arFactura->setFecha(new \DateTime('now'));
+            $dateFechaVence = $objFunciones->sumarDiasFecha($arPedido->getClienteRel()->getPlazoPago(), $arFactura->getFecha());
+            $arFactura->setFechaVence($dateFechaVence);            
+            $arFactura->setClienteRel($arPedido->getClienteRel());                   
+            $arFactura->setUsuario($usuario);             
+            $em->persist($arFactura);                        
+            foreach ($arPedidoDetalles as $arPedidoDetalle) {  
+                $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
+                $arFacturaDetalle->setFacturaRel($arFactura);                        
+                $arFacturaDetalle->setConceptoServicioRel($arPedidoDetalle->getConceptoServicioRel());
+                $arFacturaDetalle->setPedidoDetalleRel($arPedidoDetalle);
+                $arFacturaDetalle->setCantidad($arPedidoDetalle->getCantidad());
+                $arFacturaDetalle->setVrPrecio($arPedidoDetalle->getVrTotalDetallePendiente());                        
+                $em->persist($arFacturaDetalle);                                
+            }                    
+            $em->flush();  
+            $codigoFactura = $arFactura->getCodigoFacturaPk();
+            $em->getRepository('BrasaTurnoBundle:TurFactura')->liquidar($codigoFactura);            
+        }
+        return $codigoFactura;
+    }    
+    
 }

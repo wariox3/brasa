@@ -77,6 +77,9 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePago->setRecursoRel($arRecurso);
             $arSoportePago->setFechaDesde($dateFechaDesde);
             $arSoportePago->setFechaHasta($dateFechaHasta);
+            if($arrayResultado[$i]['dias'] > $arSoportePagoPeriodoActualizar->getDiasPeriodo()) {
+                $arrayResultado[$i]['dias'] = $arSoportePagoPeriodoActualizar->getDiasPeriodo(); 
+            }
             $arSoportePago->setDias($arrayResultado[$i]['dias']);
             $arSoportePago->setDescanso($arrayResultado[$i]['descanso']);
             $arSoportePago->setNovedad($arrayResultado[$i]['novedad']);
