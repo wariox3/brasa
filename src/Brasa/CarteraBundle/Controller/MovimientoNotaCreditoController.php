@@ -207,7 +207,7 @@ class MovimientoNotaCreditoController extends Controller
                 $intIndice = 0;
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoCuentaCobrar) {
-                        if($em->getRepository('BrasaCarteraBundle:CarNotaCreditoDetalle')->validarCuenta($codigoCuentaCobrar)) {
+                        if($em->getRepository('BrasaCarteraBundle:CarNotaCreditoDetalle')->validarCuenta($codigoCuentaCobrar,$codigoNotaCredito)) {
                             $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($codigoCuentaCobrar);
                             $arNotaCreditoDetalle = new \Brasa\CarteraBundle\Entity\CarNotaCreditoDetalle();
                             $arNotaCreditoDetalle->setNotaCreditoRel($arNotaCredito);
@@ -336,7 +336,8 @@ class MovimientoNotaCreditoController extends Controller
                     ->setCellValue('G1', 'FECHA PAGO')
                     ->setCellValue('H1', 'TOTAL')
                     ->setCellValue('I1', 'ANULADO')
-                    ->setCellValue('J1', 'AUTORIZADO');
+                    ->setCellValue('J1', 'AUTORIZADO')
+                    ->setCellValue('k1', 'IMPRESO');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -352,7 +353,8 @@ class MovimientoNotaCreditoController extends Controller
                     ->setCellValue('G' . $i, $arNotaCredito->getFechaPago()->format('Y-m-d'))
                     ->setCellValue('H' . $i, $arNotaCredito->getValor())
                     ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arNotaCredito->getEstadoAnulado()))
-                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arNotaCredito->getEstadoAutorizado()));
+                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arNotaCredito->getEstadoAutorizado()))
+                    ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arNotaCredito->getEstadoImpreso()));
             if($arNotaCredito->getClienteRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('C' . $i, $arNotaCredito->getClienteRel()->getNit());

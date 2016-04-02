@@ -254,7 +254,8 @@ class ConsultaReciboController extends Controller
                     ->setCellValue('M1', 'TOTAL RTE FUENTE')
                     ->setCellValue('N1', 'TOTAL')
                     ->setCellValue('O1', 'ANULADO')
-                    ->setCellValue('P1', 'AUTORIZADO');
+                    ->setCellValue('P1', 'AUTORIZADO')
+                    ->setCellValue('Q1', 'IMPRESO');
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
         $arRecibos = new \Brasa\CarteraBundle\Entity\CarRecibo();
@@ -272,7 +273,8 @@ class ConsultaReciboController extends Controller
                     ->setCellValue('M' . $i, $arRecibo->getVrTotalReteFuente())
                     ->setCellValue('N' . $i, $arRecibo->getVrTotal())
                     ->setCellValue('O' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoAnulado()))
-                    ->setCellValue('P' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoAutorizado()));
+                    ->setCellValue('P' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoAutorizado()))
+                    ->setCellValue('Q' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoImpreso()));
             if($arRecibo->getClienteRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('D' . $i, $arRecibo->getClienteRel()->getNit());

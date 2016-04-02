@@ -22,6 +22,7 @@
                 {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnAnular, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
         </div>
         <div style="float:right">
@@ -37,7 +38,7 @@
                         <td class="titulo">CÓDIGO:</td>
                         <td class="td-in-well">{{ arRecibo.codigoReciboPk }}</td>
                         <td class="titulo">NÚMERO:</td>
-                        <td class="td-in-well">{{ arRecibo.numero }}</td>
+                        <td class="td-in-well">{{ arRecibo.numero | default('0') }}</td>
                         <td class="titulo" align="right">TOTAL DESCUENTO:</td>
                         <td align="right">{{ arRecibo.vrTotalDescuento | number_format(2, '.', ',')}}</td>
                     </tr>

@@ -8,8 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Table(name="rhu_empleado")
  * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuEmpleadoRepository")
- * @DoctrineAssert\UniqueEntity(fields={"numeroIdentificacion"},message="Ya existe este número de identificación")
- * @DoctrineAssert\UniqueEntity(fields={"correo"},message="Ya existe este correo") 
+ * @DoctrineAssert\UniqueEntity(fields={"numeroIdentificacion"},message="Ya existe este número de identificación") 
  */
 
 class RhuEmpleado
@@ -105,9 +104,6 @@ class RhuEmpleado
     
     /**
      * @ORM\Column(name="correo", type="string", length=80, nullable=true)
-     * @Assert\Email(
-     * message = "Correo incorrecto",
-     * )
      */    
     private $correo;     
         

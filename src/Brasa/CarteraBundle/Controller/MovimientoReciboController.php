@@ -150,7 +150,40 @@ class MovimientoReciboController extends Controller
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));                
                 }
-            }              
+            }
+            if($form->get('BtnAnular')->isClicked()) {            
+                if($arRecibo->getEstadoImpreso() == 1) {
+                    $arRecibo->setEstadoAnulado(1);
+                    $arRecibo->setVrTotalAjustePeso(0);
+                    $arRecibo->setVrTotalDescuento(0);
+                    $arRecibo->setVrTotalReteIca(0);
+                    $arRecibo->setVrTotalReteIva(0);
+                    $arRecibo->setVrTotalReteFuente(0);
+                    $arRecibo->setVrTotal(0);
+                    $arDetallesRecibo = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->findBy(array('codigoReciboFk' => $codigoRecibo));
+                    foreach ($arDetallesRecibo AS $arDetalleRecibo) {
+                        $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
+                        $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleRecibo->getCodigoCuentaCobrarFk());
+                        $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleRecibo->getSaldoDetalle());
+                        $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleRecibo->getSaldoDetalle());
+                        $arDetalleReciboAnulado = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
+                        $arDetalleReciboAnulado = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->find($arDetalleRecibo->getCodigoReciboDetallePk());
+                        $arDetalleReciboAnulado->setVrDescuento(0);
+                        $arDetalleReciboAnulado->setVrAjustePeso(0);
+                        $arDetalleReciboAnulado->setVrReteIca(0);
+                        $arDetalleReciboAnulado->setVrReteIva(0);
+                        $arDetalleReciboAnulado->setVrReteFuente(0);
+                        $arDetalleReciboAnulado->setValor(0);
+                        $em->persist($arCuentaCobrar);
+                        $em->persist($arDetalleReciboAnulado);
+                    }
+                    
+                    $em->persist($arRecibo);
+                    
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));                
+                }
+            }
             if($form->get('BtnDetalleActualizar')->isClicked()) {
                 $arrControles = $request->request->All();
                 $this->actualizarDetalle($arrControles, $codigoRecibo);                
@@ -207,7 +240,7 @@ class MovimientoReciboController extends Controller
                 $intIndice = 0;
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoCuentaCobrar) {
-                        if($em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->validarCuenta($codigoCuentaCobrar)) {
+                        if($em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->validarCuenta($codigoCuentaCobrar,$codigoRecibo)) {
                             $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($codigoCuentaCobrar);
                             $arReciboDetalle = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
                             $arReciboDetalle->setReciboRel($arRecibo);
@@ -280,24 +313,31 @@ class MovimientoReciboController extends Controller
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);        
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
+        $arrBotonAnular = array('label' => 'Anular', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
         if($ar->getEstadoAutorizado() == 1) {            
-            $arrBotonAutorizar['disabled'] = true;            
-            $arrBotonAprobar['disabled'] = false;            
+            $arrBotonAutorizar['disabled'] = true;                        
             $arrBotonDetalleEliminar['disabled'] = true;
             $arrBotonDetalleActualizar['disabled'] = true;
+            $arrBotonAnular['disabled'] = true;
         } else {
             $arrBotonDesAutorizar['disabled'] = true;            
             $arrBotonImprimir['disabled'] = true;
+            $arrBotonAnular['disabled'] = true;
         }
         if($ar->getEstadoImpreso() == 1) {
             $arrBotonDesAutorizar['disabled'] = true;
+            $arrBotonAnular['disabled'] = false;
+        }
+        if($ar->getEstadoAnulado() == 1) {
+            $arrBotonAnular['disabled'] = true;
         }
         $form = $this->createFormBuilder()
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                 
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
+                    ->add('BtnAnular', 'submit', $arrBotonAnular)
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
                     ->getForm();
@@ -336,7 +376,8 @@ class MovimientoReciboController extends Controller
                     ->setCellValue('G1', 'FECHA PAGO')
                     ->setCellValue('H1', 'TOTAL')
                     ->setCellValue('I1', 'ANULADO')
-                    ->setCellValue('J1', 'AUTORIZADO');
+                    ->setCellValue('J1', 'AUTORIZADO')
+                    ->setCellValue('K1', 'IMPRESO');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -352,7 +393,8 @@ class MovimientoReciboController extends Controller
                     ->setCellValue('G' . $i, $arRecibo->getFechaPago()->format('Y-m-d'))
                     ->setCellValue('H' . $i, $arRecibo->getVrTotal())
                     ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoAnulado()))
-                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoAutorizado()));
+                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoAutorizado()))
+                    ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoImpreso()));
             if($arRecibo->getClienteRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('C' . $i, $arRecibo->getClienteRel()->getNit());

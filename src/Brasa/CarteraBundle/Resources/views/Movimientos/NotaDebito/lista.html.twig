@@ -66,6 +66,7 @@
                 <th>TOTAL</th>
                 <th>ANU</th>
                 <th>AUT</th>
+                <th>IMP</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -73,7 +74,7 @@
             {% for arNotasDebitos in arNotasDebitos %}
             <tr>
                 <td>{{ arNotasDebitos.codigoNotaDebitoPk  }}</td>
-                <td>{{ arNotasDebitos.numero  }}</td>
+                <td>{{ arNotasDebitos.numero | default('0') }}</td>
                 <td>{{ arNotasDebitos.fecha |date("Y/m/d")  }}</td>
                 <td>{{ arNotasDebitos.clienteRel.nit |default('')  }}</td>
                 <td>{{ arNotasDebitos.clienteRel.nombreCorto |default('')  }}</td>
@@ -83,7 +84,12 @@
                 <td style="text-align: right">{{ arNotasDebitos.valor | number_format(0, '.', ',') }}</td>
                 <td>{% if arNotasDebitos.estadoAnulado == 1 %}SI{% else %}NO{% endif %}</td>
                 <td>{% if arNotasDebitos.estadoAutorizado == 1 %}SI{% else %}NO{% endif %}</td>
-                <td style="text-align: center"><a href="{{ path('brs_cartera_movimiento_notadebito_nuevo', {'codigoNotaDebito': arNotasDebitos.codigoNotaDebitoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                <td>{% if arNotasDebitos.estadoImpreso == 1 %}SI{% else %}NO{% endif %}</td>
+                {% if arNotasDebitos.estadoAutorizado == 0 %}
+                    <td style="text-align: center"><a href="{{ path('brs_cartera_movimiento_notadebito_nuevo', {'codigoNotaDebito': arNotasDebitos.codigoNotaDebitoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                {% else %}
+                    <td style="text-align: center"><a href="#" onClick="alert('No se puede editar el registro, ha sido autorizado')"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                {% endif %}    
                 <td style="text-align: center"><a href="{{ path('brs_cartera_movimiento_notadebito_detalle', { 'codigoNotaDebito': arNotasDebitos.codigoNotaDebitoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arNotasDebitos.codigoNotaDebitoPk }}" /></td>
             </tr>

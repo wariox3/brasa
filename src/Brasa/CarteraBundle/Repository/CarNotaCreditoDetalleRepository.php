@@ -75,11 +75,11 @@ class CarNotaCreditoDetalleRepository extends EntityRepository {
         return true;
     }
     
-    public function validarCuenta($codigoCuenta) {        
+    public function validarCuenta($codigoCuenta, $codigoNotaCredito) {        
         $em = $this->getEntityManager();
         $boolValidar = TRUE;        
         $dql   = "SELECT COUNT(ncd.codigoNotaCreditoDetallePk) as numeroRegistros FROM BrasaCarteraBundle:CarNotaCreditoDetalle ncd "
-                . "WHERE ncd.codigoCuentaCobrarFk = " . $codigoCuenta;
+                . "WHERE ncd.codigoCuentaCobrarFk = " . $codigoCuenta . " AND ncd.codigoNotaCreditoFk = " . $codigoNotaCredito;
         $query = $em->createQuery($dql);
         $arrNotaCreditoDetalles = $query->getSingleResult(); 
         if($arrNotaCreditoDetalles) {

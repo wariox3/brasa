@@ -37,7 +37,7 @@
                         <td class="titulo">CÓDIGO:</td>
                         <td class="td-in-well">{{ arNotaDebito.codigoNotaDebitoPk }}</td>
                         <td class="titulo">NÚMERO:</td>
-                        <td class="td-in-well">{{ arNotaDebito.numero }}</td>
+                        <td class="td-in-well">{{ arNotaDebito.numero | default('0')}}</td>
                         <td class="titulo" align="right"></td>
                         <td align="right"></td>
                     </tr>

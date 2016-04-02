@@ -82,6 +82,7 @@
                 <th>TOTAL</th>
                 <th>ANU</th>
                 <th>AUT</th>
+                <th>IMP</th>
             </tr>
             {% for arNotaDebitos in arNotaDebitos %}
             <tr>
@@ -96,6 +97,7 @@
                 <td style="text-align: right">{{ arNotaDebitos.valor | number_format(2, '.', ',') }}</td>
                 <td>{% if arNotaDebitos.estadoAnulado == 1%}SI{% else %}NO{% endif %}</td>
                 <td>{% if arNotaDebitos.estadoAutorizado == 1%}SI{% else %}NO{% endif %}</td>
+                <td>{% if arNotaDebitos.estadoImpreso == 1%}SI{% else %}NO{% endif %}</td>
             </tr>
 
             {% endfor %}

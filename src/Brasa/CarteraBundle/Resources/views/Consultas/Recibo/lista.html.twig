@@ -87,6 +87,7 @@
                 <th>TOTAL</th>
                 <th>ANU</th>
                 <th>AUT</th>
+                <th>IMP</th>
             </tr>
             {% for arRecibos in arRecibos %}
             <tr>
@@ -106,6 +107,7 @@
                 <td style="text-align: right">{{ arRecibos.vrTotal | number_format(2, '.', ',') }}</td>
                 <td>{% if arRecibos.estadoAnulado == 1%}SI{% else %}NO{% endif %}</td>
                 <td>{% if arRecibos.estadoAutorizado == 1%}SI{% else %}NO{% endif %}</td>
+                <td>{% if arRecibos.estadoImpreso == 1%}SI{% else %}NO{% endif %}</td>
             </tr>
 
             {% endfor %}

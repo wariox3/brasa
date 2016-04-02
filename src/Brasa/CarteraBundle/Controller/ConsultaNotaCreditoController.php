@@ -249,7 +249,8 @@ class ConsultaNotaCreditoController extends Controller
                     ->setCellValue('H1', 'FECHA PAGO')
                     ->setCellValue('I1', 'TOTAL')
                     ->setCellValue('J1', 'ANULADO')
-                    ->setCellValue('K1', 'AUTORIZADO');
+                    ->setCellValue('K1', 'AUTORIZADO')
+                    ->setCellValue('L1', 'IMPRESO');
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
         $arNotasCreditos = new \Brasa\CarteraBundle\Entity\CarNotaCredito();
@@ -262,7 +263,8 @@ class ConsultaNotaCreditoController extends Controller
                     ->setCellValue('H' . $i, $arNotaCredito->getFechaPago()->format('Y-m-d'))
                     ->setCellValue('I' . $i, $arNotaCredito->getValor())
                     ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arNotaCredito->getEstadoAnulado()))
-                    ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arNotaCredito->getEstadoAutorizado()));
+                    ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arNotaCredito->getEstadoAutorizado()))
+                    ->setCellValue('L' . $i, $objFunciones->devuelveBoolean($arNotaCredito->getEstadoImpreso()));
             if($arNotaCredito->getClienteRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('D' . $i, $arNotaCredito->getClienteRel()->getNit());

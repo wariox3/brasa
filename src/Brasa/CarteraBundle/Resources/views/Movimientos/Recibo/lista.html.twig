@@ -66,6 +66,7 @@
                 <th>TOTAL</th>
                 <th>ANU</th>
                 <th>AUT</th>
+                <th>IMP</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -73,7 +74,7 @@
             {% for arRecibos in arRecibos %}
             <tr>
                 <td>{{ arRecibos.codigoReciboPk  }}</td>
-                <td>{{ arRecibos.numero  }}</td>
+                <td>{{ arRecibos.numero | default('0') }}</td>
                 <td>{{ arRecibos.fecha |date("Y/m/d")  }}</td>
                 <td>{{ arRecibos.clienteRel.nit |default('')  }}</td>
                 <td>{{ arRecibos.clienteRel.nombreCorto |default('')  }}</td>
@@ -83,7 +84,12 @@
                 <td style="text-align: right">{{ arRecibos.vrTotal | number_format(0, '.', ',') }}</td>
                 <td>{% if arRecibos.estadoAnulado == 1 %}SI{% else %}NO{% endif %}</td>
                 <td>{% if arRecibos.estadoAutorizado == 1 %}SI{% else %}NO{% endif %}</td>
-                <td style="text-align: center"><a href="{{ path('brs_cartera_movimiento_recibo_nuevo', {'codigoRecibo': arRecibos.codigoReciboPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                <td>{% if arRecibos.estadoImpreso == 1 %}SI{% else %}NO{% endif %}</td>
+                {% if arRecibos.estadoAutorizado == 0 %}
+                    <td style="text-align: center"><a href="{{ path('brs_cartera_movimiento_recibo_nuevo', {'codigoRecibo': arRecibos.codigoReciboPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                {% else %}
+                    <td style="text-align: center"><a href="#" onClick="alert('No se puede editar el registro, ha sido autorizado')"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                {% endif %}
                 <td style="text-align: center"><a href="{{ path('brs_cartera_movimiento_recibo_detalle', { 'codigoRecibo': arRecibos.codigoReciboPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arRecibos.codigoReciboPk }}" /></td>
             </tr>
