@@ -5410,6 +5410,16 @@ insert into `tur_configuracion` (`codigo_configuracion_pk`, `informacion_legal_f
 
 /** Cartera **/
 
+insert into `car_nota_credito_concepto` (`codigo_nota_credito_concepto_pk`, `nombre`) values('1','ANULACIÓN');
+insert into `car_nota_credito_concepto` (`codigo_nota_credito_concepto_pk`, `nombre`) values('2','BONIFICACIÓN');
+insert into `car_nota_credito_concepto` (`codigo_nota_credito_concepto_pk`, `nombre`) values('3','DESCUENTOS');
+insert into `car_nota_credito_concepto` (`codigo_nota_credito_concepto_pk`, `nombre`) values('4','DEVOLUCIONES');
+
+insert into `car_nota_debito_concepto` (`codigo_nota_debito_concepto_pk`, `nombre`) values('1','COMISIONES');
+insert into `car_nota_debito_concepto` (`codigo_nota_debito_concepto_pk`, `nombre`) values('2','GASTOS');
+insert into `car_nota_debito_concepto` (`codigo_nota_debito_concepto_pk`, `nombre`) values('3','FACTURACIÓN');
+insert into `car_nota_debito_concepto` (`codigo_nota_debito_concepto_pk`, `nombre`) values('4','INTERESES');
+
 insert into `car_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`) values('1','RECIBO','1');
 insert into `car_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`) values('2','NOTA DEBITO','1');
 insert into `car_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`) values('3','NOTA CREDITO','1');

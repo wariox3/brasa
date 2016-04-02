@@ -89,7 +89,7 @@ class FormatoNotaCredito extends \FPDF_FPDF {
         $this->SetFont('Arial','',7);
         $this->Cell(52, 5, $arNotaCredito->getCuentaRel()->getNombre(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
-        $this->Cell(21, 5, utf8_decode("TIPO RECIBO:") , 1, 0, 'L', 1);
+        $this->Cell(21, 5, utf8_decode("CONCEPTO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
         $this->Cell(52, 5, $arNotaCredito->getNotaCreditoConceptoRel()->getNombre(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
