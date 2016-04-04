@@ -77,7 +77,12 @@ class CarRecibo
      * @ORM\Column(name="vr_total", type="float")
      */    
     private $vrTotal = 0;      
-      
+
+    /**
+     * @ORM\Column(name="vr_total_pago", type="float")
+     */    
+    private $vrTotalPago = 0;    
+    
     /**     
      * @ORM\Column(name="estado_impreso", type="boolean")
      */    
@@ -686,5 +691,29 @@ class CarRecibo
     public function getRecibosDetallesRecibosRel()
     {
         return $this->recibosDetallesRecibosRel;
+    }
+
+    /**
+     * Set vrTotalPago
+     *
+     * @param float $vrTotalPago
+     *
+     * @return CarRecibo
+     */
+    public function setVrTotalPago($vrTotalPago)
+    {
+        $this->vrTotalPago = $vrTotalPago;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalPago
+     *
+     * @return float
+     */
+    public function getVrTotalPago()
+    {
+        return $this->vrTotalPago;
     }
 }

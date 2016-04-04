@@ -57,6 +57,7 @@ class CarReciboDetalleRepository extends EntityRepository {
         $arRecibo = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigoRecibo); 
         $intCantidad = 0;
         $floValor = 0;
+        $floValorPago = 0;
         $floDescuento = 0;
         $floAjustePeso = 0;
         $floReteIca = 0;
@@ -72,8 +73,10 @@ class CarReciboDetalleRepository extends EntityRepository {
             $floReteIva += $arReciboDetalle->getVrReteIva();
             $floReteFuente += $arReciboDetalle->getVrReteFuente();
             $floValor += $arReciboDetalle->getValor();
+            $floValorPago += $arReciboDetalle->getVrPagoDetalle();
         }                 
         $arRecibo->setVrTotal($floValor);
+        $arRecibo->setVrTotalPago($floValorPago);
         $arRecibo->setVrTotalDescuento($floDescuento);
         $arRecibo->setVrTotalAjustePeso($floAjustePeso);
         $arRecibo->setVrTotalReteIca($floReteIca);

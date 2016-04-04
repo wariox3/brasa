@@ -69,9 +69,9 @@ class CarReciboDetalle
     private $vrReteFuente = 0;
     
     /**
-     * @ORM\Column(name="saldo_detalle", type="float")
+     * @ORM\Column(name="vr_pago_detalle", type="float")
      */    
-    private $saldoDetalle = 0;
+    private $vrPagoDetalle = 0;
     
     /**     
      * @ORM\Column(name="estado_inconsistencia", type="boolean")
@@ -495,5 +495,53 @@ class CarReciboDetalle
     public function getCuentaCobrarTipoRel()
     {
         return $this->cuentaCobrarTipoRel;
+    }
+
+    /**
+     * Set vrPago
+     *
+     * @param float $vrPago
+     *
+     * @return CarReciboDetalle
+     */
+    public function setVrPago($vrPago)
+    {
+        $this->vrPago = $vrPago;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPago
+     *
+     * @return float
+     */
+    public function getVrPago()
+    {
+        return $this->vrPago;
+    }
+
+    /**
+     * Set vrPagoDetalle
+     *
+     * @param float $vrPagoDetalle
+     *
+     * @return CarReciboDetalle
+     */
+    public function setVrPagoDetalle($vrPagoDetalle)
+    {
+        $this->vrPagoDetalle = $vrPagoDetalle;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPagoDetalle
+     *
+     * @return float
+     */
+    public function getVrPagoDetalle()
+    {
+        return $this->vrPagoDetalle;
     }
 }
