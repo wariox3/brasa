@@ -73,22 +73,39 @@ class MovimientoNotaCreditoController extends Controller
                     $arNotaCredito->setClienteRel($arCliente);
                 }
             }
-            $arUsuario = $this->getUser();
-            $arNotaCredito->setUsuario($arUsuario->getUserName());            
-            $em->persist($arNotaCredito);
-            $em->flush();
-
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_nuevo', array('codigoNotaCredito' => 0 )));
-            } else {
-                if ($codigoNotaCredito != 0){
-                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_listar'));
+            if ($codigoNotaCredito != 0 && $em->getRepository('BrasaCarteraBundle:CarNotaCreditoDetalle')->numeroRegistros($codigoNotaCredito) > 0) {
+                if ($arNotaCredito->getCodigoClienteFk() == $arCliente->getCodigoClientePk()) {
+                    $arUsuario = $this->getUser();
+                    $arNotaCredito->setUsuario($arUsuario->getUserName());            
+                    $em->persist($arNotaCredito);
+                    $em->flush();
+                    if($form->get('guardarnuevo')->isClicked()) {
+                        return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_nuevo', array('codigoNotaCredito' => 0 )));
+                    } else {
+                        if ($codigoNotaCredito != 0){
+                            return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_listar'));
+                        } else {
+                            return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_detalle', array('codigoNotaCredito' => $arNotaCredito->getCodigoNotaCreditoPk())));
+                        }
+                    }
                 } else {
-                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_detalle', array('codigoNotaCredito' => $arNotaCredito->getCodigoNotaCreditoPk())));
+                    $objMensaje->Mensaje("error", "Para modificar el cliente debe eliminar los detalles asociados a este registro", $this);
                 }
-                
-            }                       
-            
+            } else {
+                $arUsuario = $this->getUser();
+                $arNotaCredito->setUsuario($arUsuario->getUserName());            
+                $em->persist($arNotaCredito);
+                $em->flush();
+                if($form->get('guardarnuevo')->isClicked()) {
+                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_nuevo', array('codigoNotaCredito' => 0 )));
+                } else {
+                    if ($codigoNotaCredito != 0){
+                        return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_listar'));
+                    } else {
+                        return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_detalle', array('codigoNotaCredito' => $arNotaCredito->getCodigoNotaCreditoPk())));
+                    }
+                }
+            }
         }
         return $this->render('BrasaCarteraBundle:Movimientos/NotaCredito:nuevo.html.twig', array(
             'arNotaCredito' => $arNotaCredito,
@@ -150,7 +167,28 @@ class MovimientoNotaCreditoController extends Controller
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_detalle', array('codigoNotaCredito' => $codigoNotaCredito)));                
                 }
-            }              
+            } 
+            if($form->get('BtnAnular')->isClicked()) {            
+                if($arNotaCredito->getEstadoImpreso() == 1) {
+                    $arNotaCredito->setEstadoAnulado(1);
+                    $arNotaCredito->setValor(0);
+                    $arDetallesNotaCredito = $em->getRepository('BrasaCarteraBundle:CarNotaCreditoDetalle')->findBy(array('codigoNotaCreditoFk' => $codigoNotaCredito));
+                    foreach ($arDetallesNotaCredito AS $arDetalleNotaCredito) {
+                        $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
+                        $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleNotaCredito->getCodigoCuentaCobrarFk());
+                        $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleNotaCredito->getSaldoDetalle());
+                        $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleNotaCredito->getSaldoDetalle());
+                        $arDetalleNotaCreditoAnulado = new \Brasa\CarteraBundle\Entity\CarNotaCreditoDetalle();
+                        $arDetalleNotaCreditoAnulado = $em->getRepository('BrasaCarteraBundle:CarNotaCreditoDetalle')->find($arDetalleNotaCredito->getCodigoNotaCreditoDetallePk());
+                        $arDetalleNotaCreditoAnulado->setValor(0);
+                        $em->persist($arCuentaCobrar);
+                        $em->persist($arDetalleNotaCreditoAnulado);
+                    }
+                    $em->persist($arNotaCredito);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_detalle', array('codigoNotaCredito' => $codigoNotaCredito)));                
+                }
+            }
             if($form->get('BtnDetalleActualizar')->isClicked()) {
                 $arrControles = $request->request->All();
                 $this->actualizarDetalle($arrControles, $codigoNotaCredito);                
@@ -280,24 +318,31 @@ class MovimientoNotaCreditoController extends Controller
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);        
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
+        $arrBotonAnular = array('label' => 'Anular', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;            
-            $arrBotonAprobar['disabled'] = false;            
+            $arrBotonAnular['disabled'] = true;
             $arrBotonDetalleEliminar['disabled'] = true;
             $arrBotonDetalleActualizar['disabled'] = true;
         } else {
             $arrBotonDesAutorizar['disabled'] = true;            
             $arrBotonImprimir['disabled'] = true;
+            $arrBotonAnular['disabled'] = true;
         }
         if($ar->getEstadoImpreso() == 1) {
             $arrBotonDesAutorizar['disabled'] = true;
+            $arrBotonAnular['disabled'] = false;
+        }
+        if($ar->getEstadoAnulado() == 1) {
+            $arrBotonAnular['disabled'] = true;
         }
         $form = $this->createFormBuilder()
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                 
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
+                    ->add('BtnAnular', 'submit', $arrBotonAnular)
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
                     ->getForm();

@@ -73,22 +73,40 @@ class MovimientoReciboController extends Controller
                     $arRecibo->setClienteRel($arCliente);
                 }
             }
-            $arUsuario = $this->getUser();
-            $arRecibo->setUsuario($arUsuario->getUserName());            
-            $em->persist($arRecibo);
-            $em->flush();
+            if ($codigoRecibo != 0 && $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->numeroRegistros($codigoRecibo) > 0) {
+                if ($arRecibo->getCodigoClienteFk() == $arCliente->getCodigoClientePk()) {
+                    $arUsuario = $this->getUser();
+                    $arRecibo->setUsuario($arUsuario->getUserName());            
+                    $em->persist($arRecibo);
+                    $em->flush();
+                    if($form->get('guardarnuevo')->isClicked()) {
+                        return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_nuevo', array('codigoRecibo' => 0 )));
+                    } else {
+                        if ($codigoRecibo != 0){
+                            return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_listar'));
+                        } else {
+                            return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $arRecibo->getCodigoReciboPk())));
+                        }
 
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_nuevo', array('codigoRecibo' => 0 )));
-            } else {
-                if ($codigoRecibo != 0){
-                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_listar'));
+                    }
                 } else {
-                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $arRecibo->getCodigoReciboPk())));
+                    $objMensaje->Mensaje("error", "Para modificar el cliente debe eliminar los detalles asociados a este registro", $this);
                 }
-                
-            }                       
-            
+            } else {
+                $arUsuario = $this->getUser();
+                $arRecibo->setUsuario($arUsuario->getUserName());            
+                $em->persist($arRecibo);
+                $em->flush();
+                if($form->get('guardarnuevo')->isClicked()) {
+                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_nuevo', array('codigoRecibo' => 0 )));
+                } else {
+                    if ($codigoRecibo != 0){
+                        return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_listar'));
+                    } else {
+                        return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $arRecibo->getCodigoReciboPk())));
+                    }
+                }
+            }
         }
         return $this->render('BrasaCarteraBundle:Movimientos/Recibo:nuevo.html.twig', array(
             'arRecibo' => $arRecibo,
