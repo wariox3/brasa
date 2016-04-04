@@ -81,8 +81,10 @@ class ProcesoCierreMesController extends Controller
                     $arCierreMesServicio->setCantidad($arPedidoDetalle->getCantidad());
                     $arCierreMesServicio->setVrTotal($arPedidoDetalle->getVrTotalDetalle());                                                            
                     $arrProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->detallesPedido($arPedidoDetalle->getCodigoPedidoDetallePk(), $arCierreMes->getAnio(), $arCierreMes->getMes());                    
-                    $arCierreMesServicio->setHorasProgramadas($arrProgramacionDetalles['horas']);
-                    $arCierreMesServicio->setVrCostoRecurso($arrProgramacionDetalles['vrRecurso']);
+                    if($arrProgramacionDetalles['horas'] != NULL) {
+                        $arCierreMesServicio->setHorasProgramadas($arrProgramacionDetalles['horas']);
+                        $arCierreMesServicio->setVrCostoRecurso($arrProgramacionDetalles['vrRecurso']);                        
+                    }
                     $em->persist($arCierreMesServicio);  
                     /*$arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoPedidoDetalleFk' => $arPedidoDetalle->getCodigoPedidoDetallePk()));                                                    
                     $arCierreMesServicioDetalle = new \Brasa\TurnoBundle\Entity\TurCierreMesServicioDetalle();
