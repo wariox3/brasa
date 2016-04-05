@@ -64,7 +64,6 @@
                 <th>APL</th>
                 <th></th>
                 <th></th>
-                <th></th>
             </tr>
             {% for arNovedades in arNovedades %}
             <tr>
@@ -75,8 +74,7 @@
                 <td>{{ arNovedades.recursoRel.nombreCorto |default('')  }}</td>                              
                 <td>{{ arNovedades.recursoReemplazoRel.nombreCorto |default('')  }}</td> 
                 <td>{% if arNovedades.estadoAplicada == 1 %} SI {% else %} NO {% endif %}</td>                                
-                <td style="text-align: center"><a href="{{ path('brs_tur_movimiento_novedad_nuevo', {'codigoNovedad': arNovedades.codigoNovedadPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
-                <td style="text-align: center"><a href="{{ path('brs_tur_cotizacion_detalle', { 'codigoCotizacion': arNovedades.codigoNovedadPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
+                <td style="text-align: center"><a href="{{ path('brs_tur_movimiento_novedad_nuevo', {'codigoNovedad': arNovedades.codigoNovedadPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arNovedades.codigoNovedadPk }}" /></td>
             </tr>
 

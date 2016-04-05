@@ -23,6 +23,17 @@ class TurNovedadTipo
     private $nombre;                         
     
     /**
+     * @ORM\Column(name="codigo_turno_fk", type="string", length=5, nullable=true)
+     */    
+    private $codigoTurnoFk;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurTurno", inversedBy="novedadesTiposTurnoRel")
+     * @ORM\JoinColumn(name="codigo_turno_fk", referencedColumnName="codigo_turno_pk")
+     */
+    protected $turnoRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurNovedad", mappedBy="novedadTipoRel")
      */
     protected $novedadesNovedadTipoRel; 
@@ -101,5 +112,53 @@ class TurNovedadTipo
     public function getNovedadesNovedadTipoRel()
     {
         return $this->novedadesNovedadTipoRel;
+    }
+
+    /**
+     * Set codigoTurnoFk
+     *
+     * @param string $codigoTurnoFk
+     *
+     * @return TurNovedadTipo
+     */
+    public function setCodigoTurnoFk($codigoTurnoFk)
+    {
+        $this->codigoTurnoFk = $codigoTurnoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTurnoFk
+     *
+     * @return string
+     */
+    public function getCodigoTurnoFk()
+    {
+        return $this->codigoTurnoFk;
+    }
+
+    /**
+     * Set turnoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurTurno $turnoRel
+     *
+     * @return TurNovedadTipo
+     */
+    public function setTurnoRel(\Brasa\TurnoBundle\Entity\TurTurno $turnoRel = null)
+    {
+        $this->turnoRel = $turnoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get turnoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurTurno
+     */
+    public function getTurnoRel()
+    {
+        return $this->turnoRel;
     }
 }

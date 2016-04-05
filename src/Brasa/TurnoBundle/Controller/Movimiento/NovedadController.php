@@ -27,7 +27,6 @@ class NovedadController extends Controller
                         $em->getRepository('BrasaTurnoBundle:TurNovedad')->aplicar($codigo);                                                            
                     }            
                 }                
-                $em->getRepository('BrasaTurnoBundle:TurNovedad')->aplicar($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_novedad'));                
             }            
             if ($form->get('BtnEliminar')->isClicked()) {

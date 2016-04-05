@@ -97,6 +97,11 @@ class TurTurno
     protected $soportesPagosDetallesTurnoRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="TurNovedadTipo", mappedBy="turnoRel")
+     */
+    protected $novedadesTiposTurnoRel;     
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -579,5 +584,39 @@ class TurTurno
     public function getVacacion()
     {
         return $this->vacacion;
+    }
+
+    /**
+     * Add novedadesTiposTurnoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurNovedadTipo $novedadesTiposTurnoRel
+     *
+     * @return TurTurno
+     */
+    public function addNovedadesTiposTurnoRel(\Brasa\TurnoBundle\Entity\TurNovedadTipo $novedadesTiposTurnoRel)
+    {
+        $this->novedadesTiposTurnoRel[] = $novedadesTiposTurnoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove novedadesTiposTurnoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurNovedadTipo $novedadesTiposTurnoRel
+     */
+    public function removeNovedadesTiposTurnoRel(\Brasa\TurnoBundle\Entity\TurNovedadTipo $novedadesTiposTurnoRel)
+    {
+        $this->novedadesTiposTurnoRel->removeElement($novedadesTiposTurnoRel);
+    }
+
+    /**
+     * Get novedadesTiposTurnoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNovedadesTiposTurnoRel()
+    {
+        return $this->novedadesTiposTurnoRel;
     }
 }

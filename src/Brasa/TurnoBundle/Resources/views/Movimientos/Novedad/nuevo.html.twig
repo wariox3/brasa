@@ -39,12 +39,12 @@
                     <div class="row">
                       <div class="col-lg-2">
                         <div class="input-group">
-                          <input id="txtCodigoRecursoReemplazo"  name="txtCodigoRecursoReemplazo"  type="text" class="form-control" value="{{ arNovedad.recursoRel.codigoRecursoPk |default('') }}"/>
+                          <input id="txtCodigoRecursoReemplazo"  name="txtCodigoRecursoReemplazo"  type="text" class="form-control" value="{{ arNovedad.recursoReemplazoRel.codigoRecursoPk |default('') }}"/>
                         </div>
                       </div>
                       <div class="col-lg-10">
                         <div class="input-group">                                      
-                          <input id="txtNombreCortoReemplazo"  name="txtNombreCortoReemplazo"  type="text" class="form-control" value="{{ arNovedad.recursoRel.nombreCorto |default('') }}" readOnly="ReadOnly" />
+                          <input id="txtNombreCortoReemplazo"  name="txtNombreCortoReemplazo"  type="text" class="form-control" value="{{ arNovedad.recursoReemplazoRel.nombreCorto |default('') }}" readOnly="ReadOnly" />
                           <span class="input-group-btn">                                        
                             <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_buscar_recurso', { 'campoCodigo': 'txtCodigoRecursoReemplazo', 'campoNombre': 'txtNombreCortoReemplazo' }) }}', 'buscarRecurso', 600, 900)">Buscar</a>
                           </span>
