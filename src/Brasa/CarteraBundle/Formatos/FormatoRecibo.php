@@ -180,7 +180,7 @@ class FormatoRecibo extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(14);
-        $header = array('COD', utf8_decode('N° FACT'), 'TIPO CUENTA COBRAR','DESCUENTO', 'AJUSTE PESO', 'RETE ICA', 'RETE IVA', 'RETE FUENTE', 'VALOR');
+        $header = array('COD', utf8_decode('NUMERO'), 'TIPO CUENTA COBRAR','DESCUENTO', 'AJUSTE PESO', 'RETE ICA', 'RETE IVA', 'RETE FUENTE', 'VALOR');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);

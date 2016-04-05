@@ -218,7 +218,7 @@ class TurFacturaRepository extends EntityRepository {
                     $em->persist($arClienteCartera);                                    
                 }
                     $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
-                    $arCuentaCobrarTipo = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrarTipo')->find(1);
+                    $arCuentaCobrarTipo = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrarTipo')->find(2);
                     $arCuentaCobrar->setClienteRel($arClienteCartera);
                     $arCuentaCobrar->setCuentaCobrarTipoRel($arCuentaCobrarTipo);
                     $arCuentaCobrar->setFecha($arFactura->getFecha());
