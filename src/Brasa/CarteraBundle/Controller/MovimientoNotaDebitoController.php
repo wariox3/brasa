@@ -197,11 +197,15 @@ class MovimientoNotaDebitoController extends Controller
                 $this->actualizarDetalle($arrControles, $codigoNotaDebito);                
                 return $this->redirect($this->generateUrl('brs_cartera_movimiento_notadebito_detalle', array('codigoNotaDebito' => $codigoNotaDebito)));
             }
-            if($form->get('BtnDetalleEliminar')->isClicked()) {   
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->eliminarSeleccionados($arrSeleccionados);
-                $em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->liquidar($codigoNotaDebito);
-                return $this->redirect($this->generateUrl('brs_cartera_movimiento_notadebito_detalle', array('codigoNotaDebito' => $codigoNotaDebito)));
+            if($form->get('BtnDetalleEliminar')->isClicked()) {
+                if($arNotaDebito->getEstadoAutorizado() == 0 ) {
+                    $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                    $em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->eliminarSeleccionados($arrSeleccionados);
+                    $em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->liquidar($codigoNotaDebito);
+                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_notadebito_detalle', array('codigoNotaDebito' => $codigoNotaDebito)));
+                } else {
+                    $objMensaje->Mensaje("error", "No se puede eliminar el registro, esta autorizado", $this);
+                }
             }    
             if($form->get('BtnImprimir')->isClicked()) {
                 $strResultado = $em->getRepository('BrasaCarteraBundle:CarNotaDebito')->imprimir($codigoNotaDebito);

@@ -159,8 +159,8 @@ class MovimientoReciboController extends Controller
                     foreach ($arDetallesRecibo AS $arDetalleRecibo) {
                         $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
                         $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleRecibo->getCodigoCuentaCobrarFk());
-                        $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleRecibo->getSaldoDetalle());
-                        $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleRecibo->getSaldoDetalle());
+                        $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleRecibo->getVrPagoDetalle());
+                        $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleRecibo->getVrPagoDetalle());
                         $em->persist($arCuentaCobrar);
                     }
                     $em->persist($arRecibo);
@@ -183,8 +183,8 @@ class MovimientoReciboController extends Controller
                     foreach ($arDetallesRecibo AS $arDetalleRecibo) {
                         $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
                         $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleRecibo->getCodigoCuentaCobrarFk());
-                        $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleRecibo->getSaldoDetalle());
-                        $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleRecibo->getSaldoDetalle());
+                        $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleRecibo->getVrPagoDetalle());
+                        $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleRecibo->getVrPagoDetalle());
                         $arDetalleReciboAnulado = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
                         $arDetalleReciboAnulado = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->find($arDetalleRecibo->getCodigoReciboDetallePk());
                         $arDetalleReciboAnulado->setVrDescuento(0);
@@ -207,7 +207,7 @@ class MovimientoReciboController extends Controller
                 return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));
             }
             if($form->get('BtnDetalleEliminar')->isClicked()) {  
-                if($arRecibo->getEstadoAutorizado() == 0) {
+                if($arRecibo->getEstadoAutorizado() == 0 ) {
                     $arrSeleccionados = $request->request->get('ChkSeleccionar');
                     $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->eliminarSeleccionados($arrSeleccionados);
                     $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->liquidar($codigoRecibo);                 

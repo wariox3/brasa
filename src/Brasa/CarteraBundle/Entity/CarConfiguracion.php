@@ -17,4 +17,28 @@ class CarConfiguracion
     private $codigoConfiguracionPk;
         
     
+
+    /**
+     * Set codigoConfiguracionPk
+     *
+     * @param integer $codigoConfiguracionPk
+     *
+     * @return CarConfiguracion
+     */
+    public function setCodigoConfiguracionPk($codigoConfiguracionPk)
+    {
+        $this->codigoConfiguracionPk = $codigoConfiguracionPk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoConfiguracionPk
+     *
+     * @return integer
+     */
+    public function getCodigoConfiguracionPk()
+    {
+        return $this->codigoConfiguracionPk;
+    }
 }

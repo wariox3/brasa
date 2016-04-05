@@ -184,7 +184,8 @@ class TurFacturaRepository extends EntityRepository {
     }     
     
     public function imprimir($codigoFactura) {
-        $em = $this->getEntityManager();  
+        $em = $this->getEntityManager();
+        
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         $strResultado = "";
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();        
@@ -200,8 +201,11 @@ class TurFacturaRepository extends EntityRepository {
                 $arClienteTurno = $em->getRepository('BrasaTurnoBundle:TurCliente')->find($arFactura->getCodigoClienteFk()); 
                 $arClienteCartera = new \Brasa\CarteraBundle\Entity\CarCliente();
                 $arClienteCartera = $em->getRepository('BrasaCarteraBundle:CarCliente')->findOneBy(array('nit' => $arClienteTurno->getNit())); 
+                $arFormaPago = new \Brasa\GeneralBundle\Entity\GenFormaPago();
+                $arFormaPago = $em->getRepository('BrasaGeneralBundle:GenFormaPago')->find(1);
                 if ($arClienteCartera == null){
-                    $arClienteCartera->setFormaPagoRel($arClienteTurno->getFormaPagoRel());
+                    $arClienteCartera = new \Brasa\CarteraBundle\Entity\CarCliente();
+                    $arClienteCartera->setFormaPagoRel($arFormaPago->getFormaPagoRel());
                     $arClienteCartera->setCiudadRel($arClienteTurno->getCiudadRel());
                     $arClienteCartera->setNit($arClienteTurno->getNit());
                     $arClienteCartera->setDigitoVerificacion($arClienteTurno->getDigitoVerificacion());
@@ -213,25 +217,21 @@ class TurFacturaRepository extends EntityRepository {
                     $arClienteCartera->setFax($arClienteTurno->getFax());
                     $arClienteCartera->setEmail($arClienteTurno->getEmail());
                     $arClienteCartera->setUsuario($arFactura->getUsuario());
-                    $em->persist($arClienteCartera);
+                    $em->persist($arClienteCartera);                                    
+                }
                     $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
+                    $arCuentaCobrarTipo = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrarTipo')->find(1);
                     $arCuentaCobrar->setClienteRel($arClienteCartera);
-                    $arCuentaCobrar->setCodigoCuentaCobrarTipoFk(1);
-                    $arCuentaCobrar->setFecha($arFactura->getFecha()->format('Y-m-d'));
-                    $arCuentaCobrar->setFechaVence($arFactura->getFechaVence()->format('Y-m-d'));
+                    $arCuentaCobrar->setCuentaCobrarTipoRel($arCuentaCobrarTipo);
+                    $arCuentaCobrar->setFecha($arFactura->getFecha());
+                    $arCuentaCobrar->setFechaVence($arFactura->getFechaVence());
                     $arCuentaCobrar->setNumeroDocumento($arFactura->getNumero());
                     $arCuentaCobrar->setValorOriginal($arFactura->getVrTotal());
                     $arCuentaCobrar->setSaldo($arFactura->getVrTotal());
-                    $arCuentaCobrar->setPlazo(30); //calcular dias de plazo
+                    $arCuentaCobrar->setPlazo($arClienteTurno->getPlazoPago());
                     $arCuentaCobrar->setAbono(0);
-                } else {
-                    
-                }
-                
-                
-                
+                    $em->persist($arCuentaCobrar);             
             }   
-            
             $em->persist($arFactura);
             $em->flush();
         } else {

@@ -103,6 +103,7 @@ class CarReciboDetalle
    
 
 
+
     /**
      * Get codigoReciboDetallePk
      *
@@ -354,27 +355,27 @@ class CarReciboDetalle
     }
 
     /**
-     * Set saldoDetalle
+     * Set vrPagoDetalle
      *
-     * @param float $saldoDetalle
+     * @param float $vrPagoDetalle
      *
      * @return CarReciboDetalle
      */
-    public function setSaldoDetalle($saldoDetalle)
+    public function setVrPagoDetalle($vrPagoDetalle)
     {
-        $this->saldoDetalle = $saldoDetalle;
+        $this->vrPagoDetalle = $vrPagoDetalle;
 
         return $this;
     }
 
     /**
-     * Get saldoDetalle
+     * Get vrPagoDetalle
      *
      * @return float
      */
-    public function getSaldoDetalle()
+    public function getVrPagoDetalle()
     {
-        return $this->saldoDetalle;
+        return $this->vrPagoDetalle;
     }
 
     /**
@@ -495,53 +496,5 @@ class CarReciboDetalle
     public function getCuentaCobrarTipoRel()
     {
         return $this->cuentaCobrarTipoRel;
-    }
-
-    /**
-     * Set vrPago
-     *
-     * @param float $vrPago
-     *
-     * @return CarReciboDetalle
-     */
-    public function setVrPago($vrPago)
-    {
-        $this->vrPago = $vrPago;
-
-        return $this;
-    }
-
-    /**
-     * Get vrPago
-     *
-     * @return float
-     */
-    public function getVrPago()
-    {
-        return $this->vrPago;
-    }
-
-    /**
-     * Set vrPagoDetalle
-     *
-     * @param float $vrPagoDetalle
-     *
-     * @return CarReciboDetalle
-     */
-    public function setVrPagoDetalle($vrPagoDetalle)
-    {
-        $this->vrPagoDetalle = $vrPagoDetalle;
-
-        return $this;
-    }
-
-    /**
-     * Get vrPagoDetalle
-     *
-     * @return float
-     */
-    public function getVrPagoDetalle()
-    {
-        return $this->vrPagoDetalle;
     }
 }
