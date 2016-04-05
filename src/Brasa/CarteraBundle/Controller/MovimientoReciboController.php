@@ -150,7 +150,6 @@ class MovimientoReciboController extends Controller
                 } else {
                     $objMensaje->Mensaje('error', 'No se puede autorizar, hay inconsistencias', $this);
                 }
-                    
                 return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));                
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {            
@@ -197,9 +196,7 @@ class MovimientoReciboController extends Controller
                         $em->persist($arCuentaCobrar);
                         $em->persist($arDetalleReciboAnulado);
                     }
-                    
                     $em->persist($arRecibo);
-                    
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));                
                 }
@@ -214,8 +211,10 @@ class MovimientoReciboController extends Controller
                     $arrSeleccionados = $request->request->get('ChkSeleccionar');
                     $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->eliminarSeleccionados($arrSeleccionados);
                     $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->liquidar($codigoRecibo);                 
+                } else {
+                    $objMensaje->Mensaje("error", "No se puede eliminar el registro, esta autorizado", $this);
                 }
-                   return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));                    
+                return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));                    
             }    
             if($form->get('BtnImprimir')->isClicked()) {
                 $strResultado = $em->getRepository('BrasaCarteraBundle:CarRecibo')->imprimir($codigoRecibo);
@@ -227,7 +226,6 @@ class MovimientoReciboController extends Controller
                 }
             }                        
         }
-
         $arReciboDetalle = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
         $arReciboDetalle = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->findBy(array ('codigoReciboFk' => $codigoRecibo));
         return $this->render('BrasaCarteraBundle:Movimientos/Recibo:detalle.html.twig', array(

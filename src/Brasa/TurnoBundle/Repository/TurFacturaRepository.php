@@ -196,6 +196,40 @@ class TurFacturaRepository extends EntityRepository {
                 $arFactura->setFecha(new \DateTime('now'));                
                 $dateFechaVence = $objFunciones->sumarDiasFecha($arFactura->getClienteRel()->getPlazoPago(), $arFactura->getFecha());
                 $arFactura->setFechaVence($dateFechaVence);
+                $arClienteTurno = new \Brasa\TurnoBundle\Entity\TurCliente();
+                $arClienteTurno = $em->getRepository('BrasaTurnoBundle:TurCliente')->find($arFactura->getCodigoClienteFk()); 
+                $arClienteCartera = new \Brasa\CarteraBundle\Entity\CarCliente();
+                $arClienteCartera = $em->getRepository('BrasaCarteraBundle:CarCliente')->findOneBy(array('nit' => $arClienteTurno->getNit())); 
+                if ($arClienteCartera == null){
+                    $arClienteCartera->setFormaPagoRel($arClienteTurno->getFormaPagoRel());
+                    $arClienteCartera->setCiudadRel($arClienteTurno->getCiudadRel());
+                    $arClienteCartera->setNit($arClienteTurno->getNit());
+                    $arClienteCartera->setDigitoVerificacion($arClienteTurno->getDigitoVerificacion());
+                    $arClienteCartera->setNombreCorto($arClienteTurno->getNombreCorto());
+                    $arClienteCartera->setPlazoPago($arClienteTurno->getPlazoPago());
+                    $arClienteCartera->setDireccion($arClienteTurno->getDireccion());
+                    $arClienteCartera->setTelefono($arClienteTurno->getTelefono());
+                    $arClienteCartera->setCelular($arClienteTurno->getCelular());
+                    $arClienteCartera->setFax($arClienteTurno->getFax());
+                    $arClienteCartera->setEmail($arClienteTurno->getEmail());
+                    $arClienteCartera->setUsuario($arFactura->getUsuario());
+                    $em->persist($arClienteCartera);
+                    $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
+                    $arCuentaCobrar->setClienteRel($arClienteCartera);
+                    $arCuentaCobrar->setCodigoCuentaCobrarTipoFk(1);
+                    $arCuentaCobrar->setFecha($arFactura->getFecha()->format('Y-m-d'));
+                    $arCuentaCobrar->setFechaVence($arFactura->getFechaVence()->format('Y-m-d'));
+                    $arCuentaCobrar->setNumeroDocumento($arFactura->getNumero());
+                    $arCuentaCobrar->setValorOriginal($arFactura->getVrTotal());
+                    $arCuentaCobrar->setSaldo($arFactura->getVrTotal());
+                    $arCuentaCobrar->setPlazo(30); //calcular dias de plazo
+                    $arCuentaCobrar->setAbono(0);
+                } else {
+                    
+                }
+                
+                
+                
             }   
             
             $em->persist($arFactura);

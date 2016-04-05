@@ -49,9 +49,9 @@ class CarNotaCreditoDetalle
     private $valor = 0;
     
     /**
-     * @ORM\Column(name="saldo_detalle", type="float")
+     * @ORM\Column(name="vr_pago_detalle", type="float")
      */    
-    private $saldoDetalle = 0;
+    private $vrPagoDetalle = 0;
     
     /**     
      * @ORM\Column(name="estado_inconsistencia", type="boolean")
@@ -239,27 +239,27 @@ class CarNotaCreditoDetalle
     }
 
     /**
-     * Set saldoDetalle
+     * Set vrPagoDetalle
      *
-     * @param float $saldoDetalle
+     * @param float $vrPagoDetalle
      *
      * @return CarNotaCreditoDetalle
      */
-    public function setSaldoDetalle($saldoDetalle)
+    public function setVrPagoDetalle($vrPagoDetalle)
     {
-        $this->saldoDetalle = $saldoDetalle;
+        $this->vrPagoDetalle = $vrPagoDetalle;
 
         return $this;
     }
 
     /**
-     * Get saldoDetalle
+     * Get vrPagoDetalle
      *
      * @return float
      */
-    public function getSaldoDetalle()
+    public function getVrPagoDetalle()
     {
-        return $this->saldoDetalle;
+        return $this->vrPagoDetalle;
     }
 
     /**

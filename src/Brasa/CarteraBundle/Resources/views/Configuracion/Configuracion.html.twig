@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-{% block title %}Configuración nómina - Soga App{% endblock %}
+{% block title %}Configuración cartera - Soga App{% endblock %}
 {% block content %}
     <script>
         $('#myTab a').click(function (e) {
@@ -20,36 +20,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Información de la configuración</div>
                     <div class="panel-body">
-                        <div class="form-group">
-                            <label for="form_informacionLegalFactura" class="col-sm-3 control-label">Informacion legal factura:</label>
-                            <div class="col-sm-9">
-                                {{ form_widget(formConfiguracion.informacionLegalFactura, { 'attr': {'class': 'form-control'} }) }}
-                            </div>
-                        </div> 
-                        <div class="form-group">
-                            <label for="form_informacionPagoFactura" class="col-sm-3 control-label">Informacion pago factura:</label>
-                            <div class="col-sm-9">
-                                {{ form_widget(formConfiguracion.informacionPagoFactura, { 'attr': {'class': 'form-control'} }) }}
-                            </div>
-                        </div>   
-                        <div class="form-group">
-                            <label for="form_informacionContactoFactura" class="col-sm-3 control-label">Informacion contacto factura:</label>
-                            <div class="col-sm-9">
-                                {{ form_widget(formConfiguracion.informacionContactoFactura, { 'attr': {'class': 'form-control'} }) }}
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="form_informacionResolucionDianFactura" class="col-sm-3 control-label">Informacion dian factura:</label>
-                            <div class="col-sm-9">
-                                {{ form_widget(formConfiguracion.informacionResolucionDianFactura, { 'attr': {'class': 'form-control'} }) }}
-                            </div>
-                        </div>                            
-                        <div class="form-group">
-                            <label for="form_informacionResolucionSupervigilanciaFactura" class="col-sm-3 control-label">Informacion supervigilancia factura:</label>
-                            <div class="col-sm-9">
-                                {{ form_widget(formConfiguracion.informacionResolucionSupervigilanciaFactura, { 'attr': {'class': 'form-control'} }) }}
-                            </div>
-                        </div>                                                        
+                                                                                
                     </div>
                 </div>  
             </div>

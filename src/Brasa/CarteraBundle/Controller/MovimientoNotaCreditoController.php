@@ -136,8 +136,8 @@ class MovimientoNotaCreditoController extends Controller
                             foreach ($arDetallesNotaCredito AS $arDetalleNotaCredito) {
                                 $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
                                 $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleNotaCredito->getCodigoCuentaCobrarFk());
-                                $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() - $arDetalleNotaCredito->getSaldoDetalle());
-                                $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() + $arDetalleNotaCredito->getSaldoDetalle());
+                                $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() - $arDetalleNotaCredito->getVrPagoDetalle());
+                                $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() + $arDetalleNotaCredito->getVrPagoDetalle());
                                 $em->persist($arCuentaCobrar);
                             }
                             $em->persist($arNotaCredito);
@@ -153,19 +153,21 @@ class MovimientoNotaCreditoController extends Controller
                 return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_detalle', array('codigoNotaCredito' => $codigoNotaCredito)));                
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {            
-                if($arNotaCredito->getEstadoAutorizado() == 1) {
+                if($arNotaCredito->getEstadoAutorizado() == 1 && $arRecibo->getEstadoImpreso() == 0) {
                     $arNotaCredito->setEstadoAutorizado(0);
                     $arDetallesNotaCredito = $em->getRepository('BrasaCarteraBundle:CarNotaCreditoDetalle')->findBy(array('codigoNotaCreditoFk' => $codigoNotaCredito));
                     foreach ($arDetallesNotaCredito AS $arDetalleNotaCredito) {
                         $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
                         $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleNotaCredito->getCodigoCuentaCobrarFk());
-                        $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleNotaCredito->getSaldoDetalle());
-                        $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleNotaCredito->getSaldoDetalle());
+                        $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleNotaCredito->getVrPagoDetalle());
+                        $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleNotaCredito->getVrPagoDetalle());
                         $em->persist($arCuentaCobrar);
                     }
                     $em->persist($arNotaCredito);
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_detalle', array('codigoNotaCredito' => $codigoNotaCredito)));                
+                } else {
+                    $objMensaje->Mensaje('error', "La nota credito debe estar autorizado y no puede estar impreso", $this);
                 }
             } 
             if($form->get('BtnAnular')->isClicked()) {            
@@ -176,8 +178,8 @@ class MovimientoNotaCreditoController extends Controller
                     foreach ($arDetallesNotaCredito AS $arDetalleNotaCredito) {
                         $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
                         $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleNotaCredito->getCodigoCuentaCobrarFk());
-                        $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleNotaCredito->getSaldoDetalle());
-                        $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleNotaCredito->getSaldoDetalle());
+                        $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleNotaCredito->getVrPagoDetalle());
+                        $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleNotaCredito->getVrPagoDetalle());
                         $arDetalleNotaCreditoAnulado = new \Brasa\CarteraBundle\Entity\CarNotaCreditoDetalle();
                         $arDetalleNotaCreditoAnulado = $em->getRepository('BrasaCarteraBundle:CarNotaCreditoDetalle')->find($arDetalleNotaCredito->getCodigoNotaCreditoDetallePk());
                         $arDetalleNotaCreditoAnulado->setValor(0);
@@ -445,7 +447,7 @@ class MovimientoNotaCreditoController extends Controller
                     $arNotaCreditoDetalle->setEstadoInconsistencia(0);
                 }
                 $arNotaCreditoDetalle->setValor($arrControles['TxtValor'.$intCodigo]);
-                $arNotaCreditoDetalle->setSaldoDetalle($floSaldoAfectar);
+                $arNotaCreditoDetalle->setVrPagoDetalle($floSaldoAfectar);
                 $em->persist($arNotaCreditoDetalle);
             }
             $em->flush();
