@@ -3922,11 +3922,15 @@ insert into `tur_concepto_servicio` (`codigo_concepto_servicio_pk`, `nombre`, `h
 
 insert into `tur_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_nomina`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `descanso`, `incapacidad`, `licencia`, `vacacion`, `usuario`, `comentarios`) values('1','DIURNO','06:00:00','18:00:00','12','12','12','0','0','0','0','0','0',NULL,NULL);
 insert into `tur_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_nomina`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `descanso`, `incapacidad`, `licencia`, `vacacion`, `usuario`, `comentarios`) values('2','NOCTURNO','18:00:00','06:00:00','12','12','4','8','0','0','0','0','0',NULL,NULL);
-insert into `tur_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_nomina`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `descanso`, `incapacidad`, `licencia`, `vacacion`, `usuario`, `comentarios`) values('D','DESCANSO','00:00:00','00:00:00','0','8','8','0','0','1','0','0','0','MARIOESTRADA',NULL);
-insert into `tur_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_nomina`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `descanso`, `incapacidad`, `licencia`, `vacacion`, `usuario`, `comentarios`) values('IG','INCAPACIDAD','00:00:00','00:00:00','0','0','0','0','1','0','1','0','0','MARIOESTRADA',NULL);
+insert into `tur_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_nomina`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `descanso`, `incapacidad`, `licencia`, `vacacion`, `usuario`, `comentarios`) values('AU','AUSENTISMO','00:00:00','00:00:00','0','0','0','0','1','0','0','1','0','MARIOESTRADA',NULL);
+insert into `tur_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_nomina`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `descanso`, `incapacidad`, `licencia`, `vacacion`, `usuario`, `comentarios`) values('D','DESCANSO','06:00:00','14:00:00','0','8','8','0','0','1','0','0','0',NULL,NULL);
+insert into `tur_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_nomina`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `descanso`, `incapacidad`, `licencia`, `vacacion`, `usuario`, `comentarios`) values('IG','INCAPACIDAD GENERAL','00:00:00','00:00:00','0','0','0','0','1','0','1','0','0','MARIOESTRADA',NULL);
 insert into `tur_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_nomina`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `descanso`, `incapacidad`, `licencia`, `vacacion`, `usuario`, `comentarios`) values('IP','INCAPACIDAD LABORAL','00:00:00','00:00:00','0','0','0','0','1','0','1','0','0','MARIOESTRADA',NULL);
 insert into `tur_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_nomina`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `descanso`, `incapacidad`, `licencia`, `vacacion`, `usuario`, `comentarios`) values('LI','LICENCIA','00:00:00','00:00:00','0','0','0','0','1','0','0','1','0','MARIOESTRADA',NULL);
 insert into `tur_turno` (`codigo_turno_pk`, `nombre`, `hora_desde`, `hora_hasta`, `horas`, `horas_nomina`, `horas_diurnas`, `horas_nocturnas`, `novedad`, `descanso`, `incapacidad`, `licencia`, `vacacion`, `usuario`, `comentarios`) values('VA','VACACIONES','00:00:00','00:00:00','0','0','0','0','1','0','0','0','1','MARIOESTRADA',NULL);
+
+insert into `tur_novedad_tipo` (`codigo_novedad_tipo_pk`, `nombre`, `codigo_turno_fk`) values('1','INCAPACIDAD GENERAL','IG');
+insert into `tur_novedad_tipo` (`codigo_novedad_tipo_pk`, `nombre`, `codigo_turno_fk`) values('3','AUSENTISMO','AU');
 
 insert into `tur_recurso_tipo` (`codigo_recurso_tipo_pk`, `nombre`) values('1','FIJO');
 insert into `tur_recurso_tipo` (`codigo_recurso_tipo_pk`, `nombre`) values('2','APOYO');
@@ -3934,6 +3938,18 @@ insert into `tur_recurso_tipo` (`codigo_recurso_tipo_pk`, `nombre`) values('3','
 insert into `tur_recurso_tipo` (`codigo_recurso_tipo_pk`, `nombre`) values('4','SUPERVISOR');
 
 insert into `tur_centro_costo` (`codigo_centro_costo_pk`, `nombre`) values('1','PRINCIPAL');
+
+insert into `tur_plantilla` (`codigo_plantilla_pk`, `nombre`, `estado_autorizado`, `homologar_codigo_turno`, `dias_secuencia`, `usuario`, `comentarios`) values('1','2D2N2X','1','0','6','MARIOESTRADA',NULL);
+
+insert into `tur_plantilla_detalle` (`codigo_plantilla_detalle_pk`, `codigo_plantilla_fk`, `posicion`, `dia_1`, `dia_2`, `dia_3`, `dia_4`, `dia_5`, `dia_6`, `dia_7`, `dia_8`, `dia_9`, `dia_10`, `dia_11`, `dia_12`, `dia_13`, `dia_14`, `dia_15`, `dia_16`, `dia_17`, `dia_18`, `dia_19`, `dia_20`, `dia_21`, `dia_22`, `dia_23`, `dia_24`, `dia_25`, `dia_26`, `dia_27`, `dia_28`, `dia_29`, `dia_30`, `dia_31`, `lunes`, `martes`, `miercoles`, `jueves`, `viernes`, `sabado`, `domingo`, `festivo`, `horas`) values('1','1','1','1','1','2','2','D','D',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0');
+insert into `tur_plantilla_detalle` (`codigo_plantilla_detalle_pk`, `codigo_plantilla_fk`, `posicion`, `dia_1`, `dia_2`, `dia_3`, `dia_4`, `dia_5`, `dia_6`, `dia_7`, `dia_8`, `dia_9`, `dia_10`, `dia_11`, `dia_12`, `dia_13`, `dia_14`, `dia_15`, `dia_16`, `dia_17`, `dia_18`, `dia_19`, `dia_20`, `dia_21`, `dia_22`, `dia_23`, `dia_24`, `dia_25`, `dia_26`, `dia_27`, `dia_28`, `dia_29`, `dia_30`, `dia_31`, `lunes`, `martes`, `miercoles`, `jueves`, `viernes`, `sabado`, `domingo`, `festivo`, `horas`) values('2','1','2','2','2','D','D','1','1',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0');
+insert into `tur_plantilla_detalle` (`codigo_plantilla_detalle_pk`, `codigo_plantilla_fk`, `posicion`, `dia_1`, `dia_2`, `dia_3`, `dia_4`, `dia_5`, `dia_6`, `dia_7`, `dia_8`, `dia_9`, `dia_10`, `dia_11`, `dia_12`, `dia_13`, `dia_14`, `dia_15`, `dia_16`, `dia_17`, `dia_18`, `dia_19`, `dia_20`, `dia_21`, `dia_22`, `dia_23`, `dia_24`, `dia_25`, `dia_26`, `dia_27`, `dia_28`, `dia_29`, `dia_30`, `dia_31`, `lunes`, `martes`, `miercoles`, `jueves`, `viernes`, `sabado`, `domingo`, `festivo`, `horas`) values('3','1','3','D','D','1','1','2','2',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0');
+
+insert into `tur_cliente` (`codigo_cliente_pk`, `codigo_sector_fk`, `codigo_forma_pago_fk`, `codigo_ciudad_fk`, `nit`, `digito_verificacion`, `nombre_corto`, `estrato`, `plazo_pago`, `direccion`, `barrio`, `telefono`, `celular`, `fax`, `email`, `gerente`, `calular_gerente`, `financiero`, `calular_financiero`, `contacto`, `calular_contacto`, `telefono_contacto`, `usuario`, `comentarios`) values('1','2','1','2239','800014451','4','URBANIZACION SANTO DOMINGO','3','30','CARRERA 50 N 15-25','HOLANDA','45858747','3112547874','5425478','SNTOD@HOTMAIL.COM','ANIBAL DE JESUS TORO','3214145541','JUAN CAMILO','3215254','HUMBERTO REYES','3214587478','3254574','MARIOESTRADA',NULL);
+insert into `tur_cliente` (`codigo_cliente_pk`, `codigo_sector_fk`, `codigo_forma_pago_fk`, `codigo_ciudad_fk`, `nit`, `digito_verificacion`, `nombre_corto`, `estrato`, `plazo_pago`, `direccion`, `barrio`, `telefono`, `celular`, `fax`, `email`, `gerente`, `calular_gerente`, `financiero`, `calular_financiero`, `contacto`, `calular_contacto`, `telefono_contacto`, `usuario`, `comentarios`) values('2','1','2','2239','8002547898','1','EMPRESA DE CAUCHOS','3','15','CARRERA 50 N 15-25','HOLANDA','2343432','3112547874','5425478','SNTOD@HOTMAIL.COM','ANIBAL DE JESUS TORO','3214145541','JUAN CAMILO','3215254','HUMBERTO REYES','3214587478','3254574','MARIOESTRADA',NULL);
+
+insert into `tur_puesto` (`codigo_puesto_pk`, `codigo_cliente_fk`, `nombre`, `direccion`, `telefono`, `celular`, `contacto`, `telefono_contacto`, `celular_contacto`, `comentarios`) values('1','1','PORTERIA','CARRERA 50 N 15-25','2343432','3112547874','HUMBERTO REYES','3254574','3214587478',NULL);
+insert into `tur_puesto` (`codigo_puesto_pk`, `codigo_cliente_fk`, `nombre`, `direccion`, `telefono`, `celular`, `contacto`, `telefono_contacto`, `celular_contacto`, `comentarios`) values('2','2','RONDA','CARRERA 50 N 15-25','2343432','3112547874','HUMBERTO REYES','3254574','3214587478',NULL);
 
 /** Recurso humano **/
 insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('1','ADMINISTRATIVO');
@@ -5428,8 +5444,8 @@ insert into `car_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`)
 insert into `car_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`) values('2','NOTA DEBITO','1');
 insert into `car_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`) values('3','NOTA CREDITO','1');
 
-insert into `car_recibo_tipo` (`codigo_recibo_tipo_pk`, `nombre`) values('1','INGRESO');
-insert into `car_recibo_tipo` (`codigo_recibo_tipo_pk`, `nombre`) values('2','EGRESO');
+insert into `car_recibo_tipo` (`codigo_recibo_tipo_pk`, `nombre`) values('1','OFICINA 1');
+insert into `car_recibo_tipo` (`codigo_recibo_tipo_pk`, `nombre`) values('2','OFICINA 2');
 
 insert into `car_cuenta_cobrar_tipo` (`codigo_cuenta_cobrar_tipo_pk`, `nombre`) values('1','FACTURACIÓN NÓMINA');
 insert into `car_cuenta_cobrar_tipo` (`codigo_cuenta_cobrar_tipo_pk`, `nombre`) values('2','FACTURACIÓN TURNO');
