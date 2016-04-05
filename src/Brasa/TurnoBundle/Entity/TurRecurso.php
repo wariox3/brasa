@@ -164,6 +164,17 @@ class TurRecurso
     protected $costosRecursosRecursoRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="TurNovedad", mappedBy="recursoRel")
+     */
+    protected $novedadesRecursoRel;    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="TurNovedad", mappedBy="recursoReemplazoRel")
+     */
+    protected $novedadesRecursoReemplazoRel;    
+    
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -173,6 +184,9 @@ class TurRecurso
         $this->soportesPagosDetallesRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pedidosDetallesRecursosRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->serviciosDetallesRecursosRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->costosRecursosRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->novedadesRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->novedadesRecursoReemplazoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -915,5 +929,73 @@ class TurRecurso
     public function getCostosRecursosRecursoRel()
     {
         return $this->costosRecursosRecursoRel;
+    }
+
+    /**
+     * Add novedadesRecursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurNovedad $novedadesRecursoRel
+     *
+     * @return TurRecurso
+     */
+    public function addNovedadesRecursoRel(\Brasa\TurnoBundle\Entity\TurNovedad $novedadesRecursoRel)
+    {
+        $this->novedadesRecursoRel[] = $novedadesRecursoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove novedadesRecursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurNovedad $novedadesRecursoRel
+     */
+    public function removeNovedadesRecursoRel(\Brasa\TurnoBundle\Entity\TurNovedad $novedadesRecursoRel)
+    {
+        $this->novedadesRecursoRel->removeElement($novedadesRecursoRel);
+    }
+
+    /**
+     * Get novedadesRecursoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNovedadesRecursoRel()
+    {
+        return $this->novedadesRecursoRel;
+    }
+
+    /**
+     * Add novedadesRecursoReemplazoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurNovedad $novedadesRecursoReemplazoRel
+     *
+     * @return TurRecurso
+     */
+    public function addNovedadesRecursoReemplazoRel(\Brasa\TurnoBundle\Entity\TurNovedad $novedadesRecursoReemplazoRel)
+    {
+        $this->novedadesRecursoReemplazoRel[] = $novedadesRecursoReemplazoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove novedadesRecursoReemplazoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurNovedad $novedadesRecursoReemplazoRel
+     */
+    public function removeNovedadesRecursoReemplazoRel(\Brasa\TurnoBundle\Entity\TurNovedad $novedadesRecursoReemplazoRel)
+    {
+        $this->novedadesRecursoReemplazoRel->removeElement($novedadesRecursoReemplazoRel);
+    }
+
+    /**
+     * Get novedadesRecursoReemplazoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNovedadesRecursoReemplazoRel()
+    {
+        return $this->novedadesRecursoReemplazoRel;
     }
 }

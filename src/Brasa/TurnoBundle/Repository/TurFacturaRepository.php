@@ -201,11 +201,9 @@ class TurFacturaRepository extends EntityRepository {
                 $arClienteTurno = $em->getRepository('BrasaTurnoBundle:TurCliente')->find($arFactura->getCodigoClienteFk()); 
                 $arClienteCartera = new \Brasa\CarteraBundle\Entity\CarCliente();
                 $arClienteCartera = $em->getRepository('BrasaCarteraBundle:CarCliente')->findOneBy(array('nit' => $arClienteTurno->getNit())); 
-                $arFormaPago = new \Brasa\GeneralBundle\Entity\GenFormaPago();
-                $arFormaPago = $em->getRepository('BrasaGeneralBundle:GenFormaPago')->find(1);
                 if ($arClienteCartera == null){
                     $arClienteCartera = new \Brasa\CarteraBundle\Entity\CarCliente();
-                    $arClienteCartera->setFormaPagoRel($arFormaPago->getFormaPagoRel());
+                    $arClienteCartera->setFormaPagoRel($arClienteTurno->getFormaPagoRel());
                     $arClienteCartera->setCiudadRel($arClienteTurno->getCiudadRel());
                     $arClienteCartera->setNit($arClienteTurno->getNit());
                     $arClienteCartera->setDigitoVerificacion($arClienteTurno->getDigitoVerificacion());

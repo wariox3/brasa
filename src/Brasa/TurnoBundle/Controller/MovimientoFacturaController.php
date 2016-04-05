@@ -13,9 +13,8 @@ class MovimientoFacturaController extends Controller
     /**
      * @Route("/tur/movimiento/factura", name="brs_tur_movimiento_factura")
      */    
-    public function listaAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function listaAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();        
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
