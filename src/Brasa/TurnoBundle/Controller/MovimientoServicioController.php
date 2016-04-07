@@ -406,8 +406,8 @@ class MovimientoServicioController extends Controller
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurServicio')->listaDQL(
                 $session->get('filtroServicioCodigo'), 
                 $session->get('filtroCodigoCliente'), 
-                $session->get('filtroServicioCodigo'),
-                $session->get('filtroServicioCodigo'));
+                $session->get('filtroServicioEstadoAutorizado'),
+                $session->get('filtroServicioEstadoCerrado'));
     }    
 
     private function listaRecurso() {        
@@ -522,6 +522,7 @@ class MovimientoServicioController extends Controller
     }    
     
     private function generarExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
@@ -535,10 +536,10 @@ class MovimientoServicioController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'H'; $col++) {
+        for($col = 'A'; $col !== 'K'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
         }     
-        for($col = 'D'; $col !== 'H'; $col++) {
+        for($col = 'D'; $col !== 'K'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }        
@@ -547,11 +548,13 @@ class MovimientoServicioController extends Controller
                     ->setCellValue('A1', 'CÓDIG0')
                     ->setCellValue('B1', 'NIT')
                     ->setCellValue('C1', 'CLIENTE')
-                    ->setCellValue('D1', 'SECTOR')                    
-                    ->setCellValue('E1', 'HORAS')
-                    ->setCellValue('F1', 'H.DIURNAS')
-                    ->setCellValue('G1', 'H.NOCTURNAS')
-                    ->setCellValue('H1', 'VALOR');
+                    ->setCellValue('D1', 'SECTOR') 
+                    ->setCellValue('E1', 'AUT')
+                    ->setCellValue('F1', 'CER')
+                    ->setCellValue('G1', 'HORAS')
+                    ->setCellValue('H1', 'H.DIURNAS')
+                    ->setCellValue('I1', 'H.NOCTURNAS')
+                    ->setCellValue('J1', 'VALOR');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -563,11 +566,13 @@ class MovimientoServicioController extends Controller
                     ->setCellValue('A' . $i, $arServicio->getCodigoServicioPk())  
                     ->setCellValue('B' . $i, $arServicio->getClienteRel()->getNit())
                     ->setCellValue('C' . $i, $arServicio->getClienteRel()->getNombreCorto())
-                    ->setCellValue('D' . $i, $arServicio->getSectorRel()->getNombre())                    
-                    ->setCellValue('E' . $i, $arServicio->getHoras())
-                    ->setCellValue('F' . $i, $arServicio->getHorasDiurnas())
-                    ->setCellValue('G' . $i, $arServicio->getHorasNocturnas())
-                    ->setCellValue('H' . $i, $arServicio->getVrTotal());
+                    ->setCellValue('D' . $i, $arServicio->getSectorRel()->getNombre())  
+                    ->setCellValue('E' . $i, $objFunciones->devuelveBoolean($arServicio->getEstadoAutorizado()))
+                    ->setCellValue('F' . $i, $objFunciones->devuelveBoolean($arServicio->getEstadoCerrado()))
+                    ->setCellValue('G' . $i, $arServicio->getHoras())
+                    ->setCellValue('H' . $i, $arServicio->getHorasDiurnas())
+                    ->setCellValue('I' . $i, $arServicio->getHorasNocturnas())
+                    ->setCellValue('J' . $i, $arServicio->getVrTotal());
 
             $i++;
         }
