@@ -66,6 +66,9 @@ class MovimientoServicioController extends Controller
                 $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
                 $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));                
                 if(count($arCliente) > 0) {
+                    $fecha = new \DateTime('now');
+                    $dateFechaGeneracion = date_create($fecha->format('Y/m/') . '01');
+                    $arServicio->setFechaGeneracion($dateFechaGeneracion);
                     $arServicio->setClienteRel($arCliente);
                     $arUsuario = $this->getUser();
                     $arServicio->setUsuario($arUsuario->getUserName());

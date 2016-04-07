@@ -66,7 +66,8 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arServicios, 'CÓDIGO', 'p.codigoServicioPk') }}</th>
                 <th>CLIENTE</th>
-                <th>SECTOR</th>                
+                <th>SECTOR</th>
+                <th>ULT.GENERADO</th>                
                 <th>H</th>
                 <th>H.D</th>
                 <th>H.N</th>
@@ -80,7 +81,8 @@
             <tr>                
                 <td>{{ arServicios.codigoServicioPk  }}</td>                  
                 <td>{{ arServicios.clienteRel.nombreCorto  }}</td>  
-                <td>{{ arServicios.sectorRel.nombre |default('')  }}</td>                                             
+                <td>{{ arServicios.sectorRel.nombre |default('')  }}</td>
+                <td>{{ arServicios.fechaGeneracion |date('Y/m')  }}</td>                
                 <td style="text-align: right">{{ arServicios.horas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arServicios.horasDiurnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arServicios.horasNocturnas | number_format(0, '.', ',') }}</td>

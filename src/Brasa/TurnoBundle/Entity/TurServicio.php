@@ -18,6 +18,11 @@ class TurServicio
     private $codigoServicioPk;                      
     
     /**
+     * @ORM\Column(name="fecha_generacion", type="date", nullable=true)
+     */    
+    private $fechaGeneracion;    
+    
+    /**
      * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
      */    
     private $codigoClienteFk;    
@@ -540,5 +545,29 @@ class TurServicio
     public function getUsuario()
     {
         return $this->usuario;
+    }
+
+    /**
+     * Set fechaGeneracion
+     *
+     * @param \DateTime $fechaGeneracion
+     *
+     * @return TurServicio
+     */
+    public function setFechaGeneracion($fechaGeneracion)
+    {
+        $this->fechaGeneracion = $fechaGeneracion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaGeneracion
+     *
+     * @return \DateTime
+     */
+    public function getFechaGeneracion()
+    {
+        return $this->fechaGeneracion;
     }
 }
