@@ -212,11 +212,7 @@ brs_tur_proceso_generar_soporte_pago_detalle_ver:
     
 brs_tur_proceso_generar_soporte_pago_nuevo:
     path:     /tur/proceso/generar/soporte/pago/nuevo/{codigoSoportePagoPeriodo}
-    defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarSoportePago:nuevo }    
-    
-brs_tur_proceso_generar_programacion_lista:
-    path:     /tur/proceso/generar/programacion/lista
-    defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarProgramacion:lista }                                         
+    defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarSoportePago:nuevo }        
 
 brs_tur_utilidad_programacion_inconsistencias:    
     path:     /tur/utilidad/programacion/inconsistencias

@@ -1,12 +1,15 @@
 <?php
-namespace Brasa\TurnoBundle\Controller;
+namespace Brasa\TurnoBundle\Controller\Proceso;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-class ProcesoGenerarProgramacionController extends Controller
+class GenerarProgramacionController extends Controller
 {
     var $strListaDql = "";
-    
+    /**
+     * @Route("/tur/proceso/generar/programacion/lista", name="brs_tur_proceso_generar_programacion_lista")
+     */    
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 4)) {
@@ -17,12 +20,11 @@ class ProcesoGenerarProgramacionController extends Controller
         $form = $this->formularioLista();
         $form->handleRequest($request);
         $this->lista();
-        if ($form->isValid()) {
+        if ($form->isValid()) {            
             if($request->request->get('OpGenerar')) {
                 $codigoPedido = $request->request->get('OpGenerar');
                 $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
-                $arPedido =  $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);                    
-                
+                $arPedido =  $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);                 
                 $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
                 $arProgramacion->setClienteRel($arPedido->getClienteRel());
                 $arProgramacion->setFecha($arPedido->getFechaProgramacion());
@@ -40,33 +42,32 @@ class ProcesoGenerarProgramacionController extends Controller
                 $em->flush();               
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_programacion_lista')); 
             }    
-            if ($form->get('BtnGenerar')->isClicked()) { 
-                $dateFecha = $form->get('fecha')->getData();
-                $strAnioMes = $dateFecha->format('Y/m');
-                $strFechaInicio = $dateFecha->format('Y/m') . '/01';                        
-                $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
-                $strFechaFinal = $dateFecha->format('Y/m') . '/' . $strUltimoDiaMes;                
-                $strDql =  $em->getRepository('BrasaTurnoBundle:TurPedido')->pedidoSinProgramarDql($strFechaInicio, $strFechaFinal);
-                $arPedidos = new \Brasa\TurnoBundle\Entity\TurPedido();                
-                $query = $em->createQuery($strDql);
-                $arPedidos = $query->getResult();
-                foreach ($arPedidos as $arPedido) {
-                    $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
-                    $arProgramacion->setClienteRel($arPedido->getClienteRel());
-                    $arProgramacion->setFecha($dateFecha);
-                    $em->persist($arProgramacion);                    
-                    $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
-                    $arPedidoDetalles =  $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $arPedido->getCodigoPedidoPk())); 
-                    foreach ($arPedidoDetalles as $arPedidoDetalle) {
-                        $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->nuevo($arPedidoDetalle->getCodigoPedidoDetallePk(), $arProgramacion);
+            if ($form->get('BtnGenerar')->isClicked()) {  
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados as $codigoPedido) {
+                        $arPedidoActualizar = new \Brasa\TurnoBundle\Entity\TurPedido();
+                        $arPedidoActualizar =  $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);                            
+                        if($arPedidoActualizar) {
+                            if($arPedidoActualizar->getEstadoProgramado() == 0) {
+                                $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
+                                $arProgramacion->setClienteRel($arPedidoActualizar->getClienteRel());
+                                $arProgramacion->setFecha($arPedidoActualizar->getFechaProgramacion());
+                                $em->persist($arProgramacion);                    
+                                $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                                $arPedidoDetalles =  $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $arPedidoActualizar->getCodigoPedidoPk())); 
+                                foreach ($arPedidoDetalles as $arPedidoDetalle) {
+                                    $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->nuevo($arPedidoDetalle->getCodigoPedidoDetallePk(), $arProgramacion);
+                                } 
+                                $arPedidoActualizar->setEstadoProgramado(true);
+                                $em->persist($arPedidoActualizar);
+                                $em->flush();
+                            }
+                        }
                     }
-                    $arPedidoActualizar = new \Brasa\TurnoBundle\Entity\TurPedido();
-                    $arPedidoActualizar =  $em->getRepository('BrasaTurnoBundle:TurPedido')->find($arPedido->getCodigoPedidoPk());    
-                    $arPedidoActualizar->setEstadoProgramado(true);
-                    $em->persist($arPedidoActualizar);
-                }
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_tur_proceso_generar_programacion_lista'));                                 
+                    
+                }    
+                return $this->redirect($this->generateUrl('brs_tur_proceso_generar_programacion_lista'));                                                                     
             }
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
@@ -86,13 +87,9 @@ class ProcesoGenerarProgramacionController extends Controller
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedido')->pedidoSinProgramarDql();
     }
     
-    private function formularioLista() {
-        $dateDia = new \DateTime('now');
-        $strDia = $dateDia->format('Y/m/') . "01";
-        $dateDia = date_create($strDia);
-        $form = $this->createFormBuilder()
-            ->add('fecha', 'date', array('data'  => $dateDia, 'format' => 'y MMMM d'))
-            ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))
+    private function formularioLista() {        
+        $form = $this->createFormBuilder()                                            
+            ->add('BtnGenerar', 'submit', array('label'  => 'Generar seleccionados'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->getForm();
         return $form;

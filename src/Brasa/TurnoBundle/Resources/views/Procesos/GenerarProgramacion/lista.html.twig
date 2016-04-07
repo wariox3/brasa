@@ -14,13 +14,7 @@
         {{ form_errors(form) }}
         <div class="panel panel-default">
             <div class="panel-heading">Filtros de busqueda</div>
-            <div class="panel-body">
-                <div class="form-group form-group-sm">
-                    <label for="form_fecha" class="col-sm-3 control-label">Fecha:</label>
-                    <div class="col-sm-9">
-                            {{ form_widget(form.fecha) }}
-                    </div>
-                </div>                
+            <div class="panel-body">                               
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnGenerar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
@@ -34,7 +28,8 @@
                 <th>NUMERO</th>
                 <th>FECHA</th>
                 <th>CLIENTE</th>
-                <th>SECTOR</th>                
+                <th>SECTOR</th>
+                <th>PROGRAMACION</th>                
                 <th>H</th>
                 <th>H.D</th>
                 <th>H.N</th>
@@ -42,6 +37,7 @@
                 <th>AUT</th> 
                 <th></th>
                 <th></th>
+                <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>                
             </tr>
             {% for arPedidos in arPedidos %}
             <tr>                
@@ -50,13 +46,15 @@
                 <td>{{ arPedidos.fecha |date("Y/m/d")  }}</td>                
                 <td>{{ arPedidos.clienteRel.nombreCorto  }}</td>  
                 <td>{{ arPedidos.sectorRel.nombre |default('')  }}</td>
+                <td>{{ arPedidos.fechaProgramacion |date("Y/m/d")  }}</td>
                 <td style="text-align: right">{{ arPedidos.horas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidos.horasDiurnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidos.horasNocturnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidos.vrTotal | number_format(0, '.', ',') }}</td>                                
                 <td>{% if arPedidos.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>                
-                <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arPedidos.codigoPedidoPk }}">Generar</button>                             </td>
+                <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arPedidos.codigoPedidoPk }}" onclick="javascript:if (!confirm('Esta seguro de generar una programacion en este periodo con este pedido?'))return false;">Generar</button></td>
                 <td style="text-align: center"><a href="{{ path('brs_tur_pedido_detalle', { 'codigoPedido': arPedidos.codigoPedidoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                
+                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidos.codigoPedidoPk }}" /></td>                                
             </tr>
             
             {% endfor %}
