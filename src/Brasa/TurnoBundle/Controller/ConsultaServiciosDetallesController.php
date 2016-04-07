@@ -84,11 +84,11 @@ class ConsultaServiciosDetallesController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'Y'; $col++) {
+        for($col = 'A'; $col !== 'Z'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
         }     
-        for($col = 'Y'; $col !== 'Y'; $col++) {
+        for($col = 'Y'; $col !== 'Z'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }        
@@ -101,23 +101,24 @@ class ConsultaServiciosDetallesController extends Controller
                     ->setCellValue('E1', 'SERVICIO')
                     ->setCellValue('F1', 'MODALIDAD')
                     ->setCellValue('G1', 'PERIODO')
-                    ->setCellValue('H1', 'PLANTILLA')
-                    ->setCellValue('I1', 'DESDE')
-                    ->setCellValue('J1', 'HASTA')
-                    ->setCellValue('K1', 'CANT')
-                    ->setCellValue('L1', 'CANT.R')
-                    ->setCellValue('M1', 'LU')
-                    ->setCellValue('N1', 'MA')
-                    ->setCellValue('O1', 'MI')
-                    ->setCellValue('P1', 'JU')
-                    ->setCellValue('Q1', 'VI')
-                    ->setCellValue('R1', 'SA')
-                    ->setCellValue('S1', 'DO')
-                    ->setCellValue('T1', 'FE')
-                    ->setCellValue('U1', 'H')
-                    ->setCellValue('V1', 'H.D')
-                    ->setCellValue('W1', 'H.N')
-                    ->setCellValue('X1', 'DIAS');
+                    ->setCellValue('H1', 'DESDE')
+                    ->setCellValue('I1', 'HASTA')                
+                    ->setCellValue('J1', 'PLANTILLA')
+                    ->setCellValue('K1', 'FECHA.P')
+                    ->setCellValue('L1', 'CANT')
+                    ->setCellValue('M1', 'CANT.R')
+                    ->setCellValue('N1', 'LU')
+                    ->setCellValue('O1', 'MA')
+                    ->setCellValue('P1', 'MI')
+                    ->setCellValue('Q1', 'JU')
+                    ->setCellValue('R1', 'VI')
+                    ->setCellValue('S1', 'SA')
+                    ->setCellValue('T1', 'DO')
+                    ->setCellValue('U1', 'FE')
+                    ->setCellValue('V1', 'H')
+                    ->setCellValue('W1', 'H.D')
+                    ->setCellValue('X1', 'H.N')
+                    ->setCellValue('Y1', 'DIAS');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -132,29 +133,30 @@ class ConsultaServiciosDetallesController extends Controller
                     ->setCellValue('E' . $i, $arServicioDetalle->getConceptoServicioRel()->getNombre())
                     ->setCellValue('F' . $i, $arServicioDetalle->getModalidadServicioRel()->getNombre())
                     ->setCellValue('G' . $i, $arServicioDetalle->getPeriodoRel()->getNombre())
-                    ->setCellValue('I' . $i, $arServicioDetalle->getFechaDesde()->format('Y/m/d'))
-                    ->setCellValue('J' . $i, $arServicioDetalle->getFechaHasta()->format('Y/m/d'))
-                    ->setCellValue('K' . $i, $arServicioDetalle->getCantidad())
-                    ->setCellValue('L' . $i, $arServicioDetalle->getCantidadRecurso())
-                    ->setCellValue('M' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getLunes()))
-                    ->setCellValue('N' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getMartes()))
-                    ->setCellValue('O' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getMiercoles()))
-                    ->setCellValue('P' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getJueves()))
-                    ->setCellValue('Q' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getViernes()))
-                    ->setCellValue('R' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getSabado()))
-                    ->setCellValue('S' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getDomingo()))
-                    ->setCellValue('T' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getFestivo()))
-                    ->setCellValue('U' . $i, $arServicioDetalle->getHoras())
-                    ->setCellValue('V' . $i, $arServicioDetalle->getHorasDiurnas())
-                    ->setCellValue('W' . $i, $arServicioDetalle->getHorasNocturnas())
-                    ->setCellValue('X' . $i, $arServicioDetalle->getDias());
+                    ->setCellValue('H' . $i, $arServicioDetalle->getFechaDesde()->format('Y/m/d'))
+                    ->setCellValue('I' . $i, $arServicioDetalle->getFechaHasta()->format('Y/m/d'))
+                    ->setCellValue('K' . $i, $arServicioDetalle->getFechaIniciaPlantilla()->format('Y/m/d'))
+                    ->setCellValue('L' . $i, $arServicioDetalle->getCantidad())
+                    ->setCellValue('M' . $i, $arServicioDetalle->getCantidadRecurso())
+                    ->setCellValue('N' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getLunes()))
+                    ->setCellValue('O' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getMartes()))
+                    ->setCellValue('P' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getMiercoles()))
+                    ->setCellValue('Q' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getJueves()))
+                    ->setCellValue('R' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getViernes()))
+                    ->setCellValue('S' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getSabado()))
+                    ->setCellValue('T' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getDomingo()))
+                    ->setCellValue('U' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getFestivo()))
+                    ->setCellValue('V' . $i, $arServicioDetalle->getHoras())
+                    ->setCellValue('W' . $i, $arServicioDetalle->getHorasDiurnas())
+                    ->setCellValue('X' . $i, $arServicioDetalle->getHorasNocturnas())
+                    ->setCellValue('Y' . $i, $arServicioDetalle->getDias());
             if($arServicioDetalle->getPuestoRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('D' . $i, $arServicioDetalle->getPuestoRel()->getNombre());
             }
             if($arServicioDetalle->getPlantillaRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('H' . $i, $arServicioDetalle->getPlantillaRel()->getNombre());
+                    ->setCellValue('J' . $i, $arServicioDetalle->getPlantillaRel()->getNombre());
             }
             $i++;
         }
