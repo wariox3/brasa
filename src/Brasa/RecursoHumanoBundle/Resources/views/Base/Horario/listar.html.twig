@@ -13,7 +13,8 @@
             <th>{{ knp_pagination_sortable(arHorarios, 'NOMBRE', 'codigo') }}</th>
             <th>HORA ENTRADA</th>
             <th>HORA SALIDA</th>
-            <th>GENERA HE</th>
+            <th>CONTROL</th>
+            <th>EXTRAS</th>            
             <th>LUNES</th>
             <th>MARTES</th>
             <th>MIERCOLES</th>
@@ -31,7 +32,8 @@
                 <td>{{arHorarios.nombre}}</td>
                 <td>{{arHorarios.horaEntrada|date('H:i:s')}}</td>
                 <td>{{arHorarios.horaSalida|date('H:i:s')}}</td>
-                <td>{% if arHorarios.generaHoraExtra == 1 %}SI {% else %}NO{% endif %}</td>
+                <td>{% if arHorarios.controlHorario == 1 %}SI {% else %}NO{% endif %}</td>
+                <td>{% if arHorarios.generaHoraExtra == 1 %}SI {% else %}NO{% endif %}</td>                
                 <td>{{arHorarios.lunes}}</td>
                 <td>{{arHorarios.martes}}</td>
                 <td>{{arHorarios.miercoles}}</td>

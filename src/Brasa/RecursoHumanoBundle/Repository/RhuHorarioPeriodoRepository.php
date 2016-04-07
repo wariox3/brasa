@@ -41,20 +41,15 @@ class RhuHorarioPeriodoRepository extends EntityRepository {
         $arHorarioPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioPeriodo')->find($codigoHorarioPeriodo);        
         $arHorarioPeriodosAbiertos = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioPeriodo')->findOneBy(array('estadoGenerado' => 1, 'estadoCerrado' => 0));
         if ($arHorarioPeriodosAbiertos == null){
-            $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
-                    . "WHERE c.codigoContratoPk <> 0 "
-                    . " AND (c.fechaHasta <= '" . $arHorarioPeriodo->getFechaPeriodo()->format('Y-m-d') . "' "
-                    . " OR c.indefinido = 1)";            
-            $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-            $query = $em->createQuery($dql);
-            $arContratos = $query->getResult();
-            foreach ($arContratos as $arContrato) {
+            $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+            $arEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findBy(array('estadoActivo' => 1));
+            foreach ($arEmpleados as $arEmpleado) {
                 $arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
                 $arHorarioAcceso->setHorarioPeriodoRel($arHorarioPeriodo);
-                $arHorarioAcceso->setEmpleadoRel($arContrato->getEmpleadoRel());
+                $arHorarioAcceso->setEmpleadoRel($arEmpleado);
                 $arHorarioAcceso->setFechaEntrada($arHorarioPeriodo->getFechaPeriodo());
                 $intDiaSemana = $arHorarioPeriodo->getFechaPeriodo()->format('N');
-                $CodigoHorarioEmpleado = $arContrato->getEmpleadoRel()->getCodigoHorarioFk();
+                $CodigoHorarioEmpleado = $arEmpleado->getCodigoHorarioFk();
                 $arHorario = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorario')->find($CodigoHorarioEmpleado);
                 $em->persist($arHorarioAcceso);
                 if ($intDiaSemana == 1) {
