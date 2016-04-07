@@ -58,48 +58,60 @@ class CapacitacionesController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnImprimir')->isClicked()) {
-                $objFormato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCapacitacion();
-                $objFormato->Generar($this, $codigoCapacitacion);
+                if ($arCapacitacion->getEstadoAutorizado() == 1){
+                    $objFormato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCapacitacion();
+                    $objFormato->Generar($this, $codigoCapacitacion);
+                }    
             }
             if($form->get('BtnImprimirNotas')->isClicked()) {
-                $objFormato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCapacitacionNotas();
-                $objFormato->Generar($this, $codigoCapacitacion);
+                if ($arCapacitacion->getEstadoAutorizado() == 1){
+                    $objFormato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCapacitacionNotas();
+                    $objFormato->Generar($this, $codigoCapacitacion);
+                }    
             }            
             if($form->get('BtnAutorizar')->isClicked()) {
-                $arCapacitacion->setEstadoAutorizado(1);
-                $em->persist($arCapacitacion);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_capacitacion_detalle', array('codigoCapacitacion' => $codigoCapacitacion)));           
+                if ($arCapacitacion->getEstadoAutorizado() == 0){
+                    $arCapacitacion->setEstadoAutorizado(1);
+                    $em->persist($arCapacitacion);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_capacitacion_detalle', array('codigoCapacitacion' => $codigoCapacitacion)));           
+                }    
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {
-                $arCapacitacion->setEstadoAutorizado(0);
-                $em->persist($arCapacitacion);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_capacitacion_detalle', array('codigoCapacitacion' => $codigoCapacitacion)));           
+                if ($arCapacitacion->getEstadoAutorizado() == 1){
+                    $arCapacitacion->setEstadoAutorizado(0);
+                    $em->persist($arCapacitacion);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_capacitacion_detalle', array('codigoCapacitacion' => $codigoCapacitacion)));           
+                }    
             }            
-            if($form->get('BtnEliminarDetalle')->isClicked()) {  
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');                                                   
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados as $codigoCapacitacionDetalle) {
-                        $arCapacitacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle();
-                        $arCapacitacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionDetalle')->find($codigoCapacitacionDetalle);                        
-                        $em->remove($arCapacitacionDetalle);                        
-                    }
-                    $em->flush();                    
-                } 
-                return $this->redirect($this->generateUrl('brs_rhu_capacitacion_detalle', array('codigoCapacitacion' => $codigoCapacitacion)));           
+            if($form->get('BtnEliminarDetalle')->isClicked()) {
+                if ($arCapacitacion->getEstadoAutorizado() == 0){
+                    $arrSeleccionados = $request->request->get('ChkSeleccionar');                                                   
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados as $codigoCapacitacionDetalle) {
+                            $arCapacitacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle();
+                            $arCapacitacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionDetalle')->find($codigoCapacitacionDetalle);                        
+                            $em->remove($arCapacitacionDetalle);                        
+                        }
+                        $em->flush();                    
+                    } 
+                    return $this->redirect($this->generateUrl('brs_rhu_capacitacion_detalle', array('codigoCapacitacion' => $codigoCapacitacion)));           
+                }    
             }  
-            if($form->get('BtnEliminarNota')->isClicked()) {  
-                $arrSeleccionados = $request->request->get('ChkSeleccionarNota');                                                   
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados as $codigoCapacitacionNota) {
-                        $arCapacitacionNota = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionNota();
-                        $arCapacitacionNota = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionNota')->find($codigoCapacitacionNota);                        
-                        $em->remove($arCapacitacionNota);                        
-                    }
-                    $em->flush();                    
-                } 
-                return $this->redirect($this->generateUrl('brs_rhu_capacitacion_detalle', array('codigoCapacitacion' => $codigoCapacitacion)));           
+            if($form->get('BtnEliminarNota')->isClicked()) {
+                if ($arCapacitacion->getEstadoAutorizado() == 0){
+                    $arrSeleccionados = $request->request->get('ChkSeleccionarNota');                                                   
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados as $codigoCapacitacionNota) {
+                            $arCapacitacionNota = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionNota();
+                            $arCapacitacionNota = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionNota')->find($codigoCapacitacionNota);                        
+                            $em->remove($arCapacitacionNota);                        
+                        }
+                        $em->flush();                    
+                    } 
+                    return $this->redirect($this->generateUrl('brs_rhu_capacitacion_detalle', array('codigoCapacitacion' => $codigoCapacitacion)));           
+                }    
             }             
         }
         $arCapacitacionesDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle();
@@ -124,11 +136,15 @@ class CapacitacionesController extends Controller
         $form = $this->createForm(new RhuCapacitacionDetalleType(), $arCapacitacionDetalle);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arCapacitacionDetalle = $form->getData();
-            $arCapacitacionDetalle->setCapacitacionRel($arCapacitacion);
-            $em->persist($arCapacitacionDetalle);
-            $em->flush();
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            if ($arCapacitacion->getEstadoAutorizado() == 0){
+                $arCapacitacionDetalle = $form->getData();
+                $arCapacitacionDetalle->setCapacitacionRel($arCapacitacion);
+                $em->persist($arCapacitacionDetalle);
+                $em->flush();
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            } else {
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }    
         }        
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Capacitaciones:detalleNuevo.html.twig', array(
             'form' => $form->createView()));
@@ -142,22 +158,23 @@ class CapacitacionesController extends Controller
             ->add('BtnAgregar', 'submit', array('label'  => 'Agregar',))
             ->getForm();
         $form->handleRequest($request);
-
         if ($form->isValid()) { 
             if ($form->get('BtnAgregar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoEmpleado) {                           
-                        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);                                
-                        $arCapacitacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle();
-                        $arCapacitacionDetalle->setCapacitacionRel($arCapacitacion);
-                        $arCapacitacionDetalle->setNumeroIdentificacion($arEmpleado->getNumeroIdentificacion());                        
-                        $arCapacitacionDetalle->setNombreCorto($arEmpleado->getNombreCorto());                        
-                        $em->persist($arCapacitacionDetalle);
+                if ($arCapacitacion->getEstadoAutorizado() == 0){
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados AS $codigoEmpleado) {                           
+                            $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);                                
+                            $arCapacitacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle();
+                            $arCapacitacionDetalle->setCapacitacionRel($arCapacitacion);
+                            $arCapacitacionDetalle->setNumeroIdentificacion($arEmpleado->getNumeroIdentificacion());                        
+                            $arCapacitacionDetalle->setNombreCorto($arEmpleado->getNombreCorto());                        
+                            $em->persist($arCapacitacionDetalle);
+                        }
+                        $em->flush();
                     }
-                    $em->flush();
-                }                                
+                }    
             }            
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
         }
@@ -177,11 +194,15 @@ class CapacitacionesController extends Controller
         $form = $this->createForm(new RhuCapacitacionNotaType(), $arCapacitacionNota);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arCapacitacionDetalle = $form->getData();
-            $arCapacitacionDetalle->setCapacitacionRel($arCapacitacion);
-            $em->persist($arCapacitacionDetalle);
-            $em->flush();
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            if ($arCapacitacion->getEstadoAutorizado() == 0){
+                $arCapacitacionDetalle = $form->getData();
+                $arCapacitacionDetalle->setCapacitacionRel($arCapacitacion);
+                $em->persist($arCapacitacionDetalle);
+                $em->flush();
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            } else {
+              echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";  
+            }
         }        
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Capacitaciones:detalleNuevoNota.html.twig', array(
             'form' => $form->createView()));
@@ -195,10 +216,14 @@ class CapacitacionesController extends Controller
         $form = $this->createForm(new RhuCapacitacionType(), $arCapacitacion);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arCapacitacion = $form->getData();                
-            $em->persist($arCapacitacion);            
-            $em->flush();
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            if ($arCapacitacion->getEstadoAutorizado() == 0){
+                $arCapacitacion = $form->getData();                
+                $em->persist($arCapacitacion);            
+                $em->flush();
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            } else {
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }    
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Capacitaciones:nuevo.html.twig', array(
             'arRequisito' => $arCapacitacion,            

@@ -51,22 +51,27 @@ class LiquidacionesController extends Controller
                 }
             }
             if($form->get('BtnAutorizar')->isClicked()) {
-                $arDotacionPendiente = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->dotacionDevolucion($arLiquidacion->getCodigoEmpleadoFk());
-                $registrosDotacionesPendientes = count($arDotacionPendiente);
-                if ($registrosDotacionesPendientes > 0){
-                    $objMensaje->Mensaje("error", "El empleado tiene dotaciones pendientes por entregar, no se puede autorizar la liquidación", $this);
-                }else{
-                    $arLiquidacion->setEstadoAutorizado(1);
+                if ($arLiquidacion->getEstadoAutorizado() == 0){
+                    $arDotacionPendiente = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->dotacionDevolucion($arLiquidacion->getCodigoEmpleadoFk());
+                    $registrosDotacionesPendientes = count($arDotacionPendiente);
+                    if ($registrosDotacionesPendientes > 0){
+                        $objMensaje->Mensaje("error", "El empleado tiene dotaciones pendientes por entregar, no se puede autorizar la liquidación", $this);
+                    }else{
+                        $arLiquidacion->setEstadoAutorizado(1);
+                        $em->persist($arLiquidacion);
+                        $em->flush();
+                        return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));
+                    }                    
+                }
+                    
+            }
+            if($form->get('BtnDesAutorizar')->isClicked()) {
+                if ($arLiquidacion->getEstadoAutorizado() == 1){
+                    $arLiquidacion->setEstadoAutorizado(0);
                     $em->persist($arLiquidacion);
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));
-                }
-            }
-            if($form->get('BtnDesAutorizar')->isClicked()) {
-                $arLiquidacion->setEstadoAutorizado(0);
-                $em->persist($arLiquidacion);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));
+                }    
             }            
             if($form->get('BtnLiquidar')->isClicked()) {
                 if($arLiquidacion->getEstadoAutorizado() == 0) {
@@ -78,18 +83,20 @@ class LiquidacionesController extends Controller
 
             }
             if($form->get('BtnEliminarAdicional')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoLiquidacionAdicional) {
-                        $arLiquidacionAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicional();
-                        $arLiquidacionAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicional')->find($codigoLiquidacionAdicional);
-                        $em->remove($arLiquidacionAdicional);
+                if ($arLiquidacion->getEstadoAutorizado() == 0){
+                    $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados AS $codigoLiquidacionAdicional) {
+                            $arLiquidacionAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicional();
+                            $arLiquidacionAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicional')->find($codigoLiquidacionAdicional);
+                            $em->remove($arLiquidacionAdicional);
+                        }
+                        $em->flush();
+                        $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidarDeducciones($codigoLiquidacion);
                     }
-                    $em->flush();
-                    $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidarDeducciones($codigoLiquidacion);
-                }
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($codigoLiquidacion);
-                return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($codigoLiquidacion);
+                    return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));
+                }    
             }
         }
         $arLiquidacionAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
@@ -109,41 +116,44 @@ class LiquidacionesController extends Controller
             ->add('BtnAgregar', 'submit', array('label'  => 'Agregar',))
             ->getForm();
         $form->handleRequest($request);
-
         if($form->isValid()) {
             $arUsuario = $this->get('security.context')->getToken()->getUser();
-            if($form->get('BtnAgregar')->isClicked()) {
-                $arrControles = $request->request->All();
-                if (isset($arrControles['TxtValor'])) {
-                    $intIndice = 0;
-                    foreach ($arrControles['LblCodigo'] as $intCodigo) {
-                        if($arrControles['TxtValor'][$intIndice] != "" && $arrControles['TxtValor'][$intIndice] != 0) {
-                            $arLiquidacionAdicionalConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionalesConcepto();
-                            $arLiquidacionAdicionalConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionalesConcepto')->find( $intCodigo);
-                            $arLiquidacionAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
-                            $arLiquidacionAdicional->setLiquidacionAdicionalConceptoRel($arLiquidacionAdicionalConcepto);
-                            $arLiquidacionAdicional->setLiquidacionRel($arLiquidacion);
-                            if ($codigoConcepto == 1){
-                                $floValor = $arrControles['TxtValor'][$intIndice];
-                                $arLiquidacionAdicional->setVrDeduccion($floValor);
-                                $arLiquidacionAdicional->setDetalle($arrControles['TxtDetalle'][$intIndice]);
-                                $arLiquidacionAdicional->setCodigoUsuario($arUsuario->getUserName());
-                            }else {
-                                $floValor = $arrControles['TxtValor'][$intIndice];
-                                $arLiquidacionAdicional->setVrBonificacion($floValor);
-                                $arLiquidacionAdicional->setDetalle($arrControles['TxtDetalle'][$intIndice]);
-                                $arLiquidacionAdicional->setCodigoUsuario($arUsuario->getUserName());
+            if ($arLiquidacion->getEstadoAutorizado() == 0){
+                if($form->get('BtnAgregar')->isClicked()) {
+                    $arrControles = $request->request->All();
+                    if (isset($arrControles['TxtValor'])) {
+                        $intIndice = 0;
+                        foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                            if($arrControles['TxtValor'][$intIndice] != "" && $arrControles['TxtValor'][$intIndice] != 0) {
+                                $arLiquidacionAdicionalConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionalesConcepto();
+                                $arLiquidacionAdicionalConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionalesConcepto')->find( $intCodigo);
+                                $arLiquidacionAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
+                                $arLiquidacionAdicional->setLiquidacionAdicionalConceptoRel($arLiquidacionAdicionalConcepto);
+                                $arLiquidacionAdicional->setLiquidacionRel($arLiquidacion);
+                                if ($codigoConcepto == 1){
+                                    $floValor = $arrControles['TxtValor'][$intIndice];
+                                    $arLiquidacionAdicional->setVrDeduccion($floValor);
+                                    $arLiquidacionAdicional->setDetalle($arrControles['TxtDetalle'][$intIndice]);
+                                    $arLiquidacionAdicional->setCodigoUsuario($arUsuario->getUserName());
+                                }else {
+                                    $floValor = $arrControles['TxtValor'][$intIndice];
+                                    $arLiquidacionAdicional->setVrBonificacion($floValor);
+                                    $arLiquidacionAdicional->setDetalle($arrControles['TxtDetalle'][$intIndice]);
+                                    $arLiquidacionAdicional->setCodigoUsuario($arUsuario->getUserName());
+                                }
+
+                                $em->persist($arLiquidacionAdicional);
                             }
-                            
-                            $em->persist($arLiquidacionAdicional);
+                            $intIndice++;
                         }
-                        $intIndice++;
+                        $em->flush();
+                        $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidarAdicionales($codigoLiquidacion);
                     }
-                    $em->flush();
-                    $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidarAdicionales($codigoLiquidacion);
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
                 }
+            } else {
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-            }
+            }   
         }
         $arLiquidacionAdicionalesConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionalesConcepto();
         $arLiquidacionAdicionalesConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionalesConcepto')->findBy(array('tipo' => $codigoConcepto));

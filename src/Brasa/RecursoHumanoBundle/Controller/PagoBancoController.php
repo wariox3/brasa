@@ -81,37 +81,45 @@ class PagoBancoController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {            
             if($form->get('BtnAutorizar')->isClicked()) {
-                $arPagoBanco->setEstadoAutorizado(1);
-                $em->persist($arPagoBanco);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_pago_banco_detalle', array('codigoPagoBanco' => $codigoPagoBanco)));           
+                if ($arPagoBanco->getEstadoAutorizado() == 0){
+                    $arPagoBanco->setEstadoAutorizado(1);
+                    $em->persist($arPagoBanco);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_pago_banco_detalle', array('codigoPagoBanco' => $codigoPagoBanco)));           
+                }
             }            
             if($form->get('BtnDesAutorizar')->isClicked()) {
-                $arPagoBanco->setEstadoAutorizado(0);
-                $em->persist($arPagoBanco);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_pago_banco_detalle', array('codigoPagoBanco' => $codigoPagoBanco)));           
+                if ($arPagoBanco->getEstadoAutorizado() == 1){
+                    $arPagoBanco->setEstadoAutorizado(0);
+                    $em->persist($arPagoBanco);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_pago_banco_detalle', array('codigoPagoBanco' => $codigoPagoBanco)));           
+                }    
             }                        
             if($form->get('BtnImprimir')->isClicked()) {
-                $objFormatoPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPagoBanco();
-                $objFormatoPagoBancoDetalle->Generar($this, $codigoPagoBanco);
+                if ($arPagoBanco->getEstadoAutorizado() == 1){
+                    $objFormatoPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPagoBanco();
+                    $objFormatoPagoBancoDetalle->Generar($this, $codigoPagoBanco);
+                }    
             }
-            if($form->get('BtnEliminarDetalle')->isClicked()) {  
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');                                                   
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados as $codigoPagoBancoDetalle) {
-                        $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
-                        $arPagoBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->find($codigoPagoBancoDetalle);
-                        $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-                        $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($arPagoBancoDetalle->getCodigoPagoFk());
-                        $arPago->setEstadoPagadoBanco(0);
-                        $em->persist($arPago);
-                        $em->remove($arPagoBancoDetalle);
-                    }
-                    $em->flush();
-                    $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBanco')->liquidar($codigoPagoBanco);
-                } 
-                return $this->redirect($this->generateUrl('brs_rhu_pago_banco_detalle', array('codigoPagoBanco' => $codigoPagoBanco)));           
+            if($form->get('BtnEliminarDetalle')->isClicked()) {
+                if ($arPagoBanco->getEstadoAutorizado() == 0){
+                    $arrSeleccionados = $request->request->get('ChkSeleccionar');                                                   
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados as $codigoPagoBancoDetalle) {
+                            $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
+                            $arPagoBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->find($codigoPagoBancoDetalle);
+                            $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+                            $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($arPagoBancoDetalle->getCodigoPagoFk());
+                            $arPago->setEstadoPagadoBanco(0);
+                            $em->persist($arPago);
+                            $em->remove($arPagoBancoDetalle);
+                        }
+                        $em->flush();
+                        $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBanco')->liquidar($codigoPagoBanco);
+                    } 
+                    return $this->redirect($this->generateUrl('brs_rhu_pago_banco_detalle', array('codigoPagoBanco' => $codigoPagoBanco)));           
+                }    
             }
             if($form->get('BtnArchivoBancolombia')->isClicked()) {
                 if($arPagoBanco->getEstadoAutorizado() == 1) {
@@ -144,60 +152,62 @@ class PagoBancoController extends Controller
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->getForm();
         $form->handleRequest($request); 
-        if ($form->isValid()) { 
-            if ($form->get('BtnGuardar')->isClicked()) {                
-                $arrSeleccionados = $request->request->get('ChkSeleccionarProgramacion');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoProgramacionPago) {                           
-                        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-                        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);                                
-                        if($arProgramacionPago->getEstadoPagadoBanco() == 0) {
-                            $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-                            $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago, 'estadoPagadoBanco' => 0));
-                            foreach ($arPagos as $arPago) {
-                                if($arPago->getEstadoPagadoBanco() == 0) {
-                                    $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
-                                    $arPagoBancoDetalle->setPagoBancoRel($arPagoBanco);
-                                    $arPagoBancoDetalle->setPagoRel($arPago);
-                                    $arPagoBancoDetalle->setNumeroIdentificacion($arPago->getEmpleadoRel()->getNumeroIdentificacion());
-                                    $arPagoBancoDetalle->setNombreCorto($arPago->getEmpleadoRel()->getNombreCorto());
-                                    $arPagoBancoDetalle->setCuenta($arPago->getEmpleadoRel()->getCuenta());
-                                    $arPagoBancoDetalle->setVrPago($arPago->getVrNeto());                        
-                                    $em->persist($arPagoBancoDetalle); 
-                                    $arPago->setEstadoPagadoBanco(1);
-                                    $em->persist($arPago);                            
-                                }
-                            }                            
+        if ($form->isValid()) {
+            if ($arPagoBanco->getEstadoAutorizado() == 0){
+                if ($form->get('BtnGuardar')->isClicked()) {                
+                    $arrSeleccionados = $request->request->get('ChkSeleccionarProgramacion');
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados AS $codigoProgramacionPago) {                           
+                            $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+                            $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);                                
+                            if($arProgramacionPago->getEstadoPagadoBanco() == 0) {
+                                $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+                                $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago, 'estadoPagadoBanco' => 0));
+                                foreach ($arPagos as $arPago) {
+                                    if($arPago->getEstadoPagadoBanco() == 0) {
+                                        $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
+                                        $arPagoBancoDetalle->setPagoBancoRel($arPagoBanco);
+                                        $arPagoBancoDetalle->setPagoRel($arPago);
+                                        $arPagoBancoDetalle->setNumeroIdentificacion($arPago->getEmpleadoRel()->getNumeroIdentificacion());
+                                        $arPagoBancoDetalle->setNombreCorto($arPago->getEmpleadoRel()->getNombreCorto());
+                                        $arPagoBancoDetalle->setCuenta($arPago->getEmpleadoRel()->getCuenta());
+                                        $arPagoBancoDetalle->setVrPago($arPago->getVrNeto());                        
+                                        $em->persist($arPagoBancoDetalle); 
+                                        $arPago->setEstadoPagadoBanco(1);
+                                        $em->persist($arPago);                            
+                                    }
+                                }                            
+                            }
+                            $arProgramacionPago->setEstadoPagadoBanco(1);
+                            $em->persist($arProgramacionPago);
                         }
-                        $arProgramacionPago->setEstadoPagadoBanco(1);
-                        $em->persist($arProgramacionPago);
-                    }
-                    $em->flush();
-                }                
-                
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoPago) {   
-                        $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-                        $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);
-                        if($arPago->getEstadoPagadoBanco() == 0) {
-                            $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
-                            $arPagoBancoDetalle->setPagoBancoRel($arPagoBanco);
-                            $arPagoBancoDetalle->setPagoRel($arPago);
-                            $arPagoBancoDetalle->setNumeroIdentificacion($arPago->getEmpleadoRel()->getNumeroIdentificacion());
-                            $arPagoBancoDetalle->setNombreCorto($arPago->getEmpleadoRel()->getNombreCorto());
-                            $arPagoBancoDetalle->setCuenta($arPago->getEmpleadoRel()->getCuenta());
-                            $arPagoBancoDetalle->setVrPago($arPago->getVrNeto());                        
-                            $em->persist($arPagoBancoDetalle); 
-                            $arPago->setEstadoPagadoBanco(1);
-                            $em->persist($arPago);                            
+                        $em->flush();
+                    }                
+
+                    $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados AS $codigoPago) {   
+                            $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+                            $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);
+                            if($arPago->getEstadoPagadoBanco() == 0) {
+                                $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
+                                $arPagoBancoDetalle->setPagoBancoRel($arPagoBanco);
+                                $arPagoBancoDetalle->setPagoRel($arPago);
+                                $arPagoBancoDetalle->setNumeroIdentificacion($arPago->getEmpleadoRel()->getNumeroIdentificacion());
+                                $arPagoBancoDetalle->setNombreCorto($arPago->getEmpleadoRel()->getNombreCorto());
+                                $arPagoBancoDetalle->setCuenta($arPago->getEmpleadoRel()->getCuenta());
+                                $arPagoBancoDetalle->setVrPago($arPago->getVrNeto());                        
+                                $em->persist($arPagoBancoDetalle); 
+                                $arPago->setEstadoPagadoBanco(1);
+                                $em->persist($arPago);                            
+                            }
                         }
+                        $em->flush();
                     }
-                    $em->flush();
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBanco')->liquidar($codigoPagoBanco);
                 }
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBanco')->liquidar($codigoPagoBanco);
-            }            
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+            }    
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagoBanco:detalleNuevo.html.twig', array(
             'arPagos' => $arPagos,

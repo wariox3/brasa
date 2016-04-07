@@ -3,6 +3,7 @@
 namespace Brasa\ContabilidadBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\ContabilidadBundle\Form\Type\CtbCentroCostoType;
 
@@ -10,6 +11,9 @@ use Brasa\ContabilidadBundle\Form\Type\CtbCentroCostoType;
 
 class BaseCentroCostoController extends Controller
 {
+    /**
+     * @Route("/ctb/base/centro/costo/lista", name="brs_ctb_base_centro_costo_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -45,6 +49,9 @@ class BaseCentroCostoController extends Controller
         ));
     }
     
+    /**
+     * @Route("/ctb/base/centro/costo/nuevo/{codigoCentroCosto}", name="brs_ctb_base_centro_costo_nuevo")
+     */
     public function nuevoAction($codigoCentroCosto) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

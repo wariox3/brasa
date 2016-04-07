@@ -3,12 +3,15 @@
 namespace Brasa\ContabilidadBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
 class UtilidadesIntercambioDatosController extends Controller
 {
     var $strDqlLista = "";      
-    
+    /**
+     * @Route("/ctb/utilidades/intercambio/datos/exportar", name="brs_ctb_utilidades_intercambio_datos_exportar")
+     */
     public function exportarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

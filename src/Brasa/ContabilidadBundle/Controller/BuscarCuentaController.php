@@ -3,6 +3,7 @@
 namespace Brasa\ContabilidadBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
 class BuscarCuentaController extends Controller
@@ -11,6 +12,9 @@ class BuscarCuentaController extends Controller
     var $strCodigo = "";
     var $strNombre = "";
     
+    /**
+     * @Route("/ctb/buscar/cuenta/{campoCodigo}", name="brs_ctb_buscar_cuenta")
+     */
     public function listaAction($campoCodigo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

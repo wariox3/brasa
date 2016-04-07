@@ -92,13 +92,17 @@ class PagoExamenController extends Controller
             }            
             
             if($form->get('BtnImprimir')->isClicked()) {
-                $objFormatoPagoExamenDetalle = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPagoExamenDetalle();
-                $objFormatoPagoExamenDetalle->Generar($this, $codigoPagoExamen);
+                if($arPagoExamen->getEstadoAutorizado() == 1) {
+                    $objFormatoPagoExamenDetalle = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPagoExamenDetalle();
+                    $objFormatoPagoExamenDetalle->Generar($this, $codigoPagoExamen);
+                }
             }
-            if($form->get('BtnEliminarDetalle')->isClicked()) {                
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamenDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamen')->liquidar($codigoPagoExamen);
-                return $this->redirect($this->generateUrl('brs_rhu_pago_examen_detalle', array('codigoPagoExamen' => $codigoPagoExamen)));           
+            if($form->get('BtnEliminarDetalle')->isClicked()) {
+                if($arPagoExamen->getEstadoAutorizado() == 0) {
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamenDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamen')->liquidar($codigoPagoExamen);
+                    return $this->redirect($this->generateUrl('brs_rhu_pago_examen_detalle', array('codigoPagoExamen' => $codigoPagoExamen)));           
+                }
             }
         }                
         $arPagoExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle();
@@ -121,27 +125,30 @@ class PagoExamenController extends Controller
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->getForm();
         $form->handleRequest($request); 
-        if ($form->isValid()) { 
-            if ($form->get('BtnGuardar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoExamen) {
-                        $arPagoExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamenDetalle')->findOneBy(array('codigoPagoExamenFk' => $codigoPagoExamen));
-                        if ($arPagoExamenDetalle == null){
-                            $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
-                            $arPagoExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle();
-                            $arPagoExamenDetalle->setPagoExamenRel($arPagoExamen);
-                            $arPagoExamenDetalle->setExamenRel($arExamen);
-                            $arPagoExamenDetalle->setVrPrecio($arExamen->getVrTotal());                                                
-                            $em->persist($arPagoExamenDetalle); 
-                            $arExamen->setEstadoPagado(1);
-                            $em->persist($arExamen);
-                        }   
+        if ($form->isValid()) {
+            if ($arPagoExamen->getEstadoAutorizado() == 0){
+                if ($form->get('BtnGuardar')->isClicked()) {
+                    $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados AS $codigoExamen) {
+                            $arPagoExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamenDetalle')->findOneBy(array('codigoPagoExamenFk' => $codigoPagoExamen));
+                            if ($arPagoExamenDetalle == null){
+                                $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
+                                $arPagoExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoExamenDetalle();
+                                $arPagoExamenDetalle->setPagoExamenRel($arPagoExamen);
+                                $arPagoExamenDetalle->setExamenRel($arExamen);
+                                $arPagoExamenDetalle->setVrPrecio($arExamen->getVrTotal());                                                
+                                $em->persist($arPagoExamenDetalle); 
+                                $arExamen->setEstadoPagado(1);
+                                $em->persist($arExamen);
+                            }   
+                        }
+                        $em->flush();
                     }
-                    $em->flush();
-                }
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamen')->liquidar($codigoPagoExamen);
-            }            
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoExamen')->liquidar($codigoPagoExamen);
+                }            
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+            }
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagoExamen:detalleNuevo.html.twig', array(

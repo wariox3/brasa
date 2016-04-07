@@ -3,6 +3,7 @@
 namespace Brasa\ContabilidadBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
 class ConsultasBalancePruebaController extends Controller
@@ -13,6 +14,9 @@ class ConsultasBalancePruebaController extends Controller
     var $strDesde = "";
     var $strHasta = "";
     
+    /**
+     * @Route("/ctb/consultas/balance/prueba/", name="brs_ctb_consultas_balance_prueba")
+     */
     public function balanceAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

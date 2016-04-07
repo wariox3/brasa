@@ -127,34 +127,38 @@ class MovimientoNotaDebitoController extends Controller
         if($form->isValid()) {
             if($form->get('BtnAutorizar')->isClicked()) {  
                 $arrControles = $request->request->All();
-                $this->actualizarDetalle($arrControles, $codigoNotaDebito);
-                $arInconsistencias = $em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->findBy(array('codigoNotaDebitoFk' =>$codigoNotaDebito,'estadoInconsistencia' => 1));
-                if ($arInconsistencias == null){
-                    if($arNotaDebito->getEstadoAutorizado() == 0) {
-                        if($em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->numeroRegistros($codigoNotaDebito) > 0) {
-                            $arNotaDebito->setEstadoAutorizado(1);
-                            $arDetallesNotaDebito = $em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->findBy(array('codigoNotaDebitoFk' => $codigoNotaDebito));
-                            foreach ($arDetallesNotaDebito AS $arDetalleNotaDebito) {
-                                $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
-                                $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleNotaDebito->getCodigoCuentaCobrarFk());
-                                $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleNotaDebito->getVrPagoDetalle());
-                                $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleNotaDebito->getVrPagoDetalle());
-                                $em->persist($arCuentaCobrar);
-                            }
-                            $em->persist($arNotaDebito);
-                            $em->flush();                        
-                        } else {
-                            $objMensaje->Mensaje('error', 'Debe adicionar detalles al recibo de caja', $this);
-                        }                    
+                if ($arNotaDebito->getEstadoAutorizado() == 0){
+                    $this->actualizarDetalle($arrControles, $codigoNotaDebito);
+                    $arInconsistencias = $em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->findBy(array('codigoNotaDebitoFk' =>$codigoNotaDebito,'estadoInconsistencia' => 1));
+                    if ($arInconsistencias == null){
+                        if($arNotaDebito->getEstadoAutorizado() == 0) {
+                            if($em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->numeroRegistros($codigoNotaDebito) > 0) {
+                                $arNotaDebito->setEstadoAutorizado(1);
+                                $arDetallesNotaDebito = $em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->findBy(array('codigoNotaDebitoFk' => $codigoNotaDebito));
+                                foreach ($arDetallesNotaDebito AS $arDetalleNotaDebito) {
+                                    $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
+                                    $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleNotaDebito->getCodigoCuentaCobrarFk());
+                                    $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleNotaDebito->getVrPagoDetalle());
+                                    $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleNotaDebito->getVrPagoDetalle());
+                                    $em->persist($arCuentaCobrar);
+                                }
+                                $em->persist($arNotaDebito);
+                                $em->flush();                        
+                            } else {
+                                $objMensaje->Mensaje('error', 'Debe adicionar detalles al recibo de caja', $this);
+                            }                    
+                        }
+                    } else {
+                        $objMensaje->Mensaje('error', 'No se puede autorizar, hay inconsistencias', $this);
                     }
+
+                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_notadebito_detalle', array('codigoNotaDebito' => $codigoNotaDebito)));                
                 } else {
-                    $objMensaje->Mensaje('error', 'No se puede autorizar, hay inconsistencias', $this);
+                    $objMensaje->Mensaje('error', 'No se puede autorizar, ya esta autorizado', $this); 
                 }
-                    
-                return $this->redirect($this->generateUrl('brs_cartera_movimiento_notadebito_detalle', array('codigoNotaDebito' => $codigoNotaDebito)));                
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {            
-                if($arNotaDebito->getEstadoAutorizado() == 1 && $arRecibo->getEstadoImpreso() == 0) {
+                if($arNotaDebito->getEstadoAutorizado() == 1 && $arNotaDebito->getEstadoImpreso() == 0) {
                     $arNotaDebito->setEstadoAutorizado(0);
                     $arDetallesNotaDebito = $em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->findBy(array('codigoNotaDebitoFk' => $codigoNotaDebito));
                     foreach ($arDetallesNotaDebito AS $arDetalleNotaDebito) {

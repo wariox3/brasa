@@ -177,13 +177,15 @@ class ExamenController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));                                                
                 }
             }
-            if ($form->get('BtnAprobar')->isClicked()) {                
-                $strRespuesta = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->aprobarExamen($codigoExamen);
-                if($strRespuesta == ''){
-                    return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));                                                
-                }else {
-                  $objMensaje->Mensaje('error', $strRespuesta, $this);
-                }                 
+            if ($form->get('BtnAprobar')->isClicked()) {
+               if($arExamen->getEstadoAutorizado() == 1) { 
+                    $strRespuesta = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->aprobarExamen($codigoExamen);
+                    if($strRespuesta == ''){
+                        return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));                                                
+                    }else {
+                      $objMensaje->Mensaje('error', $strRespuesta, $this);
+                    }    
+               }    
             }      
             
             if($form->get('BtnImprimir')->isClicked()) {
@@ -195,35 +197,41 @@ class ExamenController extends Controller
                 }
             }
             if($form->get('BtnEliminarDetalle')->isClicked()) {
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->liquidar($codigoExamen);
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));
+                if($arExamen->getEstadoAutorizado() == 0) {
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->liquidar($codigoExamen);
+                    return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));
+                }    
             }
             if($form->get('BtnAprobarDetalle')->isClicked()) {
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->aprobarDetallesSeleccionados($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));
+                if($arExamen->getEstadoAutorizado() == 0) {
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->aprobarDetallesSeleccionados($arrSeleccionados);
+                    return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));
+                }
             }
             if($form->get('BtnCerrarDetalle')->isClicked()) {
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->cerrarDetallesSeleccionados($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));
             }            
             if ($form->get('BtnActualizarDetalle')->isClicked()) {
-                $arrControles = $request->request->All();
-                $intIndice = 0;
-                foreach ($arrControles['LblCodigo'] as $intCodigo) {                
-                    if($arrControles['TxtPrecio'.$intCodigo] != "" && $arrControles['TxtPrecio'.$intCodigo] != 0) {
-                        $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
-                        $arExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->find($intCodigo);                                        
-                        $floPrecio = $arrControles['TxtPrecio'.$intCodigo];
-                        $arExamenDetalle->setValidarVencimiento($arrControles['cboValidarVencimiento'.$intCodigo]);
-                        $arExamenDetalle->setFechaVence(date_create($arrControles['TxtVence'.$intCodigo]));
-                        $arExamenDetalle->setVrPrecio($floPrecio);
-                        $em->persist($arExamenDetalle);                        
+                if($arExamen->getEstadoAutorizado() == 0) {
+                    $arrControles = $request->request->All();
+                    $intIndice = 0;
+                    foreach ($arrControles['LblCodigo'] as $intCodigo) {                
+                        if($arrControles['TxtPrecio'.$intCodigo] != "" && $arrControles['TxtPrecio'.$intCodigo] != 0) {
+                            $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
+                            $arExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->find($intCodigo);                                        
+                            $floPrecio = $arrControles['TxtPrecio'.$intCodigo];
+                            $arExamenDetalle->setValidarVencimiento($arrControles['cboValidarVencimiento'.$intCodigo]);
+                            $arExamenDetalle->setFechaVence(date_create($arrControles['TxtVence'.$intCodigo]));
+                            $arExamenDetalle->setVrPrecio($floPrecio);
+                            $em->persist($arExamenDetalle);                        
+                        }
                     }
-                }
-                $em->flush();
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->liquidar($codigoExamen);
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));
+                    $em->flush();
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->liquidar($codigoExamen);
+                    return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));
+                }    
             }            
         }
 
@@ -250,24 +258,28 @@ class ExamenController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             if ($form->get('BtnGuardar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoExamenTipo) {
-                        $arExamenTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->find($codigoExamenTipo);
-                        $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
-                        $arExamenDetalle->setExamenTipoRel($arExamenTipo);
-                        $arExamenDetalle->setExamenRel($arExamen);
-                        $arExamenDetalle->setFechaVence(new \DateTime('now'));
-                        $douPrecio = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->devuelvePrecio($arExamen->getCodigoEntidadExamenFk(), $codigoExamenTipo);
-                        $arExamenDetalle->setVrPrecio($douPrecio);
-                        $em->persist($arExamenDetalle);
+                if ($arExamen->getEstadoAutorizado() == 0){
+                    $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados AS $codigoExamenTipo) {
+                            $arExamenTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->find($codigoExamenTipo);
+                            $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
+                            $arExamenDetalle->setExamenTipoRel($arExamenTipo);
+                            $arExamenDetalle->setExamenRel($arExamen);
+                            $arExamenDetalle->setFechaVence(new \DateTime('now'));
+                            $douPrecio = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->devuelvePrecio($arExamen->getCodigoEntidadExamenFk(), $codigoExamenTipo);
+                            $arExamenDetalle->setVrPrecio($douPrecio);
+                            $em->persist($arExamenDetalle);
+                        }
+                        $em->flush();
+                        $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->liquidar($codigoExamen);
+                        echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
                     }
-                    $em->flush();
-                    $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->liquidar($codigoExamen);
+                    else {
+                        $objMensaje->Mensaje("error", "No selecciono ningun dato para grabar", $this);
+                    }
+                } else {
                     echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-                }
-                else {
-                    $objMensaje->Mensaje("error", "No selecciono ningun dato para grabar", $this);
                 }
             }            
         }

@@ -135,8 +135,10 @@ class PermisoController extends Controller
                 }
             }
             if($form->get('BtnImprimir')->isClicked()) {
-                $objFormatoPermiso = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPermiso();
-                $objFormatoPermiso->Generar($this, $codigoPermiso);
+                if($arPermiso->getEstadoAutorizado() == 1) {
+                    $objFormatoPermiso = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPermiso();
+                    $objFormatoPermiso->Generar($this, $codigoPermiso);
+                }
             }
         }
         $arPermiso = $em->getRepository('BrasaRecursoHumanoBundle:RhuPermiso')->find($codigoPermiso);

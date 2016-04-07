@@ -3,6 +3,7 @@
 namespace Brasa\ContabilidadBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\ContabilidadBundle\Form\Type\CtbTerceroType;
 
@@ -10,6 +11,9 @@ use Brasa\ContabilidadBundle\Form\Type\CtbTerceroType;
 
 class BaseTerceroController extends Controller
 {
+    /**
+     * @Route("/ctb/base/terceros/lista", name="brs_ctb_base_terceros_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -45,6 +49,9 @@ class BaseTerceroController extends Controller
         ));
     }
     
+    /**
+     * @Route("/ctb/base/terceros/nuevo/{codigoTercero}", name="brs_ctb_base_terceros_nuevo")
+     */
     public function nuevoAction($codigoTercero) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

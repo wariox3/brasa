@@ -3,11 +3,15 @@
 namespace Brasa\ContabilidadBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
 class ProcesoContabilizarAsientoController extends Controller
 {
     var $strDqlLista = "";
+    /**
+     * @Route("/ctb/procesos/contabilizar/asientos", name="brs_ctb_procesos_contabilizar_asientos")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();  

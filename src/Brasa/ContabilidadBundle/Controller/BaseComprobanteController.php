@@ -3,6 +3,7 @@
 namespace Brasa\ContabilidadBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\ContabilidadBundle\Form\Type\CtbComprobanteType;
 
@@ -10,6 +11,9 @@ use Brasa\ContabilidadBundle\Form\Type\CtbComprobanteType;
 
 class BaseComprobanteController extends Controller
 {
+    /**
+     * @Route("/ctb/base/comprobantes/lista", name="brs_ctb_base_comprobantes_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -45,6 +49,9 @@ class BaseComprobanteController extends Controller
         ));
     }
     
+    /**
+     * @Route("/ctb/base/comprobantes/nuevo/{codigoComprobante}", name="brs_ctb_base_comprobantes_nuevo")
+     */
     public function nuevoAction($codigoComprobante) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

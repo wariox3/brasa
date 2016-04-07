@@ -52,16 +52,20 @@
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arCapacitacionesDetalles.codigoCapacitacionDetallePk }}">{{ arCapacitacionesDetalles.codigoCapacitacionDetallePk }} </td>
                             <td>{{ arCapacitacionesDetalles.numeroIdentificacion }}</td>
                             <td>{{ arCapacitacionesDetalles.nombreCorto }}</td>
-                            <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCapacitacionesDetalles.codigoCapacitacionDetallePk }}" /></td>
+                            <td align="center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCapacitacionesDetalles.codigoCapacitacionDetallePk }}" /></td>
                         </tr>
                     {% endfor %}
                 </table>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_capacitacion_detalle_nuevo_empleado', {'codigoCapacitacion': arCapacitacion.codigoCapacitacionPk }) }}', 'AgregarEmpleadoCapacitacion', 600, 900)" >Nuevo empleado</a>                        
+                        {% if arCapacitacion.estadoAutorizado == 0 %}
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_capacitacion_detalle_nuevo_empleado', {'codigoCapacitacion': arCapacitacion.codigoCapacitacionPk }) }}', 'AgregarEmpleadoCapacitacion', 600, 900)" >Nuevo empleado</a>                        
+                        {% endif %}
                     </div>
-                    <div class="btn-group">                        
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_capacitacion_detalle_nuevo', {'codigoCapacitacion': arCapacitacion.codigoCapacitacionPk }) }}', 'AgregarEmpleadoCapacitacion', 600, 900)" >Nuevo</a>
+                    <div class="btn-group">
+                        {% if arCapacitacion.estadoAutorizado == 0 %}
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_capacitacion_detalle_nuevo', {'codigoCapacitacion': arCapacitacion.codigoCapacitacionPk }) }}', 'AgregarEmpleadoCapacitacion', 600, 900)" >Nuevo</a>
+                        {% endif %}    
                     </div>                    
                     <div class="btn-group">
                         {{ form_widget(form.BtnEliminarDetalle, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}               
@@ -89,7 +93,9 @@
                 </table>
                 <div class="btn-toolbar" style="float: right">
                     <div class="btn-group">
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_capacitacion_detalle_nuevo_nota', {'codigoCapacitacion': arCapacitacion.codigoCapacitacionPk }) }}', 'AgregarNota', 600, 900)" >Nuevo</a>                        
+                        {% if arCapacitacion.estadoAutorizado == 0 %}
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_capacitacion_detalle_nuevo_nota', {'codigoCapacitacion': arCapacitacion.codigoCapacitacionPk }) }}', 'AgregarNota', 600, 900)" >Nuevo</a>                        
+                        {% endif %}    
                     </div>                  
                     <div class="btn-group">
                         {{ form_widget(form.BtnEliminarNota, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}               

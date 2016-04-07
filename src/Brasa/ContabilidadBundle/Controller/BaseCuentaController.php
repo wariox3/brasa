@@ -3,6 +3,7 @@
 namespace Brasa\ContabilidadBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\ContabilidadBundle\Form\Type\CtbCuentaType;
 
@@ -11,6 +12,10 @@ use Brasa\ContabilidadBundle\Form\Type\CtbCuentaType;
 class BaseCuentaController extends Controller
 {
     var $strDqlLista = "";
+    
+    /**
+     * @Route("/ctb/base/cuentas/lista", name="brs_ctb_base_cuentas_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -42,6 +47,9 @@ class BaseCuentaController extends Controller
         ));
     }
     
+    /**
+     * @Route("/ctb/base/cuentas/nuevo/{codigoCuenta}", name="brs_ctb_base_cuentas_nuevo")
+     */
     public function nuevoAction($codigoCuenta) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

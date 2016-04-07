@@ -127,10 +127,12 @@ class DisciplinarioController extends Controller
                 }
             }
             if($form->get('BtnImprimir')->isClicked()) {
-                $codigoProcesoDisciplinarioTipo = $arProcesoDisciplinario->getCodigoDisciplinarioTipoFk();
-                $codigoProcesoDisciplinario = $arProcesoDisciplinario->getCodigoDisciplinarioPk();
-                $objFormatoCarta = new \Brasa\RecursoHumanoBundle\Formatos\FormatoProcesoDisciplinario();
-                $objFormatoCarta->Generar($this, $codigoProcesoDisciplinarioTipo, $codigoProcesoDisciplinario);
+                if($arProcesoDisciplinario->getEstadoAutorizado() == 1) {
+                    $codigoProcesoDisciplinarioTipo = $arProcesoDisciplinario->getCodigoDisciplinarioTipoFk();
+                    $codigoProcesoDisciplinario = $arProcesoDisciplinario->getCodigoDisciplinarioPk();
+                    $objFormatoCarta = new \Brasa\RecursoHumanoBundle\Formatos\FormatoProcesoDisciplinario();
+                    $objFormatoCarta->Generar($this, $codigoProcesoDisciplinarioTipo, $codigoProcesoDisciplinario);
+                }    
             }
 
         }

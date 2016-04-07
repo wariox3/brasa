@@ -151,29 +151,33 @@ class DotacionController extends Controller
                 }
             }            
             if($form->get('BtnImprimir')->isClicked()) {
-                $objFormatoDotacionDetalle = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDotacionDetalle();
-                $objFormatoDotacionDetalle->Generar($this, $codigoDotacion);
+                if($arDotacion->getEstadoAutorizado() == 0) {
+                    $objFormatoDotacionDetalle = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDotacionDetalle();
+                    $objFormatoDotacionDetalle->Generar($this, $codigoDotacion);
+                }    
             }
             
             if($form->get('BtnEliminarDetalle')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoDotacionPk) {
-                        $arDotacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
-                        $arDotacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionDetalle')->find($codigoDotacionPk);
-                        if($arDotacionDetalle->getCodigoDotacionDetalleEnlaceFk()) {
-                            $arDotacionDetalleEnlace = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
-                            $arDotacionDetalleEnlace = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionDetalle')->find($arDotacionDetalle->getCodigoDotacionDetalleEnlaceFk());                            
-                            $arDotacionDetalleEnlace->setCantidadDevuelta($arDotacionDetalleEnlace->getCantidadDevuelta() - $arDotacionDetalle->getCantidadAsignada());
-                            $em->persist($arDotacionDetalleEnlace);
+                if($arDotacion->getEstadoAutorizado() == 0) {
+                    $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados AS $codigoDotacionPk) {
+                            $arDotacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
+                            $arDotacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionDetalle')->find($codigoDotacionPk);
+                            if($arDotacionDetalle->getCodigoDotacionDetalleEnlaceFk()) {
+                                $arDotacionDetalleEnlace = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
+                                $arDotacionDetalleEnlace = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionDetalle')->find($arDotacionDetalle->getCodigoDotacionDetalleEnlaceFk());                            
+                                $arDotacionDetalleEnlace->setCantidadDevuelta($arDotacionDetalleEnlace->getCantidadDevuelta() - $arDotacionDetalle->getCantidadAsignada());
+                                $em->persist($arDotacionDetalleEnlace);
+                            }
+                            $em->remove($arDotacionDetalle);
                         }
-                        $em->remove($arDotacionDetalle);
+                        $em->flush();
                     }
-                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_dotacion_detalle', array('codigoDotacion' => $codigoDotacion)));
                 }
-                return $this->redirect($this->generateUrl('brs_rhu_dotacion_detalle', array('codigoDotacion' => $codigoDotacion)));
             }
-            if($form->get('BtnCerrar')->isClicked()) {
+            /*if($form->get('BtnCerrar')->isClicked()) {
                 $arDotacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->dotacionDevolucion($arDotaciones->getCodigoEmpleadoFk());
                 $intRegistros = count($arDotacionDetalle);
                 if ($intRegistros > 0){
@@ -186,7 +190,7 @@ class DotacionController extends Controller
                     }
                     $em->flush();
                 }
-            }
+            }*/
 
         }
         $arDotacionDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
@@ -204,7 +208,7 @@ class DotacionController extends Controller
         $arDotacion = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacion();
         $arDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->find($codigoDotacion);
         $arDotacionElementos = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElemento();
-                        $arDotacionElementos = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->findAll();
+        $arDotacionElementos = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->findAll();
         $form = $this->createFormBuilder()
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->getForm();
@@ -212,28 +216,30 @@ class DotacionController extends Controller
         if ($form->isValid()) {
             $arrControles = $request->request->All();
             if ($form->get('BtnGuardar')->isClicked()) {
-                if (isset($arrControles['TxtCantidad'])) {
-                    $intIndice = 0;
-                    foreach ($arrControles['LblCodigo'] as $intCodigo) {
-                        if($arrControles['TxtCantidad'][$intIndice] > 0 ){
-                            $arDotacionElemento = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElemento();
-                            $arDotacionElemento = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->find($intCodigo);
-                            $arDotacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
-                            $arDotacionDetalle->setDotacionRel($arDotacion);
-                            $arDotacionDetalle->setDotacionElementoRel($arDotacionElemento);
-                            $intCantidad = $arrControles['TxtCantidad'][$intIndice];
-                            $arDotacionDetalle->setCantidadAsignada($intCantidad);
-                            $arDotacionDetalle->setCantidadDevuelta(0);
-                            $intLote = $arrControles['TxtLote'][$intIndice];
-                            $intSerie = $arrControles['TxtSerie'][$intIndice];
-                            $arDotacionDetalle->setSerie($intSerie);
-                            $arDotacionDetalle->setLote($intLote);
-                            $em->persist($arDotacionDetalle);
+                if ($arDotacion->getEstadoAutorizado() == 0){
+                    if (isset($arrControles['TxtCantidad'])) {
+                        $intIndice = 0;
+                        foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                            if($arrControles['TxtCantidad'][$intIndice] > 0 ){
+                                $arDotacionElemento = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElemento();
+                                $arDotacionElemento = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->find($intCodigo);
+                                $arDotacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
+                                $arDotacionDetalle->setDotacionRel($arDotacion);
+                                $arDotacionDetalle->setDotacionElementoRel($arDotacionElemento);
+                                $intCantidad = $arrControles['TxtCantidad'][$intIndice];
+                                $arDotacionDetalle->setCantidadAsignada($intCantidad);
+                                $arDotacionDetalle->setCantidadDevuelta(0);
+                                $intLote = $arrControles['TxtLote'][$intIndice];
+                                $intSerie = $arrControles['TxtSerie'][$intIndice];
+                                $arDotacionDetalle->setSerie($intSerie);
+                                $arDotacionDetalle->setLote($intLote);
+                                $em->persist($arDotacionDetalle);
+                            }
+                            $intIndice++;
                         }
-                        $intIndice++;
                     }
+                    $em->flush();
                 }
-                $em->flush();
             }
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
@@ -257,30 +263,32 @@ class DotacionController extends Controller
         if ($form->isValid()) {
             $arrControles = $request->request->All();
             if ($form->get('BtnGuardar')->isClicked()) {
-                if (isset($arrControles['TxtCantidad'])) {
-                    $intIndice = 0;
-                    foreach ($arrControles['LblCodigo'] as $intCodigo) {
-                        if($arrControles['TxtCantidad'][$intIndice] > 0 ){
-                            $arDotacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
-                            $arDotacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionDetalle')->find($intCodigo);
-                            $arDotacionElemento = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElemento();
-                            $arDotacionElemento = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->find($arDotacionDetalle->getCodigoDotacionElementoFk());
-                            $arDotacionDetalleDevolucion = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
-                            $arDotacionDetalleDevolucion->setDotacionRel($arDotacion);
-                            $arDotacionDetalleDevolucion->setDotacionElementoRel($arDotacionElemento);
-                            $intCantidad = $arrControles['TxtCantidad'][$intIndice];
-                            $arDotacionDetalleDevolucion->setCantidadAsignada($intCantidad);
-                            $arDotacionDetalleDevolucion->setSerie($arDotacionDetalle->getSerie());
-                            $arDotacionDetalleDevolucion->setLote($arDotacionDetalle->getLote());
-                            $arDotacionDetalleDevolucion->setCodigoDotacionDetalleEnlaceFk($arDotacionDetalle->getCodigoDotacionDetallePk());
-                            $em->persist($arDotacionDetalleDevolucion);
-                            $arDotacionDetalle->setCantidadDevuelta($arDotacionDetalle->getCantidadDevuelta() + $intCantidad);                            
-                            $em->persist($arDotacionDetalle);
+                if ($arDotacion->getEstadoAutorizado() == 0){
+                    if (isset($arrControles['TxtCantidad'])) {
+                        $intIndice = 0;
+                        foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                            if($arrControles['TxtCantidad'][$intIndice] > 0 ){
+                                $arDotacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
+                                $arDotacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionDetalle')->find($intCodigo);
+                                $arDotacionElemento = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElemento();
+                                $arDotacionElemento = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->find($arDotacionDetalle->getCodigoDotacionElementoFk());
+                                $arDotacionDetalleDevolucion = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
+                                $arDotacionDetalleDevolucion->setDotacionRel($arDotacion);
+                                $arDotacionDetalleDevolucion->setDotacionElementoRel($arDotacionElemento);
+                                $intCantidad = $arrControles['TxtCantidad'][$intIndice];
+                                $arDotacionDetalleDevolucion->setCantidadAsignada($intCantidad);
+                                $arDotacionDetalleDevolucion->setSerie($arDotacionDetalle->getSerie());
+                                $arDotacionDetalleDevolucion->setLote($arDotacionDetalle->getLote());
+                                $arDotacionDetalleDevolucion->setCodigoDotacionDetalleEnlaceFk($arDotacionDetalle->getCodigoDotacionDetallePk());
+                                $em->persist($arDotacionDetalleDevolucion);
+                                $arDotacionDetalle->setCantidadDevuelta($arDotacionDetalle->getCantidadDevuelta() + $intCantidad);                            
+                                $em->persist($arDotacionDetalle);
+                            }
+                            $intIndice++;
                         }
-                        $intIndice++;
                     }
+                    $em->flush();
                 }
-                $em->flush();
             }
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }

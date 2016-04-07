@@ -153,8 +153,10 @@ class DesempenosController extends Controller
                 }
             }
             if($form->get('BtnImprimir')->isClicked()) {
-                $objFormato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDesempenos();
-                $objFormato->Generar($this, $codigoDesempeno);
+                if($arDesempeno->getEstadoAutorizado() == 1) {
+                    $objFormato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDesempenos();
+                    $objFormato->Generar($this, $codigoDesempeno);
+                }    
             }
             if($form->get('BtnCerrar')->isClicked()) {
                 if($arDesempeno->getEstadoAutorizado() == 1) {
@@ -165,218 +167,220 @@ class DesempenosController extends Controller
                 }
             }            
             
-            if($form->get('BtnEliminarDetalle')->isClicked()) {  
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');                                                   
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados as $codigoDesempenoDetalle) {
-                        $arDesempenoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoDetalle();
-                        $arDesempenoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoDetalle')->find($codigoDesempenoDetalle);                        
-                        $em->remove($arDesempenoDetalle);
-                    }
-                    $em->flush();                    
-                } 
-                return $this->redirect($this->generateUrl('brs_rhu_desempeno_detalle', array('codigoDesempeno' => $codigoDesempeno)));
+            if($form->get('BtnEliminarDetalle')->isClicked()) {
+                if($arDesempeno->getEstadoAutorizado() == 0) {
+                    $arrSeleccionados = $request->request->get('ChkSeleccionar');                                                   
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados as $codigoDesempenoDetalle) {
+                            $arDesempenoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoDetalle();
+                            $arDesempenoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoDetalle')->find($codigoDesempenoDetalle);                        
+                            $em->remove($arDesempenoDetalle);
+                        }
+                        $em->flush();                    
+                    } 
+                    return $this->redirect($this->generateUrl('brs_rhu_desempeno_detalle', array('codigoDesempeno' => $codigoDesempeno)));
+                }    
             } 
-            if ($form->get('BtnActualizarDetalle')->isClicked()) {
-                $arrControles = $request->request->All();
-                $intIndice = 0;
-                foreach ($arrControles['LblCodigo'] as $intCodigo) {
-                    if($arrControles['TxtSiempre'.$intCodigo] != "" || $arrControles['TxtCasiSiempre'.$intCodigo] != "" || $arrControles['TxtAlgunasVeces'.$intCodigo] != "" || $arrControles['TxtCasiNunca'.$intCodigo] != "" || $arrControles['TxtNunca'.$intCodigo] != "") {
-                        $intSiempre = $arrControles['TxtSiempre'.$intCodigo];
-                        $intCasiSiempre = $arrControles['TxtCasiSiempre'.$intCodigo];
-                        $intAlgunasVeces = $arrControles['TxtAlgunasVeces'.$intCodigo];
-                        $intCasiNunca = $arrControles['TxtCasiNunca'.$intCodigo];
-                        $intNunca = $arrControles['TxtNunca'.$intCodigo];
-                        $arDesempenoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoDetalle();
-                        $arDesempenoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoDetalle')->find($intCodigo);
-                        $arDesempenoDetalle->setSiempre($intSiempre);
-                        $arDesempenoDetalle->setCasiSiempre($intCasiSiempre);
-                        $arDesempenoDetalle->setAlgunasVeces($intAlgunasVeces);
-                        $arDesempenoDetalle->setCasiNunca($intCasiNunca);
-                        $arDesempenoDetalle->setNunca($intNunca);
-                        $em->persist($arDesempenoDetalle);
-                        
+            if ($form->get('BtnActualizarDetalle')->isClicked()) {                
+                    $arrControles = $request->request->All();
+                    $intIndice = 0;
+                    foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                        if($arrControles['TxtSiempre'.$intCodigo] != "" || $arrControles['TxtCasiSiempre'.$intCodigo] != "" || $arrControles['TxtAlgunasVeces'.$intCodigo] != "" || $arrControles['TxtCasiNunca'.$intCodigo] != "" || $arrControles['TxtNunca'.$intCodigo] != "") {
+                            $intSiempre = $arrControles['TxtSiempre'.$intCodigo];
+                            $intCasiSiempre = $arrControles['TxtCasiSiempre'.$intCodigo];
+                            $intAlgunasVeces = $arrControles['TxtAlgunasVeces'.$intCodigo];
+                            $intCasiNunca = $arrControles['TxtCasiNunca'.$intCodigo];
+                            $intNunca = $arrControles['TxtNunca'.$intCodigo];
+                            $arDesempenoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoDetalle();
+                            $arDesempenoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoDetalle')->find($intCodigo);
+                            $arDesempenoDetalle->setSiempre($intSiempre);
+                            $arDesempenoDetalle->setCasiSiempre($intCasiSiempre);
+                            $arDesempenoDetalle->setAlgunasVeces($intAlgunasVeces);
+                            $arDesempenoDetalle->setCasiNunca($intCasiNunca);
+                            $arDesempenoDetalle->setNunca($intNunca);
+                            $em->persist($arDesempenoDetalle);
+
+                        }
                     }
-                }
-                $strObservaciones = $arrControles['TextareaObservaciones'];
-                $strAspectosMejorar = $arrControles['TextareaAspectosMejorar'];
-                $arDesempeno->setObservaciones($strObservaciones);
-                $arDesempeno->setAspectosMejorar($strAspectosMejorar);
-                $em->persist($arDesempeno);
-                $em->flush();
-                $intSiempreAreaProfesional = 0;
-                $intCasiSiempreAreaProfesional = 0;
-                $intAlgunasVecesAreaProfesional = 0;
-                $intCasiNuncaAreaProfesional = 0;
-                $intNuncaAreaProfesional = 0;
-                $intPreguntasAreaProfesional = 0;
-                $intSiempreCompromiso = 0;
-                $intCasiSiempreCompromiso = 0;
-                $intAlgunasVecesCompromiso = 0;
-                $intCasiNuncaCompromiso = 0;
-                $intNuncaCompromiso = 0;
-                $intPreguntasCompromiso = 0;
-                $intSiempreUrbanidad = 0;
-                $intCasiSiempreUrbanidad = 0;
-                $intAlgunasVecesUrbanidad = 0;
-                $intCasiNuncaUrbanidad = 0;
-                $intNuncaUrbanidad = 0;
-                $intPreguntasUrbanidad = 0;
-                $intSiempreValores = 0;
-                $intCasiSiempreValores = 0;
-                $intAlgunasVecesValores = 0;
-                $intCasiNuncaValores = 0;
-                $intNuncaValores = 0;
-                $intPreguntasValores = 0;
-                $intSiempreOrientacionCliente = 0;
-                $intCasiSiempreOrientacionCliente = 0;
-                $intAlgunasVecesOrientacionCliente = 0;
-                $intCasiNuncaOrientacionCliente = 0;
-                $intNuncaOrientacionCliente = 0;
-                $intPreguntasOrientacionCliente = 0;
-                $intSiempreOrientacionResultados = 0;
-                $intCasiSiempreOrientacionResultados = 0;
-                $intAlgunasVecesOrientacionResultados = 0;
-                $intCasiNuncaOrientacionResultados = 0;
-                $intNuncaOrientacionResultados = 0;
-                $intPreguntasOrientacionResultados = 0;
-                $intSiempreConstruccionMantenimientoRelaciones = 0;
-                $intCasiSiempreConstruccionMantenimientoRelaciones = 0;
-                $intAlgunasVecesConstruccionMantenimientoRelaciones = 0;
-                $intCasiNuncaConstruccionMantenimientoRelaciones = 0;
-                $intNuncaConstruccionMantenimientoRelaciones = 0;
-                $intPreguntasConstruccionMantenimientoRelaciones = 0;
-                $arDesempenoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoDetalle();
-                $arDesempenoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoDetalle')->findBy(array('codigoDesempenoFk' => $codigoDesempeno));
-                foreach ($arDesempenoDetalles as $arDesempenoDetalle) {
-                    if ($arDesempenoDetalle->getDesempenoConceptoRel()->getCodigoDesempenoConceptoTipoFk() == 1){
-                        $intSiempreAreaProfesional = $intSiempreAreaProfesional + $arDesempenoDetalle->getSiempre();
-                        $intCasiSiempreAreaProfesional = $intCasiSiempreAreaProfesional + $arDesempenoDetalle->getCasiSiempre();
-                        $intAlgunasVecesAreaProfesional = $intAlgunasVecesAreaProfesional + $arDesempenoDetalle->getalgunasVeces();
-                        $intCasiNuncaAreaProfesional = $intCasiNuncaAreaProfesional + $arDesempenoDetalle->getCasiNunca();
-                        $intNuncaAreaProfesional = $intNuncaAreaProfesional + $arDesempenoDetalle->getNunca();
-                        $intPreguntasAreaProfesional ++;
+                    $strObservaciones = $arrControles['TextareaObservaciones'];
+                    $strAspectosMejorar = $arrControles['TextareaAspectosMejorar'];
+                    $arDesempeno->setObservaciones($strObservaciones);
+                    $arDesempeno->setAspectosMejorar($strAspectosMejorar);
+                    $em->persist($arDesempeno);
+                    $em->flush();
+                    $intSiempreAreaProfesional = 0;
+                    $intCasiSiempreAreaProfesional = 0;
+                    $intAlgunasVecesAreaProfesional = 0;
+                    $intCasiNuncaAreaProfesional = 0;
+                    $intNuncaAreaProfesional = 0;
+                    $intPreguntasAreaProfesional = 0;
+                    $intSiempreCompromiso = 0;
+                    $intCasiSiempreCompromiso = 0;
+                    $intAlgunasVecesCompromiso = 0;
+                    $intCasiNuncaCompromiso = 0;
+                    $intNuncaCompromiso = 0;
+                    $intPreguntasCompromiso = 0;
+                    $intSiempreUrbanidad = 0;
+                    $intCasiSiempreUrbanidad = 0;
+                    $intAlgunasVecesUrbanidad = 0;
+                    $intCasiNuncaUrbanidad = 0;
+                    $intNuncaUrbanidad = 0;
+                    $intPreguntasUrbanidad = 0;
+                    $intSiempreValores = 0;
+                    $intCasiSiempreValores = 0;
+                    $intAlgunasVecesValores = 0;
+                    $intCasiNuncaValores = 0;
+                    $intNuncaValores = 0;
+                    $intPreguntasValores = 0;
+                    $intSiempreOrientacionCliente = 0;
+                    $intCasiSiempreOrientacionCliente = 0;
+                    $intAlgunasVecesOrientacionCliente = 0;
+                    $intCasiNuncaOrientacionCliente = 0;
+                    $intNuncaOrientacionCliente = 0;
+                    $intPreguntasOrientacionCliente = 0;
+                    $intSiempreOrientacionResultados = 0;
+                    $intCasiSiempreOrientacionResultados = 0;
+                    $intAlgunasVecesOrientacionResultados = 0;
+                    $intCasiNuncaOrientacionResultados = 0;
+                    $intNuncaOrientacionResultados = 0;
+                    $intPreguntasOrientacionResultados = 0;
+                    $intSiempreConstruccionMantenimientoRelaciones = 0;
+                    $intCasiSiempreConstruccionMantenimientoRelaciones = 0;
+                    $intAlgunasVecesConstruccionMantenimientoRelaciones = 0;
+                    $intCasiNuncaConstruccionMantenimientoRelaciones = 0;
+                    $intNuncaConstruccionMantenimientoRelaciones = 0;
+                    $intPreguntasConstruccionMantenimientoRelaciones = 0;
+                    $arDesempenoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoDetalle();
+                    $arDesempenoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoDetalle')->findBy(array('codigoDesempenoFk' => $codigoDesempeno));
+                    foreach ($arDesempenoDetalles as $arDesempenoDetalle) {
+                        if ($arDesempenoDetalle->getDesempenoConceptoRel()->getCodigoDesempenoConceptoTipoFk() == 1){
+                            $intSiempreAreaProfesional = $intSiempreAreaProfesional + $arDesempenoDetalle->getSiempre();
+                            $intCasiSiempreAreaProfesional = $intCasiSiempreAreaProfesional + $arDesempenoDetalle->getCasiSiempre();
+                            $intAlgunasVecesAreaProfesional = $intAlgunasVecesAreaProfesional + $arDesempenoDetalle->getalgunasVeces();
+                            $intCasiNuncaAreaProfesional = $intCasiNuncaAreaProfesional + $arDesempenoDetalle->getCasiNunca();
+                            $intNuncaAreaProfesional = $intNuncaAreaProfesional + $arDesempenoDetalle->getNunca();
+                            $intPreguntasAreaProfesional ++;
+                        }
+                        if ($arDesempenoDetalle->getDesempenoConceptoRel()->getCodigoDesempenoConceptoTipoFk() == 2){
+                            $intSiempreCompromiso = $intSiempreCompromiso + $arDesempenoDetalle->getSiempre();
+                            $intCasiSiempreCompromiso = $intCasiSiempreCompromiso + $arDesempenoDetalle->getCasiSiempre();
+                            $intAlgunasVecesCompromiso = $intAlgunasVecesCompromiso + $arDesempenoDetalle->getalgunasVeces();
+                            $intCasiNuncaCompromiso = $intCasiNuncaCompromiso + $arDesempenoDetalle->getCasiNunca();
+                            $intNuncaCompromiso = $intNuncaCompromiso + $arDesempenoDetalle->getNunca();
+                            $intPreguntasCompromiso ++;
+                        }
+                        if ($arDesempenoDetalle->getDesempenoConceptoRel()->getCodigoDesempenoConceptoTipoFk() == 3){
+                            $intSiempreUrbanidad = $intSiempreUrbanidad + $arDesempenoDetalle->getSiempre();
+                            $intCasiSiempreUrbanidad = $intCasiSiempreUrbanidad + $arDesempenoDetalle->getCasiSiempre();
+                            $intAlgunasVecesUrbanidad = $intAlgunasVecesUrbanidad + $arDesempenoDetalle->getalgunasVeces();
+                            $intCasiNuncaUrbanidad = $intCasiNuncaUrbanidad + $arDesempenoDetalle->getCasiNunca();
+                            $intNuncaUrbanidad = $intNuncaUrbanidad + $arDesempenoDetalle->getNunca();
+                            $intPreguntasUrbanidad ++;
+                        }
+                        if ($arDesempenoDetalle->getDesempenoConceptoRel()->getCodigoDesempenoConceptoTipoFk() == 4){
+                            $intSiempreValores = $intSiempreValores + $arDesempenoDetalle->getSiempre();
+                            $intCasiSiempreValores = $intCasiSiempreValores + $arDesempenoDetalle->getCasiSiempre();
+                            $intAlgunasVecesValores = $intAlgunasVecesValores + $arDesempenoDetalle->getalgunasVeces();
+                            $intCasiNuncaValores = $intCasiNuncaValores + $arDesempenoDetalle->getCasiNunca();
+                            $intNuncaValores = $intNuncaValores + $arDesempenoDetalle->getNunca();
+                            $intPreguntasValores ++;
+                        }
+                        if ($arDesempenoDetalle->getCodigoDesempenoConceptoFk() == 26 || $arDesempenoDetalle->getCodigoDesempenoConceptoFk() == 27 || $arDesempenoDetalle->getCodigoDesempenoConceptoFk() == 28 || $arDesempenoDetalle->getCodigoDesempenoConceptoFk() == 29){
+                            $intSiempreOrientacionCliente = $intSiempreOrientacionCliente + $arDesempenoDetalle->getSiempre();
+                            $intCasiSiempreOrientacionCliente = $intCasiSiempreOrientacionCliente + $arDesempenoDetalle->getCasiSiempre();
+                            $intAlgunasVecesOrientacionCliente = $intAlgunasVecesOrientacionCliente + $arDesempenoDetalle->getalgunasVeces();
+                            $intCasiNuncaOrientacionCliente = $intCasiNuncaOrientacionCliente + $arDesempenoDetalle->getCasiNunca();
+                            $intNuncaOrientacionCliente = $intNuncaOrientacionCliente + $arDesempenoDetalle->getNunca();
+                            $intPreguntasOrientacionCliente ++;
+                        }
+                        if ($arDesempenoDetalle->getCodigoDesempenoConceptoFk() == 30 || $arDesempenoDetalle->getCodigoDesempenoConceptoFk() == 31 || $arDesempenoDetalle->getCodigoDesempenoConceptoFk() == 32){
+                            $intSiempreOrientacionResultados = $intSiempreOrientacionResultados + $arDesempenoDetalle->getSiempre();
+                            $intCasiSiempreOrientacionResultados = $intCasiSiempreOrientacionResultados + $arDesempenoDetalle->getCasiSiempre();
+                            $intAlgunasVecesOrientacionResultados = $intAlgunasVecesOrientacionResultados + $arDesempenoDetalle->getalgunasVeces();
+                            $intCasiNuncaOrientacionResultados = $intCasiNuncaOrientacionResultados + $arDesempenoDetalle->getCasiNunca();
+                            $intNuncaOrientacionResultados = $intNuncaOrientacionResultados + $arDesempenoDetalle->getNunca();
+                            $intPreguntasOrientacionResultados ++;
+                        }
+                        if ($arDesempenoDetalle->getCodigoDesempenoConceptoFk() == 33 || $arDesempenoDetalle->getCodigoDesempenoConceptoFk() == 34 || $arDesempenoDetalle->getCodigoDesempenoConceptoFk() == 35){
+                            $intSiempreConstruccionMantenimientoRelaciones = $intSiempreConstruccionMantenimientoRelaciones + $arDesempenoDetalle->getSiempre();
+                            $intCasiSiempreConstruccionMantenimientoRelaciones = $intCasiSiempreConstruccionMantenimientoRelaciones + $arDesempenoDetalle->getCasiSiempre();
+                            $intAlgunasVecesConstruccionMantenimientoRelaciones = $intAlgunasVecesConstruccionMantenimientoRelaciones + $arDesempenoDetalle->getalgunasVeces();
+                            $intCasiNuncaConstruccionMantenimientoRelaciones = $intCasiNuncaConstruccionMantenimientoRelaciones + $arDesempenoDetalle->getCasiNunca();
+                            $intNuncaConstruccionMantenimientoRelaciones = $intNuncaConstruccionMantenimientoRelaciones + $arDesempenoDetalle->getNunca();
+                            $intPreguntasConstruccionMantenimientoRelaciones ++;
+                        }
                     }
-                    if ($arDesempenoDetalle->getDesempenoConceptoRel()->getCodigoDesempenoConceptoTipoFk() == 2){
-                        $intSiempreCompromiso = $intSiempreCompromiso + $arDesempenoDetalle->getSiempre();
-                        $intCasiSiempreCompromiso = $intCasiSiempreCompromiso + $arDesempenoDetalle->getCasiSiempre();
-                        $intAlgunasVecesCompromiso = $intAlgunasVecesCompromiso + $arDesempenoDetalle->getalgunasVeces();
-                        $intCasiNuncaCompromiso = $intCasiNuncaCompromiso + $arDesempenoDetalle->getCasiNunca();
-                        $intNuncaCompromiso = $intNuncaCompromiso + $arDesempenoDetalle->getNunca();
-                        $intPreguntasCompromiso ++;
-                    }
-                    if ($arDesempenoDetalle->getDesempenoConceptoRel()->getCodigoDesempenoConceptoTipoFk() == 3){
-                        $intSiempreUrbanidad = $intSiempreUrbanidad + $arDesempenoDetalle->getSiempre();
-                        $intCasiSiempreUrbanidad = $intCasiSiempreUrbanidad + $arDesempenoDetalle->getCasiSiempre();
-                        $intAlgunasVecesUrbanidad = $intAlgunasVecesUrbanidad + $arDesempenoDetalle->getalgunasVeces();
-                        $intCasiNuncaUrbanidad = $intCasiNuncaUrbanidad + $arDesempenoDetalle->getCasiNunca();
-                        $intNuncaUrbanidad = $intNuncaUrbanidad + $arDesempenoDetalle->getNunca();
-                        $intPreguntasUrbanidad ++;
-                    }
-                    if ($arDesempenoDetalle->getDesempenoConceptoRel()->getCodigoDesempenoConceptoTipoFk() == 4){
-                        $intSiempreValores = $intSiempreValores + $arDesempenoDetalle->getSiempre();
-                        $intCasiSiempreValores = $intCasiSiempreValores + $arDesempenoDetalle->getCasiSiempre();
-                        $intAlgunasVecesValores = $intAlgunasVecesValores + $arDesempenoDetalle->getalgunasVeces();
-                        $intCasiNuncaValores = $intCasiNuncaValores + $arDesempenoDetalle->getCasiNunca();
-                        $intNuncaValores = $intNuncaValores + $arDesempenoDetalle->getNunca();
-                        $intPreguntasValores ++;
-                    }
-                    if ($arDesempenoDetalle->getCodigoDesempenoConceptoFk() == 26 || $arDesempenoDetalle->getCodigoDesempenoConceptoFk() == 27 || $arDesempenoDetalle->getCodigoDesempenoConceptoFk() == 28 || $arDesempenoDetalle->getCodigoDesempenoConceptoFk() == 29){
-                        $intSiempreOrientacionCliente = $intSiempreOrientacionCliente + $arDesempenoDetalle->getSiempre();
-                        $intCasiSiempreOrientacionCliente = $intCasiSiempreOrientacionCliente + $arDesempenoDetalle->getCasiSiempre();
-                        $intAlgunasVecesOrientacionCliente = $intAlgunasVecesOrientacionCliente + $arDesempenoDetalle->getalgunasVeces();
-                        $intCasiNuncaOrientacionCliente = $intCasiNuncaOrientacionCliente + $arDesempenoDetalle->getCasiNunca();
-                        $intNuncaOrientacionCliente = $intNuncaOrientacionCliente + $arDesempenoDetalle->getNunca();
-                        $intPreguntasOrientacionCliente ++;
-                    }
-                    if ($arDesempenoDetalle->getCodigoDesempenoConceptoFk() == 30 || $arDesempenoDetalle->getCodigoDesempenoConceptoFk() == 31 || $arDesempenoDetalle->getCodigoDesempenoConceptoFk() == 32){
-                        $intSiempreOrientacionResultados = $intSiempreOrientacionResultados + $arDesempenoDetalle->getSiempre();
-                        $intCasiSiempreOrientacionResultados = $intCasiSiempreOrientacionResultados + $arDesempenoDetalle->getCasiSiempre();
-                        $intAlgunasVecesOrientacionResultados = $intAlgunasVecesOrientacionResultados + $arDesempenoDetalle->getalgunasVeces();
-                        $intCasiNuncaOrientacionResultados = $intCasiNuncaOrientacionResultados + $arDesempenoDetalle->getCasiNunca();
-                        $intNuncaOrientacionResultados = $intNuncaOrientacionResultados + $arDesempenoDetalle->getNunca();
-                        $intPreguntasOrientacionResultados ++;
-                    }
-                    if ($arDesempenoDetalle->getCodigoDesempenoConceptoFk() == 33 || $arDesempenoDetalle->getCodigoDesempenoConceptoFk() == 34 || $arDesempenoDetalle->getCodigoDesempenoConceptoFk() == 35){
-                        $intSiempreConstruccionMantenimientoRelaciones = $intSiempreConstruccionMantenimientoRelaciones + $arDesempenoDetalle->getSiempre();
-                        $intCasiSiempreConstruccionMantenimientoRelaciones = $intCasiSiempreConstruccionMantenimientoRelaciones + $arDesempenoDetalle->getCasiSiempre();
-                        $intAlgunasVecesConstruccionMantenimientoRelaciones = $intAlgunasVecesConstruccionMantenimientoRelaciones + $arDesempenoDetalle->getalgunasVeces();
-                        $intCasiNuncaConstruccionMantenimientoRelaciones = $intCasiNuncaConstruccionMantenimientoRelaciones + $arDesempenoDetalle->getCasiNunca();
-                        $intNuncaConstruccionMantenimientoRelaciones = $intNuncaConstruccionMantenimientoRelaciones + $arDesempenoDetalle->getNunca();
-                        $intPreguntasConstruccionMantenimientoRelaciones ++;
-                    }
-                }
-                //area profesional
-                $intTotalAreaProfesional = ($intSiempreAreaProfesional * 5) / $intPreguntasAreaProfesional;
-                $intTotalAreaProfesional += ($intCasiSiempreAreaProfesional * 4) / $intPreguntasAreaProfesional;
-                $intTotalAreaProfesional += ($intAlgunasVecesAreaProfesional * 3) / $intPreguntasAreaProfesional;
-                $intTotalAreaProfesional += ($intCasiNuncaAreaProfesional * 2 ) / $intPreguntasAreaProfesional;
-                $intTotalAreaProfesional += ($intNuncaAreaProfesional * 1) / $intPreguntasAreaProfesional;
-                $intTotalAreaProfesional = round(($intTotalAreaProfesional * 100) / 5);
-                //compromiso
-                $intTotalCompromiso = ($intSiempreCompromiso * 5) / $intPreguntasCompromiso;
-                $intTotalCompromiso += ($intCasiSiempreCompromiso * 4) / $intPreguntasCompromiso;
-                $intTotalCompromiso += ($intAlgunasVecesCompromiso * 3) / $intPreguntasCompromiso;
-                $intTotalCompromiso += ($intCasiNuncaCompromiso * 2 ) / $intPreguntasCompromiso;
-                $intTotalCompromiso += ($intNuncaCompromiso * 1) / $intPreguntasCompromiso;
-                $intTotalCompromiso = round(($intTotalCompromiso * 100) / 5);
-                //urbanidad
-                $intTotalUrbanidad = ($intSiempreUrbanidad * 5) / $intPreguntasUrbanidad;
-                $intTotalUrbanidad += ($intCasiSiempreUrbanidad * 4) / $intPreguntasUrbanidad;
-                $intTotalUrbanidad += ($intAlgunasVecesUrbanidad * 3) / $intPreguntasUrbanidad;
-                $intTotalUrbanidad += ($intCasiNuncaUrbanidad * 2 ) / $intPreguntasUrbanidad;
-                $intTotalUrbanidad += ($intNuncaUrbanidad * 1) / $intPreguntasUrbanidad;
-                $intTotalUrbanidad = round(($intTotalUrbanidad * 100) / 5);
-                //Valores
-                $intTotalValores = ($intSiempreValores * 5) / $intPreguntasValores;
-                $intTotalValores += ($intCasiSiempreValores * 4) / $intPreguntasValores;
-                $intTotalValores += ($intAlgunasVecesValores * 3) / $intPreguntasValores;
-                $intTotalValores += ($intCasiNuncaValores * 2 ) / $intPreguntasValores;
-                $intTotalValores += ($intNuncaValores * 1) / $intPreguntasValores;
-                $intTotalValores = round(($intTotalValores * 100) / 5);
-                //OrientacionCliente
-                $intTotalOrientacionCliente = ($intSiempreOrientacionCliente * 5) / $intPreguntasOrientacionCliente;
-                $intTotalOrientacionCliente += ($intCasiSiempreOrientacionCliente * 4) / $intPreguntasOrientacionCliente;
-                $intTotalOrientacionCliente += ($intAlgunasVecesOrientacionCliente * 3) / $intPreguntasOrientacionCliente;
-                $intTotalOrientacionCliente += ($intCasiNuncaOrientacionCliente * 2 ) / $intPreguntasOrientacionCliente;
-                $intTotalOrientacionCliente += ($intNuncaOrientacionCliente * 1) / $intPreguntasOrientacionCliente;
-                $intTotalOrientacionCliente = round(($intTotalOrientacionCliente * 100) / 5);
-                //OrientacionResultados
-                $intTotalOrientacionResultados = ($intSiempreOrientacionResultados * 5) / $intPreguntasOrientacionResultados;
-                $intTotalOrientacionResultados += ($intCasiSiempreOrientacionResultados * 4) / $intPreguntasOrientacionResultados;
-                $intTotalOrientacionResultados += ($intAlgunasVecesOrientacionResultados * 3) / $intPreguntasOrientacionResultados;
-                $intTotalOrientacionResultados += ($intCasiNuncaOrientacionResultados * 2 ) / $intPreguntasOrientacionResultados;
-                $intTotalOrientacionResultados += ($intNuncaOrientacionResultados * 1) / $intPreguntasOrientacionResultados;
-                $intTotalOrientacionResultados = round(($intTotalOrientacionResultados * 100) / 5);
-                //ConstruccionMantenimientoRelaciones
-                $intTotalConstruccionMantenimientoRelaciones = ($intSiempreConstruccionMantenimientoRelaciones * 5) / $intPreguntasConstruccionMantenimientoRelaciones;
-                $intTotalConstruccionMantenimientoRelaciones += ($intCasiSiempreConstruccionMantenimientoRelaciones * 4) / $intPreguntasConstruccionMantenimientoRelaciones;
-                $intTotalConstruccionMantenimientoRelaciones += ($intAlgunasVecesConstruccionMantenimientoRelaciones * 3) / $intPreguntasConstruccionMantenimientoRelaciones;
-                $intTotalConstruccionMantenimientoRelaciones += ($intCasiNuncaConstruccionMantenimientoRelaciones * 2 ) / $intPreguntasConstruccionMantenimientoRelaciones;
-                $intTotalConstruccionMantenimientoRelaciones += ($intNuncaConstruccionMantenimientoRelaciones * 1) / $intPreguntasConstruccionMantenimientoRelaciones;
-                $intTotalConstruccionMantenimientoRelaciones = round(($intTotalConstruccionMantenimientoRelaciones * 100) / 5);
-                $arDesempeno = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempeno();
-                $arDesempeno = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempeno')->find($codigoDesempeno);
-                $arDesempeno->setAreaProfesional($intTotalAreaProfesional);
-                $arDesempeno->setCompromiso($intTotalCompromiso);
-                $arDesempeno->setUrbanidad($intTotalUrbanidad);
-                $arDesempeno->setValores($intTotalValores);
-                $arDesempeno->setOrientacionCliente($intTotalOrientacionCliente);
-                $arDesempeno->setOrientacionResultados($intTotalOrientacionResultados);
-                $arDesempeno->setConstruccionMantenimientoRelaciones($intTotalConstruccionMantenimientoRelaciones);
-                $subTotal1 = round(($arDesempeno->getAreaProfesional() + $arDesempeno->getCompromiso() + $arDesempeno->getUrbanidad() + $arDesempeno->getValores()) / 4);
-                $subTotal2 = round(($arDesempeno->getOrientacionCliente() + $arDesempeno->getOrientacionResultados() + $arDesempeno->getConstruccionMantenimientoRelaciones()) / 3);
-                $total = ($subTotal1 + $subTotal2) / 2;
-                $arDesempeno->setSubTotal1(round($subTotal1));
-                $arDesempeno->setSubTotal2(round($subTotal2));
-                $arDesempeno->setTotalDesempeno(round($total));
-                $em->persist($arDesempeno);
-                $em->flush();
-            }            
-        }
-        $arDesempenosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoDetalle();
-        $arDesempenosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoDetalle')->ordenarPreguntasTipo($codigoDesempeno);
-        $arDesempenosDetalles = $paginator->paginate($arDesempenosDetalles, $this->get('request')->query->get('page', 1),100);
+                    //area profesional
+                    $intTotalAreaProfesional = ($intSiempreAreaProfesional * 5) / $intPreguntasAreaProfesional;
+                    $intTotalAreaProfesional += ($intCasiSiempreAreaProfesional * 4) / $intPreguntasAreaProfesional;
+                    $intTotalAreaProfesional += ($intAlgunasVecesAreaProfesional * 3) / $intPreguntasAreaProfesional;
+                    $intTotalAreaProfesional += ($intCasiNuncaAreaProfesional * 2 ) / $intPreguntasAreaProfesional;
+                    $intTotalAreaProfesional += ($intNuncaAreaProfesional * 1) / $intPreguntasAreaProfesional;
+                    $intTotalAreaProfesional = round(($intTotalAreaProfesional * 100) / 5);
+                    //compromiso
+                    $intTotalCompromiso = ($intSiempreCompromiso * 5) / $intPreguntasCompromiso;
+                    $intTotalCompromiso += ($intCasiSiempreCompromiso * 4) / $intPreguntasCompromiso;
+                    $intTotalCompromiso += ($intAlgunasVecesCompromiso * 3) / $intPreguntasCompromiso;
+                    $intTotalCompromiso += ($intCasiNuncaCompromiso * 2 ) / $intPreguntasCompromiso;
+                    $intTotalCompromiso += ($intNuncaCompromiso * 1) / $intPreguntasCompromiso;
+                    $intTotalCompromiso = round(($intTotalCompromiso * 100) / 5);
+                    //urbanidad
+                    $intTotalUrbanidad = ($intSiempreUrbanidad * 5) / $intPreguntasUrbanidad;
+                    $intTotalUrbanidad += ($intCasiSiempreUrbanidad * 4) / $intPreguntasUrbanidad;
+                    $intTotalUrbanidad += ($intAlgunasVecesUrbanidad * 3) / $intPreguntasUrbanidad;
+                    $intTotalUrbanidad += ($intCasiNuncaUrbanidad * 2 ) / $intPreguntasUrbanidad;
+                    $intTotalUrbanidad += ($intNuncaUrbanidad * 1) / $intPreguntasUrbanidad;
+                    $intTotalUrbanidad = round(($intTotalUrbanidad * 100) / 5);
+                    //Valores
+                    $intTotalValores = ($intSiempreValores * 5) / $intPreguntasValores;
+                    $intTotalValores += ($intCasiSiempreValores * 4) / $intPreguntasValores;
+                    $intTotalValores += ($intAlgunasVecesValores * 3) / $intPreguntasValores;
+                    $intTotalValores += ($intCasiNuncaValores * 2 ) / $intPreguntasValores;
+                    $intTotalValores += ($intNuncaValores * 1) / $intPreguntasValores;
+                    $intTotalValores = round(($intTotalValores * 100) / 5);
+                    //OrientacionCliente
+                    $intTotalOrientacionCliente = ($intSiempreOrientacionCliente * 5) / $intPreguntasOrientacionCliente;
+                    $intTotalOrientacionCliente += ($intCasiSiempreOrientacionCliente * 4) / $intPreguntasOrientacionCliente;
+                    $intTotalOrientacionCliente += ($intAlgunasVecesOrientacionCliente * 3) / $intPreguntasOrientacionCliente;
+                    $intTotalOrientacionCliente += ($intCasiNuncaOrientacionCliente * 2 ) / $intPreguntasOrientacionCliente;
+                    $intTotalOrientacionCliente += ($intNuncaOrientacionCliente * 1) / $intPreguntasOrientacionCliente;
+                    $intTotalOrientacionCliente = round(($intTotalOrientacionCliente * 100) / 5);
+                    //OrientacionResultados
+                    $intTotalOrientacionResultados = ($intSiempreOrientacionResultados * 5) / $intPreguntasOrientacionResultados;
+                    $intTotalOrientacionResultados += ($intCasiSiempreOrientacionResultados * 4) / $intPreguntasOrientacionResultados;
+                    $intTotalOrientacionResultados += ($intAlgunasVecesOrientacionResultados * 3) / $intPreguntasOrientacionResultados;
+                    $intTotalOrientacionResultados += ($intCasiNuncaOrientacionResultados * 2 ) / $intPreguntasOrientacionResultados;
+                    $intTotalOrientacionResultados += ($intNuncaOrientacionResultados * 1) / $intPreguntasOrientacionResultados;
+                    $intTotalOrientacionResultados = round(($intTotalOrientacionResultados * 100) / 5);
+                    //ConstruccionMantenimientoRelaciones
+                    $intTotalConstruccionMantenimientoRelaciones = ($intSiempreConstruccionMantenimientoRelaciones * 5) / $intPreguntasConstruccionMantenimientoRelaciones;
+                    $intTotalConstruccionMantenimientoRelaciones += ($intCasiSiempreConstruccionMantenimientoRelaciones * 4) / $intPreguntasConstruccionMantenimientoRelaciones;
+                    $intTotalConstruccionMantenimientoRelaciones += ($intAlgunasVecesConstruccionMantenimientoRelaciones * 3) / $intPreguntasConstruccionMantenimientoRelaciones;
+                    $intTotalConstruccionMantenimientoRelaciones += ($intCasiNuncaConstruccionMantenimientoRelaciones * 2 ) / $intPreguntasConstruccionMantenimientoRelaciones;
+                    $intTotalConstruccionMantenimientoRelaciones += ($intNuncaConstruccionMantenimientoRelaciones * 1) / $intPreguntasConstruccionMantenimientoRelaciones;
+                    $intTotalConstruccionMantenimientoRelaciones = round(($intTotalConstruccionMantenimientoRelaciones * 100) / 5);
+                    $arDesempeno = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempeno();
+                    $arDesempeno = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempeno')->find($codigoDesempeno);
+                    $arDesempeno->setAreaProfesional($intTotalAreaProfesional);
+                    $arDesempeno->setCompromiso($intTotalCompromiso);
+                    $arDesempeno->setUrbanidad($intTotalUrbanidad);
+                    $arDesempeno->setValores($intTotalValores);
+                    $arDesempeno->setOrientacionCliente($intTotalOrientacionCliente);
+                    $arDesempeno->setOrientacionResultados($intTotalOrientacionResultados);
+                    $arDesempeno->setConstruccionMantenimientoRelaciones($intTotalConstruccionMantenimientoRelaciones);
+                    $subTotal1 = round(($arDesempeno->getAreaProfesional() + $arDesempeno->getCompromiso() + $arDesempeno->getUrbanidad() + $arDesempeno->getValores()) / 4);
+                    $subTotal2 = round(($arDesempeno->getOrientacionCliente() + $arDesempeno->getOrientacionResultados() + $arDesempeno->getConstruccionMantenimientoRelaciones()) / 3);
+                    $total = ($subTotal1 + $subTotal2) / 2;
+                    $arDesempeno->setSubTotal1(round($subTotal1));
+                    $arDesempeno->setSubTotal2(round($subTotal2));
+                    $arDesempeno->setTotalDesempeno(round($total));
+                    $em->persist($arDesempeno);
+                    $em->flush();
+            }  
+        }          
+            $arDesempenosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoDetalle();
+            $arDesempenosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoDetalle')->ordenarPreguntasTipo($codigoDesempeno);
+            $arDesempenosDetalles = $paginator->paginate($arDesempenosDetalles, $this->get('request')->query->get('page', 1),100);    
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Desempenos:detalle.html.twig', array(
                         'arDesempenosDetalles' => $arDesempenosDetalles,
                         'arDesempeno' => $arDesempeno,

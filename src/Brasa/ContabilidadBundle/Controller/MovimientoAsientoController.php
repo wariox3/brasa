@@ -5,10 +5,11 @@ namespace Brasa\ContabilidadBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Brasa\ContabilidadBundle\Form\Type\CtbAsientoType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\ContabilidadBundle\Form\Type\CtbAsientoDetalleType;
 
 
-class AsientoController extends Controller
+class MovimientoAsientoController extends Controller
 {
     var $strListaDql = "";
     var $numeroAsiento = "";
@@ -16,6 +17,9 @@ class AsientoController extends Controller
     var $fechaDesde = "";
     var $fechaHasta = "";
     
+    /**
+     * @Route("/ctb/movimientos/asientos/lista", name="brs_ctb_mov_asientos_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -64,6 +68,9 @@ class AsientoController extends Controller
         return $this->render('BrasaContabilidadBundle:Movimientos/Asientos:lista.html.twig', array('arAsientos' => $arAsientos, 'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/ctb/movimientos/asientos/nuevo/{codigoAsiento}", name="brs_ctb_mov_asientos_nuevo")
+     */
     public function nuevoAction($codigoAsiento = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -96,6 +103,9 @@ class AsientoController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/ctb/movimientos/asientos/detalle/{codigoAsiento}", name="brs_ctb_mov_asientos_detalle")
+     */
     public function detalleAction($codigoAsiento) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -114,175 +124,197 @@ class AsientoController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnAutorizar')->isClicked()) {
-                $autorizar = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->Autorizar($codigoAsiento);
-                if ($autorizar != ""){
-                    $objMensaje->Mensaje("error", $autorizar, $this);
+                if ($arAsiento->getEstadoAutorizado() == 0){
+                    $autorizar = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->Autorizar($codigoAsiento);
+                    if ($autorizar != ""){
+                        $objMensaje->Mensaje("error", $autorizar, $this);
+                    }
+                    return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
+                } else {
+                    $objMensaje->Mensaje("error", "El asiento ya esta autorizado", $this);
                 }
-                return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
+                
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {
-                $autorizar = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->DesAutorizar($codigoAsiento);
-                if ($autorizar != ""){
-                    $objMensaje->Mensaje("error", $autorizar, $this);
+                if ($arAsiento->getEstadoAutorizado() == 1){
+                    $autorizar = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->DesAutorizar($codigoAsiento);
+                    if ($autorizar != ""){
+                        $objMensaje->Mensaje("error", $autorizar, $this);
+                    }
+                    return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
+                } else {
+                    $objMensaje->Mensaje("error", "El asiento ya esta desautorizado", $this);
                 }
-                return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
+                
             }
             
             if($form->get('BtnEliminarDetalle')->isClicked()) {
                 $arrSelecionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSelecionados) > 0) {
-                    foreach ($arrSelecionados AS $codigoAsientoDetalle) {
-                        $arAsientoDetalle = new \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle();
-                        $arAsientoDetalle = $em->getRepository('BrasaContabilidadBundle:CtbAsientoDetalle')->find($codigoAsientoDetalle);
-                        if ($arAsientoDetalle->getEstadoAutorizado() == 1){
-                            $objMensaje->Mensaje("error", "El asiento detalle ". $codigoAsientoDetalle ." ya fue autorizada, no se pude eliminar", $this);
-                        }else{
-                            $em->remove($arAsientoDetalle);
+                if ($arAsiento->getEstadoAutorizado() == 0){
+                    if(count($arrSelecionados) > 0) {
+                        foreach ($arrSelecionados AS $codigoAsientoDetalle) {
+                            $arAsientoDetalle = new \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle();
+                            $arAsientoDetalle = $em->getRepository('BrasaContabilidadBundle:CtbAsientoDetalle')->find($codigoAsientoDetalle);
+                            if ($arAsientoDetalle->getEstadoAutorizado() == 1){
+                                $objMensaje->Mensaje("error", "El asiento detalle ". $codigoAsientoDetalle ." ya fue autorizada, no se pude eliminar", $this);
+                            }else{
+                                $em->remove($arAsientoDetalle);
+                            }
                         }
+                        $em->flush();
+                        $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->liquidar($codigoAsiento);
+                        return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
                     }
-                    $em->flush();
-                    $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->liquidar($codigoAsiento);
-                    return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
+                } else {
+                    $objMensaje->Mensaje("error", "No se puede eliminar el registro, el asiento esta autorizado", $this);
                 }
+                
             }
             
             if($form->get('BtnAgregar')->isClicked()) {
                 $arrControlesNew = $request->request->All();
-                $strIdentificacion = $arrControlesNew['TxtNumeroIdentificacionNew'];
-                $strCuenta = $arrControlesNew['TxtCuentaNew'];
-                $StrCentroCosto = $arrControlesNew['TxtCodigoCentroCostoNew'];
-                $intIndice = 0;
-                if ($strCuenta != null){
-                    $arAsientoNew = new \Brasa\ContabilidadBundle\Entity\CtbAsiento();
-                    $arAsientoNew = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->find($codigoAsiento);
-                    $arTerceroNew = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $strIdentificacion));
-                    $registrosNew = count($arTerceroNew);
-                    $arCuentaNew = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($strCuenta);
-                    $arAsientoTipoNew = $em->getRepository('BrasaContabilidadBundle:CtbAsientoTipo')->find($arrControlesNew['CboCodigoAsientoTipoNew']);
-                    $arCentroCostoNew = $em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find($arrControlesNew['TxtCodigoCentroCostoNew']);
-                    $arAsientoDetalleNew->setAsientoRel($arAsientoNew);
-                    $arAsientoDetalleNew->setCuentaRel($arCuentaNew);
-                    $arAsientoDetalleNew->setAsientoTipoRel($arAsientoTipoNew);
-                    $arAsientoDetalleNew->setTerceroRel($arTerceroNew);
-                    $arAsientoDetalleNew->setCentroCostoRel($arCentroCostoNew);
-                    $arAsientoDetalleNew->setDocumentoReferente($arrControlesNew['TxtDocumentoReferenteNew']);
-                    $arAsientoDetalleNew->setSoporte($arrControlesNew['TxtSoporteNew']);
-                    $arAsientoDetalleNew->setPlazo($arrControlesNew['TxtPlazoNew']);
-                    $arAsientoDetalleNew->setValorBase($arrControlesNew['TxtValorBaseNew']);
-                    if ($arAsientoTipoNew->getCodigoAsientoTipoPk() == 1){
-                        $arAsientoDetalleNew->setDebito($arrControlesNew['TxtDebitoNew']);
-                    }else{
-                        $arAsientoDetalleNew->setCredito($arrControlesNew['TxtCreditoNew']);
-                    }
-                    //$arAsientoDetalleNew->setDebito($arrControlesNew['TxtDebitoNew']);
-                    //$arAsientoDetalleNew->setCredito($arrControlesNew['TxtCreditoNew']);
-                    $arAsientoDetalleNew->setDescripcion($arrControlesNew['TxtDescripcionNew']);
-                    if ($arCuentaNew == null){
-                        $objMensaje->Mensaje("error", "El sistema no agregó el registro , por que el número de cuenta ". $strCuenta . " no existe en el sistema" , $this);
-                    }else {
-                        if ($registrosNew == 0 ){
-                            if ($strIdentificacion == null){
-                                if ($arCuentaNew->getExigeNit() == 1){
-                                    $objMensaje->Mensaje("error", "El sistema no agregó el registro , por que la cuenta exige número de identificación" , $this);
-                                }else{
-                                    
-                                    $em->persist($arAsientoDetalleNew);
-                                    $em->flush();
-                                    $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->liquidar($codigoAsiento);
-                                    return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
-                                }
-                            }else {
-                                $objMensaje->Mensaje("error", "El sistema no agregó el registro , por que el número de identificación ". $strIdentificacion . " no existe en el sistema" , $this);
-                            }
+                if ($arAsiento->getEstadoAutorizado() == 0 ){
+                    $strIdentificacion = $arrControlesNew['TxtNumeroIdentificacionNew'];
+                    $strCuenta = $arrControlesNew['TxtCuentaNew'];
+                    $StrCentroCosto = $arrControlesNew['TxtCodigoCentroCostoNew'];
+                    $intIndice = 0;
+                    if ($strCuenta != null){
+                        $arAsientoNew = new \Brasa\ContabilidadBundle\Entity\CtbAsiento();
+                        $arAsientoNew = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->find($codigoAsiento);
+                        $arTerceroNew = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $strIdentificacion));
+                        $registrosNew = count($arTerceroNew);
+                        $arCuentaNew = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($strCuenta);
+                        $arAsientoTipoNew = $em->getRepository('BrasaContabilidadBundle:CtbAsientoTipo')->find($arrControlesNew['CboCodigoAsientoTipoNew']);
+                        $arCentroCostoNew = $em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find($arrControlesNew['TxtCodigoCentroCostoNew']);
+                        $arAsientoDetalleNew->setAsientoRel($arAsientoNew);
+                        $arAsientoDetalleNew->setCuentaRel($arCuentaNew);
+                        $arAsientoDetalleNew->setAsientoTipoRel($arAsientoTipoNew);
+                        $arAsientoDetalleNew->setTerceroRel($arTerceroNew);
+                        $arAsientoDetalleNew->setCentroCostoRel($arCentroCostoNew);
+                        $arAsientoDetalleNew->setDocumentoReferente($arrControlesNew['TxtDocumentoReferenteNew']);
+                        $arAsientoDetalleNew->setSoporte($arrControlesNew['TxtSoporteNew']);
+                        $arAsientoDetalleNew->setPlazo($arrControlesNew['TxtPlazoNew']);
+                        $arAsientoDetalleNew->setValorBase($arrControlesNew['TxtValorBaseNew']);
+                        if ($arAsientoTipoNew->getCodigoAsientoTipoPk() == 1){
+                            $arAsientoDetalleNew->setDebito($arrControlesNew['TxtDebitoNew']);
+                        }else{
+                            $arAsientoDetalleNew->setCredito($arrControlesNew['TxtCreditoNew']);
+                        }
+                        //$arAsientoDetalleNew->setDebito($arrControlesNew['TxtDebitoNew']);
+                        //$arAsientoDetalleNew->setCredito($arrControlesNew['TxtCreditoNew']);
+                        $arAsientoDetalleNew->setDescripcion($arrControlesNew['TxtDescripcionNew']);
+                        if ($arCuentaNew == null){
+                            $objMensaje->Mensaje("error", "El sistema no agregó el registro , por que el número de cuenta ". $strCuenta . " no existe en el sistema" , $this);
                         }else {
-                            if ($arCentroCostoNew == null){
-                                if ($arrControlesNew['TxtCodigoCentroCostoNew'] != null){
-                                    $objMensaje->Mensaje("error", "El sistema no agregó el registro , por que el centro de costo ". $arrControlesNew['TxtCodigoCentroCostoNew'] . " no existe en el sistema" , $this);
-                                }else{ 
+                            if ($registrosNew == 0 ){
+                                if ($strIdentificacion == null){
+                                    if ($arCuentaNew->getExigeNit() == 1){
+                                        $objMensaje->Mensaje("error", "El sistema no agregó el registro , por que la cuenta exige número de identificación" , $this);
+                                    }else{
+
+                                        $em->persist($arAsientoDetalleNew);
+                                        $em->flush();
+                                        $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->liquidar($codigoAsiento);
+                                        return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
+                                    }
+                                }else {
+                                    $objMensaje->Mensaje("error", "El sistema no agregó el registro , por que el número de identificación ". $strIdentificacion . " no existe en el sistema" , $this);
+                                }
+                            }else {
+                                if ($arCentroCostoNew == null){
+                                    if ($arrControlesNew['TxtCodigoCentroCostoNew'] != null){
+                                        $objMensaje->Mensaje("error", "El sistema no agregó el registro , por que el centro de costo ". $arrControlesNew['TxtCodigoCentroCostoNew'] . " no existe en el sistema" , $this);
+                                    }else{ 
+                                        $em->persist($arAsientoDetalleNew);
+                                        $em->flush();
+                                        $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->liquidar($codigoAsiento);
+                                        return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
+                                    }
+                                }else {
                                     $em->persist($arAsientoDetalleNew);
                                     $em->flush();
                                     $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->liquidar($codigoAsiento);
                                     return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
-                                }
-                            }else {
-                                $em->persist($arAsientoDetalleNew);
-                                $em->flush();
-                                $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->liquidar($codigoAsiento);
-                                return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
-                            }        
-                        }   
+                                }        
+                            }   
+                        }
+                    } else {
+                        $objMensaje->Mensaje("error", "El registro no tiene número de cuenta", $this);
                     }
                 } else {
-                    $objMensaje->Mensaje("error", "El registro no tiene número de cuenta", $this);
+                   $objMensaje->Mensaje("error", "No se puede agregar registro, el asiento ha sido autorizado", $this); 
                 }
+                
             }
             
             if($form->get('BtnDetalleActualizar')->isClicked()) {
                 $arrControles = $request->request->All();
                 $intIndice = 0;
-                
-                if (isset($arrControles['LblCodigoGuia'])){
-                    foreach ($arrControles['LblCodigoGuia'] as $intCodigo) {
-                        $arAsientoDetalle = new \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle();
-                        $arAsientoDetalle = $em->getRepository('BrasaContabilidadBundle:CtbAsientoDetalle')->find($intCodigo);
-                        $arTercero = new \Brasa\ContabilidadBundle\Entity\CtbTercero();
-                        $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arrControles['TxtNumeroIdentificacion'.$intCodigo]));
-                        $registros = count($arTercero);
-                        $arCuenta = new \Brasa\ContabilidadBundle\Entity\CtbCuenta();
-                        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arrControles['TxtCuenta'.$intCodigo]);
-                        $arAsientoTipo = new \Brasa\ContabilidadBundle\Entity\CtbAsientoTipo();
-                        $arAsientoTipo = $em->getRepository('BrasaContabilidadBundle:CtbAsientoTipo')->find($arrControles['CboCodigoAsientoTipo'.$intCodigo]);
-                        $arCentroCosto = new \Brasa\ContabilidadBundle\Entity\CtbCentroCosto();
-                        $arCentroCosto = $em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find($arrControles['TxtCodigoCentroCosto'.$intCodigo]);
-                        $arAsientoDetalle->setCuentaRel($arCuenta);
-                        $arAsientoDetalle->setAsientoTipoRel($arAsientoTipo);
-                        $arAsientoDetalle->setTerceroRel($arTercero);
-                        $arAsientoDetalle->setCentroCostoRel($arCentroCosto);
-                        $arAsientoDetalle->setDocumentoReferente($arrControles['TxtDocumentoReferente'.$intCodigo]);
-                        $arAsientoDetalle->setSoporte($arrControles['TxtSoporte'.$intCodigo]);
-                        $arAsientoDetalle->setPlazo($arrControles['TxtPlazo'.$intCodigo]);
-                        $arAsientoDetalle->setValorBase($arrControles['TxtValorBase'.$intCodigo]);
-                        if ($arAsientoTipo->getCodigoAsientoTipoPk() == 1){
-                            $arAsientoDetalle->setDebito($arrControles['TxtDebito'.$intCodigo]);
-                            $arAsientoDetalle->setCredito(0);
-                        }else{
-                            $arAsientoDetalle->setCredito($arrControles['TxtCredito'.$intCodigo]);
-                            $arAsientoDetalle->setDebito(0);
-                        }
-                        //$arAsientoDetalle->setDebito($arrControles['TxtDebito'.$intCodigo]);
-                        //$arAsientoDetalle->setCredito($arrControles['TxtCredito'.$intCodigo]);
-                        $arAsientoDetalle->setDescripcion($arrControles['TxtDescripcion'.$intCodigo]);
-                        if ($arCuenta == null){
-                            $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el número de cuenta ". $arrControles['TxtCuenta'.$intCodigo] . " no existe" , $this);
-                        }else {
-                            if ($registros == 0 ){
-                                if ($arrControles['TxtNumeroIdentificacion'.$intCodigo] == null){
-                                    if ($arCuenta->getExigeNit() == 1){
-                                        $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que la cuenta exige número de identificación" , $this);
-                                    } else {
-                                        
-                                        $em->persist($arAsientoDetalle);
+                if ($arAsiento->getEstadoAutorizado() == 0){
+                    if (isset($arrControles['LblCodigoGuia'])){
+                        foreach ($arrControles['LblCodigoGuia'] as $intCodigo) {
+                            $arAsientoDetalle = new \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle();
+                            $arAsientoDetalle = $em->getRepository('BrasaContabilidadBundle:CtbAsientoDetalle')->find($intCodigo);
+                            $arTercero = new \Brasa\ContabilidadBundle\Entity\CtbTercero();
+                            $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arrControles['TxtNumeroIdentificacion'.$intCodigo]));
+                            $registros = count($arTercero);
+                            $arCuenta = new \Brasa\ContabilidadBundle\Entity\CtbCuenta();
+                            $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arrControles['TxtCuenta'.$intCodigo]);
+                            $arAsientoTipo = new \Brasa\ContabilidadBundle\Entity\CtbAsientoTipo();
+                            $arAsientoTipo = $em->getRepository('BrasaContabilidadBundle:CtbAsientoTipo')->find($arrControles['CboCodigoAsientoTipo'.$intCodigo]);
+                            $arCentroCosto = new \Brasa\ContabilidadBundle\Entity\CtbCentroCosto();
+                            $arCentroCosto = $em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find($arrControles['TxtCodigoCentroCosto'.$intCodigo]);
+                            $arAsientoDetalle->setCuentaRel($arCuenta);
+                            $arAsientoDetalle->setAsientoTipoRel($arAsientoTipo);
+                            $arAsientoDetalle->setTerceroRel($arTercero);
+                            $arAsientoDetalle->setCentroCostoRel($arCentroCosto);
+                            $arAsientoDetalle->setDocumentoReferente($arrControles['TxtDocumentoReferente'.$intCodigo]);
+                            $arAsientoDetalle->setSoporte($arrControles['TxtSoporte'.$intCodigo]);
+                            $arAsientoDetalle->setPlazo($arrControles['TxtPlazo'.$intCodigo]);
+                            $arAsientoDetalle->setValorBase($arrControles['TxtValorBase'.$intCodigo]);
+                            if ($arAsientoTipo->getCodigoAsientoTipoPk() == 1){
+                                $arAsientoDetalle->setDebito($arrControles['TxtDebito'.$intCodigo]);
+                                $arAsientoDetalle->setCredito(0);
+                            }else{
+                                $arAsientoDetalle->setCredito($arrControles['TxtCredito'.$intCodigo]);
+                                $arAsientoDetalle->setDebito(0);
+                            }
+                            //$arAsientoDetalle->setDebito($arrControles['TxtDebito'.$intCodigo]);
+                            //$arAsientoDetalle->setCredito($arrControles['TxtCredito'.$intCodigo]);
+                            $arAsientoDetalle->setDescripcion($arrControles['TxtDescripcion'.$intCodigo]);
+                            if ($arCuenta == null){
+                                $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el número de cuenta ". $arrControles['TxtCuenta'.$intCodigo] . " no existe" , $this);
+                            }else {
+                                if ($registros == 0 ){
+                                    if ($arrControles['TxtNumeroIdentificacion'.$intCodigo] == null){
+                                        if ($arCuenta->getExigeNit() == 1){
+                                            $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que la cuenta exige número de identificación" , $this);
+                                        } else {
+
+                                            $em->persist($arAsientoDetalle);
+                                        }
+                                    }else {
+                                        $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el número de identificación ". $arrControles['TxtNumeroIdentificacion'.$intCodigo] . " no existe" , $this);
                                     }
                                 }else {
-                                    $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el número de identificación ". $arrControles['TxtNumeroIdentificacion'.$intCodigo] . " no existe" , $this);
-                                }
-                            }else {
-                                if ($arCentroCosto == null){
-                                    if ($arrControles['TxtCodigoCentroCosto'.$intCodigo] != null){
-                                        $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el centro de costo ". $arrControles['TxtCodigoCentroCosto'.$intCodigo] . " no existe" , $this);
+                                    if ($arCentroCosto == null){
+                                        if ($arrControles['TxtCodigoCentroCosto'.$intCodigo] != null){
+                                            $objMensaje->Mensaje("error", "El sistema no modificó el registro ".$intCodigo.", por que el centro de costo ". $arrControles['TxtCodigoCentroCosto'.$intCodigo] . " no existe" , $this);
+                                        }else {
+
+                                            $em->persist($arAsientoDetalle);
+                                        }    
                                     }else {
-                                        
+
                                         $em->persist($arAsientoDetalle);
                                     }    
-                                }else {
-                                    
-                                    $em->persist($arAsientoDetalle);
                                 }    
-                            }    
-                        }   
+                            }   
+                        }
                     }
+                } else {
+                    $objMensaje->Mensaje("error", "No se puede actualizar los detalles, el asiento ha sido autorizado", $this);
                 }
-                
                 $em->flush();
                 $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->liquidar($codigoAsiento);
                 return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));

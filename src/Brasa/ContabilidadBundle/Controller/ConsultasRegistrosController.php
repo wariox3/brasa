@@ -3,6 +3,7 @@
 namespace Brasa\ContabilidadBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
 class ConsultasRegistrosController extends Controller
@@ -14,6 +15,9 @@ class ConsultasRegistrosController extends Controller
     var $strDesde = "";
     var $strHasta = "";
     
+    /**
+     * @Route("/ctb/consultas/registros/", name="brs_ctb_consultas_registros")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

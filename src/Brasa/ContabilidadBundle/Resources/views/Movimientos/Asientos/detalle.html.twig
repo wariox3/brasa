@@ -24,6 +24,10 @@
                 {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
+        </div>
+        <div style="float:right">
+            {% if arAsiento.estadoAutorizado == 1 %}<span class="label label-default">Autorizado</span>{% endif %}            
+            {% if arAsiento.estadoImpreso != 0 %}<span class="label label-success">Impreso</span>{% endif %}
         </div>    
         <br /><br />
         <div class="panel panel-default">

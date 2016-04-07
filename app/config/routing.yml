@@ -27,8 +27,8 @@ brasa_cartera:
     type:     annotation 
 
 brasa_contabilidad:
-    resource: "@BrasaContabilidadBundle/Resources/config/routing.yml"
-    prefix:   /
+    resource: "@BrasaContabilidadBundle/Controller"
+    type:     annotation
 
 brasa_tesoreria:
     resource: "@BrasaTesoreriaBundle/Resources/config/routing.yml"

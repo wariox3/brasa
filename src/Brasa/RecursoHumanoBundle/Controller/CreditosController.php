@@ -251,7 +251,6 @@ class CreditosController extends Controller
         $arCreditoPago = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
         $arCreditoPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoPago')->findBy(array('codigoCreditoFk' => $codigoCreditoFk));
         if($form->isValid()) {
-
             if($form->get('BtnImprimir')->isClicked()) {
                 $objFormatoDetalleCredito = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDetalleCredito();
                 $objFormatoDetalleCredito->Generar($this, $codigoCreditoFk);
@@ -282,33 +281,35 @@ class CreditosController extends Controller
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-            $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCreditoPk);
-            $saldoA = $arCredito->getSaldo();
-            $Abono = $form->get('vrAbono')->getData();
-
-            if ($Abono > $arCredito->getSaldoTotal()){
-                $mensaje = "El abono no puede ser superior al saldo!";
-            } else {
-                $arCredito->setSaldo($saldoA - $Abono);
-                $arCredito->setSaldoTotal($arCredito->getSaldo() - $arCredito->getVrCuotaTemporal());
-                if ($arCredito->getSaldo() <= 0){
-                   $arCredito->setEstadoPagado(1);
+            if ($arCredito->getEstadoPagado() == 0){
+                $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+                $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCreditoPk);
+                $saldoA = $arCredito->getSaldo();
+                $Abono = $form->get('vrAbono')->getData();
+                if ($Abono > $arCredito->getSaldoTotal()){
+                    $mensaje = "El abono no puede ser superior al saldo!";
+                } else {
+                    $arCredito->setSaldo($saldoA - $Abono);
+                    $arCredito->setSaldoTotal($arCredito->getSaldo() - $arCredito->getVrCuotaTemporal());
+                    if ($arCredito->getSaldo() <= 0){
+                       $arCredito->setEstadoPagado(1);
+                    }
+                    $nroACuotas = $arCredito->getNumeroCuotaActual();
+                    $seguro = $arCredito->getSeguro();
+                    $arCredito->setNumeroCuotaActual($nroACuotas + 1);
+                    $arPagoCredito->setCreditoRel($arCredito);
+                    $arPagoCredito->setvrCuota($form->get('vrAbono')->getData());
+                    $arPagoCredito->setfechaPago(new \ DateTime("now"));
+                    $arPagoCredito->setCodigoCreditoTipoPagoFk(2);
+                    $arPagoCredito->setCreditoRel($arCredito);
+                    $em->persist($arPagoCredito);
+                    $em->persist($arCredito);
+                    $em->flush();
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
                 }
-                $nroACuotas = $arCredito->getNumeroCuotaActual();
-                $seguro = $arCredito->getSeguro();
-                $arCredito->setNumeroCuotaActual($nroACuotas + 1);
-                $arPagoCredito->setCreditoRel($arCredito);
-                $arPagoCredito->setvrCuota($form->get('vrAbono')->getData());
-                $arPagoCredito->setfechaPago(new \ DateTime("now"));
-                $arPagoCredito->setCodigoCreditoTipoPagoFk(2);
-                $arPagoCredito->setCreditoRel($arCredito);
-                $em->persist($arPagoCredito);
-                $em->persist($arCredito);
-                $em->flush();
+            } else {
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-            }
-
+            }   
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Creditos:nuevoDetalle.html.twig', array(
             'arPagoCredito' => $arPagoCredito,
