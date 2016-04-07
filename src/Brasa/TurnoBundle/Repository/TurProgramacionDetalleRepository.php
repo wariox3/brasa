@@ -136,8 +136,7 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                     if(count($arPedidoDetalleRecurso) > 0) {
                         $arProgramacionDetalle->setRecursoRel($arPedidoDetalleRecurso->getRecursoRel());
                     }
-                    for($i = 1; $i < 32; $i++) {
-                        $boolAplica = $this->aplicaPlantilla($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle);
+                    for($i = 1; $i < 32; $i++) {                        
                         $strTurno = $arrTurnos[$intPosicion];
                         $strFechaDia = $arProgramacion->getFecha()->format('Y-m-') . $i;
                         $dateFechaDia = date_create($strFechaDia);
@@ -172,6 +171,7 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                         if($arPlantilla->getHomologarCodigoTurno() == 1) {
                             $strTurno = $this->devuelveCodigoTurno($arrTurnos[$intPosicion]);
                         }
+                        $boolAplica = $this->aplicaPlantilla($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle, $strTurno);                        
                         if($boolAplica == TRUE) {
                             if($i == 1) {
                                 $arProgramacionDetalle->setDia1($strTurno);
@@ -292,8 +292,7 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                         if(count($arPedidoDetalleRecurso) > 0) {
                             $arProgramacionDetalle->setRecursoRel($arPedidoDetalleRecurso->getRecursoRel());
                         }
-                        for($i = 1; $i < 32; $i++) {
-                            $boolAplica = $this->aplicaPlantilla($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle);
+                        for($i = 1; $i < 32; $i++) {                            
                             $strTurno = $arrTurnos[$intPosicion];
                             $strFechaDia = $arProgramacion->getFecha()->format('Y-m-') . $i;
                             $dateFechaDia = date_create($strFechaDia);
@@ -323,8 +322,8 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                             }
                             if($boolFestivo == 1 && isset($arrTurnos['festivo'])) {
                                 $strTurno = $arrTurnos['festivo'];
-                            }
-
+                            }                            
+                            $boolAplica = $this->aplicaPlantilla($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle, $strTurno);
                             if($boolAplica == TRUE) {
                                 if($i == 1) {
                                     $arProgramacionDetalle->setDia1($strTurno);
@@ -446,9 +445,16 @@ class TurProgramacionDetalleRepository extends EntityRepository {
         $em->flush();
     }
 
-    private function aplicaPlantilla ($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle) {
+    private function aplicaPlantilla ($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle, $strTurno) {
+        $em = $this->getEntityManager();
         $boolResultado = FALSE;
-        if($i >= $intDiaInicial && $i <= $intDiaFinal) {
+        if($strTurno != '') {
+            $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
+            $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($strTurno);
+            if($arTurno->getDescanso() == 1) {
+                $boolResultado = TRUE;
+            } else {
+                if($i >= $intDiaInicial && $i <= $intDiaFinal) {
             $strFecha = $strMesAnio . '/' . $i;
             $dateNuevaFecha = date_create($strFecha);
             $diaSemana = $dateNuevaFecha->format('N');
@@ -487,7 +493,10 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                     $boolResultado = TRUE;
                 }
             }
+        }                            
+            }
         }
+
         return $boolResultado;
     }
 
