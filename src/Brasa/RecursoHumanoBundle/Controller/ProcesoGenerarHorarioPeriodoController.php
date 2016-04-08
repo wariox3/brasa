@@ -17,15 +17,6 @@ class ProcesoGenerarHorarioPeriodoController extends Controller
         $form->handleRequest($request);
         $arHorariosPeriodos = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioPeriodo();
         if($form->isValid()) {
-            if($request->request->get('OpGenerar')) {
-                $codigoHorarioPeriodo = $request->request->get('OpGenerar');
-                $strResultado = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioPeriodo')->generar($codigoHorarioPeriodo);
-                if($strResultado == "") {
-                    return $this->redirect($this->generateUrl('brs_rhu_proceso_control_acceso_horario_periodo_listar'));
-                } else {
-                    $objMensaje->Mensaje("error", $strResultado, $this);
-                }
-            }
             if($request->request->get('OpCerrar')) {
                 $codigoHorarioPeriodo = $request->request->get('OpCerrar');
                 $strResultado = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioPeriodo')->cerrar($codigoHorarioPeriodo);
@@ -87,9 +78,9 @@ class ProcesoGenerarHorarioPeriodoController extends Controller
             if (count($arHorarioPeriodoValidar) > 0){
                 $objMensaje->Mensaje("error", "Ya existe el periodo", $this);
             }else {
-                $arHorarioPeriodo->setFechaPeriodo($form->get('fechaPeriodo')->getData());
-                $em->persist($arHorarioPeriodo);  
-                $em->flush();
+                $fecha = $form->get('fechaPeriodo')->getData();                
+                $strSql = "CALL spRhuHorarioAcceso('" . $fecha->format('Y/m/d') . "')";           
+                $em->getConnection()->executeQuery($strSql); 
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                 
             }            
         }

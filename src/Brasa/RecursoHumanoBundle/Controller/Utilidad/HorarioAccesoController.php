@@ -1,12 +1,12 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Utilidad;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
-class UtilidadesHorarioAccesoController extends Controller
+class HorarioAccesoController extends Controller
 {
     
     /**
@@ -203,42 +203,6 @@ class UtilidadesHorarioAccesoController extends Controller
             'arrErrores' => $arrErrores,
             'form' => $form->createView()
             ));
-    } 
-    
-    public function salidaAction($codigoHorarioAcceso) {
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();
-        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $form = $this->createFormBuilder()
-            ->setAction($this->generateUrl('brs_rhu_salida_control_acceso_empleados', array('codigoHorarioAcceso' => $codigoHorarioAcceso)))
-            ->add('comentarios', 'textarea', array('required' => false))
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
-            ->getForm();
-        $form->handleRequest($request);
-        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-        $arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
-        $arHorarioAcceso = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->find($codigoHorarioAcceso);
-        if ($form->isValid()) {
-            
-            $arHorarioAcceso->setFechaSalida(new \DateTime('now'));
-            $arHorarioAcceso->setEstadoSalida(1);
-            $arHorarioAcceso->setComentarios($form->get('comentarios')->getData());
-            $dateEntrada = $arHorarioAcceso->getFechaEntrada();
-            $dateSalida = $arHorarioAcceso->getFechaSalida();
-            $dateDiferencia = date_diff($dateSalida, $dateEntrada);
-            $horas = $dateDiferencia->format('%H');
-            $minutos = $dateDiferencia->format('%i');
-            $segundos = $dateDiferencia->format('%s');
-            $diferencia = $horas.":".$minutos.":".$segundos;
-            $arHorarioAcceso->setDuracionRegistro($diferencia);
-            $em->persist($arHorarioAcceso);
-            $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_utilidades_control_acceso_empleado'));
-        }
-        return $this->render('BrasaRecursoHumanoBundle:Utilidades/HorarioAcceso:salida.html.twig', array(
-            '$arHorarioAcceso' => $arHorarioAcceso,
-            'form' => $form->createView()
-        ));
-    }
+    }     
           
 }
