@@ -72,7 +72,7 @@ USE `bdbrasa`$$
 
 DROP PROCEDURE IF EXISTS `spRhuHorarioRegistro`$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spRhuHorarioRegistro`(IN codigoEmpleadoParametro INTEGER, IN fecha DATE, IN hora TIME)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spRhuHorarioRegistro`(IN codigoEmpleadoParametro INTEGER, IN fecha DATE, IN hora TIME, IN tipo TINYINT)
 BEGIN		
 	DECLARE codigoEmpleado INTEGER DEFAULT 0;
 	DECLARE codigoHorarioPeriodo INTEGER DEFAULT 0;	
@@ -85,11 +85,16 @@ BEGIN
 	DECLARE fechaHoraEntradaTurno DATETIME;
 	DECLARE fechaEntradaTurno DATE;
 	DECLARE horaEntradaTurno TIME;
+	DECLARE fechaSalidaTurno DATE;
+	DECLARE horaSalidaTurno TIME;		
 	DECLARE diferenciaEntrada INTEGER;
+	DECLARE entradaTarde TINYINT DEFAULT 0;
 	
 	SELECT codigo_horario_periodo_pk INTO codigoHorarioPeriodo FROM rhu_horario_periodo WHERE fecha_periodo = fecha;
+	#Si hay periodo de la fecha
 	IF codigoHorarioPeriodo <> 0 THEN		
 		SELECT codigo_empleado_pk INTO codigoEmpleado FROM rhu_empleado WHERE codigo_empleado_pk = codigoEmpleadoParametro;
+		#Si el empleado existe
 		IF codigoEmpleado <> 0 THEN		
 			#Verificar salida pendiente del dia anterior
 			SET fechaAnterior = ADDDATE(fecha, INTERVAL -1 DAY);			 	 
@@ -97,22 +102,34 @@ BEGIN
 			IF codigoHorarioPeriodoAnterior <> 0 THEN
 				SELECT codigo_horario_acceso_pk INTO codigoHorarioAccesoAnterior FROM rhu_horario_acceso WHERE codigo_horario_periodo_fk = codigoHorarioPeriodoAnterior AND codigo_empleado_fk = codigoEmpleado AND salida_dia_siguiente = 1 AND estado_entrada = 1 AND estado_salida = 0;
 			END IF;
-			
+			#Si no existen salidas pendientes del dia anterior
 			IF codigoHorarioAccesoAnterior = 0 THEN
-				SELECT codigo_horario_acceso_pk, estado_entrada, fecha_entrada, hora_entrada_turno INTO codigoHorarioAcceso, entrada, fechaEntradaTurno, horaEntradaTurno  FROM rhu_horario_acceso WHERE codigo_horario_periodo_fk = codigoHorarioPeriodo AND codigo_empleado_fk = codigoEmpleado;
+				SELECT codigo_horario_acceso_pk, estado_entrada, fecha_entrada, hora_entrada_turno, fecha_salida, hora_salida_turno INTO codigoHorarioAcceso, entrada, fechaEntradaTurno, horaEntradaTurno, fechaSalidaTurno, horaSalidaTurno  FROM rhu_horario_acceso WHERE codigo_horario_periodo_fk = codigoHorarioPeriodo AND codigo_empleado_fk = codigoEmpleado;
+				#Si el empleado tiene registro creado para ese dia
 				IF codigoHorarioAcceso <> 0 THEN
-					IF entrada = 0 THEN
-						SET fechaHoraEntradaTurno = CONCAT(fechaEntradaTurno,' ',horaEntradaTurno);
-						SET fechaHoraEntrada = CONCAT(fecha,' ',hora);						
-						IF fechaHoraEntrada >  fechaHoraEntradaTurno THEN						
-							SET diferenciaEntrada = TIMEDIFF(hora, horaEntradaTurno);
-							
-							INSERT INTO prueba VALUES (CONCAT(fechaHoraEntrada, ' ', fechaHoraEntradaTurno));
-							INSERT INTO prueba VALUES (diferenciaEntrada);							
-							
+					#Si la accion es una entrada
+					IF tipo = 1 THEN
+						#Si no ha entrado
+						IF entrada = 0 THEN
+							SET fechaHoraEntradaTurno = CONCAT(fechaEntradaTurno,' ',horaEntradaTurno);
+							SET fechaHoraEntrada = CONCAT(fecha,' ',hora);						
+							IF fechaHoraEntrada >  fechaHoraEntradaTurno THEN
+								SET entradaTarde = 1;
+								SET diferenciaEntrada = TIMEDIFF(hora, horaEntradaTurno);																				
+							END IF;
+							UPDATE rhu_horario_acceso SET estado_entrada = 1, fecha_entrada = fechaHoraEntrada, entrada_tarde = entradaTarde WHERE codigo_horario_acceso_pk = codigoHorarioAcceso;						
 						END IF;
-						
-					END IF;					
+					END IF;
+					#Si la accion es una salida
+					IF tipo = 2 THEN
+						#Varificar si ya tiene marcada una entrada
+						IF entrada = 1 THEN
+							#Verificar que no tenga salida
+							IF salida = 0 THEN
+							
+							END IF;
+						END IF
+					END IF;										
 				END IF;
 			END IF;		
 		END IF;
