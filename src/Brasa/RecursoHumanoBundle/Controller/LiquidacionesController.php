@@ -21,14 +21,14 @@ class LiquidacionesController extends Controller
                 $this->filtrar($form);
                 $this->listar();
             }
-
+            
             if($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
                 $this->listar();
                 $this->generarExcel();
             }
         }
-
+        
         $arLiquidaciones = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Liquidaciones:lista.html.twig', array('arLiquidaciones' => $arLiquidaciones, 'form' => $form->createView()));
     }

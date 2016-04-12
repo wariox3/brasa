@@ -210,7 +210,7 @@ class FormatoPermiso extends \FPDF_FPDF {
         
         $arPermiso = new \Brasa\RecursoHumanoBundle\Entity\RhuPermiso();
         $arPermiso = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPermiso')->find(self::$codigoPermiso);
-        $arUsers = self::$em->getRepository('BrasaSeguridadBundle:User')->find($arPermiso->getCodigoUsuario());
+        $arUsers = self::$em->getRepository('BrasaSeguridadBundle:User')->findOneBy(array('username' => $arPermiso->getCodigoUsuario()));
         $this->SetFont('Arial', 'B', 9);
         
         $this->Text(10, 120, "FIRMA: _____________________________________________");

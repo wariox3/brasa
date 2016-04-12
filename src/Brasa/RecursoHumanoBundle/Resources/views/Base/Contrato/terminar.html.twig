@@ -8,8 +8,11 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">Terminar contrato</h4>
-      </div>
+      </div>  
       {{ form_start(formContrato, { 'attr': {'class': 'form-horizontal'} }) }}
+      {% if mensaje != "" %}
+      <div class="alert alert-danger" role="alert">{{mensaje}}</div>
+      {% endif  %}
       <div class="modal-body">
  
             <table width="100%" class="table table-condensed table-bordered">                

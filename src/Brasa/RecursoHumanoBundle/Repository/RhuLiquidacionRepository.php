@@ -18,7 +18,8 @@ class RhuLiquidacionRepository extends EntityRepository {
         }
         if($boolEstadoGenerado == 1 ) {
             $dql .= " AND l.estadoGenerado = 1";
-        } elseif($boolEstadoGenerado == 0) {
+        } 
+        if($boolEstadoGenerado == '0') {
             $dql .= " AND l.estadoGenerado = 0";
         }
         $dql .= " ORDER BY l.codigoLiquidacionPk";
