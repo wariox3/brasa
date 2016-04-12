@@ -92,6 +92,7 @@ BEGIN
 	DECLARE codigoHorarioAccesoAnterior INTEGER DEFAULT 0;	
 	DECLARE entrada TINYINT;
 	DECLARE salida TINYINT;
+	DECLARE duracion DOUBLE DEFAULT 0;
 	
 	DECLARE fechaHoraEntrada DATETIME;
 	DECLARE fechaHoraEntradaTurno DATETIME;
@@ -126,7 +127,7 @@ BEGIN
 				#Si el empleado tiene registro creado para ese dia
 				IF codigoHorarioAcceso <> 0 THEN
 					#Si la accion es una entrada
-					IF tipo = 1 THEN
+					#if tipo = 1 then
 						#Si no ha entrado
 						IF entrada = 0 THEN
 							SET fechaHoraEntradaTurno = CONCAT(fechaEntradaTurno,' ',horaEntradaTurno);
@@ -137,14 +138,9 @@ BEGIN
 								SET diferenciaEntrada = (diferenciaEntrada * 60) + MINUTE(TIMEDIFF(fechaHoraEntrada, fechaHoraEntradaTurno));																																									
 							END IF;
 							UPDATE rhu_horario_acceso SET estado_entrada = 1, fecha_entrada = fechaHoraEntrada, entrada_tarde = entradaTarde, duracion_entrada_tarde =  diferenciaEntrada WHERE codigo_horario_acceso_pk = codigoHorarioAcceso;						
-						END IF;
-					END IF;
-					#Si la accion es una salida
-					IF tipo = 2 THEN						
-						#Varificar si ya tiene marcada una entrada
-						IF entrada = 1 THEN							
+						ELSE 
 							#Verificar que no tenga salida							
-							IF salida = 0 THEN
+							IF salida = 0 THEN								
 								SET fechaHoraSalidaTurno = CONCAT(fechaSalidaTurno,' ',horaSalidaTurno);
 								SET fechaHoraSalida = CONCAT(fecha,' ',hora);
 								IF fechaHoraSalida <  fechaHoraSalidaTurno THEN
@@ -152,11 +148,19 @@ BEGIN
 									SET diferenciaSalida = TIMEDIFF(fechaHoraSalidaTurno, fechaHoraSalida);	
 									SET diferenciaSalida = (diferenciaSalida * 60) + MINUTE(TIMEDIFF(fechaHoraSalidaTurno, fechaHoraSalida));										
 								END IF;	
-															
-								UPDATE rhu_horario_acceso SET estado_salida = 1, fecha_salida = fechaHoraSalida, salida_antes = salidaAntes, duracion_salida_antes = diferenciaSalida WHERE codigo_horario_acceso_pk = codigoHorarioAcceso;																						
-							END IF;
+								SELECT fecha_entrada INTO fechaHoraEntrada FROM rhu_horario_acceso WHERE codigo_horario_acceso_pk = codigoHorarioAcceso;
+								SET duracion = TIMEDIFF(fechaHoraSalida, fechaHoraEntrada);	
+								SET duracion = (duracion * 60) + MINUTE(TIMEDIFF(fechaHoraSalida, fechaHoraEntrada));																																																		
+								UPDATE rhu_horario_acceso SET estado_salida = 1, fecha_salida = fechaHoraSalida, salida_antes = salidaAntes, duracion_salida_antes = diferenciaSalida, duracion_registro = duracion WHERE codigo_horario_acceso_pk = codigoHorarioAcceso;																						
+							END IF;						
 						END IF;
-					END IF;										
+					#end if;
+					#Si la accion es una salida
+					#IF tipo = 2 THEN						
+						#Varificar si ya tiene marcada una entrada
+						#IF entrada = 1 THEN							
+						#END IF;
+					#END IF;										
 				END IF;
 			END IF;		
 		END IF;
