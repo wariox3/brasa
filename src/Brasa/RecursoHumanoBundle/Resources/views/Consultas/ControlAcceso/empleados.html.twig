@@ -90,17 +90,11 @@
                     <th>CARGO</th>
                     <th>FECHA</th>
                     <th>TURNO</th>
-                    <th>H. ENTRADA TURNO</th>
-                    <th>HORA ENTRADA</th>
-                    <th>ENTRADA TARDE</th>
-                    <th>DURACIÓN ENT. TARDE</th>
-                    <th>H. SALIDA TURNO</th>
-                    <th>HORA SALIDA</th>
-                    <th>SALIDA ANTES</th>
-                    <th>DURACIÓN SAL. ANTES</th>
-                    <th>DURACIÓN REGISTRO</th>
-                    <th>ANULADO</th>
-                    <th>COMENTARIOS</th>
+                    <th>ENTRADA/TURNO</th>                    
+                    <th>E.TARDE</th>                                        
+                    <th>SALIDA/TURNO</th>
+                    <th>S.ANTES</th>                                        
+                    <th>ANU</th>                    
                 </tr>
             {% set contador = 1  %}
             {% for arControlAccesosEmpleados in arControlAccesosEmpleados %}
@@ -112,18 +106,12 @@
                 <td>{{ arControlAccesosEmpleados.empleadoRel.departamentoEmpresaRel.nombre  }}</td>
                 <td>{{ arControlAccesosEmpleados.empleadoRel.cargoRel.nombre  }}</td>
                 <td>{{ arControlAccesosEmpleados.fechaEntrada|date('Y-m-d')  }}</td>
-                <td>{{ arControlAccesosEmpleados.codigoTurnoFk  }}</td>
-                <td>{{ arControlAccesosEmpleados.horaEntradaTurno|date('H:i:s')  }}</td>
-                <td>{% if arControlAccesosEmpleados.fechaEntrada|date('H:i:s') == "00:00:00" %}SIN ENTRADA{% else %}{{ arControlAccesosEmpleados.fechaEntrada|date('H:i:s')  }}{% endif %}</td>
-                <td>{% if arControlAccesosEmpleados.entradaTarde == 1 %}SI{% else %}NO{% endif %}</td>
-                <td>{{ arControlAccesosEmpleados.duracionEntradaTarde }}</td>
-                <td>{{ arControlAccesosEmpleados.horaSalidaTurno|date('H:i:s')  }}</td>
-                <td>{% if arControlAccesosEmpleados.fechaSalida == null %} SIN SALIDA {% else %}{{ arControlAccesosEmpleados.fechaSalida|date('H:i:s')  }}{% endif%}</td>
-                <td>{% if arControlAccesosEmpleados.salidaAntes == 1 %}SI{% else %}NO{% endif %}</td>
-                <td>{{ arControlAccesosEmpleados.duracionSalidaAntes }}</td>
-                <td>{{ arControlAccesosEmpleados.duracionRegistro|default('SIN SALIDA') }}</td>
-                <td>{% if arControlAccesosEmpleados.anulado == 1 %}SI{% else %}NO{% endif %}</td>
-                <td>{{ arControlAccesosEmpleados.comentarios  }}</td>
+                <td>{{ arControlAccesosEmpleados.codigoTurnoFk  }}</td>                
+                <td>{% if arControlAccesosEmpleados.estadoEntrada == 0 %}NO ({{ arControlAccesosEmpleados.horaEntradaTurno|date('H:i:s')  }}){% else %}{{ arControlAccesosEmpleados.fechaEntrada|date('H:i:s')  }}/{{ arControlAccesosEmpleados.horaEntradaTurno|date('H:i:s')  }}{% endif %}</td>
+                <td>{% if arControlAccesosEmpleados.entradaTarde == 1 %}SI({{ arControlAccesosEmpleados.duracionEntradaTarde }}min){% else %}NO{% endif %}</td>                                
+                <td>{% if arControlAccesosEmpleados.estadoSalida == 0 %} NO ({{ arControlAccesosEmpleados.horaSalidaTurno|date('H:i:s')  }}){% else %}{{ arControlAccesosEmpleados.fechaSalida|date('H:i:s')  }}/{{ arControlAccesosEmpleados.horaSalidaTurno|date('H:i:s')  }}{% endif%}</td>
+                <td>{% if arControlAccesosEmpleados.salidaAntes == 1 %}SI({{ arControlAccesosEmpleados.duracionSalidaAntes }}min){% else %}NO{% endif %}</td>                                
+                <td>{% if arControlAccesosEmpleados.anulado == 1 %}SI{% else %}NO{% endif %}</td>                
             </tr>
             {% set contador = contador + 1  %}
             {% endfor %}
