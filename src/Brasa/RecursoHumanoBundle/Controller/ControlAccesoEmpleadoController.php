@@ -170,7 +170,7 @@ class ControlAccesoEmpleadoController extends Controller
                                 $minutes = floor(($interval % 3600) / 60);
                                 $hours = floor($interval / 3600);
                                 $timeLlegadaTarde = $hours.":".$minutes.":".$seconds;
-                                $arControlAccesoEmpleado->setDuracionLlegadaTarde($timeLlegadaTarde);
+                                $arControlAccesoEmpleado->setDuracionEntradaTarde($timeLlegadaTarde);
                             }
                     
                      //calculo salidaAntes
@@ -205,7 +205,7 @@ class ControlAccesoEmpleadoController extends Controller
                 $arControlAccesoEmpleado->setLlegadaTarde(0);
                 $arControlAccesoEmpleado->setSalidaAntes(0);
                 $arControlAccesoEmpleado->setDuracionRegistro("");
-                $arControlAccesoEmpleado->setDuracionLlegadaTarde("");
+                $arControlAccesoEmpleado->setDuracionEntradaTarde("");
                 $arControlAccesoEmpleado->setDuracionSalidaAntes("");
                 $arControlAccesoEmpleado->setComentarios($form->get('comentarios')->getData());
                 $em->persist($arControlAccesoEmpleado);
@@ -234,7 +234,7 @@ class ControlAccesoEmpleadoController extends Controller
                         $minutes = floor(($interval % 3600) / 60);
                         $hours = floor($interval / 3600);
                         $timeLlegadaTarde = $hours.":".$minutes.":".$seconds;
-                        $arControlAccesoEmpleado->setDuracionLlegadaTarde($timeLlegadaTarde);
+                        $arControlAccesoEmpleado->setDuracionEntradaTarde($timeLlegadaTarde);
                     }
                 $em->persist($arControlAccesoEmpleado);
                 $em->flush();
@@ -325,10 +325,10 @@ class ControlAccesoEmpleadoController extends Controller
                     $timeHoraSalida = $arControlAccesoEmpleado->getFechaSalida()->format('H:i:s');
                 
             }
-            if ($arControlAccesoEmpleado->getDuracionLlegadaTarde() == null){
-                $duracionLLegadaTarde = "";
+            if ($arControlAccesoEmpleado->getDuracionEntradaTarde() == null){
+                $duracionEntradaTarde = "";
             } else {
-                $duracionLLegadaTarde = $arControlAccesoEmpleado->getDuracionLlegadaTarde();
+                $duracionEntradaTarde = $arControlAccesoEmpleado->getDuracionEntradaTarde();
             }
             if ($arControlAccesoEmpleado->getDuracionSalidaAntes() == null){
                 $duracionSalidaAntes = "";
@@ -347,7 +347,7 @@ class ControlAccesoEmpleadoController extends Controller
                 ->setCellValue('I' . $i, $arControlAccesoEmpleado->getHoraEntradaTurno()->format('H:i:s'))
                 ->setCellValue('J' . $i, $timeHoraEntrada)
                 ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arControlAccesoEmpleado->getLlegadaTarde()))
-                ->setCellValue('L' . $i, $duracionLLegadaTarde)    
+                ->setCellValue('L' . $i, $duracionEntradaTarde)    
                 ->setCellValue('M' . $i, $arControlAccesoEmpleado->getHoraSalidaTurno()->format('H:i:s'))        
                 ->setCellValue('N' . $i, $timeHoraSalida)
                 ->setCellValue('O' . $i, $objFunciones->devuelveBoolean($arControlAccesoEmpleado->getSalidaAntes()))    

@@ -221,10 +221,10 @@ class ConsultasControlAccesosEmpleadosController extends Controller
                     $timeHoraSalida = $arHorarioAcceso->getFechaSalida()->format('H:i:s');
                 
             }
-            if ($arHorarioAcceso->getDuracionLlegadaTarde() == null){
-                $duracionLLegadaTarde = "";
+            if ($arHorarioAcceso->getDuracionEntradaTarde() == null){
+                $duracionEntradaTarde = "";
             } else {
-                $duracionLLegadaTarde = $arHorarioAcceso->getDuracionLlegadaTarde();
+                $duracionEntradaTarde = $arHorarioAcceso->getDuracionEntradaTarde();
             }
             if ($arHorarioAcceso->getDuracionSalidaAntes() == null){
                 $duracionSalidaAntes = "";
@@ -243,7 +243,7 @@ class ConsultasControlAccesosEmpleadosController extends Controller
                 ->setCellValue('I' . $i, $arHorarioAcceso->getHoraEntradaTurno()->format('H:i:s'))
                 ->setCellValue('J' . $i, $timeHoraEntrada)
                 ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arHorarioAcceso->getEntradaTarde()))
-                ->setCellValue('L' . $i, $duracionLLegadaTarde)    
+                ->setCellValue('L' . $i, $duracionEntradaTarde)    
                 ->setCellValue('M' . $i, $arHorarioAcceso->getHoraSalidaTurno()->format('H:i:s'))        
                 ->setCellValue('N' . $i, $timeHoraSalida)
                 ->setCellValue('O' . $i, $objFunciones->devuelveBoolean($arHorarioAcceso->getSalidaAntes()))    
