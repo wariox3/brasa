@@ -29,9 +29,7 @@
                 <td>{% if arHorariosPeriodos.estadoGenerado == 1%}SI{% else %}NO{% endif %}</td>
                 <td>{% if arHorariosPeriodos.estadoCerrado == 1%}SI{% else %}NO{% endif %}</td>
                 <td>
-                    {% if arHorariosPeriodos.estadoGenerado == 0 %}
-                        <button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arHorariosPeriodos.codigoHorarioPeriodoPk }}">Generar</button>                             
-                    {% else %}
+                    {% if arHorariosPeriodos.estadoGenerado == 1 %}                        
                         {% if arHorariosPeriodos.estadoCerrado == 0 %}
                             <button class="btn btn-default btn-xs" type="submit" name="OpCerrar" value="{{ arHorariosPeriodos.codigoHorarioPeriodoPk }}">Cerrar</button> 
                         {% else %}

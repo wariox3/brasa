@@ -17,6 +17,7 @@ class RhuHorarioType extends AbstractType
             ->add('horaEntrada', 'time', array('required' => true))
             ->add('horaSalida', 'time', array('required' => true))
             ->add('generaHoraExtra', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))     
+            ->add('controlHorario', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))     
             ->add('lunes', 'text', array('required' => true))    
             ->add('martes', 'text', array('required' => true))        
             ->add('miercoles', 'text', array('required' => true))        

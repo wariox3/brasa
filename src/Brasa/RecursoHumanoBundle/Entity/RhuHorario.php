@@ -38,6 +38,11 @@ class RhuHorario
     private $generaHoraExtra = false;           
     
     /**
+     * @ORM\Column(name="control_horario", type="boolean")
+     */    
+    private $controlHorario = false;     
+    
+    /**
      * @ORM\Column(name="lunes", type="string", length=5)
      */
     private $lunes;     
@@ -421,5 +426,29 @@ class RhuHorario
     public function getEmpleadosHorarioRel()
     {
         return $this->empleadosHorarioRel;
+    }
+
+    /**
+     * Set controlHorario
+     *
+     * @param boolean $controlHorario
+     *
+     * @return RhuHorario
+     */
+    public function setControlHorario($controlHorario)
+    {
+        $this->controlHorario = $controlHorario;
+
+        return $this;
+    }
+
+    /**
+     * Get controlHorario
+     *
+     * @return boolean
+     */
+    public function getControlHorario()
+    {
+        return $this->controlHorario;
     }
 }

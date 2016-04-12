@@ -5449,3 +5449,4 @@ insert into `car_recibo_tipo` (`codigo_recibo_tipo_pk`, `nombre`) values('2','OF
 
 insert into `car_cuenta_cobrar_tipo` (`codigo_cuenta_cobrar_tipo_pk`, `nombre`) values('1','FACTURACIÓN NÓMINA');
 insert into `car_cuenta_cobrar_tipo` (`codigo_cuenta_cobrar_tipo_pk`, `nombre`) values('2','FACTURACIÓN TURNO');
+

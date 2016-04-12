@@ -1,12 +1,12 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Utilidad;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
-class UtilidadesHorarioAccesoController extends Controller
+class HorarioAccesoController extends Controller
 {
     
     /**
@@ -41,72 +41,20 @@ class UtilidadesHorarioAccesoController extends Controller
         if($arHorarioPeriodoDiaAnterior) {
             $codigoHorarioPeriodoDiaAnterior = $arHorarioPeriodoDiaAnterior->getCodigoHorarioPeriodoPk();
         }
-        $form = $this->createFormBuilder()    
+        $form = $this->createFormBuilder()                  
+                    ->add('tipo', 'choice', array('choices' => array('1' => 'Entrada', '2' => 'Salida'),'data' => 1,'expanded' => true,))
                     ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
                     ->getForm();               
         $form->handleRequest($request);
-        if ($form->isValid()) {            
+        if ($form->isValid()) {
+            $fecha = new \DateTime('now');
             $arrControles = $request->request->All();            
             if($arrControles['txtNumeroIdentificacion'] != '') {
                 $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                 $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
-                if($arEmpleado) {
-                    $arHorarioAccesoDiaAnt = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->verificarSalidaPendiente($codigoHorarioPeriodoDiaAnterior, $arEmpleado->getCodigoEmpleadoPk());
-                    if($arHorarioAccesoDiaAnt) {
-                        $dateFechaSalida = new \DateTime('now');
-                        //Pendiente este segmento es para turnos de un dia para otro
-                    } else {
-                        $arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
-                        $arHorarioAcceso = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->findOneBy(array('codigoHorarioPeriodoFk' => $codigoHorarioPeriodo, 'codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk()));                     
-                        if($arHorarioAcceso) {
-                            $arHorarioAccesoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
-                            $arHorarioAccesoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->find($arHorarioAcceso->getCodigoHorarioAccesoPk());                                                                             
-                            if ($arHorarioAcceso->getEstadoEntrada() == 0 ){
-                                $dateFechaEntradaTurno = $arHorarioPeriodo->getFechaPeriodo()->format('Y/m/d') . ' ' . $arHorarioAcceso->getHoraEntradaTurno()->format('H:i:s');
-                                $dateFechaEntradaTurno = date_create($dateFechaEntradaTurno);
-                                $dateFechaEntrada = new \DateTime('now');
-                                if($dateFechaEntrada->format('Y/m/d') == $dateFechaEntradaTurno->format('Y/m/d')) {
-                                    //calculo entrada tarde
-                                    if ($dateFechaEntrada > $dateFechaEntradaTurno){   
-                                        $dateDiferenciaFecha = $dateFechaEntrada->diff($dateFechaEntradaTurno);                                    
-                                        $intTiempoLlegadaTarde = ($dateDiferenciaFecha->format('%h') * 60) + $dateDiferenciaFecha->format('%i');                                                                                                                                                                                                                       
-                                        $arHorarioAccesoActualizar->setEntradaTarde(1);
-                                        $arHorarioAccesoActualizar->setDuracionLlegadaTarde($intTiempoLlegadaTarde);
-                                    }
-                                    $arHorarioAccesoActualizar->setFechaEntrada($dateFechaEntrada);
-                                    $arHorarioAccesoActualizar->setEstadoEntrada(1);
-                                    $em->persist($arHorarioAccesoActualizar);
-                                    $em->flush();                                
-                                } else {
-                                    $objMensaje->Mensaje("error", "Solo puede realizar ingresos de la fecha actual", $this);                                
-                                }
-                                return $this->redirect($this->generateUrl('brs_rhu_utilidad_horario_acceso_empleado_detalle', array('codigoHorarioPeriodo' => $codigoHorarioPeriodo)));
-                            } else {
-                                if ($arHorarioAcceso->getEstadoSalida() == 0 ){
-                                    $dateFechaSalida = new \DateTime('now');
-                                    $dateFechaSalidaTurno = $arHorarioAcceso->getFechaSalida()->format('Y/m/d') . ' ' . $arHorarioAcceso->getHoraSalidaTurno()->format('H:i:s');
-                                    $dateFechaSalidaTurno = date_create($dateFechaSalidaTurno);                                    
-                                    if($dateFechaSalida < $dateFechaSalidaTurno) {
-                                        $dateDiferenciaFecha = $dateFechaSalidaTurno->diff($dateFechaSalida);                                    
-                                        $intTiempoSalidaAnticipada = ($dateDiferenciaFecha->format('%h') * 60) + $dateDiferenciaFecha->format('%i');                                                                                                                                                                                                                       
-                                        $arHorarioAccesoActualizar->setSalidaAntes(1);
-                                        $arHorarioAccesoActualizar->setDuracionSalidaAntes($intTiempoSalidaAnticipada);                                        
-                                    }
-                                    $arHorarioAccesoActualizar->setFechaSalida($dateFechaSalida);
-                                    $arHorarioAccesoActualizar->setEstadoSalida(1);
-                                    $em->persist($arHorarioAccesoActualizar);
-                                    $em->flush();
-                                    return $this->redirect($this->generateUrl('brs_rhu_utilidad_horario_acceso_empleado_detalle', array('codigoHorarioPeriodo' => $codigoHorarioPeriodo)));
-                                } else {
-                                    if ($arHorarioAcceso->getEstadoEntrada() == 1 && $arHorarioAcceso->getEstadoSalida() == 1 ){
-                                        $objMensaje->Mensaje("error", "El empleado registra entrada y salida el día de hoy", $this);
-                                    }
-                                }
-                            }
-                        } else {
-                            $objMensaje->Mensaje("error", "El número de identificacion no se encuentra registrada en el horario de este periodo", $this);
-                        }                        
-                    }                    
+                if($arEmpleado) {                    
+                    $strSql = "CALL spRhuHorarioRegistro(" . $arEmpleado->getCodigoEmpleadoPk() . ", '" . $fecha->format('Y/m/d') . "', '" . $fecha->format('H:i:s') . "', " . $form->get('tipo')->getData() . ")";           
+                    $em->getConnection()->executeQuery($strSql); 
                 }
             }else {
                     $objMensaje->Mensaje("error", "Digite por favor el numero de identificación", $this);
@@ -203,42 +151,6 @@ class UtilidadesHorarioAccesoController extends Controller
             'arrErrores' => $arrErrores,
             'form' => $form->createView()
             ));
-    } 
-    
-    public function salidaAction($codigoHorarioAcceso) {
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();
-        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $form = $this->createFormBuilder()
-            ->setAction($this->generateUrl('brs_rhu_salida_control_acceso_empleados', array('codigoHorarioAcceso' => $codigoHorarioAcceso)))
-            ->add('comentarios', 'textarea', array('required' => false))
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
-            ->getForm();
-        $form->handleRequest($request);
-        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-        $arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
-        $arHorarioAcceso = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->find($codigoHorarioAcceso);
-        if ($form->isValid()) {
-            
-            $arHorarioAcceso->setFechaSalida(new \DateTime('now'));
-            $arHorarioAcceso->setEstadoSalida(1);
-            $arHorarioAcceso->setComentarios($form->get('comentarios')->getData());
-            $dateEntrada = $arHorarioAcceso->getFechaEntrada();
-            $dateSalida = $arHorarioAcceso->getFechaSalida();
-            $dateDiferencia = date_diff($dateSalida, $dateEntrada);
-            $horas = $dateDiferencia->format('%H');
-            $minutos = $dateDiferencia->format('%i');
-            $segundos = $dateDiferencia->format('%s');
-            $diferencia = $horas.":".$minutos.":".$segundos;
-            $arHorarioAcceso->setDuracionRegistro($diferencia);
-            $em->persist($arHorarioAcceso);
-            $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_utilidades_control_acceso_empleado'));
-        }
-        return $this->render('BrasaRecursoHumanoBundle:Utilidades/HorarioAcceso:salida.html.twig', array(
-            '$arHorarioAcceso' => $arHorarioAcceso,
-            'form' => $form->createView()
-        ));
-    }
+    }     
           
 }

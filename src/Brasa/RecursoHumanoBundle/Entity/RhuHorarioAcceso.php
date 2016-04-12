@@ -53,9 +53,9 @@ class RhuHorarioAcceso
     private $duracionRegistro = 0;
     
     /**
-     * @ORM\Column(name="duracion_llegada_tarde", type="integer")
+     * @ORM\Column(name="duracion_entrada_tarde", type="integer")
      */    
-    private $duracionLlegadaTarde = 0;
+    private $duracionEntradaTarde = 0;
     
     /**
      * @ORM\Column(name="duracion_salida_antes", type="integer")
@@ -125,7 +125,6 @@ class RhuHorarioAcceso
      */
     protected $turnoRel;
         
-
 
     /**
      * Get codigoHorarioAccesoPk
@@ -306,27 +305,27 @@ class RhuHorarioAcceso
     }
 
     /**
-     * Set duracionLlegadaTarde
+     * Set duracionEntradaTarde
      *
-     * @param integer $duracionLlegadaTarde
+     * @param integer $duracionEntradaTarde
      *
      * @return RhuHorarioAcceso
      */
-    public function setDuracionLlegadaTarde($duracionLlegadaTarde)
+    public function setDuracionEntradaTarde($duracionEntradaTarde)
     {
-        $this->duracionLlegadaTarde = $duracionLlegadaTarde;
+        $this->duracionEntradaTarde = $duracionEntradaTarde;
 
         return $this;
     }
 
     /**
-     * Get duracionLlegadaTarde
+     * Get duracionEntradaTarde
      *
      * @return integer
      */
-    public function getDuracionLlegadaTarde()
+    public function getDuracionEntradaTarde()
     {
-        return $this->duracionLlegadaTarde;
+        return $this->duracionEntradaTarde;
     }
 
     /**
