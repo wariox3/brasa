@@ -11,8 +11,8 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuSoportePagoHorarioDetalleRepository extends EntityRepository {
     
-    public function listaDql() {
-        $dql   = "SELECT sph FROM BrasaRecursoHumanoBundle:RhuSoportePagoHorario sph WHERE sph.estadoCerrado = 0";
+    public function listaDql($codigoSoportePagoHorario) {
+        $dql   = "SELECT sphd FROM BrasaRecursoHumanoBundle:RhuSoportePagoHorarioDetalle sphd WHERE sphd.codigoSoportePagoHorarioFk = " . $codigoSoportePagoHorario;
         return $dql;
     }
     

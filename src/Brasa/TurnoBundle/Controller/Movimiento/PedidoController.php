@@ -74,6 +74,8 @@ class PedidoController extends Controller
                 $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));                
                 if(count($arCliente) > 0) {
                     $arPedido->setClienteRel($arCliente);
+                    $fechaProgramacion = $arPedido->getFechaProgramacion()->format('Y/m/');
+                    $arPedido->setFechaProgramacion(date_create($fechaProgramacion . '01'));
                     $arUsuario = $this->getUser();
                     $arPedido->setUsuario($arUsuario->getUserName());
                     $em->persist($arPedido);

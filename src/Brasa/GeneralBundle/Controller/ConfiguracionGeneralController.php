@@ -50,6 +50,7 @@ class ConfiguracionGeneralController extends Controller
             ->add('nitVentasMostrador', 'text', array('data' => $arConfiguracionGeneral->getNitVentasMostrador(), 'required' => true))    
             ->add('rutaTemporal', 'text', array('data' => $arConfiguracionGeneral->getRutaTemporal(), 'required' => true))    
             ->add('rutaAlmacenamiento', 'text', array('data' => $arConfiguracionGeneral->getRutaAlmacenamiento(), 'required' => true))                
+            ->add('rutaImagenes', 'text', array('data' => $arConfiguracionGeneral->getRutaImagenes(), 'required' => true))                
             ->add('rutaDirectorio', 'text', array('data' => $arConfiguracionGeneral->getRutaDirectorio(), 'required' => true))                                
             ->add('paginaWeb', 'text', array('data' => $arConfiguracionGeneral->getPaginaWeb(), 'required' => true))                                                
             ->add('guardar', 'submit', array('label' => 'Actualizar'))            
@@ -75,6 +76,7 @@ class ConfiguracionGeneralController extends Controller
                 $NitVentasMostrador = $controles['nitVentasMostrador'];
                 $RutaTemporal = $controles['rutaTemporal'];
                 $RutaAlmacenamiento = $controles['rutaAlmacenamiento'];
+                $RutaImagenes = $controles['rutaImagenes'];
                 $RutaDirectorio = $controles['rutaDirectorio'];
                 $PaginaWeb = $controles['paginaWeb'];
                 // guardar la tarea en la base de datos
@@ -95,6 +97,7 @@ class ConfiguracionGeneralController extends Controller
                 $arConfiguracionGeneral->setNitVentasMostrador($NitVentasMostrador);
                 $arConfiguracionGeneral->setRutaTemporal($RutaTemporal);
                 $arConfiguracionGeneral->setRutaAlmacenamiento($RutaAlmacenamiento);
+                $arConfiguracionGeneral->setRutaImagenes($RutaImagenes);
                 $arConfiguracionGeneral->setRutaDirectorio($RutaDirectorio);
                 $arConfiguracionGeneral->setPaginaWeb($PaginaWeb);
                 $em->persist($arConfiguracionGeneral);

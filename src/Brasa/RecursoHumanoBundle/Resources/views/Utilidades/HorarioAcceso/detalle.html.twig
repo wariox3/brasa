@@ -50,9 +50,9 @@
                 <td>{{ arHorarioAccesos.empleadoRel.departamentoEmpresaRel.nombre  }}</td>
                 <td>{{ arHorarioAccesos.fechaEntrada|date('Y-m-d')  }}</td>
                 <td>{{ arHorarioAccesos.codigoTurnoFk }}</td>                
-                <td>{% if arHorarioAccesos.fechaEntrada|date('H:i:s') == "00:00:00" %}SIN ENTRADA ({{ arHorarioAccesos.horaEntradaTurno|date('H:i:s')  }}){% else %}{{ arHorarioAccesos.fechaEntrada|date('H:i:s')  }} / {{ arHorarioAccesos.horaEntradaTurno|date('H:i:s')  }}{% endif %}</td>
+                <td>{% if arHorarioAccesos.estadoEntrada == 0 %}SIN ENTRADA ({{ arHorarioAccesos.horaEntradaTurno|date('H:i:s')  }}){% else %}{{ arHorarioAccesos.fechaEntrada|date('H:i:s')  }} / {{ arHorarioAccesos.horaEntradaTurno|date('H:i:s')  }}{% endif %}</td>
                 <td>{% if arHorarioAccesos.entradaTarde == 1%}SI ({{ arHorarioAccesos.duracionEntradaTarde }}min){% else %}NO{% endif %}</td>                                
-                <td>{% if arHorarioAccesos.fechaSalida|date('H:i:s') == "00:00:00" %}SIN SALIDA ({{ arHorarioAccesos.horaSalidaTurno|date('H:i:s')  }}){% else %}{{ arHorarioAccesos.fechaSalida|date('H:i:s')  }} / {{ arHorarioAccesos.horaSalidaTurno|date('H:i:s')  }}{% endif %}</td>                
+                <td>{% if arHorarioAccesos.estadoSalida == 0 %}SIN SALIDA ({{ arHorarioAccesos.horaSalidaTurno|date('H:i:s')  }}){% else %}{{ arHorarioAccesos.fechaSalida|date('H:i:s')  }} / {{ arHorarioAccesos.horaSalidaTurno|date('H:i:s')  }}{% endif %}</td>                
                 <td>{% if arHorarioAccesos.salidaAntes == 1%}SI ({{ arHorarioAccesos.duracionSalidaAntes }}min){% else %}NO{% endif %}</td>                                                                                
                 <td>{{ arHorarioAccesos.duracionRegistro  }}</td>                
                 <td>{% if arHorarioAccesos.anulado == 1%}SI{% else %}NO{% endif %}</td>                

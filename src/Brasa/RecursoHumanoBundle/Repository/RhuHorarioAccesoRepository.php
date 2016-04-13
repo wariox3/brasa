@@ -34,18 +34,7 @@ class RhuHorarioAccesoRepository extends EntityRepository {
         $query = $em->createQuery($dql);
         $registro = $query->getResult();
         return $registro;
-    }
-    
-    public function resumenEmpleado($strFechaDesde = "", $strFechaHasta = "") {        
-        $em = $this->getEntityManager();
-        $dql   = "SELECT ha.codigoEmpleadoFk, COUNT(ha.codigoHorarioAccesoPk) FROM BrasaRecursoHumanoBundle:RhuHorarioAcceso ha "
-                . "WHERE  ha.fechaEntrada >= '". $strFechaDesde . " 00:00:00' AND ha.fechaEntrada <= '" . $strFechaHasta . " 23:59:59' "
-                . "GROUP BY ha.codigoEmpleadoFk";   
-                
-        $query = $em->createQuery($dql);
-        $arEmpleado = $query->getResult();
-        return $arEmpleado;
-    }    
+    }       
     
     public function empleado($strFechaDesde = "", $strFechaHasta = "", $codigoEmpleado = "") {        
         $em = $this->getEntityManager();
@@ -157,10 +146,10 @@ class RhuHorarioAccesoRepository extends EntityRepository {
             $dql .= " AND ha.fechaEntrada <= '". date_format($strHasta, 'Y-m-d') . " 23:59:59'";
         }
         if($entradaTarde == 1 ) {
-            $dql .= " AND ha.llegadaTarde = 1";
+            $dql .= " AND ha.entradaTarde = 1";
         }
         if($entradaTarde == 0 ) {
-            $dql .= " AND ha.llegadaTarde = 0";
+            $dql .= " AND ha.entradaTarde = 0";
         }
         if($salidaAntes == 1 ) {
             $dql .= " AND ha.salidaAntes = 1";

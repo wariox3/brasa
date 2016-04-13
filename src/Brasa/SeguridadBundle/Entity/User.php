@@ -80,8 +80,8 @@ class User implements UserInterface, \Serializable
     {
         $this->isActive = true;
         $this->salt = md5(uniqid(null, true));
-    }
-
+    }    
+    
     /**
      * @inheritDoc
      */
@@ -120,14 +120,21 @@ class User implements UserInterface, \Serializable
     public function eraseCredentials()
     {
     }
-
+    
+    
+    public function isEnabled()
+    {
+        return $this->isActive;
+    }    
+    
     /**
      * @see \Serializable::serialize()
      */
     public function serialize()
     {
         return serialize(array(
-            $this->id,
+            $this->isActive,
+            
         ));
     }
 

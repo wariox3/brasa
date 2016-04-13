@@ -16,7 +16,12 @@ class RhuSoportePagoHorarioDetalle
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $codigoSoportePagoHorarioDetallePk;         
-      
+
+    /**
+     * @ORM\Column(name="codigo_soporte_pago_horario_fk", type="integer")
+     */    
+    private $codigoSoportePagoHorarioFk;    
+    
     /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer")
      */    
@@ -91,6 +96,12 @@ class RhuSoportePagoHorarioDetalle
      * @ORM\Column(name="horas_extras_festivas_nocturnas", type="integer")
      */    
     private $horasExtrasFestivasNocturnas = 0;       
+
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuSoportePagoHorario", inversedBy="soportesPagosHorariosDetallesSoportePagoHorarioRel")
+     * @ORM\JoinColumn(name="codigo_soporte_pago_horario_fk", referencedColumnName="codigo_soporte_pago_horario_pk")
+     */
+    protected $soportePagoHorarioRel;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="soportesPagosHorariosDetallesEmpleadoRel")
@@ -108,6 +119,30 @@ class RhuSoportePagoHorarioDetalle
     public function getCodigoSoportePagoHorarioDetallePk()
     {
         return $this->codigoSoportePagoHorarioDetallePk;
+    }
+
+    /**
+     * Set codigoSoportePagoHorarioFk
+     *
+     * @param integer $codigoSoportePagoHorarioFk
+     *
+     * @return RhuSoportePagoHorarioDetalle
+     */
+    public function setCodigoSoportePagoHorarioFk($codigoSoportePagoHorarioFk)
+    {
+        $this->codigoSoportePagoHorarioFk = $codigoSoportePagoHorarioFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSoportePagoHorarioFk
+     *
+     * @return integer
+     */
+    public function getCodigoSoportePagoHorarioFk()
+    {
+        return $this->codigoSoportePagoHorarioFk;
     }
 
     /**
@@ -468,6 +503,30 @@ class RhuSoportePagoHorarioDetalle
     public function getHorasExtrasFestivasNocturnas()
     {
         return $this->horasExtrasFestivasNocturnas;
+    }
+
+    /**
+     * Set soportePagoHorarioRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorario $soportePagoHorarioRel
+     *
+     * @return RhuSoportePagoHorarioDetalle
+     */
+    public function setSoportePagoHorarioRel(\Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorario $soportePagoHorarioRel = null)
+    {
+        $this->soportePagoHorarioRel = $soportePagoHorarioRel;
+
+        return $this;
+    }
+
+    /**
+     * Get soportePagoHorarioRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorario
+     */
+    public function getSoportePagoHorarioRel()
+    {
+        return $this->soportePagoHorarioRel;
     }
 
     /**

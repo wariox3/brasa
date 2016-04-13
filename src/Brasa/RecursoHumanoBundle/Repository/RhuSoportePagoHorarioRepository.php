@@ -16,4 +16,116 @@ class RhuSoportePagoHorarioRepository extends EntityRepository {
         return $dql;
     }
     
+    public function generar($codigoSoportePagoHorario) {
+        $em = $this->getEntityManager();
+        $arSoportePagoHorario = new \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorario();
+        $arSoportePagoHorario = $em->getRepository('BrasaRecursoHumanoBundle:RhuSoportePagoHorario')->find($codigoSoportePagoHorario);
+        $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->contratosPeriodo($arSoportePagoHorario->getFechaDesde()->format('Y/m/d'), $arSoportePagoHorario->getFechaHasta()->format('Y/m/d'));
+        foreach ($arContratos as $arContrato) {
+            $arSoportePagoHorarioDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorarioDetalle();
+            $arSoportePagoHorarioDetalle->setSoportePagoHorarioRel($arSoportePagoHorario);
+            $arSoportePagoHorarioDetalle->setEmpleadoRel($arContrato->getEmpleadorel());
+            $arSoportePagoHorarioDetalle->setFechaDesde($arSoportePagoHorario->getFechaDesde());
+            $arSoportePagoHorarioDetalle->setFechaHasta($arSoportePagoHorario->getFechaHasta());            
+            $arHorario = $arContrato->getEmpleadoRel()->getHorarioRel();                                        
+            $arHorarioAccesos = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->empleado($arSoportePagoHorario->getFechaDesde()->format('Y/m/d'), $arSoportePagoHorario->getFechaHasta()->format('Y/m/d'), $arContrato->getCodigoEmpleadoFk());                    
+            $intHorasDiurnas = 0;   
+            $arrHorasTotal = array(
+                'horasDiurnas' => 0,
+                'horasExtrasOrdinariasDiurnas' => 0,
+                'horasNocturnas' => 0,
+                'horasExtrasOrdinariasNocturnas' => 0);
+            foreach ($arHorarioAccesos as $arHorarioAcceso) {
+                $diaSemana = $arHorarioAcceso->getFechaEntrada()->format('N');
+                $codigoTurno = $this->devuelveCodigoTurno($diaSemana, $arHorario);
+                $arTurno = new \Brasa\RecursoHumanoBundle\Entity\RhuTurno();
+                $arTurno = $em->getRepository('BrasaRecursoHumanoBundle:RhuTurno')->find($codigoTurno);
+                $intHoraInicial = 0;
+                $intHoraFinal = 0;                        
+                if($arTurno->getHoraDesde()->format('h') >= $arHorarioAcceso->getFechaEntrada()->format('h')) {
+                    $intHoraInicial = $arTurno->getHoraDesde()->format('G');                            
+                }
+                if($arTurno->getHoraHasta()->format('h') >= $arHorarioAcceso->getFechaSalida()->format('h')){
+                    $intHoraFinal = $arTurno->getHoraHasta()->format('G');
+                } else {
+                    $intHoraFinal = $arHorarioAcceso->getFechaSalida()->format('G');
+                }
+                $arrHoras = $this->devuelveHoras($intHoraInicial, $intHoraFinal); 
+                $arrHorasTotal['horasDiurnas'] += $arrHoras['horasDiurnas'];
+                $arrHorasTotal['horasNocturnas'] += $arrHoras['horasNocturnas'];
+                $arrHorasTotal['horasExtrasOrdinariasDiurnas'] += $arrHoras['horasExtrasOrdinariasDiurnas'];
+                $arrHorasTotal['horasExtrasOrdinariasNocturnas'] += $arrHoras['horasExtrasOrdinariasNocturnas'];
+            }            
+            
+            $arSoportePagoHorarioDetalle->setHorasDiurnas($arrHorasTotal['horasDiurnas']);
+            $arSoportePagoHorarioDetalle->setHorasNocturnas($arrHorasTotal['horasNocturnas']);
+            $arSoportePagoHorarioDetalle->setHorasExtrasOrdinariasDiurnas($arrHorasTotal['horasExtrasOrdinariasDiurnas']);
+            $arSoportePagoHorarioDetalle->setHorasExtrasOrdinariasNocturnas($arrHorasTotal['horasExtrasOrdinariasNocturnas']);                        
+            $em->persist($arSoportePagoHorarioDetalle);
+        }        
+        $arSoportePagoHorario->setEstadoGenerado(1);
+        $em->persist($arSoportePagoHorario);
+        $em->flush();
+    }
+    
+    private function devuelveCodigoTurno($diaSemana, $arHorario) {
+        $codigoTurno = "";
+        if($diaSemana == 1) {
+            $codigoTurno = $arHorario->getLunes();
+        }
+        if($diaSemana == 2) {
+            $codigoTurno = $arHorario->getMartes();
+        }
+        if($diaSemana == 3) {
+            $codigoTurno = $arHorario->getMiercoles();
+        }
+        if($diaSemana == 4) {
+            $codigoTurno = $arHorario->getJueves();
+        }
+        if($diaSemana == 5) {
+            $codigoTurno = $arHorario->getViernes();
+        }
+        if($diaSemana == 6) {
+            $codigoTurno = $arHorario->getSabado();
+        }
+        if($diaSemana == 7) {
+            $codigoTurno = $arHorario->getDomingo();
+        }
+        return $codigoTurno;
+    }
+    
+    private function devuelveHoras ($horaInicio, $horaFin) {        
+        $intHorasDiurnas = 0;
+        $intHorasNocturnas = 0;
+        $intHorasExtrasOrdinariasDiurnas = 0;
+        $intHorasExtrasOrdinariasNocturnas = 0;        
+        $intTotalHoras = 0;
+        $horaInicio++;
+        if($horaInicio < $horaFin) {
+            for($hora = $horaInicio; $hora <= $horaFin; $hora++) {
+                if($hora > 6 && $hora <= 22) {
+                    if($intTotalHoras <= 8) {
+                        $intHorasDiurnas++;
+                    } else {
+                        $intHorasExtrasOrdinariasDiurnas++;
+                    }                    
+                }
+                if($hora > 22 && $hora <= 23) {
+                    if($intTotalHoras <= 8) {
+                        $intHorasNocturnas++;
+                    } else {
+                        $intHorasExtrasOrdinariasNocturnas++;
+                    }                    
+                }                
+                $intTotalHoras++;
+            }
+        }
+        $arrHoras = array(
+            'horasDiurnas' => $intHorasDiurnas,
+            'horasExtrasOrdinariasDiurnas' => $intHorasExtrasOrdinariasDiurnas,
+            'horasNocturnas' => $intHorasNocturnas,
+            'horasExtrasOrdinariasNocturnas' => $intHorasExtrasOrdinariasNocturnas);
+        return $arrHoras;
+    }    
+    
 }

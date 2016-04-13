@@ -67,7 +67,11 @@ class GenConfiguracion
      * @ORM\Column(name="ruta_almacenamiento", type="string", length=500, nullable=true)
      */      
     private $rutaAlmacenamiento;    
-    
+
+    /**
+     * @ORM\Column(name="ruta_imagenes", type="string", length=500, nullable=true)
+     */      
+    private $rutaImagenes;    
     /**
      * @ORM\Column(name="nit_empresa", type="string", length=20, nullable=true)
      */      
@@ -608,5 +612,29 @@ class GenConfiguracion
     public function getCiudadRel()
     {
         return $this->ciudadRel;
+    }
+
+    /**
+     * Set rutaImagenes
+     *
+     * @param string $rutaImagenes
+     *
+     * @return GenConfiguracion
+     */
+    public function setRutaImagenes($rutaImagenes)
+    {
+        $this->rutaImagenes = $rutaImagenes;
+
+        return $this;
+    }
+
+    /**
+     * Get rutaImagenes
+     *
+     * @return string
+     */
+    public function getRutaImagenes()
+    {
+        return $this->rutaImagenes;
     }
 }

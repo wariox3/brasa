@@ -35,7 +35,7 @@ class ConsultaRecursosDisponiblesController extends Controller
                 $connection = $em->getConnection();                
                 $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
                 $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-                $strRutaImagen = "/almacenamiento/imagenes/empleados/";                
+                $strRutaImagen = $arConfiguracion->getRutaImagenes() . "empleados/";                
                 $arRecursos = new \Brasa\TurnoBundle\Entity\TurRecurso();
                 $arRecursos = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findBy(array('estadoActivo' => 1));
                 foreach ($arRecursos as $arRecurso) {

@@ -37,7 +37,18 @@ class RhuSoportePagoHorario
      */    
     private $estadoCerrado = false;    
 
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSoportePagoHorarioDetalle", mappedBy="soportePagoHorarioRel", cascade={"persist", "remove"})
+     */
+    protected $soportesPagosHorariosDetallesSoportePagoHorarioRel; 
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->soportesPagosHorariosDetallesSoportePagoHorarioRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoSoportePagoHorarioPk
@@ -143,5 +154,39 @@ class RhuSoportePagoHorario
     public function getEstadoCerrado()
     {
         return $this->estadoCerrado;
+    }
+
+    /**
+     * Add soportesPagosHorariosDetallesSoportePagoHorarioRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorarioDetalle $soportesPagosHorariosDetallesSoportePagoHorarioRel
+     *
+     * @return RhuSoportePagoHorario
+     */
+    public function addSoportesPagosHorariosDetallesSoportePagoHorarioRel(\Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorarioDetalle $soportesPagosHorariosDetallesSoportePagoHorarioRel)
+    {
+        $this->soportesPagosHorariosDetallesSoportePagoHorarioRel[] = $soportesPagosHorariosDetallesSoportePagoHorarioRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove soportesPagosHorariosDetallesSoportePagoHorarioRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorarioDetalle $soportesPagosHorariosDetallesSoportePagoHorarioRel
+     */
+    public function removeSoportesPagosHorariosDetallesSoportePagoHorarioRel(\Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorarioDetalle $soportesPagosHorariosDetallesSoportePagoHorarioRel)
+    {
+        $this->soportesPagosHorariosDetallesSoportePagoHorarioRel->removeElement($soportesPagosHorariosDetallesSoportePagoHorarioRel);
+    }
+
+    /**
+     * Get soportesPagosHorariosDetallesSoportePagoHorarioRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSoportesPagosHorariosDetallesSoportePagoHorarioRel()
+    {
+        return $this->soportesPagosHorariosDetallesSoportePagoHorarioRel;
     }
 }
