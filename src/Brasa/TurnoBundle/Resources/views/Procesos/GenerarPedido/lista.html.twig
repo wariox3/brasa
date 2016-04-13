@@ -56,7 +56,7 @@
                 <td>{% if arServicios.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td>{% if arServicios.estadoCerrado == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arServicios.codigoServicioPk }}" onclick="javascript:if (!confirm('Esta seguro de generar un pedido para este periodo con este servicio permanente?'))return false;">Generar</button>                             </td>
-                <td style="text-align: center"><a href="{{ path('brs_tur_servicio_detalle', { 'codigoServicio': arServicios.codigoServicioPk }) }}" target="_blanck"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                
+                <td style="text-align: center"><a href="{{ path('brs_tur_movimiento_servicio_detalle', { 'codigoServicio': arServicios.codigoServicioPk }) }}" target="_blanck"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arServicios.codigoServicioPk }}" /></td>                
             </tr>
             

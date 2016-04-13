@@ -15,9 +15,9 @@
         {{ form_errors(form) }}
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
-                <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_pedido_nuevo', {'codigoPedido': 0 }) }}">Nuevo</a>                
+                <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_movimiento_pedido_nuevo', {'codigoPedido': 0 }) }}">Nuevo</a>                
                 {% if arPedido.estadoAutorizado == 0 %}                    
-                    <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_pedido_nuevo', {'codigoPedido': arPedido.codigoPedidoPk }) }}">Editar</a>                
+                    <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_movimiento_pedido_nuevo', {'codigoPedido': arPedido.codigoPedidoPk }) }}">Editar</a>                
                 {% endif %}                        
                 {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
@@ -138,7 +138,7 @@
                         </tr>
                         {% for arPedidoDetalle in arPedidoDetalle %}
                             <tr>
-                                <td><a href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_resumen', {'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'pedidoDetalleResumen', 600, 900)">{{ arPedidoDetalle.codigoPedidoDetallePk }}</a><input type="hidden" name="LblCodigo[]" value="{{ arPedidoDetalle.codigoPedidoDetallePk }}"></td>                                
+                                <td><a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_pedido_detalle_resumen', {'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'pedidoDetalleResumen', 600, 900)">{{ arPedidoDetalle.codigoPedidoDetallePk }}</a><input type="hidden" name="LblCodigo[]" value="{{ arPedidoDetalle.codigoPedidoDetallePk }}"></td>                                
                                 <td>{{ arPedidoDetalle.puestoRel.nombre | default('') }}</td> 
                                 <td>{{ arPedidoDetalle.conceptoServicioRel.nombre  }}</td>                    
                                 <td>{{ arPedidoDetalle.modalidadServicioRel.nombre  }}</td>                    
@@ -181,11 +181,11 @@
                                     <td style="text-align: right">{{ arPedidoDetalle.vrPrecioAjustado | number_format(0, '.', ',') }}</td> 
                                 {% endif %}                    
                                 <td style="text-align: right">{{ arPedidoDetalle.vrTotalDetalle | number_format(0, '.', ',') }}</td>                     
-                                <td>{% if arPedidoDetalle.codigoServicioDetalleFk is not null %} <a href="{{ path('brs_tur_servicio_detalle', { 'codigoServicio': arPedidoDetalle.servicioDetalleRel.codigoServicioFk }) }}" target="_blanck">{% endif %}{{ arPedidoDetalle.codigoServicioDetalleFk | default('')  }}</a></td>                    
+                                <td>{% if arPedidoDetalle.codigoServicioDetalleFk is not null %} <a href="{{ path('brs_tur_movimiento_servicio_detalle', { 'codigoServicio': arPedidoDetalle.servicioDetalleRel.codigoServicioFk }) }}" target="_blanck">{% endif %}{{ arPedidoDetalle.codigoServicioDetalleFk | default('')  }}</a></td>                    
                                 <td>{% if arPedidoDetalle.estadoProgramado == 1 %} SI {% else %} NO {% endif %}</td>
                                 <td>{% if arPedidoDetalle.estadoFacturado == 1 %} SI {% else %} NO {% endif %}</td>
-                                <td>{% if arPedido.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                                        
-                                <td style="text-align: center"><a href="{{ path('brs_tur_pedido_detalle_recurso', { 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" width=22 height=22></a></td>                                                        
+                                <td>{% if arPedido.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                                        
+                                <td style="text-align: center"><a href="{{ path('brs_tur_movimiento_pedido_detalle_recurso', { 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" width=22 height=22></a></td>                                                        
                                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidoDetalle.codigoPedidoDetallePk }}" /></td>
                             </tr>
                         {% endfor %}
@@ -195,9 +195,9 @@
             <div class="btn-toolbar" style="float: right">
                 {% if arPedido.estadoAutorizado == 0 %}
                     <div class="btn-group">
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo_cotizacion', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo desde cotizacion</a>                
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_pedido_detalle_nuevo_servicio', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 1200)">Nuevo desde servicio</a>                                    
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_pedido_detalle_nuevo_cotizacion', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo desde cotizacion</a>                
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_pedido_detalle_nuevo_servicio', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 1200)">Nuevo desde servicio</a>                                    
                     </div>
                 {% endif %}            
                 <div class="btn-group">

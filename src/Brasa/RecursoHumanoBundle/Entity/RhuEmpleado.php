@@ -591,9 +591,9 @@ class RhuEmpleado
     protected $horarioAccesoEmpleadoRel;
 
     /**
-     * @ORM\OneToMany(targetEntity="RhuSoportePagoHorario", mappedBy="empleadoRel")
+     * @ORM\OneToMany(targetEntity="RhuSoportePagoHorarioDetalle", mappedBy="empleadoRel")
      */
-    protected $soportesPagosHorariosEmpleadoRel; 
+    protected $soportesPagosHorariosDetallesEmpleadoRel; 
     
     /**
      * @ORM\OneToMany(targetEntity="RhuPermiso", mappedBy="empleadoRel")
@@ -604,8 +604,7 @@ class RhuEmpleado
      * @ORM\OneToMany(targetEntity="RhuCarta", mappedBy="empleadoRel")
      */
     protected $cartasEmpleadoRel;
-    
-    
+       
     /**
      * Constructor
      */
@@ -639,7 +638,7 @@ class RhuEmpleado
         $this->examenesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->turRecursosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->horarioAccesoEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->soportesPagosHorariosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->soportesPagosHorariosDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->permisosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cartasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -3527,37 +3526,37 @@ class RhuEmpleado
     }
 
     /**
-     * Add soportesPagosHorariosEmpleadoRel
+     * Add soportesPagosHorariosDetallesEmpleadoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorario $soportesPagosHorariosEmpleadoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorarioDetalle $soportesPagosHorariosDetallesEmpleadoRel
      *
      * @return RhuEmpleado
      */
-    public function addSoportesPagosHorariosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorario $soportesPagosHorariosEmpleadoRel)
+    public function addSoportesPagosHorariosDetallesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorarioDetalle $soportesPagosHorariosDetallesEmpleadoRel)
     {
-        $this->soportesPagosHorariosEmpleadoRel[] = $soportesPagosHorariosEmpleadoRel;
+        $this->soportesPagosHorariosDetallesEmpleadoRel[] = $soportesPagosHorariosDetallesEmpleadoRel;
 
         return $this;
     }
 
     /**
-     * Remove soportesPagosHorariosEmpleadoRel
+     * Remove soportesPagosHorariosDetallesEmpleadoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorario $soportesPagosHorariosEmpleadoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorarioDetalle $soportesPagosHorariosDetallesEmpleadoRel
      */
-    public function removeSoportesPagosHorariosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorario $soportesPagosHorariosEmpleadoRel)
+    public function removeSoportesPagosHorariosDetallesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorarioDetalle $soportesPagosHorariosDetallesEmpleadoRel)
     {
-        $this->soportesPagosHorariosEmpleadoRel->removeElement($soportesPagosHorariosEmpleadoRel);
+        $this->soportesPagosHorariosDetallesEmpleadoRel->removeElement($soportesPagosHorariosDetallesEmpleadoRel);
     }
 
     /**
-     * Get soportesPagosHorariosEmpleadoRel
+     * Get soportesPagosHorariosDetallesEmpleadoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getSoportesPagosHorariosEmpleadoRel()
+    public function getSoportesPagosHorariosDetallesEmpleadoRel()
     {
-        return $this->soportesPagosHorariosEmpleadoRel;
+        return $this->soportesPagosHorariosDetallesEmpleadoRel;
     }
 
     /**

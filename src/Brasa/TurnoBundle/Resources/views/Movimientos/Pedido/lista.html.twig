@@ -121,8 +121,8 @@
                 <td>{% if arPedidos.estadoFacturado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arPedidos.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td>{% if arPedidos.estadoAnulado == 1 %} SI {% else %} NO {% endif %}</td>                
-                <td style="text-align: center">{% if arPedidos.estadoAutorizado == 0 %}<a href="{{ path('brs_tur_pedido_nuevo', {'codigoPedido': arPedidos.codigoPedidoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>
-                <td style="text-align: center"><a href="{{ path('brs_tur_pedido_detalle', { 'codigoPedido': arPedidos.codigoPedidoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                
+                <td style="text-align: center">{% if arPedidos.estadoAutorizado == 0 %}<a href="{{ path('brs_tur_movimiento_pedido_nuevo', {'codigoPedido': arPedidos.codigoPedidoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>
+                <td style="text-align: center"><a href="{{ path('brs_tur_movimiento_pedido_detalle', { 'codigoPedido': arPedidos.codigoPedidoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidos.codigoPedidoPk }}" /></td>
             </tr>
             
@@ -141,7 +141,7 @@
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
             <div class="btn-group">                                
-                <a class="btn btn-default btn-sm" href="{{ path('brs_tur_pedido_nuevo', {'codigoPedido': 0}) }}">Nuevo</a>                                                
+                <a class="btn btn-default btn-sm" href="{{ path('brs_tur_movimiento_pedido_nuevo', {'codigoPedido': 0}) }}">Nuevo</a>                                                
             </div>
             <div class="btn-group">                
                 {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}

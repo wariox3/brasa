@@ -83,8 +83,8 @@
                 <td style="text-align: right">{{ arCotizaciones.horasDiurnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arCotizaciones.horasNocturnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arCotizaciones.vrTotal | number_format(0, '.', ',') }}</td>
-                <td style="text-align: center"><a href="{{ path('brs_tur_cotizacion_nuevo', {'codigoCotizacion': arCotizaciones.codigoCotizacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
-                <td style="text-align: center"><a href="{{ path('brs_tur_cotizacion_detalle', { 'codigoCotizacion': arCotizaciones.codigoCotizacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
+                <td style="text-align: center"><a href="{{ path('brs_tur_movimiento_cotizacion_nuevo', {'codigoCotizacion': arCotizaciones.codigoCotizacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                <td style="text-align: center"><a href="{{ path('brs_tur_movimiento_cotizacion_detalle', { 'codigoCotizacion': arCotizaciones.codigoCotizacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCotizaciones.codigoCotizacionPk }}" /></td>
             </tr>
 
@@ -103,7 +103,7 @@
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
             <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="{{ path('brs_tur_cotizacion_nuevo', {'codigoCotizacion': 0}) }}">Nuevo</a>
+                <a class="btn btn-default btn-sm" href="{{ path('brs_tur_movimiento_cotizacion_nuevo', {'codigoCotizacion': 0}) }}">Nuevo</a>
             </div>
             <div class="btn-group">
                 {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}

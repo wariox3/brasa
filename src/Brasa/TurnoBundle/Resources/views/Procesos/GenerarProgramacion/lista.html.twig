@@ -53,7 +53,7 @@
                 <td style="text-align: right">{{ arPedidos.vrTotal | number_format(0, '.', ',') }}</td>                                
                 <td>{% if arPedidos.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arPedidos.codigoPedidoPk }}" onclick="javascript:if (!confirm('Esta seguro de generar una programacion en este periodo con este pedido?'))return false;">Generar</button></td>
-                <td style="text-align: center"><a href="{{ path('brs_tur_pedido_detalle', { 'codigoPedido': arPedidos.codigoPedidoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                
+                <td style="text-align: center"><a href="{{ path('brs_tur_movimiento_pedido_detalle', { 'codigoPedido': arPedidos.codigoPedidoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidos.codigoPedidoPk }}" /></td>                                
             </tr>
             

@@ -1,12 +1,12 @@
 <?php
-namespace Brasa\TurnoBundle\Controller;
+namespace Brasa\TurnoBundle\Controller\Movimiento;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurPedidoType;
 use Brasa\TurnoBundle\Form\Type\TurPedidoDetalleType;
-class MovimientoPedidoController extends Controller
+class PedidoController extends Controller
 {
     var $strListaDql = ""; 
     var $strListaDqlRecurso = "";   
@@ -49,6 +49,9 @@ class MovimientoPedidoController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/movimiento/pedido/nuevo/{codigoPedido}", name="brs_tur_movimiento_pedido_nuevo")
+     */     
     public function nuevoAction($codigoPedido) {
         $request = $this->getRequest();
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
@@ -77,9 +80,9 @@ class MovimientoPedidoController extends Controller
                     $em->flush();
 
                     if($form->get('guardarnuevo')->isClicked()) {
-                        return $this->redirect($this->generateUrl('brs_tur_pedido_nuevo', array('codigoPedido' => 0 )));
+                        return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_nuevo', array('codigoPedido' => 0 )));
                     } else {
-                        return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $arPedido->getCodigoPedidoPk())));
+                        return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $arPedido->getCodigoPedidoPk())));
                     }                       
                 } else {
                     $objMensaje->Mensaje("error", "El cliente no existe", $this);
@@ -91,6 +94,9 @@ class MovimientoPedidoController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/movimiento/pedido/detalle/{codigoPedido}", name="brs_tur_movimiento_pedido_detalle")
+     */     
     public function detalleAction($codigoPedido) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -107,14 +113,14 @@ class MovimientoPedidoController extends Controller
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 }
-                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
             }    
             if($form->get('BtnAnular')->isClicked()) {                                 
                 $strResultado = $em->getRepository('BrasaTurnoBundle:TurPedido')->anular($codigoPedido);
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 }
-                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
             }            
             
             if($form->get('BtnDesAutorizar')->isClicked()) {            
@@ -122,7 +128,7 @@ class MovimientoPedidoController extends Controller
                     $arPedido->setEstadoAutorizado(0);
                     $em->persist($arPedido);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
+                    return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
                 }
             } 
             if($form->get('BtnProgramar')->isClicked()) {            
@@ -131,7 +137,7 @@ class MovimientoPedidoController extends Controller
                     if($codigoProgramacion != 0) {
                         return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));                                        
                     } else {
-                        return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                                        
+                        return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));                                        
                     }                    
                 }
             }    
@@ -141,7 +147,7 @@ class MovimientoPedidoController extends Controller
                     if($codigoFactura != 0) {
                         return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $codigoFactura)));                                        
                     } else {
-                        return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                                        
+                        return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));                                        
                     }                    
                 }
             }            
@@ -150,19 +156,19 @@ class MovimientoPedidoController extends Controller
                     $arPedido->setEstadoProgramado(0);
                     $em->persist($arPedido);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
+                    return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
                 }
             }               
             if($form->get('BtnDetalleActualizar')->isClicked()) {                
                 $arrControles = $request->request->All();
                 $this->actualizarDetalle($arrControles, $codigoPedido);                                
-                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));
             }
             if($form->get('BtnDetalleEliminar')->isClicked()) {   
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->eliminarSeleccionados($arrSeleccionados);
                 $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);
-                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));
             }
             if($form->get('BtnDetalleDesprogramar')->isClicked()) {   
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -172,7 +178,7 @@ class MovimientoPedidoController extends Controller
                     $em->persist($arPedidoDetalle);                  
                 }                                         
                 $em->flush();  
-                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle', array('codigoPedido' => $codigoPedido)));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));
             }            
             if($form->get('BtnImprimir')->isClicked()) {
                 if($arPedido->getEstadoAutorizado() == 1) {
@@ -193,6 +199,9 @@ class MovimientoPedidoController extends Controller
                     ));
     }
 
+    /**
+     * @Route("/tur/movimiento/pedido/detalle/nuevo/{codigoPedido}/{codigoPedidoDetalle}", name="brs_tur_movimiento_pedido_detalle_nuevo")
+     */    
     public function detalleNuevoAction($codigoPedido, $codigoPedidoDetalle = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -230,7 +239,7 @@ class MovimientoPedidoController extends Controller
             $em->flush();
 
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle_nuevo', array('codigoPedido' => $codigoPedido, 'codigoPedidoDetalle' => 0 )));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle_nuevo', array('codigoPedido' => $codigoPedido, 'codigoPedidoDetalle' => 0 )));
             } else {
                 $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
@@ -241,6 +250,9 @@ class MovimientoPedidoController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/movimiento/pedido/detalle/nuevo/cotizacion/{codigoPedido}/{codigoPedidoDetalle}", name="brs_tur_movimiento_pedido_detalle_nuevo_cotizacion")
+     */    
     public function detalleNuevoCotizacionAction($codigoPedido, $codigoPedidoDetalle = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -337,6 +349,9 @@ class MovimientoPedidoController extends Controller
             'form' => $form->createView()));
     }    
     
+    /**
+     * @Route("/tur/movimiento/pedido/detalle/nuevo/Servicio/{codigoPedido}/{codigoPedidoDetalle}", name="brs_tur_movimiento_pedido_detalle_nuevo_servicio")
+     */     
     public function detalleNuevoServicioAction($codigoPedido, $codigoPedidoDetalle = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -443,7 +458,10 @@ class MovimientoPedidoController extends Controller
             'arServicioDetalles' => $arServicioDetalles,
             'form' => $form->createView()));
     }        
-    
+        
+    /**
+     * @Route("/tur/movimiento/pedido/detalle/recurso/{codigoPedidoDetalle}", name="brs_tur_movimiento_pedido_detalle_recurso")
+     */    
     public function detalleRecursoAction($codigoPedidoDetalle = 0) {
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
@@ -457,12 +475,12 @@ class MovimientoPedidoController extends Controller
             if($form->get('BtnDetalleEliminar')->isClicked()) {   
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->eliminarSeleccionados($arrSeleccionados);                
-                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle_recurso', array('codigoPedidoDetalle' => $codigoPedidoDetalle)));                                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle_recurso', array('codigoPedidoDetalle' => $codigoPedidoDetalle)));                                
             } 
             if($form->get('BtnDetalleActualizar')->isClicked()) {                
                 $arrControles = $request->request->All();
                 $this->actualizarDetalleRecurso($arrControles);                                
-                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle_recurso', array('codigoPedidoDetalle' => $codigoPedidoDetalle)));                                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle_recurso', array('codigoPedidoDetalle' => $codigoPedidoDetalle)));                                
             }       
             if($form->get('BtnGuardarPedidoDetalle')->isClicked()) {                   
                 $fechaIniciaPlantilla = $form->get('fechaIniciaPlantilla')->getData();                
@@ -470,7 +488,7 @@ class MovimientoPedidoController extends Controller
                 $arPedidoDetalle->setPlantillaRel($form->get('plantillaRel')->getData());
                 $em->persist($arPedidoDetalle);
                 $em->flush();
-                return $this->redirect($this->generateUrl('brs_tur_pedido_detalle_recurso', array('codigoPedidoDetalle' => $codigoPedidoDetalle)));                                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle_recurso', array('codigoPedidoDetalle' => $codigoPedidoDetalle)));                                
             }            
         }
         $arPlantillaDetalles = new \Brasa\TurnoBundle\Entity\TurPlantillaDetalle();
@@ -485,7 +503,10 @@ class MovimientoPedidoController extends Controller
             'arPlantillaDetalle' => $arPlantillaDetalles,
             'form' => $form->createView()));
     }        
-    
+        
+    /**
+     * @Route("/tur/movimiento/pedido/detalle/recurso/nuevo/{codigoPedidoDetalle}", name="brs_tur_movimiento_pedido_detalle_recurso_nuevo")
+     */    
     public function detalleRecursoNuevoAction($codigoPedidoDetalle = 0) {
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
@@ -529,7 +550,10 @@ class MovimientoPedidoController extends Controller
             'arRecursos' => $arRecurso,
             'form' => $form->createView()));
     }    
-    
+
+    /**
+     * @Route("/tur/movimiento/pedido/detalle/resumen/{codigoPedidoDetalle}", name="brs_tur_movimiento_pedido_detalle_resumen")
+     */    
     public function detalleResumenAction($codigoPedidoDetalle) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();        

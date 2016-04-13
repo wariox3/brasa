@@ -15,9 +15,9 @@
         {{ form_errors(form) }}
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
-                <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_servicio_nuevo', {'codigoServicio': 0 }) }}">Nuevo</a>                
+                <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_movimiento_servicio_nuevo', {'codigoServicio': 0 }) }}">Nuevo</a>                
                 {% if arServicio.estadoAutorizado == 0 %}                    
-                    <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_servicio_nuevo', {'codigoServicio': arServicio.codigoServicioPk }) }}">Editar</a>                
+                    <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_movimiento_servicio_nuevo', {'codigoServicio': arServicio.codigoServicioPk }) }}">Editar</a>                
                 {% endif %}            
                 {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
@@ -171,8 +171,8 @@
                                     <td style="text-align: right">{{ arServicioDetalle.vrPrecioAjustado | number_format(0, '.', ',') }}</td> 
                                 {% endif %}                    
                                 <td style="text-align: right">{{ arServicioDetalle.vrTotalDetalle | number_format(0, '.', ',') }}</td> 
-                                <td>{% if arServicio.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_servicio_detalle_nuevo', {'codigoServicio': arServicioDetalle.codigoServicioFk, 'codigoServicioDetalle': arServicioDetalle.codigoServicioDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                    
-                                <td style="text-align: center"><a href="{{ path('brs_tur_servicio_detalle_recurso', { 'codigoServicioDetalle': arServicioDetalle.codigoServicioDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" width=22 height=22></a></td>                                    
+                                <td>{% if arServicio.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_servicio_detalle_nuevo', {'codigoServicio': arServicioDetalle.codigoServicioFk, 'codigoServicioDetalle': arServicioDetalle.codigoServicioDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                    
+                                <td style="text-align: center"><a href="{{ path('brs_tur_movimiento_servicio_detalle_recurso', { 'codigoServicioDetalle': arServicioDetalle.codigoServicioDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" width=22 height=22></a></td>                                    
                                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arServicioDetalle.codigoServicioDetallePk }}" /></td>
                             </tr>
                         {% endfor %}
@@ -182,8 +182,8 @@
             <div class="btn-toolbar" style="float: right">
                 {% if arServicio.estadoAutorizado == 0 %}
                     <div class="btn-group">
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_servicio_detalle_nuevo', {'codigoServicio': arServicio.codigoServicioPk, 'codigoServicioDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_servicio_detalle_nuevo_cotizacion', {'codigoServicio': arServicio.codigoServicioPk, 'codigoServicioDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo de cotizacion</a>                
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_servicio_detalle_nuevo', {'codigoServicio': arServicio.codigoServicioPk, 'codigoServicioDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_servicio_detalle_cotizacion_nuevo', {'codigoServicio': arServicio.codigoServicioPk, 'codigoServicioDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo de cotizacion</a>                
                     </div>
                 {% endif %}            
                 <div class="btn-group">

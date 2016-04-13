@@ -1,13 +1,17 @@
 <?php
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Proceso;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 
-class ProcesoGenerarSoportePagoHorarioController extends Controller
+class GenerarSoportePagoHorarioController extends Controller
 {
     var $strListaDql = "";
 
+    /**
+     * @Route("/rhu/proceso/soporte/pago/horario", name="brs_rhu_proceso_soporte_pago_horario")
+     */    
     public function generarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

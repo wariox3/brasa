@@ -1,12 +1,12 @@
 <?php
-namespace Brasa\TurnoBundle\Controller;
+namespace Brasa\TurnoBundle\Controller\Movimiento;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurServicioType;
 use Brasa\TurnoBundle\Form\Type\TurServicioDetalleType;
-class MovimientoServicioController extends Controller
+class ServicioController extends Controller
 {
     var $strListaDql = "";
     var $strListaDqlRecurso = "";
@@ -50,6 +50,9 @@ class MovimientoServicioController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/movimiento/servicio/nuevo/{codigoServicio}", name="brs_tur_movimiento_servicio_nuevo")
+     */
     public function nuevoAction($codigoServicio) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -76,9 +79,9 @@ class MovimientoServicioController extends Controller
                     $em->flush();
 
                     if($form->get('guardarnuevo')->isClicked()) {
-                        return $this->redirect($this->generateUrl('brs_tur_servicio_nuevo', array('codigoServicio' => 0 )));
+                        return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_nuevo', array('codigoServicio' => 0 )));
                     } else {
-                        return $this->redirect($this->generateUrl('brs_tur_servicio_detalle', array('codigoServicio' => $arServicio->getCodigoServicioPk())));
+                        return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle', array('codigoServicio' => $arServicio->getCodigoServicioPk())));
                     }                       
                 } else {
                     $objMensaje->Mensaje("error", "El cliente no existe", $this);
@@ -90,6 +93,9 @@ class MovimientoServicioController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/movimiento/servicio/detalle/{codigoServicio}", name="brs_tur_movimiento_servicio_detalle")
+     */    
     public function detalleAction($codigoServicio) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -111,14 +117,14 @@ class MovimientoServicioController extends Controller
                         $objMensaje->Mensaje('error', 'Debe adicionar detalles al servicio', $this);
                     }                    
                 }
-                return $this->redirect($this->generateUrl('brs_tur_servicio_detalle', array('codigoServicio' => $codigoServicio)));                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle', array('codigoServicio' => $codigoServicio)));                
             }    
             if($form->get('BtnDesAutorizar')->isClicked()) {            
                 if($arServicio->getEstadoAutorizado() == 1) {
                     $arServicio->setEstadoAutorizado(0);
                     $em->persist($arServicio);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_tur_servicio_detalle', array('codigoServicio' => $codigoServicio)));                
+                    return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle', array('codigoServicio' => $codigoServicio)));                
                 }
             }    
             if($form->get('BtnCerrar')->isClicked()) {            
@@ -126,19 +132,19 @@ class MovimientoServicioController extends Controller
                     $arServicio->setEstadoCerrado(1);
                     $em->persist($arServicio);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_tur_servicio_detalle', array('codigoServicio' => $codigoServicio)));                
+                    return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle', array('codigoServicio' => $codigoServicio)));                
                 }
             }            
             if($form->get('BtnDetalleActualizar')->isClicked()) {                
                 $arrControles = $request->request->All();
                 $this->actualizarDetalle($arrControles, $codigoServicio);                                
-                return $this->redirect($this->generateUrl('brs_tur_servicio_detalle', array('codigoServicio' => $codigoServicio)));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle', array('codigoServicio' => $codigoServicio)));
             }
             if($form->get('BtnDetalleEliminar')->isClicked()) {   
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->eliminarSeleccionados($arrSeleccionados);
                 $em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);
-                return $this->redirect($this->generateUrl('brs_tur_servicio_detalle', array('codigoServicio' => $codigoServicio)));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle', array('codigoServicio' => $codigoServicio)));
             }
             if($form->get('BtnImprimir')->isClicked()) {
                 /*if($arServicio->getEstadoAutorizado() == 1) {
@@ -160,7 +166,10 @@ class MovimientoServicioController extends Controller
                     'form' => $form->createView()
                     ));
     }
-
+    
+    /**
+     * @Route("/tur/movimiento/servicio/detalle/nuevo/{codigoServicio}/{codigoServicioDetalle}", name="brs_tur_movimiento_servicio_detalle_nuevo")
+     */    
     public function detalleNuevoAction($codigoServicio, $codigoServicioDetalle = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -195,7 +204,7 @@ class MovimientoServicioController extends Controller
             $em->flush();
 
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_nuevo', array('codigoServicio' => $codigoServicio, 'codigoServicioDetalle' => 0 )));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle_nuevo', array('codigoServicio' => $codigoServicio, 'codigoServicioDetalle' => 0 )));
             } else {
                 $em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
@@ -206,6 +215,9 @@ class MovimientoServicioController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/movimiento/servicio/detalle/cotizacion/nuevo/{codigoServicio}/{codigoServicioDetalle}", name="brs_tur_movimiento_servicio_detalle_cotizacion_nuevo")
+     */    
     public function detalleNuevoCotizacionAction($codigoServicio, $codigoServicioDetalle = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -275,6 +287,9 @@ class MovimientoServicioController extends Controller
             'form' => $form->createView()));
     }           
     
+    /**
+     * @Route("/tur/movimiento/servicio/detalle/recurso/{codigoServicioDetalle}", name="brs_tur_movimiento_servicio_detalle_recurso")
+     */     
     public function detalleRecursoAction($codigoServicioDetalle = 0) {
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
@@ -288,19 +303,19 @@ class MovimientoServicioController extends Controller
             if($form->get('BtnDetalleEliminar')->isClicked()) {   
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurServicioDetalleRecurso')->eliminarSeleccionados($arrSeleccionados);                
-                return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
             } 
             if($form->get('BtnDetalleActualizar')->isClicked()) {                
                 $arrControles = $request->request->All();
                 $this->actualizarDetalleRecurso($arrControles);                                
-                return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
             }   
             if($form->get('BtnPlantillaNuevo')->isClicked()) {   
                 $arServicioDetallePlantilla = new \Brasa\TurnoBundle\Entity\TurServicioDetallePlantilla();
                 $arServicioDetallePlantilla->setServicioDetalleRel($arServicioDetalle);
                 $em->persist($arServicioDetallePlantilla);
                 $em->flush();
-                return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
             }
             if($form->get('BtnPlantillaActualizar')->isClicked()) {
                 $arrControles = $request->request->All();
@@ -310,12 +325,12 @@ class MovimientoServicioController extends Controller
                 $em->persist($arServicioDetalle);
                 $em->flush();
                 $this->actualizarDetallePlantilla($arrControles);                
-                return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
             }
             if($form->get('BtnPlantillaEliminar')->isClicked()) {   
                 $arrSeleccionados = $request->request->get('ChkSeleccionarPlantilla');
                 $em->getRepository('BrasaTurnoBundle:TurServicioDetallePlantilla')->eliminar($arrSeleccionados);                
-                return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
             }    
             if($form->get('BtnGuardarServicioDetalle')->isClicked()) {   
                 $intDiasSecuencia = $form->get('TxtDiasSecuencia')->getData();     
@@ -325,7 +340,7 @@ class MovimientoServicioController extends Controller
                 $arServicioDetalle->setPlantillaRel($form->get('plantillaRel')->getData());
                 $em->persist($arServicioDetalle);
                 $em->flush();
-                return $this->redirect($this->generateUrl('brs_tur_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle_recurso', array('codigoServicioDetalle' => $codigoServicioDetalle)));                                
             }            
         }
         $arPlantillaDetalles = new \Brasa\TurnoBundle\Entity\TurPlantillaDetalle();
@@ -344,6 +359,9 @@ class MovimientoServicioController extends Controller
             'form' => $form->createView()));
     }    
     
+    /**
+     * @Route("/tur/movimiento/servicio/detalle/recurso/nuevo/{codigoServicioDetalle}", name="brs_tur_movimiento_servicio_detalle_recurso_nuevo")
+     */     
     public function detalleRecursoNuevoAction($codigoServicioDetalle = 0) {
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');

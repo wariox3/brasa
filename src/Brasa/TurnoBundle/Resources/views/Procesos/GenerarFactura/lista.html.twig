@@ -59,7 +59,7 @@
                 <td>{% if arPedidos.estadoFacturado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arPedidos.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td>{% if arPedidos.estadoAnulado == 1 %} SI {% else %} NO {% endif %}</td>                                
-                <td style="text-align: center"><a href="{{ path('brs_tur_pedido_detalle', { 'codigoPedido': arPedidos.codigoPedidoPk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                
+                <td style="text-align: center"><a href="{{ path('brs_tur_movimiento_pedido_detalle', { 'codigoPedido': arPedidos.codigoPedidoPk }) }}" target="_blank"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidos.codigoPedidoPk }}" /></td>
             </tr>
             

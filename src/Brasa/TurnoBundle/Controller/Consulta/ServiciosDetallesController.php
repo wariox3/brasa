@@ -1,11 +1,11 @@
 <?php
-namespace Brasa\TurnoBundle\Controller;
+namespace Brasa\TurnoBundle\Controller\Consulta;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-class ConsultaServiciosDetallesController extends Controller
+class ServiciosDetallesController extends Controller
 {
     var $strListaDql = "";
     var $codigoServicio = "";
@@ -84,13 +84,14 @@ class ConsultaServiciosDetallesController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'Z'; $col++) {
+        for($col = 'A'; $col !== 'AC'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
         }     
-        for($col = 'Y'; $col !== 'Z'; $col++) {
+        for($col = 'Y'; $col !== 'AC'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('right');
         }        
         
         $objPHPExcel->setActiveSheetIndex(0)
@@ -118,7 +119,10 @@ class ConsultaServiciosDetallesController extends Controller
                     ->setCellValue('V1', 'H')
                     ->setCellValue('W1', 'H.D')
                     ->setCellValue('X1', 'H.N')
-                    ->setCellValue('Y1', 'DIAS');
+                    ->setCellValue('Y1', 'DIAS')
+                    ->setCellValue('Z1', 'VR.MINIMO')
+                    ->setCellValue('AA1', 'VR.AJUSTE')
+                    ->setCellValue('AB1', 'VALOR');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -149,7 +153,11 @@ class ConsultaServiciosDetallesController extends Controller
                     ->setCellValue('V' . $i, $arServicioDetalle->getHoras())
                     ->setCellValue('W' . $i, $arServicioDetalle->getHorasDiurnas())
                     ->setCellValue('X' . $i, $arServicioDetalle->getHorasNocturnas())
-                    ->setCellValue('Y' . $i, $arServicioDetalle->getDias());
+                    ->setCellValue('Y' . $i, $arServicioDetalle->getDias())
+                    ->setCellValue('Z' . $i, $arServicioDetalle->getVrPrecioMinimo())
+                    ->setCellValue('AA' . $i, $arServicioDetalle->getVrPrecioAjustado())
+                    ->setCellValue('AB' . $i, $arServicioDetalle->getVrTotalDetalle());
+            
             if($arServicioDetalle->getPuestoRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('D' . $i, $arServicioDetalle->getPuestoRel()->getNombre());

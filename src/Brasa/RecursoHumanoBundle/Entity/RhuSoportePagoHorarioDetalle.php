@@ -5,17 +5,17 @@ namespace Brasa\RecursoHumanoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="rhu_soporte_pago_horario")
- * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuSoportePagoHorarioRepository")
+ * @ORM\Table(name="rhu_soporte_pago_horario_detalle")
+ * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuSoportePagoHorarioDetalleRepository")
  */
-class RhuSoportePagoHorario
+class RhuSoportePagoHorarioDetalle
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_soporte_pago_horario_pk", type="integer")
+     * @ORM\Column(name="codigo_soporte_pago_horario_detalle_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoSoportePagoHorarioPk;         
+    private $codigoSoportePagoHorarioDetallePk;         
       
     /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer")
@@ -93,19 +93,21 @@ class RhuSoportePagoHorario
     private $horasExtrasFestivasNocturnas = 0;       
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="soportesPagosHorariosEmpleadoRel")
+     * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="soportesPagosHorariosDetallesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
     protected $empleadoRel;     
 
+
+
     /**
-     * Get codigoSoportePagoHorarioPk
+     * Get codigoSoportePagoHorarioDetallePk
      *
      * @return integer
      */
-    public function getCodigoSoportePagoHorarioPk()
+    public function getCodigoSoportePagoHorarioDetallePk()
     {
-        return $this->codigoSoportePagoHorarioPk;
+        return $this->codigoSoportePagoHorarioDetallePk;
     }
 
     /**
@@ -113,7 +115,7 @@ class RhuSoportePagoHorario
      *
      * @param integer $codigoEmpleadoFk
      *
-     * @return RhuSoportePagoHorario
+     * @return RhuSoportePagoHorarioDetalle
      */
     public function setCodigoEmpleadoFk($codigoEmpleadoFk)
     {
@@ -137,7 +139,7 @@ class RhuSoportePagoHorario
      *
      * @param \DateTime $fechaDesde
      *
-     * @return RhuSoportePagoHorario
+     * @return RhuSoportePagoHorarioDetalle
      */
     public function setFechaDesde($fechaDesde)
     {
@@ -161,7 +163,7 @@ class RhuSoportePagoHorario
      *
      * @param \DateTime $fechaHasta
      *
-     * @return RhuSoportePagoHorario
+     * @return RhuSoportePagoHorarioDetalle
      */
     public function setFechaHasta($fechaHasta)
     {
@@ -185,7 +187,7 @@ class RhuSoportePagoHorario
      *
      * @param boolean $estadoCerrado
      *
-     * @return RhuSoportePagoHorario
+     * @return RhuSoportePagoHorarioDetalle
      */
     public function setEstadoCerrado($estadoCerrado)
     {
@@ -209,7 +211,7 @@ class RhuSoportePagoHorario
      *
      * @param integer $descanso
      *
-     * @return RhuSoportePagoHorario
+     * @return RhuSoportePagoHorarioDetalle
      */
     public function setDescanso($descanso)
     {
@@ -233,7 +235,7 @@ class RhuSoportePagoHorario
      *
      * @param integer $dias
      *
-     * @return RhuSoportePagoHorario
+     * @return RhuSoportePagoHorarioDetalle
      */
     public function setDias($dias)
     {
@@ -257,7 +259,7 @@ class RhuSoportePagoHorario
      *
      * @param integer $horas
      *
-     * @return RhuSoportePagoHorario
+     * @return RhuSoportePagoHorarioDetalle
      */
     public function setHoras($horas)
     {
@@ -281,7 +283,7 @@ class RhuSoportePagoHorario
      *
      * @param integer $horasDiurnas
      *
-     * @return RhuSoportePagoHorario
+     * @return RhuSoportePagoHorarioDetalle
      */
     public function setHorasDiurnas($horasDiurnas)
     {
@@ -305,7 +307,7 @@ class RhuSoportePagoHorario
      *
      * @param integer $horasNocturnas
      *
-     * @return RhuSoportePagoHorario
+     * @return RhuSoportePagoHorarioDetalle
      */
     public function setHorasNocturnas($horasNocturnas)
     {
@@ -329,7 +331,7 @@ class RhuSoportePagoHorario
      *
      * @param integer $horasFestivasDiurnas
      *
-     * @return RhuSoportePagoHorario
+     * @return RhuSoportePagoHorarioDetalle
      */
     public function setHorasFestivasDiurnas($horasFestivasDiurnas)
     {
@@ -353,7 +355,7 @@ class RhuSoportePagoHorario
      *
      * @param integer $horasFestivasNocturnas
      *
-     * @return RhuSoportePagoHorario
+     * @return RhuSoportePagoHorarioDetalle
      */
     public function setHorasFestivasNocturnas($horasFestivasNocturnas)
     {
@@ -377,7 +379,7 @@ class RhuSoportePagoHorario
      *
      * @param integer $horasExtrasOrdinariasDiurnas
      *
-     * @return RhuSoportePagoHorario
+     * @return RhuSoportePagoHorarioDetalle
      */
     public function setHorasExtrasOrdinariasDiurnas($horasExtrasOrdinariasDiurnas)
     {
@@ -401,7 +403,7 @@ class RhuSoportePagoHorario
      *
      * @param integer $horasExtrasOrdinariasNocturnas
      *
-     * @return RhuSoportePagoHorario
+     * @return RhuSoportePagoHorarioDetalle
      */
     public function setHorasExtrasOrdinariasNocturnas($horasExtrasOrdinariasNocturnas)
     {
@@ -425,7 +427,7 @@ class RhuSoportePagoHorario
      *
      * @param integer $horasExtrasFestivasDiurnas
      *
-     * @return RhuSoportePagoHorario
+     * @return RhuSoportePagoHorarioDetalle
      */
     public function setHorasExtrasFestivasDiurnas($horasExtrasFestivasDiurnas)
     {
@@ -449,7 +451,7 @@ class RhuSoportePagoHorario
      *
      * @param integer $horasExtrasFestivasNocturnas
      *
-     * @return RhuSoportePagoHorario
+     * @return RhuSoportePagoHorarioDetalle
      */
     public function setHorasExtrasFestivasNocturnas($horasExtrasFestivasNocturnas)
     {
@@ -473,7 +475,7 @@ class RhuSoportePagoHorario
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
      *
-     * @return RhuSoportePagoHorario
+     * @return RhuSoportePagoHorarioDetalle
      */
     public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
     {

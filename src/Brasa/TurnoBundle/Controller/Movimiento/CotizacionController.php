@@ -1,5 +1,5 @@
 <?php
-namespace Brasa\TurnoBundle\Controller;
+namespace Brasa\TurnoBundle\Controller\Movimiento;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurCotizacionType;
 use Brasa\TurnoBundle\Form\Type\TurCotizacionDetalleType;
 use Brasa\TurnoBundle\Form\Type\TurCotizacionOtroType;
-class MovimientoCotizacionController extends Controller
+class CotizacionController extends Controller
 {
     var $strListaDql = "";
     var $numero = "";
@@ -50,6 +50,9 @@ class MovimientoCotizacionController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/movimiento/cotizacion/nuevo/{codigoCotizacion}", name="brs_tur_movimiento_cotizacion_nuevo")
+     */    
     public function nuevoAction($codigoCotizacion) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -79,9 +82,9 @@ class MovimientoCotizacionController extends Controller
             $em->flush();
 
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_cotizacion_nuevo', array('codigoCotizacion' => 0 )));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_cotizacion_nuevo', array('codigoCotizacion' => 0 )));
             } else {
-                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $arCotizacion->getCodigoCotizacionPk())));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_cotizacion_detalle', array('codigoCotizacion' => $arCotizacion->getCodigoCotizacionPk())));
             }                       
                                
              
@@ -92,6 +95,9 @@ class MovimientoCotizacionController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/movimiento/cotizacion/detalle/{codigoCotizacion}", name="brs_tur_movimiento_cotizacion_detalle")
+     */     
     public function detalleAction($codigoCotizacion) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -113,14 +119,14 @@ class MovimientoCotizacionController extends Controller
                         $objMensaje->Mensaje('error', 'Debe adicionar detalles a la cotizacion', $this);
                     }                    
                 }
-                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));                
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {            
                 if($arCotizacion->getEstadoAutorizado() == 1) {
                     $arCotizacion->setEstadoAutorizado(0);
                     $em->persist($arCotizacion);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));                
+                    return $this->redirect($this->generateUrl('brs_tur_movimiento_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));                
                 }
             }   
             if($form->get('BtnAprobar')->isClicked()) {            
@@ -128,19 +134,19 @@ class MovimientoCotizacionController extends Controller
                     $arCotizacion->setEstadoAprobado(1);
                     $em->persist($arCotizacion);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));                
+                    return $this->redirect($this->generateUrl('brs_tur_movimiento_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));                
                 }
             }            
             if($form->get('BtnDetalleActualizar')->isClicked()) {
                 $arrControles = $request->request->All();
                 $this->actualizarDetalle($arrControles, $codigoCotizacion);                
-                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));
             }
             if($form->get('BtnDetalleEliminar')->isClicked()) {   
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->eliminarSeleccionados($arrSeleccionados);
                 $em->getRepository('BrasaTurnoBundle:TurCotizacion')->liquidar($codigoCotizacion);
-                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));
             }  
             if($form->get('BtnOtroActualizar')->isClicked()) {
                 $arrControles = $request->request->All();
@@ -153,13 +159,13 @@ class MovimientoCotizacionController extends Controller
                 }
                 $em->flush();
                 $em->getRepository('BrasaTurnoBundle:TurCotizacion')->liquidar($codigoCotizacion);
-                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));
             }
             if($form->get('BtnOtroEliminar')->isClicked()) {   
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->eliminarSeleccionados($arrSeleccionados);
                 $em->getRepository('BrasaTurnoBundle:TurCotizacion')->liquidar($codigoCotizacion);
-                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_cotizacion_detalle', array('codigoCotizacion' => $codigoCotizacion)));
             }   
             if($form->get('BtnImprimir')->isClicked()) {
                 $strResultado = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->imprimir($codigoCotizacion);
@@ -184,6 +190,9 @@ class MovimientoCotizacionController extends Controller
                     ));
     }
 
+    /**
+     * @Route("/tur/movimiento/cotizacion/detalle/nuevo/{codigoCotizacion}/{codigoCotizacionDetalle}", name="brs_tur_movimiento_cotizacion_detalle_nuevo")
+     */     
     public function detalleNuevoAction($codigoCotizacion, $codigoCotizacionDetalle = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -214,7 +223,7 @@ class MovimientoCotizacionController extends Controller
             $em->flush();
             $em->getRepository('BrasaTurnoBundle:TurCotizacion')->liquidar($codigoCotizacion);
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle_nuevo', array('codigoCotizacion' => $codigoCotizacion, 'codigoCotizacionDetalle' => 0 )));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_cotizacion_detalle_nuevo', array('codigoCotizacion' => $codigoCotizacion, 'codigoCotizacionDetalle' => 0 )));
             } else {
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }
@@ -224,7 +233,10 @@ class MovimientoCotizacionController extends Controller
             'form' => $form->createView()));
     }
 
-    public function otroNuevoAction($codigoCotizacion, $codigoCotizacionOtro = 0) {
+    /**
+     * @Route("/tur/movimiento/cotizacion/detalle/otro/nuevo/{codigoCotizacion}/{codigoCotizacionOtro}", name="brs_tur_movimiento_cotizacion_detalle_otro_nuevo")
+     */
+    public function detalleOtroNuevoAction($codigoCotizacion, $codigoCotizacionOtro = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $arCotizacion = new \Brasa\TurnoBundle\Entity\TurCotizacion();
@@ -241,7 +253,7 @@ class MovimientoCotizacionController extends Controller
             $em->persist($arCotizacionOtro);
             $em->flush();            
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_cotizacion_detalle_nuevo', array('codigoCotizacion' => $codigoCotizacion, 'codigoCotizacionDetalle' => 0 )));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_cotizacion_detalle_nuevo', array('codigoCotizacion' => $codigoCotizacion, 'codigoCotizacionDetalle' => 0 )));
             } else {
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }
