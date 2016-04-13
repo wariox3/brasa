@@ -251,7 +251,7 @@ class PedidoController extends Controller
     }
 
     /**
-     * @Route("/tur/movimiento/pedido/detalle/nuevo/cotizacion/{codigoPedido}/{codigoPedidoDetalle}", name="brs_tur_movimiento_pedido_detalle_nuevo_cotizacion")
+     * @Route("/tur/movimiento/pedido/detalle/cotizacion/nuevo/{codigoPedido}/{codigoPedidoDetalle}", name="brs_tur_movimiento_pedido_detalle_cotizacion_nuevo")
      */    
     public function detalleNuevoCotizacionAction($codigoPedido, $codigoPedidoDetalle = 0) {
         $request = $this->getRequest();
@@ -350,7 +350,7 @@ class PedidoController extends Controller
     }    
     
     /**
-     * @Route("/tur/movimiento/pedido/detalle/nuevo/Servicio/{codigoPedido}/{codigoPedidoDetalle}", name="brs_tur_movimiento_pedido_detalle_nuevo_servicio")
+     * @Route("/tur/movimiento/pedido/detalle/Servicio/nuevo/{codigoPedido}/{codigoPedidoDetalle}", name="brs_tur_movimiento_pedido_detalle_servicio_nuevo")
      */     
     public function detalleNuevoServicioAction($codigoPedido, $codigoPedidoDetalle = 0) {
         $request = $this->getRequest();
