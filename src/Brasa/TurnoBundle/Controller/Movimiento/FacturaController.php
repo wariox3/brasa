@@ -226,24 +226,24 @@ class FacturaController extends Controller
         $em = $this->getDoctrine()->getManager();
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
         $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);        
-        $form = $this->formularioDetalleNuevo();
+        $form = $this->formularioDetalleOtroNuevo();
         $form->handleRequest($request);
         if ($form->isValid()) {
             if ($form->get('BtnGuardar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $arrControles = $request->request->All();
                 if(count($arrSeleccionados) > 0) {    
                     foreach ($arrSeleccionados AS $codigo) {
-                        $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
-                        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigo);                        
-                        $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
-                        $arFacturaDetalle->setFacturaRel($arFactura);                        
-                        $arFacturaDetalle->setConceptoServicioRel($arPedidoDetalle->getConceptoServicioRel());
-                        $arFacturaDetalle->setPedidoDetalleRel($arPedidoDetalle);
-                        $arFacturaDetalle->setCantidad($arPedidoDetalle->getCantidad());
-                        $arFacturaDetalle->setVrPrecio($arPedidoDetalle->getVrTotalDetalle());                        
-                        $em->persist($arFacturaDetalle);  
-                        //$arPedidoDetalle->setEstadoFacturado(1);
-                        //$em->persist($arPedidoDetalle);  
+                        $cantidad = $arrControles['TxtCantidad' . $codigo];
+                        $precio = $arrControles['TxtPrecio' . $codigo];
+                        $arFacturaConcepto = new \Brasa\TurnoBundle\Entity\TurFacturaConcepto();
+                        $arFacturaConcepto = $em->getRepository('BrasaTurnoBundle:TurFacturaConcepto')->find($arFacturaConcepto);
+                        $arFacturaDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto();
+                        $arFacturaDetalleConcepto->setFacturaRel($arFactura);                        
+                        $arFacturaDetalleConcepto->setFacturaConceptoRel($arFacturaConcepto);
+                        $arFacturaDetalleConcepto->setCantidad($cantidad);
+                        $arFacturaDetalleConcepto->setVrPrecio($precio);
+                        $em->persist($arFacturaDetalleConcepto);  
                     }
                 }
                 $em->flush();
@@ -255,11 +255,10 @@ class FacturaController extends Controller
             }
         }
         
-        $arFacturaDetalleConcepto = $paginator->paginate($em->createQuery($this->listaDetalleNuevo($arFactura->getCodigoClienteFk())), $request->query->get('page', 1), 500);        
-        return $this->render('BrasaTurnoBundle:Movimientos/Factura:detalleNuevo.html.twig', array(
-            'arFactura' => $arFactura,
-            'arPedidoDetalles' => $arPedidoDetalles,
-            'boolMostrarTodo' => $form->get('mostrarTodo')->getData(),
+        $arFacturaConceptos = new \Brasa\TurnoBundle\Entity\TurFacturaConcepto();
+        $arFacturaConceptos = $em->getRepository('BrasaTurnoBundle:TurFacturaConcepto')->findAll();        
+        return $this->render('BrasaTurnoBundle:Movimientos/Factura:detalleOtroNuevo.html.twig', array(
+            'arFacturaConceptos' => $arFacturaConceptos,
             'form' => $form->createView()));
     }    
     
@@ -394,7 +393,14 @@ class FacturaController extends Controller
             ->getForm();
         return $form;
     }    
-
+    
+    private function formularioDetalleOtroNuevo() {
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        return $form;
+    } 
+    
     private function actualizarDetalle($arrControles, $codigoFactura) {
         $em = $this->getDoctrine()->getManager();
         $intIndice = 0;

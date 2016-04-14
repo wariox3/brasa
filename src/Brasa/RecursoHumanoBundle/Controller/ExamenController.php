@@ -204,7 +204,7 @@ class ExamenController extends Controller
                 }    
             }
             if($form->get('BtnAprobarDetalle')->isClicked()) {
-                if($arExamen->getEstadoAutorizado() == 0) {
+                if($arExamen->getEstadoAutorizado() == 1) {
                     $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->aprobarDetallesSeleccionados($arrSeleccionados);
                     return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));
                 }

@@ -22,7 +22,7 @@ class FacturaConceptoController extends Controller
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurFacturaConcepto')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_base_cliente_lista'));
+                return $this->redirect($this->generateUrl('brs_tur_base_factura_concepto'));
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
@@ -56,9 +56,9 @@ class FacturaConceptoController extends Controller
             $em->persist($arFacturaConcepto);
             $em->flush();            
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_base_novedad_tipo_nuevo', array('codigoFacturaConcepto' => 0 )));
+                return $this->redirect($this->generateUrl('brs_tur_base_factura_conceto_nuevo', array('codigoFacturaConcepto' => 0 )));
             } else {
-                return $this->redirect($this->generateUrl('brs_tur_base_novedad_tipo'));
+                return $this->redirect($this->generateUrl('brs_tur_base_factura_concepto'));
             }                                   
         }
         return $this->render('BrasaTurnoBundle:Base/FacturaConcepto:nuevo.html.twig', array(
@@ -109,46 +109,18 @@ class FacturaConceptoController extends Controller
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'NIT')
-                    ->setCellValue('C1', 'NOMBRE')
-                    ->setCellValue('D1', 'ESTRATO')
-                    ->setCellValue('E1', 'CONTACTO')
-                    ->setCellValue('F1', 'TELEFONO')
-                    ->setCellValue('G1', 'CELULAR')
-                    ->setCellValue('H1', 'DIRECCION')
-                    ->setCellValue('I1', 'BARRIO')
-                    ->setCellValue('J1', 'CIUDAD')
-                    ->setCellValue('K1', 'FORMA PAGO')
-                    ->setCellValue('L1', 'PLAZO PAGO')
-                    ->setCellValue('M1', 'FINANCIERO')
-                    ->setCellValue('N1', 'CELULAR FINANCIERO')
-                    ->setCellValue('O1', 'GERENTE')
-                    ->setCellValue('P1', 'CELULAR GERENTE');
+                    ->setCellValue('B1', 'NOMBRE');
 
         $i = 2;
         
         $query = $em->createQuery($this->strDqlLista);
-                $arFacturaConceptos = new \Brasa\TurnoBundle\Entity\TurFacturaConcepto();
-                $arFacturaConceptos = $query->getResult();
+        $arFacturaConceptos = new \Brasa\TurnoBundle\Entity\TurFacturaConcepto();
+        $arFacturaConceptos = $query->getResult();
                 
         foreach ($arFacturaConceptos as $arFacturaConcepto) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arFacturaConcepto->getCodigoFacturaConceptoPk())
-                    ->setCellValue('B' . $i, $arFacturaConcepto->getNit())
-                    ->setCellValue('C' . $i, $arFacturaConcepto->getNombreCorto())
-                    ->setCellValue('D' . $i, $arFacturaConcepto->getEstrato())
-                    ->setCellValue('E' . $i, $arFacturaConcepto->getContacto())
-                    ->setCellValue('F' . $i, $arFacturaConcepto->getTelefonoContacto())
-                    ->setCellValue('G' . $i, $arFacturaConcepto->getCelularContacto())
-                    ->setCellValue('H' . $i, $arFacturaConcepto->getDireccion())
-                    ->setCellValue('I' . $i, $arFacturaConcepto->getBarrio())
-                    ->setCellValue('J' . $i, $arFacturaConcepto->getCiudadRel()->getNombre())
-                    ->setCellValue('K' . $i, $arFacturaConcepto->getFormaPagoRel()->getNombre())
-                    ->setCellValue('L' . $i, $arFacturaConcepto->getPlazoPago())
-                    ->setCellValue('M' . $i, $arFacturaConcepto->getFinanciero())
-                    ->setCellValue('N' . $i, $arFacturaConcepto->getCelularFinanciero())
-                    ->setCellValue('O' . $i, $arFacturaConcepto->getGerente())
-                    ->setCellValue('P' . $i, $arFacturaConcepto->getCelularGerente());                                    
+                    ->setCellValue('B' . $i, $arFacturaConcepto->getNombre());                                    
             $i++;
         }
         

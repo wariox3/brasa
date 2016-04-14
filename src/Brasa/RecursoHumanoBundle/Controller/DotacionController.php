@@ -151,7 +151,7 @@ class DotacionController extends Controller
                 }
             }            
             if($form->get('BtnImprimir')->isClicked()) {
-                if($arDotacion->getEstadoAutorizado() == 0) {
+                if($arDotacion->getEstadoAutorizado() == 1) {
                     $objFormatoDotacionDetalle = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDotacionDetalle();
                     $objFormatoDotacionDetalle->Generar($this, $codigoDotacion);
                 }    

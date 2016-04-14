@@ -133,7 +133,7 @@ class SeleccionController extends Controller
             }
 
             if($form->get('BtnAprobar')->isClicked()){
-                if($arSeleccion->getEstadoAutorizado() == 0) {
+                if($arSeleccion->getEstadoAutorizado() == 1) {
                     $strRespuesta = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->estadoAprobadoSelecciones($codigoSeleccion);
                     if ($strRespuesta == ''){
                         return $this->redirect($this->generateUrl('brs_rhu_seleccion_detalle', array('codigoSeleccion' => $codigoSeleccion)));

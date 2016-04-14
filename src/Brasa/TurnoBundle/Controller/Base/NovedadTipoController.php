@@ -22,7 +22,7 @@ class NovedadTipoController extends Controller
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurNovedadTipo')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_base_cliente_lista'));
+                return $this->redirect($this->generateUrl('brs_tur_base_novedad_tipo'));
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);

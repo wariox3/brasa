@@ -23,7 +23,7 @@ class TurFacturaConceptoRepository extends EntityRepository {
         $em = $this->getEntityManager();
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigo) {
-                $ar = $em->getRepository('BrasaTurnoBundle:TurConceptoServicio')->find($codigo);
+                $ar = $em->getRepository('BrasaTurnoBundle:TurFacturaConcepto')->find($codigo);
                 $em->remove($ar);
             }
             $em->flush();
