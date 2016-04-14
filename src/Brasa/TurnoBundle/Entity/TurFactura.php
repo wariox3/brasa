@@ -113,6 +113,11 @@ class TurFactura
      * @ORM\OneToMany(targetEntity="TurFacturaDetalle", mappedBy="facturaRel", cascade={"persist", "remove"})
      */
     protected $facturasDetallesFacturaRel; 
+
+    /**
+     * @ORM\OneToMany(targetEntity="TurFacturaDetalleConcepto", mappedBy="facturaRel", cascade={"persist", "remove"})
+     */
+    protected $facturasDetallesConceptosFacturaRel; 
     
     /**
      * Constructor
@@ -120,6 +125,7 @@ class TurFactura
     public function __construct()
     {
         $this->facturasDetallesFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facturasDetallesConceptosFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -469,6 +475,30 @@ class TurFactura
     }
 
     /**
+     * Set usuario
+     *
+     * @param string $usuario
+     *
+     * @return TurFactura
+     */
+    public function setUsuario($usuario)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return string
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -575,26 +605,36 @@ class TurFactura
     }
 
     /**
-     * Set usuario
+     * Add facturasDetallesConceptosFacturaRel
      *
-     * @param string $usuario
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosFacturaRel
      *
      * @return TurFactura
      */
-    public function setUsuario($usuario)
+    public function addFacturasDetallesConceptosFacturaRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosFacturaRel)
     {
-        $this->usuario = $usuario;
+        $this->facturasDetallesConceptosFacturaRel[] = $facturasDetallesConceptosFacturaRel;
 
         return $this;
     }
 
     /**
-     * Get usuario
+     * Remove facturasDetallesConceptosFacturaRel
      *
-     * @return string
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosFacturaRel
      */
-    public function getUsuario()
+    public function removeFacturasDetallesConceptosFacturaRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosFacturaRel)
     {
-        return $this->usuario;
+        $this->facturasDetallesConceptosFacturaRel->removeElement($facturasDetallesConceptosFacturaRel);
+    }
+
+    /**
+     * Get facturasDetallesConceptosFacturaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasDetallesConceptosFacturaRel()
+    {
+        return $this->facturasDetallesConceptosFacturaRel;
     }
 }

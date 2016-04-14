@@ -92,55 +92,7 @@ brs_tur_base_plantilla_detalle:
     
 brs_tur_base_plantilla_nuevo:
     path:     /tur/base/plantilla/nuevo/{codigoPlantilla}
-    defaults: { _controller: BrasaTurnoBundle:BasePlantilla:nuevo }
-   
-brs_tur_programacion_nuevo:
-   path:     /tur/programacion/nuevo/{codigoProgramacion}
-   defaults: { _controller: BrasaTurnoBundle:MovimientoProgramacion:nuevo }
-
-brs_tur_programacion_detalle:
-   path:     /tur/programacion/detalle/{codigoProgramacion}
-   defaults: { _controller: BrasaTurnoBundle:MovimientoProgramacion:detalle }
-
-brs_tur_programacion_detalle_nuevo:
-   path:     /tur/programacion/detalle/nuevo/{codigoProgramacion}/{codigoProgramacionDetalle}
-   defaults: { _controller: BrasaTurnoBundle:MovimientoProgramacion:detalleNuevo }      
-   
-brs_tur_programacion_detalle_nuevo_pedido:
-   path:     /tur/programacion/detalle/nuevo/pedido/{codigoProgramacion}/{codigoProgramacionDetalle}
-   defaults: { _controller: BrasaTurnoBundle:MovimientoProgramacion:detalleNuevoPedido }                                                                
-   
-brs_tur_factura_nuevo:
-   path:     /tur/factura/nuevo/{codigoFactura}
-   defaults: { _controller: BrasaTurnoBundle:MovimientoFactura:nuevo }
-
-brs_tur_factura_detalle:
-   path:     /tur/factura/detalle/{codigoFactura}
-   defaults: { _controller: BrasaTurnoBundle:MovimientoFactura:detalle }
-   
-brs_tur_factura_detalle_nuevo:
-   path:     /tur/factura/detalle/nuevo/{codigoFactura}
-   defaults: { _controller: BrasaTurnoBundle:MovimientoFactura:detalleNuevo }                                                  
-    
-brs_tur_proceso_generar_soporte_pago:
-    path:     /tur/proceso/generar/soporte/pago
-    defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarSoportePago:generar }
-    
-brs_tur_proceso_generar_soporte_pago_detalle:
-    path:     /tur/proceso/generar/soporte/pago/detalle/{codigoSoportePagoPeriodo}
-    defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarSoportePago:detalle }    
-
-brs_tur_proceso_generar_soporte_pago_editar:
-    path:     /tur/proceso/generar/soporte/pago/editar/{codigoSoportePago}
-    defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarSoportePago:editar }    
-    
-brs_tur_proceso_generar_soporte_pago_detalle_ver:
-    path:     /tur/proceso/generar/soporte/pago/detalle/ver/{codigoSoportePago}
-    defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarSoportePago:ver }
-    
-brs_tur_proceso_generar_soporte_pago_nuevo:
-    path:     /tur/proceso/generar/soporte/pago/nuevo/{codigoSoportePagoPeriodo}
-    defaults: { _controller: BrasaTurnoBundle:ProcesoGenerarSoportePago:nuevo }        
+    defaults: { _controller: BrasaTurnoBundle:BasePlantilla:nuevo }                                                                                                                                                
 
 brs_tur_utilidad_programacion_inconsistencias:    
     path:     /tur/utilidad/programacion/inconsistencias

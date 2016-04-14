@@ -1,15 +1,19 @@
 <?php
-namespace Brasa\TurnoBundle\Controller;
+namespace Brasa\TurnoBundle\Controller\Proceso;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurSoportePagoPeriodoType;
 use Brasa\TurnoBundle\Form\Type\TurSoportePagoType;
-class ProcesoGenerarSoportePagoController extends Controller
+class GenerarSoportePagoController extends Controller
 {
     var $strListaDql = "";
     var $strListaDqlDetalle = "";
 
+    /**
+     * @Route("/tur/proceso/generar/soporte/pago", name="brs_tur_proceso_generar_soporte_pago")
+     */     
     public function generarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -89,6 +93,9 @@ class ProcesoGenerarSoportePagoController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/proceso/generar/soporte/pago/detalle/{codigoSoportePagoPeriodo}", name="brs_tur_proceso_generar_soporte_pago_detalle")
+     */     
     public function detalleAction($codigoSoportePagoPeriodo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -115,6 +122,9 @@ class ProcesoGenerarSoportePagoController extends Controller
             'form' => $form->createView()));
     }    
 
+    /**
+     * @Route("/tur/proceso/generar/soporte/pago/ver/{codigoSoportePago}", name="brs_tur_proceso_generar_soporte_pago_ver")
+     */    
     public function verAction($codigoSoportePago) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -138,6 +148,9 @@ class ProcesoGenerarSoportePagoController extends Controller
             'form' => $form->createView()));
     }     
     
+    /**
+     * @Route("/tur/proceso/generar/soporte/pago/nuevo/{codigoSoportePagoPeriodo}", name="brs_tur_proceso_generar_soporte_pago_nuevo")
+     */    
     public function nuevoAction($codigoSoportePagoPeriodo) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -163,6 +176,9 @@ class ProcesoGenerarSoportePagoController extends Controller
             'form' => $form->createView()));
     }    
 
+    /**
+     * @Route("/tur/proceso/generar/soporte/pago/editar/{codigoSoportePago}", name="brs_tur_proceso_generar_soporte_pago_editar")
+     */     
     public function editarAction($codigoSoportePago) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();

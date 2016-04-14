@@ -137,7 +137,7 @@ class PedidoController extends Controller
                 if($arPedido->getEstadoProgramado() == 0 && $arPedido->getEstadoAutorizado() == 1) {                    
                     $codigoProgramacion = $this->programar($codigoPedido);
                     if($codigoProgramacion != 0) {
-                        return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));                                        
+                        return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));                                        
                     } else {
                         return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));                                        
                     }                    
@@ -147,7 +147,7 @@ class PedidoController extends Controller
                 if($arPedido->getEstadoFacturado() == 0 && $arPedido->getEstadoAutorizado() == 1) {                    
                     $codigoFactura = $em->getRepository('BrasaTurnoBundle:TurPedido')->facturar($codigoPedido,  $this->getUser()->getUsername());
                     if($codigoFactura != 0) {
-                        return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $codigoFactura)));                                        
+                        return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));                                        
                     } else {
                         return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));                                        
                     }                    

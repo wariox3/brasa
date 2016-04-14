@@ -1,10 +1,10 @@
 <?php
-namespace Brasa\TurnoBundle\Controller;
+namespace Brasa\TurnoBundle\Controller\Proceso;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-class ProcesoCierreMesController extends Controller
+class CierreMesController extends Controller
 {
     /**
      * @Route("/tur/proceso/cierre/mes", name="brs_tur_proceso_cierre_mes")

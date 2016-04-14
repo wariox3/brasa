@@ -1,11 +1,11 @@
 <?php
-namespace Brasa\TurnoBundle\Controller;
+namespace Brasa\TurnoBundle\Controller\Movimiento;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurProgramacionType;
-class MovimientoProgramacionController extends Controller
+class ProgramacionController extends Controller
 {
     var $strListaDql = "";
     
@@ -44,6 +44,9 @@ class MovimientoProgramacionController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/movimiento/programacion/nuevo/{codigoProgramacion}", name="brs_tur_movimiento_programacion_nuevo")
+     */    
     public function nuevoAction($codigoProgramacion) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -77,9 +80,9 @@ class MovimientoProgramacionController extends Controller
 
 
                     if($form->get('guardarnuevo')->isClicked()) {
-                        return $this->redirect($this->generateUrl('brs_tur_programacion_nuevo', array('codigoProgramacion' => 0 )));
+                        return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_nuevo', array('codigoProgramacion' => 0 )));
                     } else {
-                        return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $arProgramacion->getCodigoProgramacionPk())));
+                        return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $arProgramacion->getCodigoProgramacionPk())));
                     }
                 } else {
                     $objMensaje->Mensaje("error", "El cliente no existe", $this);
@@ -92,6 +95,9 @@ class MovimientoProgramacionController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/movimiento/programacion/detalle/{codigoProgramacion}", name="brs_tur_movimiento_programacion_detalle")
+     */    
     public function detalleAction($codigoProgramacion) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -114,14 +120,14 @@ class MovimientoProgramacionController extends Controller
                         $objMensaje->Mensaje('error', $strResultados, $this);
                     }
                 }
-                return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {
                 if($arProgramacion->getEstadoAutorizado() == 1) {
                     $arProgramacion->setEstadoAutorizado(0);
                     $em->persist($arProgramacion);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
+                    return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
                 }
             }
             if($form->get('BtnAprobar')->isClicked()) {
@@ -129,13 +135,13 @@ class MovimientoProgramacionController extends Controller
                     $arProgramacion->setEstadoAprobado(1);
                     $em->persist($arProgramacion);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
+                    return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
                 }
             }
             if($form->get('BtnDetalleActualizar')->isClicked()) {
                 $arrControles = $request->request->All();
                 $this->actualizarDetalle($arrControles, $codigoProgramacion);
-                return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
             }
             if($form->get('BtnDetalleEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -144,7 +150,7 @@ class MovimientoProgramacionController extends Controller
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 }
                 $em->getRepository('BrasaTurnoBundle:TurProgramacion')->liquidar($codigoProgramacion);
-                return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
             }
             if($form->get('BtnImprimir')->isClicked()) {
                 if($arProgramacion->getEstadoAutorizado() == 1) {
@@ -159,7 +165,7 @@ class MovimientoProgramacionController extends Controller
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 }
-                return $this->redirect($this->generateUrl('brs_tur_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
             }
         }
         $strAnioMes = $arProgramacion->getFecha()->format('Y/m');
@@ -180,6 +186,9 @@ class MovimientoProgramacionController extends Controller
                     ));
     }
 
+    /**
+     * @Route("/tur/movimiento/programacion/detalle/nuevo/{codigoProgramacion}/{codigoProgramacionDetalle}", name="brs_tur_movimiento_programacion_detalle_nuevo")
+     */        
     public function detalleNuevoAction($codigoProgramacion, $codigoProgramacionDetalle = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -220,6 +229,9 @@ class MovimientoProgramacionController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/movimiento/programacion/detalle/pedido/nuevo/{codigoProgramacion}/{codigoProgramacionDetalle}", name="brs_tur_movimiento_programacion_detalle_pedido_nuevo")
+     */        
     public function detalleNuevoPedidoAction($codigoProgramacion, $codigoProgramacionDetalle = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -249,6 +261,7 @@ class MovimientoProgramacionController extends Controller
             'arPedidosDetalle' => $arPedidosDetalle,
             'form' => $form->createView()));
     }
+
     /**
      * @Route("/tur/movimiento/programacion/detalle/resumen/{codigoProgramacionDetalle}", name="brs_tur_movimiento_programacion_detalle_resumen")
      */

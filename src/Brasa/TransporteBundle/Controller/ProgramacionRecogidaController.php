@@ -20,7 +20,7 @@ class ProgramacionRecogidaController extends Controller
             if ($form->get('BtnEliminar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTransporteBundle:TteProgramacionRecogida')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_programacion_lista'));                                 
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_lista'));                                 
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);

@@ -186,7 +186,7 @@
                     <td>{{ arProgramacionDetalle.dia31  }}</td>                     
                     <td style="text-align: right">{{ arProgramacionDetalle.horas | number_format(0, '.', ',') }}</td> 
                     <td>{{ arProgramacionDetalle.codigoPedidoDetalleFk }}</td>
-                    <td style="text-align: center"><a href="{{ path('brs_tur_programacion_detalle', { 'codigoProgramacion': arProgramacionDetalle.codigoProgramacionFk }) }}" target="_blanck"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                                        
+                    <td style="text-align: center"><a href="{{ path('brs_tur_movimiento_programacion_detalle', { 'codigoProgramacion': arProgramacionDetalle.codigoProgramacionFk }) }}" target="_blanck"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                                        
                 </tr>
             {% endfor %}
         </table>

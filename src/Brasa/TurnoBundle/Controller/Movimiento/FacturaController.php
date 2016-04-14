@@ -1,11 +1,11 @@
 <?php
-namespace Brasa\TurnoBundle\Controller;
+namespace Brasa\TurnoBundle\Controller\Movimiento;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurFacturaType;
-class MovimientoFacturaController extends Controller
+class FacturaController extends Controller
 {
     var $strListaDql = "";    
     var $boolMostrarTodo = "";
@@ -42,6 +42,9 @@ class MovimientoFacturaController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/movimiento/factura/nuevo/{codigoFactura}", name="brs_tur_movimiento_factura_nuevo")
+     */
     public function nuevoAction($codigoFactura) {
         $request = $this->getRequest();
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
@@ -83,9 +86,9 @@ class MovimientoFacturaController extends Controller
                     $em->flush();
 
                     if($form->get('guardarnuevo')->isClicked()) {
-                        return $this->redirect($this->generateUrl('brs_tur_factura_nuevo', array('codigoFactura' => 0 )));
+                        return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_nuevo', array('codigoFactura' => 0 )));
                     } else {
-                        return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $arFactura->getCodigoFacturaPk())));
+                        return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_detalle', array('codigoFactura' => $arFactura->getCodigoFacturaPk())));
                     }                    
                 } else {
                     $objMensaje->Mensaje("error", "El tercero no existe", $this);
@@ -97,6 +100,9 @@ class MovimientoFacturaController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/movimiento/factura/detalle/{codigoFactura}", name="brs_tur_movimiento_factura_detalle")
+     */
     public function detalleAction($codigoFactura) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -113,19 +119,19 @@ class MovimientoFacturaController extends Controller
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 }
-                return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $codigoFactura)));                                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));                                
             }    
             if($form->get('BtnDesAutorizar')->isClicked()) {                            
                 $strResultado = $em->getRepository('BrasaTurnoBundle:TurFactura')->desAutorizar($codigoFactura);
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 }
-                return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $codigoFactura)));                                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));                                
             }               
             if($form->get('BtnDetalleActualizar')->isClicked()) {   
                 $arrControles = $request->request->All();
                 $this->actualizarDetalle($arrControles, $codigoFactura);                                 
-                return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $codigoFactura)));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));
             }
 
             if($form->get('BtnAnular')->isClicked()) {                                 
@@ -133,13 +139,13 @@ class MovimientoFacturaController extends Controller
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 }
-                return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $codigoFactura)));                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));                
             }            
             if($form->get('BtnDetalleEliminar')->isClicked()) {   
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->eliminar($arrSeleccionados);
                 $em->getRepository('BrasaTurnoBundle:TurFactura')->liquidar($codigoFactura);
-                return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $codigoFactura)));
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));
             }
             if($form->get('BtnImprimir')->isClicked()) {
                 $strResultado = $em->getRepository('BrasaTurnoBundle:TurFactura')->imprimir($codigoFactura);
@@ -149,19 +155,25 @@ class MovimientoFacturaController extends Controller
                     $objFactura = new \Brasa\TurnoBundle\Formatos\FormatoFactura();
                     $objFactura->Generar($this, $codigoFactura);                    
                 }
-                return $this->redirect($this->generateUrl('brs_tur_factura_detalle', array('codigoFactura' => $codigoFactura)));                                                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));                                                
             }            
         }
 
         $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
         $arFacturaDetalle = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array ('codigoFacturaFk' => $codigoFactura));
+        $arFacturaDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto();
+        $arFacturaDetalleConcepto = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalleConcepto')->findBy(array ('codigoFacturaFk' => $codigoFactura));        
         return $this->render('BrasaTurnoBundle:Movimientos/Factura:detalle.html.twig', array(
                     'arFactura' => $arFactura,
                     'arFacturaDetalle' => $arFacturaDetalle,
+                    'arFacturaDetalleConcepto' => $arFacturaDetalleConcepto,
                     'form' => $form->createView()
                     ));
     }
-
+        
+    /**
+     * @Route("/tur/movimiento/factura/detalle/nuevo/{codigoFactura}", name="brs_tur_movimiento_factura_detalle_nuevo")
+     */
     public function detalleNuevoAction($codigoFactura) {
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
@@ -204,6 +216,52 @@ class MovimientoFacturaController extends Controller
             'boolMostrarTodo' => $form->get('mostrarTodo')->getData(),
             'form' => $form->createView()));
     }
+
+    /**
+     * @Route("/tur/movimiento/factura/detalle/otro/nuevo/{codigoFactura}", name="brs_tur_movimiento_factura_detalle_otro_nuevo")
+     */
+    public function detalleOtroNuevoAction($codigoFactura) {
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $em = $this->getDoctrine()->getManager();
+        $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
+        $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);        
+        $form = $this->formularioDetalleNuevo();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            if ($form->get('BtnGuardar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {    
+                    foreach ($arrSeleccionados AS $codigo) {
+                        $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigo);                        
+                        $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
+                        $arFacturaDetalle->setFacturaRel($arFactura);                        
+                        $arFacturaDetalle->setConceptoServicioRel($arPedidoDetalle->getConceptoServicioRel());
+                        $arFacturaDetalle->setPedidoDetalleRel($arPedidoDetalle);
+                        $arFacturaDetalle->setCantidad($arPedidoDetalle->getCantidad());
+                        $arFacturaDetalle->setVrPrecio($arPedidoDetalle->getVrTotalDetalle());                        
+                        $em->persist($arFacturaDetalle);  
+                        //$arPedidoDetalle->setEstadoFacturado(1);
+                        //$em->persist($arPedidoDetalle);  
+                    }
+                }
+                $em->flush();
+                $em->getRepository('BrasaTurnoBundle:TurFactura')->liquidar($codigoFactura);
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+            } 
+            if ($form->get('BtnFiltrar')->isClicked()) {            
+                $this->filtrarDetalleNuevo($form);
+            }
+        }
+        
+        $arFacturaDetalleConcepto = $paginator->paginate($em->createQuery($this->listaDetalleNuevo($arFactura->getCodigoClienteFk())), $request->query->get('page', 1), 500);        
+        return $this->render('BrasaTurnoBundle:Movimientos/Factura:detalleNuevo.html.twig', array(
+            'arFactura' => $arFactura,
+            'arPedidoDetalles' => $arPedidoDetalles,
+            'boolMostrarTodo' => $form->get('mostrarTodo')->getData(),
+            'form' => $form->createView()));
+    }    
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
@@ -298,10 +356,12 @@ class MovimientoFacturaController extends Controller
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
+        $arrBotonDetalleOtroEliminar = array('label' => 'Eliminar', 'disabled' => false);
         
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;                        
             $arrBotonDetalleEliminar['disabled'] = true;
+            $arrBotonDetalleOtroEliminar['disabled'] = true;
             $arrBotonDetalleActualizar['disabled'] = true;
             $arrBotonAnular['disabled'] = false; 
             if($ar->getEstadoAnulado() == 1) {
@@ -320,6 +380,7 @@ class MovimientoFacturaController extends Controller
                     ->add('BtnAnular', 'submit', $arrBotonAnular)                
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
+                    ->add('BtnDetalleOtroEliminar', 'submit', $arrBotonDetalleOtroEliminar)
                     ->getForm();
         return $form;
     }
