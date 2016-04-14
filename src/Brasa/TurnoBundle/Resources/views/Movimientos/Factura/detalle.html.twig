@@ -103,6 +103,8 @@
                         <tr>
                             <th>COD</th>
                             <th>SERVICIO</th>
+                            <th>PUESTO</th>
+                            <th>MODALIDAD</th>
                             <th>CANT</th>
                             <th>PRECIO</th>
                             <th>PED</th>
@@ -112,6 +114,8 @@
                             <tr>
                                 <td>{{ arFacturaDetalle.codigoFacturaDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arFacturaDetalle.codigoFacturaDetallePk }}"></td>
                                 <td>{{ arFacturaDetalle.conceptoServicioRel.nombre | default('') }}</td>                                    
+                                <td>{{ arFacturaDetalle.pedidoDetalleRel.puestoRel.nombre | default('') }}</td>                                    
+                                <td>{{ arFacturaDetalle.pedidoDetalleRel.modalidadServicioRel.nombre | default('') }}</td>                                    
                                 <td style="text-align: right">{{ arFacturaDetalle.cantidad | number_format(0, '.', ',') }}</td>                                    
                                 {% if arFactura.estadoAutorizado == 0 %}
                                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtPrecio{{ arFacturaDetalle.codigoFacturaDetallePk }}" value="{{ arFacturaDetalle.vrPrecio  }}" size="20" style="width:120px; text-align: right" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
