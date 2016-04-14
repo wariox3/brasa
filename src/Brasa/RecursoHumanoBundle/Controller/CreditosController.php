@@ -219,7 +219,7 @@ class CreditosController extends Controller
                             $em->persist($arCredito);
                             $em->flush();
                             if($form->get('guardarnuevo')->isClicked()) {
-                                return $this->redirect($this->generateUrl('brs_rhu_credito_nuevo', array('codigoCredito' => 0 )));
+                                return $this->redirect($this->generateUrl('brs_rhu_creditos_nuevo', array('codigoCredito' => 0 )));
                             } else {
                                 return $this->redirect($this->generateUrl('brs_rhu_creditos_lista'));
                             }                        
