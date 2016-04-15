@@ -23,6 +23,11 @@ class TurFacturaConcepto
     private $nombre;     
 
     /**
+     * @ORM\Column(name="por_iva", type="integer")
+     */
+    private $porIva = 0;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurFacturaDetalleConcepto", mappedBy="facturaConceptoRel")
      */
     protected $facturasDetallesConceptosFacturaConceptoRel; 
@@ -101,5 +106,29 @@ class TurFacturaConcepto
     public function getFacturasDetallesConceptosFacturaConceptoRel()
     {
         return $this->facturasDetallesConceptosFacturaConceptoRel;
+    }
+
+    /**
+     * Set porIva
+     *
+     * @param integer $porIva
+     *
+     * @return TurFacturaConcepto
+     */
+    public function setPorIva($porIva)
+    {
+        $this->porIva = $porIva;
+
+        return $this;
+    }
+
+    /**
+     * Get porIva
+     *
+     * @return integer
+     */
+    public function getPorIva()
+    {
+        return $this->porIva;
     }
 }

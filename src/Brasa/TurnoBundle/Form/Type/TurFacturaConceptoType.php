@@ -10,7 +10,8 @@ class TurFacturaConceptoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder                      
-            ->add('nombre', 'text', array('required' => true))  
+            ->add('nombre', 'text', array('required' => true)) 
+            ->add('porIva', 'number')                
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

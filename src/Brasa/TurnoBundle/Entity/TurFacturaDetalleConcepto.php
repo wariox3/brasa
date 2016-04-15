@@ -25,7 +25,7 @@ class TurFacturaDetalleConcepto
     /**
      * @ORM\Column(name="codigo_factura_concepto_fk", type="integer")
      */    
-    private $codigoFacturaConceptoFk;    
+    private $codigoFacturaConceptoFk;        
     
     /**
      * @ORM\Column(name="cantidad", type="float")
@@ -33,9 +33,29 @@ class TurFacturaDetalleConcepto
     private $cantidad = 0;    
     
     /**
-     * @ORM\Column(name="vr_precio", type="float")
+     * @ORM\Column(name="precio", type="float")
      */
-    private $vrPrecio = 0;     
+    private $precio = 0;     
+    
+    /**
+     * @ORM\Column(name="por_iva", type="integer")
+     */
+    private $porIva = 0;    
+
+    /**
+     * @ORM\Column(name="iva", type="float")
+     */
+    private $iva = 0;         
+    
+    /**
+     * @ORM\Column(name="subtotal", type="float")
+     */
+    private $subtotal = 0;    
+
+    /**
+     * @ORM\Column(name="total", type="float")
+     */
+    private $total = 0;    
     
     /**
      * @ORM\ManyToOne(targetEntity="TurFactura", inversedBy="facturasDetallesConceptosFacturaRel")
@@ -202,5 +222,125 @@ class TurFacturaDetalleConcepto
     public function getFacturaConceptoRel()
     {
         return $this->facturaConceptoRel;
+    }
+
+    /**
+     * Set porIva
+     *
+     * @param integer $porIva
+     *
+     * @return TurFacturaDetalleConcepto
+     */
+    public function setPorIva($porIva)
+    {
+        $this->porIva = $porIva;
+
+        return $this;
+    }
+
+    /**
+     * Get porIva
+     *
+     * @return integer
+     */
+    public function getPorIva()
+    {
+        return $this->porIva;
+    }
+
+    /**
+     * Set precio
+     *
+     * @param float $precio
+     *
+     * @return TurFacturaDetalleConcepto
+     */
+    public function setPrecio($precio)
+    {
+        $this->precio = $precio;
+
+        return $this;
+    }
+
+    /**
+     * Get precio
+     *
+     * @return float
+     */
+    public function getPrecio()
+    {
+        return $this->precio;
+    }
+
+    /**
+     * Set subtotal
+     *
+     * @param float $subtotal
+     *
+     * @return TurFacturaDetalleConcepto
+     */
+    public function setSubtotal($subtotal)
+    {
+        $this->subtotal = $subtotal;
+
+        return $this;
+    }
+
+    /**
+     * Get subtotal
+     *
+     * @return float
+     */
+    public function getSubtotal()
+    {
+        return $this->subtotal;
+    }
+
+    /**
+     * Set total
+     *
+     * @param float $total
+     *
+     * @return TurFacturaDetalleConcepto
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
+
+        return $this;
+    }
+
+    /**
+     * Get total
+     *
+     * @return float
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
+     * Set iva
+     *
+     * @param float $iva
+     *
+     * @return TurFacturaDetalleConcepto
+     */
+    public function setIva($iva)
+    {
+        $this->iva = $iva;
+
+        return $this;
+    }
+
+    /**
+     * Get iva
+     *
+     * @return float
+     */
+    public function getIva()
+    {
+        return $this->iva;
     }
 }

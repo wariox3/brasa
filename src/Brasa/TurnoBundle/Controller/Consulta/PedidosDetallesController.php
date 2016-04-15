@@ -1,10 +1,10 @@
 <?php
-namespace Brasa\TurnoBundle\Controller;
+namespace Brasa\TurnoBundle\Controller\Consulta;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-class ConsultaPedidosDetallesController extends Controller
+class PedidosDetallesController extends Controller
 {
     var $strListaDql = "";
     

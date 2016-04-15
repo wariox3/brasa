@@ -217,7 +217,7 @@
             <div class="btn-toolbar" style="float: right">
                 <div class="btn-group">
                     {% if arProgramacion.estadoAutorizado == 0 %}
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_programacion_detalle_nuevo_pedido', {'codigoProgramacion': arProgramacion.codigoProgramacionPk, 'codigoProgramacionDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 1200)">Nuevo de pedido</a>
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_programacion_detalle_pedido_nuevo', {'codigoProgramacion': arProgramacion.codigoProgramacionPk, 'codigoProgramacionDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 1200)">Nuevo de pedido</a>
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_programacion_detalle_nuevo', {'codigoProgramacion': arProgramacion.codigoProgramacionPk, 'codigoProgramacionDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 1200)">Nuevo libre</a>                
                     {% endif %}            
                 </div>

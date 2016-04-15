@@ -76,6 +76,12 @@ class TurFacturaRepository extends EntityRepository {
             $floRetencionFuente = ($floBaseAIU * 2 ) / 100;
         }
         
+        $arFacturasDetalleConceptos = new \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto();        
+        $arFacturasDetalleConceptos = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalleConcepto')->findBy(array('codigoFacturaFk' => $codigoFactura));                         
+        foreach ($arFacturasDetalleConceptos as $arFacturasDetalleConcepto) {
+            $floSubTotal += $arFacturasDetalleConceptos->getSubtotal();
+            $floIva += $arFacturasDetalleConceptos->getIva();
+        }
         $floTotal = $floSubTotal + $floIva - $floRetencionFuente;
         $arFactura->setVrBaseAIU($floBaseAIU);
         $arFactura->setVrSubtotal($floSubTotal);

@@ -33,13 +33,15 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arFacturaConceptos, 'CÓDIGO', 'p.codigoFacturaConceptoPk') }}</th>
                 <th>NOMBRE</th>
-                <th>TURNO</th>
+                <th>%IVA</th>
+                <th></th>
                 <th></th>
             </tr>
             {% for arFacturaConceptos in arFacturaConceptos %}
             <tr>
                 <td>{{ arFacturaConceptos.codigoFacturaConceptoPk  }}</td>
                 <td>{{ arFacturaConceptos.nombre }}</td>                
+                <td>{{ arFacturaConceptos.porIva }}</td>                
                 <td style="text-align: center"><a href="{{ path('brs_tur_base_factura_concepto_nuevo', {'codigoFacturaConcepto': arFacturaConceptos.codigoFacturaConceptoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturaConceptos.codigoFacturaConceptoPk }}" /></td>
             </tr>
