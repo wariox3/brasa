@@ -123,7 +123,7 @@ class GenerarSoportePagoController extends Controller
     }    
 
     /**
-     * @Route("/tur/proceso/generar/soporte/pago/ver/{codigoSoportePago}", name="brs_tur_proceso_generar_soporte_pago_ver")
+     * @Route("/tur/proceso/generar/soporte/pago/detalle/ver/{codigoSoportePago}", name="brs_tur_proceso_generar_soporte_pago_detalle_ver")
      */    
     public function verAction($codigoSoportePago) {
         $em = $this->getDoctrine()->getManager();
