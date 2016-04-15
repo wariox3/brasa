@@ -5,9 +5,9 @@ jQuery(document).ready(function() {
         Fullscreen background
     */
     $.backstretch([
-                    "/visitante/web/login/img/backgrounds/2.jpg"
-	              , "/visitante/web/login/img/backgrounds/3.jpg"
-	              , "/visitante/web/login/img/backgrounds/1.jpg"
+                    urlImagenes + "/backgrounds/2.jpg"
+	              , urlImagenes + "/backgrounds/3.jpg"
+	              , urlImagenes + "/backgrounds/1.jpg"
 	             ], {duration: 3000, fade: 750});
     
     /*
