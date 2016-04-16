@@ -51,6 +51,7 @@ class RequisitosController extends Controller
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');
         $request = $this->getRequest();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arRequisito = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisito();
         $arRequisito = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisito')->find($codigoRequisito);
         $form = $this->formularioDetalle($arRequisito);
@@ -58,10 +59,15 @@ class RequisitosController extends Controller
         if($form->isValid()) {
             if($form->get('BtnAutorizar')->isClicked()) {
                 if($arRequisito->getEstadoAutorizado() == 0) {
-                    $arRequisito->setEstadoAutorizado(1);
-                    $em->persist($arRequisito);
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_requisito_detalle', array('codigoRequisito' => $codigoRequisito)));
+                    $arRequisitosDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoDetalle')->findBy(array('codigoRequisitoFk' => $codigoRequisito));
+                    if ($arRequisitosDetalle != null){
+                        $arRequisito->setEstadoAutorizado(1);
+                        $em->persist($arRequisito);
+                        $em->flush();
+                        return $this->redirect($this->generateUrl('brs_rhu_requisito_detalle', array('codigoRequisito' => $codigoRequisito)));
+                    } else {
+                        $objMensaje->Mensaje("error", "Los requisitos no tienen detalles, no se puede autorizar", $this);
+                    }
                 }
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {

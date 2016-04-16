@@ -57,10 +57,14 @@ class LiquidacionesController extends Controller
                     if ($registrosDotacionesPendientes > 0){
                         $objMensaje->Mensaje("error", "El empleado tiene dotaciones pendientes por entregar, no se puede autorizar la liquidación", $this);
                     }else{
-                        $arLiquidacion->setEstadoAutorizado(1);
-                        $em->persist($arLiquidacion);
-                        $em->flush();
-                        return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));
+                        if ($arLiquidacion->getEstadoGenerado() == 0){
+                            $objMensaje->Mensaje("error", "La liquidacion debe ser liquidada antes de autorizar", $this);
+                        } else {
+                            $arLiquidacion->setEstadoAutorizado(1);
+                            $em->persist($arLiquidacion);
+                            $em->flush();
+                            return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));
+                        }
                     }                    
                 }
                     

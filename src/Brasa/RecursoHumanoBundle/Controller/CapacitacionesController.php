@@ -51,7 +51,8 @@ class CapacitacionesController extends Controller
     public function detalleAction($codigoCapacitacion) {
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');
-        $request = $this->getRequest();        
+        $request = $this->getRequest();   
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arCapacitacion = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacion();
         $arCapacitacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacion')->find($codigoCapacitacion);        
         $form = $this->formularioDetalle($arCapacitacion);
@@ -71,10 +72,16 @@ class CapacitacionesController extends Controller
             }            
             if($form->get('BtnAutorizar')->isClicked()) {
                 if ($arCapacitacion->getEstadoAutorizado() == 0){
-                    $arCapacitacion->setEstadoAutorizado(1);
-                    $em->persist($arCapacitacion);
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_capacitacion_detalle', array('codigoCapacitacion' => $codigoCapacitacion)));           
+                    $arCapacitacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionDetalle')->findBy(array('codigoCapacitacionFk' => $codigoCapacitacion));
+                    if ($arCapacitacionDetalle != null){
+                        $arCapacitacion->setEstadoAutorizado(1);
+                        $em->persist($arCapacitacion);
+                        $em->flush();
+                        return $this->redirect($this->generateUrl('brs_rhu_capacitacion_detalle', array('codigoCapacitacion' => $codigoCapacitacion)));           
+                    } else {
+                        $objMensaje->Mensaje("error", "La capacitación no tiene detalles, no se puede autorizar", $this);
+                    }
+                        
                 }    
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {

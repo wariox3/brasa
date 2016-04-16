@@ -117,10 +117,15 @@ class SeleccionController extends Controller
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if($form->get('BtnAutorizar')->isClicked()) {
                 if($arSeleccion->getEstadoAutorizado() == 0) {
-                    $arSeleccion->setEstadoAutorizado(1);
-                    $em->persist($arSeleccion);
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_seleccion_detalle', array('codigoSeleccion' => $codigoSeleccion)));
+                    $arSeleccionEntrevista = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionEntrevista')->findBy(array('codigoSeleccionFk' => $codigoSeleccion));
+                    if ($arSeleccionEntrevista != null){
+                        $arSeleccion->setEstadoAutorizado(1);
+                        $em->persist($arSeleccion);
+                        $em->flush();
+                        return $this->redirect($this->generateUrl('brs_rhu_seleccion_detalle', array('codigoSeleccion' => $codigoSeleccion)));
+                    } else {
+                        $objMensaje->Mensaje("error", "La selección no tiene entrevistas, no se puede autorizar", $this);
+                    }    
                 }
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {

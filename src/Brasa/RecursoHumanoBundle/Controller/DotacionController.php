@@ -136,10 +136,15 @@ class DotacionController extends Controller
         if($form->isValid()) {
             if($form->get('BtnAutorizar')->isClicked()) {            
                 if($arDotacion->getEstadoAutorizado() == 0) {
-                    $arDotacion->setEstadoAutorizado(1);
-                    $em->persist($arDotacion);
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_dotacion_detalle', array('codigoDotacion' => $codigoDotacion)));                                                
+                    $arDotacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionDetalle')->findBy(array('codigoDotacionFk' => $codigoDotacion));
+                    if ($arDotacionDetalle != null){
+                        $arDotacion->setEstadoAutorizado(1);
+                        $em->persist($arDotacion);
+                        $em->flush();
+                        return $this->redirect($this->generateUrl('brs_rhu_dotacion_detalle', array('codigoDotacion' => $codigoDotacion)));                                                
+                    } else {
+                        $objMensaje->Mensaje("error", "La dotación no tiene detalles, no se puede autorizar", $this);
+                    }    
                 }
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {            

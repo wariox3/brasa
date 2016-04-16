@@ -82,10 +82,15 @@ class PagoBancoController extends Controller
         if($form->isValid()) {            
             if($form->get('BtnAutorizar')->isClicked()) {
                 if ($arPagoBanco->getEstadoAutorizado() == 0){
-                    $arPagoBanco->setEstadoAutorizado(1);
-                    $em->persist($arPagoBanco);
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_pago_banco_detalle', array('codigoPagoBanco' => $codigoPagoBanco)));           
+                    $arPagoBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->findBy(array('codigoPagoBancoFk' => $codigoPagoBanco));
+                    if ($arPagoBancoDetalle != null){
+                        $arPagoBanco->setEstadoAutorizado(1);
+                        $em->persist($arPagoBanco);
+                        $em->flush();
+                        return $this->redirect($this->generateUrl('brs_rhu_pago_banco_detalle', array('codigoPagoBanco' => $codigoPagoBanco)));           
+                    } else {
+                        $objMensaje->Mensaje("error", "No hay detalles para los pagos al banco, no se puede autorizar", $this);
+                    }    
                 }
             }            
             if($form->get('BtnDesAutorizar')->isClicked()) {
@@ -121,9 +126,16 @@ class PagoBancoController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_pago_banco_detalle', array('codigoPagoBanco' => $codigoPagoBanco)));           
                 }    
             }
-            if($form->get('BtnArchivoBancolombia')->isClicked()) {
+            if($form->get('BtnArchivoBancolombiaPab')->isClicked()) {
                 if($arPagoBanco->getEstadoAutorizado() == 1) {
-                    $this->generarArchivoBancolombia($arPagoBanco);
+                    $this->generarArchivoBancolombiaPab($arPagoBanco);
+                } else {
+                    $objMensaje->Mensaje('error', 'El pago al banco debe estar autorizado', $this);
+                }
+            }
+            if($form->get('BtnArchivoBancolombiaSap')->isClicked()) {
+                if($arPagoBanco->getEstadoAutorizado() == 1) {
+                    $this->generarArchivoBancolombiaSap($arPagoBanco);
                 } else {
                     $objMensaje->Mensaje('error', 'El pago al banco debe estar autorizado', $this);
                 }
@@ -308,7 +320,8 @@ class PagoBancoController extends Controller
         $arrBotonEliminarDetalle = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);        
-        $arrBotonArchivoBancolombia = array('label' => 'Bancolombia', 'disabled' => false);        
+        $arrBotonArchivoBancolombiaPab = array('label' => 'Bancolombia Pab', 'disabled' => false);
+        $arrBotonArchivoBancolombiaSap = array('label' => 'Bancolombia Sap', 'disabled' => false);        
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;
             $arrBotonEliminarDetalle['disabled'] = true;
@@ -320,20 +333,21 @@ class PagoBancoController extends Controller
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)            
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)                                
-                    ->add('BtnArchivoBancolombia', 'submit', $arrBotonArchivoBancolombia)
+                    ->add('BtnArchivoBancolombiaPab', 'submit', $arrBotonArchivoBancolombiaPab)
+                    ->add('BtnArchivoBancolombiaSap', 'submit', $arrBotonArchivoBancolombiaSap)
                     ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)
                     ->getForm();  
         return $form;
     }    
     
-    private function generarArchivoBancolombia ($arPagoBanco) {
+    private function generarArchivoBancolombiaPab ($arPagoBanco) {
         $em = $this->getDoctrine()->getManager();
         //$arPagoBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco();
         $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-        $strNombreArchivo = "pago" . date('YmdHis') . ".txt";
-        $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
-        //$strArchivo = "c:/xampp/" . $strNombreArchivo;                                    
+        $strNombreArchivo = "pagoPab" . date('YmdHis') . ".txt";
+        //$strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
+        $strArchivo = "c:/xampp/" . $strNombreArchivo;                                    
         ob_clean();
         $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
         $strValorTotal = 0;
@@ -359,6 +373,61 @@ class PagoBancoController extends Controller
             fputs($ar, "6"); //(1)Tipo registro            
             fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getNumeroIdentificacion(), "0", 15)); //(15) Nit del beneficiario           
             fputs($ar, $this->RellenarNr(utf8_decode(substr($arPagoBancoDetalle->getNombreCorto(), 0, 18)),"0", 18)); // (18) Nombre del beneficiario
+            fputs($ar, "005600078"); // (9) Banco cuenta del beneficiario
+            fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getCuenta(), "0", 17)); // (17) Nro cuenta beneficiario
+            fputs($ar, "S37"); // (3) Indicador de lugar de pago (S) y tipo de transacción (37)
+            $duoValorNetoPagar = round($arPagoBancoDetalle->getVrPago()); // (17) Valor transacción
+            fputs($ar, ($this->RellenarNr($duoValorNetoPagar, "0", 10)));
+            fputs($ar, "                      ");
+            fputs($ar, "\n");
+        }
+        fclose($ar);
+        $em->flush();
+        //Fin cuerpo                        
+        header('Content-Description: File Transfer');
+        header('Content-Type: text/csv; charset=ISO-8859-15');
+        header('Content-Disposition: attachment; filename='.basename($strArchivo));
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($strArchivo));
+        readfile($strArchivo);
+        exit;         
+    }
+    
+    private function generarArchivoBancolombiaSap ($arPagoBanco) {
+        $em = $this->getDoctrine()->getManager();
+        //$arPagoBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco();
+        $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $strNombreArchivo = "pagoSap" . date('YmdHis') . ".txt";
+        //$strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
+        $strArchivo = "c:/xampp/" . $strNombreArchivo;                                    
+        ob_clean();
+        $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
+        $strValorTotal = 0;
+        $arPagosBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
+        $arPagosBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->findBy(array ('codigoPagoBancoFk' => $arPagoBanco->getCodigoPagoBancoPk()));                        
+        foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
+            $strValorTotal += round($arPagoBancoDetalle->getVrPago());
+        }        
+        // Encabezado
+        $strNitEmpresa = $this->RellenarNr(utf8_decode($arConfiguracionGeneral->getNitEmpresa()),"0",15);
+        $strNombreEmpresa = $this->RellenarNr(utf8_decode(substr($arConfiguracionGeneral->getNombreEmpresa(), 0, 16)), 0, 16);
+        $strTipoPagoSecuencia = "225PAGO NOMI ";
+        $strSecuencia = $arPagoBanco->getSecuencia();
+        $strFechaCreacion = $arPagoBanco->getFechaTrasmision()->format('Ymd');                                                                                            
+        $strFechaAplicacion = $arPagoBanco->getFechaAplicacion()->format('Ymd');
+        $strNumeroRegistros = $this->RellenarNr($arPagoBanco->getNumeroRegistros(), "0", 6);
+        $strValorTotal = $this->RellenarNr($strValorTotal, "0", 34);
+        //Fin encabezado
+        //(1) Tipo de registro, (10) Nit empresa, (225PAGO NOMI) descripcion transacion, (yymmdd) fecha creacion, (yymmdd) fecha aplicacion, (6) Numero de registros, (17) sumatoria de creditos, (11) Cuenta cliente a debitar, (1) Tipo de cuenta a debitar         
+        fputs($ar, "1" . $strNitEmpresa . $strTipoPagoSecuencia . $strFechaCreacion . $strSecuencia . $strFechaAplicacion . $strNumeroRegistros . $strValorTotal . $arPagoBanco->getCuentaRel()->getCuenta() . $arPagoBanco->getCuentaRel()->getTipo() . "\n");
+        //Inicio cuerpo
+        foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
+            fputs($ar, "6"); //(1)Tipo registro            
+            fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getNumeroIdentificacion(), "0", 15)); //(15) Nit del beneficiario           
+            fputs($ar, $this->RellenarNr(utf8_decode(substr($arPagoBancoDetalle->getNombreCorto(), 0, 30)),"0", 18)); // (18) Nombre del beneficiario
             fputs($ar, "005600078"); // (9) Banco cuenta del beneficiario
             fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getCuenta(), "0", 17)); // (17) Nro cuenta beneficiario
             fputs($ar, "S37"); // (3) Indicador de lugar de pago (S) y tipo de transacción (37)

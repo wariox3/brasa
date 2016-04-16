@@ -588,7 +588,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $strMensaje = "No se puede generar programacion porque el año es mayor al ultimo año cerrado";
             }                            
         } else {
-            $strMensaje = "Solo se pueden generar programaciones que no esten generadas y que tengan empleados";
+            $strMensaje = "Solo se pueden generar programaciones que no esten generadas y que tengan empleados o tiene inconsistencias en la programacion";
         }        
         set_time_limit(90);
         return $strMensaje;
