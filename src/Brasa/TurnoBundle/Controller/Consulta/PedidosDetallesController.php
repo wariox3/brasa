@@ -136,10 +136,10 @@ class PedidosDetallesController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'AF'; $col++) {
+        for($col = 'A'; $col !== 'AI'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
         }      
-        for($col = 'AD'; $col !== 'AF'; $col++) {            
+        for($col = 'AD'; $col !== 'AI'; $col++) {            
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }        
         $objPHPExcel->setActiveSheetIndex(0)
@@ -169,11 +169,14 @@ class PedidosDetallesController extends Controller
                     ->setCellValue('X1', 'DO')
                     ->setCellValue('Y1', 'FE')
                     ->setCellValue('Z1', 'H')
-                    ->setCellValue('AA1', 'H.D')
-                    ->setCellValue('AB1', 'H.N')
-                    ->setCellValue('AC1', 'DIAS')
-                    ->setCellValue('AD1', 'VALOR')
-                    ->setCellValue('AE1', 'VR.PEND');
+                    ->setCellValue('AA1', 'HD')
+                    ->setCellValue('AB1', 'HN')
+                    ->setCellValue('AC1', 'HP')
+                    ->setCellValue('AD1', 'HDP')
+                    ->setCellValue('AE1', 'HNP')                
+                    ->setCellValue('AF1', 'DIAS')
+                    ->setCellValue('AG1', 'VALOR')
+                    ->setCellValue('AH1', 'VR.PEND');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -208,9 +211,12 @@ class PedidosDetallesController extends Controller
                     ->setCellValue('Z' . $i, $arPedidoDetalle->getHoras())
                     ->setCellValue('AA' . $i, $arPedidoDetalle->getHorasDiurnas())
                     ->setCellValue('AB' . $i, $arPedidoDetalle->getHorasNocturnas())
-                    ->setCellValue('AC' . $i, $arPedidoDetalle->getDias())
-                    ->setCellValue('AD' . $i, $arPedidoDetalle->getVrTotalDetalle())
-                    ->setCellValue('AE' . $i, $arPedidoDetalle->getVrTotalDetallePendiente());
+                    ->setCellValue('AC' . $i, $arPedidoDetalle->getHorasProgramadas())
+                    ->setCellValue('AD' . $i, $arPedidoDetalle->getHorasDiurnasProgramadas())
+                    ->setCellValue('AE' . $i, $arPedidoDetalle->getHorasNocturnasProgramadas())
+                    ->setCellValue('AF' . $i, $arPedidoDetalle->getDias())
+                    ->setCellValue('AG' . $i, $arPedidoDetalle->getVrTotalDetalle())
+                    ->setCellValue('AH' . $i, $arPedidoDetalle->getVrTotalDetallePendiente());
             if($arPedidoDetalle->getPuestoRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('I' . $i, $arPedidoDetalle->getPuestoRel()->getNombre());

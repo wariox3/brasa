@@ -79,13 +79,13 @@ class TurPedidoRepository extends EntityRepository {
         $arPedidosDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();        
         $arPedidosDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigoPedido));         
         foreach ($arPedidosDetalle as $arPedidoDetalle) {
-            if($arPedidoDetalle->getPeriodoRel()->getCodigoPeriodoPk() == 2) {
+            if($arPedidoDetalle->getPeriodoRel()->getCodigoPeriodoPk() == 2 || $arPedidoDetalle->getLiquidarDiasReales() == 1) {
                 $intDias = $arPedidoDetalle->getDiaHasta() - $arPedidoDetalle->getDiaDesde();
                 $intDias += 1;
                 if($arPedidoDetalle->getDiaHasta() == 0 || $arPedidoDetalle->getDiaDesde() == 0) {
                     $intDias = 0;
                 }
-            } else {
+            } else {                
                 $intDias = 30;
             }
 
@@ -95,40 +95,108 @@ class TurPedidoRepository extends EntityRepository {
             $intDiasSabados = 0;
             $intDiasDominicales = 0;
             $intDiasFestivos = 0;
-            if($arPedidoDetalle->getPeriodoRel()->getCodigoPeriodoPk() == 1) {                
-                if($arPedidoDetalle->getLunes() == 1) {
-                    $intDiasOrdinarios += 4;
+            
+            
+            if($arPedidoDetalle->getPeriodoRel()->getCodigoPeriodoPk() == 1) {
+                if($arPedidoDetalle->getLiquidarDiasReales() == 0) {
+                    if($arPedidoDetalle->getLunes() == 1) {
+                        $intDiasOrdinarios += 4;
+                    }
+                    if($arPedidoDetalle->getMartes() == 1) {
+                        $intDiasOrdinarios += 4;
+                    }
+                    if($arPedidoDetalle->getMiercoles() == 1) {
+                        $intDiasOrdinarios += 4;
+                    }
+                    if($arPedidoDetalle->getJueves() == 1) {
+                        $intDiasOrdinarios += 4;
+                    }
+                    if($arPedidoDetalle->getViernes() == 1) {
+                        $intDiasOrdinarios += 4;
+                    }
+                    if($arPedidoDetalle->getSabado() == 1) {
+                        $intDiasSabados = 4;    
+                    }
+                    if($arPedidoDetalle->getDomingo() == 1) {
+                        $intDiasDominicales = 4;    
+                    }                
+                    if($arPedidoDetalle->getFestivo() == 1) {
+                        $intDiasFestivos = 2;    
+                    }                               
+                    $intTotalDias = $intDiasOrdinarios + $intDiasSabados + $intDiasDominicales + $intDiasFestivos;
+                    $intHorasRealesDiurnas = $arPedidoDetalle->getConceptoServicioRel()->getHorasDiurnas() * $intTotalDias;
+                    $intHorasRealesNocturnas = $arPedidoDetalle->getConceptoServicioRel()->getHorasNocturnas() * $intTotalDias;                                                
+                } else {
+                    $strFechaDesde = $arPedido->getFechaProgramacion()->format('Y-m') ."-". $arPedidoDetalle->getDiaDesde();
+                    $strFechaHasta = $arPedido->getFechaProgramacion()->format('Y-m') ."-". $arPedidoDetalle->getDiaHasta();
+                    $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($strFechaDesde, $strFechaHasta);
+                    $fecha = $strFechaDesde;
+                    for($i = 0; $i < $intDias; $i++) {
+                        $nuevafecha = strtotime ( '+'.$i.' day' , strtotime ( $fecha ) ) ;
+                        $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
+                        $dateNuevaFecha = date_create($nuevafecha);
+                        $diaSemana = $dateNuevaFecha->format('N');
+                        if($this->festivo($arFestivos, $dateNuevaFecha) == 1) {
+                            $intDiasFestivos += 1;
+                        } else {
+                            if($diaSemana == 1) {
+                                $intDiasOrdinarios += 1; 
+                                if($arPedidoDetalle->getLunes() == 1) {                   
+                                    $intHorasRealesDiurnas +=  $arPedidoDetalle->getConceptoServicioRel()->getHorasDiurnas();
+                                    $intHorasRealesNocturnas +=  $arPedidoDetalle->getConceptoServicioRel()->getHorasNocturnas();                        
+                                }
+                            } 
+                            if($diaSemana == 2) {
+                                $intDiasOrdinarios += 1; 
+                                if($arPedidoDetalle->getMartes() == 1) {                   
+                                    $intHorasRealesDiurnas +=  $arPedidoDetalle->getConceptoServicioRel()->getHorasDiurnas();
+                                    $intHorasRealesNocturnas +=  $arPedidoDetalle->getConceptoServicioRel()->getHorasNocturnas();                        
+                                }
+                            }                
+                            if($diaSemana == 3) {
+                                $intDiasOrdinarios += 1; 
+                                if($arPedidoDetalle->getMiercoles() == 1) {                   
+                                    $intHorasRealesDiurnas +=  $arPedidoDetalle->getConceptoServicioRel()->getHorasDiurnas();
+                                    $intHorasRealesNocturnas +=  $arPedidoDetalle->getConceptoServicioRel()->getHorasNocturnas();                        
+                                }
+                            }    
+                            if($diaSemana == 4) {
+                                $intDiasOrdinarios += 1; 
+                                if($arPedidoDetalle->getJueves() == 1) {                   
+                                    $intHorasRealesDiurnas +=  $arPedidoDetalle->getConceptoServicioRel()->getHorasDiurnas();
+                                    $intHorasRealesNocturnas +=  $arPedidoDetalle->getConceptoServicioRel()->getHorasNocturnas();                        
+                                }
+                            }                
+                            if($diaSemana == 5) {
+                                $intDiasOrdinarios += 1; 
+                                if($arPedidoDetalle->getViernes() == 1) {                   
+                                    $intHorasRealesDiurnas +=  $arPedidoDetalle->getConceptoServicioRel()->getHorasDiurnas();
+                                    $intHorasRealesNocturnas +=  $arPedidoDetalle->getConceptoServicioRel()->getHorasNocturnas();                        
+                                }
+                            }                
+                            if($diaSemana == 6) {
+                               $intDiasSabados += 1; 
+                                if($arPedidoDetalle->getSabado() == 1) {                   
+                                    $intHorasRealesDiurnas +=  $arPedidoDetalle->getConceptoServicioRel()->getHorasDiurnas();
+                                    $intHorasRealesNocturnas +=  $arPedidoDetalle->getConceptoServicioRel()->getHorasNocturnas();                        
+                                }                   
+                            }
+                            if($diaSemana == 7) {
+                               $intDiasDominicales += 1; 
+                                if($arPedidoDetalle->getDomingo() == 1) {                   
+                                    $intHorasRealesDiurnas +=  $arPedidoDetalle->getConceptoServicioRel()->getHorasDiurnas();
+                                    $intHorasRealesNocturnas +=  $arPedidoDetalle->getConceptoServicioRel()->getHorasNocturnas();                        
+                                }                   
+                            }                    
+                        }                                
+                    }                    
                 }
-                if($arPedidoDetalle->getMartes() == 1) {
-                    $intDiasOrdinarios += 4;
-                }
-                if($arPedidoDetalle->getMiercoles() == 1) {
-                    $intDiasOrdinarios += 4;
-                }
-                if($arPedidoDetalle->getJueves() == 1) {
-                    $intDiasOrdinarios += 4;
-                }
-                if($arPedidoDetalle->getViernes() == 1) {
-                    $intDiasOrdinarios += 4;
-                }
-                if($arPedidoDetalle->getSabado() == 1) {
-                    $intDiasSabados = 4;    
-                }
-                if($arPedidoDetalle->getDomingo() == 1) {
-                    $intDiasDominicales = 4;    
-                }                
-                if($arPedidoDetalle->getFestivo() == 1) {
-                    $intDiasFestivos = 2;    
-                }                               
-                $intTotalDias = $intDiasOrdinarios + $intDiasSabados + $intDiasDominicales + $intDiasFestivos;
-                $intHorasRealesDiurnas = $arPedidoDetalle->getConceptoServicioRel()->getHorasDiurnas() * $intTotalDias;
-                $intHorasRealesNocturnas = $arPedidoDetalle->getConceptoServicioRel()->getHorasNocturnas() * $intTotalDias;                            
             } else {
                 $strFechaDesde = $arPedido->getFechaProgramacion()->format('Y-m') ."-". $arPedidoDetalle->getDiaDesde();
                 $strFechaHasta = $arPedido->getFechaProgramacion()->format('Y-m') ."-". $arPedidoDetalle->getDiaHasta();
                 $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($strFechaDesde, $strFechaHasta);
                 $fecha = $strFechaDesde;
-                for($i = 1; $i <= $intDias; $i++) {
+                for($i = 0; $i < $intDias; $i++) {
                     $nuevafecha = strtotime ( '+'.$i.' day' , strtotime ( $fecha ) ) ;
                     $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
                     $dateNuevaFecha = date_create($nuevafecha);
@@ -234,7 +302,7 @@ class TurPedidoRepository extends EntityRepository {
         $em->persist($arPedido);
         $em->flush();
         return true;
-    }
+    }    
     
     public function festivo($arFestivos, $dateFecha) {
         $boolFestivo = 0;
@@ -380,4 +448,13 @@ class TurPedidoRepository extends EntityRepository {
         return $codigoFactura;
     }    
     
+    public function actualizarHorasProgramadas ($codigoPedido) {
+        $em = $this->getEntityManager();
+        $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+        $arPedidoDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigoPedido));
+        foreach($arPedidoDetalles as $arPedidoDetalle) {
+            $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->actualizarHorasProgramadas($arPedidoDetalle->getCodigoPedidoDetallePk());
+        }
+         $em->flush();               
+    }
 }

@@ -57,6 +57,11 @@ class TurServicioDetalle
      */    
     private $fechaHasta;              
     
+    /**     
+     * @ORM\Column(name="liquidarDiasReales", type="boolean")
+     */    
+    private $liquidarDiasReales = false;    
+    
     /**
      * @ORM\Column(name="dias", type="integer")
      */    
@@ -1174,5 +1179,29 @@ class TurServicioDetalle
     public function getPedidosDetallesServicioDetalleRel()
     {
         return $this->pedidosDetallesServicioDetalleRel;
+    }
+
+    /**
+     * Set liquidarDiasReales
+     *
+     * @param boolean $liquidarDiasReales
+     *
+     * @return TurServicioDetalle
+     */
+    public function setLiquidarDiasReales($liquidarDiasReales)
+    {
+        $this->liquidarDiasReales = $liquidarDiasReales;
+
+        return $this;
+    }
+
+    /**
+     * Get liquidarDiasReales
+     *
+     * @return boolean
+     */
+    public function getLiquidarDiasReales()
+    {
+        return $this->liquidarDiasReales;
     }
 }

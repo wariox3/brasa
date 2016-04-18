@@ -116,7 +116,7 @@ class TurServicioRepository extends EntityRepository {
             } else {
                 $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arServicioDetalle->getFechaDesde()->format('Y-m-d'), $arServicioDetalle->getFechaHasta()->format('Y-m-d'));
                 $fecha = $arServicioDetalle->getFechaDesde()->format('Y-m-j');
-                for($i = 1; $i <= $intDias; $i++) {
+                for($i = 0; $i < $intDias; $i++) {
                     $nuevafecha = strtotime ( '+'.$i.' day' , strtotime ( $fecha ) ) ;
                     $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
                     $dateNuevaFecha = date_create($nuevafecha);

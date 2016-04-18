@@ -117,5 +117,21 @@ class TurPedidoDetalleRepository extends EntityRepository {
         }
         return $intNumeroRegistros;
     }     
+ 
+    public function actualizarHorasProgramadas($codigoPedidoDetalle) {        
+        $em = $this->getEntityManager();
+        $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);
+        $dql   = "SELECT SUM(pd.horas) as horas, SUM(pd.horasDiurnas) as horasDiurnas, SUM(pd.horasNocturnas) as horasNocturnas FROM BrasaTurnoBundle:TurProgramacionDetalle pd "
+                . "WHERE pd.codigoPedidoDetalleFk = " . $codigoPedidoDetalle;
+        $query = $em->createQuery($dql);
+        $arrProgramacionDetalle = $query->getSingleResult(); 
+        if($arrProgramacionDetalle) {
+            $arPedidoDetalle->setHorasProgramadas($arrProgramacionDetalle['horas']);
+            $arPedidoDetalle->setHorasDiurnasProgramadas($arrProgramacionDetalle['horasDiurnas']);
+            $arPedidoDetalle->setHorasNocturnasProgramadas($arrProgramacionDetalle['horasNocturnas']);
+            $em->persist($arPedidoDetalle);
+        }       
+    }     
     
 }

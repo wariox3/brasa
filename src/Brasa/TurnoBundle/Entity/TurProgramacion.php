@@ -61,6 +61,16 @@ class TurProgramacion
      * @ORM\Column(name="horas", type="integer")
      */    
     private $horas = 0;    
+
+    /**
+     * @ORM\Column(name="horas_diurnas", type="integer")
+     */    
+    private $horasDiurnas = 0; 
+    
+    /**
+     * @ORM\Column(name="horas_nocturnas", type="integer")
+     */    
+    private $horasNocturnas = 0;     
     
     /**
      * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
@@ -422,5 +432,53 @@ class TurProgramacion
     public function getUsuario()
     {
         return $this->usuario;
+    }
+
+    /**
+     * Set horasDiurnas
+     *
+     * @param integer $horasDiurnas
+     *
+     * @return TurProgramacion
+     */
+    public function setHorasDiurnas($horasDiurnas)
+    {
+        $this->horasDiurnas = $horasDiurnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDiurnas
+     *
+     * @return integer
+     */
+    public function getHorasDiurnas()
+    {
+        return $this->horasDiurnas;
+    }
+
+    /**
+     * Set horasNocturnas
+     *
+     * @param integer $horasNocturnas
+     *
+     * @return TurProgramacion
+     */
+    public function setHorasNocturnas($horasNocturnas)
+    {
+        $this->horasNocturnas = $horasNocturnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNocturnas
+     *
+     * @return integer
+     */
+    public function getHorasNocturnas()
+    {
+        return $this->horasNocturnas;
     }
 }

@@ -87,6 +87,9 @@
                 <th>{{ knp_pagination_sortable(arProgramaciones, 'CÓDIGO', 'p.codigoProgramacionPk') }}</th>
                 <th>FECHA</th>
                 <th>CLIENTE</th>
+                <th>H</th>
+                <th>HD</th>
+                <th>HN</th>                
                 <th>AUT</th>
                 <th>ANU</th>                
                 <th></th>
@@ -98,6 +101,9 @@
                 <td>{{ arProgramaciones.codigoProgramacionPk  }}</td>
                 <td>{{ arProgramaciones.fecha |date("Y/m/d")  }}</td>
                 <td>{{ arProgramaciones.clienteRel.nombreCorto  }}</td>  
+                <td style="text-align: right">{{ arProgramaciones.horas | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProgramaciones.horasDiurnas | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProgramaciones.horasNocturnas | number_format(0, '.', ',') }}</td>                
                 <td>{% if arProgramaciones.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>                                
                 <td>{% if arProgramaciones.estadoAnulado == 1 %} SI {% else %} NO {% endif %}</td>                  
                 <td style="text-align: center">{% if arProgramaciones.estadoAutorizado == 0 %}<a href="{{ path('brs_tur_movimiento_programacion_nuevo', {'codigoProgramacion': arProgramaciones.codigoProgramacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                

@@ -103,7 +103,7 @@ class TurCotizacionRepository extends EntityRepository {
             } else {
                 $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arCotizacionDetalle->getFechaDesde()->format('Y-m-d'), $arCotizacionDetalle->getFechaHasta()->format('Y-m-d'));
                 $fecha = $arCotizacionDetalle->getFechaDesde()->format('Y-m-j');
-                for($i = 1; $i <= $intDias; $i++) {
+                for($i = 0; $i < $intDias; $i++) {
                     $nuevafecha = strtotime ( '+'.$i.' day' , strtotime ( $fecha ) ) ;
                     $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
                     $dateNuevaFecha = date_create($nuevafecha);

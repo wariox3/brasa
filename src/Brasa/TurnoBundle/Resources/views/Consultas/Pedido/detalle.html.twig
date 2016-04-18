@@ -5,7 +5,7 @@
     $(function () {
       $('[data-toggle="tooltip"]').tooltip()
     })
-</script>    
+</script> 
 <div class="container">
     <div class="page-header">
         <h3>Consulta pedidos detalle</h3>
@@ -87,14 +87,14 @@
             <tr>
                 <th>COD</th>                
                 <th>NUMERO</th>
-                <th>PUESTO</th>
-                <th></th>
+                <th>PUESTO</th>                
                 <th>TURNO</th>
                 <th>MODALIDAD</th>
                 <th>PERIODO</th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Liquidar dias reales">LDR</p></th>                            
                 <th>PLANTILLA</th>
-                <th>DESDE</th>
-                <th>HASTA</th>
+                <th>DES</th>
+                <th>HAS</th>
                 <th>CANT</th>
                 <th>LU</th>
                 <th>MA</th>
@@ -104,9 +104,9 @@
                 <th>SA</th>
                 <th>DO</th>
                 <th>FE</th>
-                <th>HORAS</th>
-                <th>H.D</th>
-                <th>H.N</th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Horas (Programadas)">H(P)</p></th>                            
+                <th><p data-toggle="tooltip" data-placement="top" title="Horas diurnas (Programadas)">HD(P)</p></th>                            
+                <th><p data-toggle="tooltip" data-placement="top" title="Horas nocturnas (Programadas)">HN(P)</p></th>
                 <th>DIAS</th>
                 <th>VALOR</th>
                 <th>VR.PEND</th>
@@ -122,13 +122,13 @@
                     {% set intCodigoCliente = arPedidosDetalles.pedidoRel.codigoClienteFk %}
                 {% endif %}                 
                 <tr>
-                    <td>{{ arPedidosDetalles.codigoPedidoDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arPedidosDetalles.codigoPedidoDetallePk }}"></td>                    
-                    <td>{{ arPedidosDetalles.pedidoRel.numero }}</td> 
-                    <td>{{ arPedidosDetalles.codigoPuestoFk }}</td> 
+                    <td><a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_pedido_detalle_resumen', {'codigoPedidoDetalle': arPedidosDetalles.codigoPedidoDetallePk }) }}', 'pedidoDetalleResumen', 600, 900)">{{ arPedidosDetalles.codigoPedidoDetallePk }}</a><input type="hidden" name="LblCodigo[]" value="{{ arPedidosDetalles.codigoPedidoDetallePk }}"></td>                                
+                    <td>{{ arPedidosDetalles.pedidoRel.numero }}</td>                     
                     <td>{{ arPedidosDetalles.puestoRel.nombre | default('') }}</td> 
                     <td>{{ arPedidosDetalles.conceptoServicioRel.nombre  }}</td>                    
                     <td>{{ arPedidosDetalles.modalidadServicioRel.nombre  }}</td>                    
                     <td>{{ arPedidosDetalles.periodoRel.nombre  }}</td>
+                    <td>{% if arPedidosDetalles.liquidarDiasReales == 1 %} SI {% else %} NO {% endif %}</td>                                                    
                     <td>{{ arPedidosDetalles.plantillaRel.nombre | default('')  }}</td>                                            
                     <td>{{ arPedidosDetalles.diaDesde }}</td>    
                     <td>{{ arPedidosDetalles.diaHasta }}</td>    
@@ -140,10 +140,11 @@
                     <td>{% if arPedidosDetalles.viernes == 1 %} SI {% else %} NO {% endif %}</td>
                     <td>{% if arPedidosDetalles.sabado == 1 %} SI {% else %} NO {% endif %}</td>
                     <td>{% if arPedidosDetalles.domingo == 1 %} SI {% else %} NO {% endif %}</td>
-                    <td>{% if arPedidosDetalles.festivo == 1 %} SI {% else %} NO {% endif %}</td>                    
-                    <td style="text-align: right">{{ arPedidosDetalles.horas | number_format(0, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arPedidosDetalles.horasDiurnas | number_format(0, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arPedidosDetalles.horasNocturnas | number_format(0, '.', ',') }}</td> 
+                    <td>{% if arPedidosDetalles.festivo == 1 %} SI {% else %} NO {% endif %}</td>                      
+                    
+                    <td style="text-align: right" {% if arPedidosDetalles.horas != arPedidosDetalles.horasProgramadas %} class="danger" {% endif %}>{{ arPedidosDetalles.horas | number_format(0, '.', ',') }}({{ arPedidosDetalles.horasProgramadas | number_format(0, '.', ',') }})</td> 
+                    <td style="text-align: right" {% if arPedidosDetalles.horasDiurnas != arPedidosDetalles.horasDiurnasProgramadas %} class="danger" {% endif %}>{{ arPedidosDetalles.horasDiurnas | number_format(0, '.', ',') }}({{ arPedidosDetalles.horasDiurnasProgramadas | number_format(0, '.', ',') }})</td> 
+                    <td style="text-align: right" {% if arPedidosDetalles.horasNocturnas != arPedidosDetalles.horasNocturnasProgramadas %} class="danger" {% endif %}>{{ arPedidosDetalles.horasNocturnas | number_format(0, '.', ',') }}({{ arPedidosDetalles.horasNocturnasProgramadas | number_format(0, '.', ',') }})</td> 
                     <td style="text-align: right">{{ arPedidosDetalles.dias | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arPedidosDetalles.vrTotalDetalle | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arPedidosDetalles.vrTotalDetallePendiente | number_format(0, '.', ',') }}</td> 

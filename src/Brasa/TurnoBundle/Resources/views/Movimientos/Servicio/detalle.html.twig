@@ -7,6 +7,11 @@
             $(this).tab('show');
         })
     </script>
+    <script>
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>    
     <div class="container">
         <div class="page-header">
             <h3>Detalle servicio</h3>
@@ -94,10 +99,13 @@
                         <tr>
                             <th>COD</th>
                             <th>PUESTO</th>
-                            <th></th>
+                            {% if arServicio.estadoAutorizado == 0 %}                                
+                                <th></th>                                
+                            {% endif %}                                                        
                             <th>SERVICIO</th>
                             <th>MODALIDAD</th>
                             <th>PERIODO</th>
+                            <th><p data-toggle="tooltip" data-placement="top" title="Liquidar dias reales">LDR</p></th>
                             <th>PLANTILLA</th>
                             <th>DESDE</th>
                             <th>HASTA</th>
@@ -124,18 +132,17 @@
                         {% for arServicioDetalle in arServicioDetalle %}
                             <tr>
                                 <td>{{ arServicioDetalle.codigoServicioDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arServicioDetalle.codigoServicioDetallePk }}"></td>
-                                    {% if arServicio.estadoAutorizado == 0 %}
+                                {% if arServicio.estadoAutorizado == 0 %}
                                     <td>
                                         <input class="input-grid" type="text" name="TxtPuesto{{ arServicioDetalle.codigoServicioDetallePk }}" id="TxtPuesto{{ arServicioDetalle.codigoServicioDetallePk }}" value="{{ arServicioDetalle.codigoPuestoFk  }}" size="10" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/>
                                         <a href="javascript:abrirVentana3('{{ path('brs_tur_buscar_puesto', {'campoCodigo': 'TxtPuesto' ~ arServicioDetalle.codigoServicioDetallePk, 'codigoCliente' : arServicio.codigoClienteFk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Buscar"></a>                            
-                                    </td>                        
-                                {% else %}
-                                    <td>{{ arServicioDetalle.codigoPuestoFk }}</td> 
+                                    </td>                                                                                             
                                 {% endif %}
                                 <td>{{ arServicioDetalle.puestoRel.nombre | default('') }}</td> 
                                 <td>{{ arServicioDetalle.conceptoServicioRel.nombre  }}</td>                    
                                 <td>{{ arServicioDetalle.modalidadServicioRel.nombre  }}</td>                    
                                 <td>{{ arServicioDetalle.periodoRel.nombre  }}</td>
+                                <td>{% if arServicioDetalle.liquidarDiasReales == 1 %} SI {% else %} NO {% endif %}</td>
                                 <td>{% if arServicioDetalle.codigoPlantillaFk is not null %} <a href="{{ path('brs_tur_base_plantilla_detalle', { 'codigoPlantilla': arServicioDetalle.codigoPlantillaFk }) }}" target="_blanck">{% endif %}{{ arServicioDetalle.plantillaRel.nombre | default('')  }}</a> ({{ arServicioDetalle.fechaIniciaPlantilla | date('Y/m/d')  }})</td>                    
                                 <td>{{ arServicioDetalle.fechaDesde |date('Y/m/d') }}</td>    
                                 <td>{{ arServicioDetalle.fechaHasta |date('Y/m/d') }}</td>                    

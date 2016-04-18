@@ -36,7 +36,7 @@ class TurCotizacionDetalle
      * @ORM\Column(name="codigo_periodo_fk", type="integer")
      */    
     private $codigoPeriodoFk;     
-    
+        
     /**
      * @ORM\Column(name="fecha_desde", type="date", nullable=true)
      */    
@@ -46,6 +46,11 @@ class TurCotizacionDetalle
      * @ORM\Column(name="fecha_hasta", type="date", nullable=true)
      */    
     private $fechaHasta;    
+    
+    /**     
+     * @ORM\Column(name="liquidarDiasReales", type="boolean")
+     */    
+    private $liquidarDiasReales = false;    
     
     /**
      * @ORM\Column(name="dias", type="integer")
@@ -843,5 +848,29 @@ class TurCotizacionDetalle
     public function getPeriodoRel()
     {
         return $this->periodoRel;
+    }
+
+    /**
+     * Set liquidarDiasReales
+     *
+     * @param boolean $liquidarDiasReales
+     *
+     * @return TurCotizacionDetalle
+     */
+    public function setLiquidarDiasReales($liquidarDiasReales)
+    {
+        $this->liquidarDiasReales = $liquidarDiasReales;
+
+        return $this;
+    }
+
+    /**
+     * Get liquidarDiasReales
+     *
+     * @return boolean
+     */
+    public function getLiquidarDiasReales()
+    {
+        return $this->liquidarDiasReales;
     }
 }

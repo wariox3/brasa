@@ -20,6 +20,7 @@ DELETE FROM tur_soporte_pago_detalle;
 DELETE FROM tur_soporte_pago;
 DELETE FROM tur_soporte_pago_periodo;
 DELETE FROM tur_factura_detalle;
+DELETE FROM tur_factura_detalle_concepto;
 DELETE FROM tur_factura;
 DELETE FROM tur_programacion_detalle;
 DELETE FROM tur_programacion;

@@ -36,13 +36,19 @@
                 <div class="col-sm-9">
                     {{ form_widget(form.puestoRel, { 'attr': {'class': 'form-control'} }) }}                        
                 </div>                
-            </div>                      
+            </div>    
+            <div class="form-group form-group-sm">
+                <label for="form_liquidarDiasReales" class="col-sm-3 control-label">Liquidar dias reales:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.liquidarDiasReales) }}
+                </div>
+            </div>                 
             <div class="form-group form-group-sm">
                 <label for="form_dia31" class="col-sm-3 control-label">Habilitar dia 31:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.dia31) }}
                 </div>
-            </div>                
+            </div>                    
             <div class="form-group form-group-sm">
                 <label for="form_cantidad" class="col-sm-3 control-label">Cantidad:</label>
                 <div class="col-sm-9">
@@ -56,7 +62,7 @@
                     Jue{{ form_widget(form.jueves) }} Vie{{ form_widget(form.viernes) }} Sab{{ form_widget(form.sabado) }} 
                     Dom{{ form_widget(form.domingo) }} Fes{{ form_widget(form.festivo) }}
                 </div>                
-            </div>                                                                                             
+            </div>               
         </div>
     </div>               
     <div class="modal-footer">        

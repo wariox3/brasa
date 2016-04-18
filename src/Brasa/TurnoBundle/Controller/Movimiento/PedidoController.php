@@ -290,6 +290,7 @@ class PedidoController extends Controller
                             $arPedidoDetalle->setFestivo($arCotizacionDetalle->getFestivo());                            
                             $arPedidoDetalle->setCantidad($arCotizacionDetalle->getCantidad());
                             $arPedidoDetalle->setVrPrecioAjustado($arCotizacionDetalle->getVrPrecioAjustado());
+                            $arPedidoDetalle->setLiquidarDiasReales($arCotizacionDetalle->getLiquidarDiasReales());
                     
                             $strAnioMes = $arPedido->getFechaProgramacion()->format('Y/m/');
                             $dateFechaDesde = date_create($strAnioMes . "1");
@@ -391,6 +392,7 @@ class PedidoController extends Controller
                         $arPedidoDetalle->setCantidad($arServicioDetalle->getCantidad());
                         $arPedidoDetalle->setVrPrecioAjustado($arServicioDetalle->getVrPrecioAjustado());
                         $arPedidoDetalle->setFechaIniciaPlantilla($arServicioDetalle->getFechaIniciaPlantilla());
+                        $arPedidoDetalle->setLiquidarDiasReales($arServicioDetalle->getLiquidarDiasReales());
                         
                         $strAnioMes = $arPedido->getFechaProgramacion()->format('Y/m/');
                         $dateFechaDesde = date_create($strAnioMes . "1");
@@ -565,10 +567,15 @@ class PedidoController extends Controller
         $arFacturaDetalles = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array('codigoPedidoDetalleFk' => $codigoPedidoDetalle));
         $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();       
         $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoPedidoDetalleFk' => $codigoPedidoDetalle));        
+        $arServicio = null;
+        if($arPedidoDetalle->getCodigoServicioDetalleFk()) {
+            $arServicio = $arPedidoDetalle->getServicioDetalleRel()->getServicioRel();
+        }
         return $this->render('BrasaTurnoBundle:Movimientos/Pedido:detalleResumen.html.twig', array(
                     'arPedidoDetalle' => $arPedidoDetalle,
                     'arFacturaDetalles' => $arFacturaDetalles,
-                    'arProgramacionDetalles' => $arProgramacionDetalles
+                    'arProgramacionDetalles' => $arProgramacionDetalles,
+                    'arServicio' => $arServicio
                     ));
     }    
     
@@ -927,7 +934,8 @@ class PedidoController extends Controller
             $codigoProgramacion = $arProgramacion->getCodigoProgramacionPk();
             foreach ($arPedidoDetalles as $arPedidoDetalle) {            
                 $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->nuevo($arPedidoDetalle->getCodigoPedidoDetallePk(), $arProgramacion);
-            }                    
+            }  
+            $em->getRepository('BrasaTurnoBundle:TurProgramacion')->liquidar($codigoProgramacion);
         }
         return $codigoProgramacion;
     }    

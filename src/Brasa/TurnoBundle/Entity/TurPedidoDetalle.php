@@ -62,6 +62,11 @@ class TurPedidoDetalle
      */    
     private $diaHasta = 1;         
     
+    /**     
+     * @ORM\Column(name="liquidarDiasReales", type="boolean")
+     */    
+    private $liquidarDiasReales = false;    
+    
     /**
      * @ORM\Column(name="dias", type="integer")
      */    
@@ -81,6 +86,21 @@ class TurPedidoDetalle
      * @ORM\Column(name="horas_nocturnas", type="integer")
      */    
     private $horasNocturnas = 0;     
+
+    /**
+     * @ORM\Column(name="horas_programadas", type="integer")
+     */    
+    private $horasProgramadas = 0;    
+
+    /**
+     * @ORM\Column(name="horas_diurnas_programadas", type="integer")
+     */    
+    private $horasDiurnasProgramadas = 0;     
+    
+    /**
+     * @ORM\Column(name="horas_nocturnas_programadas", type="integer")
+     */    
+    private $horasNocturnasProgramadas = 0; 
     
     /**
      * @ORM\Column(name="cantidad", type="integer")
@@ -1368,5 +1388,101 @@ class TurPedidoDetalle
     public function getCierresMesServiciosPedidoDetalleRel()
     {
         return $this->cierresMesServiciosPedidoDetalleRel;
+    }
+
+    /**
+     * Set liquidarDiasReales
+     *
+     * @param boolean $liquidarDiasReales
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setLiquidarDiasReales($liquidarDiasReales)
+    {
+        $this->liquidarDiasReales = $liquidarDiasReales;
+
+        return $this;
+    }
+
+    /**
+     * Get liquidarDiasReales
+     *
+     * @return boolean
+     */
+    public function getLiquidarDiasReales()
+    {
+        return $this->liquidarDiasReales;
+    }
+
+    /**
+     * Set horasProgramadas
+     *
+     * @param integer $horasProgramadas
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setHorasProgramadas($horasProgramadas)
+    {
+        $this->horasProgramadas = $horasProgramadas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasProgramadas
+     *
+     * @return integer
+     */
+    public function getHorasProgramadas()
+    {
+        return $this->horasProgramadas;
+    }
+
+    /**
+     * Set horasDiurnasProgramadas
+     *
+     * @param integer $horasDiurnasProgramadas
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setHorasDiurnasProgramadas($horasDiurnasProgramadas)
+    {
+        $this->horasDiurnasProgramadas = $horasDiurnasProgramadas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDiurnasProgramadas
+     *
+     * @return integer
+     */
+    public function getHorasDiurnasProgramadas()
+    {
+        return $this->horasDiurnasProgramadas;
+    }
+
+    /**
+     * Set horasNocturnasProgramadas
+     *
+     * @param integer $horasNocturnasProgramadas
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setHorasNocturnasProgramadas($horasNocturnasProgramadas)
+    {
+        $this->horasNocturnasProgramadas = $horasNocturnasProgramadas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNocturnasProgramadas
+     *
+     * @return integer
+     */
+    public function getHorasNocturnasProgramadas()
+    {
+        return $this->horasNocturnasProgramadas;
     }
 }

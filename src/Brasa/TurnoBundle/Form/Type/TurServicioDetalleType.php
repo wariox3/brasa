@@ -45,6 +45,7 @@ class TurServicioDetalleType extends AbstractType
             ->add('domingo', 'checkbox', array('required'  => false))
             ->add('festivo', 'checkbox', array('required'  => false))                                              
             ->add('dia31', 'checkbox', array('required'  => false))                            
+            ->add('liquidarDiasReales', 'checkbox', array('required'  => false))                            
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

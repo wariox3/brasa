@@ -7,6 +7,11 @@
             $(this).tab('show');
         })
     </script>
+    <script>
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>    
     <div class="container">        
         <div class="page-header">            
             <h3>Detalle pedido</h3>            
@@ -109,6 +114,7 @@
                             <th>SERVICIO</th>
                             <th>MODALIDAD</th>
                             <th>PERIODO</th>
+                            <th><p data-toggle="tooltip" data-placement="top" title="Liquidar dias reales">LDR</p></th>                            
                             <th>PLANTILLA</th>
                             <th>DES</th>
                             <th>HAS</th>
@@ -121,15 +127,13 @@
                             <th>SA</th>
                             <th>DO</th>
                             <th>FE</th>
-                            <th>HORAS</th>
-                            <th>H.D</th>
-                            <th>H.N</th>
+                            <th><p data-toggle="tooltip" data-placement="top" title="Horas (Programadas)">H(P)</p></th>                            
+                            <th><p data-toggle="tooltip" data-placement="top" title="Horas diurnas (Programadas)">HD(P)</p></th>                            
+                            <th><p data-toggle="tooltip" data-placement="top" title="Horas nocturnas (Programadas)">HN(P)</p></th>                            
                             <th>DIAS</th>
-                            <th>COSTO</th>
-                            <th>P.MINIMO</th>
-                            <th>P.AJUSTADO</th>
-                            <th>TOTAL</th>
-                            <th>SERV</th>
+                            <th><p data-toggle="tooltip" data-placement="top" title="Precio minimo">P.MIN</p></th>                            
+                            <th><p data-toggle="tooltip" data-placement="top" title="Precio ajustado">P.AJU</p></th>                            
+                            <th>TOTAL</th>                            
                             <th>PRG</th>
                             <th>FAC</th>
                             <th></th>
@@ -143,6 +147,7 @@
                                 <td>{{ arPedidoDetalle.conceptoServicioRel.nombre  }}</td>                    
                                 <td>{{ arPedidoDetalle.modalidadServicioRel.nombre  }}</td>                    
                                 <td>{{ arPedidoDetalle.periodoRel.nombre  }}</td>
+                                <td>{% if arPedidoDetalle.liquidarDiasReales == 1 %} SI {% else %} NO {% endif %}</td>                                
                                 <td>{% if arPedidoDetalle.codigoPlantillaFk is not null %} <a href="{{ path('brs_tur_base_plantilla_detalle', { 'codigoPlantilla': arPedidoDetalle.codigoPlantillaFk }) }}" target="_blanck">{% endif %}{{ arPedidoDetalle.plantillaRel.nombre | default('')  }}</a> ({{ arPedidoDetalle.fechaIniciaPlantilla | date('Y/m/d')  }})</td>                    
                                 {% if arPedido.estadoAutorizado == 0 %}                        
                                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiaDesde{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.diaDesde  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
@@ -169,19 +174,17 @@
                                     <td>{% if arPedidoDetalle.domingo == 1 %} SI {% else %} NO {% endif %}</td>
                                     <td>{% if arPedidoDetalle.festivo == 1 %} SI {% else %} NO {% endif %}</td>
                                 {% endif %}
-                                <td style="text-align: right">{{ arPedidoDetalle.horas | number_format(0, '.', ',') }}</td> 
-                                <td style="text-align: right">{{ arPedidoDetalle.horasDiurnas | number_format(0, '.', ',') }}</td> 
-                                <td style="text-align: right">{{ arPedidoDetalle.horasNocturnas | number_format(0, '.', ',') }}</td> 
-                                <td style="text-align: right">{{ arPedidoDetalle.dias | number_format(0, '.', ',') }}</td> 
-                                <td style="text-align: right">{{ arPedidoDetalle.vrCosto | number_format(0, '.', ',') }}</td> 
+                                <td style="text-align: right">{{ arPedidoDetalle.horas | number_format(0, '.', ',') }}({{ arPedidoDetalle.horasProgramadas | number_format(0, '.', ',') }})</td> 
+                                <td style="text-align: right">{{ arPedidoDetalle.horasDiurnas | number_format(0, '.', ',') }}({{ arPedidoDetalle.horasDiurnasProgramadas | number_format(0, '.', ',') }})</td> 
+                                <td style="text-align: right">{{ arPedidoDetalle.horasNocturnas | number_format(0, '.', ',') }}({{ arPedidoDetalle.horasNocturnasProgramadas | number_format(0, '.', ',') }})</td> 
+                                <td style="text-align: right">{{ arPedidoDetalle.dias | number_format(0, '.', ',') }}</td>                                 
                                 <td style="text-align: right">{{ arPedidoDetalle.vrPrecioMinimo | number_format(0, '.', ',') }}</td>                     
                                 {% if arPedido.estadoAutorizado == 0 %}
                                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorAjustado{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.vrPrecioAjustado  }}" size="10" style="text-align: right; width:80px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
                                     {% else %}
                                     <td style="text-align: right">{{ arPedidoDetalle.vrPrecioAjustado | number_format(0, '.', ',') }}</td> 
                                 {% endif %}                    
-                                <td style="text-align: right">{{ arPedidoDetalle.vrTotalDetalle | number_format(0, '.', ',') }}</td>                     
-                                <td>{% if arPedidoDetalle.codigoServicioDetalleFk is not null %} <a href="{{ path('brs_tur_movimiento_servicio_detalle', { 'codigoServicio': arPedidoDetalle.servicioDetalleRel.codigoServicioFk }) }}" target="_blanck">{% endif %}{{ arPedidoDetalle.codigoServicioDetalleFk | default('')  }}</a></td>                    
+                                <td style="text-align: right">{{ arPedidoDetalle.vrTotalDetalle | number_format(0, '.', ',') }}</td>                                                     
                                 <td>{% if arPedidoDetalle.estadoProgramado == 1 %} SI {% else %} NO {% endif %}</td>
                                 <td>{% if arPedidoDetalle.estadoFacturado == 1 %} SI {% else %} NO {% endif %}</td>
                                 <td>{% if arPedido.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                                        

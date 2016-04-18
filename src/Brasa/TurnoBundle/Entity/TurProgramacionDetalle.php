@@ -206,6 +206,16 @@ class TurProgramacionDetalle
      * @ORM\Column(name="horas", type="integer")
      */    
     private $horas = 0;    
+
+    /**
+     * @ORM\Column(name="horas_diurnas", type="integer")
+     */    
+    private $horasDiurnas = 0; 
+
+    /**
+     * @ORM\Column(name="horas_nocturnas", type="integer")
+     */    
+    private $horasNocturnas = 0; 
     
     /**
      * @ORM\Column(name="vr_hora_recurso", type="float")
@@ -1324,5 +1334,53 @@ class TurProgramacionDetalle
     public function getVrHoraRecurso()
     {
         return $this->vrHoraRecurso;
+    }
+
+    /**
+     * Set horasDiurnas
+     *
+     * @param integer $horasDiurnas
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setHorasDiurnas($horasDiurnas)
+    {
+        $this->horasDiurnas = $horasDiurnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDiurnas
+     *
+     * @return integer
+     */
+    public function getHorasDiurnas()
+    {
+        return $this->horasDiurnas;
+    }
+
+    /**
+     * Set horasNocturnas
+     *
+     * @param integer $horasNocturnas
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setHorasNocturnas($horasNocturnas)
+    {
+        $this->horasNocturnas = $horasNocturnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNocturnas
+     *
+     * @return integer
+     */
+    public function getHorasNocturnas()
+    {
+        return $this->horasNocturnas;
     }
 }

@@ -61,8 +61,10 @@ class TurFacturaRepository extends EntityRepository {
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();        
         $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura); 
         $floSubTotal = 0;
+        $floSubTotalConceptos = 0;
         $floBaseAIU = 0;
         $floIva = 0;
+        $floIvaConceptos = 0;
         $floRetencionFuente = 0;
         $floTotal = 0;
         $arFacturasDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();        
@@ -70,18 +72,22 @@ class TurFacturaRepository extends EntityRepository {
         foreach ($arFacturasDetalle as $arFacturaDetalle) {
             $floSubTotal +=  $arFacturaDetalle->getVrPrecio();
         }
-        $floBaseAIU = ($floSubTotal * 10) / 100;
-        $floIva = ($floBaseAIU * 16 ) / 100;
-        if($floBaseAIU >= $arConfiguracion->getBaseRetencionFuente()) {
-            $floRetencionFuente = ($floBaseAIU * 2 ) / 100;
-        }
-        
         $arFacturasDetalleConceptos = new \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto();        
         $arFacturasDetalleConceptos = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalleConcepto')->findBy(array('codigoFacturaFk' => $codigoFactura));                         
-        foreach ($arFacturasDetalleConceptos as $arFacturasDetalleConcepto) {
-            $floSubTotal += $arFacturasDetalleConceptos->getSubtotal();
-            $floIva += $arFacturasDetalleConceptos->getIva();
+        foreach ($arFacturasDetalleConceptos as $arFacturasDetalleConcepto) {            
+            $floSubTotalConceptos += $arFacturasDetalleConcepto->getSubtotal();
+            $floIvaConceptos += $arFacturasDetalleConcepto->getIva();
         }
+        
+        $floBaseAIU = ($floSubTotal * 10) / 100;
+        $floIva = (($floBaseAIU * 16 ) / 100) + $floIvaConceptos;
+        $floBaseRetencionFuente = $arConfiguracion->getBaseRetencionFuente();
+        if(($floBaseAIU+$floSubTotalConceptos) >= $floBaseRetencionFuente) {
+            $floRetencionFuente = (($floBaseAIU+$floSubTotalConceptos) * 2 ) / 100;
+        }                
+
+        $floSubTotal += $floSubTotalConceptos;
+        $floIva += $floIvaConceptos;
         $floTotal = $floSubTotal + $floIva - $floRetencionFuente;
         $arFactura->setVrBaseAIU($floBaseAIU);
         $arFactura->setVrSubtotal($floSubTotal);

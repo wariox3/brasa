@@ -87,11 +87,17 @@
                         <td align="right">{{ arProgramacion.horas | number_format(0, '.', ',')}}</td>
                     </tr>     
                     <tr>
-                        <td class="titulo">USUARIO:</td>
-                        <td class="td-in-well">{{ arProgramacion.usuario }}</td>
-                        <td class="titulo" ></td>
-                        <td align="right"></td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo" >HORAS DIURNAS:</td>
+                        <td align="right">{{ arProgramacion.horasDiurnas | number_format(0, '.', ',')}}</td>
                     </tr>                     
+                    <tr>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo" >HORAS NOCTURNAS:</td>
+                        <td align="right">{{ arProgramacion.horasNocturnas | number_format(0, '.', ',')}}</td>
+                    </tr>                    
                 </table>
             </div>
         </div>
@@ -112,7 +118,9 @@
                                 {% for arrDiaSemana in arrDiaSemana %}
                                 <th>{{ arrDiaSemana.dia }}{{ arrDiaSemana.diaSemana }}</th>
                                 {% endfor %}
-                            <th>HORAS</th>
+                            <th>H</th>
+                            <th>HD</th>
+                            <th>HN</th>
                             <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                         </tr>
                         {% for arProgramacionDetalle in arProgramacionDetalle %}
@@ -208,6 +216,8 @@
                                 {% endif %}
 
                                 <td style="text-align: right">{{ arProgramacionDetalle.horas | number_format(0, '.', ',') }}</td>                                 
+                                <td style="text-align: right">{{ arProgramacionDetalle.horasDiurnas | number_format(0, '.', ',') }}</td>                                                                 
+                                <td style="text-align: right">{{ arProgramacionDetalle.horasNocturnas | number_format(0, '.', ',') }}</td>                                                                 
                                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" /></td>
                             </tr>
                         {% endfor %}

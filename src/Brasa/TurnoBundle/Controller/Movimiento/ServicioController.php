@@ -273,6 +273,7 @@ class ServicioController extends Controller
                             $arServicioDetalle->setFechaDesde($arCotizacionDetalle->getFechaDesde());
                             $arServicioDetalle->setFechaHasta($arCotizacionDetalle->getFechaHasta());
                             $arServicioDetalle->setVrPrecioAjustado($arCotizacionDetalle->getVrPrecioAjustado());
+                            $arServicioDetalle->setLiquidarDiasReales($arCotizacionDetalle->getLiquidarDiasReales());
                             $em->persist($arServicioDetalle);
                         }                       
                     }
