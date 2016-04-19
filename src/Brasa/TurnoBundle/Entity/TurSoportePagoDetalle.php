@@ -116,6 +116,11 @@ class TurSoportePagoDetalle
      * @ORM\Column(name="horas_extras_festivas_nocturnas", type="float")
      */    
     private $horasExtrasFestivasNocturnas = 0;    
+
+    /**
+     * @ORM\Column(name="horas_descanso", type="float")
+     */    
+    private $horasDescanso = 0;     
     
     /**
      * @ORM\Column(name="codigo_turno_fk", type="string", length=5)
@@ -874,5 +879,29 @@ class TurSoportePagoDetalle
     public function getTurnoRel()
     {
         return $this->turnoRel;
+    }
+
+    /**
+     * Set horasDescanso
+     *
+     * @param float $horasDescanso
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setHorasDescanso($horasDescanso)
+    {
+        $this->horasDescanso = $horasDescanso;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDescanso
+     *
+     * @return float
+     */
+    public function getHorasDescanso()
+    {
+        return $this->horasDescanso;
     }
 }

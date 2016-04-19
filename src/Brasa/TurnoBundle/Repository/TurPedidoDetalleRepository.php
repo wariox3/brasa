@@ -122,8 +122,8 @@ class TurPedidoDetalleRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
         $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);
-        $dql   = "SELECT SUM(pd.horas) as horas, SUM(pd.horasDiurnas) as horasDiurnas, SUM(pd.horasNocturnas) as horasNocturnas FROM BrasaTurnoBundle:TurProgramacionDetalle pd "
-                . "WHERE pd.codigoPedidoDetalleFk = " . $codigoPedidoDetalle;
+        $dql   = "SELECT SUM(pd.horas) as horas, SUM(pd.horasDiurnas) as horasDiurnas, SUM(pd.horasNocturnas) as horasNocturnas FROM BrasaTurnoBundle:TurProgramacionDetalle pd JOIN pd.programacionRel p "
+                . "WHERE pd.codigoPedidoDetalleFk = " . $codigoPedidoDetalle . " AND p.estadoAutorizado = 1";
         $query = $em->createQuery($dql);
         $arrProgramacionDetalle = $query->getSingleResult(); 
         if($arrProgramacionDetalle) {

@@ -370,4 +370,54 @@ class TurProgramacionRepository extends EntityRepository {
         }        
         return $strResultado;
     }     
+    
+    public function autorizar($codigoProgramacion) {
+        $em = $this->getEntityManager();                
+        $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion);            
+        $strResultado = "";        
+        $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();        
+        $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoProgramacionFk' => $codigoProgramacion));            
+        foreach ($arProgramacionDetalles as $arProgramacionDetalle) {
+            if($arProgramacionDetalle->getCodigoPedidoDetalleFk()) {
+                $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($arProgramacionDetalle->getCodigoPedidoDetalleFk());
+                $horasProgramadas = $arPedidoDetalle->getHorasProgramadas() + $arProgramacionDetalle->getHoras();
+                $horasDiurnasProgramadas = $arPedidoDetalle->getHorasDiurnasProgramadas() + $arProgramacionDetalle->getHorasDiurnas();
+                $horasNocturnasProgramadas = $arPedidoDetalle->getHorasNocturnasProgramadas() + $arProgramacionDetalle->getHorasNocturnas();                
+                $arPedidoDetalle->setHorasProgramadas($horasProgramadas);
+                $arPedidoDetalle->setHorasDiurnasProgramadas($horasDiurnasProgramadas);
+                $arPedidoDetalle->setHorasNocturnasProgramadas($horasNocturnasProgramadas);
+                $em->persist($arPedidoDetalle);
+            }
+        }
+        $arProgramacion->setEstadoAutorizado(1);
+        $em->persist($arProgramacion);
+        $em->flush();                                         
+        return $strResultado;
+    }     
+    
+    public function desAutorizar($codigoProgramacion) {
+        $em = $this->getEntityManager();                
+        $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion);            
+        $strResultado = "";        
+        $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();        
+        $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoProgramacionFk' => $codigoProgramacion));            
+        foreach ($arProgramacionDetalles as $arProgramacionDetalle) {
+            if($arProgramacionDetalle->getCodigoPedidoDetalleFk()) {
+                $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($arProgramacionDetalle->getCodigoPedidoDetalleFk());
+                $horasProgramadas = $arPedidoDetalle->getHorasProgramadas() - $arProgramacionDetalle->getHoras();
+                $horasDiurnasProgramadas = $arPedidoDetalle->getHorasDiurnasProgramadas() - $arProgramacionDetalle->getHorasDiurnas();
+                $horasNocturnasProgramadas = $arPedidoDetalle->getHorasNocturnasProgramadas() - $arProgramacionDetalle->getHorasNocturnas();                
+                $arPedidoDetalle->setHorasProgramadas($horasProgramadas);
+                $arPedidoDetalle->setHorasDiurnasProgramadas($horasDiurnasProgramadas);
+                $arPedidoDetalle->setHorasNocturnasProgramadas($horasNocturnasProgramadas);
+                $em->persist($arPedidoDetalle);
+            }
+        }
+        $arProgramacion->setEstadoAutorizado(0);
+        $em->persist($arProgramacion);
+        $em->flush();                                         
+        return $strResultado;
+    }         
 }

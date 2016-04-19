@@ -22,6 +22,7 @@ class TurSoportePagoRepository extends EntityRepository {
                 . "SUM(spd.licencia) as licencia, "
                 . "SUM(spd.vacacion) as vacacion, "
                 . "SUM(spd.dias) as dias, "
+                . "SUM(spd.horasDescanso) as horasDescanso, "
                 . "SUM(spd.horasDiurnas) as horasDiurnas, "
                 . "SUM(spd.horasNocturnas) as horasNocturnas, "
                 . "SUM(spd.horasFestivasDiurnas) as horasFestivasDiurnas, "
@@ -54,7 +55,7 @@ class TurSoportePagoRepository extends EntityRepository {
                 $arrayResultado[$i]['dias'] += $arSoportePagoPeriodo->getDiasAdicionales();
                 $arrayResultado[$i]['horasDiurnas'] += $arSoportePagoPeriodo->getDiasAdicionales() * 8;                
             }
-            $intHorasPago = $arrayResultado[$i]['horasDiurnas'] + $arrayResultado[$i]['horasNocturnas'] + $arrayResultado[$i]['horasFestivasDiurnas'] + $arrayResultado[$i]['horasFestivasNocturnas'];
+            $intHorasPago = $arrayResultado[$i]['horasDescanso'] + $arrayResultado[$i]['horasDiurnas'] + $arrayResultado[$i]['horasNocturnas'] + $arrayResultado[$i]['horasFestivasDiurnas'] + $arrayResultado[$i]['horasFestivasNocturnas'];
             if($arrayResultado[$i]['incapacidad'] > 0) {
                 $arrayResultado[$i]['dias'] += $arrayResultado[$i]['incapacidad'];
                 $arrayResultado[$i]['horasDiurnas'] += $arrayResultado[$i]['incapacidad'] * 8;
@@ -71,7 +72,7 @@ class TurSoportePagoRepository extends EntityRepository {
                 $arrayResultado[$i]['horasDiurnas'] += $arSoportePagoPeriodoActualizar->getFestivos() * 8;
                 $arrayResultado[$i]['descanso'] += $arSoportePagoPeriodoActualizar->getFestivos();
             }            
-            $intHoras = $arrayResultado[$i]['horasDiurnas'] + $arrayResultado[$i]['horasNocturnas'] + $arrayResultado[$i]['horasFestivasDiurnas'] + $arrayResultado[$i]['horasFestivasNocturnas'];
+            $intHoras = $arrayResultado[$i]['horasDescanso'] + $arrayResultado[$i]['horasDiurnas'] + $arrayResultado[$i]['horasNocturnas'] + $arrayResultado[$i]['horasFestivasDiurnas'] + $arrayResultado[$i]['horasFestivasNocturnas'];
             $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
             $arSoportePago->setSoportePagoPeriodoRel($arSoportePagoPeriodo);
             $arSoportePago->setRecursoRel($arRecurso);
@@ -88,6 +89,7 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePago->setVacacion($arrayResultado[$i]['vacacion']);
             $arSoportePago->setHorasPago($intHorasPago);
             $arSoportePago->setHoras($intHoras);
+            $arSoportePago->setHorasDescanso($arrayResultado[$i]['horasDescanso']);
             $arSoportePago->setHorasDiurnas($arrayResultado[$i]['horasDiurnas']);
             $arSoportePago->setHorasNocturnas($arrayResultado[$i]['horasNocturnas']);
             $arSoportePago->setHorasFestivasDiurnas($arrayResultado[$i]['horasFestivasDiurnas']);

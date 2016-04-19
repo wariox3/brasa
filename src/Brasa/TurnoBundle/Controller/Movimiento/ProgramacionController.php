@@ -109,25 +109,21 @@ class ProgramacionController extends Controller
         if($form->isValid()) {
             if($form->get('BtnAutorizar')->isClicked()) {
                 if($arProgramacion->getEstadoAutorizado() == 0) {
+                    $arrControles = $request->request->All();
+                    $this->actualizarDetalle($arrControles, $codigoProgramacion);                    
                     $strResultados = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->validarAutorizar($codigoProgramacion);
                     if($strResultados == "") {
-                        $arrControles = $request->request->All();
-                        $this->actualizarDetalle($arrControles, $codigoProgramacion);
-                        $arProgramacion->setEstadoAutorizado(1);
-                        $em->persist($arProgramacion);
-                        $em->flush();
+                        $em->getRepository('BrasaTurnoBundle:TurProgramacion')->autorizar($codigoProgramacion);                        
                     } else {
                         $objMensaje->Mensaje('error', $strResultados, $this);
                     }
-                }
-                return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
+                    return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));                        
+                }                
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {
                 if($arProgramacion->getEstadoAutorizado() == 1) {
-                    $arProgramacion->setEstadoAutorizado(0);
-                    $em->persist($arProgramacion);
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
+                    $em->getRepository('BrasaTurnoBundle:TurProgramacion')->desAutorizar($codigoProgramacion);
+                    return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));                    
                 }
             }
             if($form->get('BtnAprobar')->isClicked()) {

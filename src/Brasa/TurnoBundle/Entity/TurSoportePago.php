@@ -93,6 +93,11 @@ class TurSoportePago
     private $horasPago = 0;    
     
     /**
+     * @ORM\Column(name="horas_descanso", type="float")
+     */    
+    private $horasDescanso = 0;    
+    
+    /**
      * @ORM\Column(name="horas_diurnas", type="float")
      */    
     private $horasDiurnas = 0;     
@@ -101,7 +106,7 @@ class TurSoportePago
      * @ORM\Column(name="horas_nocturnas", type="float")
      */    
     private $horasNocturnas = 0;    
-    
+        
     /**
      * @ORM\Column(name="horas_festivas_diurnas", type="float")
      */    
@@ -829,5 +834,29 @@ class TurSoportePago
     public function getSoportesPagosDetallesSoportePagoRel()
     {
         return $this->soportesPagosDetallesSoportePagoRel;
+    }
+
+    /**
+     * Set horasDescanso
+     *
+     * @param float $horasDescanso
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasDescanso($horasDescanso)
+    {
+        $this->horasDescanso = $horasDescanso;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDescanso
+     *
+     * @return float
+     */
+    public function getHorasDescanso()
+    {
+        return $this->horasDescanso;
     }
 }
