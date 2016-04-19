@@ -97,7 +97,7 @@ class RhuVacacionRepository extends EntityRepository {
                 . "WHERE (((v.fechaDesdeDisfrute BETWEEN '$strFechaDesde' AND '$strFechaHasta') OR (v.fechaHastaDisfrute BETWEEN '$strFechaDesde' AND '$strFechaHasta')) "
                 . "OR (v.fechaDesdeDisfrute >= '$strFechaDesde' AND v.fechaDesdeDisfrute <= '$strFechaHasta') "
                 . "OR (v.fechaHastaDisfrute >= '$strFechaHasta' AND v.fechaDesdeDisfrute <= '$strFechaDesde')) "
-                . "AND v.codigoEmpleadoFk = '" . $codigoEmpleado . "' AND v.codigoContratoFk = " . $codigoContrato;
+                . "AND v.codigoEmpleadoFk = '" . $codigoEmpleado . "' AND v.codigoContratoFk = " . $codigoContrato . " AND v.diasDisfrutados > 0";
         
         $query = $em->createQuery($dql);
         $arVacaciones = $query->getResult();

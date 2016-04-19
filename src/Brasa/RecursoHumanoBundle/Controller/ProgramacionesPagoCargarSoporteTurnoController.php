@@ -52,7 +52,10 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                
                     if($intDiasVacaciones > 0) {                                        
                         $arProgramacionPagoDetalle->setDiasVacaciones($intDiasVacaciones);
-                    }                        
+                    }           
+                    if($arSoportePago->getCodigoSoportePagoPk() == 3125) {
+                        echo "hola";
+                    }
                     //dias licencia
                     $intDiasLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicenciaPeriodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), $arContrato->getCodigoEmpleadoFk());                
                     if($intDiasLicencia > 0) {                                        

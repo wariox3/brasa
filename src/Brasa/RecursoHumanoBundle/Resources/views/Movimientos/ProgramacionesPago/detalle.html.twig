@@ -46,11 +46,16 @@
                     <td class="td-in-well">{{ arProgramacionPago.fechaDesde |date("Y/m/d") }}</td>                    
                     <td class="titulo">GENERADO:</td>
                     <td> {% if arProgramacionPago.estadoGenerado == 0 %} NO {% else %} SI {% endif %}</td>                   
-                </tr>                
+                </tr>                                
                 <tr>
-
                     <td class="titulo">PERIODO HASTA:</td>
                     <td class="td-in-well">{{ arProgramacionPago.fechaHasta |date("Y/m/d") }}</td>
+                    <td class="titulo">PAGADO:</td>
+                    <td> {% if arProgramacionPago.estadoPagado == 0 %} NO {% else %} SI {% endif %}</td> 
+                </tr>                
+                <tr>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
                     <td class="titulo">NETO A PAGAR:</th>
                     <td class="td-in-well" align="right">{{ arProgramacionPago.vrNeto | number_format(2, '.', ',')}}</td>                                                                                           
                 </tr>                

@@ -126,7 +126,6 @@ class ProgramacionesPagoController extends Controller
                     $objMensaje->Mensaje("error", "No puede generar empleados cuando la programacion esta generada", $this);
                 }
             }
-
             if($form->get('BtnEliminarEmpleados')->isClicked()) {
                 if($arProgramacionPago->getEstadoGenerado() == 0) {
                     $arrSeleccionados = $request->request->get('ChkSeleccionarSede');
@@ -197,17 +196,12 @@ class ProgramacionesPagoController extends Controller
         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arProgramacionPago->getCodigoCentroCostoFk());
 
-        if($arProgramacionPago->getEstadoGenerado() == 1) {
-            $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
-            $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
-        } else {
-            $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
-            $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->periodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), "", $arProgramacionPago->getCodigoCentroCostoFk());                       
-            $arIncapacidades = $paginator->paginate($arIncapacidades, $request->query->get('page', 1), 200);
-            $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
-            $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->periodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), "", $arProgramacionPago->getCodigoCentroCostoFk());                       
-            $arLicencias = $paginator->paginate($arLicencias, $request->query->get('page', 1), 200);
-        }
+        $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
+        $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->periodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), "", $arProgramacionPago->getCodigoCentroCostoFk());                       
+        $arIncapacidades = $paginator->paginate($arIncapacidades, $request->query->get('page', 1), 200);
+        $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
+        $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->periodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), "", $arProgramacionPago->getCodigoCentroCostoFk());                       
+        $arLicencias = $paginator->paginate($arLicencias, $request->query->get('page', 1), 200);        
 
         $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->listaDQL($codigoProgramacionPago));
         $arProgramacionPagoDetalles = $paginator->paginate($query, $request->query->get('page', 1), 500);

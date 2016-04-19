@@ -127,13 +127,14 @@ class RhuLicenciaRepository extends EntityRepository {
                 $intDiaInicio = $arLicencia->getFechaDesde()->format('j');
             }
             if($arLicencia->getFechaHasta() > $fechaHasta) {
-                $intDiaFin = 30;                
+                $intDiaFin = $fechaHasta->format('j');                 
             } else {
                 $intDiaFin = $arLicencia->getFechaHasta()->format('j');
-                if($intDiaFin == 31) {
-                    $intDiaFin = 30;
-                }                
-            }            
+            }
+            if($intDiaFin == 31) {
+                $intDiaFin = 30;
+            }                 
+                        
             $intDiasLicencia += (($intDiaFin - $intDiaInicio)+1);
         }
         if($intDiasLicencia > 30) {
