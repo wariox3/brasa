@@ -101,6 +101,7 @@
                 <th>TURNO</th>
                 <th>DIAS</th>
                 <th>DESCANSO</th>
+                <th>HDS</th>
                 <th>HD</th>
                 <th>HN</th>
                 <th>HFD</th>
@@ -117,6 +118,7 @@
                 <td>{{ arSoportesPagosDetalles.codigoTurnoFk  }} ({{ arSoportesPagosDetalles.turnoRel.horaDesde |date('H:i') }} - {{ arSoportesPagosDetalles.turnoRel.horaHasta |date('H:i') }})</td>
                 <td style="text-align: right">{{ arSoportesPagosDetalles.dias | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagosDetalles.descanso | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horasDescanso | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagosDetalles.horasDiurnas | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagosDetalles.horasNocturnas | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagosDetalles.horasFestivasDiurnas | number_format(2, '.', ',') }}</td>
