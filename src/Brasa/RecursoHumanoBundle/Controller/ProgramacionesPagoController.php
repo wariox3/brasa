@@ -58,7 +58,14 @@ class ProgramacionesPagoController extends Controller
                         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
                         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
                         if($arProgramacionPago->getEstadoPagado() == 0 && $arProgramacionPago->getEstadoGenerado() == 0) {
-                            $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->eliminar($codigoProgramacionPago);
+                            $arProgramacionPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
+                            if ($arProgramacionPagoDetalles == null){
+                                $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->eliminar($codigoProgramacionPago);
+                            } else {
+                                $objMensaje->Mensaje("error", "La programación de pago tiene registros asociados, no se puede eliminar", $this);
+                            }  
+                        } else {
+                            $objMensaje->Mensaje("error", "La programación de pago esta pagada o generada, no se puede eliminar", $this);
                         }
                     }
                     return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));

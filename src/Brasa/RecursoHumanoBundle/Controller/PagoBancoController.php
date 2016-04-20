@@ -359,7 +359,7 @@ class PagoBancoController extends Controller
         // Encabezado
         $strNitEmpresa = $this->RellenarNr(utf8_decode($arConfiguracionGeneral->getNitEmpresa()),"0",15);
         $strNombreEmpresa = $this->RellenarNr(utf8_decode(substr($arConfiguracionGeneral->getNombreEmpresa(), 0, 16)), 0, 16);
-        $strTipoPagoSecuencia = "225PAGO NOMI ";
+        $strTipoPagoSecuencia = "225          ";
         $strSecuencia = $arPagoBanco->getSecuencia();
         $strFechaCreacion = $arPagoBanco->getFechaTrasmision()->format('Ymd');                                                                                            
         $strFechaAplicacion = $arPagoBanco->getFechaAplicacion()->format('Ymd');
@@ -375,11 +375,11 @@ class PagoBancoController extends Controller
             fputs($ar, $this->RellenarNr(utf8_decode(substr($arPagoBancoDetalle->getNombreCorto(), 0, 30)),"0", 30)); // (30) Nombre del beneficiario
             fputs($ar, "005600078"); // (9) Banco cuenta del beneficiario
             fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getCuenta(), "0", 17)); // (17) Nro cuenta beneficiario
-            fputs($ar, "337"); // (3) Indicador de lugar de pago (S) y tipo de transacción (37)
+            fputs($ar, "337"); // (1) Indicador de lugar de pago (2) y tipo de transacción (37)
             $duoValorNetoPagar = round($arPagoBancoDetalle->getVrPago()); // (17) Valor transacción
             fputs($ar, $this->RellenarNr($duoValorNetoPagar, "0", 15) . "00");
             fputs($ar, $strFechaAplicacion);
-            fputs($ar, "                                                                                                                                                                    ");
+            fputs($ar, "");
             fputs($ar, "\n");
         }
         fclose($ar);
