@@ -377,7 +377,7 @@ class PagoBancoController extends Controller
             fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getCuenta(), "0", 17)); // (17) Nro cuenta beneficiario
             fputs($ar, "337"); // (3) Indicador de lugar de pago (S) y tipo de transacción (37)
             $duoValorNetoPagar = round($arPagoBancoDetalle->getVrPago()); // (17) Valor transacción
-            fputs($ar, ($this->RellenarNr($duoValorNetoPagar, "0", 17)));
+            fputs($ar, $this->RellenarNr($duoValorNetoPagar, "0", 15) . "00");
             fputs($ar, $strFechaAplicacion);
             fputs($ar, "                                                                                                                                                                    ");
             fputs($ar, "\n");
