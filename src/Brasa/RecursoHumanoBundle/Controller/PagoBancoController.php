@@ -364,7 +364,7 @@ class PagoBancoController extends Controller
         $strFechaCreacion = $arPagoBanco->getFechaTrasmision()->format('Ymd');                                                                                            
         $strFechaAplicacion = $arPagoBanco->getFechaAplicacion()->format('Ymd');
         $strNumeroRegistros = $this->RellenarNr($arPagoBanco->getNumeroRegistros(), "0", 6);        
-        $strValorTotal = $this->RellenarNr($strValorTotal, "0", 34);
+        $strValorTotal = "00000000000000000" . $this->RellenarNr($strValorTotal, "0", 15) . "00";
         //Fin encabezado
         //(1) Tipo de registro, (10) Nit empresa, (225PAGO NOMI) descripcion transacion, (yymmdd) fecha creacion, (yymmdd) fecha aplicacion, (6) Numero de registros, (17) sumatoria de creditos, (11) Cuenta cliente a debitar, (1) Tipo de cuenta a debitar         
         fputs($ar, "1" . $strNitEmpresa . "I" . "               " .$strTipoPagoSecuencia . $strFechaCreacion . $strSecuencia. " " . $strFechaAplicacion . $strNumeroRegistros . $strValorTotal . $arPagoBanco->getCuentaRel()->getCuenta() . $arPagoBanco->getCuentaRel()->getTipo() . "\n");
