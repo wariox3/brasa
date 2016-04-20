@@ -197,9 +197,13 @@ class MovimientoNotaDebitoController extends Controller
                 }
             }
             if($form->get('BtnDetalleActualizar')->isClicked()) {
-                $arrControles = $request->request->All();
-                $this->actualizarDetalle($arrControles, $codigoNotaDebito);                
-                return $this->redirect($this->generateUrl('brs_cartera_movimiento_notadebito_detalle', array('codigoNotaDebito' => $codigoNotaDebito)));
+                if($arNotaDebito->getEstadoAutorizado() == 0 ) {
+                    $arrControles = $request->request->All();
+                    $this->actualizarDetalle($arrControles, $codigoNotaDebito);                
+                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_notadebito_detalle', array('codigoNotaDebito' => $codigoNotaDebito)));
+                } else {
+                    $objMensaje->Mensaje("error", "No se puede imprimir el registro, esta autorizado", $this);
+                }
             }
             if($form->get('BtnDetalleEliminar')->isClicked()) {
                 if($arNotaDebito->getEstadoAutorizado() == 0 ) {
@@ -212,12 +216,16 @@ class MovimientoNotaDebitoController extends Controller
                 }
             }    
             if($form->get('BtnImprimir')->isClicked()) {
-                $strResultado = $em->getRepository('BrasaCarteraBundle:CarNotaDebito')->imprimir($codigoNotaDebito);
-                if($strResultado != "") {
-                    $objMensaje->Mensaje("error", $strResultado, $this);
+                if($arNotaDebito->getEstadoAutorizado() == 1 ) {
+                    $strResultado = $em->getRepository('BrasaCarteraBundle:CarNotaDebito')->imprimir($codigoNotaDebito);
+                    if($strResultado != "") {
+                        $objMensaje->Mensaje("error", $strResultado, $this);
+                    } else {
+                        $objNotaDebito = new \Brasa\CarteraBundle\Formatos\FormatoNotaDebito();
+                        $objNotaDebito->Generar($this, $codigoNotaDebito);
+                    }
                 } else {
-                    $objNotaDebito = new \Brasa\CarteraBundle\Formatos\FormatoNotaDebito();
-                    $objNotaDebito->Generar($this, $codigoNotaDebito);
+                    $objMensaje->Mensaje("error", "No se puede imprimir el registro, no esta autorizado", $this);
                 }
             }                        
         }

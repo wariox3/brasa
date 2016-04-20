@@ -195,9 +195,13 @@ class MovimientoNotaCreditoController extends Controller
                 }
             }
             if($form->get('BtnDetalleActualizar')->isClicked()) {
-                $arrControles = $request->request->All();
-                $this->actualizarDetalle($arrControles, $codigoNotaCredito);                
-                return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_detalle', array('codigoNotaCredito' => $codigoNotaCredito)));
+                if($arNotaCredito->getEstadoAutorizado() == 0 ) {
+                    $arrControles = $request->request->All();
+                    $this->actualizarDetalle($arrControles, $codigoNotaCredito);                
+                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_detalle', array('codigoNotaCredito' => $codigoNotaCredito)));
+                } else {
+                    $objMensaje->Mensaje("error", "No se puede actualizar el registro, esta autorizado", $this);
+                }    
             }
             if($form->get('BtnDetalleEliminar')->isClicked()) {
                 if($arNotaCredito->getEstadoAutorizado() == 0 ) {
@@ -210,12 +214,16 @@ class MovimientoNotaCreditoController extends Controller
                 }
             }    
             if($form->get('BtnImprimir')->isClicked()) {
-                $strResultado = $em->getRepository('BrasaCarteraBundle:CarNotaCredito')->imprimir($codigoNotaCredito);
-                if($strResultado != "") {
-                    $objMensaje->Mensaje("error", $strResultado, $this);
+                if($arNotaCredito->getEstadoAutorizado() == 1 ) {
+                    $strResultado = $em->getRepository('BrasaCarteraBundle:CarNotaCredito')->imprimir($codigoNotaCredito);
+                    if($strResultado != "") {
+                        $objMensaje->Mensaje("error", $strResultado, $this);
+                    } else {
+                        $objNotaCredito = new \Brasa\CarteraBundle\Formatos\FormatoNotaCredito();
+                        $objNotaCredito->Generar($this, $codigoNotaCredito);
+                    }
                 } else {
-                    $objNotaCredito = new \Brasa\CarteraBundle\Formatos\FormatoNotaCredito();
-                    $objNotaCredito->Generar($this, $codigoNotaCredito);
+                    $objMensaje->Mensaje("error", "No se puede imprimir el registro, no esta autorizado", $this);
                 }
             }                        
         }

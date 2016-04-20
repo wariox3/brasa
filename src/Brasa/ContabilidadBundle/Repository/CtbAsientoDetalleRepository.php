@@ -23,5 +23,18 @@ class CtbAsientoDetalleRepository extends EntityRepository
         
         $arAsientoDetalles = $query->getResult();
         return $arAsientoDetalles[0]['cantidad'];
-    }        
+    } 
+    
+    public function numeroRegistros($codigo) {        
+        $em = $this->getEntityManager();
+        $intNumeroRegistros = 0;
+        $dql   = "SELECT COUNT(ad.codigoAsientoDetallePk) as numeroRegistros FROM BrasaContabilidadBundle:CtbAsientoDetalle ad "
+                . "WHERE ad.codigoAsientoFk = " . $codigo;
+        $query = $em->createQuery($dql);
+        $arrAsientoDetalles = $query->getSingleResult(); 
+        if($arrAsientoDetalles) {
+            $intNumeroRegistros = $arrAsientoDetalles['numeroRegistros'];
+        }
+        return $intNumeroRegistros;
+    }
 }

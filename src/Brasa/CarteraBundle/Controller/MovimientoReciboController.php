@@ -207,9 +207,13 @@ class MovimientoReciboController extends Controller
                 }
             }
             if($form->get('BtnDetalleActualizar')->isClicked()) {
-                $arrControles = $request->request->All();
-                $this->actualizarDetalle($arrControles, $codigoRecibo);                
-                return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));
+                if($arRecibo->getEstadoAutorizado() == 0 ) {
+                    $arrControles = $request->request->All();
+                    $this->actualizarDetalle($arrControles, $codigoRecibo);                
+                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));
+                } else {
+                    $objMensaje->Mensaje("error", "No se puede actualizar el registro, esta autorizado", $this);
+                }    
             }
             if($form->get('BtnDetalleEliminar')->isClicked()) {  
                 if($arRecibo->getEstadoAutorizado() == 0 ) {
@@ -222,13 +226,18 @@ class MovimientoReciboController extends Controller
                 return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));                    
             }    
             if($form->get('BtnImprimir')->isClicked()) {
-                $strResultado = $em->getRepository('BrasaCarteraBundle:CarRecibo')->imprimir($codigoRecibo);
-                if($strResultado != "") {
-                    $objMensaje->Mensaje("error", $strResultado, $this);
+                if($arRecibo->getEstadoAutorizado() == 1 ) {
+                    $strResultado = $em->getRepository('BrasaCarteraBundle:CarRecibo')->imprimir($codigoRecibo);
+                    if($strResultado != "") {
+                        $objMensaje->Mensaje("error", $strResultado, $this);
+                    } else {
+                        $objRecibo = new \Brasa\CarteraBundle\Formatos\FormatoRecibo();
+                        $objRecibo->Generar($this, $codigoRecibo);
+                    }
                 } else {
-                    $objRecibo = new \Brasa\CarteraBundle\Formatos\FormatoRecibo();
-                    $objRecibo->Generar($this, $codigoRecibo);
+                    $objMensaje->Mensaje("error", "No se puede imprimir el registro, no esta autorizado", $this);
                 }
+                return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));                        
             }                        
         }
         $arReciboDetalle = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();

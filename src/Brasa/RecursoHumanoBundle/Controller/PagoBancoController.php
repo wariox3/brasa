@@ -346,8 +346,8 @@ class PagoBancoController extends Controller
         $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $strNombreArchivo = "pagoPab" . date('YmdHis') . ".txt";
-        $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
-        //$strArchivo = "c:/xampp/" . $strNombreArchivo;                                    
+        //$strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
+        $strArchivo = "c:/xampp/" . $strNombreArchivo;                                    
         ob_clean();
         $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
         $strValorTotal = 0;
@@ -364,21 +364,22 @@ class PagoBancoController extends Controller
         $strFechaCreacion = $arPagoBanco->getFechaTrasmision()->format('Ymd');                                                                                            
         $strFechaAplicacion = $arPagoBanco->getFechaAplicacion()->format('Ymd');
         $strNumeroRegistros = $this->RellenarNr($arPagoBanco->getNumeroRegistros(), "0", 6);        
-        $strValorTotal = $this->RellenarNr($strValorTotal, "0", 17);
+        $strValorTotal = $this->RellenarNr($strValorTotal, "0", 34);
         //Fin encabezado
         //(1) Tipo de registro, (10) Nit empresa, (225PAGO NOMI) descripcion transacion, (yymmdd) fecha creacion, (yymmdd) fecha aplicacion, (6) Numero de registros, (17) sumatoria de creditos, (11) Cuenta cliente a debitar, (1) Tipo de cuenta a debitar         
-        fputs($ar, "1" . $strNitEmpresa . $strTipoPagoSecuencia . $strFechaCreacion . $strSecuencia . $strFechaAplicacion . $strNumeroRegistros . $strValorTotal . $arPagoBanco->getCuentaRel()->getCuenta() . $arPagoBanco->getCuentaRel()->getTipo() . "\n");
+        fputs($ar, "1" . $strNitEmpresa . "I" . "               " .$strTipoPagoSecuencia . $strFechaCreacion . $strSecuencia. " " . $strFechaAplicacion . $strNumeroRegistros . $strValorTotal . $arPagoBanco->getCuentaRel()->getCuenta() . $arPagoBanco->getCuentaRel()->getTipo() . "\n");
         //Inicio cuerpo
         foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
             fputs($ar, "6"); //(1)Tipo registro            
             fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getNumeroIdentificacion(), "0", 15)); //(15) Nit del beneficiario           
-            fputs($ar, $this->RellenarNr(utf8_decode(substr($arPagoBancoDetalle->getNombreCorto(), 0, 30)),"0", 30)); // (18) Nombre del beneficiario
+            fputs($ar, $this->RellenarNr(utf8_decode(substr($arPagoBancoDetalle->getNombreCorto(), 0, 30)),"0", 30)); // (30) Nombre del beneficiario
             fputs($ar, "005600078"); // (9) Banco cuenta del beneficiario
             fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getCuenta(), "0", 17)); // (17) Nro cuenta beneficiario
-            fputs($ar, "37"); // (3) Indicador de lugar de pago (S) y tipo de transacción (37)
+            fputs($ar, "337"); // (3) Indicador de lugar de pago (S) y tipo de transacción (37)
             $duoValorNetoPagar = round($arPagoBancoDetalle->getVrPago()); // (17) Valor transacción
             fputs($ar, ($this->RellenarNr($duoValorNetoPagar, "0", 17)));
-            fputs($ar, "                      ");
+            fputs($ar, $strFechaAplicacion);
+            fputs($ar, "                                                                                                                                                                    ");
             fputs($ar, "\n");
         }
         fclose($ar);

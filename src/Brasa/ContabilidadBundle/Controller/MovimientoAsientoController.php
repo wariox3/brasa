@@ -125,11 +125,15 @@ class MovimientoAsientoController extends Controller
         if($form->isValid()) {
             if($form->get('BtnAutorizar')->isClicked()) {
                 if ($arAsiento->getEstadoAutorizado() == 0){
-                    $autorizar = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->Autorizar($codigoAsiento);
-                    if ($autorizar != ""){
-                        $objMensaje->Mensaje("error", $autorizar, $this);
-                    }
-                    return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
+                    if($em->getRepository('BrasaContabilidadBundle:CtbAsientoDetalle')->numeroRegistros($codigoAsiento) > 0) {
+                        $autorizar = $em->getRepository('BrasaContabilidadBundle:CtbAsiento')->Autorizar($codigoAsiento);
+                        if ($autorizar != ""){
+                            $objMensaje->Mensaje("error", $autorizar, $this);
+                        }
+                        return $this->redirect($this->generateUrl('brs_ctb_mov_asientos_detalle', array('codigoAsiento' => $codigoAsiento)));
+                    } else {
+                                $objMensaje->Mensaje('error', 'Debe adicionar detalles al asiento', $this);
+                            }    
                 } else {
                     $objMensaje->Mensaje("error", "El asiento ya esta autorizado", $this);
                 }
@@ -321,8 +325,12 @@ class MovimientoAsientoController extends Controller
             }
             
             if($form->get('BtnImprimir')->isClicked()) {
-                $objFormatoAsientoDetalle = new \Brasa\ContabilidadBundle\Formatos\FormatoAsientoDetalle();
-                $objFormatoAsientoDetalle->Generar($this, $codigoAsiento);
+                if ($arAsiento->getEstadoAutorizado() == 1){
+                    $objFormatoAsientoDetalle = new \Brasa\ContabilidadBundle\Formatos\FormatoAsientoDetalle();
+                    $objFormatoAsientoDetalle->Generar($this, $codigoAsiento);
+                } else {
+                    $objMensaje->Mensaje("error", "No se puede imprimir, el asiento no esta autorizado", $this);
+                }    
             }
         }
         $arAsientoDetalles = new \Brasa\ContabilidadBundle\Entity\CtbAsientoDetalle();
