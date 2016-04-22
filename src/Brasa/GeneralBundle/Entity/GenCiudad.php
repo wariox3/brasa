@@ -180,7 +180,12 @@ class GenCiudad
      * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuCliente", mappedBy="ciudadRel")
      */
     protected $rhuClientesCiudadRel;    
-   
+
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiCliente", mappedBy="ciudadRel")
+     */
+    protected $afiClientesCiudadRel;        
+    
     /**
      * Constructor
      */
@@ -210,6 +215,8 @@ class GenCiudad
         $this->rhuContratosCiudadContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->configuracionesRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->carClientesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rhuClientesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->afiClientesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1238,5 +1245,39 @@ class GenCiudad
     public function getRhuClientesCiudadRel()
     {
         return $this->rhuClientesCiudadRel;
+    }
+
+    /**
+     * Add afiClientesCiudadRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesCiudadRel
+     *
+     * @return GenCiudad
+     */
+    public function addAfiClientesCiudadRel(\Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesCiudadRel)
+    {
+        $this->afiClientesCiudadRel[] = $afiClientesCiudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove afiClientesCiudadRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesCiudadRel
+     */
+    public function removeAfiClientesCiudadRel(\Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesCiudadRel)
+    {
+        $this->afiClientesCiudadRel->removeElement($afiClientesCiudadRel);
+    }
+
+    /**
+     * Get afiClientesCiudadRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAfiClientesCiudadRel()
+    {
+        return $this->afiClientesCiudadRel;
     }
 }

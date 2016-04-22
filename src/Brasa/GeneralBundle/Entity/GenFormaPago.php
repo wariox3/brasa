@@ -55,6 +55,11 @@ class GenFormaPago
     protected $rhuClientesFormaPagoRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiCliente", mappedBy="formaPagoRel")
+     */
+    protected $afiClientesFormaPagoRel;    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -301,5 +306,39 @@ class GenFormaPago
     public function getRhuClientesFormaPagoRel()
     {
         return $this->rhuClientesFormaPagoRel;
+    }
+
+    /**
+     * Add afiClientesFormaPagoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesFormaPagoRel
+     *
+     * @return GenFormaPago
+     */
+    public function addAfiClientesFormaPagoRel(\Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesFormaPagoRel)
+    {
+        $this->afiClientesFormaPagoRel[] = $afiClientesFormaPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove afiClientesFormaPagoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesFormaPagoRel
+     */
+    public function removeAfiClientesFormaPagoRel(\Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesFormaPagoRel)
+    {
+        $this->afiClientesFormaPagoRel->removeElement($afiClientesFormaPagoRel);
+    }
+
+    /**
+     * Get afiClientesFormaPagoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAfiClientesFormaPagoRel()
+    {
+        return $this->afiClientesFormaPagoRel;
     }
 }

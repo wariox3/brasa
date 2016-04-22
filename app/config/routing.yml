@@ -1,3 +1,7 @@
+brasa_afiliacion_annotation:
+    resource: "@BrasaAfiliacionBundle/Controller/"
+    type:     annotation
+
 brasa_turno:
     resource: "@BrasaTurnoBundle/Resources/config/routing.yml"
     prefix:   /
