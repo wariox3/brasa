@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-{% block title %}Centro de costos nuevo - Soga App{% endblock %}
+{% block title %}Cliente nuevo - Soga App{% endblock %}
 {% block content %}
 <div class="container">
     {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
@@ -133,7 +133,7 @@
                 
                
     <div class="modal-footer">     
-            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_centros_costos_lista') }}">Cancelar</a>        
+            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_cliente') }}">Cancelar</a>        
             {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
             {{ form_widget(form.guardarnuevo, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
     </div>    

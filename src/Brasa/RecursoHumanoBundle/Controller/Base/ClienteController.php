@@ -20,7 +20,6 @@ class ClienteController extends Controller
         $form = $this->createFormBuilder()
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombreCliente')))
             ->add('BtnBuscar', 'submit', array('label'  => 'Buscar'))
-            ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->getForm();
         $form->handleRequest($request);
@@ -31,13 +30,7 @@ class ClienteController extends Controller
                     $form->get('TxtNombre')->getData()
                     ));                
                 $session->set('filtroNombreCliente', $form->get('TxtNombre')->getData());                
-            }
-            
-            if($form->get('BtnPdf')->isClicked()) {
-                $objFormatoClientes = new \Brasa\RecursoHumanoBundle\Formatos\FormatoClientes();
-                $objFormatoClientes->Generar($this);
-            }
-            
+            }            
             if($form->get('BtnExcel')->isClicked()) {
                 $this->generarExcel();
             }
@@ -115,6 +108,7 @@ class ClienteController extends Controller
             'arCliente' => $arCliente,            
             'form' => $form->createView()));
     }
+    
     /**
      * @Route("/rhu/base/cliente/detalle/{codigoCliente}", name="brs_rhu_base_cliente_detalle")
      */
@@ -125,14 +119,10 @@ class ClienteController extends Controller
         $form = $this->createFormBuilder()               
             ->getForm();
         $form->handleRequest($request);
-        $arSedes = new \Brasa\RecursoHumanoBundle\Entity\RhuSede();
-        $arSedes = $em->getRepository('BrasaRecursoHumanoBundle:RhuSede')->findBy(array('codigoClienteFk' => $codigoCliente));
-        $arSedes = $paginator->paginate($arSedes, $this->get('request')->query->get('page', 1),5);
-        $arClientes = new \Brasa\RecursoHumanoBundle\Entity\RhuCliente();
-        $arClientes = $em->getRepository('BrasaRecursoHumanoBundle:RhuCliente')->find($codigoCliente);
-        return $this->render('BrasaRecursoHumanoBundle:Base/Cliente:detalle.html.twig', array(
-            'arSedes' => $arSedes,        
-            'arCentrosCostos' => $arClientes,
+        $arCliente = new \Brasa\RecursoHumanoBundle\Entity\RhuCliente();
+        $arCliente = $em->getRepository('BrasaRecursoHumanoBundle:RhuCliente')->find($codigoCliente);
+        return $this->render('BrasaRecursoHumanoBundle:Base/Cliente:detalle.html.twig', array(        
+            'arCliente' => $arCliente,
             'form' => $form->createView()
                     ));
     }    
@@ -150,41 +140,86 @@ class ClienteController extends Controller
                     ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
                     ->setKeywords("office 2007 openxml php")
                     ->setCategory("Test result file");
-                $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+                $objPHPExcel->getDefaultStyle('')->getFont()->setName('Arial')->setSize(10); 
                 $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setAutoSize(true);
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'CÓDIGO')
-                            ->setCellValue('B1', 'NOMBRE')
-                            ->setCellValue('C1', 'CIUDAD')
-                            ->setCellValue('D1', 'PERIODO')
-                            ->setCellValue('E1', 'ABIERTO')
-                            ->setCellValue('F1', 'GENERA SERV POR COBRAR')
-                            ->setCellValue('G1', 'ULT PAGO')
-                            ->setCellValue('H1', 'ULT PAGO PRIMA')
-                            ->setCellValue('I1', 'ULT PAGO CESANTIAS');
-
+                            ->setCellValue('B1', 'NIT')
+                            ->setCellValue('C1', 'DV')
+                            ->setCellValue('D1', 'CLIENTE')
+                            ->setCellValue('E1', 'FORMA PAGO')
+                            ->setCellValue('F1', 'PLAZO')
+                            ->setCellValue('G1', 'DIRECCION')
+                            ->setCellValue('H1', 'BARRIO')
+                            ->setCellValue('I1', 'CIUDAD')
+                            ->setCellValue('J1', 'TELEFONO')
+                            ->setCellValue('K1', 'CELULAR')
+                            ->setCellValue('L1', 'FAX')
+                            ->setCellValue('M1', 'EMAIL')
+                            ->setCellValue('N1', 'GERENTE')
+                            ->setCellValue('O1', 'CELULAR')
+                            ->setCellValue('P1', 'FINANCIERO')
+                            ->setCellValue('Q1', 'CELULAR')
+                            ->setCellValue('R1', 'CONTACTO')
+                            ->setCellValue('S1', 'CELULAR')
+                            ->setCellValue('T1', 'TELEFONO')
+                            ->setCellValue('U1', 'COMENTARIOS');
                 $i = 2;
                 $arClientes = $em->getRepository('BrasaRecursoHumanoBundle:RhuCliente')->findAll();
                 foreach ($arClientes as $arCliente) {
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arCliente->getCodigoClientePk())
-                            ->setCellValue('B' . $i, $arCliente->getNombre())
-                            ->setCellValue('C' . $i, $arCliente->getCiudadRel()->getNombre())
-                            ->setCellValue('D' . $i, $arCliente->getPeriodoPagoRel()->getNombre())
-                            ->setCellValue('E' . $i, $objFunciones->devuelveBoolean($arCliente->getPagoAbierto()))
-                            ->setCellValue('F' . $i, $objFunciones->devuelveBoolean($arCliente->getGeneraServicioCobrar()))
-                            ->setCellValue('G' . $i, $arCliente->getFechaUltimoPago()->format('Y-m-d'))
-                            ->setCellValue('H' . $i, $arCliente->getFechaUltimoPagoPrima()->format('Y-m-d'))
-                            ->setCellValue('I' . $i, $arCliente->getFechaUltimoPagoCesantias()->format('Y-m-d'));
+                            ->setCellValue('B' . $i, $arCliente->getNit())
+                            ->setCellValue('C' . $i, $arCliente->getDigitoVerificacion())
+                            ->setCellValue('D' . $i, $arCliente->getNombreCorto())
+                            ->setCellValue('E' . $i, $arCliente->getFormaPagoRel()->getNombre())
+                            ->setCellValue('F' . $i, $arCliente->getPlazoPago())
+                            ->setCellValue('G' . $i, $arCliente->getDireccion())
+                            ->setCellValue('H' . $i, $arCliente->getBarrio())
+                            ->setCellValue('I' . $i, $arCliente->getCiudadRel()->getNombre())
+                            ->setCellValue('J' . $i, $arCliente->getTelefono())
+                            ->setCellValue('K' . $i, $arCliente->getCelular())
+                            ->setCellValue('L' . $i, $arCliente->getFax())
+                            ->setCellValue('M' . $i, $arCliente->getEmail())
+                            ->setCellValue('N' . $i, $arCliente->getGerente())
+                            ->setCellValue('O' . $i, $arCliente->getCelularGerente())
+                            ->setCellValue('P' . $i, $arCliente->getFinanciero())
+                            ->setCellValue('Q' . $i, $arCliente->getCelularFinanciero())
+                            ->setCellValue('R' . $i, $arCliente->getContacto())
+                            ->setCellValue('S' . $i, $arCliente->getCelularContacto())
+                            ->setCellValue('T' . $i, $arCliente->getTelefonoContacto())
+                            ->setCellValue('U' . $i, $arCliente->getComentarios())
+                        ;
                     $i++;
                 }
 
-                $objPHPExcel->getActiveSheet()->setTitle('ccostos');
+                $objPHPExcel->getActiveSheet()->setTitle('Clientes');
                 $objPHPExcel->setActiveSheetIndex(0);
 
                 // Redirect output to a client’s web browser (Excel2007)
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="CentrosCostos.xlsx"');
+                header('Content-Disposition: attachment;filename="Clientes.xlsx"');
                 header('Cache-Control: max-age=0');
                 // If you're serving to IE 9, then the following may be needed
                 header('Cache-Control: max-age=1');

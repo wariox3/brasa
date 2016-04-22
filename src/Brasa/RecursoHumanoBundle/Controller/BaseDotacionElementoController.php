@@ -48,9 +48,14 @@ class BaseDotacionElementoController extends Controller
                     ->setCategory("Test result file");
                 $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
                 $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        
                 $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Codigo')
-                            ->setCellValue('B1', 'Nombre');
+                            ->setCellValue('A1', 'CÓDIGO')
+                            ->setCellValue('B1', 'NOMBRE')
+                            ->setCellValue('C1', 'TIPO');
 
                 $i = 2;
                 $arDotacionElementos = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->findAll();
@@ -58,7 +63,8 @@ class BaseDotacionElementoController extends Controller
                 foreach ($arDotacionElementos as $arDotacionElementos) {
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arDotacionElementos->getCodigoDotacionElementoPk())
-                            ->setCellValue('B' . $i, $arDotacionElementos->getDotacion());
+                            ->setCellValue('B' . $i, $arDotacionElementos->getDotacion())
+                            ->setCellValue('C' . $i, $arDotacionElementos->getDotacionElementoTipoRel()->getNombre());
                     $i++;
                 }
 

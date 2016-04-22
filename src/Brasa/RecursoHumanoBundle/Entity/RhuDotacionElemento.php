@@ -15,12 +15,23 @@ class RhuDotacionElemento
      * @ORM\Column(name="codigo_dotacion_elemento_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoDotacionElementoPk;                                        
+    private $codigoDotacionElementoPk; 
+    
+    /**
+     * @ORM\Column(name="codigo_dotacion_elemento_tipo_fk", type="integer")
+     */    
+    private $codigoDotacionElementoTipoFk;
     
     /**
      * @ORM\Column(name="dotacion", type="string", nullable=true)
      */
     private $dotacion;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuDotacionElementoTipo", inversedBy="dotacionesElementosDotacionElementoTipoRel")
+     * @ORM\JoinColumn(name="codigo_dotacion_elemento_tipo_fk", referencedColumnName="codigo_dotacion_elemento_tipo_pk")
+     */
+    protected $dotacionElementoTipoRel;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuDotacionDetalle", mappedBy="dotacionElementoRel")
@@ -31,6 +42,8 @@ class RhuDotacionElemento
      * @ORM\OneToMany(targetEntity="RhuDotacionCargo", mappedBy="dotacionElementoRel")
      */
     protected $dotacionesCargosDotacionElementoRel;
+    
+    
     /**
      * Constructor
      */
@@ -48,6 +61,30 @@ class RhuDotacionElemento
     public function getCodigoDotacionElementoPk()
     {
         return $this->codigoDotacionElementoPk;
+    }
+
+    /**
+     * Set codigoDotacionElementoTipoFk
+     *
+     * @param integer $codigoDotacionElementoTipoFk
+     *
+     * @return RhuDotacionElemento
+     */
+    public function setCodigoDotacionElementoTipoFk($codigoDotacionElementoTipoFk)
+    {
+        $this->codigoDotacionElementoTipoFk = $codigoDotacionElementoTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoDotacionElementoTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoDotacionElementoTipoFk()
+    {
+        return $this->codigoDotacionElementoTipoFk;
     }
 
     /**
@@ -72,6 +109,30 @@ class RhuDotacionElemento
     public function getDotacion()
     {
         return $this->dotacion;
+    }
+
+    /**
+     * Set dotacionElementoTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElementoTipo $dotacionElementoTipoRel
+     *
+     * @return RhuDotacionElemento
+     */
+    public function setDotacionElementoTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDotacionElementoTipo $dotacionElementoTipoRel = null)
+    {
+        $this->dotacionElementoTipoRel = $dotacionElementoTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get dotacionElementoTipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElementoTipo
+     */
+    public function getDotacionElementoTipoRel()
+    {
+        return $this->dotacionElementoTipoRel;
     }
 
     /**

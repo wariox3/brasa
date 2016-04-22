@@ -4070,6 +4070,9 @@ insert into `rhu_disciplinario_tipo` (`codigo_disciplinario_tipo_pk`, `nombre`, 
 INSERT INTO `rhu_dotacion_tipo` (`codigo_dotacion_tipo_pk`, `nombre`) VALUES('1','NUEVO');
 INSERT INTO `rhu_dotacion_tipo` (`codigo_dotacion_tipo_pk`, `nombre`) VALUES('2','DEVOLUCIÓN');
 
+insert into `rhu_dotacion_elemento_tipo` (`codigo_dotacion_elemento_tipo_pk`, `dotacion`) values('1','DOTACIÓN PERSONAL');
+insert into `rhu_dotacion_elemento_tipo` (`codigo_dotacion_elemento_tipo_pk`, `dotacion`) values('2','DOTACIÓN PUESTO');
+
 insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('1','CARNET');
 insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('2','CAMISA');
 insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('3','PANTALON');
