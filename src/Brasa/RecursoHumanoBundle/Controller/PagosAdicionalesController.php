@@ -108,10 +108,12 @@ class PagosAdicionalesController extends Controller
             }
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form);
+                $form = $this->formularioLista();
                 $this->listar($form);
             }
             if($form->get('BtnExcel')->isClicked()) {
                 $this->filtrarLista($form);
+                $form = $this->formularioLista();
                 $this->listar($form);
                 $this->generarExcel();
             }
@@ -155,12 +157,27 @@ class PagosAdicionalesController extends Controller
         if($session->get('filtroCodigoPagoConcepto')) {
             $arrayPropiedadesConcepto['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $session->get('filtroCodigoPagoConcepto'));
         }
+        $strNombreCorto = "";
+        if($session->get('filtroNumeroIdentificacion')) {
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $session->get('filtroNumeroIdentificacion')));
+            if($arEmpleado) {
+                $session->set('filtroNumeroIdentificacion', $arEmpleado->getNumeroIdentificacion());
+                $strNombreCorto = $arEmpleado->getNombreCorto();
+            }  else {
+                $session->set('filtroNumeroIdentificacion', null);
+            }          
+        } else {
+            $session->set('filtroNumeroIdentificacion', null);
+        }       
+        
         $form = $this->createFormBuilder()
+            ->add('txtNumeroIdentificacion', 'text', array('label'  => 'Numero Identificacion','data' => $session->get('filtroNumeroIdentificacion'), 'required' => false))
+            ->add('txtNombreCorto', 'text', array('label'  => 'NombreCorto','data' => $strNombreCorto))                    
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('pagoConceptoRel', 'entity', $arrayPropiedadesConcepto)    
             ->add('BtnRetirarConcepto', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnAplicaDiaLaborado', 'submit', array('label'  => 'Aplicar a dia laborado',))
-            ->add('aplicarDiaLaborado', 'choice', array('choices' => array('2' => 'TODOS', '0' => 'NO', '1' => 'SI')))                
+            ->add('aplicarDiaLaborado', 'choice', array('choices' => array('2' => 'TODOS', '0' => 'NO', '1' => 'SI'), 'data' => $session->get('filtroAplicarDiaLaborado')))                
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
@@ -171,8 +188,7 @@ class PagosAdicionalesController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->listaAdicionalesDql(                    
-            $session->get('filtroNombre'),    
-            $session->get('filtroIdentificacion'),
+            $session->get('filtroNumeroIdentificacion'),
             $session->get('filtroAplicarDiaLaborado'),        
             $session->get('filtroCodigoCentroCosto'),
             $session->get('filtroCodigoPagoConcepto'));
@@ -184,9 +200,8 @@ class PagosAdicionalesController extends Controller
         $controles = $request->request->get('form');
         $arrControles = $request->request->All();
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
-        $session->set('filtroNombre', $arrControles['txtNombreCorto']);
-        $session->set('filtroIdentificacion', $arrControles['txtNumeroIdentificacion']);
-        $session->set('filtroAplicarDiaLaborado', $controles['aplicarDiaLaborado']);
+        $session->set('filtroNumeroIdentificacion', $form->get('txtNumeroIdentificacion')->getData());
+        $session->set('filtroAplicarDiaLaborado', $form->get('aplicarDiaLaborado')->getData());
         $session->set('filtroCodigoPagoConcepto', $controles['pagoConceptoRel']);
     }
 

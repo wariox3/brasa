@@ -34,34 +34,13 @@ class ClienteController extends Controller
             if($form->get('BtnExcel')->isClicked()) {
                 $this->generarExcel();
             }
-            if($form->get('BtnInactivar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoCliente) {
-                        $arCliente = new \Brasa\RecursoHumanoBundle\Entity\RhuCliente();
-                        $arCliente = $em->getRepository('BrasaRecursoHumanoBundle:RhuCliente')->find($codigoCliente);
-                        $arContratosCliente = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('codigoClienteFk' =>$codigoCliente, 'estadoActivo' => 1)); 
-                        $douNumeroContratoActivos = count($arContratosCliente);
-                        if($arCliente->getEstadoActivo() == 1){
-                            if ($douNumeroContratoActivos == 0){
-                                $arCliente->setEstadoActivo(0);
-                            }else {
-                                echo "<script>alert('No se  puede inactivar, el centro de costo tiene contrato(s) abierto(s)');</script>";
-                            }
-                        } else {
-                            $arCliente->setEstadoActivo(1);
-                        }
-                        $em->persist($arCliente);
-                    }
-                    $em->flush();
-                }
-            }
+            
         } else {
             $session->set('dqlCliente', $em->getRepository('BrasaRecursoHumanoBundle:RhuCliente')->ListaDQL(
                     $session->get('filtroNombreCliente')
                     ));                          
-        }      
-        $arClientes = $paginator->paginate($em->createQuery($this->strDqlLista), $this->get('request')->query->get('page', 1), 20);
+        }             
+        $arClientes = $paginator->paginate($em->createQuery($session->get('dqlCliente')), $this->get('request')->query->get('page', 1), 50);
         return $this->render('BrasaRecursoHumanoBundle:Base/Cliente:lista.html.twig', array(
             'arClientes' => $arClientes,
             'form' => $form->createView()));
