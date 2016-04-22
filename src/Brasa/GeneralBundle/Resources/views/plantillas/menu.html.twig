@@ -34,6 +34,7 @@
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Recurso humano</a>
                             <ul class="dropdown-menu">
+                                <li><a href="{{ path('brs_rhu_base_cliente') }}">Cliente</a></li>
                                 <li><a href="{{ path('brs_rhu_base_centros_costos_lista') }}">Centros de costo</a></li>
                                 <li><a href="{{ path('brs_rhu_base_empleados_lista') }}">Empleados</a></li>
                                 <li><a href="{{ path('brs_rhu_base_contratos_lista') }}">Contratos</a></li>
@@ -575,53 +576,25 @@
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Pagos</a>
+                                    <a tabindex="-1" href="#">Nomina</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_rhu_pagos_lista') }}">Lista</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Pagos banco</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_rhu_pago_banco_lista') }}">Lista</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Programaciones pago (Periodos)</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_rhu_programaciones_pago_lista') }}">Lista</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Liquidaciones</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_rhu_liquidaciones_lista') }}">Lista</a></li>
+                                        <li><a href="{{ path('brs_rhu_programaciones_pago_lista') }}">Programaciones pago</a></li>
+                                        <li><a href="{{ path('brs_rhu_pagos_lista') }}">Pagos</a></li>
+                                        <li><a href="{{ path('brs_rhu_pago_banco_lista') }}">Pagos banco</a></li>
+                                        <li><a href="{{ path('brs_rhu_liquidaciones_lista') }}">Liquidaciones</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="{{ path('brs_rhu_pagos_adicionales_lista') }}">Adicionales al pago</a></li>
+                                        <li><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_lista') }}">Adicionales al pago (Masivo)</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="{{ path('brs_rhu_licencias_lista') }}">Licencias</a></li>
+                                        <li><a href="{{ path('brs_rhu_incapacidades_lista') }}">Incapacidades</a></li>
+                                        <li><a href="{{ path('brs_rhu_incapacidades_pagos_lista') }}">Pagos Incapacidades</a></li>                                        
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Creditos</a>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_rhu_creditos_lista') }}">Lista</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Adicionales al pago  (Permanentes)</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_rhu_pagos_adicionales_lista') }}">Lista</a></li>
-                                        <li><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_lista') }}">Generar masivo</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Incapacidades</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_rhu_incapacidades_lista') }}">Lista</a></li>
-                                        <li><a href="{{ path('brs_rhu_incapacidades_pagos_lista') }}">Pagos Incapacidades</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Licencias</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_rhu_licencias_lista') }}">Lista</a></li>
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
@@ -683,7 +656,7 @@
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_rhu_permiso_lista') }}">Lista</a></li>
                                     </ul>
-                                </li>
+                                </li>                               
                             </ul>
                         </li>
                         <li class="dropdown-submenu">

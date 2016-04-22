@@ -175,7 +175,11 @@ class GenCiudad
      * @ORM\OneToMany(targetEntity="Brasa\CarteraBundle\Entity\CarCliente", mappedBy="ciudadRel")
      */
     protected $carClientesCiudadRel;
-    
+
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuCliente", mappedBy="ciudadRel")
+     */
+    protected $rhuClientesCiudadRel;    
    
     /**
      * Constructor
@@ -1200,5 +1204,39 @@ class GenCiudad
     public function getCarClientesCiudadRel()
     {
         return $this->carClientesCiudadRel;
+    }
+
+    /**
+     * Add rhuClientesCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCliente $rhuClientesCiudadRel
+     *
+     * @return GenCiudad
+     */
+    public function addRhuClientesCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuCliente $rhuClientesCiudadRel)
+    {
+        $this->rhuClientesCiudadRel[] = $rhuClientesCiudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuClientesCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCliente $rhuClientesCiudadRel
+     */
+    public function removeRhuClientesCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuCliente $rhuClientesCiudadRel)
+    {
+        $this->rhuClientesCiudadRel->removeElement($rhuClientesCiudadRel);
+    }
+
+    /**
+     * Get rhuClientesCiudadRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuClientesCiudadRel()
+    {
+        return $this->rhuClientesCiudadRel;
     }
 }

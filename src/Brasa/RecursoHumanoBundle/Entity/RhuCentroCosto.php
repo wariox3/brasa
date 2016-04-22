@@ -21,6 +21,11 @@ class RhuCentroCosto
      * @ORM\Column(name="nombre", type="string", length=60, nullable=true)
      */    
     private $nombre;
+
+    /**
+     * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
+     */    
+    private $codigoClienteFk;
     
     /**
      * @ORM\Column(name="codigo_ciudad_fk", type="integer", nullable=true)
@@ -117,6 +122,12 @@ class RhuCentroCosto
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
      */    
     private $codigoUsuario;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuCliente", inversedBy="centrosCostosClienteRel")
+     * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
+     */
+    protected $clienteRel;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuPeriodoPago", inversedBy="centrosCostosPeriodoPagoRel")
@@ -1504,5 +1515,53 @@ class RhuCentroCosto
     public function getCartasCentroCostoRel()
     {
         return $this->cartasCentroCostoRel;
+    }
+
+    /**
+     * Set codigoClienteFk
+     *
+     * @param integer $codigoClienteFk
+     *
+     * @return RhuCentroCosto
+     */
+    public function setCodigoClienteFk($codigoClienteFk)
+    {
+        $this->codigoClienteFk = $codigoClienteFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoClienteFk
+     *
+     * @return integer
+     */
+    public function getCodigoClienteFk()
+    {
+        return $this->codigoClienteFk;
+    }
+
+    /**
+     * Set clienteRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCliente $clienteRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function setClienteRel(\Brasa\RecursoHumanoBundle\Entity\RhuCliente $clienteRel = null)
+    {
+        $this->clienteRel = $clienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get clienteRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCliente
+     */
+    public function getClienteRel()
+    {
+        return $this->clienteRel;
     }
 }

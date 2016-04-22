@@ -48,7 +48,11 @@ class GenFormaPago
      * @ORM\OneToMany(targetEntity="Brasa\CarteraBundle\Entity\CarCliente", mappedBy="formaPagoRel")
      */
     protected $carClientesFormaPagoRel;
-    
+
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuCliente", mappedBy="formaPagoRel")
+     */
+    protected $rhuClientesFormaPagoRel;    
 
     /**
      * Constructor
@@ -263,5 +267,39 @@ class GenFormaPago
     public function getCarClientesFormaPagoRel()
     {
         return $this->carClientesFormaPagoRel;
+    }
+
+    /**
+     * Add rhuClientesFormaPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCliente $rhuClientesFormaPagoRel
+     *
+     * @return GenFormaPago
+     */
+    public function addRhuClientesFormaPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCliente $rhuClientesFormaPagoRel)
+    {
+        $this->rhuClientesFormaPagoRel[] = $rhuClientesFormaPagoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuClientesFormaPagoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCliente $rhuClientesFormaPagoRel
+     */
+    public function removeRhuClientesFormaPagoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCliente $rhuClientesFormaPagoRel)
+    {
+        $this->rhuClientesFormaPagoRel->removeElement($rhuClientesFormaPagoRel);
+    }
+
+    /**
+     * Get rhuClientesFormaPagoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuClientesFormaPagoRel()
+    {
+        return $this->rhuClientesFormaPagoRel;
     }
 }
