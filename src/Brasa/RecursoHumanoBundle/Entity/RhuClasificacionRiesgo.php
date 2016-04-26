@@ -38,6 +38,11 @@ class RhuClasificacionRiesgo
     protected $contratosClasificacionRiesgoRel;     
     
     /**
+     * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiContrato", mappedBy="clasificacionRiesgoRel")
+     */
+    protected $afiContratosClasificacionRiesgoRel;    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -169,5 +174,39 @@ class RhuClasificacionRiesgo
     public function getContratosClasificacionRiesgoRel()
     {
         return $this->contratosClasificacionRiesgoRel;
+    }
+
+    /**
+     * Add afiContratosClasificacionRiesgoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiContrato $afiContratosClasificacionRiesgoRel
+     *
+     * @return RhuClasificacionRiesgo
+     */
+    public function addAfiContratosClasificacionRiesgoRel(\Brasa\AfiliacionBundle\Entity\AfiContrato $afiContratosClasificacionRiesgoRel)
+    {
+        $this->afiContratosClasificacionRiesgoRel[] = $afiContratosClasificacionRiesgoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove afiContratosClasificacionRiesgoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiContrato $afiContratosClasificacionRiesgoRel
+     */
+    public function removeAfiContratosClasificacionRiesgoRel(\Brasa\AfiliacionBundle\Entity\AfiContrato $afiContratosClasificacionRiesgoRel)
+    {
+        $this->afiContratosClasificacionRiesgoRel->removeElement($afiContratosClasificacionRiesgoRel);
+    }
+
+    /**
+     * Get afiContratosClasificacionRiesgoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAfiContratosClasificacionRiesgoRel()
+    {
+        return $this->afiContratosClasificacionRiesgoRel;
     }
 }

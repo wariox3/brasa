@@ -114,13 +114,13 @@
                                 <li><a href="{{ path('brs_tur_base_recurso_lista') }}">Recurso</a></li>
                                 <li><a href="{{ path('brs_tur_base_turno_lista') }}">Turno</a></li>
                                 <li><a href="{{ path('brs_tur_base_plantilla_lista') }}">Plantilla de turno</a></li>
-                                <li><a href="{{ path('brs_tur_base_concepto_servicio_lista') }}">Concepto servicio</a></li>                                
+                                <li><a href="{{ path('brs_tur_base_concepto_servicio_lista') }}">Concepto servicio</a></li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">General</a>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_tur_base_factura_concepto') }}">Conceptos factura</a></li>
                                         <li><a href="{{ path('brs_tur_base_recurso_tipo_lista') }}">Recurso tipo</a></li>
-                                        <li><a href="{{ path('brs_tur_base_novedad_tipo') }}">Novedad tipo</a></li>                                
+                                        <li><a href="{{ path('brs_tur_base_novedad_tipo') }}">Novedad tipo</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -144,8 +144,9 @@
                             <a tabindex="-1" href="#">Afiliacion</a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{ path('brs_afi_base_cliente') }}">Cliente</a></li>
+                                <li><a href="{{ path('brs_afi_base_empleado') }}">Empleado</a></li>
                             </ul>
-                        </li>                        
+                        </li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -278,7 +279,7 @@
                                     <a tabindex="-1" href="#">Servicios</a>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_tur_consulta_servicios_detalles') }}">Detalles</a></li>
-                                        <li><a href="{{ path('brs_tur_consulta_servicios_detalles_recursos') }}">Detalles y recursos</a></li>                                        
+                                        <li><a href="{{ path('brs_tur_consulta_servicios_detalles_recursos') }}">Detalles y recursos</a></li>
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
@@ -330,6 +331,17 @@
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_cartera_consulta_notadebito_lista') }}">Lista</a></li>
                                         <li><a href="{{ path('brs_cartera_consulta_notadebito_detalle') }}">Detalle</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">Afiliacion</a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Periodo</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_afi_consulta_periodo_detalle') }}">Detalles</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -394,7 +406,7 @@
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_tur_proceso_generar_factura') }}">Lista</a></li>
                                     </ul>
-                                </li>                                
+                                </li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Generar programacion</a>
                                     <ul class="dropdown-menu">
@@ -418,7 +430,13 @@
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_tur_proceso_actualizar_hora_pedido') }}">Actualizar horas pedidos</a></li>
                                     </ul>
-                                </li>                                
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">Afiliacion</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ path('brs_afi_proceso_generar_periodo') }}">Generar periodo</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -595,7 +613,7 @@
                                         <li role="separator" class="divider"></li>
                                         <li><a href="{{ path('brs_rhu_licencias_lista') }}">Licencias</a></li>
                                         <li><a href="{{ path('brs_rhu_incapacidades_lista') }}">Incapacidades</a></li>
-                                        <li><a href="{{ path('brs_rhu_incapacidades_pagos_lista') }}">Pagos Incapacidades</a></li>                                        
+                                        <li><a href="{{ path('brs_rhu_incapacidades_pagos_lista') }}">Pagos Incapacidades</a></li>
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
@@ -663,7 +681,7 @@
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_rhu_permiso_lista') }}">Lista</a></li>
                                     </ul>
-                                </li>                               
+                                </li>
                             </ul>
                         </li>
                         <li class="dropdown-submenu">
@@ -704,7 +722,7 @@
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_tur_movimiento_novedad') }}">Lista</a></li>
                                     </ul>
-                                </li>                                
+                                </li>
                             </ul>
                         </li>
                         <li class="dropdown-submenu">
@@ -752,6 +770,13 @@
                                         <li><a href="{{ path('brs_cartera_movimiento_notadebito_listar') }}">Lista</a></li>
                                     </ul>
                                 </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">Afiliacion</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ path('brs_afi_movimiento_periodo') }}">Periodo</a></li>
+                                <li><a href="{{ path('brs_afi_movimiento_factura') }}">Factura</a></li>
                             </ul>
                         </li>
                     </ul>

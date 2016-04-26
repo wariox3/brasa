@@ -42,7 +42,10 @@ class GenTipoIdentificacion
      */
     protected $cbtTercerosTipoIdentificacionRel;
     
-    
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiEmpleado", mappedBy="tipoIdentificacionRel")
+     */
+    protected $afiEmpleadosTipoIdentificacionRel;        
     
     /**
      * Constructor
@@ -212,5 +215,39 @@ class GenTipoIdentificacion
     public function getCbtTercerosTipoIdentificacionRel()
     {
         return $this->cbtTercerosTipoIdentificacionRel;
+    }
+
+    /**
+     * Add afiEmpleadosTipoIdentificacionRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiEmpleado $afiEmpleadosTipoIdentificacionRel
+     *
+     * @return GenTipoIdentificacion
+     */
+    public function addAfiEmpleadosTipoIdentificacionRel(\Brasa\AfiliacionBundle\Entity\AfiEmpleado $afiEmpleadosTipoIdentificacionRel)
+    {
+        $this->afiEmpleadosTipoIdentificacionRel[] = $afiEmpleadosTipoIdentificacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove afiEmpleadosTipoIdentificacionRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiEmpleado $afiEmpleadosTipoIdentificacionRel
+     */
+    public function removeAfiEmpleadosTipoIdentificacionRel(\Brasa\AfiliacionBundle\Entity\AfiEmpleado $afiEmpleadosTipoIdentificacionRel)
+    {
+        $this->afiEmpleadosTipoIdentificacionRel->removeElement($afiEmpleadosTipoIdentificacionRel);
+    }
+
+    /**
+     * Get afiEmpleadosTipoIdentificacionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAfiEmpleadosTipoIdentificacionRel()
+    {
+        return $this->afiEmpleadosTipoIdentificacionRel;
     }
 }

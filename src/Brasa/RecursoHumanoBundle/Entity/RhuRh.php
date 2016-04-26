@@ -36,7 +36,11 @@ class RhuRh
      * @ORM\OneToMany(targetEntity="RhuSeleccion", mappedBy="rhRel")
      */
     protected $seleccionesRhRel;
-
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiEmpleado", mappedBy="rhRel")
+     */
+    protected $afiEmpleadosRhRel; 
 
 
   
@@ -184,5 +188,39 @@ class RhuRh
     public function getSeleccionesRhRel()
     {
         return $this->seleccionesRhRel;
+    }
+
+    /**
+     * Add afiEmpleadosRhRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiEmpleado $afiEmpleadosRhRel
+     *
+     * @return RhuRh
+     */
+    public function addAfiEmpleadosRhRel(\Brasa\AfiliacionBundle\Entity\AfiEmpleado $afiEmpleadosRhRel)
+    {
+        $this->afiEmpleadosRhRel[] = $afiEmpleadosRhRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove afiEmpleadosRhRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiEmpleado $afiEmpleadosRhRel
+     */
+    public function removeAfiEmpleadosRhRel(\Brasa\AfiliacionBundle\Entity\AfiEmpleado $afiEmpleadosRhRel)
+    {
+        $this->afiEmpleadosRhRel->removeElement($afiEmpleadosRhRel);
+    }
+
+    /**
+     * Get afiEmpleadosRhRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAfiEmpleadosRhRel()
+    {
+        return $this->afiEmpleadosRhRel;
     }
 }

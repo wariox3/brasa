@@ -30,8 +30,13 @@ class RhuEstadoCivil
     /**
      * @ORM\OneToMany(targetEntity="RhuSeleccion", mappedBy="estadoCivilRel")
      */
-    protected $seleccionesEstadoCivilRel;    
-
+    protected $seleccionesEstadoCivilRel;         
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiEmpleado", mappedBy="estadoCivilRel")
+     */
+    protected $afiEmpleadosEstadoCivilRel;     
+    
     /**
      * Constructor
      */
@@ -140,5 +145,39 @@ class RhuEstadoCivil
     public function getSeleccionesEstadoCivilRel()
     {
         return $this->seleccionesEstadoCivilRel;
+    }
+
+    /**
+     * Add afiEmpleadosEstadoCivilRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiEmpleado $afiEmpleadosEstadoCivilRel
+     *
+     * @return RhuEstadoCivil
+     */
+    public function addAfiEmpleadosEstadoCivilRel(\Brasa\AfiliacionBundle\Entity\AfiEmpleado $afiEmpleadosEstadoCivilRel)
+    {
+        $this->afiEmpleadosEstadoCivilRel[] = $afiEmpleadosEstadoCivilRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove afiEmpleadosEstadoCivilRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiEmpleado $afiEmpleadosEstadoCivilRel
+     */
+    public function removeAfiEmpleadosEstadoCivilRel(\Brasa\AfiliacionBundle\Entity\AfiEmpleado $afiEmpleadosEstadoCivilRel)
+    {
+        $this->afiEmpleadosEstadoCivilRel->removeElement($afiEmpleadosEstadoCivilRel);
+    }
+
+    /**
+     * Get afiEmpleadosEstadoCivilRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAfiEmpleadosEstadoCivilRel()
+    {
+        return $this->afiEmpleadosEstadoCivilRel;
     }
 }

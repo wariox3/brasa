@@ -187,6 +187,11 @@ class GenCiudad
     protected $afiClientesCiudadRel;        
     
     /**
+     * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiEmpleado", mappedBy="ciudadRel")
+     */
+    protected $afiEmpleadosCiudadRel;    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -1279,5 +1284,39 @@ class GenCiudad
     public function getAfiClientesCiudadRel()
     {
         return $this->afiClientesCiudadRel;
+    }
+
+    /**
+     * Add afiEmpleadosCiudadRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiEmpleado $afiEmpleadosCiudadRel
+     *
+     * @return GenCiudad
+     */
+    public function addAfiEmpleadosCiudadRel(\Brasa\AfiliacionBundle\Entity\AfiEmpleado $afiEmpleadosCiudadRel)
+    {
+        $this->afiEmpleadosCiudadRel[] = $afiEmpleadosCiudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove afiEmpleadosCiudadRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiEmpleado $afiEmpleadosCiudadRel
+     */
+    public function removeAfiEmpleadosCiudadRel(\Brasa\AfiliacionBundle\Entity\AfiEmpleado $afiEmpleadosCiudadRel)
+    {
+        $this->afiEmpleadosCiudadRel->removeElement($afiEmpleadosCiudadRel);
+    }
+
+    /**
+     * Get afiEmpleadosCiudadRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAfiEmpleadosCiudadRel()
+    {
+        return $this->afiEmpleadosCiudadRel;
     }
 }

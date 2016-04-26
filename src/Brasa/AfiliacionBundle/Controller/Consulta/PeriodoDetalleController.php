@@ -1,15 +1,15 @@
 <?php
-namespace Brasa\AfiliacionBundle\Controller\Base;
+namespace Brasa\AfiliacionBundle\Controller\Consulta;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Brasa\AfiliacionBundle\Form\Type\AfiClienteType;
-class ClienteController extends Controller
+use Brasa\AfiliacionBundle\Form\Type\AfiPeriodoType;
+class PeriodoDetalleController extends Controller
 {
     var $strDqlLista = "";
     /**
-     * @Route("/afi/base/cliente", name="brs_afi_base_cliente")
+     * @Route("/afi/consulta/periodo/detalle", name="brs_afi_consulta_periodo_detalle")
      */    
     public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();        
@@ -19,10 +19,28 @@ class ClienteController extends Controller
         $this->lista();
         if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
+            
+            if($request->request->get('OpGenerar')) {            
+                $codigoPeriodo = $request->request->get('OpGenerar');
+                $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->generar($codigoPeriodo);
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
+            }
+            
+            if($request->request->get('OpDeshacer')) {            
+                $codigoPeriodo = $request->request->get('OpDeshacer');
+                $strSql = "DELETE FROM afi_periodo_detalle WHERE codigo_periodo_fk = " . $codigoPeriodo;           
+                $em->getConnection()->executeQuery($strSql);                 
+                $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
+                $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);                
+                $arPeriodo->setEstadoGenerado(0);
+                $em->persist($arPeriodo);
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
+            }            
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_base_factura_concepto'));
+                $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
@@ -33,64 +51,34 @@ class ClienteController extends Controller
             }
         }
         
-        $arClientes = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
-        return $this->render('BrasaAfiliacionBundle:Base/Cliente:lista.html.twig', array(
-            'arClientes' => $arClientes, 
+        $arPeriodoDetalles = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
+        return $this->render('BrasaAfiliacionBundle:Consulta/Periodo:detalle.html.twig', array(
+            'arPeriodoDetalles' => $arPeriodoDetalles, 
             'form' => $form->createView()));
     }
-
-    /**
-     * @Route("/afi/base/cliente/nuevo/{codigoCliente}", name="brs_afi_base_cliente_nuevo")
-     */    
-    public function nuevoAction(Request $request, $codigoCliente = '') {
-        $em = $this->getDoctrine()->getManager();
-        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $arCliente = new \Brasa\AfiliacionBundle\Entity\AfiCliente();
-        if($codigoCliente != '' && $codigoCliente != '0') {
-            $arCliente = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->find($codigoCliente);
-        }        
-        $form = $this->createForm(new AfiClienteType, $arCliente);
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $arCliente = $form->getData();                        
-            $em->persist($arCliente);
-            $em->flush();            
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_afi_base_cliente_nuevo', array('codigoCliente' => 0 )));
-            } else {
-                return $this->redirect($this->generateUrl('brs_afi_base_cliente'));
-            }                                   
-        }
-        return $this->render('BrasaAfiliacionBundle:Base/Cliente:nuevo.html.twig', array(
-            'arCliente' => $arCliente,
-            'form' => $form->createView()));
-    }        
-
     
     private function lista() {    
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->listaDQL(
-                $session->get('filtroClienteNombre')   
+        $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetalle')->listaConsultaDql(
+
                 ); 
-    }
+    }       
 
     private function filtrar ($form) {        
         $session = $this->getRequest()->getSession();        
-        $session->set('filtroClienteNombre', $form->get('TxtNombre')->getData());
+        $session->set('filtroPeriodoNombre', $form->get('TxtNombre')->getData());
         $this->lista();
     }
     
     private function formularioFiltro() {
         $session = $this->getRequest()->getSession();
-        $form = $this->createFormBuilder()            
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroClienteNombre')))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
+        $form = $this->createFormBuilder()                        
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
-    }    
+    }            
 
     private function generarExcel() {
         ob_clean();
@@ -114,21 +102,21 @@ class ClienteController extends Controller
         $i = 2;
         
         $query = $em->createQuery($this->strDqlLista);
-        $arClientes = new \Brasa\AfiliacionBundle\Entity\AfiCliente();
-        $arClientes = $query->getResult();
+        $arPeriodos = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
+        $arPeriodos = $query->getResult();
                 
-        foreach ($arClientes as $arCliente) {            
+        foreach ($arPeriodos as $arPeriodo) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arCliente->getCodigoClientePk())
-                    ->setCellValue('B' . $i, $arCliente->getNombre());                                    
+                    ->setCellValue('A' . $i, $arPeriodo->getCodigoPeriodoPk())
+                    ->setCellValue('B' . $i, $arPeriodo->getNombre());                                    
             $i++;
         }
         
-        $objPHPExcel->getActiveSheet()->setTitle('Cliente');
+        $objPHPExcel->getActiveSheet()->setTitle('Periodo');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Clientes.xlsx"');
+        header('Content-Disposition: attachment;filename="Periodos.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

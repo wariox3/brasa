@@ -133,7 +133,30 @@ class AfiCliente
      * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
      */
     protected $ciudadRel;             
+
+    /**
+     * @ORM\OneToMany(targetEntity="AfiContrato", mappedBy="clienteRel")
+     */
+    protected $contratosClienteRel;     
     
+    /**
+     * @ORM\OneToMany(targetEntity="AfiPeriodo", mappedBy="clienteRel")
+     */
+    protected $periodosClienteRel;    
+
+    /**
+     * @ORM\OneToMany(targetEntity="AfiFactura", mappedBy="clienteRel")
+     */
+    protected $facturasClienteRel;    
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->contratosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->periodosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoClientePk
@@ -695,5 +718,107 @@ class AfiCliente
     public function getCiudadRel()
     {
         return $this->ciudadRel;
+    }
+
+    /**
+     * Add contratosClienteRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiContrato $contratosClienteRel
+     *
+     * @return AfiCliente
+     */
+    public function addContratosClienteRel(\Brasa\AfiliacionBundle\Entity\AfiContrato $contratosClienteRel)
+    {
+        $this->contratosClienteRel[] = $contratosClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove contratosClienteRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiContrato $contratosClienteRel
+     */
+    public function removeContratosClienteRel(\Brasa\AfiliacionBundle\Entity\AfiContrato $contratosClienteRel)
+    {
+        $this->contratosClienteRel->removeElement($contratosClienteRel);
+    }
+
+    /**
+     * Get contratosClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContratosClienteRel()
+    {
+        return $this->contratosClienteRel;
+    }
+
+    /**
+     * Add periodosClienteRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodo $periodosClienteRel
+     *
+     * @return AfiCliente
+     */
+    public function addPeriodosClienteRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodo $periodosClienteRel)
+    {
+        $this->periodosClienteRel[] = $periodosClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove periodosClienteRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodo $periodosClienteRel
+     */
+    public function removePeriodosClienteRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodo $periodosClienteRel)
+    {
+        $this->periodosClienteRel->removeElement($periodosClienteRel);
+    }
+
+    /**
+     * Get periodosClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPeriodosClienteRel()
+    {
+        return $this->periodosClienteRel;
+    }
+
+    /**
+     * Add facturasClienteRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiFactura $facturasClienteRel
+     *
+     * @return AfiCliente
+     */
+    public function addFacturasClienteRel(\Brasa\AfiliacionBundle\Entity\AfiFactura $facturasClienteRel)
+    {
+        $this->facturasClienteRel[] = $facturasClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasClienteRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiFactura $facturasClienteRel
+     */
+    public function removeFacturasClienteRel(\Brasa\AfiliacionBundle\Entity\AfiFactura $facturasClienteRel)
+    {
+        $this->facturasClienteRel->removeElement($facturasClienteRel);
+    }
+
+    /**
+     * Get facturasClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasClienteRel()
+    {
+        return $this->facturasClienteRel;
     }
 }

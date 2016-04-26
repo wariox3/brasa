@@ -76,6 +76,12 @@ class RhuEntidadSalud
      * @ORM\OneToMany(targetEntity="RhuTrasladoSalud", mappedBy="entidadSaludNuevaRel")
      */
     protected $trasladosSaludEntidadSaludNuevaRel;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiContrato", mappedBy="entidadSaludRel")
+     */
+    protected $AfiContratosEntidadSaludRel;    
+
     /**
      * Constructor
      */
@@ -456,5 +462,39 @@ class RhuEntidadSalud
     public function getTrasladosSaludEntidadSaludNuevaRel()
     {
         return $this->trasladosSaludEntidadSaludNuevaRel;
+    }
+
+    /**
+     * Add afiContratosEntidadSaludRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiContrato $afiContratosEntidadSaludRel
+     *
+     * @return RhuEntidadSalud
+     */
+    public function addAfiContratosEntidadSaludRel(\Brasa\AfiliacionBundle\Entity\AfiContrato $afiContratosEntidadSaludRel)
+    {
+        $this->AfiContratosEntidadSaludRel[] = $afiContratosEntidadSaludRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove afiContratosEntidadSaludRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiContrato $afiContratosEntidadSaludRel
+     */
+    public function removeAfiContratosEntidadSaludRel(\Brasa\AfiliacionBundle\Entity\AfiContrato $afiContratosEntidadSaludRel)
+    {
+        $this->AfiContratosEntidadSaludRel->removeElement($afiContratosEntidadSaludRel);
+    }
+
+    /**
+     * Get afiContratosEntidadSaludRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAfiContratosEntidadSaludRel()
+    {
+        return $this->AfiContratosEntidadSaludRel;
     }
 }

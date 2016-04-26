@@ -30,6 +30,12 @@ class RhuSsoSubtipoCotizante
      * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="ssoSubtipoCotizanteRel")
      */
     protected $contratosSsoSubtipoCotizanteRel;     
+
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiContrato", mappedBy="ssoSubtipoCotizanteRel")
+     */
+    protected $AfiContratosSsoSubtipoCotizanteRel;         
+
     
     /**
      * Constructor
@@ -154,5 +160,39 @@ class RhuSsoSubtipoCotizante
     public function getContratosSsoSubtipoCotizanteRel()
     {
         return $this->contratosSsoSubtipoCotizanteRel;
+    }
+
+    /**
+     * Add afiContratosSsoSubtipoCotizanteRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiContrato $afiContratosSsoSubtipoCotizanteRel
+     *
+     * @return RhuSsoSubtipoCotizante
+     */
+    public function addAfiContratosSsoSubtipoCotizanteRel(\Brasa\AfiliacionBundle\Entity\AfiContrato $afiContratosSsoSubtipoCotizanteRel)
+    {
+        $this->AfiContratosSsoSubtipoCotizanteRel[] = $afiContratosSsoSubtipoCotizanteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove afiContratosSsoSubtipoCotizanteRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiContrato $afiContratosSsoSubtipoCotizanteRel
+     */
+    public function removeAfiContratosSsoSubtipoCotizanteRel(\Brasa\AfiliacionBundle\Entity\AfiContrato $afiContratosSsoSubtipoCotizanteRel)
+    {
+        $this->AfiContratosSsoSubtipoCotizanteRel->removeElement($afiContratosSsoSubtipoCotizanteRel);
+    }
+
+    /**
+     * Get afiContratosSsoSubtipoCotizanteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAfiContratosSsoSubtipoCotizanteRel()
+    {
+        return $this->AfiContratosSsoSubtipoCotizanteRel;
     }
 }
