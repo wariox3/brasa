@@ -74,9 +74,9 @@ class IncapacidadesController extends Controller
             $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arIncapacidad = $form->getData();                          
             $arrControles = $request->request->All();
-            if($arrControles['txtNumeroIdentificacion'] != '') {
+            if($arrControles['form_txtNumeroIdentificacion'] != '') {
                 $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));                
+                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));                
                 if(count($arEmpleado) > 0) {
                     $arIncapacidad->setEmpleadoRel($arEmpleado);
                     $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();

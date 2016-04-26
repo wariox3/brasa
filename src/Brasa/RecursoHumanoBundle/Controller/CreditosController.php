@@ -197,9 +197,9 @@ class CreditosController extends Controller
             } else {
                 $arrControles = $request->request->All();
                 $arCredito = $form->getData();
-                if($arrControles['txtNumeroIdentificacion'] != '') {
+                if($arrControles['form_txtNumeroIdentificacion'] != '') {
                     $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
+                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));
                     if(count($arEmpleado) > 0) {
                         $arCredito->setEmpleadoRel($arEmpleado);
                         if($arEmpleado->getCodigoContratoActivoFk() != '') {                        

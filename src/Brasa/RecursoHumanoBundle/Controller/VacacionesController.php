@@ -128,9 +128,9 @@ class VacacionesController extends Controller
             $arrControles = $request->request->All();
             $arVacacion = $form->getData();
             if($form->get('guardar')->isClicked()) {
-                if($arrControles['txtNumeroIdentificacion'] != '') {
+                if($arrControles['form_txtNumeroIdentificacion'] != '') {
                     $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
+                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));
                     if(count($arEmpleado) > 0) {
                         $arVacacion->setEmpleadoRel($arEmpleado);
                         if($arEmpleado->getCodigoContratoActivoFk() != '') {                        
@@ -190,9 +190,9 @@ class VacacionesController extends Controller
                 }
             }
             if($form->get('ver')->isClicked()) {
-                if($arrControles['txtNumeroIdentificacion'] != '') {
+                if($arrControles['form_txtNumeroIdentificacion'] != '') {
                     $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
+                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));
                     if(count($arEmpleado) > 0) {
                         $arVacacion->setEmpleadoRel($arEmpleado);
                         if($arEmpleado->getCodigoContratoActivoFk() != '') {

@@ -138,8 +138,8 @@ class PagosAdicionalesAgregarController extends Controller
             $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arrControles = $request->request->All();
             $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
-            if ($arrControles['txtNumeroIdentificacion'] == ""){
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));
+            if ($arrControles['form_txtNumeroIdentificacion'] == ""){
                 $objMensaje->Mensaje("error", "Digite el número de identificación", $this);
             } else {
                 if ($arEmpleado == null){
@@ -444,8 +444,8 @@ class PagosAdicionalesAgregarController extends Controller
         if($form->isValid()) {
             $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arrControles = $request->request->All();
-            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
-            if ($arrControles['txtNumeroIdentificacion'] == ""){
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));
+            if ($arrControles['form_txtNumeroIdentificacion'] == ""){
                 $objMensaje->Mensaje("error", "Digite el número de identificación", $this);
             }else {
                 if ($arEmpleado == null){

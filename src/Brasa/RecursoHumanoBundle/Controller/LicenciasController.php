@@ -65,9 +65,9 @@ class LicenciasController extends Controller
             $arUsuario = $this->get('security.context')->getToken()->getUser();            
             $arLicencia = $form->getData(); 
             $arrControles = $request->request->All();
-            if($arrControles['txtNumeroIdentificacion'] != '') {
+            if($arrControles['form_txtNumeroIdentificacion'] != '') {
                 $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));                
+                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));                
                 if(count($arEmpleado) > 0) {
                     $arLicencia->setEmpleadoRel($arEmpleado);
                     if($arLicencia->getFechaDesde() <= $arLicencia->getFechaHasta()) {

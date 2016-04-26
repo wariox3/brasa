@@ -13,6 +13,10 @@ class RhuExamenControlType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuExamenClase',
                 'property' => 'nombre',
             ))
+            ->add('cargoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCargo',
+                'property' => 'nombre',
+            ))    
             ->add('entidadExamenRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadExamen',
                 'property' => 'nombre',
