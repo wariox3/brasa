@@ -88,18 +88,12 @@ class EmpleadoController extends Controller
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_empleado'));
             }                            
-            if ($form->get('BtnEliminar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_base_empleado_concepto'));
+            if ($form->get('BtnEliminarContrato')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarContrato');
+                $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->eliminar($arrSeleccionados);
+                //return $this->redirect($this->generateUrl('brs_tur_base_empleado_concepto'));
             }
-            if ($form->get('BtnFiltrar')->isClicked()) {
-                $this->filtrar($form);
-            }
-            if ($form->get('BtnExcel')->isClicked()) {
-                $this->filtrar($form);
-                $this->generarExcel();
-            }
+
         }
         $arEmpleado = new \Brasa\AfiliacionBundle\Entity\AfiEmpleado();
         $arEmpleado = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->find($codigoEmpleado);

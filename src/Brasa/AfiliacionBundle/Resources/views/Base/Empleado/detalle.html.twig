@@ -13,7 +13,7 @@
     </script>    
     <div class="container">
         <div class="page-header">
-            <h3>Detalle cliente</h3>
+            <h3>Detalle empleado</h3>
         </div>
         {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
@@ -92,7 +92,7 @@
                                 <td>{% if arContratos.generaSena == 1 %}SI{% else %}NO{% endif %}</td>
                                 <td>{% if arContratos.generaIcbf == 1 %}SI{% else %}NO{% endif %}</td>
                                 <td><a href="javascript:abrirVentana3('{{ path('brs_afi_base_empleado_contrato_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoContrato': arContratos.codigoContratoPk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
-                                <td><input type="checkbox" name="ChkSeleccionarPuesto[]" value="{{ arContratos.codigoContratoPk }}" /></td>
+                                <td><input type="checkbox" name="ChkSeleccionarContrato[]" value="{{ arContratos.codigoContratoPk }}" /></td>
                             </tr>
                         {% endfor %}
                     </table>
@@ -112,6 +112,6 @@
 
         {{ form_rest(form) }}
         {{ form_end(form) }}
-        <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_base_cliente_lista') }}">Volver</a>
+        <a  class="btn btn-default btn-sm" href="{{ path('brs_afi_base_empleado') }}">Volver</a>
     </div>
 {% endblock %}

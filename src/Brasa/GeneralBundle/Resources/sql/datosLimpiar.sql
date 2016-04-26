@@ -1,6 +1,12 @@
 UPDATE rhu_examen SET codigo_factura_fk = NULL;
 UPDATE rhu_seleccion SET codigo_factura_fk = NULL;
 
+/*Afiliacion*/
+DELETE FROM afi_factura_detalle;
+DELETE FROM afi_factura;
+DELETE FROM afi_periodo_detalle;
+DELETE FROM afi_periodo;
+
 /*Cartera*/
 DELETE FROM car_recibo_detalle;
 DELETE FROM car_recibo;
