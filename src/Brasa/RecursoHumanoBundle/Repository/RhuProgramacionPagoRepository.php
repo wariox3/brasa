@@ -1028,6 +1028,9 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $arProgramacionPagoDetalle->setDescuentoSalud(0);
                     $arProgramacionPagoDetalle->setPagoAuxilioTransporte(0);
                 }
+                if ($arContrato->getCodigoTipoPensionFk() == 5){
+                    $arProgramacionPagoDetalle->setDescuentoPension(0);
+                }
                 $dateFechaDesde =  "";
                 $dateFechaHasta =  "";
                 $intDiasDevolver = 0;

@@ -48,6 +48,10 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     $arProgramacionPagoDetalle->setFactorDia($arContrato->getFactorHorasDia());
                     $arProgramacionPagoDetalle->setVrDia($floVrDia);
                     $arProgramacionPagoDetalle->setVrHora($floVrHora);
+                    //Pregunta por el tipo de pension, si es pensionado no le retiene pension (PABLO ARANZAZU 27/04/2016)
+                    if ($arContrato->getCodigoTipoPensionFk() == 5){
+                        $arProgramacionPagoDetalle->setDescuentoPension(0);
+                    }   
                     //dias vacaciones
                     $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                
                     if($intDiasVacaciones > 0) {                                        
