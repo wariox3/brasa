@@ -16,11 +16,11 @@ class RhuSoportePagoHorarioRepository extends EntityRepository {
         return $dql;
     }
     
-    public function generar($codigoSoportePagoHorario) {
+    public function generar($codigoSoportePagoHorario) {        
         $em = $this->getEntityManager();
         $arSoportePagoHorario = new \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorario();
         $arSoportePagoHorario = $em->getRepository('BrasaRecursoHumanoBundle:RhuSoportePagoHorario')->find($codigoSoportePagoHorario);
-        $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->contratosPeriodo($arSoportePagoHorario->getFechaDesde()->format('Y/m/d'), $arSoportePagoHorario->getFechaHasta()->format('Y/m/d'));
+        $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->contratosPeriodoCentroCosto($arSoportePagoHorario->getFechaDesde()->format('Y/m/d'), $arSoportePagoHorario->getFechaHasta()->format('Y/m/d'), $arSoportePagoHorario->getCodigoCentroCostoFk());
         foreach ($arContratos as $arContrato) {
             $arSoportePagoHorarioDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorarioDetalle();
             $arSoportePagoHorarioDetalle->setSoportePagoHorarioRel($arSoportePagoHorario);
@@ -31,101 +31,200 @@ class RhuSoportePagoHorarioRepository extends EntityRepository {
             $arHorarioAccesos = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->empleado($arSoportePagoHorario->getFechaDesde()->format('Y/m/d'), $arSoportePagoHorario->getFechaHasta()->format('Y/m/d'), $arContrato->getCodigoEmpleadoFk());                    
             $intHorasDiurnas = 0;   
             $arrHorasTotal = array(
+                'horasDescanso' => 0,
                 'horasDiurnas' => 0,
-                'horasExtrasOrdinariasDiurnas' => 0,
+                'horasExtrasDiurnas' => 0,
                 'horasNocturnas' => 0,
-                'horasExtrasOrdinariasNocturnas' => 0);
-            foreach ($arHorarioAccesos as $arHorarioAcceso) {
-                $diaSemana = $arHorarioAcceso->getFechaEntrada()->format('N');
-                $codigoTurno = $this->devuelveCodigoTurno($diaSemana, $arHorario);
+                'horasExtrasNocturnas' => 0);
+            $dias = 0;
+            $descansos = 0;
+            foreach ($arHorarioAccesos as $arHorarioAcceso) {                
                 $arTurno = new \Brasa\RecursoHumanoBundle\Entity\RhuTurno();
-                $arTurno = $em->getRepository('BrasaRecursoHumanoBundle:RhuTurno')->find($codigoTurno);
-                $intHoraInicial = 0;
-                $intHoraFinal = 0;                        
-                if($arTurno->getHoraDesde()->format('h') >= $arHorarioAcceso->getFechaEntrada()->format('h')) {
-                    $intHoraInicial = $arTurno->getHoraDesde()->format('G');                            
-                }
-                if($arTurno->getHoraHasta()->format('h') >= $arHorarioAcceso->getFechaSalida()->format('h')){
-                    $intHoraFinal = $arTurno->getHoraHasta()->format('G');
+                $arTurno = $em->getRepository('BrasaRecursoHumanoBundle:RhuTurno')->find($arHorarioAcceso->getCodigoTurnoFk());
+                if($arTurno->getDescanso() == 1) {
+                    $arrHorasTotal['horasDescanso'] = $arrHorasTotal['horasDescanso'] + $arTurno->getHorasDiurnas();
+                    $descansos++;
+                    $dias++;
                 } else {
-                    $intHoraFinal = $arHorarioAcceso->getFechaSalida()->format('G');
-                }
-                $arrHoras = $this->devuelveHoras($intHoraInicial, $intHoraFinal); 
-                $arrHorasTotal['horasDiurnas'] += $arrHoras['horasDiurnas'];
-                $arrHorasTotal['horasNocturnas'] += $arrHoras['horasNocturnas'];
-                $arrHorasTotal['horasExtrasOrdinariasDiurnas'] += $arrHoras['horasExtrasOrdinariasDiurnas'];
-                $arrHorasTotal['horasExtrasOrdinariasNocturnas'] += $arrHoras['horasExtrasOrdinariasNocturnas'];
+                    if($arHorarioAcceso->getEstadoEntrada() == 1 && $arHorarioAcceso->getEstadoSalida() == 1) {
+                        $dias++;
+                        $boolFestivo = 0;
+                        $boolFestivo2 = 0;
+                        $intMinutoInicio = (($arHorarioAcceso->getFechaEntrada()->format('i') * 100)/60)/100;
+                        $intHoraInicio = $arHorarioAcceso->getFechaEntrada()->format('G');        
+                        $intHoraInicio += $intMinutoInicio;
+                        $intMinutoFinal = (($arHorarioAcceso->getFechaSalida()->format('i') * 100)/60)/100;
+                        $intHoraFinal = $arHorarioAcceso->getFechaSalida()->format('G');
+                        $intHoraFinal += $intMinutoFinal;
+                        $diaSemana = $arHorarioAcceso->getFechaEntrada()->format('N');
+                        $diaSemana2 = $arHorarioAcceso->getFechaSalida()->format('N');  
+                        if($diaSemana == 7) {
+                            $boolFestivo = 1;
+                        }
+                        if($diaSemana2 == 7) {
+                            $boolFestivo2 = 1;
+                        }        
+                        $arrHoras1 = null;
+                        if(($intHoraInicio + $intMinutoInicio) <= $intHoraFinal){  
+                            $arrHoras = $this->turnoHoras($intHoraInicio, $intMinutoInicio, $intHoraFinal, $boolFestivo, 0, 0, 0);
+                        } else {
+                            $arrHoras = $this->turnoHoras($intHoraInicio, $intMinutoInicio, 24, $boolFestivo, 0, 0, 0);
+                            $arrHoras1 = $this->turnoHoras(0, 0, $intHoraFinal, $boolFestivo2, $arrHoras['horas'], 0, 0);                 
+                        }  
+                        $arrHorasTotal['horasDescanso'] = $arrHorasTotal['horasDescanso'] + $arrHoras['horasDescanso'];
+                        $arrHorasTotal['horasDiurnas'] = $arrHorasTotal['horasDiurnas'] + $arrHoras['horasDiurnas'];
+                        $arrHorasTotal['horasNocturnas'] = $arrHorasTotal['horasNocturnas'] + $arrHoras['horasNocturnas'];
+                        $arrHorasTotal['horasExtrasDiurnas'] = $arrHorasTotal['horasExtrasDiurnas'] + $arrHoras['horasExtrasDiurnas'];
+                        $arrHorasTotal['horasExtrasNocturnas'] = $arrHorasTotal['horasExtrasNocturnas'] + $arrHoras['horasExtrasNocturnas'];
+                    }                                   
+                }                
             }            
-            
+            $intHoras = $arrHorasTotal['horasDescanso'] + $arrHorasTotal['horasDiurnas'] + $arrHorasTotal['horasNocturnas'] + $arrHorasTotal['horasExtrasDiurnas'] + $arrHorasTotal['horasExtrasNocturnas'];
+            $arSoportePagoHorarioDetalle->setHoras($intHoras);
+            $arSoportePagoHorarioDetalle->setHorasDescanso($arrHorasTotal['horasDescanso']);
             $arSoportePagoHorarioDetalle->setHorasDiurnas($arrHorasTotal['horasDiurnas']);
             $arSoportePagoHorarioDetalle->setHorasNocturnas($arrHorasTotal['horasNocturnas']);
-            $arSoportePagoHorarioDetalle->setHorasExtrasOrdinariasDiurnas($arrHorasTotal['horasExtrasOrdinariasDiurnas']);
-            $arSoportePagoHorarioDetalle->setHorasExtrasOrdinariasNocturnas($arrHorasTotal['horasExtrasOrdinariasNocturnas']);                        
+            $arSoportePagoHorarioDetalle->setHorasExtrasOrdinariasDiurnas($arrHorasTotal['horasExtrasDiurnas']);
+            $arSoportePagoHorarioDetalle->setHorasExtrasOrdinariasNocturnas($arrHorasTotal['horasExtrasNocturnas']);                        
+            $arSoportePagoHorarioDetalle->setDescanso($descansos);  
+            $arSoportePagoHorarioDetalle->setDias($dias);
             $em->persist($arSoportePagoHorarioDetalle);
         }        
         $arSoportePagoHorario->setEstadoGenerado(1);
         $em->persist($arSoportePagoHorario);
         $em->flush();
-    }
-    
-    private function devuelveCodigoTurno($diaSemana, $arHorario) {
-        $codigoTurno = "";
-        if($diaSemana == 1) {
-            $codigoTurno = $arHorario->getLunes();
-        }
-        if($diaSemana == 2) {
-            $codigoTurno = $arHorario->getMartes();
-        }
-        if($diaSemana == 3) {
-            $codigoTurno = $arHorario->getMiercoles();
-        }
-        if($diaSemana == 4) {
-            $codigoTurno = $arHorario->getJueves();
-        }
-        if($diaSemana == 5) {
-            $codigoTurno = $arHorario->getViernes();
-        }
-        if($diaSemana == 6) {
-            $codigoTurno = $arHorario->getSabado();
-        }
-        if($diaSemana == 7) {
-            $codigoTurno = $arHorario->getDomingo();
-        }
-        return $codigoTurno;
-    }
-    
-    private function devuelveHoras ($horaInicio, $horaFin) {        
-        $intHorasDiurnas = 0;
-        $intHorasNocturnas = 0;
-        $intHorasExtrasOrdinariasDiurnas = 0;
-        $intHorasExtrasOrdinariasNocturnas = 0;        
-        $intTotalHoras = 0;
-        $horaInicio++;
-        if($horaInicio < $horaFin) {
-            for($hora = $horaInicio; $hora <= $horaFin; $hora++) {
-                if($hora > 6 && $hora <= 22) {
-                    if($intTotalHoras <= 8) {
-                        $intHorasDiurnas++;
-                    } else {
-                        $intHorasExtrasOrdinariasDiurnas++;
-                    }                    
+    }    
+ 
+    private function turnoHoras($intHoraInicio, $intMinutoInicio, $intHoraFinal, $boolFestivo, $intHoras, $boolNovedad = 0, $boolDescanso = 0) {        
+        if($boolNovedad == 0) {
+            $intHorasNocturnas = $this->calcularTiempo($intHoraInicio, $intHoraFinal, 0, 6);        
+            $intHorasExtrasNocturnas = 0;
+            $intTotalHoras = $intHorasNocturnas + $intHoras;
+            if($intTotalHoras > 8) {
+                $intHorasJornada = 8 - $intHoras;
+                if($intHorasJornada >= 1) {
+                    $intHorasNocturnasReales = $intHorasNocturnas - $intHorasJornada;
+                    $intHorasNocturnas = $intHorasNocturnas - $intHorasNocturnasReales;
+                    $intHorasExtrasNocturnas = $intHorasNocturnasReales;
+                } else {
+                    $intHorasExtrasNocturnas = $intHorasNocturnas;
+                    $intHorasNocturnas = 0;
                 }
-                if($hora > 22 && $hora <= 23) {
-                    if($intTotalHoras <= 8) {
-                        $intHorasNocturnas++;
-                    } else {
-                        $intHorasExtrasOrdinariasNocturnas++;
-                    }                    
-                }                
-                $intTotalHoras++;
             }
-        }
-        $arrHoras = array(
-            'horasDiurnas' => $intHorasDiurnas,
-            'horasExtrasOrdinariasDiurnas' => $intHorasExtrasOrdinariasDiurnas,
-            'horasNocturnas' => $intHorasNocturnas,
-            'horasExtrasOrdinariasNocturnas' => $intHorasExtrasOrdinariasNocturnas);
+
+            $intHorasDiurnas = $this->calcularTiempo($intHoraInicio, $intHoraFinal, 6, 22);            
+            $intHorasExtrasDiurnas = 0;
+            $intTotalHoras = $intHoras + $intHorasNocturnas + $intHorasExtrasNocturnas + $intHorasDiurnas;
+            if($intTotalHoras > 8) {
+                $intHorasJornada = 8 - ($intHoras + $intHorasNocturnas + $intHorasExtrasNocturnas);                    
+                if($intHorasJornada > 1) {
+                    $intHorasDiurnasReales = $intHorasDiurnas - $intHorasJornada;
+                    $intHorasDiurnas = $intHorasDiurnas - $intHorasDiurnasReales;
+                    $intHorasExtrasDiurnas = $intHorasDiurnasReales;
+                } else {
+                    $intHorasExtrasDiurnas = $intHorasDiurnas;
+                    $intHorasDiurnas = 0;
+                }            
+            }
+
+            $intHorasNocturnasNoche = $this->calcularTiempo($intHoraInicio, $intHoraFinal, 22, 24); 
+            $intHorasExtrasNocturnasNoche = 0;
+            $intTotalHoras = $intHorasDiurnas + $intHorasExtrasDiurnas + $intHorasNocturnas + $intHorasNocturnasNoche;                                        
+            if($intTotalHoras > 8) {                    
+                $intHorasJornada = 8 - ($intHorasNocturnas + $intHorasDiurnas + $intHorasExtrasDiurnas);                    
+                if($intHorasJornada > 1) {
+                    $intHorasNocturnasNocheReales = $intHorasNocturnasNoche - $intHorasJornada;
+                    $intHorasNocturnasNoche = $intHorasNocturnasNoche - $intHorasNocturnasNocheReales;
+                    $intHorasExtrasNocturnasNoche = $intHorasNocturnasNocheReales;                        
+                } else {
+                    $intHorasExtrasNocturnasNoche = $intHorasNocturnasNoche;
+                    $intHorasNocturnasNoche = 0;
+                }
+            }
+            $intHorasNocturnas += $intHorasNocturnasNoche;        
+            $intHorasExtrasNocturnas += $intHorasExtrasNocturnasNoche;
+
+            $intHorasFestivasDiurnas = 0;
+            $intHorasFestivasNocturnas = 0;
+            $intHorasExtrasFestivasDiurnas = 0;
+            $intHorasExtrasFestivasNocturnas = 0;
+            if($boolFestivo == 1) {
+                $intHorasFestivasDiurnas = $intHorasDiurnas;
+                $intHorasDiurnas = 0;
+                $intHorasFestivasNocturnas = $intHorasNocturnas;
+                $intHorasNocturnas = 0;
+                $intHorasExtrasFestivasDiurnas = $intHorasExtrasDiurnas;
+                $intHorasExtrasDiurnas = 0;
+                $intHorasExtrasFestivasNocturnas = $intHorasExtrasNocturnas;
+                $intHorasExtrasNocturnas = 0;
+            }                
+            $intTotalHoras = $intHorasDiurnas+$intHorasNocturnas+$intHorasExtrasDiurnas+$intHorasExtrasNocturnas+$intHorasFestivasDiurnas+$intHorasFestivasNocturnas+$intHorasExtrasFestivasDiurnas+$intHorasExtrasFestivasNocturnas;            
+            if($boolDescanso == 1) {                
+                $arrHoras = array(
+                    'horasDescanso' => $intTotalHoras,
+                    'horasDiurnas' => 0, 
+                    'horasNocturnas' => 0, 
+                    'horasExtrasDiurnas' => 0, 
+                    'horasExtrasNocturnas' => 0,
+                    'horasFestivasDiurnas' => 0, 
+                    'horasFestivasNocturnas' => 0, 
+                    'horasExtrasFestivasDiurnas' => 0, 
+                    'horasExtrasFestivasNocturnas' => 0,
+                    'horas' => $intTotalHoras);                
+            } else {
+                $arrHoras = array(
+                    'horasDescanso' => 0,
+                    'horasDiurnas' => $intHorasDiurnas, 
+                    'horasNocturnas' => $intHorasNocturnas, 
+                    'horasExtrasDiurnas' => $intHorasExtrasDiurnas, 
+                    'horasExtrasNocturnas' => $intHorasExtrasNocturnas,
+                    'horasFestivasDiurnas' => $intHorasFestivasDiurnas, 
+                    'horasFestivasNocturnas' => $intHorasFestivasNocturnas, 
+                    'horasExtrasFestivasDiurnas' => $intHorasExtrasFestivasDiurnas, 
+                    'horasExtrasFestivasNocturnas' => $intHorasExtrasFestivasNocturnas,
+                    'horas' => $intTotalHoras);                
+            }
+            
+        } else {
+            $arrHoras = array(
+                'horasDescanso' => 0,
+                'horasDiurnas' => 0, 
+                'horasNocturnas' => 0, 
+                'horasExtrasDiurnas' => 0, 
+                'horasExtrasNocturnas' => 0,
+                'horasFestivasDiurnas' => 0, 
+                'horasFestivasNocturnas' => 0, 
+                'horasExtrasFestivasDiurnas' => 0, 
+                'horasExtrasFestivasNocturnas' => 0,
+                'horas' => 0);            
+        }  
+        
         return $arrHoras;
     }    
     
+    private function calcularTiempo($intInicial, $intFinal, $intParametroInicio, $intParametroFinal) {
+        $intHoras = 0;
+        $intHoraIniciaTemporal = 0;
+        $intHoraTerminaTemporal = 0;
+        if($intInicial < $intParametroInicio) {
+            $intHoraIniciaTemporal = $intParametroInicio;
+        } else {
+            $intHoraIniciaTemporal = $intInicial;
+        }
+        if($intFinal > $intParametroFinal) {
+            if($intInicial > $intParametroFinal) {
+                $intHoraTerminaTemporal = $intInicial;
+            } else {
+                $intHoraTerminaTemporal = $intParametroFinal;
+            }
+        } else {
+            if($intFinal > $intParametroInicio) {
+                $intHoraTerminaTemporal = $intFinal;
+            } else {
+                $intHoraTerminaTemporal = $intParametroInicio;
+            }
+        }
+        $intHoras = $intHoraTerminaTemporal - $intHoraIniciaTemporal;
+        return $intHoras;
+    }    
 }

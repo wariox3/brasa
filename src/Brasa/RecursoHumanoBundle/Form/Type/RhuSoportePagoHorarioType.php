@@ -13,6 +13,10 @@ class RhuSoportePagoHorarioType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('centroCostoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+                'property' => 'nombre',
+            ))                 
             ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd'))
             ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd'))
             ->add('guardar', 'submit', array('label' => 'Guardar'));

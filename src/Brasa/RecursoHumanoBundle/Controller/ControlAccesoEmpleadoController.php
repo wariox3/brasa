@@ -5,7 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuControlAccesoEmpleadoType;
 use Doctrine\ORM\EntityRepository;
-
+use Brasa\RecursoHumanoBundle\Form\Type\RhuHorarioAccesoType;
 
 class ControlAccesoEmpleadoController extends Controller
 {
@@ -94,157 +94,26 @@ class ControlAccesoEmpleadoController extends Controller
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }
 
-    public function nuevoAction($codigoControlAcceso) {
+    public function nuevoAction($codigoHorarioAcceso) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
-        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $arControlAccesoEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
-        if ($codigoControlAcceso != 0)
-        {
-            $arControlAccesoEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->find($codigoControlAcceso);
-            if ($arControlAccesoEmpleado->getEstadoSalida() == "1"){
-                $intSalida = "SI";
-            } else {
-                $intSalida = "NO";
-            }
-            $arControlAccesoEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->find($codigoControlAcceso);
-            if ($arControlAccesoEmpleado->getEstadoEntrada() == "1"){
-                $intEntrada = "SI";
-            } else {
-                $intEntrada = "NO";
-            }
-            if ($arControlAccesoEmpleado->getFechaSalida() == null){
-                $dateFechaSalida = new \DateTime('now');
-            } else {
-                $dateFechaSalida = $arControlAccesoEmpleado->getFechaSalida();
-            }
-        } 
-         
-        $form = $this->createFormBuilder()
-            ->add('identificacion', 'text', array('data' => $arControlAccesoEmpleado->getEmpleadoRel()->getNumeroIdentificacion()))
-            ->add('nombre', 'text', array('data' => $arControlAccesoEmpleado->getEmpleadoRel()->getNombreCorto()))    
-            ->add('fechaEntrada', 'datetime', array('date_format' => 'yyyyMMdd H:i:s','required' => true, 'data' => $arControlAccesoEmpleado->getFechaEntrada()))
-            ->add('fechaSalida', 'datetime', array('date_format' => 'yyyyMMdd H:i:s', 'required' => true, 'data' => $dateFechaSalida))
-            ->add('entrada', 'choice', array('choices' => array($arControlAccesoEmpleado->getEstadoEntrada() => $intEntrada, '0' => 'NO', '1' => 'SI')))    
-            ->add('salida', 'choice', array('choices' => array($arControlAccesoEmpleado->getEstadoSalida() => $intSalida, '0' => 'NO', '1' => 'SI')))    
-            ->add('comentarios', 'textarea', array('data' => $arControlAccesoEmpleado->getComentarios(), 'required' => false))
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
-            ->getForm();
+        $request = $this->getRequest();       
+        $arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();                
+        $arHorarioAcceso = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->find($codigoHorarioAcceso);
+        $arTurno = new \Brasa\RecursoHumanoBundle\Entity\RhuTurno();
+        $arTurno = $em->getRepository('BrasaRecursoHumanoBundle:RhuTurno')->find($arHorarioAcceso->getCodigoTurnoFk());
+        
+        $form = $this->createForm(new RhuHorarioAccesoType, $arHorarioAcceso);
         $form->handleRequest($request);
-        if ($form->isValid())
-        {
-            $arControlAccesoEmpleado->setFechaEntrada($form->get('fechaEntrada')->getData());
-            $arControlAccesoEmpleado->setFechaSalida($form->get('fechaSalida')->getData());
-            $dateEntrada = $arControlAccesoEmpleado->getFechaEntrada();
-            $dateSalida = $arControlAccesoEmpleado->getFechaSalida();
-            $dateDiferencia = date_diff($dateSalida, $dateEntrada);
-            $horas = $dateDiferencia->format('%H');
-            $minutos = $dateDiferencia->format('%i');
-            $segundos = $dateDiferencia->format('%s');
-            $horaEntrada = $dateEntrada->format('H');
-            $horaSalida = $dateSalida->format('H');
-            $diferencia = $horas.":".$minutos.":".$segundos;
-            if ($diferencia == "00:0:0"){
-                $diferencia = "";
-            }
-
-            if ($form->get('entrada')->getData() == 1 && $form->get('salida')->getData() == 1) {
-                if ($horaSalida >= $horaEntrada){
-
-                    $arControlAccesoEmpleado->setFechaEntrada($form->get('fechaEntrada')->getData());
-                    $arControlAccesoEmpleado->setFechaSalida($form->get('fechaSalida')->getData());
-                    $arControlAccesoEmpleado->setEstadoSalida(1);
-                    $arControlAccesoEmpleado->setEstadoEntrada(1);
-                    $arControlAccesoEmpleado->setDuracionRegistro($diferencia);
-                    $arControlAccesoEmpleado->setComentarios($form->get('comentarios')->getData());
-                    
-                    //calculo entradaTarde
-                            $horaTurno = $arControlAccesoEmpleado->getHoraEntradaTurno()->format('H:i:s');
-                            $horaLlegada = $arControlAccesoEmpleado->getFechaEntrada()->format('H:i:s');
-                            if ($horaTurno < $horaLlegada){
-                                $arControlAccesoEmpleado->setLlegadaTarde(1);
-                                $date1 = strtotime($horaTurno);
-                                $date2 = strtotime($horaLlegada);
-                                $interval = $date2 - $date1;
-                                $seconds = $interval % 60;
-                                $minutes = floor(($interval % 3600) / 60);
-                                $hours = floor($interval / 3600);
-                                $timeLlegadaTarde = $hours.":".$minutes.":".$seconds;
-                                $arControlAccesoEmpleado->setDuracionEntradaTarde($timeLlegadaTarde);
-                            }
-                    
-                     //calculo salidaAntes
-                            $horaTurno = $arControlAccesoEmpleado->getHoraSalidaTurno()->format('H:i:s');
-                            $horaSalida = $arControlAccesoEmpleado->getFechaSalida()->format('H:i:s');
-                            if ($horaTurno > $horaSalida){
-                                $arControlAccesoEmpleado->setSalidaAntes(1);
-                                $date1 = strtotime($horaTurno);
-                                $date2 = strtotime($horaSalida);
-                                $interval = $date1 - $date2;
-                                $seconds = $interval % 60;
-                                $minutes = floor(($interval % 3600) / 60);
-                                $hours = floor($interval / 3600);
-                                $timeSalidaTarde = $hours.":".$minutes.":".$seconds;
-                                $arControlAccesoEmpleado->setDuracionSalidaAntes($timeSalidaTarde);
-                            }
-                    
-                    
-                    $em->persist($arControlAccesoEmpleado);
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_control_acceso_empleado_lista'));
-                } else {
-                        $objMensaje->Mensaje("error", "La hora de salida no puede ser menor a la hora de entrada", $this);
-                    }  
-
-            }
-            if ($form->get('entrada')->getData() == 0 && $form->get('salida')->getData() == 0) {
-                $arControlAccesoEmpleado->setFechaSalida(null);
-                $arControlAccesoEmpleado->setFechaEntrada($form->get('fechaEntrada')->getData());
-                $arControlAccesoEmpleado->setEstadoSalida(0);
-                $arControlAccesoEmpleado->setEstadoEntrada(0);
-                $arControlAccesoEmpleado->setLlegadaTarde(0);
-                $arControlAccesoEmpleado->setSalidaAntes(0);
-                $arControlAccesoEmpleado->setDuracionRegistro("");
-                $arControlAccesoEmpleado->setDuracionEntradaTarde("");
-                $arControlAccesoEmpleado->setDuracionSalidaAntes("");
-                $arControlAccesoEmpleado->setComentarios($form->get('comentarios')->getData());
-                $em->persist($arControlAccesoEmpleado);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_control_acceso_empleado_lista'));
-            }
-            if ($form->get('entrada')->getData() == 0 && $form->get('salida')->getData() == 1) {
-                $objMensaje->Mensaje("error", "No se puede salir el empleado sin haberse registrado", $this);
-            }
-            if ($form->get('entrada')->getData() == 1 && $form->get('salida')->getData() == 0) {
-                $arControlAccesoEmpleado->setFechaSalida(null);
-                $arControlAccesoEmpleado->setFechaEntrada($form->get('fechaEntrada')->getData());
-                $arControlAccesoEmpleado->setEstadoSalida(0);
-                $arControlAccesoEmpleado->setEstadoEntrada(1);
-                $arControlAccesoEmpleado->setDuracionRegistro("");
-                $arControlAccesoEmpleado->setComentarios($form->get('comentarios')->getData());
-                //calculo entradaTarde
-                    $horaTurno = $arControlAccesoEmpleado->getHoraEntradaTurno()->format('H:i:s');
-                    $horaLlegada = $arControlAccesoEmpleado->getFechaEntrada()->format('H:i:s');
-                    if ($horaTurno < $horaLlegada){
-                        $arControlAccesoEmpleado->setLlegadaTarde(1);
-                        $date1 = strtotime($horaTurno);
-                        $date2 = strtotime($horaLlegada);
-                        $interval = $date2 - $date1;
-                        $seconds = $interval % 60;
-                        $minutes = floor(($interval % 3600) / 60);
-                        $hours = floor($interval / 3600);
-                        $timeLlegadaTarde = $hours.":".$minutes.":".$seconds;
-                        $arControlAccesoEmpleado->setDuracionEntradaTarde($timeLlegadaTarde);
-                    }
-                $em->persist($arControlAccesoEmpleado);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_control_acceso_empleado_lista'));
-            }
-               
-            
+        if ($form->isValid()) { 
+            $arHorarioAcceso = $form->getData();               
+            $em->persist($arHorarioAcceso);
+            $em->flush();   
+            return $this->redirect($this->generateUrl('brs_rhu_control_acceso_empleado_lista'));
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/ControlAcceso:nuevo.html.twig', array(
             'form' => $form->createView(),
+            'arHorarioAcceso' => $arHorarioAcceso,
+            'arTurno' => $arTurno
         ));
     }
 

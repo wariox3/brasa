@@ -1075,7 +1075,7 @@ brs_rhu_control_acceso_empleado_lista:
     defaults: { _controller: BrasaRecursoHumanoBundle:ControlAccesoEmpleado:lista }
     
 brs_rhu_control_acceso_empleado_nuevo:
-    path:     /rhu/control/acceso/empleado/nuevo/{codigoControlAcceso}
+    path:     /rhu/control/acceso/empleado/nuevo/{codigoHorarioAcceso}
     defaults: { _controller: BrasaRecursoHumanoBundle:ControlAccesoEmpleado:nuevo }    
     
 brs_rhu_buscar_empleado:

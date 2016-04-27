@@ -15,11 +15,11 @@
 
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
-                <th>CODIGO</th>
+                <th>CODIGO</th>                
                 <th>DESDE</th>
                 <th>HASTA</th>
-                <th>EMPLEADOS</th>
-                
+                <th>CENTRO COSTO</th>
+                <th>EMPLEADOS</th>                
                 <th></th>
                 <th></th>
                 <th></th>
@@ -30,6 +30,7 @@
                 <td>{{ arSoportesPagosHorarios.codigoSoportePagoHorarioPk  }}</td>                
                 <td>{{ arSoportesPagosHorarios.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arSoportesPagosHorarios.fechaHasta |date("Y/m/d")  }}</td>
+                <td>{{ arSoportesPagosHorarios.centroCostoRel.nombre }}</td>
                 
                 {% if arSoportesPagosHorarios.estadoGenerado == 0 %}
                     <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arSoportesPagosHorarios.codigoSoportePagoHorarioPk }}">Generar</button></td>

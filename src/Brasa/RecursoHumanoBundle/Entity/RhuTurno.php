@@ -60,6 +60,21 @@ class RhuTurno
     private $descanso = false;           
 
     /**
+     * @ORM\Column(name="incapacidad", type="boolean", nullable=true)
+     */    
+    private $incapacidad = false;    
+    
+    /**
+     * @ORM\Column(name="licencia", type="boolean", nullable=true)
+     */    
+    private $licencia = false;    
+    
+    /**
+     * @ORM\Column(name="vacacion", type="boolean", nullable=true)
+     */    
+    private $vacacion = false;    
+    
+    /**
      * @ORM\Column(name="salida_dia_siguiente", type="boolean")
      */    
     private $salidaDiaSiguiente = false;
@@ -378,5 +393,77 @@ class RhuTurno
     public function getHorariosAccesosTurnoRel()
     {
         return $this->horariosAccesosTurnoRel;
+    }
+
+    /**
+     * Set incapacidad
+     *
+     * @param boolean $incapacidad
+     *
+     * @return RhuTurno
+     */
+    public function setIncapacidad($incapacidad)
+    {
+        $this->incapacidad = $incapacidad;
+
+        return $this;
+    }
+
+    /**
+     * Get incapacidad
+     *
+     * @return boolean
+     */
+    public function getIncapacidad()
+    {
+        return $this->incapacidad;
+    }
+
+    /**
+     * Set licencia
+     *
+     * @param boolean $licencia
+     *
+     * @return RhuTurno
+     */
+    public function setLicencia($licencia)
+    {
+        $this->licencia = $licencia;
+
+        return $this;
+    }
+
+    /**
+     * Get licencia
+     *
+     * @return boolean
+     */
+    public function getLicencia()
+    {
+        return $this->licencia;
+    }
+
+    /**
+     * Set vacacion
+     *
+     * @param boolean $vacacion
+     *
+     * @return RhuTurno
+     */
+    public function setVacacion($vacacion)
+    {
+        $this->vacacion = $vacacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vacacion
+     *
+     * @return boolean
+     */
+    public function getVacacion()
+    {
+        return $this->vacacion;
     }
 }

@@ -68,7 +68,7 @@ class RhuContratoRepository extends EntityRepository {
         $arContratos = $query->getResult();        
         return $arContratos;
     }    
-
+    
     public function contratosPeriodoEmpleado($fechaDesde = "", $fechaHasta = "", $codigoEmpleado) {        
         $em = $this->getEntityManager();
         $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
@@ -79,6 +79,16 @@ class RhuContratoRepository extends EntityRepository {
         $arContratos = $query->getResult();        
         return $arContratos;
     }        
+
+    public function contratosPeriodoCentroCosto($fechaDesde = "", $fechaHasta = "", $codigoCentroCosto = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
+                ." WHERE (c.fechaHasta >= '" . $fechaDesde . "' OR c.indefinido = 1) "
+                . "AND c.fechaDesde <= '" . $fechaHasta . "' AND c.codigoCentroCostoFk = " . $codigoCentroCosto;
+        $query = $em->createQuery($dql);        
+        $arContratos = $query->getResult();        
+        return $arContratos;
+    }     
     
     //verifica si el empleado tiene contratos abiertos
     public function validarEmpleadoContrato($douValidarEmpleadoContrato = "") {        

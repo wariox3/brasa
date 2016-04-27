@@ -247,6 +247,10 @@ class RhuCentroCosto
      */
     protected $cartasCentroCostoRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSoportePagoHorario", mappedBy="centroCostoRel")
+     */
+    protected $soportesPagosHorariosCentroCostoRel;    
     
     /**
      * Constructor
@@ -1563,5 +1567,39 @@ class RhuCentroCosto
     public function getClienteRel()
     {
         return $this->clienteRel;
+    }
+
+    /**
+     * Add soportesPagosHorariosCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorario $soportesPagosHorariosCentroCostoRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function addSoportesPagosHorariosCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorario $soportesPagosHorariosCentroCostoRel)
+    {
+        $this->soportesPagosHorariosCentroCostoRel[] = $soportesPagosHorariosCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove soportesPagosHorariosCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorario $soportesPagosHorariosCentroCostoRel
+     */
+    public function removeSoportesPagosHorariosCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorario $soportesPagosHorariosCentroCostoRel)
+    {
+        $this->soportesPagosHorariosCentroCostoRel->removeElement($soportesPagosHorariosCentroCostoRel);
+    }
+
+    /**
+     * Get soportesPagosHorariosCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSoportesPagosHorariosCentroCostoRel()
+    {
+        return $this->soportesPagosHorariosCentroCostoRel;
     }
 }

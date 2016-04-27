@@ -44,7 +44,7 @@ class RhuHorarioAccesoRepository extends EntityRepository {
         $query = $em->createQuery($dql);
         $arEmpleado = $query->getResult();
         return $arEmpleado;
-    }    
+    }            
     
     public function validarIngreso($strFechaHoy = "", $strEmpleado= "") {          
         $em = $this->getEntityManager();

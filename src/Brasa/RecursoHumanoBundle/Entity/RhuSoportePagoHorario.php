@@ -27,6 +27,11 @@ class RhuSoportePagoHorario
      */    
     private $fechaHasta;            
 
+    /**
+     * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCentroCostoFk;    
+    
     /**     
      * @ORM\Column(name="estado_generado", type="boolean")
      */    
@@ -37,6 +42,12 @@ class RhuSoportePagoHorario
      */    
     private $estadoCerrado = false;    
 
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="soportesPagosHorariosCentroCostoRel")
+     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
+     */
+    protected $centroCostoRel;    
+    
     /**
      * @ORM\OneToMany(targetEntity="RhuSoportePagoHorarioDetalle", mappedBy="soportePagoHorarioRel", cascade={"persist", "remove"})
      */
@@ -188,5 +199,53 @@ class RhuSoportePagoHorario
     public function getSoportesPagosHorariosDetallesSoportePagoHorarioRel()
     {
         return $this->soportesPagosHorariosDetallesSoportePagoHorarioRel;
+    }
+
+    /**
+     * Set codigoCentroCostoFk
+     *
+     * @param integer $codigoCentroCostoFk
+     *
+     * @return RhuSoportePagoHorario
+     */
+    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
+    {
+        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCentroCostoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCentroCostoFk()
+    {
+        return $this->codigoCentroCostoFk;
+    }
+
+    /**
+     * Set centroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
+     *
+     * @return RhuSoportePagoHorario
+     */
+    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
+    {
+        $this->centroCostoRel = $centroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
+     */
+    public function getCentroCostoRel()
+    {
+        return $this->centroCostoRel;
     }
 }

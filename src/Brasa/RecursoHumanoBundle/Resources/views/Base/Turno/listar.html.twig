@@ -11,15 +11,17 @@
         <tr>
             <th>CÓDIGO</th>
             <th>{{ knp_pagination_sortable(arTurnos, 'NOMBRE', 'codigo') }}</th>
-            <th>HORA DESDE</th>
-            <th>HORA HASTA</th>
+            <th>DESDE</th>
+            <th>HASTA</th>
             <th>HORAS</th>
-            <th>HORAS DIURNAS</th>
-            <th>HORAS NOCTURNAS</th>
-            <th>NOVEDAD</th>
-            <th>DESCANSO</th>
-            <th>SALIDA DIA SIGUIENTE</th>
-            <th>COMENTARIOS</th>
+            <th>DIURNAS</th>
+            <th>NOCTURNAS</th>
+            <th>NOV</th>
+            <th>DES</th>
+            <th>INC</th>
+            <th>LIC</th>
+            <th>VAC</th>
+            <th>SALIDA DIA SIGUIENTE</th>            
             <th></th>
             <th></th>
         </tr>
@@ -34,8 +36,11 @@
                 <td>{{arTurnos.horasNocturnas}}</td>
                 <td>{% if arTurnos.novedad == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arTurnos.descanso == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arTurnos.incapacidad == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arTurnos.licencia == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arTurnos.vacacion == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arTurnos.salidaDiaSiguiente == 1 %} SI {% else %} NO {% endif %}</td>
-                <td>{{arTurnos.comentarios}}</td>
+                
                 <td><a href="{{ path('brs_rhu_base_turno_nuevo',{'codigoTurnoPk': arTurnos.codigoTurnoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arTurnos.codigoTurnoPk }}" /></td>
             {%endfor%}

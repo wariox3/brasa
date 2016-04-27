@@ -436,50 +436,14 @@ class BaseEmpleadoController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
+        for($col = 'A'; $col !== 'AR'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }        
+
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
-                    ->setCellValue('B1', 'TIPO IDENTIFICACIÓN')
+                    ->setCellValue('B1', 'TIPO')
                     ->setCellValue('C1', 'IDENTIFICACIÓN')
                     ->setCellValue('D1', 'CIUDAD EXPEDICIÓN IDENTIFICACIÓN')
                     ->setCellValue('E1', 'FECHA EXPEDICIÓN IDENTIFICACIÓN')
@@ -518,7 +482,9 @@ class BaseEmpleadoController extends Controller
                     ->setCellValue('AL1', 'CODIGO CONTRATO')
                     ->setCellValue('AM1', 'TALLA CAMISA')
                     ->setCellValue('AN1', 'TALLA JEANS')
-                    ->setCellValue('AO1', 'TALLA CALZADO');
+                    ->setCellValue('AO1', 'TALLA CALZADO')
+                    ->setCellValue('AP1', 'DEPARTAMENTO')
+                    ->setCellValue('AQ1', 'HORARIO');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
@@ -638,7 +604,9 @@ class BaseEmpleadoController extends Controller
                     ->setCellValue('AL' . $i, $arEmpleado->getCodigoContratoActivoFk())
                     ->setCellValue('AM' . $i, $arEmpleado->getCamisa())
                     ->setCellValue('AN' . $i, $arEmpleado->getJeans())
-                    ->setCellValue('AO' . $i, $arEmpleado->getCalzado());
+                    ->setCellValue('AO' . $i, $arEmpleado->getCalzado())
+                    ->setCellValue('AP' . $i, $arEmpleado->getDepartamentoEmpresaRel()->getNombre())
+                    ->setCellValue('AQ' . $i, $arEmpleado->getHorarioRel()->getNombre());
             $i++;
         }
 

@@ -106,6 +106,22 @@ class GenerarSoportePagoHorarioController extends Controller
             'form' => $form->createView()));
     }    
     
+    /**
+     * @Route("/rhu/proceso/soporte/pago/horario/detalle/ver/{codigoSoportePagoHorarioDetalle}", name="brs_rhu_proceso_soporte_pago_horario_detalle_ver")
+     */    
+    public function verAction($codigoSoportePagoHorarioDetalle) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');                        
+        $arSoportePagoHorarioDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorarioDetalle();
+        $arSoportePagoHorarioDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSoportePagoHorarioDetalle')->find($codigoSoportePagoHorarioDetalle);                        
+        $arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
+        $arHorarioAcceso = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->empleado($arSoportePagoHorarioDetalle->getFechaDesde()->format('Y/m/d'), $arSoportePagoHorarioDetalle->getFechaHasta()->format('Y/m/d'), $arSoportePagoHorarioDetalle->getCodigoEmpleadoFk());                        
+        return $this->render('BrasaRecursoHumanoBundle:Procesos/GenerarSoportePagoHorario:ver.html.twig', array(                        
+            'arHorarioAcceso' => $arHorarioAcceso,
+            ));
+    }         
+    
     private function lista() {
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSoportePagoHorario')->listaDql();        
@@ -114,7 +130,7 @@ class GenerarSoportePagoHorarioController extends Controller
     private function listaDetalle($codigoSoportePagoHorario) {
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSoportePagoHorarioDetalle')->listaDql($codigoSoportePagoHorario);        
-    }    
+    }  
     
     private function formularioLista() {
         $form = $this->createFormBuilder()

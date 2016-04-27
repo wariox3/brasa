@@ -48,21 +48,16 @@
             <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
                 <th>{{ knp_pagination_sortable(arControlAccesoEmpleados, 'CÓDIGO', 'at.codigoHorarioAccesoPk') }}</th>
-                <th>IDENTIFICACION</th>
+                <th>IDENTIFICACIÓN</th>
                 <th>EMPLEADO</th>
+                <th>DEPARTAMENTO</th>
                 <th>FECHA</th>
-                <th>TURNO</th>
-                <th>H. ENTRADA TURNO</th>
-                <th>HORA ENTRADA</th>
-                <th>ENTRADA TARDE</th>
-                <th>DURACIÓN ENT. TARDE</th>
-                <th>H. SALIDA TURNO</th>
-                <th>HORA SALIDA</th>
-                <th>SALIDA ANTES</th>
-                <th>DURACIÓN SAL. ANTES</th>
-                <th>DURACIÓN REGISTRO</th>
-                <th>ANULADO</th>
-                <th>COMENTARIOS</th>
+                <th>TUR</th>                
+                <th>ENTRADA/TURNO</th>
+                <th>TARDE</th>                                
+                <th>SALIDA/TURNO</th>
+                <th>ANTES</th> 
+                <th>T(min)</th>
                 <th style="text-align: center"></th>
                 <th style="text-align: center"></th>
             </tr>
@@ -71,20 +66,15 @@
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arControlAccesoEmpleados.codigoHorarioAccesoPk }}">{{ arControlAccesoEmpleados.codigoHorarioAccesoPk }} </td>
                 <td>{{ arControlAccesoEmpleados.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arControlAccesoEmpleados.empleadoRel.nombreCorto  }}</td>
+                <td>{{ arControlAccesoEmpleados.empleadoRel.departamentoEmpresaRel.nombre  }}</td>
                 <td>{{ arControlAccesoEmpleados.fechaEntrada|date('Y-m-d')  }}</td>
-                <td>{{ arControlAccesoEmpleados.codigoTurnoFk  }}</td>
-                <td>{{ arControlAccesoEmpleados.horaEntradaTurno|date('H:i:s')  }}</td>
-                <td>{% if arControlAccesoEmpleados.fechaEntrada|date('H:i:s') == "00:00:00" %}SIN ENTRADA{% else %}{{ arControlAccesoEmpleados.fechaEntrada|date('H:i:s')  }}{% endif %}</td>
-                <td>{% if arControlAccesoEmpleados.entradaTarde == 1 %}SI{% else %}NO{% endif %}</td>
-                <td>{{ arControlAccesoEmpleados.duracionEntradaTarde }}</td>
-                <td>{{ arControlAccesoEmpleados.horaSalidaTurno|date('H:i:s')  }}</td>
-                <td>{% if arControlAccesoEmpleados.fechaSalida == null %} SIN SALIDA {% else %}{{ arControlAccesoEmpleados.fechaSalida|date('H:i:s')  }}{% endif%}</td>
-                <td>{% if arControlAccesoEmpleados.salidaAntes == 1 %}SI{% else %}NO{% endif %}</td>
-                <td>{{ arControlAccesoEmpleados.duracionSalidaAntes }}</td>
-                <td>{{ arControlAccesoEmpleados.duracionRegistro|default('SIN SALIDA') }}</td>
-                <td>{% if arControlAccesoEmpleados.anulado == 1 %}SI{% else %}NO{% endif %}</td>
-                <td>{{ arControlAccesoEmpleados.comentarios  }}</td>
-                <td><a href="{{ path('brs_rhu_control_acceso_empleado_nuevo', { 'codigoControlAcceso': arControlAccesoEmpleados.codigoHorarioAccesoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                <td>{{ arControlAccesoEmpleados.codigoTurnoFk }}</td>                
+                <td>{% if arControlAccesoEmpleados.estadoEntrada == 0 %}SIN ENTRADA ({{ arControlAccesoEmpleados.horaEntradaTurno|date('H:i:s')  }}){% else %}{{ arControlAccesoEmpleados.fechaEntrada|date('H:i:s')  }} / {{ arControlAccesoEmpleados.horaEntradaTurno|date('H:i:s')  }}{% endif %}</td>
+                <td>{% if arControlAccesoEmpleados.entradaTarde == 1%}SI ({{ arControlAccesoEmpleados.duracionEntradaTarde }}min){% else %}NO{% endif %}</td>                                
+                <td>{% if arControlAccesoEmpleados.estadoSalida == 0 %}SIN SALIDA ({{ arControlAccesoEmpleados.horaSalidaTurno|date('H:i:s')  }}){% else %}{{ arControlAccesoEmpleados.fechaSalida|date('H:i:s')  }} / {{ arControlAccesoEmpleados.horaSalidaTurno|date('H:i:s')  }}{% endif %}</td>                
+                <td>{% if arControlAccesoEmpleados.salidaAntes == 1%}SI ({{ arControlAccesoEmpleados.duracionSalidaAntes }}min){% else %}NO{% endif %}</td>                                                                                
+                <td>{{ arControlAccesoEmpleados.duracionRegistro  }}</td>  
+                <td><a href="{{ path('brs_rhu_control_acceso_empleado_nuevo', { 'codigoHorarioAcceso': arControlAccesoEmpleados.codigoHorarioAccesoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arControlAccesoEmpleados.codigoHorarioAccesoPk }}" /></td>
             </tr>
             {% endfor %}

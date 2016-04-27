@@ -46,6 +46,21 @@ class RhuSoportePagoHorarioDetalle
      * @ORM\Column(name="descanso", type="integer")
      */    
     private $descanso = 0;    
+
+    /**
+     * @ORM\Column(name="incapacidad", type="integer")
+     */    
+    private $incapacidad = 0; 
+    
+    /**
+     * @ORM\Column(name="licencia", type="integer")
+     */    
+    private $licencia = 0;     
+    
+    /**
+     * @ORM\Column(name="vacacion", type="integer")
+     */    
+    private $vacacion = 0;     
     
     /**
      * @ORM\Column(name="dias", type="integer")
@@ -56,6 +71,11 @@ class RhuSoportePagoHorarioDetalle
      * @ORM\Column(name="horas", type="integer")
      */    
     private $horas = 0;    
+
+    /**
+     * @ORM\Column(name="horas_descanso", type="integer")
+     */    
+    private $horasDescanso = 0;
     
     /**
      * @ORM\Column(name="horas_diurnas", type="integer")
@@ -551,5 +571,101 @@ class RhuSoportePagoHorarioDetalle
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
+    }
+
+    /**
+     * Set incapacidad
+     *
+     * @param integer $incapacidad
+     *
+     * @return RhuSoportePagoHorarioDetalle
+     */
+    public function setIncapacidad($incapacidad)
+    {
+        $this->incapacidad = $incapacidad;
+
+        return $this;
+    }
+
+    /**
+     * Get incapacidad
+     *
+     * @return integer
+     */
+    public function getIncapacidad()
+    {
+        return $this->incapacidad;
+    }
+
+    /**
+     * Set licencia
+     *
+     * @param integer $licencia
+     *
+     * @return RhuSoportePagoHorarioDetalle
+     */
+    public function setLicencia($licencia)
+    {
+        $this->licencia = $licencia;
+
+        return $this;
+    }
+
+    /**
+     * Get licencia
+     *
+     * @return integer
+     */
+    public function getLicencia()
+    {
+        return $this->licencia;
+    }
+
+    /**
+     * Set vacacion
+     *
+     * @param integer $vacacion
+     *
+     * @return RhuSoportePagoHorarioDetalle
+     */
+    public function setVacacion($vacacion)
+    {
+        $this->vacacion = $vacacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vacacion
+     *
+     * @return integer
+     */
+    public function getVacacion()
+    {
+        return $this->vacacion;
+    }
+
+    /**
+     * Set horasDescanso
+     *
+     * @param integer $horasDescanso
+     *
+     * @return RhuSoportePagoHorarioDetalle
+     */
+    public function setHorasDescanso($horasDescanso)
+    {
+        $this->horasDescanso = $horasDescanso;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDescanso
+     *
+     * @return integer
+     */
+    public function getHorasDescanso()
+    {
+        return $this->horasDescanso;
     }
 }
