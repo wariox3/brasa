@@ -134,8 +134,11 @@ class VacacionesController extends Controller
                     if(count($arEmpleado) > 0) {
                         $arVacacion->setEmpleadoRel($arEmpleado);
                         if($arEmpleado->getCodigoContratoActivoFk() != '') {                        
-                                if ($form->get('fechaDesdeDisfrute')->getData() >  $form->get('fechaHastaDisfrute')->getData()){
-                                    $objMensaje->Mensaje("error", "La fecha desde no debe ser mayor a la fecha hasta", $this);
+                            if ($form->get('fechaDesdeDisfrute')->getData() >  $form->get('fechaHastaDisfrute')->getData()){
+                                $objMensaje->Mensaje("error", "La fecha desde no debe ser mayor a la fecha hasta", $this);
+                            } else {
+                                if ($form->get('diasDisfrutados')->getData() == 0 && $form->get('diasPagados')->getData() == 0){
+                                    $objMensaje->Mensaje("error", "Los dias pagados o los dias disfrutados, no pueden estas en ceros", $this);
                                 } else {
                                     $arVacacion->setCentroCostoRel($arEmpleado->getCentroCostoRel());
                                     $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
@@ -180,7 +183,7 @@ class VacacionesController extends Controller
                                     $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->liquidar($arVacacion->getCodigoVacacionPk());
                                     return $this->redirect($this->generateUrl('brs_rhu_vacaciones_lista'));                                                                                               
                                 }
-                            
+                            }
                         } else {
                             $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
                         }                    
