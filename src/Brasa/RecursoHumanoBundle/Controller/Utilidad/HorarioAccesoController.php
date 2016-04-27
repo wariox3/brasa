@@ -42,7 +42,7 @@ class HorarioAccesoController extends Controller
             $codigoHorarioPeriodoDiaAnterior = $arHorarioPeriodoDiaAnterior->getCodigoHorarioPeriodoPk();
         }
         $form = $this->createFormBuilder()                  
-                    ->add('tipo', 'choice', array('choices' => array('1' => 'Entrada', '2' => 'Salida'),'data' => 1,'expanded' => true,))
+                    ->add('tipo', 'choice', array('choices' => array('0' => 'Entrada', '1' => 'Salida'),'data' => 1,'expanded' => true,))
                     ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
                     ->getForm();               
         $form->handleRequest($request);

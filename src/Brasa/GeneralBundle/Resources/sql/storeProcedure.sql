@@ -135,7 +135,7 @@ BEGIN
 				#Si el empleado tiene registro creado para ese dia
 				IF codigoHorarioAcceso <> 0 THEN
 					#Si la accion es una entrada
-					#if tipo = 1 then
+					IF tipo = 0 THEN
 						#Si no ha entrado
 						IF entrada = 0 THEN
 							SET fechaHoraEntradaTurno = CONCAT(fechaEntradaTurno,' ',horaEntradaTurno);
@@ -148,8 +148,12 @@ BEGIN
 							ELSE
 								SET fechaHoraEntradaPago = fechaHoraEntradaTurno;
 							END IF;
-							UPDATE rhu_horario_acceso SET estado_entrada = 1, fecha_entrada = fechaHoraEntrada, entrada_tarde = entradaTarde, duracion_entrada_tarde =  diferenciaEntrada, fecha_entrada_pago = fechaHoraEntradaPago WHERE codigo_horario_acceso_pk = codigoHorarioAcceso;						
-						ELSE 
+							UPDATE rhu_horario_acceso SET estado_entrada = 1, fecha_entrada = fechaHoraEntrada, entrada_tarde = entradaTarde, duracion_entrada_tarde =  diferenciaEntrada, fecha_entrada_pago = fechaHoraEntradaPago WHERE codigo_horario_acceso_pk = codigoHorarioAcceso;											
+						END IF;
+					END IF;
+					#Si la accion es una salida
+					IF tipo = 1 THEN	
+						IF entrada = 1 THEN					
 							#Verificar que no tenga salida							
 							IF salida = 0 THEN								
 								SET fechaHoraSalidaTurno = CONCAT(fechaSalidaTurno,' ',horaSalidaTurno);
@@ -164,21 +168,16 @@ BEGIN
 										SET fechaHoraSalidaPago = fechaHoraSalida;
 									ELSE
 										SET fechaHoraSalidaPago = fechaHoraSalidaTurno;
-									END IF;									
+									END IF;
+									
 								END IF;	
 								SELECT fecha_entrada INTO fechaHoraEntrada FROM rhu_horario_acceso WHERE codigo_horario_acceso_pk = codigoHorarioAcceso;
 								SET duracion = TIMEDIFF(fechaHoraSalida, fechaHoraEntrada);	
 								SET duracion = (duracion * 60) + MINUTE(TIMEDIFF(fechaHoraSalida, fechaHoraEntrada));																																																		
 								UPDATE rhu_horario_acceso SET estado_salida = 1, fecha_salida = fechaHoraSalida, salida_antes = salidaAntes, duracion_salida_antes = diferenciaSalida, duracion_registro = duracion, fecha_salida_pago = fechaHoraSalidaPago WHERE codigo_horario_acceso_pk = codigoHorarioAcceso;																						
-							END IF;						
+							END IF;	
 						END IF;
-					#end if;
-					#Si la accion es una salida
-					#IF tipo = 2 THEN						
-						#Varificar si ya tiene marcada una entrada
-						#IF entrada = 1 THEN							
-						#END IF;
-					#END IF;										
+					END IF;										
 				END IF;
 			END IF;		
 		END IF;
