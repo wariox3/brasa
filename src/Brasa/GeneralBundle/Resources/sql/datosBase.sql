@@ -5343,6 +5343,7 @@ insert into `rhu_tipo_pension` (`codigo_tipo_pension_pk`, `codigo_pago_concepto_
 insert into `rhu_tipo_pension` (`codigo_tipo_pension_pk`, `codigo_pago_concepto_fk`, `nombre`, `porcentaje_empleado`, `porcentaje_empleador`) values('2','4','ALTO RIESGO','4','22');
 insert into `rhu_tipo_pension` (`codigo_tipo_pension_pk`, `codigo_pago_concepto_fk`, `nombre`, `porcentaje_empleado`, `porcentaje_empleador`) values('3','4','EMPLEADOR NORMAL','0','16');
 insert into `rhu_tipo_pension` (`codigo_tipo_pension_pk`, `codigo_pago_concepto_fk`, `nombre`, `porcentaje_empleado`, `porcentaje_empleador`) values('4','4','EMPLEADOR ALTO RIESGO','0','26');
+insert into `rhu_tipo_pension` (`codigo_tipo_pension_pk`, `codigo_pago_concepto_fk`, `nombre`, `porcentaje_empleado`, `porcentaje_empleador`) values('5','4','PENSIONADO','0','0');
 
 insert into `rhu_tipo_salud` (`codigo_tipo_salud_pk`, `codigo_pago_concepto_fk`, `nombre`, `porcentaje_empleado`, `porcentaje_empleador`) values('1','3','EMPLEADO','4','8.5');
 insert into `rhu_tipo_salud` (`codigo_tipo_salud_pk`, `codigo_pago_concepto_fk`, `nombre`, `porcentaje_empleado`, `porcentaje_empleador`) values('2','3','EMPLEADOR','0','12.5');

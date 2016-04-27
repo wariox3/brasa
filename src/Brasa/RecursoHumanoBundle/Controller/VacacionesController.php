@@ -138,7 +138,7 @@ class VacacionesController extends Controller
                                 $objMensaje->Mensaje("error", "La fecha desde no debe ser mayor a la fecha hasta", $this);
                             } else {
                                 if ($form->get('diasDisfrutados')->getData() == 0 && $form->get('diasPagados')->getData() == 0){
-                                    $objMensaje->Mensaje("error", "Los dias pagados o los dias disfrutados, no pueden estas en ceros", $this);
+                                    $objMensaje->Mensaje("error", "Los dias pagados o los dias disfrutados, no pueden estar en ceros", $this);
                                 } else {
                                     $arVacacion->setCentroCostoRel($arEmpleado->getCentroCostoRel());
                                     $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
