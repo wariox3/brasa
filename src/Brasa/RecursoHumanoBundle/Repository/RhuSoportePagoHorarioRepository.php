@@ -111,10 +111,24 @@ class RhuSoportePagoHorarioRepository extends EntityRepository {
                         }
                     }                                   
                 }                
-            }            
+            }           
+            $intHorasPermiso = $em->getRepository('BrasaRecursoHumanoBundle:RhuPermiso')->horasPermisoPeriodo($fechaDesde->format('Y/m/d'), $fechaHasta->format('Y/m/d'), $arContrato->getCodigoEmpleadoFk());
+            $incapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->diasIncapacidadPeriodo($fechaDesde, $fechaHasta, $arContrato->getCodigoEmpleadoFk());
+            $licencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicenciaPeriodo($fechaDesde, $fechaHasta, $arContrato->getCodigoEmpleadoFk());
+            $vacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $fechaDesde, $fechaHasta);
             $intHoras = $arrHorasTotal['horasDescanso'] + $arrHorasTotal['horasDiurnas'] + $arrHorasTotal['horasNocturnas'] + $arrHorasTotal['horasFestivasDiurnas'] + $arrHorasTotal['horasFestivasNocturnas'] + $arrHorasTotal['horasExtrasDiurnas'] + $arrHorasTotal['horasExtrasNocturnas'];
+            $intHoras += $intHorasPermiso;
+            $novedad = $incapacidad + $licencia + $vacacion;
+            $horasNovedad = ($incapacidad + $licencia + $vacacion) * 8;
+            $intHoras += $horasNovedad;
+            $dias += $novedad;
+            $arSoportePagoHorarioDetalle->setIncapacidad($incapacidad);
+            $arSoportePagoHorarioDetalle->setLicencia($licencia);
+            $arSoportePagoHorarioDetalle->setVacacion($vacacion);            
             $arSoportePagoHorarioDetalle->setHoras($intHoras);
             $arSoportePagoHorarioDetalle->setHorasDescanso($arrHorasTotal['horasDescanso']);
+            $arSoportePagoHorarioDetalle->setHorasPermiso($intHorasPermiso);
+            $arSoportePagoHorarioDetalle->setHorasNovedad($horasNovedad);
             $arSoportePagoHorarioDetalle->setHorasDiurnas($arrHorasTotal['horasDiurnas']);
             $arSoportePagoHorarioDetalle->setHorasNocturnas($arrHorasTotal['horasNocturnas']);
             $arSoportePagoHorarioDetalle->setHorasFestivasDiurnas($arrHorasTotal['horasFestivasDiurnas']);

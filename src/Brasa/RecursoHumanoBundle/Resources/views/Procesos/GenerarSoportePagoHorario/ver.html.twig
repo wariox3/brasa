@@ -33,6 +33,32 @@
             {% endfor %}
         </table>        
 
+        <table  class="table table-striped table-bordered table-condensed table-hover">
+            <tr>
+                <th>CODIGO</th>
+                <th>FECHA</th>
+                <th>CENTRO COSTO</th>
+                <th>TIPO PERMISO</th>
+                <th>SALIDA</th>
+                <th>LLEGADA</th>
+                <th>HORAS</th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Afecta horario">A.H</p></th>
+                <th>AUT</th>
+            </tr>
+            {% for arPermisos in arPermisos %}
+            <tr>
+                <td><input type="hidden" name="LblCodigo[]" value="{{ arPermisos.codigoPermisoPk }}">{{ arPermisos.codigoPermisoPk }} </td>
+                <td>{{ arPermisos.fechaPermiso |date("Y-m-d")  }}</td>
+                <td>{{ arPermisos.centroCostoRel.nombre  }}</td>
+                <td>{{ arPermisos.permisoTipoRel.nombre  }}</td>
+                <td>{{ arPermisos.horaSalida |date('H:i:s')  }}</td>
+                <td>{{ arPermisos.horaLlegada |date('H:i:s')  }}</td>
+                <td>{{ arPermisos.horasPermiso  }}</td>
+                <td>{% if arPermisos.afectaHorario == 1%}SI{% else %}NO{% endif %}</td>
+                <td>{% if arPermisos.estadoAutorizado == 1%}SI{% else %}NO{% endif %}</td>
+            </tr>
+            {% endfor %}
+        </table>        
 
     </div>
 {% endblock %}

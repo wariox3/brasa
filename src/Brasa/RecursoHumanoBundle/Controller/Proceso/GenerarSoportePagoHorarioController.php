@@ -139,8 +139,11 @@ class GenerarSoportePagoHorarioController extends Controller
         $arSoportePagoHorarioDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSoportePagoHorarioDetalle')->find($codigoSoportePagoHorarioDetalle);                        
         $arHorarioAcceso = new \Brasa\RecursoHumanoBundle\Entity\RhuHorarioAcceso();
         $arHorarioAcceso = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->empleado($arSoportePagoHorarioDetalle->getFechaDesde()->format('Y/m/d'), $arSoportePagoHorarioDetalle->getFechaHasta()->format('Y/m/d'), $arSoportePagoHorarioDetalle->getCodigoEmpleadoFk());                        
+        $arPermisos = new \Brasa\RecursoHumanoBundle\Entity\RhuPermiso();
+        $arPermisos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPermiso')->permisoPeriodo($arSoportePagoHorarioDetalle->getFechaDesde()->format('Y/m/d'), $arSoportePagoHorarioDetalle->getFechaHasta()->format('Y/m/d'), $arSoportePagoHorarioDetalle->getCodigoEmpleadoFk());        
         return $this->render('BrasaRecursoHumanoBundle:Procesos/GenerarSoportePagoHorario:ver.html.twig', array(                        
             'arHorarioAcceso' => $arHorarioAcceso,
+            'arPermisos' => $arPermisos,
             ));
     }         
     
@@ -187,7 +190,7 @@ class GenerarSoportePagoHorarioController extends Controller
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
         }     
-        for($col = 'F'; $col !== 'U'; $col++) {
+        for($col = 'H'; $col !== 'Y'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
             $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('right');
@@ -198,21 +201,25 @@ class GenerarSoportePagoHorarioController extends Controller
                     ->setCellValue('C1', 'HASTA')
                     ->setCellValue('D1', 'IDENTIFICACION')                
                     ->setCellValue('E1', 'NOMBRE')
-                    ->setCellValue('F1', 'DÍAS')
-                    ->setCellValue('G1', 'INC')
-                    ->setCellValue('H1', 'LIC')
-                    ->setCellValue('I1', 'VAC')
-                    ->setCellValue('J1', 'DES')
-                    ->setCellValue('K1', 'H')
-                    ->setCellValue('L1', 'HDS')
-                    ->setCellValue('M1', 'HD')
-                    ->setCellValue('N1', 'HN')
-                    ->setCellValue('O1', 'HFD')
-                    ->setCellValue('P1', 'HFN')                
-                    ->setCellValue('Q1', 'HEOD')
-                    ->setCellValue('R1', 'HEON')
-                    ->setCellValue('S1', 'HEFD')
-                    ->setCellValue('T1', 'HEFN');
+                    ->setCellValue('F1', 'DEPARTAMENTO')
+                    ->setCellValue('G1', 'HORARIO')
+                    ->setCellValue('H1', 'DÍAS')
+                    ->setCellValue('I1', 'INC')
+                    ->setCellValue('J1', 'LIC')
+                    ->setCellValue('K1', 'VAC')
+                    ->setCellValue('L1', 'DES')                        
+                    ->setCellValue('M1', 'H')
+                    ->setCellValue('N1', 'HP')
+                    ->setCellValue('O1', 'HN')
+                    ->setCellValue('P1', 'HDS')
+                    ->setCellValue('Q1', 'HD')
+                    ->setCellValue('R1', 'HN')
+                    ->setCellValue('S1', 'HFD')
+                    ->setCellValue('T1', 'HFN')                
+                    ->setCellValue('U1', 'HEOD')
+                    ->setCellValue('V1', 'HEON')
+                    ->setCellValue('W1', 'HEFD')
+                    ->setCellValue('X1', 'HEFN');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -226,21 +233,25 @@ class GenerarSoportePagoHorarioController extends Controller
                     ->setCellValue('C' . $i, $arSoportesPagoHorarioDetalle->getFechaHasta()->format('Y/m/d'))
                     ->setCellValue('D' . $i, $arSoportesPagoHorarioDetalle->getEmpleadoRel()->getNumeroIdentificacion())
                     ->setCellValue('E' . $i, $arSoportesPagoHorarioDetalle->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('F' . $i, $arSoportesPagoHorarioDetalle->getDias())
-                    ->setCellValue('G' . $i, $arSoportesPagoHorarioDetalle->getIncapacidad())
-                    ->setCellValue('H' . $i, $arSoportesPagoHorarioDetalle->getLicencia())
-                    ->setCellValue('I' . $i, $arSoportesPagoHorarioDetalle->getVacacion())
-                    ->setCellValue('J' . $i, $arSoportesPagoHorarioDetalle->getDescanso())
-                    ->setCellValue('K' . $i, $arSoportesPagoHorarioDetalle->getHoras())
-                    ->setCellValue('L' . $i, $arSoportesPagoHorarioDetalle->getHorasDescanso())
-                    ->setCellValue('M' . $i, $arSoportesPagoHorarioDetalle->getHorasDiurnas())
-                    ->setCellValue('N' . $i, $arSoportesPagoHorarioDetalle->getHorasNocturnas())
-                    ->setCellValue('O' . $i, $arSoportesPagoHorarioDetalle->getHorasFestivasDiurnas())
-                    ->setCellValue('P' . $i, $arSoportesPagoHorarioDetalle->getHorasFestivasNocturnas())                    
-                    ->setCellValue('Q' . $i, $arSoportesPagoHorarioDetalle->getHorasExtrasOrdinariasDiurnas())
-                    ->setCellValue('R' . $i, $arSoportesPagoHorarioDetalle->getHorasExtrasOrdinariasNocturnas())
-                    ->setCellValue('S' . $i, $arSoportesPagoHorarioDetalle->getHorasExtrasFestivasDiurnas())
-                    ->setCellValue('T' . $i, $arSoportesPagoHorarioDetalle->getHorasExtrasFestivasNocturnas());
+                    ->setCellValue('F' . $i, $arSoportesPagoHorarioDetalle->getEmpleadoRel()->getDepartamentoEmpresaRel()->getNombre())
+                    ->setCellValue('G' . $i, $arSoportesPagoHorarioDetalle->getEmpleadoRel()->getHorarioRel()->getNombre())                    
+                    ->setCellValue('H' . $i, $arSoportesPagoHorarioDetalle->getDias())
+                    ->setCellValue('I' . $i, $arSoportesPagoHorarioDetalle->getIncapacidad())
+                    ->setCellValue('J' . $i, $arSoportesPagoHorarioDetalle->getLicencia())
+                    ->setCellValue('K' . $i, $arSoportesPagoHorarioDetalle->getVacacion())
+                    ->setCellValue('L' . $i, $arSoportesPagoHorarioDetalle->getDescanso())
+                    ->setCellValue('M' . $i, $arSoportesPagoHorarioDetalle->getHoras())
+                    ->setCellValue('N' . $i, $arSoportesPagoHorarioDetalle->getHorasPermiso())
+                    ->setCellValue('O' . $i, $arSoportesPagoHorarioDetalle->getHorasNovedad())
+                    ->setCellValue('P' . $i, $arSoportesPagoHorarioDetalle->getHorasDescanso())
+                    ->setCellValue('Q' . $i, $arSoportesPagoHorarioDetalle->getHorasDiurnas())
+                    ->setCellValue('R' . $i, $arSoportesPagoHorarioDetalle->getHorasNocturnas())
+                    ->setCellValue('S' . $i, $arSoportesPagoHorarioDetalle->getHorasFestivasDiurnas())
+                    ->setCellValue('T' . $i, $arSoportesPagoHorarioDetalle->getHorasFestivasNocturnas())                    
+                    ->setCellValue('U' . $i, $arSoportesPagoHorarioDetalle->getHorasExtrasOrdinariasDiurnas())
+                    ->setCellValue('V' . $i, $arSoportesPagoHorarioDetalle->getHorasExtrasOrdinariasNocturnas())
+                    ->setCellValue('W' . $i, $arSoportesPagoHorarioDetalle->getHorasExtrasFestivasDiurnas())
+                    ->setCellValue('X' . $i, $arSoportesPagoHorarioDetalle->getHorasExtrasFestivasNocturnas());
 
             $i++;
         }

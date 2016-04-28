@@ -17,6 +17,7 @@
                 <th>{{ knp_pagination_sortable(arSoportesPagosHorariosDetalles, 'CÓDIGO', 'p.codigoSoportePagoHorarioDetallePk') }}</th>
                 <th>DESDE</th>
                 <th>HASTA</th>
+                <th>IDENT</th>
                 <th>NOMBRE</th>
                 <th>DIAS</th>                
                 <th>INC</th>
@@ -24,6 +25,8 @@
                 <th>VAC</th>
                 <th>DES</th>                
                 <th><p data-toggle="tooltip" data-placement="top" title="Horas">H</p></th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Horas permisos">HP</p></th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Horas novedad">HN</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Horas descanso">HDS</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Horas diurnas">HD</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Horas nocturnas">HN</p></th>
@@ -42,6 +45,7 @@
                 <td>{{ arSoportesPagosHorariosDetalles.codigoSoportePagoHorarioDetallePk  }}</td>
                 <td>{{ arSoportesPagosHorariosDetalles.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arSoportesPagosHorariosDetalles.fechaHasta |date("Y/m/d")  }}</td>   
+                <td>{{ arSoportesPagosHorariosDetalles.empleadoRel.numeroIdentificacion  }}</td>   
                 <td>{{ arSoportesPagosHorariosDetalles.empleadoRel.nombreCorto  }}</td>   
                 <td style="text-align: right">{{ arSoportesPagosHorariosDetalles.dias | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagosHorariosDetalles.incapacidad | number_format(0, '.', ',') }}</td>
@@ -49,6 +53,8 @@
                 <td style="text-align: right">{{ arSoportesPagosHorariosDetalles.vacacion | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagosHorariosDetalles.descanso | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagosHorariosDetalles.horas | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosHorariosDetalles.horasPermiso | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosHorariosDetalles.horasNovedad | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagosHorariosDetalles.horasDescanso | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagosHorariosDetalles.horasDiurnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagosHorariosDetalles.horasNocturnas | number_format(0, '.', ',') }}</td>

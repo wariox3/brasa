@@ -81,6 +81,16 @@ class RhuSoportePagoHorarioDetalle
      * @ORM\Column(name="horas_descanso", type="integer")
      */    
     private $horasDescanso = 0;
+
+    /**
+     * @ORM\Column(name="horas_permiso", type="integer")
+     */    
+    private $horasPermiso = 0;
+
+    /**
+     * @ORM\Column(name="horas_novedad", type="integer")
+     */    
+    private $horasNovedad = 0;
     
     /**
      * @ORM\Column(name="horas_diurnas", type="integer")
@@ -726,5 +736,53 @@ class RhuSoportePagoHorarioDetalle
     public function getContratoRel()
     {
         return $this->contratoRel;
+    }
+
+    /**
+     * Set horasPermiso
+     *
+     * @param integer $horasPermiso
+     *
+     * @return RhuSoportePagoHorarioDetalle
+     */
+    public function setHorasPermiso($horasPermiso)
+    {
+        $this->horasPermiso = $horasPermiso;
+
+        return $this;
+    }
+
+    /**
+     * Get horasPermiso
+     *
+     * @return integer
+     */
+    public function getHorasPermiso()
+    {
+        return $this->horasPermiso;
+    }
+
+    /**
+     * Set horasNovedad
+     *
+     * @param integer $horasNovedad
+     *
+     * @return RhuSoportePagoHorarioDetalle
+     */
+    public function setHorasNovedad($horasNovedad)
+    {
+        $this->horasNovedad = $horasNovedad;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNovedad
+     *
+     * @return integer
+     */
+    public function getHorasNovedad()
+    {
+        return $this->horasNovedad;
     }
 }

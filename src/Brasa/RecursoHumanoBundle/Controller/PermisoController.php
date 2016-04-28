@@ -61,6 +61,8 @@ class PermisoController extends Controller
         if($codigoPermiso != 0) {
             $arPermiso = $em->getRepository('BrasaRecursoHumanoBundle:RhuPermiso')->find($codigoPermiso);
         } else {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
+            $arPermiso->setJefeAutoriza($arUsuario->getNombreCorto());
             $arPermiso->setFechaPermiso(new \DateTime('now'));
         }
         $form = $this->createForm(new RhuPermisoType, $arPermiso);

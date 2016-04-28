@@ -71,6 +71,10 @@ class ProgramacionesPagoCargarSoporteHorarioController extends Controller
                         $this->insertarAdicionalPago($arProgramacionPago, 45, $arSoportePagoHorarioDetalle->getHorasExtrasFestivasNocturnas(), $arEmpleado);
                     }                    
                 }
+                
+                $arProgramacionPago->setEmpleadosGenerados(1);
+                $arProgramacionPago->setNumeroEmpleados(count($arSoportePagoHorarioDetalles));                
+                $em->persist($arProgramacionPago);                
                 $em->flush();                
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
             }                                  

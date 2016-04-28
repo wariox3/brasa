@@ -61,4 +61,28 @@ class RhuPermisoRepository extends EntityRepository {
         $dql .= " ORDER BY p.fechaPermiso";
         return $dql;
     }
+    
+    public function horasPermisoPeriodo($fechaDesde = '', $fechaHasta = '', $codigoEmpleado) {
+        $em = $this->getEntityManager();
+        $horas = 0;
+        $dql   = "SELECT SUM(p.horasPermiso) as horas "
+                . "FROM BrasaRecursoHumanoBundle:RhuPermiso p "
+                . "WHERE p.fechaPermiso >='" . $fechaDesde . "' AND p.fechaPermiso <= '" . $fechaHasta . "' AND p.codigoEmpleadoFk = " . $codigoEmpleado . " ";
+        $query = $em->createQuery($dql);
+        $arResultado = $query->getResult();
+        if($arResultado[0]['horas'] != null) {
+          $horas = $arResultado[0]['horas'];
+        }
+        return $horas;
+    } 
+    
+    public function permisoPeriodo($fechaDesde = '', $fechaHasta = '', $codigoEmpleado) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT p FROM BrasaRecursoHumanoBundle:RhuPermiso p "
+                . "WHERE p.fechaPermiso >='" . $fechaDesde . "' AND p.fechaPermiso <= '" . $fechaHasta . "' AND p.codigoEmpleadoFk = " . $codigoEmpleado . " ";
+        $query = $em->createQuery($dql);
+        $arResultado = $query->getResult();
+        return $arResultado;
+    }    
+    
 }
