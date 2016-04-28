@@ -67,7 +67,7 @@ class RhuPermisoRepository extends EntityRepository {
         $horas = 0;
         $dql   = "SELECT SUM(p.horasPermiso) as horas "
                 . "FROM BrasaRecursoHumanoBundle:RhuPermiso p "
-                . "WHERE p.fechaPermiso >='" . $fechaDesde . "' AND p.fechaPermiso <= '" . $fechaHasta . "' AND p.codigoEmpleadoFk = " . $codigoEmpleado . " ";
+                . "WHERE p.fechaPermiso >='" . $fechaDesde . "' AND p.fechaPermiso <= '" . $fechaHasta . "' AND p.codigoEmpleadoFk = " . $codigoEmpleado . " AND p.afectaHorario = 0 AND p.estadoAutorizado = 1";
         $query = $em->createQuery($dql);
         $arResultado = $query->getResult();
         if($arResultado[0]['horas'] != null) {
