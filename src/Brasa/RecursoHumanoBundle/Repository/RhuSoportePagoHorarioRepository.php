@@ -44,11 +44,18 @@ class RhuSoportePagoHorarioRepository extends EntityRepository {
             $arrHorasTotal = array(
                 'horasDescanso' => 0,
                 'horasDiurnas' => 0,
-                'horasExtrasDiurnas' => 0,
                 'horasNocturnas' => 0,
-                'horasExtrasNocturnas' => 0);
+                'horasFestivasDiurnas' => 0,
+                'horasFestivasNocturnas' => 0,                
+                'horasExtrasDiurnas' => 0,                
+                'horasExtrasNocturnas' => 0,
+                'horasExtrasFestivasDiurnas' => 0,
+                'horasExtrasFestivasNocturnas' => 0);
             $dias = 0;
-            $descansos = 0;
+            $descansos = 0; 
+            /*if($arContrato->getCodigoContratoPk() == 9) {
+                echo "hola";
+            }*/
             foreach ($arHorarioAccesos as $arHorarioAcceso) {                
                 $arTurno = new \Brasa\RecursoHumanoBundle\Entity\RhuTurno();
                 $arTurno = $em->getRepository('BrasaRecursoHumanoBundle:RhuTurno')->find($arHorarioAcceso->getCodigoTurnoFk());
@@ -85,18 +92,37 @@ class RhuSoportePagoHorarioRepository extends EntityRepository {
                         $arrHorasTotal['horasDescanso'] = $arrHorasTotal['horasDescanso'] + $arrHoras['horasDescanso'];
                         $arrHorasTotal['horasDiurnas'] = $arrHorasTotal['horasDiurnas'] + $arrHoras['horasDiurnas'];
                         $arrHorasTotal['horasNocturnas'] = $arrHorasTotal['horasNocturnas'] + $arrHoras['horasNocturnas'];
+                        $arrHorasTotal['horasFestivasDiurnas'] = $arrHorasTotal['horasFestivasDiurnas'] + $arrHoras['horasFestivasDiurnas'];
+                        $arrHorasTotal['horasFestivasNocturnas'] = $arrHorasTotal['horasFestivasNocturnas'] + $arrHoras['horasFestivasNocturnas'];                        
                         $arrHorasTotal['horasExtrasDiurnas'] = $arrHorasTotal['horasExtrasDiurnas'] + $arrHoras['horasExtrasDiurnas'];
                         $arrHorasTotal['horasExtrasNocturnas'] = $arrHorasTotal['horasExtrasNocturnas'] + $arrHoras['horasExtrasNocturnas'];
+                        $arrHorasTotal['horasExtrasFestivasDiurnas'] = $arrHorasTotal['horasExtrasFestivasDiurnas'] + $arrHoras['horasExtrasFestivasDiurnas'];
+                        $arrHorasTotal['horasExtrasFestivasNocturnas'] = $arrHorasTotal['horasExtrasFestivasNocturnas'] + $arrHoras['horasExtrasFestivasNocturnas'];                        
+                        if($arrHoras1 != null) {
+                            $arrHorasTotal['horasDescanso'] = $arrHorasTotal['horasDescanso'] + $arrHoras1['horasDescanso'];
+                            $arrHorasTotal['horasDiurnas'] = $arrHorasTotal['horasDiurnas'] + $arrHoras1['horasDiurnas'];
+                            $arrHorasTotal['horasNocturnas'] = $arrHorasTotal['horasNocturnas'] + $arrHoras1['horasNocturnas'];
+                            $arrHorasTotal['horasFestivasDiurnas'] = $arrHorasTotal['horasFestivasDiurnas'] + $arrHoras1['horasFestivasDiurnas'];
+                            $arrHorasTotal['horasFestivasNocturnas'] = $arrHorasTotal['horasFestivasNocturnas'] + $arrHoras1['horasFestivasNocturnas'];                                                    
+                            $arrHorasTotal['horasExtrasDiurnas'] = $arrHorasTotal['horasExtrasDiurnas'] + $arrHoras1['horasExtrasDiurnas'];
+                            $arrHorasTotal['horasExtrasNocturnas'] = $arrHorasTotal['horasExtrasNocturnas'] + $arrHoras1['horasExtrasNocturnas'];                            
+                            $arrHorasTotal['horasExtrasFestivasDiurnas'] = $arrHorasTotal['horasExtrasFestivasDiurnas'] + $arrHoras1['horasExtrasFestivasDiurnas'];
+                            $arrHorasTotal['horasExtrasFestivasNocturnas'] = $arrHorasTotal['horasExtrasFestivasNocturnas'] + $arrHoras1['horasExtrasFestivasNocturnas'];                                                    
+                        }
                     }                                   
                 }                
             }            
-            $intHoras = $arrHorasTotal['horasDescanso'] + $arrHorasTotal['horasDiurnas'] + $arrHorasTotal['horasNocturnas'] + $arrHorasTotal['horasExtrasDiurnas'] + $arrHorasTotal['horasExtrasNocturnas'];
+            $intHoras = $arrHorasTotal['horasDescanso'] + $arrHorasTotal['horasDiurnas'] + $arrHorasTotal['horasNocturnas'] + $arrHorasTotal['horasFestivasDiurnas'] + $arrHorasTotal['horasFestivasNocturnas'] + $arrHorasTotal['horasExtrasDiurnas'] + $arrHorasTotal['horasExtrasNocturnas'];
             $arSoportePagoHorarioDetalle->setHoras($intHoras);
             $arSoportePagoHorarioDetalle->setHorasDescanso($arrHorasTotal['horasDescanso']);
             $arSoportePagoHorarioDetalle->setHorasDiurnas($arrHorasTotal['horasDiurnas']);
             $arSoportePagoHorarioDetalle->setHorasNocturnas($arrHorasTotal['horasNocturnas']);
+            $arSoportePagoHorarioDetalle->setHorasFestivasDiurnas($arrHorasTotal['horasFestivasDiurnas']);
+            $arSoportePagoHorarioDetalle->setHorasFestivasNocturnas($arrHorasTotal['horasFestivasNocturnas']);            
             $arSoportePagoHorarioDetalle->setHorasExtrasOrdinariasDiurnas($arrHorasTotal['horasExtrasDiurnas']);
             $arSoportePagoHorarioDetalle->setHorasExtrasOrdinariasNocturnas($arrHorasTotal['horasExtrasNocturnas']);                        
+            $arSoportePagoHorarioDetalle->setHorasExtrasFestivasDiurnas($arrHorasTotal['horasExtrasFestivasDiurnas']);
+            $arSoportePagoHorarioDetalle->setHorasExtrasFestivasNocturnas($arrHorasTotal['horasExtrasFestivasNocturnas']);                                    
             $arSoportePagoHorarioDetalle->setDescanso($descansos);  
             $arSoportePagoHorarioDetalle->setDias($dias);
             $em->persist($arSoportePagoHorarioDetalle);
