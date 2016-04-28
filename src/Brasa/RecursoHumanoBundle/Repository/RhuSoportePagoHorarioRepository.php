@@ -53,7 +53,7 @@ class RhuSoportePagoHorarioRepository extends EntityRepository {
                 'horasExtrasFestivasNocturnas' => 0);
             $dias = 0;
             $descansos = 0; 
-            /*if($arContrato->getCodigoContratoPk() == 9) {
+            /*if($arContrato->getCodigoContratoPk() == 1) {
                 echo "hola";
             }*/
             foreach ($arHorarioAccesos as $arHorarioAcceso) {                
@@ -84,10 +84,10 @@ class RhuSoportePagoHorarioRepository extends EntityRepository {
                         }        
                         $arrHoras1 = null;
                         if(($intHoraInicio + $intMinutoInicio) <= $intHoraFinal+$intMinutoFinal){  
-                            $arrHoras = $this->turnoHoras($intHoraInicio, $intMinutoInicio, $intHoraFinal, $boolFestivo, 0, 0, 0);
+                            $arrHoras = $this->turnoHoras($intHoraInicio, $intMinutoInicio, $intHoraFinal, $boolFestivo, 0, 0, 0,$arTurno->getHorasPausa());
                         } else {
-                            $arrHoras = $this->turnoHoras($intHoraInicio, $intMinutoInicio, 24, $boolFestivo, 0, 0, 0);
-                            $arrHoras1 = $this->turnoHoras(0, 0, $intHoraFinal, $boolFestivo2, $arrHoras['horas'], 0, 0);                 
+                            $arrHoras = $this->turnoHoras($intHoraInicio, $intMinutoInicio, 24, $boolFestivo, 0, 0, 0, 0);
+                            $arrHoras1 = $this->turnoHoras(0, 0, $intHoraFinal, $boolFestivo2, $arrHoras['horas'], 0, 0, 0);                 
                         }  
                         $arrHorasTotal['horasDescanso'] = $arrHorasTotal['horasDescanso'] + $arrHoras['horasDescanso'];
                         $arrHorasTotal['horasDiurnas'] = $arrHorasTotal['horasDiurnas'] + $arrHoras['horasDiurnas'];
@@ -146,7 +146,7 @@ class RhuSoportePagoHorarioRepository extends EntityRepository {
         $em->flush();
     }    
  
-    private function turnoHoras($intHoraInicio, $intMinutoInicio, $intHoraFinal, $boolFestivo, $intHoras, $boolNovedad = 0, $boolDescanso = 0) {        
+    private function turnoHoras($intHoraInicio, $intMinutoInicio, $intHoraFinal, $boolFestivo, $intHoras, $boolNovedad = 0, $boolDescanso = 0, $horasPausa) {        
         if($boolNovedad == 0) {
             $intHorasNocturnas = $this->calcularTiempo($intHoraInicio, $intHoraFinal, 0, 6);        
             $intHorasExtrasNocturnas = 0;
@@ -164,6 +164,7 @@ class RhuSoportePagoHorarioRepository extends EntityRepository {
             }
 
             $intHorasDiurnas = $this->calcularTiempo($intHoraInicio, $intHoraFinal, 6, 22);            
+            $intHorasDiurnas -= $horasPausa;
             $intHorasExtrasDiurnas = 0;
             $intTotalHoras = $intHoras + $intHorasNocturnas + $intHorasExtrasNocturnas + $intHorasDiurnas;
             if($intTotalHoras > 8) {

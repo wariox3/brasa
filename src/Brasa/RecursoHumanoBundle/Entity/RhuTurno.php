@@ -45,6 +45,11 @@ class RhuTurno
     private $horasDiurnas = 0;     
     
     /**
+     * @ORM\Column(name="horas_pausa", type="float")
+     */    
+    private $horasPausa = 0;     
+    
+    /**
      * @ORM\Column(name="horas_nocturnas", type="float")
      */    
     private $horasNocturnas = 0;            
@@ -465,5 +470,29 @@ class RhuTurno
     public function getVacacion()
     {
         return $this->vacacion;
+    }
+
+    /**
+     * Set horasPausa
+     *
+     * @param float $horasPausa
+     *
+     * @return RhuTurno
+     */
+    public function setHorasPausa($horasPausa)
+    {
+        $this->horasPausa = $horasPausa;
+
+        return $this;
+    }
+
+    /**
+     * Get horasPausa
+     *
+     * @return float
+     */
+    public function getHorasPausa()
+    {
+        return $this->horasPausa;
     }
 }
