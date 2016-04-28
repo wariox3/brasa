@@ -28,6 +28,11 @@ class RhuSoportePagoHorarioDetalle
     private $codigoEmpleadoFk;    
     
     /**
+     * @ORM\Column(name="codigo_contrato_fk", type="integer")
+     */    
+    private $codigoContratoFk;    
+    
+    /**
      * @ORM\Column(name="fecha_desde", type="date", nullable=true)
      */    
     private $fechaDesde;        
@@ -129,6 +134,12 @@ class RhuSoportePagoHorarioDetalle
      */
     protected $empleadoRel;     
 
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuContrato", inversedBy="soportesPagosHorariosDetallesContratoRel")
+     * @ORM\JoinColumn(name="codigo_contrato_fk", referencedColumnName="codigo_contrato_pk")
+     */
+    protected $contratoRel;    
+
 
 
     /**
@@ -187,6 +198,30 @@ class RhuSoportePagoHorarioDetalle
     public function getCodigoEmpleadoFk()
     {
         return $this->codigoEmpleadoFk;
+    }
+
+    /**
+     * Set codigoContratoFk
+     *
+     * @param integer $codigoContratoFk
+     *
+     * @return RhuSoportePagoHorarioDetalle
+     */
+    public function setCodigoContratoFk($codigoContratoFk)
+    {
+        $this->codigoContratoFk = $codigoContratoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoFk
+     *
+     * @return integer
+     */
+    public function getCodigoContratoFk()
+    {
+        return $this->codigoContratoFk;
     }
 
     /**
@@ -286,6 +321,78 @@ class RhuSoportePagoHorarioDetalle
     }
 
     /**
+     * Set incapacidad
+     *
+     * @param integer $incapacidad
+     *
+     * @return RhuSoportePagoHorarioDetalle
+     */
+    public function setIncapacidad($incapacidad)
+    {
+        $this->incapacidad = $incapacidad;
+
+        return $this;
+    }
+
+    /**
+     * Get incapacidad
+     *
+     * @return integer
+     */
+    public function getIncapacidad()
+    {
+        return $this->incapacidad;
+    }
+
+    /**
+     * Set licencia
+     *
+     * @param integer $licencia
+     *
+     * @return RhuSoportePagoHorarioDetalle
+     */
+    public function setLicencia($licencia)
+    {
+        $this->licencia = $licencia;
+
+        return $this;
+    }
+
+    /**
+     * Get licencia
+     *
+     * @return integer
+     */
+    public function getLicencia()
+    {
+        return $this->licencia;
+    }
+
+    /**
+     * Set vacacion
+     *
+     * @param integer $vacacion
+     *
+     * @return RhuSoportePagoHorarioDetalle
+     */
+    public function setVacacion($vacacion)
+    {
+        $this->vacacion = $vacacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vacacion
+     *
+     * @return integer
+     */
+    public function getVacacion()
+    {
+        return $this->vacacion;
+    }
+
+    /**
      * Set dias
      *
      * @param integer $dias
@@ -331,6 +438,30 @@ class RhuSoportePagoHorarioDetalle
     public function getHoras()
     {
         return $this->horas;
+    }
+
+    /**
+     * Set horasDescanso
+     *
+     * @param integer $horasDescanso
+     *
+     * @return RhuSoportePagoHorarioDetalle
+     */
+    public function setHorasDescanso($horasDescanso)
+    {
+        $this->horasDescanso = $horasDescanso;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDescanso
+     *
+     * @return integer
+     */
+    public function getHorasDescanso()
+    {
+        return $this->horasDescanso;
     }
 
     /**
@@ -574,98 +705,26 @@ class RhuSoportePagoHorarioDetalle
     }
 
     /**
-     * Set incapacidad
+     * Set contratoRel
      *
-     * @param integer $incapacidad
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel
      *
      * @return RhuSoportePagoHorarioDetalle
      */
-    public function setIncapacidad($incapacidad)
+    public function setContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel = null)
     {
-        $this->incapacidad = $incapacidad;
+        $this->contratoRel = $contratoRel;
 
         return $this;
     }
 
     /**
-     * Get incapacidad
+     * Get contratoRel
      *
-     * @return integer
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContrato
      */
-    public function getIncapacidad()
+    public function getContratoRel()
     {
-        return $this->incapacidad;
-    }
-
-    /**
-     * Set licencia
-     *
-     * @param integer $licencia
-     *
-     * @return RhuSoportePagoHorarioDetalle
-     */
-    public function setLicencia($licencia)
-    {
-        $this->licencia = $licencia;
-
-        return $this;
-    }
-
-    /**
-     * Get licencia
-     *
-     * @return integer
-     */
-    public function getLicencia()
-    {
-        return $this->licencia;
-    }
-
-    /**
-     * Set vacacion
-     *
-     * @param integer $vacacion
-     *
-     * @return RhuSoportePagoHorarioDetalle
-     */
-    public function setVacacion($vacacion)
-    {
-        $this->vacacion = $vacacion;
-
-        return $this;
-    }
-
-    /**
-     * Get vacacion
-     *
-     * @return integer
-     */
-    public function getVacacion()
-    {
-        return $this->vacacion;
-    }
-
-    /**
-     * Set horasDescanso
-     *
-     * @param integer $horasDescanso
-     *
-     * @return RhuSoportePagoHorarioDetalle
-     */
-    public function setHorasDescanso($horasDescanso)
-    {
-        $this->horasDescanso = $horasDescanso;
-
-        return $this;
-    }
-
-    /**
-     * Get horasDescanso
-     *
-     * @return integer
-     */
-    public function getHorasDescanso()
-    {
-        return $this->horasDescanso;
+        return $this->contratoRel;
     }
 }

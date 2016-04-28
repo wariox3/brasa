@@ -33,6 +33,8 @@
                 <th><p data-toggle="tooltip" data-placement="top" title="Horas extras ordinarias nocturnas">HEON</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Horas extras festivas diurnas">HEFD</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Horas extras festivas nocturnas">HEFN</p></th>
+                <th></th>
+                <th></th>
                 <th></th>                
             </tr>
             {% for arSoportesPagosHorariosDetalles in arSoportesPagosHorariosDetalles %}
@@ -56,7 +58,9 @@
                 <td style="text-align: right">{{ arSoportesPagosHorariosDetalles.horasExtrasOrdinariasNocturnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagosHorariosDetalles.horasExtrasFestivasDiurnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagosHorariosDetalles.horasExtrasFestivasNocturnas | number_format(0, '.', ',') }}</td>                
+                <td><a href="javascript:abrirVentana3('{{ path('brs_rhu_proceso_soporte_pago_horario_detalle_nuevo', {'codigoSoportePagoHorarioDetalle': arSoportesPagosHorariosDetalles.codigoSoportePagoHorarioDetallePk }) }}', 'Editar', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Ver"></a></td>
                 <td><a href="javascript:abrirVentana3('{{ path('brs_rhu_proceso_soporte_pago_horario_detalle_ver', {'codigoSoportePagoHorarioDetalle': arSoportesPagosHorariosDetalles.codigoSoportePagoHorarioDetallePk }) }}', 'VerDetalleSoportePago', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_090_table.png') }}" width=20 height=20 title="Ver"></a></td>                
+                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSoportesPagosHorariosDetalles.codigoSoportePagoHorarioDetallePk }}" /></td>                                
             </tr>
             
             {% endfor %}
@@ -77,6 +81,9 @@
             <div class="btn-group">
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
+            <div class="btn-group">
+                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+            </div>             
         </div>  
                
         {{ form_rest(form) }}

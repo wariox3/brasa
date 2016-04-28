@@ -368,6 +368,10 @@ class RhuContrato
      */
     protected $contratosProrrogasContratoRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSoportePagoHorarioDetalle", mappedBy="contratoRel")
+     */
+    protected $soportesPagosHorariosDetallesContratoRel;    
     
     /**
      * Constructor
@@ -2155,5 +2159,39 @@ class RhuContrato
     public function getIncapacidadesContratoRel()
     {
         return $this->incapacidadesContratoRel;
+    }
+
+    /**
+     * Add soportesPagosHorariosDetallesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorarioDetalle $soportesPagosHorariosDetallesContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addSoportesPagosHorariosDetallesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorarioDetalle $soportesPagosHorariosDetallesContratoRel)
+    {
+        $this->soportesPagosHorariosDetallesContratoRel[] = $soportesPagosHorariosDetallesContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove soportesPagosHorariosDetallesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorarioDetalle $soportesPagosHorariosDetallesContratoRel
+     */
+    public function removeSoportesPagosHorariosDetallesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorarioDetalle $soportesPagosHorariosDetallesContratoRel)
+    {
+        $this->soportesPagosHorariosDetallesContratoRel->removeElement($soportesPagosHorariosDetallesContratoRel);
+    }
+
+    /**
+     * Get soportesPagosHorariosDetallesContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSoportesPagosHorariosDetallesContratoRel()
+    {
+        return $this->soportesPagosHorariosDetallesContratoRel;
     }
 }

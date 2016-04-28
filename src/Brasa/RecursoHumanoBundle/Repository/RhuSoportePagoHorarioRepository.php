@@ -22,13 +22,24 @@ class RhuSoportePagoHorarioRepository extends EntityRepository {
         $arSoportePagoHorario = $em->getRepository('BrasaRecursoHumanoBundle:RhuSoportePagoHorario')->find($codigoSoportePagoHorario);
         $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->contratosPeriodoCentroCosto($arSoportePagoHorario->getFechaDesde()->format('Y/m/d'), $arSoportePagoHorario->getFechaHasta()->format('Y/m/d'), $arSoportePagoHorario->getCodigoCentroCostoFk());
         foreach ($arContratos as $arContrato) {
+            $fechaDesde = $arSoportePagoHorario->getFechaDesde();
+            $fechaHasta = $arSoportePagoHorario->getFechaHasta();
+            if($arContrato->getFechaDesde() > $fechaDesde) {
+                $fechaDesde = $arContrato->getFechaDesde();
+            }
+            if($arContrato->getFechaHasta() < $fechaHasta && $arContrato->getIndefinido() == 0) {
+                $fechaHasta = $arContrato->getFechaHasta();
+            }
+            
+            
             $arSoportePagoHorarioDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorarioDetalle();
             $arSoportePagoHorarioDetalle->setSoportePagoHorarioRel($arSoportePagoHorario);
             $arSoportePagoHorarioDetalle->setEmpleadoRel($arContrato->getEmpleadorel());
+            $arSoportePagoHorarioDetalle->setContratoRel($arContrato);
             $arSoportePagoHorarioDetalle->setFechaDesde($arSoportePagoHorario->getFechaDesde());
             $arSoportePagoHorarioDetalle->setFechaHasta($arSoportePagoHorario->getFechaHasta());            
-            $arHorario = $arContrato->getEmpleadoRel()->getHorarioRel();                                        
-            $arHorarioAccesos = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->empleado($arSoportePagoHorario->getFechaDesde()->format('Y/m/d'), $arSoportePagoHorario->getFechaHasta()->format('Y/m/d'), $arContrato->getCodigoEmpleadoFk());                    
+            $arHorario = $arContrato->getEmpleadoRel()->getHorarioRel();               
+            $arHorarioAccesos = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->empleado($fechaDesde->format('Y/m/d'), $fechaHasta->format('Y/m/d'), $arContrato->getCodigoEmpleadoFk());                    
             $intHorasDiurnas = 0;   
             $arrHorasTotal = array(
                 'horasDescanso' => 0,
@@ -65,7 +76,7 @@ class RhuSoportePagoHorarioRepository extends EntityRepository {
                             $boolFestivo2 = 1;
                         }        
                         $arrHoras1 = null;
-                        if(($intHoraInicio + $intMinutoInicio) <= $intHoraFinal){  
+                        if(($intHoraInicio + $intMinutoInicio) <= $intHoraFinal+$intMinutoFinal){  
                             $arrHoras = $this->turnoHoras($intHoraInicio, $intMinutoInicio, $intHoraFinal, $boolFestivo, 0, 0, 0);
                         } else {
                             $arrHoras = $this->turnoHoras($intHoraInicio, $intMinutoInicio, 24, $boolFestivo, 0, 0, 0);
@@ -227,4 +238,17 @@ class RhuSoportePagoHorarioRepository extends EntityRepository {
         $intHoras = $intHoraTerminaTemporal - $intHoraIniciaTemporal;
         return $intHoras;
     }    
+    
+    public function eliminar($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigo) {
+                $ar = $em->getRepository('BrasaRecursoHumanoBundle:RhuSoportePagoHorario')->find($codigo);
+                if($ar->getEstadoGenerado() == 0) {
+                    $em->remove($ar);
+                }                
+            }
+            $em->flush();
+        }
+    }         
 }

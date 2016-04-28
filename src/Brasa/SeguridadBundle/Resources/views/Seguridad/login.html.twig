@@ -56,7 +56,7 @@
                             <div class="form-top">
                                 <div class="form-top-left">
                                     <h3>Ingresar a la aplicacion</h3>
-                                    <p>Ingrese su usuario y clave para ingresar:</p>
+                                    <p>Ingrese su usuario y clave:</p>
                                 </div>
                                 <div class="form-top-right">
                                     <i> <img src="{{ asset('imagenes/logos/logo.jpg') }}"></i>
@@ -67,11 +67,11 @@
                                 <form action="{{ path('login_check') }}" method="post">
                                     <div class="form-group">
                                         <label class="sr-only" for="form-username">Username</label>
-                                        <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="Username..." class="form-username form-control">
+                                        <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="Usuario..." class="form-username form-control">
                                     </div>
                                     <div class="form-group">
                                         <label class="sr-only" for="form-password">Password</label>
-                                        <input type="password" id="password" name="_password" placeholder="Password..." class="form-password form-control">
+                                        <input type="password" id="password" name="_password" placeholder="Clave..." class="form-password form-control">
                                     </div>
                                     <button type="submit" class="btn btn-danger">Ingresar!</button>
                                 </form>

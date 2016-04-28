@@ -5,7 +5,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuSoportePagoHorarioType;
-
+use Brasa\RecursoHumanoBundle\Form\Type\RhuSoportePagoHorarioDetalleType;
 class GenerarSoportePagoHorarioController extends Controller
 {
     var $strListaDql = "";
@@ -36,7 +36,12 @@ class GenerarSoportePagoHorarioController extends Controller
                 $em->persist($arSoportePagoHorario);
                 $em->flush();                                                  
                 return $this->redirect($this->generateUrl('brs_rhu_proceso_soporte_pago_horario'));                
-            }           
+            }    
+            if ($form->get('BtnEliminar')->isClicked()) {                
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuSoportePagoHorario')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_rhu_proceso_soporte_pago_horario'));
+            }            
         }
         $arSoportesPagoHorario = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
         //$arSoportesPagoHorarioDetalle = $paginator->paginate($em->createQuery($this->strListaDqlDetalle), $request->query->get('page', 1), 20);        
@@ -85,19 +90,13 @@ class GenerarSoportePagoHorarioController extends Controller
         if ($form->isValid()) {           
             if ($form->get('BtnExcel')->isClicked()) {
                 //$this->filtrar($form);
-                $this->lista();
+                $this->listaDetalle($codigoSoportePagoHorario);
                 $this->generarExcel();
             }    
-            if ($form->get('BtnGenerar')->isClicked()) {
-                $dateFechaDesde = $form->get('fechaDesde')->getData();
-                $dateFechaHasta = $form->get('fechaHasta')->getData();
-                $arEmpleadosPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioAcceso')->resumenEmpleado($dateFechaDesde->format('Y/m/d'), $dateFechaHasta->format('Y/m/d'));                
-                
-                foreach ($arEmpleadosPeriodo as $arEmpleadoPeriodo ) {
-                   
-                }                
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_proceso_soporte_pago_horario'));
+            if ($form->get('BtnEliminar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuSoportePagoHorarioDetalle')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_rhu_proceso_soporte_pago_horario_detalle', array('codigoSoportePagoHorario' => $codigoSoportePagoHorario)));
             }
         }
         $arSoportesPagoHorarioDetalle = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);        
@@ -105,6 +104,29 @@ class GenerarSoportePagoHorarioController extends Controller
             'arSoportesPagosHorariosDetalles' => $arSoportesPagoHorarioDetalle,
             'form' => $form->createView()));
     }    
+    
+    /**
+     * @Route("/rhu/proceso/soporte/pago/horario/detalle/nuevo/{codigoSoportePagoHorarioDetalle}", name="brs_rhu_proceso_soporte_pago_horario_detalle_nuevo")
+     */    
+    public function detalleNuevoAction($codigoSoportePagoHorarioDetalle) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $arSoportePagoHorarioDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorarioDetalle();
+        if($codigoSoportePagoHorarioDetalle != 0) {
+            $arSoportePagoHorarioDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSoportePagoHorarioDetalle')->find($codigoSoportePagoHorarioDetalle);
+        }
+        $form = $this->createForm(new RhuSoportePagoHorarioDetalleType(), $arSoportePagoHorarioDetalle);
+        $form->handleRequest($request);        
+        if ($form->isValid()) {           
+            $arSoportePagoHorarioDetalle = $form->getData();            
+            $em->persist($arSoportePagoHorarioDetalle);
+            $em->flush();
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                            
+        }
+        
+        return $this->render('BrasaRecursoHumanoBundle:Procesos/GenerarSoportePagoHorario:detalleNuevo.html.twig', array(
+            'form' => $form->createView()));
+    }        
     
     /**
      * @Route("/rhu/proceso/soporte/pago/horario/detalle/ver/{codigoSoportePagoHorarioDetalle}", name="brs_rhu_proceso_soporte_pago_horario_detalle_ver")
@@ -141,6 +163,7 @@ class GenerarSoportePagoHorarioController extends Controller
     
     private function formularioDetalle() {
         $form = $this->createFormBuilder()
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))                        
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))                        
             ->getForm();
         return $form;
@@ -160,41 +183,64 @@ class GenerarSoportePagoHorarioController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'U'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }     
+        for($col = 'F'; $col !== 'U'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('right');
+        }        
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CÓDIG0')
+                    ->setCellValue('A1', 'CÓDIG0')                    
                     ->setCellValue('B1', 'DESDE')
                     ->setCellValue('C1', 'HASTA')
-                    ->setCellValue('D1', 'DÍAS')
-                    ->setCellValue('E1', 'DESCANSO')
-                    ->setCellValue('F1', 'HD')
-                    ->setCellValue('G1', 'HN')
-                    ->setCellValue('H1', 'HFD')
-                    ->setCellValue('I1', 'HFN')                
-                    ->setCellValue('J1', 'HEOD')
-                    ->setCellValue('K1', 'HEON')
-                    ->setCellValue('L1', 'HEFD')
-                    ->setCellValue('M1', 'HEFN');
+                    ->setCellValue('D1', 'IDENTIFICACION')                
+                    ->setCellValue('E1', 'NOMBRE')
+                    ->setCellValue('F1', 'DÍAS')
+                    ->setCellValue('G1', 'INC')
+                    ->setCellValue('H1', 'LIC')
+                    ->setCellValue('I1', 'VAC')
+                    ->setCellValue('J1', 'DES')
+                    ->setCellValue('K1', 'H')
+                    ->setCellValue('L1', 'HDS')
+                    ->setCellValue('M1', 'HD')
+                    ->setCellValue('N1', 'HN')
+                    ->setCellValue('O1', 'HFD')
+                    ->setCellValue('P1', 'HFN')                
+                    ->setCellValue('Q1', 'HEOD')
+                    ->setCellValue('R1', 'HEON')
+                    ->setCellValue('S1', 'HEFD')
+                    ->setCellValue('T1', 'HEFN');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
-        $arSoportesPagoHorarios = new \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorario();
-        $arSoportesPagoHorarios = $query->getResult();
+        $arSoportesPagoHorarioDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorarioDetalle();
+        $arSoportesPagoHorarioDetalles = $query->getResult();
 
-        foreach ($arSoportesPagoHorarios as $arSoportesPagoHorario) {            
+        foreach ($arSoportesPagoHorarioDetalles as $arSoportesPagoHorarioDetalle) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arSoportesPagoHorario->getCodigoSoportePagoHorarioPk())
-                    ->setCellValue('B' . $i, $arSoportesPagoHorario->getFechaDesde()->format('Y/m/d'))
-                    ->setCellValue('C' . $i, $arSoportesPagoHorario->getFechaHasta()->format('Y/m/d'))
-                    ->setCellValue('D' . $i, $arSoportesPagoHorario->getDias())
-                    ->setCellValue('E' . $i, $arSoportesPagoHorario->getDescanso())
-                    ->setCellValue('F' . $i, $arSoportesPagoHorario->getHorasDiurnas())
-                    ->setCellValue('G' . $i, $arSoportesPagoHorario->getHorasNocturnas())
-                    ->setCellValue('H' . $i, $arSoportesPagoHorario->getHorasFestivasDiurnas())
-                    ->setCellValue('I' . $i, $arSoportesPagoHorario->getHorasFestivasNocturnas())                    
-                    ->setCellValue('J' . $i, $arSoportesPagoHorario->getHorasExtrasOrdinariasDiurnas())
-                    ->setCellValue('K' . $i, $arSoportesPagoHorario->getHorasExtrasOrdinariasNocturnas())
-                    ->setCellValue('L' . $i, $arSoportesPagoHorario->getHorasExtrasFestivasDiurnas())
-                    ->setCellValue('M' . $i, $arSoportesPagoHorario->getHorasExtrasFestivasNocturnas());
+                    ->setCellValue('A' . $i, $arSoportesPagoHorarioDetalle->getCodigoSoportePagoHorarioDetallePk())
+                    ->setCellValue('B' . $i, $arSoportesPagoHorarioDetalle->getFechaDesde()->format('Y/m/d'))
+                    ->setCellValue('C' . $i, $arSoportesPagoHorarioDetalle->getFechaHasta()->format('Y/m/d'))
+                    ->setCellValue('D' . $i, $arSoportesPagoHorarioDetalle->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('E' . $i, $arSoportesPagoHorarioDetalle->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('F' . $i, $arSoportesPagoHorarioDetalle->getDias())
+                    ->setCellValue('G' . $i, $arSoportesPagoHorarioDetalle->getIncapacidad())
+                    ->setCellValue('H' . $i, $arSoportesPagoHorarioDetalle->getLicencia())
+                    ->setCellValue('I' . $i, $arSoportesPagoHorarioDetalle->getVacacion())
+                    ->setCellValue('J' . $i, $arSoportesPagoHorarioDetalle->getDescanso())
+                    ->setCellValue('K' . $i, $arSoportesPagoHorarioDetalle->getHoras())
+                    ->setCellValue('L' . $i, $arSoportesPagoHorarioDetalle->getHorasDescanso())
+                    ->setCellValue('M' . $i, $arSoportesPagoHorarioDetalle->getHorasDiurnas())
+                    ->setCellValue('N' . $i, $arSoportesPagoHorarioDetalle->getHorasNocturnas())
+                    ->setCellValue('O' . $i, $arSoportesPagoHorarioDetalle->getHorasFestivasDiurnas())
+                    ->setCellValue('P' . $i, $arSoportesPagoHorarioDetalle->getHorasFestivasNocturnas())                    
+                    ->setCellValue('Q' . $i, $arSoportesPagoHorarioDetalle->getHorasExtrasOrdinariasDiurnas())
+                    ->setCellValue('R' . $i, $arSoportesPagoHorarioDetalle->getHorasExtrasOrdinariasNocturnas())
+                    ->setCellValue('S' . $i, $arSoportesPagoHorarioDetalle->getHorasExtrasFestivasDiurnas())
+                    ->setCellValue('T' . $i, $arSoportesPagoHorarioDetalle->getHorasExtrasFestivasNocturnas());
 
             $i++;
         }
