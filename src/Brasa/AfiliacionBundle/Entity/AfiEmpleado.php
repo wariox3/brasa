@@ -162,7 +162,16 @@ class AfiEmpleado
      * @ORM\OneToMany(targetEntity="AfiPeriodoDetalle", mappedBy="empleadoRel")
      */
     protected $periodosDetallesEmpleadoRel;    
-    
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->contratosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->periodosDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get codigoEmpleadoPk
      *
@@ -771,13 +780,6 @@ class AfiEmpleado
     public function getRhRel()
     {
         return $this->rhRel;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->contratosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

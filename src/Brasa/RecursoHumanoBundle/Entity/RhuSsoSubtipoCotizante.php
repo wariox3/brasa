@@ -34,7 +34,7 @@ class RhuSsoSubtipoCotizante
     /**
      * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiContrato", mappedBy="ssoSubtipoCotizanteRel")
      */
-    protected $AfiContratosSsoSubtipoCotizanteRel;         
+    protected $afiContratosSsoSubtipoCotizanteRel;         
 
     
     /**
@@ -44,6 +44,7 @@ class RhuSsoSubtipoCotizante
     {
         $this->empleadosSsoSubtipoCotizanteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contratosSsoSubtipoCotizanteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->afiContratosSsoSubtipoCotizanteRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -171,7 +172,7 @@ class RhuSsoSubtipoCotizante
      */
     public function addAfiContratosSsoSubtipoCotizanteRel(\Brasa\AfiliacionBundle\Entity\AfiContrato $afiContratosSsoSubtipoCotizanteRel)
     {
-        $this->AfiContratosSsoSubtipoCotizanteRel[] = $afiContratosSsoSubtipoCotizanteRel;
+        $this->afiContratosSsoSubtipoCotizanteRel[] = $afiContratosSsoSubtipoCotizanteRel;
 
         return $this;
     }
@@ -183,7 +184,7 @@ class RhuSsoSubtipoCotizante
      */
     public function removeAfiContratosSsoSubtipoCotizanteRel(\Brasa\AfiliacionBundle\Entity\AfiContrato $afiContratosSsoSubtipoCotizanteRel)
     {
-        $this->AfiContratosSsoSubtipoCotizanteRel->removeElement($afiContratosSsoSubtipoCotizanteRel);
+        $this->afiContratosSsoSubtipoCotizanteRel->removeElement($afiContratosSsoSubtipoCotizanteRel);
     }
 
     /**
@@ -193,6 +194,6 @@ class RhuSsoSubtipoCotizante
      */
     public function getAfiContratosSsoSubtipoCotizanteRel()
     {
-        return $this->AfiContratosSsoSubtipoCotizanteRel;
+        return $this->afiContratosSsoSubtipoCotizanteRel;
     }
 }

@@ -150,6 +150,11 @@ class AfiCliente
     protected $facturasClienteRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="AfiCurso", mappedBy="clienteRel")
+     */
+    protected $cursosClienteRel;     
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -820,5 +825,39 @@ class AfiCliente
     public function getFacturasClienteRel()
     {
         return $this->facturasClienteRel;
+    }
+
+    /**
+     * Add cursosClienteRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCurso $cursosClienteRel
+     *
+     * @return AfiCliente
+     */
+    public function addCursosClienteRel(\Brasa\AfiliacionBundle\Entity\AfiCurso $cursosClienteRel)
+    {
+        $this->cursosClienteRel[] = $cursosClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove cursosClienteRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCurso $cursosClienteRel
+     */
+    public function removeCursosClienteRel(\Brasa\AfiliacionBundle\Entity\AfiCurso $cursosClienteRel)
+    {
+        $this->cursosClienteRel->removeElement($cursosClienteRel);
+    }
+
+    /**
+     * Get cursosClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCursosClienteRel()
+    {
+        return $this->cursosClienteRel;
     }
 }

@@ -90,7 +90,7 @@ class RhuCargo
     /**
      * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiContrato", mappedBy="cargoRel")
      */
-    protected $AfiContratosCargoRel;    
+    protected $afiContratosCargoRel;    
     
     /**
      * Constructor
@@ -110,6 +110,7 @@ class RhuCargo
         $this->disciplinariosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->examenesCargosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dotacionesCargosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->afiContratosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -597,7 +598,7 @@ class RhuCargo
      */
     public function addAfiContratosCargoRel(\Brasa\AfiliacionBundle\Entity\AfiContrato $afiContratosCargoRel)
     {
-        $this->AfiContratosCargoRel[] = $afiContratosCargoRel;
+        $this->afiContratosCargoRel[] = $afiContratosCargoRel;
 
         return $this;
     }
@@ -609,7 +610,7 @@ class RhuCargo
      */
     public function removeAfiContratosCargoRel(\Brasa\AfiliacionBundle\Entity\AfiContrato $afiContratosCargoRel)
     {
-        $this->AfiContratosCargoRel->removeElement($afiContratosCargoRel);
+        $this->afiContratosCargoRel->removeElement($afiContratosCargoRel);
     }
 
     /**
@@ -619,6 +620,6 @@ class RhuCargo
      */
     public function getAfiContratosCargoRel()
     {
-        return $this->AfiContratosCargoRel;
+        return $this->afiContratosCargoRel;
     }
 }

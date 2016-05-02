@@ -60,8 +60,9 @@ class RhuEntidadCaja
     /**
      * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiContrato", mappedBy="entidadCajaRel")
      */
-    protected $AfiContratosEntidadCajaRel;    
+    protected $afiContratosEntidadCajaRel;    
     
+
     /**
      * Constructor
      */
@@ -70,6 +71,7 @@ class RhuEntidadCaja
         $this->empleadosEntidadCajaRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contratosEntidadCajaRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosFamiliasEntidadCajaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->afiContratosEntidadCajaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -313,7 +315,7 @@ class RhuEntidadCaja
      */
     public function addAfiContratosEntidadCajaRel(\Brasa\AfiliacionBundle\Entity\AfiContrato $afiContratosEntidadCajaRel)
     {
-        $this->AfiContratosEntidadCajaRel[] = $afiContratosEntidadCajaRel;
+        $this->afiContratosEntidadCajaRel[] = $afiContratosEntidadCajaRel;
 
         return $this;
     }
@@ -325,7 +327,7 @@ class RhuEntidadCaja
      */
     public function removeAfiContratosEntidadCajaRel(\Brasa\AfiliacionBundle\Entity\AfiContrato $afiContratosEntidadCajaRel)
     {
-        $this->AfiContratosEntidadCajaRel->removeElement($afiContratosEntidadCajaRel);
+        $this->afiContratosEntidadCajaRel->removeElement($afiContratosEntidadCajaRel);
     }
 
     /**
@@ -335,6 +337,6 @@ class RhuEntidadCaja
      */
     public function getAfiContratosEntidadCajaRel()
     {
-        return $this->AfiContratosEntidadCajaRel;
+        return $this->afiContratosEntidadCajaRel;
     }
 }

@@ -1,0 +1,327 @@
+<?php
+namespace Brasa\AfiliacionBundle\Controller\Movimiento;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpFoundation\Request;
+use Brasa\AfiliacionBundle\Form\Type\AfiCursoType;
+class CursoController extends Controller
+{
+    var $strDqlLista = "";
+    /**
+     * @Route("/afi/movimiento/curso", name="brs_afi_movimiento_curso")
+     */    
+    public function listaAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();        
+        $paginator  = $this->get('knp_paginator');
+        $form = $this->formularioFiltro();
+        $form->handleRequest($request);
+        $this->lista();
+        if ($form->isValid()) {
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');
+            
+            if($request->request->get('OpGenerar')) {            
+                $codigoCurso = $request->request->get('OpGenerar');
+                $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->generar($codigoCurso);
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso'));
+            }
+            
+            if($request->request->get('OpDeshacer')) {            
+                $codigoCurso = $request->request->get('OpDeshacer');
+                $strSql = "DELETE FROM afi_curso_detalle WHERE codigo_curso_fk = " . $codigoCurso;           
+                $em->getConnection()->executeQuery($strSql);                 
+                $arCurso = new \Brasa\AfiliacionBundle\Entity\AfiCurso();
+                $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($codigoCurso);                
+                $arCurso->setEstadoGenerado(0);
+                $em->persist($arCurso);
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso'));
+            }            
+            if ($form->get('BtnEliminar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso'));
+            }
+            if ($form->get('BtnFiltrar')->isClicked()) {
+                $this->filtrar($form);
+            }
+            if ($form->get('BtnExcel')->isClicked()) {
+                $this->filtrar($form);
+                $this->generarExcel();
+            }
+        }
+        
+        $arCursos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
+        return $this->render('BrasaAfiliacionBundle:Movimiento/Curso:lista.html.twig', array(
+            'arCursos' => $arCursos, 
+            'form' => $form->createView()));
+    }
+
+    /**
+     * @Route("/afi/movimiento/curso/nuevo/{codigoCurso}", name="brs_afi_movimiento_curso_nuevo")
+     */    
+    public function nuevoAction(Request $request, $codigoCurso = '') {
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arCurso = new \Brasa\AfiliacionBundle\Entity\AfiCurso();
+        if($codigoCurso != '' && $codigoCurso != '0') {
+            $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($codigoCurso);
+        }        
+        $form = $this->createForm(new AfiCursoType, $arCurso);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arCurso = $form->getData();  
+            $arCurso->setFecha(new \DateTime('now'));
+            $em->persist($arCurso);
+            $em->flush();            
+            if($form->get('guardarnuevo')->isClicked()) {
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_nuevo', array('codigoCurso' => 0 )));
+            } else {
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso'));
+            }                                   
+        }
+        return $this->render('BrasaAfiliacionBundle:Movimiento/Curso:nuevo.html.twig', array(
+            'arCurso' => $arCurso,
+            'form' => $form->createView()));
+    }        
+
+    /**
+     * @Route("/afi/movimiento/curso/detalle/{codigoCurso}", name="brs_afi_movimiento_curso_detalle")
+     */    
+    public function detalleAction(Request $request, $codigoCurso = '') {
+        $em = $this->getDoctrine()->getManager();        
+        $paginator  = $this->get('knp_paginator');
+        $arCurso = new \Brasa\AfiliacionBundle\Entity\AfiCurso();
+        $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($codigoCurso);
+        $form = $this->formularioDetalle();
+        $form->handleRequest($request);
+        $this->listaDetalle($codigoCurso);
+        if ($form->isValid()) {
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');
+            
+            if($request->request->get('OpGenerar')) {            
+                $codigoCurso = $request->request->get('OpGenerar');
+                $arCurso = new \Brasa\AfiliacionBundle\Entity\AfiCurso();
+                $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($codigoCurso);
+                $arCurso->setEstadoGenerado(1);
+                $em->persist($arCurso);
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso'));
+            }                            
+            if ($form->get('BtnEliminar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_tur_base_factura_concepto'));
+            }
+            if ($form->get('BtnExcel')->isClicked()) {
+                //$this->filtrar($form);
+                $this->listaDetalle($codigoCurso);
+                $this->generarDetalleExcel();
+            }
+        }
+        
+        $arCursoDetalles = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
+        return $this->render('BrasaAfiliacionBundle:Movimiento/Curso:detalle.html.twig', array(
+            'arCurso' => $arCurso, 
+            'arCursoDetalles' => $arCursoDetalles, 
+            'form' => $form->createView()));
+    }    
+
+    /**
+     * @Route("/afi/movimiento/curso/detalle/nuevo/{codigoCurso}", name="brs_afi_movimiento_curso_detalle_nuevo")
+     */    
+    public function detalleNuevoAction(Request $request, $codigoCurso = '') {
+        $em = $this->getDoctrine()->getManager();        
+        $paginator  = $this->get('knp_paginator');
+        $arCurso = new \Brasa\AfiliacionBundle\Entity\AfiCurso();
+        $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($codigoCurso);
+        $form = $this->formularioDetalleNuevo();
+        $form->handleRequest($request);        
+        if ($form->isValid()) {
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');
+            
+            if($request->request->get('OpGenerar')) {            
+                $codigoCurso = $request->request->get('OpGenerar');
+                $arCurso = new \Brasa\AfiliacionBundle\Entity\AfiCurso();
+                $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($codigoCurso);
+                $arCurso->setEstadoGenerado(1);
+                $em->persist($arCurso);
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso'));
+            }                            
+            if ($form->get('BtnEliminar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_tur_base_factura_concepto'));
+            }
+            if ($form->get('BtnExcel')->isClicked()) {
+                //$this->filtrar($form);
+                $this->listaDetalle($codigoCurso);
+                $this->generarDetalleExcel();
+            }
+        }
+        $dqlEmpleado = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->listaDql();
+        $arEmpleados = $paginator->paginate($em->createQuery($dqlEmpleado), $request->query->get('page', 1), 20);
+        return $this->render('BrasaAfiliacionBundle:Movimiento/Curso:detalleNuevo.html.twig', array(
+            'arCurso' => $arCurso, 
+            'arEmpleados' => $arEmpleados, 
+            'form' => $form->createView()));
+    }    
+    
+    private function lista() {    
+        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->listaDQL(
+                $session->get('filtroCursoNombre')   
+                ); 
+    }
+    
+    private function listaDetalle($codigoCurso) {    
+        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiCursoDetalle')->listaDQL(
+                $codigoCurso   
+                ); 
+    }    
+
+    private function filtrar ($form) {        
+        $session = $this->getRequest()->getSession();        
+        $session->set('filtroCursoNombre', $form->get('TxtNombre')->getData());
+        $this->lista();
+    }
+    
+    private function formularioFiltro() {
+        $session = $this->getRequest()->getSession();
+        $form = $this->createFormBuilder()            
+            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroCursoNombre')))
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->getForm();
+        return $form;
+    }    
+    
+    private function formularioDetalle() {
+        $session = $this->getRequest()->getSession();
+        $form = $this->createFormBuilder()                        
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))            
+            ->getForm();
+        return $form;
+    }     
+    
+    private function formularioDetalleNuevo() {
+        $session = $this->getRequest()->getSession();
+        $form = $this->createFormBuilder()     
+            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroEmpleadoNombre')))
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))            
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar',))            
+            ->getForm();
+        return $form;
+    }         
+
+    private function generarExcel() {
+        ob_clean();
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'CÓDIG0')
+                    ->setCellValue('B1', 'NOMBRE');
+
+        $i = 2;
+        
+        $query = $em->createQuery($this->strDqlLista);
+        $arCursos = new \Brasa\AfiliacionBundle\Entity\AfiCurso();
+        $arCursos = $query->getResult();
+                
+        foreach ($arCursos as $arCurso) {            
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arCurso->getCodigoCursoPk())
+                    ->setCellValue('B' . $i, $arCurso->getNombre());                                    
+            $i++;
+        }
+        
+        $objPHPExcel->getActiveSheet()->setTitle('Curso');
+        $objPHPExcel->setActiveSheetIndex(0);
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="Cursos.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    private function generarDetalleExcel() {
+        ob_clean();
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'COD')
+                    ->setCellValue('B1', 'CLIENTE')
+                    ->setCellValue('C1', 'DESDE')
+                    ->setCellValue('D1', 'HASTA');
+
+        $i = 2;
+        
+        $query = $em->createQuery($this->strDqlLista);
+        $arCursoDetalles = new \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle();
+        $arCursoDetalles = $query->getResult();
+                
+        foreach ($arCursoDetalles as $arCursoDetalle) {            
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arCursoDetalle->getCodigoCursoDetallePk())
+                    ->setCellValue('B' . $i, $arCursoDetalle->getCursoRel()->getClienteRel()->getNombreCorto())
+                    ->setCellValue('C' . $i, $arCursoDetalle->getFechaDesde()->format('Y/m/d'))
+                    ->setCellValue('D' . $i, $arCursoDetalle->getFechaHasta()->format('Y/m/d'));                                    
+            $i++;
+        }
+        
+        $objPHPExcel->getActiveSheet()->setTitle('CursoDetalle');
+        $objPHPExcel->setActiveSheetIndex(0);
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="CursoDetalles.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }    
+
+}
