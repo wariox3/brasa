@@ -164,6 +164,7 @@ class CursoController extends Controller
                     $arCursoDetalle = new \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle();
                     $arCursoDetalle->setCursoRel($arCurso);          
                     $arCursoDetalle->setCursoTipoRel($arCursoTipo);
+                    $arCursoDetalle->setPrecio($arCursoTipo->getPrecio());
                     $em->persist($arCursoDetalle);                    
                 }
                 $em->flush();

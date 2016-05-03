@@ -13,6 +13,12 @@ class AfiCursoRepository extends EntityRepository {
         return $dql;
     }            
     
+    public function pendienteDql($codigoCliente) {        
+        $dql   = "SELECT c FROM BrasaAfiliacionBundle:AfiCurso c WHERE c.estadoFacturado = 0 AND c.estadoAnulado = 0 AND c.codigoClienteFk = " . $codigoCliente;
+        $dql .= " ORDER BY c.codigoCursoPk DESC";
+        return $dql;
+    }                    
+    
     public function eliminar($arrSeleccionados) {
         $em = $this->getEntityManager();
         if(count($arrSeleccionados) > 0) {
@@ -85,12 +91,14 @@ class AfiCursoRepository extends EntityRepository {
             if($arCurso->getNumero() == 0) {            
                 $intNumero = $em->getRepository('BrasaAfiliacionBundle:AfiConsecutivo')->consecutivo(1);
                 $arCurso->setNumero($intNumero);
-                $arServicio = new \Brasa\AfiliacionBundle\Entity\AfiServicio();
+                /*$arServicio = new \Brasa\AfiliacionBundle\Entity\AfiServicio();
                 $arServicio->setClienteRel($arCurso->getClienteRel());
                 $arServicio->setCurso($arCurso->getTotal());
                 $arServicio->setTotal($arCurso->getTotal());
                 $arServicio->setPendiente($arCurso->getTotal());
                 $em->persist($arServicio);                
+                 * 
+                 */
             }   
             $em->persist($arCurso);
             $em->flush();

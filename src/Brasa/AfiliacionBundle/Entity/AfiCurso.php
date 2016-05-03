@@ -51,6 +51,11 @@ class AfiCurso
      * @ORM\Column(name="estado_anulado", type="boolean")
      */    
     private $estadoAnulado = false;     
+
+    /**     
+     * @ORM\Column(name="estado_facturado", type="boolean")
+     */    
+    private $estadoFacturado = false;    
     
     /**
      * @ORM\ManyToOne(targetEntity="AfiCliente", inversedBy="cursosClienteRel")
@@ -374,5 +379,29 @@ class AfiCurso
     public function getFacturasDetallesCursosCursoRel()
     {
         return $this->facturasDetallesCursosCursoRel;
+    }
+
+    /**
+     * Set estadoFacturado
+     *
+     * @param boolean $estadoFacturado
+     *
+     * @return AfiCurso
+     */
+    public function setEstadoFacturado($estadoFacturado)
+    {
+        $this->estadoFacturado = $estadoFacturado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoFacturado
+     *
+     * @return boolean
+     */
+    public function getEstadoFacturado()
+    {
+        return $this->estadoFacturado;
     }
 }

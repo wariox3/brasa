@@ -22,6 +22,9 @@ class AfiFacturaDetalleCursoRepository extends \Doctrine\ORM\EntityRepository
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigo) {
                 $ar = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleCurso')->find($codigo);
+                $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($ar->getCodigoCursoFk());
+                $arCurso->setEstadoFacturado(0);
+                $em->persist($arCurso);
                 $em->remove($ar);
             }
             $em->flush();

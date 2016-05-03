@@ -8,7 +8,7 @@ class AfiFacturaDetalleRepository extends EntityRepository {
     
     public function ListaDql($codigoFactura) {
         $em = $this->getEntityManager();
-        $dql   = "SELECT fd FROM BrasaAfiliacionBundle:AfiFacturaDetalle fd WHERE fd.codigoFacturaDetallePk <> 0 AND fd.codigoFacturaFk = " . $codigoFactura;
+        $dql   = "SELECT fd FROM BrasaAfiliacionBundle:AfiFacturaDetalle fd WHERE fd.codigoFacturaFk = " . $codigoFactura;
         $dql .= " ORDER BY fd.codigoFacturaDetallePk";
         return $dql;
     }            

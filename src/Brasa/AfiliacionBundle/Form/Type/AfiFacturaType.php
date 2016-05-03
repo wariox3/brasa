@@ -14,7 +14,7 @@ class AfiFacturaType extends AbstractType
                 'class' => 'BrasaAfiliacionBundle:AfiFacturaTipo',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('ft')
-                    ->orderBy('ft.nombre', 'ASC');},
+                    ->orderBy('ft.codigoFacturaTipoPk', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                
             ->add('clienteRel', 'entity', array(

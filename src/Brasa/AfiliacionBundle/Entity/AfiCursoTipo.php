@@ -23,6 +23,11 @@ class AfiCursoTipo
     private $nombre;                             
     
     /**
+     * @ORM\Column(name="precio", type="float")
+     */
+    private $precio = 0;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="AfiCursoDetalle", mappedBy="cursoTipoRel")
      */
     protected $cursosDetallesCursoTipoRel; 
@@ -100,5 +105,29 @@ class AfiCursoTipo
     public function getCursosDetallesCursoTipoRel()
     {
         return $this->cursosDetallesCursoTipoRel;
+    }
+
+    /**
+     * Set precio
+     *
+     * @param float $precio
+     *
+     * @return AfiCursoTipo
+     */
+    public function setPrecio($precio)
+    {
+        $this->precio = $precio;
+
+        return $this;
+    }
+
+    /**
+     * Get precio
+     *
+     * @return float
+     */
+    public function getPrecio()
+    {
+        return $this->precio;
     }
 }
