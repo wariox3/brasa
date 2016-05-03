@@ -110,7 +110,9 @@
                 <th>29</th>
                 <th>30</th>
                 <th>31</th>
-                <th>HORAS</th>
+                <th>H</th>
+                <th>HD</th>
+                <th>HN</th>
             </tr>
             {% for arProgramacionDetalles in arProgramacionDetalles %}
                 <tr>                    
@@ -148,6 +150,8 @@
                     <td>{{ arProgramacionDetalles.dia30  }}</td>
                     <td>{{ arProgramacionDetalles.dia31  }}</td>
                     <td style="text-align: right">{{ arProgramacionDetalles.horas | number_format(0, '.', ',') }}</td>
+                    <td style="text-align: right">{{ arProgramacionDetalles.horasDiurnas | number_format(0, '.', ',') }}</td>
+                    <td style="text-align: right">{{ arProgramacionDetalles.horasNocturnas | number_format(0, '.', ',') }}</td>
                 </tr>
             {% endfor %}
         </table>

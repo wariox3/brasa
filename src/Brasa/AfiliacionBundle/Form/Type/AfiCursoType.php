@@ -17,6 +17,13 @@ class AfiCursoType extends AbstractType
                     ->orderBy('c.nombreCorto', 'ASC');},
                 'property' => 'nombreCorto',
                 'required' => true))                                             
+            ->add('empleadoRel', 'entity', array(
+                'class' => 'BrasaAfiliacionBundle:AfiEmpleado',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('c')
+                    ->orderBy('c.nombreCorto', 'ASC');},
+                'property' => 'nombreCorto',
+                'required' => false))                            
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

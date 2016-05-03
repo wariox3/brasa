@@ -4,14 +4,20 @@ namespace Brasa\AfiliacionBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-class AfiCursoRepository extends EntityRepository {  
+class AfiServicioRepository extends EntityRepository {  
     
     public function ListaDql() {
         $em = $this->getEntityManager();
-        $dql   = "SELECT c FROM BrasaAfiliacionBundle:AfiCurso c WHERE c.codigoCursoPk <> 0";
-        $dql .= " ORDER BY c.codigoCursoPk DESC";
+        $dql   = "SELECT s FROM BrasaAfiliacionBundle:AfiServicio s WHERE s.codigoServicioPk <> 0";
+        $dql .= " ORDER BY s.codigoServicioPk DESC";
         return $dql;
     }            
+    
+    public function pendienteDql($codigoCliente) {        
+        $dql   = "SELECT s FROM BrasaAfiliacionBundle:AfiServicio s WHERE s.pendiente > 0 AND s.codigoClienteFk = " . $codigoCliente;
+        $dql .= " ORDER BY s.codigoServicioPk DESC";
+        return $dql;
+    }                
     
     public function eliminar($arrSeleccionados) {
         $em = $this->getEntityManager();
@@ -85,12 +91,6 @@ class AfiCursoRepository extends EntityRepository {
             if($arCurso->getNumero() == 0) {            
                 $intNumero = $em->getRepository('BrasaAfiliacionBundle:AfiConsecutivo')->consecutivo(1);
                 $arCurso->setNumero($intNumero);
-                $arServicio = new \Brasa\AfiliacionBundle\Entity\AfiServicio();
-                $arServicio->setClienteRel($arCurso->getClienteRel());
-                $arServicio->setCurso($arCurso->getTotal());
-                $arServicio->setTotal($arCurso->getTotal());
-                $arServicio->setPendiente($arCurso->getTotal());
-                $em->persist($arServicio);                
             }   
             $em->persist($arCurso);
             $em->flush();

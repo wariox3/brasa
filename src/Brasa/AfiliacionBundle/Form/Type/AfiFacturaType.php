@@ -10,6 +10,13 @@ class AfiFacturaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder    
+            ->add('facturaTipoRel', 'entity', array(
+                'class' => 'BrasaAfiliacionBundle:AfiFacturaTipo',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('ft')
+                    ->orderBy('ft.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                
             ->add('clienteRel', 'entity', array(
                 'class' => 'BrasaAfiliacionBundle:AfiCliente',
                 'query_builder' => function (EntityRepository $er)  {

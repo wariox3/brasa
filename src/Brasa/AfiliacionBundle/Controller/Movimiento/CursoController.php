@@ -91,32 +91,49 @@ class CursoController extends Controller
     public function detalleAction(Request $request, $codigoCurso = '') {
         $em = $this->getDoctrine()->getManager();        
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = $this->get('mensajes_brasa');
         $arCurso = new \Brasa\AfiliacionBundle\Entity\AfiCurso();
         $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($codigoCurso);
-        $form = $this->formularioDetalle();
+        $form = $this->formularioDetalle($arCurso);
         $form->handleRequest($request);
         $this->listaDetalle($codigoCurso);
-        if ($form->isValid()) {
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            
-            if($request->request->get('OpGenerar')) {            
-                $codigoCurso = $request->request->get('OpGenerar');
-                $arCurso = new \Brasa\AfiliacionBundle\Entity\AfiCurso();
-                $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($codigoCurso);
-                $arCurso->setEstadoGenerado(1);
-                $em->persist($arCurso);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso'));
-            }                            
-            if ($form->get('BtnEliminar')->isClicked()) {
+        if ($form->isValid()) {  
+            if($form->get('BtnAutorizar')->isClicked()) {      
+                $arrControles = $request->request->All();
+                $this->actualizarDetalle($arrControles, $codigoCurso);
+                $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->autorizar($codigoCurso);
+                if($strResultado != "") {
+                    $objMensaje->Mensaje("error", $strResultado, $this);
+                }
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_detalle', array('codigoCurso' => $codigoCurso)));
+            }            
+            if($form->get('BtnDesAutorizar')->isClicked()) {                            
+                $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->desAutorizar($codigoCurso);
+                if($strResultado != "") {
+                    $objMensaje->Mensaje("error", $strResultado, $this);
+                }
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_detalle', array('codigoCurso' => $codigoCurso)));
+            }    
+            if($form->get('BtnImprimir')->isClicked()) {
+                $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->imprimir($codigoCurso);
+                if($strResultado != "") {
+                    $objMensaje->Mensaje("error", $strResultado, $this);
+                } else {
+                    //$objFactura = new \Brasa\TurnoBundle\Formatos\FormatoFactura();
+                    //$objFactura->Generar($this, $codigoFactura);                    
+                }
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_detalle', array('codigoCurso' => $codigoCurso)));
+            }             
+            if($form->get('BtnDetalleActualizar')->isClicked()) {   
+                $arrControles = $request->request->All();
+                $this->actualizarDetalle($arrControles, $codigoCurso);                                 
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_detalle', array('codigoCurso' => $codigoCurso)));
+            }            
+            if ($form->get('BtnDetalleEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_base_factura_concepto'));
-            }
-            if ($form->get('BtnExcel')->isClicked()) {
-                //$this->filtrar($form);
-                $this->listaDetalle($codigoCurso);
-                $this->generarDetalleExcel();
+                $em->getRepository('BrasaAfiliacionBundle:AfiCursoDetalle')->eliminar($arrSeleccionados);
+                $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->liquidar($codigoCurso);
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_detalle', array('codigoCurso' => $codigoCurso)));
             }
         }
         
@@ -138,33 +155,26 @@ class CursoController extends Controller
         $form = $this->formularioDetalleNuevo();
         $form->handleRequest($request);        
         if ($form->isValid()) {
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            
-            if($request->request->get('OpGenerar')) {            
-                $codigoCurso = $request->request->get('OpGenerar');
-                $arCurso = new \Brasa\AfiliacionBundle\Entity\AfiCurso();
-                $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($codigoCurso);
-                $arCurso->setEstadoGenerado(1);
-                $em->persist($arCurso);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso'));
-            }                            
-            if ($form->get('BtnEliminar')->isClicked()) {
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');                                      
+            if ($form->get('BtnGuardar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_base_factura_concepto'));
-            }
-            if ($form->get('BtnExcel')->isClicked()) {
-                //$this->filtrar($form);
-                $this->listaDetalle($codigoCurso);
-                $this->generarDetalleExcel();
+                foreach ($arrSeleccionados as $codigoCursoTipo) {
+                    $arCursoTipo = new \Brasa\AfiliacionBundle\Entity\AfiCursoTipo();
+                    $arCursoTipo = $em->getRepository('BrasaAfiliacionBundle:AfiCursoTipo')->find($codigoCursoTipo);
+                    $arCursoDetalle = new \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle();
+                    $arCursoDetalle->setCursoRel($arCurso);          
+                    $arCursoDetalle->setCursoTipoRel($arCursoTipo);
+                    $em->persist($arCursoDetalle);                    
+                }
+                $em->flush();
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }
         }
-        $dqlEmpleado = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->listaDql();
-        $arEmpleados = $paginator->paginate($em->createQuery($dqlEmpleado), $request->query->get('page', 1), 20);
+        $dqlCursosTipos = $em->getRepository('BrasaAfiliacionBundle:AfiCursoTipo')->listaDql();
+        $arCursoTipos = $paginator->paginate($em->createQuery($dqlCursosTipos), $request->query->get('page', 1), 20);
         return $this->render('BrasaAfiliacionBundle:Movimiento/Curso:detalleNuevo.html.twig', array(
             'arCurso' => $arCurso, 
-            'arEmpleados' => $arEmpleados, 
+            'arCursoTipos' => $arCursoTipos, 
             'form' => $form->createView()));
     }    
     
@@ -199,16 +209,41 @@ class CursoController extends Controller
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
-    }    
+    }            
     
-    private function formularioDetalle() {
-        $session = $this->getRequest()->getSession();
-        $form = $this->createFormBuilder()                        
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))            
-            ->getForm();
+    private function formularioDetalle($ar) {        
+        $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);      
+        $arrBotonAnular = array('label' => 'Anular', 'disabled' => true);        
+        $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
+        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
+        $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
+        
+        if($ar->getEstadoAutorizado() == 1) {            
+            $arrBotonAutorizar['disabled'] = true;                        
+            $arrBotonDetalleEliminar['disabled'] = true;            
+            $arrBotonDetalleActualizar['disabled'] = true;
+
+            $arrBotonAnular['disabled'] = false; 
+            if($ar->getEstadoAnulado() == 1) {
+                $arrBotonDesAutorizar['disabled'] = true;
+                $arrBotonAnular['disabled'] = true;
+            }            
+        } else {
+            $arrBotonDesAutorizar['disabled'] = true;            
+            $arrBotonImprimir['disabled'] = true;
+        }
+ 
+        $form = $this->createFormBuilder()
+                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
+                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                                     
+                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)
+                    ->add('BtnAnular', 'submit', $arrBotonAnular)                
+                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
+                    ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
+                    ->getForm();
         return $form;
-    }     
+    }    
     
     private function formularioDetalleNuevo() {
         $session = $this->getRequest()->getSession();
@@ -324,4 +359,18 @@ class CursoController extends Controller
         exit;
     }    
 
+    private function actualizarDetalle($arrControles, $codigoCurso) {
+        $em = $this->getDoctrine()->getManager();        
+        if(isset($arrControles['LblCodigo'])) {
+            foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                $arCursoDetalle = new \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle;
+                $arCursoDetalle = $em->getRepository('BrasaAfiliacionBundle:AfiCursoDetalle')->find($intCodigo);
+                $arCursoDetalle->setPrecio($arrControles['TxtPrecio'.$intCodigo]);                             
+                $em->persist($arCursoDetalle);
+            }
+            $em->flush();                
+            $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->liquidar($codigoCurso);            
+        }        
+    }        
+    
 }

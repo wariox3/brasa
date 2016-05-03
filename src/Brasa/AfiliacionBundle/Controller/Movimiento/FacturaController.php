@@ -90,40 +90,94 @@ class FacturaController extends Controller
     public function detalleAction(Request $request, $codigoFactura = '') {
         $em = $this->getDoctrine()->getManager();        
         $paginator  = $this->get('knp_paginator');
-        $form = $this->formularioDetalle();
-        $form->handleRequest($request);
-        $this->listaDetalle($codigoFactura);
+        $arFactura = new \Brasa\AfiliacionBundle\Entity\AfiFactura();
+        $arFactura = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->find($codigoFactura);
+        $form = $this->formularioDetalle($arFactura);
+        $form->handleRequest($request);        
         if ($form->isValid()) {
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            
-            if($request->request->get('OpGenerar')) {            
-                $codigoFactura = $request->request->get('OpGenerar');
-                $arFactura = new \Brasa\AfiliacionBundle\Entity\AfiFactura();
-                $arFactura = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->find($codigoFactura);
-                $arFactura->setEstadoGenerado(1);
-                $em->persist($arFactura);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_afi_movimiento_factura'));
-            }                            
-            if ($form->get('BtnEliminar')->isClicked()) {
+            if($form->get('BtnAutorizar')->isClicked()) {      
+                $arrControles = $request->request->All();
+                $this->actualizarDetalle($arrControles, $codigoFactura);
+                $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->autorizar($codigoFactura);
+                if($strResultado != "") {
+                    $objMensaje->Mensaje("error", $strResultado, $this);
+                }
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));
+            }            
+            if($form->get('BtnDesAutorizar')->isClicked()) {                            
+                $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->desAutorizar($codigoFactura);
+                if($strResultado != "") {
+                    $objMensaje->Mensaje("error", $strResultado, $this);
+                }
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));
+            }    
+            if($form->get('BtnImprimir')->isClicked()) {
+                $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->imprimir($codigoFactura);
+                if($strResultado != "") {
+                    $objMensaje->Mensaje("error", $strResultado, $this);
+                } else {
+                    //$objFactura = new \Brasa\TurnoBundle\Formatos\FormatoFactura();
+                    //$objFactura->Generar($this, $codigoFactura);                    
+                }
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));
+            }             
+            if($form->get('BtnDetalleActualizar')->isClicked()) {   
+                $arrControles = $request->request->All();
+                $this->actualizarDetalle($arrControles, $codigoFactura);                                 
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));
+            }            
+            if ($form->get('BtnDetalleEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_base_factura_concepto'));
-            }
-            if ($form->get('BtnFiltrar')->isClicked()) {
-                $this->filtrar($form);
-            }
-            if ($form->get('BtnExcel')->isClicked()) {
-                $this->filtrar($form);
-                $this->generarExcel();
+                $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->eliminar($arrSeleccionados);
+                //$em->getRepository('BrasaAfiliacionBundle:AfiFactura')->liquidar($codigoFactura);
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));
             }
         }
-        
-        $arFacturaDetalles = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
+        $dql = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->listaDQL($codigoFactura); 
+        $arFacturaDetalles = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 20);
+        $dql = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleCurso')->listaDQL($codigoFactura); 
+        $arFacturaDetalleCursos = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 20);
         return $this->render('BrasaAfiliacionBundle:Movimiento/Factura:detalle.html.twig', array(
+            'arFactura' => $arFactura,
             'arFacturaDetalles' => $arFacturaDetalles, 
+            'arFacturaDetalleCursos' => $arFacturaDetalleCursos,
             'form' => $form->createView()));
     }    
+    
+    /**
+     * @Route("/afi/movimiento/factura/detalle/nuevo/{codigoFactura}", name="brs_afi_movimiento_factura_detalle_nuevo")
+     */    
+    public function detalleNuevoAction(Request $request, $codigoFactura = '') {
+        $em = $this->getDoctrine()->getManager();        
+        $paginator  = $this->get('knp_paginator');
+        $arFactura = new \Brasa\AfiliacionBundle\Entity\AfiFactura();
+        $arFactura = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->find($codigoFactura);
+        $form = $this->formularioDetalleNuevo();
+        $form->handleRequest($request);        
+        if ($form->isValid()) {
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');                                      
+            if ($form->get('BtnGuardar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                foreach ($arrSeleccionados as $codigoServicio) {
+                    $arServicio = new \Brasa\AfiliacionBundle\Entity\AfiServicio();
+                    $arServicio = $em->getRepository('BrasaAfiliacionBundle:AfiServicio')->find($codigoServicio);
+                    $arFacturaDetalle = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();
+                    $arFacturaDetalle->setFacturaRel($arFactura);          
+                    $arFacturaDetalle->setServicioRel($arServicio);
+                    $arFacturaDetalle->setCurso($arServicio->getPendiente());
+                    $em->persist($arFacturaDetalle);                    
+                }
+                $em->flush();
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }
+        }
+        $dqlServiciosPendientes = $em->getRepository('BrasaAfiliacionBundle:AfiServicio')->pendienteDql($arFactura->getCodigoClienteFk());
+        $arServicios = $paginator->paginate($em->createQuery($dqlServiciosPendientes), $request->query->get('page', 1), 20);
+        return $this->render('BrasaAfiliacionBundle:Movimiento/Factura:detalleNuevo.html.twig', array(
+            'arFactura' => $arFactura, 
+            'arServicios' => $arServicios, 
+            'form' => $form->createView()));
+    }        
     
     private function lista() {    
         $session = $this->getRequest()->getSession();
@@ -131,15 +185,7 @@ class FacturaController extends Controller
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->listaDQL(
                 $session->get('filtroFacturaNombre')   
                 ); 
-    }
-    
-    private function listaDetalle($codigoFactura) {    
-        $session = $this->getRequest()->getSession();
-        $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->listaDQL(
-                $codigoFactura   
-                ); 
-    }    
+    }      
 
     private function filtrar ($form) {        
         $session = $this->getRequest()->getSession();        
@@ -158,15 +204,51 @@ class FacturaController extends Controller
         return $form;
     }    
     
-    private function formularioDetalle() {
-        $session = $this->getRequest()->getSession();
-        $form = $this->createFormBuilder()                        
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))            
+    private function formularioDetalle($ar) {        
+        $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);      
+        $arrBotonAnular = array('label' => 'Anular', 'disabled' => true);        
+        $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
+        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
+        $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
+        $arrBotonDetalleCursoEliminar = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonDetalleCursoActualizar = array('label' => 'Actualizar', 'disabled' => false);
+        
+        if($ar->getEstadoAutorizado() == 1) {            
+            $arrBotonAutorizar['disabled'] = true;                        
+            $arrBotonDetalleEliminar['disabled'] = true;            
+            $arrBotonDetalleActualizar['disabled'] = true;
+
+            $arrBotonAnular['disabled'] = false; 
+            if($ar->getEstadoAnulado() == 1) {
+                $arrBotonDesAutorizar['disabled'] = true;
+                $arrBotonAnular['disabled'] = true;
+            }            
+        } else {
+            $arrBotonDesAutorizar['disabled'] = true;            
+            $arrBotonImprimir['disabled'] = true;
+        }
+ 
+        $form = $this->createFormBuilder()
+                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
+                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                                     
+                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)
+                    ->add('BtnAnular', 'submit', $arrBotonAnular)                
+                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
+                    ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
+                    ->add('BtnDetalleCursoActualizar', 'submit', $arrBotonDetalleActualizar)
+                    ->add('BtnDetalleCursoEliminar', 'submit', $arrBotonDetalleEliminar)                
+                    ->getForm();
+        return $form;
+    }        
+
+    private function formularioDetalleNuevo() {        
+        $form = $this->createFormBuilder()                 
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))                        
             ->getForm();
         return $form;
-    }     
-
+    }             
+    
     private function generarExcel() {
         ob_clean();
         $em = $this->getDoctrine()->getManager();
@@ -217,6 +299,18 @@ class FacturaController extends Controller
         exit;
     }
 
-    
+    private function actualizarDetalle($arrControles, $codigoFactura) {
+        $em = $this->getDoctrine()->getManager();        
+        if(isset($arrControles['LblCodigo'])) {
+            foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                $arFacturaDetalle = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle;
+                $arFacturaDetalle = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->find($intCodigo);
+                $arFacturaDetalle->setPrecio($arrControles['TxtPrecio'.$intCodigo]);                             
+                $em->persist($arFacturaDetalle);
+            }
+            $em->flush();                
+            $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->liquidar($codigoFactura);            
+        }        
+    }            
 
 }

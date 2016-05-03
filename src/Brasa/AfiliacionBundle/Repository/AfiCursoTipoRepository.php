@@ -4,12 +4,12 @@ namespace Brasa\AfiliacionBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-class AfiFacturaDetalleRepository extends EntityRepository {  
+class AfiCursoTipoRepository extends EntityRepository { 
     
-    public function ListaDql($codigoFactura) {
+    public function ListaDql() {
         $em = $this->getEntityManager();
-        $dql   = "SELECT fd FROM BrasaAfiliacionBundle:AfiFacturaDetalle fd WHERE fd.codigoFacturaDetallePk <> 0 AND fd.codigoFacturaFk = " . $codigoFactura;
-        $dql .= " ORDER BY fd.codigoFacturaDetallePk";
+        $dql   = "SELECT ct FROM BrasaAfiliacionBundle:AfiCursoTipo ct WHERE ct.codigoCursoTipoPk <> 0";
+        $dql .= " ORDER BY ct.nombre";
         return $dql;
     }            
     
@@ -17,11 +17,10 @@ class AfiFacturaDetalleRepository extends EntityRepository {
         $em = $this->getEntityManager();
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigo) {
-                $ar = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->find($codigo);
+                $ar = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->find($codigo);
                 $em->remove($ar);
             }
             $em->flush();
         }
-    }             
-        
+    }        
 }

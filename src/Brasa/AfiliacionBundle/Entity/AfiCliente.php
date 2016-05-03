@@ -75,27 +75,7 @@ class AfiCliente
     /**
      * @ORM\Column(name="email", type="string", length=80, nullable=true)
      */
-    private $email;     
-    
-    /**
-     * @ORM\Column(name="gerente", type="string", length=80, nullable=true)
-     */
-    private $gerente;    
-    
-    /**
-     * @ORM\Column(name="calular_gerente", type="string", length=20, nullable=true)
-     */
-    private $celularGerente;  
-    
-    /**
-     * @ORM\Column(name="financiero", type="string", length=80, nullable=true)
-     */
-    private $financiero;    
-    
-    /**
-     * @ORM\Column(name="calular_financiero", type="string", length=20, nullable=true)
-     */
-    private $celularFinanciero;     
+    private $email;             
     
     /**
      * @ORM\Column(name="contacto", type="string", length=80, nullable=true)
@@ -153,6 +133,11 @@ class AfiCliente
      * @ORM\OneToMany(targetEntity="AfiCurso", mappedBy="clienteRel")
      */
     protected $cursosClienteRel;     
+
+    /**
+     * @ORM\OneToMany(targetEntity="AfiServicio", mappedBy="clienteRel")
+     */
+    protected $serviciosClienteRel;
     
     /**
      * Constructor
@@ -859,5 +844,39 @@ class AfiCliente
     public function getCursosClienteRel()
     {
         return $this->cursosClienteRel;
+    }
+
+    /**
+     * Add serviciosClienteRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiServicio $serviciosClienteRel
+     *
+     * @return AfiCliente
+     */
+    public function addServiciosClienteRel(\Brasa\AfiliacionBundle\Entity\AfiServicio $serviciosClienteRel)
+    {
+        $this->serviciosClienteRel[] = $serviciosClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove serviciosClienteRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiServicio $serviciosClienteRel
+     */
+    public function removeServiciosClienteRel(\Brasa\AfiliacionBundle\Entity\AfiServicio $serviciosClienteRel)
+    {
+        $this->serviciosClienteRel->removeElement($serviciosClienteRel);
+    }
+
+    /**
+     * Get serviciosClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiciosClienteRel()
+    {
+        return $this->serviciosClienteRel;
     }
 }

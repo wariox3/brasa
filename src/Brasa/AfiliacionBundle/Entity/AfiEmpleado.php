@@ -164,12 +164,17 @@ class AfiEmpleado
     protected $periodosDetallesEmpleadoRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="AfiCurso", mappedBy="empleadoRel")
+     */
+    protected $cursosEmpleadoRel;    
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->contratosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->periodosDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cursosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -848,5 +853,39 @@ class AfiEmpleado
     public function getPeriodosDetallesEmpleadoRel()
     {
         return $this->periodosDetallesEmpleadoRel;
+    }
+
+    /**
+     * Add cursosEmpleadoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCurso $cursosEmpleadoRel
+     *
+     * @return AfiEmpleado
+     */
+    public function addCursosEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiCurso $cursosEmpleadoRel)
+    {
+        $this->cursosEmpleadoRel[] = $cursosEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove cursosEmpleadoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCurso $cursosEmpleadoRel
+     */
+    public function removeCursosEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiCurso $cursosEmpleadoRel)
+    {
+        $this->cursosEmpleadoRel->removeElement($cursosEmpleadoRel);
+    }
+
+    /**
+     * Get cursosEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCursosEmpleadoRel()
+    {
+        return $this->cursosEmpleadoRel;
     }
 }

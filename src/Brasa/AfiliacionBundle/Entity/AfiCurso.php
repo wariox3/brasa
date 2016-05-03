@@ -16,6 +16,11 @@ class AfiCurso
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $codigoCursoPk;         
+
+    /**
+     * @ORM\Column(name="numero", type="integer", nullable=true)
+     */    
+    private $numero = 0; 
     
     /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
@@ -28,15 +33,25 @@ class AfiCurso
     private $codigoClienteFk;      
     
     /**
-     * @ORM\Column(name="precio", type="float")
+     * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
+     */    
+    private $codigoEmpleadoFk;    
+    
+    /**
+     * @ORM\Column(name="total", type="float")
      */
-    private $precio = 0;             
+    private $total = 0;             
     
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
      */    
-    private $estadoAutorizado = 0;         
+    private $estadoAutorizado = 0;            
 
+    /**     
+     * @ORM\Column(name="estado_anulado", type="boolean")
+     */    
+    private $estadoAnulado = false;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="AfiCliente", inversedBy="cursosClienteRel")
      * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
@@ -44,10 +59,20 @@ class AfiCurso
     protected $clienteRel;    
 
     /**
+     * @ORM\ManyToOne(targetEntity="AfiEmpleado", inversedBy="cursosEmpleadoRel")
+     * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
+     */
+    protected $empleadoRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="AfiCursoDetalle", mappedBy="cursoRel")
      */
     protected $cursosDetallesCursoRel;     
-    
+
+    /**
+     * @ORM\OneToMany(targetEntity="AfiFacturaDetalleCurso", mappedBy="cursoRel")
+     */
+    protected $facturasDetallesCursosCursoRel;    
 
     /**
      * Constructor
@@ -116,27 +141,27 @@ class AfiCurso
     }
 
     /**
-     * Set precio
+     * Set total
      *
-     * @param float $precio
+     * @param float $total
      *
      * @return AfiCurso
      */
-    public function setPrecio($precio)
+    public function setTotal($total)
     {
-        $this->precio = $precio;
+        $this->total = $total;
 
         return $this;
     }
 
     /**
-     * Get precio
+     * Get total
      *
      * @return float
      */
-    public function getPrecio()
+    public function getTotal()
     {
-        return $this->precio;
+        return $this->total;
     }
 
     /**
@@ -161,6 +186,30 @@ class AfiCurso
     public function getEstadoAutorizado()
     {
         return $this->estadoAutorizado;
+    }
+
+    /**
+     * Set estadoAnulado
+     *
+     * @param boolean $estadoAnulado
+     *
+     * @return AfiCurso
+     */
+    public function setEstadoAnulado($estadoAnulado)
+    {
+        $this->estadoAnulado = $estadoAnulado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAnulado
+     *
+     * @return boolean
+     */
+    public function getEstadoAnulado()
+    {
+        return $this->estadoAnulado;
     }
 
     /**
@@ -219,5 +268,111 @@ class AfiCurso
     public function getCursosDetallesCursoRel()
     {
         return $this->cursosDetallesCursoRel;
+    }
+
+    /**
+     * Set numero
+     *
+     * @param integer $numero
+     *
+     * @return AfiCurso
+     */
+    public function setNumero($numero)
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    /**
+     * Get numero
+     *
+     * @return integer
+     */
+    public function getNumero()
+    {
+        return $this->numero;
+    }
+
+    /**
+     * Set codigoEmpleadoFk
+     *
+     * @param integer $codigoEmpleadoFk
+     *
+     * @return AfiCurso
+     */
+    public function setCodigoEmpleadoFk($codigoEmpleadoFk)
+    {
+        $this->codigoEmpleadoFk = $codigoEmpleadoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEmpleadoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEmpleadoFk()
+    {
+        return $this->codigoEmpleadoFk;
+    }
+
+    /**
+     * Set empleadoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiEmpleado $empleadoRel
+     *
+     * @return AfiCurso
+     */
+    public function setEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiEmpleado $empleadoRel = null)
+    {
+        $this->empleadoRel = $empleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoRel
+     *
+     * @return \Brasa\AfiliacionBundle\Entity\AfiEmpleado
+     */
+    public function getEmpleadoRel()
+    {
+        return $this->empleadoRel;
+    }
+
+    /**
+     * Add facturasDetallesCursosCursoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso $facturasDetallesCursosCursoRel
+     *
+     * @return AfiCurso
+     */
+    public function addFacturasDetallesCursosCursoRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso $facturasDetallesCursosCursoRel)
+    {
+        $this->facturasDetallesCursosCursoRel[] = $facturasDetallesCursosCursoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasDetallesCursosCursoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso $facturasDetallesCursosCursoRel
+     */
+    public function removeFacturasDetallesCursosCursoRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso $facturasDetallesCursosCursoRel)
+    {
+        $this->facturasDetallesCursosCursoRel->removeElement($facturasDetallesCursosCursoRel);
+    }
+
+    /**
+     * Get facturasDetallesCursosCursoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasDetallesCursosCursoRel()
+    {
+        return $this->facturasDetallesCursosCursoRel;
     }
 }

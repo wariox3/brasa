@@ -8,6 +8,12 @@
         <div class="panel-heading">Informacion general</div>
         <div class="panel-body">     
             <div class="form-group form-group-sm">
+                <label for="form_facturaTipoRel" class="col-sm-3 control-label">Tipo:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.facturaTipoRel, { 'attr': {'class': 'form-control'} }) }}                      
+                </div>                
+            </div>             
+            <div class="form-group form-group-sm">
                 <label for="form_clienteRel" class="col-sm-3 control-label">Cliente:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.clienteRel, { 'attr': {'class': 'form-control'} }) }}                      

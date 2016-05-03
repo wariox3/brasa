@@ -20,7 +20,17 @@ class AfiCursoDetalle
     /**
      * @ORM\Column(name="codigo_curso_fk", type="integer")
      */    
-    private $codigoCursoFk;            
+    private $codigoCursoFk;                
+    
+    /**
+     * @ORM\Column(name="codigo_curso_tipo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCursoTipoFk;    
+    
+    /**
+     * @ORM\Column(name="precio", type="float")
+     */
+    private $precio = 0;    
     
     /**
      * @ORM\ManyToOne(targetEntity="AfiCurso", inversedBy="cursosDetallesCursoRel")
@@ -28,6 +38,11 @@ class AfiCursoDetalle
      */
     protected $cursoRel;    
     
+    /**
+     * @ORM\ManyToOne(targetEntity="AfiCursoTipo", inversedBy="cursosDetallesCursoTipoRel")
+     * @ORM\JoinColumn(name="codigo_curso_tipo_fk", referencedColumnName="codigo_curso_tipo_pk")
+     */
+    protected $cursoTipoRel;     
 
     /**
      * Get codigoCursoDetallePk
@@ -64,6 +79,30 @@ class AfiCursoDetalle
     }
 
     /**
+     * Set precio
+     *
+     * @param float $precio
+     *
+     * @return AfiCursoDetalle
+     */
+    public function setPrecio($precio)
+    {
+        $this->precio = $precio;
+
+        return $this;
+    }
+
+    /**
+     * Get precio
+     *
+     * @return float
+     */
+    public function getPrecio()
+    {
+        return $this->precio;
+    }
+
+    /**
      * Set cursoRel
      *
      * @param \Brasa\AfiliacionBundle\Entity\AfiCurso $cursoRel
@@ -85,5 +124,53 @@ class AfiCursoDetalle
     public function getCursoRel()
     {
         return $this->cursoRel;
+    }
+
+    /**
+     * Set codigoCursoTipoFk
+     *
+     * @param integer $codigoCursoTipoFk
+     *
+     * @return AfiCursoDetalle
+     */
+    public function setCodigoCursoTipoFk($codigoCursoTipoFk)
+    {
+        $this->codigoCursoTipoFk = $codigoCursoTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCursoTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCursoTipoFk()
+    {
+        return $this->codigoCursoTipoFk;
+    }
+
+    /**
+     * Set cursoTipoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCursoTipo $cursoTipoRel
+     *
+     * @return AfiCursoDetalle
+     */
+    public function setCursoTipoRel(\Brasa\AfiliacionBundle\Entity\AfiCursoTipo $cursoTipoRel = null)
+    {
+        $this->cursoTipoRel = $cursoTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get cursoTipoRel
+     *
+     * @return \Brasa\AfiliacionBundle\Entity\AfiCursoTipo
+     */
+    public function getCursoTipoRel()
+    {
+        return $this->cursoTipoRel;
     }
 }
