@@ -28,12 +28,22 @@ class AfiFacturaRepository extends EntityRepository {
         $em = $this->getEntityManager();        
         $arFactura = new \Brasa\AfiliacionBundle\Entity\AfiFactura();        
         $arFactura = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->find($codigoFactura);                 
-        $floSubTotal = 0;        
+        $floSubTotal = 0;
+        $floCurso = 0;        
         $arFacturasDetalle = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();        
         $arFacturasDetalle = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura));                 
         foreach ($arFacturasDetalle as $arFacturaDetalle) {
             $floSubTotal +=  $arFacturaDetalle->getPrecio();
         }                           
+        
+        $arFacturasDetalleCursos = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso();        
+        $arFacturasDetalleCursos = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleCurso')->findBy(array('codigoFacturaFk' => $codigoFactura));                 
+        foreach ($arFacturasDetalleCursos as $arFacturasDetalleCurso) {
+            $floSubTotal +=  $arFacturasDetalleCurso->getPrecio();
+            $floCurso +=  $arFacturasDetalleCurso->getPrecio();
+        }        
+        $arFactura->setCurso($floCurso);
+        $arFactura->setSubTotal($floSubTotal);
         $arFactura->setTotal($floSubTotal);
         $em->persist($arFactura);
         $em->flush();
@@ -44,17 +54,12 @@ class AfiFacturaRepository extends EntityRepository {
         $em = $this->getEntityManager();                
         $arFactura = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->find($codigoFactura);            
         $strResultado = "";        
-        if($arFactura->getEstadoAutorizado() == 0) {
-            if($em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->numeroRegistros($codigoFactura) > 0) {                            
-                if($strResultado == "") {
-                    $arFactura->setEstadoAutorizado(1);
-                    $em->persist($arFactura);
-                    $em->flush();                              
-                }
-              
-            } else {
-                $strResultado = "Debe adicionar detalles";
-            }            
+        if($arFactura->getEstadoAutorizado() == 0) {            
+            if($strResultado == "") {
+                $arFactura->setEstadoAutorizado(1);
+                $em->persist($arFactura);
+                $em->flush();                              
+            }                          
         } else {
             $strResultado = "Ya esta autorizado";
         }        
@@ -76,24 +81,57 @@ class AfiFacturaRepository extends EntityRepository {
     }    
     
     public function imprimir($codigoFactura) {
-        $em = $this->getEntityManager();        
-        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
+        $em = $this->getEntityManager();                
         $strResultado = "";
         $arFactura = new \Brasa\AfiliacionBundle\Entity\AfiFactura();        
         $arFactura = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->find($codigoFactura);        
         if($arFactura->getEstadoAutorizado() == 1) {
             if($arFactura->getNumero() == 0) {            
-                $intNumero = $em->getRepository('BrasaAfiliacionBundle:AfiConsecutivo')->consecutivo(1);
+                if($arFactura->getCodigoFacturaTipoFk() == 1) {
+                    $intNumero = $em->getRepository('BrasaAfiliacionBundle:AfiConsecutivo')->consecutivo(2);
+                    $arCuentaCobrarTipo = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrarTipo')->find(3);
+                } 
+                if($arFactura->getCodigoFacturaTipoFk() == 2) {
+                    $intNumero = $em->getRepository('BrasaAfiliacionBundle:AfiConsecutivo')->consecutivo(3);
+                    $arCuentaCobrarTipo = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrarTipo')->find(4);
+                }    
                 $arFactura->setNumero($intNumero);
-                $arServicio = new \Brasa\AfiliacionBundle\Entity\AfiServicio();
-                $arServicio->setClienteRel($arFactura->getClienteRel());
-                $arServicio->setVrFactura($arFactura->getTotal());
-                $em->persist($arServicio);                
-            }   
+                
+                $arClienteAfiliacion = new \Brasa\AfiliacionBundle\Entity\AfiCliente();
+                $arClienteAfiliacion = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->find($arFactura->getCodigoClienteFk());                 
+                $arClienteCartera = new \Brasa\CarteraBundle\Entity\CarCliente();
+                $arClienteCartera = $em->getRepository('BrasaCarteraBundle:CarCliente')->findOneBy(array('nit' => $arClienteAfiliacion->getNit()));                 
+                if ($arClienteCartera == null){
+                    $arClienteCartera = new \Brasa\CarteraBundle\Entity\CarCliente();
+                    $arClienteCartera->setFormaPagoRel($arClienteAfiliacion->getFormaPagoRel());
+                    $arClienteCartera->setCiudadRel($arClienteAfiliacion->getCiudadRel());
+                    $arClienteCartera->setNit($arClienteAfiliacion->getNit());
+                    $arClienteCartera->setDigitoVerificacion($arClienteAfiliacion->getDigitoVerificacion());
+                    $arClienteCartera->setNombreCorto($arClienteAfiliacion->getNombreCorto());
+                    $arClienteCartera->setPlazoPago($arClienteAfiliacion->getPlazoPago());
+                    $arClienteCartera->setDireccion($arClienteAfiliacion->getDireccion());
+                    $arClienteCartera->setTelefono($arClienteAfiliacion->getTelefono());
+                    $arClienteCartera->setCelular($arClienteAfiliacion->getCelular());
+                    $arClienteCartera->setFax($arClienteAfiliacion->getFax());
+                    $arClienteCartera->setEmail($arClienteAfiliacion->getEmail());                    
+                    $em->persist($arClienteCartera);                                    
+                }                
+                $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();                                
+                $arCuentaCobrar->setClienteRel($arClienteCartera);
+                $arCuentaCobrar->setCuentaCobrarTipoRel($arCuentaCobrarTipo);
+                $arCuentaCobrar->setFecha($arFactura->getFecha());
+                $arCuentaCobrar->setFechaVence($arFactura->getFechaVence());
+                $arCuentaCobrar->setNumeroDocumento($arFactura->getNumero());
+                $arCuentaCobrar->setValorOriginal($arFactura->getTotal());
+                $arCuentaCobrar->setSaldo($arFactura->getTotal());
+                $arCuentaCobrar->setPlazo($arClienteAfiliacion->getPlazoPago());                
+                $arCuentaCobrar->setAbono(0);
+                $em->persist($arCuentaCobrar);                
+            }              
             $em->persist($arFactura);
             $em->flush();
         } else {
-            $strResultado = "Debe autorizar el factura para imprimir";
+            $strResultado = "Debe autorizar la factura para imprimir";
         }
         return $strResultado;
     }            

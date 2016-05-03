@@ -23,5 +23,5 @@ class AfiFacturaDetalleRepository extends EntityRepository {
             $em->flush();
         }
     }             
-        
+ 
 }

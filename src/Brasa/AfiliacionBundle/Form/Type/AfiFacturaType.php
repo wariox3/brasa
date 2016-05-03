@@ -23,7 +23,9 @@ class AfiFacturaType extends AbstractType
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombreCorto', 'ASC');},
                 'property' => 'nombreCorto',
-                'required' => true))                                                         
+                'required' => true))  
+            ->add('soporte', 'text', array('required' => false))
+            ->add('comentarios', 'textarea', array('required' => false))                            
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

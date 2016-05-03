@@ -33,9 +33,34 @@ class AfiFactura
     private $fecha;        
 
     /**
+     * @ORM\Column(name="fecha_vence", type="date", nullable=true)
+     */    
+    private $fechaVence;    
+    
+    /**
+     * @ORM\Column(name="soporte", type="string", length=30, nullable=true)
+     */
+    private $soporte;     
+    
+    /**
      * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
      */    
     private $codigoClienteFk;    
+
+    /**
+     * @ORM\Column(name="curso", type="float")
+     */
+    private $curso = 0; 
+    
+    /**
+     * @ORM\Column(name="subtotal", type="float")
+     */
+    private $subTotal = 0;     
+    
+    /**
+     * @ORM\Column(name="iva", type="float")
+     */
+    private $iva = 0;     
     
     /**
      * @ORM\Column(name="total", type="float")
@@ -51,6 +76,16 @@ class AfiFactura
      * @ORM\Column(name="estado_anulado", type="boolean")
      */    
     private $estadoAnulado = false;    
+    
+    /**
+     * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
+     */    
+    private $usuario;     
+    
+    /**
+     * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
+     */    
+    private $comentarios;     
     
     /**
      * @ORM\ManyToOne(targetEntity="AfiCliente", inversedBy="facturasClienteRel")
@@ -74,12 +109,14 @@ class AfiFactura
      */
     protected $facturasDetallesCursosFacturaRel;    
 
+    
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->facturasDetallesFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facturasDetallesCursosFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -186,6 +223,78 @@ class AfiFactura
     public function getCodigoClienteFk()
     {
         return $this->codigoClienteFk;
+    }
+
+    /**
+     * Set curso
+     *
+     * @param float $curso
+     *
+     * @return AfiFactura
+     */
+    public function setCurso($curso)
+    {
+        $this->curso = $curso;
+
+        return $this;
+    }
+
+    /**
+     * Get curso
+     *
+     * @return float
+     */
+    public function getCurso()
+    {
+        return $this->curso;
+    }
+
+    /**
+     * Set subTotal
+     *
+     * @param float $subTotal
+     *
+     * @return AfiFactura
+     */
+    public function setSubTotal($subTotal)
+    {
+        $this->subTotal = $subTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get subTotal
+     *
+     * @return float
+     */
+    public function getSubTotal()
+    {
+        return $this->subTotal;
+    }
+
+    /**
+     * Set iva
+     *
+     * @param float $iva
+     *
+     * @return AfiFactura
+     */
+    public function setIva($iva)
+    {
+        $this->iva = $iva;
+
+        return $this;
+    }
+
+    /**
+     * Get iva
+     *
+     * @return float
+     */
+    public function getIva()
+    {
+        return $this->iva;
     }
 
     /**
@@ -374,5 +483,101 @@ class AfiFactura
     public function getFacturasDetallesCursosFacturaRel()
     {
         return $this->facturasDetallesCursosFacturaRel;
+    }
+
+    /**
+     * Set fechaVence
+     *
+     * @param \DateTime $fechaVence
+     *
+     * @return AfiFactura
+     */
+    public function setFechaVence($fechaVence)
+    {
+        $this->fechaVence = $fechaVence;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVence
+     *
+     * @return \DateTime
+     */
+    public function getFechaVence()
+    {
+        return $this->fechaVence;
+    }
+
+    /**
+     * Set soporte
+     *
+     * @param string $soporte
+     *
+     * @return AfiFactura
+     */
+    public function setSoporte($soporte)
+    {
+        $this->soporte = $soporte;
+
+        return $this;
+    }
+
+    /**
+     * Get soporte
+     *
+     * @return string
+     */
+    public function getSoporte()
+    {
+        return $this->soporte;
+    }
+
+    /**
+     * Set usuario
+     *
+     * @param string $usuario
+     *
+     * @return AfiFactura
+     */
+    public function setUsuario($usuario)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return string
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return AfiFactura
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
     }
 }

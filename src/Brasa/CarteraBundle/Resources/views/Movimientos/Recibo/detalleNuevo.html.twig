@@ -23,7 +23,7 @@
                 <td>{{arCuentasCobrar.codigoCuentaCobrarPk}}</td>
                 <td>{{arCuentasCobrar.clienteRel.formaPagoRel.nombre}}</td>
                 <td>{{arCuentasCobrar.plazo}}</td>
-                <td>{{arCuentasCobrar.cuentaCobrarTipoRel.nombre }}</td>
+                <td>{{arCuentasCobrar.cuentaCobrarTipoRel.nombre | default('') }}</td>
                 <td>{{arCuentasCobrar.numeroDocumento}}</td>
                 <td>{{arCuentasCobrar.fecha | date('Y-m-d')}}</td>
                 <td>{{arCuentasCobrar.fechaVence | date('Y-m-d')}}</td>

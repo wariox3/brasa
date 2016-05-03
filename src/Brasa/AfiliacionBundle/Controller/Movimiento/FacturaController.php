@@ -63,14 +63,22 @@ class FacturaController extends Controller
     public function nuevoAction(Request $request, $codigoFactura = '') {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         $arFactura = new \Brasa\AfiliacionBundle\Entity\AfiFactura();
         if($codigoFactura != '' && $codigoFactura != '0') {
             $arFactura = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->find($codigoFactura);
-        }        
+        } else{
+            $arFactura->setFecha(new \DateTime('now'));
+            $arFactura->setFechaVence(new \DateTime('now'));
+        }       
         $form = $this->createForm(new AfiFacturaType, $arFactura);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arFactura = $form->getData();                        
+            $arFactura = $form->getData();  
+            $dateFechaVence = $objFunciones->sumarDiasFecha($arFactura->getClienteRel()->getPlazoPago(), $arFactura->getFecha());
+            $arFactura->setFechaVence($dateFechaVence); 
+            $arUsuario = $this->getUser(); 
+            $arFactura->setUsuario($arUsuario->getUserName());
             $em->persist($arFactura);
             $em->flush();            
             if($form->get('guardarnuevo')->isClicked()) {
@@ -88,7 +96,8 @@ class FacturaController extends Controller
      * @Route("/afi/movimiento/factura/detalle/{codigoFactura}", name="brs_afi_movimiento_factura_detalle")
      */    
     public function detalleAction(Request $request, $codigoFactura = '') {
-        $em = $this->getDoctrine()->getManager();        
+        $em = $this->getDoctrine()->getManager();  
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $paginator  = $this->get('knp_paginator');
         $arFactura = new \Brasa\AfiliacionBundle\Entity\AfiFactura();
         $arFactura = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->find($codigoFactura);
