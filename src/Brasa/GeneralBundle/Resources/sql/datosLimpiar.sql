@@ -3,9 +3,12 @@ UPDATE rhu_seleccion SET codigo_factura_fk = NULL;
 
 /*Afiliacion*/
 DELETE FROM afi_factura_detalle;
+DELETE FROM afi_factura_detalle_curso;
 DELETE FROM afi_factura;
 DELETE FROM afi_periodo_detalle;
 DELETE FROM afi_periodo;
+DELETE FROM afi_curso_detalle;
+DELETE FROM afi_curso;
 
 /*Cartera*/
 DELETE FROM car_recibo_detalle;

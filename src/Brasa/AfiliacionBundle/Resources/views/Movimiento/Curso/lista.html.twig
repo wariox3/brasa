@@ -31,12 +31,16 @@
         </div>
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
-                <th>{{ knp_pagination_sortable(arCursos, 'CÓDIGO', 'p.codigoCursoPk') }}</th>
+                <th>CODIGO</th>
+                <th>NUMERO</th>
                 <th>FECHA</th>                
                 <th>NIT</th>
                 <th>CLIENTE</th>
                 <th>IDENTIFICACION</th>
                 <th>EMPLEADO</th>
+                <th>AUT</th>
+                <th>FAC</th>
+                <th>ANU</th>
                 <th>TOTAL</th>
                 <th></th>
                 <th></th>
@@ -45,11 +49,15 @@
             {% for arCursos in arCursos %}
             <tr>
                 <td>{{ arCursos.codigoCursoPk  }}</td>
+                <td>{{ arCursos.numero  }}</td>
                 <td>{{ arCursos.fecha |date('Y/m/d') }}</td>
                 <td>{{ arCursos.clienteRel.nit  }}</td>
                 <td>{{ arCursos.clienteRel.nombreCorto  }}</td>     
                 <td>{{ arCursos.empleadoRel.numeroIdentificacion | default('') }}</td>
                 <td>{{ arCursos.empleadoRel.nombreCorto | default('') }}</td> 
+                <td>{% if arCursos.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arCursos.estadoFacturado == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arCursos.estadoAnulado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: right">{{ arCursos.total | number_format(0, '.', ',') }}</td>                
                 <td style="text-align: center"><a href="{{ path('brs_afi_movimiento_curso_nuevo', {'codigoCurso': arCursos.codigoCursoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_afi_movimiento_curso_detalle', { 'codigoCurso': arCursos.codigoCursoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                

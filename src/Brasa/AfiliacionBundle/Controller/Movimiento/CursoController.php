@@ -257,6 +257,7 @@ class CursoController extends Controller
     }         
 
     private function generarExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -271,12 +272,26 @@ class CursoController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'L'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
+        }      
+        for($col = 'K'; $col !== 'L'; $col++) {            
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }         
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'NOMBRE');
+                    ->setCellValue('B1', 'NUMERO')
+                    ->setCellValue('C1', 'FECHA')
+                    ->setCellValue('D1', 'NIT')
+                    ->setCellValue('E1', 'CLIENTE')
+                    ->setCellValue('F1', 'IDENTIFICACION')
+                    ->setCellValue('G1', 'EMPLEADO')
+                    ->setCellValue('H1', 'FAC')
+                    ->setCellValue('I1', 'AUT')
+                    ->setCellValue('J1', 'ANU')
+                    ->setCellValue('K1', 'TOTAL');
 
-        $i = 2;
-        
+        $i = 2;        
         $query = $em->createQuery($this->strDqlLista);
         $arCursos = new \Brasa\AfiliacionBundle\Entity\AfiCurso();
         $arCursos = $query->getResult();
@@ -284,7 +299,19 @@ class CursoController extends Controller
         foreach ($arCursos as $arCurso) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arCurso->getCodigoCursoPk())
-                    ->setCellValue('B' . $i, $arCurso->getNombre());                                    
+                    ->setCellValue('B' . $i, $arCurso->getNumero())
+                    ->setCellValue('C' . $i, $arCurso->getFecha()->format('Y/m/d'))
+                    ->setCellValue('D' . $i, $arCurso->getClienteRel()->getNit())
+                    ->setCellValue('E' . $i, $arCurso->getClienteRel()->getNombreCorto())
+                    ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arCurso->getEstadoFacturado()))
+                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arCurso->getEstadoAutorizado()))
+                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arCurso->getEstadoAnulado()))
+                    ->setCellValue('K' . $i, $arCurso->getTotal());
+            
+            if($arCurso->getCodigoEmpleadoFk() != null) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F' . $i, $arCurso->getEmpleadoRel()->getNumeroIdentificacion());
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G' . $i, $arCurso->getEmpleadoRel()->getNombreCorto());
+            }
             $i++;
         }
         
@@ -304,61 +331,7 @@ class CursoController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }
-
-    private function generarDetalleExcel() {
-        ob_clean();
-        $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
-        $objPHPExcel = new \PHPExcel();
-        // Set document properties
-        $objPHPExcel->getProperties()->setCreator("EMPRESA")
-            ->setLastModifiedBy("EMPRESA")
-            ->setTitle("Office 2007 XLSX Test Document")
-            ->setSubject("Office 2007 XLSX Test Document")
-            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
-            ->setKeywords("office 2007 openxml php")
-            ->setCategory("Test result file");
-        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
-        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'COD')
-                    ->setCellValue('B1', 'CLIENTE')
-                    ->setCellValue('C1', 'DESDE')
-                    ->setCellValue('D1', 'HASTA');
-
-        $i = 2;
-        
-        $query = $em->createQuery($this->strDqlLista);
-        $arCursoDetalles = new \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle();
-        $arCursoDetalles = $query->getResult();
-                
-        foreach ($arCursoDetalles as $arCursoDetalle) {            
-            $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arCursoDetalle->getCodigoCursoDetallePk())
-                    ->setCellValue('B' . $i, $arCursoDetalle->getCursoRel()->getClienteRel()->getNombreCorto())
-                    ->setCellValue('C' . $i, $arCursoDetalle->getFechaDesde()->format('Y/m/d'))
-                    ->setCellValue('D' . $i, $arCursoDetalle->getFechaHasta()->format('Y/m/d'));                                    
-            $i++;
-        }
-        
-        $objPHPExcel->getActiveSheet()->setTitle('CursoDetalle');
-        $objPHPExcel->setActiveSheetIndex(0);
-        // Redirect output to a client’s web browser (Excel2007)
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="CursoDetalles.xlsx"');
-        header('Cache-Control: max-age=0');
-        // If you're serving to IE 9, then the following may be needed
-        header('Cache-Control: max-age=1');
-        // If you're serving to IE over SSL, then the following may be needed
-        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-        header ('Pragma: public'); // HTTP/1.0
-        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
-        $objWriter->save('php://output');
-        exit;
-    }    
+    }   
 
     private function actualizarDetalle($arrControles, $codigoCurso) {
         $em = $this->getDoctrine()->getManager();        
