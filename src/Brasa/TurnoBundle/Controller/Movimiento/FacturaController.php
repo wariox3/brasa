@@ -463,6 +463,7 @@ class FacturaController extends Controller
     }    
     
     private function generarExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
@@ -476,9 +477,27 @@ class FacturaController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'O'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
+        }      
+        for($col = 'I'; $col !== 'O'; $col++) {            
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }        
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'CLIENTE');
+                    ->setCellValue('B1', 'NUMERO')
+                    ->setCellValue('C1', 'FECHA')
+                    ->setCellValue('D1', 'VENCE')
+                    ->setCellValue('E1', 'NIT')                    
+                    ->setCellValue('F1', 'CLIENTE')
+                    ->setCellValue('G1', 'AUT')
+                    ->setCellValue('H1', 'ANU')
+                    ->setCellValue('I1', 'SUBTOTAL')    
+                    ->setCellValue('J1', 'BASE AUI')
+                    ->setCellValue('K1', 'IVA')
+                    ->setCellValue('L1', 'RTEIVA')
+                    ->setCellValue('M1', 'RTEFTE')
+                    ->setCellValue('N1', 'TOTAL');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -488,8 +507,19 @@ class FacturaController extends Controller
         foreach ($arFacturas as $arFactura) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arFactura->getCodigoFacturaPk())
-                    ->setCellValue('B' . $i, $arFactura->getClienteRel()->getNombreCorto());
-
+                    ->setCellValue('B' . $i, $arFactura->getNumero())
+                    ->setCellValue('C' . $i, $arFactura->getFecha()->format('Y/m/d'))
+                    ->setCellValue('D' . $i, $arFactura->getFechaVence()->format('Y/m/d'))
+                    ->setCellValue('E' . $i, $arFactura->getClienteRel()->getNit())
+                    ->setCellValue('F' . $i, $arFactura->getClienteRel()->getNombreCorto())
+                    ->setCellValue('G' . $i, $objFunciones->devuelveBoolean($arFactura->getEstadoAutorizado()))
+                    ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arFactura->getEstadoAnulado()))
+                    ->setCellValue('I' . $i, $arFactura->getVrSubtotal())
+                    ->setCellValue('J' . $i, $arFactura->getVrBaseAIU())
+                    ->setCellValue('K' . $i, $arFactura->getVrIva())
+                    ->setCellValue('L' . $i, $arFactura->getVrRetencionIva())
+                    ->setCellValue('M' . $i, $arFactura->getVrRetencionFuente())
+                    ->setCellValue('N' . $i, $arFactura->getVrTotal());
             $i++;
         }
 
