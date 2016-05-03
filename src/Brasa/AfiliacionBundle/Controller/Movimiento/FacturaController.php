@@ -84,7 +84,7 @@ class FacturaController extends Controller
             if($form->get('guardarnuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_nuevo', array('codigoFactura' => 0 )));
             } else {
-                return $this->redirect($this->generateUrl('brs_afi_movimiento_factura'));
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_detalle', array('codigoFactura' => $arFactura->getCodigoFacturaPk())));
             }                                   
         }
         return $this->render('BrasaAfiliacionBundle:Movimiento/Factura:nuevo.html.twig', array(

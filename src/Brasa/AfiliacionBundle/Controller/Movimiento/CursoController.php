@@ -77,7 +77,7 @@ class CursoController extends Controller
             if($form->get('guardarnuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_nuevo', array('codigoCurso' => 0 )));
             } else {
-                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso'));
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_detalle', array('codigoCurso' => $arCurso->getCodigoCursoPk())));
             }                                   
         }
         return $this->render('BrasaAfiliacionBundle:Movimiento/Curso:nuevo.html.twig', array(
