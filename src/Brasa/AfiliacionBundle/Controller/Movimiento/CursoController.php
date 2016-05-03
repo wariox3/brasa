@@ -42,6 +42,36 @@ class CursoController extends Controller
                 $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->eliminar($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_curso'));
             }
+            if ($form->get('BtnAsistencia')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                foreach ($arrSeleccionados as $codigoCurso) {
+                    $arCurso = new \Brasa\AfiliacionBundle\Entity\AfiCurso();
+                    $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($codigoCurso);
+                    if($arCurso->getAsistencia() == 1) {
+                        $arCurso->setAsistencia(0);
+                    }  else {
+                        $arCurso->setAsistencia(1);
+                    }
+                    $em->persist($arCurso);                    
+                }                
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso'));
+            } 
+            if ($form->get('BtnCertificado')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                foreach ($arrSeleccionados as $codigoCurso) {
+                    $arCurso = new \Brasa\AfiliacionBundle\Entity\AfiCurso();
+                    $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($codigoCurso);
+                    if($arCurso->getCertificado() == 1) {
+                        $arCurso->setCertificado(0);
+                    }  else {
+                        $arCurso->setCertificado(1);
+                    }
+                    $em->persist($arCurso);                    
+                }                
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso'));
+            }            
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
             }
@@ -66,6 +96,9 @@ class CursoController extends Controller
         $arCurso = new \Brasa\AfiliacionBundle\Entity\AfiCurso();
         if($codigoCurso != '' && $codigoCurso != '0') {
             $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($codigoCurso);
+        } else {
+            $arCurso->setFechaVence(new \DateTime('now'));
+            $arCurso->setFechaProgramacion(new \DateTime('now'));
         }        
         $form = $this->createForm(new AfiCursoType, $arCurso);
         $form->handleRequest($request);
@@ -206,6 +239,8 @@ class CursoController extends Controller
         $form = $this->createFormBuilder()            
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroCursoNombre')))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
+            ->add('BtnAsistencia', 'submit', array('label'  => 'Asistencia',))            
+            ->add('BtnCertificado', 'submit', array('label'  => 'Certificado',))                            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
@@ -272,24 +307,28 @@ class CursoController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'L'; $col++) {
+        for($col = 'A'; $col !== 'P'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
         }      
-        for($col = 'K'; $col !== 'L'; $col++) {            
+        for($col = 'O'; $col !== 'P'; $col++) {            
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }         
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
                     ->setCellValue('B1', 'NUMERO')
                     ->setCellValue('C1', 'FECHA')
-                    ->setCellValue('D1', 'NIT')
-                    ->setCellValue('E1', 'CLIENTE')
-                    ->setCellValue('F1', 'IDENTIFICACION')
-                    ->setCellValue('G1', 'EMPLEADO')
-                    ->setCellValue('H1', 'FAC')
-                    ->setCellValue('I1', 'AUT')
-                    ->setCellValue('J1', 'ANU')
-                    ->setCellValue('K1', 'TOTAL');
+                    ->setCellValue('D1', 'VENCE')
+                    ->setCellValue('E1', 'PROGRAMADO')
+                    ->setCellValue('F1', 'NIT')
+                    ->setCellValue('G1', 'CLIENTE')
+                    ->setCellValue('H1', 'IDENTIFICACION')
+                    ->setCellValue('I1', 'EMPLEADO')
+                    ->setCellValue('J1', 'FAC')
+                    ->setCellValue('K1', 'AUT')
+                    ->setCellValue('L1', 'ASI')
+                    ->setCellValue('M1', 'CER')
+                    ->setCellValue('N1', 'ANU')
+                    ->setCellValue('O1', 'TOTAL');
 
         $i = 2;        
         $query = $em->createQuery($this->strDqlLista);
@@ -301,16 +340,20 @@ class CursoController extends Controller
                     ->setCellValue('A' . $i, $arCurso->getCodigoCursoPk())
                     ->setCellValue('B' . $i, $arCurso->getNumero())
                     ->setCellValue('C' . $i, $arCurso->getFecha()->format('Y/m/d'))
-                    ->setCellValue('D' . $i, $arCurso->getClienteRel()->getNit())
-                    ->setCellValue('E' . $i, $arCurso->getClienteRel()->getNombreCorto())
-                    ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arCurso->getEstadoFacturado()))
-                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arCurso->getEstadoAutorizado()))
-                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arCurso->getEstadoAnulado()))
-                    ->setCellValue('K' . $i, $arCurso->getTotal());
+                    ->setCellValue('D' . $i, $arCurso->getFechaVence()->format('Y/m/d'))
+                    ->setCellValue('E' . $i, $arCurso->getFechaProgramacion()->format('Y/m/d'))
+                    ->setCellValue('F' . $i, $arCurso->getClienteRel()->getNit())
+                    ->setCellValue('G' . $i, $arCurso->getClienteRel()->getNombreCorto())
+                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arCurso->getEstadoFacturado()))
+                    ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arCurso->getEstadoAutorizado()))
+                    ->setCellValue('L' . $i, $objFunciones->devuelveBoolean($arCurso->getAsistencia()))
+                    ->setCellValue('M' . $i, $objFunciones->devuelveBoolean($arCurso->getCertificado()))
+                    ->setCellValue('N' . $i, $objFunciones->devuelveBoolean($arCurso->getEstadoAnulado()))
+                    ->setCellValue('O' . $i, $arCurso->getTotal());
             
             if($arCurso->getCodigoEmpleadoFk() != null) {
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F' . $i, $arCurso->getEmpleadoRel()->getNumeroIdentificacion());
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G' . $i, $arCurso->getEmpleadoRel()->getNombreCorto());
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H' . $i, $arCurso->getEmpleadoRel()->getNumeroIdentificacion());
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I' . $i, $arCurso->getEmpleadoRel()->getNombreCorto());
             }
             $i++;
         }

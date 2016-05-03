@@ -64,6 +64,10 @@ class RhuLicenciaRepository extends EntityRepository {
         return $arLicencias;
     }                    
     
+    /*
+     * Este calculo de dias de incapacidad es solo para periodos de nomina por lo tanto
+     * aplica solo en 1 mes
+     */    
     public function diasLicencia($fechaDesde, $fechaHasta, $codigoEmpleado, $tipo) {
         $em = $this->getEntityManager();
         $strFechaDesde = $fechaDesde->format('Y-m-d');
@@ -86,7 +90,7 @@ class RhuLicenciaRepository extends EntityRepository {
             $intDiaInicio = 1;            
             $intDiaFin = 30;
             if($arLicencia->getFechaDesde() <  $fechaDesde) {
-                $intDiaInicio = 1;                
+                $intDiaInicio = $fechaDesde->format('j');                
             } else {
                 $intDiaInicio = $arLicencia->getFechaDesde()->format('j');
             }
@@ -106,6 +110,10 @@ class RhuLicenciaRepository extends EntityRepository {
         return $intDiasLicencia;
     }                
     
+    /*
+     * Este calculo de dias de incapacidad es solo para periodos de nomina por lo tanto
+     * aplica solo en 1 mes
+     */    
     public function diasLicenciaPeriodo($fechaDesde, $fechaHasta, $codigoEmpleado) {
         $em = $this->getEntityManager();
         $strFechaDesde = $fechaDesde->format('Y-m-d');
@@ -122,7 +130,7 @@ class RhuLicenciaRepository extends EntityRepository {
             $intDiaInicio = 1;            
             $intDiaFin = 30;
             if($arLicencia->getFechaDesde() <  $fechaDesde) {
-                $intDiaInicio = 1;                
+                $intDiaInicio = $fechaDesde->format('j');                
             } else {
                 $intDiaInicio = $arLicencia->getFechaDesde()->format('j');
             }

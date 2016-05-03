@@ -113,6 +113,11 @@ class RhuIncapacidadRepository extends EntityRepository {
         return $arIncapacidadesCobrar;        
     }
     
+    
+    /*
+     * Este calculo de dias de incapacidad es solo para periodos de nomina por lo tanto
+     * aplica solo en 1 mes
+     */    
     public function diasIncapacidad($fechaDesde, $fechaHasta, $codigoEmpleado, $tipo) {
         $em = $this->getEntityManager();
         $strFechaDesde = $fechaDesde->format('Y-m-d');
@@ -130,7 +135,7 @@ class RhuIncapacidadRepository extends EntityRepository {
             $intDiaInicio = 1;            
             $intDiaFin = 30;
             if($arIncapacidad->getFechaDesde() <  $fechaDesde) {
-                $intDiaInicio = 1;                
+                $intDiaInicio = $fechaDesde->format('j');                
             } else {
                 $intDiaInicio = $arIncapacidad->getFechaDesde()->format('j');
             }
@@ -149,7 +154,11 @@ class RhuIncapacidadRepository extends EntityRepository {
         }
         return $intDiasIncapacidad;                     
     }                    
-
+    
+    /*
+     * Este calculo de dias de incapacidad es solo para periodos de nomina por lo tanto
+     * aplica solo en 1 mes
+     */
     public function diasIncapacidadPeriodo($fechaDesde, $fechaHasta, $codigoEmpleado) {
         $em = $this->getEntityManager();
         $strFechaDesde = $fechaDesde->format('Y-m-d');
@@ -166,7 +175,7 @@ class RhuIncapacidadRepository extends EntityRepository {
             $intDiaInicio = 1;            
             $intDiaFin = 30;
             if($arIncapacidad->getFechaDesde() <  $fechaDesde) {
-                $intDiaInicio = 1;                
+                $intDiaInicio = $fechaDesde->format('j');                
             } else {
                 $intDiaInicio = $arIncapacidad->getFechaDesde()->format('j');
             }

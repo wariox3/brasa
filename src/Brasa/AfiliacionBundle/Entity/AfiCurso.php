@@ -26,7 +26,17 @@ class AfiCurso
      * @ORM\Column(name="fecha", type="date", nullable=true)
      */    
     private $fecha;        
+    
+    /**
+     * @ORM\Column(name="fecha_vence", type="date", nullable=true)
+     */    
+    private $fechaVence;    
 
+    /**
+     * @ORM\Column(name="fecha_programacion", type="date", nullable=true)
+     */    
+    private $fechaProgramacion;    
+    
     /**
      * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
      */    
@@ -41,6 +51,16 @@ class AfiCurso
      * @ORM\Column(name="total", type="float")
      */
     private $total = 0;             
+
+    /**     
+     * @ORM\Column(name="asistencia", type="boolean")
+     */    
+    private $asistencia = 0;    
+    
+    /**     
+     * @ORM\Column(name="certificado", type="boolean")
+     */    
+    private $certificado = 0;    
     
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
@@ -403,5 +423,149 @@ class AfiCurso
     public function getEstadoFacturado()
     {
         return $this->estadoFacturado;
+    }
+
+    /**
+     * Set vence
+     *
+     * @param \DateTime $vence
+     *
+     * @return AfiCurso
+     */
+    public function setVence($vence)
+    {
+        $this->vence = $vence;
+
+        return $this;
+    }
+
+    /**
+     * Get vence
+     *
+     * @return \DateTime
+     */
+    public function getVence()
+    {
+        return $this->vence;
+    }
+
+    /**
+     * Set programacion
+     *
+     * @param \DateTime $programacion
+     *
+     * @return AfiCurso
+     */
+    public function setProgramacion($programacion)
+    {
+        $this->programacion = $programacion;
+
+        return $this;
+    }
+
+    /**
+     * Get programacion
+     *
+     * @return \DateTime
+     */
+    public function getProgramacion()
+    {
+        return $this->programacion;
+    }
+
+    /**
+     * Set fechaVence
+     *
+     * @param \DateTime $fechaVence
+     *
+     * @return AfiCurso
+     */
+    public function setFechaVence($fechaVence)
+    {
+        $this->fechaVence = $fechaVence;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVence
+     *
+     * @return \DateTime
+     */
+    public function getFechaVence()
+    {
+        return $this->fechaVence;
+    }
+
+    /**
+     * Set fechaProgramacion
+     *
+     * @param \DateTime $fechaProgramacion
+     *
+     * @return AfiCurso
+     */
+    public function setFechaProgramacion($fechaProgramacion)
+    {
+        $this->fechaProgramacion = $fechaProgramacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaProgramacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaProgramacion()
+    {
+        return $this->fechaProgramacion;
+    }
+
+    /**
+     * Set asistencia
+     *
+     * @param boolean $asistencia
+     *
+     * @return AfiCurso
+     */
+    public function setAsistencia($asistencia)
+    {
+        $this->asistencia = $asistencia;
+
+        return $this;
+    }
+
+    /**
+     * Get asistencia
+     *
+     * @return boolean
+     */
+    public function getAsistencia()
+    {
+        return $this->asistencia;
+    }
+
+    /**
+     * Set certificado
+     *
+     * @param boolean $certificado
+     *
+     * @return AfiCurso
+     */
+    public function setCertificado($certificado)
+    {
+        $this->certificado = $certificado;
+
+        return $this;
+    }
+
+    /**
+     * Get certificado
+     *
+     * @return boolean
+     */
+    public function getCertificado()
+    {
+        return $this->certificado;
     }
 }

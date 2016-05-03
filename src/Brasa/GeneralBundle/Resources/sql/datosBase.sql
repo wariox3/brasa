@@ -1206,6 +1206,7 @@ INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('11','SELECC
 INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('12','PERMISOS');
 INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('13','CARTAS');
 INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('14','SELECCION ENTREVISTAS');
+INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('15','CURSOS');
 /** Contabilidad **/
 
 insert into `ctb_cuenta` (`codigo_cuenta_pk`, `nombre_cuenta`, `codigo_cuenta_padre_fk`, `permite_movimientos`, `exige_nit`, `exige_centro_costos`, `porcentaje_retencion`) values('1','ACTIVO','0','0','0','0','0');
@@ -4086,18 +4087,18 @@ INSERT INTO `rhu_dotacion_tipo` (`codigo_dotacion_tipo_pk`, `nombre`) VALUES('2'
 insert into `rhu_dotacion_elemento_tipo` (`codigo_dotacion_elemento_tipo_pk`, `dotacion`) values('1','DOTACIÓN PERSONAL');
 insert into `rhu_dotacion_elemento_tipo` (`codigo_dotacion_elemento_tipo_pk`, `dotacion`) values('2','DOTACIÓN PUESTO');
 
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('1','CARNET');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('2','CAMISA');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('3','PANTALON');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('4','ZAPATOS');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('5','TAPABOCA');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('6','MEDIAS');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('7','BOTAS');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('8','GORRO');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('9','GUANTES');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('10','BATOLA');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('11','TAPAOIDOS');
-insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`, `dotacion`) values('12','GAFAS');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`,`codigo_dotacion_elemento_tipo_fk`,`dotacion`) values('1','1','CARNET');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`,`codigo_dotacion_elemento_tipo_fk`, `dotacion`) values('2','1','CAMISA');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`,`codigo_dotacion_elemento_tipo_fk`, `dotacion`) values('3','1','PANTALON');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`,`codigo_dotacion_elemento_tipo_fk`, `dotacion`) values('4','1','ZAPATOS');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`,`codigo_dotacion_elemento_tipo_fk`, `dotacion`) values('5','1','TAPABOCA');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`,`codigo_dotacion_elemento_tipo_fk`, `dotacion`) values('6','1','MEDIAS');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`,`codigo_dotacion_elemento_tipo_fk`, `dotacion`) values('7','1','BOTAS');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`,`codigo_dotacion_elemento_tipo_fk`, `dotacion`) values('8','1','GORRO');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`,`codigo_dotacion_elemento_tipo_fk`, `dotacion`) values('9','1','GUANTES');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`,`codigo_dotacion_elemento_tipo_fk`, `dotacion`) values('10','1','BATOLA');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`,`codigo_dotacion_elemento_tipo_fk`, `dotacion`) values('11','1','TAPAOIDOS');
+insert into `rhu_dotacion_elemento` (`codigo_dotacion_elemento_pk`,`codigo_dotacion_elemento_tipo_fk`, `dotacion`) values('12','1','GAFAS');
 
 INSERT INTO `rhu_empleado_estudio_tipo` (`codigo_empleado_estudio_tipo_pk`, `nombre`, `validar_vencimiento`) VALUES('1','SECUNDARIA','0');
 INSERT INTO `rhu_empleado_estudio_tipo` (`codigo_empleado_estudio_tipo_pk`, `nombre`, `validar_vencimiento`) VALUES('2','TECNICO','0');

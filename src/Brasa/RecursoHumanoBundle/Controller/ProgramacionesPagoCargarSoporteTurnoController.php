@@ -65,6 +65,7 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     if($intDiasLicencia > 0) {                                        
                         $arProgramacionPagoDetalle->setDiasLicencia($intDiasLicencia);
                     }     
+
                     //dias incapacidad
                     $intDiasIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->diasIncapacidadPeriodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), $arContrato->getCodigoEmpleadoFk());                
                     if($intDiasIncapacidad > 0) {                                        

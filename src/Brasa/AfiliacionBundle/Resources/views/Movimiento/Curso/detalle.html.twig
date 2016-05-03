@@ -21,11 +21,14 @@
                 {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnAnular, { 'attr': {'class': 'btn btn-default btn-sm', 'onclick': 'return confirm("Esta seguro de anular el curso?")'} }) }}
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 15,  'numero': arCurso.codigoCursoPk }) }}', 'Archivos', 500, 700)" >Archivos</a>                
             </div>
         </div>
         <div style="float:right">
             {% if arCurso.estadoAutorizado == 1 %}<span class="label label-default">Autorizado</span>{% endif %}            
             {% if arCurso.numero != 0 %}<span class="label label-success">Impreso</span>{% endif %}
+            {% if arCurso.asistencia == 1 %}<span class="label label-default">Asistencia</span>{% endif %}            
+            {% if arCurso.certificado == 1 %}<span class="label label-default">Certificado</span>{% endif %}            
             {% if arCurso.estadoAnulado == 1 %}<span class="label label-danger">Anulado</span>{% endif %}
         </div>
         <br /><br />        
@@ -36,24 +39,32 @@
                     <tr>
                         <td class="titulo">NUMERO:</td>
                         <td class="td-in-well">{{ arCurso.numero }}</td>                        
+                        <td class="titulo">FECHA:</td>
+                        <td class="td-in-well">{{ arCurso.fecha | date('Y/m/d') }}</td>
                         <td class="titulo">CODIGO:</td>
                         <td class="td-in-well">{{ arCurso.codigoCursoPk }}</td>
                     </tr> 
                     <tr>
                         <td class="titulo">CLIENTE:</td>
                         <td class="td-in-well">{{ arCurso.clienteRel.nit }}-{{ arCurso.clienteRel.nombreCorto }}</td>
+                        <td class="titulo">VENCE:</td>
+                        <td class="td-in-well">{{ arCurso.fechaVence | date('Y/m/d') }}</td>                        
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>                        
                     </tr> 
                     <tr>
                         <td class="titulo">EMPLEADO:</td>
                         <td class="td-in-well">{{ arCurso.empleadoRel.numeroIdentificacion | default('') }}-{{ arCurso.empleadoRel.nombreCorto | default('') }}</td>
+                        <td class="titulo">PROGRAMACION:</td>
+                        <td class="td-in-well">{{ arCurso.fechaProgramacion | date('Y/m/d') }}</td>                        
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>                        
                     </tr>                    
                     <tr>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>                        
                         <td class="titulo" >TOTAL:</td>
                         <td align="right">{{ arCurso.total | number_format(0, '.', ',')}}</td>
                     </tr>                    
