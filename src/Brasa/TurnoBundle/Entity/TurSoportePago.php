@@ -96,6 +96,11 @@ class TurSoportePago
      * @ORM\Column(name="horas_descanso", type="float")
      */    
     private $horasDescanso = 0;    
+
+    /**
+     * @ORM\Column(name="horas_novedad", type="float")
+     */    
+    private $horasNovedad = 0;
     
     /**
      * @ORM\Column(name="horas_diurnas", type="float")
@@ -539,6 +544,54 @@ class TurSoportePago
     }
 
     /**
+     * Set horasDescanso
+     *
+     * @param float $horasDescanso
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasDescanso($horasDescanso)
+    {
+        $this->horasDescanso = $horasDescanso;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDescanso
+     *
+     * @return float
+     */
+    public function getHorasDescanso()
+    {
+        return $this->horasDescanso;
+    }
+
+    /**
+     * Set horasNovedad
+     *
+     * @param float $horasNovedad
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasNovedad($horasNovedad)
+    {
+        $this->horasNovedad = $horasNovedad;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNovedad
+     *
+     * @return float
+     */
+    public function getHorasNovedad()
+    {
+        return $this->horasNovedad;
+    }
+
+    /**
      * Set horasDiurnas
      *
      * @param float $horasDiurnas
@@ -834,29 +887,5 @@ class TurSoportePago
     public function getSoportesPagosDetallesSoportePagoRel()
     {
         return $this->soportesPagosDetallesSoportePagoRel;
-    }
-
-    /**
-     * Set horasDescanso
-     *
-     * @param float $horasDescanso
-     *
-     * @return TurSoportePago
-     */
-    public function setHorasDescanso($horasDescanso)
-    {
-        $this->horasDescanso = $horasDescanso;
-
-        return $this;
-    }
-
-    /**
-     * Get horasDescanso
-     *
-     * @return float
-     */
-    public function getHorasDescanso()
-    {
-        return $this->horasDescanso;
     }
 }

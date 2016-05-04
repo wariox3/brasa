@@ -297,6 +297,7 @@ class GenerarSoportePagoController extends Controller
         $arSoportePagoDetalle->setHorasExtrasFestivasDiurnas($arrHoras['horasExtrasFestivasDiurnas']);
         $arSoportePagoDetalle->setHorasExtrasFestivasNocturnas($arrHoras['horasExtrasFestivasNocturnas']);
         $arSoportePagoDetalle->setHorasDescanso($arrHoras['horasDescanso']);
+        $arSoportePagoDetalle->setHorasNovedad($arrHoras['horasNovedad']);
         if($strTurnoFijoNomina) {
             $arSoportePagoDetalle->setHorasDiurnas($arrHoras['horasDiurnas'] + $arrHoras['horasFestivasDiurnas']);
             $arSoportePagoDetalle->setHorasFestivasDiurnas(0);
@@ -324,6 +325,7 @@ class GenerarSoportePagoController extends Controller
             $arSoportePagoDetalle->setHorasExtrasFestivasDiurnas($arrHoras1['horasExtrasFestivasDiurnas']);
             $arSoportePagoDetalle->setHorasExtrasFestivasNocturnas($arrHoras1['horasExtrasFestivasNocturnas']);
             $arSoportePagoDetalle->setHorasDescanso($arrHoras1['horasDescanso']);
+            $arSoportePagoDetalle->setHorasNovedad($arrHoras1['horasNovedad']);
             $em->persist($arSoportePagoDetalle);            
         }                    
     }
@@ -663,6 +665,7 @@ class GenerarSoportePagoController extends Controller
             if($boolDescanso == 1) {                
                 $arrHoras = array(
                     'horasDescanso' => $intTotalHoras,
+                    'horasNovedad' => 0,
                     'horasDiurnas' => 0, 
                     'horasNocturnas' => 0, 
                     'horasExtrasDiurnas' => 0, 
@@ -675,6 +678,7 @@ class GenerarSoportePagoController extends Controller
             } else {
                 $arrHoras = array(
                     'horasDescanso' => 0,
+                    'horasNovedad' => 0,
                     'horasDiurnas' => $intHorasDiurnas, 
                     'horasNocturnas' => $intHorasNocturnas, 
                     'horasExtrasDiurnas' => $intHorasExtrasDiurnas, 
@@ -689,6 +693,7 @@ class GenerarSoportePagoController extends Controller
         } else {
             $arrHoras = array(
                 'horasDescanso' => 0,
+                'horasNovedad' => 8,
                 'horasDiurnas' => 0, 
                 'horasNocturnas' => 0, 
                 'horasExtrasDiurnas' => 0, 

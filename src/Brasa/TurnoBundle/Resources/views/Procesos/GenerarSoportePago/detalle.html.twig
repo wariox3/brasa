@@ -49,7 +49,7 @@
                 <td colspan="5"></td>
                 <td colspan="5" style="text-align: center">NOVEDADES</td>
                 <td colspan="2" style="text-align: center">NOMINA</td>
-                <td colspan="5" style="text-align: center">HORAS</td>
+                <td colspan="6" style="text-align: center">HORAS</td>
                 <td colspan="4" style="text-align: center">TIEMPO ADICIONAL</td>
                 <td colspan="5"></td>
             </tr>
@@ -65,6 +65,7 @@
                 <th><p data-toggle="tooltip" data-placement="top" title="Horas pago">HP</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Horas">H</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Horas descanso">HDS</p></th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Horas novedad">HNV</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Horas diurnas">HD</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Horas nocturnas">HN</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Horas festivas diurnas">HFD</p></th>
@@ -94,6 +95,7 @@
                 <td style="text-align: right">{{ arSoportesPagos.horasPago | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horas | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horasDescanso | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagos.horasNovedad | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horasDiurnas | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horasNocturnas | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horasFestivasDiurnas | number_format(2, '.', ',') }}</td>

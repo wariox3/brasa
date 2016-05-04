@@ -123,6 +123,11 @@ class TurSoportePagoDetalle
     private $horasDescanso = 0;     
     
     /**
+     * @ORM\Column(name="horas_novedad", type="float")
+     */    
+    private $horasNovedad = 0;    
+    
+    /**
      * @ORM\Column(name="codigo_turno_fk", type="string", length=5)
      */    
     private $codigoTurnoFk;    
@@ -903,5 +908,29 @@ class TurSoportePagoDetalle
     public function getHorasDescanso()
     {
         return $this->horasDescanso;
+    }
+
+    /**
+     * Set horasNovedad
+     *
+     * @param float $horasNovedad
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setHorasNovedad($horasNovedad)
+    {
+        $this->horasNovedad = $horasNovedad;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNovedad
+     *
+     * @return float
+     */
+    public function getHorasNovedad()
+    {
+        return $this->horasNovedad;
     }
 }

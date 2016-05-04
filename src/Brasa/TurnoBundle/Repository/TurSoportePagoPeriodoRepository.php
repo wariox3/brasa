@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 
 class TurSoportePagoPeriodoRepository extends EntityRepository {
     public function listaDql() {
-        $dql   = "SELECT spp FROM BrasaTurnoBundle:TurSoportePagoPeriodo spp";
+        $dql   = "SELECT spp FROM BrasaTurnoBundle:TurSoportePagoPeriodo spp ORDER BY spp.codigoSoportePagoPeriodoPk DESC";
         return $dql;
     }
     
