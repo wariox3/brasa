@@ -76,18 +76,7 @@ class EmpleadoController extends Controller
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioDetalle();
         $form->handleRequest($request);        
-        if ($form->isValid()) {
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            
-            if($request->request->get('OpGenerar')) {            
-                $codigoEmpleado = $request->request->get('OpGenerar');
-                $arEmpleado = new \Brasa\AfiliacionBundle\Entity\AfiEmpleado();
-                $arEmpleado = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->find($codigoEmpleado);
-                $arEmpleado->setEstadoGenerado(1);
-                $em->persist($arEmpleado);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_afi_movimiento_empleado'));
-            }                            
+        if ($form->isValid()) {                            
             if ($form->get('BtnEliminarContrato')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarContrato');
                 $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->eliminar($arrSeleccionados);

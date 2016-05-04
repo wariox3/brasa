@@ -19,6 +19,12 @@ class AfiCursoRepository extends EntityRepository {
         return $dql;
     }                    
     
+    public function pendientePagoDql($codigoEntidadEntrenamiento) {        
+        $dql   = "SELECT c FROM BrasaAfiliacionBundle:AfiCurso c WHERE c.estadoPagado = 0 AND c.estadoAnulado = 0 AND c.codigoEntidadEntrenamientoFk = " . $codigoEntidadEntrenamiento;
+        $dql .= " ORDER BY c.codigoCursoPk DESC";
+        return $dql;
+    }                        
+    
     public function eliminar($arrSeleccionados) {
         $em = $this->getEntityManager();
         if(count($arrSeleccionados) > 0) {
@@ -34,12 +40,15 @@ class AfiCursoRepository extends EntityRepository {
         $em = $this->getEntityManager();        
         $arCurso = new \Brasa\AfiliacionBundle\Entity\AfiCurso();        
         $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($codigoCurso);                 
+        $costo = 0;        
         $floSubTotal = 0;        
         $arCursosDetalle = new \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle();        
         $arCursosDetalle = $em->getRepository('BrasaAfiliacionBundle:AfiCursoDetalle')->findBy(array('codigoCursoFk' => $codigoCurso));                 
         foreach ($arCursosDetalle as $arCursoDetalle) {
+            $costo +=  $arCursoDetalle->getCosto();
             $floSubTotal +=  $arCursoDetalle->getPrecio();
         }                           
+        $arCurso->setCosto($costo);
         $arCurso->setTotal($floSubTotal);
         $em->persist($arCurso);
         $em->flush();

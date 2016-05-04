@@ -48,6 +48,16 @@ class AfiCurso
     private $codigoEmpleadoFk;    
     
     /**
+     * @ORM\Column(name="codigo_entidad_entrenamiento_fk", type="integer", nullable=true)
+     */    
+    private $codigoEntidadEntrenamientoFk;    
+
+    /**
+     * @ORM\Column(name="costo", type="float")
+     */
+    private $costo = 0;    
+
+    /**
      * @ORM\Column(name="total", type="float")
      */
     private $total = 0;             
@@ -76,6 +86,11 @@ class AfiCurso
      * @ORM\Column(name="estado_facturado", type="boolean")
      */    
     private $estadoFacturado = false;    
+
+    /**     
+     * @ORM\Column(name="estado_pagado", type="boolean")
+     */    
+    private $estadoPagado = false;
     
     /**
      * @ORM\ManyToOne(targetEntity="AfiCliente", inversedBy="cursosClienteRel")
@@ -88,6 +103,12 @@ class AfiCurso
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
     protected $empleadoRel;    
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AfiEntidadEntrenamiento", inversedBy="cursosEntidadEntrenamientoRel")
+     * @ORM\JoinColumn(name="codigo_entidad_entrenamiento_fk", referencedColumnName="codigo_entidad_entrenamiento_pk")
+     */
+    protected $entidadEntrenamientoRel; 
     
     /**
      * @ORM\OneToMany(targetEntity="AfiCursoDetalle", mappedBy="cursoRel")
@@ -100,11 +121,18 @@ class AfiCurso
     protected $facturasDetallesCursosCursoRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="AfiPagoCursoDetalle", mappedBy="cursoRel")
+     */
+    protected $pagosCursosDetalleCursoRel;   
+    
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->cursosDetallesCursoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facturasDetallesCursosCursoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosCursosDetalleCursoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -115,184 +143,6 @@ class AfiCurso
     public function getCodigoCursoPk()
     {
         return $this->codigoCursoPk;
-    }
-
-    /**
-     * Set fecha
-     *
-     * @param \DateTime $fecha
-     *
-     * @return AfiCurso
-     */
-    public function setFecha($fecha)
-    {
-        $this->fecha = $fecha;
-
-        return $this;
-    }
-
-    /**
-     * Get fecha
-     *
-     * @return \DateTime
-     */
-    public function getFecha()
-    {
-        return $this->fecha;
-    }
-
-    /**
-     * Set codigoClienteFk
-     *
-     * @param integer $codigoClienteFk
-     *
-     * @return AfiCurso
-     */
-    public function setCodigoClienteFk($codigoClienteFk)
-    {
-        $this->codigoClienteFk = $codigoClienteFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoClienteFk
-     *
-     * @return integer
-     */
-    public function getCodigoClienteFk()
-    {
-        return $this->codigoClienteFk;
-    }
-
-    /**
-     * Set total
-     *
-     * @param float $total
-     *
-     * @return AfiCurso
-     */
-    public function setTotal($total)
-    {
-        $this->total = $total;
-
-        return $this;
-    }
-
-    /**
-     * Get total
-     *
-     * @return float
-     */
-    public function getTotal()
-    {
-        return $this->total;
-    }
-
-    /**
-     * Set estadoAutorizado
-     *
-     * @param boolean $estadoAutorizado
-     *
-     * @return AfiCurso
-     */
-    public function setEstadoAutorizado($estadoAutorizado)
-    {
-        $this->estadoAutorizado = $estadoAutorizado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoAutorizado
-     *
-     * @return boolean
-     */
-    public function getEstadoAutorizado()
-    {
-        return $this->estadoAutorizado;
-    }
-
-    /**
-     * Set estadoAnulado
-     *
-     * @param boolean $estadoAnulado
-     *
-     * @return AfiCurso
-     */
-    public function setEstadoAnulado($estadoAnulado)
-    {
-        $this->estadoAnulado = $estadoAnulado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoAnulado
-     *
-     * @return boolean
-     */
-    public function getEstadoAnulado()
-    {
-        return $this->estadoAnulado;
-    }
-
-    /**
-     * Set clienteRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiCliente $clienteRel
-     *
-     * @return AfiCurso
-     */
-    public function setClienteRel(\Brasa\AfiliacionBundle\Entity\AfiCliente $clienteRel = null)
-    {
-        $this->clienteRel = $clienteRel;
-
-        return $this;
-    }
-
-    /**
-     * Get clienteRel
-     *
-     * @return \Brasa\AfiliacionBundle\Entity\AfiCliente
-     */
-    public function getClienteRel()
-    {
-        return $this->clienteRel;
-    }
-
-    /**
-     * Add cursosDetallesCursoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle $cursosDetallesCursoRel
-     *
-     * @return AfiCurso
-     */
-    public function addCursosDetallesCursoRel(\Brasa\AfiliacionBundle\Entity\AfiCursoDetalle $cursosDetallesCursoRel)
-    {
-        $this->cursosDetallesCursoRel[] = $cursosDetallesCursoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove cursosDetallesCursoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle $cursosDetallesCursoRel
-     */
-    public function removeCursosDetallesCursoRel(\Brasa\AfiliacionBundle\Entity\AfiCursoDetalle $cursosDetallesCursoRel)
-    {
-        $this->cursosDetallesCursoRel->removeElement($cursosDetallesCursoRel);
-    }
-
-    /**
-     * Get cursosDetallesCursoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCursosDetallesCursoRel()
-    {
-        return $this->cursosDetallesCursoRel;
     }
 
     /**
@@ -320,157 +170,27 @@ class AfiCurso
     }
 
     /**
-     * Set codigoEmpleadoFk
+     * Set fecha
      *
-     * @param integer $codigoEmpleadoFk
+     * @param \DateTime $fecha
      *
      * @return AfiCurso
      */
-    public function setCodigoEmpleadoFk($codigoEmpleadoFk)
+    public function setFecha($fecha)
     {
-        $this->codigoEmpleadoFk = $codigoEmpleadoFk;
+        $this->fecha = $fecha;
 
         return $this;
     }
 
     /**
-     * Get codigoEmpleadoFk
-     *
-     * @return integer
-     */
-    public function getCodigoEmpleadoFk()
-    {
-        return $this->codigoEmpleadoFk;
-    }
-
-    /**
-     * Set empleadoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiEmpleado $empleadoRel
-     *
-     * @return AfiCurso
-     */
-    public function setEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiEmpleado $empleadoRel = null)
-    {
-        $this->empleadoRel = $empleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get empleadoRel
-     *
-     * @return \Brasa\AfiliacionBundle\Entity\AfiEmpleado
-     */
-    public function getEmpleadoRel()
-    {
-        return $this->empleadoRel;
-    }
-
-    /**
-     * Add facturasDetallesCursosCursoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso $facturasDetallesCursosCursoRel
-     *
-     * @return AfiCurso
-     */
-    public function addFacturasDetallesCursosCursoRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso $facturasDetallesCursosCursoRel)
-    {
-        $this->facturasDetallesCursosCursoRel[] = $facturasDetallesCursosCursoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove facturasDetallesCursosCursoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso $facturasDetallesCursosCursoRel
-     */
-    public function removeFacturasDetallesCursosCursoRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso $facturasDetallesCursosCursoRel)
-    {
-        $this->facturasDetallesCursosCursoRel->removeElement($facturasDetallesCursosCursoRel);
-    }
-
-    /**
-     * Get facturasDetallesCursosCursoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFacturasDetallesCursosCursoRel()
-    {
-        return $this->facturasDetallesCursosCursoRel;
-    }
-
-    /**
-     * Set estadoFacturado
-     *
-     * @param boolean $estadoFacturado
-     *
-     * @return AfiCurso
-     */
-    public function setEstadoFacturado($estadoFacturado)
-    {
-        $this->estadoFacturado = $estadoFacturado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoFacturado
-     *
-     * @return boolean
-     */
-    public function getEstadoFacturado()
-    {
-        return $this->estadoFacturado;
-    }
-
-    /**
-     * Set vence
-     *
-     * @param \DateTime $vence
-     *
-     * @return AfiCurso
-     */
-    public function setVence($vence)
-    {
-        $this->vence = $vence;
-
-        return $this;
-    }
-
-    /**
-     * Get vence
+     * Get fecha
      *
      * @return \DateTime
      */
-    public function getVence()
+    public function getFecha()
     {
-        return $this->vence;
-    }
-
-    /**
-     * Set programacion
-     *
-     * @param \DateTime $programacion
-     *
-     * @return AfiCurso
-     */
-    public function setProgramacion($programacion)
-    {
-        $this->programacion = $programacion;
-
-        return $this;
-    }
-
-    /**
-     * Get programacion
-     *
-     * @return \DateTime
-     */
-    public function getProgramacion()
-    {
-        return $this->programacion;
+        return $this->fecha;
     }
 
     /**
@@ -522,6 +242,126 @@ class AfiCurso
     }
 
     /**
+     * Set codigoClienteFk
+     *
+     * @param integer $codigoClienteFk
+     *
+     * @return AfiCurso
+     */
+    public function setCodigoClienteFk($codigoClienteFk)
+    {
+        $this->codigoClienteFk = $codigoClienteFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoClienteFk
+     *
+     * @return integer
+     */
+    public function getCodigoClienteFk()
+    {
+        return $this->codigoClienteFk;
+    }
+
+    /**
+     * Set codigoEmpleadoFk
+     *
+     * @param integer $codigoEmpleadoFk
+     *
+     * @return AfiCurso
+     */
+    public function setCodigoEmpleadoFk($codigoEmpleadoFk)
+    {
+        $this->codigoEmpleadoFk = $codigoEmpleadoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEmpleadoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEmpleadoFk()
+    {
+        return $this->codigoEmpleadoFk;
+    }
+
+    /**
+     * Set codigoEntidadEntrenamientoFk
+     *
+     * @param integer $codigoEntidadEntrenamientoFk
+     *
+     * @return AfiCurso
+     */
+    public function setCodigoEntidadEntrenamientoFk($codigoEntidadEntrenamientoFk)
+    {
+        $this->codigoEntidadEntrenamientoFk = $codigoEntidadEntrenamientoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadEntrenamientoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEntidadEntrenamientoFk()
+    {
+        return $this->codigoEntidadEntrenamientoFk;
+    }
+
+    /**
+     * Set costo
+     *
+     * @param float $costo
+     *
+     * @return AfiCurso
+     */
+    public function setCosto($costo)
+    {
+        $this->costo = $costo;
+
+        return $this;
+    }
+
+    /**
+     * Get costo
+     *
+     * @return float
+     */
+    public function getCosto()
+    {
+        return $this->costo;
+    }
+
+    /**
+     * Set total
+     *
+     * @param float $total
+     *
+     * @return AfiCurso
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
+
+        return $this;
+    }
+
+    /**
+     * Get total
+     *
+     * @return float
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
      * Set asistencia
      *
      * @param boolean $asistencia
@@ -567,5 +407,275 @@ class AfiCurso
     public function getCertificado()
     {
         return $this->certificado;
+    }
+
+    /**
+     * Set estadoAutorizado
+     *
+     * @param boolean $estadoAutorizado
+     *
+     * @return AfiCurso
+     */
+    public function setEstadoAutorizado($estadoAutorizado)
+    {
+        $this->estadoAutorizado = $estadoAutorizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAutorizado
+     *
+     * @return boolean
+     */
+    public function getEstadoAutorizado()
+    {
+        return $this->estadoAutorizado;
+    }
+
+    /**
+     * Set estadoAnulado
+     *
+     * @param boolean $estadoAnulado
+     *
+     * @return AfiCurso
+     */
+    public function setEstadoAnulado($estadoAnulado)
+    {
+        $this->estadoAnulado = $estadoAnulado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAnulado
+     *
+     * @return boolean
+     */
+    public function getEstadoAnulado()
+    {
+        return $this->estadoAnulado;
+    }
+
+    /**
+     * Set estadoFacturado
+     *
+     * @param boolean $estadoFacturado
+     *
+     * @return AfiCurso
+     */
+    public function setEstadoFacturado($estadoFacturado)
+    {
+        $this->estadoFacturado = $estadoFacturado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoFacturado
+     *
+     * @return boolean
+     */
+    public function getEstadoFacturado()
+    {
+        return $this->estadoFacturado;
+    }
+
+    /**
+     * Set estadoPagado
+     *
+     * @param boolean $estadoPagado
+     *
+     * @return AfiCurso
+     */
+    public function setEstadoPagado($estadoPagado)
+    {
+        $this->estadoPagado = $estadoPagado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagado
+     *
+     * @return boolean
+     */
+    public function getEstadoPagado()
+    {
+        return $this->estadoPagado;
+    }
+
+    /**
+     * Set clienteRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCliente $clienteRel
+     *
+     * @return AfiCurso
+     */
+    public function setClienteRel(\Brasa\AfiliacionBundle\Entity\AfiCliente $clienteRel = null)
+    {
+        $this->clienteRel = $clienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get clienteRel
+     *
+     * @return \Brasa\AfiliacionBundle\Entity\AfiCliente
+     */
+    public function getClienteRel()
+    {
+        return $this->clienteRel;
+    }
+
+    /**
+     * Set empleadoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiEmpleado $empleadoRel
+     *
+     * @return AfiCurso
+     */
+    public function setEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiEmpleado $empleadoRel = null)
+    {
+        $this->empleadoRel = $empleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoRel
+     *
+     * @return \Brasa\AfiliacionBundle\Entity\AfiEmpleado
+     */
+    public function getEmpleadoRel()
+    {
+        return $this->empleadoRel;
+    }
+
+    /**
+     * Set entidadEntrenamientoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamiento $entidadEntrenamientoRel
+     *
+     * @return AfiCurso
+     */
+    public function setEntidadEntrenamientoRel(\Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamiento $entidadEntrenamientoRel = null)
+    {
+        $this->entidadEntrenamientoRel = $entidadEntrenamientoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadEntrenamientoRel
+     *
+     * @return \Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamiento
+     */
+    public function getEntidadEntrenamientoRel()
+    {
+        return $this->entidadEntrenamientoRel;
+    }
+
+    /**
+     * Add cursosDetallesCursoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle $cursosDetallesCursoRel
+     *
+     * @return AfiCurso
+     */
+    public function addCursosDetallesCursoRel(\Brasa\AfiliacionBundle\Entity\AfiCursoDetalle $cursosDetallesCursoRel)
+    {
+        $this->cursosDetallesCursoRel[] = $cursosDetallesCursoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove cursosDetallesCursoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle $cursosDetallesCursoRel
+     */
+    public function removeCursosDetallesCursoRel(\Brasa\AfiliacionBundle\Entity\AfiCursoDetalle $cursosDetallesCursoRel)
+    {
+        $this->cursosDetallesCursoRel->removeElement($cursosDetallesCursoRel);
+    }
+
+    /**
+     * Get cursosDetallesCursoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCursosDetallesCursoRel()
+    {
+        return $this->cursosDetallesCursoRel;
+    }
+
+    /**
+     * Add facturasDetallesCursosCursoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso $facturasDetallesCursosCursoRel
+     *
+     * @return AfiCurso
+     */
+    public function addFacturasDetallesCursosCursoRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso $facturasDetallesCursosCursoRel)
+    {
+        $this->facturasDetallesCursosCursoRel[] = $facturasDetallesCursosCursoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasDetallesCursosCursoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso $facturasDetallesCursosCursoRel
+     */
+    public function removeFacturasDetallesCursosCursoRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso $facturasDetallesCursosCursoRel)
+    {
+        $this->facturasDetallesCursosCursoRel->removeElement($facturasDetallesCursosCursoRel);
+    }
+
+    /**
+     * Get facturasDetallesCursosCursoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasDetallesCursosCursoRel()
+    {
+        return $this->facturasDetallesCursosCursoRel;
+    }
+
+    /**
+     * Add pagosCursosDetalleCursoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPagoCursoDetalle $pagosCursosDetalleCursoRel
+     *
+     * @return AfiCurso
+     */
+    public function addPagosCursosDetalleCursoRel(\Brasa\AfiliacionBundle\Entity\AfiPagoCursoDetalle $pagosCursosDetalleCursoRel)
+    {
+        $this->pagosCursosDetalleCursoRel[] = $pagosCursosDetalleCursoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosCursosDetalleCursoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPagoCursoDetalle $pagosCursosDetalleCursoRel
+     */
+    public function removePagosCursosDetalleCursoRel(\Brasa\AfiliacionBundle\Entity\AfiPagoCursoDetalle $pagosCursosDetalleCursoRel)
+    {
+        $this->pagosCursosDetalleCursoRel->removeElement($pagosCursosDetalleCursoRel);
+    }
+
+    /**
+     * Get pagosCursosDetalleCursoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosCursosDetalleCursoRel()
+    {
+        return $this->pagosCursosDetalleCursoRel;
     }
 }

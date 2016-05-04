@@ -197,6 +197,8 @@ class CursoController extends Controller
                     $arCursoDetalle = new \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle();
                     $arCursoDetalle->setCursoRel($arCurso);          
                     $arCursoDetalle->setCursoTipoRel($arCursoTipo);
+                    $costo = $em->getRepository('BrasaAfiliacionBundle:AfiEntidadEntrenamientoCosto')->costoCursoEntidadEntrenamiento($arCurso->getCodigoEntidadEntrenamientoFk(), $codigoCursoTipo);
+                    $arCursoDetalle->setCosto($costo);
                     $arCursoDetalle->setPrecio($arCursoTipo->getPrecio());
                     $em->persist($arCursoDetalle);                    
                 }
@@ -383,6 +385,7 @@ class CursoController extends Controller
                 $arCursoDetalle = new \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle;
                 $arCursoDetalle = $em->getRepository('BrasaAfiliacionBundle:AfiCursoDetalle')->find($intCodigo);
                 $arCursoDetalle->setPrecio($arrControles['TxtPrecio'.$intCodigo]);                             
+                $arCursoDetalle->setCosto($arrControles['TxtCosto'.$intCodigo]);                             
                 $em->persist($arCursoDetalle);
             }
             $em->flush();                

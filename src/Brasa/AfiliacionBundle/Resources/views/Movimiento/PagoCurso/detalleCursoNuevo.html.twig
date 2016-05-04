@@ -1,5 +1,5 @@
 {% extends '::base_sin_menu.html.twig' %}
-{% block title %}Detalle factura nuevo - Soga App{% endblock %}
+{% block title %}Detalle curso nuevo - Soga App{% endblock %}
 {% block content %}
 <div class="container">
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
@@ -9,7 +9,7 @@
             <tr>
                 <th>CODIGO</th>
                 <th>IDENTIFICACION</th>  
-                <th>EMPLEADO</th>                 
+                <th>EMPLEADO</th>  
                 <th>TOTAL</th>               
                 <th></th>
             </tr>
@@ -17,7 +17,7 @@
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arCursos.codigoCursoPk }}">{{ arCursos.codigoCursoPk }} </td>                                
                 <td>{{ arCursos.empleadoRel.numeroIdentificacion | default('') }}</td>
-                <td>{{ arCursos.empleadoRel.nombreCorto | default('') }}</td>                                                                
+                <td>{{ arCursos.empleadoRel.nombreCorto | default('') }}</td>                                                
                 <td style="text-align: right">{{ arCursos.total | number_format(0, '.', ',') }}</td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCursos.codigoCursoPk }}" /></td>
             </tr>

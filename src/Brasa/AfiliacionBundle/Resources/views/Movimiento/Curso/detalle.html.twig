@@ -53,13 +53,21 @@
                         <td class="td-in-well"></td>                        
                     </tr> 
                     <tr>
-                        <td class="titulo">EMPLEADO:</td>
-                        <td class="td-in-well">{{ arCurso.empleadoRel.numeroIdentificacion | default('') }}-{{ arCurso.empleadoRel.nombreCorto | default('') }}</td>
+                        <td class="titulo">ENTIDAD:</td>
+                        <td class="td-in-well">{{ arCurso.entidadEntrenamientoRel.nombreCorto | default('') }}</td>
                         <td class="titulo">PROGRAMACION:</td>
                         <td class="td-in-well">{{ arCurso.fechaProgramacion | date('Y/m/d') }}</td>                        
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>                        
                     </tr>                    
+                    <tr>
+                        <td class="titulo">EMPLEADO:</td>
+                        <td class="td-in-well">{{ arCurso.empleadoRel.numeroIdentificacion | default('') }}-{{ arCurso.empleadoRel.nombreCorto | default('') }}</td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>                        
+                        <td class="titulo" >COSTO:</td>
+                        <td align="right">{{ arCurso.costo | number_format(0, '.', ',')}}</td>
+                    </tr>                     
                     <tr>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
@@ -75,16 +83,19 @@
             <tr>
                 <th>CODIGO</th>
                 <th>NOMBRE</th>
+                <th>COSTO</th>
                 <th>PRECIO</th>
                 <th></th>
             </tr>
             {% for arCursoDetalles in arCursoDetalles %}
             <tr>
                 <td>{{ arCursoDetalles.codigoCursoDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arCursoDetalles.codigoCursoDetallePk }}"></td>                
-                <td>{{ arCursoDetalles.cursoTipoRel.nombre }}</td>                
-                {% if arCurso.estadoAutorizado == 0 %}
-                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtPrecio{{ arCursoDetalles.codigoCursoDetallePk }}" value="{{ arCursoDetalles.precio  }}" size="20" style="width:120px; text-align: right" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                <td>{{ arCursoDetalles.cursoTipoRel.nombre }}</td>                                
+                {% if arCurso.estadoAutorizado == 0 %}                    
+                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtCosto{{ arCursoDetalles.codigoCursoDetallePk }}" value="{{ arCursoDetalles.costo  }}" size="20" style="width:120px; text-align: right" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                    
+                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtPrecio{{ arCursoDetalles.codigoCursoDetallePk }}" value="{{ arCursoDetalles.precio  }}" size="20" style="width:120px; text-align: right" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                    
                 {% else %}                    
+                    <td style="text-align: right">{{ arCursoDetalles.costo | number_format(0, '.', ',') }}</td>
                     <td style="text-align: right">{{ arCursoDetalles.precio | number_format(0, '.', ',') }}</td>
                 {% endif %}
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCursoDetalles.codigoCursoDetallePk }}" /></td>

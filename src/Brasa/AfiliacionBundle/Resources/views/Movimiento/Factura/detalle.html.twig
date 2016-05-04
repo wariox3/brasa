@@ -67,7 +67,7 @@
             </div>
         </div>   
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#detalle" data-toggle="tab">Detalle</a></li>
+            <li class="active"><a href="#detalle" data-toggle="tab">Seguridad social</a></li>
             <li><a href="#cursos" data-toggle="tab">Cursos</a></li>
         </ul>    
         <div class="tab-content">
@@ -119,6 +119,8 @@
                         <tr>
                             <th>CODIGO</th>
                             <th>FECHA</th>
+                            <th>IDENTIFICACION</th>  
+                            <th>EMPLEADO</th>                             
                             <th>PRECIO</th>
                             <th></th>
                         </tr>
@@ -126,6 +128,8 @@
                             <tr>
                                 <td>{{ arFacturaDetalleCursos.codigoFacturaDetalleCursoPk  }}</td>
                                 <td>{{ arFacturaDetalleCursos.cursoRel.fecha | date('Y/m/d')  }}</td>
+                                <td>{{ arFacturaDetalleCursos.cursoRel.empleadoRel.numeroIdentificacion | default('') }}</td>
+                                <td>{{ arFacturaDetalleCursos.cursoRel.empleadoRel.nombreCorto | default('') }}</td>                                                                                                
                                 <td style="text-align: right">{{ arFacturaDetalleCursos.precio | number_format(0, '.', ',') }}</td>                
                                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturaDetalleCursos.codigoFacturaDetalleCursoPk }}" /></td>
                             </tr>

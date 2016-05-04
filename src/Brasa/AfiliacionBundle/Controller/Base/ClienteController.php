@@ -66,6 +66,26 @@ class ClienteController extends Controller
             'form' => $form->createView()));
     }        
 
+    /**
+     * @Route("/afi/base/cliente/detalle/{codigoCliente}", name="brs_afi_base_cliente_detalle")
+     */    
+    public function detalleAction(Request $request, $codigoCliente = '') {
+        $em = $this->getDoctrine()->getManager();        
+        $paginator  = $this->get('knp_paginator');
+        $form = $this->formularioDetalle();
+        $form->handleRequest($request);        
+        if ($form->isValid()) {                                       
+
+        }
+        $arCliente = new \Brasa\AfiliacionBundle\Entity\AfiCliente();
+        $arCliente = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->find($codigoCliente);
+        $dql = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->listaDetalleDql($codigoCliente);        
+        $arContratos = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 20);
+        return $this->render('BrasaAfiliacionBundle:Base/Cliente:detalle.html.twig', array(
+            'arCliente' => $arCliente,
+            'arContratos' => $arContratos, 
+            'form' => $form->createView()));
+    }    
     
     private function lista() {    
         $session = $this->getRequest()->getSession();
@@ -91,7 +111,14 @@ class ClienteController extends Controller
             ->getForm();
         return $form;
     }    
-
+    
+    private function formularioDetalle() {        
+        $form = $this->createFormBuilder()                                    
+            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))                        
+            ->getForm();
+        return $form;
+    }         
+    
     private function generarExcel() {
         ob_clean();
         $em = $this->getDoctrine()->getManager();
@@ -107,9 +134,25 @@ class ClienteController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'P'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
+        }            
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'NOMBRE');
+                    ->setCellValue('B1', 'NIT')
+                    ->setCellValue('C1', 'NOMBRE')
+                    ->setCellValue('D1', 'FORMAPAGO')
+                    ->setCellValue('E1', 'PLAZO')
+                    ->setCellValue('F1', 'DIRECCION')
+                    ->setCellValue('G1', 'BARRIO')
+                    ->setCellValue('H1', 'CIUDAD')
+                    ->setCellValue('I1', 'TELEFONO')
+                    ->setCellValue('J1', 'CELULAR')
+                    ->setCellValue('K1', 'FAX')
+                    ->setCellValue('L1', 'EMAIL')
+                    ->setCellValue('M1', 'CONTACTO')
+                    ->setCellValue('N1', 'CELCONTACTO')
+                    ->setCellValue('O1', 'TELCONTACTO');
 
         $i = 2;
         
@@ -120,7 +163,20 @@ class ClienteController extends Controller
         foreach ($arClientes as $arCliente) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arCliente->getCodigoClientePk())
-                    ->setCellValue('B' . $i, $arCliente->getNombre());                                    
+                    ->setCellValue('B' . $i, $arCliente->getNit())
+                    ->setCellValue('C' . $i, $arCliente->getNombreCorto())
+                    ->setCellValue('D' . $i, $arCliente->getFormaPagoRel()->getNombre())
+                    ->setCellValue('E' . $i, $arCliente->getPlazoPago())
+                    ->setCellValue('F' . $i, $arCliente->getDireccion())
+                    ->setCellValue('G' . $i, $arCliente->getBarrio())
+                    ->setCellValue('H' . $i, $arCliente->getCiudadRel()->getNombre())
+                    ->setCellValue('I' . $i, $arCliente->getTelefono())
+                    ->setCellValue('J' . $i, $arCliente->getCelular())
+                    ->setCellValue('K' . $i, $arCliente->getFax())
+                    ->setCellValue('L' . $i, $arCliente->getEmail())
+                    ->setCellValue('M' . $i, $arCliente->getContacto())
+                    ->setCellValue('N' . $i, $arCliente->getCelularContacto())
+                    ->setCellValue('O' . $i, $arCliente->getTelefonoContacto());                                    
             $i++;
         }
         
@@ -141,7 +197,6 @@ class ClienteController extends Controller
         $objWriter->save('php://output');
         exit;
     }
-
     
 
 }

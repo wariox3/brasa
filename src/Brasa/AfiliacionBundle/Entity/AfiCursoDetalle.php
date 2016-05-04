@@ -26,7 +26,12 @@ class AfiCursoDetalle
      * @ORM\Column(name="codigo_curso_tipo_fk", type="integer", nullable=true)
      */    
     private $codigoCursoTipoFk;    
-    
+
+    /**
+     * @ORM\Column(name="costo", type="float")
+     */
+    private $costo = 0;    
+
     /**
      * @ORM\Column(name="precio", type="float")
      */
@@ -172,5 +177,29 @@ class AfiCursoDetalle
     public function getCursoTipoRel()
     {
         return $this->cursoTipoRel;
+    }
+
+    /**
+     * Set costo
+     *
+     * @param float $costo
+     *
+     * @return AfiCursoDetalle
+     */
+    public function setCosto($costo)
+    {
+        $this->costo = $costo;
+
+        return $this;
+    }
+
+    /**
+     * Get costo
+     *
+     * @return float
+     */
+    public function getCosto()
+    {
+        return $this->costo;
     }
 }

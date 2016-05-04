@@ -33,6 +33,11 @@ class AfiCursoTipo
     protected $cursosDetallesCursoTipoRel; 
 
     /**
+     * @ORM\OneToMany(targetEntity="AfiEntidadEntrenamientoCosto", mappedBy="cursoTipoRel")
+     */
+    protected $entidadesEntrenamientoCostosCursoTipoRel;     
+    
+    /**
      * Get codigoCursoTipoPk
      *
      * @return integer
@@ -129,5 +134,39 @@ class AfiCursoTipo
     public function getPrecio()
     {
         return $this->precio;
+    }
+
+    /**
+     * Add entidadesEntrenamientoCostosCursoTipoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamientoCosto $entidadesEntrenamientoCostosCursoTipoRel
+     *
+     * @return AfiCursoTipo
+     */
+    public function addEntidadesEntrenamientoCostosCursoTipoRel(\Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamientoCosto $entidadesEntrenamientoCostosCursoTipoRel)
+    {
+        $this->entidadesEntrenamientoCostosCursoTipoRel[] = $entidadesEntrenamientoCostosCursoTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove entidadesEntrenamientoCostosCursoTipoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamientoCosto $entidadesEntrenamientoCostosCursoTipoRel
+     */
+    public function removeEntidadesEntrenamientoCostosCursoTipoRel(\Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamientoCosto $entidadesEntrenamientoCostosCursoTipoRel)
+    {
+        $this->entidadesEntrenamientoCostosCursoTipoRel->removeElement($entidadesEntrenamientoCostosCursoTipoRel);
+    }
+
+    /**
+     * Get entidadesEntrenamientoCostosCursoTipoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEntidadesEntrenamientoCostosCursoTipoRel()
+    {
+        return $this->entidadesEntrenamientoCostosCursoTipoRel;
     }
 }

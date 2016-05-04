@@ -39,6 +39,7 @@
                 <th>CLIENTE</th>
                 <th>IDENTIFICACION</th>
                 <th>EMPLEADO</th>
+                <th>ENTIDAD</th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Autorizado">AUT</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Facturado">FAC</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Asistio al curso">ASI</p></th>
@@ -59,6 +60,7 @@
                 <td>{{ arCursos.clienteRel.nombreCorto  }}</td>
                 <td>{{ arCursos.empleadoRel.numeroIdentificacion | default('') }}</td>
                 <td>{{ arCursos.empleadoRel.nombreCorto | default('') }}</td>
+                <td>{{ arCursos.entidadEntrenamientoRel.nombreCorto | default('') }}</td>
                 <td>{% if arCursos.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arCursos.estadoFacturado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arCursos.asistencia == 1 %} SI {% else %} NO {% endif %}</td>
