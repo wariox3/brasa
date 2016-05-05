@@ -167,7 +167,7 @@ class Curso extends \FPDF_FPDF {
         foreach ($arCursoDetalles as $arCursoDetalle) {            
             $pdf->Cell(11, 4, $arCursoDetalle->getCodigoCursoDetallePk(), 1, 0, 'L');
             $pdf->Cell(167, 4, $arCursoDetalle->getCursoTipoRel()->getNombre(), 1, 0, 'L');
-            $pdf->Cell(15, 4, number_format(0, 2, '.', ','), 1, 0, 'R');                                             
+            $pdf->Cell(15, 4, number_format($arCursoDetalle->getPrecio(), 2, '.', ','), 1, 0, 'R');                                             
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }
