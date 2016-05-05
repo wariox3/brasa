@@ -129,25 +129,26 @@ class MovimientoCuentaCobrarController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'N'; $col++) {
+        for($col = 'A'; $col !== 'M'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
         }     
-        for($col = 'H'; $col !== 'N'; $col++) {
+        for($col = 'I'; $col !== 'M'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }        
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'NUMERO')
-                    ->setCellValue('C1', 'FECHA')
-                    ->setCellValue('D1', 'NIT')                
-                    ->setCellValue('E1', 'CLIENTE')
-                    ->setCellValue('F1', 'CUENTA COBRAR TIPO')
-                    ->setCellValue('G1', 'VENCE')
-                    ->setCellValue('H1', 'VALOR')
-                    ->setCellValue('I1', 'SALDO')
-                    ->setCellValue('J1', 'PLAZO')
-                    ->setCellValue('K1', 'ABONO');
+                    ->setCellValue('C1', 'TIPO')
+                    ->setCellValue('D1', 'FECHA')
+                    ->setCellValue('E1', 'VENCE')
+                    ->setCellValue('F1', 'NIT')                
+                    ->setCellValue('G1', 'CLIENTE')
+                    ->setCellValue('H1', 'ASESOR')                                        
+                    ->setCellValue('I1', 'VALOR')
+                    ->setCellValue('J1', 'SALDO')
+                    ->setCellValue('K1', 'PLAZO')
+                    ->setCellValue('L1', 'ABONO');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -158,23 +159,21 @@ class MovimientoCuentaCobrarController extends Controller
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arCuentasCobrar->getCodigoCuentaCobrarPk())
                     ->setCellValue('B' . $i, $arCuentasCobrar->getNumeroDocumento())
-                    ->setCellValue('C' . $i, $arCuentasCobrar->getFecha()->format('Y-m-d'))
-                    ->setCellValue('G' . $i, $arCuentasCobrar->getFechaVence()->format('Y-m-d'))
-                    ->setCellValue('H' . $i, $arCuentasCobrar->getValorOriginal())
-                    ->setCellValue('I' . $i, $arCuentasCobrar->getSaldo())
-                    ->setCellValue('J' . $i, $arCuentasCobrar->getPlazo())
-                    ->setCellValue('K' . $i, $arCuentasCobrar->getAbono());
+                    ->setCellValue('D' . $i, $arCuentasCobrar->getFecha()->format('Y-m-d'))
+                    ->setCellValue('E' . $i, $arCuentasCobrar->getFechaVence()->format('Y-m-d'))
+                    ->setCellValue('I' . $i, $arCuentasCobrar->getValorOriginal())
+                    ->setCellValue('J' . $i, $arCuentasCobrar->getSaldo())
+                    ->setCellValue('K' . $i, $arCuentasCobrar->getPlazo())
+                    ->setCellValue('L' . $i, $arCuentasCobrar->getAbono());
             if($arCuentasCobrar->getClienteRel()) {
-                $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('D' . $i, $arCuentasCobrar->getClienteRel()->getNit());
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F' . $i, $arCuentasCobrar->getClienteRel()->getNit());
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G' . $i, $arCuentasCobrar->getClienteRel()->getNombreCorto());
             }
-            if($arCuentasCobrar->getClienteRel()) {
-                $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('E' . $i, $arCuentasCobrar->getClienteRel()->getNombreCorto());
-            }
+            if($arCuentasCobrar->getAsesorRel()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H' . $i, $arCuentasCobrar->getAsesorRel()->getNombre());
+            }            
             if($arCuentasCobrar->getCuentaCobrarTipoRel()) {
-                $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('F' . $i, $arCuentasCobrar->getCuentaCobrarTipoRel()->getNombre());
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C' . $i, $arCuentasCobrar->getCuentaCobrarTipoRel()->getNombre());
             }    
             $i++;
         }

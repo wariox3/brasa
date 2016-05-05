@@ -57,12 +57,13 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arRecibos, 'CÓDIGO', 'r.codigoReciboPk') }}</th>
                 <th>NUMERO</th>
+                <th>TIPO</th>
                 <th>FECHA</th>
+                <th>F.PAGO</th>
                 <th>NIT</th>
                 <th>CLIENTE</th>
-                <th>CUENTA</th>
-                <th>TIPO</th>
-                <th>FECHA PAGO</th>
+                <th>ASESOR</th>
+                <th>CUENTA</th>                                
                 <th>TOTAL</th>
                 <th>ANU</th>
                 <th>AUT</th>
@@ -75,12 +76,13 @@
             <tr>
                 <td>{{ arRecibos.codigoReciboPk  }}</td>
                 <td>{{ arRecibos.numero | default('0') }}</td>
+                <td>{{ arRecibos.reciboTipoRel.nombre |default('')  }}</td>                
                 <td>{{ arRecibos.fecha |date("Y/m/d")  }}</td>
+                <td>{{ arRecibos.fechaPago |date("Y/m/d")  }}</td>
                 <td>{{ arRecibos.clienteRel.nit |default('')  }}</td>
                 <td>{{ arRecibos.clienteRel.nombreCorto |default('')  }}</td>
-                <td>{{ arRecibos.cuentaRel.nombre |default('')  }}</td>
-                <td>{{ arRecibos.reciboTipoRel.nombre |default('')  }}</td>
-                <td>{{ arRecibos.fechaPago |date("Y/m/d")  }}</td>
+                <td>{{ arRecibos.asesorRel.nombre |default('')  }}</td>
+                <td>{{ arRecibos.cuentaRel.nombre |default('')  }}</td>                
                 <td style="text-align: right">{{ arRecibos.vrTotal | number_format(0, '.', ',') }}</td>
                 <td>{% if arRecibos.estadoAnulado == 1 %}SI{% else %}NO{% endif %}</td>
                 <td>{% if arRecibos.estadoAutorizado == 1 %}SI{% else %}NO{% endif %}</td>

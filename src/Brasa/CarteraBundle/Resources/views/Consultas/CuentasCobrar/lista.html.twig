@@ -73,11 +73,12 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arCuentasCobrar, 'CÓDIGO', 'cc.codigoCuentaCobrarPk') }}</th>
                 <th>NUMERO</th>
+                <th>TIPO</th>
                 <th>FECHA</th>
+                <th>VENCE</th>
                 <th>NIT</th>
                 <th>CLIENTE</th>
-                <th>TIPO</th>
-                <th>VENCE</th>
+                <th>ASESOR</th>                                
                 <th>PLAZO</th>
                 <th>VALOR</th>
                 <th>ABONO</th>
@@ -87,11 +88,12 @@
             <tr>
                 <td>{{ arCuentasCobrar.codigoCuentaCobrarPk  }}</td>
                 <td>{{ arCuentasCobrar.numeroDocumento  }}</td>
+                <td>{{ arCuentasCobrar.cuentaCobrarTipoRel.nombre |default('')  }}</td>
                 <td>{{ arCuentasCobrar.fecha |date("Y/m/d")  }}</td>
+                <td>{{ arCuentasCobrar.fechaVence |date("Y/m/d")  }}</td>
                 <td>{{ arCuentasCobrar.clienteRel.nit |default('')  }}</td>
                 <td>{{ arCuentasCobrar.clienteRel.nombreCorto |default('')  }}</td>
-                <td>{{ arCuentasCobrar.cuentaCobrarTipoRel.nombre |default('')  }}</td>
-                <td>{{ arCuentasCobrar.fechaVence |date("Y/m/d")  }}</td>
+                <td>{{ arCuentasCobrar.asesorRel.nombre |default('')  }}</td>                
                 <td>{{ arCuentasCobrar.plazo }}</td>
                 <td style="text-align: right">{{ arCuentasCobrar.valorOriginal | number_format(0, '.', ',') }}</td>
                 <td>{{ arCuentasCobrar.abono  }}</td>

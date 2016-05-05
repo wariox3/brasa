@@ -21,31 +21,31 @@
                         <div class="row">
                           <div class="col-lg-2">
                             <div class="input-group">
-                              {{ form_widget(form.TxtNit, { 'attr': {'class': 'form-control'} }) }}                              
+                              {{ form_widget(form.TxtNit, { 'attr': {'class': 'form-control'} }) }}
                             </div>
                           </div>
                           <div class="col-lg-10">
-                            <div class="input-group">     
-                              {{ form_widget(form.TxtNombreCliente, { 'attr': {'class': 'form-control', 'readOnly': 'ReadOnly'} }) }}                              
-                              <span class="input-group-btn">                                        
+                            <div class="input-group">
+                              {{ form_widget(form.TxtNombreCliente, { 'attr': {'class': 'form-control', 'readOnly': 'ReadOnly'} }) }}
+                              <span class="input-group-btn">
                                 <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_cartera_buscar_cliente', { 'campoCodigo': 'form_TxtNit', 'campoNombre': 'form_TxtNombreCliente' }) }}', 'buscarCliente', 600, 900)">Buscar</a>
                               </span>
                             </div>
                           </div>
                         </div>
                     </div>
-                </div>                
-                    
-                <div class="form-group form-group-sm">  
+                </div>
+
+                <div class="form-group form-group-sm">
                     <label for="form_TxtNumero" class="col-sm-2 control-label">Numero:</label>
                     <div class="col-sm-4">
                         {{ form_widget(form.TxtNumero, { 'attr': {'class': 'form-control'} }) }}
                     </div>
                     <label for="form_cuentaCobrarTipoRel" class="col-sm-2 control-label">Tipo cuenta cobrar:</label>
-                    <div class="col-sm-4">                  
+                    <div class="col-sm-4">
                         {{ form_widget(form.cuentaCobrarTipoRel, { 'attr': {'class': 'form-control'} }) }}
-                    </div>                    
-                </div>     
+                    </div>
+                </div>
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
@@ -57,11 +57,12 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arCuentasCobrar, 'CÓDIGO', 'cc.codigoCuentaCobrarPk') }}</th>
                 <th>NUMERO</th>
+                <th>TIPO</th>
                 <th>FECHA</th>
+                <th>VENCE</th>
                 <th>NIT</th>
                 <th>CLIENTE</th>
-                <th>CUENTA COBRAR TIPO</th>
-                <th>VENCE</th>
+                <th>ASESOR</th>
                 <th>PLAZO</th>
                 <th>VALOR</th>
                 <th>ABONO</th>
@@ -72,11 +73,12 @@
             <tr>
                 <td>{{ arCuentasCobrar.codigoCuentaCobrarPk  }}</td>
                 <td>{{ arCuentasCobrar.numeroDocumento  }}</td>
-                <td>{{ arCuentasCobrar.fecha |date("Y/m/d")  }}</td>
-                <td>{{ arCuentasCobrar.clienteRel.nit |default('')  }}</td>
-                <td>{{ arCuentasCobrar.clienteRel.nombreCorto |default('')  }}</td>
                 <td>{{ arCuentasCobrar.cuentaCobrarTipoRel.nombre |default('')  }}</td>
+                <td>{{ arCuentasCobrar.fecha |date("Y/m/d")  }}</td>
                 <td>{{ arCuentasCobrar.fechaVence |date("Y/m/d")  }}</td>
+                <td>{{ arCuentasCobrar.clienteRel.nit |default('')  }}</td>
+                <td>{{ arCuentasCobrar.clienteRel.nombreCorto |default('')  }}</td>                
+                <td>{{ arCuentasCobrar.asesorRel.nombre |default('')  }}</td>                                
                 <td>{{ arCuentasCobrar.plazo  }}</td>
                 <td style="text-align: right">{{ arCuentasCobrar.valorOriginal | number_format(0, '.', ',') }}</td>
                 <td>{{ arCuentasCobrar.abono  }}</td>

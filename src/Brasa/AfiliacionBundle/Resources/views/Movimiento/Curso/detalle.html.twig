@@ -21,6 +21,8 @@
                 {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnAnular, { 'attr': {'class': 'btn btn-default btn-sm', 'onclick': 'return confirm("Esta seguro de anular el curso?")'} }) }}
+                {{ form_widget(form.BtnFacturar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+                {{ form_widget(form.BtnCuentaCobro, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
                 <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 15,  'numero': arCurso.codigoCursoPk }) }}', 'Archivos', 500, 700)" >Archivos</a>                
             </div>
         </div>

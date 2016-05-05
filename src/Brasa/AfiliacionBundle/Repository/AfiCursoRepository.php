@@ -116,4 +116,34 @@ class AfiCursoRepository extends EntityRepository {
         }
         return $strResultado;
     }    
+    
+    public function facturar($codigoCurso, $usuario, $tipo) {
+        $em = $this->getEntityManager();
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
+        $codigoFactura = 0;
+        $arCurso = new \Brasa\AfiliacionBundle\Entity\AfiCurso();
+        $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($codigoCurso);             
+        $arCurso->setEstadoFacturado(1);
+        $em->persist($arCurso);    
+        $arFacturaTipo = new \Brasa\AfiliacionBundle\Entity\AfiFacturaTipo();
+        $arFacturaTipo = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaTipo')->find($tipo);          
+        $arFactura = new \Brasa\AfiliacionBundle\Entity\AfiFactura();
+        $arFactura->setFecha(new \DateTime('now'));
+        $dateFechaVence = $objFunciones->sumarDiasFecha($arCurso->getClienteRel()->getPlazoPago(), $arFactura->getFecha());
+        $arFactura->setFacturaTipoRel($arFacturaTipo);
+        $arFactura->setFechaVence($dateFechaVence);            
+        $arFactura->setClienteRel($arCurso->getClienteRel());         
+        $arFactura->setUsuario($usuario);             
+        $em->persist($arFactura);                        
+        $arFacturaDetalleCurso = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso();
+        $arFacturaDetalleCurso->setFacturaRel($arFactura);
+        $arFacturaDetalleCurso->setCursoRel($arCurso);
+        $arFacturaDetalleCurso->setPrecio($arCurso->getTotal());
+        $arFacturaDetalleCurso->setTotal($arCurso->getTotal());
+        $em->persist($arFacturaDetalleCurso);        
+        $em->flush();  
+        $codigoFactura = $arFactura->getCodigoFacturaPk();
+        $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->liquidar($codigoFactura);                    
+        return $codigoFactura;
+    }        
 }

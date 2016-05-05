@@ -59,6 +59,11 @@ class GenAsesor
     protected $carCuentasCobrarAsesorRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="Brasa\CarteraBundle\Entity\CarRecibo", mappedBy="asesorRel")
+     */
+    protected $carRecibosAsesorRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiCliente", mappedBy="asesorRel")
      */
     protected $afiClientesAsesorRel;     
@@ -369,5 +374,39 @@ class GenAsesor
     public function getCarCuentasCobrarAsesorRel()
     {
         return $this->carCuentasCobrarAsesorRel;
+    }
+
+    /**
+     * Add carRecibosAsesorRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarRecibo $carRecibosAsesorRel
+     *
+     * @return GenAsesor
+     */
+    public function addCarRecibosAsesorRel(\Brasa\CarteraBundle\Entity\CarRecibo $carRecibosAsesorRel)
+    {
+        $this->carRecibosAsesorRel[] = $carRecibosAsesorRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove carRecibosAsesorRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarRecibo $carRecibosAsesorRel
+     */
+    public function removeCarRecibosAsesorRel(\Brasa\CarteraBundle\Entity\CarRecibo $carRecibosAsesorRel)
+    {
+        $this->carRecibosAsesorRel->removeElement($carRecibosAsesorRel);
+    }
+
+    /**
+     * Get carRecibosAsesorRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCarRecibosAsesorRel()
+    {
+        return $this->carRecibosAsesorRel;
     }
 }

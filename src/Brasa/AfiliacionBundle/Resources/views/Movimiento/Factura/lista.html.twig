@@ -33,6 +33,7 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arFacturas, 'CÓDIGO', 'p.codigoFacturaPk') }}</th>
                 <th>TIPO</th>
+                <th>NUMERO</th>
                 <th>NIT</th>
                 <th>CLIENTE</th>
                 <th>FECHA</th>
@@ -43,7 +44,8 @@
             {% for arFacturas in arFacturas %}
             <tr>
                 <td>{{ arFacturas.codigoFacturaPk  }}</td>
-                <td>{{ arFacturas.facturaTipoRel.nombre  }}</td>
+                <td>{{ arFacturas.facturaTipoRel.nombre | default('') }}</td>
+                <td>{{ arFacturas.numero  }}</td>
                 <td>{{ arFacturas.clienteRel.nit  }}</td>
                 <td>{{ arFacturas.clienteRel.nombreCorto  }}</td>
                 <td>{{ arFacturas.fecha |date('Y/m/d') }}</td>

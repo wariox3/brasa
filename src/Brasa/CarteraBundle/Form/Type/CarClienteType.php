@@ -16,7 +16,14 @@ class CarClienteType extends AbstractType
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                 
+                'required' => true))  
+            ->add('asesorRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenAsesor',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('a')
+                    ->orderBy('a.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                             
             ->add('formaPagoRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenFormaPago',
                 'query_builder' => function (EntityRepository $er)  {

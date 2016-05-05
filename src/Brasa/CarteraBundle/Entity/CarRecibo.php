@@ -39,6 +39,11 @@ class CarRecibo
     private $codigoReciboTipoFk;
     
     /**
+     * @ORM\Column(name="codigo_asesor_fk", type="integer", nullable=true)
+     */    
+    private $codigoAsesorFk;     
+    
+    /**
      * @ORM\Column(name="numero", type="string", length=30, nullable=true)
      */    
     private $numero;
@@ -131,6 +136,12 @@ class CarRecibo
      */
     protected $cuentaRel;
          
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenAsesor", inversedBy="carRecibosAsesorRel")
+     * @ORM\JoinColumn(name="codigo_asesor_fk", referencedColumnName="codigo_asesor_pk")
+     */
+    protected $asesorRel;    
+    
    /**
      * @ORM\OneToMany(targetEntity="CarReciboDetalle", mappedBy="reciboRel")
      */
@@ -715,5 +726,53 @@ class CarRecibo
     public function getVrTotalPago()
     {
         return $this->vrTotalPago;
+    }
+
+    /**
+     * Set codigoAsesorFk
+     *
+     * @param integer $codigoAsesorFk
+     *
+     * @return CarRecibo
+     */
+    public function setCodigoAsesorFk($codigoAsesorFk)
+    {
+        $this->codigoAsesorFk = $codigoAsesorFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoAsesorFk
+     *
+     * @return integer
+     */
+    public function getCodigoAsesorFk()
+    {
+        return $this->codigoAsesorFk;
+    }
+
+    /**
+     * Set asesorRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenAsesor $asesorRel
+     *
+     * @return CarRecibo
+     */
+    public function setAsesorRel(\Brasa\GeneralBundle\Entity\GenAsesor $asesorRel = null)
+    {
+        $this->asesorRel = $asesorRel;
+
+        return $this;
+    }
+
+    /**
+     * Get asesorRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenAsesor
+     */
+    public function getAsesorRel()
+    {
+        return $this->asesorRel;
     }
 }

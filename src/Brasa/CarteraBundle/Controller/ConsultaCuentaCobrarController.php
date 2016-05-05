@@ -9,10 +9,10 @@ class ConsultaCuentaCobrarController extends Controller
     var $strListaDql = "";
     var $strFechaDesde = "";
     var $strFechaHasta = "";
-    
+
     /**
      * @Route("/cartera/consulta/cuentacobrar/lista", name="brs_cartera_consulta_cuentacobrar_lista")
-     */    
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -21,7 +21,7 @@ class ConsultaCuentaCobrarController extends Controller
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->lista();
-        if ($form->isValid()) {            
+        if ($form->isValid()) {
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
                 $form = $this->formularioFiltro();
@@ -34,40 +34,40 @@ class ConsultaCuentaCobrarController extends Controller
                 $this->generarExcel();
             }
         }
-        
+
         $arCuentasCobrar = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 100);
         return $this->render('BrasaCarteraBundle:Consultas/CuentasCobrar:lista.html.twig', array(
             'arCuentasCobrar' => $arCuentasCobrar,
             'form' => $form->createView()));
     }
-            
+
     private function lista() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $strFechaDesde = "";
         $strFechaHasta = "";
         $this->strListaDql =  $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->listaConsultaDql(
-                $session->get('filtroNumero'), 
-                $session->get('filtroCodigoCliente'), 
+                $session->get('filtroNumero'),
+                $session->get('filtroCodigoCliente'),
                 $session->get('filtroCuentaCobrarTipo'),
                 $session->get('filtroDesde'),
                 $session->get('filtroHasta'));
     }
 
     private function filtrar ($form) {
-        $session = $this->getRequest()->getSession(); 
+        $session = $this->getRequest()->getSession();
         $arCuentaCobrarTipo = $form->get('cuentaCobrarTipoRel')->getData();
         if ($arCuentaCobrarTipo == null){
             $codigo = "";
         } else {
             $codigo = $arCuentaCobrarTipo->getCodigoCuentaCobrarTipoPk();
         }
-        $session->set('filtroNumero', $form->get('TxtNumero')->getData());           
+        $session->set('filtroNumero', $form->get('TxtNumero')->getData());
         $session->set('filtroCuentaCobrarTipo', $codigo);
-        $session->set('filtroNit', $form->get('TxtNit')->getData());                         
+        $session->set('filtroNit', $form->get('TxtNit')->getData());
         $session->set('filtroDesde', $form->get('fechaDesde')->getData());
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
-        
+
     }
 
     private function formularioFiltro() {
@@ -82,10 +82,10 @@ class ConsultaCuentaCobrarController extends Controller
             }  else {
                 $session->set('filtroCodigoCliente', null);
                 $session->set('filtroNit', null);
-            }          
+            }
         } else {
             $session->set('filtroCodigoCliente', null);
-        }       
+        }
         $arrayPropiedades = array(
                 'class' => 'BrasaCarteraBundle:CarCuentaCobrarTipo',
                 'query_builder' => function (EntityRepository $er) {
@@ -102,10 +102,10 @@ class ConsultaCuentaCobrarController extends Controller
         }
         $form = $this->createFormBuilder()
             ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
-            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                
-            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroPedidoNumero')))            
+            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))
+            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroPedidoNumero')))
             ->add('cuentaCobrarTipoRel', 'entity', $arrayPropiedades)
-            //->add('fechaDesde', 'date', array('format' => 'yyyyMMdd'))                            
+            //->add('fechaDesde', 'date', array('format' => 'yyyyMMdd'))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date')))
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date')))
             //->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
@@ -113,12 +113,12 @@ class ConsultaCuentaCobrarController extends Controller
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
-    }   
+    }
 
     private function generarExcel() {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
-        $em = $this->getDoctrine()->getManager();        
+        $em = $this->getDoctrine()->getManager();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")
@@ -128,55 +128,55 @@ class ConsultaCuentaCobrarController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
-        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10);
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'N'; $col++) {
-            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
-        }     
-        for($col = 'H'; $col !== 'N'; $col++) {
+        for($col = 'A'; $col !== 'M'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+        }
+        for($col = 'I'; $col !== 'M'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
-        }        
+        }
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'NUMERO')
-                    ->setCellValue('C1', 'FECHA')
-                    ->setCellValue('D1', 'NIT')                
-                    ->setCellValue('E1', 'CLIENTE')
-                    ->setCellValue('F1', 'CUENTA COBRAR TIPO')
-                    ->setCellValue('G1', 'VENCE')
-                    ->setCellValue('H1', 'VALOR')
-                    ->setCellValue('I1', 'SALDO')
-                    ->setCellValue('J1', 'PLAZO')
-                    ->setCellValue('K1', 'ABONO');
+                    ->setCellValue('C1', 'TIPO')
+                    ->setCellValue('D1', 'FECHA')
+                    ->setCellValue('E1', 'VENCE')
+                    ->setCellValue('F1', 'NIT')
+                    ->setCellValue('G1', 'CLIENTE')
+                    ->setCellValue('H1', 'ASESOR')
+                    ->setCellValue('I1', 'VALOR')
+                    ->setCellValue('J1', 'SALDO')
+                    ->setCellValue('K1', 'PLAZO')
+                    ->setCellValue('L1', 'ABONO');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
         $arCuentasCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
         $arCuentasCobrar = $query->getResult();
 
-        foreach ($arCuentasCobrar as $arCuentasCobrar) {            
+        foreach ($arCuentasCobrar as $arCuentasCobrar) {
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arCuentasCobrar->getCodigoCuentaCobrarPk())
                     ->setCellValue('B' . $i, $arCuentasCobrar->getNumeroDocumento())
-                    ->setCellValue('C' . $i, $arCuentasCobrar->getFecha()->format('Y-m-d'))
-                    ->setCellValue('G' . $i, $arCuentasCobrar->getFechaVence()->format('Y-m-d'))
-                    ->setCellValue('H' . $i, $arCuentasCobrar->getValorOriginal())
-                    ->setCellValue('I' . $i, $arCuentasCobrar->getSaldo())
-                    ->setCellValue('J' . $i, $arCuentasCobrar->getPlazo())
-                    ->setCellValue('K' . $i, $arCuentasCobrar->getAbono());
+                    ->setCellValue('D' . $i, $arCuentasCobrar->getFecha()->format('Y-m-d'))
+                    ->setCellValue('E' . $i, $arCuentasCobrar->getFechaVence()->format('Y-m-d'))
+                    ->setCellValue('I' . $i, $arCuentasCobrar->getValorOriginal())
+                    ->setCellValue('J' . $i, $arCuentasCobrar->getSaldo())
+                    ->setCellValue('K' . $i, $arCuentasCobrar->getPlazo())
+                    ->setCellValue('L' . $i, $arCuentasCobrar->getAbono());
             if($arCuentasCobrar->getClienteRel()) {
-                $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('D' . $i, $arCuentasCobrar->getClienteRel()->getNit());
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F' . $i, $arCuentasCobrar->getClienteRel()->getNit());
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G' . $i, $arCuentasCobrar->getClienteRel()->getNombreCorto());
             }
-            if($arCuentasCobrar->getClienteRel()) {
-                $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('E' . $i, $arCuentasCobrar->getClienteRel()->getNombreCorto());
-            }
+            if($arCuentasCobrar->getAsesorRel()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H' . $i, $arCuentasCobrar->getAsesorRel()->getNombre());                
+            }            
             if($arCuentasCobrar->getCuentaCobrarTipoRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('F' . $i, $arCuentasCobrar->getCuentaCobrarTipoRel()->getNombre());
-            }    
+                    ->setCellValue('C' . $i, $arCuentasCobrar->getCuentaCobrarTipoRel()->getNombre());
+            }
             $i++;
         }
 
@@ -196,7 +196,7 @@ class ConsultaCuentaCobrarController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }     
+    }
 
 
 }

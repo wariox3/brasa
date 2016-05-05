@@ -71,6 +71,7 @@ class MovimientoReciboController extends Controller
                 $arCliente = $em->getRepository('BrasaCarteraBundle:CarCliente')->findOneBy(array('nit' => $arrControles['txtNit']));                
                 if(count($arCliente) > 0) {
                     $arRecibo->setClienteRel($arCliente);
+                    $arRecibo->setAsesorRel($arCliente->getAsesorRel());
                 }
             }
             if ($codigoRecibo != 0 && $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->numeroRegistros($codigoRecibo) > 0) {

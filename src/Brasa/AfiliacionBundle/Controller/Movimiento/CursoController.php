@@ -156,7 +156,27 @@ class CursoController extends Controller
                     //$objFactura->Generar($this, $codigoFactura);                    
                 }
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_detalle', array('codigoCurso' => $codigoCurso)));
-            }             
+            }      
+            if($form->get('BtnFacturar')->isClicked()) {            
+                if($arCurso->getEstadoFacturado() == 0 && $arCurso->getEstadoAutorizado() == 1) {                    
+                    $codigoFactura = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->facturar($codigoCurso,  $this->getUser()->getUsername(), 1);
+                    if($codigoFactura != 0) {
+                        return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));                                        
+                    } else {
+                        return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_detalle', array('codigoCurso' => $codigoCurso)));                                        
+                    }                    
+                }
+            }            
+            if($form->get('BtnCuentaCobro')->isClicked()) {            
+                if($arCurso->getEstadoFacturado() == 0 && $arCurso->getEstadoAutorizado() == 1) {                    
+                    $codigoFactura = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->facturar($codigoCurso,  $this->getUser()->getUsername(), 2);
+                    if($codigoFactura != 0) {
+                        return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));                                        
+                    } else {
+                        return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_detalle', array('codigoCurso' => $codigoCurso)));                                        
+                    }                    
+                }
+            }            
             if($form->get('BtnDetalleActualizar')->isClicked()) {   
                 $arrControles = $request->request->All();
                 $this->actualizarDetalle($arrControles, $codigoCurso);                                 
@@ -251,7 +271,9 @@ class CursoController extends Controller
     
     private function formularioDetalle($ar) {        
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);      
-        $arrBotonAnular = array('label' => 'Anular', 'disabled' => true);        
+        $arrBotonAnular = array('label' => 'Anular', 'disabled' => true);    
+        $arrBotonFacturar = array('label' => 'Facturar', 'disabled' => true);        
+        $arrBotonCuentaCobro = array('label' => 'Cuenta cobro', 'disabled' => true);        
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
@@ -266,6 +288,13 @@ class CursoController extends Controller
             if($ar->getEstadoAnulado() == 1) {
                 $arrBotonDesAutorizar['disabled'] = true;
                 $arrBotonAnular['disabled'] = true;
+            } else {
+                if($ar->getEstadoFacturado() == 0) {
+                    if($ar->getNumero() > 0) {
+                        $arrBotonFacturar['disabled'] = false;
+                        $arrBotonCuentaCobro['disabled'] = false;
+                    }                    
+                }                
             }            
         } else {
             $arrBotonDesAutorizar['disabled'] = true;            
@@ -273,6 +302,8 @@ class CursoController extends Controller
         }
  
         $form = $this->createFormBuilder()
+                    ->add('BtnFacturar', 'submit', $arrBotonFacturar)                
+                    ->add('BtnCuentaCobro', 'submit', $arrBotonCuentaCobro)                
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                                     
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)

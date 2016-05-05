@@ -69,26 +69,26 @@
                         <td align="right">{{ arRecibo.vrTotalReteIva | number_format(2, '.', ',')}}</td>
                     </tr>
                     <tr>
+                        <td class="titulo">ASESOR:</td>
+                        <td class="td-in-well">{{ arRecibo.asesorRel.nombre |default('') }}</td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo" align="right">TOTAL RETE FUENTE:</td>
+                        <td align="right">{{ arRecibo.vrTotalReteFuente | number_format(2, '.', ',')}}</td>
+                    </tr>
+                    <tr>
                         <td class="titulo">ANULADO:</td>
                         <td class="td-in-well">{% if arRecibo.estadoAnulado == 1 %}SI{% else %}NO{% endif %}</td>
                         <td class="titulo">IMPRESO:</td>
                         <td class="td-in-well">{% if arRecibo.estadoImpreso == 1 %}SI{% else %}NO{% endif %}</td>
-                        <td class="titulo" align="right">TOTAL RETE FUENTE:</td>
-                        <td align="right">{{ arRecibo.vrTotalReteFuente | number_format(2, '.', ',')}}</td>
+                        <td class="titulo" align="right">VALOR:</td>
+                        <td align="right">{{ arRecibo.vrTotal | number_format(2, '.', ',')}}</td>
                     </tr>
                     <tr>
                         <td class="titulo">EXPORTADO:</td>
                         <td class="td-in-well">{% if arRecibo.estadoExportado == 1 %}SI{% else %}NO{% endif %}</td>
                         <td class="titulo">AUTORIZADO:</td>
                         <td class="td-in-well">{% if arRecibo.estadoAutorizado == 1 %}SI{% else %}NO{% endif %}</td>
-                        <td class="titulo" align="right">VALOR:</td>
-                        <td align="right">{{ arRecibo.vrTotal | number_format(2, '.', ',')}}</td>
-                    </tr>
-                    <tr>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
                         <td class="titulo" align="right">TOTAL PAGO:</td>
                         <td align="right">{{ arRecibo.vrTotalPago | number_format(2, '.', ',')}}</td>
                     </tr>                    
