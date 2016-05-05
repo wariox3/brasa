@@ -33,14 +33,19 @@ class AfiCliente
     private $nombreCorto;                             
     
     /**
-     * @ORM\Column(name="plazo_pago", type="integer")
+     * @ORM\Column(name="codigo_asesor_fk", type="integer", nullable=true)
      */    
-    private $plazoPago = 0;    
+    private $codigoAsesorFk;   
     
     /**
      * @ORM\Column(name="codigo_forma_pago_fk", type="integer", nullable=true)
      */    
     private $codigoFormaPagoFk;     
+    
+    /**
+     * @ORM\Column(name="plazo_pago", type="integer")
+     */    
+    private $plazoPago = 0;    
     
     /**
      * @ORM\Column(name="direccion", type="string", length=120, nullable=true)
@@ -101,6 +106,12 @@ class AfiCliente
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;                            
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenAsesor", inversedBy="afiClientesAsesorRel")
+     * @ORM\JoinColumn(name="codigo_asesor_fk", referencedColumnName="codigo_asesor_pk")
+     */
+    protected $asesorRel;    
     
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenFormaPago", inversedBy="afiClientesFormaPagoRel")
@@ -786,5 +797,53 @@ class AfiCliente
     public function getServiciosClienteRel()
     {
         return $this->serviciosClienteRel;
+    }
+
+    /**
+     * Set codigoAsesorFk
+     *
+     * @param integer $codigoAsesorFk
+     *
+     * @return AfiCliente
+     */
+    public function setCodigoAsesorFk($codigoAsesorFk)
+    {
+        $this->codigoAsesorFk = $codigoAsesorFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoAsesorFk
+     *
+     * @return integer
+     */
+    public function getCodigoAsesorFk()
+    {
+        return $this->codigoAsesorFk;
+    }
+
+    /**
+     * Set asesorRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenAsesor $asesorRel
+     *
+     * @return AfiCliente
+     */
+    public function setAsesorRel(\Brasa\GeneralBundle\Entity\GenAsesor $asesorRel = null)
+    {
+        $this->asesorRel = $asesorRel;
+
+        return $this;
+    }
+
+    /**
+     * Get asesorRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenAsesor
+     */
+    public function getAsesorRel()
+    {
+        return $this->asesorRel;
     }
 }

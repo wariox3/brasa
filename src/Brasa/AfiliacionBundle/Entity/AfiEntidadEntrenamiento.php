@@ -68,29 +68,27 @@ class AfiEntidadEntrenamiento
     private $comentarios;                                  
 
     /**
-     * @ORM\OneToMany(targetEntity="AfiCurso", mappedBy="entidadEmtrenamientoRel")
+     * @ORM\OneToMany(targetEntity="AfiCurso", mappedBy="entidadEntrenamientoRel")
      */
     protected $cursosEntidadEntrenamientoRel;     
 
     /**
-     * @ORM\OneToMany(targetEntity="AfiEntidadEntrenamientoCosto", mappedBy="entidadEmtrenamientoRel")
+     * @ORM\OneToMany(targetEntity="AfiEntidadEntrenamientoCosto", mappedBy="entidadEntrenamientoRel")
      */
-    protected $entidadesEntrenamientoCostosEntidadEntrenamientoRel;
+    protected $entidadesEntrenamientosCostosEntidadEntrenamientoRel;
 
     /**
      * @ORM\OneToMany(targetEntity="AfiPagoCurso", mappedBy="entidadEntrenamientoRel")
      */
     protected $pagosCursosEntidadEntrenamientoRel;
     
-
-
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->cursosEntidadEntrenamientoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->entidadesEntrenamientoCostosEntidadEntrenamientoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->entidadesEntrenamientosCostosEntidadEntrenamientoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosCursosEntidadEntrenamientoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -379,37 +377,37 @@ class AfiEntidadEntrenamiento
     }
 
     /**
-     * Add entidadesEntrenamientoCostosEntidadEntrenamientoRel
+     * Add entidadesEntrenamientosCostosEntidadEntrenamientoRel
      *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamientoCosto $entidadesEntrenamientoCostosEntidadEntrenamientoRel
+     * @param \Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamientoCosto $entidadesEntrenamientosCostosEntidadEntrenamientoRel
      *
      * @return AfiEntidadEntrenamiento
      */
-    public function addEntidadesEntrenamientoCostosEntidadEntrenamientoRel(\Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamientoCosto $entidadesEntrenamientoCostosEntidadEntrenamientoRel)
+    public function addEntidadesEntrenamientosCostosEntidadEntrenamientoRel(\Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamientoCosto $entidadesEntrenamientosCostosEntidadEntrenamientoRel)
     {
-        $this->entidadesEntrenamientoCostosEntidadEntrenamientoRel[] = $entidadesEntrenamientoCostosEntidadEntrenamientoRel;
+        $this->entidadesEntrenamientosCostosEntidadEntrenamientoRel[] = $entidadesEntrenamientosCostosEntidadEntrenamientoRel;
 
         return $this;
     }
 
     /**
-     * Remove entidadesEntrenamientoCostosEntidadEntrenamientoRel
+     * Remove entidadesEntrenamientosCostosEntidadEntrenamientoRel
      *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamientoCosto $entidadesEntrenamientoCostosEntidadEntrenamientoRel
+     * @param \Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamientoCosto $entidadesEntrenamientosCostosEntidadEntrenamientoRel
      */
-    public function removeEntidadesEntrenamientoCostosEntidadEntrenamientoRel(\Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamientoCosto $entidadesEntrenamientoCostosEntidadEntrenamientoRel)
+    public function removeEntidadesEntrenamientosCostosEntidadEntrenamientoRel(\Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamientoCosto $entidadesEntrenamientosCostosEntidadEntrenamientoRel)
     {
-        $this->entidadesEntrenamientoCostosEntidadEntrenamientoRel->removeElement($entidadesEntrenamientoCostosEntidadEntrenamientoRel);
+        $this->entidadesEntrenamientosCostosEntidadEntrenamientoRel->removeElement($entidadesEntrenamientosCostosEntidadEntrenamientoRel);
     }
 
     /**
-     * Get entidadesEntrenamientoCostosEntidadEntrenamientoRel
+     * Get entidadesEntrenamientosCostosEntidadEntrenamientoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getEntidadesEntrenamientoCostosEntidadEntrenamientoRel()
+    public function getEntidadesEntrenamientosCostosEntidadEntrenamientoRel()
     {
-        return $this->entidadesEntrenamientoCostosEntidadEntrenamientoRel;
+        return $this->entidadesEntrenamientosCostosEntidadEntrenamientoRel;
     }
 
     /**

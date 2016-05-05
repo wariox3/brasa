@@ -6,9 +6,12 @@ use Doctrine\ORM\EntityRepository;
 
 class AfiCursoTipoRepository extends EntityRepository { 
     
-    public function ListaDql() {
+    public function listaDql($nombre = '') {
         $em = $this->getEntityManager();
-        $dql   = "SELECT ct FROM BrasaAfiliacionBundle:AfiCursoTipo ct WHERE ct.codigoCursoTipoPk <> 0";
+        $dql   = "SELECT ct FROM BrasaAfiliacionBundle:AfiCursoTipo ct WHERE ct.codigoCursoTipoPk <> 0 ";
+        if($nombre != "" ) {
+            $dql .= " AND ct.nombre LIKE '%" . $nombre . "%'";
+        }
         $dql .= " ORDER BY ct.nombre";
         return $dql;
     }            

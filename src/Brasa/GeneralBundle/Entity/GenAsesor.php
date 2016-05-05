@@ -48,7 +48,20 @@ class GenAsesor
      */
     protected $tercerosRel;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\CarteraBundle\Entity\CarCliente", mappedBy="asesorRel")
+     */
+    protected $carClientesAsesorRel;    
     
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\CarteraBundle\Entity\CarCuentaCobrar", mappedBy="asesorRel")
+     */
+    protected $carCuentasCobrarAsesorRel;    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiCliente", mappedBy="asesorRel")
+     */
+    protected $afiClientesAsesorRel;     
     
     /**
      * Constructor
@@ -220,5 +233,141 @@ class GenAsesor
     public function getTercerosRel()
     {
         return $this->tercerosRel;
+    }
+
+    /**
+     * Add afiClientesAsesorRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesAsesorRel
+     *
+     * @return GenAsesor
+     */
+    public function addAfiClientesAsesorRel(\Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesAsesorRel)
+    {
+        $this->afiClientesAsesorRel[] = $afiClientesAsesorRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove afiClientesAsesorRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesAsesorRel
+     */
+    public function removeAfiClientesAsesorRel(\Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesAsesorRel)
+    {
+        $this->afiClientesAsesorRel->removeElement($afiClientesAsesorRel);
+    }
+
+    /**
+     * Get afiClientesAsesorRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAfiClientesAsesorRel()
+    {
+        return $this->afiClientesAsesorRel;
+    }
+
+    /**
+     * Add carAsesorRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarCliente $carAsesorRel
+     *
+     * @return GenAsesor
+     */
+    public function addCarAsesorRel(\Brasa\CarteraBundle\Entity\CarCliente $carAsesorRel)
+    {
+        $this->carAsesorRel[] = $carAsesorRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove carAsesorRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarCliente $carAsesorRel
+     */
+    public function removeCarAsesorRel(\Brasa\CarteraBundle\Entity\CarCliente $carAsesorRel)
+    {
+        $this->carAsesorRel->removeElement($carAsesorRel);
+    }
+
+    /**
+     * Get carAsesorRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCarAsesorRel()
+    {
+        return $this->carAsesorRel;
+    }
+
+    /**
+     * Add carClientesAsesorRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarCliente $carClientesAsesorRel
+     *
+     * @return GenAsesor
+     */
+    public function addCarClientesAsesorRel(\Brasa\CarteraBundle\Entity\CarCliente $carClientesAsesorRel)
+    {
+        $this->carClientesAsesorRel[] = $carClientesAsesorRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove carClientesAsesorRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarCliente $carClientesAsesorRel
+     */
+    public function removeCarClientesAsesorRel(\Brasa\CarteraBundle\Entity\CarCliente $carClientesAsesorRel)
+    {
+        $this->carClientesAsesorRel->removeElement($carClientesAsesorRel);
+    }
+
+    /**
+     * Get carClientesAsesorRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCarClientesAsesorRel()
+    {
+        return $this->carClientesAsesorRel;
+    }
+
+    /**
+     * Add carCuentasCobrarAsesorRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarCuentaCobrar $carCuentasCobrarAsesorRel
+     *
+     * @return GenAsesor
+     */
+    public function addCarCuentasCobrarAsesorRel(\Brasa\CarteraBundle\Entity\CarCuentaCobrar $carCuentasCobrarAsesorRel)
+    {
+        $this->carCuentasCobrarAsesorRel[] = $carCuentasCobrarAsesorRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove carCuentasCobrarAsesorRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarCuentaCobrar $carCuentasCobrarAsesorRel
+     */
+    public function removeCarCuentasCobrarAsesorRel(\Brasa\CarteraBundle\Entity\CarCuentaCobrar $carCuentasCobrarAsesorRel)
+    {
+        $this->carCuentasCobrarAsesorRel->removeElement($carCuentasCobrarAsesorRel);
+    }
+
+    /**
+     * Get carCuentasCobrarAsesorRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCarCuentasCobrarAsesorRel()
+    {
+        return $this->carCuentasCobrarAsesorRel;
     }
 }

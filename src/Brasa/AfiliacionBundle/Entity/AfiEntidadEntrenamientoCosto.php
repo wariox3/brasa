@@ -33,7 +33,7 @@ class AfiEntidadEntrenamientoCosto
     private $costo = 0;        
 
     /**
-     * @ORM\ManyToOne(targetEntity="AfiEntidadEntrenamiento", inversedBy="entidadesEntrenamientoCostosEntidadEntrenamientoRel")
+     * @ORM\ManyToOne(targetEntity="AfiEntidadEntrenamiento", inversedBy="entidadesEntrenamientosCostosEntidadEntrenamientoRel")
      * @ORM\JoinColumn(name="codigo_entidad_entrenamiento_fk", referencedColumnName="codigo_entidad_entrenamiento_pk")
      */
     protected $entidadEntrenamientoRel;     
@@ -43,7 +43,6 @@ class AfiEntidadEntrenamientoCosto
      * @ORM\JoinColumn(name="codigo_curso_tipo_fk", referencedColumnName="codigo_curso_tipo_pk")
      */
     protected $cursoTipoRel;     
-
 
 
     /**

@@ -104,6 +104,7 @@ class AfiFacturaRepository extends EntityRepository {
                 if ($arClienteCartera == null){
                     $arClienteCartera = new \Brasa\CarteraBundle\Entity\CarCliente();
                     $arClienteCartera->setFormaPagoRel($arClienteAfiliacion->getFormaPagoRel());
+                    $arClienteCartera->setAsesorRel($arClienteAfiliacion->getAsesorRel());
                     $arClienteCartera->setCiudadRel($arClienteAfiliacion->getCiudadRel());
                     $arClienteCartera->setNit($arClienteAfiliacion->getNit());
                     $arClienteCartera->setDigitoVerificacion($arClienteAfiliacion->getDigitoVerificacion());
@@ -118,6 +119,7 @@ class AfiFacturaRepository extends EntityRepository {
                 }                
                 $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();                                
                 $arCuentaCobrar->setClienteRel($arClienteCartera);
+                $arCuentaCobrar->setAsesorRel($arClienteCartera->getAsesorRel());
                 $arCuentaCobrar->setCuentaCobrarTipoRel($arCuentaCobrarTipo);
                 $arCuentaCobrar->setFecha($arFactura->getFecha());
                 $arCuentaCobrar->setFechaVence($arFactura->getFechaVence());

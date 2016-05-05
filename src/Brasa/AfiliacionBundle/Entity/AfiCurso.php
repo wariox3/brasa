@@ -123,7 +123,7 @@ class AfiCurso
     /**
      * @ORM\OneToMany(targetEntity="AfiPagoCursoDetalle", mappedBy="cursoRel")
      */
-    protected $pagosCursosDetalleCursoRel;   
+    protected $pagosCursosDetallesCursoRel;   
     
     /**
      * Constructor
@@ -677,5 +677,39 @@ class AfiCurso
     public function getPagosCursosDetalleCursoRel()
     {
         return $this->pagosCursosDetalleCursoRel;
+    }
+
+    /**
+     * Add pagosCursosDetallesCursoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPagoCursoDetalle $pagosCursosDetallesCursoRel
+     *
+     * @return AfiCurso
+     */
+    public function addPagosCursosDetallesCursoRel(\Brasa\AfiliacionBundle\Entity\AfiPagoCursoDetalle $pagosCursosDetallesCursoRel)
+    {
+        $this->pagosCursosDetallesCursoRel[] = $pagosCursosDetallesCursoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosCursosDetallesCursoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPagoCursoDetalle $pagosCursosDetallesCursoRel
+     */
+    public function removePagosCursosDetallesCursoRel(\Brasa\AfiliacionBundle\Entity\AfiPagoCursoDetalle $pagosCursosDetallesCursoRel)
+    {
+        $this->pagosCursosDetallesCursoRel->removeElement($pagosCursosDetallesCursoRel);
+    }
+
+    /**
+     * Get pagosCursosDetallesCursoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosCursosDetallesCursoRel()
+    {
+        return $this->pagosCursosDetallesCursoRel;
     }
 }

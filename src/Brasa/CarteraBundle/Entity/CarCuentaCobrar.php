@@ -49,6 +49,11 @@ class CarCuentaCobrar
     private $codigoClienteFk;        
     
     /**
+     * @ORM\Column(name="codigo_asesor_fk", type="integer", nullable=true)
+     */    
+    private $codigoAsesorFk;    
+    
+    /**
      * @ORM\Column(name="valor_original", type="float")
      */    
     private $valorOriginal = 0;    
@@ -68,6 +73,12 @@ class CarCuentaCobrar
      * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
      */
     protected $clienteRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenAsesor", inversedBy="carCuentasCobrarAsesorRel")
+     * @ORM\JoinColumn(name="codigo_asesor_fk", referencedColumnName="codigo_asesor_pk")
+     */
+    protected $asesorRel;    
     
     /**
      * @ORM\ManyToOne(targetEntity="CarCuentaCobrarTipo", inversedBy="cuentasCobrarTiposCuentaCobrarRel")
@@ -477,5 +488,53 @@ class CarCuentaCobrar
     public function getRecibosDetallesCuentaCobrarRel()
     {
         return $this->recibosDetallesCuentaCobrarRel;
+    }
+
+    /**
+     * Set codigoAsesorFk
+     *
+     * @param integer $codigoAsesorFk
+     *
+     * @return CarCuentaCobrar
+     */
+    public function setCodigoAsesorFk($codigoAsesorFk)
+    {
+        $this->codigoAsesorFk = $codigoAsesorFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoAsesorFk
+     *
+     * @return integer
+     */
+    public function getCodigoAsesorFk()
+    {
+        return $this->codigoAsesorFk;
+    }
+
+    /**
+     * Set asesorRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenAsesor $asesorRel
+     *
+     * @return CarCuentaCobrar
+     */
+    public function setAsesorRel(\Brasa\GeneralBundle\Entity\GenAsesor $asesorRel = null)
+    {
+        $this->asesorRel = $asesorRel;
+
+        return $this;
+    }
+
+    /**
+     * Get asesorRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenAsesor
+     */
+    public function getAsesorRel()
+    {
+        return $this->asesorRel;
     }
 }
