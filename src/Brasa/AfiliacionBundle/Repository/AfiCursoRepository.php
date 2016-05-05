@@ -6,10 +6,46 @@ use Doctrine\ORM\EntityRepository;
 
 class AfiCursoRepository extends EntityRepository {  
     
-    public function ListaDql() {
+    public function ListaDql($numero = "", $codigoCliente = "", $boolEstadoAutorizado = "", $boolAsistencia = "", $boolEstadoFacturado = "", $boolEstadoAnulado = "", $strFechaDesde = "", $strFechaHasta = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT c FROM BrasaAfiliacionBundle:AfiCurso c WHERE c.codigoCursoPk <> 0";
-        $dql .= " ORDER BY c.codigoCursoPk DESC";
+        if($numero != "") {
+            $dql .= " AND c.numero = " . $numero;  
+        }        
+        if($codigoCliente != "") {
+            $dql .= " AND c.codigoClienteFk = " . $codigoCliente;  
+        }    
+        if($boolEstadoAutorizado == 1 ) {
+            $dql .= " AND c.estadoAutorizado = 1";
+        }
+        if($boolEstadoAutorizado == "0") {
+            $dql .= " AND c.estadoAutorizado = 0";
+        }        
+        if($boolAsistencia == 1 ) {
+            $dql .= " AND c.asistencia = 1";
+        }
+        if($boolAsistencia == "0") {
+            $dql .= " AND c.asistencia = 0";
+        }    
+        if($boolEstadoFacturado == 1 ) {
+            $dql .= " AND c.estadoFacturado = 1";
+        }
+        if($boolEstadoFacturado == "0") {
+            $dql .= " AND c.estadoFacturado = 0";
+        }
+        if($boolEstadoAnulado == 1 ) {
+            $dql .= " AND c.estadoAnulado = 1";
+        }
+        if($boolEstadoAnulado == "0") {
+            $dql .= " AND c.estadoAnulado = 0";
+        }        
+        if($strFechaDesde != "") {
+            $dql .= " AND c.fecha >= '" . $strFechaDesde . "'";
+        }        
+        if($strFechaHasta != "") {
+            $dql .= " AND c.fecha <= '" . $strFechaHasta . "'";
+        }        
+        $dql .= " ORDER BY c.fecha DESC";
         return $dql;
     }            
     

@@ -72,11 +72,15 @@ class CursoController extends Controller
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_curso'));
             }            
-            if ($form->get('BtnFiltrar')->isClicked()) {
+            if ($form->get('BtnFiltrar')->isClicked()) {                
                 $this->filtrar($form);
+                $form = $this->formularioFiltro();
+                $this->lista();                
             }
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
+                $form = $this->formularioFiltro();
+                $this->lista();
                 $this->generarExcel();
             }
         }
@@ -256,8 +260,22 @@ class CursoController extends Controller
     private function lista() {    
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
+        $strFechaDesde = "";
+        $strFechaHasta = "";        
+        $filtrarFecha = $session->get('filtroCursoFiltrarFecha');
+        if($filtrarFecha) {
+            $strFechaDesde = $session->get('filtroCursoFechaDesde');
+            $strFechaHasta = $session->get('filtroCursoFechaHasta');                    
+        }
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->listaDQL(
-                $session->get('filtroCursoNombre')   
+                $session->get('filtroCursoNumero'), 
+                $session->get('filtroCodigoCliente'), 
+                $session->get('filtroCursoEstadoAutorizado'), 
+                $session->get('filtroCursoAsistencia'),
+                $session->get('filtroCursoEstadoFacturado'),
+                $session->get('filtroCursoEstadoAnulado'),
+                $strFechaDesde,
+                $strFechaHasta  
                 ); 
     }
     
@@ -271,14 +289,58 @@ class CursoController extends Controller
 
     private function filtrar ($form) {        
         $session = $this->getRequest()->getSession();        
-        $session->set('filtroCursoNombre', $form->get('TxtNombre')->getData());
-        $this->lista();
+        $session->set('filtroCursoNumero', $form->get('TxtNumero')->getData());
+        $session->set('filtroCursoEstadoAutorizado', $form->get('estadoAutorizado')->getData());          
+        $session->set('filtroCursoAsistencia', $form->get('asistencia')->getData());          
+        $session->set('filtroCursoEstadoFacturado', $form->get('estadoFacturado')->getData());          
+        $session->set('filtroCursoEstadoAnulado', $form->get('estadoAnulado')->getData());          
+        $session->set('filtroNit', $form->get('TxtNit')->getData());                         
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        $session->set('filtroCursoFechaDesde', $dateFechaDesde->format('Y/m/d'));
+        $session->set('filtroCursoFechaHasta', $dateFechaHasta->format('Y/m/d'));                 
+        $session->set('filtroCursoFiltrarFecha', $form->get('filtrarFecha')->getData());
     }
     
     private function formularioFiltro() {
+        $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $form = $this->createFormBuilder()            
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroCursoNombre')))
+        $strNombreCliente = "";
+        if($session->get('filtroNit')) {
+            $arCliente = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
+            if($arCliente) {
+                $session->set('filtroCodigoCliente', $arCliente->getCodigoClientePk());
+                $strNombreCliente = $arCliente->getNombreCorto();
+            }  else {
+                $session->set('filtroCodigoCliente', null);
+                $session->set('filtroNit', null);
+            }          
+        } else {
+            $session->set('filtroCodigoCliente', null);
+        }       
+        $dateFecha = new \DateTime('now');
+        $strFechaDesde = $dateFecha->format('Y/m/')."01";
+        $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
+        $strFechaHasta = $dateFecha->format('Y/m/').$intUltimoDia;
+        if($session->get('filtroCursoFechaDesde') != "") {
+            $strFechaDesde = $session->get('filtroCursoFechaDesde');
+        }
+        if($session->get('filtroCursoFechaHasta') != "") {
+            $strFechaHasta = $session->get('filtroCursoFechaHasta');
+        }    
+        $dateFechaDesde = date_create($strFechaDesde);
+        $dateFechaHasta = date_create($strFechaHasta);
+        $form = $this->createFormBuilder()
+            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                
+            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCursoNumero')))
+            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroCursoEstadoAutorizado')))                
+            ->add('asistencia', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ASISTIO', '0' => 'NO ASISTIO'), 'data' => $session->get('filtroCursoAsistencia')))                                
+            ->add('estadoFacturado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'FACTURADO', '0' => 'SIN FACTURAR'), 'data' => $session->get('filtroCursoEstadoFacturado')))                                
+            ->add('estadoAnulado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ANULADO', '0' => 'SIN ANULAR'), 'data' => $session->get('filtroCursoEstadoAnulado')))                                
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                
+            ->add('filtrarFecha', 'checkbox', array('required'  => false, 'data' => $session->get('filtroCursoFiltrarFecha')))                             
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
             ->add('BtnAsistencia', 'submit', array('label'  => 'Asistencia',))            
             ->add('BtnCertificado', 'submit', array('label'  => 'Certificado',))                            
@@ -286,7 +348,7 @@ class CursoController extends Controller
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
-    }            
+    }     
     
     private function formularioDetalle($ar) {        
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);      
