@@ -104,14 +104,33 @@ class CursoController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arCurso = $form->getData();  
-            $arCurso->setFecha(new \DateTime('now'));
-            $em->persist($arCurso);
-            $em->flush();            
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_nuevo', array('codigoCurso' => 0 )));
-            } else {
-                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_detalle', array('codigoCurso' => $arCurso->getCodigoCursoPk())));
-            }                                   
+            $arrControles = $request->request->All();
+            if($arrControles['txtNit'] != '') {
+                $arCliente = new \Brasa\AfiliacionBundle\Entity\AfiCliente();
+                $arCliente = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->findOneBy(array('nit' => $arrControles['txtNit']));                
+                if(count($arCliente) > 0) {
+                    $arCurso->setClienteRel($arCliente);                    
+                    if($arrControles['txtNumeroIdentificacion'] != '') {
+                        $arEmpleado = new \Brasa\AfiliacionBundle\Entity\AfiEmpleado();
+                        $arEmpleado = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));                
+                        if(count($arEmpleado) > 0) {                            
+                            $arCurso->setEmpleadoRel($arEmpleado);
+                            $arCurso->setFecha(new \DateTime('now'));                    
+                            $em->persist($arCurso);
+                            $em->flush();            
+                            if($form->get('guardarnuevo')->isClicked()) {
+                                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_nuevo', array('codigoCurso' => 0 )));
+                            } else {
+                                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_detalle', array('codigoCurso' => $arCurso->getCodigoCursoPk())));
+                            } 
+                        } else {
+                            $objMensaje->Mensaje("error", "El empleado no existe", $this);
+                        }
+                    }                   
+                } else {
+                    $objMensaje->Mensaje("error", "El cliente no existe", $this);
+                }                                                 
+            }                                              
         }
         return $this->render('BrasaAfiliacionBundle:Movimiento/Curso:nuevo.html.twig', array(
             'arCurso' => $arCurso,
@@ -152,10 +171,10 @@ class CursoController extends Controller
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 } else {
-                    //$objFactura = new \Brasa\TurnoBundle\Formatos\FormatoFactura();
-                    //$objFactura->Generar($this, $codigoFactura);                    
+                    $objCurso = new \Brasa\AfiliacionBundle\Formatos\Curso();
+                    $objCurso->Generar($this, $codigoCurso);                    
                 }
-                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_detalle', array('codigoCurso' => $codigoCurso)));
+                //return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_detalle', array('codigoCurso' => $codigoCurso)));
             }      
             if($form->get('BtnFacturar')->isClicked()) {            
                 if($arCurso->getEstadoFacturado() == 0 && $arCurso->getEstadoAutorizado() == 1) {                    

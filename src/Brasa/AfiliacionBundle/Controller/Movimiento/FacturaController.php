@@ -75,17 +75,27 @@ class FacturaController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arFactura = $form->getData();  
-            $dateFechaVence = $objFunciones->sumarDiasFecha($arFactura->getClienteRel()->getPlazoPago(), $arFactura->getFecha());
-            $arFactura->setFechaVence($dateFechaVence); 
-            $arUsuario = $this->getUser(); 
-            $arFactura->setUsuario($arUsuario->getUserName());
-            $em->persist($arFactura);
-            $em->flush();            
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_nuevo', array('codigoFactura' => 0 )));
-            } else {
-                return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_detalle', array('codigoFactura' => $arFactura->getCodigoFacturaPk())));
-            }                                   
+            $arrControles = $request->request->All();
+            if($arrControles['txtNit'] != '') {
+                $arCliente = new \Brasa\AfiliacionBundle\Entity\AfiCliente();
+                $arCliente = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->findOneBy(array('nit' => $arrControles['txtNit']));                
+                if(count($arCliente) > 0) {
+                    $arFactura->setClienteRel($arCliente);
+                    $dateFechaVence = $objFunciones->sumarDiasFecha($arFactura->getClienteRel()->getPlazoPago(), $arFactura->getFecha());
+                    $arFactura->setFechaVence($dateFechaVence); 
+                    $arUsuario = $this->getUser(); 
+                    $arFactura->setUsuario($arUsuario->getUserName());
+                    $em->persist($arFactura);
+                    $em->flush();            
+                    if($form->get('guardarnuevo')->isClicked()) {
+                        return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_nuevo', array('codigoFactura' => 0 )));
+                    } else {
+                        return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_detalle', array('codigoFactura' => $arFactura->getCodigoFacturaPk())));
+                    }                     
+                } else {
+                    $objMensaje->Mensaje("error", "El cliente no existe", $this);
+                }   
+            }                                                  
         }
         return $this->render('BrasaAfiliacionBundle:Movimiento/Factura:nuevo.html.twig', array(
             'arFactura' => $arFactura,

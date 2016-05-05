@@ -50,8 +50,8 @@ class AfiCurso
     /**
      * @ORM\Column(name="codigo_entidad_entrenamiento_fk", type="integer", nullable=true)
      */    
-    private $codigoEntidadEntrenamientoFk;    
-
+    private $codigoEntidadEntrenamientoFk;            
+    
     /**
      * @ORM\Column(name="costo", type="float")
      */
@@ -125,6 +125,8 @@ class AfiCurso
      */
     protected $pagosCursosDetallesCursoRel;   
     
+
+
     /**
      * Constructor
      */
@@ -132,7 +134,7 @@ class AfiCurso
     {
         $this->cursosDetallesCursoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->facturasDetallesCursosCursoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->pagosCursosDetalleCursoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosCursosDetallesCursoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -643,40 +645,6 @@ class AfiCurso
     public function getFacturasDetallesCursosCursoRel()
     {
         return $this->facturasDetallesCursosCursoRel;
-    }
-
-    /**
-     * Add pagosCursosDetalleCursoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiPagoCursoDetalle $pagosCursosDetalleCursoRel
-     *
-     * @return AfiCurso
-     */
-    public function addPagosCursosDetalleCursoRel(\Brasa\AfiliacionBundle\Entity\AfiPagoCursoDetalle $pagosCursosDetalleCursoRel)
-    {
-        $this->pagosCursosDetalleCursoRel[] = $pagosCursosDetalleCursoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove pagosCursosDetalleCursoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiPagoCursoDetalle $pagosCursosDetalleCursoRel
-     */
-    public function removePagosCursosDetalleCursoRel(\Brasa\AfiliacionBundle\Entity\AfiPagoCursoDetalle $pagosCursosDetalleCursoRel)
-    {
-        $this->pagosCursosDetalleCursoRel->removeElement($pagosCursosDetalleCursoRel);
-    }
-
-    /**
-     * Get pagosCursosDetalleCursoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPagosCursosDetalleCursoRel()
-    {
-        return $this->pagosCursosDetalleCursoRel;
     }
 
     /**

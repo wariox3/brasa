@@ -135,8 +135,8 @@ class PagoCurso extends \FPDF_FPDF {
         foreach ($arPagoCursoDetalles as $arPagoCursoDetalle) {            
             $pdf->Cell(20, 4, $arPagoCursoDetalle->getCodigoPagoCursoDetallePk(), 1, 0, 'L');            
             if($arPagoCursoDetalle->getCursoRel()->getCodigoEmpleadoFk() != null) {
-                $pdf->Cell(25, 4, $arPagoCursoDetalle->getCursoRel()->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
-                $pdf->Cell(130, 4, utf8_decode($arPagoCursoDetalle->getCursoRel()->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');                
+                $pdf->Cell(25, 4, $arPagoCursoDetalle->getCursoRel()->getNumeroIdentificacion(), 1, 0, 'L');
+                $pdf->Cell(130, 4, utf8_decode($arPagoCursoDetalle->getCursoRel()->getNombreCorto()), 1, 0, 'L');                
             } else {
                 $pdf->Cell(25, 4, '', 1, 0, 'L');
                 $pdf->Cell(130, 4, '', 1, 0, 'L');                
