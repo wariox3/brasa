@@ -28,6 +28,11 @@ class AfiPagoCurso
     private $fecha;           
     
     /**
+     * @ORM\Column(name="codigo_cuenta_fk", type="integer", nullable=true)
+     */    
+    private $codigoCuentaFk;    
+    
+    /**
      * @ORM\Column(name="soporte", type="string", length=30, nullable=true)
      */
     private $soporte;     
@@ -68,6 +73,12 @@ class AfiPagoCurso
      */
     protected $entidadEntrenamientoRel;    
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCuenta", inversedBy="afiPagosCursosCuentaRel")
+     * @ORM\JoinColumn(name="codigo_cuenta_fk", referencedColumnName="codigo_cuenta_pk")
+     */
+    protected $cuentaRel;     
+    
     /**
      * @ORM\OneToMany(targetEntity="AfiPagoCursoDetalle", mappedBy="pagoCursoRel")
      */
@@ -362,5 +373,53 @@ class AfiPagoCurso
     public function getPagosCursosDetallesPagoCursoRel()
     {
         return $this->pagosCursosDetallesPagoCursoRel;
+    }
+
+    /**
+     * Set codigoCuentaFk
+     *
+     * @param integer $codigoCuentaFk
+     *
+     * @return AfiPagoCurso
+     */
+    public function setCodigoCuentaFk($codigoCuentaFk)
+    {
+        $this->codigoCuentaFk = $codigoCuentaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCuentaFk
+     *
+     * @return integer
+     */
+    public function getCodigoCuentaFk()
+    {
+        return $this->codigoCuentaFk;
+    }
+
+    /**
+     * Set cuentaRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCuenta $cuentaRel
+     *
+     * @return AfiPagoCurso
+     */
+    public function setCuentaRel(\Brasa\GeneralBundle\Entity\GenCuenta $cuentaRel = null)
+    {
+        $this->cuentaRel = $cuentaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get cuentaRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCuenta
+     */
+    public function getCuentaRel()
+    {
+        return $this->cuentaRel;
     }
 }

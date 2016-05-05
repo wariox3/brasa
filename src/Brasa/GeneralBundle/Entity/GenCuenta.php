@@ -69,7 +69,10 @@ class GenCuenta
      */
     protected $carNotasCreditosCuentaRel;
     
-    
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiPagoCurso", mappedBy="cuentaRel")
+     */
+    protected $afiPagosCursosCuentaRel;     
     
     
     /**
@@ -371,5 +374,39 @@ class GenCuenta
     public function getCarNotasCreditosCuentaRel()
     {
         return $this->carNotasCreditosCuentaRel;
+    }
+
+    /**
+     * Add afiPagosCursosCuentaRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPagoCurso $afiPagosCursosCuentaRel
+     *
+     * @return GenCuenta
+     */
+    public function addAfiPagosCursosCuentaRel(\Brasa\AfiliacionBundle\Entity\AfiPagoCurso $afiPagosCursosCuentaRel)
+    {
+        $this->afiPagosCursosCuentaRel[] = $afiPagosCursosCuentaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove afiPagosCursosCuentaRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPagoCurso $afiPagosCursosCuentaRel
+     */
+    public function removeAfiPagosCursosCuentaRel(\Brasa\AfiliacionBundle\Entity\AfiPagoCurso $afiPagosCursosCuentaRel)
+    {
+        $this->afiPagosCursosCuentaRel->removeElement($afiPagosCursosCuentaRel);
+    }
+
+    /**
+     * Get afiPagosCursosCuentaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAfiPagosCursosCuentaRel()
+    {
+        return $this->afiPagosCursosCuentaRel;
     }
 }

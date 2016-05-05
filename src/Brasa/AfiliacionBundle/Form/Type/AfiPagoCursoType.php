@@ -9,7 +9,14 @@ class AfiPagoCursoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder    
+        $builder 
+            ->add('cuentaRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenCuenta',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('c')
+                    ->orderBy('c.codigoCuentaPk', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                 
             ->add('entidadEntrenamientoRel', 'entity', array(
                 'class' => 'BrasaAfiliacionBundle:AfiEntidadEntrenamiento',
                 'query_builder' => function (EntityRepository $er)  {

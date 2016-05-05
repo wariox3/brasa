@@ -120,9 +120,9 @@ class PagoCursoController extends Controller
                 $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiPagoCurso')->imprimir($codigoPagoCurso);
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);
-                } else {
-                    //$objPagoCurso = new \Brasa\TurnoBundle\Formatos\FormatoPagoCurso();
-                    //$objPagoCurso->Generar($this, $codigoPagoCurso);                    
+                } else {                    
+                    $objPagoCurso = new \Brasa\AfiliacionBundle\Formatos\PagoCurso();
+                    $objPagoCurso->Generar($this, $codigoPagoCurso);                    
                 }
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_pago_curso_detalle', array('codigoPagoCurso' => $codigoPagoCurso)));
             }                        
