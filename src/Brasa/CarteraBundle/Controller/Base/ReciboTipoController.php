@@ -1,18 +1,18 @@
 <?php
-namespace Brasa\CarteraBundle\Controller;
+namespace Brasa\CarteraBundle\Controller\Base;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Brasa\CarteraBundle\Form\Type\CarClienteType;
+use Brasa\CarteraBundle\Form\Type\CarReciboTipoType;
 
-class BaseClienteController extends Controller
+class ReciboTipoController extends Controller
 {
     var $strDqlLista = "";
     var $strCodigo = "";
     var $strNombre = "";
     /**
-     * @Route("/cartera/base/cliente/lista", name="brs_cartera_base_cliente_listar")
+     * @Route("/cartera/base/recibo/tipo/lista", name="brs_cartera_base_recibo_tipo_listar")
      */   
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -25,8 +25,8 @@ class BaseClienteController extends Controller
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaCarteraBundle:CarCliente')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_cartera_base_cliente_listar'));
+                $em->getRepository('BrasaCarteraBundle:CarReciboTipo')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_cartera_base_recibo_tipo_listar'));
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
@@ -37,52 +37,45 @@ class BaseClienteController extends Controller
             }
         }
         
-        $arClientes = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
-        return $this->render('BrasaCarteraBundle:Base/Cliente:lista.html.twig', array(
-            'arClientes' => $arClientes, 
+        $arReciboTipos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
+        return $this->render('BrasaCarteraBundle:Base/ReciboTipo:lista.html.twig', array(
+            'arReciboTipos' => $arReciboTipos, 
             'form' => $form->createView()));
     }
     
     /**
-     * @Route("/cartera/base/cliente/nuevo/{codigoCliente}", name="brs_cartera_base_cliente_nuevo")
+     * @Route("/cartera/base/recibo/tipo/nuevo/{codigoReciboTipo}", name="brs_cartera_base_recibo_tipo_nuevo")
      */
-    public function nuevoAction($codigoCliente = '') {
+    public function nuevoAction($codigoReciboTipo = '') {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $arCliente = new \Brasa\CarteraBundle\Entity\CarCliente();
-        if($codigoCliente != '' && $codigoCliente != '0') {
-            $arCliente = $em->getRepository('BrasaCarteraBundle:CarCliente')->find($codigoCliente);
+        $arReciboTipo = new \Brasa\CarteraBundle\Entity\CarReciboTipo();
+        if($codigoReciboTipo != '' && $codigoReciboTipo != '0') {
+            $arReciboTipo = $em->getRepository('BrasaCarteraBundle:CarReciboTipo')->find($codigoReciboTipo);
         }        
-        $form = $this->createForm(new CarClienteType, $arCliente);
+        $form = $this->createForm(new CarReciboTipoType, $arReciboTipo);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arCliente = $form->getData();
-            $arClienteValidar = new \Brasa\CarteraBundle\Entity\CarCliente();
-            $arClienteValidar = $em->getRepository('BrasaCarteraBundle:CarCliente')->findBy(array('nit' => $arCliente->getNit()));
-            if(($codigoCliente == 0 || $codigoCliente == '') && count($arClienteValidar) > 0) {
-                $objMensaje->Mensaje("error", "El cliente con ese nit ya existe", $this);
+            $arReciboTipo = $form->getData();
+            $em->persist($arReciboTipo);
+            $em->flush();            
+            if($form->get('guardarnuevo')->isClicked()) {
+                return $this->redirect($this->generateUrl('brs_cartera_base_recibo_tipo_nuevo', array('codigoReciboTipo' => 0 )));
             } else {
-                $arUsuario = $this->getUser();
-                $arCliente->setUsuario($arUsuario->getUserName());
-                $em->persist($arCliente);
-                $em->flush();            
-                if($form->get('guardarnuevo')->isClicked()) {
-                    return $this->redirect($this->generateUrl('brs_cartera_base_cliente_nuevo', array('codigoCliente' => 0 )));
-                } else {
-                    return $this->redirect($this->generateUrl('brs_cartera_base_cliente_listar'));
-                }                                   
-            }                                                                            
+                return $this->redirect($this->generateUrl('brs_cartera_base_recibo_tipo_listar'));
+            }                                   
+                                                                                        
 
         }
-        return $this->render('BrasaCarteraBundle:Base/Cliente:nuevo.html.twig', array(
-            'arCliente' => $arCliente,
+        return $this->render('BrasaCarteraBundle:Base/ReciboTipo:nuevo.html.twig', array(
+            'arReciboTipo' => $arReciboTipo,
             'form' => $form->createView()));
     }          
     
     private function lista() {        
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaCarteraBundle:CarCliente')->listaDQL(
+        $this->strDqlLista = $em->getRepository('BrasaCarteraBundle:CarReciboTipo')->listaDQL(
                 $this->strNombre,                
                 $this->strCodigo   
                 ); 
@@ -122,46 +115,26 @@ class BaseClienteController extends Controller
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'NIT')
-                    ->setCellValue('C1', 'DV')
-                    ->setCellValue('D1', 'NOMBRE')
-                    ->setCellValue('E1', 'CIUDAD')
-                    ->setCellValue('F1', 'DIRECCION')
-                    ->setCellValue('G1', 'TELEFONO')
-                    ->setCellValue('H1', 'CELULAR')
-                    ->setCellValue('I1', 'EMAIL')
-                    ->setCellValue('J1', 'FAX')
-                    ->setCellValue('K1', 'FORMA PAGO')
-                    ->setCellValue('L1', 'PLAZO PAGO');
+                    ->setCellValue('B1', 'NOMBRE');
 
         $i = 2;
         
         $query = $em->createQuery($this->strDqlLista);
-                $arClientes = new \Brasa\CarteraBundle\Entity\CarCliente();
-                $arClientes = $query->getResult();
+                $arReciboTipos = new \Brasa\CarteraBundle\Entity\CarReciboTipo();
+                $arReciboTipos = $query->getResult();
                 
-        foreach ($arClientes as $arCliente) {            
+        foreach ($arReciboTipos as $arReciboTipo) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arCliente->getCodigoClientePk())
-                    ->setCellValue('B' . $i, $arCliente->getNit())
-                    ->setCellValue('C' . $i, $arCliente->getDigitoVerificacion())
-                    ->setCellValue('D' . $i, $arCliente->getNombreCorto())
-                    ->setCellValue('E' . $i, $arCliente->getCiudadRel()->getNombre())
-                    ->setCellValue('F' . $i, $arCliente->getDireccion())
-                    ->setCellValue('G' . $i, $arCliente->getTelefono())
-                    ->setCellValue('H' . $i, $arCliente->getCelular())
-                    ->setCellValue('I' . $i, $arCliente->getEmail())
-                    ->setCellValue('J' . $i, $arCliente->getFax())
-                    ->setCellValue('K' . $i, $arCliente->getFormaPagoRel()->getNombre())
-                    ->setCellValue('L' . $i, $arCliente->getPlazoPago());                                    
+                    ->setCellValue('A' . $i, $arReciboTipo->getCodigoReciboTipoPk())
+                    ->setCellValue('B' . $i, $arReciboTipo->getNombre());                                    
             $i++;
         }
         
-        $objPHPExcel->getActiveSheet()->setTitle('Cliente');
+        $objPHPExcel->getActiveSheet()->setTitle('ReciboTipo');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Clientes.xlsx"');
+        header('Content-Disposition: attachment;filename="ReciboTipos.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

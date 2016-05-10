@@ -1,18 +1,18 @@
 <?php
-namespace Brasa\CarteraBundle\Controller;
+namespace Brasa\CarteraBundle\Controller\Base;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Brasa\CarteraBundle\Form\Type\CarNotaCreditoConceptoType;
+use Brasa\CarteraBundle\Form\Type\CarCuentaCobrarTipoType;
 
-class BaseNotaCreditoConceptoController extends Controller
+class CuentaCobrarTipoController extends Controller
 {
     var $strDqlLista = "";
     var $strCodigo = "";
     var $strNombre = "";
     /**
-     * @Route("/cartera/base/notacredito/concepto/lista", name="brs_cartera_base_notacredito_concepto_listar")
+     * @Route("/cartera/base/cuentacobrar/tipo/lista", name="brs_cartera_base_cuentacobrar_tipo_listar")
      */   
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -25,8 +25,8 @@ class BaseNotaCreditoConceptoController extends Controller
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaCarteraBundle:CarNotaCreditoConcepto')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_cartera_base_notacredito_concepto_listar'));
+                $em->getRepository('BrasaCarteraBundle:CarCuentaCobrarTipo')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_cartera_base_cuentacobrar_tipo_listar'));
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
@@ -37,45 +37,45 @@ class BaseNotaCreditoConceptoController extends Controller
             }
         }
         
-        $arNotaCreditoConceptos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
-        return $this->render('BrasaCarteraBundle:Base/NotaCreditoConcepto:lista.html.twig', array(
-            'arNotaCreditoConceptos' => $arNotaCreditoConceptos, 
+        $arCuentaCobrarTipos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
+        return $this->render('BrasaCarteraBundle:Base/CuentaCobroTipo:lista.html.twig', array(
+            'arCuentaCobrarTipos' => $arCuentaCobrarTipos, 
             'form' => $form->createView()));
     }
     
     /**
-     * @Route("/cartera/base/notacredito/concepto/nuevo/{codigoNotaCreditoConcepto}", name="brs_cartera_base_notacredito_concepto_nuevo")
+     * @Route("/cartera/base/cuentacobrar/tipo/nuevo/{codigoCuentaCobrarTipo}", name="brs_cartera_base_cuentacobrar_tipo_nuevo")
      */
-    public function nuevoAction($codigoNotaCreditoConcepto = '') {
+    public function nuevoAction($codigoCuentaCobrarTipo = '') {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $arNotaCreditoConcepto = new \Brasa\CarteraBundle\Entity\CarNotaCreditoConcepto();
-        if($codigoNotaCreditoConcepto != '' && $codigoNotaCreditoConcepto != '0') {
-            $arNotaCreditoConcepto = $em->getRepository('BrasaCarteraBundle:CarNotaCreditoConcepto')->find($codigoNotaCreditoConcepto);
+        $arCuentaCobrarTipo = new \Brasa\CarteraBundle\Entity\CarCuentaCobrarTipo();
+        if($codigoCuentaCobrarTipo != '' && $codigoCuentaCobrarTipo != '0') {
+            $arCuentaCobrarTipo = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrarTipo')->find($codigoCuentaCobrarTipo);
         }        
-        $form = $this->createForm(new CarNotaCreditoConceptoType, $arNotaCreditoConcepto);
+        $form = $this->createForm(new CarCuentaCobrarTipoType, $arCuentaCobrarTipo);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arNotaCreditoConcepto = $form->getData();
-            $em->persist($arNotaCreditoConcepto);
+            $arCuentaCobrarTipo = $form->getData();
+            $em->persist($arCuentaCobrarTipo);
             $em->flush();            
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_cartera_base_notacredito_concepto_nuevo', array('codigoNotaCreditoConcepto' => 0 )));
+                return $this->redirect($this->generateUrl('brs_cartera_base_cuentacobrar_tipo_nuevo', array('codigoCuentaCobroTipo' => 0 )));
             } else {
-                return $this->redirect($this->generateUrl('brs_cartera_base_notacredito_concepto_listar'));
+                return $this->redirect($this->generateUrl('brs_cartera_base_cuentacobrar_tipo_listar'));
             }                                   
                                                                                         
 
         }
-        return $this->render('BrasaCarteraBundle:Base/NotaCreditoConcepto:nuevo.html.twig', array(
-            'arNotaCreditoConcepto' => $arNotaCreditoConcepto,
+        return $this->render('BrasaCarteraBundle:Base/CuentaCobroTipo:nuevo.html.twig', array(
+            'arCuentaCobrarTipo' => $arCuentaCobrarTipo,
             'form' => $form->createView()));
     }          
     
     private function lista() {        
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaCarteraBundle:CarNotaCreditoConcepto')->listaDQL(
+        $this->strDqlLista = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrarTipo')->listaDQL(
                 $this->strNombre,                
                 $this->strCodigo   
                 ); 
@@ -120,21 +120,21 @@ class BaseNotaCreditoConceptoController extends Controller
         $i = 2;
         
         $query = $em->createQuery($this->strDqlLista);
-                $arNotaCreditoConceptos = new \Brasa\CarteraBundle\Entity\CarNotaCreditoConcepto();
-                $arNotaCreditoConceptos = $query->getResult();
+                $arCuentaCobrarTipos = new \Brasa\CarteraBundle\Entity\CarCuentaCobrarTipo();
+                $arCuentaCobrarTipos = $query->getResult();
                 
-        foreach ($arNotaCreditoConceptos as $arNotaCreditoConcepto) {            
+        foreach ($arCuentaCobrarTipos as $arCuentaCobrarTipo) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arNotaCreditoConcepto->getCodigoNotaCreditoConceptoPk())
-                    ->setCellValue('B' . $i, $arNotaCreditoConcepto->getNombre());                                    
+                    ->setCellValue('A' . $i, $arCuentaCobrarTipo->getCodigoCuentaCobrarTipoPk())
+                    ->setCellValue('B' . $i, $arCuentaCobrarTipo->getNombre());                                    
             $i++;
         }
         
-        $objPHPExcel->getActiveSheet()->setTitle('NotaCreditoConcepto');
+        $objPHPExcel->getActiveSheet()->setTitle('CuentaCobrarTipo');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="NotaCreditoConceptos.xlsx"');
+        header('Content-Disposition: attachment;filename="CuentaCobrarTipos.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

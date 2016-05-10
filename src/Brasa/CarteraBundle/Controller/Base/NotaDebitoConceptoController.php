@@ -1,12 +1,12 @@
 <?php
-namespace Brasa\CarteraBundle\Controller;
+namespace Brasa\CarteraBundle\Controller\Base;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\CarteraBundle\Form\Type\CarNotaDebitoConceptoType;
 
-class BaseNotaDebitoConceptoController extends Controller
+class NotaDebitoConceptoController extends Controller
 {
     var $strDqlLista = "";
     var $strCodigo = "";
