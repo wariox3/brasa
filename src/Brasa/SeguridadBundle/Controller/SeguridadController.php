@@ -18,10 +18,8 @@ class SeguridadController extends Controller
             $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);                        
             $session->remove(SecurityContext::AUTHENTICATION_ERROR);
         }
- 
-        return $this->render(
-            'BrasaSeguridadBundle:Seguridad:login.html.twig',
-            array(
+        
+        return $this->render('BrasaSeguridadBundle:Seguridad:login.html.twig', array(
                 // last username entered by the user
                 'last_username' => $session->get(SecurityContext::LAST_USERNAME),
                 'error'         => $error,

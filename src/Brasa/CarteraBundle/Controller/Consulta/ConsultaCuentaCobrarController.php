@@ -1,5 +1,5 @@
 <?php
-namespace Brasa\CarteraBundle\Controller;
+namespace Brasa\CarteraBundle\Controller\Consulta;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
@@ -50,6 +50,7 @@ class ConsultaCuentaCobrarController extends Controller
                 $session->get('filtroNumero'),
                 $session->get('filtroCodigoCliente'),
                 $session->get('filtroCuentaCobrarTipo'),
+                $session->get('filtroAsesor'),
                 $session->get('filtroDesde'),
                 $session->get('filtroHasta'));
     }
@@ -62,8 +63,15 @@ class ConsultaCuentaCobrarController extends Controller
         } else {
             $codigo = $arCuentaCobrarTipo->getCodigoCuentaCobrarTipoPk();
         }
+        $arAsesor = $form->get('asesorRel')->getData();
+        if ($arAsesor == null){
+            $codigoAsesor = "";
+        } else {
+            $codigoAsesor = $arAsesor->getCodigoAsesorPk();
+        }        
         $session->set('filtroNumero', $form->get('TxtNumero')->getData());
         $session->set('filtroCuentaCobrarTipo', $codigo);
+        $session->set('filtroAsesor', $codigoAsesor);
         $session->set('filtroNit', $form->get('TxtNit')->getData());
         $session->set('filtroDesde', $form->get('fechaDesde')->getData());
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
@@ -100,15 +108,28 @@ class ConsultaCuentaCobrarController extends Controller
         if($session->get('filtroCuentaCobrarTipo')) {
             $arrayPropiedades['data'] = $em->getReference("BrasaCarteraBundle:CarCuentaCobrarTipo", $session->get('filtroCuentaCobrarTipo'));
         }
+        $arrayPropiedadesAsesor = array(
+                'class' => 'BrasaGeneralBundle:GenAsesor',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('a')
+                    ->orderBy('a.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );        
+        if($session->get('filtroAsesor')) {
+            $arrayPropiedadesAsesor['data'] = $em->getReference("BrasaGeneralBundle:GenAsesor", $session->get('filtroAsesor'));
+        }        
         $form = $this->createFormBuilder()
             ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
             ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))
             ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroPedidoNumero')))
             ->add('cuentaCobrarTipoRel', 'entity', $arrayPropiedades)
-            //->add('fechaDesde', 'date', array('format' => 'yyyyMMdd'))
+            ->add('asesorRel', 'entity', $arrayPropiedadesAsesor)
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date')))
-            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date')))
-            //->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date')))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();

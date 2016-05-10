@@ -273,6 +273,7 @@ class CursoController extends Controller
                 $session->get('filtroCursoEstadoAutorizado'), 
                 $session->get('filtroCursoAsistencia'),
                 $session->get('filtroCursoEstadoFacturado'),
+                $session->get('filtroCursoEstadoPagado'),
                 $session->get('filtroCursoEstadoAnulado'),
                 $strFechaDesde,
                 $strFechaHasta  
@@ -293,6 +294,7 @@ class CursoController extends Controller
         $session->set('filtroCursoEstadoAutorizado', $form->get('estadoAutorizado')->getData());          
         $session->set('filtroCursoAsistencia', $form->get('asistencia')->getData());          
         $session->set('filtroCursoEstadoFacturado', $form->get('estadoFacturado')->getData());          
+        $session->set('filtroCursoEstadoPagado', $form->get('estadoPagado')->getData());          
         $session->set('filtroCursoEstadoAnulado', $form->get('estadoAnulado')->getData());          
         $session->set('filtroNit', $form->get('TxtNit')->getData());                         
         $dateFechaDesde = $form->get('fechaDesde')->getData();
@@ -337,6 +339,7 @@ class CursoController extends Controller
             ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroCursoEstadoAutorizado')))                
             ->add('asistencia', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ASISTIO', '0' => 'NO ASISTIO'), 'data' => $session->get('filtroCursoAsistencia')))                                
             ->add('estadoFacturado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'FACTURADO', '0' => 'SIN FACTURAR'), 'data' => $session->get('filtroCursoEstadoFacturado')))                                
+            ->add('estadoPagado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'PAGADO', '0' => 'SIN PAGAR'), 'data' => $session->get('filtroCursoEstadoPagado')))                                                
             ->add('estadoAnulado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ANULADO', '0' => 'SIN ANULAR'), 'data' => $session->get('filtroCursoEstadoAnulado')))                                
             ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
             ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                
@@ -424,7 +427,7 @@ class CursoController extends Controller
         for($col = 'A'; $col !== 'P'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
         }      
-        for($col = 'O'; $col !== 'P'; $col++) {            
+        for($col = 'P'; $col !== 'R'; $col++) {            
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }         
         $objPHPExcel->setActiveSheetIndex(0)
@@ -438,11 +441,13 @@ class CursoController extends Controller
                     ->setCellValue('H1', 'IDENTIFICACION')
                     ->setCellValue('I1', 'EMPLEADO')
                     ->setCellValue('J1', 'FAC')
-                    ->setCellValue('K1', 'AUT')
-                    ->setCellValue('L1', 'ASI')
-                    ->setCellValue('M1', 'CER')
-                    ->setCellValue('N1', 'ANU')
-                    ->setCellValue('O1', 'TOTAL');
+                    ->setCellValue('K1', 'PAG')
+                    ->setCellValue('L1', 'AUT')
+                    ->setCellValue('M1', 'ASI')
+                    ->setCellValue('N1', 'CER')
+                    ->setCellValue('O1', 'ANU')
+                    ->setCellValue('P1', 'COSTO')
+                    ->setCellValue('Q1', 'TOTAL');
 
         $i = 2;        
         $query = $em->createQuery($this->strDqlLista);
@@ -459,11 +464,13 @@ class CursoController extends Controller
                     ->setCellValue('F' . $i, $arCurso->getClienteRel()->getNit())
                     ->setCellValue('G' . $i, $arCurso->getClienteRel()->getNombreCorto())
                     ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arCurso->getEstadoFacturado()))
-                    ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arCurso->getEstadoAutorizado()))
-                    ->setCellValue('L' . $i, $objFunciones->devuelveBoolean($arCurso->getAsistencia()))
-                    ->setCellValue('M' . $i, $objFunciones->devuelveBoolean($arCurso->getCertificado()))
-                    ->setCellValue('N' . $i, $objFunciones->devuelveBoolean($arCurso->getEstadoAnulado()))
-                    ->setCellValue('O' . $i, $arCurso->getTotal());
+                    ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arCurso->getEstadoPagado()))
+                    ->setCellValue('L' . $i, $objFunciones->devuelveBoolean($arCurso->getEstadoAutorizado()))
+                    ->setCellValue('M' . $i, $objFunciones->devuelveBoolean($arCurso->getAsistencia()))
+                    ->setCellValue('N' . $i, $objFunciones->devuelveBoolean($arCurso->getCertificado()))
+                    ->setCellValue('O' . $i, $objFunciones->devuelveBoolean($arCurso->getEstadoAnulado()))
+                    ->setCellValue('P' . $i, $arCurso->getCosto())
+                    ->setCellValue('Q' . $i, $arCurso->getTotal());
             
             if($arCurso->getCodigoEmpleadoFk() != null) {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H' . $i, $arCurso->getEmpleadoRel()->getNumeroIdentificacion());

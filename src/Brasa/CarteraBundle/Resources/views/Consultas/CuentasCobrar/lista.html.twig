@@ -52,9 +52,13 @@
                 </div>
                 <div class="form-group form-group-sm">  
                     <label for="form_fechaDesde" class="col-sm-2 control-label">Desde:</label>
-                    <div class="col-sm-10">                  
+                    <div class="col-sm-4">                  
                         {{ form_widget(form.fechaDesde, {'attr': {'maxlength' : 10} }) }}
                     </div>
+                    <label for="form_asesorRel" class="col-sm-2 control-label">Asesor:</label>
+                    <div class="col-sm-4">                  
+                        {{ form_widget(form.asesorRel, { 'attr': {'class': 'form-control'} }) }}
+                    </div>                      
                 </div>                     
                 <div class="form-group form-group-sm">  
                     <label for="form_fechaHasta" class="col-sm-2 control-label">Hasta:</label>

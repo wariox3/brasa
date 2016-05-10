@@ -38,7 +38,7 @@ class CarCuentaCobrarRepository extends EntityRepository
         
     }
     
-    public function listaConsultaDql($numero = "", $codigoCliente = "", $codigoCuentaCobrarTipo = "", $strFechaDesde = "", $strFechaHasta = "") {
+    public function listaConsultaDql($numero = "", $codigoCliente = "", $codigoCuentaCobrarTipo = "", $codigoAsesor = "", $strFechaDesde = "", $strFechaHasta = "") {
         $dql   = "SELECT cc FROM BrasaCarteraBundle:CarCuentaCobrar cc WHERE cc.codigoCuentaCobrarPk <> 0 AND cc.saldo > 0";
         if($numero != "") {
             $dql .= " AND cc.numeroDocumento = " . $numero;  
@@ -49,6 +49,9 @@ class CarCuentaCobrarRepository extends EntityRepository
         if($codigoCuentaCobrarTipo != "") {
             $dql .= " AND cc.codigoCuentaCobrarTipoFk = " . $codigoCuentaCobrarTipo;  
         }
+        if($codigoAsesor != "") {
+            $dql .= " AND cc.codigoAsesorFk = " . $codigoAsesor;  
+        }        
         if ($strFechaDesde != ""){
             $dql .= " AND cc.fecha >='" . date_format($strFechaDesde, ('Y-m-d')). "'";
         }

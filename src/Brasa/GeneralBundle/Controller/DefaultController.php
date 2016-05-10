@@ -9,6 +9,7 @@ class DefaultController extends Controller
     
     public function indexAction()
     {
+        $em = $this->getDoctrine()->getManager();
         // Chart
         $series = array(
             array("name" => "Data Serie Name",    "data" => array(1,2,4,5,6,3,8))
@@ -20,7 +21,11 @@ class DefaultController extends Controller
         $ob->xAxis->title(array('text'  => "Horizontal axis title"));
         $ob->yAxis->title(array('text'  => "Vertical axis title"));
         $ob->series($series);       
-        
+        $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        if($arConfiguracion->getInhabilitado() == 1) {           
+            return $this->redirect($this->generateUrl('logout'));
+        }
         return $this->render('BrasaGeneralBundle:Default:index.html.twig', array(
             'chart' => $ob
         ));

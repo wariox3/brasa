@@ -118,6 +118,11 @@ class GenConfiguracion
     private $paginaWeb;
         
     /**
+     * @ORM\Column(name="inhabilitado", type="boolean")
+     */    
+    private $inhabilitado = false; 
+    
+    /**
      * @ORM\ManyToOne(targetEntity="GenCiudad", inversedBy="configuracionesRel")
      * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
      */
@@ -636,5 +641,29 @@ class GenConfiguracion
     public function getRutaImagenes()
     {
         return $this->rutaImagenes;
+    }
+
+    /**
+     * Set inhabilitado
+     *
+     * @param boolean $inhabilitado
+     *
+     * @return GenConfiguracion
+     */
+    public function setInhabilitado($inhabilitado)
+    {
+        $this->inhabilitado = $inhabilitado;
+
+        return $this;
+    }
+
+    /**
+     * Get inhabilitado
+     *
+     * @return boolean
+     */
+    public function getInhabilitado()
+    {
+        return $this->inhabilitado;
     }
 }

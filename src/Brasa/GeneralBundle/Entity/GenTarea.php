@@ -50,12 +50,12 @@ class GenTarea
     /**
      * @ORM\Column(name="estado_terminado", type="boolean")
      */    
-    private $estadoTerminado = 0;  
+    private $estadoTerminado = false;  
     
     /**
      * @ORM\Column(name="estado_anulado", type="boolean")
      */    
-    private $estadoAnulado = 0;     
+    private $estadoAnulado = false;     
     
     /**
      * @ORM\Column(name="usuario_tarea_fk", type="string", length=50, nullable=true)

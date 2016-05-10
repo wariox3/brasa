@@ -119,7 +119,7 @@ class AfiFacturaRepository extends EntityRepository {
                 }                
                 $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();                                
                 $arCuentaCobrar->setClienteRel($arClienteCartera);
-                $arCuentaCobrar->setAsesorRel($arClienteCartera->getAsesorRel());
+                $arCuentaCobrar->setAsesorRel($arClienteAfiliacion->getAsesorRel());
                 $arCuentaCobrar->setCuentaCobrarTipoRel($arCuentaCobrarTipo);
                 $arCuentaCobrar->setFecha($arFactura->getFecha());
                 $arCuentaCobrar->setFechaVence($arFactura->getFechaVence());

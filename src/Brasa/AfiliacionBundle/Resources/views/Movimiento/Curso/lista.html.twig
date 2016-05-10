@@ -70,6 +70,16 @@
                     <div class="col-sm-4"> 
                         {{ form_widget(form.filtrarFecha) }}
                     </div>
+                    <label for="form_estadoPagado" class="col-sm-2 control-label">Pagado:</label>
+                    <div class="col-sm-4">                  
+                        {{ form_widget(form.estadoPagado, { 'attr': {'class': 'form-control'} }) }}
+                    </div>                    
+                </div>                    
+                <div class="form-group form-group-sm">  
+                    <label for="form_TxtNumero" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-4"> 
+                        
+                    </div>
                     <label for="form_estadoAnulado" class="col-sm-2 control-label">Anulado:</label>
                     <div class="col-sm-4">                  
                         {{ form_widget(form.estadoAnulado, { 'attr': {'class': 'form-control'} }) }}
@@ -96,6 +106,7 @@
                 <th>ENTIDAD</th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Autorizado">AUT</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Facturado">FAC</p></th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Facturado">PAG</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Asistio al curso">ASI</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Certificado">CER</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Anulado">ANU</p></th>
@@ -117,6 +128,7 @@
                 <td>{{ arCursos.entidadEntrenamientoRel.nombreCorto | default('') }}</td>
                 <td>{% if arCursos.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arCursos.estadoFacturado == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arCursos.estadoPagado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arCursos.asistencia == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arCursos.certificado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arCursos.estadoAnulado == 1 %} SI {% else %} NO {% endif %}</td>
