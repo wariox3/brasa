@@ -13,6 +13,7 @@ class GenAsesorType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('numeroIdentificacion', 'text', array('required' => true))
             ->add('nombre', 'text', array('required' => true))
             ->add('direccion', 'text', array('required' => false))    
             ->add('telefono', 'text', array('required' => false))    

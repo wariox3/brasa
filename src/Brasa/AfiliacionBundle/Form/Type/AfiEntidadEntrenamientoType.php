@@ -9,7 +9,9 @@ class AfiEntidadEntrenamientoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder                                                                                     
+        $builder      
+            ->add('nit', 'text', array('required' => false))
+            ->add('digitoVerificacion', 'text', array('required' => false))                
             ->add('nombreCorto', 'text', array('required' => true))                          
             ->add('direccion', 'text', array('required' => false))  
             ->add('telefono', 'text', array('required' => false))                              

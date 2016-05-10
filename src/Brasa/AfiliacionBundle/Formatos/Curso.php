@@ -87,11 +87,11 @@ class Curso extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(26, 5, utf8_decode("EMPLEADO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(52, 5, $arCurso->getEmpleadoRel()->getNombreCorto(), 1, 0, 'L', 1);
+        $this->Cell(52, 5, $arCurso->getNombreCorto(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(21, 5, utf8_decode("CEDULA:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(52, 5, $arCurso->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L', 1);
+        $this->Cell(52, 5, $arCurso->getNumeroIdentificacion(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(23, 5, '', 1, 0, 'R', 1);
         $this->SetFont('Arial','',8);

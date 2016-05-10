@@ -15,8 +15,12 @@ class GenAsesor
      * @ORM\Column(name="codigo_asesor_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */ 
-    private $codigoAsesorPk;
-    
+    private $codigoAsesorPk;    
+
+    /**
+     * @ORM\Column(name="numero_identificacion", type="string", length=15, nullable=false)
+     */
+    private $numeroIdentificacion; 
     
     /**
      * @ORM\Column(name="nombre", type="string", length=80, nullable=true)
@@ -68,12 +72,17 @@ class GenAsesor
      */
     protected $afiClientesAsesorRel;     
     
+
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->tercerosRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->carClientesAsesorRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->carCuentasCobrarAsesorRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->carRecibosAsesorRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->afiClientesAsesorRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -84,6 +93,30 @@ class GenAsesor
     public function getCodigoAsesorPk()
     {
         return $this->codigoAsesorPk;
+    }
+
+    /**
+     * Set numeroIdentificacion
+     *
+     * @param string $numeroIdentificacion
+     *
+     * @return GenAsesor
+     */
+    public function setNumeroIdentificacion($numeroIdentificacion)
+    {
+        $this->numeroIdentificacion = $numeroIdentificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroIdentificacion
+     *
+     * @return string
+     */
+    public function getNumeroIdentificacion()
+    {
+        return $this->numeroIdentificacion;
     }
 
     /**
@@ -241,74 +274,6 @@ class GenAsesor
     }
 
     /**
-     * Add afiClientesAsesorRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesAsesorRel
-     *
-     * @return GenAsesor
-     */
-    public function addAfiClientesAsesorRel(\Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesAsesorRel)
-    {
-        $this->afiClientesAsesorRel[] = $afiClientesAsesorRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove afiClientesAsesorRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesAsesorRel
-     */
-    public function removeAfiClientesAsesorRel(\Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesAsesorRel)
-    {
-        $this->afiClientesAsesorRel->removeElement($afiClientesAsesorRel);
-    }
-
-    /**
-     * Get afiClientesAsesorRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAfiClientesAsesorRel()
-    {
-        return $this->afiClientesAsesorRel;
-    }
-
-    /**
-     * Add carAsesorRel
-     *
-     * @param \Brasa\CarteraBundle\Entity\CarCliente $carAsesorRel
-     *
-     * @return GenAsesor
-     */
-    public function addCarAsesorRel(\Brasa\CarteraBundle\Entity\CarCliente $carAsesorRel)
-    {
-        $this->carAsesorRel[] = $carAsesorRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove carAsesorRel
-     *
-     * @param \Brasa\CarteraBundle\Entity\CarCliente $carAsesorRel
-     */
-    public function removeCarAsesorRel(\Brasa\CarteraBundle\Entity\CarCliente $carAsesorRel)
-    {
-        $this->carAsesorRel->removeElement($carAsesorRel);
-    }
-
-    /**
-     * Get carAsesorRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCarAsesorRel()
-    {
-        return $this->carAsesorRel;
-    }
-
-    /**
      * Add carClientesAsesorRel
      *
      * @param \Brasa\CarteraBundle\Entity\CarCliente $carClientesAsesorRel
@@ -408,5 +373,39 @@ class GenAsesor
     public function getCarRecibosAsesorRel()
     {
         return $this->carRecibosAsesorRel;
+    }
+
+    /**
+     * Add afiClientesAsesorRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesAsesorRel
+     *
+     * @return GenAsesor
+     */
+    public function addAfiClientesAsesorRel(\Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesAsesorRel)
+    {
+        $this->afiClientesAsesorRel[] = $afiClientesAsesorRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove afiClientesAsesorRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesAsesorRel
+     */
+    public function removeAfiClientesAsesorRel(\Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesAsesorRel)
+    {
+        $this->afiClientesAsesorRel->removeElement($afiClientesAsesorRel);
+    }
+
+    /**
+     * Get afiClientesAsesorRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAfiClientesAsesorRel()
+    {
+        return $this->afiClientesAsesorRel;
     }
 }

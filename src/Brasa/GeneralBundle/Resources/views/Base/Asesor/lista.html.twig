@@ -11,6 +11,7 @@
         <tr>
             
             <th>CÓDIGO</th>
+            <th>IDENTIFICACION</th>
             <th>{{ knp_pagination_sortable(arAsesores, 'NOMBRE', 'codigo') }}</th>             
             <th>DIRECCIÓN</th>
             <th>TELÉFONO</th>
@@ -22,7 +23,8 @@
         
             {%for arAsesores in arAsesores %}
                <tr>
-                <td>{{arAsesores.codigoAsesorPk}}</td>
+                <td>{{arAsesores.codigoAsesorPk }}</td>
+                <td>{{arAsesores.numeroIdentificacion }}</td>
                 <td>{{arAsesores.nombre}}</td>
                 <td>{{arAsesores.direccion}}</td>
                 <td>{{arAsesores.telefono}}</td>

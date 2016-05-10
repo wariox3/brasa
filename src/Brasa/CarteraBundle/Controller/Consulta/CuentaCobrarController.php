@@ -4,7 +4,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-class ConsultaCuentaCobrarController extends Controller
+class CuentaCobrarController extends Controller
 {
     var $strListaDql = "";
     var $strFechaDesde = "";

@@ -72,7 +72,9 @@ class AfiCursoRepository extends EntityRepository {
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigo) {
                 $ar = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($codigo);
-                $em->remove($ar);
+                if($ar->getNumero() <= 0) {
+                    $em->remove($ar);
+                }                
             }
             $em->flush();
         }

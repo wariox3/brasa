@@ -18,6 +18,16 @@ class AfiEntidadEntrenamiento
     private $codigoEntidadEntrenamientoPk;                   
     
     /**
+     * @ORM\Column(name="nit", type="string", length=15, nullable=false)
+     */
+    private $nit;        
+    
+    /**
+     * @ORM\Column(name="digito_verificacion", type="string", length=1, nullable=true)
+     */
+    private $digitoVerificacion;     
+    
+    /**
      * @ORM\Column(name="nombreCorto", type="string", length=50)
      */
     private $nombreCorto;                             
@@ -442,5 +452,53 @@ class AfiEntidadEntrenamiento
     public function getPagosCursosEntidadEntrenamientoRel()
     {
         return $this->pagosCursosEntidadEntrenamientoRel;
+    }
+
+    /**
+     * Set nit
+     *
+     * @param string $nit
+     *
+     * @return AfiEntidadEntrenamiento
+     */
+    public function setNit($nit)
+    {
+        $this->nit = $nit;
+
+        return $this;
+    }
+
+    /**
+     * Get nit
+     *
+     * @return string
+     */
+    public function getNit()
+    {
+        return $this->nit;
+    }
+
+    /**
+     * Set digitoVerificacion
+     *
+     * @param string $digitoVerificacion
+     *
+     * @return AfiEntidadEntrenamiento
+     */
+    public function setDigitoVerificacion($digitoVerificacion)
+    {
+        $this->digitoVerificacion = $digitoVerificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get digitoVerificacion
+     *
+     * @return string
+     */
+    public function getDigitoVerificacion()
+    {
+        return $this->digitoVerificacion;
     }
 }

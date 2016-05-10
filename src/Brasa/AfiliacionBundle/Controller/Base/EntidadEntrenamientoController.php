@@ -22,7 +22,7 @@ class EntidadEntrenamientoController extends Controller
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaAfiliacionBundle:AfiEntidadEntrenamiento')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_base_factura_concepto'));
+                return $this->redirect($this->generateUrl('brs_afi_base_entidad_entrenamiento'));
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
@@ -72,14 +72,23 @@ class EntidadEntrenamientoController extends Controller
     public function detalleAction(Request $request, $codigoEntidadEntrenamiento = '') {
         $em = $this->getDoctrine()->getManager();        
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioDetalle();
         $form->handleRequest($request);        
-        if ($form->isValid()) {                                       
+        if ($form->isValid()) {                                                   
             if($form->get('BtnActualizarCosto')->isClicked()) {   
                 $arrControles = $request->request->All();
                 $this->actualizarDetalle($arrControles);                                 
                 return $this->redirect($this->generateUrl('brs_afi_base_entidad_entrenamiento_detalle', array('codigoEntidadEntrenamiento' => $codigoEntidadEntrenamiento)));
-            }
+            }            
+            if ($form->get('BtnEliminarCosto')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarCosto');
+                $em->getRepository('BrasaAfiliacionBundle:AfiEntidadEntrenamientoCosto')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_afi_base_entidad_entrenamiento_detalle', array('codigoEntidadEntrenamiento' => $codigoEntidadEntrenamiento)));
+            }      
+            if ($form->get('BtnImprimir')->isClicked()) {
+               $objMensaje->Mensaje('error', "Opcion en desarrollo", $this);
+            }            
         }
         $arEntidadEntrenamiento = new \Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamiento();
         $arEntidadEntrenamiento = $em->getRepository('BrasaAfiliacionBundle:AfiEntidadEntrenamiento')->find($codigoEntidadEntrenamiento);
@@ -105,14 +114,18 @@ class EntidadEntrenamientoController extends Controller
             $arrSeleccionados = $request->request->get('ChkSeleccionar');                                      
             if ($form->get('BtnGuardar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                foreach ($arrSeleccionados as $codigoCursoTipo) {
-                    $arCursoTipo = new \Brasa\AfiliacionBundle\Entity\AfiCursoTipo();
-                    $arCursoTipo = $em->getRepository('BrasaAfiliacionBundle:AfiCursoTipo')->find($codigoCursoTipo);
-                    $arEntidadEntrenamientoCosto = new \Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamientoCosto();
-                    $arEntidadEntrenamientoCosto->setEntidadEntrenamientoRel($arEntidadEntrenamiento);          
-                    $arEntidadEntrenamientoCosto->setCursoTipoRel($arCursoTipo);
-                    $arEntidadEntrenamientoCosto->setCosto(0);
-                    $em->persist($arEntidadEntrenamientoCosto);                    
+                foreach ($arrSeleccionados as $codigoCursoTipo) { 
+                    $arEntidadEntrenamientoCostoValidar = new \Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamientoCosto();
+                    $arEntidadEntrenamientoCostoValidar = $em->getRepository('BrasaAfiliacionBundle:AfiEntidadEntrenamientoCosto')->findBy(array('codigoEntidadEntrenamientoFk' => $codigoEntidadEntrenamiento, 'codigoCursoTipoFk' => $codigoCursoTipo));
+                    if(!$arEntidadEntrenamientoCostoValidar) {
+                        $arCursoTipo = new \Brasa\AfiliacionBundle\Entity\AfiCursoTipo();
+                        $arCursoTipo = $em->getRepository('BrasaAfiliacionBundle:AfiCursoTipo')->find($codigoCursoTipo);
+                        $arEntidadEntrenamientoCosto = new \Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamientoCosto();
+                        $arEntidadEntrenamientoCosto->setEntidadEntrenamientoRel($arEntidadEntrenamiento);          
+                        $arEntidadEntrenamientoCosto->setCursoTipoRel($arCursoTipo);
+                        $arEntidadEntrenamientoCosto->setCosto(0);
+                        $em->persist($arEntidadEntrenamientoCosto);                         
+                    }                   
                 }
                 $em->flush();
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";

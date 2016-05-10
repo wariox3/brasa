@@ -53,6 +53,16 @@ class AfiCurso
     private $codigoEntidadEntrenamientoFk;            
     
     /**
+     * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=true)
+     */         
+    private $numeroIdentificacion;    
+    
+    /**
+     * @ORM\Column(name="nombre_corto", type="string", length=80, nullable=true)
+     */    
+    private $nombreCorto;     
+    
+    /**
      * @ORM\Column(name="costo", type="float")
      */
     private $costo = 0;    
@@ -111,7 +121,7 @@ class AfiCurso
     protected $entidadEntrenamientoRel; 
     
     /**
-     * @ORM\OneToMany(targetEntity="AfiCursoDetalle", mappedBy="cursoRel")
+     * @ORM\OneToMany(targetEntity="AfiCursoDetalle", mappedBy="cursoRel", cascade={"persist", "remove"})
      */
     protected $cursosDetallesCursoRel;     
 
@@ -125,7 +135,6 @@ class AfiCurso
      */
     protected $pagosCursosDetallesCursoRel;   
     
-
 
     /**
      * Constructor
@@ -313,6 +322,54 @@ class AfiCurso
     public function getCodigoEntidadEntrenamientoFk()
     {
         return $this->codigoEntidadEntrenamientoFk;
+    }
+
+    /**
+     * Set numeroIdentificacion
+     *
+     * @param string $numeroIdentificacion
+     *
+     * @return AfiCurso
+     */
+    public function setNumeroIdentificacion($numeroIdentificacion)
+    {
+        $this->numeroIdentificacion = $numeroIdentificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroIdentificacion
+     *
+     * @return string
+     */
+    public function getNumeroIdentificacion()
+    {
+        return $this->numeroIdentificacion;
+    }
+
+    /**
+     * Set nombreCorto
+     *
+     * @param string $nombreCorto
+     *
+     * @return AfiCurso
+     */
+    public function setNombreCorto($nombreCorto)
+    {
+        $this->nombreCorto = $nombreCorto;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreCorto
+     *
+     * @return string
+     */
+    public function getNombreCorto()
+    {
+        return $this->nombreCorto;
     }
 
     /**

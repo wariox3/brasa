@@ -22,7 +22,7 @@ class ClienteController extends Controller
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_base_factura_concepto'));
+                return $this->redirect($this->generateUrl('brs_afi_base_cliente'));
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
@@ -72,10 +72,13 @@ class ClienteController extends Controller
     public function detalleAction(Request $request, $codigoCliente = '') {
         $em = $this->getDoctrine()->getManager();        
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioDetalle();
         $form->handleRequest($request);        
         if ($form->isValid()) {                                       
-
+            if ($form->get('BtnImprimir')->isClicked()) {
+               $objMensaje->Mensaje('error', "Opcion en desarrollo", $this);
+            }
         }
         $arCliente = new \Brasa\AfiliacionBundle\Entity\AfiCliente();
         $arCliente = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->find($codigoCliente);

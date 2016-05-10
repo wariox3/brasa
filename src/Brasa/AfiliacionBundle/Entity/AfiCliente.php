@@ -126,6 +126,11 @@ class AfiCliente
     protected $ciudadRel;             
 
     /**
+     * @ORM\OneToMany(targetEntity="AfiEmpleado", mappedBy="clienteRel")
+     */
+    protected $empleadosClienteRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="AfiContrato", mappedBy="clienteRel")
      */
     protected $contratosClienteRel;     
@@ -845,5 +850,39 @@ class AfiCliente
     public function getAsesorRel()
     {
         return $this->asesorRel;
+    }
+
+    /**
+     * Add empleadosClienteRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiEmpleado $empleadosClienteRel
+     *
+     * @return AfiCliente
+     */
+    public function addEmpleadosClienteRel(\Brasa\AfiliacionBundle\Entity\AfiEmpleado $empleadosClienteRel)
+    {
+        $this->empleadosClienteRel[] = $empleadosClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove empleadosClienteRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiEmpleado $empleadosClienteRel
+     */
+    public function removeEmpleadosClienteRel(\Brasa\AfiliacionBundle\Entity\AfiEmpleado $empleadosClienteRel)
+    {
+        $this->empleadosClienteRel->removeElement($empleadosClienteRel);
+    }
+
+    /**
+     * Get empleadosClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmpleadosClienteRel()
+    {
+        return $this->empleadosClienteRel;
     }
 }

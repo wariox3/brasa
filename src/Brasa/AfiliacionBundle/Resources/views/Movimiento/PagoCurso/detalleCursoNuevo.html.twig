@@ -18,7 +18,7 @@
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arCursos.codigoCursoPk }}">{{ arCursos.codigoCursoPk }} </td>                                
                 <td>{{ arCursos.empleadoRel.numeroIdentificacion | default('') }}</td>
                 <td>{{ arCursos.empleadoRel.nombreCorto | default('') }}</td>                                                
-                <td style="text-align: right">{{ arCursos.total | number_format(0, '.', ',') }}</td>                
+                <td style="text-align: right">{{ arCursos.costo | number_format(0, '.', ',') }}</td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCursos.codigoCursoPk }}" /></td>
             </tr>
             {% endfor %} 

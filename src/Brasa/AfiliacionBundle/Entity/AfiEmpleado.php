@@ -127,6 +127,10 @@ class AfiEmpleado
      */    
     private $codigoUsuario;
         
+    /**
+     * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
+     */    
+    private $codigoClienteFk;    
     
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTipoIdentificacion", inversedBy="afiEmpleadosTipoIdentificacionRel")
@@ -152,6 +156,12 @@ class AfiEmpleado
      */
     protected $rhRel; 
        
+    /**
+     * @ORM\ManyToOne(targetEntity="AfiCliente", inversedBy="empleadosClienteRel")
+     * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
+     */
+    protected $clienteRel;    
+    
     /**
      * @ORM\OneToMany(targetEntity="AfiContrato", mappedBy="empleadoRel")
      */
@@ -886,5 +896,53 @@ class AfiEmpleado
     public function getCursosEmpleadoRel()
     {
         return $this->cursosEmpleadoRel;
+    }
+
+    /**
+     * Set codigoClienteFk
+     *
+     * @param integer $codigoClienteFk
+     *
+     * @return AfiEmpleado
+     */
+    public function setCodigoClienteFk($codigoClienteFk)
+    {
+        $this->codigoClienteFk = $codigoClienteFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoClienteFk
+     *
+     * @return integer
+     */
+    public function getCodigoClienteFk()
+    {
+        return $this->codigoClienteFk;
+    }
+
+    /**
+     * Set clienteRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCliente $clienteRel
+     *
+     * @return AfiEmpleado
+     */
+    public function setClienteRel(\Brasa\AfiliacionBundle\Entity\AfiCliente $clienteRel = null)
+    {
+        $this->clienteRel = $clienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get clienteRel
+     *
+     * @return \Brasa\AfiliacionBundle\Entity\AfiCliente
+     */
+    public function getClienteRel()
+    {
+        return $this->clienteRel;
     }
 }

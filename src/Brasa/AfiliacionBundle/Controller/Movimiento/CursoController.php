@@ -116,21 +116,25 @@ class CursoController extends Controller
                     $arCurso->setClienteRel($arCliente);                    
                     if($arrControles['txtNumeroIdentificacion'] != '') {
                         $arEmpleado = new \Brasa\AfiliacionBundle\Entity\AfiEmpleado();
-                        $arEmpleado = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));                
-                        if(count($arEmpleado) > 0) {                            
+                        $arEmpleado = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));                                        
+                        if(count($arEmpleado) > 0) {                                                    
                             $arCurso->setEmpleadoRel($arEmpleado);
-                            $arCurso->setFecha(new \DateTime('now'));                    
-                            $em->persist($arCurso);
-                            $em->flush();            
-                            if($form->get('guardarnuevo')->isClicked()) {
-                                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_nuevo', array('codigoCurso' => 0 )));
-                            } else {
-                                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_detalle', array('codigoCurso' => $arCurso->getCodigoCursoPk())));
-                            } 
-                        } else {
-                            $objMensaje->Mensaje("error", "El empleado no existe", $this);
+                            $arCurso->setNumeroIdentificacion($arEmpleado->getNumeroIdentificacion());
+                            $arCurso->setNombreCorto($arEmpleado->getNombreCorto());                            
                         }
-                    }                   
+                    }
+                    if($arCurso->getNumeroIdentificacion() == "") {
+                        $arCurso->setNumeroIdentificacion($arCliente->getNit());
+                        $arCurso->setNombreCorto($arCliente->getNombreCorto());                          
+                    }
+                    $arCurso->setFecha(new \DateTime('now'));  
+                    $em->persist($arCurso);
+                    $em->flush();            
+                    if($form->get('guardarnuevo')->isClicked()) {
+                        return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_nuevo', array('codigoCurso' => 0 )));
+                    } else {
+                        return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_detalle', array('codigoCurso' => $arCurso->getCodigoCursoPk())));
+                    }                    
                 } else {
                     $objMensaje->Mensaje("error", "El cliente no existe", $this);
                 }                                                 
@@ -141,6 +145,78 @@ class CursoController extends Controller
             'form' => $form->createView()));
     }        
 
+    /**
+     * @Route("/afi/movimiento/curso/nuevo/cliente/", name="brs_afi_movimiento_curso_nuevo_cliente")
+     */    
+    public function nuevoClienteAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();    
+        $form = $this->formularioNuevoCliente();                
+        $form->handleRequest($request);
+        $this->listaNuevoCliente();
+        if ($form->isValid()) {
+            if ($form->get('BtnFiltrar')->isClicked()) {                
+                $this->filtrarNuevoCliente($form);
+                $form = $this->formularioNuevoCliente();
+                $this->listaNuevoCliente();                
+            }            
+            if ($form->get('BtnGuardar')->isClicked()) { 
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if($arrSeleccionados) {
+                    $nit = $form->get('TxtNit')->getData();
+                    $arrControles = $request->request->All();
+                    if($nit != '') {
+                        $arCliente = new \Brasa\AfiliacionBundle\Entity\AfiCliente();
+                        $arCliente = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->findOneBy(array('nit' => $nit));                
+                        if(count($arCliente) > 0) {
+                            $arEntidadEntrenamiento = new \Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamiento();
+                            $arEntidadEntrenamiento = $form->get('entidadEntrenamientoRel')->getData();
+                            $arCursoTipo = new \Brasa\AfiliacionBundle\Entity\AfiCursoTipo();
+                            $arCursoTipo = $form->get('cursoTipoRel')->getData();
+                            $fechaVence = $form->get('fechaVence')->getData();
+                            $fechaProgramacion = $form->get('fechaProgramacion')->getData();
+                            foreach ($arrSeleccionados as $codigoEmpleado) {
+                                $arEmpleado = new \Brasa\AfiliacionBundle\Entity\AfiEmpleado();
+                                $arEmpleado = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->find($codigoEmpleado);
+                                
+                                $arCurso = new \Brasa\AfiliacionBundle\Entity\AfiCurso();                        
+                                $arCurso->setClienteRel($arCliente);                    
+                                $arCurso->setEmpleadoRel($arEmpleado);
+                                $arCurso->setEntidadEntrenamientoRel($arEntidadEntrenamiento);                                
+                                $arCurso->setNumeroIdentificacion($arEmpleado->getNumeroIdentificacion());
+                                $arCurso->setNombreCorto($arEmpleado->getNombreCorto());                          
+                                $arCurso->setFecha(new \DateTime('now'));  
+                                $arCurso->setFechaVence($fechaVence);
+                                $arCurso->setFechaProgramacion($fechaProgramacion);
+                                $em->persist($arCurso);   
+                                
+                                $arCursoDetalle = new \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle();
+                                $arCursoDetalle->setCursoRel($arCurso);
+                                $arCursoDetalle->setCursoTipoRel($arCursoTipo);
+                                $costo = $em->getRepository('BrasaAfiliacionBundle:AfiEntidadEntrenamientoCosto')->costoCursoEntidadEntrenamiento($arEntidadEntrenamiento->getCodigoEntidadEntrenamientoPk(), $arCursoTipo->getCodigoCursoTipoPk());
+                                $arCursoDetalle->setCosto($costo);
+                                $arCursoDetalle->setPrecio($arCursoTipo->getPrecio());
+                                $em->persist($arCursoDetalle);
+                            }                 
+                            $em->flush();            
+                            return $this->redirect($this->generateUrl('brs_afi_movimiento_curso'));
+                        } else {
+                            $objMensaje->Mensaje("error", "El cliente no existe", $this);
+                        }                                                 
+                    }                     
+                }
+                 
+            }
+                                            
+        }
+        
+        $arEmpleados = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);        
+        return $this->render('BrasaAfiliacionBundle:Movimiento/Curso:nuevoCliente.html.twig', array( 
+            'arEmpleados' => $arEmpleados,
+            'form' => $form->createView()));
+    }     
+    
     /**
      * @Route("/afi/movimiento/curso/detalle/{codigoCurso}", name="brs_afi_movimiento_curso_detalle")
      */    
@@ -280,6 +356,14 @@ class CursoController extends Controller
                 ); 
     }
     
+    private function listaNuevoCliente() {    
+        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->listaDQL('',
+                $session->get('filtroCodigoCliente')
+                ); 
+    }    
+    
     private function listaDetalle($codigoCurso) {    
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
@@ -303,6 +387,11 @@ class CursoController extends Controller
         $session->set('filtroCursoFechaHasta', $dateFechaHasta->format('Y/m/d'));                 
         $session->set('filtroCursoFiltrarFecha', $form->get('filtrarFecha')->getData());
     }
+    
+    private function filtrarNuevoCliente ($form) {        
+        $session = $this->getRequest()->getSession();               
+        $session->set('filtroNit', $form->get('TxtNit')->getData());                         
+    }    
     
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
@@ -395,6 +484,49 @@ class CursoController extends Controller
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
                     ->getForm();
+        return $form;
+    }    
+    
+    private function formularioNuevoCliente() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $strNombreCliente = "";
+        if($session->get('filtroNit')) {
+            $arCliente = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
+            if($arCliente) {
+                $session->set('filtroCodigoCliente', $arCliente->getCodigoClientePk());
+                $strNombreCliente = $arCliente->getNombreCorto();
+            }  else {
+                $session->set('filtroCodigoCliente', null);
+                $session->set('filtroNit', null);
+            }          
+        } else {
+            $session->set('filtroCodigoCliente', null);
+        }       
+        $dateFecha = new \DateTime('now');
+        
+        $form = $this->createFormBuilder()
+            ->add('entidadEntrenamientoRel', 'entity', array(
+                'class' => 'BrasaAfiliacionBundle:AfiEntidadEntrenamiento',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('ee')
+                    ->orderBy('ee.nombreCorto', 'ASC');},
+                'property' => 'nombreCorto',
+                'required' => true))  
+            ->add('cursoTipoRel', 'entity', array(
+                'class' => 'BrasaAfiliacionBundle:AfiCursoTipo',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('ct')
+                    ->orderBy('ct.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                             
+            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                                
+            ->add('fechaProgramacion', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFecha))                                                            
+            ->add('fechaVence', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFecha))                                                                                        
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))                                    
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->getForm();
         return $form;
     }    
     

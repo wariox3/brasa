@@ -32,6 +32,7 @@
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
                 <th>{{ knp_pagination_sortable(arEntidadEntrenamientos, 'CÓDIGO', 'p.codigoEntidadEntrenamientoPk') }}</th>
+                <th>NIT</th>
                 <th>NOMBRE</th>
                 <th>TELEFONO</th>
                 <th>CONTACTO</th>                
@@ -42,6 +43,7 @@
             {% for arEntidadEntrenamientos in arEntidadEntrenamientos %}
             <tr>
                 <td>{{ arEntidadEntrenamientos.codigoEntidadEntrenamientoPk  }}</td>                
+                <td>{{ arEntidadEntrenamientos.nit }}</td>
                 <td>{{ arEntidadEntrenamientos.nombreCorto }}</td>
                 <td>{{ arEntidadEntrenamientos.telefono }}</td>
                 <td>{{ arEntidadEntrenamientos.contacto }}</td>
