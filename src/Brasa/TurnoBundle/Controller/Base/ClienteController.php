@@ -1,17 +1,21 @@
 <?php
-namespace Brasa\TurnoBundle\Controller;
+namespace Brasa\TurnoBundle\Controller\Base;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurClienteType;
 use Brasa\TurnoBundle\Form\Type\TurClientePuestoType;
 use Brasa\TurnoBundle\Form\Type\TurClienteDireccionType;
-class BaseClienteController extends Controller
+class ClienteController extends Controller
 {
     var $strDqlLista = "";
     var $strCodigo = "";
     var $strNombre = "";
-    
+
+    /**
+     * @Route("/tur/base/cliente/", name="brs_tur_base_cliente")
+     */     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -24,7 +28,7 @@ class BaseClienteController extends Controller
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurCliente')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_base_cliente_lista'));
+                return $this->redirect($this->generateUrl('brs_tur_base_cliente'));
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
@@ -41,6 +45,9 @@ class BaseClienteController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/base/cliente/nuevo/{codigoCliente}", name="brs_tur_base_cliente_nuevo")
+     */    
     public function nuevoAction($codigoCliente = '') {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -65,7 +72,7 @@ class BaseClienteController extends Controller
                 if($form->get('guardarnuevo')->isClicked()) {
                     return $this->redirect($this->generateUrl('brs_tur_base_cliente_nuevo', array('codigoCliente' => 0 )));
                 } else {
-                    return $this->redirect($this->generateUrl('brs_tur_base_cliente_lista'));
+                    return $this->redirect($this->generateUrl('brs_tur_base_cliente'));
                 }                                   
             }                                                                            
 
@@ -75,6 +82,9 @@ class BaseClienteController extends Controller
             'form' => $form->createView()));
     }        
 
+    /**
+     * @Route("/tur/base/cliente/detalle/{codigoCliente}", name="brs_tur_base_cliente_detalle")
+     */     
     public function detalleAction($codigoCliente) {
         $em = $this->getDoctrine()->getManager(); 
         $request = $this->getRequest();
@@ -108,6 +118,9 @@ class BaseClienteController extends Controller
                     ));
     }
 
+    /**
+     * @Route("/tur/base/cliente/puesto/nuevo/{codigoCliente}/{codigoPuesto}", name="brs_tur_base_cliente_puesto_nuevo")
+     */    
     public function puestoNuevoAction($codigoCliente, $codigoPuesto) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();        
@@ -135,7 +148,10 @@ class BaseClienteController extends Controller
             'arCliente' => $arCliente,
             'form' => $form->createView()));
     }   
-    
+
+    /**
+     * @Route("/tur/base/cliente/direccion/nuevo/{codigoCliente}/{codigoDireccion}", name="brs_tur_base_cliente_direccion_nuevo")
+     */    
     public function direccionNuevoAction($codigoCliente, $codigoDireccion) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();        

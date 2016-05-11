@@ -120,6 +120,8 @@
                             <th>CONTACTO</th>
                             <th>TEL.CONTACTO</th>
                             <th>CEL.CONTACTO</th>
+                            <th>C.DOTACION</th>
+                            <th></th>
                             <th></th>
                             <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                         </tr>
@@ -133,7 +135,9 @@
                                 <td>{{ arPuestos.contacto  }}</td>
                                 <td>{{ arPuestos.telefonoContacto  }}</td>
                                 <td>{{ arPuestos.celularContacto  }}</td>
+                                <td style="text-align: right">{{ arPuestos.costoDotacion | number_format(0, '.', ',') }}</td>
                                 <td><a href="javascript:abrirVentana3('{{ path('brs_tur_base_cliente_puesto_nuevo', {'codigoCliente': arCliente.codigoClientePk, 'codigoPuesto': arPuestos.codigoPuestoPk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                        
+                                <td style="text-align: center"><a href="{{ path('brs_tur_base_puesto_detalle', { 'codigoPuesto': arPuestos.codigoPuestoPk }) }}" target="_blanck"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                
                                 <td><input type="checkbox" name="ChkSeleccionarPuesto[]" value="{{ arPuestos.codigoPuestoPk }}" /></td>
                             </tr>
                         {% endfor %}
@@ -184,6 +188,6 @@
 
         {{ form_rest(form) }}
         {{ form_end(form) }}
-        <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_base_cliente_lista') }}">Volver</a>
+        <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_base_cliente') }}">Volver</a>
     </div>
 {% endblock %}

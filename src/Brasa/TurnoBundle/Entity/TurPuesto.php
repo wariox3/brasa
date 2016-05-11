@@ -23,7 +23,7 @@ class TurPuesto
     private $nombre;      
     
     /**
-     * @ORM\Column(name="direccion", type="string", length=80)
+     * @ORM\Column(name="direccion", type="string", length=80, nullable=true)
      */
     private $direccion;    
     
@@ -51,6 +51,11 @@ class TurPuesto
      * @ORM\Column(name="celular_contacto", type="string", length=30, nullable=true)
      */
     private $celularContacto;    
+    
+    /**
+     * @ORM\Column(name="costo_dotacion", type="float")
+     */    
+    private $costoDotacion = 0;     
     
     /**
      * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
@@ -87,6 +92,11 @@ class TurPuesto
      * @ORM\OneToMany(targetEntity="TurCierreMesServicio", mappedBy="puestoRel")
      */
     protected $cierresMesServiciosPuestoRel; 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="TurPuestoDotacion", mappedBy="puestoRel")
+     */
+    protected $puestosDotacionesPuestoRel;     
     
     /**
      * Constructor
@@ -482,5 +492,63 @@ class TurPuesto
     public function getCierresMesServiciosPuestoRel()
     {
         return $this->cierresMesServiciosPuestoRel;
+    }
+
+    /**
+     * Add puestosDotacionesPuestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPuestoDotacion $puestosDotacionesPuestoRel
+     *
+     * @return TurPuesto
+     */
+    public function addPuestosDotacionesPuestoRel(\Brasa\TurnoBundle\Entity\TurPuestoDotacion $puestosDotacionesPuestoRel)
+    {
+        $this->puestosDotacionesPuestoRel[] = $puestosDotacionesPuestoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove puestosDotacionesPuestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPuestoDotacion $puestosDotacionesPuestoRel
+     */
+    public function removePuestosDotacionesPuestoRel(\Brasa\TurnoBundle\Entity\TurPuestoDotacion $puestosDotacionesPuestoRel)
+    {
+        $this->puestosDotacionesPuestoRel->removeElement($puestosDotacionesPuestoRel);
+    }
+
+    /**
+     * Get puestosDotacionesPuestoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPuestosDotacionesPuestoRel()
+    {
+        return $this->puestosDotacionesPuestoRel;
+    }
+
+    /**
+     * Set costoDotacion
+     *
+     * @param float $costoDotacion
+     *
+     * @return TurPuesto
+     */
+    public function setCostoDotacion($costoDotacion)
+    {
+        $this->costoDotacion = $costoDotacion;
+
+        return $this;
+    }
+
+    /**
+     * Get costoDotacion
+     *
+     * @return float
+     */
+    public function getCostoDotacion()
+    {
+        return $this->costoDotacion;
     }
 }

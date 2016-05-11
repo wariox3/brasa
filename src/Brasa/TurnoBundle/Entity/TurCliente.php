@@ -38,6 +38,11 @@ class TurCliente
     private $codigoSectorFk;     
     
     /**
+     * @ORM\Column(name="codigo_asesor_fk", type="integer", nullable=true)
+     */    
+    private $codigoAsesorFk;    
+    
+    /**
      * @ORM\Column(name="estrato", type="string", length=5, nullable=true)
      */
     private $estrato;                
@@ -145,6 +150,12 @@ class TurCliente
     protected $formaPagoRel;     
     
     /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenAsesor", inversedBy="turClientesAsesorRel")
+     * @ORM\JoinColumn(name="codigo_asesor_fk", referencedColumnName="codigo_asesor_pk")
+     */
+    protected $asesorRel;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="turClientesCiudadRel")
      * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
      */
@@ -190,6 +201,10 @@ class TurCliente
      */
     protected $cierresMesServiciosClienteRel;     
 
+    /**
+     * @ORM\OneToMany(targetEntity="TurPuestoDotacion", mappedBy="clienteRel")
+     */
+    protected $puestosDotacionesClienteRel;    
     
     /**
      * Constructor
@@ -1110,5 +1125,87 @@ class TurCliente
     public function getCierresMesServiciosClienteRel()
     {
         return $this->cierresMesServiciosClienteRel;
+    }
+
+    /**
+     * Set codigoAsesorFk
+     *
+     * @param integer $codigoAsesorFk
+     *
+     * @return TurCliente
+     */
+    public function setCodigoAsesorFk($codigoAsesorFk)
+    {
+        $this->codigoAsesorFk = $codigoAsesorFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoAsesorFk
+     *
+     * @return integer
+     */
+    public function getCodigoAsesorFk()
+    {
+        return $this->codigoAsesorFk;
+    }
+
+    /**
+     * Set asesorRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenAsesor $asesorRel
+     *
+     * @return TurCliente
+     */
+    public function setAsesorRel(\Brasa\GeneralBundle\Entity\GenAsesor $asesorRel = null)
+    {
+        $this->asesorRel = $asesorRel;
+
+        return $this;
+    }
+
+    /**
+     * Get asesorRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenAsesor
+     */
+    public function getAsesorRel()
+    {
+        return $this->asesorRel;
+    }
+
+    /**
+     * Add puestosDotacionesClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPuestoDotacion $puestosDotacionesClienteRel
+     *
+     * @return TurCliente
+     */
+    public function addPuestosDotacionesClienteRel(\Brasa\TurnoBundle\Entity\TurPuestoDotacion $puestosDotacionesClienteRel)
+    {
+        $this->puestosDotacionesClienteRel[] = $puestosDotacionesClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove puestosDotacionesClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPuestoDotacion $puestosDotacionesClienteRel
+     */
+    public function removePuestosDotacionesClienteRel(\Brasa\TurnoBundle\Entity\TurPuestoDotacion $puestosDotacionesClienteRel)
+    {
+        $this->puestosDotacionesClienteRel->removeElement($puestosDotacionesClienteRel);
+    }
+
+    /**
+     * Get puestosDotacionesClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPuestosDotacionesClienteRel()
+    {
+        return $this->puestosDotacionesClienteRel;
     }
 }

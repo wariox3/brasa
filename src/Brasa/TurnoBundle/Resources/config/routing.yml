@@ -44,27 +44,7 @@ brs_tur_base_concepto_servicio_lista:
     
 brs_tur_base_concepto_servicio_nuevo:
     path:     /tur/base/concepto/servicio/nuevo/{codigoConceptoServicio}
-    defaults: { _controller: BrasaTurnoBundle:BaseConceptoServicio:nuevo }
-
-brs_tur_base_cliente_lista:
-    path:     /tur/base/cliente/lista
-    defaults: { _controller: BrasaTurnoBundle:BaseCliente:lista }     
-    
-brs_tur_base_cliente_detalle:
-    path:     /tur/base/cliente/detalle/{codigoCliente}
-    defaults: { _controller: BrasaTurnoBundle:BaseCliente:detalle }    
-    
-brs_tur_base_cliente_nuevo:
-    path:     /tur/base/cliente/nuevo/{codigoCliente}
-    defaults: { _controller: BrasaTurnoBundle:BaseCliente:nuevo }
-
-brs_tur_base_cliente_puesto_nuevo:
-    path:     /tur/base/cliente/puesto/nuevo/{codigoCliente}/{codigoPuesto}
-    defaults: { _controller: BrasaTurnoBundle:BaseCliente:puestoNuevo }    
-
-brs_tur_base_cliente_direccion_nuevo:
-    path:     /tur/base/cliente/direccion/nuevo/{codigoCliente}/{codigoDireccion}
-    defaults: { _controller: BrasaTurnoBundle:BaseCliente:direccionNuevo } 
+    defaults: { _controller: BrasaTurnoBundle:BaseConceptoServicio:nuevo }               
 
 brs_tur_base_prospecto_lista:
     path:     /tur/base/prospecto/lista

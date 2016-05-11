@@ -5,14 +5,17 @@ namespace Brasa\TurnoBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 class TurPuestoRepository extends EntityRepository {    
-    public function ListaDql($codigoCliente, $strNombre = "", $strCodigo = "") {
+    public function listaDql($codigoPuesto = '', $codigoCliente = '', $strNombre = "") {
         $em = $this->getEntityManager();
-        $dql   = "SELECT p FROM BrasaTurnoBundle:TurPuesto p WHERE p.codigoClienteFk = " . $codigoCliente;
+        $dql   = "SELECT p FROM BrasaTurnoBundle:TurPuesto p WHERE p.codigoPuestoPk <> 0 ";
+        if($codigoCliente != "" ) {
+            $dql .= " AND p.codigoClienteFk = " . $codigoCliente;
+        }
         if($strNombre != "" ) {
             $dql .= " AND p.nombre LIKE '%" . $strNombre . "%'";
         }
-        if($strCodigo != "" ) {
-            $dql .= " AND p.codigoPuestoPk LIKE '%" . $strCodigo . "%'";
+        if($codigoPuesto != "" ) {
+            $dql .= " AND p.codigoPuestoPk = " . $codigoPuesto;
         }
         $dql .= " ORDER BY p.nombre";
         return $dql;
@@ -27,5 +30,22 @@ class TurPuestoRepository extends EntityRepository {
             }
             $em->flush();
         }
-    }     
+    }   
+    
+    public function liquidar($codigoPuesto) {        
+        $em = $this->getEntityManager();        
+        $arPuesto = new \Brasa\TurnoBundle\Entity\TurPuesto();        
+        $arPuesto = $em->getRepository('BrasaTurnoBundle:TurPuesto')->find($codigoPuesto); 
+        $costo = 0;
+        $arPuestoDotaciones = new \Brasa\TurnoBundle\Entity\TurPuestoDotacion();        
+        $arPuestoDotaciones = $em->getRepository('BrasaTurnoBundle:TurPuestoDotacion')->findBy(array('codigoPuestoFk' => $codigoPuesto));         
+        foreach ($arPuestoDotaciones as $arPuestoDotacion) {
+            $costo += $arPuestoDotacion->getTotal();
+        }
+        $arPuesto->setCostoDotacion($costo);
+        $em->persist($arPuesto);
+        $em->flush();
+        return true;
+    }        
+    
 }
