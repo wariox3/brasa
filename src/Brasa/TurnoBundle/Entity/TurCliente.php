@@ -147,7 +147,7 @@ class TurCliente
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenFormaPago", inversedBy="turClientesFormaPagoRel")
      * @ORM\JoinColumn(name="codigo_forma_pago_fk", referencedColumnName="codigo_forma_pago_pk")
      */
-    protected $formaPagoRel;     
+    protected $formaPagoRel;            
     
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenAsesor", inversedBy="turClientesAsesorRel")
@@ -206,6 +206,8 @@ class TurCliente
      */
     protected $puestosDotacionesClienteRel;    
     
+
+
     /**
      * Constructor
      */
@@ -219,6 +221,7 @@ class TurCliente
         $this->puestosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->clientesDireccionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cierresMesServiciosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->puestosDotacionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -325,6 +328,30 @@ class TurCliente
     public function getCodigoSectorFk()
     {
         return $this->codigoSectorFk;
+    }
+
+    /**
+     * Set codigoAsesorFk
+     *
+     * @param integer $codigoAsesorFk
+     *
+     * @return TurCliente
+     */
+    public function setCodigoAsesorFk($codigoAsesorFk)
+    {
+        $this->codigoAsesorFk = $codigoAsesorFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoAsesorFk
+     *
+     * @return integer
+     */
+    public function getCodigoAsesorFk()
+    {
+        return $this->codigoAsesorFk;
     }
 
     /**
@@ -1128,54 +1155,6 @@ class TurCliente
     }
 
     /**
-     * Set codigoAsesorFk
-     *
-     * @param integer $codigoAsesorFk
-     *
-     * @return TurCliente
-     */
-    public function setCodigoAsesorFk($codigoAsesorFk)
-    {
-        $this->codigoAsesorFk = $codigoAsesorFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoAsesorFk
-     *
-     * @return integer
-     */
-    public function getCodigoAsesorFk()
-    {
-        return $this->codigoAsesorFk;
-    }
-
-    /**
-     * Set asesorRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenAsesor $asesorRel
-     *
-     * @return TurCliente
-     */
-    public function setAsesorRel(\Brasa\GeneralBundle\Entity\GenAsesor $asesorRel = null)
-    {
-        $this->asesorRel = $asesorRel;
-
-        return $this;
-    }
-
-    /**
-     * Get asesorRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenAsesor
-     */
-    public function getAsesorRel()
-    {
-        return $this->asesorRel;
-    }
-
-    /**
      * Add puestosDotacionesClienteRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurPuestoDotacion $puestosDotacionesClienteRel
@@ -1207,5 +1186,29 @@ class TurCliente
     public function getPuestosDotacionesClienteRel()
     {
         return $this->puestosDotacionesClienteRel;
+    }
+
+    /**
+     * Set asesorRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenAsesor $asesorRel
+     *
+     * @return TurCliente
+     */
+    public function setAsesorRel(\Brasa\GeneralBundle\Entity\GenAsesor $asesorRel = null)
+    {
+        $this->asesorRel = $asesorRel;
+
+        return $this;
+    }
+
+    /**
+     * Get asesorRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenAsesor
+     */
+    public function getAsesorRel()
+    {
+        return $this->asesorRel;
     }
 }

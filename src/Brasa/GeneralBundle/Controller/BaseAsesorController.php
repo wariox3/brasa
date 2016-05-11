@@ -85,10 +85,10 @@ class BaseAsesorController extends Controller
             }
             
         }
-        $arAsesores = new \Brasa\GeneralBundle\Entity\GenAsesor();
-        $query = $em->getRepository('BrasaGeneralBundle:GenAsesor')->findAll();
-        $arAsesores = $paginator->paginate($query, $this->get('request')->query->get('page', 1),50);
-
+        $dql = $em->getRepository('BrasaGeneralBundle:GenAsesor')->listaDql();
+        $arAsesores = new \Brasa\GeneralBundle\Entity\GenAsesor();        
+        //$arAsesores = $em->getRepository('BrasaGeneralBundle:GenAsesor')->findAll();
+        $arAsesores = $paginator->paginate($em->createQuery($dql), $this->get('request')->query->get('page', 1),50);
         return $this->render('BrasaGeneralBundle:Base/Asesor:lista.html.twig', array(
                     'arAsesores' => $arAsesores,
                     'form'=> $form->createView()

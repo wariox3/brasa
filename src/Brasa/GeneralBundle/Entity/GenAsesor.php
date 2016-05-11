@@ -71,11 +71,7 @@ class GenAsesor
      * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiCliente", mappedBy="asesorRel")
      */
     protected $afiClientesAsesorRel;     
-    
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\turCliente", mappedBy="asesorRel")
-     */
-    protected $turClientesAsesorRel;
+
     
     /**
      * Constructor
@@ -411,39 +407,5 @@ class GenAsesor
     public function getAfiClientesAsesorRel()
     {
         return $this->afiClientesAsesorRel;
-    }
-
-    /**
-     * Add turClientesAsesorRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\turCliente $turClientesAsesorRel
-     *
-     * @return GenAsesor
-     */
-    public function addTurClientesAsesorRel(\Brasa\TurnoBundle\Entity\turCliente $turClientesAsesorRel)
-    {
-        $this->turClientesAsesorRel[] = $turClientesAsesorRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove turClientesAsesorRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\turCliente $turClientesAsesorRel
-     */
-    public function removeTurClientesAsesorRel(\Brasa\TurnoBundle\Entity\turCliente $turClientesAsesorRel)
-    {
-        $this->turClientesAsesorRel->removeElement($turClientesAsesorRel);
-    }
-
-    /**
-     * Get turClientesAsesorRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTurClientesAsesorRel()
-    {
-        return $this->turClientesAsesorRel;
     }
 }

@@ -12,4 +12,8 @@ use Doctrine\ORM\EntityRepository;
  */
 class GenAsesorRepository extends EntityRepository
 {
+        public function listaDql() {
+            $dql   = "SELECT a FROM BrasaGeneralBundle:GenAsesor a WHERE a.codigoAsesorPk <> 0";        
+        return $dql;
+    } 
 }
