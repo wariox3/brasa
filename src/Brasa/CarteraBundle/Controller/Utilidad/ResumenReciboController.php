@@ -131,8 +131,8 @@ class ResumenReciboController extends Controller
             ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                
             ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroPedidoNumero')))            
             ->add('reciboTipoRel', 'entity', $arrayPropiedades)
-            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date')))
-            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date')))
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => new \DateTime('now')))
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => new \DateTime('now')))            
             ->add('BtnExcelLista', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrarLista', 'submit', array('label'  => 'Filtrar'))
             ->getForm();

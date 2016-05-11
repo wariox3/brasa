@@ -119,7 +119,7 @@
                 <tr class="{{ class }}">
                     <td>{{ arReciboDetalle.codigoReciboDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arReciboDetalle.codigoReciboDetallePk }}"></td>                                                    
                     <td>{{ arReciboDetalle.numeroFactura  }}</td>
-                    <td>{{ arReciboDetalle.cuentaCobrarTipoRel.nombre  }}</td>
+                    <td>{{ arReciboDetalle.cuentaCobrarTipoRel.nombre |default('')  }}</td>
                     {% if arRecibo.estadoAutorizado == 0 %}                        
                         <td style="text-align: right"><input style="text-align: right" class="input-grid" type="text" name="TxtVrDescuento{{ arReciboDetalle.codigoReciboDetallePk }}" value="{{ arReciboDetalle.vrDescuento  }}" size="8" style="width:65px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
                         <td style="text-align: right"><input style="text-align: right" class="input-grid" type="text" name="TxtVrAjustePeso{{ arReciboDetalle.codigoReciboDetallePk }}" value="{{ arReciboDetalle.vrAjustePeso  }}" size="8" style="width:65px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
