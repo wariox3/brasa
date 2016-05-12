@@ -215,6 +215,7 @@ class TurFacturaRepository extends EntityRepository {
                 $arClienteCartera = $em->getRepository('BrasaCarteraBundle:CarCliente')->findOneBy(array('nit' => $arClienteTurno->getNit())); 
                 if ($arClienteCartera == null){
                     $arClienteCartera = new \Brasa\CarteraBundle\Entity\CarCliente();
+                    $arClienteCartera->setAsesorRel($arClienteTurno->getAsesorRel());
                     $arClienteCartera->setFormaPagoRel($arClienteTurno->getFormaPagoRel());
                     $arClienteCartera->setCiudadRel($arClienteTurno->getCiudadRel());
                     $arClienteCartera->setNit($arClienteTurno->getNit());
@@ -232,6 +233,7 @@ class TurFacturaRepository extends EntityRepository {
                     $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
                     $arCuentaCobrarTipo = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrarTipo')->find(2);
                     $arCuentaCobrar->setClienteRel($arClienteCartera);
+                    $arCuentaCobrar->setAsesorRel($arClienteTurno->getAsesorRel());
                     $arCuentaCobrar->setCuentaCobrarTipoRel($arCuentaCobrarTipo);
                     $arCuentaCobrar->setFecha($arFactura->getFecha());
                     $arCuentaCobrar->setFechaVence($arFactura->getFechaVence());
