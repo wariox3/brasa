@@ -10,6 +10,15 @@ class TurServicioDetalleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {       
         $builder
+            ->add('proyectoRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurProyecto',
+                'query_builder' => function (EntityRepository $er) use ($options) {
+                    return $er->createQueryBuilder('p')
+                    ->where('p.codigoClienteFk = :codigoCliente ')
+                    ->setParameter('codigoCliente', $options['data']->getServicioRel()->getCodigoClienteFk())
+                    ->orderBy('p.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false))                 
             ->add('puestoRel', 'entity', array(
                 'class' => 'BrasaTurnoBundle:TurPuesto',
                 'query_builder' => function (EntityRepository $er) use ($options) {

@@ -9,7 +9,7 @@ class TurCotizacionDetalleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
+        $builder                
             ->add('conceptoServicioRel', 'entity', array(
                 'class' => 'BrasaTurnoBundle:TurConceptoServicio',
                 'query_builder' => function (EntityRepository $er)  {

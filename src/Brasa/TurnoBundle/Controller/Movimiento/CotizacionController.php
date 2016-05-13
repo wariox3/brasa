@@ -436,6 +436,15 @@ class CotizacionController extends Controller
                 $arCotizacionDetalle = new \Brasa\TurnoBundle\Entity\TurCotizacionDetalle();
                 $arCotizacionDetalle = $em->getRepository('BrasaTurnoBundle:TurCotizacionDetalle')->find($intCodigo);
                 $arCotizacionDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);
+                if(isset($arrControles['TxtProyecto'.$intCodigo])) {
+                    if($arrControles['TxtProyecto'.$intCodigo] != '') {
+                        $arProyecto = new \Brasa\TurnoBundle\Entity\TurProyecto();
+                        $arProyecto = $em->getRepository('BrasaTurnoBundle:TurProyecto')->find($arrControles['TxtProyecto'.$intCodigo]);
+                        if($arProyecto) {
+                            $arCotizacionDetalle->setProyectoRel($arProyecto);
+                        }
+                    }                    
+                }               
                 if($arrControles['TxtValorAjustado'.$intCodigo] != '') {
                     $arCotizacionDetalle->setVrPrecioAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
                 }                     

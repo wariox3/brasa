@@ -38,6 +38,11 @@ class TurProgramacionDetalle
     private $codigoPedidoDetalleFk;    
 
     /**
+     * @ORM\Column(name="codigo_proyecto_fk", type="integer", nullable=true)
+     */    
+    private $codigoProyectoFk;    
+    
+    /**
      * @ORM\Column(name="codigo_puesto_fk", type="integer", nullable=true)
      */    
     private $codigoPuestoFk;    
@@ -241,6 +246,12 @@ class TurProgramacionDetalle
     protected $recursoRel;    
     
     /**
+     * @ORM\ManyToOne(targetEntity="TurProyecto", inversedBy="programacionesDetallesProyectoRel")
+     * @ORM\JoinColumn(name="codigo_proyecto_fk", referencedColumnName="codigo_proyecto_pk")
+     */
+    protected $proyectoRel;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurPuesto", inversedBy="programacionesDetallesPuestoRel")
      * @ORM\JoinColumn(name="codigo_puesto_fk", referencedColumnName="codigo_puesto_pk")
      */
@@ -250,6 +261,7 @@ class TurProgramacionDetalle
      * @ORM\OneToMany(targetEntity="TurSoportePagoDetalle", mappedBy="programacionDetalleRel")
      */
     protected $soportesPagosDetallesProgramacionDetalleRel; 
+
 
 
     /**
@@ -295,6 +307,54 @@ class TurProgramacionDetalle
     }
 
     /**
+     * Set anio
+     *
+     * @param integer $anio
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setAnio($anio)
+    {
+        $this->anio = $anio;
+
+        return $this;
+    }
+
+    /**
+     * Get anio
+     *
+     * @return integer
+     */
+    public function getAnio()
+    {
+        return $this->anio;
+    }
+
+    /**
+     * Set mes
+     *
+     * @param integer $mes
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setMes($mes)
+    {
+        $this->mes = $mes;
+
+        return $this;
+    }
+
+    /**
+     * Get mes
+     *
+     * @return integer
+     */
+    public function getMes()
+    {
+        return $this->mes;
+    }
+
+    /**
      * Set codigoPedidoDetalleFk
      *
      * @param integer $codigoPedidoDetalleFk
@@ -316,6 +376,54 @@ class TurProgramacionDetalle
     public function getCodigoPedidoDetalleFk()
     {
         return $this->codigoPedidoDetalleFk;
+    }
+
+    /**
+     * Set codigoProyectoFk
+     *
+     * @param integer $codigoProyectoFk
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setCodigoProyectoFk($codigoProyectoFk)
+    {
+        $this->codigoProyectoFk = $codigoProyectoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoProyectoFk
+     *
+     * @return integer
+     */
+    public function getCodigoProyectoFk()
+    {
+        return $this->codigoProyectoFk;
+    }
+
+    /**
+     * Set codigoPuestoFk
+     *
+     * @param integer $codigoPuestoFk
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setCodigoPuestoFk($codigoPuestoFk)
+    {
+        $this->codigoPuestoFk = $codigoPuestoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPuestoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPuestoFk()
+    {
+        return $this->codigoPuestoFk;
     }
 
     /**
@@ -1111,6 +1219,78 @@ class TurProgramacionDetalle
     }
 
     /**
+     * Set horasDiurnas
+     *
+     * @param integer $horasDiurnas
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setHorasDiurnas($horasDiurnas)
+    {
+        $this->horasDiurnas = $horasDiurnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDiurnas
+     *
+     * @return integer
+     */
+    public function getHorasDiurnas()
+    {
+        return $this->horasDiurnas;
+    }
+
+    /**
+     * Set horasNocturnas
+     *
+     * @param integer $horasNocturnas
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setHorasNocturnas($horasNocturnas)
+    {
+        $this->horasNocturnas = $horasNocturnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNocturnas
+     *
+     * @return integer
+     */
+    public function getHorasNocturnas()
+    {
+        return $this->horasNocturnas;
+    }
+
+    /**
+     * Set vrHoraRecurso
+     *
+     * @param float $vrHoraRecurso
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setVrHoraRecurso($vrHoraRecurso)
+    {
+        $this->vrHoraRecurso = $vrHoraRecurso;
+
+        return $this;
+    }
+
+    /**
+     * Get vrHoraRecurso
+     *
+     * @return float
+     */
+    public function getVrHoraRecurso()
+    {
+        return $this->vrHoraRecurso;
+    }
+
+    /**
      * Set programacionRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurProgramacion $programacionRel
@@ -1183,6 +1363,54 @@ class TurProgramacionDetalle
     }
 
     /**
+     * Set proyectoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurProyecto $proyectoRel
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setProyectoRel(\Brasa\TurnoBundle\Entity\TurProyecto $proyectoRel = null)
+    {
+        $this->proyectoRel = $proyectoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get proyectoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurProyecto
+     */
+    public function getProyectoRel()
+    {
+        return $this->proyectoRel;
+    }
+
+    /**
+     * Set puestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPuesto $puestoRel
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setPuestoRel(\Brasa\TurnoBundle\Entity\TurPuesto $puestoRel = null)
+    {
+        $this->puestoRel = $puestoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get puestoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPuesto
+     */
+    public function getPuestoRel()
+    {
+        return $this->puestoRel;
+    }
+
+    /**
      * Add soportesPagosDetallesProgramacionDetalleRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesProgramacionDetalleRel
@@ -1214,173 +1442,5 @@ class TurProgramacionDetalle
     public function getSoportesPagosDetallesProgramacionDetalleRel()
     {
         return $this->soportesPagosDetallesProgramacionDetalleRel;
-    }
-
-    /**
-     * Set codigoPuestoFk
-     *
-     * @param integer $codigoPuestoFk
-     *
-     * @return TurProgramacionDetalle
-     */
-    public function setCodigoPuestoFk($codigoPuestoFk)
-    {
-        $this->codigoPuestoFk = $codigoPuestoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoPuestoFk
-     *
-     * @return integer
-     */
-    public function getCodigoPuestoFk()
-    {
-        return $this->codigoPuestoFk;
-    }
-
-    /**
-     * Set puestoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurPuesto $puestoRel
-     *
-     * @return TurProgramacionDetalle
-     */
-    public function setPuestoRel(\Brasa\TurnoBundle\Entity\TurPuesto $puestoRel = null)
-    {
-        $this->puestoRel = $puestoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get puestoRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurPuesto
-     */
-    public function getPuestoRel()
-    {
-        return $this->puestoRel;
-    }
-
-    /**
-     * Set anio
-     *
-     * @param integer $anio
-     *
-     * @return TurProgramacionDetalle
-     */
-    public function setAnio($anio)
-    {
-        $this->anio = $anio;
-
-        return $this;
-    }
-
-    /**
-     * Get anio
-     *
-     * @return integer
-     */
-    public function getAnio()
-    {
-        return $this->anio;
-    }
-
-    /**
-     * Set mes
-     *
-     * @param integer $mes
-     *
-     * @return TurProgramacionDetalle
-     */
-    public function setMes($mes)
-    {
-        $this->mes = $mes;
-
-        return $this;
-    }
-
-    /**
-     * Get mes
-     *
-     * @return integer
-     */
-    public function getMes()
-    {
-        return $this->mes;
-    }
-
-    /**
-     * Set vrHoraRecurso
-     *
-     * @param float $vrHoraRecurso
-     *
-     * @return TurProgramacionDetalle
-     */
-    public function setVrHoraRecurso($vrHoraRecurso)
-    {
-        $this->vrHoraRecurso = $vrHoraRecurso;
-
-        return $this;
-    }
-
-    /**
-     * Get vrHoraRecurso
-     *
-     * @return float
-     */
-    public function getVrHoraRecurso()
-    {
-        return $this->vrHoraRecurso;
-    }
-
-    /**
-     * Set horasDiurnas
-     *
-     * @param integer $horasDiurnas
-     *
-     * @return TurProgramacionDetalle
-     */
-    public function setHorasDiurnas($horasDiurnas)
-    {
-        $this->horasDiurnas = $horasDiurnas;
-
-        return $this;
-    }
-
-    /**
-     * Get horasDiurnas
-     *
-     * @return integer
-     */
-    public function getHorasDiurnas()
-    {
-        return $this->horasDiurnas;
-    }
-
-    /**
-     * Set horasNocturnas
-     *
-     * @param integer $horasNocturnas
-     *
-     * @return TurProgramacionDetalle
-     */
-    public function setHorasNocturnas($horasNocturnas)
-    {
-        $this->horasNocturnas = $horasNocturnas;
-
-        return $this;
-    }
-
-    /**
-     * Get horasNocturnas
-     *
-     * @return integer
-     */
-    public function getHorasNocturnas()
-    {
-        return $this->horasNocturnas;
     }
 }

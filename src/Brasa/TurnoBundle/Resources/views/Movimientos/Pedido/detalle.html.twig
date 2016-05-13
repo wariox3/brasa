@@ -110,6 +110,7 @@
                     <table class="table table-striped table-bordered table-condensed">
                         <tr>
                             <th>COD</th>
+                            <th>PROYECTO</th>
                             <th>PUESTO</th>
                             <th>SERVICIO</th>
                             <th>MODALIDAD</th>
@@ -143,6 +144,7 @@
                         {% for arPedidoDetalle in arPedidoDetalle %}
                             <tr>
                                 <td><a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_pedido_detalle_resumen', {'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'pedidoDetalleResumen', 600, 900)">{{ arPedidoDetalle.codigoPedidoDetallePk }}</a><input type="hidden" name="LblCodigo[]" value="{{ arPedidoDetalle.codigoPedidoDetallePk }}"></td>                                
+                                <td>{{ arPedidoDetalle.proyectoRel.nombre | default('') }}</td> 
                                 <td>{{ arPedidoDetalle.puestoRel.nombre | default('') }}</td> 
                                 <td>{{ arPedidoDetalle.conceptoServicioRel.nombre  }}</td>                    
                                 <td>{{ arPedidoDetalle.modalidadServicioRel.nombre  }}</td>                    

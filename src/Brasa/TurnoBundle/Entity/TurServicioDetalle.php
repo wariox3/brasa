@@ -23,6 +23,11 @@ class TurServicioDetalle
     private $codigoServicioFk;
 
     /**
+     * @ORM\Column(name="codigo_proyecto_fk", type="integer", nullable=true)
+     */    
+    private $codigoProyectoFk;
+    
+    /**
      * @ORM\Column(name="codigo_puesto_fk", type="integer", nullable=true)
      */    
     private $codigoPuestoFk;            
@@ -174,6 +179,12 @@ class TurServicioDetalle
     protected $servicioRel;       
 
     /**
+     * @ORM\ManyToOne(targetEntity="TurProyecto", inversedBy="serviciosDetallesProyectoRel")
+     * @ORM\JoinColumn(name="codigo_proyecto_fk", referencedColumnName="codigo_proyecto_pk")
+     */
+    protected $proyectoRel;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurPuesto", inversedBy="serviciosDetallesPuestoRel")
      * @ORM\JoinColumn(name="codigo_puesto_fk", referencedColumnName="codigo_puesto_pk")
      */
@@ -261,6 +272,30 @@ class TurServicioDetalle
     public function getCodigoServicioFk()
     {
         return $this->codigoServicioFk;
+    }
+
+    /**
+     * Set codigoProyectoFk
+     *
+     * @param integer $codigoProyectoFk
+     *
+     * @return TurServicioDetalle
+     */
+    public function setCodigoProyectoFk($codigoProyectoFk)
+    {
+        $this->codigoProyectoFk = $codigoProyectoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoProyectoFk
+     *
+     * @return integer
+     */
+    public function getCodigoProyectoFk()
+    {
+        return $this->codigoProyectoFk;
     }
 
     /**
@@ -429,6 +464,30 @@ class TurServicioDetalle
     public function getFechaHasta()
     {
         return $this->fechaHasta;
+    }
+
+    /**
+     * Set liquidarDiasReales
+     *
+     * @param boolean $liquidarDiasReales
+     *
+     * @return TurServicioDetalle
+     */
+    public function setLiquidarDiasReales($liquidarDiasReales)
+    {
+        $this->liquidarDiasReales = $liquidarDiasReales;
+
+        return $this;
+    }
+
+    /**
+     * Get liquidarDiasReales
+     *
+     * @return boolean
+     */
+    public function getLiquidarDiasReales()
+    {
+        return $this->liquidarDiasReales;
     }
 
     /**
@@ -960,6 +1019,30 @@ class TurServicioDetalle
     }
 
     /**
+     * Set proyectoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurProyecto $proyectoRel
+     *
+     * @return TurServicioDetalle
+     */
+    public function setProyectoRel(\Brasa\TurnoBundle\Entity\TurProyecto $proyectoRel = null)
+    {
+        $this->proyectoRel = $proyectoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get proyectoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurProyecto
+     */
+    public function getProyectoRel()
+    {
+        return $this->proyectoRel;
+    }
+
+    /**
      * Set puestoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurPuesto $puestoRel
@@ -1179,29 +1262,5 @@ class TurServicioDetalle
     public function getPedidosDetallesServicioDetalleRel()
     {
         return $this->pedidosDetallesServicioDetalleRel;
-    }
-
-    /**
-     * Set liquidarDiasReales
-     *
-     * @param boolean $liquidarDiasReales
-     *
-     * @return TurServicioDetalle
-     */
-    public function setLiquidarDiasReales($liquidarDiasReales)
-    {
-        $this->liquidarDiasReales = $liquidarDiasReales;
-
-        return $this;
-    }
-
-    /**
-     * Get liquidarDiasReales
-     *
-     * @return boolean
-     */
-    public function getLiquidarDiasReales()
-    {
-        return $this->liquidarDiasReales;
     }
 }

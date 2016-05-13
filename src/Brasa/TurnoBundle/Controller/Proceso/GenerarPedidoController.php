@@ -95,6 +95,7 @@ class GenerarPedidoController extends Controller
                         $arPedidoDetalleNuevo->setCantidad($arServicioDetalle->getCantidad());
                         $arPedidoDetalleNuevo->setConceptoServicioRel($arServicioDetalle->getConceptoServicioRel());
                         $arPedidoDetalleNuevo->setModalidadServicioRel($arServicioDetalle->getModalidadServicioRel());                    
+                        $arPedidoDetalleNuevo->setProyectoRel($arServicioDetalle->getProyectoRel());
                         $arPedidoDetalleNuevo->setPuestoRel($arServicioDetalle->getPuestoRel());
                         $arPedidoDetalleNuevo->setPlantillaRel($arServicioDetalle->getPlantillaRel());
                         $arPedidoDetalleNuevo->setServicioDetalleRel($arServicioDetalle);

@@ -111,6 +111,12 @@
                     <table class="table table-striped table-bordered table-condensed">
                         <tr>
                             <th>COD</th>
+                            <th>PROYECTO</th>
+                            {% if arCotizacion.estadoAutorizado == 0 %}     
+                                {% if arCotizacion.codigoClienteFk != NULL %}
+                                    <th></th>                                
+                                {% endif %}                             
+                            {% endif %}                             
                             <th>SERVICIO</th>
                             <th>MODALIDAD</th> 
                             <th>PERIODO</th>
@@ -140,6 +146,15 @@
                         {% for arCotizacionDetalle in arCotizacionDetalle %}
                             <tr>
                                 <td>{{ arCotizacionDetalle.codigoCotizacionDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arCotizacionDetalle.codigoCotizacionDetallePk }}"></td>
+                                {% if arCotizacion.estadoAutorizado == 0 %}
+                                    {% if arCotizacion.codigoClienteFk != NULL %}
+                                        <td>
+                                            <input class="input-grid" type="text" name="TxtProyecto{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" id="TxtProyecto{{ arCotizacionDetalle.codigoCotizacionDetallePk }}" value="{{ arCotizacionDetalle.codigoProyectoFk  }}" size="10" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/>
+                                            <a href="javascript:abrirVentana3('{{ path('brs_tur_buscar_proyecto', {'campoCodigo': 'TxtProyecto' ~ arCotizacionDetalle.codigoCotizacionDetallePk, 'codigoCliente' : arCotizacion.codigoClienteFk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Buscar"></a>                            
+                                        </td>                                                                                             
+                                    {% endif %}
+                                {% endif %}
+                                <td>{{ arCotizacionDetalle.proyectoRel.nombre | default('') }}</td>                                 
                                 <td>{{ arCotizacionDetalle.conceptoServicioRel.nombre  }}</td>                    
                                 <td>{{ arCotizacionDetalle.modalidadServicioRel.nombre  }}</td> 
                                 <td>{{ arCotizacionDetalle.periodoRel.nombre  }}</td>                                 

@@ -14,8 +14,8 @@
             <tr>
                 <th>COD</th>
                 <th>SER</th>
+                <th>PROYECTO</th>
                 <th>PUESTO</th>
-                <th></th>
                 <th>SERVICIO</th>
                 <th>MODALIDAD</th>
                 <th>PERIODO</th>
@@ -31,7 +31,7 @@
                 <th>SA</th>
                 <th>DO</th>
                 <th>FE</th>
-                <th>HORAS</th>
+                <th>H</th>
                 <th>H.D</th>
                 <th>H.N</th>
                 <th>DIAS</th>
@@ -41,8 +41,8 @@
             {% for arServicioDetalles in arServicioDetalles %}
             <tr>
                 <td>{{ arServicioDetalles.codigoServicioDetallePk  }}</td>
-                <td>{{ arServicioDetalles.codigoServicioFk }}</td>
-                <td>{{ arServicioDetalles.codigoPuestoFk }}</td>
+                <td>{{ arServicioDetalles.codigoServicioFk }}</td>                
+                <td>{{ arServicioDetalles.proyectoRel.nombre | default('') }}</td> 
                 <td>{{ arServicioDetalles.puestoRel.nombre | default('') }}</td> 
                 <td>{{ arServicioDetalles.conceptoServicioRel.nombre  }}</td>                    
                 <td>{{ arServicioDetalles.modalidadServicioRel.nombre  }}</td>                    

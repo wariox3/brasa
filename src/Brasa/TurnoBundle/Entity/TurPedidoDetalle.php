@@ -23,6 +23,11 @@ class TurPedidoDetalle
     private $codigoPedidoFk;
 
     /**
+     * @ORM\Column(name="codigo_proyecto_fk", type="integer", nullable=true)
+     */    
+    private $codigoProyectoFk;    
+    
+    /**
      * @ORM\Column(name="codigo_puesto_fk", type="integer", nullable=true)
      */    
     private $codigoPuestoFk;           
@@ -204,6 +209,12 @@ class TurPedidoDetalle
     protected $pedidoRel;       
 
     /**
+     * @ORM\ManyToOne(targetEntity="TurProyecto", inversedBy="pedidosDetallesProyectoRel")
+     * @ORM\JoinColumn(name="codigo_proyecto_fk", referencedColumnName="codigo_proyecto_pk")
+     */
+    protected $proyectoRel;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurPuesto", inversedBy="pedidosDetallesPuestoRel")
      * @ORM\JoinColumn(name="codigo_puesto_fk", referencedColumnName="codigo_puesto_pk")
      */
@@ -264,6 +275,7 @@ class TurPedidoDetalle
      */
     protected $cierresMesServiciosPedidoDetalleRel;    
     
+
     /**
      * Constructor
      */
@@ -272,6 +284,8 @@ class TurPedidoDetalle
         $this->pedidosDetallesRecursosPedidoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->programacionesDetallesPedidoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->facturasDetallesPedidoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->soportesPagosDetallesPedidoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cierresMesServiciosPedidoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -306,6 +320,30 @@ class TurPedidoDetalle
     public function getCodigoPedidoFk()
     {
         return $this->codigoPedidoFk;
+    }
+
+    /**
+     * Set codigoProyectoFk
+     *
+     * @param integer $codigoProyectoFk
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setCodigoProyectoFk($codigoProyectoFk)
+    {
+        $this->codigoProyectoFk = $codigoProyectoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoProyectoFk
+     *
+     * @return integer
+     */
+    public function getCodigoProyectoFk()
+    {
+        return $this->codigoProyectoFk;
     }
 
     /**
@@ -501,6 +539,30 @@ class TurPedidoDetalle
     }
 
     /**
+     * Set liquidarDiasReales
+     *
+     * @param boolean $liquidarDiasReales
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setLiquidarDiasReales($liquidarDiasReales)
+    {
+        $this->liquidarDiasReales = $liquidarDiasReales;
+
+        return $this;
+    }
+
+    /**
+     * Get liquidarDiasReales
+     *
+     * @return boolean
+     */
+    public function getLiquidarDiasReales()
+    {
+        return $this->liquidarDiasReales;
+    }
+
+    /**
      * Set dias
      *
      * @param integer $dias
@@ -594,6 +656,78 @@ class TurPedidoDetalle
     public function getHorasNocturnas()
     {
         return $this->horasNocturnas;
+    }
+
+    /**
+     * Set horasProgramadas
+     *
+     * @param integer $horasProgramadas
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setHorasProgramadas($horasProgramadas)
+    {
+        $this->horasProgramadas = $horasProgramadas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasProgramadas
+     *
+     * @return integer
+     */
+    public function getHorasProgramadas()
+    {
+        return $this->horasProgramadas;
+    }
+
+    /**
+     * Set horasDiurnasProgramadas
+     *
+     * @param integer $horasDiurnasProgramadas
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setHorasDiurnasProgramadas($horasDiurnasProgramadas)
+    {
+        $this->horasDiurnasProgramadas = $horasDiurnasProgramadas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDiurnasProgramadas
+     *
+     * @return integer
+     */
+    public function getHorasDiurnasProgramadas()
+    {
+        return $this->horasDiurnasProgramadas;
+    }
+
+    /**
+     * Set horasNocturnasProgramadas
+     *
+     * @param integer $horasNocturnasProgramadas
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setHorasNocturnasProgramadas($horasNocturnasProgramadas)
+    {
+        $this->horasNocturnasProgramadas = $horasNocturnasProgramadas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNocturnasProgramadas
+     *
+     * @return integer
+     */
+    public function getHorasNocturnasProgramadas()
+    {
+        return $this->horasNocturnasProgramadas;
     }
 
     /**
@@ -738,6 +872,30 @@ class TurPedidoDetalle
     public function getVrTotalDetalle()
     {
         return $this->vrTotalDetalle;
+    }
+
+    /**
+     * Set vrTotalDetallePendiente
+     *
+     * @param float $vrTotalDetallePendiente
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setVrTotalDetallePendiente($vrTotalDetallePendiente)
+    {
+        $this->vrTotalDetallePendiente = $vrTotalDetallePendiente;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalDetallePendiente
+     *
+     * @return float
+     */
+    public function getVrTotalDetallePendiente()
+    {
+        return $this->vrTotalDetallePendiente;
     }
 
     /**
@@ -1053,6 +1211,30 @@ class TurPedidoDetalle
     }
 
     /**
+     * Set proyectoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurProyecto $proyectoRel
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setProyectoRel(\Brasa\TurnoBundle\Entity\TurProyecto $proyectoRel = null)
+    {
+        $this->proyectoRel = $proyectoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get proyectoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurProyecto
+     */
+    public function getProyectoRel()
+    {
+        return $this->proyectoRel;
+    }
+
+    /**
      * Set puestoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurPuesto $puestoRel
@@ -1299,30 +1481,6 @@ class TurPedidoDetalle
     }
 
     /**
-     * Set vrTotalDetallePendiente
-     *
-     * @param float $vrTotalDetallePendiente
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setVrTotalDetallePendiente($vrTotalDetallePendiente)
-    {
-        $this->vrTotalDetallePendiente = $vrTotalDetallePendiente;
-
-        return $this;
-    }
-
-    /**
-     * Get vrTotalDetallePendiente
-     *
-     * @return float
-     */
-    public function getVrTotalDetallePendiente()
-    {
-        return $this->vrTotalDetallePendiente;
-    }
-
-    /**
      * Add soportesPagosDetallesPedidoDetalleRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesPedidoDetalleRel
@@ -1388,101 +1546,5 @@ class TurPedidoDetalle
     public function getCierresMesServiciosPedidoDetalleRel()
     {
         return $this->cierresMesServiciosPedidoDetalleRel;
-    }
-
-    /**
-     * Set liquidarDiasReales
-     *
-     * @param boolean $liquidarDiasReales
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setLiquidarDiasReales($liquidarDiasReales)
-    {
-        $this->liquidarDiasReales = $liquidarDiasReales;
-
-        return $this;
-    }
-
-    /**
-     * Get liquidarDiasReales
-     *
-     * @return boolean
-     */
-    public function getLiquidarDiasReales()
-    {
-        return $this->liquidarDiasReales;
-    }
-
-    /**
-     * Set horasProgramadas
-     *
-     * @param integer $horasProgramadas
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setHorasProgramadas($horasProgramadas)
-    {
-        $this->horasProgramadas = $horasProgramadas;
-
-        return $this;
-    }
-
-    /**
-     * Get horasProgramadas
-     *
-     * @return integer
-     */
-    public function getHorasProgramadas()
-    {
-        return $this->horasProgramadas;
-    }
-
-    /**
-     * Set horasDiurnasProgramadas
-     *
-     * @param integer $horasDiurnasProgramadas
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setHorasDiurnasProgramadas($horasDiurnasProgramadas)
-    {
-        $this->horasDiurnasProgramadas = $horasDiurnasProgramadas;
-
-        return $this;
-    }
-
-    /**
-     * Get horasDiurnasProgramadas
-     *
-     * @return integer
-     */
-    public function getHorasDiurnasProgramadas()
-    {
-        return $this->horasDiurnasProgramadas;
-    }
-
-    /**
-     * Set horasNocturnasProgramadas
-     *
-     * @param integer $horasNocturnasProgramadas
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setHorasNocturnasProgramadas($horasNocturnasProgramadas)
-    {
-        $this->horasNocturnasProgramadas = $horasNocturnasProgramadas;
-
-        return $this;
-    }
-
-    /**
-     * Get horasNocturnasProgramadas
-     *
-     * @return integer
-     */
-    public function getHorasNocturnasProgramadas()
-    {
-        return $this->horasNocturnasProgramadas;
     }
 }

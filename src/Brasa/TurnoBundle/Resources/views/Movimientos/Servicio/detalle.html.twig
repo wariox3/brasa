@@ -98,10 +98,8 @@
                     <table class="table table-striped table-bordered table-condensed">
                         <tr>
                             <th>COD</th>
-                            <th>PUESTO</th>
-                            {% if arServicio.estadoAutorizado == 0 %}                                
-                                <th></th>                                
-                            {% endif %}                                                        
+                            <th>PROYECTO</th>
+                            <th>PUESTO</th>                                                       
                             <th>SERVICIO</th>
                             <th>MODALIDAD</th>
                             <th>PERIODO</th>
@@ -132,12 +130,7 @@
                         {% for arServicioDetalle in arServicioDetalle %}
                             <tr>
                                 <td>{{ arServicioDetalle.codigoServicioDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arServicioDetalle.codigoServicioDetallePk }}"></td>
-                                {% if arServicio.estadoAutorizado == 0 %}
-                                    <td>
-                                        <input class="input-grid" type="text" name="TxtPuesto{{ arServicioDetalle.codigoServicioDetallePk }}" id="TxtPuesto{{ arServicioDetalle.codigoServicioDetallePk }}" value="{{ arServicioDetalle.codigoPuestoFk  }}" size="10" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/>
-                                        <a href="javascript:abrirVentana3('{{ path('brs_tur_buscar_puesto', {'campoCodigo': 'TxtPuesto' ~ arServicioDetalle.codigoServicioDetallePk, 'codigoCliente' : arServicio.codigoClienteFk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Buscar"></a>                            
-                                    </td>                                                                                             
-                                {% endif %}
+                                <td>{{ arServicioDetalle.proyectoRel.nombre | default('') }}</td>                                 
                                 <td>{{ arServicioDetalle.puestoRel.nombre | default('') }}</td> 
                                 <td>{{ arServicioDetalle.conceptoServicioRel.nombre  }}</td>                    
                                 <td>{{ arServicioDetalle.modalidadServicioRel.nombre  }}</td>                    

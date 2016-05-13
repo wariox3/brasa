@@ -132,6 +132,7 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                         $arProgramacionDetalle->setProgramacionRel($arProgramacion);
                         $arProgramacionDetalle->setPedidoDetalleRel($arPedidoDetalle);
+                        $arProgramacionDetalle->setProyectoRel($arPedidoDetalle->getProyectoRel());
                         $arProgramacionDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
                         $arProgramacionDetalle->setAnio($arProgramacion->getFecha()->format('Y'));
                         $arProgramacionDetalle->setMes($arProgramacion->getFecha()->format('m'));                        
@@ -287,6 +288,7 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                         $arProgramacionDetalle->setProgramacionRel($arProgramacion);
                         $arProgramacionDetalle->setPedidoDetalleRel($arPedidoDetalle);
+                        $arProgramacionDetalle->setProyectoRel($arPedidoDetalle->getProyectoRel());
                         $arProgramacionDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
                         $arPedidoDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso();
                         $arPedidoDetalleRecurso = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->findOneBy(array('codigoPedidoDetalleFk' => $codigoPedidoDetalle, 'posicion' => $arPlantillaDetalle->getPosicion()));
@@ -434,6 +436,7 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                             $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                             $arProgramacionDetalle->setProgramacionRel($arProgramacion);
                             $arProgramacionDetalle->setPedidoDetalleRel($arPedidoDetalle);
+                            $arProgramacionDetalle->setProyectoRel($arPedidoDetalle->getProyectoRel());
                             $arProgramacionDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
                             $em->persist($arProgramacionDetalle);
                         }

@@ -256,6 +256,7 @@ class ServicioController extends Controller
                         foreach($arCotizacionDetalles as $arCotizacionDetalle) {
                             $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
                             $arServicioDetalle->setServicioRel($arServicio);
+                            $arServicioDetalle->setProyectoRel($arCotizacionDetalle->getProyectoRel());
                             $arServicioDetalle->setModalidadServicioRel($arCotizacionDetalle->getModalidadServicioRel());
                             $arServicioDetalle->setPeriodoRel($arCotizacionDetalle->getPeriodoRel());
                             $arServicioDetalle->setConceptoServicioRel($arCotizacionDetalle->getConceptoServicioRel());
@@ -627,13 +628,6 @@ class ServicioController extends Controller
                 $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
                 $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($intCodigo);
                 $arServicioDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);
-                if($arrControles['TxtPuesto'.$intCodigo] != '') {
-                    $arPuesto = new \Brasa\TurnoBundle\Entity\TurPuesto();
-                    $arPuesto = $em->getRepository('BrasaTurnoBundle:TurPuesto')->find($arrControles['TxtPuesto'.$intCodigo]);
-                    if($arPuesto) {
-                        $arServicioDetalle->setPuestoRel($arPuesto);
-                    }
-                }
                 if($arrControles['TxtValorAjustado'.$intCodigo] != '') {
                     $arServicioDetalle->setVrPrecioAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
                 }            

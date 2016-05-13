@@ -192,6 +192,11 @@ class TurCliente
     protected $puestosClienteRel;     
 
     /**
+     * @ORM\OneToMany(targetEntity="TurProyecto", mappedBy="clienteRel")
+     */
+    protected $proyectosClienteRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurClienteDireccion", mappedBy="clienteRel")
      */
     protected $clientesDireccionesClienteRel; 
@@ -1210,5 +1215,39 @@ class TurCliente
     public function getAsesorRel()
     {
         return $this->asesorRel;
+    }
+
+    /**
+     * Add proyectosClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurProyecto $proyectosClienteRel
+     *
+     * @return TurCliente
+     */
+    public function addProyectosClienteRel(\Brasa\TurnoBundle\Entity\TurProyecto $proyectosClienteRel)
+    {
+        $this->proyectosClienteRel[] = $proyectosClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove proyectosClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurProyecto $proyectosClienteRel
+     */
+    public function removeProyectosClienteRel(\Brasa\TurnoBundle\Entity\TurProyecto $proyectosClienteRel)
+    {
+        $this->proyectosClienteRel->removeElement($proyectosClienteRel);
+    }
+
+    /**
+     * Get proyectosClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProyectosClienteRel()
+    {
+        return $this->proyectosClienteRel;
     }
 }

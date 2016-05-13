@@ -276,6 +276,7 @@ class PedidoController extends Controller
                         foreach($arCotizacionDetalles as $arCotizacionDetalle) {
                             $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
                             $arPedidoDetalle->setPedidoRel($arPedido);
+                            $arPedidoDetalle->setProyectoRel($arCotizacionDetalle->getProyectoRel());
                             $arPedidoDetalle->setModalidadServicioRel($arCotizacionDetalle->getModalidadServicioRel());
                             $arPedidoDetalle->setPeriodoRel($arCotizacionDetalle->getPeriodoRel());
                             $arPedidoDetalle->setConceptoServicioRel($arCotizacionDetalle->getConceptoServicioRel());
@@ -378,6 +379,7 @@ class PedidoController extends Controller
                         $arPedidoDetalle->setPeriodoRel($arServicioDetalle->getPeriodoRel());
                         $arPedidoDetalle->setConceptoServicioRel($arServicioDetalle->getConceptoServicioRel());
                         $arPedidoDetalle->setPlantillaRel($arServicioDetalle->getPlantillaRel());                        
+                        $arPedidoDetalle->setProyectoRel($arServicioDetalle->getProyectoRel());
                         $arPedidoDetalle->setPuestoRel($arServicioDetalle->getPuestoRel());
                         $arPedidoDetalle->setServicioDetalleRel($arServicioDetalle);
                         $arPedidoDetalle->setDias($arServicioDetalle->getDias());

@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurClienteType;
 use Brasa\TurnoBundle\Form\Type\TurClientePuestoType;
+use Brasa\TurnoBundle\Form\Type\TurProyectoType;
 use Brasa\TurnoBundle\Form\Type\TurClienteDireccionType;
 class ClienteController extends Controller
 {
@@ -99,6 +100,11 @@ class ClienteController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurPuesto')->eliminar($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_tur_base_cliente_detalle', array('codigoCliente' => $codigoCliente)));
             }    
+            if($form->get('BtnEliminarProyecto')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarProyecto');
+                $em->getRepository('BrasaTurnoBundle:TurProyecto')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_tur_base_cliente_detalle', array('codigoCliente' => $codigoCliente)));
+            }            
             if($form->get('BtnEliminarDireccion')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarDireccion');
                 $em->getRepository('BrasaTurnoBundle:TurClienteDireccion')->eliminar($arrSeleccionados);
@@ -108,11 +114,14 @@ class ClienteController extends Controller
 
         $arPuestos = new \Brasa\TurnoBundle\Entity\TurPuesto();
         $arPuestos = $em->getRepository('BrasaTurnoBundle:TurPuesto')->findBy(array ('codigoClienteFk' => $codigoCliente));
+        $arProyectos = new \Brasa\TurnoBundle\Entity\TurProyecto();
+        $arProyectos = $em->getRepository('BrasaTurnoBundle:TurProyecto')->findBy(array ('codigoClienteFk' => $codigoCliente));        
         $arClienteDirecciones = new \Brasa\TurnoBundle\Entity\TurClienteDireccion();
         $arClienteDirecciones = $em->getRepository('BrasaTurnoBundle:TurClienteDireccion')->findBy(array ('codigoClienteFk' => $codigoCliente));        
         return $this->render('BrasaTurnoBundle:Base/Cliente:detalle.html.twig', array(
                     'arCliente' => $arCliente,
                     'arPuestos' => $arPuestos,
+                    'arProyectos' => $arProyectos,
                     'arClienteDirecciones' => $arClienteDirecciones,
                     'form' => $form->createView()
                     ));
@@ -149,6 +158,37 @@ class ClienteController extends Controller
             'form' => $form->createView()));
     }   
 
+    /**
+     * @Route("/tur/base/cliente/proyecto/nuevo/{codigoCliente}/{codigoProyecto}", name="brs_tur_base_cliente_proyecto_nuevo")
+     */    
+    public function proyectoNuevoAction($codigoCliente, $codigoProyecto) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();        
+        $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
+        $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->find($codigoCliente);
+        $arProyecto = new \Brasa\TurnoBundle\Entity\TurProyecto();
+        if($codigoProyecto != '' && $codigoProyecto != '0') {
+            $arProyecto = $em->getRepository('BrasaTurnoBundle:TurProyecto')->find($codigoProyecto);
+        }        
+        $form = $this->createForm(new TurProyectoType, $arProyecto);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arProyecto = $form->getData();
+            $arProyecto->setClienteRel($arCliente);
+            $em->persist($arProyecto);
+            $em->flush();            
+            
+            if($form->get('guardarnuevo')->isClicked()) {
+                return $this->redirect($this->generateUrl('brs_tur_cliente_proyecto_nuevo', array('codigoCliente' => $codigoCliente )));
+            } else {
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }            
+        }
+        return $this->render('BrasaTurnoBundle:Base/Cliente:proyectoNuevo.html.twig', array(
+            'arCliente' => $arCliente,
+            'form' => $form->createView()));
+    }    
+    
     /**
      * @Route("/tur/base/cliente/direccion/nuevo/{codigoCliente}/{codigoDireccion}", name="brs_tur_base_cliente_direccion_nuevo")
      */    
@@ -208,11 +248,13 @@ class ClienteController extends Controller
     private function formularioDetalle($ar) {
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);        
         $arrBotonEliminarPuesto = array('label' => 'Eliminar', 'disabled' => false);                
+        $arrBotonEliminarProyecto = array('label' => 'Eliminar', 'disabled' => false);                
         $arrBotonEliminarDireccion = array('label' => 'Eliminar', 'disabled' => false);                
        
         $form = $this->createFormBuilder()    
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)            
                     ->add('BtnEliminarPuesto', 'submit', $arrBotonEliminarPuesto)            
+                    ->add('BtnEliminarProyecto', 'submit', $arrBotonEliminarProyecto)            
                     ->add('BtnEliminarDireccion', 'submit', $arrBotonEliminarDireccion)            
                     ->getForm();  
         return $form;

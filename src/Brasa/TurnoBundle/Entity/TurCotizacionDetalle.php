@@ -23,6 +23,11 @@ class TurCotizacionDetalle
     private $codigoCotizacionFk;    
     
     /**
+     * @ORM\Column(name="codigo_proyecto_fk", type="integer", nullable=true)
+     */    
+    private $codigoProyectoFk;     
+    
+    /**
      * @ORM\Column(name="codigo_concepto_servicio_fk", type="integer")
      */    
     private $codigoConceptoServicioFk;  
@@ -148,6 +153,12 @@ class TurCotizacionDetalle
      */
     protected $cotizacionRel;       
 
+    /**
+     * @ORM\ManyToOne(targetEntity="TurProyecto", inversedBy="cotizacionesDetallesProyectoRel")
+     * @ORM\JoinColumn(name="codigo_proyecto_fk", referencedColumnName="codigo_proyecto_pk")
+     */
+    protected $proyectoRel;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="TurConceptoServicio", inversedBy="cotizacionesDetallesConceptoServicioRel")
      * @ORM\JoinColumn(name="codigo_concepto_servicio_fk", referencedColumnName="codigo_concepto_servicio_pk")
@@ -872,5 +883,53 @@ class TurCotizacionDetalle
     public function getLiquidarDiasReales()
     {
         return $this->liquidarDiasReales;
+    }
+
+    /**
+     * Set codigoProyectoFk
+     *
+     * @param integer $codigoProyectoFk
+     *
+     * @return TurCotizacionDetalle
+     */
+    public function setCodigoProyectoFk($codigoProyectoFk)
+    {
+        $this->codigoProyectoFk = $codigoProyectoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoProyectoFk
+     *
+     * @return integer
+     */
+    public function getCodigoProyectoFk()
+    {
+        return $this->codigoProyectoFk;
+    }
+
+    /**
+     * Set proyectoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurProyecto $proyectoRel
+     *
+     * @return TurCotizacionDetalle
+     */
+    public function setProyectoRel(\Brasa\TurnoBundle\Entity\TurProyecto $proyectoRel = null)
+    {
+        $this->proyectoRel = $proyectoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get proyectoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurProyecto
+     */
+    public function getProyectoRel()
+    {
+        return $this->proyectoRel;
     }
 }
