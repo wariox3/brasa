@@ -23,6 +23,11 @@ class TurServicio
     private $fechaGeneracion;    
     
     /**
+     * @ORM\Column(name="soporte", type="string", length=30, nullable=true)
+     */
+    private $soporte;     
+    
+    /**
      * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
      */    
     private $codigoClienteFk;    
@@ -569,5 +574,29 @@ class TurServicio
     public function getFechaGeneracion()
     {
         return $this->fechaGeneracion;
+    }
+
+    /**
+     * Set soporte
+     *
+     * @param string $soporte
+     *
+     * @return TurServicio
+     */
+    public function setSoporte($soporte)
+    {
+        $this->soporte = $soporte;
+
+        return $this;
+    }
+
+    /**
+     * Get soporte
+     *
+     * @return string
+     */
+    public function getSoporte()
+    {
+        return $this->soporte;
     }
 }

@@ -49,6 +49,8 @@ class EmpleadoController extends Controller
         $arEmpleado = new \Brasa\AfiliacionBundle\Entity\AfiEmpleado();
         if($codigoEmpleado != '' && $codigoEmpleado != '0') {
             $arEmpleado = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->find($codigoEmpleado);
+        } else {
+            $arEmpleado->setFechaNacimiento(new \DateTime('now'));
         }        
         $form = $this->createForm(new AfiEmpleadoType, $arEmpleado);
         $form->handleRequest($request);

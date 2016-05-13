@@ -17,7 +17,13 @@
                 <div class="col-sm-9">
                     {{ form_widget(form.direccion, { 'attr': {'class': 'form-control', 'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}                        
                 </div>                
-            </div>                 
+            </div>   
+            <div class="form-group form-group-sm">
+                <label for="form_ciudadRel" class="col-sm-3 control-label">Ciudad:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.ciudadRel, { 'attr': {'class': 'form-control'} }) }}                        
+                </div>                
+            </div>                
             <div class="form-group form-group-sm">
                 <label for="form_telefono" class="col-sm-3 control-label">Telefono:</label>
                 <div class="col-sm-9">

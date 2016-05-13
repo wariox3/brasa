@@ -40,6 +40,7 @@
                 <th>{{ knp_pagination_sortable(arPuestos, 'CÓDIGO', 'p.codigoPuestoPk') }}</th>                
                 <th>CLIENTE</th>
                 <th>NOMBRE</th>
+                <th>CIUDAD</th>
                 <th>CONTACTO</th>
                 <th>TELEFONO</th>
                 <th>C.DOTACION</th>
@@ -52,6 +53,7 @@
                 <td>{{ arPuestos.codigoPuestoPk  }}</td>
                 <td>{{ arPuestos.clienteRel.nombreCorto | default('') }}</td>
                 <td>{{ arPuestos.nombre }}</td>
+                <td>{{ arPuestos.ciudadRel.nombre | default('')}}</td>
                 <td>{{ arPuestos.contacto | default('') }}</td>
                 <td>{{ arPuestos.telefono }}</td>
                 <td style="text-align: right">{{ arPuestos.costoDotacion | number_format(0, '.', ',') }}</td>

@@ -162,6 +162,11 @@ class GenCiudad
     protected $turClientesCiudadRel;
     
     /**
+     * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurPuesto", mappedBy="ciudadRel")
+     */
+    protected $turPuestosCiudadRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuContrato", mappedBy="ciudadContratoRel")
      */
     protected $rhuContratosCiudadContratoRel;
@@ -1318,5 +1323,39 @@ class GenCiudad
     public function getAfiEmpleadosCiudadRel()
     {
         return $this->afiEmpleadosCiudadRel;
+    }
+
+    /**
+     * Add turPuestosCiudadRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPuesto $turPuestosCiudadRel
+     *
+     * @return GenCiudad
+     */
+    public function addTurPuestosCiudadRel(\Brasa\TurnoBundle\Entity\TurPuesto $turPuestosCiudadRel)
+    {
+        $this->turPuestosCiudadRel[] = $turPuestosCiudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove turPuestosCiudadRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPuesto $turPuestosCiudadRel
+     */
+    public function removeTurPuestosCiudadRel(\Brasa\TurnoBundle\Entity\TurPuesto $turPuestosCiudadRel)
+    {
+        $this->turPuestosCiudadRel->removeElement($turPuestosCiudadRel);
+    }
+
+    /**
+     * Get turPuestosCiudadRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTurPuestosCiudadRel()
+    {
+        return $this->turPuestosCiudadRel;
     }
 }

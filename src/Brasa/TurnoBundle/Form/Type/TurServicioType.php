@@ -15,7 +15,8 @@ class TurServicioType extends AbstractType
                     return $er->createQueryBuilder('s')
                     ->orderBy('s.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))              
+                'required' => true))       
+            ->add('soporte', 'text', array('required' => false))                            
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

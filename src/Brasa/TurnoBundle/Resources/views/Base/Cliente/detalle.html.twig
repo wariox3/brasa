@@ -115,8 +115,8 @@
                             <th>COD</th>                                
                             <th>NOMBRE</th>
                             <th>DIRECCION</th>
+                            <th>CIUDAD</th>
                             <th>TELEFONO</th>
-                            <th>CELULAR</th>
                             <th>CONTACTO</th>
                             <th>TEL.CONTACTO</th>
                             <th>CEL.CONTACTO</th>
@@ -130,8 +130,8 @@
                                 <td>{{ arPuestos.codigoPuestoPk  }}<input type="hidden" name="LblCodigo[]" value="{{ arPuestos.codigoPuestoPk }}"></td>                    
                                 <td>{{ arPuestos.nombre  }}</td>
                                 <td>{{ arPuestos.direccion  }}</td>
-                                <td>{{ arPuestos.telefono  }}</td>
-                                <td>{{ arPuestos.celular  }}</td>
+                                <td>{{ arPuestos.ciudadRel.nombre | default('')}}</td>  
+                                <td>{{ arPuestos.telefono  }}</td>                                
                                 <td>{{ arPuestos.contacto  }}</td>
                                 <td>{{ arPuestos.telefonoContacto  }}</td>
                                 <td>{{ arPuestos.celularContacto  }}</td>
