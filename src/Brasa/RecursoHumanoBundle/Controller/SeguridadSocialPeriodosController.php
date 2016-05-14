@@ -635,7 +635,7 @@ class SeguridadSocialPeriodosController extends Controller
                 $codigoPeriodoDetalle = $request->request->get('OpDesgenerar');
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->desgenerar($codigoPeriodoDetalle);
             }
-            if($form->get('BtnEliminar')->isClicked()) {
+            /*if($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoPeriodoDetalleAportePk) {
@@ -646,7 +646,7 @@ class SeguridadSocialPeriodosController extends Controller
                     }
                     return $this->redirect($this->generateUrl('brs_rhu_ss_periodo_detalle_aportes', array('codigoPeriodoDetalle' => $codigoPeriodoDetalle)));
                 }
-            }
+            }*/
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarDetalleAporte($form);
                 $this->listarDetalleAportes($codigoPeriodoDetalle);

@@ -51,14 +51,14 @@
                         <td class="td-in-well">{{ arPagoBanco.cuentaRel.bancoRel.nombre }}</td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td></td>
+                        <td class="titulo">AUTORIZADO:</td>
+                        <td>{% if arPagoBanco.estadoAutorizado == 1%}SI{% else %}NO{% endif %}</td>
                         <td class="titulo" >REGISTROS:</td>
                         <td align="right">{{ arPagoBanco.numeroRegistros | number_format(0, '.', ',')}}</td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td></td>
+                        <td class="titulo">IMPRESO:</td>
+                        <td>{% if arPagoBanco.estadoImpreso == 1%}SI{% else %}NO{% endif %}</td>
                         <td class="titulo" >TOTAL:</td>
                         <td align="right">{{ arPagoBanco.vrTotalPago | number_format(0, '.', ',')}}</td>
                     </tr>                    

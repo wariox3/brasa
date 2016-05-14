@@ -55,7 +55,12 @@ class RhuPagoBanco
     /**
      * @ORM\Column(name="estado_autorizado", type="boolean")
      */
-    private $estadoAutorizado = 0;    
+    private $estadoAutorizado = 0;
+
+    /**
+     * @ORM\Column(name="estado_impreso", type="boolean")
+     */
+    private $estadoImpreso = 0;    
     
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCuenta", inversedBy="rhuPagosBancosCuentaRel")
@@ -69,6 +74,7 @@ class RhuPagoBanco
     protected $pagosBancosDetallesPagoBancoRel;     
     
 
+    
     /**
      * Constructor
      */
@@ -277,6 +283,30 @@ class RhuPagoBanco
     public function getEstadoAutorizado()
     {
         return $this->estadoAutorizado;
+    }
+
+    /**
+     * Set estadoImpreso
+     *
+     * @param boolean $estadoImpreso
+     *
+     * @return RhuPagoBanco
+     */
+    public function setEstadoImpreso($estadoImpreso)
+    {
+        $this->estadoImpreso = $estadoImpreso;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoImpreso
+     *
+     * @return boolean
+     */
+    public function getEstadoImpreso()
+    {
+        return $this->estadoImpreso;
     }
 
     /**

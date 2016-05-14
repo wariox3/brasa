@@ -94,18 +94,25 @@ class PagoBancoController extends Controller
                 }
             }            
             if($form->get('BtnDesAutorizar')->isClicked()) {
-                if ($arPagoBanco->getEstadoAutorizado() == 1){
+                if ($arPagoBanco->getEstadoAutorizado() == 1 && $arPagoBanco->getEstadoImpreso() == 0){
                     $arPagoBanco->setEstadoAutorizado(0);
                     $em->persist($arPagoBanco);
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_pago_banco_detalle', array('codigoPagoBanco' => $codigoPagoBanco)));           
+                } else {
+                    $objMensaje->Mensaje("error", "La pago banco debe estar autorizado y no puede estar impreso", $this);
                 }    
             }                        
             if($form->get('BtnImprimir')->isClicked()) {
                 if ($arPagoBanco->getEstadoAutorizado() == 1){
                     $objFormatoPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPagoBanco();
                     $objFormatoPagoBancoDetalle->Generar($this, $codigoPagoBanco);
-                }    
+                    $arPagoBanco->setEstadoImpreso(1);
+                    $em->persist($arPagoBanco);
+                    $em->flush();
+                } else {
+                    $objMensaje->Mensaje("error", "No puede imprimir el archivo sin estar autorizada", $this);
+                }   
             }
             if($form->get('BtnEliminarDetalle')->isClicked()) {
                 if ($arPagoBanco->getEstadoAutorizado() == 0){
@@ -154,6 +161,7 @@ class PagoBancoController extends Controller
     public function detalleNuevoAction($codigoPagoBanco) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arPagoBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco();
         $arPagoBanco = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBanco')->find($codigoPagoBanco);
         $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
@@ -162,6 +170,7 @@ class PagoBancoController extends Controller
         $arProgramacionesPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->findBy(array('estadoPagado' => 1, 'estadoPagadoBanco' => 0));        
         $form = $this->createFormBuilder()
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->getForm();
         $form->handleRequest($request); 
         if ($form->isValid()) {
@@ -217,9 +226,37 @@ class PagoBancoController extends Controller
                         $em->flush();
                     }
                     $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBanco')->liquidar($codigoPagoBanco);
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+                }
+                //Eliminar las programaciones que se pagaron individualmente PABLO ARANZAZU 13/05/2016
+                if ($form->get('BtnEliminar')->isClicked()){
+                    $arrSeleccionados = $request->request->get('ChkSeleccionarProgramacion');
+                    $intTotalRegistros =0;
+                    $intTotalRegistrosPagados =0;
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados AS $codigoProgramacionPago) {                           
+                            $arPagosLimpiar = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+                            $arPagosLimpiar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
+                            $intTotalRegistros = count($arPagosLimpiar);
+                            foreach ($arPagosLimpiar AS $arPagoLimpiar) {
+                                if ($arPagoLimpiar->getEstadoPagadoBanco() == 1){
+                                    $intTotalRegistrosPagados++;
+                                }
+                            }
+                            if ($intTotalRegistrosPagados == $intTotalRegistros){
+                                $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+                                $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);                                
+                                $arProgramacionPago->setEstadoPagadoBanco(1);
+                                $em->persist($arProgramacionPago);
+                                $em->flush();
+                            } else {
+                                $objMensaje->Mensaje("error", "No se puede Eliminar la programacion ".$codigoProgramacionPago." Tiene registros sin pagar", $this);
+                            }
+                        }
+                    }    
                 }
             }    
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+                
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagoBanco:detalleNuevo.html.twig', array(
             'arPagos' => $arPagos,
@@ -327,6 +364,9 @@ class PagoBancoController extends Controller
             $arrBotonEliminarDetalle['disabled'] = true;
         } else {
             $arrBotonImprimir['disabled'] = true;
+            $arrBotonDesAutorizar['disabled'] = true;
+        }
+        if ($ar->getEstadoImpreso() == 1){
             $arrBotonDesAutorizar['disabled'] = true;
         }
         $form = $this->createFormBuilder()    
