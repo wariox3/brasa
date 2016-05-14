@@ -584,7 +584,7 @@ class CursoController extends Controller
                     ->setCellValue('O1', 'ANU')
                     ->setCellValue('P1', 'COSTO')
                     ->setCellValue('Q1', 'TOTAL')
-                    ->setCellValue('R1', 'TOTAL');
+                    ->setCellValue('R1', 'UTILIDAD');
 
         $i = 2;        
         $query = $em->createQuery($this->strDqlLista);
