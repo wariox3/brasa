@@ -18,10 +18,10 @@ class CarReciboDetalleRepository extends EntityRepository {
             $dql .= " AND rd.codigoCuentaCobrarTipoFk = " . $codigoCuentaCobrarTipo;  
         }
         if ($strFechaDesde != ""){
-            $dql .= " AND r.fecha >='" . date_format($strFechaDesde, ('Y-m-d')). "'";
+            $dql .= " AND r.fecha >='" . $strFechaDesde. "'";
         }
         if($strFechaHasta != "") {
-            $dql .= " AND r.fecha <='" . date_format($strFechaHasta, ('Y-m-d')) . "'";
+            $dql .= " AND r.fecha <='" . $strFechaHasta . "'";
         }        
         return $dql;
     } 

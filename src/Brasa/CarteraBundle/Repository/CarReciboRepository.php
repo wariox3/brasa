@@ -41,10 +41,10 @@ class CarReciboRepository extends EntityRepository
             $dql .= " AND r.codigoReciboTipoFk = " . $codigoReciboTipo;  
         }
         if ($strFechaDesde != ""){
-            $dql .= " AND r.fecha >='" . date_format($strFechaDesde, ('Y-m-d')). "'";
+            $dql .= " AND r.fecha >='" . $strFechaDesde . "'";
         }
         if($strFechaHasta != "") {
-            $dql .= " AND r.fecha <='" . date_format($strFechaHasta, ('Y-m-d')) . "'";
+            $dql .= " AND r.fecha <='" . $strFechaHasta . "'";
         }        
         return $dql;
     } 

@@ -106,11 +106,13 @@ class ReciboController extends Controller
         } else {
             $codigo = $arReciboTipo->getCodigoReciboTipoPk();
         }
+        $fechaDesde =  $form->get('fechaDesde')->getData();
+        $fechaHasta =  $form->get('fechaHasta')->getData();        
         $session->set('filtroNumero', $form->get('TxtNumero')->getData());           
         $session->set('filtroReciboTipo', $codigo);
         $session->set('filtroNit', $form->get('TxtNit')->getData());                         
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        $session->set('filtroDesde', $fechaDesde->format('Y/m/d'));
+        $session->set('filtroHasta', $fechaHasta->format('Y/m/d'));
         
     }
     
@@ -122,11 +124,13 @@ class ReciboController extends Controller
         } else {
             $codigo = $arCuentaCobrarTipo->getCodigoCuentaCobrarTipoPk();
         }
+        $fechaDesde =  $form->get('fechaDesde')->getData();
+        $fechaHasta =  $form->get('fechaHasta')->getData();          
         $session->set('filtroNumero', $form->get('TxtNumero')->getData());           
         $session->set('filtroCuentaCobrarTipo', $codigo);
         $session->set('filtroNit', $form->get('TxtNit')->getData());                         
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        $session->set('filtroDesde', $fechaDesde->format('Y/m/d'));
+        $session->set('filtroHasta', $fechaHasta->format('Y/m/d'));
         
     }
 
@@ -165,8 +169,8 @@ class ReciboController extends Controller
             ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                
             ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroPedidoNumero')))            
             ->add('reciboTipoRel', 'entity', $arrayPropiedades)
-            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date')))
-            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date')))
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => new \DateTime('now')))
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => new \DateTime('now'))) 
             ->add('BtnExcelLista', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrarLista', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
@@ -208,8 +212,8 @@ class ReciboController extends Controller
             ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                
             ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroPedidoNumero')))            
             ->add('cuentaCobrarTipoRel', 'entity', $arrayPropiedades)
-            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date')))
-            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date')))
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => new \DateTime('now')))
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => new \DateTime('now')))
             ->add('BtnExcelDetalle', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrarDetalle', 'submit', array('label'  => 'Filtrar'))
             ->getForm();

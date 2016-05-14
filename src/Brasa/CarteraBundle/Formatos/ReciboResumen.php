@@ -129,7 +129,48 @@ class ReciboResumen extends \FPDF_FPDF {
         $pdf->Cell(30, 4, '', 0, 0, 'L');
         $pdf->Cell(40, 4, '', 0, 0, 'L');
         $pdf->Cell(15, 4, '', 0, 0, 'L');
-        $pdf->Cell(30, 4, number_format($total, 2, '.', ','), 1, 0, 'R');        
+        $pdf->Cell(30, 4, number_format($total, 2, '.', ','), 1, 0, 'R'); 
+        $pdf->Ln();
+        $pdf->Ln();
+
+        $header = array('TIPO', 'NUMERO', 'FECHA', 'CUENTA', 'CLIENTE', 'DCTO', 'AJUSTE', 'RTEICA', 'RTEIVA', 'RTEFTE', 'TOTAL');
+        $pdf->SetFillColor(236, 236, 236);
+        $pdf->SetTextColor(0);
+        $pdf->SetDrawColor(0, 0, 0);
+        $pdf->SetLineWidth(.2);
+        $pdf->SetFont('', 'B', 6);
+
+        //creamos la cabecera de la tabla.
+        $w = array(20, 13, 15, 25, 40, 13, 13, 13, 13, 13, 13);
+        for ($i = 0; $i < count($header); $i++)
+            if ($i == 0 || $i == 1)
+                $pdf->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
+            else
+                $pdf->Cell($w[$i], 4, $header[$i], 1, 0, 'C', 1);
+
+        //Restauración de colores y fuentes
+        $pdf->SetFillColor(224, 235, 255);
+        $pdf->SetTextColor(0);
+        $pdf->SetFont('');
+        $pdf->Ln(4);
+        $dql   = "SELECT r FROM BrasaCarteraBundle:CarRecibo r JOIN r.reciboTipoRel rt WHERE r.fecha >='" . self::$fechaDesde . "' AND r.fecha <='" . self::$fechaHasta . "'";                
+        $query = self::$em->createQuery($dql);
+        $arRecibos = $query->getResult();
+        foreach ($arRecibos as $arRecibo) {
+            $pdf->Cell(20, 4, $arRecibo->getReciboTipoRel()->getNombre(), 1, 0, 'L');                        
+            $pdf->Cell(13, 4, $arRecibo->getNumero(), 1, 0, 'L');                        
+            $pdf->Cell(15, 4, $arRecibo->getFecha()->format('Y/m/d'), 1, 0, 'L');                        
+            $pdf->Cell(25, 4, $arRecibo->getCuentaRel()->getNombre(), 1, 0, 'L');                        
+            $pdf->Cell(40, 4, $arRecibo->getClienteRel()->getNombreCorto(), 1, 0, 'L');                        
+            $pdf->Cell(13, 4, number_format($arRecibo->getVrTotalDescuento(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(13, 4, number_format($arRecibo->getVrTotalAjustePeso(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(13, 4, number_format($arRecibo->getVrTotalReteIca(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(13, 4, number_format($arRecibo->getVrTotalReteIva(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(13, 4, number_format($arRecibo->getVrTotalReteFuente(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(13, 4, number_format($arRecibo->getVrTotalPago(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Ln();
+            $pdf->SetAutoPageBreak(true, 15);
+        }        
     }
 
     public function Footer() {

@@ -72,13 +72,13 @@
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
                 <th>{{ knp_pagination_sortable(arRecibos, 'CÓDIGO', 'r.codigoReciboPk') }}</th>
+                <th>TIPO</th>
                 <th>NUMERO</th>
                 <th>FECHA</th>
+                <th>F.PAGO</th>
+                <th>CUENTA</th>                                
                 <th>NIT</th>
-                <th>CLIENTE</th>
-                <th>CUENTA</th>
-                <th>TIPO</th>
-                <th>FECHA PAGO</th>
+                <th>CLIENTE</th>                
                 <th>T. DESCUENTO</th>
                 <th>T. AJUSTE PESO</th>
                 <th>T. RTE ICA</th>
@@ -92,13 +92,13 @@
             {% for arRecibos in arRecibos %}
             <tr>
                 <td>{{ arRecibos.codigoReciboPk  }}</td>
+                <td>{{ arRecibos.reciboTipoRel.nombre |default('')  }}</td>
                 <td>{{ arRecibos.numero  }}</td>
                 <td>{{ arRecibos.fecha |date("Y/m/d")  }}</td>
-                <td>{{ arRecibos.clienteRel.nit |default('')  }}</td>
-                <td>{{ arRecibos.clienteRel.nombreCorto |default('')  }}</td>
-                <td>{{ arRecibos.cuentaRel.nombre |default('')  }}</td>
-                <td>{{ arRecibos.reciboTipoRel.nombre |default('')  }}</td>
                 <td>{{ arRecibos.fechaPago |date("Y/m/d")  }}</td>
+                <td>{{ arRecibos.cuentaRel.nombre |default('')  }}</td>                
+                <td>{{ arRecibos.clienteRel.nit |default('')  }}</td>
+                <td>{{ arRecibos.clienteRel.nombreCorto |default('')  }}</td>                                
                 <td style="text-align: right">{{ arRecibos.vrTotalDescuento | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arRecibos.vrTotalAjustePeso | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arRecibos.vrTotalReteIca | number_format(2, '.', ',') }}</td>

@@ -101,7 +101,11 @@ class CursoController extends Controller
         if($codigoCurso != '' && $codigoCurso != '0') {
             $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($codigoCurso);
         } else {
-            $arCurso->setFechaVence(new \DateTime('now'));
+            $fecha = date('Y-m-d');
+            $nuevafecha = strtotime ( '+360 day' , strtotime ( $fecha ) ) ;
+            $nuevafecha = date ('Y-m-d', $nuevafecha ); 
+            $nuevafecha = date_create($nuevafecha);
+            $arCurso->setFechaVence($nuevafecha);
             $arCurso->setFechaProgramacion(new \DateTime('now'));
         }        
         $form = $this->createForm(new AfiCursoType, $arCurso);
@@ -559,7 +563,7 @@ class CursoController extends Controller
         for($col = 'A'; $col !== 'P'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
         }      
-        for($col = 'P'; $col !== 'R'; $col++) {            
+        for($col = 'P'; $col !== 'S'; $col++) {            
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }         
         $objPHPExcel->setActiveSheetIndex(0)
@@ -579,7 +583,8 @@ class CursoController extends Controller
                     ->setCellValue('N1', 'CER')
                     ->setCellValue('O1', 'ANU')
                     ->setCellValue('P1', 'COSTO')
-                    ->setCellValue('Q1', 'TOTAL');
+                    ->setCellValue('Q1', 'TOTAL')
+                    ->setCellValue('R1', 'TOTAL');
 
         $i = 2;        
         $query = $em->createQuery($this->strDqlLista);
@@ -602,7 +607,8 @@ class CursoController extends Controller
                     ->setCellValue('N' . $i, $objFunciones->devuelveBoolean($arCurso->getCertificado()))
                     ->setCellValue('O' . $i, $objFunciones->devuelveBoolean($arCurso->getEstadoAnulado()))
                     ->setCellValue('P' . $i, $arCurso->getCosto())
-                    ->setCellValue('Q' . $i, $arCurso->getTotal());
+                    ->setCellValue('Q' . $i, $arCurso->getTotal())
+                    ->setCellValue('R' . $i, $arCurso->getTotal()-$arCurso->getCosto());
             
             if($arCurso->getCodigoEmpleadoFk() != null) {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H' . $i, $arCurso->getEmpleadoRel()->getNumeroIdentificacion());
