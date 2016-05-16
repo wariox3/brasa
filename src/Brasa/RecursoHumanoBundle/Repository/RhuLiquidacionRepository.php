@@ -122,11 +122,16 @@ class RhuLiquidacionRepository extends EntityRepository {
                 $arLiquidacion->setVrPrima($douPrima);            
             } else {
                 //if($dateFechaDesde->format('md') != '0101') {
+                    $douIbp = $em->getRepository('BrasaRecursoHumanoBundle:RhuIngresoBase')->devuelveIbpFecha($arLiquidacion->getCodigoEmpleadoFk(), $arLiquidacion->getContratoRel()->getFechaDesde()->format('Y-m-d'), $arLiquidacion->getContratoRel()->getFechaHasta()->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());                
+                    $douIBCTotalPrimas = $douIbp;
                     $intDiasPrima = $this->diasPrestaciones($dateFechaHasta, $dateFechaDesde) - 2;    
-                    $douAdicionalPrima = ($douBasePrestacionesTotalPrimas * $intDiasPrima) / 360;                
+                    $douBasePrestacionesPrimas = ($douIBCTotalPrimas / $intDiasPrima) * 30;
+                    $douBasePrestacionesTotalPrimas = ($douIBCTotalPrimas + $douAuxilioTransporte) * $intDiasPrima;
+                    
+                    $douAdicionalesPrima = $douBasePrestacionesTotalPrimas / 360;                     
                     $arLiquidacion->setDiasPrimas($intDiasPrima * -1);
                     $arLiquidacion->setVrPrima(0); 
-                    $arLiquidacion->setVrDeduccionPrima($douAdicionalPrima);                                       
+                    $arLiquidacion->setVrDeduccionPrima($douAdicionalesPrima);                                       
                 /*} else {
                     $intDiasPrima = 0;
                     $douDeduccionPrima = 0;
