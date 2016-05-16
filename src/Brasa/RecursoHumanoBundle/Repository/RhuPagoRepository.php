@@ -400,6 +400,23 @@ class RhuPagoRepository extends EntityRepository {
         return $dato;
     }
     
+    public function noPrestacionalCartaLaboral($intPeriodo, $codigoContrato) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT p FROM BrasaRecursoHumanoBundle:RhuPago p  "
+                . "WHERE p.estadoPagado = 1 "
+                . "AND p.codigoContratoFk = " . $codigoContrato . " ";
+        $query = $em->createQuery($dql)
+                    ->setFirstResult(0)
+                    ->setMaxResults($intPeriodo);
+        $arrayResultado = $query->getResult();
+        $dato = 0;
+        foreach ($arrayResultado as $arrayResultado) {
+            $dato += $arrayResultado->getVrAdicionalValorNoPrestasional();   
+        }
+        //$floSuplementario = $arrayResultado[0]['suplementario'];
+        return $dato;
+    }
+    
     public function devuelveCostosDane($fechaDesde, $fechaHasta, $fechaProceso) {
         $em = $this->getEntityManager();
         $dql   = "SELECT p, c FROM BrasaRecursoHumanoBundle:RhuPago p JOIN p.contratoRel c WHERE p.codigoPagoPk <> 0"

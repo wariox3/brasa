@@ -7,11 +7,23 @@
         </div>
         {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
+        
         <div class="btn-group">
-            {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            
             {{ form_widget(form.BtnInactivarContrato, { 'attr': {'class': 'btn btn-danger btn-sm','onclick': 'return confirm("Esta seguro que desea inactivar el contrato?")'} }) }}
             <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 4,  'numero': arContrato.codigoContratoPk }) }}', 'Archivos', 500, 700)" >Documentos</a>                        
+            <button type="button" class="btn btn-default btn-sm">Utilidades</button>
+            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            <span class="caret"></span>
+            </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>{{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}</li>
+                    <li class="divider">a</li>
+                    <li>{{ form_widget(form.BtnImprimirCartaPresentacion, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}</li>                    
+                    <li>{{ form_widget(form.BtnEntregaDocumentos, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}</li>                                       
+                </ul>
         </div>
+              
         <br /> <br />
         <div class="panel panel-default">
             <div class="panel-heading">Información contrato</div>

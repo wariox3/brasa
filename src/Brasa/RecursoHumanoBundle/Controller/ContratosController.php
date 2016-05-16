@@ -49,13 +49,23 @@ class ContratosController extends Controller
             $disabled = TRUE;
         }
         $form = $this->createFormBuilder()
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir'))
+            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir Contrato'))
+            ->add('BtnImprimirCartaPresentacion', 'submit', array('label'  => 'Carta presentación'))
+            ->add('BtnEntregaDocumentos', 'submit', array('label'  => 'Entrega documentos'))
             ->add('BtnInactivarContrato', 'submit', array('label'  => 'Inactivar', 'disabled' => $disabled))    
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnImprimir')->isClicked()) {
                 $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoContrato();
+                $objFormatoContrato->Generar($this, $codigoContrato);
+            }
+            if($form->get('BtnImprimirCartaPresentacion')->isClicked()) {
+                $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCartaPresentacion();
+                $objFormatoContrato->Generar($this, $codigoContrato);
+            }
+            if($form->get('BtnEntregaDocumentos')->isClicked()) {
+                $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoEntregaDocumentos();
                 $objFormatoContrato->Generar($this, $codigoContrato);
             }
             if($form->get('BtnInactivarContrato')->isClicked()) {

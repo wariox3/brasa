@@ -249,6 +249,7 @@ class PagoBancoController extends Controller
                                 $arProgramacionPago->setEstadoPagadoBanco(1);
                                 $em->persist($arProgramacionPago);
                                 $em->flush();
+                                return $this->redirect($this->generateUrl('brs_rhu_pago_banco_detalle_nuevo', array('codigoPagoBanco' => $codigoPagoBanco)));
                             } else {
                                 $objMensaje->Mensaje("error", "No se puede Eliminar la programacion ".$codigoProgramacionPago." Tiene registros sin pagar", $this);
                             }
