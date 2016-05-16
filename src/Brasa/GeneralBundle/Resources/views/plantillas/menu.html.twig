@@ -107,10 +107,16 @@
                         </li>
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Turno</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="{{ path('brs_tur_base_centro_costo_lista') }}">Centro costo</a></li>
-                                <li><a href="{{ path('brs_tur_base_cliente') }}">Cliente</a></li>
-                                <li><a href="{{ path('brs_tur_base_puesto') }}">Puesto</a></li>
+                            <ul class="dropdown-menu">                                
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Cliente</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_tur_base_cliente') }}">Cliente</a></li>
+                                        <li><a href="{{ path('brs_tur_base_contrato') }}">Contrato</a></li>
+                                        <li><a href="{{ path('brs_tur_base_puesto') }}">Puesto</a></li>
+                                    </ul>
+                                </li>                                
+                                <li><a href="{{ path('brs_tur_base_centro_costo_lista') }}">Centro costo</a></li>                                                                
                                 <li><a href="{{ path('brs_tur_base_prospecto_lista') }}">Prospecto</a></li>
                                 <li><a href="{{ path('brs_tur_base_recurso_lista') }}">Recurso</a></li>
                                 <li><a href="{{ path('brs_tur_base_turno_lista') }}">Turno</a></li>

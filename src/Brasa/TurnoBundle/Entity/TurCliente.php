@@ -197,6 +197,11 @@ class TurCliente
     protected $proyectosClienteRel;     
     
     /**
+     * @ORM\OneToMany(targetEntity="TurContrato", mappedBy="clienteRel")
+     */
+    protected $contratosClienteRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurClienteDireccion", mappedBy="clienteRel")
      */
     protected $clientesDireccionesClienteRel; 
@@ -1249,5 +1254,39 @@ class TurCliente
     public function getProyectosClienteRel()
     {
         return $this->proyectosClienteRel;
+    }
+
+    /**
+     * Add contratosClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurContrato $contratosClienteRel
+     *
+     * @return TurCliente
+     */
+    public function addContratosClienteRel(\Brasa\TurnoBundle\Entity\TurContrato $contratosClienteRel)
+    {
+        $this->contratosClienteRel[] = $contratosClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove contratosClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurContrato $contratosClienteRel
+     */
+    public function removeContratosClienteRel(\Brasa\TurnoBundle\Entity\TurContrato $contratosClienteRel)
+    {
+        $this->contratosClienteRel->removeElement($contratosClienteRel);
+    }
+
+    /**
+     * Get contratosClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContratosClienteRel()
+    {
+        return $this->contratosClienteRel;
     }
 }
