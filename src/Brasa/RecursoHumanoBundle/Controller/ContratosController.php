@@ -51,7 +51,6 @@ class ContratosController extends Controller
         $form = $this->createFormBuilder()
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir Contrato'))
             ->add('BtnImprimirCartaPresentacion', 'submit', array('label'  => 'Carta presentación'))
-            ->add('BtnEntregaDocumentos', 'submit', array('label'  => 'Entrega documentos'))
             ->add('BtnInactivarContrato', 'submit', array('label'  => 'Inactivar', 'disabled' => $disabled))    
             ->getForm();
         $form->handleRequest($request);
@@ -61,12 +60,9 @@ class ContratosController extends Controller
                 $objFormatoContrato->Generar($this, $codigoContrato);
             }
             if($form->get('BtnImprimirCartaPresentacion')->isClicked()) {
+                $arUsuario = $this->get('security.context')->getToken()->getUser();
                 $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCartaPresentacion();
-                $objFormatoContrato->Generar($this, $codigoContrato);
-            }
-            if($form->get('BtnEntregaDocumentos')->isClicked()) {
-                $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoEntregaDocumentos();
-                $objFormatoContrato->Generar($this, $codigoContrato);
+                $objFormatoContrato->Generar($this, $codigoContrato,$arUsuario);
             }
             if($form->get('BtnInactivarContrato')->isClicked()) {
                 $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
@@ -484,6 +480,36 @@ class ContratosController extends Controller
                 $session->get('filtroContratoActivo'),
                 $session->get('filtroCodigoCentroCosto')
                 ));
+    }
+    
+    public function documentosAction($codigoContrato) {
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $request = $this->getRequest(); // captura o recupera datos del formulario
+        $form = $this->createFormBuilder() //
+            ->add('BtnEntregaDocumentos', 'submit', array('label'  => 'Imprimir'))
+            ->getForm(); 
+        $form->handleRequest($request);
+        if($form->isValid()) {
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');
+            if ($arrSeleccionados == null){
+                $objMensaje->Mensaje("error", "No ha seleccionado ningun documento", $this);
+            } else {
+                foreach ($arrSeleccionados AS $codigoDocumento){
+                    //$arEntregaDocumento = new \Brasa\RecursoHumanoBundle\Entity\RhuEntregaDocumento();
+                    $arEntregaDocumento = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntregaDocumento')->find($codigoDocumento);                                
+                }
+                $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoEntregaDocumentos();
+                $objFormatoContrato->Generar($this, $codigoContrato,$arrSeleccionados);
+            }   
+            
+        }
+        $arEntregaDocumentos = new \Brasa\RecursoHumanoBundle\Entity\RhuEntregaDocumento();
+        $arEntregaDocumentos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntregaDocumento')->findAll();
+        return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:documentos.html.twig', array(
+                    'arEntregaDocumentos' => $arEntregaDocumentos,
+                    'form'=> $form->createView()
+        ));
     }
 
     private function formularioLista() {

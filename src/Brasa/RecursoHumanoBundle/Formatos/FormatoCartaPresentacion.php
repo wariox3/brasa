@@ -5,11 +5,14 @@ class FormatoCartaPresentacion extends \FPDF_FPDF {
     
     public static $codigoContrato;
     
-    public function Generar($miThis, $codigoContrato) {        
+    public static $usuario;
+    
+    public function Generar($miThis, $codigoContrato, $usuario) {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
         self::$codigoContrato = $codigoContrato;
+        self::$usuario = $usuario;
         $pdf = new FormatoCartaPresentacion();
         $pdf->AliasNbPages();
         $pdf->AddPage();
@@ -72,8 +75,9 @@ class FormatoCartaPresentacion extends \FPDF_FPDF {
         $arConfiguracionNomina = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
         setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
         $pdf->Text(10, 60, utf8_decode($arConfiguracion->getCiudadRel()->getNombre()). ", ". strftime("%d de %B de %Y", strtotime(date('Y-m-d'))));
-        //se reemplaza el contenido de la tabla contenido formato carta laboral
-        //se reemplaza el contenido de la tabla tipo de proceso disciplinario
+        $usuarioCarta = self::$usuario;
+        $usuarioCarta = $usuarioCarta->getNombreCorto();
+        //se reemplaza el contenido de la tabla contenido formato
         $sustitucion1 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion();
         $sustitucion2 = $arContrato->getEmpleadoRel()->getNombreCorto();
         $sustitucion3 = $arContrato->getCargoRel()->getNombre();
@@ -107,6 +111,7 @@ class FormatoCartaPresentacion extends \FPDF_FPDF {
         $sustitucion15 = $arContrato->getEntidadPensionRel()->getNombre();
         $sustitucion16 = $arConfiguracionNomina->getEntidadRiesgoProfesionalRel()->getNombre();
         $sustitucion17 = $arContrato->getEntidadCajaRel()->getNombre();
+        $sustitucion18 = $usuarioCarta;
         $cadena = $arContenidoFormato->getContenido();
         $patron1 = '/#1/';
         $patron2 = '/#2/';
@@ -125,6 +130,7 @@ class FormatoCartaPresentacion extends \FPDF_FPDF {
         $patron15 = '/#f/';
         $patron16 = '/#g/';
         $patron17 = '/#h/';
+        $patron18 = '/#i/';
         $cadenaCambiada = preg_replace($patron1, $sustitucion1, $cadena);
         $cadenaCambiada = preg_replace($patron2, $sustitucion2, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron3, $sustitucion3, $cadenaCambiada);
@@ -142,6 +148,7 @@ class FormatoCartaPresentacion extends \FPDF_FPDF {
         $cadenaCambiada = preg_replace($patron15, $sustitucion15, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron16, $sustitucion16, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron17, $sustitucion17, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron18, $sustitucion18, $cadenaCambiada);
         $pdf->MultiCell(0,5, $cadenaCambiada);
     }
 

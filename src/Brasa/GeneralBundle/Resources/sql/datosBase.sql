@@ -4045,6 +4045,13 @@ INSERT INTO `rhu_desempeno_concepto_tipo` (`codigo_desempeno_concepto_tipo_pk`, 
 INSERT INTO `rhu_desempeno_concepto_tipo` (`codigo_desempeno_concepto_tipo_pk`, `nombre`) VALUES('4','VALORES');
 INSERT INTO `rhu_desempeno_concepto_tipo` (`codigo_desempeno_concepto_tipo_pk`, `nombre`) VALUES('5','COMPETENCIAS');
 
+insert into `rhu_entrega_documento` (`codigo_documento_pk`, `nombre`) values('1','AFILIACIÓN A CAJA DE COMPENSACIÓN');
+insert into `rhu_entrega_documento` (`codigo_documento_pk`, `nombre`) values('2','AFILIACIÓN A PENSIÓN');
+insert into `rhu_entrega_documento` (`codigo_documento_pk`, `nombre`) values('3','AFILIACIÓN A SALUD');
+insert into `rhu_entrega_documento` (`codigo_documento_pk`, `nombre`) values('4','CARNET ARL');
+insert into `rhu_entrega_documento` (`codigo_documento_pk`, `nombre`) values('5','CARTA PRESENTACIÓN');
+insert into `rhu_entrega_documento` (`codigo_documento_pk`, `nombre`) values('6','CONTRATO DE TRABAJO');
+
 INSERT INTO `rhu_desempeno_concepto` (`codigo_desempeno_concepto_pk`, `codigo_desempeno_concepto_tipo_fk`, `nombre`) VALUES('1','1','TIENE TODOS LOS CONCEPTOS PROPIOS DE SU PROFESIÓN Y LOS APLICA EN SU TRABAJO DE MANERA ACERTADA');
 INSERT INTO `rhu_desempeno_concepto` (`codigo_desempeno_concepto_pk`, `codigo_desempeno_concepto_tipo_fk`, `nombre`) VALUES('2','1','CONOCE Y ENTIENDE LAS FUNCIONES Y RESPONSABILIDADES QUE TIENE EL CARGO ASIGNADO');
 INSERT INTO `rhu_desempeno_concepto` (`codigo_desempeno_concepto_pk`, `codigo_desempeno_concepto_tipo_fk`, `nombre`) VALUES('3','1','CONOCE Y ENTIENDE EL ENTORNO Y PARTICULARIDADES DE ESTE');

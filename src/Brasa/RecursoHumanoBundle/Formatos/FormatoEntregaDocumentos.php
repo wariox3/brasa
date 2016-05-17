@@ -5,11 +5,14 @@ class FormatoEntregaDocumentos extends \FPDF_FPDF {
     
     public static $codigoContrato;
     
-    public function Generar($miThis, $codigoContrato) {        
+    public static $arEntregaDocumento;
+    
+    public function Generar($miThis, $codigoContrato, $arEntregaDocumento) {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
         self::$codigoContrato = $codigoContrato;
+        self::$arEntregaDocumento = $arEntregaDocumento;
         $pdf = new FormatoEntregaDocumentos();
         $pdf->AliasNbPages();
         $pdf->AddPage();
@@ -72,8 +75,16 @@ class FormatoEntregaDocumentos extends \FPDF_FPDF {
         $arConfiguracionNomina = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
         setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
         $pdf->Text(10, 60, utf8_decode($arConfiguracion->getCiudadRel()->getNombre()). ", ". strftime("%d de %B de %Y", strtotime(date('Y-m-d'))));
-        //se reemplaza el contenido de la tabla contenido formato carta laboral
-        //se reemplaza el contenido de la tabla tipo de proceso disciplinario
+        $arEntregaDocumentos = new \Brasa\RecursoHumanoBundle\Entity\RhuEntregaDocumento();
+        $arEntregaDocumentos = self::$arEntregaDocumento;
+        $y = 144;
+        foreach ($arEntregaDocumentos as $codigoDocumento) {            
+            $arDocs = new \Brasa\RecursoHumanoBundle\Entity\RhuEntregaDocumento();
+            $arDocs = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuEntregaDocumento')->find($codigoDocumento);
+            $pdf->Text(10, $y, utf8_decode("- ".$arDocs->getNombre()), 0, 0, 'L');
+            $y = $y + 5;
+        }    
+        //se reemplaza el contenido de la tabla contenido formato 
         $sustitucion1 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion();
         $sustitucion2 = $arContrato->getEmpleadoRel()->getNombreCorto();
         $sustitucion3 = $arContrato->getCargoRel()->getNombre();

@@ -482,6 +482,10 @@ brs_rhu_base_contratos_detalles:
     path:     /rhu/base/contratos/detalle/{codigoContrato}
     defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:detalle }
     
+brs_rhu_base_contratos_documentos:
+    path:     /rhu/base/contratos/documentos/{codigoContrato}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:documentos }    
+    
 brs_rhu_base_disciplinario_tipo_lista:
     path:     /rhu/base/disciplinario/tipo/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:BaseDisciplinarioTipo:lista } 
