@@ -35,9 +35,9 @@ class BuscarPuestoController extends Controller
     private function lista($codigoCliente) {        
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurPuesto')->listaDQL(
+                $this->strCodigo,
                 $codigoCliente,
-                $this->strNombre,                
-                $this->strCodigo   
+                $this->strNombre                   
                 ); 
     }       
     
