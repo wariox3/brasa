@@ -379,6 +379,11 @@ class TurPedidoRepository extends EntityRepository {
                 if(count($arProgramacionesDetalles) > 0) {
                     $boolAnular = FALSE;
                 }
+                $arFacturasDetalles = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
+                $arFacturasDetalles = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array('codigoPedidoDetalleFk' => $arPedidoDetalle->getCodigoPedidoDetallePk()));                    
+                if(count($arFacturasDetalles) > 0) {
+                    $boolAnular = FALSE;
+                }                
             }
             if($boolAnular == TRUE) {
                 foreach ($arPedidoDetalles as $arPedidoDetalle) {
@@ -388,6 +393,7 @@ class TurPedidoRepository extends EntityRepository {
                     $arPedidoDetalleAct->setVrPrecioAjustado(0);
                     $arPedidoDetalleAct->setVrPrecioMinimo(0);
                     $arPedidoDetalleAct->setVrTotalDetalle(0);
+                    $arPedidoDetalleAct->setVrTotalDetallePendiente(0);
                     $arPedidoDetalleAct->setHoras(0);
                     $arPedidoDetalleAct->setHorasDiurnas(0);
                     $arPedidoDetalleAct->setHorasNocturnas(0);                    
@@ -398,7 +404,7 @@ class TurPedidoRepository extends EntityRepository {
                 $arPedido->setVrTotalCosto(0);
                 $arPedido->setVrTotalPrecioAjustado(0);
                 $arPedido->setVrTotalPrecioMinimo(0);
-                $arPedido->setVrTotal(0);
+                $arPedido->setVrTotal(0);                
                 $arPedido->setHoras(0);
                 $arPedido->setHorasDiurnas(0);
                 $arPedido->setHorasNocturnas(0);

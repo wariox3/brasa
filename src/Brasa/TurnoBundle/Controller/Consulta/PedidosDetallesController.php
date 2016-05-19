@@ -136,10 +136,10 @@ class PedidosDetallesController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'AI'; $col++) {
+        for($col = 'A'; $col !== 'AK'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
         }      
-        for($col = 'AD'; $col !== 'AI'; $col++) {            
+        for($col = 'AI'; $col !== 'AK'; $col++) {            
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }        
         $objPHPExcel->setActiveSheetIndex(0)
@@ -150,33 +150,35 @@ class PedidosDetallesController extends Controller
                     ->setCellValue('E1', 'FH PROG')
                     ->setCellValue('F1', 'CLIENTE')
                     ->setCellValue('G1', 'SECTOR')
-                    ->setCellValue('H1', 'PROGRAMADO')               
-                    ->setCellValue('I1', 'PUESTO')
-                    ->setCellValue('J1', 'SERVICIO')
-                    ->setCellValue('K1', 'MODALIDAD')
-                    ->setCellValue('L1', 'PERIODO')
-                    ->setCellValue('M1', 'PLANTILLA')
-                    ->setCellValue('N1', 'DESDE')
-                    ->setCellValue('O1', 'HASTA')
-                    ->setCellValue('P1', 'CANT')
-                    ->setCellValue('Q1', 'CANT.R')
-                    ->setCellValue('R1', 'LU')
-                    ->setCellValue('S1', 'MA')
-                    ->setCellValue('T1', 'MI')
-                    ->setCellValue('U1', 'JU')
-                    ->setCellValue('V1', 'VI')
-                    ->setCellValue('W1', 'SA')
-                    ->setCellValue('X1', 'DO')
-                    ->setCellValue('Y1', 'FE')
-                    ->setCellValue('Z1', 'H')
-                    ->setCellValue('AA1', 'HD')
-                    ->setCellValue('AB1', 'HN')
-                    ->setCellValue('AC1', 'HP')
-                    ->setCellValue('AD1', 'HDP')
-                    ->setCellValue('AE1', 'HNP')                
-                    ->setCellValue('AF1', 'DIAS')
-                    ->setCellValue('AG1', 'VALOR')
-                    ->setCellValue('AH1', 'VR.PEND');
+                    ->setCellValue('H1', 'AUT')                   
+                    ->setCellValue('I1', 'PRO')
+                    ->setCellValue('J1', 'FAC')
+                    ->setCellValue('K1', 'ANU')
+                    ->setCellValue('L1', 'PUESTO')
+                    ->setCellValue('M1', 'SERVICIO')
+                    ->setCellValue('N1', 'MODALIDAD')
+                    ->setCellValue('O1', 'PERIODO')
+                    ->setCellValue('P1', 'PLANTILLA')
+                    ->setCellValue('Q1', 'DESDE')
+                    ->setCellValue('R1', 'HASTA')
+                    ->setCellValue('S1', 'CANT')
+                    ->setCellValue('T1', 'LU')
+                    ->setCellValue('U1', 'MA')
+                    ->setCellValue('V1', 'MI')
+                    ->setCellValue('W1', 'JU')
+                    ->setCellValue('X1', 'VI')
+                    ->setCellValue('Y1', 'SA')
+                    ->setCellValue('Z1', 'DO')
+                    ->setCellValue('AA1', 'FE')
+                    ->setCellValue('AB1', 'H')
+                    ->setCellValue('AC1', 'HD')
+                    ->setCellValue('AD1', 'HN')
+                    ->setCellValue('AE1', 'HP')
+                    ->setCellValue('AF1', 'HDP')
+                    ->setCellValue('AG1', 'HNP')                
+                    ->setCellValue('AH1', 'DIAS')
+                    ->setCellValue('AI1', 'VALOR')
+                    ->setCellValue('AJ1', 'VR.PEND');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -192,38 +194,40 @@ class PedidosDetallesController extends Controller
                     ->setCellValue('E' . $i, $arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('Y/m/d'))
                     ->setCellValue('F' . $i, $arPedidoDetalle->getPedidoRel()->getClienteRel()->getNombreCorto())
                     ->setCellValue('G' . $i, $arPedidoDetalle->getPedidoRel()->getSectorRel()->getNombre())
-                    ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getPedidoRel()->getEstadoProgramado()))
-                    ->setCellValue('J' . $i, $arPedidoDetalle->getConceptoServicioRel()->getNombre())
-                    ->setCellValue('K' . $i, $arPedidoDetalle->getModalidadServicioRel()->getNombre())
-                    ->setCellValue('L' . $i, $arPedidoDetalle->getPeriodoRel()->getNombre())                    
-                    ->setCellValue('N' . $i, $arPedidoDetalle->getDiaDesde())
-                    ->setCellValue('O' . $i, $arPedidoDetalle->getDiaHasta())
-                    ->setCellValue('P' . $i, $arPedidoDetalle->getCantidad())
-                    ->setCellValue('Q' . $i, $arPedidoDetalle->getCantidadRecurso())
-                    ->setCellValue('R' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getLunes()))
-                    ->setCellValue('S' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getMartes()))
-                    ->setCellValue('T' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getMiercoles()))
-                    ->setCellValue('U' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getJueves()))
-                    ->setCellValue('V' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getViernes()))
-                    ->setCellValue('W' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getSabado()))
-                    ->setCellValue('X' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getDomingo()))
-                    ->setCellValue('Y' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getFestivo()))
-                    ->setCellValue('Z' . $i, $arPedidoDetalle->getHoras())
-                    ->setCellValue('AA' . $i, $arPedidoDetalle->getHorasDiurnas())
-                    ->setCellValue('AB' . $i, $arPedidoDetalle->getHorasNocturnas())
-                    ->setCellValue('AC' . $i, $arPedidoDetalle->getHorasProgramadas())
-                    ->setCellValue('AD' . $i, $arPedidoDetalle->getHorasDiurnasProgramadas())
-                    ->setCellValue('AE' . $i, $arPedidoDetalle->getHorasNocturnasProgramadas())
-                    ->setCellValue('AF' . $i, $arPedidoDetalle->getDias())
-                    ->setCellValue('AG' . $i, $arPedidoDetalle->getVrTotalDetalle())
-                    ->setCellValue('AH' . $i, $arPedidoDetalle->getVrTotalDetallePendiente());
+                    ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getPedidoRel()->getEstadoAutorizado()))
+                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getPedidoRel()->getEstadoProgramado()))
+                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getPedidoRel()->getEstadoFacturado()))
+                    ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getPedidoRel()->getEstadoAnulado()))
+                    ->setCellValue('M' . $i, $arPedidoDetalle->getConceptoServicioRel()->getNombre())
+                    ->setCellValue('N' . $i, $arPedidoDetalle->getModalidadServicioRel()->getNombre())
+                    ->setCellValue('O' . $i, $arPedidoDetalle->getPeriodoRel()->getNombre())                    
+                    ->setCellValue('Q' . $i, $arPedidoDetalle->getDiaDesde())
+                    ->setCellValue('R' . $i, $arPedidoDetalle->getDiaHasta())
+                    ->setCellValue('S' . $i, $arPedidoDetalle->getCantidad())
+                    ->setCellValue('T' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getLunes()))
+                    ->setCellValue('U' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getMartes()))
+                    ->setCellValue('V' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getMiercoles()))
+                    ->setCellValue('W' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getJueves()))
+                    ->setCellValue('X' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getViernes()))
+                    ->setCellValue('Y' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getSabado()))
+                    ->setCellValue('Z' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getDomingo()))
+                    ->setCellValue('AA' . $i, $objFunciones->devuelveBoolean($arPedidoDetalle->getFestivo()))
+                    ->setCellValue('AB' . $i, $arPedidoDetalle->getHoras())
+                    ->setCellValue('AC' . $i, $arPedidoDetalle->getHorasDiurnas())
+                    ->setCellValue('AD' . $i, $arPedidoDetalle->getHorasNocturnas())
+                    ->setCellValue('AE' . $i, $arPedidoDetalle->getHorasProgramadas())
+                    ->setCellValue('AF' . $i, $arPedidoDetalle->getHorasDiurnasProgramadas())
+                    ->setCellValue('AG' . $i, $arPedidoDetalle->getHorasNocturnasProgramadas())
+                    ->setCellValue('AH' . $i, $arPedidoDetalle->getDias())
+                    ->setCellValue('AI' . $i, $arPedidoDetalle->getVrTotalDetalle())
+                    ->setCellValue('AJ' . $i, $arPedidoDetalle->getVrTotalDetallePendiente());
             if($arPedidoDetalle->getPuestoRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('I' . $i, $arPedidoDetalle->getPuestoRel()->getNombre());
+                    ->setCellValue('L' . $i, $arPedidoDetalle->getPuestoRel()->getNombre());
             }
             if($arPedidoDetalle->getPlantillaRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('M' . $i, $arPedidoDetalle->getPlantillaRel()->getNombre());
+                    ->setCellValue('P' . $i, $arPedidoDetalle->getPlantillaRel()->getNombre());
             }            
             $i++;
         }

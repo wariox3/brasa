@@ -1,16 +1,21 @@
 <?php
 
-namespace Brasa\TurnoBundle\Controller;
+namespace Brasa\TurnoBundle\Controller\Buscar;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
-class BuscarPuestoController extends Controller
+class PuestoController extends Controller
 {
     var $strDqlLista = "";     
     var $strCodigo = "";
     var $strNombre = "";
     
+    
+    /**
+     * @Route("/tur/burcar/puesto/{campoCodigo}/{campoCliente}", name="brs_tur_buscar_puesto")
+     */    
     public function listaAction($campoCodigo, $codigoCliente) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

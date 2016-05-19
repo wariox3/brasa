@@ -80,27 +80,7 @@ brs_tur_utilidad_programacion_inconsistencias:
 
 brs_tur_utilidad_programacion_descarga_masiva:    
     path:     /tur/utilidad/programacion/descarga/masiva
-    defaults: { _controller: BrasaTurnoBundle:UtilidadProgramacionDescargaMasiva:lista }    
-    
-brs_tur_buscar_cliente:
-    pattern:  /tur/buscar/cliente/{campoCodigo}/{campoNombre}
-    defaults: { _controller: BrasaTurnoBundle:BuscarCliente:lista }     
-    
-brs_tur_buscar_recurso:
-    pattern:  /turno/buscar/recurso/{campoCodigo}/{campoNombre}
-    defaults: { _controller: BrasaTurnoBundle:BuscarRecurso:buscar }    
-
-brs_tur_buscar_recurso2:
-    pattern:  /turno/buscar/recurso/{campoCodigo}
-    defaults: { _controller: BrasaTurnoBundle:BuscarRecurso:buscar2 }
-    
-brs_tur_buscar_puesto:
-    pattern:  /turno/buscar/puesto/{campoCodigo}/{codigoCliente}
-    defaults: { _controller: BrasaTurnoBundle:BuscarPuesto:lista } 
-
-brs_tur_buscar_direccion:
-    pattern:  /turno/buscar/direccion/{campoCodigo}/{campoNombre}
-    defaults: { _controller: BrasaTurnoBundle:BuscarDireccion:lista }    
+    defaults: { _controller: BrasaTurnoBundle:UtilidadProgramacionDescargaMasiva:lista }            
     
 brs_tur_configuracion:
     path:     /tur/configuracion/{codigoConfiguracionPk}

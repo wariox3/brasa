@@ -1,17 +1,22 @@
 <?php
 
-namespace Brasa\TurnoBundle\Controller;
+namespace Brasa\TurnoBundle\Controller\Buscar;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
-class BuscarRecursoController extends Controller
+class RecursoController extends Controller
 {
     var $strDqlLista = "";     
     var $strCodigo = "";
     var $strNombre = "";
     
-    public function buscarAction($campoCodigo,$campoNombre) {
+    
+    /**
+     * @Route("/tur/burcar/recurso/{campoCodigo}/{campoNombre}", name="brs_tur_buscar_recurso")
+     */    
+    public function buscarAction($campoCodigo, $campoNombre) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
@@ -33,6 +38,9 @@ class BuscarRecursoController extends Controller
             ));
     }        
     
+    /**
+     * @Route("/tur/burcar/recurso/{campoCodigo}", name="brs_tur_buscar_recurso2")
+     */  
     public function buscar2Action($campoCodigo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

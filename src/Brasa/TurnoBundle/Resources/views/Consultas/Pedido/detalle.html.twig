@@ -87,6 +87,7 @@
             <tr>
                 <th>COD</th>                
                 <th>NUMERO</th>
+                <th>FECHA</th>
                 <th>PUESTO</th>                
                 <th>TURNO</th>
                 <th>MODALIDAD</th>
@@ -124,6 +125,7 @@
                 <tr>
                     <td><a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_pedido_detalle_resumen', {'codigoPedidoDetalle': arPedidosDetalles.codigoPedidoDetallePk }) }}', 'pedidoDetalleResumen', 600, 900)">{{ arPedidosDetalles.codigoPedidoDetallePk }}</a><input type="hidden" name="LblCodigo[]" value="{{ arPedidosDetalles.codigoPedidoDetallePk }}"></td>                                
                     <td>{{ arPedidosDetalles.pedidoRel.numero }}</td>                     
+                    <td>{{ arPedidosDetalles.pedidoRel.fechaProgramacion | date('Y/m') }}</td>                     
                     <td>{{ arPedidosDetalles.puestoRel.nombre | default('') }}</td> 
                     <td>{{ arPedidosDetalles.conceptoServicioRel.nombre  }}</td>                    
                     <td>{{ arPedidosDetalles.modalidadServicioRel.nombre  }}</td>                    
