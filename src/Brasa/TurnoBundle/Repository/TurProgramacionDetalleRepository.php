@@ -172,7 +172,7 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                             if($arPlantilla->getHomologarCodigoTurno() == 1) {
                                 $strTurno = $this->devuelveCodigoTurno($arrTurnos[$intPosicionPlantilla]);
                             }
-                            $boolAplica = $this->aplicaPlantilla($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle, $strTurno);                        
+                            $boolAplica = $this->aplicaPlantilla($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle, $strTurno, $boolFestivo);                        
                             if($boolAplica == TRUE) {
                                 if($i == 1) {
                                     $arProgramacionDetalle->setDia1($strTurno);
@@ -326,7 +326,7 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                             if($boolFestivo == 1 && isset($arrTurnos['festivo'])) {
                                 $strTurno = $arrTurnos['festivo'];
                             }                            
-                            $boolAplica = $this->aplicaPlantilla($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle, $strTurno);
+                            $boolAplica = $this->aplicaPlantilla($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle, $strTurno, $boolFestivo);
                             if($boolAplica == TRUE) {
                                 if($i == 1) {
                                     $arProgramacionDetalle->setDia1($strTurno);
@@ -449,7 +449,7 @@ class TurProgramacionDetalleRepository extends EntityRepository {
         $em->flush();
     }
 
-    private function aplicaPlantilla ($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle, $strTurno) {
+    private function aplicaPlantilla ($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle, $strTurno, $festivo) {
         $em = $this->getEntityManager();
         $boolResultado = FALSE;
         if($strTurno != '') {
@@ -496,6 +496,11 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                         if($arPedidoDetalle->getDomingo() == 1) {
                             $boolResultado = TRUE;
                         }
+                    }
+                    if($festivo == 1) {
+                        if($arPedidoDetalle->getFestivo() == 1) {
+                            $boolResultado = TRUE;
+                        }                        
                     }
                 }                            
             }

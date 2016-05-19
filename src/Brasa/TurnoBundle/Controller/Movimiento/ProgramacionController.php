@@ -455,52 +455,7 @@ class ProgramacionController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }
-
-    private function aplicaPlantilla ($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle) {
-        $boolResultado = FALSE;
-        if($i >= $intDiaInicial && $i <= $intDiaFinal) {
-            $strFecha = $strMesAnio . '/' . $i;
-            $dateNuevaFecha = date_create($strFecha);
-            $diaSemana = $dateNuevaFecha->format('N');
-            if($diaSemana == 1) {
-                if($arPedidoDetalle->getLunes() == 1) {
-                    $boolResultado = TRUE;
-                }
-            }
-            if($diaSemana == 2) {
-                if($arPedidoDetalle->getMartes() == 1) {
-                    $boolResultado = TRUE;
-                }
-            }
-            if($diaSemana == 3) {
-                if($arPedidoDetalle->getMiercoles() == 1) {
-                    $boolResultado = TRUE;
-                }
-            }
-            if($diaSemana == 4) {
-                if($arPedidoDetalle->getJueves() == 1) {
-                    $boolResultado = TRUE;
-                }
-            }
-            if($diaSemana == 5) {
-                if($arPedidoDetalle->getViernes() == 1) {
-                    $boolResultado = TRUE;
-                }
-            }
-            if($diaSemana == 6) {
-                if($arPedidoDetalle->getSabado() == 1) {
-                    $boolResultado = TRUE;
-                }
-            }
-            if($diaSemana == 7) {
-                if($arPedidoDetalle->getDomingo() == 1) {
-                    $boolResultado = TRUE;
-                }
-            }
-        }
-        return $boolResultado;
-    }
+    }    
 
     private function devuelveDiaSemanaEspaniol ($dateFecha) {
         $strDia = "";
