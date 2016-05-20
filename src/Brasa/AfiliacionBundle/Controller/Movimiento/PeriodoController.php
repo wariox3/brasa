@@ -216,6 +216,7 @@ class PeriodoController extends Controller
     }
 
     private function generarDetalleExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -230,12 +231,30 @@ class PeriodoController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'R'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
+        }      
+        for($col = 'I'; $col !== 'R'; $col++) {            
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }        
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'COD')
                     ->setCellValue('B1', 'CLIENTE')
                     ->setCellValue('C1', 'DESDE')
-                    ->setCellValue('D1', 'HASTA');
-
+                    ->setCellValue('D1', 'HASTA')
+                    ->setCellValue('E1', 'IDENTIFICACION')
+                    ->setCellValue('F1', 'NOMBRE')
+                    ->setCellValue('G1', 'ING')
+                    ->setCellValue('H1', 'DIAS')
+                    ->setCellValue('I1', 'SALARIO')
+                    ->setCellValue('J1', 'PENSION')
+                    ->setCellValue('K1', 'SALUD')
+                    ->setCellValue('L1', 'CAJA')
+                    ->setCellValue('M1', 'RIESGO')
+                    ->setCellValue('N1', 'SENA')
+                    ->setCellValue('O1', 'ICBF')
+                    ->setCellValue('P1', 'ADMIN')
+                    ->setCellValue('Q1', 'TOTAL');
         $i = 2;
         
         $query = $em->createQuery($this->strDqlLista);
@@ -247,7 +266,20 @@ class PeriodoController extends Controller
                     ->setCellValue('A' . $i, $arPeriodoDetalle->getCodigoPeriodoDetallePk())
                     ->setCellValue('B' . $i, $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getNombreCorto())
                     ->setCellValue('C' . $i, $arPeriodoDetalle->getFechaDesde()->format('Y/m/d'))
-                    ->setCellValue('D' . $i, $arPeriodoDetalle->getFechaHasta()->format('Y/m/d'));                                    
+                    ->setCellValue('D' . $i, $arPeriodoDetalle->getFechaHasta()->format('Y/m/d'))
+                    ->setCellValue('E' . $i, $arPeriodoDetalle->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('F' . $i, $arPeriodoDetalle->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('G' . $i, $objFunciones->devuelveBoolean($arPeriodoDetalle->getIngreso()))
+                    ->setCellValue('H' . $i, $arPeriodoDetalle->getDias())
+                    ->setCellValue('I' . $i, $arPeriodoDetalle->getSalario())
+                    ->setCellValue('J' . $i, $arPeriodoDetalle->getPension())
+                    ->setCellValue('K' . $i, $arPeriodoDetalle->getSalud())
+                    ->setCellValue('L' . $i, $arPeriodoDetalle->getCaja())
+                    ->setCellValue('M' . $i, $arPeriodoDetalle->getRiesgos())
+                    ->setCellValue('N' . $i, $arPeriodoDetalle->getSena())
+                    ->setCellValue('O' . $i, $arPeriodoDetalle->getIcbf())
+                    ->setCellValue('P' . $i, $arPeriodoDetalle->getAdministracion())
+                    ->setCellValue('Q' . $i, $arPeriodoDetalle->getTotal());                                    
             $i++;
         }
         

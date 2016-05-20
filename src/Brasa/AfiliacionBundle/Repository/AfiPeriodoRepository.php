@@ -28,17 +28,19 @@ class AfiPeriodoRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();                
         $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
+        $administracion = $arPeriodo->getClienteRel()->getAdministracion();
         $arContratos = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->contratosPeriodo($arPeriodo->getFechaDesde()->format('Y/m/d'), $arPeriodo->getFechaHasta()->format('Y/m/d'), $arPeriodo->getCodigoClienteFk());      
         foreach($arContratos as $arContrato) {
             //$arContrato = new \Brasa\AfiliacionBundle\Entity\AfiContrato();
-            $salarioMinimo = 689455;
+            $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
+            $salarioMinimo = $arConfiguracion->getVrSalario();
+            
             $porcentajeIcbf = 3;
             $porcentajeSena = 2;
             $intDias = $this->diasContrato($arPeriodo, $arContrato);
             $salario = $arContrato->getVrSalario();
             $vrDia = $salario / 30;
-            $salarioPeriodo = $vrDia * $intDias;
-            $afiliacion = 0;
+            $salarioPeriodo = $vrDia * $intDias;            
             $pension = 0;
             $salud = 0;
             $caja = 0;
@@ -62,7 +64,7 @@ class AfiPeriodoRepository extends EntityRepository {
                 $icbf = ($salarioPeriodo * $porcentajeIcbf)/100;
                 $sena = ($salarioPeriodo * $porcentajeSena)/100;
             }
-            $total = $pension + $salud + $caja + $riesgos + $sena + $icbf + $afiliacion;
+            $total = $pension + $salud + $caja + $riesgos + $sena + $icbf + $administracion;
             $arPeriodoDetalle = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle();
             $arPeriodoDetalle->setPeriodoRel($arPeriodo);
             $arPeriodoDetalle->setContratoRel($arContrato);
@@ -75,7 +77,7 @@ class AfiPeriodoRepository extends EntityRepository {
             $arPeriodoDetalle->setSalud($salud);
             $arPeriodoDetalle->setCaja($caja);
             $arPeriodoDetalle->setRiesgos($riesgos);
-            $arPeriodoDetalle->setAfiliacion($afiliacion);
+            $arPeriodoDetalle->setAdministracion($administracion);
             $arPeriodoDetalle->setTotal($total);
             if($arContrato->getFechaDesde() >= $arPeriodo->getFechaDesde()) {
                 $arPeriodoDetalle->setIngreso(1);

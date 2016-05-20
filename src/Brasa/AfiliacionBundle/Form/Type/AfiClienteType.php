@@ -32,7 +32,7 @@ class AfiClienteType extends AbstractType
                 'property' => 'nombre',
                 'required' => true))                              
                             
-            ->add('nit', 'number', array('required' => true))
+            ->add('nit', 'text', array('required' => true))
             ->add('digitoVerificacion', 'text', array('required' => false))  
             ->add('nombreCorto', 'text', array('required' => true))              
             ->add('plazoPago', 'number', array('required' => false)) 
@@ -44,7 +44,18 @@ class AfiClienteType extends AbstractType
             ->add('email', 'text', array('required' => false))                              
             ->add('contacto', 'text', array('required' => false))                  
             ->add('celularContacto', 'text', array('required' => false))  
-            ->add('telefonoContacto', 'text', array('required' => false))  
+            ->add('telefonoContacto', 'text', array('required' => false))
+            ->add('afiliacion', 'number', array('required' => false))
+            ->add('administracion', 'number', array('required' => false))
+            ->add('generaPension', 'checkbox', array('required'  => false))
+            ->add('generaSalud', 'checkbox', array('required'  => false))
+            ->add('generaRiesgos', 'checkbox', array('required'  => false))
+            ->add('generaCaja', 'checkbox', array('required'  => false))                            
+            ->add('generaSena', 'checkbox', array('required'  => false))
+            ->add('generaIcbf', 'checkbox', array('required'  => false))
+            ->add('porcentajePension', 'number', array('required' => true))
+            ->add('porcentajeSalud', 'number', array('required' => true))
+            ->add('porcentajeCaja', 'number', array('required' => true))                            
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

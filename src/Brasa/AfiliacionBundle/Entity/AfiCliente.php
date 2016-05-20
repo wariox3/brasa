@@ -103,6 +103,62 @@ class AfiCliente
     private $usuario;     
     
     /**
+     * @ORM\Column(name="afiliacion", type="float")
+     */    
+    private $afiliacion = 0;    
+    
+    /**
+     * @ORM\Column(name="administracion", type="float")
+     */    
+    private $administracion = 0;     
+
+    /**     
+     * @ORM\Column(name="genera_salud", type="boolean")
+     */    
+    private $genera_salud = false;
+
+    /**
+     * @ORM\Column(name="porcentaje_salud", type="float")
+     */
+    private $porcentajeSalud = 0;    
+    
+    /**     
+     * @ORM\Column(name="genera_pension", type="boolean")
+     */    
+    private $genera_pension = false;        
+
+    /**
+     * @ORM\Column(name="porcentaje_pension", type="float")
+     */
+    private $porcentajePension = 0;    
+    
+    /**     
+     * @ORM\Column(name="genera_caja", type="boolean")
+     */    
+    private $genera_caja = false;            
+    
+    /**
+     * @ORM\Column(name="porcentaje_caja", type="float")
+     */
+    private $porcentajeCaja = 0;     
+    
+    /**     
+     * @ORM\Column(name="genera_riesgos", type="boolean")
+     */    
+    private $genera_riesgos = false;        
+    
+    /**     
+     * @ORM\Column(name="genera_sena", type="boolean")
+     */    
+    private $genera_sena = false;     
+    
+    
+    /**     
+     * @ORM\Column(name="genera_icbf", type="boolean")
+     */    
+    private $genera_icbf = false;
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;                            
@@ -884,5 +940,269 @@ class AfiCliente
     public function getEmpleadosClienteRel()
     {
         return $this->empleadosClienteRel;
+    }
+
+    /**
+     * Set afiliacion
+     *
+     * @param float $afiliacion
+     *
+     * @return AfiCliente
+     */
+    public function setAfiliacion($afiliacion)
+    {
+        $this->afiliacion = $afiliacion;
+
+        return $this;
+    }
+
+    /**
+     * Get afiliacion
+     *
+     * @return float
+     */
+    public function getAfiliacion()
+    {
+        return $this->afiliacion;
+    }
+
+    /**
+     * Set administracion
+     *
+     * @param float $administracion
+     *
+     * @return AfiCliente
+     */
+    public function setAdministracion($administracion)
+    {
+        $this->administracion = $administracion;
+
+        return $this;
+    }
+
+    /**
+     * Get administracion
+     *
+     * @return float
+     */
+    public function getAdministracion()
+    {
+        return $this->administracion;
+    }
+
+    /**
+     * Set generaSalud
+     *
+     * @param boolean $generaSalud
+     *
+     * @return AfiCliente
+     */
+    public function setGeneraSalud($generaSalud)
+    {
+        $this->genera_salud = $generaSalud;
+
+        return $this;
+    }
+
+    /**
+     * Get generaSalud
+     *
+     * @return boolean
+     */
+    public function getGeneraSalud()
+    {
+        return $this->genera_salud;
+    }
+
+    /**
+     * Set porcentajeSalud
+     *
+     * @param float $porcentajeSalud
+     *
+     * @return AfiCliente
+     */
+    public function setPorcentajeSalud($porcentajeSalud)
+    {
+        $this->porcentajeSalud = $porcentajeSalud;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeSalud
+     *
+     * @return float
+     */
+    public function getPorcentajeSalud()
+    {
+        return $this->porcentajeSalud;
+    }
+
+    /**
+     * Set generaPension
+     *
+     * @param boolean $generaPension
+     *
+     * @return AfiCliente
+     */
+    public function setGeneraPension($generaPension)
+    {
+        $this->genera_pension = $generaPension;
+
+        return $this;
+    }
+
+    /**
+     * Get generaPension
+     *
+     * @return boolean
+     */
+    public function getGeneraPension()
+    {
+        return $this->genera_pension;
+    }
+
+    /**
+     * Set porcentajePension
+     *
+     * @param float $porcentajePension
+     *
+     * @return AfiCliente
+     */
+    public function setPorcentajePension($porcentajePension)
+    {
+        $this->porcentajePension = $porcentajePension;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajePension
+     *
+     * @return float
+     */
+    public function getPorcentajePension()
+    {
+        return $this->porcentajePension;
+    }
+
+    /**
+     * Set generaCaja
+     *
+     * @param boolean $generaCaja
+     *
+     * @return AfiCliente
+     */
+    public function setGeneraCaja($generaCaja)
+    {
+        $this->genera_caja = $generaCaja;
+
+        return $this;
+    }
+
+    /**
+     * Get generaCaja
+     *
+     * @return boolean
+     */
+    public function getGeneraCaja()
+    {
+        return $this->genera_caja;
+    }
+
+    /**
+     * Set porcentajeCaja
+     *
+     * @param float $porcentajeCaja
+     *
+     * @return AfiCliente
+     */
+    public function setPorcentajeCaja($porcentajeCaja)
+    {
+        $this->porcentajeCaja = $porcentajeCaja;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeCaja
+     *
+     * @return float
+     */
+    public function getPorcentajeCaja()
+    {
+        return $this->porcentajeCaja;
+    }
+
+    /**
+     * Set generaRiesgos
+     *
+     * @param boolean $generaRiesgos
+     *
+     * @return AfiCliente
+     */
+    public function setGeneraRiesgos($generaRiesgos)
+    {
+        $this->genera_riesgos = $generaRiesgos;
+
+        return $this;
+    }
+
+    /**
+     * Get generaRiesgos
+     *
+     * @return boolean
+     */
+    public function getGeneraRiesgos()
+    {
+        return $this->genera_riesgos;
+    }
+
+    /**
+     * Set generaSena
+     *
+     * @param boolean $generaSena
+     *
+     * @return AfiCliente
+     */
+    public function setGeneraSena($generaSena)
+    {
+        $this->genera_sena = $generaSena;
+
+        return $this;
+    }
+
+    /**
+     * Get generaSena
+     *
+     * @return boolean
+     */
+    public function getGeneraSena()
+    {
+        return $this->genera_sena;
+    }
+
+    /**
+     * Set generaIcbf
+     *
+     * @param boolean $generaIcbf
+     *
+     * @return AfiCliente
+     */
+    public function setGeneraIcbf($generaIcbf)
+    {
+        $this->genera_icbf = $generaIcbf;
+
+        return $this;
+    }
+
+    /**
+     * Get generaIcbf
+     *
+     * @return boolean
+     */
+    public function getGeneraIcbf()
+    {
+        return $this->genera_icbf;
     }
 }

@@ -107,8 +107,26 @@ class EmpleadoController extends Controller
             $arContrato = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->find($codigoContrato);
         } else {
             $arEmpleado = new \Brasa\AfiliacionBundle\Entity\AfiEmpleado();
-            $arEmpleado = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->find($codigoEmpleado);
+            $arEmpleado = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->find($codigoEmpleado);            
             $arContrato->setEmpleadoRel($arEmpleado);
+            $arContrato->setClienteRel($arEmpleado->getClienteRel());
+            $arContrato->setFechaDesde(new \DateTime('now'));
+            $arContrato->setFechaHasta(new \DateTime('now'));
+            $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
+            $douSalarioMinimo = $arConfiguracion->getVrSalario();
+            $arContrato->setVrSalario($douSalarioMinimo);
+            $arContrato->setIndefinido(true);
+            if($arEmpleado->getClienteRel()) {
+                $arContrato->setGeneraPension($arEmpleado->getClienteRel()->getGeneraPension());
+                $arContrato->setGeneraSalud($arEmpleado->getClienteRel()->getGeneraSalud());
+                $arContrato->setGeneraRiesgos($arEmpleado->getClienteRel()->getGeneraRiesgos());
+                $arContrato->setGeneraCaja($arEmpleado->getClienteRel()->getGeneraCaja());
+                $arContrato->setGeneraSena($arEmpleado->getClienteRel()->getGeneraSena());
+                $arContrato->setGeneraIcbf($arEmpleado->getClienteRel()->getGeneraIcbf()); 
+                $arContrato->setPorcentajePension($arEmpleado->getClienteRel()->getPorcentajePension());
+                $arContrato->setPorcentajeSalud($arEmpleado->getClienteRel()->getPorcentajeSalud());
+                $arContrato->setPorcentajeCaja($arEmpleado->getClienteRel()->getPorcentajeCaja());                
+            }            
         }        
         $form = $this->createForm(new AfiContratoType, $arContrato);
         $form->handleRequest($request);

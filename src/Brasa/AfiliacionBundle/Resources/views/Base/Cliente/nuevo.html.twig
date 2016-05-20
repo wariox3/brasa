@@ -110,7 +110,49 @@
                 </div>
             </div>                 
         </div>
-    </div>               
+    </div> 
+    <div class="panel panel-default">
+        <div class="panel-heading">Liquidacion</div>
+        <div class="panel-body">                                          
+            <div class="form-group form-group-sm">
+                <label for="form_afiliacion" class="col-sm-3 control-label">Afiliacion:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.afiliacion, { 'attr': {'class': 'form-control'} }) }}                        
+                </div>                
+            </div> 
+            <div class="form-group form-group-sm">
+                <label for="form_administracion" class="col-sm-3 control-label">Administracion:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.administracion, { 'attr': {'class': 'form-control'} }) }}                        
+                </div>                
+            </div>  
+            <div class="form-group form-group-sm">
+                <label for="form_lunes" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    Pension{{ form_widget(form.generaPension) }}  Salud{{ form_widget(form.generaSalud) }} Riesgos{{ form_widget(form.generaRiesgos) }} Caja{{ form_widget(form.generaCaja) }}
+                    Sena{{ form_widget(form.generaSena) }} ICBF{{ form_widget(form.generaIcbf) }} 
+                </div>                
+            </div>     
+            <div class="form-group form-group-sm">
+                <label for="form_porcentajePension" class="col-sm-3 control-label">% Pension:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.porcentajePension, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>     
+            <div class="form-group form-group-sm">
+                <label for="form_porcentajeSalud" class="col-sm-3 control-label">% Salud:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.porcentajeSalud, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>  
+            <div class="form-group form-group-sm">
+                <label for="form_porcentajeCaja" class="col-sm-3 control-label">% Caja:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.porcentajeCaja, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                
+        </div>
+    </div>                
     <div class="modal-footer">
         <a class="btn btn-default btn-sm" href="{{ path('brs_afi_base_cliente') }}">Cancelar</a>        
         {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}

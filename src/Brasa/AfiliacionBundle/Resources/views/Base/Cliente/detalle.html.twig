@@ -40,7 +40,19 @@
                         <td class="td-in-well">{{ arCliente.asesorRel.nombre }}</td>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
-                    </tr>                    
+                    </tr>  
+                    <tr>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>                        
+                        <td class="titulo" >AFILIACION:</td>
+                        <td align="right">{{ arCliente.afiliacion | number_format(0, '.', ',')}}</td>
+                    </tr>  
+                    <tr>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>                        
+                        <td class="titulo" >ADMINISTRACION:</td>
+                        <td align="right">{{ arCliente.administracion | number_format(0, '.', ',')}}</td>
+                    </tr>                     
                 </table>
             </div>
         </div>

@@ -26,7 +26,7 @@
                 <th>RIESGOS</th>
                 <th>SENA</th>
                 <th>ICBF</th>
-                <th>AFILIACION</th>
+                <th>ADMINISTRACION</th>
                 <th>TOTAL</th>
                 <th></th>
             </tr>
@@ -45,7 +45,7 @@
                 <td style="text-align: right">{{ arPeriodoDetalles.riesgos | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPeriodoDetalles.sena | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPeriodoDetalles.icbf | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPeriodoDetalles.afiliacion | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPeriodoDetalles.administracion | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPeriodoDetalles.total | number_format(0, '.', ',') }}</td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPeriodoDetalles.codigoPeriodoDetallePk }}" /></td>
             </tr>

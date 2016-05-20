@@ -88,6 +88,11 @@ class AfiPeriodoDetalle
     private $afiliacion = 0;    
     
     /**
+     * @ORM\Column(name="administracion", type="float")
+     */
+    private $administracion = 0;     
+    
+    /**
      * @ORM\Column(name="total", type="float")
      */
     private $total = 0;
@@ -579,5 +584,29 @@ class AfiPeriodoDetalle
     public function getTotal()
     {
         return $this->total;
+    }
+
+    /**
+     * Set administracion
+     *
+     * @param float $administracion
+     *
+     * @return AfiPeriodoDetalle
+     */
+    public function setAdministracion($administracion)
+    {
+        $this->administracion = $administracion;
+
+        return $this;
+    }
+
+    /**
+     * Get administracion
+     *
+     * @return float
+     */
+    public function getAdministracion()
+    {
+        return $this->administracion;
     }
 }

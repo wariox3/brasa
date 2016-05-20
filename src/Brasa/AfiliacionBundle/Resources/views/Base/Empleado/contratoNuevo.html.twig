@@ -36,19 +36,19 @@
                 <div class="col-sm-4">
                     {{ form_widget(form.fechaHasta) }} 
                 </div>                
-            </div>    
+            </div>  
+            <div class="form-group form-group-sm">
+                <label for="form_indefinido" class="col-sm-3 control-label">Indefinido:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.indefinido) }}
+                </div>
+            </div>                
             <div class="form-group form-group-sm">
                 <label for="form_vrSalario" class="col-sm-3 control-label">Salario:</label>
                 <div class="col-sm-9">
                         {{ form_widget(form.vrSalario, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_salarioIntegral" class="col-sm-3 control-label">Salario integral:</label>
-                <div class="col-sm-9">
-                        {{ form_widget(form.salarioIntegral, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>                
+            </div>               
    
             <div class="form-group form-group-sm">
                 <label for="form_ssoTipoCotizanteRel" class="col-sm-3 control-label">Tipo cotizante:</label>

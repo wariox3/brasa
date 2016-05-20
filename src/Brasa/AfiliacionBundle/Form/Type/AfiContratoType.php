@@ -54,11 +54,11 @@ class AfiContratoType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuClasificacionRiesgo',
                 'property' => 'nombre',
             ))                  
-            ->add('numero', 'text', array('required' => true))
-            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                            
-            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                                        
+            ->add('numero', 'text', array('required' => false))
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd'))                            
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd'))
+            ->add('indefinido', 'checkbox', array('required'  => false))
             ->add('vrSalario', 'number', array('required' => true))  
-            ->add('salarioIntegral', 'choice', array('choices' => array('0' => 'NO', '1' => 'SI')))
             ->add('generaPension', 'checkbox', array('required'  => false))
             ->add('generaSalud', 'checkbox', array('required'  => false))
             ->add('generaRiesgos', 'checkbox', array('required'  => false))
