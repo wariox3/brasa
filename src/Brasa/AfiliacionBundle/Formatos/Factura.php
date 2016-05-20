@@ -58,7 +58,7 @@ class Factura extends \FPDF_FPDF {
         $this->Ln();
         $this->Ln(1);
         $this->SetFont('Arial', 'B', 9);
-        $List1 = array('NOMBRE: ', 'NIT: ', 'TELEFONO:', 'DIRECCION:', 'SECTOR:', 'ESTRATO:');
+        $List1 = array('NOMBRE: ', 'NIT: ', 'TELEFONO:', 'DIRECCION:');
         foreach ($List1 as $col) {
             $this->Cell(50, 4, $col, 0, 0, 'L');
             $this->Ln(4);
@@ -67,9 +67,7 @@ class Factura extends \FPDF_FPDF {
         $Datos = array($arFactura->getClienteRel()->getNombreCorto(),
             $arFactura->getClienteRel()->getNit() . "-" . $arFactura->getClienteRel()->getDigitoVerificacion(),
             $arFactura->getClienteRel()->getTelefono(),
-            $arFactura->getClienteRel()->getDireccion(),
-            $arFactura->getClienteRel()->getSectorRel()->getNombre(),
-            $arFactura->getClienteRel()->getEstrato());
+            $arFactura->getClienteRel()->getDireccion());
         $this->SetFont('Arial', '', 8);
         $this->SetY(54);
 
@@ -84,7 +82,7 @@ class Factura extends \FPDF_FPDF {
         $this->ln(1);
         $this->SetY(27);
 
-        $List1 = array('FACTURA DE VENTA', 'Fecha emision:', 'Fecha vencimiento:', 'Forma pago:', 'Plazo:', 'Soporte:');
+        $List1 = array($arFactura->getFacturaTipoRel()->getNombre(), 'Fecha emision:', 'Fecha vencimiento:', 'Forma pago:', 'Plazo:', 'Soporte:');
         $this->SetFont('Arial', 'B', 8);
         foreach ($List1 as $col) {
             $this->SetX(150);
@@ -109,17 +107,12 @@ class Factura extends \FPDF_FPDF {
             $this->Ln();
         }
         $this->SetY(48);
-        if($arFactura->getClienteDireccionRel()) {
-            $arrayTexto = array($arFactura->getClienteDireccionRel()->getNombre(),
-                $arFactura->getClienteDireccionRel()->getCiudadRel()->getNombre(),
-                $arFactura->getClienteDireccionRel()->getDireccion(),
-                $arFactura->getClienteDireccionRel()->getBarrio());            
-        } else {
-            $arrayTexto = array("PRINCIPAL",
-                $arFactura->getClienteRel()->getCiudadRel()->getNombre(),
-                $arFactura->getClienteRel()->getDireccion(),
-                $arFactura->getClienteRel()->getBarrio());                        
-        }
+
+        $arrayTexto = array("PRINCIPAL",
+            $arFactura->getClienteRel()->getCiudadRel()->getNombre(),
+            $arFactura->getClienteRel()->getDireccion(),
+            $arFactura->getClienteRel()->getBarrio());                        
+        
         
         $this->SetX(110);
         $this->SetFont('Arial', 'B', 10);
@@ -138,8 +131,15 @@ class Factura extends \FPDF_FPDF {
     }
 
     public function EncabezadoDetalles() {
-        $this->Ln(14);
-        $header = array('CODIGO', 'DETALLE', 'PEDIDO', 'CANTIDAD', 'VALOR');
+        $this->SetX(10);
+        $this->Ln(14); 
+        $this->SetFillColor(255,255,255);
+        $this->SetTextColor(0);
+        $this->SetFont('Arial', 'B', 14);        
+        $this->Cell(10, 4, "CURSOS", 0, 0, 'L', 1);
+        
+        $this->Ln(5);          
+        $header = array('CODIGO', 'FECHA', 'IDENTIFICACION', 'EMPLEADO', 'PRECIO');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -147,7 +147,7 @@ class Factura extends \FPDF_FPDF {
         $this->SetFont('', 'B', 7);
 
         //creamos la cabecera de la tabla.
-        $w = array(15, 125, 10, 15, 30);
+        $w = array(15, 20, 25, 80, 15, 30);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -163,64 +163,19 @@ class Factura extends \FPDF_FPDF {
 
     public function Body($pdf) {
         $arFacturaDetalles = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();
-        $arFacturaDetalles = self::$em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->findBy(array('codigoFacturaFk' => self::$codigoFactura));
+        $arFacturaDetalles = self::$em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleCurso')->findBy(array('codigoFacturaFk' => self::$codigoFactura));
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
         foreach ($arFacturaDetalles as $arFacturaDetalle) {
-            $strDetalle = "SERVICIO " . $arFacturaDetalle->getConceptoServicioRel()->getNombre() . " DESDE EL DIA " . $arFacturaDetalle->getPedidoDetalleRel()->getDiaDesde()
-                    . " HASTA EL DIA " . $arFacturaDetalle->getPedidoDetalleRel()->getDiaHasta() . " DE " .
-            $this->devuelveMes($arFacturaDetalle->getPedidoDetalleRel()->getPedidoRel()->getFechaProgramacion()->format('n')) . " " . $arFacturaDetalle->getPedidoDetalleRel()->getPedidoRel()->getFechaProgramacion()->format('Y');
-            $pdf->Cell(15, 4, $arFacturaDetalle->getCodigoFacturaDetallePk(), 1, 0, 'L');
-            $pdf->Cell(125, 4, $strDetalle, 1, 0, 'L');
-            $pdf->Cell(10, 4, $arFacturaDetalle->getPedidoDetalleRel()->getPedidoRel()->getNumero(), 1, 0, 'L');
-            $pdf->Cell(15, 4, number_format($arFacturaDetalle->getCantidad(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(30, 4, number_format($arFacturaDetalle->getVrPrecio(), 0, '.', ','), 1, 0, 'R');
+             
+            $pdf->Cell(15, 4, $arFacturaDetalle->getCodigoFacturaDetalleCursoPk(), 1, 0, 'L');
+            $pdf->Cell(20, 4, $arFacturaDetalle->getCursoRel()->getFechaProgramacion()->format('Y/m/d'), 1, 0, 'L');
+            $pdf->Cell(25, 4, $arFacturaDetalle->getCursoRel()->getNumeroIdentificacion(), 1, 0, 'L');
+            $pdf->Cell(80, 4, $arFacturaDetalle->getCursoRel()->getNombreCorto(), 1, 0, 'L');
+            $pdf->Cell(15, 4, number_format($arFacturaDetalle->getPrecio(), 0, '.', ','), 1, 0, 'R');
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }
-    }
-
-    public function devuelveMes($intMes) {
-        $strMes = "";
-        switch ($intMes) {
-            case 1:
-                $strMes = "ENERO";
-                break;
-            case 2:
-                $strMes = "FEBRERO";
-                break;
-            case 3:
-                $strMes = "MARZO";
-                break;
-            case 4:
-                $strMes = "ABRIL";
-                break;
-            case 5:
-                $strMes = "MAYO";
-                break;
-            case 6:
-                $strMes = "JUNIO";
-                break;
-            case 7:
-                $strMes = "JULIO";
-                break;
-            case 8:
-                $strMes = "AGOSTO";
-                break;
-            case 9:
-                $strMes = "SEPTIEMBRE";
-                break;
-            case 10:
-                $strMes = "OCTUBRE";
-                break;
-            case 11:
-                $strMes = "NOVIEMBRE";
-                break;
-            case 12:
-                $strMes = "DICIEMBRE";
-                break;
-        }
-        return $strMes;
     }
 
     public function Footer() {
@@ -233,8 +188,7 @@ class Factura extends \FPDF_FPDF {
 
         $this->SetFont('Arial', 'B', 7.5);
         $this->ln(7);
-        $totales = array('SUBTOTAL: ' . " " . " ",
-            'BASE AIU: ' . " " . " ",
+        $totales = array('SUBTOTAL: ' . " " . " ",            
             '(+)IVA: ' . " " . " ",
             '(+)RTE FUENTE: ' . " " . " ",
             '(+)RTE IVA: ' . " " . " ",
@@ -250,16 +204,15 @@ class Factura extends \FPDF_FPDF {
             $this->ln();
         }
 
-        $totales2 = array(number_format($arFactura->getVrSubtotal(), 0, '.', ','),
-            number_format($arFactura->getVrBaseAIU(), 0, '.', ','),
-            number_format($arFactura->getVrIva(), 0, '.', ','),
-            number_format($arFactura->getVrRetencionFuente(), 0, '.', ','),
-            number_format($arFactura->getVrRetencionIva(), 0, '.', ','),
-            number_format($arFactura->getVrTotal(), 0, '.', ',')
+        $totales2 = array(number_format($arFactura->getSubtotal(), 0, '.', ','),
+            number_format(0, 0, '.', ','),            
+            number_format(0, 0, '.', ','),
+            number_format(0, 0, '.', ','),
+            number_format($arFactura->getTotal(), 0, '.', ',')
         );
 
         $this->SetFont('Arial', '', 7.5);
-        $this->SetXY(190, $this->GetY() - 36);
+        $this->SetXY(190, $this->GetY() - 32);
         $this->ln(12);
         for ($i = 0; $i < count($totales2); $i++) {
             $this->SetX(185);
@@ -329,7 +282,7 @@ class Factura extends \FPDF_FPDF {
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
 
         $this->SetFont('Arial', '', 5);
-        $this->Text(188, 13, ' [sogaApp - turnos]');
+        $this->Text(188, 13, ' [sogaApp - afiliacion]');
         $this->Image('imagenes/logos/logo.jpg', 15, 15, 35, 17);
         $this->ln(11);
         $this->SetFont('Arial', 'B', 12);
