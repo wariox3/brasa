@@ -34,9 +34,10 @@
                 <th>{{ knp_pagination_sortable(arFacturas, 'CÓDIGO', 'p.codigoFacturaPk') }}</th>
                 <th>TIPO</th>
                 <th>NUMERO</th>
+                <th>FECHA</th>
                 <th>NIT</th>
                 <th>CLIENTE</th>
-                <th>FECHA</th>
+                <th>VALOR</th>                
                 <th></th>
                 <th></th>
                 <th></th>
@@ -46,9 +47,10 @@
                 <td>{{ arFacturas.codigoFacturaPk  }}</td>
                 <td>{{ arFacturas.facturaTipoRel.nombre | default('') }}</td>
                 <td>{{ arFacturas.numero  }}</td>
-                <td>{{ arFacturas.clienteRel.nit  }}</td>
-                <td>{{ arFacturas.clienteRel.nombreCorto  }}</td>
                 <td>{{ arFacturas.fecha |date('Y/m/d') }}</td>
+                <td>{{ arFacturas.clienteRel.nit  }}</td>
+                <td>{{ arFacturas.clienteRel.nombreCorto  }}</td>                
+                <td style="text-align: right">{{ arFacturas.total | number_format(0, '.', ',') }}</td>
                 <td style="text-align: center"><a href="{{ path('brs_afi_movimiento_factura_nuevo', {'codigoFactura': arFacturas.codigoFacturaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_afi_movimiento_factura_detalle', { 'codigoFactura': arFacturas.codigoFacturaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturas.codigoFacturaPk }}" /></td>
