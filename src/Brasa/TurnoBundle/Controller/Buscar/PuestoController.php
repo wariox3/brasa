@@ -14,7 +14,7 @@ class PuestoController extends Controller
     
     
     /**
-     * @Route("/tur/burcar/puesto/{campoCodigo}/{campoCliente}", name="brs_tur_buscar_puesto")
+     * @Route("/tur/burcar/puesto/{campoCodigo}/{codigoCliente}", name="brs_tur_buscar_puesto")
      */    
     public function listaAction($campoCodigo, $codigoCliente) {
         $em = $this->getDoctrine()->getManager();
