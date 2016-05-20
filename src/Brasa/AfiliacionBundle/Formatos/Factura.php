@@ -95,7 +95,7 @@ class Factura extends \FPDF_FPDF {
             $arFactura->getFechaVence()->format('Y-m-d'),
             $arFactura->getClienteRel()->getFormaPagoRel()->getNombre(),
             $arFactura->getClienteRel()->getPlazoPago(),
-            substr ($arFactura->getSoporte(),0,6));
+            substr ($arFactura->getSoporte(),0,16));
         $this->SetXY(175,25);
         $this->SetFont('Arial', '', 14);        
         $this->Cell(30, 3, $arFactura->getNumero(), 0, 0, 'R'); 
