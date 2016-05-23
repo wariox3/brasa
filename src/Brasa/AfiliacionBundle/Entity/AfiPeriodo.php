@@ -38,6 +38,11 @@ class AfiPeriodo
     private $estadoGenerado = false;
 
     /**     
+     * @ORM\Column(name="estado_pago_generado", type="boolean")
+     */    
+    private $estadoPagoGenerado = false;    
+    
+    /**     
      * @ORM\Column(name="estado_cerrado", type="boolean")
      */    
     private $estadoCerrado = false;    
@@ -52,7 +57,11 @@ class AfiPeriodo
      * @ORM\OneToMany(targetEntity="AfiPeriodoDetalle", mappedBy="periodoRel")
      */
     protected $periodosDetallesPeriodoRel;     
-    
+   
+    /**
+     * @ORM\OneToMany(targetEntity="AfiPeriodoDetallePago", mappedBy="periodoRel")
+     */
+    protected $periodosDetallesPagosPeriodoRel;     
 
     /**
      * Constructor
@@ -248,5 +257,63 @@ class AfiPeriodo
     public function getPeriodosDetallesPeriodoRel()
     {
         return $this->periodosDetallesPeriodoRel;
+    }
+
+    /**
+     * Set estadoPagoGenerado
+     *
+     * @param boolean $estadoPagoGenerado
+     *
+     * @return AfiPeriodo
+     */
+    public function setEstadoPagoGenerado($estadoPagoGenerado)
+    {
+        $this->estadoPagoGenerado = $estadoPagoGenerado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagoGenerado
+     *
+     * @return boolean
+     */
+    public function getEstadoPagoGenerado()
+    {
+        return $this->estadoPagoGenerado;
+    }
+
+    /**
+     * Add periodosDetallesPagosPeriodoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosPeriodoRel
+     *
+     * @return AfiPeriodo
+     */
+    public function addPeriodosDetallesPagosPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosPeriodoRel)
+    {
+        $this->periodosDetallesPagosPeriodoRel[] = $periodosDetallesPagosPeriodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove periodosDetallesPagosPeriodoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosPeriodoRel
+     */
+    public function removePeriodosDetallesPagosPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosPeriodoRel)
+    {
+        $this->periodosDetallesPagosPeriodoRel->removeElement($periodosDetallesPagosPeriodoRel);
+    }
+
+    /**
+     * Get periodosDetallesPagosPeriodoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPeriodosDetallesPagosPeriodoRel()
+    {
+        return $this->periodosDetallesPagosPeriodoRel;
     }
 }

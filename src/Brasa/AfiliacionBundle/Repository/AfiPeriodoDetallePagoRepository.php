@@ -4,15 +4,15 @@ namespace Brasa\AfiliacionBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-class AfiPeriodoDetalleRepository extends EntityRepository {  
+class AfiPeriodoDetallePagoRepository extends EntityRepository {  
     
     public function listaDql($codigoPeriodo = "") {
         $em = $this->getEntityManager();
-        $dql   = "SELECT pd FROM BrasaAfiliacionBundle:AfiPeriodoDetalle pd WHERE pd.codigoPeriodoDetallePk <> 0";
+        $dql   = "SELECT pdp FROM BrasaAfiliacionBundle:AfiPeriodoDetallePago pdp WHERE pdp.codigoPeriodoDetallePagoPk <> 0";
         if($codigoPeriodo != "") {
-            $dql .= " AND pd.codigoPeriodoFk =" . $codigoPeriodo;
+            $dql .= " AND pdp.codigoPeriodoFk =" . $codigoPeriodo;
         }
-        $dql .= " ORDER BY pd.codigoPeriodoDetallePk";
+        $dql .= " ORDER BY pdp.codigoPeriodoDetallePagoPk";
         return $dql;
     }            
     

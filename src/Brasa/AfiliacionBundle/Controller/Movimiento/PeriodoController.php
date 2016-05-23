@@ -26,6 +26,12 @@ class PeriodoController extends Controller
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
             }
             
+            if($request->request->get('OpGenerarPago')) {            
+                $codigoPeriodo = $request->request->get('OpGenerarPago');
+                $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->generarPago($codigoPeriodo);
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
+            }            
+            
             if($request->request->get('OpDeshacer')) {            
                 $codigoPeriodo = $request->request->get('OpDeshacer');
                 $strSql = "DELETE FROM afi_periodo_detalle WHERE codigo_periodo_fk = " . $codigoPeriodo;           
@@ -37,6 +43,18 @@ class PeriodoController extends Controller
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
             }            
+            if($request->request->get('OpDeshacerPago')) {            
+                $codigoPeriodo = $request->request->get('OpDeshacerPago');
+                $strSql = "DELETE FROM afi_periodo_detalle_pago WHERE codigo_periodo_fk = " . $codigoPeriodo;           
+                $em->getConnection()->executeQuery($strSql);                 
+                $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
+                $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);                
+                $arPeriodo->setEstadoPagoGenerado(0);
+                $em->persist($arPeriodo);
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
+            }            
+            
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->eliminar($arrSeleccionados);
@@ -90,6 +108,8 @@ class PeriodoController extends Controller
     public function detalleAction(Request $request, $codigoPeriodo = '') {
         $em = $this->getDoctrine()->getManager();        
         $paginator  = $this->get('knp_paginator');
+        $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();                
+        $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);            
         $form = $this->formularioDetalle();
         $form->handleRequest($request);
         $this->listaDetalle($codigoPeriodo);
@@ -118,8 +138,12 @@ class PeriodoController extends Controller
         }
         
         $arPeriodoDetalles = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
+        $dql = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetallePago')->listaDQL($codigoPeriodo);         
+        $arPeriodoDetallesPagos = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 20);
         return $this->render('BrasaAfiliacionBundle:Movimiento/Periodo:detalle.html.twig', array(
+            'arPeriodo' => $arPeriodo, 
             'arPeriodoDetalles' => $arPeriodoDetalles, 
+            'arPeriodoDetallesPagos' => $arPeriodoDetallesPagos, 
             'form' => $form->createView()));
     }    
     
@@ -138,7 +162,7 @@ class PeriodoController extends Controller
                 $codigoPeriodo   
                 ); 
     }    
-
+    
     private function filtrar ($form) {        
         $session = $this->getRequest()->getSession();        
         $session->set('filtroPeriodoNombre', $form->get('TxtNombre')->getData());
@@ -161,6 +185,8 @@ class PeriodoController extends Controller
         $form = $this->createFormBuilder()                        
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))            
+            ->add('BtnDetallePagoEliminar', 'submit', array('label'  => 'Eliminar',))            
+            ->add('BtnDetallePagoExcel', 'submit', array('label'  => 'Excel',))                            
             ->getForm();
         return $form;
     }     

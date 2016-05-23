@@ -37,6 +37,7 @@
                 <th>DESDE</th>
                 <th>HASTA</th>
                 <th></th>
+                <th></th>
                 <th></th>                
                 <th></th>
                 <th></th>
@@ -50,21 +51,33 @@
                 <td>{{ arPeriodos.fechaDesde |date('Y/m/d') }}</td>
                 <td>{{ arPeriodos.fechaHasta |date('Y/m/d') }}</td>
                 {% if arPeriodos.estadoGenerado == 0 %}
-                    <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arPeriodos.codigoPeriodoPk }}">Generar</button></td>
+                    <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arPeriodos.codigoPeriodoPk }}">Generar cobro</button></td>                    
                     <td></td>                    
                     <td style="text-align: center"><a href="{{ path('brs_afi_movimiento_periodo_nuevo', {'codigoPeriodo': arPeriodos.codigoPeriodoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
                     <td></td>
                 {% else %}
                     {% if arPeriodos.estadoCerrado == 0 %}
-                        <td><button class="btn btn-default btn-xs" type="submit" name="OpDeshacer" value="{{ arPeriodos.codigoPeriodoPk }}">Deshacer</button></td>
-                        <td><button class="btn btn-default btn-xs" type="submit" name="OpCerrar" value="{{ arPeriodos.codigoPeriodoPk }}">Cerrar</button></td>
+                        <td><button class="btn btn-default btn-xs" type="submit" name="OpDeshacer" value="{{ arPeriodos.codigoPeriodoPk }}">Deshacer cobro</button></td>                                                
                     {% else %}                        
-                        <td></td>
                         <td></td>                        
                     {% endif %}
-                    <td></td>                                                    
-                    <td style="text-align: center"><a href="{{ path('brs_afi_movimiento_periodo_detalle', { 'codigoPeriodo': arPeriodos.codigoPeriodoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                            
-                {% endif %}                                                
+                    <td></td>                                                                        
+                {% endif %}                
+                {% if arPeriodos.estadoPagoGenerado == 0 %}
+                    <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerarPago" value="{{ arPeriodos.codigoPeriodoPk }}">Generar pago</button></td>
+                {% else %}
+                    {% if arPeriodos.estadoCerrado == 0 %}
+                        <td><button class="btn btn-default btn-xs" type="submit" name="OpDeshacerPago" value="{{ arPeriodos.codigoPeriodoPk }}">Deshacer pago</button></td>
+                    {% else %}                        
+                        <td></td>                        
+                    {% endif %}                        
+                {% endif %} 
+                {% if arPeriodos.estadoCerrado == 0 %}
+                    <td><button class="btn btn-default btn-xs" type="submit" name="OpCerrar" value="{{ arPeriodos.codigoPeriodoPk }}">Cerrar</button></td>
+                {% else %}                        
+                    <td></td>                        
+                {% endif %}                     
+                <td style="text-align: center"><a href="{{ path('brs_afi_movimiento_periodo_detalle', { 'codigoPeriodo': arPeriodos.codigoPeriodoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                            
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPeriodos.codigoPeriodoPk }}" /></td>
             </tr>
 

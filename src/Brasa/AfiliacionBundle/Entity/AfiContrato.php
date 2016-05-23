@@ -217,6 +217,10 @@ class AfiContrato
      */
     protected $periodosDetallesContratoRel;
 
+    /**
+     * @ORM\OneToMany(targetEntity="AfiPeriodoDetallePago", mappedBy="contratoRel")
+     */
+    protected $periodosDetallesPagosContratoRel;    
 
     /**
      * Constructor
@@ -1156,5 +1160,39 @@ class AfiContrato
     public function getPeriodosDetallesContratoRel()
     {
         return $this->periodosDetallesContratoRel;
+    }
+
+    /**
+     * Add periodosDetallesPagosContratoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosContratoRel
+     *
+     * @return AfiContrato
+     */
+    public function addPeriodosDetallesPagosContratoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosContratoRel)
+    {
+        $this->periodosDetallesPagosContratoRel[] = $periodosDetallesPagosContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove periodosDetallesPagosContratoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosContratoRel
+     */
+    public function removePeriodosDetallesPagosContratoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosContratoRel)
+    {
+        $this->periodosDetallesPagosContratoRel->removeElement($periodosDetallesPagosContratoRel);
+    }
+
+    /**
+     * Get periodosDetallesPagosContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPeriodosDetallesPagosContratoRel()
+    {
+        return $this->periodosDetallesPagosContratoRel;
     }
 }

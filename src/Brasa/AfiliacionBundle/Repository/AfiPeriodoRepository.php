@@ -29,12 +29,11 @@ class AfiPeriodoRepository extends EntityRepository {
         $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();                
         $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
         $administracion = $arPeriodo->getClienteRel()->getAdministracion();
+        $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
+        $salarioMinimo = $arConfiguracion->getVrSalario();
         $arContratos = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->contratosPeriodo($arPeriodo->getFechaDesde()->format('Y/m/d'), $arPeriodo->getFechaHasta()->format('Y/m/d'), $arPeriodo->getCodigoClienteFk());      
         foreach($arContratos as $arContrato) {
-            //$arContrato = new \Brasa\AfiliacionBundle\Entity\AfiContrato();
-            $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
-            $salarioMinimo = $arConfiguracion->getVrSalario();
-            
+            //$arContrato = new \Brasa\AfiliacionBundle\Entity\AfiContrato();            
             $porcentajeIcbf = 3;
             $porcentajeSena = 2;
             $intDias = $this->diasContrato($arPeriodo, $arContrato);
@@ -89,6 +88,32 @@ class AfiPeriodoRepository extends EntityRepository {
         $em->persist($arPeriodo);
         $em->flush();        
     }
+    
+    public function generarPago($codigoPeriodo) {
+        $em = $this->getEntityManager();
+        $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();                
+        $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);    
+        $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
+        $salarioMinimo = $arConfiguracion->getVrSalario();  
+        $secuencia = 1;
+        $arContratos = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->contratosPeriodo($arPeriodo->getFechaDesde()->format('Y/m/d'), $arPeriodo->getFechaHasta()->format('Y/m/d'), $arPeriodo->getCodigoClienteFk());      
+        foreach($arContratos as $arContrato) {            
+            $arPeriodoDetallePago = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago();
+            $arPeriodoDetallePago->setPeriodoRel($arPeriodo);
+            $arPeriodoDetallePago->setEmpleadoRel($arContrato->getEmpleadoRel());
+            $arPeriodoDetallePago->setContratoRel($arContrato);
+            $arPeriodoDetallePago->setTipoRegistro(2);
+            $arPeriodoDetallePago->setSecuencia($secuencia);
+            $arPeriodoDetallePago->setTipoDocumento($arContrato->getEmpleadoRel()->getTipoIdentificacionRel()->getCodigoInterface());
+            $arPeriodoDetallePago->setTipoCotizante($arContrato->getCodigoTipoCotizanteFk());
+            $arPeriodoDetallePago->setSubtipoCotizante($arContrato->getCodigoSubtipoCotizanteFk());
+            $em->persist($arPeriodoDetallePago);            
+            $secuencia++;
+        }  
+        $arPeriodo->setEstadoPagoGenerado(1);
+        $em->persist($arPeriodo);
+        $em->flush();        
+    }    
     
     public function diasContrato($arPeriodo, $arContrato) {        
         $dateFechaDesde =  "";

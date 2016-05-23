@@ -173,6 +173,11 @@ class AfiEmpleado
     protected $periodosDetallesEmpleadoRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="AfiPeriodoDetallePago", mappedBy="empleadoRel")
+     */
+    protected $periodosDetallesPagosEmpleadoRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="AfiCurso", mappedBy="empleadoRel")
      */
     protected $cursosEmpleadoRel;    
@@ -944,5 +949,39 @@ class AfiEmpleado
     public function getClienteRel()
     {
         return $this->clienteRel;
+    }
+
+    /**
+     * Add periodosDetallesPagosEmpleadoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosEmpleadoRel
+     *
+     * @return AfiEmpleado
+     */
+    public function addPeriodosDetallesPagosEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosEmpleadoRel)
+    {
+        $this->periodosDetallesPagosEmpleadoRel[] = $periodosDetallesPagosEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove periodosDetallesPagosEmpleadoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosEmpleadoRel
+     */
+    public function removePeriodosDetallesPagosEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosEmpleadoRel)
+    {
+        $this->periodosDetallesPagosEmpleadoRel->removeElement($periodosDetallesPagosEmpleadoRel);
+    }
+
+    /**
+     * Get periodosDetallesPagosEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPeriodosDetallesPagosEmpleadoRel()
+    {
+        return $this->periodosDetallesPagosEmpleadoRel;
     }
 }

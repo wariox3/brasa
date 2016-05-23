@@ -380,6 +380,9 @@ class RhuPagoRepository extends EntityRepository {
         $query = $em->createQuery($dql);
         $arrayResultado = $query->getResult();
         $floSuplementario = $arrayResultado[0]['suplementario'];
+        if($floSuplementario == null) {
+            $floSuplementario = 0;
+        }
         return $floSuplementario;
     }
     
