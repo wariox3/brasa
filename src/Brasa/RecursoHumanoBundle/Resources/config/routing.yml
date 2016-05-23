@@ -676,7 +676,15 @@ brs_rhu_examen_detalle_nuevo:
 
 brs_rhu_examen_detalle_nuevo_comentario:
    path:     /rhu/examen/detalle/nuevo/comentario/{codigoExamenDetalle}
-   defaults: { _controller: BrasaRecursoHumanoBundle:Examen:detalleNuevoComentario }   
+   defaults: { _controller: BrasaRecursoHumanoBundle:Examen:detalleNuevoComentario }
+   
+brs_rhu_examen_restriccion_medica_editar:
+    path:     /rhu/examen/restriccion/medica/editar/{codigoExamen}/{codigoRestriccionMedica}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Examen:editarRestriccionMedica } 
+    
+brs_rhu_examen_restriccion_medica_agregar:
+    path:     /rhu/examen/restriccion/medica/agregar/{codigoExamen}/{codigoRestriccionMedica}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Examen:agregarRestriccionMedica }    
    
 brs_rhu_base_entidadexamen_listar:
    path:     /rhu/base/entidadexamen/listar

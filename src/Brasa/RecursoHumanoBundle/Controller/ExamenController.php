@@ -6,6 +6,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuExamenType;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuExamenControlType;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuExamenDetalleType;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuExamenRestriccionMedicaType;
+
 class ExamenController extends Controller
 {
     var $strListaDql = "";
@@ -232,19 +234,29 @@ class ExamenController extends Controller
                     $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->liquidar($codigoExamen);
                     return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));
                 }    
-            }            
+            }
+            if($form->get('BtnEliminarRestriccion')->isClicked()) {
+                /*if($arExamen->getEstadoAutorizado() == 0) {
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->liquidar($codigoExamen);
+                    return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));
+                } */   
+            }
         }
 
 
         $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
         $arExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->findBy(array ('codigoExamenFk' => $codigoExamen));
+        $arExamenRestriccionesMedicas = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedica();
+        $arExamenRestriccionesMedicas = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenRestriccionMedica')->findBy(array ('codigoExamenFk' => $codigoExamen));
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Examen:detalle.html.twig', array(
                     'arExamen' => $arExamen,
                     'arExamenDetalle' => $arExamenDetalle,
+                    'arExamenRestriccionesMedicas' => $arExamenRestriccionesMedicas,
                     'form' => $form->createView()
                     ));
     }
-
+    
     public function detalleNuevoAction($codigoExamen) {
         $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
@@ -304,7 +316,85 @@ class ExamenController extends Controller
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Examen:detalleNuevoComentario.html.twig', array(
             'form' => $form->createView()));
-    }    
+    }
+
+    public function agregarRestriccionMedicaAction($codigoExamen,$codigoRestriccionMedica) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
+        $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
+        $arExamenRestriccionMedica = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedica();
+        $arExamenRestriccionMedicaTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedicaTipo();
+        $arExamenRestriccionMedicaTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenRestriccionMedicaTipo')->findAll();
+        $form = $this->createForm(new RhuExamenRestriccionMedicaType(), $arExamenRestriccionMedica);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            if ($arExamen->getEstadoAutorizado() == 0){
+                $arUsuario = $this->get('security.context')->getToken()->getUser();
+                $arExamenRestriccionMedica = $form->getData();
+                $arExamenRestriccionMedica->setExamenRel($arExamen);
+                $arExamenRestriccionMedica->setFecha(new \DateTime('now'));
+                $arExamenRestriccionMedica->setCodigoUsuario($arUsuario->getUserName());
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados AS $codigoExamenRestriccionMedicaDetalle) {
+                            $arExamenRestriccionMedicaDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedicaDetalle();
+                            $arExamenRestriccionMedicaDetalle->setExamenRestriccionMedicaDetalleRel($arExamenRestriccionMedica);
+                            $arExamenRestriccionMedicaTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedicaTipo;
+                            $arExamenRestriccionMedicaTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenRestriccionMedicaTipo')->find($codigoExamenRestriccionMedicaDetalle);
+                            $arExamenRestriccionMedicaDetalle->setExamenRestriccionMedicaTipoRel($arExamenRestriccionMedicaTipo);
+                            $em->persist($arExamenRestriccionMedicaDetalle);
+                        }
+                        $em->persist($arExamenRestriccionMedica);
+                        $em->flush();
+                        echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                    }
+                    else {
+                        $objMensaje->Mensaje("error", "Debe selecionar al menos un tipo de restricción medica", $this);
+                    }
+                
+                if($form->get('guardarnuevo')->isClicked()) {
+                    return $this->redirect($this->generateUrl('brs_rhu_examen_restriccion_medica_agregar', array('codigoExamen' => $codigoExamen, 'codigoRestriccionMedica' => 0)));
+                }
+            } else {    
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+              }  
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Examen:agregarRestriccion.html.twig', array(
+            'form' => $form->createView(),
+            'arExamenRestriccionMedicaTipos' => $arExamenRestriccionMedicaTipos
+            ));
+    }
+    
+    public function editarRestriccionMedicaAction($codigoExamen,$codigoRestriccionMedica) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
+        $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
+        $arExamenRestriccionMedica = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedica();
+        $arExamenRestriccionMedicaDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedicaDetalle();
+        if($codigoRestriccionMedica != 0) {
+            $arExamenRestriccionMedica = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenRestriccionMedica')->find($codigoRestriccionMedica);
+            $arExamenRestriccionMedicaDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenRestriccionMedicaDetalle')->findBy(array('codigoExamenRestriccionMedicaFk' => $arExamenRestriccionMedica->getCodigoExamenRestriccionMedicaPk()));
+        }
+        $form = $this->createForm(new RhuExamenRestriccionMedicaType(), $arExamenRestriccionMedica);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            if ($arExamen->getEstadoAutorizado() == 1){
+                $arExamenRestriccionMedica = $form->getData();
+                $arExamenRestriccionMedica->setExamenRel($arExamen);
+                $em->persist($arExamenRestriccionMedica);
+                $em->flush();
+            } else {    
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+              }  
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Examen:editarRestriccion.html.twig', array(
+            'form' => $form->createView(),
+            'arExamenRestriccionMedicaDetalles' => $arExamenRestriccionMedicaDetalles
+            ));
+    }
     
     private function listar() {
         $session = $this->getRequest()->getSession();
@@ -365,6 +455,7 @@ class ExamenController extends Controller
         $arrBotonActualizarDetalle = array('label' => 'Actualizar', 'disabled' => false);
         $arrBotonAprobarDetalle = array('label' => 'Aprobar', 'disabled' => false);
         $arrBotonCerrarDetalle = array('label' => 'Cerrar', 'disabled' => true);
+        $arrBotonEliminarRestriccion = array('label' => 'Eliminar', 'disabled' => true);
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;            
             $arrBotonEliminarDetalle['disabled'] = true;
@@ -389,7 +480,8 @@ class ExamenController extends Controller
                     ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)
                     ->add('BtnActualizarDetalle', 'submit', $arrBotonActualizarDetalle)    
                     ->add('BtnAprobarDetalle', 'submit', $arrBotonAprobarDetalle)                                
-                    ->add('BtnCerrarDetalle', 'submit', $arrBotonCerrarDetalle)                                
+                    ->add('BtnCerrarDetalle', 'submit', $arrBotonCerrarDetalle)
+                    ->add('BtnEliminarRestriccion', 'submit', $arrBotonEliminarRestriccion)
                     ->getForm();  
         return $form;
     }

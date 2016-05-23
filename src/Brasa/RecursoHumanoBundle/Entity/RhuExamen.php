@@ -181,6 +181,10 @@ class RhuExamen
      */
     protected $pagosExamenesDetallesExamenRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuExamenRestriccionMedica", mappedBy="examenRel")
+     */
+    protected $examenesExamenRestriccionMedicaRel;
     
     
     /**
@@ -190,6 +194,7 @@ class RhuExamen
     {
         $this->examenesExamenDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosExamenesDetallesExamenRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->examenesExamenRestriccionMedicaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -707,6 +712,30 @@ class RhuExamen
     }
 
     /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuExamen
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
+    }
+
+    /**
      * Set examenClaseRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamenClase $examenClaseRel
@@ -943,26 +972,36 @@ class RhuExamen
     }
 
     /**
-     * Set codigoUsuario
+     * Add examenesExamenRestriccionMedicaRel
      *
-     * @param string $codigoUsuario
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedica $examenesExamenRestriccionMedicaRel
      *
      * @return RhuExamen
      */
-    public function setCodigoUsuario($codigoUsuario)
+    public function addExamenesExamenRestriccionMedicaRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedica $examenesExamenRestriccionMedicaRel)
     {
-        $this->codigoUsuario = $codigoUsuario;
+        $this->examenesExamenRestriccionMedicaRel[] = $examenesExamenRestriccionMedicaRel;
 
         return $this;
     }
 
     /**
-     * Get codigoUsuario
+     * Remove examenesExamenRestriccionMedicaRel
      *
-     * @return string
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedica $examenesExamenRestriccionMedicaRel
      */
-    public function getCodigoUsuario()
+    public function removeExamenesExamenRestriccionMedicaRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedica $examenesExamenRestriccionMedicaRel)
     {
-        return $this->codigoUsuario;
+        $this->examenesExamenRestriccionMedicaRel->removeElement($examenesExamenRestriccionMedicaRel);
+    }
+
+    /**
+     * Get examenesExamenRestriccionMedicaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExamenesExamenRestriccionMedicaRel()
+    {
+        return $this->examenesExamenRestriccionMedicaRel;
     }
 }

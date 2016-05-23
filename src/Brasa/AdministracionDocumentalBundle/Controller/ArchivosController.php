@@ -59,7 +59,7 @@ class ArchivosController extends Controller
         return $this->render('BrasaAdministracionDocumentalBundle:Archivos:cargar.html.twig', array(
             'form' => $form->createView()
             ));
-    }    
+    } 
     
     public function descargarAction($codigoArchivo) {
         $em = $this->getDoctrine()->getManager();
@@ -76,6 +76,55 @@ class ArchivosController extends Controller
         $response->headers->set('Content-length', $arArchivo->getTamano());        
         $response->sendHeaders();
         $response->setContent(readfile($strRuta));        
+              
+    }
+    
+    public function enviarAction($codigoDocumento, $numero,$codigoArchivo) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $objMensaje = $this->get('mensajes_brasa'); 
+        $arArchivo = new \Brasa\AdministracionDocumentalBundle\Entity\AdArchivo();
+        $arArchivo = $em->getRepository('BrasaAdministracionDocumentalBundle:AdArchivo')->find($codigoArchivo);
+        $strRuta = $arArchivo->getDirectorioRel()->getRutaPrincipal() . $arArchivo->getDirectorioRel()->getNumero() . "/" . $arArchivo->getCodigoArchivoPk() . "_" . $arArchivo->getNombre();
+        
+        $form = $this->createFormBuilder()
+            ->add('asunto', 'text', array('required' => true))
+            ->add('email', 'text', array('required' => true))
+            ->add('mensaje', 'textarea', array('required' => true)) 
+            ->add('BtnEnviar', 'submit', array('label'  => 'Enviar'))
+            ->getForm();
+        $form->handleRequest($request);
+        if($form->isValid()) {
+            if($form->get('BtnEnviar')->isClicked()) {                
+                /*$objArchivo = $form['attachment']->getData();
+                if($objArchivo->getClientOriginalExtension() == 'pdf') {
+                    $arArchivo = new \Brasa\AdministracionDocumentalBundle\Entity\AdArchivo();                    
+                    $arArchivo->setNombre($objArchivo->getClientOriginalName());
+                    $arArchivo->setExtensionOriginal($objArchivo->getClientOriginalExtension());                
+                    $arArchivo->setTamano($objArchivo->getClientSize());
+                    $arArchivo->setTipo($objArchivo->getClientMimeType());
+                    $arArchivo->setDocumentoRel($em->getRepository('BrasaAdministracionDocumentalBundle:AdDocumento')->find($codigoDocumento));               
+                    $arArchivo->setNumero($numero);
+                    $arArchivo->setDescripcion($form->get('descripcion')->getData());
+                    $arArchivo->setComentarios($form->get('comentarios')->getData());
+                    $arDirectorio = $em->getRepository('BrasaAdministracionDocumentalBundle:AdDirectorio')->devolverDirectorio();
+                    $arArchivo->setDirectorioRel($arDirectorio);                    
+                    $em->persist($arArchivo);
+                    $em->flush();
+                    $strDestino = $arDirectorio->getRutaPrincipal() . $arDirectorio->getNumero() . "/";
+                    $strArchivo = $arArchivo->getCodigoArchivoPk() . "_" . $objArchivo->getClientOriginalName();
+                    $form['attachment']->getData()->move($strDestino, $strArchivo);                    
+                    return $this->redirect($this->generateUrl('brs_ad_archivos_lista', array('codigoDocumento' => $codigoDocumento, 'numero' => $numero)));
+                } else {
+                    $objMensaje->Mensaje("error", "Solo se pueden cargar arhivos pdf", $this);
+                }*/
+            }                                   
+        }         
+        return $this->render('BrasaAdministracionDocumentalBundle:Archivos:enviar.html.twig', array(
+            'form' => $form->createView(),
+            'codigoDocumento' => $codigoDocumento,
+            'numero' => $numero,
+            ));
               
     }
 }

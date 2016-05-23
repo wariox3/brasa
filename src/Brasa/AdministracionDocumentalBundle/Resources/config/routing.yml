@@ -9,3 +9,7 @@ brs_ad_archivos_cargar:
 brs_ad_archivos_descargar:
    path:     /ad/archivos/descargar/{codigoArchivo}
    defaults: { _controller: BrasaAdministracionDocumentalBundle:Archivos:descargar } 
+   
+brs_ad_archivos_enviar:
+   path:     /ad/archivos/enviar/{codigoDocumento}/{numero}/{codigoArchivo}
+   defaults: { _controller: BrasaAdministracionDocumentalBundle:Archivos:enviar }   
