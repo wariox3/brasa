@@ -43,10 +43,7 @@ class AfiServicio
      */
     protected $clienteRel;    
 
-    /**
-     * @ORM\OneToMany(targetEntity="AfiFacturaDetalle", mappedBy="servicioRel")
-     */
-    protected $facturasDetallesServicioRel;     
+
 
     /**
      * Get codigoServicioPk
@@ -176,46 +173,5 @@ class AfiServicio
     public function getClienteRel()
     {
         return $this->clienteRel;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->facturasDetallesServicioRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add facturasDetallesServicioRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle $facturasDetallesServicioRel
-     *
-     * @return AfiServicio
-     */
-    public function addFacturasDetallesServicioRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle $facturasDetallesServicioRel)
-    {
-        $this->facturasDetallesServicioRel[] = $facturasDetallesServicioRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove facturasDetallesServicioRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle $facturasDetallesServicioRel
-     */
-    public function removeFacturasDetallesServicioRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle $facturasDetallesServicioRel)
-    {
-        $this->facturasDetallesServicioRel->removeElement($facturasDetallesServicioRel);
-    }
-
-    /**
-     * Get facturasDetallesServicioRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFacturasDetallesServicioRel()
-    {
-        return $this->facturasDetallesServicioRel;
     }
 }

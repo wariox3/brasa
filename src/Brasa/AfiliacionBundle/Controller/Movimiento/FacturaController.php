@@ -184,24 +184,28 @@ class FacturaController extends Controller
             $arrSeleccionados = $request->request->get('ChkSeleccionar');                                      
             if ($form->get('BtnGuardar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                foreach ($arrSeleccionados as $codigoServicio) {
-                    $arServicio = new \Brasa\AfiliacionBundle\Entity\AfiServicio();
-                    $arServicio = $em->getRepository('BrasaAfiliacionBundle:AfiServicio')->find($codigoServicio);
+                foreach ($arrSeleccionados as $codigoPeriodo) {
+                    $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
+                    $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
                     $arFacturaDetalle = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();
-                    $arFacturaDetalle->setFacturaRel($arFactura);          
-                    $arFacturaDetalle->setServicioRel($arServicio);
-                    $arFacturaDetalle->setCurso($arServicio->getPendiente());
-                    $em->persist($arFacturaDetalle);                    
+                    $arFacturaDetalle->setFacturaRel($arFactura);                          
+                    $arFacturaDetalle->setPeriodoRel($arPeriodo);    
+                    $arFacturaDetalle->setPrecio($arPeriodo->getTotal());
+                    $arFacturaDetalle->setTotal($arPeriodo->getTotal());
+                    $em->persist($arFacturaDetalle); 
+                    $arPeriodo->setEstadoFacturado(1);
+                    $em->persist($arPeriodo);
                 }
                 $em->flush();
+                $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->liquidar($codigoFactura);
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }
         }
-        $dqlServiciosPendientes = $em->getRepository('BrasaAfiliacionBundle:AfiServicio')->pendienteDql($arFactura->getCodigoClienteFk());
-        $arServicios = $paginator->paginate($em->createQuery($dqlServiciosPendientes), $request->query->get('page', 1), 20);
+        $dqlPeriodosPendientes = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->pendienteDql($arFactura->getCodigoClienteFk());
+        $arPeriodos = $paginator->paginate($em->createQuery($dqlPeriodosPendientes), $request->query->get('page', 1), 20);
         return $this->render('BrasaAfiliacionBundle:Movimiento/Factura:detalleNuevo.html.twig', array(
             'arFactura' => $arFactura, 
-            'arServicios' => $arServicios, 
+            'arPeriodos' => $arPeriodos, 
             'form' => $form->createView()));
     }        
 

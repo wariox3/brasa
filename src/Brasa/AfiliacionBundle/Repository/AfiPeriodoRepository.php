@@ -31,6 +31,14 @@ class AfiPeriodoRepository extends EntityRepository {
         $administracion = $arPeriodo->getClienteRel()->getAdministracion();
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
         $salarioMinimo = $arConfiguracion->getVrSalario();
+        $totalPension = 0;
+        $totalSalud = 0;
+        $totalCaja = 0;
+        $totalRiesgos = 0;
+        $totalSena = 0;
+        $totalIcbf = 0;  
+        $totalAdministracion = 0;
+        $totalGeneral = 0;
         $arContratos = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->contratosPeriodo($arPeriodo->getFechaDesde()->format('Y/m/d'), $arPeriodo->getFechaHasta()->format('Y/m/d'), $arPeriodo->getCodigoClienteFk());      
         foreach($arContratos as $arContrato) {
             //$arContrato = new \Brasa\AfiliacionBundle\Entity\AfiContrato();            
@@ -81,10 +89,26 @@ class AfiPeriodoRepository extends EntityRepository {
             if($arContrato->getFechaDesde() >= $arPeriodo->getFechaDesde()) {
                 $arPeriodoDetalle->setIngreso(1);
             }
-            $em->persist($arPeriodoDetalle);            
+            $em->persist($arPeriodoDetalle); 
+            $totalPension += $pension;
+            $totalSalud += $salud;
+            $totalCaja += $caja;
+            $totalRiesgos += $riesgos;
+            $totalSena += $sena;
+            $totalIcbf += $icbf;             
+            $totalAdministracion += $administracion;
+            $totalGeneral += $total;
         }
             
         $arPeriodo->setEstadoGenerado(1);
+        $arPeriodo->setPension($totalPension);
+        $arPeriodo->setSalud($totalSalud);
+        $arPeriodo->setCaja($totalCaja);
+        $arPeriodo->setRiesgos($totalRiesgos);
+        $arPeriodo->setSena($totalSena);
+        $arPeriodo->setIcbf($totalIcbf);
+        $arPeriodo->setAdministracion($totalAdministracion);
+        $arPeriodo->setTotal($totalGeneral);
         $em->persist($arPeriodo);
         $em->flush();        
     }
@@ -156,4 +180,10 @@ class AfiPeriodoRepository extends EntityRepository {
         }         
         return $intDiasDevolver;
     }
+    
+    public function pendienteDql($codigoCliente) {        
+        $dql   = "SELECT p FROM BrasaAfiliacionBundle:AfiPeriodo p WHERE p.estadoFacturado = 0 AND p.codigoClienteFk = " . $codigoCliente;
+        $dql .= " ORDER BY p.codigoPeriodoPk DESC";
+        return $dql;
+    }                    
 }

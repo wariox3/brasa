@@ -26,6 +26,11 @@ class AfiFacturaDetalle
      * @ORM\Column(name="codigo_servicio_fk", type="integer")
      */    
     private $codigoServicioFk; 
+
+    /**
+     * @ORM\Column(name="codigo_periodo_fk", type="integer")
+     */    
+    private $codigoPeriodoFk;
     
     /**
      * @ORM\Column(name="precio", type="float")
@@ -41,14 +46,16 @@ class AfiFacturaDetalle
      * @ORM\ManyToOne(targetEntity="AfiFactura", inversedBy="facturasDetallesFacturaRel")
      * @ORM\JoinColumn(name="codigo_factura_fk", referencedColumnName="codigo_factura_pk")
      */
-    protected $facturaRel;    
+    protected $facturaRel;         
     
     /**
-     * @ORM\ManyToOne(targetEntity="AfiServicio", inversedBy="facturasDetallesServicioRel")
-     * @ORM\JoinColumn(name="codigo_servicio_fk", referencedColumnName="codigo_servicio_pk")
+     * @ORM\ManyToOne(targetEntity="AfiPeriodo", inversedBy="facturasDetallesPeriodoRel")
+     * @ORM\JoinColumn(name="codigo_periodo_fk", referencedColumnName="codigo_periodo_pk")
      */
-    protected $servicioRel; 
+    protected $periodoRel;    
     
+
+
     /**
      * Get codigoFacturaDetallePk
      *
@@ -84,30 +91,6 @@ class AfiFacturaDetalle
     }
 
     /**
-     * Set facturaRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiFactura $facturaRel
-     *
-     * @return AfiFacturaDetalle
-     */
-    public function setFacturaRel(\Brasa\AfiliacionBundle\Entity\AfiFactura $facturaRel = null)
-    {
-        $this->facturaRel = $facturaRel;
-
-        return $this;
-    }
-
-    /**
-     * Get facturaRel
-     *
-     * @return \Brasa\AfiliacionBundle\Entity\AfiFactura
-     */
-    public function getFacturaRel()
-    {
-        return $this->facturaRel;
-    }
-
-    /**
      * Set codigoServicioFk
      *
      * @param integer $codigoServicioFk
@@ -129,6 +112,30 @@ class AfiFacturaDetalle
     public function getCodigoServicioFk()
     {
         return $this->codigoServicioFk;
+    }
+
+    /**
+     * Set codigoPeriodoFk
+     *
+     * @param integer $codigoPeriodoFk
+     *
+     * @return AfiFacturaDetalle
+     */
+    public function setCodigoPeriodoFk($codigoPeriodoFk)
+    {
+        $this->codigoPeriodoFk = $codigoPeriodoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPeriodoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPeriodoFk()
+    {
+        return $this->codigoPeriodoFk;
     }
 
     /**
@@ -180,26 +187,50 @@ class AfiFacturaDetalle
     }
 
     /**
-     * Set servicioRel
+     * Set facturaRel
      *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiServicio $servicioRel
+     * @param \Brasa\AfiliacionBundle\Entity\AfiFactura $facturaRel
      *
      * @return AfiFacturaDetalle
      */
-    public function setServicioRel(\Brasa\AfiliacionBundle\Entity\AfiServicio $servicioRel = null)
+    public function setFacturaRel(\Brasa\AfiliacionBundle\Entity\AfiFactura $facturaRel = null)
     {
-        $this->servicioRel = $servicioRel;
+        $this->facturaRel = $facturaRel;
 
         return $this;
     }
 
     /**
-     * Get servicioRel
+     * Get facturaRel
      *
-     * @return \Brasa\AfiliacionBundle\Entity\AfiServicio
+     * @return \Brasa\AfiliacionBundle\Entity\AfiFactura
      */
-    public function getServicioRel()
+    public function getFacturaRel()
     {
-        return $this->servicioRel;
+        return $this->facturaRel;
+    }
+
+    /**
+     * Set periodoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodo $periodoRel
+     *
+     * @return AfiFacturaDetalle
+     */
+    public function setPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodo $periodoRel = null)
+    {
+        $this->periodoRel = $periodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get periodoRel
+     *
+     * @return \Brasa\AfiliacionBundle\Entity\AfiPeriodo
+     */
+    public function getPeriodoRel()
+    {
+        return $this->periodoRel;
     }
 }
