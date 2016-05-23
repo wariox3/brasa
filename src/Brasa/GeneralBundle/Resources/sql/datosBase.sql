@@ -5414,6 +5414,10 @@ insert into `rhu_examen_lista_precio` (`codigo_examen_lista_precio_pk`, `codigo_
 
 INSERT INTO `rhu_sso_sucursal` (`codigo_sucursal_pk`, `nombre`, `codigo_interface`) values('1','MEDELLIN','1010');
 
+/** Afiliacion **/
+insert into `afi_factura_tipo` (`codigo_factura_tipo_pk`, `nombre`) values('1','FACTURA VENTA');
+insert into `afi_factura_tipo` (`codigo_factura_tipo_pk`, `nombre`) values('2','CUENTA COBRO');
+
 /** Seguridad **/
 
 insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('1','Crear contratos despues de pagado el periodo','PROCESO','RECURSO HUMANO');
