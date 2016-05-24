@@ -223,6 +223,11 @@ class AfiContrato
     protected $periodosDetallesPagosContratoRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="AfiNovedad", mappedBy="contratoRel")
+     */
+    protected $novedadesContratoRel;    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -1194,5 +1199,39 @@ class AfiContrato
     public function getPeriodosDetallesPagosContratoRel()
     {
         return $this->periodosDetallesPagosContratoRel;
+    }
+
+    /**
+     * Add novedadesContratoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiNovedad $novedadesContratoRel
+     *
+     * @return AfiContrato
+     */
+    public function addNovedadesContratoRel(\Brasa\AfiliacionBundle\Entity\AfiNovedad $novedadesContratoRel)
+    {
+        $this->novedadesContratoRel[] = $novedadesContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove novedadesContratoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiNovedad $novedadesContratoRel
+     */
+    public function removeNovedadesContratoRel(\Brasa\AfiliacionBundle\Entity\AfiNovedad $novedadesContratoRel)
+    {
+        $this->novedadesContratoRel->removeElement($novedadesContratoRel);
+    }
+
+    /**
+     * Get novedadesContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNovedadesContratoRel()
+    {
+        return $this->novedadesContratoRel;
     }
 }

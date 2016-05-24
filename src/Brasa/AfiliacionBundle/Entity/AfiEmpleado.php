@@ -123,6 +123,11 @@ class AfiEmpleado
     private $comentarios;             
         
     /**
+     * @ORM\Column(name="codigo_contrato_activo", type="integer", nullable=true)
+     */
+    private $codigoContratoActivo; 
+    
+    /**
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
      */    
     private $codigoUsuario;
@@ -180,7 +185,13 @@ class AfiEmpleado
     /**
      * @ORM\OneToMany(targetEntity="AfiCurso", mappedBy="empleadoRel")
      */
-    protected $cursosEmpleadoRel;    
+    protected $cursosEmpleadoRel;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AfiNovedad", mappedBy="empleadoRel")
+     */
+    protected $novedadesEmpleadoRel;
+    
     /**
      * Constructor
      */
@@ -983,5 +994,63 @@ class AfiEmpleado
     public function getPeriodosDetallesPagosEmpleadoRel()
     {
         return $this->periodosDetallesPagosEmpleadoRel;
+    }
+
+    /**
+     * Add novedadesEmpleadoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiNovedad $novedadesEmpleadoRel
+     *
+     * @return AfiEmpleado
+     */
+    public function addNovedadesEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiNovedad $novedadesEmpleadoRel)
+    {
+        $this->novedadesEmpleadoRel[] = $novedadesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove novedadesEmpleadoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiNovedad $novedadesEmpleadoRel
+     */
+    public function removeNovedadesEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiNovedad $novedadesEmpleadoRel)
+    {
+        $this->novedadesEmpleadoRel->removeElement($novedadesEmpleadoRel);
+    }
+
+    /**
+     * Get novedadesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNovedadesEmpleadoRel()
+    {
+        return $this->novedadesEmpleadoRel;
+    }
+
+    /**
+     * Set codigoContratoActivo
+     *
+     * @param integer $codigoContratoActivo
+     *
+     * @return AfiEmpleado
+     */
+    public function setCodigoContratoActivo($codigoContratoActivo)
+    {
+        $this->codigoContratoActivo = $codigoContratoActivo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoActivo
+     *
+     * @return integer
+     */
+    public function getCodigoContratoActivo()
+    {
+        return $this->codigoContratoActivo;
     }
 }

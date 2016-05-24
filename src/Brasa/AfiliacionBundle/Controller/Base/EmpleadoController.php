@@ -130,9 +130,16 @@ class EmpleadoController extends Controller
         }        
         $form = $this->createForm(new AfiContratoType, $arContrato);
         $form->handleRequest($request);
-        if ($form->isValid()) {            
+        if ($form->isValid()) {      
             $em->persist($arContrato);
-            $em->flush();            
+            $em->flush();
+            if($codigoContrato == 0 || $codigoContrato == '') {
+                $arEmpleado = new \Brasa\AfiliacionBundle\Entity\AfiEmpleado();
+                $arEmpleado = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->find($codigoEmpleado);                            
+                $arEmpleado->setCodigoContratoActivo($arContrato->getCodigoContratoPk());
+                $em->persist($arEmpleado);
+                $em->flush();
+            }                                    
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                  
         }
         return $this->render('BrasaAfiliacionBundle:Base/Empleado:contratoNuevo.html.twig', array(
