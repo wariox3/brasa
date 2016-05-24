@@ -7,6 +7,7 @@ DELETE FROM afi_pago_curso;
 DELETE FROM afi_factura_detalle;
 DELETE FROM afi_factura_detalle_curso;
 DELETE FROM afi_factura;
+DELETE FROM afi_periodo_detalle_pago;
 DELETE FROM afi_periodo_detalle;
 DELETE FROM afi_periodo;
 DELETE FROM afi_curso_detalle;

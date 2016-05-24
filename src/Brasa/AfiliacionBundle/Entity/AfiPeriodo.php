@@ -25,12 +25,37 @@ class AfiPeriodo
     /**
      * @ORM\Column(name="fecha_hasta", type="date", nullable=true)
      */    
-    private $fechaHasta; 
-
+    private $fechaHasta;     
+    
+    /**
+     * @ORM\Column(name="fecha_pago", type="date", nullable=true)
+     */    
+    private $fechaPago;    
+    
     /**
      * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
      */    
     private $codigoClienteFk;    
+
+    /**
+     * @ORM\Column(name="anio", type="integer", nullable=true)
+     */    
+    private $anio;
+    
+    /**
+     * @ORM\Column(name="mes", type="integer", nullable=true)
+     */    
+    private $mes;    
+
+    /**
+     * @ORM\Column(name="anio_pago", type="integer", nullable=true)
+     */    
+    private $anioPago;
+    
+    /**
+     * @ORM\Column(name="mes_pago", type="integer", nullable=true)
+     */    
+    private $mesPago;
     
     /**     
      * @ORM\Column(name="estado_facturado", type="boolean")
@@ -615,5 +640,125 @@ class AfiPeriodo
     public function getFacturasDetallesPeriodoRel()
     {
         return $this->facturasDetallesPeriodoRel;
+    }
+
+    /**
+     * Set anio
+     *
+     * @param integer $anio
+     *
+     * @return AfiPeriodo
+     */
+    public function setAnio($anio)
+    {
+        $this->anio = $anio;
+
+        return $this;
+    }
+
+    /**
+     * Get anio
+     *
+     * @return integer
+     */
+    public function getAnio()
+    {
+        return $this->anio;
+    }
+
+    /**
+     * Set mes
+     *
+     * @param integer $mes
+     *
+     * @return AfiPeriodo
+     */
+    public function setMes($mes)
+    {
+        $this->mes = $mes;
+
+        return $this;
+    }
+
+    /**
+     * Get mes
+     *
+     * @return integer
+     */
+    public function getMes()
+    {
+        return $this->mes;
+    }
+
+    /**
+     * Set anioPago
+     *
+     * @param integer $anioPago
+     *
+     * @return AfiPeriodo
+     */
+    public function setAnioPago($anioPago)
+    {
+        $this->anioPago = $anioPago;
+
+        return $this;
+    }
+
+    /**
+     * Get anioPago
+     *
+     * @return integer
+     */
+    public function getAnioPago()
+    {
+        return $this->anioPago;
+    }
+
+    /**
+     * Set mesPago
+     *
+     * @param integer $mesPago
+     *
+     * @return AfiPeriodo
+     */
+    public function setMesPago($mesPago)
+    {
+        $this->mesPago = $mesPago;
+
+        return $this;
+    }
+
+    /**
+     * Get mesPago
+     *
+     * @return integer
+     */
+    public function getMesPago()
+    {
+        return $this->mesPago;
+    }
+
+    /**
+     * Set fechaPago
+     *
+     * @param \DateTime $fechaPago
+     *
+     * @return AfiPeriodo
+     */
+    public function setFechaPago($fechaPago)
+    {
+        $this->fechaPago = $fechaPago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaPago
+     *
+     * @return \DateTime
+     */
+    public function getFechaPago()
+    {
+        return $this->fechaPago;
     }
 }

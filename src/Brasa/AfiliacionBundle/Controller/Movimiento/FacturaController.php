@@ -134,9 +134,15 @@ class FacturaController extends Controller
                 $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->imprimir($codigoFactura);
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);
-                } else {                    
-                    $objFactura = new \Brasa\AfiliacionBundle\Formatos\Factura();
-                    $objFactura->Generar($this, $codigoFactura);                    
+                } else {        
+                    if($arFactura->getCodigoFacturaTipoFk() == 1) {
+                        $objFactura = new \Brasa\AfiliacionBundle\Formatos\Factura();
+                        $objFactura->Generar($this, $codigoFactura);                                            
+                    } else {
+                        $objCuentaCobro = new \Brasa\AfiliacionBundle\Formatos\CuentaCobro();
+                        $objCuentaCobro->Generar($this, $codigoFactura);                                            
+                    }
+
                 }
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));
             }             

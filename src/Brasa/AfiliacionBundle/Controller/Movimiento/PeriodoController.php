@@ -84,6 +84,15 @@ class PeriodoController extends Controller
         $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
         if($codigoPeriodo != '' && $codigoPeriodo != '0') {
             $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
+        } else {
+            $fecha = new \DateTime('now');
+            $arPeriodo->setFechaDesde($fecha);
+            $arPeriodo->setFechaHasta($fecha);
+            $arPeriodo->setFechaPago($fecha);
+            $arPeriodo->setAnio($fecha->format('Y'));
+            $arPeriodo->setMes($fecha->format('m'));
+            $arPeriodo->setAnioPago($fecha->format('Y'));
+            $arPeriodo->setMesPago($fecha->format('m'));
         }        
         $form = $this->createForm(new AfiPeriodoType, $arPeriodo);
         $form->handleRequest($request);
@@ -114,27 +123,176 @@ class PeriodoController extends Controller
         $form->handleRequest($request);
         $this->listaDetalle($codigoPeriodo);
         if ($form->isValid()) {
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            
-            if($request->request->get('OpGenerar')) {            
-                $codigoPeriodo = $request->request->get('OpGenerar');
-                $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
-                $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
-                $arPeriodo->setEstadoGenerado(1);
-                $em->persist($arPeriodo);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
-            }                            
-            if ($form->get('BtnEliminar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_base_factura_concepto'));
-            }
-            if ($form->get('BtnExcel')->isClicked()) {
-                //$this->filtrar($form);
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');            
+            if ($form->get('BtnDetalleCobroExcel')->isClicked()) {
                 $this->listaDetalle($codigoPeriodo);
                 $this->generarDetalleExcel();
             }
+            if ($form->get('BtnDetalleCobroImprimir')->isClicked()) {
+                $objPeriodoCobro = new \Brasa\AfiliacionBundle\Formatos\PeriodoCobro();
+                $objPeriodoCobro->Generar($this, $codigoPeriodo);
+                //$this->listaDetalle($codigoPeriodo);
+                //$this->generarDetalleExcel();
+            }            
+            if ($form->get('BtnDetallePagoExcel')->isClicked()) {
+                $this->listaDetallePago($codigoPeriodo);
+                $this->generarDetallePagoExcel();
+            }            
+            if ($form->get('BtnDetallePagoArchivo')->isClicked()) {                
+                $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+                $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+                $strRutaArchivo = $arConfiguracion->getRutaTemporal();
+                $strNombreArchivo = "pila" . date('YmdHis') . ".txt";
+                $ar = fopen($strRutaArchivo . $strNombreArchivo, "a") or
+                    die("Problemas en la creacion del archivo plano");
+                fputs($ar, '01');
+                fputs($ar, '1');
+                fputs($ar, '0001');
+                fputs($ar, $this->RellenarNr($arConfiguracion->getNombreEmpresa(), " ", 200, "D"));
+                fputs($ar, 'NI');
+                fputs($ar, $this->RellenarNr($arConfiguracion->getNitEmpresa(), " ", 16, "D"));
+                fputs($ar, '3');
+                fputs($ar, 'E');
+                fputs($ar, '          ');
+                fputs($ar, '          ');
+                fputs($ar, 'S');
+                fputs($ar, $this->RellenarNr($arPeriodo->getClienteRel()->getCodigoSucursal(), " ", 10, "D"));
+                fputs($ar, $this->RellenarNr($arPeriodo->getClienteRel()->getCodigoSucursal(), " ", 40, "D"));
+                //Arp del aportante
+                fputs($ar, '14-18 ');
+                //Periodo pago para los diferentes sistemas
+                fputs($ar, $arPeriodo->getAnioPago().'-'. $this->RellenarNr($arPeriodo->getMesPago(), "0", 2, "I"));
+                fputs($ar, $arPeriodo->getAnio().'-'. $this->RellenarNr($arPeriodo->getMes(), "0", 2, "I"));
+                //Numero radicacion de la planilla
+                fputs($ar, '0000000000');
+                //Fecha de pago
+                fputs($ar, $arPeriodo->getFechaPago()->format('Y-m-d'));
+                //Numero total de empleados
+                fputs($ar, $this->RellenarNr(0, "0", 5, "I"));
+                //Valor total de la nomina
+                fputs($ar, $this->RellenarNr(0, "0", 12, "I"));
+                fputs($ar, '1');
+                fputs($ar, '89');
+                fputs($ar, "\n");
+
+                $arPeriodoDetallePagos = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago();
+                $arPeriodoDetallePagos = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetallePago')->findBy(array('codigoPeriodoFk' => $codigoPeriodo));
+                foreach($arPeriodoDetallePagos as $arPeriodoDetallePago) {
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getTipoRegistro(), "0", 2, "I"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getSecuencia(), "0", 5, "I"));
+                    fputs($ar, $arPeriodoDetallePago->getTipoDocumento());
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getEmpleadoRel()->getNumeroIdentificacion(), " ", 16, "D"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getTipoCotizante(), "0", 2, "I"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getSubtipoCotizante(), "0", 2, "I"));
+                    fputs($ar, $arPeriodoDetallePago->getExtranjeroNoObligadoCotizarPension());
+                    fputs($ar, $arPeriodoDetallePago->getColombianoResidenteExterior());
+                    fputs($ar, $arPeriodoDetallePago->getCodigoDepartamentoUbicacionlaboral());
+                    fputs($ar, $arPeriodoDetallePago->getCodigoMunicipioUbicacionlaboral());
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getPrimerApellido(), " ", 20, "D"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getSegundoApellido(), " ", 30, "D"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getPrimerNombre(), " ", 20, "D"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getSegundoNombre(), " ", 30, "D"));
+                    fputs($ar, $arPeriodoDetallePago->getIngreso());
+                    fputs($ar, $arPeriodoDetallePago->getRetiro());
+                    fputs($ar, $arPeriodoDetallePago->getTrasladoDesdeOtraEps());
+                    fputs($ar, $arPeriodoDetallePago->getTrasladoAOtraEps());
+                    fputs($ar, $arPeriodoDetallePago->getTrasladoDesdeOtraPension());
+                    fputs($ar, $arPeriodoDetallePago->getTrasladoAOtraPension());
+                    fputs($ar, $arPeriodoDetallePago->getVariacionPermanenteSalario());
+                    fputs($ar, $arPeriodoDetallePago->getCorrecciones());
+                    fputs($ar, $arPeriodoDetallePago->getVariacionTransitoriaSalario());
+                    fputs($ar, $arPeriodoDetallePago->getSuspensionTemporalContratoLicenciaServicios());
+                    fputs($ar, $arPeriodoDetallePago->getIncapacidadGeneral());
+                    fputs($ar, $arPeriodoDetallePago->getLicenciaMaternidad());
+                    fputs($ar, $arPeriodoDetallePago->getVacaciones());
+                    fputs($ar, $arPeriodoDetallePago->getAporteVoluntario());
+                    fputs($ar, $arPeriodoDetallePago->getVariacionCentrosTrabajo());
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getIncapacidadAccidenteTrabajoEnfermedadProfesional(), "0", 2, "I"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCodigoEntidadPensionPertenece(), " ", 6, "D"));
+                    fputs($ar, $arPeriodoDetallePago->getCodigoEntidadPensionTraslada());
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCodigoEntidadSaludPertenece(), " ", 6, "D"));
+                    fputs($ar, $arPeriodoDetallePago->getCodigoEntidadSaludTraslada());
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCodigoEntidadCajaPertenece(), " ", 6, "D"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getDiasCotizadosPension(), "0", 2, "I"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getDiasCotizadosSalud(), "0", 2, "I"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getDiasCotizadosRiesgosProfesionales(), "0", 2, "I"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getDiasCotizadosCajaCompensacion(), "0", 2, "I"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getSalarioBasico(), "0", 9, "I"));
+                    fputs($ar, $arPeriodoDetallePago->getSalarioIntegral());
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getIbcPension(), "0", 9, "I"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getIbcSalud(), "0", 9, "I"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getIbcRiesgosProfesionales(), "0", 9, "I"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getIbcCaja(), "0", 9, "I"));
+                    fputs($ar, $this->RellenarNr(($arPeriodoDetallePago->getTarifaPension()/100), "0", 7, "D"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCotizacionPension(), "0", 9, "I"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getAporteVoluntarioFondoPensionesObligatorias(), "0", 9, "I"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCotizacionVoluntarioFondoPensionesObligatorias(), "0", 9, "I"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getTotalCotizacion(), "0", 9, "I"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getAportesFondoSolidaridadPensionalSolidaridad(), "0", 9, "I"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getAportesFondoSolidaridadPensionalSubsistencia(), "0", 9, "I"));
+                    fputs($ar, '000000000');
+                    fputs($ar, $this->RellenarNr(($arPeriodoDetallePago->getTarifaSalud()/100), "0", 7, "D"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCotizacionSalud(), "0", 9, "I"));
+                    //fputs($ar, $arSsoAporte->getValorUpcAdicional());
+                    fputs($ar, "000000000");
+                    //fputs($ar, $arSsoAporte->getNumeroAutorizacionIncapacidadEnfermedadGeneral());
+                    fputs($ar, "               ");
+                    //fputs($ar, $arSsoAporte->getValorIncapacidadEnfermedadGeneral());
+                    fputs($ar, "000000000");
+                    //fputs($ar, $arSsoAporte->getNumeroAutorizacionLicenciaMaternidadPaternidad());
+                    fputs($ar, "               ");
+                    //fputs($ar, $arSsoAporte->getValorLicenciaMaternidadPaternidad());
+                    fputs($ar, "000000000");
+                    fputs($ar, $this->RellenarNr(($arPeriodoDetallePago->getTarifaRiesgos()/100), "0", 9, "D"));
+                    //fputs($ar, $arSsoAporte->getCentroTrabajoCodigoCt());
+                    fputs($ar, "000000000");
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCotizacionRiesgos(), "0", 9, "I"));
+                    fputs($ar, $this->RellenarNr(($arPeriodoDetallePago->getTarifaCaja()/100), "0", 7, "D"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCotizacionCaja(), "0", 9, "I"));
+                    //fputs($ar, $arSsoAporte->getTarifaAportesSENA());
+                    fputs($ar, "0.00000");
+                    //fputs($ar, $arSsoAporte->getValorAportesSENA());
+                    fputs($ar, "000000000");
+                    //fputs($ar, $arSsoAporte->getTarifaAportesICBF());
+                    fputs($ar, "0.00000");
+                    //fputs($ar, $arSsoAporte->getValorAporteICBF());
+                    fputs($ar, "000000000");
+                    //fputs($ar, $arSsoAporte->getTarifaAportesESAP());
+                    fputs($ar, "0.00000");
+                    //fputs($ar, $arSsoAporte->getValorAporteESAP());
+                    fputs($ar, "000000000");
+                    //fputs($ar, $arSsoAporte->getTarifaAportesMEN());
+                    fputs($ar, "0.00000");
+                    //fputs($ar, $arSsoAporte->getValorAporteMEN());
+                    fputs($ar, "000000000");                    
+                    //fputs($ar, $arSsoAporte->getTipoDocumentoResponsableUPC());
+                    fputs($ar, "  ");
+                    //fputs($ar, $arSsoAporte->getNumeroIdentificacionResponsableUPCAdicional());
+                    fputs($ar, "                ");
+                    //fputs($ar, $arSsoAporte->getCotizanteExoneradoPagoAporteParafiscalesSalud());
+                    fputs($ar, " ");
+                    //fputs($ar, $arSsoAporte->getCodigoAdministradoraRiesgosLaborales());
+                    fputs($ar, "      ");
+                    //fputs($ar, $arSsoAporte->getClaseRiesgoAfiliado());
+                    fputs($ar, " ");
+                    fputs($ar, "\n");
+                }
+                
+                fclose($ar);
+                $strArchivo = $strRutaArchivo.$strNombreArchivo;
+                header('Content-Description: File Transfer');
+                header('Content-Type: text/csv; charset=ISO-8859-15');
+                header('Content-Disposition: attachment; filename='.basename($strArchivo));
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($strArchivo));
+                readfile($strArchivo);
+                $em->flush();
+                exit;
+                //return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo_detalle', array('codigoPeriodo' => $codigoPeriodo)));
+            }            
+            
         }
         
         $arPeriodoDetalles = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
@@ -155,10 +313,16 @@ class PeriodoController extends Controller
                 ); 
     }
     
-    private function listaDetalle($codigoPeriodo) {    
-        $session = $this->getRequest()->getSession();
+    private function listaDetalle($codigoPeriodo) {            
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetalle')->listaDQL(
+                $codigoPeriodo   
+                ); 
+    }    
+    
+    private function listaDetallePago($codigoPeriodo) {            
+        $em = $this->getDoctrine()->getManager();
+        $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetallePago')->listaDQL(
                 $codigoPeriodo   
                 ); 
     }    
@@ -184,9 +348,11 @@ class PeriodoController extends Controller
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()                        
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))            
+            ->add('BtnDetalleCobroExcel', 'submit', array('label'  => 'Excel',))            
+            ->add('BtnDetalleCobroImprimir', 'submit', array('label'  => 'Imprimir',))            
             ->add('BtnDetallePagoEliminar', 'submit', array('label'  => 'Eliminar',))            
             ->add('BtnDetallePagoExcel', 'submit', array('label'  => 'Excel',))                            
+            ->add('BtnDetallePagoArchivo', 'submit', array('label'  => 'Archivo plano',))                                            
             ->getForm();
         return $form;
     }     
@@ -206,9 +372,16 @@ class PeriodoController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'C'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
+        }      
+        /*for($col = 'AI'; $col !== 'AK'; $col++) {            
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }*/         
+        
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'NOMBRE');
+                    ->setCellValue('B1', 'CLIENTE');
 
         $i = 2;
         
@@ -219,7 +392,7 @@ class PeriodoController extends Controller
         foreach ($arPeriodos as $arPeriodo) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arPeriodo->getCodigoPeriodoPk())
-                    ->setCellValue('B' . $i, $arPeriodo->getNombre());                                    
+                    ->setCellValue('B' . $i, $arPeriodo->getClienteRel()->getNombreCorto());                                    
             $i++;
         }
         
@@ -236,7 +409,7 @@ class PeriodoController extends Controller
         header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
         header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
         header ('Pragma: public'); // HTTP/1.0
-        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);        
         $objWriter->save('php://output');
         exit;
     }
@@ -326,5 +499,91 @@ class PeriodoController extends Controller
         $objWriter->save('php://output');
         exit;
     }    
+    
+    private function generarDetallePagoExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
+        ob_clean();
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'R'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
+        }      
+        for($col = 'D'; $col !== 'J'; $col++) {            
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'COD')
+                    ->setCellValue('B1', 'IDENTIFICACION')
+                    ->setCellValue('C1', 'NOMBRE')
+                    ->setCellValue('D1', 'PENSION')
+                    ->setCellValue('E1', 'SALUD')
+                    ->setCellValue('F1', 'CAJA')
+                    ->setCellValue('G1', 'RIESGO')
+                    ->setCellValue('H1', 'SENA')
+                    ->setCellValue('I1', 'ICBF');
+        $i = 2;
+        
+        $query = $em->createQuery($this->strDqlLista);
+        $arPeriodoDetallesPagos = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago();
+        $arPeriodoDetallesPagos = $query->getResult();
+                
+        foreach ($arPeriodoDetallesPagos as $arPeriodoDetallePago) {            
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arPeriodoDetallePago->getCodigoPeriodoDetallePagoPk())
+                    ->setCellValue('B' . $i, $arPeriodoDetallePago->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('C' . $i, $arPeriodoDetallePago->getEmpleadoRel()->getNombreCorto())                    
+                    ->setCellValue('D' . $i, $arPeriodoDetallePago->getCotizacionPension())
+                    ->setCellValue('E' . $i, $arPeriodoDetallePago->getCotizacionSalud())
+                    ->setCellValue('F' . $i, $arPeriodoDetallePago->getCotizacionCaja())
+                    ->setCellValue('G' . $i, $arPeriodoDetallePago->getCotizacionRiesgos())
+                    ->setCellValue('H' . $i, $arPeriodoDetallePago->getCotizacionSena())
+                    ->setCellValue('I' . $i, $arPeriodoDetallePago->getCotizacionIcbf());                                    
+            $i++;
+        }
+        
+        $objPHPExcel->getActiveSheet()->setTitle('PeriodoDetallePago');
+        $objPHPExcel->setActiveSheetIndex(0);
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="PeriodoDetallePago.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }        
 
+    public static function RellenarNr($Nro, $Str, $NroCr, $strPosicion) {
+        $Nro = utf8_decode($Nro);
+        $Longitud = strlen($Nro);
+        $Nc = $NroCr - $Longitud;
+        for ($i = 0; $i < $Nc; $i++) {
+            if($strPosicion == "I") {
+                $Nro = $Str . $Nro;
+            } else {
+                $Nro = $Nro . $Str;
+            }
+
+        }
+
+        return (string) $Nro;
+    }    
+    
 }

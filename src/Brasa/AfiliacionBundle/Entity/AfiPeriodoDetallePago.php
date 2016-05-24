@@ -363,29 +363,29 @@ class AfiPeriodoDetallePago
     private $cotizacionIcbf = 0;    
     
     /**
-     * @ORM\Column(name="aporte_voluntario_fondo_pensiones_obligatorias", type="string", length=9)
+     * @ORM\Column(name="aporte_voluntario_fondo_pensiones_obligatorias", type="float")
      */
-    private $aporteVoluntarioFondoPensionesObligatorias;    
+    private $aporteVoluntarioFondoPensionesObligatorias = 0;    
     
     /**
-     * @ORM\Column(name="cotizacion_voluntario_fondo_pensiones_obligatorias", type="string", length=9)
+     * @ORM\Column(name="cotizacion_voluntario_fondo_pensiones_obligatorias", type="float")
      */
-    private $cotizacionVoluntarioFondoPensionesObligatorias;    
+    private $cotizacionVoluntarioFondoPensionesObligatorias = 0;    
     
     /**
      * @ORM\Column(name="total_cotizacion", type="float")
      */
-    private $totalCotizacion;    
+    private $totalCotizacion = 0;    
     
     /**
      * @ORM\Column(name="aportes_fondo_solidaridad_pensional_solidaridad", type="float")
      */
-    private $aportesFondoSolidaridadPensionalSolidaridad;    
+    private $aportesFondoSolidaridadPensionalSolidaridad = 0;    
     
     /**
      * @ORM\Column(name="aportes_fondo_solidaridad_pensional_subsistencia", type="float")
      */
-    private $aportesFondoSolidaridadPensionalSubsistencia;      
+    private $aportesFondoSolidaridadPensionalSubsistencia = 0;      
     
     /**
      * @ORM\Column(name="codigo_cargo_fk", type="integer", nullable=true)
@@ -410,6 +410,8 @@ class AfiPeriodoDetallePago
      */
     protected $contratoRel;    
     
+
+
     /**
      * Get codigoPeriodoDetallePagoPk
      *
@@ -442,30 +444,6 @@ class AfiPeriodoDetallePago
     public function getCodigoPeriodoFk()
     {
         return $this->codigoPeriodoFk;
-    }
-
-    /**
-     * Set codigoSucursalFk
-     *
-     * @param integer $codigoSucursalFk
-     *
-     * @return AfiPeriodoDetallePago
-     */
-    public function setCodigoSucursalFk($codigoSucursalFk)
-    {
-        $this->codigoSucursalFk = $codigoSucursalFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoSucursalFk
-     *
-     * @return integer
-     */
-    public function getCodigoSucursalFk()
-    {
-        return $this->codigoSucursalFk;
     }
 
     /**
@@ -2103,7 +2081,7 @@ class AfiPeriodoDetallePago
     /**
      * Set aporteVoluntarioFondoPensionesObligatorias
      *
-     * @param string $aporteVoluntarioFondoPensionesObligatorias
+     * @param float $aporteVoluntarioFondoPensionesObligatorias
      *
      * @return AfiPeriodoDetallePago
      */
@@ -2117,7 +2095,7 @@ class AfiPeriodoDetallePago
     /**
      * Get aporteVoluntarioFondoPensionesObligatorias
      *
-     * @return string
+     * @return float
      */
     public function getAporteVoluntarioFondoPensionesObligatorias()
     {
@@ -2127,7 +2105,7 @@ class AfiPeriodoDetallePago
     /**
      * Set cotizacionVoluntarioFondoPensionesObligatorias
      *
-     * @param string $cotizacionVoluntarioFondoPensionesObligatorias
+     * @param float $cotizacionVoluntarioFondoPensionesObligatorias
      *
      * @return AfiPeriodoDetallePago
      */
@@ -2141,7 +2119,7 @@ class AfiPeriodoDetallePago
     /**
      * Get cotizacionVoluntarioFondoPensionesObligatorias
      *
-     * @return string
+     * @return float
      */
     public function getCotizacionVoluntarioFondoPensionesObligatorias()
     {

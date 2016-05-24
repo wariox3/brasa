@@ -159,6 +159,11 @@ class AfiCliente
     private $genera_icbf = false;
     
     /**
+     * @ORM\Column(name="codigo_sucursal", type="string", length=10)
+     */
+    private $codigoSucursal;    
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;                            
@@ -1204,5 +1209,29 @@ class AfiCliente
     public function getGeneraIcbf()
     {
         return $this->genera_icbf;
+    }
+
+    /**
+     * Set codigoSucursal
+     *
+     * @param string $codigoSucursal
+     *
+     * @return AfiCliente
+     */
+    public function setCodigoSucursal($codigoSucursal)
+    {
+        $this->codigoSucursal = $codigoSucursal;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSucursal
+     *
+     * @return string
+     */
+    public function getCodigoSucursal()
+    {
+        return $this->codigoSucursal;
     }
 }

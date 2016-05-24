@@ -98,7 +98,8 @@
                     </div>
                     <div class="btn-toolbar" style="float: right">
                         <div class="btn-group">
-                            {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                            {{ form_widget(form.BtnDetalleCobroExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                            {{ form_widget(form.BtnDetalleCobroImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                         </div>
                         <div class="btn-group">
                             <a class="btn btn-default btn-sm" href="{{ path('brs_afi_movimiento_periodo_nuevo', {'codigoPeriodo': 0}) }}">Nuevo</a>
@@ -115,12 +116,24 @@
                         <tr>
                             <th>COD</th>
                             <th>IDENTIFICACION</th>
+                            <th>NOMBRE</th>
+                            <th>PENSION</th>
+                            <th>SALUD</th>
+                            <th>RIESGOS</th>
+                            <th>CAJA</th>
+                            <th>TOTAL</th>
                             <th></th>
                         </tr>
                         {% for arPeriodoDetallesPagos in arPeriodoDetallesPagos %}
                         <tr>
                             <td>{{ arPeriodoDetallesPagos.codigoPeriodoDetallePagoPk  }}</td>
                             <td>{{ arPeriodoDetallesPagos.empleadoRel.numeroIdentificacion }}</td>
+                            <td>{{ arPeriodoDetallesPagos.empleadoRel.nombreCorto }}</td>
+                            <td style="text-align: right">{{ arPeriodoDetallesPagos.cotizacionPension | number_format(0, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPeriodoDetallesPagos.cotizacionSalud | number_format(0, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPeriodoDetallesPagos.cotizacionRiesgos | number_format(0, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPeriodoDetallesPagos.cotizacionCaja | number_format(0, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPeriodoDetallesPagos.totalCotizacion | number_format(0, '.', ',') }}</td>
                             <td><input type="checkbox" name="ChkSeleccionarDetallePago[]" value="{{ arPeriodoDetallesPagos.codigoPeriodoDetallePagoPk }}" /></td>
                         </tr>
                         {% endfor %}
@@ -140,6 +153,7 @@
                     <div class="btn-toolbar" style="float: right">
                         <div class="btn-group">
                             {{ form_widget(form.BtnDetallePagoExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                            {{ form_widget(form.BtnDetallePagoArchivo, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                         </div>
                         <div class="btn-group">
                             <a class="btn btn-default btn-sm" href="{{ path('brs_afi_movimiento_periodo_nuevo', {'codigoPeriodo': 0}) }}">Nuevo</a>

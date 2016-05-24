@@ -19,6 +19,11 @@ class AfiPeriodoType extends AbstractType
                 'required' => true))                                             
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                            
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                            
+            ->add('fechaPago','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                                        
+            ->add('anio', 'number', array('required' => true))  
+            ->add('mes', 'number', array('required' => true))  
+            ->add('anioPago', 'number', array('required' => true))  
+            ->add('mesPago', 'number', array('required' => true))                              
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }
