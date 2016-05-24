@@ -5418,6 +5418,12 @@ INSERT INTO `rhu_sso_sucursal` (`codigo_sucursal_pk`, `nombre`, `codigo_interfac
 insert into `afi_factura_tipo` (`codigo_factura_tipo_pk`, `nombre`) values('1','FACTURA VENTA');
 insert into `afi_factura_tipo` (`codigo_factura_tipo_pk`, `nombre`) values('2','CUENTA COBRO');
 
+insert into `afi_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`) values('1','CURSO','0');
+insert into `afi_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`) values('2','FACTURA','0');
+insert into `afi_consecutivo` (`codigo_consecutivo_pk`, `nombre`, `consecutivo`) values('3','CUENTA COBRO','0');
+
+insert into `afi_configuracion` (`codigo_configuracion_pk`, `informacion_legal_factura`, `informacion_pago_factura`, `informacion_contacto_factura`, `informacion_resolucion_dian_factura`, `informacion_resolucion_supervigilancia_factura`) values('1','\"Esta factura de venta es un titulo valor negociable (Ley 1231 de 2008) y se asimila en sus efectos legales a una letra de cambio segun articulo 779 del Codigo de Comercio. Acepto el contenido y las condiciones estipuladas en esta factura de venta (Ley 1231/17 de julio de 2008). Se cobran intereses por mora a la tasa máxima legal vigente.\"\r\n* NO SOMOS GRANDES CONTRUBUYENTES NI RETENEDORES DEL IVA. COD ICA 302 TARIFA 3/1000','REALIZAR PAGO EN LA CUENTA CORRIENTE BANCOLOMBIA NUMERO 0000000000 A NOMBRE DE OBRAS Y SOSTENIMIENTO S.A.S','CRA 51 N 41-222 OF 504 MEDELLIN TEL 4487575 e-mail: admonhorus2006@gmail.com','Numeracion de 0000 al 0000 de Factura de Venta, autorizada por la DIAN\r\nResolucion: 000000000000 de 2015/05/05. Tipo 02. Factura Computador.','Resolucion Supervigilancia 20137200053817 del 4 Agosto 2013');
+
 /** Seguridad **/
 
 insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('1','Crear contratos despues de pagado el periodo','PROCESO','RECURSO HUMANO');

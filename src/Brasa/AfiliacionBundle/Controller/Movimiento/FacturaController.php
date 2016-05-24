@@ -148,9 +148,9 @@ class FacturaController extends Controller
             if ($form->get('BtnDetalleEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->eliminar($arrSeleccionados);
-                //$em->getRepository('BrasaAfiliacionBundle:AfiFactura')->liquidar($codigoFactura);
+                $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->liquidar($codigoFactura);
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));
-            }
+            }            
             if ($form->get('BtnDetalleCursoEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleCurso')->eliminar($arrSeleccionados);
@@ -190,8 +190,17 @@ class FacturaController extends Controller
                     $arFacturaDetalle = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();
                     $arFacturaDetalle->setFacturaRel($arFactura);                          
                     $arFacturaDetalle->setPeriodoRel($arPeriodo);    
+                    $arFacturaDetalle->setFechaDesde($arPeriodo->getFechaDesde());
+                    $arFacturaDetalle->setFechaHasta($arPeriodo->getFechaHasta());
                     $arFacturaDetalle->setPrecio($arPeriodo->getTotal());
                     $arFacturaDetalle->setTotal($arPeriodo->getTotal());
+                    $arFacturaDetalle->setPension($arPeriodo->getPension());
+                    $arFacturaDetalle->setSalud($arPeriodo->getSalud());
+                    $arFacturaDetalle->setRiesgos($arPeriodo->getRiesgos());
+                    $arFacturaDetalle->setCaja($arPeriodo->getCaja());
+                    $arFacturaDetalle->setSena($arPeriodo->getSena());
+                    $arFacturaDetalle->setIcbf($arPeriodo->getIcbf());
+                    $arFacturaDetalle->setAdministracion($arPeriodo->getAdministracion());
                     $em->persist($arFacturaDetalle); 
                     $arPeriodo->setEstadoFacturado(1);
                     $em->persist($arPeriodo);

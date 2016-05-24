@@ -77,11 +77,31 @@
                     <table  class="table table-striped table-bordered table-condensed table-hover">
                         <tr>
                             <th>{{ knp_pagination_sortable(arFacturaDetalles, 'CÓDIGO', 'p.codigoFacturaDetallePk') }}</th>
+                            <th>DESDE</th>
+                            <th>HASTA</th>
+                            <th>PENSION</th>
+                            <th>SALUD</th>
+                            <th>RIESGOS</th>
+                            <th>CAJA</th>
+                            <th>SENA</th>
+                            <th>ICBF</th>
+                            <th>ADMIN</th>
+                            <th>TOTAL</th>
                             <th></th>
                         </tr>
                         {% for arFacturaDetalles in arFacturaDetalles %}
                             <tr>
                                 <td>{{ arFacturaDetalles.codigoFacturaDetallePk  }}</td>
+                                <td>{{ arFacturaDetalles.fechaDesde |date('Y/m/d') }}</td>                
+                                <td>{{ arFacturaDetalles.fechaHasta |date('Y/m/d') }}</td>                                
+                                <td style="text-align: right">{{ arFacturaDetalles.pension | number_format(0, '.', ',') }}</td>
+                                <td style="text-align: right">{{ arFacturaDetalles.salud | number_format(0, '.', ',') }}</td>
+                                <td style="text-align: right">{{ arFacturaDetalles.riesgos | number_format(0, '.', ',') }}</td>
+                                <td style="text-align: right">{{ arFacturaDetalles.caja | number_format(0, '.', ',') }}</td>
+                                <td style="text-align: right">{{ arFacturaDetalles.sena | number_format(0, '.', ',') }}</td>
+                                <td style="text-align: right">{{ arFacturaDetalles.icbf | number_format(0, '.', ',') }}</td>                                
+                                <td style="text-align: right">{{ arFacturaDetalles.administracion | number_format(0, '.', ',') }}</td>                                
+                                <td style="text-align: right">{{ arFacturaDetalles.total | number_format(0, '.', ',') }}</td>                                
                                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturaDetalles.codigoFacturaDetallePk }}" /></td>
                             </tr>
 

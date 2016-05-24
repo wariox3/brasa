@@ -16,6 +16,7 @@
                 <th>CAJA</th>
                 <th>SENA</th>
                 <th>ICBF</th>
+                <th>ADMIN</th>
                 <th>TOTAL</th>
                 <th></th>
             </tr>
@@ -30,6 +31,7 @@
                 <td style="text-align: right">{{ arPeriodos.caja | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPeriodos.sena | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPeriodos.icbf | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPeriodos.administracion | number_format(0, '.', ',') }}</td>                                
                 <td style="text-align: right">{{ arPeriodos.total | number_format(0, '.', ',') }}</td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPeriodos.codigoPeriodoPk }}" /></td>
             </tr>

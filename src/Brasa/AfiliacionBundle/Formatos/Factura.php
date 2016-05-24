@@ -131,37 +131,40 @@ class Factura extends \FPDF_FPDF {
     }
 
     public function EncabezadoDetalles() {
-        $this->SetX(10);
-        $this->Ln(14); 
-        $this->SetFillColor(255,255,255);
-        $this->SetTextColor(0);
-        $this->SetFont('Arial', 'B', 14);        
-        $this->Cell(10, 4, "CURSOS", 0, 0, 'L', 1);
+
+    }
+
+    public function Body($pdf) {
+        //Cursos
+        $pdf->SetX(10);
+        $pdf->Ln(14); 
+        $pdf->SetFillColor(255,255,255);
+        $pdf->SetTextColor(0);
+        $pdf->SetFont('Arial', 'B', 14);        
+        $pdf->Cell(10, 4, "CURSOS", 0, 0, 'L', 1);
         
-        $this->Ln(5);          
+        $pdf->Ln(5);          
         $header = array('CODIGO', 'FECHA', 'IDENTIFICACION', 'EMPLEADO', 'PRECIO');
-        $this->SetFillColor(236, 236, 236);
-        $this->SetTextColor(0);
-        $this->SetDrawColor(0, 0, 0);
-        $this->SetLineWidth(.2);
-        $this->SetFont('', 'B', 7);
+        $pdf->SetFillColor(236, 236, 236);
+        $pdf->SetTextColor(0);
+        $pdf->SetDrawColor(0, 0, 0);
+        $pdf->SetLineWidth(.2);
+        $pdf->SetFont('', 'B', 7);
 
         //creamos la cabecera de la tabla.
         $w = array(15, 20, 25, 80, 15, 30);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0)
-                $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
+                $pdf->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
             else
-                $this->Cell($w[$i], 4, $header[$i], 1, 0, 'C', 1);
+                $pdf->Cell($w[$i], 4, $header[$i], 1, 0, 'C', 1);
 
         //Restauración de colores y fuentes
-        $this->SetFillColor(224, 235, 255);
-        $this->SetTextColor(0);
-        $this->SetFont('');
-        $this->Ln(4);
-    }
-
-    public function Body($pdf) {
+        $pdf->SetFillColor(224, 235, 255);
+        $pdf->SetTextColor(0);
+        $pdf->SetFont('');
+        $pdf->Ln(4);
+        
         $arFacturaDetalles = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();
         $arFacturaDetalles = self::$em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleCurso')->findBy(array('codigoFacturaFk' => self::$codigoFactura));
         $pdf->SetX(10);
@@ -176,6 +179,52 @@ class Factura extends \FPDF_FPDF {
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }
+        
+        //Seguridad social
+        $pdf->SetX(10);
+        $pdf->Ln(14); 
+        $pdf->SetFillColor(255,255,255);
+        $pdf->SetTextColor(0);
+        $pdf->SetFont('Arial', 'B', 14);        
+        $pdf->Cell(10, 4, "SEGURIDAD SOCIAL", 0, 0, 'L', 1);
+        
+        $pdf->Ln(5);          
+        $header = array('CODIGO', 'DESDE', 'HASTA', 'EMPLEADO', 'PRECIO');
+        $pdf->SetFillColor(236, 236, 236);
+        $pdf->SetTextColor(0);
+        $pdf->SetDrawColor(0, 0, 0);
+        $pdf->SetLineWidth(.2);
+        $pdf->SetFont('', 'B', 7);
+
+        //creamos la cabecera de la tabla.
+        $w = array(15, 20, 25, 80, 15, 30);
+        for ($i = 0; $i < count($header); $i++)
+            if ($i == 0)
+                $pdf->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
+            else
+                $pdf->Cell($w[$i], 4, $header[$i], 1, 0, 'C', 1);
+
+        //Restauración de colores y fuentes
+        $pdf->SetFillColor(224, 235, 255);
+        $pdf->SetTextColor(0);
+        $pdf->SetFont('');
+        $pdf->Ln(4);
+        
+        $arFacturaDetalles = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();
+        $arFacturaDetalles = self::$em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->findBy(array('codigoFacturaFk' => self::$codigoFactura));
+        $pdf->SetX(10);
+        $pdf->SetFont('Arial', '', 7);
+        foreach ($arFacturaDetalles as $arFacturaDetalle) {
+             
+            $pdf->Cell(15, 4, $arFacturaDetalle->getCodigoFacturaDetallePk(), 1, 0, 'L');
+            $pdf->Cell(20, 4, $arFacturaDetalle->getFechaDesde()->format('Y/m/d'), 1, 0, 'L');
+            $pdf->Cell(25, 4, '', 1, 0, 'L');
+            $pdf->Cell(80, 4, '', 1, 0, 'L');
+            $pdf->Cell(15, 4, number_format($arFacturaDetalle->getPrecio(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Ln();
+            $pdf->SetAutoPageBreak(true, 15);
+        }        
+        
     }
 
     public function Footer() {
