@@ -396,6 +396,35 @@ class ExamenController extends Controller
             ));
     }
     
+    public function detalleRestriccionMedicaAction($codigoRestriccionMedica) {
+        $em = $this->getDoctrine()->getManager(); 
+        $request = $this->getRequest();
+        $objMensaje = $this->get('mensajes_brasa');
+        $arExamenRestriccionMedica = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedica();
+        $arExamenRestriccionMedica = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenRestriccionMedica')->find($codigoRestriccionMedica);
+        $arExamenRestriccionMedicaDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedicaDetalle();
+        $arExamenRestriccionMedicaDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenRestriccionMedicaDetalle')->findBy(array('codigoExamenRestriccionMedicaFk' => $arExamenRestriccionMedica->getCodigoExamenRestriccionMedicaPk()));
+        $form = $this->createFormBuilder()
+            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
+            ->getForm();
+        $form->handleRequest($request);
+        if($form->isValid()) {
+                 
+            if($form->get('BtnImprimir')->isClicked()) {
+                
+                $objExamenRestriccionMedica = new \Brasa\RecursoHumanoBundle\Formatos\FormatoExamenRestriccionMedica();
+                $objExamenRestriccionMedica->Generar($this, $codigoRestriccionMedica,$arExamenRestriccionMedica,$arExamenRestriccionMedicaDetalle);
+               
+            }
+        }
+
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Examen:detalleRestriccion.html.twig', array(
+                    'arExamenRestriccionMedica' => $arExamenRestriccionMedica,
+                    'arExamenRestriccionMedicaDetalle' => $arExamenRestriccionMedicaDetalle,
+                    'form' => $form->createView()
+                    ));
+    }
+    
     private function listar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();

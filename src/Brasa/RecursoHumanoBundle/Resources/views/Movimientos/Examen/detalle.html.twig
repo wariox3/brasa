@@ -147,6 +147,7 @@
                             <th>TIPO REVISIÓN</th>
                             <th>DIAS</th>
                             <th></th>
+                            <th></th>
                             <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodosTabla(this,'ChkSeleccionarPrueba[]');"/></th>
                         </tr>
                         {% for arExamenRestriccionesMedicas in arExamenRestriccionesMedicas %}
@@ -157,7 +158,8 @@
                             </td>
                             <td>{{ arExamenRestriccionesMedicas.examenRevisionMedicaTipoRel.nombre }}</td>
                             <td>{{ arExamenRestriccionesMedicas.dias }}</td>
-                            <td><a href="javascript:abrirVentana3('{{ path('brs_rhu_examen_restriccion_medica_editar', {'codigoExamen': arExamen.codigoExamenPk, 'codigoRestriccionMedica': arExamenRestriccionesMedicas.codigoExamenRestriccionMedicaPk }) }}', 'AgregarRestriccionMedica', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                            <td align="center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_examen_restriccion_medica_editar', {'codigoExamen': arExamen.codigoExamenPk, 'codigoRestriccionMedica': arExamenRestriccionesMedicas.codigoExamenRestriccionMedicaPk }) }}', 'AgregarRestriccionMedica', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                            <td align="center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_examen_restriccion_medica_detalle', { 'codigoRestriccionMedica': arExamenRestriccionesMedicas.codigoExamenRestriccionMedicaPk }) }}', 'DetalleRestriccionMedica', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=20 height=20></a></td>
                             <td align="center"><input type="checkbox" name="ChkSeleccionarRestriccion[]" value="{{ arExamenRestriccionesMedicas.codigoExamenRestriccionMedicaPk }}" /></td>
                         </tr>
                         {% endfor %}

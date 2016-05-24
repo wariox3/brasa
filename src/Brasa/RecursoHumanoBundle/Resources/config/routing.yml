@@ -684,7 +684,11 @@ brs_rhu_examen_restriccion_medica_editar:
     
 brs_rhu_examen_restriccion_medica_agregar:
     path:     /rhu/examen/restriccion/medica/agregar/{codigoExamen}/{codigoRestriccionMedica}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Examen:agregarRestriccionMedica }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:Examen:agregarRestriccionMedica }
+    
+brs_rhu_examen_restriccion_medica_detalle:
+    path:     /rhu/examen/restriccion/medica/detalle/{codigoRestriccionMedica}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Examen:detalleRestriccionMedica }    
    
 brs_rhu_base_entidadexamen_listar:
    path:     /rhu/base/entidadexamen/listar

@@ -110,7 +110,7 @@ class ConsultasRegistrosController extends Controller
                     ->setCellValue('B' . $i, $arRegistro->getNumero())
                     ->setCellValue('C' . $i, $arRegistro->getNumeroReferencia())
                     ->setCellValue('D' . $i, $arRegistro->getFecha()->Format('Y-m-d'))
-                    ->setCellValue('E' . $i, $arRegistro->getCodigoComprobanteContableFk())
+                    ->setCellValue('E' . $i, $arRegistro->getCodigoComprobanteFk())
                     ->setCellValue('F' . $i, $arRegistro->getCodigoCuentaFk())
                     ->setCellValue('G' . $i, $arRegistro->getCodigoTerceroFk())
                     ->setCellValue('H' . $i, '')
