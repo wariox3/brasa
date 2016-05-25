@@ -268,7 +268,7 @@ class SegUsuariosController extends Controller
         $em = $this->getDoctrine()->getManager();
         $formUsuario = $this->createFormBuilder()
             ->setAction($this->generateUrl('brs_seg_admin_usuario_cambiar_clave', array('codigoUsuario' => $codigoUsuario)))
-            ->add('password', 'text')                            
+            ->add('password', 'password')                            
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $formUsuario->handleRequest($request);        

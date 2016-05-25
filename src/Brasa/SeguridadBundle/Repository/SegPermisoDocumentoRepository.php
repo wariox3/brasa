@@ -11,5 +11,20 @@ use Doctrine\ORM\EntityRepository;
  */
 class SegPermisoDocumentoRepository extends EntityRepository {
     
-    
+    public function permiso($arUsuario, $codigoDocumento, $tipo) {        
+        $em = $this->getEntityManager();
+        $boolPermiso = false;
+        $arPermisoDocumento = new \Brasa\SeguridadBundle\Entity\SegPermisoDocumento();
+        $arPermisoDocumento = $em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->findOneBy(array('codigoUsuarioFk' => $arUsuario->getId(), 'codigoDocumentoFk' => $codigoDocumento));
+        if(count($arPermisoDocumento) > 0) {
+            switch ($tipo) {
+                case 1: //Ingreso
+                    if($arPermisoDocumento->getIngreso() == 1) {
+                        $boolPermiso = true;
+                    }
+                    break;
+            }     
+        }                                           
+        return $boolPermiso;        
+    }    
 }
