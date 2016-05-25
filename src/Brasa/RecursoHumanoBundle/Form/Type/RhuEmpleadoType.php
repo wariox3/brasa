@@ -68,7 +68,7 @@ class RhuEmpleadoType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuRh',
                 'property' => 'tipo',
             ))
-            ->add('correo', 'text', array('required' => true))
+            ->add('correo', 'text', array('required' => false))
             ->add('cuenta', 'text', array('required' => false))
             ->add('tipoCuenta', 'choice', array('choices' => array('S' => 'AHORRO', 'D' => 'CORRIENTE')))
             ->add('numeroIdentificacion', 'text', array('required' => true))
