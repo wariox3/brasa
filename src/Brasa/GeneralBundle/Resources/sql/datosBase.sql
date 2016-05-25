@@ -5435,6 +5435,31 @@ insert into `afi_configuracion` (`codigo_configuracion_pk`, `informacion_legal_f
 
 /** Seguridad **/
 
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('1','PROGRAMACION PAGO',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('2','PAGO',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('3','REQUISICION',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('4','SELECCION',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('5','EXAMEN',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('6','PAGO EXAMEN',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('7','REQUISITOS',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('8','PAGO BANCO',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('9','LIQUIDACION',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('10','ADICIONAL PAGO',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('11','LICENCIA',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('12','INCAPACIDAD',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('13','PAGO INCAPACIDAD',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('14','VACACIONES',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('15','CREDITO',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('16','FACTURA',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('17','DOTACION',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('18','ACCIDENTE TRABAJO',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('19','INFORMACION INTERNA',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('20','PROCESO DISCIPLINARIO',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('21','CAPACITACION',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('22','GESTION DESEMPEÑO',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('23','CONTROL ACCESO',NULL,NULL);
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('24','PERMISO',NULL,NULL);
+
 insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('1','Crear contratos despues de pagado el periodo','PROCESO','RECURSO HUMANO');
 insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('2','Ver salario en empleados','VER','RECURSO HUMANO');
 insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('3','Generar pedidos automaticos','PROCESO','TURNOS');
