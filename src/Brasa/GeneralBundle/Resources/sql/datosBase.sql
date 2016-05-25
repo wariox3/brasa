@@ -5415,6 +5415,15 @@ insert into `rhu_examen_lista_precio` (`codigo_examen_lista_precio_pk`, `codigo_
 INSERT INTO `rhu_sso_sucursal` (`codigo_sucursal_pk`, `nombre`, `codigo_interface`) values('1','MEDELLIN','1010');
 
 /** Afiliacion **/
+insert into `afi_novedad_tipo` (`codigo_novedad_tipo_pk`, `nombre`) values('1','INCAPACIDAD GENERAL');
+insert into `afi_novedad_tipo` (`codigo_novedad_tipo_pk`, `nombre`) values('2','INCAPACIDAD LABORAL');
+insert into `afi_novedad_tipo` (`codigo_novedad_tipo_pk`, `nombre`) values('3','LICENCIA NO REMUNERADA');
+insert into `afi_novedad_tipo` (`codigo_novedad_tipo_pk`, `nombre`) values('4','LICENCIA REMUNERADA');
+insert into `afi_novedad_tipo` (`codigo_novedad_tipo_pk`, `nombre`) values('5','LICENCIA MATERNIDAD');
+insert into `afi_novedad_tipo` (`codigo_novedad_tipo_pk`, `nombre`) values('6','LICENCIA PATERNIDAD');
+insert into `afi_novedad_tipo` (`codigo_novedad_tipo_pk`, `nombre`) values('7','LICENCIA DE LUTO');
+insert into `afi_novedad_tipo` (`codigo_novedad_tipo_pk`, `nombre`) values('8','SUSPENSIÓN Y/O AUSENTISMO');
+
 insert into `afi_factura_tipo` (`codigo_factura_tipo_pk`, `nombre`) values('1','FACTURA VENTA');
 insert into `afi_factura_tipo` (`codigo_factura_tipo_pk`, `nombre`) values('2','CUENTA COBRO');
 
