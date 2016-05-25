@@ -16,7 +16,7 @@ class CtbCuentaRepository extends EntityRepository
         $em = $this->getEntityManager();
         $dql   = "SELECT c FROM BrasaContabilidadBundle:CtbCuenta c WHERE c.codigoCuentaPk <> 0";
         if($intCodigoCuenta != "" && $intCodigoCuenta != 0) {
-            $dql .= " AND c.codigoCuentaPk like '%" . $intCodigoCuenta."%'";
+            $dql .= " AND c.codigoCuentaPk like '" . $intCodigoCuenta."%'";
         }
         if($strNombreCuenta != "" ) {
             $dql .= " AND c.nombreCuenta like '%" . $strNombreCuenta."%'";
