@@ -159,7 +159,7 @@ class AfiCliente
     private $genera_icbf = false;
     
     /**
-     * @ORM\Column(name="codigo_sucursal", type="string", length=10)
+     * @ORM\Column(name="codigo_sucursal", type="string", length=10, nullable=true)
      */
     private $codigoSucursal;    
     
