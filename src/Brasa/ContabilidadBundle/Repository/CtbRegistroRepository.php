@@ -403,8 +403,10 @@ class CtbRegistroRepository extends EntityRepository
     public function contabilizarPagoBanco($codigo,$arComprobanteContable,$arCentroCosto,$arTercero,$arPagoBancoDetalle) {
         $em = $this->getEntityManager();
         //La cuenta
+        $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion;
+        $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
         $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find('250501');                            
+        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arConfiguracionNomina->getCuentaPago());                            
         $arRegistro->setComprobanteRel($arComprobanteContable);
         $arRegistro->setCentroCostoRel($arCentroCosto);
         $arRegistro->setCuentaRel($arCuenta);

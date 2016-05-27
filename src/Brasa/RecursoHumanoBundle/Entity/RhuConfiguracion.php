@@ -152,6 +152,11 @@ class RhuConfiguracion
     private $cuentaNominaPagar;
     
     /**
+     * @ORM\Column(name="cuenta_pago", type="integer")
+     */
+    private $cuentaPago;
+    
+    /**
      * Tipo de base para la liquidacion de vacaciones 1-salario 2-salario+prestaciones 3-salario+recargos
      * @ORM\Column(name="tipo_base_pago_vacaciones", type="integer")
      */
@@ -882,5 +887,29 @@ class RhuConfiguracion
     public function getCuentaNominaPagar()
     {
         return $this->cuentaNominaPagar;
+    }
+
+    /**
+     * Set cuentaPago
+     *
+     * @param integer $cuentaPago
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCuentaPago($cuentaPago)
+    {
+        $this->cuentaPago = $cuentaPago;
+
+        return $this;
+    }
+
+    /**
+     * Get cuentaPago
+     *
+     * @return integer
+     */
+    public function getCuentaPago()
+    {
+        return $this->cuentaPago;
     }
 }

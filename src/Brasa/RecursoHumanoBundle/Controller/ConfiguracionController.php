@@ -141,6 +141,7 @@ class ConfiguracionController extends Controller
             ->add('aportesPorcentajeVacaciones', 'number', array('data' => $arConfiguracion->getAportesPorcentajeVacaciones(), 'required' => true))
             ->add('tipoBasePagoVacaciones', 'choice', array('choices' => array('1' => 'SALARIO', '2' => 'SALARIO PRESTACIONAL', '3' => 'SALARIO+RECARGOS NOCTURNOS', '0' => 'SIN ASIGNAR'), 'data' => $arConfiguracion->getTipoBasePagoVacaciones()))                
             ->add('cuentaNominaPagar', 'number', array('data' => $arConfiguracion->getCuentaNominaPagar(), 'required' => true))
+            ->add('cuentaPago', 'number', array('data' => $arConfiguracion->getCuentaPago(), 'required' => true))
             ->add('guardar', 'submit', array('label' => 'Actualizar'))
             ->getForm();
         $formConfiguracion->handleRequest($request);
@@ -150,6 +151,7 @@ class ConfiguracionController extends Controller
             $ValorAuxilioTransporte = $controles['vrAuxilioTransporte'];
             $porcentajePensionExtra = $controles['porcentajePensionExtra'];
             $cuentaNominaPagar = $controles['cuentaNominaPagar'];
+            $cuentaPago = $controles['cuentaPago'];
             $ValorSalario = $controles['vrSalario'];
             $codigoConceptoCredito = $controles['conceptoCredito'];
             $codigoConceptoIncapacidad = $controles['conceptoIncapacidad'];
@@ -176,6 +178,7 @@ class ConfiguracionController extends Controller
             $arConfiguracion->setVrAuxilioTransporte($ValorAuxilioTransporte);
             $arConfiguracion->setPorcentajePensionExtra($porcentajePensionExtra);
             $arConfiguracion->setCuentaNominaPagar($cuentaNominaPagar);
+            $arConfiguracion->setCuentaPago($cuentaPago);
             $arConfiguracion->setPorcentajeIva($porcentajeIva);
             $arConfiguracion->setVrSalario($ValorSalario);
             $arConfiguracion->setCodigoCredito($codigoConceptoCredito);
