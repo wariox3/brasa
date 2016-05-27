@@ -74,6 +74,19 @@ class GenerarProgramacionController extends Controller
                 $this->lista();
                 $this->generarExcel();
             }
+            if ($form->get('BtnCerrarProgramacion')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados as $codigoPedido) {
+                        $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
+                        $arPedido =  $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);                                                    
+                        $arPedido->setEstadoProgramado(1);
+                        $em->persist($arPedido);
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_tur_proceso_generar_programacion_lista'));
+                }
+            }                        
         }
         
         $arPedidos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 100);
@@ -91,6 +104,7 @@ class GenerarProgramacionController extends Controller
         $form = $this->createFormBuilder()                                            
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar seleccionados'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
+            ->add('BtnCerrarProgramacion', 'submit', array('label'  => 'Cerrar programacion'))
             ->getForm();
         return $form;
     }        
