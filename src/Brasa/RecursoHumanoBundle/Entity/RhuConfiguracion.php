@@ -144,7 +144,12 @@ class RhuConfiguracion
     /**
      * @ORM\Column(name="aportes_porcentaje_vacaciones", type="float")
      */
-    private $aportesPorcentajeVacaciones = 0;     
+    private $aportesPorcentajeVacaciones = 0;
+    
+    /**
+     * @ORM\Column(name="cuenta_nomina_pagar", type="integer")
+     */
+    private $cuentaNominaPagar;
     
     /**
      * Tipo de base para la liquidacion de vacaciones 1-salario 2-salario+prestaciones 3-salario+recargos
@@ -853,5 +858,29 @@ class RhuConfiguracion
     public function getAportesPorcentajeVacaciones()
     {
         return $this->aportesPorcentajeVacaciones;
+    }
+
+    /**
+     * Set cuentaNominaPagar
+     *
+     * @param integer $cuentaNominaPagar
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCuentaNominaPagar($cuentaNominaPagar)
+    {
+        $this->cuentaNominaPagar = $cuentaNominaPagar;
+
+        return $this;
+    }
+
+    /**
+     * Get cuentaNominaPagar
+     *
+     * @return integer
+     */
+    public function getCuentaNominaPagar()
+    {
+        return $this->cuentaNominaPagar;
     }
 }

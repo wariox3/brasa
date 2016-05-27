@@ -39,6 +39,13 @@ class RhuExamenRestriccionMedica
     private $dias;
     
     /**
+     * @ORM\Column(name="fecha_vence", type="date", nullable=true)
+     */ 
+    
+    private $fechaVence;
+    
+    
+    /**
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
      */    
     private $codigoUsuario;
@@ -280,5 +287,29 @@ class RhuExamenRestriccionMedica
     public function getExamenesRestriccionesMedicasDetallesExamenRestriccionMedicaRel()
     {
         return $this->examenesRestriccionesMedicasDetallesExamenRestriccionMedicaRel;
+    }
+
+    /**
+     * Set fechaVence
+     *
+     * @param \DateTime $fechaVence
+     *
+     * @return RhuExamenRestriccionMedica
+     */
+    public function setFechaVence($fechaVence)
+    {
+        $this->fechaVence = $fechaVence;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVence
+     *
+     * @return \DateTime
+     */
+    public function getFechaVence()
+    {
+        return $this->fechaVence;
     }
 }

@@ -146,9 +146,10 @@
                             <th>CÓDIGO</th>
                             <th>TIPO REVISIÓN</th>
                             <th>DIAS</th>
+                            <th>FECHA VENCIMIENTO</th>
                             <th></th>
                             <th></th>
-                            <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodosTabla(this,'ChkSeleccionarPrueba[]');"/></th>
+                            <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodosTabla(this,'ChkSeleccionarRestriccion[]');"/></th>
                         </tr>
                         {% for arExamenRestriccionesMedicas in arExamenRestriccionesMedicas %}
                         <tr>
@@ -156,10 +157,18 @@
                                 <input type="hidden" name="LblCodigo[]" value="{{ arExamenRestriccionesMedicas.codigoExamenRestriccionMedicaPk }}">
                                 <span class="badge">{{ arExamenRestriccionesMedicas.codigoExamenRestriccionMedicaPk }}</span>
                             </td>
+                            
                             <td>{{ arExamenRestriccionesMedicas.examenRevisionMedicaTipoRel.nombre }}</td>
                             <td>{{ arExamenRestriccionesMedicas.dias }}</td>
-                            <td align="center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_examen_restriccion_medica_editar', {'codigoExamen': arExamen.codigoExamenPk, 'codigoRestriccionMedica': arExamenRestriccionesMedicas.codigoExamenRestriccionMedicaPk }) }}', 'AgregarRestriccionMedica', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
-                            <td align="center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_examen_restriccion_medica_detalle', { 'codigoRestriccionMedica': arExamenRestriccionesMedicas.codigoExamenRestriccionMedicaPk }) }}', 'DetalleRestriccionMedica', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=20 height=20></a></td>
+                            <td>{{ arExamenRestriccionesMedicas.fechaVence | date('Y/m/d') }}</td>
+                            
+                            {% if arExamen.estadoAutorizado == 1 and arExamen.estadoAprobado == 0%}
+                                <td align="center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_examen_restriccion_medica_editar', {'codigoExamen': arExamen.codigoExamenPk, 'codigoRestriccionMedica': arExamenRestriccionesMedicas.codigoExamenRestriccionMedicaPk }) }}', 'AgregarRestriccionMedica', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
+                                <td align="center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_examen_restriccion_medica_detalle', { 'codigoRestriccionMedica': arExamenRestriccionesMedicas.codigoExamenRestriccionMedicaPk }) }}', 'DetalleRestriccionMedica', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=20 height=20></a></td>    
+                            {% else %}
+                                <td></td>
+                                <td></td>
+                            {% endif %}    
                             <td align="center"><input type="checkbox" name="ChkSeleccionarRestriccion[]" value="{{ arExamenRestriccionesMedicas.codigoExamenRestriccionMedicaPk }}" /></td>
                         </tr>
                         {% endfor %}
@@ -167,11 +176,11 @@
 
                     <!-- Botones Menu Items -->
                     <div class="btn-toolbar" style="float: right">
-                        <div class="btn-group">
-                            
+                        {% if arExamen.estadoAutorizado == 1 and arExamen.estadoAprobado == 0%}
+                            <div class="btn-group">
                                 <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_examen_restriccion_medica_agregar', {'codigoExamen': arExamen.codigoExamenPk, 'codigoRestriccionMedica': 0 }) }}', 'AgregarRestriccionMedica', 600, 900)">Nuevo</a>
-                            
-                        </div>
+                            </div>
+                        {% endif %}        
                         <div class="btn-group">
                             {{ form_widget(form.BtnEliminarRestriccion, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                         </div>
@@ -181,8 +190,7 @@
         </div>
     </div>
 
-
-        {{ form_rest(form) }}
+    {{ form_rest(form) }}
     {{ form_end(form) }}
     <a  class="btn btn-default btn-sm" href="{{ path('brs_rhu_examen_listar') }}">Volver</a>
 </div>

@@ -14,6 +14,12 @@
                     <td class="titulo">TIPO REVISIÓN:</td>
                     <td class="td-in-well">{{ arExamenRestriccionMedica.examenRevisionMedicaTipoRel.nombre }}</td>
                 </tr>
+                <tr>
+                    <td class="titulo">DÍAS RESTRICCIÓN:</td>
+                    <td class="td-in-well">{{ arExamenRestriccionMedica.dias}}</td>
+                    <td class="titulo">FECHA VENCE:</td>
+                    <td class="td-in-well">{{ arExamenRestriccionMedica.fechaVence | date('Y-m-d') }}</td>
+                </tr>
             </table>
       </div>
     </div>

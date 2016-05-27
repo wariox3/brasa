@@ -6,12 +6,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuExamenType;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuExamenControlType;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuExamenDetalleType;
-use Brasa\RecursoHumanoBundle\Form\Type\RhuExamenRestriccionMedicaType;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuExamenRestriccionMedicaAgregarType;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuExamenRestriccionMedicaEditarType;
 
 class ExamenController extends Controller
 {
     var $strListaDql = "";
-    
+
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -34,7 +35,7 @@ class ExamenController extends Controller
                 $this->generarExcel();
             }
         }
-        
+
         $arExamenes = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Examen:lista.html.twig', array('arExamenes' => $arExamenes, 'form' => $form->createView()));
     }
@@ -50,7 +51,7 @@ class ExamenController extends Controller
         }else{
             $arExamen->setFecha(new \DateTime('now'));
             $arExamen->setControlPago($arConfiguracion->getControlPago());
-        }        
+        }
         $form = $this->createForm(new RhuExamenType, $arExamen);
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -61,34 +62,34 @@ class ExamenController extends Controller
                 if($arExamen->getExamenClaseRel()->getCodigoExamenClasePk() == 1 && $codigoExamen == 0) {
                     $arExamenTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo();
                     $arExamenTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->findBy(array('ingreso' => 1));
-                    foreach ($arExamenTipos as $arExamenTipo) {                    
+                    foreach ($arExamenTipos as $arExamenTipo) {
                         $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
                         $arExamenDetalle->setExamenRel($arExamen);
                         $arExamenDetalle->setExamenTipoRel($arExamenTipo);
                         $floPrecio = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->devuelvePrecio($arExamen->getEntidadExamenRel()->getCodigoEntidadExamenPk(), $arExamenTipo->getCodigoExamenTipoPk());
-                        $arExamenDetalle->setVrPrecio($floPrecio);                                        
+                        $arExamenDetalle->setVrPrecio($floPrecio);
                         $arExamenDetalle->setFechaVence(new \DateTime('now'));
-                        $em->persist($arExamenDetalle);                    
-                    }                
+                        $em->persist($arExamenDetalle);
+                    }
                 }
                 $arCargo = $form->get('cargoRel')->getData();
                 $arExamenCargo = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenCargo();
                 $arExamenCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenCargo')->findBy(array('codigoCargoFk' => $arCargo->getCodigoCargoPk()));
-                foreach ($arExamenCargo as $arExamenCargo) {                    
+                foreach ($arExamenCargo as $arExamenCargo) {
                     $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
                     $arExamenDetalle->setExamenRel($arExamen);
                     $arExamenDetalle->setExamenTipoRel($arExamenCargo->getExamenTipoRel());
                     $floPrecio = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->devuelvePrecio($arExamen->getEntidadExamenRel()->getCodigoEntidadExamenPk(), $arExamenCargo->getCodigoExamenTipoFk());
-                    $arExamenDetalle->setVrPrecio($floPrecio);                                        
+                    $arExamenDetalle->setVrPrecio($floPrecio);
                     $arExamenDetalle->setFechaVence(new \DateTime('now'));
-                    $em->persist($arExamenDetalle);                    
-                }                
+                    $em->persist($arExamenDetalle);
+                }
             }
-            
+
             $em->persist($arExamen);
             $em->flush();
             $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->liquidar($arExamen->getCodigoExamenPk());
-            
+
             if($form->get('guardarnuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_rhu_examen_nuevo', array('codigoExamen' => 0 )));
             } else {
@@ -99,7 +100,7 @@ class ExamenController extends Controller
             'arExamen' => $arExamen,
             'form' => $form->createView()));
     }
-    
+
     public function nuevoControlAction($codigoExamen) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -108,8 +109,8 @@ class ExamenController extends Controller
         if($codigoExamen != 0) {
             $arExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->find($codigoExamen);
         }else{
-            $arExamen->setFecha(new \DateTime('now'));            
-        }        
+            $arExamen->setFecha(new \DateTime('now'));
+        }
         $form = $this->createForm(new RhuExamenControlType, $arExamen);
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -134,13 +135,13 @@ class ExamenController extends Controller
                             return $this->redirect($this->generateUrl('brs_rhu_examen_nuevo_control', array('codigoExamen' => 0 )));
                         } else {
                             return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $arExamen->getCodigoExamenPk())));
-                        }                        
+                        }
                     } else {
                         $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
-                    } 
+                    }
                 } else {
                     $objMensaje->Mensaje("error", "El empleado no existe", $this);
-                }                 
+                }
             }
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Examen:nuevoControl.html.twig', array(
@@ -149,7 +150,7 @@ class ExamenController extends Controller
     }
 
     public function detalleAction($codigoExamen) {
-        $em = $this->getDoctrine()->getManager(); 
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
         $arExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
@@ -158,38 +159,38 @@ class ExamenController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if($form->get('BtnAutorizar')->isClicked()) {            
+            if($form->get('BtnAutorizar')->isClicked()) {
                 if($arExamen->getEstadoAutorizado() == 0) {
                     if($em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->numeroRegistros($codigoExamen) > 0) {
                         $arExamen->setEstadoAutorizado(1);
                         $em->persist($arExamen);
                         $em->flush();
-                        return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));                                                                        
+                        return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));
                     } else {
                         $objMensaje->Mensaje('error', 'Debe adicionar detalles al examen', $this);
-                    }                    
+                    }
                 }
-                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));                                                
+                return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));
             }
-            if($form->get('BtnDesAutorizar')->isClicked()) {            
+            if($form->get('BtnDesAutorizar')->isClicked()) {
                 if($arExamen->getEstadoAutorizado() == 1) {
                     $arExamen->setEstadoAutorizado(0);
                     $em->persist($arExamen);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));                                                
+                    return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));
                 }
             }
             if ($form->get('BtnAprobar')->isClicked()) {
-               if($arExamen->getEstadoAutorizado() == 1) { 
+               if($arExamen->getEstadoAutorizado() == 1) {
                     $strRespuesta = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->aprobarExamen($codigoExamen);
                     if($strRespuesta == ''){
-                        return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));                                                
+                        return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));
                     }else {
                       $objMensaje->Mensaje('error', $strRespuesta, $this);
-                    }    
-               }    
-            }      
-            
+                    }
+               }
+            }
+
             if($form->get('BtnImprimir')->isClicked()) {
                 if($arExamen->getEstadoAutorizado() == 1) {
                     $objExamen = new \Brasa\RecursoHumanoBundle\Formatos\FormatoExamen();
@@ -203,7 +204,7 @@ class ExamenController extends Controller
                     $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
                     $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->liquidar($codigoExamen);
                     return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));
-                }    
+                }
             }
             if($form->get('BtnAprobarDetalle')->isClicked()) {
                 if($arExamen->getEstadoAutorizado() == 1) {
@@ -214,33 +215,48 @@ class ExamenController extends Controller
             if($form->get('BtnCerrarDetalle')->isClicked()) {
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->cerrarDetallesSeleccionados($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));
-            }            
+            }
             if ($form->get('BtnActualizarDetalle')->isClicked()) {
                 if($arExamen->getEstadoAutorizado() == 0) {
                     $arrControles = $request->request->All();
                     $intIndice = 0;
-                    foreach ($arrControles['LblCodigo'] as $intCodigo) {                
+                    foreach ($arrControles['LblCodigo'] as $intCodigo) {
                         if($arrControles['TxtPrecio'.$intCodigo] != "" && $arrControles['TxtPrecio'.$intCodigo] != 0) {
                             $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
-                            $arExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->find($intCodigo);                                        
+                            $arExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->find($intCodigo);
                             $floPrecio = $arrControles['TxtPrecio'.$intCodigo];
                             $arExamenDetalle->setValidarVencimiento($arrControles['cboValidarVencimiento'.$intCodigo]);
                             $arExamenDetalle->setFechaVence(date_create($arrControles['TxtVence'.$intCodigo]));
                             $arExamenDetalle->setVrPrecio($floPrecio);
-                            $em->persist($arExamenDetalle);                        
+                            $em->persist($arExamenDetalle);
                         }
                     }
                     $em->flush();
                     $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->liquidar($codigoExamen);
                     return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));
-                }    
+                }
             }
             if($form->get('BtnEliminarRestriccion')->isClicked()) {
-                /*if($arExamen->getEstadoAutorizado() == 0) {
-                    $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
-                    $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->liquidar($codigoExamen);
+                if($arExamen->getEstadoAutorizado() == 1) {
+                    $arrSeleccionados = $request->request->get('ChkSeleccionarRestriccion');
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados as $codigoExamenRestriccionMedica) {
+                            $arExamenRestriccionMedica = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedica();
+                            $arExamenRestriccionMedica = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenRestriccionMedica')->find($codigoExamenRestriccionMedica);
+                            $arExamenRestriccionMedicaDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedicaDetalle();
+                            $arExamenRestriccionMedicaDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenRestriccionMedicaDetalle')->findBy(array('codigoExamenRestriccionMedicaFk' => $arExamenRestriccionMedica->getCodigoExamenRestriccionMedicaPk()));
+                            foreach ($arExamenRestriccionMedicaDetalles as $codigoExamenRestriccionMedicaDetalle) {
+                                $arExamenRestriccionMedicaDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedicaDetalle();
+                                $arExamenRestriccionMedicaDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenRestriccionMedicaDetalle')->find($codigoExamenRestriccionMedicaDetalle);
+                                $em->remove($arExamenRestriccionMedicaDetalle);
+                            }
+                            $em->remove($arExamenRestriccionMedica);
+                        }
+                        $em->flush();
+
+                    }
                     return $this->redirect($this->generateUrl('brs_rhu_examen_detalle', array('codigoExamen' => $codigoExamen)));
-                } */   
+                }
             }
         }
 
@@ -256,7 +272,7 @@ class ExamenController extends Controller
                     'form' => $form->createView()
                     ));
     }
-    
+
     public function detalleNuevoAction($codigoExamen) {
         $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
@@ -293,7 +309,7 @@ class ExamenController extends Controller
                 } else {
                     echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
                 }
-            }            
+            }
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Examen:detalleNuevo.html.twig', array(
             'arExamenTipos' => $arExamenTipos,
@@ -303,7 +319,7 @@ class ExamenController extends Controller
 
     public function detalleNuevoComentarioAction($codigoExamenDetalle) {
         $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();        
+        $em = $this->getDoctrine()->getManager();
         $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
         $arExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->find($codigoExamenDetalle);
         $form = $this->createForm(new RhuExamenDetalleType, $arExamenDetalle);
@@ -327,15 +343,20 @@ class ExamenController extends Controller
         $arExamenRestriccionMedica = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedica();
         $arExamenRestriccionMedicaTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedicaTipo();
         $arExamenRestriccionMedicaTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenRestriccionMedicaTipo')->findAll();
-        $form = $this->createForm(new RhuExamenRestriccionMedicaType(), $arExamenRestriccionMedica);
+        $form = $this->createForm(new RhuExamenRestriccionMedicaAgregarType(), $arExamenRestriccionMedica);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            if ($arExamen->getEstadoAutorizado() == 0){
+            if ($arExamen->getEstadoAutorizado() == 1){
                 $arUsuario = $this->get('security.context')->getToken()->getUser();
                 $arExamenRestriccionMedica = $form->getData();
                 $arExamenRestriccionMedica->setExamenRel($arExamen);
                 $arExamenRestriccionMedica->setFecha(new \DateTime('now'));
-                $arExamenRestriccionMedica->setCodigoUsuario($arUsuario->getUserName());
+                $arExamenRestriccionMedica->setCodigoUsuario($arUsuario->getUserName());             
+                //Fecha Vencimiento
+                $fechaExamen = $arExamen->getFecha()->format('Y-m-d');
+                $dias = $arExamenRestriccionMedica->getDias();
+                $dateFechaVence = date('Y-m-d', strtotime("$fechaExamen + $dias day"));
+                $arExamenRestriccionMedica->setFechaVence(new \DateTime($dateFechaVence));
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                     if(count($arrSeleccionados) > 0) {
                         foreach ($arrSeleccionados AS $codigoExamenRestriccionMedicaDetalle) {
@@ -353,20 +374,17 @@ class ExamenController extends Controller
                     else {
                         $objMensaje->Mensaje("error", "Debe selecionar al menos un tipo de restricción medica", $this);
                     }
-                
-                if($form->get('guardarnuevo')->isClicked()) {
-                    return $this->redirect($this->generateUrl('brs_rhu_examen_restriccion_medica_agregar', array('codigoExamen' => $codigoExamen, 'codigoRestriccionMedica' => 0)));
-                }
-            } else {    
+
+            } else {
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-              }  
+              }
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Examen:agregarRestriccion.html.twig', array(
             'form' => $form->createView(),
             'arExamenRestriccionMedicaTipos' => $arExamenRestriccionMedicaTipos
             ));
     }
-    
+
     public function editarRestriccionMedicaAction($codigoExamen,$codigoRestriccionMedica) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -377,27 +395,68 @@ class ExamenController extends Controller
         if($codigoRestriccionMedica != 0) {
             $arExamenRestriccionMedica = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenRestriccionMedica')->find($codigoRestriccionMedica);
             $arExamenRestriccionMedicaDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenRestriccionMedicaDetalle')->findBy(array('codigoExamenRestriccionMedicaFk' => $arExamenRestriccionMedica->getCodigoExamenRestriccionMedicaPk()));
+            $arExamenRestriccionMedicaTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenRestriccionMedicaDetalle')->tiposRestriccionesMedicas($arExamenRestriccionMedica->getCodigoExamenRestriccionMedicaPk());
         }
-        $form = $this->createForm(new RhuExamenRestriccionMedicaType(), $arExamenRestriccionMedica);
+
+        $form = $this->createForm(new RhuExamenRestriccionMedicaEditarType(), $arExamenRestriccionMedica);
         $form->handleRequest($request);
         if ($form->isValid()) {
             if ($arExamen->getEstadoAutorizado() == 1){
-                $arExamenRestriccionMedica = $form->getData();
-                $arExamenRestriccionMedica->setExamenRel($arExamen);
-                $em->persist($arExamenRestriccionMedica);
-                $em->flush();
-            } else {    
+                if ($form->get('BtnGuardar')->isClicked()) {
+                    $arExamenRestriccionMedica = $form->getData();
+                    $arExamenRestriccionMedica->setExamenRel($arExamen);
+                    $em->persist($arExamenRestriccionMedica);
+                    $arUsuario = $this->get('security.context')->getToken()->getUser();
+                    $arExamenRestriccionMedica = $form->getData();
+                    $arExamenRestriccionMedica->setExamenRel($arExamen);
+                    $arExamenRestriccionMedica->setFecha(new \DateTime('now'));
+                    $arExamenRestriccionMedica->setCodigoUsuario($arUsuario->getUserName());
+                    //Fecha Vencimiento
+                    $fechaExamen = $arExamen->getFecha()->format('Y-m-d');
+                    $dias = $arExamenRestriccionMedica->getDias();
+                    $dateFechaVence = date('Y-m-d', strtotime("$fechaExamen + $dias day"));
+                    $arExamenRestriccionMedica->setFechaVence(new \DateTime($dateFechaVence));
+                    $arrSeleccionados = $request->request->get('ChkSeleccionarNuevo');
+                        if(count($arrSeleccionados) > 0) {
+                            foreach ($arrSeleccionados AS $codigoExamenRestriccionMedicaDetalle) {
+                                $arExamenRestriccionMedicaDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedicaDetalle();
+                                $arExamenRestriccionMedicaDetalle->setExamenRestriccionMedicaDetalleRel($arExamenRestriccionMedica);
+                                $arExamenRestriccionMedicaTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedicaTipo;
+                                $arExamenRestriccionMedicaTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenRestriccionMedicaTipo')->find($codigoExamenRestriccionMedicaDetalle);
+                                $arExamenRestriccionMedicaDetalle->setExamenRestriccionMedicaTipoRel($arExamenRestriccionMedicaTipo);
+                                $em->persist($arExamenRestriccionMedicaDetalle);
+                            }
+                            $em->persist($arExamenRestriccionMedica);
+                            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                        }
+                    $em->flush();
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                }
+                if ($form->get('BtnEliminar')->isClicked()) {
+                    $arrSeleccionados = $request->request->get('ChkSeleccionarDetalle');
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados AS $codigoExamenRestriccionMedicaDetalle) {
+                            $arExamenRestriccionMedicaDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedicaDetalle();
+                            $arExamenRestriccionMedicaDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenRestriccionMedicaDetalle')->find($codigoExamenRestriccionMedicaDetalle);
+                            $em->remove($arExamenRestriccionMedicaDetalle);
+                            $em->flush();
+                        }
+                        return $this->redirect($this->generateUrl('brs_rhu_examen_restriccion_medica_editar', array('codigoExamen' => $codigoExamen, 'codigoRestriccionMedica' => $codigoRestriccionMedica)));
+                    }
+                }
+            } else {
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-              }  
+              }
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Examen:editarRestriccion.html.twig', array(
             'form' => $form->createView(),
-            'arExamenRestriccionMedicaDetalles' => $arExamenRestriccionMedicaDetalles
+            'arExamenRestriccionMedicaDetalles' => $arExamenRestriccionMedicaDetalles,
+            'arExamenRestriccionMedicaTipos' => $arExamenRestriccionMedicaTipo,
             ));
     }
-    
+
     public function detalleRestriccionMedicaAction($codigoRestriccionMedica) {
-        $em = $this->getDoctrine()->getManager(); 
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
         $arExamenRestriccionMedica = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenRestriccionMedica();
@@ -409,12 +468,12 @@ class ExamenController extends Controller
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
-                 
+
             if($form->get('BtnImprimir')->isClicked()) {
-                
+
                 $objExamenRestriccionMedica = new \Brasa\RecursoHumanoBundle\Formatos\FormatoExamenRestriccionMedica();
                 $objExamenRestriccionMedica->Generar($this, $codigoRestriccionMedica,$arExamenRestriccionMedica,$arExamenRestriccionMedicaDetalle);
-               
+
             }
         }
 
@@ -424,7 +483,7 @@ class ExamenController extends Controller
                     'form' => $form->createView()
                     ));
     }
-    
+
     private function listar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
@@ -438,14 +497,14 @@ class ExamenController extends Controller
 
     private function filtrar ($form) {
         $session = $this->getRequest()->getSession();
-        $request = $this->getRequest(); 
+        $request = $this->getRequest();
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroAprobadoExamen', $form->get('estadoAprobado')->getData());
         $session->set('filtroControlPago', $form->get('controlPago')->getData());
     }
-    
+
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -467,26 +526,26 @@ class ExamenController extends Controller
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('estadoAprobado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAprobadoExamen')))
-            ->add('controlPago', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroControlPago')))    
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
+            ->add('controlPago', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroControlPago')))
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }
-    
+
     private function formularioDetalle($ar) {
-        $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);        
+        $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonAprobar = array('label' => 'Aprobar', 'disabled' => false);
-        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);        
+        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonEliminarDetalle = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonActualizarDetalle = array('label' => 'Actualizar', 'disabled' => false);
         $arrBotonAprobarDetalle = array('label' => 'Aprobar', 'disabled' => false);
         $arrBotonCerrarDetalle = array('label' => 'Cerrar', 'disabled' => true);
-        $arrBotonEliminarRestriccion = array('label' => 'Eliminar', 'disabled' => true);
-        if($ar->getEstadoAutorizado() == 1) {            
-            $arrBotonAutorizar['disabled'] = true;            
+        $arrBotonEliminarRestriccion = array('label' => 'Eliminar', 'disabled' => false);
+        if($ar->getEstadoAutorizado() == 1) {
+            $arrBotonAutorizar['disabled'] = true;
             $arrBotonEliminarDetalle['disabled'] = true;
             $arrBotonActualizarDetalle['disabled'] = true;
         } else {
@@ -494,24 +553,26 @@ class ExamenController extends Controller
             $arrBotonAprobarDetalle['disabled'] = true;
             $arrBotonImprimir['disabled'] = true;
             $arrBotonAprobar['disabled'] = true;
+            $arrBotonEliminarRestriccion['disabled'] = true;
         }
         if($ar->getEstadoAprobado() == 1) {
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonAprobarDetalle['disabled'] = true;
             $arrBotonAprobar['disabled'] = true;
             $arrBotonCerrarDetalle['disabled'] = false;
-        }        
-        $form = $this->createFormBuilder()    
-                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
-                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)            
+            $arrBotonEliminarRestriccion['disabled'] = true;
+        }
+        $form = $this->createFormBuilder()
+                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)
+                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)
                     ->add('BtnAprobar', 'submit', $arrBotonAprobar)
-                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)            
+                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)
                     ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)
-                    ->add('BtnActualizarDetalle', 'submit', $arrBotonActualizarDetalle)    
-                    ->add('BtnAprobarDetalle', 'submit', $arrBotonAprobarDetalle)                                
+                    ->add('BtnActualizarDetalle', 'submit', $arrBotonActualizarDetalle)
+                    ->add('BtnAprobarDetalle', 'submit', $arrBotonAprobarDetalle)
                     ->add('BtnCerrarDetalle', 'submit', $arrBotonCerrarDetalle)
                     ->add('BtnEliminarRestriccion', 'submit', $arrBotonEliminarRestriccion)
-                    ->getForm();  
+                    ->getForm();
         return $form;
     }
 
@@ -529,7 +590,7 @@ class ExamenController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
-        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10);
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
@@ -570,11 +631,11 @@ class ExamenController extends Controller
                     ->setCellValue('R1', 'COMENTARIOS GENERALES');
 
         $i = 2;
-        
+
         $query = $em->createQuery($this->strListaDql);
                 $arExamenes = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
                 $arExamenes = $query->getResult();
-                
+
         foreach ($arExamenes as $arExamen) {
             $strNombreCentroCosto = "";
             if($arExamen->getCentroCostoRel()) {
@@ -584,7 +645,7 @@ class ExamenController extends Controller
             if($arExamen->getEntidadExamenRel()) {
                 $strNombreEntidad = $arExamen->getEntidadExamenRel()->getNombre();
             }
-            
+
             //Calculo edad
             $varFechaNacimientoAnio = $arExamen->getFechaNacimiento()->format('Y');
             $varFechaNacimientoMes =  $arExamen->getFechaNacimiento()->format('m');
@@ -621,8 +682,8 @@ class ExamenController extends Controller
                         $array[] = $arDetalleExamen->getEstadoAprobado();
                         $array[] = $arDetalleExamen->getComentarios();
                     }
-                    
-                    
+
+
                     foreach ($array as $posicion=>$jugador){
                         $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('R' . $i, $jugador)
@@ -631,10 +692,10 @@ class ExamenController extends Controller
                             ->setCellValue('U' . $i, $jugador)
                             ->setCellValue('V' . $i, $jugador);
                     }
-                        
+
             $i++;
         }
-        
+
         $objPHPExcel->getActiveSheet()->setTitle('Examen');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
@@ -653,6 +714,6 @@ class ExamenController extends Controller
         exit;
     }
 
-    
+
 
 }

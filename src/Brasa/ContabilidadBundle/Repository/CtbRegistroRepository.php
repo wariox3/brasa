@@ -382,9 +382,11 @@ class CtbRegistroRepository extends EntityRepository
             $arRegistro->setDescripcionContable($arPagoDetalle->getPagoConceptoRel()->getNombre());
             $em->persist($arRegistro);                                
             //echo $arPagoDetalle->getCodigoPagoDetallePk() . "[" . $arPagoDetalle->getPagoConceptoRel()->getCodigoCuentaFk() . "]" . "<br/>";
-        }                              
+        }
+        $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion;
+        $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
         $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find('25050505'); //estaba 250501                           
+        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arConfiguracionNomina->getCuentaNominaPagar()); //estaba 250501                           
         $arRegistro->setComprobanteRel($arComprobanteContable);
         $arRegistro->setCentroCostoRel($arCentroCosto);
         $arRegistro->setCuentaRel($arCuenta);

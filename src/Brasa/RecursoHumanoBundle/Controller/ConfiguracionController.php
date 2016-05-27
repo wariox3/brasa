@@ -140,6 +140,7 @@ class ConfiguracionController extends Controller
             ->add('aportesPorcentajeCaja', 'number', array('data' => $arConfiguracion->getAportesPorcentajeCaja(), 'required' => true))
             ->add('aportesPorcentajeVacaciones', 'number', array('data' => $arConfiguracion->getAportesPorcentajeVacaciones(), 'required' => true))
             ->add('tipoBasePagoVacaciones', 'choice', array('choices' => array('1' => 'SALARIO', '2' => 'SALARIO PRESTACIONAL', '3' => 'SALARIO+RECARGOS NOCTURNOS', '0' => 'SIN ASIGNAR'), 'data' => $arConfiguracion->getTipoBasePagoVacaciones()))                
+            ->add('cuentaNominaPagar', 'number', array('data' => $arConfiguracion->getCuentaNominaPagar(), 'required' => true))
             ->add('guardar', 'submit', array('label' => 'Actualizar'))
             ->getForm();
         $formConfiguracion->handleRequest($request);
@@ -148,6 +149,7 @@ class ConfiguracionController extends Controller
             $codigoConceptoAuxilioTransporte = $controles['conceptoAuxilioTransporte'];
             $ValorAuxilioTransporte = $controles['vrAuxilioTransporte'];
             $porcentajePensionExtra = $controles['porcentajePensionExtra'];
+            $cuentaNominaPagar = $controles['cuentaNominaPagar'];
             $ValorSalario = $controles['vrSalario'];
             $codigoConceptoCredito = $controles['conceptoCredito'];
             $codigoConceptoIncapacidad = $controles['conceptoIncapacidad'];
@@ -173,6 +175,7 @@ class ConfiguracionController extends Controller
             $arConfiguracion->setCodigoAuxilioTransporte($codigoConceptoAuxilioTransporte);
             $arConfiguracion->setVrAuxilioTransporte($ValorAuxilioTransporte);
             $arConfiguracion->setPorcentajePensionExtra($porcentajePensionExtra);
+            $arConfiguracion->setCuentaNominaPagar($cuentaNominaPagar);
             $arConfiguracion->setPorcentajeIva($porcentajeIva);
             $arConfiguracion->setVrSalario($ValorSalario);
             $arConfiguracion->setCodigoCredito($codigoConceptoCredito);
