@@ -182,6 +182,50 @@ class ProgramacionController extends Controller
                     ));
     }
 
+
+    /**
+     * @Route("/tur/movimiento/programacion/detalle/nuevo/{codigoProgramacion}/{codigoProgramacionDetalle}", name="brs_tur_movimiento_programacion_detalle_nuevo")
+     */        
+    public function detalleNuevoAction($codigoProgramacion, $codigoProgramacionDetalle = 0) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
+        $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion);
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            if ($form->get('BtnGuardar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $arrControles = $request->request->All();
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigo) {
+                        $intCantidad = $arrControles['TxtCantidad'.$codigo];
+                        for($i = 1; $i <= $intCantidad; $i++) {
+                            $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                            $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigo);
+                            $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+                            $arProgramacionDetalle->setProgramacionRel($arProgramacion);
+                            $arProgramacionDetalle->setPedidoDetalleRel($arPedidoDetalle);
+                            $arProgramacionDetalle->setAnio($arProgramacion->getFecha()->format('Y'));
+                            $arProgramacionDetalle->setMes($arProgramacion->getFecha()->format('m'));
+                            $em->persist($arProgramacionDetalle);
+                        }
+                    }
+                    $em->flush();
+                }
+                $em->getRepository('BrasaTurnoBundle:TurProgramacion')->liquidar($codigoProgramacion);
+            }
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+        }
+        $arPedidosDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->listaCliente($arProgramacion->getCodigoClienteFk());
+        return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalleNuevo.html.twig', array(
+            'arProgramacion' => $arProgramacion,
+            'arPedidosDetalle' => $arPedidosDetalle,
+            'form' => $form->createView()));
+    }    
+    
     /**
      * @Route("/tur/movimiento/programacion/detalle/pedido/nuevo/{codigoProgramacion}/{codigoProgramacionDetalle}", name="brs_tur_movimiento_programacion_detalle_pedido_nuevo")
      */        
@@ -208,7 +252,7 @@ class ProgramacionController extends Controller
             }
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
-        $arPedidosDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->pendientesCliente($arProgramacion->getCodigoClienteFk());
+        $arPedidosDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->listaCliente($arProgramacion->getCodigoClienteFk(), $arProgramacion->getFecha()->format('Y/m/d'));
         return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalleNuevoPedido.html.twig', array(
             'arProgramacion' => $arProgramacion,
             'arPedidosDetalle' => $arPedidosDetalle,
