@@ -15,6 +15,7 @@ class ConfiguracionController extends Controller
     public function configuracionAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
         $arConsecutivo = new \Brasa\RecursoHumanoBundle\Entity\RhuConsecutivo();
@@ -177,8 +178,6 @@ class ConfiguracionController extends Controller
             $arConfiguracion->setCodigoAuxilioTransporte($codigoConceptoAuxilioTransporte);
             $arConfiguracion->setVrAuxilioTransporte($ValorAuxilioTransporte);
             $arConfiguracion->setPorcentajePensionExtra($porcentajePensionExtra);
-            $arConfiguracion->setCuentaNominaPagar($cuentaNominaPagar);
-            $arConfiguracion->setCuentaPago($cuentaPago);
             $arConfiguracion->setPorcentajeIva($porcentajeIva);
             $arConfiguracion->setVrSalario($ValorSalario);
             $arConfiguracion->setCodigoCredito($codigoConceptoCredito);
@@ -200,6 +199,7 @@ class ConfiguracionController extends Controller
             $arConfiguracion->setAportesPorcentajeCaja($aportesPorcentajeCaja);
             $arConfiguracion->setAportesPorcentajeVacaciones($aportesPorcentajeVacaciones);
             $arConfiguracion->setTipoBasePagoVacaciones($tipoBasePagoVacaciones);
+            
             $arrControles = $request->request->All();
             $intIndiceConsecutivo = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {
@@ -213,10 +213,24 @@ class ConfiguracionController extends Controller
                         }
                         $intIndiceConsecutivo++;
                     }
-
-            $em->persist($arConfiguracion);
-            $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_configuracion_nomina', array('codigoConfiguracionPk' => 1)));
+            $arCuentaNominaPagar = new \Brasa\ContabilidadBundle\Entity\CtbCuenta();
+            $arCuentaNominaPagar = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuentaNominaPagar);        
+            if ($arCuentaNominaPagar == null){
+                $objMensaje->Mensaje("error", "La cuenta de contabilidad nomina por pagar " .$cuentaNominaPagar. " no existe", $this);
+            } else {
+                $arConfiguracion->setCuentaNominaPagar($cuentaNominaPagar);
+            }
+            $arCuentaPagos = new \Brasa\ContabilidadBundle\Entity\CtbCuenta();
+            $arCuentaPagos = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuentaPago);        
+            if ($arCuentaPagos == null){
+                $objMensaje->Mensaje("error", "La cuenta de contabilidad pagos " .$cuentaPago. " no existe", $this);
+            } else {
+                $arConfiguracion->setCuentaPago($cuentaPago);   
+            }
+        $em->persist($arConfiguracion);
+        $em->flush();    
+        return $this->redirect($this->generateUrl('brs_rhu_configuracion_nomina', array('codigoConfiguracionPk' => 1)));                            
+            
         }
         return $this->render('BrasaRecursoHumanoBundle:Configuracion:Configuracion.html.twig', array(
             'formConfiguracion' => $formConfiguracion->createView(),
