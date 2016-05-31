@@ -96,28 +96,32 @@ class ArchivosController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnEnviar')->isClicked()) {                
-                /*$objArchivo = $form['attachment']->getData();
-                if($objArchivo->getClientOriginalExtension() == 'pdf') {
-                    $arArchivo = new \Brasa\AdministracionDocumentalBundle\Entity\AdArchivo();                    
-                    $arArchivo->setNombre($objArchivo->getClientOriginalName());
-                    $arArchivo->setExtensionOriginal($objArchivo->getClientOriginalExtension());                
-                    $arArchivo->setTamano($objArchivo->getClientSize());
-                    $arArchivo->setTipo($objArchivo->getClientMimeType());
-                    $arArchivo->setDocumentoRel($em->getRepository('BrasaAdministracionDocumentalBundle:AdDocumento')->find($codigoDocumento));               
-                    $arArchivo->setNumero($numero);
-                    $arArchivo->setDescripcion($form->get('descripcion')->getData());
-                    $arArchivo->setComentarios($form->get('comentarios')->getData());
-                    $arDirectorio = $em->getRepository('BrasaAdministracionDocumentalBundle:AdDirectorio')->devolverDirectorio();
-                    $arArchivo->setDirectorioRel($arDirectorio);                    
-                    $em->persist($arArchivo);
-                    $em->flush();
-                    $strDestino = $arDirectorio->getRutaPrincipal() . $arDirectorio->getNumero() . "/";
-                    $strArchivo = $arArchivo->getCodigoArchivoPk() . "_" . $objArchivo->getClientOriginalName();
-                    $form['attachment']->getData()->move($strDestino, $strArchivo);                    
-                    return $this->redirect($this->generateUrl('brs_ad_archivos_lista', array('codigoDocumento' => $codigoDocumento, 'numero' => $numero)));
-                } else {
-                    $objMensaje->Mensaje("error", "Solo se pueden cargar arhivos pdf", $this);
-                }*/
+                
+               /* $para  = 'aranzatus21@gmail.com'; // atención a la coma
+                
+                $título = 'Prueba envio email soga';
+
+                $mensaje = 'Hola';
+
+                // Para enviar un correo HTML, debe establecerse la cabecera Content-type
+                $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
+                $cabeceras .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+
+                // Cabeceras adicionales
+                $cabeceras .= 'From: Recordatorio <analista.desarrollo@jgefectivo.com>' . "\r\n";
+
+                // Enviarlo
+                mail($para, $título, $mensaje, $cabeceras);*/
+                
+                $message = \Swift_Message::newInstance()
+        ->setSubject('Hello Email')
+        ->setFrom('analista.desarrollo@jgefectivo.com')
+        ->setTo('desarrollo@jgefectivo.com')
+        ->setBody('You should see me from the profiler!')
+    ;
+
+    $this->get('mailer')->send($message);
+                
             }                                   
         }         
         return $this->render('BrasaAdministracionDocumentalBundle:Archivos:enviar.html.twig', array(
