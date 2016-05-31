@@ -147,12 +147,12 @@ class RhuConfiguracion
     private $aportesPorcentajeVacaciones = 0;
     
     /**
-     * @ORM\Column(name="cuenta_nomina_pagar", type="integer")
+     * @ORM\Column(name="cuenta_nomina_pagar", type="string", length=20, nullable=true)
      */
     private $cuentaNominaPagar;
     
     /**
-     * @ORM\Column(name="cuenta_pago", type="integer")
+     * @ORM\Column(name="cuenta_pago", type="string", length=20, nullable=true)
      */
     private $cuentaPago;
     
@@ -168,6 +168,8 @@ class RhuConfiguracion
      */
     protected $entidadRiesgoProfesionalRel;
 
+
+    
 
     /**
      * Set codigoConfiguracionPk
@@ -650,30 +652,6 @@ class RhuConfiguracion
     }
 
     /**
-     * Set entidadRiesgoProfesionalRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel
-     *
-     * @return RhuConfiguracion
-     */
-    public function setEntidadRiesgoProfesionalRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel = null)
-    {
-        $this->entidadRiesgoProfesionalRel = $entidadRiesgoProfesionalRel;
-
-        return $this;
-    }
-
-    /**
-     * Get entidadRiesgoProfesionalRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional
-     */
-    public function getEntidadRiesgoProfesionalRel()
-    {
-        return $this->entidadRiesgoProfesionalRel;
-    }
-
-    /**
      * Set prestacionesPorcentajeCesantias
      *
      * @param float $prestacionesPorcentajeCesantias
@@ -695,54 +673,6 @@ class RhuConfiguracion
     public function getPrestacionesPorcentajeCesantias()
     {
         return $this->prestacionesPorcentajeCesantias;
-    }
-
-    /**
-     * Set prestacionesPorcentajeVacaciones
-     *
-     * @param float $prestacionesPorcentajeVacaciones
-     *
-     * @return RhuConfiguracion
-     */
-    public function setPrestacionesPorcentajeVacaciones($prestacionesPorcentajeVacaciones)
-    {
-        $this->prestacionesPorcentajeVacaciones = $prestacionesPorcentajeVacaciones;
-
-        return $this;
-    }
-
-    /**
-     * Get prestacionesPorcentajeVacaciones
-     *
-     * @return float
-     */
-    public function getPrestacionesPorcentajeVacaciones()
-    {
-        return $this->prestacionesPorcentajeVacaciones;
-    }
-
-    /**
-     * Set aportesPorcentajeCaja
-     *
-     * @param float $aportesPorcentajeCaja
-     *
-     * @return RhuConfiguracion
-     */
-    public function setAportesPorcentajeCaja($aportesPorcentajeCaja)
-    {
-        $this->aportesPorcentajeCaja = $aportesPorcentajeCaja;
-
-        return $this;
-    }
-
-    /**
-     * Get aportesPorcentajeCaja
-     *
-     * @return float
-     */
-    public function getAportesPorcentajeCaja()
-    {
-        return $this->aportesPorcentajeCaja;
     }
 
     /**
@@ -794,6 +724,30 @@ class RhuConfiguracion
     }
 
     /**
+     * Set prestacionesPorcentajeVacaciones
+     *
+     * @param float $prestacionesPorcentajeVacaciones
+     *
+     * @return RhuConfiguracion
+     */
+    public function setPrestacionesPorcentajeVacaciones($prestacionesPorcentajeVacaciones)
+    {
+        $this->prestacionesPorcentajeVacaciones = $prestacionesPorcentajeVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get prestacionesPorcentajeVacaciones
+     *
+     * @return float
+     */
+    public function getPrestacionesPorcentajeVacaciones()
+    {
+        return $this->prestacionesPorcentajeVacaciones;
+    }
+
+    /**
      * Set prestacionesPorcentajeAporteVacaciones
      *
      * @param float $prestacionesPorcentajeAporteVacaciones
@@ -818,27 +772,27 @@ class RhuConfiguracion
     }
 
     /**
-     * Set tipoBasePagoVacaciones
+     * Set aportesPorcentajeCaja
      *
-     * @param integer $tipoBasePagoVacaciones
+     * @param float $aportesPorcentajeCaja
      *
      * @return RhuConfiguracion
      */
-    public function setTipoBasePagoVacaciones($tipoBasePagoVacaciones)
+    public function setAportesPorcentajeCaja($aportesPorcentajeCaja)
     {
-        $this->tipoBasePagoVacaciones = $tipoBasePagoVacaciones;
+        $this->aportesPorcentajeCaja = $aportesPorcentajeCaja;
 
         return $this;
     }
 
     /**
-     * Get tipoBasePagoVacaciones
+     * Get aportesPorcentajeCaja
      *
-     * @return integer
+     * @return float
      */
-    public function getTipoBasePagoVacaciones()
+    public function getAportesPorcentajeCaja()
     {
-        return $this->tipoBasePagoVacaciones;
+        return $this->aportesPorcentajeCaja;
     }
 
     /**
@@ -868,7 +822,7 @@ class RhuConfiguracion
     /**
      * Set cuentaNominaPagar
      *
-     * @param integer $cuentaNominaPagar
+     * @param string $cuentaNominaPagar
      *
      * @return RhuConfiguracion
      */
@@ -882,7 +836,7 @@ class RhuConfiguracion
     /**
      * Get cuentaNominaPagar
      *
-     * @return integer
+     * @return string
      */
     public function getCuentaNominaPagar()
     {
@@ -892,7 +846,7 @@ class RhuConfiguracion
     /**
      * Set cuentaPago
      *
-     * @param integer $cuentaPago
+     * @param string $cuentaPago
      *
      * @return RhuConfiguracion
      */
@@ -906,10 +860,58 @@ class RhuConfiguracion
     /**
      * Get cuentaPago
      *
-     * @return integer
+     * @return string
      */
     public function getCuentaPago()
     {
         return $this->cuentaPago;
+    }
+
+    /**
+     * Set tipoBasePagoVacaciones
+     *
+     * @param integer $tipoBasePagoVacaciones
+     *
+     * @return RhuConfiguracion
+     */
+    public function setTipoBasePagoVacaciones($tipoBasePagoVacaciones)
+    {
+        $this->tipoBasePagoVacaciones = $tipoBasePagoVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoBasePagoVacaciones
+     *
+     * @return integer
+     */
+    public function getTipoBasePagoVacaciones()
+    {
+        return $this->tipoBasePagoVacaciones;
+    }
+
+    /**
+     * Set entidadRiesgoProfesionalRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel
+     *
+     * @return RhuConfiguracion
+     */
+    public function setEntidadRiesgoProfesionalRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel = null)
+    {
+        $this->entidadRiesgoProfesionalRel = $entidadRiesgoProfesionalRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadRiesgoProfesionalRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional
+     */
+    public function getEntidadRiesgoProfesionalRel()
+    {
+        return $this->entidadRiesgoProfesionalRel;
     }
 }
