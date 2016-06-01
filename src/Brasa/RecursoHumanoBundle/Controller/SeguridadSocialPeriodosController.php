@@ -367,6 +367,15 @@ class SeguridadSocialPeriodosController extends Controller
                 $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setAutoSize(true);
                 $objPHPExcel->getActiveSheet()->getColumnDimension('AA')->setAutoSize(true);
                 $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('AC')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('AD')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('AE')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('AF')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('AG')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('AH')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('AI')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('AJ')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('AK')->setAutoSize(true);
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'IDENTIFICACIÓN')
                     ->setCellValue('B1', 'NOMBRE')
