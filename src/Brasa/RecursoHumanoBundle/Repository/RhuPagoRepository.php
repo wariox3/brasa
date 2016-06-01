@@ -195,7 +195,7 @@ class RhuPagoRepository extends EntityRepository {
         return $douNeto;
     }    
     
-    public function listaDql($intNumero = 0, $strCodigoCentroCosto = "", $strIdentificacion = "", $intTipo = "") {        
+    public function listaDql($intNumero = 0, $strCodigoCentroCosto = "", $strIdentificacion = "", $intTipo = "", $strDesde = "", $strHasta = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT p, e FROM BrasaRecursoHumanoBundle:RhuPago p JOIN p.empleadoRel e WHERE p.codigoPagoPk <> 0";
         if($intNumero != "" && $intNumero != 0) {
@@ -209,7 +209,13 @@ class RhuPagoRepository extends EntityRepository {
         }        
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
-        }        
+        }
+        if($strDesde != "" || $strDesde != 0){
+            $dql .= " AND p.fechaDesde >='" . date_format($strDesde, ('Y-m-d')) . "'";
+        }
+        if($strHasta != "" || $strHasta != 0) {
+            $dql .= " AND p.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
         $dql .= " ORDER BY p.codigoPagoPk DESC";
         return $dql;
     }                        

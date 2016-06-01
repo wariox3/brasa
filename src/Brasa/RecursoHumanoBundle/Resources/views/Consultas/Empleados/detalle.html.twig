@@ -230,7 +230,7 @@
                         <th>DESDE</th>
                         <th>HASTA</th>
                         <th>DÍAS</th>
-                        <th>AUX TRANS</th>                        
+                        <th>AFECTA TRANSPORTE</th>                        
                         <th>COMENTARIOS</th>
                     </tr>
                     {% for arLicencias in arLicencias %}
@@ -325,7 +325,6 @@
                             <th>{{ knp_pagination_sortable(arEmpleadoEstudios, 'CÓDIGO', 'e.codigoEmpleadoEstudioPk') }}</th>
                             <th>ESTUDIO</th>
                             <th>INSTITUCIÓN</th>
-                            <th>AÑOS APROBADOS</th>
                             <th>CIUDAD</th>
                             <th>TÍTULO OBTENIDO</th>
                             <th></th>
@@ -335,7 +334,6 @@
                                 <td><input type="hidden" name="LblCodigo[]" value="{{ arEmpleadoEstudios.codigoEmpleadoEstudioPk }}">{{ arEmpleadoEstudios.codigoEmpleadoEstudioPk }} </td>
                                 <td>{{ arEmpleadoEstudios.empleadoEstudioTipoRel.nombre  }}</td>
                                 <td>{{ arEmpleadoEstudios.institucion  }}</td>
-                                <td>{{ arEmpleadoEstudios.aprobados  }}</td>
                                 <td>{{ arEmpleadoEstudios.ciudadRel.nombre  }}</td>
                                 <td>{{ arEmpleadoEstudios.titulo  }}</td>
                             </tr>

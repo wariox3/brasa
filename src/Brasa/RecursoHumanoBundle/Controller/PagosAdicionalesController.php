@@ -5,10 +5,12 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuAdicionalPagoType;
+use Symfony\Component\HttpFoundation\Request;
 
 class PagosAdicionalesController extends Controller
 {
-    var $strDqlLista = "";   
+    var $strDqlLista = "";
+    var $strDqlListaTiempoSuplementarioMasivo = "";
     var $nombre = "";
     var $identificacion = "";
     var $aplicarDiaLaborado = 2;
@@ -296,17 +298,38 @@ class PagosAdicionalesController extends Controller
     public function generarMasivoSuplementarioDetalleAction($codigoProgramacionPago) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $session = $this->get('session');
         $paginator  = $this->get('knp_paginator');
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-        $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->listaDQL('', $arProgramacionPago->getCodigoCentroCostoFk(), 1));
-        $arEmpleados = $paginator->paginate($query, $request->query->get('page', 1), 50);      
+        //$query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->listaDQL('', $arProgramacionPago->getCodigoCentroCostoFk(), 1));
+        //$arEmpleados = $paginator->paginate($query, $request->query->get('page', 1), 50);
+        //$form = $this->formularioLista();
+        
+        $arrayPropiedadesDepartamentoEmpresa = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuDepartamentoEmpresa',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoDepartamentoEmpresa')) {
+            $arrayPropiedadesDepartamentoEmpresa['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuDepartamentoEmpresa", $session->get('filtroCodigoDepartamentoEmpresa'));
+        }
         $form = $this->createFormBuilder()
-            ->add('BtnGenerar', 'submit', array('label'  => 'Generar',))
+            ->add('departamentoEmpresaRel', 'entity', $arrayPropiedadesDepartamentoEmpresa)
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))                                
+            ->add('BtnGenerar', 'submit', array('label'  => 'Generar',))    
             ->getForm();
         $form->handleRequest($request);
+        $this->listarTiempoSuplementarioMasivo($arProgramacionPago);
         if($form->isValid()) {
             $arrControles = $request->request->All();
+            
             if($form->get('BtnGenerar')->isClicked()) {
                     $intIndice = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {
@@ -427,12 +450,33 @@ class PagosAdicionalesController extends Controller
                     $em->flush();
                     //echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }
+            if($form->get('BtnFiltrar')->isClicked()) {
+                $this->filtrarListaTiempoSuplementirioMasivo($form, $request);
+                $this->listarTiempoSuplementarioMasivo($arProgramacionPago);
+            }
         }
-
+        $arEmpleados = $paginator->paginate($em->createQuery($this->strDqlListaTiempoSuplementarioMasivo), $request->query->get('page', 1), 50);                               
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:generarMasivoSuplementarioDetalle.html.twig', array(
             'arEmpleados' => $arEmpleados,
             'form' => $form->createView()
             ));
+    }
+    
+    private function listarTiempoSuplementarioMasivo($ar) {
+        $em = $this->getDoctrine()->getManager();                
+        $session = $this->get('session');
+        $this->strDqlListaTiempoSuplementarioMasivo = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaTiempoSuplementarioMasivoDql(
+                    '',
+                    $ar->getCodigoCentroCostoFk(),
+                    1,
+                    $session->get('filtroCodigoDepartamentoEmpresa')
+                    );  
+    }         
+    
+    private function filtrarListaTiempoSuplementirioMasivo($form, Request $request) {
+        $session = $this->get('session');        
+        $controles = $request->request->get('form');
+        $session->set('filtroCodigoDepartamentoEmpresa', $controles['departamentoEmpresaRel']);
     }
     
     public function generarMasivoValorDetalleAction($codigoCentroCosto) {

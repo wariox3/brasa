@@ -21,6 +21,12 @@
                     <div class="col-sm-10">                  
                         {{ form_widget(form.estadoGenerado, { 'attr': {'class': 'form-control'} }) }}
                     </div>
+                </div>
+                <div class="form-group form-group-sm">  
+                    <label for="form_centroCostoRel" class="col-sm-2 control-label">Centro costo:</label>
+                    <div class="col-sm-10">                  
+                        {{ form_widget(form.centroCostoRel, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
                 </div>    
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
@@ -35,6 +41,7 @@
                         <th>FECHA</th>
                         <th>IDENTIFICACIÓN</th>
                         <th>EMPLEADO</th>
+                        <th>CENTRO COSTO</th>
                         <th>DESDE</th>
                         <th>HASTA</th>                                                                        
                         <th>GENERADO</th>
@@ -47,6 +54,7 @@
                             <td>{{ arLiquidaciones.fecha |date("Y/m/d")  }}</td>
                             <td>{{ arLiquidaciones.empleadoRel.numeroIdentificacion|default('SIN EMPLEADO')  }}</td>                            
                             <td>{{ arLiquidaciones.empleadoRel.nombreCorto|default('SIN EMPLEADO')  }}</td>                            
+                            <td>{{ arLiquidaciones.centroCostoRel.nombre ('SIN CENTRO COSTO')  }}</td>                            
                             <td>{{ arLiquidaciones.fechaDesde |date("Y/m/d")  }}</td>
                             <td>{{ arLiquidaciones.fechaHasta |date("Y/m/d")  }}</td>
                             <td>{%if arLiquidaciones.estadoGenerado == 1%} SI {%else%} NO {%endif%}</td>

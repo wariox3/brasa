@@ -150,7 +150,12 @@ class RhuContrato
     /**     
      * @ORM\Column(name="estado_liquidado", type="boolean")
      */    
-    private $estadoLiquidado = 0;   
+    private $estadoLiquidado = 0; 
+    
+    /**
+     * @ORM\Column(name="ibp_adicional", type="float")
+     */
+    private $ibpAdicional = 0;
     
     /**
      * Este factor se utiliza para saber de cuantas horas se compone un dia
@@ -2193,5 +2198,29 @@ class RhuContrato
     public function getSoportesPagosHorariosDetallesContratoRel()
     {
         return $this->soportesPagosHorariosDetallesContratoRel;
+    }
+
+    /**
+     * Set ibpAdicional
+     *
+     * @param float $ibpAdicional
+     *
+     * @return RhuContrato
+     */
+    public function setIbpAdicional($ibpAdicional)
+    {
+        $this->ibpAdicional = $ibpAdicional;
+
+        return $this;
+    }
+
+    /**
+     * Get ibpAdicional
+     *
+     * @return float
+     */
+    public function getIbpAdicional()
+    {
+        return $this->ibpAdicional;
     }
 }

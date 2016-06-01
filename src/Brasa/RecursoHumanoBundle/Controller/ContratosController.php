@@ -326,6 +326,8 @@ class ContratosController extends Controller
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
         $formContrato = $this->createFormBuilder()
             ->setAction($this->generateUrl('brs_rhu_contratos_terminar', array('codigoContrato' => $codigoContrato)))
             ->add('fechaTerminacion', 'date', array('label'  => 'Terminacion', 'data' => new \DateTime('now')))
@@ -333,11 +335,11 @@ class ContratosController extends Controller
                 'class' => 'BrasaRecursoHumanoBundle:RhuMotivoTerminacionContrato',
                         'property' => 'motivo',
             ))
+            ->add('ibpAdicional', 'number', array('data' =>$arContrato->getIbpAdicional() ,'required' => false))      
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $formContrato->handleRequest($request);
-        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
+        
         $arDotacionPendiente = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->dotacionDevolucion($arContrato->getCodigoEmpleadoFk());
         $registrosDotacionesPendientes = count($arDotacionPendiente);
         if ($registrosDotacionesPendientes > 0){
@@ -351,6 +353,7 @@ class ContratosController extends Controller
             $arMotivoTerminacion = new \Brasa\RecursoHumanoBundle\Entity\RhuMotivoTerminacionContrato();
             $codigoMotivoContrato = $formContrato->get('terminacionContratoRel')->getData();
             $arMotivoTerminacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuMotivoTerminacionContrato')->find($codigoMotivoContrato);
+            $floIbpAdicional = $formContrato->get('ibpAdicional')->getData();
             if($dateFechaHasta >= $arContrato->getFechaUltimoPago()) {
                 if($em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->validarCierreContrato($dateFechaHasta, $arContrato->getCodigoEmpleadoFk())) {
                     if($em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->validarCierreContrato($dateFechaHasta, $arContrato->getCodigoEmpleadoFk())) {
@@ -360,6 +363,7 @@ class ContratosController extends Controller
                             $arContrato->setEstadoActivo(0);
                             $arContrato->setEstadoLiquidado(1);
                             $arContrato->setTerminacionContratoRel($codigoMotivoContrato);
+                            $arContrato->setIbpAdicional($floIbpAdicional);
                             $em->persist($arContrato);
                             $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato->getCodigoEmpleadoFk());
@@ -433,6 +437,34 @@ class ContratosController extends Controller
             'arContrato' => $arContrato,
             'formContrato' => $formContrato->createView(),
             'mensaje' => $mensaje
+        ));
+    }
+    
+    public function ibpAdicionalAction($codigoContrato) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        
+        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
+        $formIbpAdicional = $this->createFormBuilder()
+            ->setAction($this->generateUrl('brs_rhu_contratos_ibp_adicional', array('codigoContrato' => $codigoContrato)))
+            ->add('ibpAdicional', 'number', array('data' =>$arContrato->getIbpAdicional() ,'required' => false))      
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        $formIbpAdicional->handleRequest($request);    
+        if ($formIbpAdicional->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
+            $floIbpAdicional = $formIbpAdicional->get('ibpAdicional')->getData();
+            
+            $arContrato->setIbpAdicional($floIbpAdicional);
+            $em->persist($arContrato);
+            $em->flush();
+       
+            return $this->redirect($this->generateUrl('brs_rhu_base_contratos_detalles', array('codigoContrato' => $codigoContrato)));
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:ibpAdicional.html.twig', array(
+            'arContrato' => $arContrato,
+            'formIbpAdicional' => $formIbpAdicional->createView()
         ));
     }
 

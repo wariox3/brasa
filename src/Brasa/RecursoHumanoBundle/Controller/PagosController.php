@@ -106,6 +106,8 @@ class PagosController extends Controller
         $form = $this->createFormBuilder()                        
             ->add('centroCostoRel', 'entity', $arrayPropiedadesCentroCosto)
             ->add('pagoTipoRel', 'entity', $arrayPropiedadesTipo)
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))    
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))                            
             ->add('TxtNumero', 'text', array('label'  => 'Numero','data' => $session->get('filtroPagoNumero')))                                                   
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                                            
@@ -122,7 +124,9 @@ class PagosController extends Controller
                     $this->intNumero,
                     $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroIdentificacion'),
-                    $session->get('filtroCodigoPagoTipo')
+                    $session->get('filtroCodigoPagoTipo'),
+                    $session->get('filtroDesde'),
+                    $session->get('filtroHasta')
                     );  
     }         
     
@@ -133,6 +137,8 @@ class PagosController extends Controller
         $session->set('filtroCodigoPagoTipo', $controles['pagoTipoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $this->intNumero = $form->get('TxtNumero')->getData();
+        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }         
     
     private function generarExcel() {

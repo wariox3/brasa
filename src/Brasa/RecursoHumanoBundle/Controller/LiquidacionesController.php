@@ -3,6 +3,8 @@
 namespace Brasa\RecursoHumanoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpFoundation\Request;
 
 class LiquidacionesController extends Controller
 {
@@ -172,12 +174,28 @@ class LiquidacionesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->listaDql(
                $session->get('filtroIdentificacion'),
-               $session->get('filtroGenerado'));
+               $session->get('filtroGenerado'),
+               $session->get('filtroCodigoCentroCosto'));
     }
 
     private function formularioLista() {
         $session = $this->getRequest()->getSession();
+        $arrayPropiedadesCentroCosto = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoCentroCosto')) {
+            $arrayPropiedadesCentroCosto['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
+        }
         $form = $this->createFormBuilder()
+            ->add('centroCostoRel', 'entity', $arrayPropiedadesCentroCosto)    
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('estadoGenerado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'),'data' => $session->get('filtroGenerado')))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -217,6 +235,7 @@ class LiquidacionesController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroGenerado', $controles['estadoGenerado']);
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
     }
 
     private function generarExcel() {

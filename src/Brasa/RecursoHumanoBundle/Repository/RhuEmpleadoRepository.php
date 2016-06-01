@@ -117,4 +117,26 @@ class RhuEmpleadoRepository extends EntityRepository {
         return $arResultado;
     }
     
+    public function ListaTiempoSuplementarioMasivoDql($strNombre = "", $strCodigoCentroCosto = "", $boolMostrarActivos = 2, $strCodigoDepartamentoEmpresa = "" ) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuEmpleado e WHERE e.codigoEmpleadoPk <> 0";
+        if($strNombre != "" ) {
+            $dql .= " AND e.nombreCorto LIKE '%" . $strNombre . "%'";
+        }
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }
+        if($boolMostrarActivos == 1 ) {
+            $dql .= " AND e.estadoActivo = 1";
+        }
+        if($boolMostrarActivos == "0") {
+            $dql .= " AND e.estadoActivo = 0";
+        }
+        if($strCodigoDepartamentoEmpresa != "") {
+            $dql .= " AND e.codigoDepartamentoEmpresaFk = " . $strCodigoDepartamentoEmpresa;
+        }
+        $dql .= " ORDER BY e.nombreCorto";
+        return $dql;
+    }
+    
 }

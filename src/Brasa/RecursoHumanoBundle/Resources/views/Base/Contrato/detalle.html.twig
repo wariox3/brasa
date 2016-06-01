@@ -25,7 +25,7 @@
                     <li>{{ form_widget(form.BtnImprimirCartaPresentacion, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}</li>                    
                     <li><a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_base_contratos_documentos', {'codigoContrato': arContrato.codigoContratoPk }) }}', 'Archivos', 500, 700)" >Entrega documentos</a></li>                                       
                 </ul>
-                
+            <a class="btn btn-default btn-sm" id="{{ path('brs_rhu_contratos_ibp_adicional', { 'codigoContrato': arContrato.codigoContratoPk}) }}" style="float:left">Base prestacional anterior</a>
         </div>  
         <br /> <br />
         <div class="panel panel-default">
@@ -53,24 +53,24 @@
                     <td>{% if arContrato.codigoContratoTipoFk != 2 %} INDEFINIDO {% else %} {{ arContrato.fechaHasta |date("Y/m/d")  }} {% endif %}</td>
                     <td class="titulo">CENTRO COSTO:</td>
                     <td class="td-in-well">{{ arContrato.centroCostoRel.nombre|default('SIN CENTRO COSTO') }}</td>
-                    <td class="titulo">CARGO:</td>
-                    <td class="td-in-well">{{ arContrato.cargoRel.nombre|default('SIN CARGO') }}</td>
+                    <td class="titulo">BASE PRESTACIONAL ANTERIOR:</td>
+                    <td class="td-in-well-numerico" align="right">{{ arContrato.ibpAdicional | number_format(2, '.', ',') }}</td>
                 </tr>                 
                 <tr>
                     <td class="titulo">CLASIFICACIÓN RIESGO:</td>
                     <td class="td-in-well">{{ arContrato.clasificacionRiesgoRel.nombre|default('SIN CENTRO COSTO') }}</td>
                     <td class="titulo">IDENTIFICACIÓN:</td>
                     <td class="td-in-well">{{ arContrato.empleadoRel.numeroIdentificacion }}</td>
-                    <td class="titulo">DESCRIPCIÓN CARGO:</td>
-                    <td class="td-in-well">{{ arContrato.cargoDescripcion }}</td>
+                    <td class="titulo">CARGO:</td>
+                    <td class="td-in-well">{{ arContrato.cargoRel.nombre|default('SIN CARGO') }}</td>
                 </tr>
                 <tr>
                     <td class="titulo">ÚLTIMO PAGO:</td>
                     <td>{{ arContrato.fechaUltimoPago|date("Y/m/d") }}</td>
                     <td class="titulo">EMPLEADO:</td>
                     <td class="td-in-well">{{ arContrato.empleadoRel.nombreCorto }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">DESCRIPCIÓN CARGO</td>
+                    <td class="td-in-well">{{ arContrato.cargoDescripcion }}</td>
                 </tr>                 
                 <tr>
                     <td class="titulo">ÚLTIMA PRIMA:</td>

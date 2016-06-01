@@ -86,7 +86,8 @@ class RhuContratoType extends AbstractType
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                
+                'required' => true))
+            ->add('ibpAdicional', 'number', array('required' => false))                
             ->add('guardar', 'submit');        
     }
  
