@@ -1,12 +1,12 @@
 <?php
 
-namespace Brasa\ContabilidadBundle\Controller;
+namespace Brasa\ContabilidadBundle\Controller\Proceso;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
-class ProcesoContabilizarAsientoController extends Controller
+class ContabilizarAsientoController extends Controller
 {
     var $strDqlLista = "";
     /**

@@ -1,12 +1,12 @@
 <?php
 
-namespace Brasa\ContabilidadBundle\Controller;
+namespace Brasa\ContabilidadBundle\Controller\Buscar;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
-class BuscarTerceroController extends Controller
+class TerceroController extends Controller
 {
     var $strDqlLista = "";     
     var $strIdentificacion = "";

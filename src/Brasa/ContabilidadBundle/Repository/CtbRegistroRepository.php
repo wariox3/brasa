@@ -30,6 +30,18 @@ class CtbRegistroRepository extends EntityRepository
         return $dql;
     }           
     
+    public function eliminar($arrSeleccionados) {        
+        if(count($arrSeleccionados) > 0) {
+            $em = $this->getEntityManager();
+            foreach ($arrSeleccionados AS $codigo) {                                
+                $ar = $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->find($codigo);  
+                $em->remove($ar);                  
+            }                                         
+            $em->flush();       
+        }
+        
+    }     
+    
     /**
      * Contabiliza un movimiento de inventario
      * @param integer $codigoMovimiento codigo del movimiento que se va a procesar.

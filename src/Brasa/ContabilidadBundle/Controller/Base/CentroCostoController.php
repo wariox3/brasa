@@ -1,18 +1,18 @@
 <?php
 
-namespace Brasa\ContabilidadBundle\Controller;
+namespace Brasa\ContabilidadBundle\Controller\Base;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Brasa\ContabilidadBundle\Form\Type\CtbComprobanteType;
+use Brasa\ContabilidadBundle\Form\Type\CtbCentroCostoType;
 
 
 
-class BaseComprobanteController extends Controller
+class CentroCostoController extends Controller
 {
     /**
-     * @Route("/ctb/base/comprobantes/lista", name="brs_ctb_base_comprobantes_lista")
+     * @Route("/ctb/base/centro/costo/lista", name="brs_ctb_base_centro_costo_lista")
      */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -23,14 +23,14 @@ class BaseComprobanteController extends Controller
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
-        $arComprobantes = new \Brasa\ContabilidadBundle\Entity\CtbComprobante();
+        $arCentroCostos = new \Brasa\ContabilidadBundle\Entity\CtbCentroCosto();
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoComprobante) {
-                    $arComprobante = new \Brasa\ContabilidadBundle\Entity\CtbComprobante();
-                    $arComprobante = $em->getRepository('BrasaContabilidadBundle:CtbComprobante')->find($codigoComprobante);
-                    $em->remove($arComprobante);
+                foreach ($arrSeleccionados AS $codigoCentroCosto) {
+                    $arCentroCosto = new \Brasa\ContabilidadBundle\Entity\CtbCentroCosto();
+                    $arCentroCosto = $em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find($codigoCentroCosto);
+                    $em->remove($arCentroCosto);
                     $em->flush();
                 }
             }
@@ -38,39 +38,39 @@ class BaseComprobanteController extends Controller
                 $this->generarExcel();
             }
         }
-        $arComprobantes = new \Brasa\ContabilidadBundle\Entity\CtbComprobante();
-        $query = $em->getRepository('BrasaContabilidadBundle:CtbComprobante')->findAll();
-        $arComprobantes = $paginator->paginate($query, $this->get('request')->query->get('page', 1),100);
+        $arCentroCostos = new \Brasa\ContabilidadBundle\Entity\CtbCentroCosto();
+        $query = $em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->findAll();
+        $arCentroCostos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),100);
 
-        return $this->render('BrasaContabilidadBundle:Base/Comprobantes:lista.html.twig', array(
-                    'arComprobantes' => $arComprobantes,
+        return $this->render('BrasaContabilidadBundle:Base/CentroCosto:lista.html.twig', array(
+                    'arCentroCostos' => $arCentroCostos,
                     'form'=> $form->createView()
            
         ));
     }
     
     /**
-     * @Route("/ctb/base/comprobantes/nuevo/{codigoComprobante}", name="brs_ctb_base_comprobantes_nuevo")
+     * @Route("/ctb/base/centro/costo/nuevo/{codigoCentroCosto}", name="brs_ctb_base_centro_costo_nuevo")
      */
-    public function nuevoAction($codigoComprobante) {
+    public function nuevoAction($codigoCentroCosto) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arComprobante = new \Brasa\ContabilidadBundle\Entity\CtbComprobante();
-        if ($codigoComprobante != 0)
+        $arCentroCosto = new \Brasa\ContabilidadBundle\Entity\CtbCentroCosto();
+        if ($codigoCentroCosto != 0)
         {
-            $arComprobante = $em->getRepository('BrasaContabilidadBundle:CtbComprobante')->find($codigoComprobante);
+            $arCentroCosto = $em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find($codigoCentroCosto);
         }    
-        $form = $this->createForm(new CtbComprobanteType(), $arComprobante);
+        $form = $this->createForm(new CtbCentroCostoType(), $arCentroCosto);
         $form->handleRequest($request);
         if ($form->isValid())
         {
             // guardar la tarea en la base de datos
-            $arComprobante = $form->getData();
-            $em->persist($arComprobante);
+            $arCentroCosto = $form->getData();
+            $em->persist($arCentroCosto);
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_ctb_base_comprobantes_lista'));
+            return $this->redirect($this->generateUrl('brs_ctb_base_centro_costo_lista'));
         }
-        return $this->render('BrasaContabilidadBundle:Base/Comprobantes:nuevo.html.twig', array(
+        return $this->render('BrasaContabilidadBundle:Base/CentroCosto:nuevo.html.twig', array(
             'form' => $form->createView(),
         ));
     }
@@ -93,22 +93,22 @@ class BaseComprobanteController extends Controller
                     ->setCellValue('B1', 'NOMBRE');
 
         $i = 2;
-        $arComprobantes = $em->getRepository('BrasaContabilidadBundle:CtbComprobante')->findAll();
+        $arCentroCostos = $em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->findAll();
 
-        foreach ($arComprobantes as $arComprobante) {
+        foreach ($arCentroCostos as $arCentroCostos) {
 
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arComprobante->getCodigoComprobantePk())
-                    ->setCellValue('B' . $i, $arComprobante->getNombre());
+                    ->setCellValue('A' . $i, $arCentroCostos->getCodigoCentroCostoPk())
+                    ->setCellValue('B' . $i, $arCentroCostos->getNombre());
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('Comprobantes');
+        $objPHPExcel->getActiveSheet()->setTitle('CentroCostos');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Comprobantes.xlsx"');
+        header('Content-Disposition: attachment;filename="CentroCostos.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

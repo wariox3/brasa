@@ -1,6 +1,6 @@
 <?php
 
-namespace Brasa\ContabilidadBundle\Controller;
+namespace Brasa\ContabilidadBundle\Controller\Base;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -9,7 +9,7 @@ use Brasa\ContabilidadBundle\Form\Type\CtbCuentaType;
 
 
 
-class BaseCuentaController extends Controller
+class CuentaController extends Controller
 {
     var $strDqlLista = "";
     

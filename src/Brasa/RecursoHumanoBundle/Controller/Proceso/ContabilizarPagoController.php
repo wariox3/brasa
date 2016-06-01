@@ -55,7 +55,7 @@ class ContabilizarPagoController extends Controller
                                 $arTercero->setEmail($arPago->getEmpleadoRel()->getCorreo());
                                 $em->persist($arTercero);                                 
                                 $this->contabilizarPagoNomina($codigo,$arComprobanteContable,$arCentroCosto,$arTercero,$arPago, $arConfiguracionNomina);  
-                                $arPago->setEstadoContabilizado(1);
+                                $arPago->setEstadoContabilizado(1);                                
                                 $em->persist($arPago);
                             }                                                    
                         }
@@ -89,8 +89,13 @@ class ContabilizarPagoController extends Controller
         $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
         $arPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $codigo));
         foreach ($arPagoDetalles as $arPagoDetalle) {
-            $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-            $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arPagoDetalle->getPagoConceptoRel()->getCodigoCuentaFk());                            
+            $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro(); 
+            if($arPago->getCentroCostoRel()->getAdministrativo() == 1) {
+                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arPagoDetalle->getPagoConceptoRel()->getCodigoCuentaFk());                            
+            } else {
+                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arPagoDetalle->getPagoConceptoRel()->getCodigoCuentaOperacionFk());                            
+            }
+            
             $arRegistro->setComprobanteRel($arComprobanteContable);
             $arRegistro->setCentroCostoRel($arCentroCosto);
             $arRegistro->setCuentaRel($arCuenta);

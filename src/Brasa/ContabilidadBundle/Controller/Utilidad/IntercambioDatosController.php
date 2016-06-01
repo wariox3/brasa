@@ -1,12 +1,12 @@
 <?php
 
-namespace Brasa\ContabilidadBundle\Controller;
+namespace Brasa\ContabilidadBundle\Controller\Utilidad;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
-class UtilidadesIntercambioDatosController extends Controller
+class IntercambioDatosController extends Controller
 {
     var $strDqlLista = "";      
     /**

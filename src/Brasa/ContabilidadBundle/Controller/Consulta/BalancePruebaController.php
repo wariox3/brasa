@@ -1,12 +1,12 @@
 <?php
 
-namespace Brasa\ContabilidadBundle\Controller;
+namespace Brasa\ContabilidadBundle\Controller\Consulta;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
-class ConsultasBalancePruebaController extends Controller
+class BalancePruebaController extends Controller
 {
     var $strDqlLista = "";
     var $strCuentaDesde = "";

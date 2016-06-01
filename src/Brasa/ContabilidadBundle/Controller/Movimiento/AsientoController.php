@@ -1,6 +1,6 @@
 <?php
 
-namespace Brasa\ContabilidadBundle\Controller;
+namespace Brasa\ContabilidadBundle\Controller\Movimiento;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
@@ -9,7 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\ContabilidadBundle\Form\Type\CtbAsientoDetalleType;
 
 
-class MovimientoAsientoController extends Controller
+class AsientoController extends Controller
 {
     var $strListaDql = "";
     var $numeroAsiento = "";

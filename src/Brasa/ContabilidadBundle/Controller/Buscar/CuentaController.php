@@ -1,19 +1,19 @@
 <?php
 
-namespace Brasa\ContabilidadBundle\Controller;
+namespace Brasa\ContabilidadBundle\Controller\Buscar;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
-class BuscarCentroCostoController extends Controller
+class CuentaController extends Controller
 {
     var $strDqlLista = "";     
     var $strCodigo = "";
     var $strNombre = "";
     
     /**
-     * @Route("/ctb/buscar/centro/costo/{campoCodigo}", name="brs_ctb_buscar_centro_costo")
+     * @Route("/ctb/buscar/cuenta/{campoCodigo}", name="brs_ctb_buscar_cuenta")
      */
     public function listaAction($campoCodigo) {
         $em = $this->getDoctrine()->getManager();
@@ -28,9 +28,9 @@ class BuscarCentroCostoController extends Controller
                 $this->lista();
             }
         }
-        $arCentroCosto = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 40);
-        return $this->render('BrasaContabilidadBundle:Buscar:centroCosto.html.twig', array(
-            'arCentroCostos' => $arCentroCosto,
+        $arCuenta = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 40);
+        return $this->render('BrasaContabilidadBundle:Buscar:cuenta.html.twig', array(
+            'arCuenta' => $arCuenta,
             'campoCodigo' => $campoCodigo,            
             'form' => $form->createView()
             ));
@@ -38,9 +38,9 @@ class BuscarCentroCostoController extends Controller
     
     private function lista() {        
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->listaDQL(
-                $this->strNombre,
-                $this->strCodigo
+        $this->strDqlLista = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->listaDQL(
+                $this->strCodigo,
+                $this->strNombre                   
                 ); 
     }       
     
@@ -54,7 +54,7 @@ class BuscarCentroCostoController extends Controller
     }           
 
     private function filtrarLista($form) {
-        $session = $this->getRequest()->getSession();
+        
         $this->strCodigo = $form->get('TxtCodigo')->getData();
         $this->strNombre = $form->get('TxtNombre')->getData();
     }    

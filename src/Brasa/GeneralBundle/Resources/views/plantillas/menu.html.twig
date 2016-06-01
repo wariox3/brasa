@@ -165,12 +165,7 @@
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Contabilidad</a>
                             <ul class="dropdown-menu">
-                                <li class="dropdown-submenu">
-                                    <a tabindex="-1" href="#">Registros</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_ctb_consultas_registros') }}">Lista</a></li>
-                                    </ul>
-                                </li>
+                                <li><a href="{{ path('brs_ctb_consultas_registros') }}">Registros</a></li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="{{ path('brs_ctb_consultas_balance_prueba')}}">Balance de prueba</a>
                                 </li>
@@ -580,7 +575,8 @@
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Contabilidad</a>
                             <ul class="dropdown-menu">
-                                <li class="dropdown-submenu">
+                                <li><a href="{{ path('brs_ctb_movimiento_registro') }}">Registro</a></li>
+                                <li class="dropdown-submenu">                                    
                                     <a tabindex="-1" href="#">Asientos</a>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_ctb_mov_asientos_lista') }}">Lista</a></li>

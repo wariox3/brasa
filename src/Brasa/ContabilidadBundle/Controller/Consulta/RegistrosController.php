@@ -1,12 +1,12 @@
 <?php
 
-namespace Brasa\ContabilidadBundle\Controller;
+namespace Brasa\ContabilidadBundle\Controller\Consulta;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
-class ConsultasRegistrosController extends Controller
+class RegistrosController extends Controller
 {
     var $strDqlLista = "";
     var $strNumero = "";
@@ -39,7 +39,7 @@ class ConsultasRegistrosController extends Controller
 
         }
         $arRegistros = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 40);
-        return $this->render('BrasaContabilidadBundle:Consultas/Registros:lista.html.twig', array(
+        return $this->render('BrasaContabilidadBundle:Consulta/Registro:lista.html.twig', array(
             'arRegistros' => $arRegistros,
             'form' => $form->createView()
             ));
@@ -86,6 +86,12 @@ class ConsultasRegistrosController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'M'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
+        }      
+        for($col = 'I'; $col !== 'L'; $col++) {            
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }        
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'NÚMERO')
@@ -111,14 +117,16 @@ class ConsultasRegistrosController extends Controller
                     ->setCellValue('C' . $i, $arRegistro->getNumeroReferencia())
                     ->setCellValue('D' . $i, $arRegistro->getFecha()->Format('Y-m-d'))
                     ->setCellValue('E' . $i, $arRegistro->getCodigoComprobanteFk())
-                    ->setCellValue('F' . $i, $arRegistro->getCodigoCuentaFk())
-                    ->setCellValue('G' . $i, $arRegistro->getCodigoTerceroFk())
-                    ->setCellValue('H' . $i, '')
+                    ->setCellValue('F' . $i, $arRegistro->getCodigoCuentaFk())                    
                     ->setCellValue('I' . $i, $arRegistro->getDebito())
                     ->setCellValue('J' . $i, $arRegistro->getCredito())
                     ->setCellValue('K' . $i, $arRegistro->getBase())
                     ->setCellValue('L' . $i, $arRegistro->getDescripcionContable());
             $i++;
+            if($arRegistro->getTerceroRel()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G' . $i, $arRegistro->getTerceroRel()->getNumeroIdentificacion());
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H' . $i, $arRegistro->getTerceroRel()->getNombreCorto());
+            }
         }
 
         $objPHPExcel->getActiveSheet()->setTitle('registros');
