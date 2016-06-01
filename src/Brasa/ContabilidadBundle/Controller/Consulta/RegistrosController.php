@@ -121,12 +121,12 @@ class RegistrosController extends Controller
                     ->setCellValue('I' . $i, $arRegistro->getDebito())
                     ->setCellValue('J' . $i, $arRegistro->getCredito())
                     ->setCellValue('K' . $i, $arRegistro->getBase())
-                    ->setCellValue('L' . $i, $arRegistro->getDescripcionContable());
-            $i++;
+                    ->setCellValue('L' . $i, $arRegistro->getDescripcionContable());            
             if($arRegistro->getTerceroRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G' . $i, $arRegistro->getTerceroRel()->getNumeroIdentificacion());
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H' . $i, $arRegistro->getTerceroRel()->getNombreCorto());
             }
+            $i++;
         }
 
         $objPHPExcel->getActiveSheet()->setTitle('registros');
