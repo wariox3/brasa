@@ -4,6 +4,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+
 class RegistroController extends Controller
 {
     var $strListaDql = "";   
@@ -26,17 +27,17 @@ class RegistroController extends Controller
                 return $this->redirect($this->generateUrl('brs_ctb_movimiento_registro'));                 
                 
             }
-            /*if ($form->get('BtnFiltrar')->isClicked()) {
-                $this->filtrar($form);
-                $form = $this->formularioFiltro();
+            if ($form->get('BtnFiltrar')->isClicked()) {
+                $this->filtrar($form, $request);
+                //$form = $this->formularioFiltro();
                 $this->lista();
             }
             if ($form->get('BtnExcel')->isClicked()) {
-                $this->filtrar($form);
-                $form = $this->formularioFiltro();
+                $this->filtrar($form, $request);
+                //$form = $this->formularioFiltro();
                 $this->lista();
                 $this->generarExcel();
-            }*/
+            }
         }
         $arRegistros = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 50);
         return $this->render('BrasaContabilidadBundle:Movimiento/Registro:lista.html.twig', array(
@@ -47,22 +48,22 @@ class RegistroController extends Controller
     private function lista() {   
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->listaDQL();
+        
+        $this->strListaDql =  $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->listaDQL(
+                    $session->get('filtroNumeroRegistro'),
+                    $session->get('filtroCodigoComprobante'),
+                    $session->get('filtroDesde'),
+                    $session->get('filtroHasta')
+                    );
     }        
     
-    private function filtrar ($form) {
-        $session = $this->getRequest()->getSession();        
-        $session->set('filtroRegistroNumero', $form->get('TxtNumero')->getData());
-        $session->set('filtroRegistroEstadoAutorizado', $form->get('estadoAutorizado')->getData());          
-        $session->set('filtroRegistroEstadoProgramado', $form->get('estadoProgramado')->getData());          
-        $session->set('filtroRegistroEstadoFacturado', $form->get('estadoFacturado')->getData());          
-        $session->set('filtroRegistroEstadoAnulado', $form->get('estadoAnulado')->getData());          
-        $session->set('filtroNit', $form->get('TxtNit')->getData());                         
-        $dateFechaDesde = $form->get('fechaDesde')->getData();
-        $dateFechaHasta = $form->get('fechaHasta')->getData();
-        $session->set('filtroRegistroFechaDesde', $dateFechaDesde->format('Y/m/d'));
-        $session->set('filtroRegistroFechaHasta', $dateFechaHasta->format('Y/m/d'));                 
-        $session->set('filtroRegistroFiltrarFecha', $form->get('filtrarFecha')->getData());
+    private function filtrar ($form, Request $request) {
+        $session = $this->get('session');        
+        $controles = $request->request->get('form');
+        $session->set('filtroRegistroNumero', $controles['TxtNumeroRegistro']);                
+        $session->set('filtroCodigoComprobante', $controles['comprobanteRel']);
+        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
         
     }
     
@@ -180,5 +181,62 @@ class RegistroController extends Controller
         $objWriter->save('php://output');
         exit;
     }
+    
+    /**
+     * @Route("/ctb/movimiento/registro/eliminar", name="brs_ctb_movimiento_registro_eliminar")
+     */    
+    public function eliminarMasivoAction() {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $session = $this->getRequest()->getSession();                              
+        $form = $this->createFormBuilder()
+            ->add('TxtNumeroRegistro', 'text', array('label'  => 'Codigo'))
+            ->add('comprobanteRel', 'entity', array(
+                'class' => 'BrasaContabilidadBundle:CtbComprobante',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                    ->orderBy('c.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""))
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                                            
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))    
+            ->getForm();
+        $form->handleRequest($request);        
+        if ($form->isValid()) {             
+            if ($form->get('BtnEliminar')->isClicked()) {
+                $intNumeroRegistro = $form->get('TxtNumeroRegistro')->getData();
+                $arComprobante = $form->get('comprobanteRel')->getData();
+                if ($arComprobante == null){
+                    $codigoComprobante = "";
+                } else {
+                    $codigoComprobante = $arComprobante->getCodigoComprobantePk();
+                }
+                
+                $dateFechaDesde = $form->get('fechaDesde')->getData();
+                $dateFechaHasta = $form->get('fechaHasta')->getData();
+                
+                $arRegistros = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();
+                $arRegistros = $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->listaEliminarRegistrosMasivosDql($intNumeroRegistro,$codigoComprobante,$dateFechaDesde,$dateFechaHasta);
+                echo count($arRegistros);
+                foreach ($arRegistros as $codigoRegistro) {
+                    $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();
+                    $arRegistro = $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->find($codigoRegistro);
+                    $em->remove($arRegistro);
+                    $em->flush();
+                }
+                //$em->getRepository('BrasaContabilidadBundle:CtbRegistro')->eliminar($arrSeleccionados);
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }
+        }
+        //$arRegistros = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 50);
+        return $this->render('BrasaContabilidadBundle:Movimiento/Registro:eliminarMasivo.html.twig', array(        
+            'form' => $form->createView()));
+    }
+    
+    
     
 }

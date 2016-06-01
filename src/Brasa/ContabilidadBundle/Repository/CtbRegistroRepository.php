@@ -13,22 +13,42 @@ use Doctrine\ORM\EntityRepository;
 class CtbRegistroRepository extends EntityRepository
 {
 
-    public function listaDql($boolExportado = "", $numero = "", $numeroReferencia = "", $comprobante = "", $fechaDesde = "", $fechaHasta = "") {        
+    public function listaDql($numero = "", $comprobante = "", $fechaDesde = "", $fechaHasta = "") {        
         $dql   = "SELECT r FROM BrasaContabilidadBundle:CtbRegistro r WHERE r.codigoRegistroPk <> 0";
-        if($boolExportado == "0") {
-            $dql .= " AND r.exportado = 0";
-        }
         if($numero != "") {
             $dql .= " AND r.numero = " . $numero;
-        }        
-        if($numeroReferencia != "") {
-            $dql .= " AND r.numeroReferencia = " . $numeroReferencia;
-        }        
+        }                
         if($comprobante != "") {
             $dql .= " AND r.codigoComprobanteFk = " . $comprobante;
-        }        
+        }
+        if($fechaDesde != "" || $fechaDesde != 0){
+            $dql .= " AND r.fecha >='" . date_format($fechaDesde, ('Y-m-d')) . "'";
+        }
+        if($fechaHasta != "" || $fechaHasta != 0) {
+            $dql .= " AND r.fecha <='" . date_format($fechaHasta, ('Y-m-d')) . "'";
+        }
         return $dql;
     }           
+    
+    public function listaEliminarRegistrosMasivosDql($intNumero = 0, $comprobante = "", $strDesde = "", $strHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT r FROM BrasaContabilidadBundle:CtbRegistro r WHERE r.codigoRegistroPk <> 0";
+        if($intNumero != "") {
+            $dql .= " AND r.numero = " . $intNumero;
+        }
+        if($comprobante != "") {
+            $dql .= " AND r.codigoComprobanteFk = " . $comprobante;
+        }   
+        if($strDesde != "" || $strDesde != 0){
+            $dql .= " AND r.fecha >='" . date_format($strDesde, ('Y-m-d')) . "'";
+        }
+        if($strHasta != "" || $strHasta != 0) {
+            $dql .= " AND r.fecha <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();
+        return $arrayResultado;
+    }
     
     public function eliminar($arrSeleccionados) {        
         if(count($arrSeleccionados) > 0) {

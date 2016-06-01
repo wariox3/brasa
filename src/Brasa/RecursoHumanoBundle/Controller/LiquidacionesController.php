@@ -179,6 +179,7 @@ class LiquidacionesController extends Controller
     }
 
     private function formularioLista() {
+        $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $arrayPropiedadesCentroCosto = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
