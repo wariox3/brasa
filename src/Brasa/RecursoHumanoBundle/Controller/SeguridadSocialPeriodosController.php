@@ -413,7 +413,7 @@ class SeguridadSocialPeriodosController extends Controller
                     ->setCellValue('AH1', 'C.R')
                     ->setCellValue('AI1', 'C.C')
                     ->setCellValue('AJ1', 'C.SN')
-                    ->setCellValue('AK1', 'C.SN');
+                    ->setCellValue('AK1', 'C.I');
                 
                 $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
                 $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);
