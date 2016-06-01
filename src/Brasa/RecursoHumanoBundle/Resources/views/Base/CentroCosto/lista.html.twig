@@ -43,6 +43,7 @@
                 <th><p data-toggle="tooltip" data-placement="top" title="Pago automatico">P.A</p></th>
                 <th>HORA</th>
                 <th>DÍAS PAGO</th>
+                <th>ADMIN</th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Genera servicios por cobrar">SERVICIO</p></th>
                 <th>ABIERTO</th>
                 <th>ACTIVO</th>
@@ -63,6 +64,7 @@
                 <td>{% if arCentrosCostos.generarPagoAutomatico == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{{ arCentrosCostos.horaPagoAutomatico |date("H:i")  }}</td>
                 <td>{{ arCentrosCostos.diasPago  }}</td>
+                <td>{% if arCentrosCostos.administrativo == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arCentrosCostos.generaServicioCobrar == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arCentrosCostos.pagoAbierto == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arCentrosCostos.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>

@@ -1,13 +1,16 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
-
+namespace Brasa\RecursoHumanoBundle\Controller\Proceso;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 
-class ProcesoContabilizarPagoController extends Controller
+class ContabilizarPagoController extends Controller
 {
     var $strDqlLista = "";
+    /**
+     * @Route("/rhu/proceso/contabilizar/pago/", name="brs_rhu_proceso_contabilizar_pago")
+     */     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();  

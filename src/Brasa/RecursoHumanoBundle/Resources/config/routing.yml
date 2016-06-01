@@ -1004,11 +1004,7 @@ brs_rhu_proceso_cierre_anio:
 
 brs_rhu_proceso_cierre_anio_cerrar:
     path:     /rhu/proceso/cierre/anio/cerrar/{codigoCierreAnio}
-    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoCierreAnio:cerrar }            
-    
-brs_rhu_proceso_contabilizar_pago:
-    path:     /rhu/proceso/contabilizar/pago
-    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoContabilizarPago:lista }     
+    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoCierreAnio:cerrar }                
 
 brs_rhu_proceso_contabilizar_pago_banco:
     path:     /rhu/proceso/contabilizar/pago/banco

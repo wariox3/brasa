@@ -60,10 +60,10 @@ class FormatoPago extends \FPDF_FPDF {
         $this->SetXY(10, 40);
         $this->SetFillColor(200, 200, 200);
         $this->SetFont('Arial','B',6.5);
-        $this->Cell(22, 6, "PAGO:" , 1, 0, 'L', 1);
+        $this->Cell(22, 6, "NUMERO:" , 1, 0, 'L', 1);
         $this->SetFillColor(255, 255, 255);
         $this->SetFont('Arial','',7);
-        $this->Cell(78, 6, $arPago->getCodigoPagoPk() , 1, 0, 'L', 1);
+        $this->Cell(78, 6, $arPago->getNumero() , 1, 0, 'L', 1);
         $this->SetFont('Arial','B',6.5);
         $this->SetFillColor(200, 200, 200);
         $this->Cell(24, 6, "FECHA:" , 1, 0, 'L', 1);

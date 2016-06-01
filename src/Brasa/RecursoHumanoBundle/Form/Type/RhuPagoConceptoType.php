@@ -27,6 +27,8 @@ class RhuPagoConceptoType extends AbstractType
             ->add('conceptoAuxilioTransporte', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('codigoCuentaFk', 'text', array('required' => true))
             ->add('tipoCuenta', 'number', array('required' => true))    
+            ->add('codigoCuentaOperacionFk', 'text', array('required' => true))
+            ->add('tipoCuentaOperacion', 'number', array('required' => true))                    
             ->add('conceptoPension', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('conceptoSalud', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('tipoAdicional', 'number', array('required' => true))

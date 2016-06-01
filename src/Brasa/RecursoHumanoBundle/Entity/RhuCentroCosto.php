@@ -116,12 +116,17 @@ class RhuCentroCosto
     /**     
      * @ORM\Column(name="genera_servicio_cobrar", type="boolean")
      */    
-    private $generaServicioCobrar = 0;
+    private $generaServicioCobrar = false;
+
+    /**     
+     * @ORM\Column(name="administrativo", type="boolean")
+     */    
+    private $administrativo = false;    
     
     /**
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
      */    
-    private $codigoUsuario;
+    private $codigoUsuario;       
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuCliente", inversedBy="centrosCostosClienteRel")
@@ -252,6 +257,7 @@ class RhuCentroCosto
      */
     protected $soportesPagosHorariosCentroCostoRel;    
     
+
     /**
      * Constructor
      */
@@ -277,6 +283,7 @@ class RhuCentroCosto
         $this->disciplinariosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->permisosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cartasCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->soportesPagosHorariosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -311,6 +318,30 @@ class RhuCentroCosto
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set codigoClienteFk
+     *
+     * @param integer $codigoClienteFk
+     *
+     * @return RhuCentroCosto
+     */
+    public function setCodigoClienteFk($codigoClienteFk)
+    {
+        $this->codigoClienteFk = $codigoClienteFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoClienteFk
+     *
+     * @return integer
+     */
+    public function getCodigoClienteFk()
+    {
+        return $this->codigoClienteFk;
     }
 
     /**
@@ -746,6 +777,30 @@ class RhuCentroCosto
     }
 
     /**
+     * Set administrativo
+     *
+     * @param boolean $administrativo
+     *
+     * @return RhuCentroCosto
+     */
+    public function setAdministrativo($administrativo)
+    {
+        $this->administrativo = $administrativo;
+
+        return $this;
+    }
+
+    /**
+     * Get administrativo
+     *
+     * @return boolean
+     */
+    public function getAdministrativo()
+    {
+        return $this->administrativo;
+    }
+
+    /**
      * Set codigoUsuario
      *
      * @param string $codigoUsuario
@@ -767,6 +822,30 @@ class RhuCentroCosto
     public function getCodigoUsuario()
     {
         return $this->codigoUsuario;
+    }
+
+    /**
+     * Set clienteRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCliente $clienteRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function setClienteRel(\Brasa\RecursoHumanoBundle\Entity\RhuCliente $clienteRel = null)
+    {
+        $this->clienteRel = $clienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get clienteRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCliente
+     */
+    public function getClienteRel()
+    {
+        return $this->clienteRel;
     }
 
     /**
@@ -1519,54 +1598,6 @@ class RhuCentroCosto
     public function getCartasCentroCostoRel()
     {
         return $this->cartasCentroCostoRel;
-    }
-
-    /**
-     * Set codigoClienteFk
-     *
-     * @param integer $codigoClienteFk
-     *
-     * @return RhuCentroCosto
-     */
-    public function setCodigoClienteFk($codigoClienteFk)
-    {
-        $this->codigoClienteFk = $codigoClienteFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoClienteFk
-     *
-     * @return integer
-     */
-    public function getCodigoClienteFk()
-    {
-        return $this->codigoClienteFk;
-    }
-
-    /**
-     * Set clienteRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCliente $clienteRel
-     *
-     * @return RhuCentroCosto
-     */
-    public function setClienteRel(\Brasa\RecursoHumanoBundle\Entity\RhuCliente $clienteRel = null)
-    {
-        $this->clienteRel = $clienteRel;
-
-        return $this;
-    }
-
-    /**
-     * Get clienteRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCliente
-     */
-    public function getClienteRel()
-    {
-        return $this->clienteRel;
     }
 
     /**

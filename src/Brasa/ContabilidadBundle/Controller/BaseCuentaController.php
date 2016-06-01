@@ -53,23 +53,26 @@ class BaseCuentaController extends Controller
     public function nuevoAction($codigoCuenta) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arCuenta = new \Brasa\ContabilidadBundle\Entity\CtbCuenta();
-        if ($codigoCuenta != 0)
-        {
+        if ($codigoCuenta != 0) {
             $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($codigoCuenta);
         }    
         $form = $this->createForm(new CtbCuentaType(), $arCuenta);
         $form->handleRequest($request);
-        if ($form->isValid())
-        {
-            // guardar la tarea en la base de datos
-            $arCuentaPadre = $form->get('codigoCuentaPadreFk')->getData();
+        if ($form->isValid()) {           
             $arCuenta = $form->getData();
-            $arCuenta->setCodigoCuentaPadreFk($arCuentaPadre->getCodigoCuentaPk());
-            $arCuenta->setNombreCuenta($arCuenta->getNombreCuenta());
-            $em->persist($arCuenta);
-            $em->flush();
-            return $this->redirect($this->generateUrl('brs_ctb_base_cuentas_lista'));
+            $arCuentaPadre = new \Brasa\ContabilidadBundle\Entity\CtbCuenta();
+            $arCuentaPadre = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arCuenta->getCodigoCuentaPadreFk());
+            if($arCuentaPadre) {                
+                $arCuenta->setNombreCuenta($arCuenta->getNombreCuenta());
+                $em->persist($arCuenta);
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_ctb_base_cuentas_lista'));                
+            } else {
+                $objMensaje->Mensaje('error', 'La cuenta padre no existe', $this);
+            }
+
         }
         return $this->render('BrasaContabilidadBundle:Base/Cuentas:nuevo.html.twig', array(
             'form' => $form->createView(),

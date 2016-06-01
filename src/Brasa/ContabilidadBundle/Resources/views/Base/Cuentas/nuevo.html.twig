@@ -9,6 +9,12 @@
         <div class="panel-heading">Información general</div>
         <div class="panel-body">
             <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Cuenta padre:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.codigoCuentaPadreFk, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>            
+            <div class="form-group form-group-sm">
                 <label class="col-sm-3 control-label">Código cuenta:</label>
                 <div class="col-sm-9">
                     {% if form_errors(form.codigoCuentaPk) %}
@@ -24,12 +30,6 @@
                 <label class="col-sm-3 control-label">Nombre:</label>
                 <div class="col-sm-9">
                         {{ form_widget(form.nombreCuenta, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control','autofocus':'autofocus'} }) }}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label class="col-sm-3 control-label">Cuenta de que depende:</label>
-                <div class="col-sm-9">
-                        {{ form_widget(form.codigoCuentaPadreFk, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">

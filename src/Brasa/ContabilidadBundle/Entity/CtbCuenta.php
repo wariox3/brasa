@@ -27,9 +27,9 @@ class CtbCuenta
     private $nombreCuenta;     
     
     /**
-     * @ORM\Column(name="codigo_cuenta_padre_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_cuenta_padre_fk", type="string", length=20, nullable=true)
      */ 
-    private $codigo_cuenta_padre_fk = 0;    
+    private $codigo_cuenta_padre_fk;    
 
     /**
      * @ORM\Column(name="permite_movimientos", type="boolean")
@@ -56,8 +56,6 @@ class CtbCuenta
      */
     protected $asientosDetallesCuentaRel;
 
-
-    
     /**
      * Constructor
      */
@@ -117,7 +115,7 @@ class CtbCuenta
     /**
      * Set codigoCuentaPadreFk
      *
-     * @param integer $codigoCuentaPadreFk
+     * @param string $codigoCuentaPadreFk
      *
      * @return CtbCuenta
      */
@@ -131,7 +129,7 @@ class CtbCuenta
     /**
      * Get codigoCuentaPadreFk
      *
-     * @return integer
+     * @return string
      */
     public function getCodigoCuentaPadreFk()
     {

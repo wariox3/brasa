@@ -25,17 +25,17 @@ class RhuPagoConcepto
     /**
      * @ORM\Column(name="compone_salario", type="boolean")
      */    
-    private $componeSalario = 0; 
+    private $componeSalario = false; 
 
     /**
      * @ORM\Column(name="compone_porcentaje", type="boolean")
      */    
-    private $componePorcentaje = 0;     
+    private $componePorcentaje = false;     
 
     /**
      * @ORM\Column(name="compone_valor", type="boolean")
      */    
-    private $componeValor = 0;     
+    private $componeValor = false;     
     
     /**
      * @ORM\Column(name="por_porcentaje", type="float")
@@ -45,17 +45,17 @@ class RhuPagoConcepto
     /**
      * @ORM\Column(name="prestacional", type="boolean")
      */    
-    private $prestacional = 0;     
+    private $prestacional = false;     
     
     /**
      * @ORM\Column(name="genera_ingreso_base_prestacion", type="boolean")
      */    
-    private $generaIngresoBasePrestacion = 0;    
+    private $generaIngresoBasePrestacion = false;    
 
     /**
      * @ORM\Column(name="genera_ingreso_base_cotizacion", type="boolean")
      */    
-    private $generaIngresoBaseCotizacion = 0;    
+    private $generaIngresoBaseCotizacion = false;    
     
     /**
      * @ORM\Column(name="operacion", type="integer")
@@ -65,37 +65,47 @@ class RhuPagoConcepto
     /**
      * @ORM\Column(name="concepto_adicion", type="boolean")
      */    
-    private $conceptoAdicion = 0;     
+    private $conceptoAdicion = false;     
     
     /**
      * @ORM\Column(name="concepto_auxilio_transporte", type="boolean")
      */    
-    private $conceptoAuxilioTransporte = 0;     
+    private $conceptoAuxilioTransporte = false;     
     
     /**
      * @ORM\Column(name="concepto_incapacidad", type="boolean")
      */    
-    private $conceptoIncapacidad = 0;     
+    private $conceptoIncapacidad = false;     
 
     /**
      * @ORM\Column(name="concepto_pension", type="boolean")
      */    
-    private $conceptoPension = 0;    
+    private $conceptoPension = false;    
 
     /**
      * @ORM\Column(name="concepto_salud", type="boolean")
      */    
-    private $conceptoSalud = 0;        
+    private $conceptoSalud = false;        
     
     /**
-     * @ORM\Column(name="codigo_cuenta_fk", type="string", length=20)
+     * @ORM\Column(name="codigo_cuenta_fk", type="string", length=20, nullable=true)
      */     
     private $codigoCuentaFk;     
 
     /**
      * @ORM\Column(name="tipoCuenta", type="bigint")
      */     
-    private $tipoCuenta = 1;    
+    private $tipoCuenta = 1;     
+    
+    /**
+     * @ORM\Column(name="codigo_cuenta_operacion_fk", type="string", length=20, nullable=true)
+     */     
+    private $codigoCuentaOperacionFk;    
+    
+    /**
+     * @ORM\Column(name="tipoCuentaOperacion", type="bigint")
+     */     
+    private $tipoCuentaOperacion = 1;   
     
     /**
      * @ORM\Column(name="tipo_adicional", type="smallint")
@@ -136,8 +146,7 @@ class RhuPagoConcepto
      * @ORM\OneToMany(targetEntity="RhuTipoSalud", mappedBy="pagoConceptoRel")
      */
     protected $tiposSaludPagoConceptoRel;    
-    
-    
+       
 
     /**
      * Constructor
@@ -545,6 +554,54 @@ class RhuPagoConcepto
     public function getTipoCuenta()
     {
         return $this->tipoCuenta;
+    }
+
+    /**
+     * Set codigoCuentaOperacionFk
+     *
+     * @param string $codigoCuentaOperacionFk
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setCodigoCuentaOperacionFk($codigoCuentaOperacionFk)
+    {
+        $this->codigoCuentaOperacionFk = $codigoCuentaOperacionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCuentaOperacionFk
+     *
+     * @return string
+     */
+    public function getCodigoCuentaOperacionFk()
+    {
+        return $this->codigoCuentaOperacionFk;
+    }
+
+    /**
+     * Set tipoCuentaOperacion
+     *
+     * @param integer $tipoCuentaOperacion
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setTipoCuentaOperacion($tipoCuentaOperacion)
+    {
+        $this->tipoCuentaOperacion = $tipoCuentaOperacion;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCuentaOperacion
+     *
+     * @return integer
+     */
+    public function getTipoCuentaOperacion()
+    {
+        return $this->tipoCuentaOperacion;
     }
 
     /**
