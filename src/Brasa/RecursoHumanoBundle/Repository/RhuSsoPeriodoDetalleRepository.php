@@ -19,6 +19,8 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
     public function generar($codigoPeriodoDetalle) {
         $em = $this->getEntityManager();
         set_time_limit(0);
+        $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+        $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
         $arPeriodoEmpleadoValidar = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
         $arPeriodoEmpleadoValidar = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->findOneBy(array('codigoPeriodoDetalleFk' => $codigoPeriodoDetalle));        
         if ($arPeriodoEmpleadoValidar == null){
@@ -162,7 +164,9 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 if($arPeriodoEmpleado->getContratoRel()->getCodigoTipoCotizanteFk() == 19 || $arPeriodoEmpleado->getContratoRel()->getCodigoTipoCotizanteFk() == 12) {
                     $floTarifaSalud = 12.5;
                 }
-                if((($floSalario + $floSuplementario) > (10 * 644350))) {
+                $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+                $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+                if((($floSalario + $floSuplementario) > (10 * $arConfiguracionNomina->getVrSalario()))) {
                     $floTarifaSalud = 12.5;  
                     $floTarifaIcbf = 3;
                     $floTarifaSena = 2;                
@@ -181,7 +185,8 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $floCotizacionVoluntariaFondoPensionesObligatorias = 0;
 
                 $floCotizacionPension = $this->redondearAporte($floSalario + $floSuplementario, $floIbcPension, $floTarifaPension, $intDiasCotizarPension);            
-                if($floSalario >= (644350 * 4)) {
+                
+                if($floSalario >= ($arConfiguracionNomina->getVrSalario() * 4)) {
                     $floCotizacionFSPSolidaridad = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
                     $floCotizacionFSPSubsistencia = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
                 }
@@ -325,7 +330,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                     $floCotizacionVoluntariaFondoPensionesObligatorias = 0;
 
                     $floCotizacionPension = $this->redondearAporte($floSalario + $floSuplementario, $floIbcPension, $floTarifaPension, $intDiasCotizarPension);            
-                    if($floSalario >= (644350 * 4)) {
+                    if($floSalario >= ($arConfiguracionNomina->getVrSalario() * 4)) {
                         $floCotizacionFSPSolidaridad = 0;
                         $floCotizacionFSPSubsistencia = 0;
                     }
@@ -381,20 +386,23 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
     }    
     
     public function liquidarIncapacidadGeneral($floSalario, $floSalarioAnterior, $intDias) {
+        $em = $this->getEntityManager();
+        $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+        $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
         if($floSalarioAnterior > 0) {
             $floSalario = $floSalarioAnterior;
         }                
         $floValorDia = $floSalario / 30;
-        $floValorDiaSalarioMinimo = 644350 / 30;
+        $floValorDiaSalarioMinimo = $arConfiguracionNomina->getVrSalario() / 30;
         $floIbcIncapacidad = 0;       
                 
-        if($floSalario <= 644350) {
+        if($floSalario <= $arConfiguracionNomina->getVrSalario()) {
             $floIbcIncapacidad = $intDias * $floValorDia;            
         }
-        if($floSalario > 644350 && $floSalario <= 644350 * 1.5) {
+        if($floSalario > $arConfiguracionNomina->getVrSalario() && $floSalario <= $arConfiguracionNomina->getVrSalario() * 1.5) {
             $floIbcIncapacidad = $intDias * $floValorDiaSalarioMinimo;            
         }
-        if($floSalario > (644350 * 1.5)) {
+        if($floSalario > ($arConfiguracionNomina->getVrSalario() * 1.5)) {
             $floIbcIncapacidad = $intDias * $floValorDia; 
             $floIbcIncapacidad = ($floIbcIncapacidad * 66.67)/100;            
         }        
@@ -412,6 +420,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
     }        
     
     public function redondearIbc($intDias, $floIbcBruto) {
+        $em = $this->getEntityManager();
         $floIbc = 0;       
         $floIbcRedondedado = round($floIbcBruto, -3, PHP_ROUND_HALF_DOWN);
         $floIbcMinimo = $this->redondearIbcMinimo($intDias);
@@ -431,12 +440,16 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
     }
 
     public function redondearIbcMinimo ($intDias) {
-        $floValorDia = 644350 / 30;
+        $em = $this->getEntityManager();
+        $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+        $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+        $floValorDia = $arConfiguracionNomina->getVrSalario() / 30;
         $floIbcBruto = intval($intDias * $floValorDia);
         return $floIbcBruto;
     }    
     
     public function redondearAporte($floIbcTotal, $floIbc, $floTarifa, $intDias) {
+        $em = $this->getEntityManager();
         $floTarifa = $floTarifa / 100;
         $floIbcBruto = ($floIbcTotal / 30) * $intDias;        
         $floCotizacionRedondeada = round($floIbc * $floTarifa, -2, PHP_ROUND_HALF_DOWN);        
@@ -467,7 +480,10 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
     }
 
     public function redondearAporteMinimo($floTarifa, $intDias) {
-        $floSalario = 644350;
+        $em = $this->getEntityManager();
+        $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+        $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+        $floSalario = $arConfiguracionNomina->getVrSalario();
         $douValorDia = $floSalario / 30;
         $floIbcReal = $douValorDia * $intDias;
         if($intDias != 30) {

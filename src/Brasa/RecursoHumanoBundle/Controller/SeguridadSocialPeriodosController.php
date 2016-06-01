@@ -171,7 +171,8 @@ class SeguridadSocialPeriodosController extends Controller
                 $codigoPeriodoDetalle = $request->request->get('OpGenerarArchivo');
                 $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
                 $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-                $strRutaArchivo = $arConfiguracion->getRutaTemporal();
+                //$strRutaArchivo = $arConfiguracion->getRutaTemporal();
+                $strRutaArchivo = "c:/xampp/"."_";
                 $strNombreArchivo = "pila" . date('YmdHis') . ".txt";
                 $ar = fopen($strRutaArchivo . $strNombreArchivo, "a") or
                     die("Problemas en la creacion del archivo plano");
@@ -570,7 +571,7 @@ class SeguridadSocialPeriodosController extends Controller
                         $arPeriodoEmpleado->setVrSalario($floSalario);
                         $em->persist($arPeriodoEmpleado);
                     }
-                    if($arrControles['TxtSuplementario'.$intCodigo] != "" ) {
+                    if($arrControles['TxtSuplementario'.$intCodigo] != 0) {
                         $floSuplementario = $arrControles['TxtSuplementario'.$intCodigo];
                         $arPeriodoEmpleado->setVrSuplementario($floSuplementario);
                         $em->persist($arPeriodoEmpleado);
@@ -921,6 +922,7 @@ class SeguridadSocialPeriodosController extends Controller
         $controles = $request->request->get('form');
         $codigoPeriodoDetalle = $form->get('sucursalRel')->getData();
         $codigoPeriodoDetalle = $codigoPeriodoDetalle->getCodigoPeriodoDetallePk();
+        
         $this->strCodigoPeriodoDetalleTraslados = $codigoPeriodoDetalle;
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         
@@ -930,10 +932,10 @@ class SeguridadSocialPeriodosController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $codigoPeriodoDetalle = $form->get('sucursalRel')->getData();
         $codigoPeriodoDetalle = $codigoPeriodoDetalle->getCodigoPeriodoDetallePk();
         $this->strCodigoPeriodoDetalleCopias = $codigoPeriodoDetalle;
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
     }
     
     private function filtrarDetalleAporte($form) {
