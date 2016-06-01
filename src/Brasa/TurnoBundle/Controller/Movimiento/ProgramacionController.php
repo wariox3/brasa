@@ -200,13 +200,8 @@ class ProgramacionController extends Controller
                 if($arProgramacion->getEstadoAutorizado() == 0) {
                     $arrControles = $request->request->All();
                     $this->actualizarDetalle($arrControles, $codigoProgramacion);                    
-                    $strResultados = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->validarAutorizar($codigoProgramacion);
-                    if($strResultados == "") {
-                        $em->getRepository('BrasaTurnoBundle:TurProgramacion')->autorizar($codigoProgramacion);                        
-                    } else {
-                        $objMensaje->Mensaje('error', $strResultados, $this);
-                    }
-                    return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));                        
+                    $em->getRepository('BrasaTurnoBundle:TurProgramacion')->liquidar($codigoProgramacion);
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
                 }                
             }
         }
@@ -437,7 +432,7 @@ class ProgramacionController extends Controller
 
     private function formularioDetalleEditar() {
         $form = $this->createFormBuilder(array(), array('csrf_protection' => false))                    
-                    ->add('BtnGuardar', 'submit', array('label' => 'Autorizar'))
+                    ->add('BtnGuardar', 'submit', array('label' => 'Guardar'))
                     ->getForm();
         return $form;
     }    
