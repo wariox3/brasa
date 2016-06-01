@@ -93,7 +93,7 @@ class RhuPagoConcepto
     private $codigoCuentaFk;     
 
     /**
-     * @ORM\Column(name="tipoCuenta", type="bigint")
+     * @ORM\Column(name="tipo_cuenta", type="bigint")
      */     
     private $tipoCuenta = 1;     
     
@@ -103,7 +103,7 @@ class RhuPagoConcepto
     private $codigoCuentaOperacionFk;    
     
     /**
-     * @ORM\Column(name="tipoCuentaOperacion", type="bigint")
+     * @ORM\Column(name="tipo_cuenta_operacion", type="bigint")
      */     
     private $tipoCuentaOperacion = 1;   
     
@@ -147,6 +147,7 @@ class RhuPagoConcepto
      */
     protected $tiposSaludPagoConceptoRel;    
        
+
 
     /**
      * Constructor
