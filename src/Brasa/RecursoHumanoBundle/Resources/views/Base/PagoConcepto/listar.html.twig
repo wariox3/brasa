@@ -26,6 +26,7 @@
             <th>PENSIÓN</th>
             <th>SALUD</th>
             <th>T.ADIC</th>
+            <th>COD.INT</th>
             <th></th>
             <th></th>
         </tr>
@@ -48,6 +49,7 @@
                 <td>{% if arPagoConceptos.conceptoPension == 1%} SI {% else %}NO{% endif%}</td>
                 <td>{% if arPagoConceptos.conceptoSalud == 1%} SI {% else %}NO{% endif%}</td>
                 <td>{{arPagoConceptos.TipoAdicional}}</td>
+                <td>{{arPagoConceptos.codigoInterface}}</td>
                 <td><a href="{{ path('brs_rhu_pago_concepto_nuevo',{'codigoPagoConcepto': arPagoConceptos.codigoPagoConceptoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagoConceptos.codigoPagoConceptoPk }}" /></td>
             {%endfor%}

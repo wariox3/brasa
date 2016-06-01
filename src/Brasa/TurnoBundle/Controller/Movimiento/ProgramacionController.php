@@ -109,8 +109,8 @@ class ProgramacionController extends Controller
         if($form->isValid()) {
             if($form->get('BtnAutorizar')->isClicked()) {
                 if($arProgramacion->getEstadoAutorizado() == 0) {
-                    $arrControles = $request->request->All();
-                    $this->actualizarDetalle($arrControles, $codigoProgramacion);                    
+                    //$arrControles = $request->request->All();
+                    //$this->actualizarDetalle($arrControles, $codigoProgramacion);                    
                     $strResultados = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->validarAutorizar($codigoProgramacion);
                     if($strResultados == "") {
                         $em->getRepository('BrasaTurnoBundle:TurProgramacion')->autorizar($codigoProgramacion);                        
@@ -172,17 +172,62 @@ class ProgramacionController extends Controller
             $diaSemana = $this->devuelveDiaSemanaEspaniol($dateFecha);
             $arrDiaSemana[$i] = array('dia' => $i, 'diaSemana' => $diaSemana);
         }
+        $formDetalle = $this->createFormBuilder()->getForm();        
         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
         $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array ('codigoProgramacionFk' => $codigoProgramacion));
         return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalle.html.twig', array(
                     'arProgramacion' => $arProgramacion,
                     'arProgramacionDetalle' => $arProgramacionDetalle,
                     'arrDiaSemana' => $arrDiaSemana,
-                    'form' => $form->createView()
+                    'form' => $form->createView(),
+                    'formDetalle' => $form->createView()
                     ));
     }
 
-
+    /**
+     * @Route("/tur/movimiento/programacion/detalle/editar/{codigoPuesto}/{codigoProgramacion}/", name="brs_tur_movimiento_programacion_detalle_editar")
+     */        
+    public function detalleEditarAction($codigoPuesto, $codigoProgramacion) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $objMensaje = $this->get('mensajes_brasa');
+        $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
+        $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion);
+        $form = $this->formularioDetalleEditar();
+        $form->handleRequest($request);
+        if($form->isValid()) {
+            if($form->get('BtnGuardar')->isClicked()) {
+                if($arProgramacion->getEstadoAutorizado() == 0) {
+                    $arrControles = $request->request->All();
+                    $this->actualizarDetalle($arrControles, $codigoProgramacion);                    
+                    $strResultados = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->validarAutorizar($codigoProgramacion);
+                    if($strResultados == "") {
+                        $em->getRepository('BrasaTurnoBundle:TurProgramacion')->autorizar($codigoProgramacion);                        
+                    } else {
+                        $objMensaje->Mensaje('error', $strResultados, $this);
+                    }
+                    return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));                        
+                }                
+            }
+        }
+        $strAnioMes = $arProgramacion->getFecha()->format('Y/m');
+        $arrDiaSemana = array();
+        for($i = 1; $i <= 31; $i++) {
+            $strFecha = $strAnioMes . '/' . $i;
+            $dateFecha = date_create($strFecha);
+            $diaSemana = $this->devuelveDiaSemanaEspaniol($dateFecha);
+            $arrDiaSemana[$i] = array('dia' => $i, 'diaSemana' => $diaSemana);
+        }        
+        $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+        $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array ('codigoProgramacionFk' => $codigoProgramacion, 'codigoPuestoFk' => $codigoPuesto));
+        return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalleEditar.html.twig', array(
+                    'arProgramacion' => $arProgramacion,
+                    'arProgramacionDetalle' => $arProgramacionDetalle,
+                    'arrDiaSemana' => $arrDiaSemana,
+                    'form' => $form->createView(),                    
+                    ));
+    } 
+    
     /**
      * @Route("/tur/movimiento/programacion/detalle/nuevo/{codigoProgramacion}/{codigoProgramacionDetalle}", name="brs_tur_movimiento_programacion_detalle_nuevo")
      */        
@@ -378,7 +423,7 @@ class ProgramacionController extends Controller
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonAprobar['disabled'] = true;
         }
-        $form = $this->createFormBuilder()
+        $form = $this->createFormBuilder(array(), array('csrf_protection' => false))
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)
                     ->add('BtnAprobar', 'submit', $arrBotonAprobar)
@@ -390,6 +435,13 @@ class ProgramacionController extends Controller
         return $form;
     }
 
+    private function formularioDetalleEditar() {
+        $form = $this->createFormBuilder(array(), array('csrf_protection' => false))                    
+                    ->add('BtnGuardar', 'submit', array('label' => 'Autorizar'))
+                    ->getForm();
+        return $form;
+    }    
+    
     private function generarExcel() {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
@@ -493,22 +545,6 @@ class ProgramacionController extends Controller
         foreach ($arrControles['LblCodigo'] as $intCodigo) {
             $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
             $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($intCodigo);
-            if($arrControles['TxtRecurso'.$intCodigo] != '') {
-                $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
-                $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($arrControles['TxtRecurso'.$intCodigo]);
-                if($arRecurso) {
-                    $arProgramacionDetalle->setRecursoRel($arRecurso);
-                }
-            } else {
-                $arProgramacionDetalle->setRecursoRel(NULL);
-            }
-            if($arrControles['TxtPuesto'.$intCodigo] != '') {
-                $arPuesto = new \Brasa\TurnoBundle\Entity\TurPuesto();
-                $arPuesto = $em->getRepository('BrasaTurnoBundle:TurPuesto')->find($arrControles['TxtPuesto'.$intCodigo]);
-                if($arPuesto) {
-                    $arProgramacionDetalle->setPuestoRel($arPuesto);
-                }
-            }
             if($arrControles['TxtDia01D'.$intCodigo] != '') {
                 $strTurno = $this->validarTurno($arrControles['TxtDia01D'.$intCodigo]);
                 $arProgramacionDetalle->setDia1($strTurno);

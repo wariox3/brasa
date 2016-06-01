@@ -113,6 +113,11 @@ class RhuPagoConcepto
     private $tipoAdicional = 1;       
     
     /**
+     * @ORM\Column(name="codigo_interface", type="string", length=30, nullable=true)
+     */    
+    private $codigoInterface;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuPagoDetalle", mappedBy="pagoConceptoRel")
      */
     protected $pagosDetallesPagoConceptoRel;     
@@ -865,5 +870,29 @@ class RhuPagoConcepto
     public function getTiposSaludPagoConceptoRel()
     {
         return $this->tiposSaludPagoConceptoRel;
+    }
+
+    /**
+     * Set codigoInterface
+     *
+     * @param string $codigoInterface
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setCodigoInterface($codigoInterface)
+    {
+        $this->codigoInterface = $codigoInterface;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoInterface
+     *
+     * @return string
+     */
+    public function getCodigoInterface()
+    {
+        return $this->codigoInterface;
     }
 }
