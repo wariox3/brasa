@@ -540,6 +540,22 @@ class ProgramacionController extends Controller
         foreach ($arrControles['LblCodigo'] as $intCodigo) {
             $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
             $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($intCodigo);
+            if($arrControles['TxtRecurso'.$intCodigo] != '') {
+                $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
+                $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($arrControles['TxtRecurso'.$intCodigo]);
+                if($arRecurso) {
+                    $arProgramacionDetalle->setRecursoRel($arRecurso);
+                }
+            } else {
+                $arProgramacionDetalle->setRecursoRel(NULL);
+            }
+            if($arrControles['TxtPuesto'.$intCodigo] != '') {
+                $arPuesto = new \Brasa\TurnoBundle\Entity\TurPuesto();
+                $arPuesto = $em->getRepository('BrasaTurnoBundle:TurPuesto')->find($arrControles['TxtPuesto'.$intCodigo]);
+                if($arPuesto) {
+                    $arProgramacionDetalle->setPuestoRel($arPuesto);
+                }
+            }            
             if($arrControles['TxtDia01D'.$intCodigo] != '') {
                 $strTurno = $this->validarTurno($arrControles['TxtDia01D'.$intCodigo]);
                 $arProgramacionDetalle->setDia1($strTurno);
