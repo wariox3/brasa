@@ -337,11 +337,8 @@ class SeguridadSocialPeriodosController extends Controller
                     ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
                     ->setKeywords("office 2007 openxml php")
                     ->setCategory("Test result file");
-                $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
                 $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-                $objPHPExcel->getActiveSheet()->getStyle('2')->getFont()->setBold(true);
-                $objPHPExcel->getActiveSheet()->getStyle('3')->getFont()->setBold(true);
-                $objPHPExcel->getActiveSheet()->getStyle('5')->getFont()->setBold(true);
+                $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
                 $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
                 $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
                 $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
@@ -371,46 +368,51 @@ class SeguridadSocialPeriodosController extends Controller
                 $objPHPExcel->getActiveSheet()->getColumnDimension('AA')->setAutoSize(true);
                 $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setAutoSize(true);
                 $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'PERIODO DETALLE')
-                    ->setCellValue('A2', 'CÓDIGO SUCURSAL')
-                    ->setCellValue('A3', 'SUCURSAL')
-                    ->setCellValue('A5', 'CÓDIGO PERIODO')
-                    ->setCellValue('B5', 'IDENTIFICACIÓN')
-                    ->setCellValue('C5', 'NOMBRE')
-                    ->setCellValue('D5', 'CONTRATO')
-                    ->setCellValue('E5', 'INGRESO')
-                    ->setCellValue('F5', 'RETIRO')
-                    ->setCellValue('G5', 'VARIACIÓN TRANSITORIA SALARIO')
-                    ->setCellValue('H5', 'LICENCIA NO REMUNERADA')
-                    ->setCellValue('I5', 'INCAPACIDAD GENERAL')
-                    ->setCellValue('J5', 'LICENCIA MATERNIDAD')
-                    ->setCellValue('K5', 'RIESGOS PROFESIONALES')
-                    ->setCellValue('L5', 'SALARIO')
-                    ->setCellValue('M5', 'SUPLEMENTARIO')
-                    ->setCellValue('N5', 'DÍAS PENSION')
-                    ->setCellValue('O5', 'DÍAS SALUD')
-                    ->setCellValue('P5', 'DÍAS RIESGOS PROFESIONALES')
-                    ->setCellValue('Q5', 'DÍAS CAJA COMPENSACIÓN')
-                    ->setCellValue('R5', 'IBC PENSIÓN')
-                    ->setCellValue('S5', 'IBC SALUD')
-                    ->setCellValue('T5', 'IBC RIESGOS PROFESIONALES')
-                    ->setCellValue('U5', 'IBC CAJA COMPENSACIÓN')
-                    ->setCellValue('V5', 'TARIFA PENSIÓN')
-                    ->setCellValue('W5', 'TARIFA SALUD')
-                    ->setCellValue('X5', 'TARIFA RIESGOS PROFESIONALES')
-                    ->setCellValue('Y5', 'TARIFA CAJA COMPENSACIÓN')
-                    ->setCellValue('Z5', 'COTIZACIÓN PENSIÓN')
-                    ->setCellValue('AA5', 'COTIZACIÓN SALUD')
-                    ->setCellValue('AB5', 'COTIZACIÓN RIESGOS PROFESIONALES')
-                    ->setCellValue('AC5', 'COTIZACIÓN CAJA COMPENSACIÓN');
+                    ->setCellValue('A1', 'IDENTIFICACIÓN')
+                    ->setCellValue('B1', 'NOMBRE')
+                    ->setCellValue('C1', 'C. COSTO')
+                    ->setCellValue('D1', 'CONTRATO')
+                    ->setCellValue('E1', 'ING')
+                    ->setCellValue('F1', 'RET')
+                    ->setCellValue('G1', 'VST')
+                    ->setCellValue('H1', 'SLN')
+                    ->setCellValue('I1', 'IGE')
+                    ->setCellValue('J1', 'LMA')
+                    ->setCellValue('K1', 'VAC')    
+                    ->setCellValue('L1', 'IRP')
+                    ->setCellValue('M1', 'SALARIO')
+                    ->setCellValue('N1', 'SUPLE')
+                    ->setCellValue('O1', 'SI')
+                    ->setCellValue('P1', 'D.P')
+                    ->setCellValue('Q1', 'D.S')
+                    ->setCellValue('R1', 'D.R.P')
+                    ->setCellValue('S1', 'D.C')
+                    ->setCellValue('T1', 'IBC P')
+                    ->setCellValue('U1', 'IBC S')
+                    ->setCellValue('V1', 'IBC R')
+                    ->setCellValue('W1', 'IBC C')
+                    ->setCellValue('X1', 'T.P')
+                    ->setCellValue('Y1', 'T.S')
+                    ->setCellValue('Z1', 'T.R')
+                    ->setCellValue('AA1', 'T.C')
+                    ->setCellValue('AB1', 'T.SN')
+                    ->setCellValue('AC1', 'T.I')
+                    ->setCellValue('AD1', 'C.P')
+                    ->setCellValue('AE1', 'C.FSSO')
+                    ->setCellValue('AF1', 'C.FSSU')
+                    ->setCellValue('AG1', 'C.S')
+                    ->setCellValue('AH1', 'C.R')
+                    ->setCellValue('AI1', 'C.C')
+                    ->setCellValue('AJ1', 'C.SN')
+                    ->setCellValue('AK1', 'C.SN');
                 
                 $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
                 $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);
-                $objPHPExcel->setActiveSheetIndex(0)
+                /*$objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('B1', $arPeriodoDetalle->getCodigoPeriodoDetallePk())
                     ->setCellValue('B2', $arPeriodoDetalle->getCodigoSucursalFk())
-                    ->setCellValue('B3', $arPeriodoDetalle->getSsoSucursalRel()->getNombre())    ;
-                $i = 6;
+                    ->setCellValue('B3', $arPeriodoDetalle->getSsoSucursalRel()->getNombre())    ;*/
+                $i = 2;
                 $arSsoAportes = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte();
                 $arSsoAportes = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoAporte')->findBy(array('codigoPeriodoDetalleFk' => $codigoPeriodoDetalle));
                 foreach ($arSsoAportes as $arSsoAporte) {            
@@ -426,14 +428,22 @@ class SeguridadSocialPeriodosController extends Controller
                     if ($arSsoAporte->getLicenciaMaternidad() == "X"){
                        $licenciaMaternidad = $arSsoAporte->getgetLicenciaMaternidad()." ". $arSsoAporte->getDiasLicenciaMaternidad(); 
                     }
+                    $vacaciones = "";
+                    if ($arSsoAporte->getVacaciones() == "X"){
+                       $vacaciones = $arSsoAporte->getVacaciones()." ". $arSsoAporte->getDiasVacaciones(); 
+                    }
                     $riesgosProfesionales = "";
                     if ($arSsoAporte->getIncapacidadAccidenteTrabajoEnfermedadProfesional() > 0){
                        $riesgosProfesionales = $arSsoAporte->getIncapacidadAccidenteTrabajoEnfermedadProfesional(); 
                     }
+                    $salarioIntegral = "";
+                    if ($arSsoAporte->getSalarioIntegral() == "X"){
+                       $salarioIntegral = $arSsoAporte->getSalarioIntegral(); 
+                    }
                     $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arSsoAporte->getCodigoAportePk())
-                    ->setCellValue('B' . $i, $arSsoAporte->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('C' . $i, $arSsoAporte->getEmpleadoRel()->getNombreCorto())       
+                    ->setCellValue('A' . $i, $arSsoAporte->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('B' . $i, $arSsoAporte->getEmpleadoRel()->getNombreCorto())       
+                    ->setCellValue('C' . $i, $arSsoAporte->getContratoRel()->getCentroCostoRel()->getNombre())        
                     ->setCellValue('D' . $i, $arSsoAporte->getCodigoContratoFk())
                     ->setCellValue('E' . $i, $arSsoAporte->getIngreso())        
                     ->setCellValue('F' . $i, $arSsoAporte->getRetiro())
@@ -441,25 +451,33 @@ class SeguridadSocialPeriodosController extends Controller
                     ->setCellValue('H' . $i, $suspencionTemporalContratoLicenciaServicios)
                     ->setCellValue('I' . $i, $incapacidadGeneral)
                     ->setCellValue('J' . $i, $licenciaMaternidad)
-                    ->setCellValue('K' . $i, $riesgosProfesionales)
-                    ->setCellValue('L' . $i, $arSsoAporte->getSalarioBasico())
-                    ->setCellValue('M' . $i, $arSsoAporte->getSuplementario())
-                    ->setCellValue('N' . $i, $arSsoAporte->getDiasCotizadosPension())
-                    ->setCellValue('O' . $i, $arSsoAporte->getDiasCotizadosSalud())
-                    ->setCellValue('P' . $i, $arSsoAporte->getDiasCotizadosRiesgosProfesionales())
-                    ->setCellValue('Q' . $i, $arSsoAporte->getDiasCotizadosCajaCompensacion())
-                    ->setCellValue('R' . $i, $arSsoAporte->getIbcPension())
-                    ->setCellValue('S' . $i, $arSsoAporte->getIbcSalud())
-                    ->setCellValue('T' . $i, $arSsoAporte->getIbcRiesgosProfesionales())
-                    ->setCellValue('U' . $i, $arSsoAporte->getIbcCaja())
-                    ->setCellValue('V' . $i, $arSsoAporte->getTarifaPension())
-                    ->setCellValue('W' . $i, $arSsoAporte->getTarifaSalud())
-                    ->setCellValue('X' . $i, $arSsoAporte->getTarifaRiesgos())
-                    ->setCellValue('Y' . $i, $arSsoAporte->getTarifaCaja())
-                    ->setCellValue('Z' . $i, $arSsoAporte->getCotizacionPension())
-                    ->setCellValue('AA' . $i, $arSsoAporte->getCotizacionSalud())
-                    ->setCellValue('AB' . $i, $arSsoAporte->getCotizacionRiesgos())
-                    ->setCellValue('AC' . $i, $arSsoAporte->getCotizacionCaja());
+                    ->setCellValue('K' . $i, $vacaciones)
+                    ->setCellValue('L' . $i, $riesgosProfesionales)
+                    ->setCellValue('M' . $i, $arSsoAporte->getSalarioBasico())
+                    ->setCellValue('N' . $i, $arSsoAporte->getSuplementario())
+                    ->setCellValue('O' . $i, $salarioIntegral)        
+                    ->setCellValue('P' . $i, $arSsoAporte->getDiasCotizadosPension())
+                    ->setCellValue('Q' . $i, $arSsoAporte->getDiasCotizadosSalud())
+                    ->setCellValue('R' . $i, $arSsoAporte->getDiasCotizadosRiesgosProfesionales())
+                    ->setCellValue('S' . $i, $arSsoAporte->getDiasCotizadosCajaCompensacion())
+                    ->setCellValue('T' . $i, $arSsoAporte->getIbcPension())
+                    ->setCellValue('U' . $i, $arSsoAporte->getIbcSalud())
+                    ->setCellValue('V' . $i, $arSsoAporte->getIbcRiesgosProfesionales())
+                    ->setCellValue('W' . $i, $arSsoAporte->getIbcCaja())
+                    ->setCellValue('X' . $i, $arSsoAporte->getTarifaPension())
+                    ->setCellValue('Y' . $i, $arSsoAporte->getTarifaSalud())
+                    ->setCellValue('Z' . $i, $arSsoAporte->getTarifaRiesgos())
+                    ->setCellValue('AA' . $i, $arSsoAporte->getTarifaCaja())
+                    ->setCellValue('AB' . $i, $arSsoAporte->getTarifaSena())
+                    ->setCellValue('AC' . $i, $arSsoAporte->getTarifaIcbf())
+                    ->setCellValue('AD' . $i, $arSsoAporte->getCotizacionPension())
+                    ->setCellValue('AE' . $i, $arSsoAporte->getAportesFondoSolidaridadPensionalSolidaridad())
+                    ->setCellValue('AF' . $i, $arSsoAporte->getAportesFondoSolidaridadPensionalSubsistencia())
+                    ->setCellValue('AG' . $i, $arSsoAporte->getCotizacionSalud())
+                    ->setCellValue('AH' . $i, $arSsoAporte->getCotizacionRiesgos())
+                    ->setCellValue('AI' . $i, $arSsoAporte->getCotizacionCaja())
+                    ->setCellValue('AJ' . $i, $arSsoAporte->getCotizacionSena())
+                    ->setCellValue('AK' . $i, $arSsoAporte->getCotizacionIcbf());
                     $i++;
                 }
 
