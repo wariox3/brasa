@@ -13,13 +13,16 @@ use Doctrine\ORM\EntityRepository;
 class CtbRegistroRepository extends EntityRepository
 {
 
-    public function listaDql($numero = "", $comprobante = "", $fechaDesde = "", $fechaHasta = "") {        
+    public function listaDql($comprobante = "",$numero = "", $numeroReferencia = "", $fechaDesde = "", $fechaHasta = "") {        
         $dql   = "SELECT r FROM BrasaContabilidadBundle:CtbRegistro r WHERE r.codigoRegistroPk <> 0";
+        if($comprobante != "") {
+            $dql .= " AND r.codigoComprobanteFk = " . $comprobante;
+        }
         if($numero != "") {
             $dql .= " AND r.numero = " . $numero;
         }                
-        if($comprobante != "") {
-            $dql .= " AND r.codigoComprobanteFk = " . $comprobante;
+        if($numeroReferencia != "") {
+            $dql .= " AND r.numeroReferencia = " . $numeroReferencia;
         }
         if($fechaDesde != "" || $fechaDesde != 0){
             $dql .= " AND r.fecha >='" . date_format($fechaDesde, ('Y-m-d')) . "'";

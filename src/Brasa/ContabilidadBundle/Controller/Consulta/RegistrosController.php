@@ -5,6 +5,7 @@ namespace Brasa\ContabilidadBundle\Controller\Consulta;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpFoundation\Request;
 
 class RegistrosController extends Controller
 {
@@ -28,12 +29,12 @@ class RegistrosController extends Controller
         if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if($form->get('BtnExcel')->isClicked()) {
-                $this->filtrar($form);
+                $this->filtrar($form, $request);
                 $this->listar();
                 $this->generarExcel();
             }            
             if($form->get('BtnFiltrar')->isClicked()) {
-                $this->filtrar($form);
+                $this->filtrar($form, $request);
                 $this->listar();
             }
 
@@ -46,8 +47,15 @@ class RegistrosController extends Controller
     }    
     
     private function listar() {        
+        $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->listaDql("", $this->strNumero, $this->strNumeroReferencia, $this->strComprobante);
+        $this->strDqlLista = $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->listaDql(
+                    $session->get('filtroCodigoComprobante'),
+                    $session->get('filtroNumero'),
+                    $session->get('filtroNumeroReferencia'),
+                    $session->get('filtroDesde'),
+                    $session->get('filtroHasta')
+                    );
     }       
     
     private function formularioLista() {
@@ -64,12 +72,14 @@ class RegistrosController extends Controller
         return $form;
     }    
 
-    private function filtrar($form) {        
-        $this->strNumero = $form->get('TxtNumero')->getData();
-        $this->strNumeroReferencia = $form->get('TxtNumeroReferencia')->getData();
-        $this->strComprobante = $form->get('TxtComprobante')->getData();
-        $this->strDesde = $form->get('fechaDesde')->getData();
-        $this->strHasta = $form->get('fechaHasta')->getData();
+    private function filtrar($form, Request $request) {
+        $session = $this->get('session');  
+        $controles = $request->request->get('form');
+        $session->set('filtroCodigoComprobante', $controles['TxtComprobante']);                
+        $session->set('filtroNumero', $controles['TxtNumero']);
+        $session->set('filtroNumeroReferencia', $controles['TxtNumeroReferencia']);
+        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }   
 
     private function generarExcel() {

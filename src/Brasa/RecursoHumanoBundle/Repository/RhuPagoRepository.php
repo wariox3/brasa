@@ -260,10 +260,24 @@ class RhuPagoRepository extends EntityRepository {
         return $dql;
     }
     
-    public function contabilizadosDql() {        
-        $dql   = "SELECT p FROM BrasaRecursoHumanoBundle:RhuPago p WHERE p.estadoContabilizado = 1 AND p.estadoPagado = 1";       
-        $dql .= " ORDER BY p.codigoPagoPk DESC";
-        return $dql;
+    public function contabilizadosPagoNominaDql($intNumeroDesde = 0, $intNumeroHasta = 0,$strDesde = "",$strHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT p FROM BrasaRecursoHumanoBundle:RhuPago p WHERE p.estadoContabilizado = 1 AND p.estadoPagado = 1";
+        if($intNumeroDesde != "" || $intNumeroDesde != 0) {
+            $dql .= " AND p.numero >= " . $intNumeroDesde;
+        }
+        if($intNumeroHasta != "" || $intNumeroHasta != 0) {
+            $dql .= " AND p.numero <= " . $intNumeroHasta;
+        }   
+        if($strDesde != "" || $strDesde != 0){
+            $dql .= " AND p.fechaDesde >='" . date_format($strDesde, ('Y-m-d')) . "'";
+        }
+        if($strHasta != "" || $strHasta != 0) {
+            $dql .= " AND p.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();
+        return $arrayResultado;
     } 
     
     public function pendientesContabilizarDql() {        

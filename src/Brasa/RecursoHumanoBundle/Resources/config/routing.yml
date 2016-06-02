@@ -1012,7 +1012,11 @@ brs_rhu_proceso_cierre_anio_cerrar:
 
 brs_rhu_proceso_contabilizar_pago_banco:
     path:     /rhu/proceso/contabilizar/pago/banco
-    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoContabilizarPagoBanco:lista }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoContabilizarPagoBanco:lista }
+    
+brs_rhu_proceso_descontabilizar_pago_banco:
+    path:     /rhu/proceso/descontabilizar/pago/banco
+    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoContabilizarPagoBanco:descontabilizarPagoBanco }    
     
 brs_rhu_proceso_control_acceso_horario_periodo_listar:
     path:     /rhu/proceso/control/acceso/periodo/horario/lista

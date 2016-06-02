@@ -14,5 +14,19 @@ class RhuPagoBancoDetalleRepository extends EntityRepository {
         $dql   = "SELECT pbd FROM BrasaRecursoHumanoBundle:RhuPagoBancoDetalle pbd WHERE pbd.estadoContabilizado = 0";       
         $dql .= " ORDER BY pbd.codigoPagoBancoDetallePk DESC";
         return $dql;
-    }                                
+    } 
+    
+    public function contabilizadosPagoBancoDql($intPagoDesde = 0, $intPagoHasta = 0) {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT pbd,p FROM BrasaRecursoHumanoBundle:RhuPagoBancoDetalle pbd JOIN pbd.pagoRel p WHERE pbd.estadoContabilizado = 1";
+        if($intPagoDesde != "" || $intPagoDesde != 0) {
+            $dql .= " AND pbd.codigoPagoFk >= " . $intPagoDesde;
+        }
+        if($intPagoHasta != "" || $intPagoHasta != 0) {
+            $dql .= " AND pbd.codigoPagoFk <= " . $intPagoHasta;
+        }   
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();
+        return $arrayResultado;
+    } 
 }

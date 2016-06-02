@@ -80,6 +80,41 @@ class ProcesoContabilizarPagoBancoController extends Controller
     private function listar() {
         $em = $this->getDoctrine()->getManager();                
         $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->pendientesContabilizarDql();  
-    }         
+    } 
+    
+    public function descontabilizarPagoBancoAction() {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $session = $this->getRequest()->getSession(); 
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $form = $this->createFormBuilder()
+            ->add('pagoDesde', 'number', array('label'  => 'Pago desde'))
+            ->add('pagoHasta', 'number', array('label'  => 'Pago hasta'))
+            ->add('BtnDescontabilizar', 'submit', array('label'  => 'Descontabilizar',))    
+            ->getForm();
+        $form->handleRequest($request);        
+        if ($form->isValid()) {             
+            if ($form->get('BtnDescontabilizar')->isClicked()) {
+                $intPagoDesde = $form->get('pagoDesde')->getData();
+                $intPagoHasta = $form->get('pagoHasta')->getData();
+                if($intPagoDesde != "" || $intPagoHasta != "") {
+                    $arRegistros = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
+                    $arRegistros = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->contabilizadosPagoBancoDql($intPagoDesde,$intPagoHasta);  
+                    foreach ($arRegistros as $codigoRegistro) {
+                        $arRegistro = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
+                        $arRegistro = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->find($codigoRegistro);
+                        $arRegistro->setEstadoContabilizado(0);                                                    
+                        $em->persist($arRegistro);                    
+                    }
+                    $em->flush();
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                } else {
+                    $objMensaje->Mensaje('error', 'Debe seleccionar un filtro', $this);
+                }                               
+            }
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Procesos/Contabilizar:descontabilizarPagoBanco.html.twig', array(
+            'form' => $form->createView()));
+    }
     
 }
