@@ -103,7 +103,7 @@ class RhuPagoConcepto
     private $codigoCuentaOperacionFk;    
     
     /**
-     * @ORM\Column(name="tipo_cuenta_operacion", type="bigint")
+     * @ORM\Column(name="tipo_cuenta_operacion", type="bigint", nullable=true)
      */     
     private $tipoCuentaOperacion = 1;   
     

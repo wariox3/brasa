@@ -53,7 +53,7 @@ class TurPuesto
     private $celularContacto;    
     
     /**
-     * @ORM\Column(name="costo_dotacion", type="float")
+     * @ORM\Column(name="costo_dotacion", type="float", nullable=true)
      */    
     private $costoDotacion = 0;     
     
