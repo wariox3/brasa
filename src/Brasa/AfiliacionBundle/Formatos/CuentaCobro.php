@@ -316,7 +316,7 @@ class CuentaCobro extends \FPDF_FPDF {
         $this->SetFont('Arial', 'B', 12);
         $this->ln(5);
         $this->SetFont('Arial', 'B', 10);
-        $this->Text(21, 35, "NIT " . $arConfiguracion->getNitEmpresa() . "-" . $arConfiguracion->getDigitoVerificacionEmpresa());
+        //$this->Text(21, 35, "NIT " . $arConfiguracion->getNitEmpresa() . "-" . $arConfiguracion->getDigitoVerificacionEmpresa());
         $this->SetXY(258, 18);
     }
 
