@@ -1,9 +1,9 @@
-{% extends '::base.html.twig' %}
-{% block title %}Contabilizar pagos - Soga App{% endblock %}
+{% extends '::base_sin_menu.html.twig' %}
+{% block title %}Descontabilizar pagos - Soga App{% endblock %}
 {% block content %}
 <div class="container">
     <div class="page-header">
-        <h3>Contabilizar pagos</h3>
+        <h3>Descontabilizar pagos</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
             {{ form_errors(form) }}
@@ -53,10 +53,7 @@
         </div>                
         <div class="btn-toolbar" style="float: right">                 
             <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_proceso_descontabilizar_pago') }}', 'Archivos', 600, 1000)" >Descontabilizar</a>                        
-            </div>
-            <div class="btn-group">
-                {{ form_widget(form.BtnContabilizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                               
+                {{ form_widget(form.BtnDesContabilizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                               
             </div>
         </div>
         

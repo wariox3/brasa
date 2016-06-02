@@ -75,7 +75,6 @@ class ContabilizarPagoController extends Controller
     private function formularioLista() {
         $form = $this->createFormBuilder()                        
             ->add('BtnContabilizar', 'submit', array('label'  => 'Contabilizar',))
-            ->add('BtnDesContabilizar', 'submit', array('label'  => 'DesContabilizar',))
             ->getForm();        
         return $form;
     }      
@@ -132,5 +131,53 @@ class ContabilizarPagoController extends Controller
         }
         $em->flush();
     }    
+ 
+    /**
+     * @Route("/rhu/proceso/descontabilizar/pago/", name="brs_rhu_proceso_descontabilizar_pago")
+     */     
+    public function listaDescontabilizarAction() {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();  
+        $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $form = $this->formularioListaDescontabilizar();
+        $form->handleRequest($request);
+        $this->listarDescontabilizar();
+        if($form->isValid()) {            
+            if ($form->get('BtnDesContabilizar')->isClicked()) {    
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                                    
+                    foreach ($arrSeleccionados AS $codigo) {                                     
+                        $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+                        $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigo);
+                        $arPago->setEstadoContabilizado(0);                                                    
+                        $em->persist($arPago);
+                    }
+                    $em->flush();
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                } else {
+                    $objMensaje->Mensaje('error', 'Debe seleccionar al menos un registro', $this);
+                }
+            }            
+        }       
+                
+        $arPagos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);                               
+        return $this->render('BrasaRecursoHumanoBundle:Procesos/Contabilizar:descontabilizar.html.twig', array(
+            'arPagos' => $arPagos,
+            'form' => $form->createView()));
+    }          
+    
+    private function formularioListaDescontabilizar() {
+        $form = $this->createFormBuilder()                        
+            ->add('BtnDesContabilizar', 'submit', array('label'  => 'DesContabilizar',))
+            ->getForm();        
+        return $form;
+    }      
+    
+    private function listarDescontabilizar() {
+        $em = $this->getDoctrine()->getManager();                
+        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->contabilizadosDql();  
+    }
     
 }
