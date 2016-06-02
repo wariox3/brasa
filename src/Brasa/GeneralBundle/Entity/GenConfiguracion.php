@@ -75,7 +75,7 @@ class GenConfiguracion
     /**
      * @ORM\Column(name="nit_empresa", type="string", length=20, nullable=true)
      */      
-    private $nitEmpresa; 
+    private $nitEmpresa;         
     
     /**
      * @ORM\Column(name="digito_verificacion_empresa", type="string", length=2, nullable=true)
@@ -86,6 +86,16 @@ class GenConfiguracion
      * @ORM\Column(name="nombre_empresa", type="string", length=90, nullable=true)
      */    
     private $nombreEmpresa;
+    
+    /**
+     * @ORM\Column(name="identificacion_representante_legal", type="string", length=80, nullable=true)
+     */      
+    private $identificacionRepresentanteLegal;
+    
+    /**
+     * @ORM\Column(name="representante_legal", type="string", length=80, nullable=true)
+     */      
+    private $representanteLegal;        
     
     /**
      * @ORM\Column(name="sigla", type="string", length=90, nullable=true)
@@ -665,5 +675,53 @@ class GenConfiguracion
     public function getInhabilitado()
     {
         return $this->inhabilitado;
+    }
+
+    /**
+     * Set identificacionRepresentanteLegal
+     *
+     * @param string $identificacionRepresentanteLegal
+     *
+     * @return GenConfiguracion
+     */
+    public function setIdentificacionRepresentanteLegal($identificacionRepresentanteLegal)
+    {
+        $this->identificacionRepresentanteLegal = $identificacionRepresentanteLegal;
+
+        return $this;
+    }
+
+    /**
+     * Get identificacionRepresentanteLegal
+     *
+     * @return string
+     */
+    public function getIdentificacionRepresentanteLegal()
+    {
+        return $this->identificacionRepresentanteLegal;
+    }
+
+    /**
+     * Set representanteLegal
+     *
+     * @param string $representanteLegal
+     *
+     * @return GenConfiguracion
+     */
+    public function setRepresentanteLegal($representanteLegal)
+    {
+        $this->representanteLegal = $representanteLegal;
+
+        return $this;
+    }
+
+    /**
+     * Get representanteLegal
+     *
+     * @return string
+     */
+    public function getRepresentanteLegal()
+    {
+        return $this->representanteLegal;
     }
 }

@@ -58,7 +58,7 @@ class CuentaCobro extends \FPDF_FPDF {
         $this->Ln();
         $this->Ln(1);
         $this->SetFont('Arial', 'B', 9);
-        $List1 = array('NOMBRE: ', 'NIT: ', 'TELEFONO:', 'DIRECCION:');
+        $List1 = array('NOMBRE: ', 'NIT: ', 'TELEFONO:', 'DIRECCION:', 'CORREO:');
         foreach ($List1 as $col) {
             $this->Cell(50, 4, $col, 0, 0, 'L');
             $this->Ln(4);
@@ -67,7 +67,8 @@ class CuentaCobro extends \FPDF_FPDF {
         $Datos = array($arFactura->getClienteRel()->getNombreCorto(),
             $arFactura->getClienteRel()->getNit() . "-" . $arFactura->getClienteRel()->getDigitoVerificacion(),
             $arFactura->getClienteRel()->getTelefono(),
-            $arFactura->getClienteRel()->getDireccion());
+            $arFactura->getClienteRel()->getDireccion(),
+            $arFactura->getClienteRel()->getEmail());
         $this->SetFont('Arial', '', 8);
         $this->SetY(54);
 
@@ -106,9 +107,9 @@ class CuentaCobro extends \FPDF_FPDF {
         $this->SetFont('Arial', '', 10);        
         $this->Cell(30, 3, 'ALTURAS Y SEGURIDAD LABORAL', 0, 0, 'C');        
         $this->SetXY(100,25);
-        $this->Cell(30, 3, 'ROBERTO MEJIA SOSA', 0, 0, 'C');        
+        $this->Cell(30, 3, $arConfiguracion->getNombreEmpresa(), 0, 0, 'C');        
         $this->SetXY(100,30);
-        $this->Cell(30, 3, 'RUT: 8.274.945-1', 0, 0, 'C');
+        $this->Cell(30, 3, 'RUT: ' . number_format($arConfiguracion->getNitEmpresa(), 0, '.', '.') . '-' . $arConfiguracion->getDigitoVerificacionEmpresa(), 0, 0, 'C');
         $this->SetXY(100,35);
         $this->Cell(30, 3, 'REGIMEN SIMPLIFICADO', 0, 0, 'C');
         
@@ -225,6 +226,8 @@ class CuentaCobro extends \FPDF_FPDF {
     public function Footer() {
         $arFactura = new \Brasa\AfiliacionBundle\Entity\AfiFactura();
         $arFactura = self::$em->getRepository('BrasaAfiliacionBundle:AfiFactura')->find(self::$codigoFactura);
+        $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracionGeneral = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $arConfiguracion = new \Brasa\AfiliacionBundle\Entity\AfiConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaAfiliacionBundle:AfiConfiguracion')->find(1);
         $this->SetY(180);
@@ -233,10 +236,8 @@ class CuentaCobro extends \FPDF_FPDF {
         $this->SetFont('Arial', 'B', 7.5);
         $this->ln(7);
         $totales = array('SUBTOTAL: ' . " " . " ",            
-            '(+)IVA: ' . " " . " ",
-            '(+)RTE FUENTE: ' . " " . " ",
-            '(+)RTE IVA: ' . " " . " ",
-            'TOTAL GENERAL: ' . " " . " "
+            '(-)DESCUENTO: ' . " " . " ",
+            'TOTAL: ' . " " . " "
         );
 
         $this->line(10, $this->GetY() + 40, 205, $this->GetY() + 40);
@@ -250,13 +251,11 @@ class CuentaCobro extends \FPDF_FPDF {
 
         $totales2 = array(number_format($arFactura->getSubtotal(), 0, '.', ','),
             number_format(0, 0, '.', ','),            
-            number_format(0, 0, '.', ','),
-            number_format(0, 0, '.', ','),
             number_format($arFactura->getTotal(), 0, '.', ',')
         );
 
         $this->SetFont('Arial', '', 7.5);
-        $this->SetXY(190, $this->GetY() - 32);
+        $this->SetXY(190, $this->GetY() - 24);
         $this->ln(12);
         for ($i = 0; $i < count($totales2); $i++) {
             $this->SetX(185);
@@ -264,7 +263,7 @@ class CuentaCobro extends \FPDF_FPDF {
             $this->ln();
         }
 
-        $this->SetY($this->GetY() - 20);
+        $this->SetY($this->GetY() - 10);
         $this->SetFont('Arial', 'B', 8);
         $this->SetX(10);
         $this->Cell(20, 5, 'OBSERVACIONES:', 0, 'L');
@@ -280,30 +279,15 @@ class CuentaCobro extends \FPDF_FPDF {
             $intCentavos = substr($arrayNumero[1], 0, 2);
         $strLetras = "";
         //$strLetras = \Brasa\GeneralBundle\MisClases\Funciones::devolverNumeroLetras($arFactura->getVrTotal()) . " con " . \Brasa\GeneralBundle\MisClases\Funciones::devolverNumeroLetras($intCentavos);
-        $this->SetFont('Arial', 'B', 6);
-        $this->Text(12, 224, "SON : " . substr(strtoupper(self::$strLetras), 0, 96));
+        $this->SetFont('Arial', 'B', 6);        
         $this->Ln();
-
-        //$Text = array($arConfiguracion->getInformacionLegalFactura());
-
-        //$this->SetFont('Arial', '', 6);
-        //$this->GetY($this->SetY(228));
-        //$this->SetX(10);
-        //$this->MultiCell(90, 3, $arConfiguracion->getInformacionLegalFactura());
-
-
-        //$this->SetFont('Arial', '', 7);
-        //$this->GetY($this->SetY(255));
-        //$this->SetX(10);
-        //$this->MultiCell(90, 3, $arConfiguracion->getInformacionResolucionSupervigilanciaFactura(), 0, 'L');
 
         $this->GetY($this->SetY(235));
         $this->SetX(10);
         $this->SetFont('Arial', 'B', 6);
-        $this->Cell(0, 0, $this->line(100, $this->GetY() + 15, 150, $this->GetY() + 15) . $this->Text(100, $this->GetY() + 18, "AUTORIZADO"));
-        $this->Cell(0, 0, $this->line(154, $this->GetY() + 15, 205, $this->GetY() + 15) . $this->Text(154, $this->GetY() + 18, "RECIBI (Nombre y firma)"));
-
-        $this->line(10, 260, 205, 260);
+        $this->Text(12, $this->GetY() + 8, 'Atentamente,');
+        $this->Cell(0, 0, $this->line(12, $this->GetY() + 20, 80, $this->GetY() + 20) . $this->Text(12, $this->GetY() + 23, $arConfiguracionGeneral->getRepresentanteLegal()) . $this->Text(12, $this->GetY() + 26, "C.C " . $arConfiguracionGeneral->getIdentificacionRepresentanteLegal()));        
+        
         $this->SetFont('Arial', '', 7);
         $this->SetY(-70);
         $this->Ln();
@@ -313,12 +297,12 @@ class CuentaCobro extends \FPDF_FPDF {
 
         $this->Ln(3);
         $this->SetFont('Arial', 'B', 8);
-        $this->Text(20, $this->GetY($this->SetY(264)), 'FAVOR CONSIGNAR EN LA CUENTA DE AHORROS NRO. 01431082914 BANCOLOMBIA A NOMBRE DE ROBERTO MEJIA SOSA');
-        $this->SetFont('Arial', '', 7);
-        $this->Text(60, $this->GetY($this->SetY(267)), 'CRA 51 NRO 41-222 OF 504 EDIFICIO CALLE NUEVA PBX: 4487575 EXT 105 CEL 3206974497');
-
+        $this->Text(20, $this->GetY($this->SetY(230)), $arConfiguracion->getInformacionPagoFactura());
+        $this->SetFont('Arial', 'B', 8);
+        $this->Text(60, $this->GetY($this->SetY(267)), $arConfiguracion->getInformacionContactoFactura());
+        $this->SetFont('Arial', '', 8);
         //Número de página
-        $this->Text(188, 273, 'Pagina ' . $this->PageNo() . ' de {nb}');
+        $this->Text(180, 273, 'Pagina ' . $this->PageNo() . ' de {nb}');
     }
 
     public function GenerarEncabezadoFactura($em) {
