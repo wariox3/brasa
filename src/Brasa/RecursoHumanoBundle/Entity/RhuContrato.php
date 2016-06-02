@@ -153,7 +153,7 @@ class RhuContrato
     private $estadoLiquidado = 0; 
     
     /**
-     * @ORM\Column(name="ibp_adicional", type="float")
+     * @ORM\Column(name="ibp_adicional", type="float", nullable=true)
      */
     private $ibpAdicional = 0;
     
