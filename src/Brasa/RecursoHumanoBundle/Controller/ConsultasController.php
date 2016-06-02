@@ -2124,12 +2124,22 @@ class ConsultasController extends Controller
             }else{
                 $estadoContratoActivo = "VIGENTE";
             }
+            if ($arEmpleado->getFechaContrato() = null){
+                $fechaContrato = "";
+            } else {
+                $fechaContrato = $arEmpleado->getFechaContrato()->format('Y-m-d');
+            }
+            if ($arEmpleado->getFechaFinalizaContrato() = null){
+                $fechaFinalizacionContrato = "";
+            } else {
+                $fechaFinalizacionContrato = $arEmpleado->getFechaFinalizaContrato()->format('Y-m-d');
+            }        
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arEmpleado->getCodigoEmpleadoPk())
                     ->setCellValue('B' . $i, $arEmpleado->getTipoIdentificacionRel()->getNombre())
                     ->setCellValue('C' . $i, $arEmpleado->getNumeroIdentificacion())
                     ->setCellValue('D' . $i, $arEmpleado->getciudadExpedicionRel()->getNombre())
-                    ->setCellValue('E' . $i, $arEmpleado->getFechaExpedicionIdentificacion())
+                    ->setCellValue('E' . $i, $arEmpleado->getFechaExpedicionIdentificacion()->format('Y-m-d'))
                     ->setCellValue('F' . $i, $arEmpleado->getLibretaMilitar())
                     ->setCellValue('G' . $i, $centroCosto)
                     ->setCellValue('H' . $i, $arEmpleado->getNombreCorto())
@@ -2141,7 +2151,7 @@ class ConsultasController extends Controller
                     ->setCellValue('N' . $i, $arEmpleado->getRhRel()->getTipo())
                     ->setCellValue('O' . $i, $sexo)
                     ->setCellValue('P' . $i, $arEmpleado->getCorreo())
-                    ->setCellValue('Q' . $i, $arEmpleado->getFechaNacimiento())
+                    ->setCellValue('Q' . $i, $arEmpleado->getFechaNacimiento()->format('Y-m-d'))
                     ->setCellValue('R' . $i, $arEmpleado->getCiudadNacimientoRel()->getNombre())
                     ->setCellValue('S' . $i, $arEmpleado->getEstadoCivilRel()->getNombre())
                     ->setCellValue('T' . $i, $padreFamilia)
@@ -2154,8 +2164,8 @@ class ConsultasController extends Controller
                     ->setCellValue('AA' . $i, $arEmpleado->getCuenta())
                     ->setCellValue('AB' . $i, $arEmpleado->getBancoRel()->getNombre())
                     ->setCellValue('AC' . $i, $arEmpleado->getVrSalario())
-                    ->setCellValue('AD' . $i, $arEmpleado->getFechaContrato())
-                    ->setCellValue('AE' . $i, $arEmpleado->getFechaFinalizaContrato())
+                    ->setCellValue('AD' . $i, $fechaContrato)
+                    ->setCellValue('AE' . $i, $fechaFinalizacionContrato)
                     ->setCellValue('AF' . $i, $cargo)
                     ->setCellValue('AG' . $i, $arEmpleado->getCargoDescripcion())
                     ->setCellValue('AH' . $i, $tipoPension)
