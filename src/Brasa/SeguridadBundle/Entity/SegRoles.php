@@ -27,6 +27,11 @@ class SegRoles
     protected $usersRolRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="SegUsuarioRol", mappedBy="rolRel")
+     */
+    protected $usuariosRolesRolRel;    
+    
+    /**
      * Set codigoRolPk
      *
      * @param string $codigoRolPk
@@ -113,5 +118,39 @@ class SegRoles
     public function getUsersRolRel()
     {
         return $this->usersRolRel;
+    }
+
+    /**
+     * Add usuariosRolesRolRel
+     *
+     * @param \Brasa\SeguridadBundle\Entity\SegUsuarioRol $usuariosRolesRolRel
+     *
+     * @return SegRoles
+     */
+    public function addUsuariosRolesRolRel(\Brasa\SeguridadBundle\Entity\SegUsuarioRol $usuariosRolesRolRel)
+    {
+        $this->usuariosRolesRolRel[] = $usuariosRolesRolRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove usuariosRolesRolRel
+     *
+     * @param \Brasa\SeguridadBundle\Entity\SegUsuarioRol $usuariosRolesRolRel
+     */
+    public function removeUsuariosRolesRolRel(\Brasa\SeguridadBundle\Entity\SegUsuarioRol $usuariosRolesRolRel)
+    {
+        $this->usuariosRolesRolRel->removeElement($usuariosRolesRolRel);
+    }
+
+    /**
+     * Get usuariosRolesRolRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUsuariosRolesRolRel()
+    {
+        return $this->usuariosRolesRolRel;
     }
 }

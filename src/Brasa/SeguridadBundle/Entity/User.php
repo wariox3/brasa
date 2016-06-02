@@ -74,7 +74,10 @@ class User implements UserInterface, \Serializable
      */
     protected $userUsuarioPermisoEspecialRel;
     
-    
+    /**
+     * @ORM\OneToMany(targetEntity="SegUsuarioRol", mappedBy="usuarioRel")
+     */
+    protected $usuariosRolesUsuarioRel;    
     
     public function __construct()
     {
@@ -384,5 +387,39 @@ class User implements UserInterface, \Serializable
     public function getUserUsuarioPermisoEspecialRel()
     {
         return $this->userUsuarioPermisoEspecialRel;
+    }
+
+    /**
+     * Add usuariosRolesUsuarioRel
+     *
+     * @param \Brasa\SeguridadBundle\Entity\SegUsuarioRol $usuariosRolesUsuarioRel
+     *
+     * @return User
+     */
+    public function addUsuariosRolesUsuarioRel(\Brasa\SeguridadBundle\Entity\SegUsuarioRol $usuariosRolesUsuarioRel)
+    {
+        $this->usuariosRolesUsuarioRel[] = $usuariosRolesUsuarioRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove usuariosRolesUsuarioRel
+     *
+     * @param \Brasa\SeguridadBundle\Entity\SegUsuarioRol $usuariosRolesUsuarioRel
+     */
+    public function removeUsuariosRolesUsuarioRel(\Brasa\SeguridadBundle\Entity\SegUsuarioRol $usuariosRolesUsuarioRel)
+    {
+        $this->usuariosRolesUsuarioRel->removeElement($usuariosRolesUsuarioRel);
+    }
+
+    /**
+     * Get usuariosRolesUsuarioRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUsuariosRolesUsuarioRel()
+    {
+        return $this->usuariosRolesUsuarioRel;
     }
 }

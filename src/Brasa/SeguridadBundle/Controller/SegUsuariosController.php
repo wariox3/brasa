@@ -3,6 +3,7 @@
 namespace Brasa\SeguridadBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Security\Core\SecurityContext;
 use Brasa\SeguridadBundle\Form\Type\UserType;
 
@@ -61,6 +62,7 @@ class SegUsuariosController extends Controller
         $form = $this->createFormBuilder()
             ->add('BtnEliminarEspecial', 'submit', array('label' => 'Eliminar'))
             ->add('BtnEliminarDocumento', 'submit', array('label' => 'Eliminar'))    
+            ->add('BtnEliminarRol', 'submit', array('label' => 'Eliminar'))
             ->add('BtnActualizar', 'submit', array('label' => 'Actualizar'))    
             ->getForm();
         $form->handleRequest($request);
@@ -92,6 +94,18 @@ class SegUsuariosController extends Controller
                 }
                 return $this->redirect($this->generateUrl('brs_seg_admin_usuario_detalle', array('codigoUsuario' => $codigoUsuario)));
             }
+            if($form->get('BtnEliminarRol')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarUsuarioRol');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoUsuarioRol) {
+                        $arUsuarioRol = new \Brasa\SeguridadBundle\Entity\SegUsuarioRol();
+                        $arUsuarioRol = $em->getRepository('BrasaSeguridadBundle:SegUsuarioRol')->find($codigoUsuarioRol);
+                        $em->remove($arUsuarioRol);                        
+                    }
+                    $em->flush();
+                }
+                return $this->redirect($this->generateUrl('brs_seg_admin_usuario_detalle', array('codigoUsuario' => $codigoUsuario)));
+            }            
             if($form->get('BtnActualizar')->isClicked()) {
                 $arrControles = $request->request->All();
                 $intIndice = 0;
@@ -164,9 +178,12 @@ class SegUsuariosController extends Controller
         $arPermisosDocumentos = $em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->findBy(array('codigoUsuarioFk' => $codigoUsuario));
         $arPermisosEspeciales = new \Brasa\SeguridadBundle\Entity\SegUsuarioPermisoEspecial();
         $arPermisosEspeciales = $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->findBy(array('codigoUsuarioFk' => $codigoUsuario));
+        $arUsuarioRoles = new \Brasa\SeguridadBundle\Entity\SegUsuarioRol();
+        $arUsuarioRoles = $em->getRepository('BrasaSeguridadBundle:SegUsuarioRol')->findBy(array('codigoUsuarioFk' => $codigoUsuario));        
         return $this->render('BrasaSeguridadBundle:Usuarios:detalle.html.twig', array(
                     'arPermisosDocumentos' => $arPermisosDocumentos,
                     'arPermisosEspeciales' => $arPermisosEspeciales,
+                    'arUsuarioRoles' => $arUsuarioRoles,
                     'arUsuario' => $arUsuario,
                     'form' => $form->createView()
                     ));
@@ -212,44 +229,105 @@ class SegUsuariosController extends Controller
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder()
-            ->add('documentoRel', 'entity', array(
-                'class' => 'BrasaSeguridadBundle:SegDocumento',
-                'property' => 'nombre',
-                'data' => "",
-                'required' => true,))
-            ->add('ingreso', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))
-            ->add('nuevo', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))
-            ->add('editar', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))
-            ->add('eliminar', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))
-            ->add('autorizar', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))
-            ->add('desautorizar', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))
-            ->add('aprobar', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))
-            ->add('desaprobar', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))
-            ->add('anular', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))
-            ->add('desanular', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))    
-            ->add('imprimir', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))    
-            ->add('guardar', 'submit', array('label' => 'Guardar'))
+            ->add('ingreso', 'checkbox', array('required'  => false))
+            ->add('nuevo', 'checkbox', array('required'  => false))
+            ->add('editar', 'checkbox', array('required'  => false))
+            ->add('eliminar', 'checkbox', array('required'  => false))
+            ->add('autorizar', 'checkbox', array('required'  => false))
+            ->add('desautorizar', 'checkbox', array('required'  => false))
+            ->add('aprobar', 'checkbox', array('required'  => false))
+            ->add('desaprobar', 'checkbox', array('required'  => false))
+            ->add('anular', 'checkbox', array('required'  => false))            
+            ->add('imprimir', 'checkbox', array('required'  => false))
+            ->add('desanular', 'checkbox', array('required'  => false))            
+            ->add('BtnGuardar', 'submit', array('label' => 'Guardar'))
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arUsuario = $em->getRepository('BrasaSeguridadBundle:User')->find($codigoUsuario);
-            $arPermisoDocumentos = $form->get('documentoRel')->getData();
-            $registros = $em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->findOneBy(array('codigoUsuarioFk' => $codigoUsuario, 'codigoDocumentoFk' => $arPermisoDocumentos->getCodigoDocumentoPk()));
-            if ($registros == null){
-                $arUsuarioPermisoDocumento = new \Brasa\SeguridadBundle\Entity\SegPermisoDocumento();
-                $arUsuarioPermisoDocumento->setDocumentoRel($form->get('documentoRel')->getData());
-                $arUsuarioPermisoDocumento->setUsuarioRel($arUsuario);
-                $em->persist($arUsuarioPermisoDocumento);
-                $em->flush();
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-            } else {
-                    $objMensaje->Mensaje("error", "Ya existe el permiso para este usuario", $this);
-            }
+            if ($form->get('BtnGuardar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $arDatos = $form->getData();
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoDocumento) {        
+                        $arUsuarioPermisoDocumentoValidar = new \Brasa\SeguridadBundle\Entity\SegPermisoDocumento();
+                        $arUsuarioPermisoDocumentoValidar = $em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->findBy(array('codigoUsuarioFk' => $codigoUsuario, 'codigoDocumentoFk' => $codigoDocumento));
+                        if(!$arUsuarioPermisoDocumentoValidar) {
+                            $arUsuario = $em->getRepository('BrasaSeguridadBundle:User')->find($codigoUsuario);                                            
+                            $arDocumento = $em->getRepository('BrasaSeguridadBundle:SegDocumento')->find($codigoDocumento);
+                            $arUsuarioPermisoDocumento = new \Brasa\SeguridadBundle\Entity\SegPermisoDocumento();
+                            $arUsuarioPermisoDocumento->setDocumentoRel($arDocumento);
+                            $arUsuarioPermisoDocumento->setUsuarioRel($arUsuario);
+                            $arUsuarioPermisoDocumento->setIngreso($arDatos['ingreso']);
+                            $arUsuarioPermisoDocumento->setNuevo($arDatos['nuevo']);
+                            $arUsuarioPermisoDocumento->setEditar($arDatos['editar']);
+                            $arUsuarioPermisoDocumento->setEliminar($arDatos['eliminar']);
+                            $arUsuarioPermisoDocumento->setAutorizar($arDatos['autorizar']);
+                            $arUsuarioPermisoDocumento->setDesautorizar($arDatos['desautorizar']);
+                            $arUsuarioPermisoDocumento->setAprobar($arDatos['aprobar']);
+                            $arUsuarioPermisoDocumento->setDesaprobar($arDatos['desaprobar']);
+                            $arUsuarioPermisoDocumento->setAnular($arDatos['anular']);
+                            $arUsuarioPermisoDocumento->setDesanular($arDatos['desanular']);
+                            $arUsuarioPermisoDocumento->setImprimir($arDatos['imprimir']);
+                            
+                            $em->persist($arUsuarioPermisoDocumento);
+                        }                        
+                    }
+                    $em->flush();                    
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                }
+                else {
+                    $objMensaje->Mensaje("error", "No selecciono ningun dato para grabar", $this);
+                }
+            }                                    
         }
+        $arDocumentos = $em->getRepository('BrasaSeguridadBundle:SegDocumento')->findAll();
         return $this->render('BrasaSeguridadBundle:Usuarios:detalleNuevoPermisoDocumento.html.twig', array(
-            'form' => $form->createView()));
+            'arDocumentos' => $arDocumentos,
+            'form' => $form->createView()
+                ));
     }
 
+    /**
+     * @Route("/seg/usuario/detalle/rol/nuevo/{codigoUsuario}/", name="brs_seg_usuario_detalle_rol_nuevo")
+     */     
+    public function detalleNuevoRolAction($codigoUsuario) {
+        $request = $this->getRequest();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $em = $this->getDoctrine()->getManager();
+        $arRoles = $em->getRepository('BrasaSeguridadBundle:SegRoles')->findAll();
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            if ($form->get('BtnGuardar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoRol) {
+                        $arUsuario = $em->getRepository('BrasaSeguridadBundle:User')->find($codigoUsuario);
+                        $arRol = $em->getRepository('BrasaSeguridadBundle:SegRoles')->find($codigoRol);
+                        $arUsuarioRolValidar = new \Brasa\SeguridadBundle\Entity\SegUsuarioRol();
+                        $arUsuarioRolValidar = $em->getRepository('BrasaSeguridadBundle:SegUsuarioRol')->findBy(array('codigoUsuarioFk' => $codigoUsuario, 'codigoRolFk' => $codigoRol));
+                        if(!$arUsuarioRolValidar) {
+                            $arUsuarioRol = new \Brasa\SeguridadBundle\Entity\SegUsuarioRol();
+                            $arUsuarioRol->setRolRel($arRol);
+                            $arUsuarioRol->setUsuarioRel($arUsuario);
+                            $em->persist($arUsuarioRol);
+                        }                        
+                    }
+                    $em->flush();                    
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                }
+                else {
+                    $objMensaje->Mensaje("error", "No selecciono ningun dato para grabar", $this);
+                }
+            }
+        }
+        return $this->render('BrasaSeguridadBundle:Usuarios:detalleNuevoRol.html.twig', array(
+            'arRoles' => $arRoles,
+            'form' => $form->createView()));
+    }    
+    
     public function recuperarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
