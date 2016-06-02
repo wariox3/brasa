@@ -25,16 +25,13 @@ class RegistroController extends Controller
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->eliminar($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_ctb_movimiento_registro'));                 
-                
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form, $request);
-                //$form = $this->formularioFiltro();
                 $this->lista();
             }
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form, $request);
-                //$form = $this->formularioFiltro();
                 $this->lista();
                 $this->generarExcel();
             }
@@ -48,9 +45,8 @@ class RegistroController extends Controller
     private function lista() {   
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        
         $this->strListaDql =  $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->listaDQL(
-                    $session->get('filtroNumeroRegistro'),
+                    $session->get('filtroRegistroNumero'),
                     $session->get('filtroCodigoComprobante'),
                     $session->get('filtroDesde'),
                     $session->get('filtroHasta')
@@ -64,14 +60,12 @@ class RegistroController extends Controller
         $session->set('filtroCodigoComprobante', $controles['comprobanteRel']);
         $session->set('filtroDesde', $form->get('fechaDesde')->getData());
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
-        
     }
     
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-
             ->add('TxtNumeroRegistro', 'text', array('label'  => 'Codigo'))
             ->add('comprobanteRel', 'entity', array(
                 'class' => 'BrasaContabilidadBundle:CtbComprobante',
@@ -93,8 +87,6 @@ class RegistroController extends Controller
     }   
     
     private function generarExcel() {
-        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
-        ob_clean();
         $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
         // Set document properties
@@ -107,65 +99,50 @@ class RegistroController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'S'; $col++) {
-            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
-        }     
-        for($col = 'M'; $col !== 'S'; $col++) {
-            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
-        }
-        
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'TIPO')
-                    ->setCellValue('C1', 'NÚMERO')
-                    ->setCellValue('D1', 'FECHA')
-                    ->setCellValue('E1', 'AÑO')
-                    ->setCellValue('F1', 'MES')
-                    ->setCellValue('G1', 'CLIENTE')
-                    ->setCellValue('H1', 'SECTOR')
-                    ->setCellValue('I1', 'AUT')
-                    ->setCellValue('J1', 'PRO')
-                    ->setCellValue('K1', 'FAC')
-                    ->setCellValue('L1', 'ANU')
-                    ->setCellValue('M1', 'HORAS')
-                    ->setCellValue('N1', 'H.DIURNAS')
-                    ->setCellValue('O1', 'H.NOCTURNAS')
-                    ->setCellValue('P1', 'P.MINIMO')
-                    ->setCellValue('Q1', 'P.AJUSTADO')
-                    ->setCellValue('R1', 'TOTAL');
+                    ->setCellValue('A1', 'CÓDIGO')
+                    ->setCellValue('B1', 'NÚMERO')
+                    ->setCellValue('C1', 'NÚMERO REFERENCIA')
+                    ->setCellValue('D1', 'COMPROBANTE')
+                    ->setCellValue('E1', 'CUENTA')
+                    ->setCellValue('F1', 'TERCERO')
+                    ->setCellValue('G1', 'DEBITO')
+                    ->setCellValue('H1', 'CREDITO')
+                    ->setCellValue('I1', 'BASE')
+                    ->setCellValue('J1', 'DETALLE');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
         $arRegistros = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();
         $arRegistros = $query->getResult();
-
         foreach ($arRegistros as $arRegistro) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arRegistro->getCodigoRegistroPk())
-                    ->setCellValue('B' . $i, $arRegistro->getRegistroTipoRel()->getNombre())
-                    ->setCellValue('C' . $i, $arRegistro->getNumero())
-                    ->setCellValue('D' . $i, $arRegistro->getFecha()->format('Y/m/d'))
-                    ->setCellValue('E' . $i, $arRegistro->getFechaProgramacion()->format('Y'))
-                    ->setCellValue('F' . $i, $arRegistro->getFechaProgramacion()->format('F'))                    
-                    ->setCellValue('G' . $i, $arRegistro->getClienteRel()->getNombreCorto())
-                    ->setCellValue('H' . $i, $arRegistro->getSectorRel()->getNombre())
-                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arRegistro->getEstadoAutorizado()))
-                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arRegistro->getEstadoProgramado()))
-                    ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arRegistro->getEstadoFacturado()))
-                    ->setCellValue('L' . $i, $objFunciones->devuelveBoolean($arRegistro->getEstadoAnulado()))
-                    ->setCellValue('M' . $i, $arRegistro->getHoras())
-                    ->setCellValue('N' . $i, $arRegistro->getHorasDiurnas())
-                    ->setCellValue('O' . $i, $arRegistro->getHorasNocturnas())
-                    ->setCellValue('P' . $i, $arRegistro->getVrTotalPrecioMinimo())
-                    ->setCellValue('Q' . $i, $arRegistro->getVrTotalPrecioAjustado())
-                    ->setCellValue('R' . $i, $arRegistro->getVrTotal());
-
+                    ->setCellValue('B' . $i, $arRegistro->getNumero())
+                    ->setCellValue('C' . $i, $arRegistro->getNumeroReferencia())
+                    ->setCellValue('D' . $i, $arRegistro->getFecha()->format('Y-m-d'))
+                    ->setCellValue('E' . $i, $arRegistro->getCodigoComprobanteFk())
+                    ->setCellValue('F' . $i, $arRegistro->getCodigoCuentaFk())
+                    ->setCellValue('G' . $i, $arRegistro->getTerceroRel()->getNombreCorto())
+                    ->setCellValue('H' . $i, $arRegistro->getDebito())
+                    ->setCellValue('I' . $i, $arRegistro->getCredito())
+                    ->setCellValue('J' . $i, $arRegistro->getDescripcionContable());
             $i++;
         }
 
         $objPHPExcel->getActiveSheet()->setTitle('Registros');
         $objPHPExcel->setActiveSheetIndex(0);
+
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="Registros.xlsx"');
@@ -180,7 +157,7 @@ class RegistroController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }
+    } 
     
     /**
      * @Route("/ctb/movimiento/registro/eliminar", name="brs_ctb_movimiento_registro_eliminar")
