@@ -165,7 +165,8 @@ class RegistroController extends Controller
     public function eliminarMasivoAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $session = $this->getRequest()->getSession();                              
+        $session = $this->getRequest()->getSession(); 
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder()
             ->add('TxtNumeroRegistro', 'text', array('label'  => 'Codigo'))
             ->add('comprobanteRel', 'entity', array(
@@ -195,18 +196,19 @@ class RegistroController extends Controller
                 
                 $dateFechaDesde = $form->get('fechaDesde')->getData();
                 $dateFechaHasta = $form->get('fechaHasta')->getData();
-                
-                $arRegistros = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();
-                $arRegistros = $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->listaEliminarRegistrosMasivosDql($intNumeroRegistro,$codigoComprobante,$dateFechaDesde,$dateFechaHasta);
-                echo count($arRegistros);
-                foreach ($arRegistros as $codigoRegistro) {
-                    $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();
-                    $arRegistro = $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->find($codigoRegistro);
-                    $em->remove($arRegistro);
+                if($intNumeroRegistro != "" || $codigoComprobante != "") {
+                    $arRegistros = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();
+                    $arRegistros = $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->listaEliminarRegistrosMasivosDql($intNumeroRegistro,$codigoComprobante,$dateFechaDesde,$dateFechaHasta);                
+                    foreach ($arRegistros as $codigoRegistro) {
+                        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();
+                        $arRegistro = $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->find($codigoRegistro);
+                        $em->remove($arRegistro);                    
+                    }
                     $em->flush();
-                }
-                //$em->getRepository('BrasaContabilidadBundle:CtbRegistro')->eliminar($arrSeleccionados);
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                } else {
+                    $objMensaje->Mensaje('error', 'Debe seleccionar un filtro', $this);
+                }                               
             }
         }
         //$arRegistros = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 50);

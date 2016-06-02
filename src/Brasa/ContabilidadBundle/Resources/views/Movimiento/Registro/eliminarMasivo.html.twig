@@ -44,8 +44,8 @@
                     </div>
                 </div>    
                 <div class="form-group form-group-sm">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm', 'style':'float:right'} }) }}
+                    <div class="col-sm-offset-2 col-sm-10">                        
+                        {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm', 'style':'float:right', 'onclick': 'return confirm("Esta seguro eliminar los registros?")'} }) }}
                     </div>
                 </div>
             </div>
