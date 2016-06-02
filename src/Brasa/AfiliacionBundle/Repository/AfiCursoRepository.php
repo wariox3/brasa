@@ -120,6 +120,18 @@ class AfiCursoRepository extends EntityRepository {
         return $strResultado;
     } 
     
+    public function anular($codigoCurso) {        
+        $em = $this->getEntityManager();        
+        $arCurso = new \Brasa\AfiliacionBundle\Entity\AfiCurso();        
+        $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($codigoCurso);                                                        
+        $arCurso->setEstadoAnulado(1);
+        $arCurso->setTotal(0);
+        $arCurso->setCosto(0);        
+        $em->persist($arCurso);
+        $em->flush();
+        return "";
+    }        
+    
     public function desAutorizar($codigoCurso) {
         $em = $this->getEntityManager();                
         $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($codigoCurso);            

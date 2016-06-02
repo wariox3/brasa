@@ -243,6 +243,13 @@ class CursoController extends Controller
                 }
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_detalle', array('codigoCurso' => $codigoCurso)));
             }            
+            if($form->get('BtnAnular')->isClicked()) {      
+                $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->anular($codigoCurso);
+                if($strResultado != "") {
+                    $objMensaje->Mensaje("error", $strResultado, $this);
+                }
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_detalle', array('codigoCurso' => $codigoCurso)));
+            }            
             if($form->get('BtnDesAutorizar')->isClicked()) {                            
                 $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->desAutorizar($codigoCurso);
                 if($strResultado != "") {

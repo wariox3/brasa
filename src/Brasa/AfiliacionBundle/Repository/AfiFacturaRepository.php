@@ -49,6 +49,35 @@ class AfiFacturaRepository extends EntityRepository {
         $em->flush();
         return true;
     }
+
+    public function anular($codigoFactura) {        
+        $em = $this->getEntityManager();        
+        $arFactura = new \Brasa\AfiliacionBundle\Entity\AfiFactura();        
+        $arFactura = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->find($codigoFactura);                 
+        /*$arFacturasDetalle = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();        
+        $arFacturasDetalle = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura));                 
+        foreach ($arFacturasDetalle as $arFacturaDetalle) {
+            $floSubTotal +=  $arFacturaDetalle->getPrecio();
+        }
+         * 
+         */                           
+        
+        $arFacturasDetalleCursos = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso();        
+        $arFacturasDetalleCursos = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleCurso')->findBy(array('codigoFacturaFk' => $codigoFactura));                 
+        foreach ($arFacturasDetalleCursos as $arFacturasDetalleCurso) {
+            $arCurso = new \Brasa\AfiliacionBundle\Entity\AfiCurso();        
+            $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($arFacturasDetalleCurso->getCodigoCursoFk());                             
+            $arCurso->setEstadoFacturado(0);
+            $em->persist($arCurso);
+        }        
+        $arFactura->setEstadoAnulado(1);
+        $arFactura->setCurso(0);
+        $arFactura->setSubTotal(0);
+        $arFactura->setTotal(0);
+        $em->persist($arFactura);
+        $em->flush();
+        return "";
+    }    
     
     public function autorizar($codigoFactura) {
         $em = $this->getEntityManager();                

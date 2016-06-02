@@ -122,6 +122,13 @@ class FacturaController extends Controller
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 }
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));
+            }          
+            if($form->get('BtnAnular')->isClicked()) {      
+                $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->anular($codigoFactura);
+                if($strResultado != "") {
+                    $objMensaje->Mensaje("error", $strResultado, $this);
+                }
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));
             }            
             if($form->get('BtnDesAutorizar')->isClicked()) {                            
                 $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->desAutorizar($codigoFactura);

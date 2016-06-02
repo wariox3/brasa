@@ -104,9 +104,13 @@ class CuentaCobro extends \FPDF_FPDF {
         
         $this->SetXY(100,20);
         $this->SetFont('Arial', '', 10);        
-        $this->Cell(30, 3, $arConfiguracion->getNombreEmpresa(), 0, 0, 'C');        
+        $this->Cell(30, 3, 'ALTURAS Y SEGURIDAD LABORAL', 0, 0, 'C');        
         $this->SetXY(100,25);
-        $this->Cell(30, 3, $arConfiguracion->getNitEmpresa() . "-" . $arConfiguracion->getDigitoVerificacionEmpresa(), 0, 0, 'C');        
+        $this->Cell(30, 3, 'ROBERTO MEJIA SOSA', 0, 0, 'C');        
+        $this->SetXY(100,30);
+        $this->Cell(30, 3, 'RUT: 8.274.945-1', 0, 0, 'C');
+        $this->SetXY(100,35);
+        $this->Cell(30, 3, 'REGIMEN SIMPLIFICADO', 0, 0, 'C');
         
         $this->SetXY(150,42);
         $this->SetFont('Arial', '', 14);        
@@ -134,7 +138,7 @@ class CuentaCobro extends \FPDF_FPDF {
             $pdf->SetFillColor(255,255,255);
             $pdf->SetTextColor(0);
             $pdf->SetFont('Arial', 'B', 14);        
-            $pdf->Cell(10, 4, "CURSOS", 0, 0, 'L', 1);
+            $pdf->Cell(10, 4, "", 0, 0, 'L', 1);
 
             $pdf->Ln(5);          
             $header = array('FECHA', 'IDENTIFICACION', 'EMPLEADO', 'PRECIO');
@@ -309,9 +313,9 @@ class CuentaCobro extends \FPDF_FPDF {
 
         $this->Ln(3);
         $this->SetFont('Arial', 'B', 8);
-        $this->Text(20, $this->GetY($this->SetY(264)), $arConfiguracion->getInformacionPagoFactura());
+        $this->Text(20, $this->GetY($this->SetY(264)), 'FAVOR CONSIGNAR EN LA CUENTA DE AHORROS NRO. 01431082914 BANCOLOMBIA A NOMBRE DE ROBERTO MEJIA SOSA');
         $this->SetFont('Arial', '', 7);
-        $this->Text(60, $this->GetY($this->SetY(267)), $arConfiguracion->getInformacionContactoFactura());
+        $this->Text(60, $this->GetY($this->SetY(267)), 'CRA 51 NRO 41-222 OF 504 EDIFICIO CALLE NUEVA PBX: 4487575 EXT 105 CEL 3206974497');
 
         //Número de página
         $this->Text(188, 273, 'Pagina ' . $this->PageNo() . ' de {nb}');
