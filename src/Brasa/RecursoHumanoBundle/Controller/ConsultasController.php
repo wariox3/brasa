@@ -2124,16 +2124,16 @@ class ConsultasController extends Controller
             }else{
                 $estadoContratoActivo = "VIGENTE";
             }
-            if ($arEmpleado->getFechaContrato() = null){
+            if ($arEmpleado->getFechaContrato() == null){
                 $fechaContrato = "";
             } else {
                 $fechaContrato = $arEmpleado->getFechaContrato()->format('Y-m-d');
             }
-            if ($arEmpleado->getFechaFinalizaContrato() = null){
+            if ($arEmpleado->getFechaFinalizaContrato() == null){
                 $fechaFinalizacionContrato = "";
             } else {
                 $fechaFinalizacionContrato = $arEmpleado->getFechaFinalizaContrato()->format('Y-m-d');
-            }        
+            }       
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arEmpleado->getCodigoEmpleadoPk())
                     ->setCellValue('B' . $i, $arEmpleado->getTipoIdentificacionRel()->getNombre())
