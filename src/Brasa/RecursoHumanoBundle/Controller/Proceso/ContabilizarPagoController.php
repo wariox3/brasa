@@ -75,6 +75,7 @@ class ContabilizarPagoController extends Controller
     private function formularioLista() {
         $form = $this->createFormBuilder()                        
             ->add('BtnContabilizar', 'submit', array('label'  => 'Contabilizar',))
+            ->add('BtnDesContabilizar', 'submit', array('label'  => 'DesContabilizar',))
             ->getForm();        
         return $form;
     }      
