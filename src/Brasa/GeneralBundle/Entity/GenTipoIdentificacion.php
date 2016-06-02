@@ -23,7 +23,7 @@ class GenTipoIdentificacion
     private $nombre;      
 
     /**
-     * @ORM\Column(name="codigo_interface", type="string", length=2, nullable=true)
+     * @ORM\Column(name="codigo_interface", type="string", length=10, nullable=true)
      */    
     private $codigoInterface;    
     
@@ -55,6 +55,7 @@ class GenTipoIdentificacion
         $this->rhuEmpleadosTipoIdentificacionRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuSeleccionesTipoIdentificacionRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cbtTercerosTipoIdentificacionRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->afiEmpleadosTipoIdentificacionRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
