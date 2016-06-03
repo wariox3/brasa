@@ -632,15 +632,7 @@ brs_rhu_base_caja_listar:
    
 brs_rhu_base_caja_nuevo:
    path:     /rhu/base/caja/nuevo/{codigoEntidadCajaPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseCaja:nuevo }
-   
-brs_rhu_base_cargo_listar:
-   path:     /rhu/base/cargo/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseCargo:listar }
-   
-brs_rhu_base_cargo_nuevo:
-   path:     /rhu/base/cargo/nuevo/{codigoCargoPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseCargo:nuevo }
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseCaja:nuevo }   
    
 brs_rhu_base_clasificacion_listar:
    path:     /rhu/base/clasificacion/listar

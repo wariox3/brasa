@@ -1,19 +1,24 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCargoType;
 
 /**
  * RhuCargo controller.
  *
  */
-class BaseCargoController extends Controller
+class CargoController extends Controller
 {
     var $strDqlLista = "";     
     var $strNombre = "";
+    
+    /**
+     * @Route("/rhu/base/cargo/", name="brs_rhu_base_cargo")
+     */     
     public function listarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -23,15 +28,18 @@ class BaseCargoController extends Controller
         $this->listar();
         $arCargos = new \Brasa\RecursoHumanoBundle\Entity\RhuCargo();
         if($form->isValid()) {
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoCargoPk) {
-                    $arCargo = new \Brasa\RecursoHumanoBundle\Entity\RhuCargo();
-                    $arCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuCargo')->find($codigoCargoPk);
-                    $em->remove($arCargo);
-                    $em->flush();
-                }
-                return $this->redirect($this->generateUrl('brs_rhu_base_cargo_listar'));
+            if($form->get('BtnEliminar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    
+                    foreach ($arrSeleccionados AS $codigoCargoPk) {
+                        $arCargo = new \Brasa\RecursoHumanoBundle\Entity\RhuCargo();
+                        $arCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuCargo')->find($codigoCargoPk);
+                        $em->remove($arCargo);                        
+                    }                    
+                    $em->flush();                                            
+                    return $this->redirect($this->generateUrl('brs_rhu_base_cargo'));
+                }                
             }
             if($form->get('BtnExcel')->isClicked()) {
                 $this->filtrarLista($form);
@@ -49,14 +57,17 @@ class BaseCargoController extends Controller
                 $this->listar();
             }    
         }
-             
+      
         $arCargos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 40);
         return $this->render('BrasaRecursoHumanoBundle:Base/Cargo:listar.html.twig', array(
                     'arCargos' => $arCargos,
                     'form'=> $form->createView()
         ));
     }
-    
+
+    /**
+     * @Route("/rhu/base/cargo/nuevo/{codigoCargoPk}", name="brs_rhu_base_cargo_nuevo")
+     */    
     public function nuevoAction($codigoCargoPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -73,7 +84,7 @@ class BaseCargoController extends Controller
             $em->persist($arCargo);
             $arCargo = $formCargo->getData();
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_base_cargo_listar'));
+            return $this->redirect($this->generateUrl('brs_rhu_base_cargo'));
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/Cargo:nuevo.html.twig', array(
             'formCargo' => $formCargo->createView(),

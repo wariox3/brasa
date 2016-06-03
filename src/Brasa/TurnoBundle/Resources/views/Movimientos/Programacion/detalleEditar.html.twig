@@ -54,8 +54,8 @@
                 <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
             </tr>
             {% set intRecurso = '' %}
-            {% for arProgramacionDetalle in arProgramacionDetalle %}  
-                    {% if intRecurso != arProgramacionDetalle.codigoRecursoFk %}
+            {% for arProgramacionDetalle in arProgramacionDetalle %}                     
+                    {% if intRecurso != arProgramacionDetalle.codigoRecursoFk or arProgramacionDetalle.codigoRecursoFk == '' %}
                          <tr>
                             <td id="suptipo" colspan="4">
                                 <input class="input-grid" type="text" name="TxtRecurso{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" id="TxtRecurso{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.codigoRecursoFk }}" size="10" style="width:60px" onkeyup="javascript:this.value = this.value.toUpperCase();" onclick="this.select()"/>
@@ -67,10 +67,9 @@
                                 <a href="javascript:abrirVentana3('{{ path('brs_tur_buscar_puesto', {'campoCodigo': 'TxtPuesto' ~ arProgramacionDetalle.codigoProgramacionDetallePk, 'codigoCliente' : arProgramacion.codigoClienteFk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_027_search.png') }}" width=20 height=20 title="Buscar"></a>                                                                
                                 {{ arProgramacionDetalle.puestoRel.nombre | default('') }}                                 
                             </td>
-                         </tr>
-                         
+                         </tr>                         
                          {% set intRecurso = arProgramacionDetalle.codigoRecursoFk %}
-                     {% endif %}                
+                    {% endif %}                
                     <tr>
                     <input type="hidden" name="LblCodigo[]" value="{{ arProgramacionDetalle.codigoProgramacionDetallePk }}">                                                                   
                     {% if arProgramacion.estadoAutorizado == 0 %}                                    
