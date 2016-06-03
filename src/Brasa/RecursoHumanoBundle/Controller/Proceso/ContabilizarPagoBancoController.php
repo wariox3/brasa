@@ -74,19 +74,7 @@ class ContabilizarPagoBancoController extends Controller
             'arPagosBancoDetalle' => $arPagosBancoDetalle,
             'form' => $form->createView()));
     }          
-    
-    private function formularioLista() {
-        $form = $this->createFormBuilder()                        
-            ->add('BtnContabilizar', 'submit', array('label'  => 'Contabilizar',))
-            ->getForm();        
-        return $form;
-    }      
-    
-    private function listar() {
-        $em = $this->getDoctrine()->getManager();                
-        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->pendientesContabilizarDql();  
-    } 
-    
+
     /**
      * @Route("/rhu/proceso/descontabilizar/pago/banco/", name="brs_rhu_proceso_descontabilizar_pago_banco")
      */    
@@ -124,5 +112,52 @@ class ContabilizarPagoBancoController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Procesos/Contabilizar:descontabilizarPagoBanco.html.twig', array(
             'form' => $form->createView()));
     }
+    
+    private function formularioLista() {
+        $form = $this->createFormBuilder()                        
+            ->add('BtnContabilizar', 'submit', array('label'  => 'Contabilizar',))
+            ->getForm();        
+        return $form;
+    }      
+    
+    private function listar() {
+        $em = $this->getDoctrine()->getManager();                
+        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->pendientesContabilizarDql();  
+    } 
+    
+    public function contabilizarPagoBanco($codigo,$arComprobanteContable,$arCentroCosto,$arTercero,$arPagoBancoDetalle) {
+        $em = $this->getDoctrine()->getManager();
+        //La cuenta
+        $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion;
+        $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arConfiguracionNomina->getCuentaPago());                            
+        $arRegistro->setComprobanteRel($arComprobanteContable);
+        $arRegistro->setCentroCostoRel($arCentroCosto);
+        $arRegistro->setCuentaRel($arCuenta);
+        $arRegistro->setTerceroRel($arTercero);
+        $arRegistro->setNumero($arPagoBancoDetalle->getCodigoPagoBancoDetallePk());
+        $arRegistro->setNumeroReferencia($arPagoBancoDetalle->getPagoRel()->getNumero());                                
+        $arRegistro->setFecha($arPagoBancoDetalle->getPagoBancoRel()->getFechaAplicacion());
+        $arRegistro->setDebito($arPagoBancoDetalle->getVrPago());                            
+        $arRegistro->setDescripcionContable('PAGO');                                
+        $em->persist($arRegistro);  
+
+        //Banco
+        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro(); 
+        $codigoCuenta = $arPagoBancoDetalle->getPagoBancoRel()->getCuentaRel()->getCodigoCuentaFk();
+        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($codigoCuenta);                            
+        $arRegistro->setComprobanteRel($arComprobanteContable);
+        $arRegistro->setCentroCostoRel($arCentroCosto);
+        $arRegistro->setCuentaRel($arCuenta);
+        $arRegistro->setTerceroRel($arTercero);
+        $arRegistro->setNumero($arPagoBancoDetalle->getCodigoPagoBancoDetallePk());
+        $arRegistro->setNumeroReferencia($arPagoBancoDetalle->getPagoRel()->getNumero());                                
+        $arRegistro->setFecha($arPagoBancoDetalle->getPagoBancoRel()->getFechaAplicacion());
+        $arRegistro->setCredito($arPagoBancoDetalle->getVrPago());                            
+        $arRegistro->setDescripcionContable($arPagoBancoDetalle->getNombreCorto());
+        $em->persist($arRegistro);
+        $em->flush();
+    }        
     
 }
