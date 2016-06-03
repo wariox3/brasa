@@ -35,7 +35,7 @@
         <div class="form-group form-group-sm">
                 <label class="col-sm-2 control-label">Código interface:</label>
                 <div class="col-sm-10">
-                        {{ form_widget(formPension.codigoInterface, { 'attr': {'onkeypress': 'ValidaSoloNumeros();','class': 'form-control'} }) }}
+                        {{ form_widget(formPension.codigoInterface, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
                 </div>
         </div>        
 </div>
