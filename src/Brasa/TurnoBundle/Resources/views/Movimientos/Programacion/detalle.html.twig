@@ -130,7 +130,12 @@
                                  <tr>
                                      <td id="suptipo" colspan="38"><b>{{ arProgramacionDetalle.puestoRel.nombre | default('') }}<b/>
                                         {% if arProgramacion.estadoAutorizado == 0 %}
-                                            <a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_programacion_detalle_editar', {'codigoPuesto': arProgramacionDetalle.codigoPuestoFk, 'codigoProgramacion': arProgramacion.codigoProgramacionPk }) }}', 'Editar puesto', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar programacion puesto"></a>
+                                            {% if arProgramacionDetalle.codigoPuestoFk is not null %}
+                                                <a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_programacion_detalle_editar', {'codigoPuesto': arProgramacionDetalle.codigoPuestoFk, 'codigoProgramacion': arProgramacion.codigoProgramacionPk }) }}', 'Editar puesto', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar programacion puesto"></a>
+                                            {% else %}
+                                                <b>SIN PUESTO (Error)<b/>
+                                                <a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_programacion_detalle_editar', {'codigoPuesto': 0, 'codigoProgramacion': arProgramacion.codigoProgramacionPk }) }}', 'Editar puesto', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar programacion puesto"></a>                                            
+                                            {% endif %}
                                         {% endif %}
                                      </td>
                                  </tr>

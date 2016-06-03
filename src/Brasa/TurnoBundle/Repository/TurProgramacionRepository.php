@@ -346,7 +346,11 @@ class TurProgramacionRepository extends EntityRepository {
         $strResultados = "";
         if($em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->numeroRegistros($codigoProgramacion) > 0) {        
             if($em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->validarRecurso($codigoProgramacion)) {        
-                
+                if($em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->validarPuesto($codigoProgramacion)) {        
+
+                } else {
+                    $strResultados = "Existen detalles sin puesto, no se puede autorizar, verifique la programacion";
+                }                
             } else {
                 $strResultados = "Hay detalles sin recursos asignados";
             }

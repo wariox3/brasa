@@ -214,7 +214,12 @@ class ProgramacionController extends Controller
             $arrDiaSemana[$i] = array('dia' => $i, 'diaSemana' => $diaSemana);
         }        
         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
-        $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array ('codigoProgramacionFk' => $codigoProgramacion, 'codigoPuestoFk' => $codigoPuesto));
+        if($codigoPuesto == 0) {
+            $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array ('codigoProgramacionFk' => $codigoProgramacion, 'codigoPuestoFk' => null));            
+        } else {
+            $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array ('codigoProgramacionFk' => $codigoProgramacion, 'codigoPuestoFk' => $codigoPuesto));            
+        }
+        
         return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalleEditar.html.twig', array(
                     'arProgramacion' => $arProgramacion,
                     'arProgramacionDetalle' => $arProgramacionDetalle,
