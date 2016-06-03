@@ -23,7 +23,7 @@ class TurCliente
     private $nit;        
     
     /**
-     * @ORM\Column(name="digito_verificacion", type="string", length=1, nullable=true)
+     * @ORM\Column(name="digito_verificacion", type="string", length=3, nullable=true)
      */
     private $digitoVerificacion;             
     
