@@ -207,10 +207,10 @@ class CreditosController extends Controller
                             $arCredito->setFecha(new \DateTime('now'));
                             $douVrPagar = $form->get('vrPagar')->getData();
                             $intCuotas = $form->get('numeroCuotas')->getData();
-                            $vrSeguro = $form->get('seguro')->getData();
+                            $vrSeguro = $form->get('seguro')->getData();                            
                             $vrSaltoTotal = $douVrPagar;
-                            $douVrCuota = $douVrPagar / $intCuotas;
-                            $arCredito->setVrCuota($douVrCuota);
+                            //$douVrCuota = $douVrPagar / $intCuotas;
+                            //$arCredito->setVrCuota($douVrCuota);
                             $arCredito->setSaldo($vrSaltoTotal);
                             $arCredito->setSaldoTotal($vrSaltoTotal);
                             if($codigoCredito == 0) {

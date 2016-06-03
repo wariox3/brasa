@@ -49,6 +49,18 @@
                 </div>
             </div>
             <div class="form-group form-group-sm">
+                <label for="form_vrCuota" class="col-sm-3 control-label">Cuota:</label>
+                <div class="col-sm-9">
+                            {{ form_widget(form.vrCuota, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Validar cuotas:</label>
+                <div class="col-sm-9">
+                            {{ form_widget(form.validarCuotas) }}
+                </div>
+            </div>                
+            <div class="form-group form-group-sm">
                 <label for="form_creditoTipoPagoRel" class="col-sm-3 control-label">Tipo pago:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.creditoTipoPagoRel, { 'attr': {'class': 'form-control'} }) }}

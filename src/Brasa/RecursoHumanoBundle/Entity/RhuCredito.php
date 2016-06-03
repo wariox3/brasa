@@ -106,7 +106,7 @@ class RhuCredito
     /**     
      * @ORM\Column(name="estado_suspendido", type="boolean")
      */    
-    private $estadoSuspendido = 0;
+    private $estadoSuspendido = false;
     
     /**
      * @ORM\Column(name="vr_abonos", type="float")
@@ -122,6 +122,11 @@ class RhuCredito
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
      */    
     private $codigoUsuario;
+    
+    /**     
+     * @ORM\Column(name="validar_cuotas", type="boolean")
+     */    
+    private $validarCuotas = false;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="creditosEmpleadoRel")
@@ -924,5 +929,29 @@ class RhuCredito
     public function getCodigoUsuario()
     {
         return $this->codigoUsuario;
+    }
+
+    /**
+     * Set validarCuotas
+     *
+     * @param boolean $validarCuotas
+     *
+     * @return RhuCredito
+     */
+    public function setValidarCuotas($validarCuotas)
+    {
+        $this->validarCuotas = $validarCuotas;
+
+        return $this;
+    }
+
+    /**
+     * Get validarCuotas
+     *
+     * @return boolean
+     */
+    public function getValidarCuotas()
+    {
+        return $this->validarCuotas;
     }
 }
