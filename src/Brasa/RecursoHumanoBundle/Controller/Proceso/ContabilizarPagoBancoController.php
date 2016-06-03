@@ -1,13 +1,18 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Proceso;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
-class ProcesoContabilizarPagoBancoController extends Controller
+class ContabilizarPagoBancoController extends Controller
 {
     var $strDqlLista = "";
+    
+    /**
+     * @Route("/rhu/proceso/contabilizar/pago/banco/", name="brs_rhu_proceso_contabilizar_pago_banco")
+     */     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();  
@@ -82,6 +87,9 @@ class ProcesoContabilizarPagoBancoController extends Controller
         $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->pendientesContabilizarDql();  
     } 
     
+    /**
+     * @Route("/rhu/proceso/descontabilizar/pago/banco/", name="brs_rhu_proceso_descontabilizar_pago_banco")
+     */    
     public function descontabilizarPagoBancoAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
