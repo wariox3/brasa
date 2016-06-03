@@ -58,7 +58,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             if($arProgramacionPagoProcesar->getFechaDesde()->format('Y') <= $arConfiguracion->getAnioActual()) {
                 $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
                 $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arProgramacionPagoProcesar->getCodigoCentroCostoFk());
-                
+                //Nomina
                 if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 1) {
                     $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
                     $arProgramacionPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
@@ -438,7 +438,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarProgramacionPago($arProgramacionPagoProcesar->getCodigoCentroCostoFk(), 1);
                     }
                 }
-
+                
+                //Prima
                 if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 2) {
                     $arProgramacionPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                     $arProgramacionPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $arProgramacionPagoProcesar->getCodigoProgramacionPagoPk()));
@@ -461,7 +462,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $intDias = $arProgramacionPagoDetalle->getDias();
                         $intDiasContinuos = $arProgramacionPagoDetalle->getFechaDesde()->diff($arProgramacionPagoDetalle->getFechaHasta());
                         $intDiasContinuos = $intDiasContinuos->format('%a');
-                        $intDiasContinuos += 1;
+                        $intDiasContinuos += 1;                                                
                         
                         $floIbp = $em->getRepository('BrasaRecursoHumanoBundle:RhuIngresoBase')->devuelveIbpFecha($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesdePago()->format('Y-m-d'), $arProgramacionPagoProcesar->getFechaHastaReal()->format('Y-m-d'), $arProgramacionPagoDetalle->getCodigoContratoFk());
                         
@@ -511,7 +512,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     $em->flush();
                     //$em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->liquidar($codigoProgramacionPago);
                 }
-
+                
+                //Cesantias
                 if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 3) {
                     $arProgramacionPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                     $arProgramacionPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $arProgramacionPagoProcesar->getCodigoProgramacionPagoPk()));
