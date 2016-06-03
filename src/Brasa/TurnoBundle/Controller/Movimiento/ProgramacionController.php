@@ -134,11 +134,6 @@ class ProgramacionController extends Controller
                     return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
                 }
             }
-            if($form->get('BtnDetalleActualizar')->isClicked()) {
-                $arrControles = $request->request->All();
-                $this->actualizarDetalle($arrControles, $codigoProgramacion);
-                return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
-            }
             if($form->get('BtnDetalleEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $strResultado =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
@@ -402,13 +397,11 @@ class ProgramacionController extends Controller
         $arrBotonAnular = array('label' => 'Anular', 'disabled' => true);
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
-        $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
-        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
+        $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);        
         if($ar->getEstadoAutorizado() == 1) {
             $arrBotonAutorizar['disabled'] = true;
             $arrBotonAprobar['disabled'] = false;
-            $arrBotonDetalleEliminar['disabled'] = true;
-            $arrBotonDetalleActualizar['disabled'] = true;
+            $arrBotonDetalleEliminar['disabled'] = true;            
             $arrBotonAnular['disabled'] = false;
             if($ar->getEstadoAnulado() == 1) {
                 $arrBotonDesAutorizar['disabled'] = true;
@@ -428,8 +421,7 @@ class ProgramacionController extends Controller
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)
                     ->add('BtnAprobar', 'submit', $arrBotonAprobar)
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
-                    ->add('BtnAnular', 'submit', $arrBotonAnular)
-                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
+                    ->add('BtnAnular', 'submit', $arrBotonAnular)                    
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
                     ->getForm();
         return $form;
