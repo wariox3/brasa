@@ -6,6 +6,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuBancoType;
 
+//use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+//use Doctrine\DBAL\Driver\PDOException;
+
 /**
  * RhuBanco controller.
  *
