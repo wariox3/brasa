@@ -17,7 +17,8 @@ class RhuDotacionCargoType extends AbstractType
             ->add('dotacionElementoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuDotacionElemento',
                 'property' => 'dotacion',
-            ))                 
+            ))
+            ->add('cantidadAsignada', 'number', array('required' => true))    
             ->add('guardar', 'submit');        
     }
  

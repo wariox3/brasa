@@ -163,10 +163,15 @@ class BaseDotacionCargoController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'CARGO')
-                    ->setCellValue('C1', 'DOTACIÓN');
+                    ->setCellValue('C1', 'DOTACIÓN')
+                    ->setCellValue('D1', 'CANTIDAD');
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
@@ -176,7 +181,8 @@ class BaseDotacionCargoController extends Controller
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arDotacionCargo->getCodigoDotacionCargoPk())
                     ->setCellValue('B' . $i, $arDotacionCargo->getCargoRel()->getNombre())
-                    ->setCellValue('C' . $i, $arDotacionCargo->getDotacionElementoRel()->getDotacion());
+                    ->setCellValue('C' . $i, $arDotacionCargo->getDotacionElementoRel()->getDotacion())
+                    ->setCellValue('D' . $i, $arDotacionCargo->getCantidadAsignada());
             $i++;
         }
 
