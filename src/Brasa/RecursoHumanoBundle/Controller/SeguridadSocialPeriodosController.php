@@ -462,7 +462,7 @@ class SeguridadSocialPeriodosController extends Controller
                     ->setCellValue('K' . $i, $vacaciones)
                     ->setCellValue('L' . $i, $riesgosProfesionales)
                     ->setCellValue('M' . $i, $arSsoAporte->getSalarioBasico())
-                    ->setCellValue('N' . $i, $arSsoAporte->getSuplementario())
+                    ->setCellValue('N' . $i, number_format($arSsoAporte->getSuplementario(),0,'.',','))
                     ->setCellValue('O' . $i, $salarioIntegral)        
                     ->setCellValue('P' . $i, $arSsoAporte->getDiasCotizadosPension())
                     ->setCellValue('Q' . $i, $arSsoAporte->getDiasCotizadosSalud())
