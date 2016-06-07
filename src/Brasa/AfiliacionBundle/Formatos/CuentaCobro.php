@@ -173,7 +173,7 @@ class CuentaCobro extends \FPDF_FPDF {
                     $pdf->Cell(20, 4, $arCursoDetalle->getCursoRel()->getFechaProgramacion()->format('Y/m/d'), 1, 0, 'L');
                     $pdf->Cell(25, 4, $arCursoDetalle->getCursoRel()->getNumeroIdentificacion(), 1, 0, 'L');                
                     $pdf->Cell(80, 4, $arCursoDetalle->getCursoRel()->getNombreCorto(), 1, 0, 'L');
-                    $pdf->Cell(40, 4, $arCursoDetalle->getCursoRel()->getCursoTipoRel()->getNombre(), 1, 0, 'L');
+                    $pdf->Cell(40, 4, $arCursoDetalle->getCursoTipoRel()->getNombre(), 1, 0, 'L');
                     $pdf->Cell(30, 4, number_format($arCursoDetalle->getPrecio(), 0, '.', ','), 1, 0, 'R');
                     $pdf->Ln();
                     $pdf->SetAutoPageBreak(true, 15);                    

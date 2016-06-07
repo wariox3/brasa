@@ -31,17 +31,21 @@ class AfiCursoTipo
      * @ORM\OneToMany(targetEntity="AfiCursoDetalle", mappedBy="cursoTipoRel")
      */
     protected $cursosDetallesCursoTipoRel; 
-
-    /**
-     * @ORM\OneToMany(targetEntity="AfiCurso", mappedBy="cursoTipoRel")
-     */
-    protected $cursosCursoTipoRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="AfiEntidadEntrenamientoCosto", mappedBy="cursoTipoRel")
      */
     protected $entidadesEntrenamientoCostosCursoTipoRel;     
     
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->cursosDetallesCursoTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->entidadesEntrenamientoCostosCursoTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get codigoCursoTipoPk
      *
@@ -75,12 +79,29 @@ class AfiCursoTipo
     {
         return $this->nombre;
     }
+
     /**
-     * Constructor
+     * Set precio
+     *
+     * @param float $precio
+     *
+     * @return AfiCursoTipo
      */
-    public function __construct()
+    public function setPrecio($precio)
     {
-        $this->cursosDetallesCursoTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->precio = $precio;
+
+        return $this;
+    }
+
+    /**
+     * Get precio
+     *
+     * @return float
+     */
+    public function getPrecio()
+    {
+        return $this->precio;
     }
 
     /**
@@ -118,30 +139,6 @@ class AfiCursoTipo
     }
 
     /**
-     * Set precio
-     *
-     * @param float $precio
-     *
-     * @return AfiCursoTipo
-     */
-    public function setPrecio($precio)
-    {
-        $this->precio = $precio;
-
-        return $this;
-    }
-
-    /**
-     * Get precio
-     *
-     * @return float
-     */
-    public function getPrecio()
-    {
-        return $this->precio;
-    }
-
-    /**
      * Add entidadesEntrenamientoCostosCursoTipoRel
      *
      * @param \Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamientoCosto $entidadesEntrenamientoCostosCursoTipoRel
@@ -173,39 +170,5 @@ class AfiCursoTipo
     public function getEntidadesEntrenamientoCostosCursoTipoRel()
     {
         return $this->entidadesEntrenamientoCostosCursoTipoRel;
-    }
-
-    /**
-     * Add cursosCursoTipoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiCurso $cursosCursoTipoRel
-     *
-     * @return AfiCursoTipo
-     */
-    public function addCursosCursoTipoRel(\Brasa\AfiliacionBundle\Entity\AfiCurso $cursosCursoTipoRel)
-    {
-        $this->cursosCursoTipoRel[] = $cursosCursoTipoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove cursosCursoTipoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiCurso $cursosCursoTipoRel
-     */
-    public function removeCursosCursoTipoRel(\Brasa\AfiliacionBundle\Entity\AfiCurso $cursosCursoTipoRel)
-    {
-        $this->cursosCursoTipoRel->removeElement($cursosCursoTipoRel);
-    }
-
-    /**
-     * Get cursosCursoTipoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCursosCursoTipoRel()
-    {
-        return $this->cursosCursoTipoRel;
     }
 }
