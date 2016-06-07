@@ -94,5 +94,30 @@ class RhuPagoAdicionalRepository extends EntityRepository {
         $arrayResultado = $query->getResult();
         $floValor = $arrayResultado[0]['valor'];
         return $floValor;
-    }     
+    } 
+
+    public function eliminarTodoAdicionalesTiempo($codigoProgramacionPago) {
+        $em = $this->getEntityManager();
+        $arAdicionalesPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+        $arAdicionalesPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
+        if ($arAdicionalesPago <> null){
+            $strSql = "DELETE FROM rhu_pago_adicional WHERE codigo_programacion_pago_fk = " . $codigoProgramacionPago . " AND tipo_adicional = 4 ";
+            $em->getConnection()->executeQuery($strSql);
+            //$em->persist($arProgramacionPagoDetalle);
+            //$em->flush();
+            return true;
+        }    
+    }
+    public function eliminarTodoAdicionalesValor($codigoProgramacionPago) {
+        $em = $this->getEntityManager();
+        $arAdicionalesPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+        $arAdicionalesPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
+        if ($arAdicionalesPago <> null){
+            $strSql = "DELETE FROM rhu_pago_adicional WHERE codigo_programacion_pago_fk = " . $codigoProgramacionPago. " AND tipo_adicional <> 4 ";
+            $em->getConnection()->executeQuery($strSql);
+            //$em->persist($arProgramacionPagoDetalle);
+            //$em->flush();
+            return true;
+        }    
+    }
 }

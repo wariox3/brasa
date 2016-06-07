@@ -202,6 +202,24 @@ class ProgramacionesPagoController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
                 }
             }
+            if($form->get('BtnEliminarTodoEmpleados')->isClicked()) {
+                if ($arProgramacionPago->getEstadoGenerado() == 0 ){
+                    $resultado = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->eliminarTodoEmpleados($codigoProgramacionPago);
+                }
+                return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
+            }
+            if($form->get('BtnEliminarTodoAdicionalesTiempo')->isClicked()) {
+                if ($arProgramacionPago->getEstadoGenerado() == 0 ){
+                    $resultado = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->eliminarTodoAdicionalesTiempo($codigoProgramacionPago);
+                }
+               return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
+            }
+            if($form->get('BtnEliminarTodoAdicionalesValor')->isClicked()) {
+                if ($arProgramacionPago->getEstadoGenerado() == 0 ){
+                    $resultado = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->eliminarTodoAdicionalesValor($codigoProgramacionPago);
+                }
+               return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
+            }
         }
         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arProgramacionPago->getCodigoCentroCostoFk());
@@ -401,13 +419,19 @@ class ProgramacionesPagoController extends Controller
         $arrBotonRetirarConceptoTiempo = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonRetirarConceptoValor = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonGenerarEmpleados = array('label' => 'Cargar contratos', 'disabled' => false);
-        $arrBotonEliminarEmpleados = array('label' => 'Eliminar', 'disabled' => false);        
+        $arrBotonEliminarEmpleados = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonEliminarTodoEmpleados = array('label' => 'Eliminar todo', 'disabled' => false);
+        $arrBotonEliminarTodoAdicionalesValor = array('label' => 'Eliminar todo', 'disabled' => false);
+        $arrBotonEliminarTodoAdicionalesTiempo = array('label' => 'Eliminar todo', 'disabled' => false);        
         if($arProgramacionPago->getEstadoGenerado() == 1) {            
             $arrBotonGenerarEmpleados['disabled'] = true;         
             $arrBotonEliminarEmpleados['disabled'] = true;
             $arrBotonRetirarConceptoTiempo['disabled'] = true;
             $arrBotonRetirarConceptoValor['disabled'] = true;
             $arrBotonAplicarDiaLaborado['disabled'] = true;
+            $arrBotonEliminarTodoEmpleados['disabled'] = true;
+            $arrBotonEliminarTodoAdicionalesTiempo['disabled'] = true;
+            $arrBotonEliminarTodoAdicionalesValor['disabled'] = true;
         }
         $form = $this->createFormBuilder()    
                     ->add('BtnGenerarEmpleados', 'submit', $arrBotonGenerarEmpleados)                        
@@ -415,6 +439,9 @@ class ProgramacionesPagoController extends Controller
                     ->add('BtnRetirarConceptoTiempo', 'submit', $arrBotonRetirarConceptoTiempo)
                     ->add('BtnRetirarConceptoValor', 'submit', $arrBotonRetirarConceptoValor)
                     ->add('BtnAplicaDiaLaborado', 'submit', $arrBotonAplicarDiaLaborado)
+                    ->add('BtnEliminarTodoEmpleados', 'submit', $arrBotonEliminarTodoEmpleados)
+                    ->add('BtnEliminarTodoAdicionalesTiempo', 'submit', $arrBotonEliminarTodoAdicionalesTiempo)
+                    ->add('BtnEliminarTodoAdicionalesValor', 'submit', $arrBotonEliminarTodoAdicionalesValor)
                     ->getForm();  
         return $form;
     }    

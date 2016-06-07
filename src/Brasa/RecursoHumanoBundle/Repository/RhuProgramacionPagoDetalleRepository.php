@@ -65,6 +65,19 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         $query = $em->createQuery($dql);
         $arrayResultado = $query->getSingleScalarResult();
         return $arrayResultado;
-    }         
+    }
+    
+    public function eliminarTodoEmpleados($codigoProgramacionPago) {
+        $em = $this->getEntityManager();
+        $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+        $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
+        if ($arProgramacionPagoDetalle <> null){
+            $strSql = "DELETE FROM rhu_programacion_pago_detalle WHERE codigo_programacion_pago_fk = " . $codigoProgramacionPago;
+            $em->getConnection()->executeQuery($strSql);
+            //$em->persist($arProgramacionPagoDetalle);
+            //$em->flush();
+            return true;
+        }    
+    }
     
 }

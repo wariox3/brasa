@@ -125,6 +125,9 @@
                 </div>
             {% endif %}
                 <div class="btn-group">
+                    {{ form_widget(form.BtnEliminarTodoAdicionalesTiempo, { 'attr': {'class': 'btn btn-danger btn-sm', 'onclick': 'return confirm("Esta seguro eliminar los registros?")'} }) }}                        
+                </div>
+                <div class="btn-group">
                     {{ form_widget(form.BtnRetirarConceptoTiempo, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                        
                 </div>
             </div>                
@@ -180,6 +183,9 @@
                     <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_pagos_adicionales_agregar_valor', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk, 'tipo': 2 }) }}', 'AgregarValor', 600, 900)" >Descuento</a>
                 </div>
             {% endif %}
+                <div class="btn-group">
+                    {{ form_widget(form.BtnEliminarTodoAdicionalesValor, { 'attr': {'class': 'btn btn-danger btn-sm', 'onclick': 'return confirm("Esta seguro eliminar los registros?")'} }) }}                        
+                </div>
                 <div class="btn-group">
                     {{ form_widget(form.BtnAplicaDiaLaborado, { 'attr': {'class': 'btn btn-success btn-sm'} }) }}                                                
                     {{ form_widget(form.BtnRetirarConceptoValor, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                        
@@ -325,6 +331,11 @@
                     <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_cargar_tiempo_sede', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar sedes</a>
                     <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_agregar_empleado', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'AgregarEmpleado', 600, 900)" >Agregar</a>                
                 {% endif %}
+            </div>
+            <div class="btn-group">
+                {{ form_widget(form.BtnEliminarTodoEmpleados, { 'attr': {'class': 'btn btn-danger btn-sm', 'onclick': 'return confirm("Esta seguro de eliminar los registros?")'} }) }}
+            </div>
+            <div class="btn-group">
                 {{ form_widget(form.BtnEliminarEmpleados, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
             </div>
         </div>

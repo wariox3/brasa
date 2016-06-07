@@ -28,6 +28,7 @@ class RhuCreditoType extends AbstractType
             ->add('seguro', 'number', array('required' => true))
             ->add('numeroLibranza', 'number', array('required' => false))
             ->add('validarCuotas', 'checkbox', array('required'  => false))
+            ->add('numeroCuotaActual', 'number', array('required' => false))    
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));        
     }
