@@ -131,7 +131,7 @@ class CuentaCobro extends \FPDF_FPDF {
 
     public function Body($pdf) {
         //Cursos
-        $arFacturaDetalles = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();
+        $arFacturaDetalles = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso();
         $arFacturaDetalles = self::$em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleCurso')->findBy(array('codigoFacturaFk' => self::$codigoFactura));
         if(count($arFacturaDetalles) > 0) {
             $pdf->SetX(10);
@@ -166,14 +166,18 @@ class CuentaCobro extends \FPDF_FPDF {
 
             $pdf->SetX(10);
             $pdf->SetFont('Arial', '', 7);
-            foreach ($arFacturaDetalles as $arFacturaDetalle) {                
-                $pdf->Cell(20, 4, $arFacturaDetalle->getCursoRel()->getFechaProgramacion()->format('Y/m/d'), 1, 0, 'L');
-                $pdf->Cell(25, 4, $arFacturaDetalle->getCursoRel()->getNumeroIdentificacion(), 1, 0, 'L');                
-                $pdf->Cell(80, 4, $arFacturaDetalle->getCursoRel()->getNombreCorto(), 1, 0, 'L');
-                $pdf->Cell(40, 4, $arFacturaDetalle->getCursoRel()->getCursoTipoRel()->getNombre(), 1, 0, 'L');
-                $pdf->Cell(30, 4, number_format($arFacturaDetalle->getPrecio(), 0, '.', ','), 1, 0, 'R');
-                $pdf->Ln();
-                $pdf->SetAutoPageBreak(true, 15);
+            foreach ($arFacturaDetalles as $arFacturaDetalle) { 
+                $arCursosDetalles = new \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle();
+                $arCursosDetalles = self::$em->getRepository('BrasaAfiliacionBundle:AfiCursoDetalle')->findBy(array('codigoCursoFk' => $arFacturaDetalle->getCodigoCursoFk()));
+                foreach ($arCursosDetalles as $arCursoDetalle) {
+                    $pdf->Cell(20, 4, $arCursoDetalle->getCursoRel()->getFechaProgramacion()->format('Y/m/d'), 1, 0, 'L');
+                    $pdf->Cell(25, 4, $arCursoDetalle->getCursoRel()->getNumeroIdentificacion(), 1, 0, 'L');                
+                    $pdf->Cell(80, 4, $arCursoDetalle->getCursoRel()->getNombreCorto(), 1, 0, 'L');
+                    $pdf->Cell(40, 4, $arCursoDetalle->getCursoRel()->getCursoTipoRel()->getNombre(), 1, 0, 'L');
+                    $pdf->Cell(30, 4, number_format($arCursoDetalle->getPrecio(), 0, '.', ','), 1, 0, 'R');
+                    $pdf->Ln();
+                    $pdf->SetAutoPageBreak(true, 15);                    
+                }
             }            
         }
         
