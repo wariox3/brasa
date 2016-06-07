@@ -47,6 +47,11 @@ class TurSoportePago
      */    
     private $vrSalario = 0;    
     
+    /**
+     * @ORM\Column(name="vr_pago", type="float")
+     */    
+    private $vrPago = 0;    
+    
     /**     
      * @ORM\Column(name="estado_cerrado", type="boolean")
      */    
@@ -145,7 +150,7 @@ class TurSoportePago
     /**
      * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
      */    
-    private $usuario;     
+    private $usuario;         
     
     /**
      * @ORM\ManyToOne(targetEntity="TurSoportePagoPeriodo", inversedBy="soportesPagosSoportePagoPeriodoRel")
@@ -808,6 +813,54 @@ class TurSoportePago
     }
 
     /**
+     * Set diaFestivo
+     *
+     * @param integer $diaFestivo
+     *
+     * @return TurSoportePago
+     */
+    public function setDiaFestivo($diaFestivo)
+    {
+        $this->diaFestivo = $diaFestivo;
+
+        return $this;
+    }
+
+    /**
+     * Get diaFestivo
+     *
+     * @return integer
+     */
+    public function getDiaFestivo()
+    {
+        return $this->diaFestivo;
+    }
+
+    /**
+     * Set diaDomingo
+     *
+     * @param integer $diaDomingo
+     *
+     * @return TurSoportePago
+     */
+    public function setDiaDomingo($diaDomingo)
+    {
+        $this->diaDomingo = $diaDomingo;
+
+        return $this;
+    }
+
+    /**
+     * Get diaDomingo
+     *
+     * @return integer
+     */
+    public function getDiaDomingo()
+    {
+        return $this->diaDomingo;
+    }
+
+    /**
      * Set soportePagoPeriodoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportePagoPeriodoRel
@@ -887,5 +940,29 @@ class TurSoportePago
     public function getSoportesPagosDetallesSoportePagoRel()
     {
         return $this->soportesPagosDetallesSoportePagoRel;
+    }
+
+    /**
+     * Set vrPago
+     *
+     * @param float $vrPago
+     *
+     * @return TurSoportePago
+     */
+    public function setVrPago($vrPago)
+    {
+        $this->vrPago = $vrPago;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPago
+     *
+     * @return float
+     */
+    public function getVrPago()
+    {
+        return $this->vrPago;
     }
 }

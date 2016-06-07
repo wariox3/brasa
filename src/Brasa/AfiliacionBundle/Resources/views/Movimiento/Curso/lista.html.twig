@@ -99,6 +99,7 @@
                 <th>NUMERO</th>
                 <th>FECHA</th>
                 <th>VENCE</th>
+                <th>TIPO</th>
                 <th>CLIENTE</th>
                 <th>IDENTIFICACION</th>
                 <th>EMPLEADO</th>
@@ -120,6 +121,7 @@
                 <td>{{ arCursos.numero  }}</td>
                 <td>{{ arCursos.fecha |date('Y/m/d') }}</td>
                 <td>{{ arCursos.fechaVence |date('Y/m/d') }}</td>                
+                <td>{{ arCursos.cursoTipoRel.nombre | default('') }}</td>
                 <td>{{ arCursos.clienteRel.nombreCorto  }}</td>
                 <td>{{ arCursos.numeroIdentificacion | default('') }}</td>
                 <td>{{ arCursos.nombreCorto | default('') }}</td>

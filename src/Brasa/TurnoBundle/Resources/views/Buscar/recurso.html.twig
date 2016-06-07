@@ -43,9 +43,9 @@
         <table  class="table table-striped table-bordered table-condensed table-hover">            
             <tr>
                 <th>{{ knp_pagination_sortable(arRecursos, 'CÓDIGO', 'e.codigoRecursoPk') }}</th>
-                <th>NIT</th>
+                <th>IDENTIFICACION</th>
                 <th>{{ knp_pagination_sortable(arRecursos, 'NOMBRE', 'e.nombreCorto') }}</th>
-                <th>{{ knp_pagination_sortable(arRecursos, 'NOMBRE', 'e.apodo') }}</th>
+                <th>{{ knp_pagination_sortable(arRecursos, 'APODO', 'e.apodo') }}</th>
                 <th></th>
             </tr>
             {% for arRecursos in arRecursos %}

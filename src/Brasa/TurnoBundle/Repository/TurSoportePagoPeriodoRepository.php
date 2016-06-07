@@ -13,6 +13,7 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
     public function liquidar($codigoSoportePagoPeriodo) {        
         $em = $this->getEntityManager();        
         $intRegistros = 0;
+        $vrTotalPago = 0;
         $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();        
         $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo); 
         $dql   = "SELECT COUNT(sp.codigoSoportePagoPk) as numeroRegistros "
@@ -21,9 +22,33 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
         $query = $em->createQuery($dql);
         $arrayResultado = $query->getResult();         
         if($arrayResultado) {
-            $intRegistros = $arrayResultado[0]['numeroRegistros'];
+            $intRegistros = $arrayResultado[0]['numeroRegistros'];                    
+        }        
+        
+        $arSoportePagoPeriodo->setRecursos($intRegistros);        
+        $porRecargoNocturno = 35;
+        $porFestivaDiurna = 175;
+        $porExtraFestivaDiurna = 200;
+        $porExtraFestivaNocturna = 250;        
+        $arSoportePagos = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+        $arSoportePagos = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo)); 
+        foreach ($arSoportePagos as $arSoportePago) {
+            $arSoportePagoAct = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+            $arSoportePagoAct = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($arSoportePago->getCodigoSoportePagoPk()); 
+            $salario = $arSoportePago->getVrSalario();
+            $vrDia = $salario / 30;
+            $vrHora = $vrDia / 8;
+            $vrDiurna = $vrHora * $arSoportePago->getHorasDiurnas();            
+            $vrNocturna = ($vrHora + (($vrHora * $porRecargoNocturno)/100)) * $arSoportePago->getHorasNocturnas();
+            $vrDescanso = $vrHora * $arSoportePago->getHorasDescanso();
+            $vrFestivaDiurna = (($vrHora * $porFestivaDiurna)/100) * $arSoportePago->getHorasFestivasDiurnas();
+            $vrExtraFestivaDiurna = (($vrHora * $porExtraFestivaDiurna)/100) * $arSoportePago->getHorasExtrasFestivasDiurnas();
+            $vrExtraFestivaNocturna = (($vrHora * $porExtraFestivaNocturna)/100) * $arSoportePago->getHorasExtrasFestivasNocturnas();            
+            $vrPago = $vrDiurna + $vrNocturna + $vrDescanso + $vrFestivaDiurna + $vrExtraFestivaDiurna + $vrExtraFestivaNocturna;
+            $arSoportePagoAct->setVrPago($vrPago);
+            $vrTotalPago += $vrPago;
         }
-        $arSoportePagoPeriodo->setRecursos($intRegistros);
+        $arSoportePagoPeriodo->setVrPago($vrTotalPago);
         $em->persist($arSoportePagoPeriodo);
         $em->flush();
         return true;

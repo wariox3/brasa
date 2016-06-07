@@ -43,29 +43,29 @@ class TurSoportePagoDetalle
     private $estadoCerrado = false;    
     
     /**
-     * @ORM\Column(name="descanso", type="float")
+     * @ORM\Column(name="descanso", type="boolean")
      */    
-    private $descanso = 0;     
+    private $descanso = false;     
 
     /**
-     * @ORM\Column(name="novedad", type="float")
+     * @ORM\Column(name="novedad", type="boolean")
      */    
-    private $novedad = 0;    
+    private $novedad = false;    
     
     /**
-     * @ORM\Column(name="incapacidad", type="integer")
+     * @ORM\Column(name="incapacidad", type="boolean")
      */    
-    private $incapacidad = 0;
+    private $incapacidad = false;
     
     /**
-     * @ORM\Column(name="licencia", type="integer")
+     * @ORM\Column(name="licencia", type="boolean")
      */    
-    private $licencia = 0;     
+    private $licencia = false;     
     
     /**
-     * @ORM\Column(name="vacacion", type="integer")
+     * @ORM\Column(name="vacacion", type="boolean")
      */    
-    private $vacacion = 0;    
+    private $vacacion = false;    
     
     /**
      * @ORM\Column(name="dias", type="float")
@@ -178,7 +178,6 @@ class TurSoportePagoDetalle
      */
     protected $turnoRel;    
     
-
 
     /**
      * Get codigoSoportePagoDetallePk
@@ -313,7 +312,7 @@ class TurSoportePagoDetalle
     /**
      * Set descanso
      *
-     * @param float $descanso
+     * @param boolean $descanso
      *
      * @return TurSoportePagoDetalle
      */
@@ -327,7 +326,7 @@ class TurSoportePagoDetalle
     /**
      * Get descanso
      *
-     * @return float
+     * @return boolean
      */
     public function getDescanso()
     {
@@ -337,7 +336,7 @@ class TurSoportePagoDetalle
     /**
      * Set novedad
      *
-     * @param float $novedad
+     * @param boolean $novedad
      *
      * @return TurSoportePagoDetalle
      */
@@ -351,7 +350,7 @@ class TurSoportePagoDetalle
     /**
      * Get novedad
      *
-     * @return float
+     * @return boolean
      */
     public function getNovedad()
     {
@@ -361,7 +360,7 @@ class TurSoportePagoDetalle
     /**
      * Set incapacidad
      *
-     * @param integer $incapacidad
+     * @param boolean $incapacidad
      *
      * @return TurSoportePagoDetalle
      */
@@ -375,7 +374,7 @@ class TurSoportePagoDetalle
     /**
      * Get incapacidad
      *
-     * @return integer
+     * @return boolean
      */
     public function getIncapacidad()
     {
@@ -385,7 +384,7 @@ class TurSoportePagoDetalle
     /**
      * Set licencia
      *
-     * @param integer $licencia
+     * @param boolean $licencia
      *
      * @return TurSoportePagoDetalle
      */
@@ -399,7 +398,7 @@ class TurSoportePagoDetalle
     /**
      * Get licencia
      *
-     * @return integer
+     * @return boolean
      */
     public function getLicencia()
     {
@@ -409,7 +408,7 @@ class TurSoportePagoDetalle
     /**
      * Set vacacion
      *
-     * @param integer $vacacion
+     * @param boolean $vacacion
      *
      * @return TurSoportePagoDetalle
      */
@@ -423,7 +422,7 @@ class TurSoportePagoDetalle
     /**
      * Get vacacion
      *
-     * @return integer
+     * @return boolean
      */
     public function getVacacion()
     {
@@ -671,6 +670,54 @@ class TurSoportePagoDetalle
     }
 
     /**
+     * Set horasDescanso
+     *
+     * @param float $horasDescanso
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setHorasDescanso($horasDescanso)
+    {
+        $this->horasDescanso = $horasDescanso;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDescanso
+     *
+     * @return float
+     */
+    public function getHorasDescanso()
+    {
+        return $this->horasDescanso;
+    }
+
+    /**
+     * Set horasNovedad
+     *
+     * @param float $horasNovedad
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setHorasNovedad($horasNovedad)
+    {
+        $this->horasNovedad = $horasNovedad;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNovedad
+     *
+     * @return float
+     */
+    public function getHorasNovedad()
+    {
+        return $this->horasNovedad;
+    }
+
+    /**
      * Set codigoTurnoFk
      *
      * @param string $codigoTurnoFk
@@ -884,53 +931,5 @@ class TurSoportePagoDetalle
     public function getTurnoRel()
     {
         return $this->turnoRel;
-    }
-
-    /**
-     * Set horasDescanso
-     *
-     * @param float $horasDescanso
-     *
-     * @return TurSoportePagoDetalle
-     */
-    public function setHorasDescanso($horasDescanso)
-    {
-        $this->horasDescanso = $horasDescanso;
-
-        return $this;
-    }
-
-    /**
-     * Get horasDescanso
-     *
-     * @return float
-     */
-    public function getHorasDescanso()
-    {
-        return $this->horasDescanso;
-    }
-
-    /**
-     * Set horasNovedad
-     *
-     * @param float $horasNovedad
-     *
-     * @return TurSoportePagoDetalle
-     */
-    public function setHorasNovedad($horasNovedad)
-    {
-        $this->horasNovedad = $horasNovedad;
-
-        return $this;
-    }
-
-    /**
-     * Get horasNovedad
-     *
-     * @return float
-     */
-    public function getHorasNovedad()
-    {
-        return $this->horasNovedad;
     }
 }

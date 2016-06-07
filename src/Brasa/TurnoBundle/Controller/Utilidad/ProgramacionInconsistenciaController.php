@@ -1,16 +1,20 @@
 <?php
 
-namespace Brasa\TurnoBundle\Controller;
+namespace Brasa\TurnoBundle\Controller\Utilidad;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use ZipArchive;
 use Symfony\Component\HttpFoundation\Response;
 
-class UtilidadProgramacionInconsistenciaController extends Controller
+
+class ProgramacionInconsistenciaController extends Controller
 {
     var $strDqlLista = "";
-    
+    /**
+     * @Route("/tur/utilidad/programacion/inconsistencias", name="brs_tur_utilidad_programacion_inconsistencias")
+     */    
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();  

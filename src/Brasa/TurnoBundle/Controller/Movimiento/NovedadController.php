@@ -58,6 +58,7 @@ class NovedadController extends Controller
      */
     public function nuevoAction(Request $request, $codigoNovedad) {        
         $em = $this->getDoctrine()->getManager();        
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arNovedad = new \Brasa\TurnoBundle\Entity\TurNovedad();
         if($codigoNovedad != 0) {
             $arNovedad = $em->getRepository('BrasaTurnoBundle:TurNovedad')->find($codigoNovedad);
@@ -83,17 +84,21 @@ class NovedadController extends Controller
                 if(count($arRecursoReemplazo) > 0) {
                     $arNovedad->setRecursoReemplazoRel($arRecursoReemplazo);
                 }
-            }            
-            $arUsuario = $this->getUser();
-            $arNovedad->setUsuario($arUsuario->getUserName());            
-            $em->persist($arNovedad);
-            $em->flush();
+            }    
+            if($arNovedad->getRecursoRel()) {
+                $arUsuario = $this->getUser();
+                $arNovedad->setUsuario($arUsuario->getUserName());            
+                $em->persist($arNovedad);
+                $em->flush();
 
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_movimiento_novedad_nuevo', array('codigoNovedad' => 0 )));
+                if($form->get('guardarnuevo')->isClicked()) {
+                    return $this->redirect($this->generateUrl('brs_tur_movimiento_novedad_nuevo', array('codigoNovedad' => 0 )));
+                } else {
+                    return $this->redirect($this->generateUrl('brs_tur_movimiento_novedad'));
+                }                 
             } else {
-                return $this->redirect($this->generateUrl('brs_tur_movimiento_novedad'));
-            }                                                                               
+                $objMensaje->Mensaje('error', 'Debe seleccionar un recurso', $this);
+            }                                                                              
         }
         return $this->render('BrasaTurnoBundle:Movimientos/Novedad:nuevo.html.twig', array(
             'arNovedad' => $arNovedad,
@@ -191,41 +196,88 @@ class NovedadController extends Controller
                     'form' => $form->createView()
                     ));
     }       
+
+    /**
+     * @Route("/tur/movimiento/novedad/cambiar/tipo{codigoNovedad}", name="brs_tur_movimiento_novedad_cambiar_tipo")
+     */    
+    public function cambiarTipoAction($codigoNovedad) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arNovedad = new \Brasa\TurnoBundle\Entity\TurNovedad();
+        $arNovedad = $em->getRepository('BrasaTurnoBundle:TurNovedad')->find($codigoNovedad);
+        $formNovedad = $this->createFormBuilder()
+            ->setAction($this->generateUrl('brs_tur_movimiento_novedad_cambiar_tipo', array('codigoNovedad' => $codigoNovedad)))            
+            ->add('novedadTipoRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurNovedadTipo',
+                        'property' => 'nombre',
+            ))            
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        $formNovedad->handleRequest($request);                
+        if ($formNovedad->isValid()) {                        
+            $arNovedadTipo = new \Brasa\TurnoBundle\Entity\TurNovedadTipo();            
+            $arNovedadTipo = $formNovedad->get('novedadTipoRel')->getData(); 
+            if($arNovedad->getCodigoNovedadTipoFk() != $arNovedadTipo->getCodigoNovedadTipoPk()) {
+                $arNovedad->setNovedadTipoRel($arNovedadTipo);
+                $em->persist($arNovedad);
+                $em->flush();
+                $em->getRepository('BrasaTurnoBundle:TurNovedad')->aplicar($codigoNovedad, 0, 1); 
+            }
+            return $this->redirect($this->generateUrl('brs_tur_movimiento_novedad'));
+        }
+        return $this->render('BrasaTurnoBundle:Movimientos/Novedad:cambiarTipo.html.twig', array(
+            'arNovedad' => $arNovedad,
+            'formNovedad' => $formNovedad->createView()
+        ));
+    }    
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurNovedad')->listaDQL(
-                $session->get('filtroCodigoRecurso'));
+                $session->get('filtroNovedadNumero'),
+                $session->get('filtroCodigoRecurso'),
+                $session->get('filtroNovedadEstadoAplicado'),
+                $session->get('filtroCodigoNovedad'));
     }
 
     private function filtrar ($form) {       
         $session = $this->getRequest()->getSession();        
         $session->set('filtroNovedadNumero', $form->get('TxtNumero')->getData());
+        $session->set('filtroCodigoRecurso', $form->get('TxtCodigoRecurso')->getData());        
+        $session->set('filtroCodigoNovedad', $form->get('TxtCodigoNovedad')->getData());
+        $session->set('filtroNovedadEstadoAplicado', $form->get('estadoAplicado')->getData());  
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $strNombreCliente = "";
-        if($session->get('filtroNit')) {
-            $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
-            if($arCliente) {
-                $session->set('filtroCodigoCliente', $arCliente->getCodigoClientePk());
-                $strNombreCliente = $arCliente->getNombreCorto();
+        $strNombreRecurso = "";
+        if($session->get('filtroCodigoRecurso')) {
+            $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($session->get('filtroCodigoRecurso'));
+            if($arRecurso) {                
+                $strNombreRecurso = $arRecurso->getNombreCorto();
             }  else {
-                $session->set('filtroCodigoCliente', null);
-                $session->set('filtroNit', null);
+                $session->set('filtroCodigoRecurso', null);
             }          
-        } else {
-            $session->set('filtroCodigoCliente', null);
         }
-        
+        $strNombreNovedad = "";
+        if($session->get('filtroCodigoNovedad')) {
+            $arNovedad = $em->getRepository('BrasaTurnoBundle:TurNovedadTipo')->find($session->get('filtroCodigoNovedad'));
+            if($arNovedad) {                
+                $strNombreNovedad = $arNovedad->getNombre();
+            }  else {
+                $session->set('filtroCodigoNovedad', null);
+            }          
+        }        
         $form = $this->createFormBuilder()
             ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroNovedadNumero')))
-            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
-            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))
-            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroNovedadEstadoAutorizado')))                
+            ->add('TxtCodigoRecurso', 'text', array('label'  => 'Nit','data' => $session->get('filtroCodigoRecurso')))
+            ->add('TxtNombreRecurso', 'text', array('label'  => 'NombreCliente','data' => $strNombreRecurso))                                
+            ->add('TxtCodigoNovedad', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCodigoNovedad')))
+            ->add('TxtNombreNovedad', 'text', array('label'  => 'Nombre','data' => $strNombreNovedad))                                                
+            ->add('estadoAplicado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'APLICADAS', '0' => 'SIN APLICAR'), 'data' => $session->get('filtroNovedadEstadoAplicado')))                
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnAplicar', 'submit', array('label'  => 'Aplicar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))

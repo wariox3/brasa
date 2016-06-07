@@ -49,6 +49,8 @@ class AfiCursoDetalle
      */
     protected $cursoTipoRel;     
 
+
+
     /**
      * Get codigoCursoDetallePk
      *
@@ -81,6 +83,54 @@ class AfiCursoDetalle
     public function getCodigoCursoFk()
     {
         return $this->codigoCursoFk;
+    }
+
+    /**
+     * Set codigoCursoTipoFk
+     *
+     * @param integer $codigoCursoTipoFk
+     *
+     * @return AfiCursoDetalle
+     */
+    public function setCodigoCursoTipoFk($codigoCursoTipoFk)
+    {
+        $this->codigoCursoTipoFk = $codigoCursoTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCursoTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCursoTipoFk()
+    {
+        return $this->codigoCursoTipoFk;
+    }
+
+    /**
+     * Set costo
+     *
+     * @param float $costo
+     *
+     * @return AfiCursoDetalle
+     */
+    public function setCosto($costo)
+    {
+        $this->costo = $costo;
+
+        return $this;
+    }
+
+    /**
+     * Get costo
+     *
+     * @return float
+     */
+    public function getCosto()
+    {
+        return $this->costo;
     }
 
     /**
@@ -132,30 +182,6 @@ class AfiCursoDetalle
     }
 
     /**
-     * Set codigoCursoTipoFk
-     *
-     * @param integer $codigoCursoTipoFk
-     *
-     * @return AfiCursoDetalle
-     */
-    public function setCodigoCursoTipoFk($codigoCursoTipoFk)
-    {
-        $this->codigoCursoTipoFk = $codigoCursoTipoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCursoTipoFk
-     *
-     * @return integer
-     */
-    public function getCodigoCursoTipoFk()
-    {
-        return $this->codigoCursoTipoFk;
-    }
-
-    /**
      * Set cursoTipoRel
      *
      * @param \Brasa\AfiliacionBundle\Entity\AfiCursoTipo $cursoTipoRel
@@ -177,29 +203,5 @@ class AfiCursoDetalle
     public function getCursoTipoRel()
     {
         return $this->cursoTipoRel;
-    }
-
-    /**
-     * Set costo
-     *
-     * @param float $costo
-     *
-     * @return AfiCursoDetalle
-     */
-    public function setCosto($costo)
-    {
-        $this->costo = $costo;
-
-        return $this;
-    }
-
-    /**
-     * Get costo
-     *
-     * @return float
-     */
-    public function getCosto()
-    {
-        return $this->costo;
     }
 }

@@ -15,35 +15,55 @@
         <div class="panel panel-default">
             <div class="panel-heading">Filtros de busqueda</div>
             <div class="panel-body">
-                <div     class="form-group form-group-sm">
-                    <label for="txtNit" class="col-sm-2 control-label">Cliente:</label>
+                <div class="form-group form-group-sm">
+                    <label for="TxtCodigoNovedad" class="col-sm-2 control-label">Novedad:</label>
                     <div class="col-sm-10">
                         <div class="row">
                           <div class="col-lg-2">
                             <div class="input-group">
-                              {{ form_widget(form.TxtNit, { 'attr': {'class': 'form-control'} }) }}                              
+                              {{ form_widget(form.TxtCodigoNovedad, { 'attr': {'class': 'form-control'} }) }}                              
                             </div>
                           </div>
                           <div class="col-lg-10">
                             <div class="input-group">     
-                              {{ form_widget(form.TxtNombreCliente, { 'attr': {'class': 'form-control', 'readOnly': 'ReadOnly'} }) }}                              
+                              {{ form_widget(form.TxtNombreNovedad, { 'attr': {'class': 'form-control', 'readOnly': 'ReadOnly'} }) }}                              
                               <span class="input-group-btn">                                        
-                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_buscar_cliente', { 'campoCodigo': 'form_TxtNit', 'campoNombre': 'form_TxtNombreCliente' }) }}', 'buscarCliente', 600, 900)">Buscar</a>
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_buscar_novedad', { 'campoCodigo': 'form_TxtCodigoNovedad', 'campoNombre': 'form_TxtNombreNovedad' }) }}', 'buscarNovedad', 600, 900)">Buscar</a>
                               </span>
                             </div>
                           </div>
                         </div>
                     </div>
                 </div>                
-                    
+                <div class="form-group form-group-sm">
+                    <label for="TxtCodigoRecurso" class="col-sm-2 control-label">Recurso:</label>
+                    <div class="col-sm-10">
+                        <div class="row">
+                          <div class="col-lg-2">
+                            <div class="input-group">
+                              {{ form_widget(form.TxtCodigoRecurso, { 'attr': {'class': 'form-control'} }) }}                              
+                            </div>
+                          </div>
+                          <div class="col-lg-10">
+                            <div class="input-group">     
+                              {{ form_widget(form.TxtNombreRecurso, { 'attr': {'class': 'form-control', 'readOnly': 'ReadOnly'} }) }}                              
+                              <span class="input-group-btn">                                        
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_buscar_recurso', { 'campoCodigo': 'form_TxtCodigoRecurso', 'campoNombre': 'form_TxtNombreRecurso' }) }}', 'buscarRecurso', 600, 900)">Buscar</a>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                              
                 <div class="form-group form-group-sm">  
                     <label for="form_TxtNumero" class="col-sm-2 control-label">Numero:</label>
                     <div class="col-sm-4">
                         {{ form_widget(form.TxtNumero, { 'attr': {'class': 'form-control'} }) }}
                     </div>
-                    <label for="form_estadoAutorizado" class="col-sm-2 control-label">Autorizado:</label>
+                    <label for="form_estadoAplicado" class="col-sm-2 control-label">Aplicado:</label>
                     <div class="col-sm-4">                  
-                        {{ form_widget(form.estadoAutorizado, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.estadoAplicado, { 'attr': {'class': 'form-control'} }) }}
                     </div>                    
                 </div>     
                 <div class="form-group form-group-sm">
@@ -64,6 +84,7 @@
                 <th>APL</th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
             {% for arNovedades in arNovedades %}
             <tr>
@@ -73,7 +94,8 @@
                 <td>{{ arNovedades.fechaHasta |date("Y/m/d")  }}</td>
                 <td>{{ arNovedades.recursoRel.nombreCorto |default('')  }}</td>                              
                 <td>{{ arNovedades.recursoReemplazoRel.nombreCorto |default('')  }}</td> 
-                <td>{% if arNovedades.estadoAplicada == 1 %} SI {% else %} NO {% endif %}</td>                                
+                <td>{% if arNovedades.estadoAplicada == 1 %} SI {% else %} NO {% endif %}</td> 
+                <td style="text-align: center"><a class="btn btn-default btn-xs" id="{{ path('brs_tur_movimiento_novedad_cambiar_tipo', { 'codigoNovedad': arNovedades.codigoNovedadPk}) }}" style="float:left">Cambiar tipo</a></td>
                 <td style="text-align: center"><a href="{{ path('brs_tur_movimiento_novedad_nuevo', {'codigoNovedad': arNovedades.codigoNovedadPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arNovedades.codigoNovedadPk }}" /></td>
             </tr>

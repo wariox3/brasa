@@ -33,6 +33,11 @@ class TurSoportePagoPeriodo
     private $recursos = 0;    
     
     /**
+     * @ORM\Column(name="vr_pago", type="float")
+     */    
+    private $vrPago = 0;    
+    
+    /**
      * @ORM\Column(name="festivos", type="integer")
      */    
     private $festivos = 0;    
@@ -74,6 +79,16 @@ class TurSoportePagoPeriodo
     private $estadoCerrado = false;    
 
     /**
+     * @ORM\Column(name="dia_festivo_real", type="integer")
+     */    
+    private $diaFestivoReal = 0;    
+
+    /**
+     * @ORM\Column(name="dia_domingo_real", type="integer")
+     */    
+    private $diaDomingoReal = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurCentroCosto", inversedBy="soportesPagosPeriodosCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
@@ -89,6 +104,7 @@ class TurSoportePagoPeriodo
      */
     protected $soportesPagosDetallesSoportePagoPeriodoRel;     
     
+
     /**
      * Constructor
      */
@@ -181,6 +197,102 @@ class TurSoportePagoPeriodo
     }
 
     /**
+     * Set festivos
+     *
+     * @param integer $festivos
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setFestivos($festivos)
+    {
+        $this->festivos = $festivos;
+
+        return $this;
+    }
+
+    /**
+     * Get festivos
+     *
+     * @return integer
+     */
+    public function getFestivos()
+    {
+        return $this->festivos;
+    }
+
+    /**
+     * Set diasAdicionales
+     *
+     * @param integer $diasAdicionales
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setDiasAdicionales($diasAdicionales)
+    {
+        $this->diasAdicionales = $diasAdicionales;
+
+        return $this;
+    }
+
+    /**
+     * Get diasAdicionales
+     *
+     * @return integer
+     */
+    public function getDiasAdicionales()
+    {
+        return $this->diasAdicionales;
+    }
+
+    /**
+     * Set diasPeriodo
+     *
+     * @param integer $diasPeriodo
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setDiasPeriodo($diasPeriodo)
+    {
+        $this->diasPeriodo = $diasPeriodo;
+
+        return $this;
+    }
+
+    /**
+     * Get diasPeriodo
+     *
+     * @return integer
+     */
+    public function getDiasPeriodo()
+    {
+        return $this->diasPeriodo;
+    }
+
+    /**
+     * Set descansoFestivoFijo
+     *
+     * @param boolean $descansoFestivoFijo
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setDescansoFestivoFijo($descansoFestivoFijo)
+    {
+        $this->descansoFestivoFijo = $descansoFestivoFijo;
+
+        return $this;
+    }
+
+    /**
+     * Get descansoFestivoFijo
+     *
+     * @return boolean
+     */
+    public function getDescansoFestivoFijo()
+    {
+        return $this->descansoFestivoFijo;
+    }
+
+    /**
      * Set codigoCentroCostoFk
      *
      * @param integer $codigoCentroCostoFk
@@ -250,6 +362,78 @@ class TurSoportePagoPeriodo
     public function getEstadoAprobado()
     {
         return $this->estadoAprobado;
+    }
+
+    /**
+     * Set estadoCerrado
+     *
+     * @param boolean $estadoCerrado
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setEstadoCerrado($estadoCerrado)
+    {
+        $this->estadoCerrado = $estadoCerrado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCerrado
+     *
+     * @return boolean
+     */
+    public function getEstadoCerrado()
+    {
+        return $this->estadoCerrado;
+    }
+
+    /**
+     * Set diaFestivoReal
+     *
+     * @param integer $diaFestivoReal
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setDiaFestivoReal($diaFestivoReal)
+    {
+        $this->diaFestivoReal = $diaFestivoReal;
+
+        return $this;
+    }
+
+    /**
+     * Get diaFestivoReal
+     *
+     * @return integer
+     */
+    public function getDiaFestivoReal()
+    {
+        return $this->diaFestivoReal;
+    }
+
+    /**
+     * Set diaDomingoReal
+     *
+     * @param integer $diaDomingoReal
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setDiaDomingoReal($diaDomingoReal)
+    {
+        $this->diaDomingoReal = $diaDomingoReal;
+
+        return $this;
+    }
+
+    /**
+     * Get diaDomingoReal
+     *
+     * @return integer
+     */
+    public function getDiaDomingoReal()
+    {
+        return $this->diaDomingoReal;
     }
 
     /**
@@ -345,122 +529,26 @@ class TurSoportePagoPeriodo
     }
 
     /**
-     * Set festivos
+     * Set vrPago
      *
-     * @param integer $festivos
+     * @param float $vrPago
      *
      * @return TurSoportePagoPeriodo
      */
-    public function setFestivos($festivos)
+    public function setVrPago($vrPago)
     {
-        $this->festivos = $festivos;
+        $this->vrPago = $vrPago;
 
         return $this;
     }
 
     /**
-     * Get festivos
+     * Get vrPago
      *
-     * @return integer
+     * @return float
      */
-    public function getFestivos()
+    public function getVrPago()
     {
-        return $this->festivos;
-    }
-
-    /**
-     * Set descansoFestivoFijo
-     *
-     * @param boolean $descansoFestivoFijo
-     *
-     * @return TurSoportePagoPeriodo
-     */
-    public function setDescansoFestivoFijo($descansoFestivoFijo)
-    {
-        $this->descansoFestivoFijo = $descansoFestivoFijo;
-
-        return $this;
-    }
-
-    /**
-     * Get descansoFestivoFijo
-     *
-     * @return boolean
-     */
-    public function getDescansoFestivoFijo()
-    {
-        return $this->descansoFestivoFijo;
-    }
-
-    /**
-     * Set estadoCerrado
-     *
-     * @param boolean $estadoCerrado
-     *
-     * @return TurSoportePagoPeriodo
-     */
-    public function setEstadoCerrado($estadoCerrado)
-    {
-        $this->estadoCerrado = $estadoCerrado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoCerrado
-     *
-     * @return boolean
-     */
-    public function getEstadoCerrado()
-    {
-        return $this->estadoCerrado;
-    }
-
-    /**
-     * Set diasAdicionales
-     *
-     * @param integer $diasAdicionales
-     *
-     * @return TurSoportePagoPeriodo
-     */
-    public function setDiasAdicionales($diasAdicionales)
-    {
-        $this->diasAdicionales = $diasAdicionales;
-
-        return $this;
-    }
-
-    /**
-     * Get diasAdicionales
-     *
-     * @return integer
-     */
-    public function getDiasAdicionales()
-    {
-        return $this->diasAdicionales;
-    }
-
-    /**
-     * Set diasPeriodo
-     *
-     * @param integer $diasPeriodo
-     *
-     * @return TurSoportePagoPeriodo
-     */
-    public function setDiasPeriodo($diasPeriodo)
-    {
-        $this->diasPeriodo = $diasPeriodo;
-
-        return $this;
-    }
-
-    /**
-     * Get diasPeriodo
-     *
-     * @return integer
-     */
-    public function getDiasPeriodo()
-    {
-        return $this->diasPeriodo;
+        return $this->vrPago;
     }
 }

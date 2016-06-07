@@ -33,6 +33,11 @@ class AfiCurso
     private $fechaVence;    
 
     /**
+     * @ORM\Column(name="codigo_curso_tipo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCursoTipoFk;     
+    
+    /**
      * @ORM\Column(name="fecha_programacion", type="date", nullable=true)
      */    
     private $fechaProgramacion;    
@@ -101,6 +106,12 @@ class AfiCurso
      * @ORM\Column(name="estado_pagado", type="boolean")
      */    
     private $estadoPagado = false;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="AfiCursoTipo", inversedBy="cursosCursoTipoRel")
+     * @ORM\JoinColumn(name="codigo_curso_tipo_fk", referencedColumnName="codigo_curso_tipo_pk")
+     */
+    protected $cursoTipoRel;    
     
     /**
      * @ORM\ManyToOne(targetEntity="AfiCliente", inversedBy="cursosClienteRel")
@@ -226,6 +237,30 @@ class AfiCurso
     public function getFechaVence()
     {
         return $this->fechaVence;
+    }
+
+    /**
+     * Set codigoCursoTipoFk
+     *
+     * @param integer $codigoCursoTipoFk
+     *
+     * @return AfiCurso
+     */
+    public function setCodigoCursoTipoFk($codigoCursoTipoFk)
+    {
+        $this->codigoCursoTipoFk = $codigoCursoTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCursoTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCursoTipoFk()
+    {
+        return $this->codigoCursoTipoFk;
     }
 
     /**
@@ -562,6 +597,30 @@ class AfiCurso
     public function getEstadoPagado()
     {
         return $this->estadoPagado;
+    }
+
+    /**
+     * Set cursoTipoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCursoTipo $cursoTipoRel
+     *
+     * @return AfiCurso
+     */
+    public function setCursoTipoRel(\Brasa\AfiliacionBundle\Entity\AfiCursoTipo $cursoTipoRel = null)
+    {
+        $this->cursoTipoRel = $cursoTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get cursoTipoRel
+     *
+     * @return \Brasa\AfiliacionBundle\Entity\AfiCursoTipo
+     */
+    public function getCursoTipoRel()
+    {
+        return $this->cursoTipoRel;
     }
 
     /**

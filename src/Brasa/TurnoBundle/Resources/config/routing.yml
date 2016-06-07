@@ -72,15 +72,7 @@ brs_tur_base_plantilla_detalle:
     
 brs_tur_base_plantilla_nuevo:
     path:     /tur/base/plantilla/nuevo/{codigoPlantilla}
-    defaults: { _controller: BrasaTurnoBundle:BasePlantilla:nuevo }                                                                                                                                                
-
-brs_tur_utilidad_programacion_inconsistencias:    
-    path:     /tur/utilidad/programacion/inconsistencias
-    defaults: { _controller: BrasaTurnoBundle:UtilidadProgramacionInconsistencia:lista }
-
-brs_tur_utilidad_programacion_descarga_masiva:    
-    path:     /tur/utilidad/programacion/descarga/masiva
-    defaults: { _controller: BrasaTurnoBundle:UtilidadProgramacionDescargaMasiva:lista }            
+    defaults: { _controller: BrasaTurnoBundle:BasePlantilla:nuevo }                                                                                                                                                           
     
 brs_tur_configuracion:
     path:     /tur/configuracion/{codigoConfiguracionPk}

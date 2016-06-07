@@ -71,8 +71,8 @@
                         <td align="right">{{ arCurso.costo | number_format(0, '.', ',')}}</td>
                     </tr>                     
                     <tr>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">TIPO:</td>
+                        <td class="td-in-well">{{ arCurso.cursoTipoRel.nombre | default('') }}</td>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>                        
                         <td class="titulo" >TOTAL:</td>
