@@ -5365,6 +5365,7 @@ INSERT INTO `rhu_sso_tipo_cotizante` (`codigo_tipo_cotizante_pk`, `nombre`) VALU
 INSERT INTO `rhu_sso_tipo_cotizante` (`codigo_tipo_cotizante_pk`, `nombre`) VALUES('20','20 Estudiantes (Régimen especial-Ley 789/2002)');
 INSERT INTO `rhu_sso_tipo_cotizante` (`codigo_tipo_cotizante_pk`, `nombre`) VALUES('21','21 Estudiantes de postgrado en salud (Decreto 190 de 1996)');
 INSERT INTO `rhu_sso_tipo_cotizante` (`codigo_tipo_cotizante_pk`, `nombre`) VALUES('22','22 Profesor de establecimiento particular');
+INSERT INTO `rhu_sso_tipo_cotizante` (`codigo_tipo_cotizante_pk`, `nombre`) VALUES('23','23 Estudiante (Decreto 055 de 2015)');
 INSERT INTO `rhu_sso_tipo_cotizante` (`codigo_tipo_cotizante_pk`, `nombre`) VALUES('30','30 Dependiente Entidades o Universidades Públicas con régimen especial en Salud.');
 INSERT INTO `rhu_sso_tipo_cotizante` (`codigo_tipo_cotizante_pk`, `nombre`) VALUES('31','31 Cooperados o Precooperativas de Trabajo Asociado.');
 INSERT INTO `rhu_sso_tipo_cotizante` (`codigo_tipo_cotizante_pk`, `nombre`) VALUES('32','32 Cotizante miembro de la carrera diplomática o consular de un país extranjero o funcionario de organismo multilateral no sometido a la legislación c');

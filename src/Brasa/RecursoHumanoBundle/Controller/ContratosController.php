@@ -155,10 +155,11 @@ class ContratosController extends Controller
             $boolValidarTipoContrato = TRUE;
             $boolValidarTipoContratoSalud = TRUE;
             $boolValidarContratoFijo = TRUE;
-            if($arContrato->getContratoTipoRel()->getCodigoContratoTipoPk() == 4 && ($arContrato->getSsoTipoCotizanteRel()->getCodigoTipoCotizantePk() != 12 || $arContrato->getSsoSubtipoCotizanteRel()->getCodigoSubtipoCotizantePk() != 0)) {
+            if($arContrato->getContratoTipoRel()->getCodigoContratoTipoPk() == 4 && ($arContrato->getSsoTipoCotizanteRel()->getCodigoTipoCotizantePk() != 12 && $arContrato->getSsoTipoCotizanteRel()->getCodigoTipoCotizantePk() != 19 || $arContrato->getSsoSubtipoCotizanteRel()->getCodigoSubtipoCotizantePk() != 0)) {
                 $boolValidarTipoContrato = FALSE;
-            }
-            if($arContrato->getContratoTipoRel()->getCodigoContratoTipoPk() == 5 && ($arContrato->getSsoTipoCotizanteRel()->getCodigoTipoCotizantePk() != 19 || $arContrato->getSsoSubtipoCotizanteRel()->getCodigoSubtipoCotizantePk() != 0)) {
+            } 
+                
+            if($arContrato->getContratoTipoRel()->getCodigoContratoTipoPk() == 5 && ($arContrato->getSsoTipoCotizanteRel()->getCodigoTipoCotizantePk() != 23 || $arContrato->getSsoSubtipoCotizanteRel()->getCodigoSubtipoCotizantePk() != 0)) {
                 $boolValidarTipoContrato = FALSE;
             }
             if($arContrato->getContratoTipoRel()->getCodigoContratoTipoPk() == 4 || $arContrato->getContratoTipoRel()->getCodigoContratoTipoPk() == 5) {
@@ -245,7 +246,7 @@ class ContratosController extends Controller
                                     echo "La fecha de inicio del contrato debe ser mayor a la ultima fecha de pago del centro de costos " . $arContrato->getCentroCostoRel()->getFechaUltimoPago()->format('Y-m-d');
                                 }                                
                             } else {
-                                $objMensaje->Mensaje("error", "Los contraros de aprendizaje del sena (lectiva-productiva) la salud va a cargo del empleador", $this);
+                                $objMensaje->Mensaje("error", "Los contratos de practicante/aprendizaje del sena (lectiva-productiva) la salud va a cargo del empleador", $this);
                             }
                         } else {
                             echo "Verifique el tipo de contrato con el tipo y subtipo de cotizante a seguridad social";
