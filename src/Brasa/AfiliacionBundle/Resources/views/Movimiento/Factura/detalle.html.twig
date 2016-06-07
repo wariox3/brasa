@@ -138,6 +138,7 @@
                     <table  class="table table-striped table-bordered table-condensed table-hover">
                         <tr>
                             <th>CODIGO</th>
+                            <th>NUMERO</th>
                             <th>FECHA</th>
                             <th>IDENTIFICACION</th>  
                             <th>EMPLEADO</th>                             
@@ -147,6 +148,7 @@
                         {% for arFacturaDetalleCursos in arFacturaDetalleCursos %}
                             <tr>
                                 <td>{{ arFacturaDetalleCursos.codigoFacturaDetalleCursoPk  }}</td>
+                                <td>{{ arFacturaDetalleCursos.cursoRel.numero | default('')  }}</td>
                                 <td>{{ arFacturaDetalleCursos.cursoRel.fecha | date('Y/m/d')  }}</td>
                                 <td>{{ arFacturaDetalleCursos.cursoRel.empleadoRel.numeroIdentificacion | default('') }}</td>
                                 <td>{{ arFacturaDetalleCursos.cursoRel.empleadoRel.nombreCorto | default('') }}</td>                                                                                                
