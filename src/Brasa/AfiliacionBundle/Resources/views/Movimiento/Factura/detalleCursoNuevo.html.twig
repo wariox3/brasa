@@ -6,8 +6,8 @@
     {{ form_errors(form) }}
     <h3>Nuevo detalle (Curso)</h3> 
         <table  class="table table-striped table-bordered table-condensed table-hover">            
-            <tr>
-                <th>CODIGO</th>
+            <tr>                
+                <th>NUMERO</th>
                 <th>IDENTIFICACION</th>  
                 <th>EMPLEADO</th>                 
                 <th>TOTAL</th>               
@@ -15,7 +15,8 @@
             </tr>
             {% for arCursos in arCursos %}
             <tr>
-                <td><input type="hidden" name="LblCodigo[]" value="{{ arCursos.codigoCursoPk }}">{{ arCursos.codigoCursoPk }} </td>                                
+                <td><input type="hidden" name="LblCodigo[]" value="{{ arCursos.codigoCursoPk }}"></td>                                
+                <td>{{ arCursos.numero }}</td>
                 <td>{{ arCursos.empleadoRel.numeroIdentificacion | default('') }}</td>
                 <td>{{ arCursos.empleadoRel.nombreCorto | default('') }}</td>                                                                
                 <td style="text-align: right">{{ arCursos.total | number_format(0, '.', ',') }}</td>                
