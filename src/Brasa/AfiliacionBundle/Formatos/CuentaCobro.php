@@ -142,7 +142,7 @@ class CuentaCobro extends \FPDF_FPDF {
             $pdf->Cell(10, 4, "", 0, 0, 'L', 1);
 
             $pdf->Ln(5);          
-            $header = array('FECHA', 'IDENTIFICACION', 'EMPLEADO', 'CERTIFICADO', 'PRECIO');
+            $header = array('FECHA', 'NUMERO', 'IDENTIFICACION', 'EMPLEADO', 'CERTIFICADO', 'PRECIO');
             $pdf->SetFillColor(236, 236, 236);
             $pdf->SetTextColor(0);
             $pdf->SetDrawColor(0, 0, 0);
@@ -150,7 +150,7 @@ class CuentaCobro extends \FPDF_FPDF {
             $pdf->SetFont('', 'B', 7);
 
             //creamos la cabecera de la tabla.
-            $w = array(20, 25, 80, 40, 30);
+            $w = array(20, 20, 25, 70, 40, 20);
             for ($i = 0; $i < count($header); $i++)
                 if ($i == 0)
                     $pdf->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -171,10 +171,11 @@ class CuentaCobro extends \FPDF_FPDF {
                 $arCursosDetalles = self::$em->getRepository('BrasaAfiliacionBundle:AfiCursoDetalle')->findBy(array('codigoCursoFk' => $arFacturaDetalle->getCodigoCursoFk()));
                 foreach ($arCursosDetalles as $arCursoDetalle) {
                     $pdf->Cell(20, 4, $arCursoDetalle->getCursoRel()->getFechaProgramacion()->format('Y/m/d'), 1, 0, 'L');
+                    $pdf->Cell(20, 4, $arCursoDetalle->getCursoRel()->getNumero(), 1, 0, 'L');                
                     $pdf->Cell(25, 4, $arCursoDetalle->getCursoRel()->getNumeroIdentificacion(), 1, 0, 'L');                
-                    $pdf->Cell(80, 4, $arCursoDetalle->getCursoRel()->getNombreCorto(), 1, 0, 'L');
+                    $pdf->Cell(70, 4, $arCursoDetalle->getCursoRel()->getNombreCorto(), 1, 0, 'L');
                     $pdf->Cell(40, 4, $arCursoDetalle->getCursoTipoRel()->getNombre(), 1, 0, 'L');
-                    $pdf->Cell(30, 4, number_format($arCursoDetalle->getPrecio(), 0, '.', ','), 1, 0, 'R');
+                    $pdf->Cell(20, 4, number_format($arCursoDetalle->getPrecio(), 0, '.', ','), 1, 0, 'R');
                     $pdf->Ln();
                     $pdf->SetAutoPageBreak(true, 15);                    
                 }
