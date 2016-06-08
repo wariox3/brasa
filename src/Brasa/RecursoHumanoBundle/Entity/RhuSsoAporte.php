@@ -76,7 +76,7 @@ class RhuSsoAporte
     /**
      * @ORM\Column(name="tipo_documento", type="string", length=2)
      */    
-    private $tipo_documento;    
+    private $tipoDocumento;    
     
     /**
      * @ORM\Column(name="tipo_cotizante", type="smallint")
@@ -396,12 +396,87 @@ class RhuSsoAporte
     /**
      * @ORM\Column(name="aportes_fondo_solidaridad_pensional_subsistencia", type="float")
      */
-    private $aportesFondoSolidaridadPensionalSubsistencia;      
+    private $aportesFondoSolidaridadPensionalSubsistencia;
+    
+    /**
+     * @ORM\Column(name="valor_upc_adicional", type="float")
+     */
+    private $valorUpcAdicional;
+    
+    /**
+     * @ORM\Column(name="numero_autorizacion_incapacidad_enfermedad_general", type="string", length=9)
+     */
+    private $numeroAutorizacionIncapacidadEnfermedadGeneral;
+    
+    /**
+     * @ORM\Column(name="valor_incapacidad_enfermedad_general", type="float")
+     */
+    private $valorIncapacidadEnfermedadGeneral;
+    
+    /**
+     * @ORM\Column(name="numero_autorizacion_licencia_maternidad_paternidad", type="string", length=9)
+     */
+    private $numeroAutorizacionLicenciaMaternidadPaternidad;
+    
+    /**
+     * @ORM\Column(name="valor_incapacidad_licencia_maternidad_paternidad", type="float")
+     */
+    private $valorIncapacidadLicenciaMaternidadPaternidad;
+    
+    /**
+     * @ORM\Column(name="centro_trabajo_codigo_ct", type="string", length=9)
+     */
+    private $centroTrabajoCodigoCt;
     
     /**
      * @ORM\Column(name="codigo_cargo_fk", type="integer", nullable=true)
      */    
-    private $codigoCargoFk;           
+    private $codigoCargoFk;
+    
+    /**
+     * @ORM\Column(name="tarifa_aporte_esap", type="float")
+     */
+    private $tarifaAportesESAP = 0;
+    
+    /**
+     * @ORM\Column(name="valor_aporte_esap", type="float")
+     */
+    private $valorAportesESAP;
+    
+    /**
+     * @ORM\Column(name="tarifa_aporte_men", type="float")
+     */
+    private $tarifaAportesMEN = 0;
+    
+    /**
+     * @ORM\Column(name="valor_aporte_men", type="float")
+     */
+    private $valorAportesMEN;
+    
+    /**
+     * @ORM\Column(name="tipo_documento_responsable_upc", type="string", length=4)
+     */    
+    private $tipoDocumentoResponsableUPC;
+    
+    /**
+     * @ORM\Column(name="numero_identificacion_responsable_upc_adicional", type="string", length=20)
+     */    
+    private $numeroIdentificacionResponsableUPCAdicional;
+    
+    /**
+     * @ORM\Column(name="cotizante_exonerado_pago_aporte_parafiscales_salud", type="string", length=20)
+     */    
+    private $cotizanteExoneradoPagoAporteParafiscalesSalud;
+    
+    /**
+     * @ORM\Column(name="codigo_administradora_riesgos_laborales", type="string", length=20)
+     */    
+    private $codigoAdministradoraRiesgosLaborales;
+    
+    /**
+     * @ORM\Column(name="clase_riesgo_afiliado", type="string", length=20)
+     */    
+    private $claseRiesgoAfiliado;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="ssoAportesSsoPeriodoRel")
@@ -439,6 +514,8 @@ class RhuSsoAporte
      */
     protected $cargoRel;     
     
+
+   
 
     /**
      * Get codigoAportePk
@@ -571,6 +648,102 @@ class RhuSsoAporte
     }
 
     /**
+     * Set anio
+     *
+     * @param integer $anio
+     *
+     * @return RhuSsoAporte
+     */
+    public function setAnio($anio)
+    {
+        $this->anio = $anio;
+
+        return $this;
+    }
+
+    /**
+     * Get anio
+     *
+     * @return integer
+     */
+    public function getAnio()
+    {
+        return $this->anio;
+    }
+
+    /**
+     * Set mes
+     *
+     * @param integer $mes
+     *
+     * @return RhuSsoAporte
+     */
+    public function setMes($mes)
+    {
+        $this->mes = $mes;
+
+        return $this;
+    }
+
+    /**
+     * Get mes
+     *
+     * @return integer
+     */
+    public function getMes()
+    {
+        return $this->mes;
+    }
+
+    /**
+     * Set fechaDesde
+     *
+     * @param \DateTime $fechaDesde
+     *
+     * @return RhuSsoAporte
+     */
+    public function setFechaDesde($fechaDesde)
+    {
+        $this->fechaDesde = $fechaDesde;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaDesde
+     *
+     * @return \DateTime
+     */
+    public function getFechaDesde()
+    {
+        return $this->fechaDesde;
+    }
+
+    /**
+     * Set fechaHasta
+     *
+     * @param \DateTime $fechaHasta
+     *
+     * @return RhuSsoAporte
+     */
+    public function setFechaHasta($fechaHasta)
+    {
+        $this->fechaHasta = $fechaHasta;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaHasta
+     *
+     * @return \DateTime
+     */
+    public function getFechaHasta()
+    {
+        return $this->fechaHasta;
+    }
+
+    /**
      * Set tipoRegistro
      *
      * @param integer $tipoRegistro
@@ -627,7 +800,7 @@ class RhuSsoAporte
      */
     public function setTipoDocumento($tipoDocumento)
     {
-        $this->tipo_documento = $tipoDocumento;
+        $this->tipoDocumento = $tipoDocumento;
 
         return $this;
     }
@@ -639,7 +812,7 @@ class RhuSsoAporte
      */
     public function getTipoDocumento()
     {
-        return $this->tipo_documento;
+        return $this->tipoDocumento;
     }
 
     /**
@@ -1267,219 +1440,27 @@ class RhuSsoAporte
     }
 
     /**
-     * Set salarioBasico
+     * Set diasVacaciones
      *
-     * @param float $salarioBasico
+     * @param integer $diasVacaciones
      *
      * @return RhuSsoAporte
      */
-    public function setSalarioBasico($salarioBasico)
+    public function setDiasVacaciones($diasVacaciones)
     {
-        $this->salarioBasico = $salarioBasico;
+        $this->diasVacaciones = $diasVacaciones;
 
         return $this;
     }
 
     /**
-     * Get salarioBasico
+     * Get diasVacaciones
      *
-     * @return float
+     * @return integer
      */
-    public function getSalarioBasico()
+    public function getDiasVacaciones()
     {
-        return $this->salarioBasico;
-    }
-
-    /**
-     * Set salarioMesAnterior
-     *
-     * @param float $salarioMesAnterior
-     *
-     * @return RhuSsoAporte
-     */
-    public function setSalarioMesAnterior($salarioMesAnterior)
-    {
-        $this->salarioMesAnterior = $salarioMesAnterior;
-
-        return $this;
-    }
-
-    /**
-     * Get salarioMesAnterior
-     *
-     * @return float
-     */
-    public function getSalarioMesAnterior()
-    {
-        return $this->salarioMesAnterior;
-    }
-
-    /**
-     * Set salarioIntegral
-     *
-     * @param string $salarioIntegral
-     *
-     * @return RhuSsoAporte
-     */
-    public function setSalarioIntegral($salarioIntegral)
-    {
-        $this->salarioIntegral = $salarioIntegral;
-
-        return $this;
-    }
-
-    /**
-     * Get salarioIntegral
-     *
-     * @return string
-     */
-    public function getSalarioIntegral()
-    {
-        return $this->salarioIntegral;
-    }
-
-    /**
-     * Set suplementario
-     *
-     * @param float $suplementario
-     *
-     * @return RhuSsoAporte
-     */
-    public function setSuplementario($suplementario)
-    {
-        $this->suplementario = $suplementario;
-
-        return $this;
-    }
-
-    /**
-     * Get suplementario
-     *
-     * @return float
-     */
-    public function getSuplementario()
-    {
-        return $this->suplementario;
-    }
-
-    /**
-     * Set ssoPeriodoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo $ssoPeriodoRel
-     *
-     * @return RhuSsoAporte
-     */
-    public function setSsoPeriodoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo $ssoPeriodoRel = null)
-    {
-        $this->ssoPeriodoRel = $ssoPeriodoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ssoPeriodoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo
-     */
-    public function getSsoPeriodoRel()
-    {
-        return $this->ssoPeriodoRel;
-    }
-
-    /**
-     * Set ssoPeriodoDetalleRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodoDetalleRel
-     *
-     * @return RhuSsoAporte
-     */
-    public function setSsoPeriodoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodoDetalleRel = null)
-    {
-        $this->ssoPeriodoDetalleRel = $ssoPeriodoDetalleRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ssoPeriodoDetalleRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle
-     */
-    public function getSsoPeriodoDetalleRel()
-    {
-        return $this->ssoPeriodoDetalleRel;
-    }
-
-    /**
-     * Set ssoSucursalRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal $ssoSucursalRel
-     *
-     * @return RhuSsoAporte
-     */
-    public function setSsoSucursalRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal $ssoSucursalRel = null)
-    {
-        $this->ssoSucursalRel = $ssoSucursalRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ssoSucursalRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal
-     */
-    public function getSsoSucursalRel()
-    {
-        return $this->ssoSucursalRel;
-    }
-
-    /**
-     * Set empleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
-     *
-     * @return RhuSsoAporte
-     */
-    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
-    {
-        $this->empleadoRel = $empleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get empleadoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
-     */
-    public function getEmpleadoRel()
-    {
-        return $this->empleadoRel;
-    }
-
-    /**
-     * Set contratoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel
-     *
-     * @return RhuSsoAporte
-     */
-    public function setContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel = null)
-    {
-        $this->contratoRel = $contratoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get contratoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContrato
-     */
-    public function getContratoRel()
-    {
-        return $this->contratoRel;
+        return $this->diasVacaciones;
     }
 
     /**
@@ -1771,6 +1752,102 @@ class RhuSsoAporte
     }
 
     /**
+     * Set salarioBasico
+     *
+     * @param float $salarioBasico
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSalarioBasico($salarioBasico)
+    {
+        $this->salarioBasico = $salarioBasico;
+
+        return $this;
+    }
+
+    /**
+     * Get salarioBasico
+     *
+     * @return float
+     */
+    public function getSalarioBasico()
+    {
+        return $this->salarioBasico;
+    }
+
+    /**
+     * Set salarioMesAnterior
+     *
+     * @param float $salarioMesAnterior
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSalarioMesAnterior($salarioMesAnterior)
+    {
+        $this->salarioMesAnterior = $salarioMesAnterior;
+
+        return $this;
+    }
+
+    /**
+     * Get salarioMesAnterior
+     *
+     * @return float
+     */
+    public function getSalarioMesAnterior()
+    {
+        return $this->salarioMesAnterior;
+    }
+
+    /**
+     * Set salarioIntegral
+     *
+     * @param string $salarioIntegral
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSalarioIntegral($salarioIntegral)
+    {
+        $this->salarioIntegral = $salarioIntegral;
+
+        return $this;
+    }
+
+    /**
+     * Get salarioIntegral
+     *
+     * @return string
+     */
+    public function getSalarioIntegral()
+    {
+        return $this->salarioIntegral;
+    }
+
+    /**
+     * Set suplementario
+     *
+     * @param float $suplementario
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSuplementario($suplementario)
+    {
+        $this->suplementario = $suplementario;
+
+        return $this;
+    }
+
+    /**
+     * Get suplementario
+     *
+     * @return float
+     */
+    public function getSuplementario()
+    {
+        return $this->suplementario;
+    }
+
+    /**
      * Set ibcPension
      *
      * @param float $ibcPension
@@ -1963,6 +2040,54 @@ class RhuSsoAporte
     }
 
     /**
+     * Set tarifaSena
+     *
+     * @param float $tarifaSena
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTarifaSena($tarifaSena)
+    {
+        $this->tarifaSena = $tarifaSena;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaSena
+     *
+     * @return float
+     */
+    public function getTarifaSena()
+    {
+        return $this->tarifaSena;
+    }
+
+    /**
+     * Set tarifaIcbf
+     *
+     * @param float $tarifaIcbf
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTarifaIcbf($tarifaIcbf)
+    {
+        $this->tarifaIcbf = $tarifaIcbf;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaIcbf
+     *
+     * @return float
+     */
+    public function getTarifaIcbf()
+    {
+        return $this->tarifaIcbf;
+    }
+
+    /**
      * Set cotizacionPension
      *
      * @param float $cotizacionPension
@@ -2056,6 +2181,54 @@ class RhuSsoAporte
     public function getCotizacionCaja()
     {
         return $this->cotizacionCaja;
+    }
+
+    /**
+     * Set cotizacionSena
+     *
+     * @param float $cotizacionSena
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCotizacionSena($cotizacionSena)
+    {
+        $this->cotizacionSena = $cotizacionSena;
+
+        return $this;
+    }
+
+    /**
+     * Get cotizacionSena
+     *
+     * @return float
+     */
+    public function getCotizacionSena()
+    {
+        return $this->cotizacionSena;
+    }
+
+    /**
+     * Set cotizacionIcbf
+     *
+     * @param float $cotizacionIcbf
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCotizacionIcbf($cotizacionIcbf)
+    {
+        $this->cotizacionIcbf = $cotizacionIcbf;
+
+        return $this;
+    }
+
+    /**
+     * Get cotizacionIcbf
+     *
+     * @return float
+     */
+    public function getCotizacionIcbf()
+    {
+        return $this->cotizacionIcbf;
     }
 
     /**
@@ -2179,219 +2352,147 @@ class RhuSsoAporte
     }
 
     /**
-     * Set diasVacaciones
+     * Set valorUpcAdicional
      *
-     * @param integer $diasVacaciones
+     * @param float $valorUpcAdicional
      *
      * @return RhuSsoAporte
      */
-    public function setDiasVacaciones($diasVacaciones)
+    public function setValorUpcAdicional($valorUpcAdicional)
     {
-        $this->diasVacaciones = $diasVacaciones;
+        $this->valorUpcAdicional = $valorUpcAdicional;
 
         return $this;
     }
 
     /**
-     * Get diasVacaciones
-     *
-     * @return integer
-     */
-    public function getDiasVacaciones()
-    {
-        return $this->diasVacaciones;
-    }
-
-    /**
-     * Set tarifaSena
-     *
-     * @param float $tarifaSena
-     *
-     * @return RhuSsoAporte
-     */
-    public function setTarifaSena($tarifaSena)
-    {
-        $this->tarifaSena = $tarifaSena;
-
-        return $this;
-    }
-
-    /**
-     * Get tarifaSena
+     * Get valorUpcAdicional
      *
      * @return float
      */
-    public function getTarifaSena()
+    public function getValorUpcAdicional()
     {
-        return $this->tarifaSena;
+        return $this->valorUpcAdicional;
     }
 
     /**
-     * Set tarifaIcbf
+     * Set numeroAutorizacionIncapacidadEnfermedadGeneral
      *
-     * @param float $tarifaIcbf
+     * @param string $numeroAutorizacionIncapacidadEnfermedadGeneral
      *
      * @return RhuSsoAporte
      */
-    public function setTarifaIcbf($tarifaIcbf)
+    public function setNumeroAutorizacionIncapacidadEnfermedadGeneral($numeroAutorizacionIncapacidadEnfermedadGeneral)
     {
-        $this->tarifaIcbf = $tarifaIcbf;
+        $this->numeroAutorizacionIncapacidadEnfermedadGeneral = $numeroAutorizacionIncapacidadEnfermedadGeneral;
 
         return $this;
     }
 
     /**
-     * Get tarifaIcbf
+     * Get numeroAutorizacionIncapacidadEnfermedadGeneral
+     *
+     * @return string
+     */
+    public function getNumeroAutorizacionIncapacidadEnfermedadGeneral()
+    {
+        return $this->numeroAutorizacionIncapacidadEnfermedadGeneral;
+    }
+
+    /**
+     * Set valorIncapacidadEnfermedadGeneral
+     *
+     * @param float $valorIncapacidadEnfermedadGeneral
+     *
+     * @return RhuSsoAporte
+     */
+    public function setValorIncapacidadEnfermedadGeneral($valorIncapacidadEnfermedadGeneral)
+    {
+        $this->valorIncapacidadEnfermedadGeneral = $valorIncapacidadEnfermedadGeneral;
+
+        return $this;
+    }
+
+    /**
+     * Get valorIncapacidadEnfermedadGeneral
      *
      * @return float
      */
-    public function getTarifaIcbf()
+    public function getValorIncapacidadEnfermedadGeneral()
     {
-        return $this->tarifaIcbf;
+        return $this->valorIncapacidadEnfermedadGeneral;
     }
 
     /**
-     * Set cotizacionSena
+     * Set numeroAutorizacionLicenciaMaternidadPaternidad
      *
-     * @param float $cotizacionSena
+     * @param string $numeroAutorizacionLicenciaMaternidadPaternidad
      *
      * @return RhuSsoAporte
      */
-    public function setCotizacionSena($cotizacionSena)
+    public function setNumeroAutorizacionLicenciaMaternidadPaternidad($numeroAutorizacionLicenciaMaternidadPaternidad)
     {
-        $this->cotizacionSena = $cotizacionSena;
+        $this->numeroAutorizacionLicenciaMaternidadPaternidad = $numeroAutorizacionLicenciaMaternidadPaternidad;
 
         return $this;
     }
 
     /**
-     * Get cotizacionSena
+     * Get numeroAutorizacionLicenciaMaternidadPaternidad
+     *
+     * @return string
+     */
+    public function getNumeroAutorizacionLicenciaMaternidadPaternidad()
+    {
+        return $this->numeroAutorizacionLicenciaMaternidadPaternidad;
+    }
+
+    /**
+     * Set valorIncapacidadLicenciaMaternidadPaternidad
+     *
+     * @param float $valorIncapacidadLicenciaMaternidadPaternidad
+     *
+     * @return RhuSsoAporte
+     */
+    public function setValorIncapacidadLicenciaMaternidadPaternidad($valorIncapacidadLicenciaMaternidadPaternidad)
+    {
+        $this->valorIncapacidadLicenciaMaternidadPaternidad = $valorIncapacidadLicenciaMaternidadPaternidad;
+
+        return $this;
+    }
+
+    /**
+     * Get valorIncapacidadLicenciaMaternidadPaternidad
      *
      * @return float
      */
-    public function getCotizacionSena()
+    public function getValorIncapacidadLicenciaMaternidadPaternidad()
     {
-        return $this->cotizacionSena;
+        return $this->valorIncapacidadLicenciaMaternidadPaternidad;
     }
 
     /**
-     * Set cotizacionIcbf
+     * Set centroTrabajoCodigoCt
      *
-     * @param float $cotizacionIcbf
+     * @param string $centroTrabajoCodigoCt
      *
      * @return RhuSsoAporte
      */
-    public function setCotizacionIcbf($cotizacionIcbf)
+    public function setCentroTrabajoCodigoCt($centroTrabajoCodigoCt)
     {
-        $this->cotizacionIcbf = $cotizacionIcbf;
+        $this->centroTrabajoCodigoCt = $centroTrabajoCodigoCt;
 
         return $this;
     }
 
     /**
-     * Get cotizacionIcbf
+     * Get centroTrabajoCodigoCt
      *
-     * @return float
+     * @return string
      */
-    public function getCotizacionIcbf()
+    public function getCentroTrabajoCodigoCt()
     {
-        return $this->cotizacionIcbf;
-    }
-
-    /**
-     * Set anio
-     *
-     * @param integer $anio
-     *
-     * @return RhuSsoAporte
-     */
-    public function setAnio($anio)
-    {
-        $this->anio = $anio;
-
-        return $this;
-    }
-
-    /**
-     * Get anio
-     *
-     * @return integer
-     */
-    public function getAnio()
-    {
-        return $this->anio;
-    }
-
-    /**
-     * Set mes
-     *
-     * @param integer $mes
-     *
-     * @return RhuSsoAporte
-     */
-    public function setMes($mes)
-    {
-        $this->mes = $mes;
-
-        return $this;
-    }
-
-    /**
-     * Get mes
-     *
-     * @return integer
-     */
-    public function getMes()
-    {
-        return $this->mes;
-    }
-
-    /**
-     * Set fechaDesde
-     *
-     * @param \DateTime $fechaDesde
-     *
-     * @return RhuSsoAporte
-     */
-    public function setFechaDesde($fechaDesde)
-    {
-        $this->fechaDesde = $fechaDesde;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaDesde
-     *
-     * @return \DateTime
-     */
-    public function getFechaDesde()
-    {
-        return $this->fechaDesde;
-    }
-
-    /**
-     * Set fechaHasta
-     *
-     * @param \DateTime $fechaHasta
-     *
-     * @return RhuSsoAporte
-     */
-    public function setFechaHasta($fechaHasta)
-    {
-        $this->fechaHasta = $fechaHasta;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaHasta
-     *
-     * @return \DateTime
-     */
-    public function getFechaHasta()
-    {
-        return $this->fechaHasta;
+        return $this->centroTrabajoCodigoCt;
     }
 
     /**
@@ -2416,6 +2517,342 @@ class RhuSsoAporte
     public function getCodigoCargoFk()
     {
         return $this->codigoCargoFk;
+    }
+
+    /**
+     * Set tarifaAportesESAP
+     *
+     * @param float $tarifaAportesESAP
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTarifaAportesESAP($tarifaAportesESAP)
+    {
+        $this->tarifaAportesESAP = $tarifaAportesESAP;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaAportesESAP
+     *
+     * @return float
+     */
+    public function getTarifaAportesESAP()
+    {
+        return $this->tarifaAportesESAP;
+    }
+
+    /**
+     * Set valorAportesESAP
+     *
+     * @param float $valorAportesESAP
+     *
+     * @return RhuSsoAporte
+     */
+    public function setValorAportesESAP($valorAportesESAP)
+    {
+        $this->valorAportesESAP = $valorAportesESAP;
+
+        return $this;
+    }
+
+    /**
+     * Get valorAportesESAP
+     *
+     * @return float
+     */
+    public function getValorAportesESAP()
+    {
+        return $this->valorAportesESAP;
+    }
+
+    /**
+     * Set tarifaAportesMEN
+     *
+     * @param float $tarifaAportesMEN
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTarifaAportesMEN($tarifaAportesMEN)
+    {
+        $this->tarifaAportesMEN = $tarifaAportesMEN;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaAportesMEN
+     *
+     * @return float
+     */
+    public function getTarifaAportesMEN()
+    {
+        return $this->tarifaAportesMEN;
+    }
+
+    /**
+     * Set valorAportesMEN
+     *
+     * @param float $valorAportesMEN
+     *
+     * @return RhuSsoAporte
+     */
+    public function setValorAportesMEN($valorAportesMEN)
+    {
+        $this->valorAportesMEN = $valorAportesMEN;
+
+        return $this;
+    }
+
+    /**
+     * Get valorAportesMEN
+     *
+     * @return float
+     */
+    public function getValorAportesMEN()
+    {
+        return $this->valorAportesMEN;
+    }
+
+    /**
+     * Set tipoDocumentoResponsableUPC
+     *
+     * @param string $tipoDocumentoResponsableUPC
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTipoDocumentoResponsableUPC($tipoDocumentoResponsableUPC)
+    {
+        $this->tipoDocumentoResponsableUPC = $tipoDocumentoResponsableUPC;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoDocumentoResponsableUPC
+     *
+     * @return string
+     */
+    public function getTipoDocumentoResponsableUPC()
+    {
+        return $this->tipoDocumentoResponsableUPC;
+    }
+
+    /**
+     * Set numeroIdentificacionResponsableUPCAdicional
+     *
+     * @param string $numeroIdentificacionResponsableUPCAdicional
+     *
+     * @return RhuSsoAporte
+     */
+    public function setNumeroIdentificacionResponsableUPCAdicional($numeroIdentificacionResponsableUPCAdicional)
+    {
+        $this->numeroIdentificacionResponsableUPCAdicional = $numeroIdentificacionResponsableUPCAdicional;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroIdentificacionResponsableUPCAdicional
+     *
+     * @return string
+     */
+    public function getNumeroIdentificacionResponsableUPCAdicional()
+    {
+        return $this->numeroIdentificacionResponsableUPCAdicional;
+    }
+
+    /**
+     * Set cotizanteExoneradoPagoAporteParafiscalesSalud
+     *
+     * @param string $cotizanteExoneradoPagoAporteParafiscalesSalud
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCotizanteExoneradoPagoAporteParafiscalesSalud($cotizanteExoneradoPagoAporteParafiscalesSalud)
+    {
+        $this->cotizanteExoneradoPagoAporteParafiscalesSalud = $cotizanteExoneradoPagoAporteParafiscalesSalud;
+
+        return $this;
+    }
+
+    /**
+     * Get cotizanteExoneradoPagoAporteParafiscalesSalud
+     *
+     * @return string
+     */
+    public function getCotizanteExoneradoPagoAporteParafiscalesSalud()
+    {
+        return $this->cotizanteExoneradoPagoAporteParafiscalesSalud;
+    }
+
+    /**
+     * Set codigoAdministradoraRiesgosLaborales
+     *
+     * @param string $codigoAdministradoraRiesgosLaborales
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoAdministradoraRiesgosLaborales($codigoAdministradoraRiesgosLaborales)
+    {
+        $this->codigoAdministradoraRiesgosLaborales = $codigoAdministradoraRiesgosLaborales;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoAdministradoraRiesgosLaborales
+     *
+     * @return string
+     */
+    public function getCodigoAdministradoraRiesgosLaborales()
+    {
+        return $this->codigoAdministradoraRiesgosLaborales;
+    }
+
+    /**
+     * Set claseRiesgoAfiliado
+     *
+     * @param string $claseRiesgoAfiliado
+     *
+     * @return RhuSsoAporte
+     */
+    public function setClaseRiesgoAfiliado($claseRiesgoAfiliado)
+    {
+        $this->claseRiesgoAfiliado = $claseRiesgoAfiliado;
+
+        return $this;
+    }
+
+    /**
+     * Get claseRiesgoAfiliado
+     *
+     * @return string
+     */
+    public function getClaseRiesgoAfiliado()
+    {
+        return $this->claseRiesgoAfiliado;
+    }
+
+    /**
+     * Set ssoPeriodoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo $ssoPeriodoRel
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSsoPeriodoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo $ssoPeriodoRel = null)
+    {
+        $this->ssoPeriodoRel = $ssoPeriodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ssoPeriodoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo
+     */
+    public function getSsoPeriodoRel()
+    {
+        return $this->ssoPeriodoRel;
+    }
+
+    /**
+     * Set ssoPeriodoDetalleRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodoDetalleRel
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSsoPeriodoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodoDetalleRel = null)
+    {
+        $this->ssoPeriodoDetalleRel = $ssoPeriodoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ssoPeriodoDetalleRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle
+     */
+    public function getSsoPeriodoDetalleRel()
+    {
+        return $this->ssoPeriodoDetalleRel;
+    }
+
+    /**
+     * Set ssoSucursalRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal $ssoSucursalRel
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSsoSucursalRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal $ssoSucursalRel = null)
+    {
+        $this->ssoSucursalRel = $ssoSucursalRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ssoSucursalRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal
+     */
+    public function getSsoSucursalRel()
+    {
+        return $this->ssoSucursalRel;
+    }
+
+    /**
+     * Set empleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
+     *
+     * @return RhuSsoAporte
+     */
+    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
+    {
+        $this->empleadoRel = $empleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
+     */
+    public function getEmpleadoRel()
+    {
+        return $this->empleadoRel;
+    }
+
+    /**
+     * Set contratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel
+     *
+     * @return RhuSsoAporte
+     */
+    public function setContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel = null)
+    {
+        $this->contratoRel = $contratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get contratoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContrato
+     */
+    public function getContratoRel()
+    {
+        return $this->contratoRel;
     }
 
     /**

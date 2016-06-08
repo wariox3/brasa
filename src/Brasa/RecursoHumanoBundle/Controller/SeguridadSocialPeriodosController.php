@@ -176,7 +176,8 @@ class SeguridadSocialPeriodosController extends Controller
                 $codigoPeriodoDetalle = $request->request->get('OpGenerarArchivo');
                 $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
                 $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-                $strRutaArchivo = $arConfiguracion->getRutaTemporal();                
+                //$strRutaArchivo = $arConfiguracion->getRutaTemporal();
+                $strRutaArchivo = "";
                 $strNombreArchivo = "pila" . date('YmdHis') . ".txt";
                 $ar = fopen($strRutaArchivo . $strNombreArchivo, "a") or
                     die("Problemas en la creacion del archivo plano");
@@ -207,7 +208,7 @@ class SeguridadSocialPeriodosController extends Controller
                 //Numero total de empleados
                 fputs($ar, $this->RellenarNr($arPeriodoDetalle->getNumeroEmpleados(), "0", 5, "I")); //duda
                 //Valor total de la nomina
-                fputs($ar, $this->RellenarNr(0, "0", 12, "I"));
+                fputs($ar, $this->RellenarNr(0, "0", 12, "I")); //duda
                 fputs($ar, '1');
                 fputs($ar, '89');
                 fputs($ar, "\n");
@@ -216,7 +217,7 @@ class SeguridadSocialPeriodosController extends Controller
                 $arSsoAportes = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoAporte')->findBy(array('codigoPeriodoDetalleFk' => $codigoPeriodoDetalle));
                 foreach($arSsoAportes as $arSsoAporte) {
                     fputs($ar, $this->RellenarNr($arSsoAporte->getTipoRegistro(), "0", 2, "I"));
-                    fputs($ar, $this->RellenarNr($arSsoAporte->getSecuencia(), "0", 5, "I"));
+                    fputs($ar, $this->RellenarNr($arSsoAporte->getSecuencia(), "0", 5, "I")); 
                     fputs($ar, $arSsoAporte->getTipoDocumento());
                     fputs($ar, $this->RellenarNr($arSsoAporte->getEmpleadoRel()->getNumeroIdentificacion(), " ", 16, "D"));
                     fputs($ar, $this->RellenarNr($arSsoAporte->getTipoCotizante(), "0", 2, "I"));
@@ -250,7 +251,7 @@ class SeguridadSocialPeriodosController extends Controller
                     fputs($ar, $this->RellenarNr($arSsoAporte->getCodigoEntidadSaludPertenece(), " ", 6, "D"));
                     fputs($ar, $arSsoAporte->getCodigoEntidadSaludTraslada());
                     fputs($ar, $this->RellenarNr($arSsoAporte->getCodigoEntidadCajaPertenece(), " ", 6, "D"));
-                    fputs($ar, $this->RellenarNr($arSsoAporte->getDiasCotizadosPension(), "0", 2, "I"));
+                    fputs($ar, $this->RellenarNr($arSsoAporte->getDiasCotizadosPension(), "0", 2, "I")); //estaba $this->RellenarNr($arSsoAporte->getDiasCotizadosPension(), "0", 2, "I"));
                     fputs($ar, $this->RellenarNr($arSsoAporte->getDiasCotizadosSalud(), "0", 2, "I"));
                     fputs($ar, $this->RellenarNr($arSsoAporte->getDiasCotizadosRiesgosProfesionales(), "0", 2, "I"));
                     fputs($ar, $this->RellenarNr($arSsoAporte->getDiasCotizadosCajaCompensacion(), "0", 2, "I"));
@@ -267,51 +268,51 @@ class SeguridadSocialPeriodosController extends Controller
                     fputs($ar, $this->RellenarNr($arSsoAporte->getTotalCotizacion(), "0", 9, "I"));
                     fputs($ar, $this->RellenarNr($arSsoAporte->getAportesFondoSolidaridadPensionalSolidaridad(), "0", 9, "I"));
                     fputs($ar, $this->RellenarNr($arSsoAporte->getAportesFondoSolidaridadPensionalSubsistencia(), "0", 9, "I"));
-                    fputs($ar, '000000000');
+                    //fputs($ar, '000000000');
                     fputs($ar, $this->RellenarNr(($arSsoAporte->getTarifaSalud()/100), "0", 7, "D"));
                     fputs($ar, $this->RellenarNr($arSsoAporte->getCotizacionSalud(), "0", 9, "I"));
-                    //fputs($ar, $arSsoAporte->getValorUpcAdicional());
-                    fputs($ar, "000000000");
-                    //fputs($ar, $arSsoAporte->getNumeroAutorizacionIncapacidadEnfermedadGeneral());
-                    fputs($ar, "               ");
-                    //fputs($ar, $arSsoAporte->getValorIncapacidadEnfermedadGeneral());
-                    fputs($ar, "000000000");
-                    //fputs($ar, $arSsoAporte->getNumeroAutorizacionLicenciaMaternidadPaternidad());
-                    fputs($ar, "               ");
-                    //fputs($ar, $arSsoAporte->getValorLicenciaMaternidadPaternidad());
-                    fputs($ar, "000000000");
+                    fputs($ar, $arSsoAporte->getValorUpcAdicional());
+                    //fputs($ar, "000000000");
+                    fputs($ar, $arSsoAporte->getNumeroAutorizacionIncapacidadEnfermedadGeneral());
+                    //fputs($ar, "               ");
+                    fputs($ar, $arSsoAporte->getValorIncapacidadEnfermedadGeneral());
+                    //fputs($ar, "000000000");
+                    fputs($ar, $arSsoAporte->getNumeroAutorizacionLicenciaMaternidadPaternidad());
+                    //fputs($ar, "               ");
+                    fputs($ar, $arSsoAporte->getValorIncapacidadLicenciaMaternidadPaternidad());
+                    //fputs($ar, "000000000");
                     fputs($ar, $this->RellenarNr(($arSsoAporte->getTarifaRiesgos()/100), "0", 9, "D"));
-                    //fputs($ar, $arSsoAporte->getCentroTrabajoCodigoCt());
-                    fputs($ar, "000000000");
+                    fputs($ar, $arSsoAporte->getCentroTrabajoCodigoCt());
+                    //fputs($ar, "000000000");
                     fputs($ar, $this->RellenarNr($arSsoAporte->getCotizacionRiesgos(), "0", 9, "I"));
                     fputs($ar, $this->RellenarNr(($arSsoAporte->getTarifaCaja()/100), "0", 7, "D"));
                     fputs($ar, $this->RellenarNr($arSsoAporte->getCotizacionCaja(), "0", 9, "I"));
-                    //fputs($ar, $arSsoAporte->getTarifaAportesSENA());
-                    fputs($ar, "0.00000");
-                    //fputs($ar, $arSsoAporte->getValorAportesSENA());
-                    fputs($ar, "000000000");
-                    //fputs($ar, $arSsoAporte->getTarifaAportesICBF());
-                    fputs($ar, "0.00000");
-                    //fputs($ar, $arSsoAporte->getValorAporteICBF());
-                    fputs($ar, "000000000");
-                    //fputs($ar, $arSsoAporte->getTarifaAportesESAP());
-                    fputs($ar, "0.00000");
-                    //fputs($ar, $arSsoAporte->getValorAporteESAP());
-                    fputs($ar, "000000000");
-                    //fputs($ar, $arSsoAporte->getTarifaAportesMEN());
-                    fputs($ar, "0.00000");
-                    //fputs($ar, $arSsoAporte->getValorAporteMEN());
-                    fputs($ar, "000000000");                    
-                    //fputs($ar, $arSsoAporte->getTipoDocumentoResponsableUPC());
-                    fputs($ar, "  ");
-                    //fputs($ar, $arSsoAporte->getNumeroIdentificacionResponsableUPCAdicional());
-                    fputs($ar, "                ");
-                    //fputs($ar, $arSsoAporte->getCotizanteExoneradoPagoAporteParafiscalesSalud());
-                    fputs($ar, " ");
-                    //fputs($ar, $arSsoAporte->getCodigoAdministradoraRiesgosLaborales());
-                    fputs($ar, "      ");
-                    //fputs($ar, $arSsoAporte->getClaseRiesgoAfiliado());
-                    fputs($ar, " ");
+                    fputs($ar, $arSsoAporte->getTarifaSENA());
+                    //fputs($ar, "0.00000");
+                    fputs($ar, $arSsoAporte->getCotizacionSena());
+                    //fputs($ar, "000000000");
+                    fputs($ar, $arSsoAporte->getTarifaIcbf());
+                    //fputs($ar, "0.00000");
+                    fputs($ar, $arSsoAporte->getCotizacionIcbf());
+                    //fputs($ar, "000000000");
+                    fputs($ar, $arSsoAporte->getTarifaAportesESAP());
+                    //fputs($ar, "0.00000");
+                    fputs($ar, $arSsoAporte->getValorAportesESAP());
+                    //fputs($ar, "000000000");
+                    fputs($ar, $arSsoAporte->getTarifaAportesMEN());
+                    //fputs($ar, "0.00000");
+                    fputs($ar, $arSsoAporte->getValorAportesMEN());
+                    //fputs($ar, "000000000");                    
+                    fputs($ar, $arSsoAporte->getTipoDocumentoResponsableUPC());
+                    //fputs($ar, "  ");
+                    fputs($ar, $arSsoAporte->getNumeroIdentificacionResponsableUPCAdicional());
+                    //fputs($ar, "                ");
+                    fputs($ar, $arSsoAporte->getCotizanteExoneradoPagoAporteParafiscalesSalud());
+                    //fputs($ar, " ");
+                    fputs($ar, $arSsoAporte->getCodigoAdministradoraRiesgosLaborales());
+                    //fputs($ar, "      ");
+                    fputs($ar, $arSsoAporte->getClaseRiesgoAfiliado());
+                    //fputs($ar, " ");
                     fputs($ar, "\n");
                 }
                 fclose($ar);

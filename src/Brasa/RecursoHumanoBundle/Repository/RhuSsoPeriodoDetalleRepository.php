@@ -361,6 +361,13 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
         $arPeriodoDetalle->setEstadoGenerado(1);
         $arPeriodoDetalle->setNumeroRegistros($i - 1);
         $arPeriodoDetalle->setNumeroEmpleados($intNumeroEmpleados);
+        
+        
+        $em->persist($arPeriodoDetalle);
+        $em->flush();
+        $arrayTotal = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoAporte')->totalCotizacionPeriodoDetalle($codigoPeriodoDetalle);
+        $floTotalAportesCotizacion = (float)$arrayTotal[0]['total'];
+        $arPeriodoDetalle->setTotalCotizacion($floTotalAportesCotizacion);
         $em->persist($arPeriodoDetalle);
         $em->flush();
         return true;
