@@ -14,8 +14,37 @@
         <div class="panel panel-default">
             <div class="panel-heading">Filtros de busqueda</div>
             <div class="panel-body">
-
-
+                <div     class="form-group form-group-sm">
+                    <label for="txtNit" class="col-sm-2 control-label">Cliente:</label>
+                    <div class="col-sm-10">
+                        <div class="row">
+                          <div class="col-lg-2">
+                            <div class="input-group">
+                              {{ form_widget(form.TxtNit, { 'attr': {'class': 'form-control'} }) }}                              
+                            </div>
+                          </div>
+                          <div class="col-lg-10">
+                            <div class="input-group">     
+                              {{ form_widget(form.TxtNombreCliente, { 'attr': {'class': 'form-control', 'readOnly': 'ReadOnly'} }) }}                              
+                              <span class="input-group-btn">                                        
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_afi_buscar_cliente', { 'campoCodigo': 'form_TxtNit', 'campoNombre': 'form_TxtNombreCliente' }) }}', 'buscarCliente', 600, 900)">Buscar</a>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>                 
+                    
+                <div class="form-group form-group-sm">  
+                    <label for="form_TxtNumero" class="col-sm-2 control-label">Numero:</label>
+                    <div class="col-sm-4">
+                        {{ form_widget(form.TxtNumero, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <label for="form_estadoFacturado" class="col-sm-2 control-label">Facturado:</label>
+                    <div class="col-sm-4">                  
+                        {{ form_widget(form.estadoFacturado, { 'attr': {'class': 'form-control'} }) }}
+                    </div>                    
+                </div>                                         
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
@@ -28,6 +57,7 @@
                 <th>{{ knp_pagination_sortable(arPeriodoDetalles, 'CÓDIGO', 'p.codigoPeriodoDetallePk') }}</th>
                 <th>DESDE</th>
                 <th>HASTA</th>
+                <th>CLIENTE</th>
                 <th>EMPLEADO</th>
                 <th>ING</th>
                 <th>DIAS</th>
@@ -38,14 +68,16 @@
                 <th>RIESGOS</th>
                 <th>SENA</th>
                 <th>ICBF</th>
-                <th>AFILIACION</th>
+                <th>ADMIN</th>
                 <th>TOTAL</th>                
+                <th>FAC</th>                
             </tr>
             {% for arPeriodoDetalles in arPeriodoDetalles %}
             <tr>
                 <td>{{ arPeriodoDetalles.codigoPeriodoDetallePk  }}</td>
                 <td>{{ arPeriodoDetalles.fechaDesde |date('Y/m/d') }}</td>
                 <td>{{ arPeriodoDetalles.fechaHasta |date('Y/m/d') }}</td>
+                <td>{{ arPeriodoDetalles.periodoRel.clienteRel.nombreCorto }}</td>
                 <td>{{ arPeriodoDetalles.empleadoRel.nombreCorto }}</td>
                 <td>{% if arPeriodoDetalles.ingreso == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: right">{{ arPeriodoDetalles.dias | number_format(0, '.', ',') }}</td>
@@ -56,8 +88,9 @@
                 <td style="text-align: right">{{ arPeriodoDetalles.riesgos | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPeriodoDetalles.sena | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPeriodoDetalles.icbf | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPeriodoDetalles.afiliacion | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPeriodoDetalles.total | number_format(0, '.', ',') }}</td>                
+                <td style="text-align: right">{{ arPeriodoDetalles.administracion | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPeriodoDetalles.total | number_format(0, '.', ',') }}</td>  
+                <td>{% if arPeriodoDetalles.periodoRel.estadoFacturado == 1 %} SI {% else %} NO {% endif %}</td>
             </tr>
 
             {% endfor %}

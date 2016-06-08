@@ -17,33 +17,11 @@ class PeriodoDetalleController extends Controller
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->lista();
-        if ($form->isValid()) {
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            
-            if($request->request->get('OpGenerar')) {            
-                $codigoPeriodo = $request->request->get('OpGenerar');
-                $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->generar($codigoPeriodo);
-                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
-            }
-            
-            if($request->request->get('OpDeshacer')) {            
-                $codigoPeriodo = $request->request->get('OpDeshacer');
-                $strSql = "DELETE FROM afi_periodo_detalle WHERE codigo_periodo_fk = " . $codigoPeriodo;           
-                $em->getConnection()->executeQuery($strSql);                 
-                $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
-                $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);                
-                $arPeriodo->setEstadoGenerado(0);
-                $em->persist($arPeriodo);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
-            }            
-            if ($form->get('BtnEliminar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
-            }
+        if ($form->isValid()) {                      
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
+                $form = $this->formularioFiltro();
+                $this->lista();
             }
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
@@ -61,19 +39,41 @@ class PeriodoDetalleController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetalle')->listaConsultaDql(
-
+                $session->get('filtroCursoNumero'),
+                $session->get('filtroCodigoCliente'),
+                $session->get('filtroPeriodoEstadoFacturado')
                 ); 
     }       
 
     private function filtrar ($form) {        
-        $session = $this->getRequest()->getSession();        
-        $session->set('filtroPeriodoNombre', $form->get('TxtNombre')->getData());
+        $session = $this->getRequest()->getSession();                        
+        $session->set('filtroPeriodoNumero', $form->get('TxtNumero')->getData());
+        $session->set('filtroPeriodoEstadoFacturado', $form->get('estadoFacturado')->getData());                  
+        $session->set('filtroNit', $form->get('TxtNit')->getData());                                 
         $this->lista();
     }
     
     private function formularioFiltro() {
+        $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $form = $this->createFormBuilder()                        
+        $strNombreCliente = "";
+        if($session->get('filtroNit')) {
+            $arCliente = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
+            if($arCliente) {
+                $session->set('filtroCodigoCliente', $arCliente->getCodigoClientePk());
+                $strNombreCliente = $arCliente->getNombreCorto();
+            }  else {
+                $session->set('filtroCodigoCliente', null);
+                $session->set('filtroNit', null);
+            }          
+        } else {
+            $session->set('filtroCodigoCliente', null);
+        }        
+        $form = $this->createFormBuilder() 
+            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))
+            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCursoNumero')))
+            ->add('estadoFacturado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'FACTURADO', '0' => 'SIN FACTURAR'), 'data' => $session->get('filtroPeriodoEstadoFacturado')))                
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
@@ -81,6 +81,7 @@ class PeriodoDetalleController extends Controller
     }            
 
     private function generarExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -95,20 +96,56 @@ class PeriodoDetalleController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'R'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
+        }      
+        for($col = 'I'; $col !== 'R'; $col++) {            
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        } 
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'NOMBRE');
+                    ->setCellValue('A1', 'COD')
+                    ->setCellValue('B1', 'CLIENTE')
+                    ->setCellValue('C1', 'DESDE')
+                    ->setCellValue('D1', 'HASTA')
+                    ->setCellValue('E1', 'IDENTIFICACION')
+                    ->setCellValue('F1', 'NOMBRE')
+                    ->setCellValue('G1', 'ING')
+                    ->setCellValue('H1', 'DIAS')
+                    ->setCellValue('I1', 'SALARIO')
+                    ->setCellValue('J1', 'PENSION')
+                    ->setCellValue('K1', 'SALUD')
+                    ->setCellValue('L1', 'CAJA')
+                    ->setCellValue('M1', 'RIESGO')
+                    ->setCellValue('N1', 'SENA')
+                    ->setCellValue('O1', 'ICBF')
+                    ->setCellValue('P1', 'ADMIN')
+                    ->setCellValue('Q1', 'TOTAL');
 
         $i = 2;
         
         $query = $em->createQuery($this->strDqlLista);
-        $arPeriodos = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
-        $arPeriodos = $query->getResult();
+        $arPeriodoDetalles = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle();
+        $arPeriodoDetalles = $query->getResult();
                 
-        foreach ($arPeriodos as $arPeriodo) {            
+        foreach ($arPeriodoDetalles as $arPeriodoDetalle) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPeriodo->getCodigoPeriodoPk())
-                    ->setCellValue('B' . $i, $arPeriodo->getNombre());                                    
+                    ->setCellValue('A' . $i, $arPeriodoDetalle->getCodigoPeriodoDetallePk())
+                    ->setCellValue('B' . $i, $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getNombreCorto())
+                    ->setCellValue('C' . $i, $arPeriodoDetalle->getFechaDesde()->format('Y/m/d'))
+                    ->setCellValue('D' . $i, $arPeriodoDetalle->getFechaHasta()->format('Y/m/d'))
+                    ->setCellValue('E' . $i, $arPeriodoDetalle->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('F' . $i, $arPeriodoDetalle->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('G' . $i, $objFunciones->devuelveBoolean($arPeriodoDetalle->getIngreso()))
+                    ->setCellValue('H' . $i, $arPeriodoDetalle->getDias())
+                    ->setCellValue('I' . $i, $arPeriodoDetalle->getSalario())
+                    ->setCellValue('J' . $i, $arPeriodoDetalle->getPension())
+                    ->setCellValue('K' . $i, $arPeriodoDetalle->getSalud())
+                    ->setCellValue('L' . $i, $arPeriodoDetalle->getCaja())
+                    ->setCellValue('M' . $i, $arPeriodoDetalle->getRiesgos())
+                    ->setCellValue('N' . $i, $arPeriodoDetalle->getSena())
+                    ->setCellValue('O' . $i, $arPeriodoDetalle->getIcbf())
+                    ->setCellValue('P' . $i, $arPeriodoDetalle->getAdministracion())
+                    ->setCellValue('Q' . $i, $arPeriodoDetalle->getTotal());                                   
             $i++;
         }
         
