@@ -136,7 +136,7 @@ class AfiCursoRepository extends EntityRepository {
         $em = $this->getEntityManager();                
         $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($codigoCurso);            
         $strResultado = "";        
-        if($arCurso->getEstadoAutorizado() == 1 && $arCurso->getEstadoAnulado() == 0 && $arCurso->getNumero() == 0) {                                            
+        if($arCurso->getEstadoAutorizado() == 1 && $arCurso->getEstadoAnulado() == 0) {                                            
             $arCurso->setEstadoAutorizado(0);
             $em->persist($arCurso);
             $em->flush();                                                        
