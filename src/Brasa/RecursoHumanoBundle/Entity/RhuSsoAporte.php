@@ -404,7 +404,7 @@ class RhuSsoAporte
     private $valorUpcAdicional = 0;
     
     /**
-     * @ORM\Column(name="numero_autorizacion_incapacidad_enfermedad_general", type="string", length=9, nullable=true)
+     * @ORM\Column(name="numero_autorizacion_incapacidad_enfermedad_general", type="string", length=30, nullable=true)
      */
     private $numeroAutorizacionIncapacidadEnfermedadGeneral;
     
@@ -414,7 +414,7 @@ class RhuSsoAporte
     private $valorIncapacidadEnfermedadGeneral = 0;
     
     /**
-     * @ORM\Column(name="numero_autorizacion_licencia_maternidad_paternidad", type="string", length=9, nullable=true)
+     * @ORM\Column(name="numero_autorizacion_licencia_maternidad_paternidad", type="string", length=30, nullable=true)
      */
     private $numeroAutorizacionLicenciaMaternidadPaternidad;
     
@@ -424,7 +424,7 @@ class RhuSsoAporte
     private $valorIncapacidadLicenciaMaternidadPaternidad = 0;
     
     /**
-     * @ORM\Column(name="centro_trabajo_codigo_ct", type="string", length=9, nullable=true)
+     * @ORM\Column(name="centro_trabajo_codigo_ct", type="string", length=30, nullable=true)
      */
     private $centroTrabajoCodigoCt;
     
@@ -459,7 +459,7 @@ class RhuSsoAporte
     private $tipoDocumentoResponsableUPC;
     
     /**
-     * @ORM\Column(name="numero_identificacion_responsable_upc_adicional", type="string", length=20, nullable=true)
+     * @ORM\Column(name="numero_identificacion_responsable_upc_adicional", type="string", length=30, nullable=true)
      */    
     private $numeroIdentificacionResponsableUPCAdicional;
     
@@ -515,7 +515,7 @@ class RhuSsoAporte
     protected $cargoRel;     
     
 
-  
+ 
 
     /**
      * Get codigoAportePk
