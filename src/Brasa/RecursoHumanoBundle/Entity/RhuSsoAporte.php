@@ -516,4 +516,2366 @@ class RhuSsoAporte
     
 
   
+
+    /**
+     * Get codigoAportePk
+     *
+     * @return integer
+     */
+    public function getCodigoAportePk()
+    {
+        return $this->codigoAportePk;
+    }
+
+    /**
+     * Set codigoPeriodoFk
+     *
+     * @param integer $codigoPeriodoFk
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoPeriodoFk($codigoPeriodoFk)
+    {
+        $this->codigoPeriodoFk = $codigoPeriodoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPeriodoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPeriodoFk()
+    {
+        return $this->codigoPeriodoFk;
+    }
+
+    /**
+     * Set codigoPeriodoDetalleFk
+     *
+     * @param integer $codigoPeriodoDetalleFk
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoPeriodoDetalleFk($codigoPeriodoDetalleFk)
+    {
+        $this->codigoPeriodoDetalleFk = $codigoPeriodoDetalleFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPeriodoDetalleFk
+     *
+     * @return integer
+     */
+    public function getCodigoPeriodoDetalleFk()
+    {
+        return $this->codigoPeriodoDetalleFk;
+    }
+
+    /**
+     * Set codigoSucursalFk
+     *
+     * @param integer $codigoSucursalFk
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoSucursalFk($codigoSucursalFk)
+    {
+        $this->codigoSucursalFk = $codigoSucursalFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSucursalFk
+     *
+     * @return integer
+     */
+    public function getCodigoSucursalFk()
+    {
+        return $this->codigoSucursalFk;
+    }
+
+    /**
+     * Set codigoEmpleadoFk
+     *
+     * @param integer $codigoEmpleadoFk
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoEmpleadoFk($codigoEmpleadoFk)
+    {
+        $this->codigoEmpleadoFk = $codigoEmpleadoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEmpleadoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEmpleadoFk()
+    {
+        return $this->codigoEmpleadoFk;
+    }
+
+    /**
+     * Set codigoContratoFk
+     *
+     * @param integer $codigoContratoFk
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoContratoFk($codigoContratoFk)
+    {
+        $this->codigoContratoFk = $codigoContratoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoFk
+     *
+     * @return integer
+     */
+    public function getCodigoContratoFk()
+    {
+        return $this->codigoContratoFk;
+    }
+
+    /**
+     * Set anio
+     *
+     * @param integer $anio
+     *
+     * @return RhuSsoAporte
+     */
+    public function setAnio($anio)
+    {
+        $this->anio = $anio;
+
+        return $this;
+    }
+
+    /**
+     * Get anio
+     *
+     * @return integer
+     */
+    public function getAnio()
+    {
+        return $this->anio;
+    }
+
+    /**
+     * Set mes
+     *
+     * @param integer $mes
+     *
+     * @return RhuSsoAporte
+     */
+    public function setMes($mes)
+    {
+        $this->mes = $mes;
+
+        return $this;
+    }
+
+    /**
+     * Get mes
+     *
+     * @return integer
+     */
+    public function getMes()
+    {
+        return $this->mes;
+    }
+
+    /**
+     * Set fechaDesde
+     *
+     * @param \DateTime $fechaDesde
+     *
+     * @return RhuSsoAporte
+     */
+    public function setFechaDesde($fechaDesde)
+    {
+        $this->fechaDesde = $fechaDesde;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaDesde
+     *
+     * @return \DateTime
+     */
+    public function getFechaDesde()
+    {
+        return $this->fechaDesde;
+    }
+
+    /**
+     * Set fechaHasta
+     *
+     * @param \DateTime $fechaHasta
+     *
+     * @return RhuSsoAporte
+     */
+    public function setFechaHasta($fechaHasta)
+    {
+        $this->fechaHasta = $fechaHasta;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaHasta
+     *
+     * @return \DateTime
+     */
+    public function getFechaHasta()
+    {
+        return $this->fechaHasta;
+    }
+
+    /**
+     * Set tipoRegistro
+     *
+     * @param integer $tipoRegistro
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTipoRegistro($tipoRegistro)
+    {
+        $this->tipoRegistro = $tipoRegistro;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoRegistro
+     *
+     * @return integer
+     */
+    public function getTipoRegistro()
+    {
+        return $this->tipoRegistro;
+    }
+
+    /**
+     * Set secuencia
+     *
+     * @param integer $secuencia
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSecuencia($secuencia)
+    {
+        $this->secuencia = $secuencia;
+
+        return $this;
+    }
+
+    /**
+     * Get secuencia
+     *
+     * @return integer
+     */
+    public function getSecuencia()
+    {
+        return $this->secuencia;
+    }
+
+    /**
+     * Set tipoDocumento
+     *
+     * @param string $tipoDocumento
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTipoDocumento($tipoDocumento)
+    {
+        $this->tipoDocumento = $tipoDocumento;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoDocumento
+     *
+     * @return string
+     */
+    public function getTipoDocumento()
+    {
+        return $this->tipoDocumento;
+    }
+
+    /**
+     * Set tipoCotizante
+     *
+     * @param integer $tipoCotizante
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTipoCotizante($tipoCotizante)
+    {
+        $this->tipoCotizante = $tipoCotizante;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCotizante
+     *
+     * @return integer
+     */
+    public function getTipoCotizante()
+    {
+        return $this->tipoCotizante;
+    }
+
+    /**
+     * Set subtipoCotizante
+     *
+     * @param integer $subtipoCotizante
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSubtipoCotizante($subtipoCotizante)
+    {
+        $this->subtipoCotizante = $subtipoCotizante;
+
+        return $this;
+    }
+
+    /**
+     * Get subtipoCotizante
+     *
+     * @return integer
+     */
+    public function getSubtipoCotizante()
+    {
+        return $this->subtipoCotizante;
+    }
+
+    /**
+     * Set extranjeroNoObligadoCotizarPension
+     *
+     * @param string $extranjeroNoObligadoCotizarPension
+     *
+     * @return RhuSsoAporte
+     */
+    public function setExtranjeroNoObligadoCotizarPension($extranjeroNoObligadoCotizarPension)
+    {
+        $this->extranjeroNoObligadoCotizarPension = $extranjeroNoObligadoCotizarPension;
+
+        return $this;
+    }
+
+    /**
+     * Get extranjeroNoObligadoCotizarPension
+     *
+     * @return string
+     */
+    public function getExtranjeroNoObligadoCotizarPension()
+    {
+        return $this->extranjeroNoObligadoCotizarPension;
+    }
+
+    /**
+     * Set colombianoResidenteExterior
+     *
+     * @param string $colombianoResidenteExterior
+     *
+     * @return RhuSsoAporte
+     */
+    public function setColombianoResidenteExterior($colombianoResidenteExterior)
+    {
+        $this->colombianoResidenteExterior = $colombianoResidenteExterior;
+
+        return $this;
+    }
+
+    /**
+     * Get colombianoResidenteExterior
+     *
+     * @return string
+     */
+    public function getColombianoResidenteExterior()
+    {
+        return $this->colombianoResidenteExterior;
+    }
+
+    /**
+     * Set codigoDepartamentoUbicacionlaboral
+     *
+     * @param string $codigoDepartamentoUbicacionlaboral
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoDepartamentoUbicacionlaboral($codigoDepartamentoUbicacionlaboral)
+    {
+        $this->codigoDepartamentoUbicacionlaboral = $codigoDepartamentoUbicacionlaboral;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoDepartamentoUbicacionlaboral
+     *
+     * @return string
+     */
+    public function getCodigoDepartamentoUbicacionlaboral()
+    {
+        return $this->codigoDepartamentoUbicacionlaboral;
+    }
+
+    /**
+     * Set codigoMunicipioUbicacionlaboral
+     *
+     * @param string $codigoMunicipioUbicacionlaboral
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoMunicipioUbicacionlaboral($codigoMunicipioUbicacionlaboral)
+    {
+        $this->codigoMunicipioUbicacionlaboral = $codigoMunicipioUbicacionlaboral;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoMunicipioUbicacionlaboral
+     *
+     * @return string
+     */
+    public function getCodigoMunicipioUbicacionlaboral()
+    {
+        return $this->codigoMunicipioUbicacionlaboral;
+    }
+
+    /**
+     * Set primerNombre
+     *
+     * @param string $primerNombre
+     *
+     * @return RhuSsoAporte
+     */
+    public function setPrimerNombre($primerNombre)
+    {
+        $this->primerNombre = $primerNombre;
+
+        return $this;
+    }
+
+    /**
+     * Get primerNombre
+     *
+     * @return string
+     */
+    public function getPrimerNombre()
+    {
+        return $this->primerNombre;
+    }
+
+    /**
+     * Set segundoNombre
+     *
+     * @param string $segundoNombre
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSegundoNombre($segundoNombre)
+    {
+        $this->segundoNombre = $segundoNombre;
+
+        return $this;
+    }
+
+    /**
+     * Get segundoNombre
+     *
+     * @return string
+     */
+    public function getSegundoNombre()
+    {
+        return $this->segundoNombre;
+    }
+
+    /**
+     * Set primerApellido
+     *
+     * @param string $primerApellido
+     *
+     * @return RhuSsoAporte
+     */
+    public function setPrimerApellido($primerApellido)
+    {
+        $this->primerApellido = $primerApellido;
+
+        return $this;
+    }
+
+    /**
+     * Get primerApellido
+     *
+     * @return string
+     */
+    public function getPrimerApellido()
+    {
+        return $this->primerApellido;
+    }
+
+    /**
+     * Set segundoApellido
+     *
+     * @param string $segundoApellido
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSegundoApellido($segundoApellido)
+    {
+        $this->segundoApellido = $segundoApellido;
+
+        return $this;
+    }
+
+    /**
+     * Get segundoApellido
+     *
+     * @return string
+     */
+    public function getSegundoApellido()
+    {
+        return $this->segundoApellido;
+    }
+
+    /**
+     * Set ingreso
+     *
+     * @param string $ingreso
+     *
+     * @return RhuSsoAporte
+     */
+    public function setIngreso($ingreso)
+    {
+        $this->ingreso = $ingreso;
+
+        return $this;
+    }
+
+    /**
+     * Get ingreso
+     *
+     * @return string
+     */
+    public function getIngreso()
+    {
+        return $this->ingreso;
+    }
+
+    /**
+     * Set retiro
+     *
+     * @param string $retiro
+     *
+     * @return RhuSsoAporte
+     */
+    public function setRetiro($retiro)
+    {
+        $this->retiro = $retiro;
+
+        return $this;
+    }
+
+    /**
+     * Get retiro
+     *
+     * @return string
+     */
+    public function getRetiro()
+    {
+        return $this->retiro;
+    }
+
+    /**
+     * Set trasladoDesdeOtraEps
+     *
+     * @param string $trasladoDesdeOtraEps
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTrasladoDesdeOtraEps($trasladoDesdeOtraEps)
+    {
+        $this->trasladoDesdeOtraEps = $trasladoDesdeOtraEps;
+
+        return $this;
+    }
+
+    /**
+     * Get trasladoDesdeOtraEps
+     *
+     * @return string
+     */
+    public function getTrasladoDesdeOtraEps()
+    {
+        return $this->trasladoDesdeOtraEps;
+    }
+
+    /**
+     * Set trasladoAOtraEps
+     *
+     * @param string $trasladoAOtraEps
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTrasladoAOtraEps($trasladoAOtraEps)
+    {
+        $this->trasladoAOtraEps = $trasladoAOtraEps;
+
+        return $this;
+    }
+
+    /**
+     * Get trasladoAOtraEps
+     *
+     * @return string
+     */
+    public function getTrasladoAOtraEps()
+    {
+        return $this->trasladoAOtraEps;
+    }
+
+    /**
+     * Set trasladoDesdeOtraPension
+     *
+     * @param string $trasladoDesdeOtraPension
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTrasladoDesdeOtraPension($trasladoDesdeOtraPension)
+    {
+        $this->trasladoDesdeOtraPension = $trasladoDesdeOtraPension;
+
+        return $this;
+    }
+
+    /**
+     * Get trasladoDesdeOtraPension
+     *
+     * @return string
+     */
+    public function getTrasladoDesdeOtraPension()
+    {
+        return $this->trasladoDesdeOtraPension;
+    }
+
+    /**
+     * Set trasladoAOtraPension
+     *
+     * @param string $trasladoAOtraPension
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTrasladoAOtraPension($trasladoAOtraPension)
+    {
+        $this->trasladoAOtraPension = $trasladoAOtraPension;
+
+        return $this;
+    }
+
+    /**
+     * Get trasladoAOtraPension
+     *
+     * @return string
+     */
+    public function getTrasladoAOtraPension()
+    {
+        return $this->trasladoAOtraPension;
+    }
+
+    /**
+     * Set variacionPermanenteSalario
+     *
+     * @param string $variacionPermanenteSalario
+     *
+     * @return RhuSsoAporte
+     */
+    public function setVariacionPermanenteSalario($variacionPermanenteSalario)
+    {
+        $this->variacionPermanenteSalario = $variacionPermanenteSalario;
+
+        return $this;
+    }
+
+    /**
+     * Get variacionPermanenteSalario
+     *
+     * @return string
+     */
+    public function getVariacionPermanenteSalario()
+    {
+        return $this->variacionPermanenteSalario;
+    }
+
+    /**
+     * Set correcciones
+     *
+     * @param string $correcciones
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCorrecciones($correcciones)
+    {
+        $this->correcciones = $correcciones;
+
+        return $this;
+    }
+
+    /**
+     * Get correcciones
+     *
+     * @return string
+     */
+    public function getCorrecciones()
+    {
+        return $this->correcciones;
+    }
+
+    /**
+     * Set variacionTransitoriaSalario
+     *
+     * @param string $variacionTransitoriaSalario
+     *
+     * @return RhuSsoAporte
+     */
+    public function setVariacionTransitoriaSalario($variacionTransitoriaSalario)
+    {
+        $this->variacionTransitoriaSalario = $variacionTransitoriaSalario;
+
+        return $this;
+    }
+
+    /**
+     * Get variacionTransitoriaSalario
+     *
+     * @return string
+     */
+    public function getVariacionTransitoriaSalario()
+    {
+        return $this->variacionTransitoriaSalario;
+    }
+
+    /**
+     * Set suspensionTemporalContratoLicenciaServicios
+     *
+     * @param string $suspensionTemporalContratoLicenciaServicios
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSuspensionTemporalContratoLicenciaServicios($suspensionTemporalContratoLicenciaServicios)
+    {
+        $this->suspensionTemporalContratoLicenciaServicios = $suspensionTemporalContratoLicenciaServicios;
+
+        return $this;
+    }
+
+    /**
+     * Get suspensionTemporalContratoLicenciaServicios
+     *
+     * @return string
+     */
+    public function getSuspensionTemporalContratoLicenciaServicios()
+    {
+        return $this->suspensionTemporalContratoLicenciaServicios;
+    }
+
+    /**
+     * Set diasLicencia
+     *
+     * @param integer $diasLicencia
+     *
+     * @return RhuSsoAporte
+     */
+    public function setDiasLicencia($diasLicencia)
+    {
+        $this->diasLicencia = $diasLicencia;
+
+        return $this;
+    }
+
+    /**
+     * Get diasLicencia
+     *
+     * @return integer
+     */
+    public function getDiasLicencia()
+    {
+        return $this->diasLicencia;
+    }
+
+    /**
+     * Set incapacidadGeneral
+     *
+     * @param string $incapacidadGeneral
+     *
+     * @return RhuSsoAporte
+     */
+    public function setIncapacidadGeneral($incapacidadGeneral)
+    {
+        $this->incapacidadGeneral = $incapacidadGeneral;
+
+        return $this;
+    }
+
+    /**
+     * Get incapacidadGeneral
+     *
+     * @return string
+     */
+    public function getIncapacidadGeneral()
+    {
+        return $this->incapacidadGeneral;
+    }
+
+    /**
+     * Set diasIncapacidadGeneral
+     *
+     * @param integer $diasIncapacidadGeneral
+     *
+     * @return RhuSsoAporte
+     */
+    public function setDiasIncapacidadGeneral($diasIncapacidadGeneral)
+    {
+        $this->diasIncapacidadGeneral = $diasIncapacidadGeneral;
+
+        return $this;
+    }
+
+    /**
+     * Get diasIncapacidadGeneral
+     *
+     * @return integer
+     */
+    public function getDiasIncapacidadGeneral()
+    {
+        return $this->diasIncapacidadGeneral;
+    }
+
+    /**
+     * Set licenciaMaternidad
+     *
+     * @param string $licenciaMaternidad
+     *
+     * @return RhuSsoAporte
+     */
+    public function setLicenciaMaternidad($licenciaMaternidad)
+    {
+        $this->licenciaMaternidad = $licenciaMaternidad;
+
+        return $this;
+    }
+
+    /**
+     * Get licenciaMaternidad
+     *
+     * @return string
+     */
+    public function getLicenciaMaternidad()
+    {
+        return $this->licenciaMaternidad;
+    }
+
+    /**
+     * Set diasLicenciaMaternidad
+     *
+     * @param integer $diasLicenciaMaternidad
+     *
+     * @return RhuSsoAporte
+     */
+    public function setDiasLicenciaMaternidad($diasLicenciaMaternidad)
+    {
+        $this->diasLicenciaMaternidad = $diasLicenciaMaternidad;
+
+        return $this;
+    }
+
+    /**
+     * Get diasLicenciaMaternidad
+     *
+     * @return integer
+     */
+    public function getDiasLicenciaMaternidad()
+    {
+        return $this->diasLicenciaMaternidad;
+    }
+
+    /**
+     * Set vacaciones
+     *
+     * @param string $vacaciones
+     *
+     * @return RhuSsoAporte
+     */
+    public function setVacaciones($vacaciones)
+    {
+        $this->vacaciones = $vacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get vacaciones
+     *
+     * @return string
+     */
+    public function getVacaciones()
+    {
+        return $this->vacaciones;
+    }
+
+    /**
+     * Set diasVacaciones
+     *
+     * @param integer $diasVacaciones
+     *
+     * @return RhuSsoAporte
+     */
+    public function setDiasVacaciones($diasVacaciones)
+    {
+        $this->diasVacaciones = $diasVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get diasVacaciones
+     *
+     * @return integer
+     */
+    public function getDiasVacaciones()
+    {
+        return $this->diasVacaciones;
+    }
+
+    /**
+     * Set aporteVoluntario
+     *
+     * @param string $aporteVoluntario
+     *
+     * @return RhuSsoAporte
+     */
+    public function setAporteVoluntario($aporteVoluntario)
+    {
+        $this->aporteVoluntario = $aporteVoluntario;
+
+        return $this;
+    }
+
+    /**
+     * Get aporteVoluntario
+     *
+     * @return string
+     */
+    public function getAporteVoluntario()
+    {
+        return $this->aporteVoluntario;
+    }
+
+    /**
+     * Set variacionCentrosTrabajo
+     *
+     * @param string $variacionCentrosTrabajo
+     *
+     * @return RhuSsoAporte
+     */
+    public function setVariacionCentrosTrabajo($variacionCentrosTrabajo)
+    {
+        $this->variacionCentrosTrabajo = $variacionCentrosTrabajo;
+
+        return $this;
+    }
+
+    /**
+     * Get variacionCentrosTrabajo
+     *
+     * @return string
+     */
+    public function getVariacionCentrosTrabajo()
+    {
+        return $this->variacionCentrosTrabajo;
+    }
+
+    /**
+     * Set incapacidadAccidenteTrabajoEnfermedadProfesional
+     *
+     * @param integer $incapacidadAccidenteTrabajoEnfermedadProfesional
+     *
+     * @return RhuSsoAporte
+     */
+    public function setIncapacidadAccidenteTrabajoEnfermedadProfesional($incapacidadAccidenteTrabajoEnfermedadProfesional)
+    {
+        $this->incapacidadAccidenteTrabajoEnfermedadProfesional = $incapacidadAccidenteTrabajoEnfermedadProfesional;
+
+        return $this;
+    }
+
+    /**
+     * Get incapacidadAccidenteTrabajoEnfermedadProfesional
+     *
+     * @return integer
+     */
+    public function getIncapacidadAccidenteTrabajoEnfermedadProfesional()
+    {
+        return $this->incapacidadAccidenteTrabajoEnfermedadProfesional;
+    }
+
+    /**
+     * Set codigoEntidadPensionPertenece
+     *
+     * @param string $codigoEntidadPensionPertenece
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoEntidadPensionPertenece($codigoEntidadPensionPertenece)
+    {
+        $this->codigoEntidadPensionPertenece = $codigoEntidadPensionPertenece;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadPensionPertenece
+     *
+     * @return string
+     */
+    public function getCodigoEntidadPensionPertenece()
+    {
+        return $this->codigoEntidadPensionPertenece;
+    }
+
+    /**
+     * Set codigoEntidadPensionTraslada
+     *
+     * @param string $codigoEntidadPensionTraslada
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoEntidadPensionTraslada($codigoEntidadPensionTraslada)
+    {
+        $this->codigoEntidadPensionTraslada = $codigoEntidadPensionTraslada;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadPensionTraslada
+     *
+     * @return string
+     */
+    public function getCodigoEntidadPensionTraslada()
+    {
+        return $this->codigoEntidadPensionTraslada;
+    }
+
+    /**
+     * Set codigoEntidadSaludPertenece
+     *
+     * @param string $codigoEntidadSaludPertenece
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoEntidadSaludPertenece($codigoEntidadSaludPertenece)
+    {
+        $this->codigoEntidadSaludPertenece = $codigoEntidadSaludPertenece;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadSaludPertenece
+     *
+     * @return string
+     */
+    public function getCodigoEntidadSaludPertenece()
+    {
+        return $this->codigoEntidadSaludPertenece;
+    }
+
+    /**
+     * Set codigoEntidadSaludTraslada
+     *
+     * @param string $codigoEntidadSaludTraslada
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoEntidadSaludTraslada($codigoEntidadSaludTraslada)
+    {
+        $this->codigoEntidadSaludTraslada = $codigoEntidadSaludTraslada;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadSaludTraslada
+     *
+     * @return string
+     */
+    public function getCodigoEntidadSaludTraslada()
+    {
+        return $this->codigoEntidadSaludTraslada;
+    }
+
+    /**
+     * Set codigoEntidadCajaPertenece
+     *
+     * @param string $codigoEntidadCajaPertenece
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoEntidadCajaPertenece($codigoEntidadCajaPertenece)
+    {
+        $this->codigoEntidadCajaPertenece = $codigoEntidadCajaPertenece;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadCajaPertenece
+     *
+     * @return string
+     */
+    public function getCodigoEntidadCajaPertenece()
+    {
+        return $this->codigoEntidadCajaPertenece;
+    }
+
+    /**
+     * Set diasCotizadosPension
+     *
+     * @param integer $diasCotizadosPension
+     *
+     * @return RhuSsoAporte
+     */
+    public function setDiasCotizadosPension($diasCotizadosPension)
+    {
+        $this->diasCotizadosPension = $diasCotizadosPension;
+
+        return $this;
+    }
+
+    /**
+     * Get diasCotizadosPension
+     *
+     * @return integer
+     */
+    public function getDiasCotizadosPension()
+    {
+        return $this->diasCotizadosPension;
+    }
+
+    /**
+     * Set diasCotizadosSalud
+     *
+     * @param integer $diasCotizadosSalud
+     *
+     * @return RhuSsoAporte
+     */
+    public function setDiasCotizadosSalud($diasCotizadosSalud)
+    {
+        $this->diasCotizadosSalud = $diasCotizadosSalud;
+
+        return $this;
+    }
+
+    /**
+     * Get diasCotizadosSalud
+     *
+     * @return integer
+     */
+    public function getDiasCotizadosSalud()
+    {
+        return $this->diasCotizadosSalud;
+    }
+
+    /**
+     * Set diasCotizadosRiesgosProfesionales
+     *
+     * @param integer $diasCotizadosRiesgosProfesionales
+     *
+     * @return RhuSsoAporte
+     */
+    public function setDiasCotizadosRiesgosProfesionales($diasCotizadosRiesgosProfesionales)
+    {
+        $this->diasCotizadosRiesgosProfesionales = $diasCotizadosRiesgosProfesionales;
+
+        return $this;
+    }
+
+    /**
+     * Get diasCotizadosRiesgosProfesionales
+     *
+     * @return integer
+     */
+    public function getDiasCotizadosRiesgosProfesionales()
+    {
+        return $this->diasCotizadosRiesgosProfesionales;
+    }
+
+    /**
+     * Set diasCotizadosCajaCompensacion
+     *
+     * @param integer $diasCotizadosCajaCompensacion
+     *
+     * @return RhuSsoAporte
+     */
+    public function setDiasCotizadosCajaCompensacion($diasCotizadosCajaCompensacion)
+    {
+        $this->diasCotizadosCajaCompensacion = $diasCotizadosCajaCompensacion;
+
+        return $this;
+    }
+
+    /**
+     * Get diasCotizadosCajaCompensacion
+     *
+     * @return integer
+     */
+    public function getDiasCotizadosCajaCompensacion()
+    {
+        return $this->diasCotizadosCajaCompensacion;
+    }
+
+    /**
+     * Set salarioBasico
+     *
+     * @param float $salarioBasico
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSalarioBasico($salarioBasico)
+    {
+        $this->salarioBasico = $salarioBasico;
+
+        return $this;
+    }
+
+    /**
+     * Get salarioBasico
+     *
+     * @return float
+     */
+    public function getSalarioBasico()
+    {
+        return $this->salarioBasico;
+    }
+
+    /**
+     * Set salarioMesAnterior
+     *
+     * @param float $salarioMesAnterior
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSalarioMesAnterior($salarioMesAnterior)
+    {
+        $this->salarioMesAnterior = $salarioMesAnterior;
+
+        return $this;
+    }
+
+    /**
+     * Get salarioMesAnterior
+     *
+     * @return float
+     */
+    public function getSalarioMesAnterior()
+    {
+        return $this->salarioMesAnterior;
+    }
+
+    /**
+     * Set salarioIntegral
+     *
+     * @param string $salarioIntegral
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSalarioIntegral($salarioIntegral)
+    {
+        $this->salarioIntegral = $salarioIntegral;
+
+        return $this;
+    }
+
+    /**
+     * Get salarioIntegral
+     *
+     * @return string
+     */
+    public function getSalarioIntegral()
+    {
+        return $this->salarioIntegral;
+    }
+
+    /**
+     * Set suplementario
+     *
+     * @param float $suplementario
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSuplementario($suplementario)
+    {
+        $this->suplementario = $suplementario;
+
+        return $this;
+    }
+
+    /**
+     * Get suplementario
+     *
+     * @return float
+     */
+    public function getSuplementario()
+    {
+        return $this->suplementario;
+    }
+
+    /**
+     * Set ibcPension
+     *
+     * @param float $ibcPension
+     *
+     * @return RhuSsoAporte
+     */
+    public function setIbcPension($ibcPension)
+    {
+        $this->ibcPension = $ibcPension;
+
+        return $this;
+    }
+
+    /**
+     * Get ibcPension
+     *
+     * @return float
+     */
+    public function getIbcPension()
+    {
+        return $this->ibcPension;
+    }
+
+    /**
+     * Set ibcSalud
+     *
+     * @param float $ibcSalud
+     *
+     * @return RhuSsoAporte
+     */
+    public function setIbcSalud($ibcSalud)
+    {
+        $this->ibcSalud = $ibcSalud;
+
+        return $this;
+    }
+
+    /**
+     * Get ibcSalud
+     *
+     * @return float
+     */
+    public function getIbcSalud()
+    {
+        return $this->ibcSalud;
+    }
+
+    /**
+     * Set ibcRiesgosProfesionales
+     *
+     * @param float $ibcRiesgosProfesionales
+     *
+     * @return RhuSsoAporte
+     */
+    public function setIbcRiesgosProfesionales($ibcRiesgosProfesionales)
+    {
+        $this->ibcRiesgosProfesionales = $ibcRiesgosProfesionales;
+
+        return $this;
+    }
+
+    /**
+     * Get ibcRiesgosProfesionales
+     *
+     * @return float
+     */
+    public function getIbcRiesgosProfesionales()
+    {
+        return $this->ibcRiesgosProfesionales;
+    }
+
+    /**
+     * Set ibcCaja
+     *
+     * @param float $ibcCaja
+     *
+     * @return RhuSsoAporte
+     */
+    public function setIbcCaja($ibcCaja)
+    {
+        $this->ibcCaja = $ibcCaja;
+
+        return $this;
+    }
+
+    /**
+     * Get ibcCaja
+     *
+     * @return float
+     */
+    public function getIbcCaja()
+    {
+        return $this->ibcCaja;
+    }
+
+    /**
+     * Set tarifaPension
+     *
+     * @param float $tarifaPension
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTarifaPension($tarifaPension)
+    {
+        $this->tarifaPension = $tarifaPension;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaPension
+     *
+     * @return float
+     */
+    public function getTarifaPension()
+    {
+        return $this->tarifaPension;
+    }
+
+    /**
+     * Set tarifaSalud
+     *
+     * @param float $tarifaSalud
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTarifaSalud($tarifaSalud)
+    {
+        $this->tarifaSalud = $tarifaSalud;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaSalud
+     *
+     * @return float
+     */
+    public function getTarifaSalud()
+    {
+        return $this->tarifaSalud;
+    }
+
+    /**
+     * Set tarifaRiesgos
+     *
+     * @param float $tarifaRiesgos
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTarifaRiesgos($tarifaRiesgos)
+    {
+        $this->tarifaRiesgos = $tarifaRiesgos;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaRiesgos
+     *
+     * @return float
+     */
+    public function getTarifaRiesgos()
+    {
+        return $this->tarifaRiesgos;
+    }
+
+    /**
+     * Set tarifaCaja
+     *
+     * @param float $tarifaCaja
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTarifaCaja($tarifaCaja)
+    {
+        $this->tarifaCaja = $tarifaCaja;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaCaja
+     *
+     * @return float
+     */
+    public function getTarifaCaja()
+    {
+        return $this->tarifaCaja;
+    }
+
+    /**
+     * Set tarifaSena
+     *
+     * @param float $tarifaSena
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTarifaSena($tarifaSena)
+    {
+        $this->tarifaSena = $tarifaSena;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaSena
+     *
+     * @return float
+     */
+    public function getTarifaSena()
+    {
+        return $this->tarifaSena;
+    }
+
+    /**
+     * Set tarifaIcbf
+     *
+     * @param float $tarifaIcbf
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTarifaIcbf($tarifaIcbf)
+    {
+        $this->tarifaIcbf = $tarifaIcbf;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaIcbf
+     *
+     * @return float
+     */
+    public function getTarifaIcbf()
+    {
+        return $this->tarifaIcbf;
+    }
+
+    /**
+     * Set cotizacionPension
+     *
+     * @param float $cotizacionPension
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCotizacionPension($cotizacionPension)
+    {
+        $this->cotizacionPension = $cotizacionPension;
+
+        return $this;
+    }
+
+    /**
+     * Get cotizacionPension
+     *
+     * @return float
+     */
+    public function getCotizacionPension()
+    {
+        return $this->cotizacionPension;
+    }
+
+    /**
+     * Set cotizacionSalud
+     *
+     * @param float $cotizacionSalud
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCotizacionSalud($cotizacionSalud)
+    {
+        $this->cotizacionSalud = $cotizacionSalud;
+
+        return $this;
+    }
+
+    /**
+     * Get cotizacionSalud
+     *
+     * @return float
+     */
+    public function getCotizacionSalud()
+    {
+        return $this->cotizacionSalud;
+    }
+
+    /**
+     * Set cotizacionRiesgos
+     *
+     * @param float $cotizacionRiesgos
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCotizacionRiesgos($cotizacionRiesgos)
+    {
+        $this->cotizacionRiesgos = $cotizacionRiesgos;
+
+        return $this;
+    }
+
+    /**
+     * Get cotizacionRiesgos
+     *
+     * @return float
+     */
+    public function getCotizacionRiesgos()
+    {
+        return $this->cotizacionRiesgos;
+    }
+
+    /**
+     * Set cotizacionCaja
+     *
+     * @param float $cotizacionCaja
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCotizacionCaja($cotizacionCaja)
+    {
+        $this->cotizacionCaja = $cotizacionCaja;
+
+        return $this;
+    }
+
+    /**
+     * Get cotizacionCaja
+     *
+     * @return float
+     */
+    public function getCotizacionCaja()
+    {
+        return $this->cotizacionCaja;
+    }
+
+    /**
+     * Set cotizacionSena
+     *
+     * @param float $cotizacionSena
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCotizacionSena($cotizacionSena)
+    {
+        $this->cotizacionSena = $cotizacionSena;
+
+        return $this;
+    }
+
+    /**
+     * Get cotizacionSena
+     *
+     * @return float
+     */
+    public function getCotizacionSena()
+    {
+        return $this->cotizacionSena;
+    }
+
+    /**
+     * Set cotizacionIcbf
+     *
+     * @param float $cotizacionIcbf
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCotizacionIcbf($cotizacionIcbf)
+    {
+        $this->cotizacionIcbf = $cotizacionIcbf;
+
+        return $this;
+    }
+
+    /**
+     * Get cotizacionIcbf
+     *
+     * @return float
+     */
+    public function getCotizacionIcbf()
+    {
+        return $this->cotizacionIcbf;
+    }
+
+    /**
+     * Set aporteVoluntarioFondoPensionesObligatorias
+     *
+     * @param string $aporteVoluntarioFondoPensionesObligatorias
+     *
+     * @return RhuSsoAporte
+     */
+    public function setAporteVoluntarioFondoPensionesObligatorias($aporteVoluntarioFondoPensionesObligatorias)
+    {
+        $this->aporteVoluntarioFondoPensionesObligatorias = $aporteVoluntarioFondoPensionesObligatorias;
+
+        return $this;
+    }
+
+    /**
+     * Get aporteVoluntarioFondoPensionesObligatorias
+     *
+     * @return string
+     */
+    public function getAporteVoluntarioFondoPensionesObligatorias()
+    {
+        return $this->aporteVoluntarioFondoPensionesObligatorias;
+    }
+
+    /**
+     * Set cotizacionVoluntarioFondoPensionesObligatorias
+     *
+     * @param string $cotizacionVoluntarioFondoPensionesObligatorias
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCotizacionVoluntarioFondoPensionesObligatorias($cotizacionVoluntarioFondoPensionesObligatorias)
+    {
+        $this->cotizacionVoluntarioFondoPensionesObligatorias = $cotizacionVoluntarioFondoPensionesObligatorias;
+
+        return $this;
+    }
+
+    /**
+     * Get cotizacionVoluntarioFondoPensionesObligatorias
+     *
+     * @return string
+     */
+    public function getCotizacionVoluntarioFondoPensionesObligatorias()
+    {
+        return $this->cotizacionVoluntarioFondoPensionesObligatorias;
+    }
+
+    /**
+     * Set totalCotizacion
+     *
+     * @param float $totalCotizacion
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTotalCotizacion($totalCotizacion)
+    {
+        $this->totalCotizacion = $totalCotizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get totalCotizacion
+     *
+     * @return float
+     */
+    public function getTotalCotizacion()
+    {
+        return $this->totalCotizacion;
+    }
+
+    /**
+     * Set aportesFondoSolidaridadPensionalSolidaridad
+     *
+     * @param float $aportesFondoSolidaridadPensionalSolidaridad
+     *
+     * @return RhuSsoAporte
+     */
+    public function setAportesFondoSolidaridadPensionalSolidaridad($aportesFondoSolidaridadPensionalSolidaridad)
+    {
+        $this->aportesFondoSolidaridadPensionalSolidaridad = $aportesFondoSolidaridadPensionalSolidaridad;
+
+        return $this;
+    }
+
+    /**
+     * Get aportesFondoSolidaridadPensionalSolidaridad
+     *
+     * @return float
+     */
+    public function getAportesFondoSolidaridadPensionalSolidaridad()
+    {
+        return $this->aportesFondoSolidaridadPensionalSolidaridad;
+    }
+
+    /**
+     * Set aportesFondoSolidaridadPensionalSubsistencia
+     *
+     * @param float $aportesFondoSolidaridadPensionalSubsistencia
+     *
+     * @return RhuSsoAporte
+     */
+    public function setAportesFondoSolidaridadPensionalSubsistencia($aportesFondoSolidaridadPensionalSubsistencia)
+    {
+        $this->aportesFondoSolidaridadPensionalSubsistencia = $aportesFondoSolidaridadPensionalSubsistencia;
+
+        return $this;
+    }
+
+    /**
+     * Get aportesFondoSolidaridadPensionalSubsistencia
+     *
+     * @return float
+     */
+    public function getAportesFondoSolidaridadPensionalSubsistencia()
+    {
+        return $this->aportesFondoSolidaridadPensionalSubsistencia;
+    }
+
+    /**
+     * Set valorUpcAdicional
+     *
+     * @param float $valorUpcAdicional
+     *
+     * @return RhuSsoAporte
+     */
+    public function setValorUpcAdicional($valorUpcAdicional)
+    {
+        $this->valorUpcAdicional = $valorUpcAdicional;
+
+        return $this;
+    }
+
+    /**
+     * Get valorUpcAdicional
+     *
+     * @return float
+     */
+    public function getValorUpcAdicional()
+    {
+        return $this->valorUpcAdicional;
+    }
+
+    /**
+     * Set numeroAutorizacionIncapacidadEnfermedadGeneral
+     *
+     * @param string $numeroAutorizacionIncapacidadEnfermedadGeneral
+     *
+     * @return RhuSsoAporte
+     */
+    public function setNumeroAutorizacionIncapacidadEnfermedadGeneral($numeroAutorizacionIncapacidadEnfermedadGeneral)
+    {
+        $this->numeroAutorizacionIncapacidadEnfermedadGeneral = $numeroAutorizacionIncapacidadEnfermedadGeneral;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroAutorizacionIncapacidadEnfermedadGeneral
+     *
+     * @return string
+     */
+    public function getNumeroAutorizacionIncapacidadEnfermedadGeneral()
+    {
+        return $this->numeroAutorizacionIncapacidadEnfermedadGeneral;
+    }
+
+    /**
+     * Set valorIncapacidadEnfermedadGeneral
+     *
+     * @param float $valorIncapacidadEnfermedadGeneral
+     *
+     * @return RhuSsoAporte
+     */
+    public function setValorIncapacidadEnfermedadGeneral($valorIncapacidadEnfermedadGeneral)
+    {
+        $this->valorIncapacidadEnfermedadGeneral = $valorIncapacidadEnfermedadGeneral;
+
+        return $this;
+    }
+
+    /**
+     * Get valorIncapacidadEnfermedadGeneral
+     *
+     * @return float
+     */
+    public function getValorIncapacidadEnfermedadGeneral()
+    {
+        return $this->valorIncapacidadEnfermedadGeneral;
+    }
+
+    /**
+     * Set numeroAutorizacionLicenciaMaternidadPaternidad
+     *
+     * @param string $numeroAutorizacionLicenciaMaternidadPaternidad
+     *
+     * @return RhuSsoAporte
+     */
+    public function setNumeroAutorizacionLicenciaMaternidadPaternidad($numeroAutorizacionLicenciaMaternidadPaternidad)
+    {
+        $this->numeroAutorizacionLicenciaMaternidadPaternidad = $numeroAutorizacionLicenciaMaternidadPaternidad;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroAutorizacionLicenciaMaternidadPaternidad
+     *
+     * @return string
+     */
+    public function getNumeroAutorizacionLicenciaMaternidadPaternidad()
+    {
+        return $this->numeroAutorizacionLicenciaMaternidadPaternidad;
+    }
+
+    /**
+     * Set valorIncapacidadLicenciaMaternidadPaternidad
+     *
+     * @param float $valorIncapacidadLicenciaMaternidadPaternidad
+     *
+     * @return RhuSsoAporte
+     */
+    public function setValorIncapacidadLicenciaMaternidadPaternidad($valorIncapacidadLicenciaMaternidadPaternidad)
+    {
+        $this->valorIncapacidadLicenciaMaternidadPaternidad = $valorIncapacidadLicenciaMaternidadPaternidad;
+
+        return $this;
+    }
+
+    /**
+     * Get valorIncapacidadLicenciaMaternidadPaternidad
+     *
+     * @return float
+     */
+    public function getValorIncapacidadLicenciaMaternidadPaternidad()
+    {
+        return $this->valorIncapacidadLicenciaMaternidadPaternidad;
+    }
+
+    /**
+     * Set centroTrabajoCodigoCt
+     *
+     * @param string $centroTrabajoCodigoCt
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCentroTrabajoCodigoCt($centroTrabajoCodigoCt)
+    {
+        $this->centroTrabajoCodigoCt = $centroTrabajoCodigoCt;
+
+        return $this;
+    }
+
+    /**
+     * Get centroTrabajoCodigoCt
+     *
+     * @return string
+     */
+    public function getCentroTrabajoCodigoCt()
+    {
+        return $this->centroTrabajoCodigoCt;
+    }
+
+    /**
+     * Set codigoCargoFk
+     *
+     * @param integer $codigoCargoFk
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoCargoFk($codigoCargoFk)
+    {
+        $this->codigoCargoFk = $codigoCargoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCargoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCargoFk()
+    {
+        return $this->codigoCargoFk;
+    }
+
+    /**
+     * Set tarifaAportesESAP
+     *
+     * @param float $tarifaAportesESAP
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTarifaAportesESAP($tarifaAportesESAP)
+    {
+        $this->tarifaAportesESAP = $tarifaAportesESAP;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaAportesESAP
+     *
+     * @return float
+     */
+    public function getTarifaAportesESAP()
+    {
+        return $this->tarifaAportesESAP;
+    }
+
+    /**
+     * Set valorAportesESAP
+     *
+     * @param float $valorAportesESAP
+     *
+     * @return RhuSsoAporte
+     */
+    public function setValorAportesESAP($valorAportesESAP)
+    {
+        $this->valorAportesESAP = $valorAportesESAP;
+
+        return $this;
+    }
+
+    /**
+     * Get valorAportesESAP
+     *
+     * @return float
+     */
+    public function getValorAportesESAP()
+    {
+        return $this->valorAportesESAP;
+    }
+
+    /**
+     * Set tarifaAportesMEN
+     *
+     * @param float $tarifaAportesMEN
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTarifaAportesMEN($tarifaAportesMEN)
+    {
+        $this->tarifaAportesMEN = $tarifaAportesMEN;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaAportesMEN
+     *
+     * @return float
+     */
+    public function getTarifaAportesMEN()
+    {
+        return $this->tarifaAportesMEN;
+    }
+
+    /**
+     * Set valorAportesMEN
+     *
+     * @param float $valorAportesMEN
+     *
+     * @return RhuSsoAporte
+     */
+    public function setValorAportesMEN($valorAportesMEN)
+    {
+        $this->valorAportesMEN = $valorAportesMEN;
+
+        return $this;
+    }
+
+    /**
+     * Get valorAportesMEN
+     *
+     * @return float
+     */
+    public function getValorAportesMEN()
+    {
+        return $this->valorAportesMEN;
+    }
+
+    /**
+     * Set tipoDocumentoResponsableUPC
+     *
+     * @param string $tipoDocumentoResponsableUPC
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTipoDocumentoResponsableUPC($tipoDocumentoResponsableUPC)
+    {
+        $this->tipoDocumentoResponsableUPC = $tipoDocumentoResponsableUPC;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoDocumentoResponsableUPC
+     *
+     * @return string
+     */
+    public function getTipoDocumentoResponsableUPC()
+    {
+        return $this->tipoDocumentoResponsableUPC;
+    }
+
+    /**
+     * Set numeroIdentificacionResponsableUPCAdicional
+     *
+     * @param string $numeroIdentificacionResponsableUPCAdicional
+     *
+     * @return RhuSsoAporte
+     */
+    public function setNumeroIdentificacionResponsableUPCAdicional($numeroIdentificacionResponsableUPCAdicional)
+    {
+        $this->numeroIdentificacionResponsableUPCAdicional = $numeroIdentificacionResponsableUPCAdicional;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroIdentificacionResponsableUPCAdicional
+     *
+     * @return string
+     */
+    public function getNumeroIdentificacionResponsableUPCAdicional()
+    {
+        return $this->numeroIdentificacionResponsableUPCAdicional;
+    }
+
+    /**
+     * Set cotizanteExoneradoPagoAporteParafiscalesSalud
+     *
+     * @param string $cotizanteExoneradoPagoAporteParafiscalesSalud
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCotizanteExoneradoPagoAporteParafiscalesSalud($cotizanteExoneradoPagoAporteParafiscalesSalud)
+    {
+        $this->cotizanteExoneradoPagoAporteParafiscalesSalud = $cotizanteExoneradoPagoAporteParafiscalesSalud;
+
+        return $this;
+    }
+
+    /**
+     * Get cotizanteExoneradoPagoAporteParafiscalesSalud
+     *
+     * @return string
+     */
+    public function getCotizanteExoneradoPagoAporteParafiscalesSalud()
+    {
+        return $this->cotizanteExoneradoPagoAporteParafiscalesSalud;
+    }
+
+    /**
+     * Set codigoAdministradoraRiesgosLaborales
+     *
+     * @param string $codigoAdministradoraRiesgosLaborales
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoAdministradoraRiesgosLaborales($codigoAdministradoraRiesgosLaborales)
+    {
+        $this->codigoAdministradoraRiesgosLaborales = $codigoAdministradoraRiesgosLaborales;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoAdministradoraRiesgosLaborales
+     *
+     * @return string
+     */
+    public function getCodigoAdministradoraRiesgosLaborales()
+    {
+        return $this->codigoAdministradoraRiesgosLaborales;
+    }
+
+    /**
+     * Set claseRiesgoAfiliado
+     *
+     * @param string $claseRiesgoAfiliado
+     *
+     * @return RhuSsoAporte
+     */
+    public function setClaseRiesgoAfiliado($claseRiesgoAfiliado)
+    {
+        $this->claseRiesgoAfiliado = $claseRiesgoAfiliado;
+
+        return $this;
+    }
+
+    /**
+     * Get claseRiesgoAfiliado
+     *
+     * @return string
+     */
+    public function getClaseRiesgoAfiliado()
+    {
+        return $this->claseRiesgoAfiliado;
+    }
+
+    /**
+     * Set ssoPeriodoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo $ssoPeriodoRel
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSsoPeriodoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo $ssoPeriodoRel = null)
+    {
+        $this->ssoPeriodoRel = $ssoPeriodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ssoPeriodoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo
+     */
+    public function getSsoPeriodoRel()
+    {
+        return $this->ssoPeriodoRel;
+    }
+
+    /**
+     * Set ssoPeriodoDetalleRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodoDetalleRel
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSsoPeriodoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodoDetalleRel = null)
+    {
+        $this->ssoPeriodoDetalleRel = $ssoPeriodoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ssoPeriodoDetalleRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle
+     */
+    public function getSsoPeriodoDetalleRel()
+    {
+        return $this->ssoPeriodoDetalleRel;
+    }
+
+    /**
+     * Set ssoSucursalRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal $ssoSucursalRel
+     *
+     * @return RhuSsoAporte
+     */
+    public function setSsoSucursalRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal $ssoSucursalRel = null)
+    {
+        $this->ssoSucursalRel = $ssoSucursalRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ssoSucursalRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal
+     */
+    public function getSsoSucursalRel()
+    {
+        return $this->ssoSucursalRel;
+    }
+
+    /**
+     * Set empleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
+     *
+     * @return RhuSsoAporte
+     */
+    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
+    {
+        $this->empleadoRel = $empleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
+     */
+    public function getEmpleadoRel()
+    {
+        return $this->empleadoRel;
+    }
+
+    /**
+     * Set contratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel
+     *
+     * @return RhuSsoAporte
+     */
+    public function setContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel = null)
+    {
+        $this->contratoRel = $contratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get contratoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContrato
+     */
+    public function getContratoRel()
+    {
+        return $this->contratoRel;
+    }
+
+    /**
+     * Set cargoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCargo $cargoRel
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCargo $cargoRel = null)
+    {
+        $this->cargoRel = $cargoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get cargoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCargo
+     */
+    public function getCargoRel()
+    {
+        return $this->cargoRel;
+    }
 }
