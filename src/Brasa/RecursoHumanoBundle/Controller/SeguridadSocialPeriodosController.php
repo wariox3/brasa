@@ -176,8 +176,8 @@ class SeguridadSocialPeriodosController extends Controller
                 $codigoPeriodoDetalle = $request->request->get('OpGenerarArchivo');
                 $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
                 $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-                //$strRutaArchivo = $arConfiguracion->getRutaTemporal();
-                $strRutaArchivo = "";
+                $strRutaArchivo = $arConfiguracion->getRutaTemporal();
+                //$strRutaArchivo = "";
                 $strNombreArchivo = "pila" . date('YmdHis') . ".txt";
                 $ar = fopen($strRutaArchivo . $strNombreArchivo, "a") or
                     die("Problemas en la creacion del archivo plano");
