@@ -401,7 +401,7 @@ class RhuSsoAporte
     /**
      * @ORM\Column(name="valor_upc_adicional", type="float")
      */
-    private $valorUpcAdicional;
+    private $valorUpcAdicional = 0;
     
     /**
      * @ORM\Column(name="numero_autorizacion_incapacidad_enfermedad_general", type="string", length=9)
@@ -411,7 +411,7 @@ class RhuSsoAporte
     /**
      * @ORM\Column(name="valor_incapacidad_enfermedad_general", type="float")
      */
-    private $valorIncapacidadEnfermedadGeneral;
+    private $valorIncapacidadEnfermedadGeneral = 0;
     
     /**
      * @ORM\Column(name="numero_autorizacion_licencia_maternidad_paternidad", type="string", length=9)
@@ -421,7 +421,7 @@ class RhuSsoAporte
     /**
      * @ORM\Column(name="valor_incapacidad_licencia_maternidad_paternidad", type="float")
      */
-    private $valorIncapacidadLicenciaMaternidadPaternidad;
+    private $valorIncapacidadLicenciaMaternidadPaternidad = 0;
     
     /**
      * @ORM\Column(name="centro_trabajo_codigo_ct", type="string", length=9)
@@ -441,7 +441,7 @@ class RhuSsoAporte
     /**
      * @ORM\Column(name="valor_aporte_esap", type="float")
      */
-    private $valorAportesESAP;
+    private $valorAportesESAP = 0;
     
     /**
      * @ORM\Column(name="tarifa_aporte_men", type="float")
@@ -451,7 +451,7 @@ class RhuSsoAporte
     /**
      * @ORM\Column(name="valor_aporte_men", type="float")
      */
-    private $valorAportesMEN;
+    private $valorAportesMEN = 0;
     
     /**
      * @ORM\Column(name="tipo_documento_responsable_upc", type="string", length=4)
