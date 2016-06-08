@@ -165,7 +165,11 @@ class ProgramacionController extends Controller
             $strFecha = $strAnioMes . '/' . $i;
             $dateFecha = date_create($strFecha);
             $diaSemana = $this->devuelveDiaSemanaEspaniol($dateFecha);
-            $arrDiaSemana[$i] = array('dia' => $i, 'diaSemana' => $diaSemana);
+            $boolFestivo = 0;
+            if($diaSemana == 'd') {
+                $boolFestivo = 1;
+            }
+            $arrDiaSemana[$i] = array('dia' => $i, 'diaSemana' => $diaSemana, 'festivo' => $boolFestivo);
         }
         $formDetalle = $this->createFormBuilder()->getForm();        
         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
