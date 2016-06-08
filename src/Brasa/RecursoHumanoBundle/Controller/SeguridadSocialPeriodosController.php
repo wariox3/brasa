@@ -205,7 +205,7 @@ class SeguridadSocialPeriodosController extends Controller
                 //Fecha de pago
                 fputs($ar, $arPeriodoDetalle->getSsoPeriodoRel()->getFechaPago()->format('Y-m-d'));
                 //Numero total de empleados
-                fputs($ar, $this->RellenarNr(0, "0", 5, "I"));
+                fputs($ar, $this->RellenarNr($arPeriodoDetalle->getNumeroEmpleados(), "0", 5, "I")); //duda
                 //Valor total de la nomina
                 fputs($ar, $this->RellenarNr(0, "0", 12, "I"));
                 fputs($ar, '1');

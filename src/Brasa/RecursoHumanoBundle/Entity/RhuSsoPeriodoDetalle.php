@@ -53,6 +53,16 @@ class RhuSsoPeriodoDetalle
     private $numeroRegistros;
     
     /**
+     * @ORM\Column(name="numero_empleados", type="integer", nullable=true)
+     */    
+    private $numeroEmpleados;
+    
+    /**
+     * @ORM\Column(name="total_cotizacion", type="float" , nullable=true)
+     */
+    private $totalCotizacion = 0;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="ssoPeriodosDetallesSsoPeriodoRel")
      * @ORM\JoinColumn(name="codigo_periodo_fk", referencedColumnName="codigo_periodo_pk")
      */
@@ -74,6 +84,7 @@ class RhuSsoPeriodoDetalle
      */
     protected $ssoPeriodosEmpleadosSsoPeriodoDetalleRel;     
 
+    
     
     /**
      * Constructor
@@ -260,6 +271,54 @@ class RhuSsoPeriodoDetalle
     public function getNumeroRegistros()
     {
         return $this->numeroRegistros;
+    }
+
+    /**
+     * Set numeroEmpleados
+     *
+     * @param integer $numeroEmpleados
+     *
+     * @return RhuSsoPeriodoDetalle
+     */
+    public function setNumeroEmpleados($numeroEmpleados)
+    {
+        $this->numeroEmpleados = $numeroEmpleados;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroEmpleados
+     *
+     * @return integer
+     */
+    public function getNumeroEmpleados()
+    {
+        return $this->numeroEmpleados;
+    }
+
+    /**
+     * Set totalCotizacion
+     *
+     * @param float $totalCotizacion
+     *
+     * @return RhuSsoPeriodoDetalle
+     */
+    public function setTotalCotizacion($totalCotizacion)
+    {
+        $this->totalCotizacion = $totalCotizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get totalCotizacion
+     *
+     * @return float
+     */
+    public function getTotalCotizacion()
+    {
+        return $this->totalCotizacion;
     }
 
     /**

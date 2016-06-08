@@ -108,9 +108,9 @@
                 <td style="text-align: right">{{ arSsoAportes.cotizacionCaja | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSsoAportes.cotizacionSena | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSsoAportes.cotizacionIcbf | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arSsoAportes.cotizacionPension+arSsoAportes.cotizacionSalud+arSsoAportes.cotizacionRiesgos+arSsoAportes.cotizacionCaja+arSsoAportes.cotizacionSena+arSsoAportes.cotizacionIcbf  | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSsoAportes.totalCotizacion  | number_format(0, '.', ',') }}</td>
             </tr>
-            {% set Total = arSsoAportes.cotizacionPension+arSsoAportes.cotizacionSalud+arSsoAportes.cotizacionRiesgos+arSsoAportes.cotizacionCaja+arSsoAportes.cotizacionSena+arSsoAportes.cotizacionIcbf+arSsoAportes.aportesFondoSolidaridadPensionalSubsistencia+arSsoAportes.aportesFondoSolidaridadPensionalSubsistencia %}
+            {% set Total = arSsoAportes.totalCotizacion %}
             {% set TotalGeneral = TotalGeneral + Total %}
            
             {% endfor %}

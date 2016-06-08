@@ -563,6 +563,16 @@ class BaseEmpleadoController extends Controller
             }else{
                 $estadoContratoActivo = "VIGENTE";
             }
+            if ($arEmpleado->getCodigoDepartamentoEmpresaFk() == null){
+                $departamentoEmpresa = "";
+            }else{
+                $departamentoEmpresa = $arEmpleado->getDepartamentoEmpresaRel()->getNombre();
+            }
+            if ($arEmpleado->getCodigoHorarioFk() == null){
+                $horario = "";
+            }else{
+                $horario = $arEmpleado->getHorarioRel()->getNombre();
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arEmpleado->getCodigoEmpleadoPk())
                     ->setCellValue('B' . $i, $arEmpleado->getTipoIdentificacionRel()->getNombre())
@@ -605,8 +615,8 @@ class BaseEmpleadoController extends Controller
                     ->setCellValue('AM' . $i, $arEmpleado->getCamisa())
                     ->setCellValue('AN' . $i, $arEmpleado->getJeans())
                     ->setCellValue('AO' . $i, $arEmpleado->getCalzado())
-                    ->setCellValue('AP' . $i, $arEmpleado->getDepartamentoEmpresaRel()->getNombre())
-                    ->setCellValue('AQ' . $i, $arEmpleado->getHorarioRel()->getNombre());
+                    ->setCellValue('AP' . $i, $departamentoEmpresa)
+                    ->setCellValue('AQ' . $i, $horario);
             $i++;
         }
 

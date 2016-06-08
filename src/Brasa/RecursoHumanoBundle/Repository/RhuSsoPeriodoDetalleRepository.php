@@ -19,6 +19,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
     public function generar($codigoPeriodoDetalle) {
         $em = $this->getEntityManager();
         set_time_limit(0);
+        $intNumeroEmpleados = 0;
         $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
         $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
         $arPeriodoEmpleadoValidar = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
@@ -38,6 +39,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
             $i = 1;
             $arPeriodoEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
             $arPeriodoEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->findBy(array('codigoPeriodoFk' => $arPeriodoDetalle->getCodigoPeriodoFk(), 'codigoPeriodoDetalleFk' => $codigoPeriodoDetalle));                
+            $intNumeroEmpleados = count($arPeriodoEmpleados);
             foreach ($arPeriodoEmpleados as $arPeriodoEmpleado) {
                 $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                 $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arPeriodoEmpleado->getCodigoEmpleadoFk());        
@@ -190,13 +192,14 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                     $floCotizacionFSPSolidaridad = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
                     $floCotizacionFSPSubsistencia = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
                 }
-                $floTotalCotizacion = $floAporteVoluntarioFondoPensionesObligatorias + $floCotizacionVoluntariaFondoPensionesObligatorias + $floCotizacionPension;
+                
                 $floCotizacionSalud = $this->redondearAporte($floSalario + $floSuplementario, $floIbcSalud, $floTarifaSalud, $intDiasCotizarSalud);
                 $floCotizacionRiesgos = $this->redondearAporte($floSalario + $floSuplementario, $floIbcRiesgos, $floTarifaRiesgos, $intDiasCotizarRiesgos);
                 $floCotizacionCaja = $this->redondearAporte($floSalario + $floSuplementario, $floIbcCaja, $floTarifaCaja, $intDiasCotizarCaja);
                 $floCotizacionIcbf = $this->redondearAporte($floSalario + $floSuplementario, $floIbcCaja, $floTarifaIcbf, $intDiasCotizarCaja);
                 $floCotizacionSena = $this->redondearAporte($floSalario + $floSuplementario, $floIbcCaja, $floTarifaSena, $intDiasCotizarCaja);
-
+                $floTotalCotizacion = $floAporteVoluntarioFondoPensionesObligatorias + $floCotizacionVoluntariaFondoPensionesObligatorias + $floCotizacionPension + $floCotizacionSalud + $floCotizacionRiesgos + $floCotizacionCaja + $floCotizacionIcbf + $floCotizacionSena;
+                
                 $arAporte->setAporteVoluntarioFondoPensionesObligatorias($floAporteVoluntarioFondoPensionesObligatorias);
                 $arAporte->setCotizacionVoluntarioFondoPensionesObligatorias($floCotizacionVoluntariaFondoPensionesObligatorias);
                 $arAporte->setAportesFondoSolidaridadPensionalSolidaridad($floCotizacionFSPSolidaridad);
@@ -334,11 +337,12 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                         $floCotizacionFSPSolidaridad = 0;
                         $floCotizacionFSPSubsistencia = 0;
                     }
-                    $floTotalCotizacion = $floAporteVoluntarioFondoPensionesObligatorias + $floCotizacionVoluntariaFondoPensionesObligatorias + $floCotizacionPension;
+                    //$floTotalCotizacion = $floAporteVoluntarioFondoPensionesObligatorias + $floCotizacionVoluntariaFondoPensionesObligatorias + $floCotizacionPension;
                     $floCotizacionSalud = $this->redondearAporte($floSalario + $floSuplementario, $floIbcSalud, $floTarifaSalud, $intDiasCotizarSalud);
                     $floCotizacionRiesgos = $this->redondearAporte($floSalario + $floSuplementario, $floIbcRiesgos, $floTarifaRiesgos, $intDiasCotizarRiesgos);
                     $floCotizacionCaja = $this->redondearAporte($floSalario + $floSuplementario, $floIbcCaja, $floTarifaCaja, $intDiasCotizarCaja);
-
+                    $floTotalCotizacion = $floAporteVoluntarioFondoPensionesObligatorias + $floCotizacionVoluntariaFondoPensionesObligatorias + $floCotizacionPension + $floCotizacionSalud + $floCotizacionRiesgos + $floCotizacionCaja;
+                    
                     $arAporte->setAporteVoluntarioFondoPensionesObligatorias($floAporteVoluntarioFondoPensionesObligatorias);
                     $arAporte->setCotizacionVoluntarioFondoPensionesObligatorias($floCotizacionVoluntariaFondoPensionesObligatorias);
                     $arAporte->setAportesFondoSolidaridadPensionalSolidaridad($floCotizacionFSPSolidaridad);
@@ -356,6 +360,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
         
         $arPeriodoDetalle->setEstadoGenerado(1);
         $arPeriodoDetalle->setNumeroRegistros($i - 1);
+        $arPeriodoDetalle->setNumeroEmpleados($intNumeroEmpleados);
         $em->persist($arPeriodoDetalle);
         $em->flush();
         return true;
