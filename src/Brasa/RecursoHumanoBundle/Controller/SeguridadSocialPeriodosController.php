@@ -232,10 +232,10 @@ class SeguridadSocialPeriodosController extends Controller
                     fputs($ar, $this->RellenarNr($arSsoAporte->getSegundoNombre(), " ", 30, "D"));
                     fputs($ar, $arSsoAporte->getIngreso());
                     fputs($ar, $arSsoAporte->getRetiro());
-                    fputs($ar, $arSsoAporte->getTrasladoDesdeOtraEps());
-                    fputs($ar, $arSsoAporte->getTrasladoAOtraEps());
-                    fputs($ar, $arSsoAporte->getTrasladoDesdeOtraPension());
-                    fputs($ar, $arSsoAporte->getTrasladoAOtraPension());
+                    fputs($ar, $this->RellenarNr($arSsoAporte->getTrasladoDesdeOtraEps(), " ", 6, "D"));
+                    fputs($ar, $this->RellenarNr($arSsoAporte->getTrasladoAOtraEps(), " ", 6, "D"));
+                    fputs($ar, $this->RellenarNr($arSsoAporte->getTrasladoDesdeOtraPension(), " ", 6, "D"));
+                    fputs($ar, $this->RellenarNr($arSsoAporte->getTrasladoAOtraPension(), " ", 6, "D"));
                     fputs($ar, $arSsoAporte->getVariacionPermanenteSalario());
                     fputs($ar, $arSsoAporte->getCorrecciones());
                     fputs($ar, $arSsoAporte->getVariacionTransitoriaSalario());
