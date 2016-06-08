@@ -63,8 +63,12 @@
                 <th style="text-align: right">C.C</th>
                 <th style="text-align: right">C.SN</th>
                 <th style="text-align: right">C.I</th>
+                <th style="text-align: right">TOTAL GENERADO</th>
             </tr>
+            {% set Total = 0 %}
+            {% set TotalGeneral = 0 %}
             {% for arSsoAportes in arSsoAportes %}
+            
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arSsoAportes.codigoAportePk }}">{{ arSsoAportes.codigoAportePk }} </td>
                 <td><a href="javascript:abrirVentana3('{{ path('brs_rhu_ss_resumen_pago', {'codigoPeriodoDetalle': arPeriodoDetalle.codigoPeriodoDetallePK, 'codigoEmpleado': arSsoAportes.codigoEmpleadoFK}) }}', 'resumenPagos', 600, 900)">{{ arSsoAportes.empleadoRel.numeroIdentificacion  }}</a></td>
@@ -104,8 +108,15 @@
                 <td style="text-align: right">{{ arSsoAportes.cotizacionCaja | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSsoAportes.cotizacionSena | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSsoAportes.cotizacionIcbf | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSsoAportes.cotizacionPension+arSsoAportes.cotizacionSalud+arSsoAportes.cotizacionRiesgos+arSsoAportes.cotizacionCaja+arSsoAportes.cotizacionSena+arSsoAportes.cotizacionIcbf  | number_format(0, '.', ',') }}</td>
             </tr>
+            {% set Total = arSsoAportes.cotizacionPension+arSsoAportes.cotizacionSalud+arSsoAportes.cotizacionRiesgos+arSsoAportes.cotizacionCaja+arSsoAportes.cotizacionSena+arSsoAportes.cotizacionIcbf+arSsoAportes.aportesFondoSolidaridadPensionalSubsistencia+arSsoAportes.aportesFondoSolidaridadPensionalSubsistencia %}
+            {% set TotalGeneral = TotalGeneral + Total %}
+           
             {% endfor %}
+             <td colspan="38"></td>
+             <td style="text-align: right">{{TotalGeneral}}</td>
+            
         </table>
         {{ knp_pagination_render(arSsoAportes) }}
 

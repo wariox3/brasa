@@ -87,7 +87,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 if($arPeriodoEmpleado->getDiasIncapacidadGeneral() > 0) {
                     $arAporte->setIncapacidadGeneral('X');
                     $arAporte->setDiasIncapacidadGeneral($arPeriodoEmpleado->getDiasIncapacidadGeneral());
-                    $floSalarioMesActual = $floSalario + $floSuplementario;   
+                    $floSalarioMesActual = $floSalario /*+ $floSuplementario*/;   
                     $floSalarioMesAnterior = $this->ibcMesAnterior($arEmpleado->getCodigoEmpleadoPk(), $arPeriodoDetalle->getSsoPeriodoRel()->getMes(), $arPeriodoDetalle->getSsoPeriodoRel()->getAnio());
                     $floIbcIncapacidadGeneral = $this->liquidarIncapacidadGeneral($floSalarioMesActual, $floSalarioMesAnterior, $arPeriodoEmpleado->getDiasIncapacidadGeneral());                        
                     $floIbcIncapacidades += $floIbcIncapacidadGeneral;                
@@ -210,7 +210,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $arAporte->setCotizacionSena($floCotizacionSena);
                 $em->persist($arAporte);
                 $i++;
-                //Para las licencias
+                //Para las licencias segunda linea solo licencias
                 if($intDiasLicenciaNoRemunerada > 0) {
                     $arAporte = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte();
                     $arAporte->setSsoPeriodoRel($arPeriodoEmpleado->getSsoPeriodoRel());
@@ -315,7 +315,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                     $arAporte->setIbcRiesgosProfesionales($floIbcRiesgos);
                     $arAporte->setIbcCaja($floIbcCaja);                                    
 
-                    $floTarifaPension = $arPeriodoEmpleado->getTarifaPension() + 4;            
+                    $floTarifaPension = $arPeriodoEmpleado->getTarifaPension();   // se quito un porcentaje de 4% (+ 4)         
                     $floTarifaSalud = 0;
                     $floTarifaRiesgos = 0;
                     $floTarifaCaja = 0;
@@ -352,8 +352,10 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                     $i++;                
                 }
             }
-        } 
+        }
+        
         $arPeriodoDetalle->setEstadoGenerado(1);
+        $arPeriodoDetalle->setNumeroRegistros($i - 1);
         $em->persist($arPeriodoDetalle);
         $em->flush();
         return true;
@@ -366,6 +368,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
         $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
         $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);
         $arPeriodoDetalle->setEstadoGenerado(0);
+        $arPeriodoDetalle->setNumeroRegistros(0);
         $em->persist($arPeriodoDetalle);
         $em->flush();
         return true;

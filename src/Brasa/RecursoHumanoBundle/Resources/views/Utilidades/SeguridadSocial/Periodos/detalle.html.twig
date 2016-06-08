@@ -20,6 +20,7 @@
                 <th>AÑO PAGO</th>
                 <th>MES</th>
                 <th>MES PAGO</th>
+                <th>NÚMERO</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -42,6 +43,7 @@
                 <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.anioPago  }}</td>
                 <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.mes  }}</td>
                 <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.mesPago  }}</td>
+                <td>{{ arSsoPeriodoDetalles.numeroRegistros  }}</td>
                 <td>{% if arSsoPeriodoDetalles.estadoGenerado == 1 %} <button class="btn btn-default btn-xs" type="submit" name="OpGenerarArchivo" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}">Archivo plano</button>  {% endif %}</td>
                 <td>{% if arSsoPeriodoDetalles.estadoGenerado == 1 %} <button class="btn btn-default btn-xs" type="submit" name="OpGenerarExcel" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}">Excel</button>  {% endif %}</td>
                 <td>

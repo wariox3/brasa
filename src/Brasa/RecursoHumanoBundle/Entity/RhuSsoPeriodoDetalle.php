@@ -48,6 +48,11 @@ class RhuSsoPeriodoDetalle
     private $estadoActualizado = 0;
     
     /**
+     * @ORM\Column(name="numero_registros", type="integer", nullable=true)
+     */    
+    private $numeroRegistros;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="ssoPeriodosDetallesSsoPeriodoRel")
      * @ORM\JoinColumn(name="codigo_periodo_fk", referencedColumnName="codigo_periodo_pk")
      */
@@ -68,6 +73,16 @@ class RhuSsoPeriodoDetalle
      * @ORM\OneToMany(targetEntity="RhuSsoPeriodoEmpleado", mappedBy="ssoPeriodoDetalleRel")
      */
     protected $ssoPeriodosEmpleadosSsoPeriodoDetalleRel;     
+
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->ssoAportesSsoPeriodoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ssoPeriodosEmpleadosSsoPeriodoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoPeriodoDetallePk
@@ -128,6 +143,30 @@ class RhuSsoPeriodoDetalle
     }
 
     /**
+     * Set detalle
+     *
+     * @param string $detalle
+     *
+     * @return RhuSsoPeriodoDetalle
+     */
+    public function setDetalle($detalle)
+    {
+        $this->detalle = $detalle;
+
+        return $this;
+    }
+
+    /**
+     * Get detalle
+     *
+     * @return string
+     */
+    public function getDetalle()
+    {
+        return $this->detalle;
+    }
+
+    /**
      * Set estadoGenerado
      *
      * @param boolean $estadoGenerado
@@ -149,6 +188,78 @@ class RhuSsoPeriodoDetalle
     public function getEstadoGenerado()
     {
         return $this->estadoGenerado;
+    }
+
+    /**
+     * Set estadoCerrado
+     *
+     * @param boolean $estadoCerrado
+     *
+     * @return RhuSsoPeriodoDetalle
+     */
+    public function setEstadoCerrado($estadoCerrado)
+    {
+        $this->estadoCerrado = $estadoCerrado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCerrado
+     *
+     * @return boolean
+     */
+    public function getEstadoCerrado()
+    {
+        return $this->estadoCerrado;
+    }
+
+    /**
+     * Set estadoActualizado
+     *
+     * @param boolean $estadoActualizado
+     *
+     * @return RhuSsoPeriodoDetalle
+     */
+    public function setEstadoActualizado($estadoActualizado)
+    {
+        $this->estadoActualizado = $estadoActualizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoActualizado
+     *
+     * @return boolean
+     */
+    public function getEstadoActualizado()
+    {
+        return $this->estadoActualizado;
+    }
+
+    /**
+     * Set numeroRegistros
+     *
+     * @param integer $numeroRegistros
+     *
+     * @return RhuSsoPeriodoDetalle
+     */
+    public function setNumeroRegistros($numeroRegistros)
+    {
+        $this->numeroRegistros = $numeroRegistros;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroRegistros
+     *
+     * @return integer
+     */
+    public function getNumeroRegistros()
+    {
+        return $this->numeroRegistros;
     }
 
     /**
@@ -197,13 +308,6 @@ class RhuSsoPeriodoDetalle
     public function getSsoSucursalRel()
     {
         return $this->ssoSucursalRel;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->ssoAportesSsoPeriodoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -272,77 +376,5 @@ class RhuSsoPeriodoDetalle
     public function getSsoPeriodosEmpleadosSsoPeriodoDetalleRel()
     {
         return $this->ssoPeriodosEmpleadosSsoPeriodoDetalleRel;
-    }
-
-    /**
-     * Set estadoCerrado
-     *
-     * @param boolean $estadoCerrado
-     *
-     * @return RhuSsoPeriodoDetalle
-     */
-    public function setEstadoCerrado($estadoCerrado)
-    {
-        $this->estadoCerrado = $estadoCerrado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoCerrado
-     *
-     * @return boolean
-     */
-    public function getEstadoCerrado()
-    {
-        return $this->estadoCerrado;
-    }
-
-    /**
-     * Set estadoActualizado
-     *
-     * @param boolean $estadoActualizado
-     *
-     * @return RhuSsoPeriodoDetalle
-     */
-    public function setEstadoActualizado($estadoActualizado)
-    {
-        $this->estadoActualizado = $estadoActualizado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoActualizado
-     *
-     * @return boolean
-     */
-    public function getEstadoActualizado()
-    {
-        return $this->estadoActualizado;
-    }
-
-    /**
-     * Set detalle
-     *
-     * @param string $detalle
-     *
-     * @return RhuSsoPeriodoDetalle
-     */
-    public function setDetalle($detalle)
-    {
-        $this->detalle = $detalle;
-
-        return $this;
-    }
-
-    /**
-     * Get detalle
-     *
-     * @return string
-     */
-    public function getDetalle()
-    {
-        return $this->detalle;
     }
 }
