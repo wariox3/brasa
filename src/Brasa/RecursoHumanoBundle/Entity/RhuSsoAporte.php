@@ -414,7 +414,7 @@ class RhuSsoAporte
     private $valorIncapacidadEnfermedadGeneral = 0;
     
     /**
-     * @ORM\Column(name="numero_autorizacion_licencia_maternidad_paternidad", type="string", length=9)
+     * @ORM\Column(name="numero_autorizacion_licencia_maternidad_paternidad", type="string", length=9, nullable=true)
      */
     private $numeroAutorizacionLicenciaMaternidadPaternidad;
     
@@ -424,7 +424,7 @@ class RhuSsoAporte
     private $valorIncapacidadLicenciaMaternidadPaternidad = 0;
     
     /**
-     * @ORM\Column(name="centro_trabajo_codigo_ct", type="string", length=9)
+     * @ORM\Column(name="centro_trabajo_codigo_ct", type="string", length=9, nullable=true)
      */
     private $centroTrabajoCodigoCt;
     
@@ -454,27 +454,27 @@ class RhuSsoAporte
     private $valorAportesMEN = 0;
     
     /**
-     * @ORM\Column(name="tipo_documento_responsable_upc", type="string", length=4)
+     * @ORM\Column(name="tipo_documento_responsable_upc", type="string", length=4, nullable=true)
      */    
     private $tipoDocumentoResponsableUPC;
     
     /**
-     * @ORM\Column(name="numero_identificacion_responsable_upc_adicional", type="string", length=20)
+     * @ORM\Column(name="numero_identificacion_responsable_upc_adicional", type="string", length=20, nullable=true)
      */    
     private $numeroIdentificacionResponsableUPCAdicional;
     
     /**
-     * @ORM\Column(name="cotizante_exonerado_pago_aporte_parafiscales_salud", type="string", length=20)
+     * @ORM\Column(name="cotizante_exonerado_pago_aporte_parafiscales_salud", type="string", length=20, nullable=true)
      */    
     private $cotizanteExoneradoPagoAporteParafiscalesSalud;
     
     /**
-     * @ORM\Column(name="codigo_administradora_riesgos_laborales", type="string", length=20)
+     * @ORM\Column(name="codigo_administradora_riesgos_laborales", type="string", length=20, nullable=true)
      */    
     private $codigoAdministradoraRiesgosLaborales;
     
     /**
-     * @ORM\Column(name="clase_riesgo_afiliado", type="string", length=20)
+     * @ORM\Column(name="clase_riesgo_afiliado", type="string", length=20, nullable=true)
      */    
     private $claseRiesgoAfiliado;
     
