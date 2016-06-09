@@ -18,7 +18,7 @@ class TurPuesto
     private $codigoPuestoPk;        
     
     /**
-     * @ORM\Column(name="nombre", type="string", length=50)
+     * @ORM\Column(name="nombre", type="string", length=60)
      */
     private $nombre;      
             
