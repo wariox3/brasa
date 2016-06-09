@@ -7,6 +7,25 @@
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
+        <div class="panel panel-default">
+            <div class="panel-heading">Información detalle sucursal</div>
+            <div class="panel-body">
+                <table width="100%" class="table table-condensed table-bordered">
+                    <tr>
+                        <td class="titulo">CÓDIGO:</td>
+                        <td class="td-in-well">{{ arPeriodo.codigoPeriodoPk }}</td>
+                        <td class="titulo">DESDE:</td>
+                        <td class="td-in-well">{{ arPeriodo.fechaDesde |date("Y/m/d") }}</td>
+                        <td class="titulo">HASTA:</td>
+                        <td class="td-in-well">{{ arPeriodo.fechaHasta |date("Y/m/d") }}</td>
+                        <td class="titulo">PERIODO:</td>
+                        <td class="td-in-well">{{ arPeriodo.fechaHasta |date("Y-m") }}</td> 
+                        <td class="titulo">PAGO:</td>
+                        <td class="td-in-well">{{ arPeriodo.fechaPago |date("Y-m") }}</td>                         
+                    </tr>                    
+                </table>
+            </div>
+        </div>
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
                 <th>CÓDIGO</th>
@@ -14,11 +33,8 @@
                 <th>DETALLE</th>
                 <th>GEN</th>
                 <th>CER</th>
-                <th>DESDE</th>
-                <th>HASTA</th>
-                <th>PERIDOO</th>
-                <th>PAGO</th>
                 <th>REG</th>
+                <th style="text-align: right">TOTAL</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -35,11 +51,8 @@
                 <td>{{ arSsoPeriodoDetalles.detalle  }}</td>
                 <td {% if arSsoPeriodoDetalles.estadoGenerado == 1 %}class="success"{% endif %}>{% if arSsoPeriodoDetalles.estadoGenerado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td {% if arSsoPeriodoDetalles.estadoCerrado == 1 %}class="success"{% endif %}>{% if arSsoPeriodoDetalles.estadoCerrado == 1 %} SI {% else %} NO {% endif %}</td>
-                <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.fechaDesde |date("Y/m/d")  }}</td>
-                <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.fechaHasta |date("Y/m/d")  }}</td>
-                <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.anio  }}-{{ arSsoPeriodoDetalles.ssoPeriodoRel.mes  }}</td>
-                <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.anioPago  }}-{{ arSsoPeriodoDetalles.ssoPeriodoRel.mesPago  }}</td>
                 <td>{{ arSsoPeriodoDetalles.numeroRegistros  }}</td>
+                <td>{{ arSsoPeriodoDetalles.totalCotizacion | number_format(0, '.', ',') }} </td>
                 <td>{% if arSsoPeriodoDetalles.estadoGenerado == 1 %} <button class="btn btn-default btn-xs" type="submit" name="OpGenerarArchivo" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}">Archivo plano</button>  {% endif %}</td>
                 <td>{% if arSsoPeriodoDetalles.estadoGenerado == 1 %} <button class="btn btn-default btn-xs" type="submit" name="OpGenerarExcel" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}">Excel</button>  {% endif %}</td>
                 <td>

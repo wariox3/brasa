@@ -412,7 +412,7 @@ class SeguridadSocialPeriodosController extends Controller
                     ->setCellValue('AI1', 'C.C')
                     ->setCellValue('AJ1', 'C.SN')
                     ->setCellValue('AK1', 'C.I')
-                    ->setCellValue('AL1', 'TOTAL COT');
+                    ->setCellValue('AL1', 'TOTAL');
                 
                 $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
                 $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);
@@ -462,7 +462,7 @@ class SeguridadSocialPeriodosController extends Controller
                     ->setCellValue('K' . $i, $vacaciones)
                     ->setCellValue('L' . $i, $riesgosProfesionales)
                     ->setCellValue('M' . $i, $arSsoAporte->getSalarioBasico())
-                    ->setCellValue('N' . $i, $arSsoAporte->getSuplementario())
+                    ->setCellValue('N' . $i, number_format($arSsoAporte->getSuplementario(),0,',','.'))
                     ->setCellValue('O' . $i, $salarioIntegral)        
                     ->setCellValue('P' . $i, $arSsoAporte->getDiasCotizadosPension())
                     ->setCellValue('Q' . $i, $arSsoAporte->getDiasCotizadosSalud())
@@ -520,9 +520,11 @@ class SeguridadSocialPeriodosController extends Controller
             }
         }
         $arSsoPeriodoDetalles = $paginator->paginate($em->createQuery($this->strDqlListaDetalle), $request->query->get('page', 1), 50);                
+        $arPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->find($codigoPeriodo);
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/SeguridadSocial/Periodos:detalle.html.twig', array(
             'arSsoPeriodoDetalles' => $arSsoPeriodoDetalles,
             'codigoPeriodo' => $codigoPeriodo,
+            'arPeriodo' => $arPeriodo,
             'form' => $form->createView()));
     }
     
