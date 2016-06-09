@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuDepartamentoEmpresaType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * RhuDepartamentoEmpresa controller.
@@ -17,6 +18,7 @@ class BaseDepartamentoEmpresaController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
@@ -26,13 +28,17 @@ class BaseDepartamentoEmpresaController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoDepartamentoEmpresaPk) {
-                    $arDepartamentosEmpresa = new \Brasa\RecursoHumanoBundle\Entity\RhuDepartamentoEmpresa();
-                    $arDepartamentosEmpresa = $em->getRepository('BrasaRecursoHumanoBundle:RhuDepartamentoEmpresa')->find($codigoDepartamentoEmpresaPk);
-                    $em->remove($arDepartamentosEmpresa);
+                try{
+                    foreach ($arrSeleccionados AS $codigoDepartamentoEmpresaPk) {
+                        $arDepartamentosEmpresa = new \Brasa\RecursoHumanoBundle\Entity\RhuDepartamentoEmpresa();
+                        $arDepartamentosEmpresa = $em->getRepository('BrasaRecursoHumanoBundle:RhuDepartamentoEmpresa')->find($codigoDepartamentoEmpresaPk);
+                        $em->remove($arDepartamentosEmpresa);
+                    }
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_base_departamento_empresa_listar'));
-                }
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el departamento empresa porque esta siendo utilizado', $this);
+                  }    
             }    
         
         if($form->get('BtnExcel')->isClicked()) {

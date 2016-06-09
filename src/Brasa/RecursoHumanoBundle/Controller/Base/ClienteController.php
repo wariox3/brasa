@@ -5,6 +5,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuClienteType;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 class ClienteController extends Controller
 {

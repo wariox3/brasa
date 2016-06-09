@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuSeleccionEntrevistaTipoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * RhuSeleccionEntrevistaTipo controller.
@@ -17,6 +18,7 @@ class BaseSeleccionEntrevistaTipoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
@@ -26,13 +28,17 @@ class BaseSeleccionEntrevistaTipoController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoSeleccionEntrevistaTipoPk) {
-                    $arSeleccionEntrevistaTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionEntrevistaTipo();
-                    $arSeleccionEntrevistaTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionEntrevistaTipo')->find($codigoSeleccionEntrevistaTipoPk);
-                    $em->remove($arSeleccionEntrevistaTipo);
+                try{
+                    foreach ($arrSeleccionados AS $codigoSeleccionEntrevistaTipoPk) {
+                        $arSeleccionEntrevistaTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionEntrevistaTipo();
+                        $arSeleccionEntrevistaTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionEntrevistaTipo')->find($codigoSeleccionEntrevistaTipoPk);
+                        $em->remove($arSeleccionEntrevistaTipo);
+                    }
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_base_seleccion_entrevista_tipo_listar'));
-                }
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el tipo de entrevista porque esta siendo utilizado', $this);
+                  }    
             }    
         
         if($form->get('BtnExcel')->isClicked()) {

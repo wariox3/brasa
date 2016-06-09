@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuRequisitoConceptoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * RhuRequisitoConcepto controller.
@@ -18,6 +19,7 @@ class BaseRequisitoConceptoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioLista(); 
         $form->handleRequest($request);     
         $this->listar();
@@ -25,11 +27,15 @@ class BaseRequisitoConceptoController extends Controller
             if($form->get('BtnEliminar')->isClicked()) {                           
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoRequisitoConcepto) {
-                        $arRequisitoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoConcepto')->find($codigoRequisitoConcepto);
-                        $em->remove($arRequisitoConcepto);
+                    try{
+                        foreach ($arrSeleccionados AS $codigoRequisitoConcepto) {
+                            $arRequisitoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoConcepto')->find($codigoRequisitoConcepto);
+                            $em->remove($arRequisitoConcepto);
+                        }
                         $em->flush();
-                    }
+                    } catch (ForeignKeyConstraintViolationException $e) { 
+                        $objMensaje->Mensaje('error', 'No se puede eliminar el concepto porque esta siendo utilizado', $this);
+                      }    
                 }                
             }
             

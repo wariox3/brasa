@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuPagoConceptoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * RhuPagoConcepto controller.
@@ -17,6 +18,7 @@ class BasePagoConceptoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
@@ -28,12 +30,16 @@ class BasePagoConceptoController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoPagoConceptoPk) {
-                    $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                    $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($codigoPagoConceptoPk);
-                    $em->remove($arPagoConcepto);
+                try{
+                    foreach ($arrSeleccionados AS $codigoPagoConceptoPk) {
+                        $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                        $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($codigoPagoConceptoPk);
+                        $em->remove($arPagoConcepto);
+                    }
                     $em->flush();
-                }
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el pago concepto porque esta siendo utilizado', $this);
+                  }    
             }
             
         if($form->get('BtnExcel')->isClicked()) {

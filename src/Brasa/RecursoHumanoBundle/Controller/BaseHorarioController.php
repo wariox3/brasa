@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuHorarioType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * RhuHorario controller.
@@ -17,6 +18,7 @@ class BaseHorarioController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
@@ -28,13 +30,17 @@ class BaseHorarioController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoHorarioPk) {
-                    $arHorario = new \Brasa\RecursoHumanoBundle\Entity\RhuHorario();
-                    $arHorario = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorario')->find($codigoHorarioPk);
-                    $em->remove($arHorario);
-                    $em->flush();
-                }
-                return $this->redirect($this->generateUrl('brs_rhu_base_horario_listar'));
+                try{
+                    foreach ($arrSeleccionados AS $codigoHorarioPk) {
+                        $arHorario = new \Brasa\RecursoHumanoBundle\Entity\RhuHorario();
+                        $arHorario = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorario')->find($codigoHorarioPk);
+                        $em->remove($arHorario);
+                    }
+                     $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_base_horario_listar'));
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el horario porque esta siendo utilizado', $this);
+                  }    
             }    
         
         if($form->get('BtnExcel')->isClicked()) {

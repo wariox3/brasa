@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCartaTipoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * RhuCartaTipo controller.
@@ -17,6 +18,7 @@ class BaseCartaTipoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder()
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
             ->getForm(); 
@@ -25,13 +27,17 @@ class BaseCartaTipoController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoCartaTipo) {
-                    $arCartaTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuCartaTipo();
-                    $arCartaTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuCartaTipo')->find($codigoCartaTipo);
-                    $em->remove($arCartaTipo);
-                    $em->flush();                    
-                }
-                return $this->redirect($this->generateUrl('brs_rhu_base_carta_tipo_lista'));
+                try{
+                    foreach ($arrSeleccionados AS $codigoCartaTipo) {
+                        $arCartaTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuCartaTipo();
+                        $arCartaTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuCartaTipo')->find($codigoCartaTipo);
+                        $em->remove($arCartaTipo);         
+                    }
+                    $em->flush(); 
+                    return $this->redirect($this->generateUrl('brs_rhu_base_carta_tipo_lista'));
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar la carta tipo porque esta siendo utilizado', $this);
+                  }    
             }                        
         }
         

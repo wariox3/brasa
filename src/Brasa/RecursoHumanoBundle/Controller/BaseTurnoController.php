@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuTurnoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * RhuTurno controller.
@@ -17,6 +18,7 @@ class BaseTurnoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
@@ -28,13 +30,17 @@ class BaseTurnoController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoTurnoPk) {
-                    $arTurno = new \Brasa\RecursoHumanoBundle\Entity\RhuTurno();
-                    $arTurno = $em->getRepository('BrasaRecursoHumanoBundle:RhuTurno')->find($codigoTurnoPk);
-                    $em->remove($arTurno);
+                try{
+                    foreach ($arrSeleccionados AS $codigoTurnoPk) {
+                        $arTurno = new \Brasa\RecursoHumanoBundle\Entity\RhuTurno();
+                        $arTurno = $em->getRepository('BrasaRecursoHumanoBundle:RhuTurno')->find($codigoTurnoPk);
+                        $em->remove($arTurno);
+                    }
                     $em->flush();
-                }
-                return $this->redirect($this->generateUrl('brs_rhu_base_turno_listar'));
+                    return $this->redirect($this->generateUrl('brs_rhu_base_turno_listar'));
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el turno porque esta siendo utilizado', $this);
+                  }    
             }    
         
         if($form->get('BtnExcel')->isClicked()) {

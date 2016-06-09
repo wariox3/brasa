@@ -383,6 +383,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
         $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);
         $arPeriodoDetalle->setEstadoGenerado(0);
         $arPeriodoDetalle->setNumeroRegistros(0);
+        $arPeriodoDetalle->setTotalCotizacion(0);
         $em->persist($arPeriodoDetalle);
         $em->flush();
         return true;

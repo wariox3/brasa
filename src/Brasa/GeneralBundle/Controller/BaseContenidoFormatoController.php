@@ -5,6 +5,7 @@ namespace Brasa\GeneralBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\GeneralBundle\Form\Type\GenContenidoFormatoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * GenContenidoFormato controller.
@@ -17,6 +18,7 @@ class BaseContenidoFormatoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder()
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
             ->getForm(); 
@@ -25,13 +27,17 @@ class BaseContenidoFormatoController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoContenidoFormato) {
-                    $arContenidoFormato = new \Brasa\GeneralBundle\Entity\GenContenidoFormato();
-                    $arContenidoFormato = $em->getRepository('BrasaGeneralBundle:GenContenidoFormato')->find($codigoContenidoFormato);
-                    $em->remove($arContenidoFormato);
-                    $em->flush();                    
-                }
-                return $this->redirect($this->generateUrl('brs_gen_base_contenido_formato_lista'));
+                try{
+                    foreach ($arrSeleccionados AS $codigoContenidoFormato) {
+                        $arContenidoFormato = new \Brasa\GeneralBundle\Entity\GenContenidoFormato();
+                        $arContenidoFormato = $em->getRepository('BrasaGeneralBundle:GenContenidoFormato')->find($codigoContenidoFormato);
+                        $em->remove($arContenidoFormato);                    
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_gen_base_contenido_formato_lista'));
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar contenidos de los formatos porque esta siendo utilizado', $this);
+                   }    
             }                        
         }
         $arContenidoFormatos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);        

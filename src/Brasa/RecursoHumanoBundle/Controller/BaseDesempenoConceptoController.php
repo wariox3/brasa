@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuDesempenoConceptoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * RhuBaseDesempenoConcepto controller.
@@ -17,6 +18,7 @@ class BaseDesempenoConceptoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
@@ -26,12 +28,16 @@ class BaseDesempenoConceptoController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoDesempenoConcepto) {
-                    $arDesempenoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoConcepto();
-                    $arDesempenoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoConcepto')->find($codigoDesempenoConcepto);
-                    $em->remove($arDesempenoConcepto);
+                try{
+                    foreach ($arrSeleccionados AS $codigoDesempenoConcepto) {
+                        $arDesempenoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoConcepto();
+                        $arDesempenoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoConcepto')->find($codigoDesempenoConcepto);
+                        $em->remove($arDesempenoConcepto);
+                    }
                     $em->flush();
-                }
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el concepto porque esta siendo utilizado', $this);
+                  }    
             }
               
             if($form->get('BtnExcel')->isClicked()) { 

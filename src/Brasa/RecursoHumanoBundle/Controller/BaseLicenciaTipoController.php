@@ -5,6 +5,8 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuLicenciaTipoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+
 
 /**
  * RhuLicenciaTipo controller.
@@ -17,6 +19,7 @@ class BaseLicenciaTipoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
@@ -26,11 +29,15 @@ class BaseLicenciaTipoController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoLicenciaTipoPk) {
-                    $arLicenciaTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicenciaTipo')->find($codigoLicenciaTipoPk);
-                    $em->remove($arLicenciaTipo);
+                try{    
+                    foreach ($arrSeleccionados AS $codigoLicenciaTipoPk) {
+                        $arLicenciaTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicenciaTipo')->find($codigoLicenciaTipoPk);
+                        $em->remove($arLicenciaTipo);
+                    }
                     $em->flush();
-                }
+                } catch (ForeignKeyConstraintViolationException $e) {
+                        $objMensaje->Mensaje('error', 'No se puede eliminar el tipo de licencia porque esta siendo utilizado', $this);
+                    }    
             }
             
         if($form->get('BtnExcel')->isClicked()) {

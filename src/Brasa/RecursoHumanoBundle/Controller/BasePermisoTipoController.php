@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuPermisoTipoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * RhuPermisoTipo controller.
@@ -17,6 +18,7 @@ class BasePermisoTipoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
@@ -28,12 +30,16 @@ class BasePermisoTipoController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoPermisoTipoPk) {
-                    $arPermisoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPermisoTipo();
-                    $arPermisoTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPermisoTipo')->find($codigoPermisoTipoPk);
-                    $em->remove($arPermisoTipo);
+                try{
+                    foreach ($arrSeleccionados AS $codigoPermisoTipoPk) {
+                        $arPermisoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuPermisoTipo();
+                        $arPermisoTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPermisoTipo')->find($codigoPermisoTipoPk);
+                        $em->remove($arPermisoTipo);
+                    }
                     $em->flush();
-                }
+               } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el tipo de permiso porque esta siendo utilizado', $this);
+                 }     
             }    
         
         if($form->get('BtnExcel')->isClicked()) {

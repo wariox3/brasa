@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuSaludType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * RhuEntidadSalud controller.
@@ -17,6 +18,7 @@ class BaseSaludController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
             ->add('BtnPdf', 'submit', array('label'  => 'PDF'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
@@ -29,12 +31,16 @@ class BaseSaludController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoEntidadSaludPk) {
-                    $arSalud = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud();
-                    $arSalud = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadSalud')->find($codigoEntidadSaludPk);
-                    $em->remove($arSalud);
+                try{
+                    foreach ($arrSeleccionados AS $codigoEntidadSaludPk) {
+                        $arSalud = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud();
+                        $arSalud = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadSalud')->find($codigoEntidadSaludPk);
+                        $em->remove($arSalud);
+                    }
                     $em->flush();
-                }
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar la entidad de salud porque esta siendo utilizado', $this);
+                  }    
             }
             
         if($form->get('BtnPdf')->isClicked()) {

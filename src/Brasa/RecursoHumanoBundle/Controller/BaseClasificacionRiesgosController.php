@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuClasificacionRiesgosType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * RhuClasificacionRiesgos controller.
@@ -17,6 +18,7 @@ class BaseClasificacionRiesgosController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
             ->add('BtnPdf', 'submit', array('label'  => 'PDF'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
@@ -27,13 +29,17 @@ class BaseClasificacionRiesgosController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoClasificacionPk) {
-                    $arClasificacion = new \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo();
-                    $arClasificacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuClasificacionRiesgo')->find($codigoClasificacionPk);
-                    $em->remove($arClasificacion);
+                try{
+                    foreach ($arrSeleccionados AS $codigoClasificacionPk) {
+                        $arClasificacion = new \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo();
+                        $arClasificacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuClasificacionRiesgo')->find($codigoClasificacionPk);
+                        $em->remove($arClasificacion);
+                    }
                     $em->flush();
-                }
-                return $this->redirect($this->generateUrl('brs_rhu_base_clasificacion_listar'));
+                    return $this->redirect($this->generateUrl('brs_rhu_base_clasificacion_listar'));
+                    } catch (ForeignKeyConstraintViolationException $e) { 
+                        $objMensaje->Mensaje('error', 'No se puede eliminar clasificacion de riesgos porque esta siendo utilizado', $this);
+                      }
             }
             
         if($form->get('BtnPdf')->isClicked()) {
@@ -99,6 +105,7 @@ class BaseClasificacionRiesgosController extends Controller
            
         ));
     }
+    
     public function nuevoAction($codigoClasificacionPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

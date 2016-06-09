@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuSsoSucursalType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 
 class BaseSsoSucursalController extends Controller
@@ -14,6 +15,7 @@ class BaseSsoSucursalController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
             ->add('BtnPdf', 'submit', array('label'  => 'PDF'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
@@ -26,12 +28,16 @@ class BaseSsoSucursalController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoSucursalPk) {
-                    $arSsoSucursal = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal();
-                    $arSsoSucursal = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoSucursal')->find($codigoSucursalPk);
-                    $em->remove($arSsoSucursal);
+                try{
+                    foreach ($arrSeleccionados AS $codigoSucursalPk) {
+                        $arSsoSucursal = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoSucursal();
+                        $arSsoSucursal = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoSucursal')->find($codigoSucursalPk);
+                        $em->remove($arSsoSucursal);
+                    }
                     $em->flush();
-                }
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar la sucursal porque esta siendo utilizado', $this);
+                  }                   
             }
             
         if($form->get('BtnPdf')->isClicked()) {
@@ -97,6 +103,7 @@ class BaseSsoSucursalController extends Controller
            
         ));
     }
+    
     public function nuevoAction($codigoSucursalPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

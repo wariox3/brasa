@@ -6,6 +6,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuExamenCargoType;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+
 
 /**
  * RhuExamenCargo controller.
@@ -18,6 +20,7 @@ class BaseExamenCargoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioLista(); 
         $form->handleRequest($request);     
         $this->listar();
@@ -29,11 +32,15 @@ class BaseExamenCargoController extends Controller
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if($form->get('BtnEliminar')->isClicked()) {
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoExamenCargo) {
-                        $arExamenCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenCargo')->find($codigoExamenCargo);
-                        $em->remove($arExamenCargo);
+                    try{
+                        foreach ($arrSeleccionados AS $codigoExamenCargo) {
+                            $arExamenCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenCargo')->find($codigoExamenCargo);
+                            $em->remove($arExamenCargo);
+                        }
                         $em->flush();
-                    }
+                    } catch (ForeignKeyConstraintViolationException $e) {
+                        $objMensaje->Mensaje('error', 'No se puede eliminar el examen por cargo porque esta siendo utilizado', $this);
+                    }    
                 }                
             }
             if($form->get('BtnExcel')->isClicked()) { 

@@ -176,8 +176,13 @@ class SeguridadSocialPeriodosController extends Controller
                 $codigoPeriodoDetalle = $request->request->get('OpGenerarArchivo');
                 $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
                 $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-                $strRutaArchivo = $arConfiguracion->getRutaTemporal();
-                //$strRutaArchivo = "c:/xampp/";
+                $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+                $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+                $arEntidadRiesgos = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
+                $arEntidadRiesgos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($arConfiguracionNomina->getCodigoEntidadRiesgoFk());
+                $condigoInterfaceRiesgos = $arEntidadRiesgos->getCodigoInterface();
+                //$strRutaArchivo = $arConfiguracion->getRutaTemporal();
+                $strRutaArchivo = "c:/xampp/";
                 $strNombreArchivo = "pila" . date('YmdHis') . ".txt";
                 ob_clean();
                 $ar = fopen($strRutaArchivo . $strNombreArchivo, "a") or
@@ -198,7 +203,8 @@ class SeguridadSocialPeriodosController extends Controller
                 fputs($ar, $this->RellenarNr($arPeriodoDetalle->getSsoSucursalRel()->getCodigoInterface(), " ", 10, "D")); //Nro 11
                 fputs($ar, $this->RellenarNr($arPeriodoDetalle->getSsoSucursalRel()->getNombre(), " ", 40, "D")); //Nro 12
                 //Arp del aportante
-                fputs($ar, '14-18 '); //Nro 13
+                //fputs($ar, '14-18 '); 
+                fputs($ar, $this->RellenarNr($condigoInterfaceRiesgos, " ", 6, "D")); //Nro 13
                 //Periodo pago para los diferentes sistemas
                 fputs($ar, $arPeriodoDetalle->getSsoPeriodoRel()->getAnio().'-'. $this->RellenarNr($arPeriodoDetalle->getSsoPeriodoRel()->getMes(), "0", 2, "I")); //Nro 14
                 fputs($ar, $arPeriodoDetalle->getSsoPeriodoRel()->getAnioPago().'-'. $this->RellenarNr($arPeriodoDetalle->getSsoPeriodoRel()->getMesPago(), "0", 2, "I")); //Nro 15

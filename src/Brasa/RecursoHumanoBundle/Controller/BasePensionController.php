@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuPensionType;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * RhuEntidadPension controller.
@@ -17,6 +18,7 @@ class BasePensionController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder() //
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
@@ -30,12 +32,16 @@ class BasePensionController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoEntidadPensionPk) {
-                    $arPension = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension();
-                    $arPension = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadPension')->find($codigoEntidadPensionPk);
-                    $em->remove($arPension);
+                try{
+                    foreach ($arrSeleccionados AS $codigoEntidadPensionPk) {
+                        $arPension = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension();
+                        $arPension = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadPension')->find($codigoEntidadPensionPk);
+                        $em->remove($arPension);
+                    }
                     $em->flush();
-                }
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar la entidad de pension porque esta siendo utilizado', $this);
+                  }    
             }
         
         if($form->get('BtnPdf')->isClicked()) {

@@ -5,6 +5,8 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuExamenTipoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+
 
 /**
  * RhuExamenTipo controller.
@@ -17,6 +19,7 @@ class BaseExamenTipoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
             ->add('BtnPdf', 'submit', array('label'  => 'PDF'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
@@ -27,12 +30,16 @@ class BaseExamenTipoController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoExamenTipoPk) {
-                    $arExamenTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo();
-                    $arExamenTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->find($codigoExamenTipoPk);
-                    $em->remove($arExamenTipo);
+                try{
+                    foreach ($arrSeleccionados AS $codigoExamenTipoPk) {
+                        $arExamenTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo();
+                        $arExamenTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->find($codigoExamenTipoPk);
+                        $em->remove($arExamenTipo);
+                    }
                     $em->flush();
-                }
+                } catch (ForeignKeyConstraintViolationException $e) {
+                        $objMensaje->Mensaje('error', 'No se puede eliminar el tipo de examen porque esta siendo utilizado', $this);
+                    }    
             }
             
             if($form->get('BtnPdf')->isClicked()) {

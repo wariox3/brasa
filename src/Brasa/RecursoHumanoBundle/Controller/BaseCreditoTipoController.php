@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCreditoTipoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * RhucreditoTipo controller.
@@ -17,6 +18,7 @@ class BaseCreditoTipoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
             ->add('BtnPdf', 'submit', array('label'  => 'PDF'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
@@ -29,12 +31,16 @@ class BaseCreditoTipoController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoCreditoTipoPk) {
-                    $arCreditoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud();
-                    $arCreditoTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoTipo')->find($codigoCreditoTipoPk);
-                    $em->remove($arCreditoTipo);
+                try{
+                    foreach ($arrSeleccionados AS $codigoCreditoTipoPk) {
+                        $arCreditoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud();
+                        $arCreditoTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoTipo')->find($codigoCreditoTipoPk);
+                        $em->remove($arCreditoTipo);
+                    }
                     $em->flush();
-                }
+                    } catch (ForeignKeyConstraintViolationException $e) {
+                        $objMensaje->Mensaje('error', 'No se puede eliminar el tipo de credito porque esta siendo utilizado', $this);
+                    }
             }
         
         if($form->get('BtnPdf')->isClicked()) {

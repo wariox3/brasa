@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuDotacionCargoType;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * RhuDotacionCargo controller.
@@ -18,6 +19,7 @@ class BaseDotacionCargoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioLista(); 
         $form->handleRequest($request);     
         $this->listar();
@@ -29,11 +31,15 @@ class BaseDotacionCargoController extends Controller
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if($form->get('BtnEliminar')->isClicked()) {
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoDotacionCargo) {
-                        $arDotacionCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionCargo')->find($codigoDotacionCargo);
-                        $em->remove($arDotacionCargo);
-                        $em->flush();
-                    }
+                    try{
+                        foreach ($arrSeleccionados AS $codigoDotacionCargo) {
+                            $arDotacionCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionCargo')->find($codigoDotacionCargo);
+                            $em->remove($arDotacionCargo);
+                            $em->flush();
+                        }
+                   } catch (ForeignKeyConstraintViolationException $e) { 
+                        $objMensaje->Mensaje('error', 'No se puede eliminar la dotacion por cargo porque esta siendo utilizado', $this);
+                     }     
                 }                
             }
             if($form->get('BtnExcel')->isClicked()) { 

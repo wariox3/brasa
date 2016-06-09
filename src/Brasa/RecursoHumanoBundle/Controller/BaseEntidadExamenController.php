@@ -5,7 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 
 use Brasa\RecursoHumanoBundle\Form\Type\RhuEntidadExamenType;
@@ -32,18 +32,21 @@ class BaseEntidadExamenController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoEntidadExamenPk) {
-                    $arEntidadExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadExamen();
-                    $arEntidadExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadExamen')->find($codigoEntidadExamenPk);
-                    $arEntidadExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->findOneBy(array('codigoEntidadExamenFk' => $codigoEntidadExamenPk));
-                    if ($arEntidadExamenDetalle == null){
-                        $em->remove($arEntidadExamen);
-                    } else {
-                        $objMensaje->Mensaje("error", "No se puede eliminar el registro " . $codigoEntidadExamenPk .", tiene detalles asociados", $this);
+                try{
+                    foreach ($arrSeleccionados AS $codigoEntidadExamenPk) {
+                        $arEntidadExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadExamen();
+                        $arEntidadExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadExamen')->find($codigoEntidadExamenPk);
+                        $arEntidadExamenDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->findOneBy(array('codigoEntidadExamenFk' => $codigoEntidadExamenPk));
+                        if ($arEntidadExamenDetalle == null){
+                            $em->remove($arEntidadExamen);
+                        } else {
+                            $objMensaje->Mensaje("error", "No se puede eliminar el registro " . $codigoEntidadExamenPk .", tiene detalles asociados", $this);
+                        }
+                        $em->flush();
                     }
-                    
-                    $em->flush();
-                }
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar la entidad examen porque esta siendo utilizado', $this);
+                  }    
             }
         
         if($form->get('BtnPdf')->isClicked()) {

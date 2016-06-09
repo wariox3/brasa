@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuSaludTipoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * RhuBaseSaludTipo controller.
@@ -17,6 +18,7 @@ class BaseSaludTipoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
@@ -26,13 +28,17 @@ class BaseSaludTipoController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoSaludTipo) {
-                    $arSaludTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud();
-                    $arSaludTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuTipoSalud')->find($codigoSaludTipo);
-                    $em->remove($arSaludTipo);
+                try{
+                    foreach ($arrSeleccionados AS $codigoSaludTipo) {
+                        $arSaludTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud();
+                        $arSaludTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuTipoSalud')->find($codigoSaludTipo);
+                        $em->remove($arSaludTipo);
+                    }
                     $em->flush();
-                }
-                return $this->redirect($this->generateUrl('brs_rhu_base_salud_tipo_lista'));
+                    return $this->redirect($this->generateUrl('brs_rhu_base_salud_tipo_lista'));
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el tipo de salud porque esta siendo utilizado', $this);
+                  }    
             }
               
             if($form->get('BtnExcel')->isClicked()) { 

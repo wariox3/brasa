@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuDisciplinarioTipoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * RhuDisciplinarioTipo controller.
@@ -17,6 +18,7 @@ class BaseDisciplinarioTipoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder()
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
             ->getForm(); 
@@ -25,13 +27,17 @@ class BaseDisciplinarioTipoController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoDisciplinarioTipo) {
-                    $arDisciplinarioTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioTipo();
-                    $arDisciplinarioTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinarioTipo')->find($codigoDisciplinarioTipo);
-                    $em->remove($arDisciplinarioTipo);
-                    $em->flush();                    
-                }
-                return $this->redirect($this->generateUrl('brs_rhu_base_disciplinario_tipo_lista'));
+                try{
+                    foreach ($arrSeleccionados AS $codigoDisciplinarioTipo) {
+                        $arDisciplinarioTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioTipo();
+                        $arDisciplinarioTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinarioTipo')->find($codigoDisciplinarioTipo);
+                        $em->remove($arDisciplinarioTipo);                 
+                    }
+                    $em->flush(); 
+                    return $this->redirect($this->generateUrl('brs_rhu_base_disciplinario_tipo_lista'));
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el tipo de proceso disciplinario porque esta siendo utilizado', $this);
+                  }
             }                        
         }
         

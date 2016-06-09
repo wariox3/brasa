@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuEmpleadoEstudioTipoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * RhuBaseEmpleadoEstudioTipo controller.
@@ -17,6 +18,7 @@ class BaseEmpleadoEstudioTipoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
@@ -26,12 +28,16 @@ class BaseEmpleadoEstudioTipoController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoTipoEstudio) {
-                    $arTipoEstudio = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudioTipo();
-                    $arTipoEstudio = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudioTipo')->find($codigoTipoEstudio);
-                    $em->remove($arTipoEstudio);
+                try{
+                    foreach ($arrSeleccionados AS $codigoTipoEstudio) {
+                        $arTipoEstudio = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudioTipo();
+                        $arTipoEstudio = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudioTipo')->find($codigoTipoEstudio);
+                        $em->remove($arTipoEstudio);
+                    }
                     $em->flush();
-                }
+                } catch (ForeignKeyConstraintViolationException $e) {
+                        $objMensaje->Mensaje('error', 'No se puede eliminar el tipo de estudio porque esta siendo utilizado', $this);
+                    }    
             }
               
             if($form->get('BtnExcel')->isClicked()) { 

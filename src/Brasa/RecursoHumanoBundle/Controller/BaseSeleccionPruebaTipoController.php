@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuSeleccionPruebaTipoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * RhuSeleccionPruebaTipo controller.
@@ -17,6 +18,7 @@ class BaseSeleccionPruebaTipoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
@@ -26,13 +28,17 @@ class BaseSeleccionPruebaTipoController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoSeleccionPruebaTipoPk) {
-                    $arSeleccionPruebaTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionPruebaTipo();
-                    $arSeleccionPruebaTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionPruebaTipo')->find($codigoSeleccionPruebaTipoPk);
-                    $em->remove($arSeleccionPruebaTipo);
+                try{
+                    foreach ($arrSeleccionados AS $codigoSeleccionPruebaTipoPk) {
+                        $arSeleccionPruebaTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionPruebaTipo();
+                        $arSeleccionPruebaTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionPruebaTipo')->find($codigoSeleccionPruebaTipoPk);
+                        $em->remove($arSeleccionPruebaTipo);
+                    }
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_base_seleccion_prueba_tipo_listar'));
-                }
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el tipo de prueba porque esta siendo utilizado', $this);
+                  }    
             }    
         
         if($form->get('BtnExcel')->isClicked()) {

@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuContratoTipoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * RhuContratosTipo controller.
@@ -17,6 +18,7 @@ class BaseContratosTipoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder()
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
             ->getForm(); 
@@ -25,13 +27,17 @@ class BaseContratosTipoController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoContratoTipo) {
-                    $arContratoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuContratoTipo();
-                    $arContratoTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuContratoTipo')->find($codigoContratoTipo);
-                    $em->remove($arContratoTipo);
-                    $em->flush();                    
-                }
-                return $this->redirect($this->generateUrl('brs_rhu_base_contrato_tipo_lista'));
+                try{
+                    foreach ($arrSeleccionados AS $codigoContratoTipo) {
+                        $arContratoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuContratoTipo();
+                        $arContratoTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuContratoTipo')->find($codigoContratoTipo);
+                        $em->remove($arContratoTipo);                   
+                    }
+                    $em->flush(); 
+                    return $this->redirect($this->generateUrl('brs_rhu_base_contrato_tipo_lista'));
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el tipo de contrato porque esta siendo utilizado', $this);
+                  }    
             }                        
         }
         

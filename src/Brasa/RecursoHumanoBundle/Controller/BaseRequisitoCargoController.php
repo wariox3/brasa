@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuRequisitoCargoType;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * RhuRequisitoCargo controller.
@@ -18,6 +19,7 @@ class BaseRequisitoCargoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioLista(); 
         $form->handleRequest($request);     
         $this->listar();
@@ -29,11 +31,15 @@ class BaseRequisitoCargoController extends Controller
                     $this->listar();
                 }
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoRequisitoCargo) {
-                        $arRequisitoCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoCargo')->find($codigoRequisitoCargo);
-                        $em->remove($arRequisitoCargo);
+                    try{
+                        foreach ($arrSeleccionados AS $codigoRequisitoCargo) {
+                            $arRequisitoCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoCargo')->find($codigoRequisitoCargo);
+                            $em->remove($arRequisitoCargo);
+                        }
                         $em->flush();
-                    }
+                    } catch (ForeignKeyConstraintViolationException $e) { 
+                        $objMensaje->Mensaje('error', 'No se puede eliminar el requisito por cargo porque esta siendo utilizado', $this);
+                      }    
                 }                
             }
             

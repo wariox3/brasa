@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuBancoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 //use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 //use Doctrine\DBAL\Driver\PDOException;
@@ -20,6 +21,7 @@ class BaseBancoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
             ->add('BtnPdf', 'submit', array('label'  => 'PDF'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
@@ -32,13 +34,17 @@ class BaseBancoController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoBancoPk) {
-                    $arBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuBanco();
-                    $arBanco = $em->getRepository('BrasaRecursoHumanoBundle:RhuBanco')->find($codigoBancoPk);
-                    $em->remove($arBanco);
+                try{
+                    foreach ($arrSeleccionados AS $codigoBancoPk) {
+                        $arBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuBanco();
+                        $arBanco = $em->getRepository('BrasaRecursoHumanoBundle:RhuBanco')->find($codigoBancoPk);
+                        $em->remove($arBanco);
+                    }
                     $em->flush();
-                }
-                 return $this->redirect($this->generateUrl('brs_rhu_base_banco_listar'));
+                    return $this->redirect($this->generateUrl('brs_rhu_base_banco_listar'));
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el banco porque esta siendo utilizado', $this);
+                  }     
             }
             
         if($form->get('BtnPdf')->isClicked()) {

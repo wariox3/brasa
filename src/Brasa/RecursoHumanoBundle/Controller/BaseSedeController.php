@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuSedeType;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 class BaseSedeController extends Controller
 {
@@ -13,6 +14,7 @@ class BaseSedeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $session = $this->getRequest()->getSession();
         $form = $this->formularioLista();
         $form->handleRequest($request);
@@ -82,12 +84,16 @@ class BaseSedeController extends Controller
 
             if ($form->get('BtnEliminar')->isClicked()) {    
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoSedePk) {
-                        $arSedes = new \Brasa\RecursoHumanoBundle\Entity\RhuSede();
-                        $arSedes = $em->getRepository('BrasaRecursoHumanoBundle:RhuSede')->find($codigoSedePk);
-                        $em->remove($arSedes);
-                        $em->flush();
+                    try{
+                        foreach ($arrSeleccionados AS $codigoSedePk) {
+                            $arSedes = new \Brasa\RecursoHumanoBundle\Entity\RhuSede();
+                            $arSedes = $em->getRepository('BrasaRecursoHumanoBundle:RhuSede')->find($codigoSedePk);
+                            $em->remove($arSedes);
                         }
+                        $em->flush();
+                    } catch (ForeignKeyConstraintViolationException $e) { 
+                        $objMensaje->Mensaje('error', 'No se puede eliminar la sede porque esta siendo utilizado', $this);
+                      }    
                 }
                 $this->filtrarLista($form);
                 $this->listar();
@@ -99,6 +105,7 @@ class BaseSedeController extends Controller
             'form' => $form->createView()
             ));
     }
+    
     public function nuevoAction($codigoSedePk) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -123,7 +130,8 @@ class BaseSedeController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Base/Sede:nuevo.html.twig', array(
             'arSede' => $arSede,
             'form' => $form->createView()));
-    }    
+    }   
+    
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();        
@@ -151,13 +159,15 @@ class BaseSedeController extends Controller
             ->getForm();        
         return $form;
     }  
+    
     private function filtrarLista($form) {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);        
         $session->set('filtroEmpleadoNombre', $form->get('TxtNombre')->getData());
-    }    
+    }   
+    
     private function listar() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();

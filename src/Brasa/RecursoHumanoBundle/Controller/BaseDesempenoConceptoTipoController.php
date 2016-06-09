@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuDesempenoConceptoTipoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * RhuBaseDesempenoConceptoTipo controller.
@@ -17,6 +18,7 @@ class BaseDesempenoConceptoTipoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
@@ -26,12 +28,16 @@ class BaseDesempenoConceptoTipoController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoDesempenoConceptoTipo) {
-                    $arDesempenoConceptoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoConceptoTipo();
-                    $arDesempenoConceptoTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoConceptoTipo')->find($codigoDesempenoConceptoTipo);
-                    $em->remove($arDesempenoConceptoTipo);
+                try{
+                    foreach ($arrSeleccionados AS $codigoDesempenoConceptoTipo) {
+                        $arDesempenoConceptoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoConceptoTipo();
+                        $arDesempenoConceptoTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoConceptoTipo')->find($codigoDesempenoConceptoTipo);
+                        $em->remove($arDesempenoConceptoTipo);
+                    }
                     $em->flush();
-                }
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el concepto tipo porque esta siendo utilizado', $this);
+                  }    
             }
               
             if($form->get('BtnExcel')->isClicked()) { 
