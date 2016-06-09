@@ -58,11 +58,4 @@ class RhuSsoAporteRepository extends EntityRepository {
         return $arrayResultado;
     } 
     
-    public function totalCotizacionPeriodoDetalle($codigoPeriodoDetalle = "") {
-        $em = $this->getEntityManager();
-        $dql   = "SELECT SUM(a.totalCotizacion) as total FROM BrasaRecursoHumanoBundle:RhuSsoAporte a WHERE a.codigoAportePk <> 0 AND a.codigoPeriodoDetalleFk = " .$codigoPeriodoDetalle." ";        
-        $query = $em->createQuery($dql);
-        $arrayResultado = $query->getResult();
-        return $arrayResultado;
-    }
 }

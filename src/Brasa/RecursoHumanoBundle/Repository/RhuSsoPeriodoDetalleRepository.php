@@ -36,6 +36,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $arPeriodoDetalle->setEstadoActualizado(1);
                 $em->persist($arPeriodoDetalle);
             }
+            $totalCotizacionGeneral = 0;
             $i = 1;
             $arPeriodoEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
             $arPeriodoEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->findBy(array('codigoPeriodoFk' => $arPeriodoDetalle->getCodigoPeriodoFk(), 'codigoPeriodoDetalleFk' => $codigoPeriodoDetalle));                
@@ -198,20 +199,24 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $floCotizacionCaja = $this->redondearAporte($floSalario + $floSuplementario, $floIbcCaja, $floTarifaCaja, $intDiasCotizarCaja);
                 $floCotizacionIcbf = $this->redondearAporte($floSalario + $floSuplementario, $floIbcCaja, $floTarifaIcbf, $intDiasCotizarCaja);
                 $floCotizacionSena = $this->redondearAporte($floSalario + $floSuplementario, $floIbcCaja, $floTarifaSena, $intDiasCotizarCaja);
-                $floTotalCotizacion = $floAporteVoluntarioFondoPensionesObligatorias + $floCotizacionVoluntariaFondoPensionesObligatorias + $floCotizacionPension + $floCotizacionSalud + $floCotizacionRiesgos + $floCotizacionCaja + $floCotizacionIcbf + $floCotizacionSena;
+                $floTotalCotizacionFondos = $floAporteVoluntarioFondoPensionesObligatorias + $floCotizacionVoluntariaFondoPensionesObligatorias + $floCotizacionPension;
                 
                 $arAporte->setAporteVoluntarioFondoPensionesObligatorias($floAporteVoluntarioFondoPensionesObligatorias);
                 $arAporte->setCotizacionVoluntarioFondoPensionesObligatorias($floCotizacionVoluntariaFondoPensionesObligatorias);
                 $arAporte->setAportesFondoSolidaridadPensionalSolidaridad($floCotizacionFSPSolidaridad);
                 $arAporte->setAportesFondoSolidaridadPensionalSubsistencia($floCotizacionFSPSolidaridad);
-                $arAporte->setTotalCotizacion($floTotalCotizacion);
+                $arAporte->setTotalCotizacionFondos($floTotalCotizacionFondos);
                 $arAporte->setCotizacionPension($floCotizacionPension);
                 $arAporte->setCotizacionSalud($floCotizacionSalud);
                 $arAporte->setCotizacionRiesgos($floCotizacionRiesgos);
                 $arAporte->setCotizacionCaja($floCotizacionCaja); 
                 $arAporte->setCotizacionIcbf($floCotizacionIcbf);
                 $arAporte->setCotizacionSena($floCotizacionSena);
-                $em->persist($arAporte);
+                $arAporte->setCentroTrabajoCodigoCt($arPeriodoEmpleado->getContratoRel()->getCodigoCentroCostoFk());
+                $totalCotizacion = $floTotalCotizacionFondos + $floCotizacionSalud + $floCotizacionRiesgos + $floCotizacionCaja + $floCotizacionIcbf+$floCotizacionSena;
+                $totalCotizacionGeneral += $totalCotizacion;
+                $arAporte->setTotalCotizacion($totalCotizacion);
+                $em->persist($arAporte);                
                 $i++;
                 //Para las licencias segunda linea solo licencias
                 if($intDiasLicenciaNoRemunerada > 0) {
@@ -337,37 +342,34 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                         $floCotizacionFSPSolidaridad = 0;
                         $floCotizacionFSPSubsistencia = 0;
                     }
-                    //$floTotalCotizacion = $floAporteVoluntarioFondoPensionesObligatorias + $floCotizacionVoluntariaFondoPensionesObligatorias + $floCotizacionPension;
+                    
                     $floCotizacionSalud = $this->redondearAporte($floSalario + $floSuplementario, $floIbcSalud, $floTarifaSalud, $intDiasCotizarSalud);
                     $floCotizacionRiesgos = $this->redondearAporte($floSalario + $floSuplementario, $floIbcRiesgos, $floTarifaRiesgos, $intDiasCotizarRiesgos);
                     $floCotizacionCaja = $this->redondearAporte($floSalario + $floSuplementario, $floIbcCaja, $floTarifaCaja, $intDiasCotizarCaja);
-                    $floTotalCotizacion = $floAporteVoluntarioFondoPensionesObligatorias + $floCotizacionVoluntariaFondoPensionesObligatorias + $floCotizacionPension + $floCotizacionSalud + $floCotizacionRiesgos + $floCotizacionCaja;
+                    $floTotalCotizacionFondos = $floAporteVoluntarioFondoPensionesObligatorias + $floCotizacionVoluntariaFondoPensionesObligatorias + $floCotizacionPension;
                     
                     $arAporte->setAporteVoluntarioFondoPensionesObligatorias($floAporteVoluntarioFondoPensionesObligatorias);
                     $arAporte->setCotizacionVoluntarioFondoPensionesObligatorias($floCotizacionVoluntariaFondoPensionesObligatorias);
                     $arAporte->setAportesFondoSolidaridadPensionalSolidaridad($floCotizacionFSPSolidaridad);
                     $arAporte->setAportesFondoSolidaridadPensionalSubsistencia($floCotizacionFSPSolidaridad);
-                    $arAporte->setTotalCotizacion($floTotalCotizacion);
+                    $arAporte->setTotalCotizacionFondos($floTotalCotizacionFondos);
                     $arAporte->setCotizacionPension($floCotizacionPension);
                     $arAporte->setCotizacionSalud($floCotizacionSalud);
                     $arAporte->setCotizacionRiesgos($floCotizacionRiesgos);
-                    $arAporte->setCotizacionCaja($floCotizacionCaja);                        
+                    $arAporte->setCotizacionCaja($floCotizacionCaja);   
+                    $arAporte->setCentroTrabajoCodigoCt($arPeriodoEmpleado->getContratoRel()->getCodigoCentroCostoFk());
+                    $totalCotizacion = $floTotalCotizacionFondos + $floCotizacionSalud + $floCotizacionRiesgos + $floCotizacionCaja + $floCotizacionIcbf+$floCotizacionSena;
+                    $totalCotizacionGeneral += $totalCotizacion;
+                    $arAporte->setTotalCotizacion($totalCotizacion);
                     $em->persist($arAporte);
                     $i++;                
                 }
             }
         }
-        
+        $arPeriodoDetalle->setTotalCotizacion($totalCotizacionGeneral);
         $arPeriodoDetalle->setEstadoGenerado(1);
         $arPeriodoDetalle->setNumeroRegistros($i - 1);
-        $arPeriodoDetalle->setNumeroEmpleados($intNumeroEmpleados);
-        
-        
-        $em->persist($arPeriodoDetalle);
-        $em->flush();
-        $arrayTotal = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoAporte')->totalCotizacionPeriodoDetalle($codigoPeriodoDetalle);
-        $floTotalAportesCotizacion = (float)$arrayTotal[0]['total'];
-        $arPeriodoDetalle->setTotalCotizacion($floTotalAportesCotizacion);
+        $arPeriodoDetalle->setNumeroEmpleados($intNumeroEmpleados);                
         $em->persist($arPeriodoDetalle);
         $em->flush();
         return true;

@@ -384,9 +384,9 @@ class RhuSsoAporte
     private $cotizacionVoluntarioFondoPensionesObligatorias;    
     
     /**
-     * @ORM\Column(name="total_cotizacion", type="float")
+     * @ORM\Column(name="total_cotizacion_fondos", type="float")
      */
-    private $totalCotizacion;    
+    private $totalCotizacionFondos;       
     
     /**
      * @ORM\Column(name="aportes_fondo_solidaridad_pensional_solidaridad", type="float")
@@ -477,6 +477,11 @@ class RhuSsoAporte
      * @ORM\Column(name="clase_riesgo_afiliado", type="string", length=20, nullable=true)
      */    
     private $claseRiesgoAfiliado;
+    
+    /**
+     * @ORM\Column(name="total_cotizacion", type="float")
+     */
+    private $totalCotizacion;        
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="ssoAportesSsoPeriodoRel")
@@ -2877,5 +2882,29 @@ class RhuSsoAporte
     public function getCargoRel()
     {
         return $this->cargoRel;
+    }
+
+    /**
+     * Set totalCotizacionFondos
+     *
+     * @param float $totalCotizacionFondos
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTotalCotizacionFondos($totalCotizacionFondos)
+    {
+        $this->totalCotizacionFondos = $totalCotizacionFondos;
+
+        return $this;
+    }
+
+    /**
+     * Get totalCotizacionFondos
+     *
+     * @return float
+     */
+    public function getTotalCotizacionFondos()
+    {
+        return $this->totalCotizacionFondos;
     }
 }

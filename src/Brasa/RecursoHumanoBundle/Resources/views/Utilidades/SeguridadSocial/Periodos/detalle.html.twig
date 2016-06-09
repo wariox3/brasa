@@ -12,15 +12,13 @@
                 <th>CÓDIGO</th>
                 <th>SUCURSAL</th>
                 <th>DETALLE</th>
-                <th>GENERADO</th>
-                <th>CERRADO</th>
+                <th>GEN</th>
+                <th>CER</th>
                 <th>DESDE</th>
                 <th>HASTA</th>
-                <th>AÑO</th>
-                <th>AÑO PAGO</th>
-                <th>MES</th>
-                <th>MES PAGO</th>
-                <th>NÚMERO</th>
+                <th>PERIDOO</th>
+                <th>PAGO</th>
+                <th>REG</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -39,10 +37,8 @@
                 <td {% if arSsoPeriodoDetalles.estadoCerrado == 1 %}class="success"{% endif %}>{% if arSsoPeriodoDetalles.estadoCerrado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.fechaHasta |date("Y/m/d")  }}</td>
-                <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.anio  }}</td>
-                <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.anioPago  }}</td>
-                <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.mes  }}</td>
-                <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.mesPago  }}</td>
+                <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.anio  }}-{{ arSsoPeriodoDetalles.ssoPeriodoRel.mes  }}</td>
+                <td>{{ arSsoPeriodoDetalles.ssoPeriodoRel.anioPago  }}-{{ arSsoPeriodoDetalles.ssoPeriodoRel.mesPago  }}</td>
                 <td>{{ arSsoPeriodoDetalles.numeroRegistros  }}</td>
                 <td>{% if arSsoPeriodoDetalles.estadoGenerado == 1 %} <button class="btn btn-default btn-xs" type="submit" name="OpGenerarArchivo" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}">Archivo plano</button>  {% endif %}</td>
                 <td>{% if arSsoPeriodoDetalles.estadoGenerado == 1 %} <button class="btn btn-default btn-xs" type="submit" name="OpGenerarExcel" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}">Excel</button>  {% endif %}</td>
