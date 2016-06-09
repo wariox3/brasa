@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCargoType;
-
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 /**
  * RhuCargo controller.
  *
@@ -23,6 +23,7 @@ class CargoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioLista();
         $form->handleRequest($request);
         $this->listar();
@@ -31,14 +32,18 @@ class CargoController extends Controller
             if($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
-                    
-                    foreach ($arrSeleccionados AS $codigoCargoPk) {
-                        $arCargo = new \Brasa\RecursoHumanoBundle\Entity\RhuCargo();
-                        $arCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuCargo')->find($codigoCargoPk);
-                        $em->remove($arCargo);                        
-                    }                    
-                    $em->flush();                                            
-                    return $this->redirect($this->generateUrl('brs_rhu_base_cargo'));
+                    try{
+                        foreach ($arrSeleccionados AS $codigoCargoPk) {
+                            $arCargo = new \Brasa\RecursoHumanoBundle\Entity\RhuCargo();
+                            $arCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuCargo')->find($codigoCargoPk);
+                            $em->remove($arCargo);                        
+                        }                    
+                        $em->flush();                                            
+                        return $this->redirect($this->generateUrl('brs_rhu_base_cargo'));                        
+                    } catch (ForeignKeyConstraintViolationException $e) {
+                        $objMensaje->Mensaje('error', 'No se puede eliminar el cargo porque esta siendo utilizado', $this);
+                    }
+
                 }                
             }
             if($form->get('BtnExcel')->isClicked()) {
