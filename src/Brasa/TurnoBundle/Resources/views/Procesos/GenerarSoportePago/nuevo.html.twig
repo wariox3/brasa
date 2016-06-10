@@ -31,7 +31,31 @@
                     {{ form_widget(form.diasPeriodo, { 'attr': {'class': 'form-control'} }) }}  
                     <p style="font-size: 0.8em;">- Numero de dias que tiene el periodo</p>                     
                 </div>                
-            </div>                
+            </div>                                
+        </div>
+    </div>  
+    <div class="panel panel-default">
+        <div class="panel-heading">Informacion compensacion</div>
+        <div class="panel-body">     
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Dias festivos reales:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.diaFestivoReal, { 'attr': {'class': 'form-control'} }) }}  
+                    <p style="font-size: 0.8em;">- Numero de dias festivos reales del periodo</p>                     
+                </div>                
+            </div>   
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Dias domingos reales:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.diaDomingoReal, { 'attr': {'class': 'form-control'} }) }}  
+                    <p style="font-size: 0.8em;">- Numero de dias domingos reales del periodo</p>                     
+                </div>                
+            </div>                     
+        </div>
+    </div>                    
+    <div class="panel panel-default">
+        <div class="panel-heading">Informacion parametros liquidacion</div>
+        <div class="panel-body">                    
             <div class="form-group form-group-sm">
                 <label for="form_festivos" class="col-sm-3 control-label">Dias festivos:</label>
                 <div class="col-sm-9">
@@ -54,7 +78,7 @@
                 </div>                
             </div>                
         </div>
-    </div>               
+    </div>                    
     <div class="modal-footer">
         <a class="btn btn-default btn-sm" href="{{ path('brs_tur_proceso_generar_soporte_pago') }}">Cancelar</a>        
         {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
