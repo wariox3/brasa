@@ -5487,6 +5487,7 @@ insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tip
 insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('2','Ver salario en empleados','VER','RECURSO HUMANO');
 insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('3','Generar pedidos automaticos','PROCESO','TURNOS');
 insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('4','Generar programaciones automaticas','PROCESO','TURNOS');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('5','Modificar contrato despues de terminado','PROCESO','RECURSO HUMANO');
 
 INSERT INTO `seg_roles` (`codigo_rol_pk`, `nombre`) VALUES('ROLE_ADMIN','ADMINISTRADOR');
 INSERT INTO `seg_roles` (`codigo_rol_pk`, `nombre`) VALUES('ROLE_USER','USUARIO');

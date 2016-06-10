@@ -441,6 +441,49 @@ class ContratosController extends Controller
         ));
     }
     
+    public function actualizarContratoTerminadoAction($codigoContrato) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $permiso = "";
+        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
+        $permiso = $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(),5);
+        $formActualizar = $this->createFormBuilder()
+            //->setAction($this->generateUrl('brs_rhu_contratos_actualizar_terminado', array('codigoContrato' => $codigoContrato)))
+            ->add('clasificacionRiesgoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuClasificacionRiesgo',
+                'property' => 'nombre',
+                'data' => $arContrato->getClasificacionRiesgoRel(),
+            ))
+            ->add('terminacionContratoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuMotivoTerminacionContrato',
+                'property' => 'motivo',
+                'data' => $arContrato->getTerminacionContratoRel(),
+            ))    
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => $arContrato->getFechaHasta()  ,'attr' => array('class' => 'date',)))                                    
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        $formActualizar->handleRequest($request);
+        if ($formActualizar->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
+            if ($permiso == false){
+                $objMensaje->Mensaje("error", "No tiene permisos para actualizar el contrato", $this);
+            } else {
+            $arContrato->setTerminacionContratoRel($formActualizar->get('terminacionContratoRel')->getData());
+            $arContrato->setClasificacionRiesgoRel($formActualizar->get('clasificacionRiesgoRel')->getData());
+            $arContrato->setFechaHasta($formActualizar->get('fechaHasta')->getData());
+            $em->persist($arContrato);
+            $em->flush();
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:actualizarContratoTerminado.html.twig', array(
+            'arContrato' => $arContrato,
+            'formActualizar' => $formActualizar->createView()
+        ));
+    }
+    
     public function ibpAdicionalAction($codigoContrato) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
