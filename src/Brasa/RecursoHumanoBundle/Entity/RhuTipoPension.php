@@ -38,10 +38,21 @@ class RhuTipoPension
     private $codigoPagoConceptoFk;
 
     /**
+     * @ORM\Column(name="codigo_pago_concepto_fondo_fk", type="integer", nullable=true)
+     */    
+    private $codigoPagoConceptoFondoFk;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuPagoConcepto", inversedBy="tiposPensionesPagoConceptoRel")
      * @ORM\JoinColumn(name="codigo_pago_concepto_fk", referencedColumnName="codigo_pago_concepto_pk")
      */
     protected $pagoConceptoRel;    
+
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuPagoConcepto", inversedBy="tiposPensionesPagoConceptoFondoRel")
+     * @ORM\JoinColumn(name="codigo_pago_concepto_fondo_fk", referencedColumnName="codigo_pago_concepto_pk")
+     */
+    protected $pagoConceptoFondoRel;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="tipoPensionRel")
@@ -259,5 +270,53 @@ class RhuTipoPension
     public function getEmpleadosTipoPensionRel()
     {
         return $this->empleadosTipoPensionRel;
+    }
+
+    /**
+     * Set codigoPagoConceptoFondoFk
+     *
+     * @param integer $codigoPagoConceptoFondoFk
+     *
+     * @return RhuTipoPension
+     */
+    public function setCodigoPagoConceptoFondoFk($codigoPagoConceptoFondoFk)
+    {
+        $this->codigoPagoConceptoFondoFk = $codigoPagoConceptoFondoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPagoConceptoFondoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPagoConceptoFondoFk()
+    {
+        return $this->codigoPagoConceptoFondoFk;
+    }
+
+    /**
+     * Set pagoConceptoFondoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoFondoRel
+     *
+     * @return RhuTipoPension
+     */
+    public function setPagoConceptoFondoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoFondoRel = null)
+    {
+        $this->pagoConceptoFondoRel = $pagoConceptoFondoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoConceptoFondoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto
+     */
+    public function getPagoConceptoFondoRel()
+    {
+        return $this->pagoConceptoFondoRel;
     }
 }

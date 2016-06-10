@@ -373,18 +373,12 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                             $douPorcentaje = $arContrato->getTipoPensionRel()->getPorcentajeEmpleado();
                             $intOperacion = -1;
                             if($douPorcentaje > 0) {
-                                if($intHorasLaboradas > 0) {                                
-                                    $douValorHoraMinimo = ($douVrSalarioMinimo / 240) * 4;
-                                    if($douVrHora > $douValorHoraMinimo) {
-                                        $douPorcentaje = $arConfiguracion->getPorcentajePensionExtra(); //PORCENTAJE PENSION EXTRA DEL 5%
-                                    }                                        
-                                }
+
                                 if($arProgramacionPagoDetalle->getSalarioIntegral() == 1) {
                                     $douPagoDetalle = (($douIngresoBaseCotizacion / 1.3) * $douPorcentaje)/100;
                                 } else {
                                     $douPagoDetalle = ($douIngresoBaseCotizacion * $douPorcentaje)/100;
                                 }
-
                                 $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                 $arPagoDetalle->setPagoRel($arPago);
                                 $arPagoDetalle->setPagoConceptoRel($arContrato->getTipoPensionRel()->getPagoConceptoRel());
@@ -394,10 +388,30 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                 $arPagoDetalle->setOperacion($intOperacion);
                                 $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $intOperacion);
                                 $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
-                                $em->persist($arPagoDetalle);                                
+                                $em->persist($arPagoDetalle);   
+                                
+                                //Fondo de solidaridad pensional
+                                if($intHorasLaboradas > 0) {                                
+                                    $douValorHoraMinimo = ($douVrSalarioMinimo / 240) * 4;
+                                    if($douVrHora > $douValorHoraMinimo) {
+                                        $douPorcentaje = 1;
+                                        $douPagoDetalle = ($douIngresoBaseCotizacion * $douPorcentaje)/100;                                        
+                                        $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                                        $arPagoDetalle->setPagoRel($arPago);
+                                        $arPagoDetalle->setPagoConceptoRel($arContrato->getTipoPensionRel()->getPagoConceptoFondoRel());
+                                        $arPagoDetalle->setPorcentajeAplicado($douPorcentaje);
+                                        $arPagoDetalle->setVrDia($douVrDia);
+                                        $arPagoDetalle->setVrPago($douPagoDetalle);
+                                        $arPagoDetalle->setOperacion($intOperacion);
+                                        $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $intOperacion);
+                                        $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
+                                        $em->persist($arPagoDetalle);                                         
+                                    }                                        
+                                }
+                                
                             }                            
-                        }
-
+                        }                                                
+                        
                         //Subsidio transporte
                         if($arProgramacionPagoDetalle->getPagoAuxilioTransporte() == 1) {
                             if($intDiasTransporte > 0) {
@@ -422,6 +436,29 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                 }
                             }                            
                         }
+                        
+                        //Retencion en la fuente
+                        /*if($douIngresoBaseCotizacion > 0){
+                            $intPagoConcepto = $arConfiguracion->getCodigoRetencionFuente();
+                            $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConcepto);                                                                                    
+                            $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                            $arPagoDetalle->setPagoRel($arPago);
+                            $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
+                            $arPagoDetalle->setVrHora(0);
+                            $arPagoDetalle->setVrDia(0);
+                            $arPagoDetalle->setPorcentajeAplicado($arPagoConcepto->getPorPorcentaje());
+                            $arPagoDetalle->setNumeroHoras();
+                            $arPagoDetalle->setNumeroDias(0);
+                            $arPagoDetalle->setVrPago($douPagoDetalle);
+                            $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
+                            $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConcepto->getOperacion());
+                            $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
+                            $em->persist($arPagoDetalle);
+                            $douIngresoBasePrestacional += $douPagoDetalle;                        
+                            $douIngresoBaseCotizacion += $douPagoDetalle;                        
+                            $arPagoDetalle->setVrIngresoBasePrestacion($douPagoDetalle);
+                            $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);                            
+                        }*/
                         
                         $intDiasLaborados = $intHorasLaboradas / $intFactorDia;                        
                         $douAuxilioTransporteCotizacion = $arProgramacionPagoDetalle->getDiasReales() * ($arConfiguracion->getVrAuxilioTransporte() / 30);

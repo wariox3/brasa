@@ -148,6 +148,11 @@ class RhuPagoConcepto
     protected $tiposPensionesPagoConceptoRel;     
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuTipoPension", mappedBy="pagoConceptoFondoRel")
+     */
+    protected $tiposPensionesPagoConceptoFondoRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuTipoSalud", mappedBy="pagoConceptoRel")
      */
     protected $tiposSaludPagoConceptoRel;    
@@ -894,5 +899,39 @@ class RhuPagoConcepto
     public function getCodigoInterface()
     {
         return $this->codigoInterface;
+    }
+
+    /**
+     * Add tiposPensionesPagoConceptoFondoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoPension $tiposPensionesPagoConceptoFondoRel
+     *
+     * @return RhuPagoConcepto
+     */
+    public function addTiposPensionesPagoConceptoFondoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoPension $tiposPensionesPagoConceptoFondoRel)
+    {
+        $this->tiposPensionesPagoConceptoFondoRel[] = $tiposPensionesPagoConceptoFondoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove tiposPensionesPagoConceptoFondoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoPension $tiposPensionesPagoConceptoFondoRel
+     */
+    public function removeTiposPensionesPagoConceptoFondoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoPension $tiposPensionesPagoConceptoFondoRel)
+    {
+        $this->tiposPensionesPagoConceptoFondoRel->removeElement($tiposPensionesPagoConceptoFondoRel);
+    }
+
+    /**
+     * Get tiposPensionesPagoConceptoFondoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTiposPensionesPagoConceptoFondoRel()
+    {
+        return $this->tiposPensionesPagoConceptoFondoRel;
     }
 }

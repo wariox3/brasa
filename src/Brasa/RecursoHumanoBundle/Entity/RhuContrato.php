@@ -181,7 +181,7 @@ class RhuContrato
     /**     
      * @ORM\Column(name="salario_integral", type="boolean")
      */    
-    private $salarioIntegral = 0;  
+    private $salarioIntegral = false;  
     
     /**
      * @ORM\Column(name="codigo_entidad_salud_fk", type="integer", nullable=true)
@@ -378,6 +378,7 @@ class RhuContrato
      */
     protected $soportesPagosHorariosDetallesContratoRel;    
     
+
     /**
      * Constructor
      */
@@ -390,12 +391,15 @@ class RhuContrato
         $this->ssoAportesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cambiosSalariosContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->vacacionesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->licenciasContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->incapacidadesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ingresosBasesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contratosSedesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->proyeccionesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->trasladosPensionesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->trasladosSaludContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contratosProrrogasContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->soportesPagosHorariosDetallesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1054,6 +1058,30 @@ class RhuContrato
     public function getEstadoLiquidado()
     {
         return $this->estadoLiquidado;
+    }
+
+    /**
+     * Set ibpAdicional
+     *
+     * @param float $ibpAdicional
+     *
+     * @return RhuContrato
+     */
+    public function setIbpAdicional($ibpAdicional)
+    {
+        $this->ibpAdicional = $ibpAdicional;
+
+        return $this;
+    }
+
+    /**
+     * Get ibpAdicional
+     *
+     * @return float
+     */
+    public function getIbpAdicional()
+    {
+        return $this->ibpAdicional;
     }
 
     /**
@@ -1895,6 +1923,74 @@ class RhuContrato
     }
 
     /**
+     * Add licenciasContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addLicenciasContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasContratoRel)
+    {
+        $this->licenciasContratoRel[] = $licenciasContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove licenciasContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasContratoRel
+     */
+    public function removeLicenciasContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasContratoRel)
+    {
+        $this->licenciasContratoRel->removeElement($licenciasContratoRel);
+    }
+
+    /**
+     * Get licenciasContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLicenciasContratoRel()
+    {
+        return $this->licenciasContratoRel;
+    }
+
+    /**
+     * Add incapacidadesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadesContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addIncapacidadesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadesContratoRel)
+    {
+        $this->incapacidadesContratoRel[] = $incapacidadesContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove incapacidadesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadesContratoRel
+     */
+    public function removeIncapacidadesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadesContratoRel)
+    {
+        $this->incapacidadesContratoRel->removeElement($incapacidadesContratoRel);
+    }
+
+    /**
+     * Get incapacidadesContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getIncapacidadesContratoRel()
+    {
+        return $this->incapacidadesContratoRel;
+    }
+
+    /**
      * Add ingresosBasesContratoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuIngresoBase $ingresosBasesContratoRel
@@ -2099,74 +2195,6 @@ class RhuContrato
     }
 
     /**
-     * Add licenciasContratoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasContratoRel
-     *
-     * @return RhuContrato
-     */
-    public function addLicenciasContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasContratoRel)
-    {
-        $this->licenciasContratoRel[] = $licenciasContratoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove licenciasContratoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasContratoRel
-     */
-    public function removeLicenciasContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLicencia $licenciasContratoRel)
-    {
-        $this->licenciasContratoRel->removeElement($licenciasContratoRel);
-    }
-
-    /**
-     * Get licenciasContratoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getLicenciasContratoRel()
-    {
-        return $this->licenciasContratoRel;
-    }
-
-    /**
-     * Add incapacidadesContratoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadesContratoRel
-     *
-     * @return RhuContrato
-     */
-    public function addIncapacidadesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadesContratoRel)
-    {
-        $this->incapacidadesContratoRel[] = $incapacidadesContratoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove incapacidadesContratoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadesContratoRel
-     */
-    public function removeIncapacidadesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad $incapacidadesContratoRel)
-    {
-        $this->incapacidadesContratoRel->removeElement($incapacidadesContratoRel);
-    }
-
-    /**
-     * Get incapacidadesContratoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getIncapacidadesContratoRel()
-    {
-        return $this->incapacidadesContratoRel;
-    }
-
-    /**
      * Add soportesPagosHorariosDetallesContratoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuSoportePagoHorarioDetalle $soportesPagosHorariosDetallesContratoRel
@@ -2198,29 +2226,5 @@ class RhuContrato
     public function getSoportesPagosHorariosDetallesContratoRel()
     {
         return $this->soportesPagosHorariosDetallesContratoRel;
-    }
-
-    /**
-     * Set ibpAdicional
-     *
-     * @param float $ibpAdicional
-     *
-     * @return RhuContrato
-     */
-    public function setIbpAdicional($ibpAdicional)
-    {
-        $this->ibpAdicional = $ibpAdicional;
-
-        return $this;
-    }
-
-    /**
-     * Get ibpAdicional
-     *
-     * @return float
-     */
-    public function getIbpAdicional()
-    {
-        return $this->ibpAdicional;
     }
 }

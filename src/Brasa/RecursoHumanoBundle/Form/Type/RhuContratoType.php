@@ -78,8 +78,8 @@ class RhuContratoType extends AbstractType
             ->add('vrSalario', 'number', array('required' => true))  
             //->add('numero', 'text', array('required' => true))                                           
             ->add('cargoDescripcion', 'text', array('required' => true))                                                                       
-            ->add('comentarios', 'textarea', array('required' => false))
-            ->add('salarioIntegral', 'choice', array('choices' => array('0' => 'NO', '1' => 'SI')))
+            ->add('comentarios', 'textarea', array('required' => false))            
+            ->add('salarioIntegral', 'checkbox', array('required'  => false))                            
             ->add('ciudadContratoRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {
