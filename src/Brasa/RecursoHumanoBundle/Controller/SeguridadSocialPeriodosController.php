@@ -182,7 +182,7 @@ class SeguridadSocialPeriodosController extends Controller
                 $arEntidadRiesgos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($arConfiguracionNomina->getCodigoEntidadRiesgoFk());
                 $condigoInterfaceRiesgos = $arEntidadRiesgos->getCodigoInterface();
                 $strRutaArchivo = $arConfiguracion->getRutaTemporal();
-                //$strRutaArchivo = "c:/xampp/";
+                ///$strRutaArchivo = "c:/xampp/";
                 $strNombreArchivo = "pila" . date('YmdHis') . ".txt";
                 ob_clean();
                 $ar = fopen($strRutaArchivo . $strNombreArchivo, "a") or
