@@ -21,7 +21,8 @@ class GenerarSoportePagoController extends Controller
         $form = $this->formularioGenerar();
         $form->handleRequest($request);        
         if ($form->isValid()) {
-            if($request->request->get('OpGenerar')) {            
+            if($request->request->get('OpGenerar')) {  
+                set_time_limit(0);
                 $codigoSoportePagoPeriodo = $request->request->get('OpGenerar');
                 $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);
                 $dateFechaDesde = $arSoportePagoPeriodo->getFechaDesde();
@@ -51,6 +52,7 @@ class GenerarSoportePagoController extends Controller
                 $em->flush();
                 $em->getRepository('BrasaTurnoBundle:TurSoportePago')->resumen($dateFechaDesde, $dateFechaHasta, $arSoportePagoPeriodo);                
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->liquidar($codigoSoportePagoPeriodo);                                
+                set_time_limit(60);
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));
             }
             if($request->request->get('OpDeshacer')) {
@@ -64,6 +66,7 @@ class GenerarSoportePagoController extends Controller
                 $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
                 $arSoportePagoPeriodo->setEstadoGenerado(0);
                 $arSoportePagoPeriodo->setRecursos(0);
+                $arSoportePagoPeriodo->setVrPago(0);
                 $em->persist($arSoportePagoPeriodo);
                 $em->flush();                                                  
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
@@ -150,12 +153,14 @@ class GenerarSoportePagoController extends Controller
                         
                     }
                     $arSoportePagoAct = new \Brasa\TurnoBundle\Entity\TurSoportePago();
-                    $arSoportePagoAct = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($arSoportePago->getCodigoSoportePagoPk());
+                    $arSoportePagoAct = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($arSoportePago->getCodigoSoportePagoPk());                    
                     $arSoportePagoAct->setHorasDiurnas($horasDia);
                     $arSoportePagoAct->setHorasNocturnas($horasNoche);
                     $arSoportePagoAct->setHorasExtrasOrdinariasDiurnas($horasExtraDia);
                     $arSoportePagoAct->setHorasExtrasOrdinariasNocturnas($horasExtraNoche);
                     $arSoportePagoAct->setHorasDescanso($horasFestivas);
+                    $horas = $horasFestivas + $horasDia + $horasNoche + $arSoportePagoAct->getHorasNovedad();
+                    $arSoportePagoAct->setHoras($horas);
                     $em->persist($arSoportePagoAct);
                 }
                 $em->flush();
