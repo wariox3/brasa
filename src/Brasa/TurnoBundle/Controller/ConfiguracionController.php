@@ -26,6 +26,15 @@ class ConfiguracionController extends Controller
             ->add('informacionContactoFactura', 'textarea', array('data' => $arConfiguracion->getInformacionContactoFactura(), 'required' => false)) 
             ->add('informacionResolucionDianFactura', 'textarea', array('data' => $arConfiguracion->getInformacionResolucionDianFactura(), 'required' => false)) 
             ->add('informacionResolucionSupervigilanciaFactura', 'textarea', array('data' => $arConfiguracion->getInformacionResolucionSupervigilanciaFactura(), 'required' => false)) 
+            ->add('codigoConceptoHorasDescansoFk', 'number', array('data' => $arConfiguracion->getCodigoConceptoHorasDescansoFk(), 'required' => false)) 
+            ->add('codigoConceptoHorasDiurnasFk', 'number', array('data' => $arConfiguracion->getCodigoConceptoHorasDiurnasFk(), 'required' => false)) 
+            ->add('codigoConceptoHorasNocturnasFk', 'number', array('data' => $arConfiguracion->getCodigoConceptoHorasNocturnasFk(), 'required' => false))                 
+            ->add('codigoConceptoHorasFestivasDiurnasFk', 'number', array('data' => $arConfiguracion->getCodigoConceptoHorasFestivasDiurnasFk(), 'required' => false)) 
+            ->add('codigoConceptoHorasFestivasNocturnasFk', 'number', array('data' => $arConfiguracion->getCodigoConceptoHorasFestivasNocturnasFk(), 'required' => false))                                 
+            ->add('codigoConceptoHorasExtrasOrdinariasDiurnasFk', 'number', array('data' => $arConfiguracion->getCodigoConceptoHorasExtrasOrdinariasDiurnasFk(), 'required' => false)) 
+            ->add('codigoConceptoHorasExtrasOrdinariasNocturnasFk', 'number', array('data' => $arConfiguracion->getCodigoConceptoHorasExtrasOrdinariasNocturnasFk(), 'required' => false))                                                 
+            ->add('codigoConceptoHorasExtrasFestivasDiurnasFk', 'number', array('data' => $arConfiguracion->getCodigoConceptoHorasExtrasFestivasDiurnasFk(), 'required' => false)) 
+            ->add('codigoConceptoHorasExtrasFestivasNocturnasFk', 'number', array('data' => $arConfiguracion->getCodigoConceptoHorasExtrasFestivasNocturnasFk(), 'required' => false))                                                                 
             ->add('guardar', 'submit', array('label' => 'Actualizar'))
             ->getForm();
         $formConfiguracion->handleRequest($request);
@@ -41,6 +50,15 @@ class ConfiguracionController extends Controller
             $arConfiguracion->setInformacionContactoFactura($strInformacionContactoFactura);
             $arConfiguracion->setInformacionResolucionDianFactura($strInformacionResolucionDianFactura);
             $arConfiguracion->setInformacionResolucionSupervigilanciaFactura($strInformacionResolucionSupervigilanciaFactura);
+            $arConfiguracion->setCodigoConceptoHorasDescansoFk($controles['codigoConceptoHorasDescansoFk']);
+            $arConfiguracion->setCodigoConceptoHorasDiurnasFk($controles['codigoConceptoHorasDiurnasFk']);
+            $arConfiguracion->setCodigoConceptoHorasNocturnasFk($controles['codigoConceptoHorasNocturnasFk']);
+            $arConfiguracion->setCodigoConceptoHorasFestivasDiurnasFk($controles['codigoConceptoHorasFestivasDiurnasFk']);
+            $arConfiguracion->setCodigoConceptoHorasFestivasNocturnasFk($controles['codigoConceptoHorasFestivasNocturnasFk']);
+            $arConfiguracion->setCodigoConceptoHorasExtrasOrdinariasDiurnasFk($controles['codigoConceptoHorasExtrasOrdinariasDiurnasFk']);
+            $arConfiguracion->setCodigoConceptoHorasExtrasOrdinariasNocturnasFk($controles['codigoConceptoHorasExtrasOrdinariasNocturnasFk']);
+            $arConfiguracion->setCodigoConceptoHorasExtrasFestivasDiurnasFk($controles['codigoConceptoHorasExtrasFestivasDiurnasFk']);
+            $arConfiguracion->setCodigoConceptoHorasExtrasFestivasNocturnasFk($controles['codigoConceptoHorasExtrasFestivasNocturnasFk']);
             $arrControles = $request->request->All();
             $intIndiceConsecutivo = 0;
             foreach ($arrControles['LblCodigo'] as $intCodigo) {

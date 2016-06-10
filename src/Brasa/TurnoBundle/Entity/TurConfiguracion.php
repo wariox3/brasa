@@ -42,6 +42,51 @@ class TurConfiguracion
     private $informacionResolucionSupervigilanciaFactura;    
     
     /**
+     * @ORM\Column(name="codigo_concepto_horas_descanso_fk", type="integer", nullable=true)
+     */    
+    private $codigoConceptoHorasDescansoFk;     
+    
+    /**
+     * @ORM\Column(name="codigo_concepto_horas_diurnas_fk", type="integer", nullable=true)
+     */    
+    private $codigoConceptoHorasDiurnasFk;    
+
+    /**
+     * @ORM\Column(name="codigo_concepto_horas_nocturnas_fk", type="integer", nullable=true)
+     */    
+    private $codigoConceptoHorasNocturnasFk; 
+    
+    /**
+     * @ORM\Column(name="codigo_concepto_horas_festivas_diurnas_fk", type="integer", nullable=true)
+     */    
+    private $codigoConceptoHorasFestivasDiurnasFk;     
+    
+    /**
+     * @ORM\Column(name="codigo_concepto_horas_festivas_nocturnas_fk", type="integer", nullable=true)
+     */    
+    private $codigoConceptoHorasFestivasNocturnasFk;     
+    
+    /**
+     * @ORM\Column(name="codigo_concepto_horas_extras_ordinarias_diurnas_fk", type="integer", nullable=true)
+     */    
+    private $codigoConceptoHorasExtrasOrdinariasDiurnasFk;     
+    
+    /**
+     * @ORM\Column(name="codigo_concepto_horas_extras_ordinarias_nocturnas_fk", type="integer", nullable=true)
+     */    
+    private $codigoConceptoHorasExtrasOrdinariasNocturnasFk;   
+    
+    /**
+     * @ORM\Column(name="codigo_concepto_horas_extras_festivas_diurnas_fk", type="integer", nullable=true)
+     */    
+    private $codigoConceptoHorasExtrasFestivasDiurnasFk;     
+    
+    /**
+     * @ORM\Column(name="codigo_concepto_horas_extras_festivas_nocturnas_fk", type="integer", nullable=true)
+     */    
+    private $codigoConceptoHorasExtrasFestivasNocturnasFk;     
+    
+    /**
      * Set codigoConfiguracionPk
      *
      * @param integer $codigoConfiguracionPk
@@ -183,5 +228,221 @@ class TurConfiguracion
     public function getInformacionResolucionSupervigilanciaFactura()
     {
         return $this->informacionResolucionSupervigilanciaFactura;
+    }
+
+    /**
+     * Set codigoConceptoHorasDescansoFk
+     *
+     * @param integer $codigoConceptoHorasDescansoFk
+     *
+     * @return TurConfiguracion
+     */
+    public function setCodigoConceptoHorasDescansoFk($codigoConceptoHorasDescansoFk)
+    {
+        $this->codigoConceptoHorasDescansoFk = $codigoConceptoHorasDescansoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoConceptoHorasDescansoFk
+     *
+     * @return integer
+     */
+    public function getCodigoConceptoHorasDescansoFk()
+    {
+        return $this->codigoConceptoHorasDescansoFk;
+    }
+
+    /**
+     * Set codigoConceptoHorasDiurnasFk
+     *
+     * @param integer $codigoConceptoHorasDiurnasFk
+     *
+     * @return TurConfiguracion
+     */
+    public function setCodigoConceptoHorasDiurnasFk($codigoConceptoHorasDiurnasFk)
+    {
+        $this->codigoConceptoHorasDiurnasFk = $codigoConceptoHorasDiurnasFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoConceptoHorasDiurnasFk
+     *
+     * @return integer
+     */
+    public function getCodigoConceptoHorasDiurnasFk()
+    {
+        return $this->codigoConceptoHorasDiurnasFk;
+    }
+
+    /**
+     * Set codigoConceptoHorasNocturnasFk
+     *
+     * @param integer $codigoConceptoHorasNocturnasFk
+     *
+     * @return TurConfiguracion
+     */
+    public function setCodigoConceptoHorasNocturnasFk($codigoConceptoHorasNocturnasFk)
+    {
+        $this->codigoConceptoHorasNocturnasFk = $codigoConceptoHorasNocturnasFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoConceptoHorasNocturnasFk
+     *
+     * @return integer
+     */
+    public function getCodigoConceptoHorasNocturnasFk()
+    {
+        return $this->codigoConceptoHorasNocturnasFk;
+    }
+
+    /**
+     * Set codigoConceptoHorasFestivasDiurnasFk
+     *
+     * @param integer $codigoConceptoHorasFestivasDiurnasFk
+     *
+     * @return TurConfiguracion
+     */
+    public function setCodigoConceptoHorasFestivasDiurnasFk($codigoConceptoHorasFestivasDiurnasFk)
+    {
+        $this->codigoConceptoHorasFestivasDiurnasFk = $codigoConceptoHorasFestivasDiurnasFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoConceptoHorasFestivasDiurnasFk
+     *
+     * @return integer
+     */
+    public function getCodigoConceptoHorasFestivasDiurnasFk()
+    {
+        return $this->codigoConceptoHorasFestivasDiurnasFk;
+    }
+
+    /**
+     * Set codigoConceptoHorasFestivasNocturnasFk
+     *
+     * @param integer $codigoConceptoHorasFestivasNocturnasFk
+     *
+     * @return TurConfiguracion
+     */
+    public function setCodigoConceptoHorasFestivasNocturnasFk($codigoConceptoHorasFestivasNocturnasFk)
+    {
+        $this->codigoConceptoHorasFestivasNocturnasFk = $codigoConceptoHorasFestivasNocturnasFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoConceptoHorasFestivasNocturnasFk
+     *
+     * @return integer
+     */
+    public function getCodigoConceptoHorasFestivasNocturnasFk()
+    {
+        return $this->codigoConceptoHorasFestivasNocturnasFk;
+    }
+
+    /**
+     * Set codigoConceptoHorasExtrasOrdinariasDiurnasFk
+     *
+     * @param integer $codigoConceptoHorasExtrasOrdinariasDiurnasFk
+     *
+     * @return TurConfiguracion
+     */
+    public function setCodigoConceptoHorasExtrasOrdinariasDiurnasFk($codigoConceptoHorasExtrasOrdinariasDiurnasFk)
+    {
+        $this->codigoConceptoHorasExtrasOrdinariasDiurnasFk = $codigoConceptoHorasExtrasOrdinariasDiurnasFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoConceptoHorasExtrasOrdinariasDiurnasFk
+     *
+     * @return integer
+     */
+    public function getCodigoConceptoHorasExtrasOrdinariasDiurnasFk()
+    {
+        return $this->codigoConceptoHorasExtrasOrdinariasDiurnasFk;
+    }
+
+    /**
+     * Set codigoConceptoHorasExtrasOrdinariasNocturnasFk
+     *
+     * @param integer $codigoConceptoHorasExtrasOrdinariasNocturnasFk
+     *
+     * @return TurConfiguracion
+     */
+    public function setCodigoConceptoHorasExtrasOrdinariasNocturnasFk($codigoConceptoHorasExtrasOrdinariasNocturnasFk)
+    {
+        $this->codigoConceptoHorasExtrasOrdinariasNocturnasFk = $codigoConceptoHorasExtrasOrdinariasNocturnasFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoConceptoHorasExtrasOrdinariasNocturnasFk
+     *
+     * @return integer
+     */
+    public function getCodigoConceptoHorasExtrasOrdinariasNocturnasFk()
+    {
+        return $this->codigoConceptoHorasExtrasOrdinariasNocturnasFk;
+    }
+
+    /**
+     * Set codigoConceptoHorasExtrasFestivasDiurnasFk
+     *
+     * @param integer $codigoConceptoHorasExtrasFestivasDiurnasFk
+     *
+     * @return TurConfiguracion
+     */
+    public function setCodigoConceptoHorasExtrasFestivasDiurnasFk($codigoConceptoHorasExtrasFestivasDiurnasFk)
+    {
+        $this->codigoConceptoHorasExtrasFestivasDiurnasFk = $codigoConceptoHorasExtrasFestivasDiurnasFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoConceptoHorasExtrasFestivasDiurnasFk
+     *
+     * @return integer
+     */
+    public function getCodigoConceptoHorasExtrasFestivasDiurnasFk()
+    {
+        return $this->codigoConceptoHorasExtrasFestivasDiurnasFk;
+    }
+
+    /**
+     * Set codigoConceptoHorasExtrasFestivasNocturnasFk
+     *
+     * @param integer $codigoConceptoHorasExtrasFestivasNocturnasFk
+     *
+     * @return TurConfiguracion
+     */
+    public function setCodigoConceptoHorasExtrasFestivasNocturnasFk($codigoConceptoHorasExtrasFestivasNocturnasFk)
+    {
+        $this->codigoConceptoHorasExtrasFestivasNocturnasFk = $codigoConceptoHorasExtrasFestivasNocturnasFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoConceptoHorasExtrasFestivasNocturnasFk
+     *
+     * @return integer
+     */
+    public function getCodigoConceptoHorasExtrasFestivasNocturnasFk()
+    {
+        return $this->codigoConceptoHorasExtrasFestivasNocturnasFk;
     }
 }
