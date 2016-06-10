@@ -156,10 +156,14 @@ class RhuProgramacionPagoDetalle
     private $salarioIntegral = 0;     
     
     /**
-     * @ORM\Column(name="soporteTurno", type="boolean")
+     * @ORM\Column(name="soporte_turno", type="boolean")
      */
     private $soporteTurno = 1;    
         
+    /**
+     * @ORM\Column(name="comentarios", type="string", length=150, nullable=true)
+     */    
+    private $comentarios;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuProgramacionPago", inversedBy="programacionesPagosDetallesProgramacionPagoRel")
@@ -761,6 +765,54 @@ class RhuProgramacionPagoDetalle
     }
 
     /**
+     * Set diasIncapacidad
+     *
+     * @param integer $diasIncapacidad
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setDiasIncapacidad($diasIncapacidad)
+    {
+        $this->diasIncapacidad = $diasIncapacidad;
+
+        return $this;
+    }
+
+    /**
+     * Get diasIncapacidad
+     *
+     * @return integer
+     */
+    public function getDiasIncapacidad()
+    {
+        return $this->diasIncapacidad;
+    }
+
+    /**
+     * Set diasLicencia
+     *
+     * @param integer $diasLicencia
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setDiasLicencia($diasLicencia)
+    {
+        $this->diasLicencia = $diasLicencia;
+
+        return $this;
+    }
+
+    /**
+     * Get diasLicencia
+     *
+     * @return integer
+     */
+    public function getDiasLicencia()
+    {
+        return $this->diasLicencia;
+    }
+
+    /**
      * Set diasVacaciones
      *
      * @param integer $diasVacaciones
@@ -830,6 +882,30 @@ class RhuProgramacionPagoDetalle
     public function getSoporteTurno()
     {
         return $this->soporteTurno;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
     }
 
     /**
@@ -970,53 +1046,5 @@ class RhuProgramacionPagoDetalle
     public function getPagosDetallesProgramacionPagoDetalleRel()
     {
         return $this->pagosDetallesProgramacionPagoDetalleRel;
-    }
-
-    /**
-     * Set diasIncapacidad
-     *
-     * @param integer $diasIncapacidad
-     *
-     * @return RhuProgramacionPagoDetalle
-     */
-    public function setDiasIncapacidad($diasIncapacidad)
-    {
-        $this->diasIncapacidad = $diasIncapacidad;
-
-        return $this;
-    }
-
-    /**
-     * Get diasIncapacidad
-     *
-     * @return integer
-     */
-    public function getDiasIncapacidad()
-    {
-        return $this->diasIncapacidad;
-    }
-
-    /**
-     * Set diasLicencia
-     *
-     * @param integer $diasLicencia
-     *
-     * @return RhuProgramacionPagoDetalle
-     */
-    public function setDiasLicencia($diasLicencia)
-    {
-        $this->diasLicencia = $diasLicencia;
-
-        return $this;
-    }
-
-    /**
-     * Get diasLicencia
-     *
-     * @return integer
-     */
-    public function getDiasLicencia()
-    {
-        return $this->diasLicencia;
     }
 }

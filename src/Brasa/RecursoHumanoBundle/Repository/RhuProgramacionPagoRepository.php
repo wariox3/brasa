@@ -79,7 +79,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $arPago->setContratoRel($arContrato);                        
                         $arPago->setDiasPeriodo($arProgramacionPagoDetalle->getDias());
                         $arPago->setCodigoUsuario($arProgramacionPagoProcesar->getCodigoUsuario());
-                        
+                        $arPago->setComentarios($arProgramacionPagoDetalle->getComentarios());
 
                         //Parametros generales
                         $intHorasLaboradas = $arProgramacionPagoDetalle->getHorasPeriodoReales();
@@ -330,6 +330,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
                         $arPagoDetalle->setVrHora($douVrHora);
                         $arPagoDetalle->setVrDia($douVrDia);
+                        $arPagoDetalle->setPorcentajeAplicado($arPagoConcepto->getPorPorcentaje());
                         $arPagoDetalle->setNumeroHoras($intHorasLaboradas);
                         $arPagoDetalle->setNumeroDias($intHorasLaboradas / $intFactorDia);
                         $arPagoDetalle->setVrPago($douPagoDetalle);

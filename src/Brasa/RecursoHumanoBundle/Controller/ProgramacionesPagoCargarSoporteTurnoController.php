@@ -48,6 +48,7 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     $arProgramacionPagoDetalle->setFactorDia($arContrato->getFactorHorasDia());
                     $arProgramacionPagoDetalle->setVrDia($floVrDia);
                     $arProgramacionPagoDetalle->setVrHora($floVrHora);
+                    //$arProgramacionPagoDetalle->set
                     //Pregunta por el tipo de pension, si es pensionado no le retiene pension (PABLO ARANZAZU 27/04/2016)
                     if ($arContrato->getCodigoTipoPensionFk() == 5){
                         $arProgramacionPagoDetalle->setDescuentoPension(0);
@@ -57,9 +58,9 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     if($intDiasVacaciones > 0) {                                        
                         $arProgramacionPagoDetalle->setDiasVacaciones($intDiasVacaciones);
                     }           
-                    if($arSoportePago->getCodigoSoportePagoPk() == 3125) {
-                        echo "hola";
-                    }
+                    //if($arSoportePago->getCodigoSoportePagoPk() == 3125) {
+                    //    echo "hola";
+                    //}
                     //dias licencia
                     $intDiasLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicenciaPeriodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), $arContrato->getCodigoEmpleadoFk());                
                     if($intDiasLicencia > 0) {                                        
@@ -83,8 +84,8 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     if($intDiasIncapacidad != $arSoportePago->getIncapacidad()) {
                         $arrInconsistencias[] = array('inconsistencia' => "El empleado " . $arEmpleado->getNombreCorto() . " tiene incapacidades de " . $arSoportePago->getIncapacidad() . " dias en turnos y de " . $intDiasIncapacidad . " en recurso humano");
                     }                    
-                    
-                    
+                    $comentarios = "Diurnas[" . $arSoportePago->getHorasDiurnas() . "] Nocturnas[" . $arSoportePago->getHorasNocturnas() . "], Descanso[" . $arSoportePago->getHorasDescanso() . "]";
+                    $arProgramacionPagoDetalle->setComentarios($comentarios);                    
                     $em->persist($arProgramacionPagoDetalle);
 
                     if($arSoportePago->getHorasNocturnas() > 0) {

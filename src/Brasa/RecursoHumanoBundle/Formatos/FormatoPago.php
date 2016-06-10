@@ -150,10 +150,24 @@ class FormatoPago extends \FPDF_FPDF {
         $this->SetFont('Arial','',7);
         $this->SetFillColor(255, 255, 255);
         $this->Cell(24, 5, $arPago->getFechaHasta()->format('Y/m/d') , 1, 0, 'L', 1);
-        
-        
+        $this->SetFont('Arial','B',6.5);
+        $this->SetFillColor(200, 200, 200);
+        $this->Cell(24, 6, "" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',7);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(45, 5, "" , 1, 0, 'R', 1);
+        $this->Cell(21, 6, '' , 1, 0, 'R', 1);        
+        //FILA 6
+        $this->SetXY(10, 65);
+        $this->SetFont('Arial','B',6.5);
+        $this->SetFillColor(200, 200, 200);
+        $this->Cell(22, 5, "COMENTARIO:" , 1, 0, 'L', 1);                            
+        $this->SetFont('Arial','',6.5);
+        $this->SetFillColor(255, 255, 255);
+        $this->Cell(171, 5, $arPago->getComentarios() , 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',6.5);
+        
+        //$this->SetFillColor(255, 255, 255);
+        //$this->Cell(45, 5, "" , 1, 0, 'R', 1);
         $this->EncabezadoDetalles();
         
     }
