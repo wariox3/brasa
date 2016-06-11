@@ -38,6 +38,7 @@
                 <th>LMA</th>
                 <th>VAC</th>
                 <th>IRP</th>
+                <th>INT</th>
                 <th style="text-align: right">SALARIO</th>
                 <th style="text-align: right">SUPLE</th>
                 <th>S.I</th>
@@ -80,6 +81,7 @@
                 <td>{% if arSsoAportes.licenciaMaternidad == 'X' %}{{ arSsoAportes.licenciaMaternidad }}{{ arSsoAportes.diasLicenciaMaternidad }} {% endif %}</td>
                 <td>{% if arSsoAportes.vacaciones == 'X' %}{{ arSsoAportes.vacaciones }}{{ arSsoAportes.diasVacaciones }} {% endif %}</td>
                 <td>{% if arSsoAportes.incapacidadAccidenteTrabajoEnfermedadProfesional > 0 %}{{ arSsoAportes.incapacidadAccidenteTrabajoEnfermedadProfesional }} {% endif %}</td>
+                <td>{{ arSsoAportes.salarioIntegral }}</td>
                 <td style="text-align: right">{{ arSsoAportes.salarioBasico | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSsoAportes.suplementario | number_format(0, '.', ',') }}</td>
                 <td>{% if arSsoAportes.salarioIntegral == 'X' %}{{ arSsoAportes.salarioIntegral }} {% endif %}</td>
@@ -108,7 +110,7 @@
                 <td style="text-align: right">{{ arSsoAportes.totalCotizacion  | number_format(0, '.', ',') }}</td>
             </tr>           
             {% endfor %}
-             <td colspan="38"></td>
+             <td colspan="39"></td>
              <td style="text-align: right">{{ arPeriodoDetalle.totalCotizacion | number_format(0, '.', ',') }}</td>
             
         </table>

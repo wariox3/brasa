@@ -14,7 +14,7 @@ class RhuSsoSucursalType extends AbstractType
     {
         $builder
             ->add('nombre', 'text', array('required' => true))
-            ->add('codigoInterface', 'number', array('required' => true))
+            ->add('codigoInterface', 'text', array('required' => true))
             ->add('guardar', 'submit', array('label' => 'Guardar'));
     }
 

@@ -338,10 +338,14 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConcepto->getOperacion());
                         $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
                         $em->persist($arPagoDetalle);
-                        $douIngresoBasePrestacional += $douPagoDetalle;                        
-                        $douIngresoBaseCotizacion += $douPagoDetalle;                        
+                        //El ingreso base cotizacion del salacion integral es el 70% del salario                        
+                        if($arProgramacionPagoDetalle->getSalarioIntegral() == 1) {
+                            $douPagoDetalleCotizacion = ($douPagoDetalle * 70 / 100);    
+                        }                        
+                        $douIngresoBasePrestacional += $douPagoDetalle;
+                        $douIngresoBaseCotizacion += $douPagoDetalleCotizacion;                        
                         $arPagoDetalle->setVrIngresoBasePrestacion($douPagoDetalle);
-                        $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);
+                        $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalleCotizacion);
 
                         //Liquidar salud
                         if($arProgramacionPagoDetalle->getDescuentoSalud() == 1) {                            
@@ -349,12 +353,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                             $floPorcentaje = $arContrato->getTipoSaludRel()->getPorcentajeEmpleado();
                             $intOperacion = -1;
                             if($floPorcentaje > 0) {
-                                if($arProgramacionPagoDetalle->getSalarioIntegral() == 1) {
-                                    $douPagoDetalle = (($douIngresoBaseCotizacion / 1.3) * $floPorcentaje)/100;                                                                
-                                } else {
-                                    $douPagoDetalle = ($douIngresoBaseCotizacion * $floPorcentaje)/100;                                                            
-                                }
-
+                                $douPagoDetalle = ($douIngresoBaseCotizacion * $floPorcentaje)/100;                                                                                            
                                 $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                 $arPagoDetalle->setPagoRel($arPago);
                                 $arPagoDetalle->setPagoConceptoRel($arContrato->getTipoSaludRel()->getPagoConceptoRel());
@@ -373,12 +372,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                             $douPorcentaje = $arContrato->getTipoPensionRel()->getPorcentajeEmpleado();
                             $intOperacion = -1;
                             if($douPorcentaje > 0) {
-
-                                if($arProgramacionPagoDetalle->getSalarioIntegral() == 1) {
-                                    $douPagoDetalle = (($douIngresoBaseCotizacion / 1.3) * $douPorcentaje)/100;
-                                } else {
-                                    $douPagoDetalle = ($douIngresoBaseCotizacion * $douPorcentaje)/100;
-                                }
+                                $douPagoDetalle = ($douIngresoBaseCotizacion * $douPorcentaje)/100;                                
                                 $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                                 $arPagoDetalle->setPagoRel($arPago);
                                 $arPagoDetalle->setPagoConceptoRel($arContrato->getTipoPensionRel()->getPagoConceptoRel());
@@ -1155,9 +1149,9 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $floNeto = $floDevengado - $floDeducciones;
                 $arProgramacionPagoDetalle->setVrNetoPagar($floNeto);
                 
-                if($arContrato->getCodigoEmpleadoFk() == 1135) {
-                    echo "";
-                }
+                //if($arContrato->getCodigoEmpleadoFk() == 1135) {
+                //    echo "";
+                //}
                 
                 //dias vacaciones
                 $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                
@@ -1201,7 +1195,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 . " AND c.fechaDesde <= '" . $arProgramacionPago->getFechaHasta()->format('Y-m-d') . "' "
                 . " AND (c.fechaHasta >= '" . $arProgramacionPago->getFechaDesde()->format('Y-m-d') . "' "
                 . " OR c.indefinido = 1) "
-                . " AND c.estadoLiquidado = 0 AND c.codigoContratoTipoFk <> 4 AND c.codigoContratoTipoFk <> 5";
+                . " AND c.estadoLiquidado = 0 AND c.codigoContratoTipoFk <> 4 AND c.codigoContratoTipoFk <> 5 AND c.salarioIntegral = 0";
             $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
             $query = $em->createQuery($dql);
             $arContratos = $query->getResult();
@@ -1267,7 +1261,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 . " AND c.fechaDesde <= '" . $arProgramacionPago->getFechaHasta()->format('Y-m-d') . "' "
                 . " AND (c.fechaHasta >= '" . $arProgramacionPago->getFechaDesde()->format('Y-m-d') . "' "
                 . " OR c.indefinido = 1) "
-                . " AND c.estadoLiquidado = 0 AND c.codigoContratoTipoFk <> 4 AND c.codigoContratoTipoFk <> 5";            
+                . " AND c.estadoLiquidado = 0 AND c.codigoContratoTipoFk <> 4 AND c.codigoContratoTipoFk <> 5 and c.salarioIntegral = 0";            
             $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
             $query = $em->createQuery($dql);
             $arContratos = $query->getResult();

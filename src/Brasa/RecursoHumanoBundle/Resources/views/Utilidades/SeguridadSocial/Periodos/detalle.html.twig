@@ -52,7 +52,7 @@
                 <td {% if arSsoPeriodoDetalles.estadoGenerado == 1 %}class="success"{% endif %}>{% if arSsoPeriodoDetalles.estadoGenerado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td {% if arSsoPeriodoDetalles.estadoCerrado == 1 %}class="success"{% endif %}>{% if arSsoPeriodoDetalles.estadoCerrado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{{ arSsoPeriodoDetalles.numeroRegistros  }}</td>
-                <td>{{ arSsoPeriodoDetalles.totalCotizacion | number_format(0, '.', ',') }} </td>
+                <td style="text-align: right">{{ arSsoPeriodoDetalles.totalCotizacion | number_format(0, '.', ',') }} </td>
                 <td>{% if arSsoPeriodoDetalles.estadoGenerado == 1 %} <button class="btn btn-default btn-xs" type="submit" name="OpGenerarArchivo" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}">Archivo plano</button>  {% endif %}</td>
                 <td>{% if arSsoPeriodoDetalles.estadoGenerado == 1 %} <button class="btn btn-default btn-xs" type="submit" name="OpGenerarExcel" value="{{ arSsoPeriodoDetalles.codigoPeriodoDetallePk }}">Excel</button>  {% endif %}</td>
                 <td>

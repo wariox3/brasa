@@ -74,9 +74,10 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $arAporte->setCargoRel($arContrato->getCargoRel());
                 //Parametros generales
                 $floSalario = $arPeriodoEmpleado->getVrSalario();
+                $floSalarioIntegral = $arPeriodoEmpleado->getVrSalario();
                 if($arPeriodoEmpleado->getSalarioIntegral() == 'X') {
                     $arAporte->setSalarioIntegral($arPeriodoEmpleado->getSalarioIntegral());                
-                    $floSalario = $floSalario / 1.3;
+                    $floSalario = $floSalario*70/100;
                 } else {
                     $arAporte->setSalarioIntegral(' ');                
                 }
@@ -109,9 +110,13 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 if($arPeriodoEmpleado->getDiasVacaciones() > 0) {
                     $arAporte->setVacaciones('X');
                     $arAporte->setDiasVacaciones($arPeriodoEmpleado->getDiasVacaciones());
-                }            
-
-                $arAporte->setSalarioBasico($floSalario);            
+                }   
+                
+                if($arPeriodoEmpleado->getSalarioIntegral() == 'X') {
+                    $arAporte->setSalarioBasico($floSalarioIntegral);            
+                } else {
+                    $arAporte->setSalarioBasico($floSalario);            
+                }                                    
                 $arAporte->setCodigoEntidadPensionPertenece($arPeriodoEmpleado->getCodigoEntidadPensionPertenece());
                 $arAporte->setCodigoEntidadSaludPertenece($arPeriodoEmpleado->getCodigoEntidadSaludPertenece());
                 $arAporte->setCodigoEntidadCajaPertenece($arPeriodoEmpleado->getCodigoEntidadCajaPertenece());
@@ -189,7 +194,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
 
                 $floCotizacionPension = $this->redondearAporte($floSalario + $floSuplementario, $floIbcPension, $floTarifaPension, $intDiasCotizarPension);            
                 
-                if($floSalario >= ($arConfiguracionNomina->getVrSalario() * 4)) {
+                if($floIbcPension >= ($arConfiguracionNomina->getVrSalario() * 4)) {
                     $floCotizacionFSPSolidaridad = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
                     $floCotizacionFSPSubsistencia = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
                 }
@@ -240,11 +245,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                     $arAporte->setPrimerApellido($arEmpleado->getApellido1());
                     $arAporte->setSegundoApellido($arEmpleado->getApellido2());
 
-                    //Parametros generales
-                    $floSalario = $arPeriodoEmpleado->getVrSalario();
-                    if($arPeriodoEmpleado->getSalarioIntegral() == 'X') {
-                        $floSalario = $floSalario / 1.3;
-                    }                
+                    //Parametros generales               
                     $floSuplementario = $arPeriodoEmpleado->getVrSuplementario();            
                     $floIbcIncapacidades = 0;
 
@@ -265,7 +266,12 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                         $floIbcIncapacidadLaboral = $this->liquidarIncapacidadLaboral($floSalarioMesActual, $floSalarioMesAnterior, $arPeriodoEmpleado->getDiasIncapacidadLaboral());                        
                         $floIbcIncapacidades += $floIbcIncapacidadLaboral;                                        
                     }                        
-                    $arAporte->setSalarioBasico($floSalario);            
+                    
+                    if($arPeriodoEmpleado->getSalarioIntegral() == 'X') {
+                        $arAporte->setSalarioBasico($floSalarioIntegral);            
+                    } else {
+                        $arAporte->setSalarioBasico($floSalario);            
+                    }            
                     $arAporte->setCodigoEntidadPensionPertenece($arPeriodoEmpleado->getCodigoEntidadPensionPertenece());
                     $arAporte->setCodigoEntidadSaludPertenece($arPeriodoEmpleado->getCodigoEntidadSaludPertenece());
                     $arAporte->setCodigoEntidadCajaPertenece($arPeriodoEmpleado->getCodigoEntidadCajaPertenece());
