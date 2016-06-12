@@ -63,7 +63,7 @@ class TurServicioDetalle
     private $fechaHasta;              
     
     /**     
-     * @ORM\Column(name="liquidarDiasReales", type="boolean")
+     * @ORM\Column(name="liquidar_dias_reales", type="boolean")
      */    
     private $liquidarDiasReales = false;    
     
@@ -229,6 +229,7 @@ class TurServicioDetalle
      */
     protected $pedidosDetallesServicioDetalleRel;     
     
+
 
     /**
      * Constructor
