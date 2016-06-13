@@ -73,6 +73,11 @@ class TurPuesto
     private $comentarios;   
     
     /**
+     * @ORM\Column(name="codigo_interface", type="string", length=30, nullable=true)
+     */
+    private $codigoInterface;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurCliente", inversedBy="puestosClienteRel")
      * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
      */
@@ -609,5 +614,29 @@ class TurPuesto
     public function getCiudadRel()
     {
         return $this->ciudadRel;
+    }
+
+    /**
+     * Set codigoInterface
+     *
+     * @param string $codigoInterface
+     *
+     * @return TurPuesto
+     */
+    public function setCodigoInterface($codigoInterface)
+    {
+        $this->codigoInterface = $codigoInterface;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoInterface
+     *
+     * @return string
+     */
+    public function getCodigoInterface()
+    {
+        return $this->codigoInterface;
     }
 }
