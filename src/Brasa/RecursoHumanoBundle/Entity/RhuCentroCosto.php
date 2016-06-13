@@ -61,17 +61,17 @@ class RhuCentroCosto
      * Si existen programaciones de pago pendientes
      * @ORM\Column(name="pago_abierto", type="boolean")
      */    
-    private $pagoAbierto = 0;    
+    private $pagoAbierto = false;    
     
     /**     
      * @ORM\Column(name="estado_activo", type="boolean")
      */    
-    private $estadoActivo = 0;     
+    private $estadoActivo = false;     
 
     /**     
      * @ORM\Column(name="generar_pago_automatico", type="boolean")
      */    
-    private $generarPagoAutomatico = 0;    
+    private $generarPagoAutomatico = false;    
     
     /**
      * @ORM\Column(name="hora_pago_automatico", type="time", nullable=true)
@@ -258,6 +258,7 @@ class RhuCentroCosto
     protected $soportesPagosHorariosCentroCostoRel;    
     
 
+    
     /**
      * Constructor
      */
