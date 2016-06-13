@@ -66,7 +66,7 @@ class RhuCentroCosto
     /**     
      * @ORM\Column(name="estado_activo", type="boolean")
      */    
-    private $estadoActivo = false;     
+    private $estadoActivo = 0;     
 
     /**     
      * @ORM\Column(name="generar_pago_automatico", type="boolean")
@@ -257,7 +257,6 @@ class RhuCentroCosto
      */
     protected $soportesPagosHorariosCentroCostoRel;    
     
-
 
     /**
      * Constructor
