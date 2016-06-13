@@ -33,6 +33,11 @@ class TurCliente
     private $nombreCorto;                         
     
     /**
+     * @ORM\Column(name="nombre_completo", type="string", length=200, nullable=true)
+     */
+    private $nombreCompleto;    
+    
+    /**
      * @ORM\Column(name="codigo_sector_fk", type="integer")
      */    
     private $codigoSectorFk;     
@@ -1288,5 +1293,29 @@ class TurCliente
     public function getContratosClienteRel()
     {
         return $this->contratosClienteRel;
+    }
+
+    /**
+     * Set nombreCompleto
+     *
+     * @param string $nombreCompleto
+     *
+     * @return TurCliente
+     */
+    public function setNombreCompleto($nombreCompleto)
+    {
+        $this->nombreCompleto = $nombreCompleto;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreCompleto
+     *
+     * @return string
+     */
+    public function getNombreCompleto()
+    {
+        return $this->nombreCompleto;
     }
 }
