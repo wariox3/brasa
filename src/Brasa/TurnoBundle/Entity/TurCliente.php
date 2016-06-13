@@ -18,7 +18,7 @@ class TurCliente
     private $codigoClientePk;    
     
     /**
-     * @ORM\Column(name="nit", type="string", length=15, nullable=false, unique=true)
+     * @ORM\Column(name="nit", type="string", length=15, nullable=false)
      */
     private $nit;        
     
@@ -221,8 +221,6 @@ class TurCliente
      */
     protected $puestosDotacionesClienteRel;    
     
-
-
     /**
      * Constructor
      */
@@ -234,6 +232,8 @@ class TurCliente
         $this->facturasClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->programacionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->puestosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->proyectosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contratosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->clientesDireccionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cierresMesServiciosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->puestosDotacionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -319,6 +319,30 @@ class TurCliente
     public function getNombreCorto()
     {
         return $this->nombreCorto;
+    }
+
+    /**
+     * Set nombreCompleto
+     *
+     * @param string $nombreCompleto
+     *
+     * @return TurCliente
+     */
+    public function setNombreCompleto($nombreCompleto)
+    {
+        $this->nombreCompleto = $nombreCompleto;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreCompleto
+     *
+     * @return string
+     */
+    public function getNombreCompleto()
+    {
+        return $this->nombreCompleto;
     }
 
     /**
@@ -874,6 +898,30 @@ class TurCliente
     }
 
     /**
+     * Set asesorRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenAsesor $asesorRel
+     *
+     * @return TurCliente
+     */
+    public function setAsesorRel(\Brasa\GeneralBundle\Entity\GenAsesor $asesorRel = null)
+    {
+        $this->asesorRel = $asesorRel;
+
+        return $this;
+    }
+
+    /**
+     * Get asesorRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenAsesor
+     */
+    public function getAsesorRel()
+    {
+        return $this->asesorRel;
+    }
+
+    /**
      * Set ciudadRel
      *
      * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
@@ -1102,6 +1150,74 @@ class TurCliente
     }
 
     /**
+     * Add proyectosClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurProyecto $proyectosClienteRel
+     *
+     * @return TurCliente
+     */
+    public function addProyectosClienteRel(\Brasa\TurnoBundle\Entity\TurProyecto $proyectosClienteRel)
+    {
+        $this->proyectosClienteRel[] = $proyectosClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove proyectosClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurProyecto $proyectosClienteRel
+     */
+    public function removeProyectosClienteRel(\Brasa\TurnoBundle\Entity\TurProyecto $proyectosClienteRel)
+    {
+        $this->proyectosClienteRel->removeElement($proyectosClienteRel);
+    }
+
+    /**
+     * Get proyectosClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProyectosClienteRel()
+    {
+        return $this->proyectosClienteRel;
+    }
+
+    /**
+     * Add contratosClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurContrato $contratosClienteRel
+     *
+     * @return TurCliente
+     */
+    public function addContratosClienteRel(\Brasa\TurnoBundle\Entity\TurContrato $contratosClienteRel)
+    {
+        $this->contratosClienteRel[] = $contratosClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove contratosClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurContrato $contratosClienteRel
+     */
+    public function removeContratosClienteRel(\Brasa\TurnoBundle\Entity\TurContrato $contratosClienteRel)
+    {
+        $this->contratosClienteRel->removeElement($contratosClienteRel);
+    }
+
+    /**
+     * Get contratosClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContratosClienteRel()
+    {
+        return $this->contratosClienteRel;
+    }
+
+    /**
      * Add clientesDireccionesClienteRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurClienteDireccion $clientesDireccionesClienteRel
@@ -1201,121 +1317,5 @@ class TurCliente
     public function getPuestosDotacionesClienteRel()
     {
         return $this->puestosDotacionesClienteRel;
-    }
-
-    /**
-     * Set asesorRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenAsesor $asesorRel
-     *
-     * @return TurCliente
-     */
-    public function setAsesorRel(\Brasa\GeneralBundle\Entity\GenAsesor $asesorRel = null)
-    {
-        $this->asesorRel = $asesorRel;
-
-        return $this;
-    }
-
-    /**
-     * Get asesorRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenAsesor
-     */
-    public function getAsesorRel()
-    {
-        return $this->asesorRel;
-    }
-
-    /**
-     * Add proyectosClienteRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurProyecto $proyectosClienteRel
-     *
-     * @return TurCliente
-     */
-    public function addProyectosClienteRel(\Brasa\TurnoBundle\Entity\TurProyecto $proyectosClienteRel)
-    {
-        $this->proyectosClienteRel[] = $proyectosClienteRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove proyectosClienteRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurProyecto $proyectosClienteRel
-     */
-    public function removeProyectosClienteRel(\Brasa\TurnoBundle\Entity\TurProyecto $proyectosClienteRel)
-    {
-        $this->proyectosClienteRel->removeElement($proyectosClienteRel);
-    }
-
-    /**
-     * Get proyectosClienteRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProyectosClienteRel()
-    {
-        return $this->proyectosClienteRel;
-    }
-
-    /**
-     * Add contratosClienteRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurContrato $contratosClienteRel
-     *
-     * @return TurCliente
-     */
-    public function addContratosClienteRel(\Brasa\TurnoBundle\Entity\TurContrato $contratosClienteRel)
-    {
-        $this->contratosClienteRel[] = $contratosClienteRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove contratosClienteRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurContrato $contratosClienteRel
-     */
-    public function removeContratosClienteRel(\Brasa\TurnoBundle\Entity\TurContrato $contratosClienteRel)
-    {
-        $this->contratosClienteRel->removeElement($contratosClienteRel);
-    }
-
-    /**
-     * Get contratosClienteRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getContratosClienteRel()
-    {
-        return $this->contratosClienteRel;
-    }
-
-    /**
-     * Set nombreCompleto
-     *
-     * @param string $nombreCompleto
-     *
-     * @return TurCliente
-     */
-    public function setNombreCompleto($nombreCompleto)
-    {
-        $this->nombreCompleto = $nombreCompleto;
-
-        return $this;
-    }
-
-    /**
-     * Get nombreCompleto
-     *
-     * @return string
-     */
-    public function getNombreCompleto()
-    {
-        return $this->nombreCompleto;
     }
 }
