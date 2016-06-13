@@ -82,7 +82,7 @@ class BaseCentroCostoController extends Controller
             $arCentroCosto->setFechaUltimoPago(new \DateTime('now'));
             $arCentroCosto->setFechaUltimoPagoCesantias(new \DateTime('now'));
             $arCentroCosto->setFechaUltimoPagoPrima(new \DateTime('now'));            
-            $arCentroCosto->setEstadoActivo(1);            
+            $arCentroCosto->setEstadoActivo(true);            
         }
         $form = $this->createForm(new RhuCentroCostoType(), $arCentroCosto);
         $form->handleRequest($request);
