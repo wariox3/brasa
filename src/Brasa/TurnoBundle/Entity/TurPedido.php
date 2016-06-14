@@ -113,6 +113,32 @@ class TurPedido
     private $vrTotalPrecioMinimo = 0;        
     
     /**
+     * @ORM\Column(name="vr_total_otros", type="float")
+     */
+    private $vrTotalOtros = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_total_servicio", type="float")
+     */
+    private $vrTotalServicio = 0; 
+    
+
+    /**
+     * @ORM\Column(name="vr_subtotal", type="float")
+     */
+    private $vrSubtotal = 0; 
+
+    /**
+     * @ORM\Column(name="vr_iva", type="float")
+     */
+    private $vrIva = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_base_aiu", type="float")
+     */
+    private $vrBaseAiu = 0;     
+    
+    /**
      * @ORM\Column(name="vr_total", type="float")
      */
     private $vrTotal = 0;   
@@ -150,6 +176,11 @@ class TurPedido
      */
     protected $pedidosDetallesPedidoRel; 
 
+    /**
+     * @ORM\OneToMany(targetEntity="TurPedidoDetalleConcepto", mappedBy="pedidoRel", cascade={"persist", "remove"})
+     */
+    protected $pedidosDetallesConceptosPedidoRel;    
+    
     /**
      * Constructor
      */
@@ -800,5 +831,159 @@ class TurPedido
     public function getUsuario()
     {
         return $this->usuario;
+    }
+
+    /**
+     * Set vrTotalOtros
+     *
+     * @param float $vrTotalOtros
+     *
+     * @return TurPedido
+     */
+    public function setVrTotalOtros($vrTotalOtros)
+    {
+        $this->vrTotalOtros = $vrTotalOtros;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalOtros
+     *
+     * @return float
+     */
+    public function getVrTotalOtros()
+    {
+        return $this->vrTotalOtros;
+    }
+
+    /**
+     * Set vrTotalServicio
+     *
+     * @param float $vrTotalServicio
+     *
+     * @return TurPedido
+     */
+    public function setVrTotalServicio($vrTotalServicio)
+    {
+        $this->vrTotalServicio = $vrTotalServicio;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalServicio
+     *
+     * @return float
+     */
+    public function getVrTotalServicio()
+    {
+        return $this->vrTotalServicio;
+    }
+
+    /**
+     * Set vrSubtotal
+     *
+     * @param float $vrSubtotal
+     *
+     * @return TurPedido
+     */
+    public function setVrSubtotal($vrSubtotal)
+    {
+        $this->vrSubtotal = $vrSubtotal;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSubtotal
+     *
+     * @return float
+     */
+    public function getVrSubtotal()
+    {
+        return $this->vrSubtotal;
+    }
+
+    /**
+     * Set vrIva
+     *
+     * @param float $vrIva
+     *
+     * @return TurPedido
+     */
+    public function setVrIva($vrIva)
+    {
+        $this->vrIva = $vrIva;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIva
+     *
+     * @return float
+     */
+    public function getVrIva()
+    {
+        return $this->vrIva;
+    }
+
+    /**
+     * Set vrBaseAiu
+     *
+     * @param float $vrBaseAiu
+     *
+     * @return TurPedido
+     */
+    public function setVrBaseAiu($vrBaseAiu)
+    {
+        $this->vrBaseAiu = $vrBaseAiu;
+
+        return $this;
+    }
+
+    /**
+     * Get vrBaseAiu
+     *
+     * @return float
+     */
+    public function getVrBaseAiu()
+    {
+        return $this->vrBaseAiu;
+    }
+
+    /**
+     * Add pedidosDetallesConceptosPedidoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidosDetallesConceptosPedidoRel
+     *
+     * @return TurPedido
+     */
+    public function addPedidosDetallesConceptosPedidoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidosDetallesConceptosPedidoRel)
+    {
+        $this->pedidosDetallesConceptosPedidoRel[] = $pedidosDetallesConceptosPedidoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pedidosDetallesConceptosPedidoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidosDetallesConceptosPedidoRel
+     */
+    public function removePedidosDetallesConceptosPedidoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidosDetallesConceptosPedidoRel)
+    {
+        $this->pedidosDetallesConceptosPedidoRel->removeElement($pedidosDetallesConceptosPedidoRel);
+    }
+
+    /**
+     * Get pedidosDetallesConceptosPedidoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPedidosDetallesConceptosPedidoRel()
+    {
+        return $this->pedidosDetallesConceptosPedidoRel;
     }
 }

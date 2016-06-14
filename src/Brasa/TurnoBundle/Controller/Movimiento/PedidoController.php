@@ -102,6 +102,7 @@ class PedidoController extends Controller
     public function detalleAction($codigoPedido) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');
         $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
         $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);
@@ -194,13 +195,72 @@ class PedidoController extends Controller
 
         $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
         $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array ('codigoPedidoFk' => $codigoPedido));
+        
+        $dql = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->listaDql($codigoPedido);       
+        $arPedidoDetalle = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 150);
+        $dql = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleConcepto')->listaDql($codigoPedido);       
+        $arPedidoDetalleConceptos = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 150);                
         return $this->render('BrasaTurnoBundle:Movimientos/Pedido:detalle.html.twig', array(
                     'arPedido' => $arPedido,
                     'arPedidoDetalle' => $arPedidoDetalle,
+                    'arPedidoDetalleConceptos' => $arPedidoDetalleConceptos,
                     'form' => $form->createView()
                     ));
     }
 
+    /**
+     * @Route("/tur/movimiento/pedido/detalle/concepto/nuevo/{codigoPedido}", name="brs_tur_movimiento_pedido_detalle_concepto_nuevo")
+     */
+    public function detalleConceptoNuevoAction($codigoPedido) {
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $em = $this->getDoctrine()->getManager();
+        $arServicio = new \Brasa\TurnoBundle\Entity\TurServicio();
+        $arServicio = $em->getRepository('BrasaTurnoBundle:TurServicio')->find($codigoServicio);        
+        $form = $this->formularioDetalleOtroNuevo();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            if ($form->get('BtnGuardar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $arrControles = $request->request->All();
+                if(count($arrSeleccionados) > 0) {    
+                    foreach ($arrSeleccionados AS $codigo) {
+                        $arFacturaConcepto = new \Brasa\TurnoBundle\Entity\TurFacturaConcepto();
+                        $arFacturaConcepto = $em->getRepository('BrasaTurnoBundle:TurFacturaConcepto')->find($codigo);
+                        $cantidad = $arrControles['TxtCantidad' . $codigo];
+                        $precio = $arrControles['TxtPrecio' . $codigo];                        
+                        $subtotal = $cantidad * $precio;
+                        $subtotalAIU = $subtotal * 10/100;
+                        $iva = ($subtotalAIU * $arFacturaConcepto->getPorIva())/100;
+                        $total = $subtotal + $iva;
+                        $arServicioDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto();
+                        $arServicioDetalleConcepto->setServicioRel($arServicio);                        
+                        $arServicioDetalleConcepto->setFacturaConceptoRel($arFacturaConcepto);
+                        $arServicioDetalleConcepto->setPorIva($arFacturaConcepto->getPorIva());
+                        $arServicioDetalleConcepto->setCantidad($cantidad);
+                        $arServicioDetalleConcepto->setPrecio($precio);
+                        $arServicioDetalleConcepto->setSubtotal($subtotal);                        
+                        $arServicioDetalleConcepto->setIva($iva);
+                        $arServicioDetalleConcepto->setTotal($total);
+                        $em->persist($arServicioDetalleConcepto);  
+                    }
+                }
+                $em->flush();
+                $em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+            } 
+            if ($form->get('BtnFiltrar')->isClicked()) {            
+                $this->filtrarDetalleNuevo($form);
+            }
+        }
+        
+        $arFacturaConceptos = new \Brasa\TurnoBundle\Entity\TurFacturaConcepto();
+        $arFacturaConceptos = $em->getRepository('BrasaTurnoBundle:TurFacturaConcepto')->findAll();        
+        return $this->render('BrasaTurnoBundle:Movimientos/Servicio:detalleOtroNuevo.html.twig', array(
+            'arFacturaConceptos' => $arFacturaConceptos,
+            'form' => $form->createView()));
+    }         
+    
     /**
      * @Route("/tur/movimiento/pedido/detalle/nuevo/{codigoPedido}/{codigoPedidoDetalle}", name="brs_tur_movimiento_pedido_detalle_nuevo")
      */    
@@ -687,6 +747,8 @@ class PedidoController extends Controller
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
         $arrBotonDetalleDesprogramar = array('label' => 'Desprogramar', 'disabled' => false);
         $arrBotonDesprogramar = array('label' => 'Desprogramar', 'disabled' => true);        
+        $arrBotonDetalleConceptoActualizar = array('label' => 'Actualizar', 'disabled' => false);
+        $arrBotonDetalleConceptoEliminar = array('label' => 'Eliminar', 'disabled' => false);
         
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;                        
@@ -694,6 +756,8 @@ class PedidoController extends Controller
             $arrBotonDetalleActualizar['disabled'] = true;
             $arrBotonProgramar['disabled'] = false;
             $arrBotonAnular['disabled'] = false; 
+            $arrBotonDetalleConceptoActualizar['disabled'] = true;
+            $arrBotonDetalleConceptoEliminar['disabled'] = true;            
             if($ar->getEstadoAnulado() == 1) {
                 $arrBotonDesAutorizar['disabled'] = true;
                 $arrBotonAnular['disabled'] = true;                
@@ -725,7 +789,9 @@ class PedidoController extends Controller
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
                     ->add('BtnDetalleDesprogramar', 'submit', $arrBotonDetalleDesprogramar)
-                    ->add('BtnDesprogramar', 'submit', $arrBotonDesprogramar)                 
+                    ->add('BtnDesprogramar', 'submit', $arrBotonDesprogramar)  
+                    ->add('BtnDetalleConceptoActualizar', 'submit', $arrBotonDetalleConceptoActualizar)
+                    ->add('BtnDetalleConceptoEliminar', 'submit', $arrBotonDetalleConceptoEliminar)                                
                     ->getForm();
         return $form;
     }

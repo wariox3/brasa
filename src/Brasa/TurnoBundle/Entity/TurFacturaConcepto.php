@@ -38,6 +38,11 @@ class TurFacturaConcepto
     protected $serviciosDetallesConceptosFacturaConceptoRel;     
     
     /**
+     * @ORM\OneToMany(targetEntity="TurPedidoDetalleConcepto", mappedBy="facturaConceptoRel")
+     */
+    protected $pedidosDetallesConceptosFacturaConceptoRel;      
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -170,5 +175,39 @@ class TurFacturaConcepto
     public function getServiciosDetallesConceptosFacturaConceptoRel()
     {
         return $this->serviciosDetallesConceptosFacturaConceptoRel;
+    }
+
+    /**
+     * Add pedidosDetallesConceptosFacturaConceptoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidosDetallesConceptosFacturaConceptoRel
+     *
+     * @return TurFacturaConcepto
+     */
+    public function addPedidosDetallesConceptosFacturaConceptoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidosDetallesConceptosFacturaConceptoRel)
+    {
+        $this->pedidosDetallesConceptosFacturaConceptoRel[] = $pedidosDetallesConceptosFacturaConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pedidosDetallesConceptosFacturaConceptoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidosDetallesConceptosFacturaConceptoRel
+     */
+    public function removePedidosDetallesConceptosFacturaConceptoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidosDetallesConceptosFacturaConceptoRel)
+    {
+        $this->pedidosDetallesConceptosFacturaConceptoRel->removeElement($pedidosDetallesConceptosFacturaConceptoRel);
+    }
+
+    /**
+     * Get pedidosDetallesConceptosFacturaConceptoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPedidosDetallesConceptosFacturaConceptoRel()
+    {
+        return $this->pedidosDetallesConceptosFacturaConceptoRel;
     }
 }
