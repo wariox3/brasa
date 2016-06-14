@@ -51,9 +51,59 @@ class RhuSeleccionRequisito
     private $codigoCentroCostoFk;
     
     /**
+     * @ORM\Column(name="codigo_ciudad_fk", type="integer", nullable=true)
+     */
+    private $codigoCiudadFk;
+    
+    /**
      * @ORM\Column(name="codigo_cargo_fk", type="integer", nullable=true)
      */    
     private $codigoCargoFk;
+    
+    /**
+     * @ORM\Column(name="edad_minima_maxima", type="string", length=20, nullable=true)
+     */
+    private $edadMinimaMaxima;
+    
+    /**
+     * @ORM\Column(name="numero_hijos", type="integer", nullable=true)
+     */
+    private $numeroHijos;
+    
+    /**
+     * @ORM\Column(name="codigo_estado_civil_fk", type="string", length=1, nullable=true)
+     */
+    private $codigoEstadoCivilFk;
+    
+    /**
+     * @ORM\Column(name="codigo_estudio_tipo_fk", type="integer", length=4, nullable=true)
+     */    
+    private $codigoEstudioTipoFk;
+    
+    /**
+     * @ORM\Column(name="codigo_sexo_fk", type="string", length=1, nullable=true)
+     */
+    private $codigoSexoFk;
+    
+    /**
+     * @ORM\Column(name="codigo_religion_fk", type="string", length=20, nullable=true)
+     */
+    private $codigoReligionFk;
+    
+    /**
+     * @ORM\Column(name="codigo_experiencia_fk", type="string", length=30, nullable=true)
+     */
+    private $codigoExperienciaFk;
+    
+    /**
+     * @ORM\Column(name="codigo_disponibilidad_fk", type="string", length=30, nullable=true)
+     */
+    private $codigoDisponibilidadFk;
+    
+    /**
+     * @ORM\Column(name="codigo_tipo_vehiculo_fk", type="string", length=2, nullable=true)
+     */
+    private $codigoTipoVehiculoFk;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="seleccionesRequisitosCentroCostoRel")
@@ -68,6 +118,24 @@ class RhuSeleccionRequisito
     protected $cargoRel;
     
     /**
+     * @ORM\ManyToOne(targetEntity="RhuEstadoCivil", inversedBy="seleccionesRequisitosEstadoCivilRel")
+     * @ORM\JoinColumn(name="codigo_estado_civil_fk", referencedColumnName="codigo_estado_civil_pk")
+     */
+    protected $estadoCivilRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuSeleccionesRequisitosCiudadRel")
+     * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
+     */
+    protected $ciudadRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEmpleadoEstudioTipo", inversedBy="seleccionesRequisitosEmpleadoEstudioTipoRel")
+     * @ORM\JoinColumn(name="codigo_estudio_tipo_fk", referencedColumnName="codigo_empleado_estudio_tipo_pk")
+     */
+    protected $estudioTipoRel;
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuSeleccion", mappedBy="seleccionRequisitoRel")
      */
     protected $seleccionesSeleccionRequisitoRel;
@@ -76,6 +144,7 @@ class RhuSeleccionRequisito
      * @ORM\OneToMany(targetEntity="RhuAspirante", mappedBy="seleccionRequisitoRel")
      */
     protected $aspirantesSeleccionRequisitoRel;
+    
     
     
     /**
@@ -242,6 +311,30 @@ class RhuSeleccionRequisito
     }
 
     /**
+     * Set codigoCiudadFk
+     *
+     * @param integer $codigoCiudadFk
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setCodigoCiudadFk($codigoCiudadFk)
+    {
+        $this->codigoCiudadFk = $codigoCiudadFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCiudadFk
+     *
+     * @return integer
+     */
+    public function getCodigoCiudadFk()
+    {
+        return $this->codigoCiudadFk;
+    }
+
+    /**
      * Set codigoCargoFk
      *
      * @param integer $codigoCargoFk
@@ -263,6 +356,174 @@ class RhuSeleccionRequisito
     public function getCodigoCargoFk()
     {
         return $this->codigoCargoFk;
+    }
+
+    /**
+     * Set edadMinimaMaxima
+     *
+     * @param string $edadMinimaMaxima
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setEdadMinimaMaxima($edadMinimaMaxima)
+    {
+        $this->edadMinimaMaxima = $edadMinimaMaxima;
+
+        return $this;
+    }
+
+    /**
+     * Get edadMinimaMaxima
+     *
+     * @return string
+     */
+    public function getEdadMinimaMaxima()
+    {
+        return $this->edadMinimaMaxima;
+    }
+
+    /**
+     * Set numeroHijos
+     *
+     * @param integer $numeroHijos
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setNumeroHijos($numeroHijos)
+    {
+        $this->numeroHijos = $numeroHijos;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroHijos
+     *
+     * @return integer
+     */
+    public function getNumeroHijos()
+    {
+        return $this->numeroHijos;
+    }
+
+    /**
+     * Set codigoEstadoCivilFk
+     *
+     * @param string $codigoEstadoCivilFk
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setCodigoEstadoCivilFk($codigoEstadoCivilFk)
+    {
+        $this->codigoEstadoCivilFk = $codigoEstadoCivilFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEstadoCivilFk
+     *
+     * @return string
+     */
+    public function getCodigoEstadoCivilFk()
+    {
+        return $this->codigoEstadoCivilFk;
+    }
+
+    /**
+     * Set codigoEstudioTipoFk
+     *
+     * @param integer $codigoEstudioTipoFk
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setCodigoEstudioTipoFk($codigoEstudioTipoFk)
+    {
+        $this->codigoEstudioTipoFk = $codigoEstudioTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEstudioTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEstudioTipoFk()
+    {
+        return $this->codigoEstudioTipoFk;
+    }
+
+    /**
+     * Set codigoSexoFk
+     *
+     * @param string $codigoSexoFk
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setCodigoSexoFk($codigoSexoFk)
+    {
+        $this->codigoSexoFk = $codigoSexoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSexoFk
+     *
+     * @return string
+     */
+    public function getCodigoSexoFk()
+    {
+        return $this->codigoSexoFk;
+    }
+
+    /**
+     * Set codigoReligionFk
+     *
+     * @param string $codigoReligionFk
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setCodigoReligionFk($codigoReligionFk)
+    {
+        $this->codigoReligionFk = $codigoReligionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoReligionFk
+     *
+     * @return string
+     */
+    public function getCodigoReligionFk()
+    {
+        return $this->codigoReligionFk;
+    }
+
+    /**
+     * Set codigoTipoVehiculoFk
+     *
+     * @param string $codigoTipoVehiculoFk
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setCodigoTipoVehiculoFk($codigoTipoVehiculoFk)
+    {
+        $this->codigoTipoVehiculoFk = $codigoTipoVehiculoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTipoVehiculoFk
+     *
+     * @return string
+     */
+    public function getCodigoTipoVehiculoFk()
+    {
+        return $this->codigoTipoVehiculoFk;
     }
 
     /**
@@ -311,6 +572,78 @@ class RhuSeleccionRequisito
     public function getCargoRel()
     {
         return $this->cargoRel;
+    }
+
+    /**
+     * Set estadoCivilRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEstadoCivil $estadoCivilRel
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setEstadoCivilRel(\Brasa\RecursoHumanoBundle\Entity\RhuEstadoCivil $estadoCivilRel = null)
+    {
+        $this->estadoCivilRel = $estadoCivilRel;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCivilRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEstadoCivil
+     */
+    public function getEstadoCivilRel()
+    {
+        return $this->estadoCivilRel;
+    }
+
+    /**
+     * Set ciudadRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
+    {
+        $this->ciudadRel = $ciudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     */
+    public function getCiudadRel()
+    {
+        return $this->ciudadRel;
+    }
+
+    /**
+     * Set estudioTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudioTipo $estudioTipoRel
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setEstudioTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudioTipo $estudioTipoRel = null)
+    {
+        $this->estudioTipoRel = $estudioTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get estudioTipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudioTipo
+     */
+    public function getEstudioTipoRel()
+    {
+        return $this->estudioTipoRel;
     }
 
     /**
@@ -379,5 +712,53 @@ class RhuSeleccionRequisito
     public function getAspirantesSeleccionRequisitoRel()
     {
         return $this->aspirantesSeleccionRequisitoRel;
+    }
+
+    /**
+     * Set codigoExperienciaFk
+     *
+     * @param string $codigoExperienciaFk
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setCodigoExperienciaFk($codigoExperienciaFk)
+    {
+        $this->codigoExperienciaFk = $codigoExperienciaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoExperienciaFk
+     *
+     * @return string
+     */
+    public function getCodigoExperienciaFk()
+    {
+        return $this->codigoExperienciaFk;
+    }
+
+    /**
+     * Set codigoDisponibilidadFk
+     *
+     * @param string $codigoDisponibilidadFk
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setCodigoDisponibilidadFk($codigoDisponibilidadFk)
+    {
+        $this->codigoDisponibilidadFk = $codigoDisponibilidadFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoDisponibilidadFk
+     *
+     * @return string
+     */
+    public function getCodigoDisponibilidadFk()
+    {
+        return $this->codigoDisponibilidadFk;
     }
 }

@@ -37,6 +37,11 @@ class RhuEmpleadoEstudioTipo
      */
     protected $empleadosEmpleadoEstudioTipoRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSeleccionRequisito", mappedBy="estudioTipoRel")
+     */
+    protected $seleccionesRequisitosEmpleadoEstudioTipoRel;
+    
     
     
     /**
@@ -46,6 +51,7 @@ class RhuEmpleadoEstudioTipo
     {
         $this->empleadosEstudiosEmpleadoEstudioTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosEmpleadoEstudioTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->seleccionesRequisitosEmpleadoEstudioTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -80,6 +86,30 @@ class RhuEmpleadoEstudioTipo
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set validarVencimiento
+     *
+     * @param boolean $validarVencimiento
+     *
+     * @return RhuEmpleadoEstudioTipo
+     */
+    public function setValidarVencimiento($validarVencimiento)
+    {
+        $this->validarVencimiento = $validarVencimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get validarVencimiento
+     *
+     * @return boolean
+     */
+    public function getValidarVencimiento()
+    {
+        return $this->validarVencimiento;
     }
 
     /**
@@ -151,26 +181,36 @@ class RhuEmpleadoEstudioTipo
     }
 
     /**
-     * Set validarVencimiento
+     * Add seleccionesRequisitosEmpleadoEstudioTipoRel
      *
-     * @param boolean $validarVencimiento
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionesRequisitosEmpleadoEstudioTipoRel
      *
      * @return RhuEmpleadoEstudioTipo
      */
-    public function setValidarVencimiento($validarVencimiento)
+    public function addSeleccionesRequisitosEmpleadoEstudioTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionesRequisitosEmpleadoEstudioTipoRel)
     {
-        $this->validarVencimiento = $validarVencimiento;
+        $this->seleccionesRequisitosEmpleadoEstudioTipoRel[] = $seleccionesRequisitosEmpleadoEstudioTipoRel;
 
         return $this;
     }
 
     /**
-     * Get validarVencimiento
+     * Remove seleccionesRequisitosEmpleadoEstudioTipoRel
      *
-     * @return boolean
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionesRequisitosEmpleadoEstudioTipoRel
      */
-    public function getValidarVencimiento()
+    public function removeSeleccionesRequisitosEmpleadoEstudioTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionesRequisitosEmpleadoEstudioTipoRel)
     {
-        return $this->validarVencimiento;
+        $this->seleccionesRequisitosEmpleadoEstudioTipoRel->removeElement($seleccionesRequisitosEmpleadoEstudioTipoRel);
+    }
+
+    /**
+     * Get seleccionesRequisitosEmpleadoEstudioTipoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeleccionesRequisitosEmpleadoEstudioTipoRel()
+    {
+        return $this->seleccionesRequisitosEmpleadoEstudioTipoRel;
     }
 }

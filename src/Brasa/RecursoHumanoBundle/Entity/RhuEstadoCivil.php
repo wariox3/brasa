@@ -30,7 +30,12 @@ class RhuEstadoCivil
     /**
      * @ORM\OneToMany(targetEntity="RhuSeleccion", mappedBy="estadoCivilRel")
      */
-    protected $seleccionesEstadoCivilRel;         
+    protected $seleccionesEstadoCivilRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSeleccionRequisito", mappedBy="estadoCivilRel")
+     */
+    protected $seleccionesRequisitosEstadoCivilRel;
     
     /**
      * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiEmpleado", mappedBy="estadoCivilRel")
@@ -51,6 +56,7 @@ class RhuEstadoCivil
     {
         $this->empleadosEstadoCivilRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->seleccionesEstadoCivilRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->seleccionesRequisitosEstadoCivilRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->afiEmpleadosEstadoCivilRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->aspirantesEstadoCivilRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -155,6 +161,40 @@ class RhuEstadoCivil
     public function getSeleccionesEstadoCivilRel()
     {
         return $this->seleccionesEstadoCivilRel;
+    }
+
+    /**
+     * Add seleccionesRequisitosEstadoCivilRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionesRequisitosEstadoCivilRel
+     *
+     * @return RhuEstadoCivil
+     */
+    public function addSeleccionesRequisitosEstadoCivilRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionesRequisitosEstadoCivilRel)
+    {
+        $this->seleccionesRequisitosEstadoCivilRel[] = $seleccionesRequisitosEstadoCivilRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove seleccionesRequisitosEstadoCivilRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionesRequisitosEstadoCivilRel
+     */
+    public function removeSeleccionesRequisitosEstadoCivilRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionesRequisitosEstadoCivilRel)
+    {
+        $this->seleccionesRequisitosEstadoCivilRel->removeElement($seleccionesRequisitosEstadoCivilRel);
+    }
+
+    /**
+     * Get seleccionesRequisitosEstadoCivilRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeleccionesRequisitosEstadoCivilRel()
+    {
+        return $this->seleccionesRequisitosEstadoCivilRel;
     }
 
     /**

@@ -97,6 +97,11 @@ class GenCiudad
     protected $rhuSeleccionesCiudadRel;
     
     /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito", mappedBy="ciudadRel")
+     */
+    protected $rhuSeleccionesRequisitosCiudadRel;
+    
+    /**
      * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuAspirante", mappedBy="ciudadRel")
      */
     protected $rhuAspirantesCiudadRel;
@@ -212,6 +217,7 @@ class GenCiudad
     protected $afiEmpleadosCiudadRel;    
     
     
+    
     /**
      * Constructor
      */
@@ -225,6 +231,7 @@ class GenCiudad
         $this->despachosCiudadDestinoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->puntosOperacionCiudadOrigenRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuSeleccionesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rhuSeleccionesRequisitosCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuAspirantesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuExamenesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuSeleccionesReferenciasCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -698,6 +705,40 @@ class GenCiudad
     public function getRhuSeleccionesCiudadRel()
     {
         return $this->rhuSeleccionesCiudadRel;
+    }
+
+    /**
+     * Add rhuSeleccionesRequisitosCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $rhuSeleccionesRequisitosCiudadRel
+     *
+     * @return GenCiudad
+     */
+    public function addRhuSeleccionesRequisitosCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $rhuSeleccionesRequisitosCiudadRel)
+    {
+        $this->rhuSeleccionesRequisitosCiudadRel[] = $rhuSeleccionesRequisitosCiudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuSeleccionesRequisitosCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $rhuSeleccionesRequisitosCiudadRel
+     */
+    public function removeRhuSeleccionesRequisitosCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $rhuSeleccionesRequisitosCiudadRel)
+    {
+        $this->rhuSeleccionesRequisitosCiudadRel->removeElement($rhuSeleccionesRequisitosCiudadRel);
+    }
+
+    /**
+     * Get rhuSeleccionesRequisitosCiudadRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuSeleccionesRequisitosCiudadRel()
+    {
+        return $this->rhuSeleccionesRequisitosCiudadRel;
     }
 
     /**

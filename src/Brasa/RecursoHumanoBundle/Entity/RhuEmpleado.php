@@ -73,7 +73,7 @@ class RhuEmpleado
     private $celular; 
     
     /**
-     * @ORM\Column(name="direccion", type="string", length=30, nullable=true)
+     * @ORM\Column(name="direccion", type="string", length=120, nullable=true)
      */    
     private $direccion; 
     
