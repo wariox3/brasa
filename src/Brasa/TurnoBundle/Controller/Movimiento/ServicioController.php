@@ -149,6 +149,18 @@ class ServicioController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle', array('codigoServicio' => $codigoServicio)));
             }
+            if($form->get('BtnDetalleConceptoActualizar')->isClicked()) {   
+                $arrControles = $request->request->All();
+                $this->actualizarDetalleConcepto($arrControles, $codigoServicio);                                 
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle', array('codigoServicio' => $codigoServicio)));
+            }            
+            if($form->get('BtnDetalleConceptoEliminar')->isClicked()) {   
+                $arrSeleccionados = $request->request->get('ChkSeleccionarServicioConcepto');
+                $em->getRepository('BrasaTurnoBundle:TurServicioDetalleConcepto')->eliminar($arrSeleccionados);
+                $em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle', array('codigoServicio' => $codigoServicio)));
+            }
+            
             if($form->get('BtnImprimir')->isClicked()) {
                 /*if($arServicio->getEstadoAutorizado() == 1) {
                     $objServicio = new \Brasa\TurnoBundle\Formatos\FormatoServicio();
@@ -163,12 +175,68 @@ class ServicioController extends Controller
 
         $dql = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->listaDql($codigoServicio);       
         $arServicioDetalle = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 150);
+        $dql = $em->getRepository('BrasaTurnoBundle:TurServicioDetalleConcepto')->listaDql($codigoServicio);       
+        $arServicioDetalleConcepto = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 150);        
         return $this->render('BrasaTurnoBundle:Movimientos/Servicio:detalle.html.twig', array(
                     'arServicio' => $arServicio,
                     'arServicioDetalle' => $arServicioDetalle,
+                    'arServicioDetalleConceptos' => $arServicioDetalleConcepto,
                     'form' => $form->createView()
                     ));
     }
+    
+    /**
+     * @Route("/tur/movimiento/servicio/detalle/concepto/nuevo/{codigoServicio}", name="brs_tur_movimiento_servicio_detalle_concepto_nuevo")
+     */
+    public function detalleConceptoNuevoAction($codigoServicio) {
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $em = $this->getDoctrine()->getManager();
+        $arServicio = new \Brasa\TurnoBundle\Entity\TurServicio();
+        $arServicio = $em->getRepository('BrasaTurnoBundle:TurServicio')->find($codigoServicio);        
+        $form = $this->formularioDetalleOtroNuevo();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            if ($form->get('BtnGuardar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $arrControles = $request->request->All();
+                if(count($arrSeleccionados) > 0) {    
+                    foreach ($arrSeleccionados AS $codigo) {
+                        $arFacturaConcepto = new \Brasa\TurnoBundle\Entity\TurFacturaConcepto();
+                        $arFacturaConcepto = $em->getRepository('BrasaTurnoBundle:TurFacturaConcepto')->find($codigo);
+                        $cantidad = $arrControles['TxtCantidad' . $codigo];
+                        $precio = $arrControles['TxtPrecio' . $codigo];                        
+                        $subtotal = $cantidad * $precio;
+                        $subtotalAIU = $subtotal * 10/100;
+                        $iva = ($subtotalAIU * $arFacturaConcepto->getPorIva())/100;
+                        $total = $subtotal + $iva;
+                        $arServicioDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto();
+                        $arServicioDetalleConcepto->setServicioRel($arServicio);                        
+                        $arServicioDetalleConcepto->setFacturaConceptoRel($arFacturaConcepto);
+                        $arServicioDetalleConcepto->setPorIva($arFacturaConcepto->getPorIva());
+                        $arServicioDetalleConcepto->setCantidad($cantidad);
+                        $arServicioDetalleConcepto->setPrecio($precio);
+                        $arServicioDetalleConcepto->setSubtotal($subtotal);                        
+                        $arServicioDetalleConcepto->setIva($iva);
+                        $arServicioDetalleConcepto->setTotal($total);
+                        $em->persist($arServicioDetalleConcepto);  
+                    }
+                }
+                $em->flush();
+                $em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+            } 
+            if ($form->get('BtnFiltrar')->isClicked()) {            
+                $this->filtrarDetalleNuevo($form);
+            }
+        }
+        
+        $arFacturaConceptos = new \Brasa\TurnoBundle\Entity\TurFacturaConcepto();
+        $arFacturaConceptos = $em->getRepository('BrasaTurnoBundle:TurFacturaConcepto')->findAll();        
+        return $this->render('BrasaTurnoBundle:Movimientos/Servicio:detalleOtroNuevo.html.twig', array(
+            'arFacturaConceptos' => $arFacturaConceptos,
+            'form' => $form->createView()));
+    }     
     
     /**
      * @Route("/tur/movimiento/servicio/detalle/nuevo/{codigoServicio}/{codigoServicioDetalle}", name="brs_tur_movimiento_servicio_detalle_nuevo")
@@ -497,12 +565,16 @@ class ServicioController extends Controller
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);        
+        $arrBotonDetalleConceptoActualizar = array('label' => 'Actualizar', 'disabled' => false);
+        $arrBotonDetalleConceptoEliminar = array('label' => 'Eliminar', 'disabled' => false);
         
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;                        
             $arrBotonDetalleEliminar['disabled'] = true;
             $arrBotonDetalleActualizar['disabled'] = true;
             $arrBotonCerrar['disabled'] = false;  
+            $arrBotonDetalleConceptoActualizar['disabled'] = true;
+            $arrBotonDetalleConceptoEliminar['disabled'] = true;            
         } else {
             $arrBotonDesAutorizar['disabled'] = true;            
             $arrBotonImprimir['disabled'] = true;
@@ -519,6 +591,8 @@ class ServicioController extends Controller
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
+                    ->add('BtnDetalleConceptoActualizar', 'submit', $arrBotonDetalleConceptoActualizar)
+                    ->add('BtnDetalleConceptoEliminar', 'submit', $arrBotonDetalleConceptoEliminar)                
                     ->getForm();
         return $form;
     }
@@ -546,6 +620,13 @@ class ServicioController extends Controller
             ->getForm();
         return $form;
     }    
+    
+    private function formularioDetalleOtroNuevo() {
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        return $form;
+    }     
     
     private function generarExcel() {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
@@ -905,5 +986,30 @@ class ServicioController extends Controller
         }
 
         $em->flush();
-    }    
+    }   
+    
+    private function actualizarDetalleConcepto($arrControles, $codigoServicio) {
+        $em = $this->getDoctrine()->getManager();
+        $intIndice = 0;
+        if(isset($arrControles['LblCodigoConcepto'])) {
+            foreach ($arrControles['LblCodigoConcepto'] as $intCodigo) {
+                $arServicioDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto();
+                $arServicioDetalleConcepto = $em->getRepository('BrasaTurnoBundle:TurServicioDetalleConcepto')->find($intCodigo);                
+                $cantidad = $arrControles['TxtCantidadConcepto' . $intCodigo];
+                $precio = $arrControles['TxtPrecioConcepto'. $intCodigo];                
+                $subtotal = $cantidad * $precio;
+                $subtotalAIU = $subtotal * 10/100;
+                $iva = ($subtotalAIU * $arServicioDetalleConcepto->getPorIva())/100;                
+                $total = $subtotal + $iva;                
+                $arServicioDetalleConcepto->setCantidad($cantidad);
+                $arServicioDetalleConcepto->setPrecio($precio);
+                $arServicioDetalleConcepto->setSubtotal($subtotal);                        
+                $arServicioDetalleConcepto->setIva($iva);
+                $arServicioDetalleConcepto->setTotal($total);                                                             
+                $em->persist($arServicioDetalleConcepto);
+            }
+            $em->flush();                
+            $em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);            
+        }        
+    }        
 }

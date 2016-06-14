@@ -33,11 +33,17 @@ class TurFacturaConcepto
     protected $facturasDetallesConceptosFacturaConceptoRel; 
     
     /**
+     * @ORM\OneToMany(targetEntity="TurServicioDetalleConcepto", mappedBy="facturaConceptoRel")
+     */
+    protected $serviciosDetallesConceptosFacturaConceptoRel;     
+    
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->facturasDetallesConceptosFacturaConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->serviciosDetallesConceptosFacturaConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -75,6 +81,30 @@ class TurFacturaConcepto
     }
 
     /**
+     * Set porIva
+     *
+     * @param integer $porIva
+     *
+     * @return TurFacturaConcepto
+     */
+    public function setPorIva($porIva)
+    {
+        $this->porIva = $porIva;
+
+        return $this;
+    }
+
+    /**
+     * Get porIva
+     *
+     * @return integer
+     */
+    public function getPorIva()
+    {
+        return $this->porIva;
+    }
+
+    /**
      * Add facturasDetallesConceptosFacturaConceptoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosFacturaConceptoRel
@@ -109,26 +139,36 @@ class TurFacturaConcepto
     }
 
     /**
-     * Set porIva
+     * Add serviciosDetallesConceptosFacturaConceptoRel
      *
-     * @param integer $porIva
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto $serviciosDetallesConceptosFacturaConceptoRel
      *
      * @return TurFacturaConcepto
      */
-    public function setPorIva($porIva)
+    public function addServiciosDetallesConceptosFacturaConceptoRel(\Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto $serviciosDetallesConceptosFacturaConceptoRel)
     {
-        $this->porIva = $porIva;
+        $this->serviciosDetallesConceptosFacturaConceptoRel[] = $serviciosDetallesConceptosFacturaConceptoRel;
 
         return $this;
     }
 
     /**
-     * Get porIva
+     * Remove serviciosDetallesConceptosFacturaConceptoRel
      *
-     * @return integer
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto $serviciosDetallesConceptosFacturaConceptoRel
      */
-    public function getPorIva()
+    public function removeServiciosDetallesConceptosFacturaConceptoRel(\Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto $serviciosDetallesConceptosFacturaConceptoRel)
     {
-        return $this->porIva;
+        $this->serviciosDetallesConceptosFacturaConceptoRel->removeElement($serviciosDetallesConceptosFacturaConceptoRel);
+    }
+
+    /**
+     * Get serviciosDetallesConceptosFacturaConceptoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiciosDetallesConceptosFacturaConceptoRel()
+    {
+        return $this->serviciosDetallesConceptosFacturaConceptoRel;
     }
 }

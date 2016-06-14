@@ -74,6 +74,16 @@ class TurServicio
     private $vrTotalCosto = 0;
     
     /**
+     * @ORM\Column(name="vr_total_otros", type="float")
+     */
+    private $vrTotalOtros = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_total_servicio", type="float")
+     */
+    private $vrTotalServicio = 0;     
+    
+    /**
      * @ORM\Column(name="vr_total_precio_ajustado", type="float")
      */
     private $vrTotalPrecioAjustado = 0;            
@@ -82,6 +92,21 @@ class TurServicio
      * @ORM\Column(name="vr_total_precio_minimo", type="float")
      */
     private $vrTotalPrecioMinimo = 0;        
+
+    /**
+     * @ORM\Column(name="vr_subtotal", type="float")
+     */
+    private $vrSubtotal = 0; 
+
+    /**
+     * @ORM\Column(name="vr_iva", type="float")
+     */
+    private $vrIva = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_base_aiu", type="float")
+     */
+    private $vrBaseAiu = 0; 
     
     /**
      * @ORM\Column(name="vr_total", type="float")
@@ -115,6 +140,11 @@ class TurServicio
      */
     protected $serviciosDetallesServicioRel; 
 
+    /**
+     * @ORM\OneToMany(targetEntity="TurServicioDetalleConcepto", mappedBy="servicioRel", cascade={"persist", "remove"})
+     */
+    protected $serviciosDetallesConceptosServicioRel;
+    
 
     /**
      * Constructor
@@ -122,6 +152,7 @@ class TurServicio
     public function __construct()
     {
         $this->serviciosDetallesServicioRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->serviciosDetallesConceptosServicioRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -132,6 +163,54 @@ class TurServicio
     public function getCodigoServicioPk()
     {
         return $this->codigoServicioPk;
+    }
+
+    /**
+     * Set fechaGeneracion
+     *
+     * @param \DateTime $fechaGeneracion
+     *
+     * @return TurServicio
+     */
+    public function setFechaGeneracion($fechaGeneracion)
+    {
+        $this->fechaGeneracion = $fechaGeneracion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaGeneracion
+     *
+     * @return \DateTime
+     */
+    public function getFechaGeneracion()
+    {
+        return $this->fechaGeneracion;
+    }
+
+    /**
+     * Set soporte
+     *
+     * @param string $soporte
+     *
+     * @return TurServicio
+     */
+    public function setSoporte($soporte)
+    {
+        $this->soporte = $soporte;
+
+        return $this;
+    }
+
+    /**
+     * Get soporte
+     *
+     * @return string
+     */
+    public function getSoporte()
+    {
+        return $this->soporte;
     }
 
     /**
@@ -351,6 +430,54 @@ class TurServicio
     }
 
     /**
+     * Set vrTotalOtros
+     *
+     * @param float $vrTotalOtros
+     *
+     * @return TurServicio
+     */
+    public function setVrTotalOtros($vrTotalOtros)
+    {
+        $this->vrTotalOtros = $vrTotalOtros;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalOtros
+     *
+     * @return float
+     */
+    public function getVrTotalOtros()
+    {
+        return $this->vrTotalOtros;
+    }
+
+    /**
+     * Set vrTotalServicio
+     *
+     * @param float $vrTotalServicio
+     *
+     * @return TurServicio
+     */
+    public function setVrTotalServicio($vrTotalServicio)
+    {
+        $this->vrTotalServicio = $vrTotalServicio;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalServicio
+     *
+     * @return float
+     */
+    public function getVrTotalServicio()
+    {
+        return $this->vrTotalServicio;
+    }
+
+    /**
      * Set vrTotalPrecioAjustado
      *
      * @param float $vrTotalPrecioAjustado
@@ -420,6 +547,30 @@ class TurServicio
     public function getVrTotal()
     {
         return $this->vrTotal;
+    }
+
+    /**
+     * Set usuario
+     *
+     * @param string $usuario
+     *
+     * @return TurServicio
+     */
+    public function setUsuario($usuario)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return string
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
     }
 
     /**
@@ -529,74 +680,108 @@ class TurServicio
     }
 
     /**
-     * Set usuario
+     * Add serviciosDetallesConceptosServicioRel
      *
-     * @param string $usuario
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto $serviciosDetallesConceptosServicioRel
      *
      * @return TurServicio
      */
-    public function setUsuario($usuario)
+    public function addServiciosDetallesConceptosServicioRel(\Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto $serviciosDetallesConceptosServicioRel)
     {
-        $this->usuario = $usuario;
+        $this->serviciosDetallesConceptosServicioRel[] = $serviciosDetallesConceptosServicioRel;
 
         return $this;
     }
 
     /**
-     * Get usuario
+     * Remove serviciosDetallesConceptosServicioRel
      *
-     * @return string
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto $serviciosDetallesConceptosServicioRel
      */
-    public function getUsuario()
+    public function removeServiciosDetallesConceptosServicioRel(\Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto $serviciosDetallesConceptosServicioRel)
     {
-        return $this->usuario;
+        $this->serviciosDetallesConceptosServicioRel->removeElement($serviciosDetallesConceptosServicioRel);
     }
 
     /**
-     * Set fechaGeneracion
+     * Get serviciosDetallesConceptosServicioRel
      *
-     * @param \DateTime $fechaGeneracion
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiciosDetallesConceptosServicioRel()
+    {
+        return $this->serviciosDetallesConceptosServicioRel;
+    }
+
+    /**
+     * Set vrSubtotal
+     *
+     * @param float $vrSubtotal
      *
      * @return TurServicio
      */
-    public function setFechaGeneracion($fechaGeneracion)
+    public function setVrSubtotal($vrSubtotal)
     {
-        $this->fechaGeneracion = $fechaGeneracion;
+        $this->vrSubtotal = $vrSubtotal;
 
         return $this;
     }
 
     /**
-     * Get fechaGeneracion
+     * Get vrSubtotal
      *
-     * @return \DateTime
+     * @return float
      */
-    public function getFechaGeneracion()
+    public function getVrSubtotal()
     {
-        return $this->fechaGeneracion;
+        return $this->vrSubtotal;
     }
 
     /**
-     * Set soporte
+     * Set vrBaseAiu
      *
-     * @param string $soporte
+     * @param float $vrBaseAiu
      *
      * @return TurServicio
      */
-    public function setSoporte($soporte)
+    public function setVrBaseAiu($vrBaseAiu)
     {
-        $this->soporte = $soporte;
+        $this->vrBaseAiu = $vrBaseAiu;
 
         return $this;
     }
 
     /**
-     * Get soporte
+     * Get vrBaseAiu
      *
-     * @return string
+     * @return float
      */
-    public function getSoporte()
+    public function getVrBaseAiu()
     {
-        return $this->soporte;
+        return $this->vrBaseAiu;
+    }
+
+    /**
+     * Set vrIva
+     *
+     * @param float $vrIva
+     *
+     * @return TurServicio
+     */
+    public function setVrIva($vrIva)
+    {
+        $this->vrIva = $vrIva;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIva
+     *
+     * @return float
+     */
+    public function getVrIva()
+    {
+        return $this->vrIva;
     }
 }
