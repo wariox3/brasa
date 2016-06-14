@@ -143,6 +143,11 @@ class TurCliente
     private $comentarios;                    
     
     /**
+     * @ORM\Column(name="codigo_interface", type="string", length=30, nullable=true)
+     */
+    private $codigoInterface;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurSector", inversedBy="clientesSectorRel")
      * @ORM\JoinColumn(name="codigo_sector_fk", referencedColumnName="codigo_sector_pk")
      */
@@ -1317,5 +1322,29 @@ class TurCliente
     public function getPuestosDotacionesClienteRel()
     {
         return $this->puestosDotacionesClienteRel;
+    }
+
+    /**
+     * Set codigoInterface
+     *
+     * @param string $codigoInterface
+     *
+     * @return TurCliente
+     */
+    public function setCodigoInterface($codigoInterface)
+    {
+        $this->codigoInterface = $codigoInterface;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoInterface
+     *
+     * @return string
+     */
+    public function getCodigoInterface()
+    {
+        return $this->codigoInterface;
     }
 }
