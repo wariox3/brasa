@@ -38,12 +38,16 @@ class RhuRh
     protected $seleccionesRhRel;
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuAspirante", mappedBy="rhRel")
+     */
+    protected $aspirantesRhRel;
+    
+    /**
      * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiEmpleado", mappedBy="rhRel")
      */
     protected $afiEmpleadosRhRel; 
 
 
-  
     /**
      * Constructor
      */
@@ -52,6 +56,8 @@ class RhuRh
         $this->empleadosRhRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->seleccionesEstadoCivilRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->seleccionesRhRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->aspirantesRhRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->afiEmpleadosRhRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -188,6 +194,40 @@ class RhuRh
     public function getSeleccionesRhRel()
     {
         return $this->seleccionesRhRel;
+    }
+
+    /**
+     * Add aspirantesRhRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesRhRel
+     *
+     * @return RhuRh
+     */
+    public function addAspirantesRhRel(\Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesRhRel)
+    {
+        $this->aspirantesRhRel[] = $aspirantesRhRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove aspirantesRhRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesRhRel
+     */
+    public function removeAspirantesRhRel(\Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesRhRel)
+    {
+        $this->aspirantesRhRel->removeElement($aspirantesRhRel);
+    }
+
+    /**
+     * Get aspirantesRhRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAspirantesRhRel()
+    {
+        return $this->aspirantesRhRel;
     }
 
     /**

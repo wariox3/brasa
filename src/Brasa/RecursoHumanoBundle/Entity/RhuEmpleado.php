@@ -326,7 +326,12 @@ class RhuEmpleado
     /**
      * @ORM\Column(name="codigo_interface", type="string", length=30, nullable=true)
      */
-    private $codigoInterface;     
+    private $codigoInterface; 
+
+    /**
+     * @ORM\Column(name="codigo_tipo_libreta", type="integer", nullable=true)
+     */    
+    private $codigoTipoLibreta;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuClasificacionRiesgo", inversedBy="empleadosClasificacionRiesgoRel")
@@ -610,6 +615,7 @@ class RhuEmpleado
      */
     protected $cartasEmpleadoRel;
        
+    
     /**
      * Constructor
      */
@@ -2072,6 +2078,54 @@ class RhuEmpleado
     public function getCodigoUsuario()
     {
         return $this->codigoUsuario;
+    }
+
+    /**
+     * Set codigoInterface
+     *
+     * @param string $codigoInterface
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoInterface($codigoInterface)
+    {
+        $this->codigoInterface = $codigoInterface;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoInterface
+     *
+     * @return string
+     */
+    public function getCodigoInterface()
+    {
+        return $this->codigoInterface;
+    }
+
+    /**
+     * Set codigoTipoLibreta
+     *
+     * @param integer $codigoTipoLibreta
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoTipoLibreta($codigoTipoLibreta)
+    {
+        $this->codigoTipoLibreta = $codigoTipoLibreta;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTipoLibreta
+     *
+     * @return integer
+     */
+    public function getCodigoTipoLibreta()
+    {
+        return $this->codigoTipoLibreta;
     }
 
     /**
@@ -3630,29 +3684,5 @@ class RhuEmpleado
     public function getCartasEmpleadoRel()
     {
         return $this->cartasEmpleadoRel;
-    }
-
-    /**
-     * Set codigoInterface
-     *
-     * @param string $codigoInterface
-     *
-     * @return RhuEmpleado
-     */
-    public function setCodigoInterface($codigoInterface)
-    {
-        $this->codigoInterface = $codigoInterface;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoInterface
-     *
-     * @return string
-     */
-    public function getCodigoInterface()
-    {
-        return $this->codigoInterface;
     }
 }

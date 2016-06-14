@@ -259,7 +259,7 @@ class BaseEmpleadoController extends Controller
             else {
                 $arEmpleado->setLibretaMilitar("");
             }
-
+            $arEmpleado->setCodigoTipoLibreta($arEmpleado->getCodigoTipoLibreta());
             if($arEmpleado->getCuenta() != "") {
                 if (strlen($arEmpleado->getCuenta()) != $arEmpleado->getBancoRel()->getNumeroDigitos()){
                     $objMensaje->Mensaje("error", "El numero de digitos son (". $arEmpleado->getBancoRel()->getNumeroDigitos() .") para el banco ". $arEmpleado->getBancoRel()->getNombre(), $this);

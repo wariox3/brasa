@@ -45,7 +45,14 @@ class GenTipoIdentificacion
     /**
      * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiEmpleado", mappedBy="tipoIdentificacionRel")
      */
-    protected $afiEmpleadosTipoIdentificacionRel;        
+    protected $afiEmpleadosTipoIdentificacionRel; 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuAspirante", mappedBy="tipoIdentificacionRel")
+     */
+    protected $rhuAspirantesTipoIdentificacionRel;
+    
+    
     
     /**
      * Constructor
@@ -56,6 +63,7 @@ class GenTipoIdentificacion
         $this->rhuSeleccionesTipoIdentificacionRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cbtTercerosTipoIdentificacionRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->afiEmpleadosTipoIdentificacionRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rhuAspirantesTipoIdentificacionRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -250,5 +258,39 @@ class GenTipoIdentificacion
     public function getAfiEmpleadosTipoIdentificacionRel()
     {
         return $this->afiEmpleadosTipoIdentificacionRel;
+    }
+
+    /**
+     * Add rhuAspirantesTipoIdentificacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAspirante $rhuAspirantesTipoIdentificacionRel
+     *
+     * @return GenTipoIdentificacion
+     */
+    public function addRhuAspirantesTipoIdentificacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuAspirante $rhuAspirantesTipoIdentificacionRel)
+    {
+        $this->rhuAspirantesTipoIdentificacionRel[] = $rhuAspirantesTipoIdentificacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuAspirantesTipoIdentificacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAspirante $rhuAspirantesTipoIdentificacionRel
+     */
+    public function removeRhuAspirantesTipoIdentificacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuAspirante $rhuAspirantesTipoIdentificacionRel)
+    {
+        $this->rhuAspirantesTipoIdentificacionRel->removeElement($rhuAspirantesTipoIdentificacionRel);
+    }
+
+    /**
+     * Get rhuAspirantesTipoIdentificacionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuAspirantesTipoIdentificacionRel()
+    {
+        return $this->rhuAspirantesTipoIdentificacionRel;
     }
 }

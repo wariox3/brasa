@@ -762,13 +762,21 @@ brs_rhu_base_permiso_tipo_nuevo:
    path:     /rhu/base/permiso/tipo/nuevo/{codigoPermisoTipoPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BasePermisoTipo:nuevo }   
 
+brs_rhu_aspirante_lista:
+    path:     /rhu/aspirante/lista
+    defaults: { _controller: BrasaRecursoHumanoBundle:Aspirante:lista }         
+    
+brs_rhu_aspirante_nuevo:
+    path:     /rhu/aspirante/nuevo/{codigoAspirante}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Aspirante:nuevo }
+    
 brs_rhu_seleccion_lista:
     path:     /rhu/seleccion/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:lista }         
     
 brs_rhu_seleccion_nuevo:
     path:     /rhu/seleccion/nuevo/{codigoSeleccion}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:nuevo } 
+    defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:nuevo }    
 
 brs_rhu_seleccion_agregar_referencia:
     path:     /rhu/seleccion/agregar/referencia/{codigoSeleccion}/{codigoSeleccionReferencia}
@@ -788,7 +796,11 @@ brs_rhu_seleccion_agregar_entrevista:
 
 brs_rhu_seleccion_detalle:
     path:     /rhu/seleccion/detalle/{codigoSeleccion}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:detalle }     
+    defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:detalle }
+    
+brs_rhu_aspirante_detalle:
+    path:     /rhu/aspirante/detalle/{codigoAspirante}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Aspirante:detalle }    
     
 brs_rhu_seleccionrequisito_lista:
     path:     /rhu/seleccionrequisito/lista

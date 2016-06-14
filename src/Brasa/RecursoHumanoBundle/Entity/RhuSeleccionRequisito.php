@@ -72,6 +72,10 @@ class RhuSeleccionRequisito
      */
     protected $seleccionesSeleccionRequisitoRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuAspirante", mappedBy="seleccionRequisitoRel")
+     */
+    protected $aspirantesSeleccionRequisitoRel;
     
     
     /**
@@ -80,6 +84,7 @@ class RhuSeleccionRequisito
     public function __construct()
     {
         $this->seleccionesSeleccionRequisitoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->aspirantesSeleccionRequisitoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -340,5 +345,39 @@ class RhuSeleccionRequisito
     public function getSeleccionesSeleccionRequisitoRel()
     {
         return $this->seleccionesSeleccionRequisitoRel;
+    }
+
+    /**
+     * Add aspirantesSeleccionRequisitoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesSeleccionRequisitoRel
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function addAspirantesSeleccionRequisitoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesSeleccionRequisitoRel)
+    {
+        $this->aspirantesSeleccionRequisitoRel[] = $aspirantesSeleccionRequisitoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove aspirantesSeleccionRequisitoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesSeleccionRequisitoRel
+     */
+    public function removeAspirantesSeleccionRequisitoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesSeleccionRequisitoRel)
+    {
+        $this->aspirantesSeleccionRequisitoRel->removeElement($aspirantesSeleccionRequisitoRel);
+    }
+
+    /**
+     * Get aspirantesSeleccionRequisitoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAspirantesSeleccionRequisitoRel()
+    {
+        return $this->aspirantesSeleccionRequisitoRel;
     }
 }

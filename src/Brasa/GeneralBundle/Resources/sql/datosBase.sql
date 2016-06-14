@@ -1218,6 +1218,7 @@ INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('14','SELECC
 INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('15','CURSOS (AFI)');
 INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('16','EMPLEADO (AFI)');
 INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('17','CLIENTES (AFI)');
+INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('18','ASPIRANTES');
 /** Contabilidad **/
 
 insert into `ctb_cuenta` (`codigo_cuenta_pk`, `nombre_cuenta`, `codigo_cuenta_padre_fk`, `permite_movimientos`, `exige_nit`, `exige_centro_costos`, `porcentaje_retencion`) values('1','ACTIVO','0','0','0','0','0');

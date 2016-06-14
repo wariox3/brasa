@@ -35,7 +35,14 @@ class RhuEstadoCivil
     /**
      * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiEmpleado", mappedBy="estadoCivilRel")
      */
-    protected $afiEmpleadosEstadoCivilRel;     
+    protected $afiEmpleadosEstadoCivilRel; 
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuAspirante", mappedBy="estadoCivilRel")
+     */
+    protected $aspirantesEstadoCivilRel;
+    
+    
     
     /**
      * Constructor
@@ -43,6 +50,9 @@ class RhuEstadoCivil
     public function __construct()
     {
         $this->empleadosEstadoCivilRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->seleccionesEstadoCivilRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->afiEmpleadosEstadoCivilRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->aspirantesEstadoCivilRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -179,5 +189,39 @@ class RhuEstadoCivil
     public function getAfiEmpleadosEstadoCivilRel()
     {
         return $this->afiEmpleadosEstadoCivilRel;
+    }
+
+    /**
+     * Add aspirantesEstadoCivilRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesEstadoCivilRel
+     *
+     * @return RhuEstadoCivil
+     */
+    public function addAspirantesEstadoCivilRel(\Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesEstadoCivilRel)
+    {
+        $this->aspirantesEstadoCivilRel[] = $aspirantesEstadoCivilRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove aspirantesEstadoCivilRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesEstadoCivilRel
+     */
+    public function removeAspirantesEstadoCivilRel(\Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesEstadoCivilRel)
+    {
+        $this->aspirantesEstadoCivilRel->removeElement($aspirantesEstadoCivilRel);
+    }
+
+    /**
+     * Get aspirantesEstadoCivilRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAspirantesEstadoCivilRel()
+    {
+        return $this->aspirantesEstadoCivilRel;
     }
 }

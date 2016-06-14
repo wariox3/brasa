@@ -5,27 +5,17 @@ namespace Brasa\RecursoHumanoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="rhu_seleccion")
- * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuSeleccionRepository")
+ * @ORM\Table(name="rhu_aspirante")
+ * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuAspiranteRepository")
  */
-class RhuSeleccion
+class RhuAspirante
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_seleccion_pk", type="integer")
+     * @ORM\Column(name="codigo_aspirante_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoSeleccionPk;
-
-    /**
-     * @ORM\Column(name="codigo_seleccion_requisito_fk", type="integer", nullable=true)
-     */
-    private $codigoSeleccionRequisitoFk;
-
-    /**
-     * @ORM\Column(name="codigo_seleccion_tipo_fk", type="integer")
-     */
-    private $codigoSeleccionTipoFk;
+    private $codigoAspirantePk;
 
     /**
      * @ORM\Column(name="fecha", type="datetime", nullable=true)
@@ -36,6 +26,11 @@ class RhuSeleccion
      * @ORM\Column(name="codigo_tipo_identificacion_fk", type="integer")
      */
     private $codigoTipoIdentificacionFk;
+    
+    /**
+     * @ORM\Column(name="codigo_seleccion_requisito_fk", type="integer", nullable=true)
+     */
+    private $codigoSeleccionRequisitoFk;
 
     /**
      * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false)
@@ -92,7 +87,6 @@ class RhuSeleccion
      */
     private $barrio;
 
-
     /**
      * @ORM\Column(name="codigo_rh_fk", type="integer", nullable=true)
      */
@@ -127,7 +121,7 @@ class RhuSeleccion
      * @ORM\Column(name="codigo_ciudad_expedicion_fk", type="integer", nullable=true)
      */
     private $codigoCiudadExpedicionFk;
-
+    
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */
@@ -149,41 +143,6 @@ class RhuSeleccion
     private $estadoAprobado = 0;
 
     /**
-     * @ORM\Column(name="presenta_pruebas", type="boolean")
-     */
-    private $presentaPruebas = 0;
-
-    /**
-     * @ORM\Column(name="referencias_verificadas", type="boolean")
-     */
-    private $referenciasVerificadas = 0;
-
-    /**
-     * @ORM\Column(name="estado_cobrado", type="boolean")
-     */
-    private $estadoCobrado = 0;
-
-    /**
-     * @ORM\Column(name="fecha_entrevista", type="datetime", nullable=true)
-     */
-    private $fecha_entrevista;
-
-    /**
-     * @ORM\Column(name="fecha_pruebas", type="datetime", nullable=true)
-     */
-    private $fecha_pruebas;
-
-    /**
-     * @ORM\Column(name="vr_servicio", type="float")
-     */
-    private $vrServicio = 0;
-
-    /**
-     * @ORM\Column(name="codigo_factura_fk", type="integer", nullable=true)
-     */
-    private $codigoFacturaFk;
-
-    /**
      * @ORM\Column(name="estado_cerrado", type="boolean")
      */
     private $estadoCerrado = 0;
@@ -199,161 +158,72 @@ class RhuSeleccion
     private $codigoUsuario;
 
     /**
-     * @ORM\ManyToOne(targetEntity="RhuSeleccionTipo", inversedBy="seleccionesSeleccionTipoRel")
-     * @ORM\JoinColumn(name="codigo_seleccion_tipo_fk", referencedColumnName="codigo_seleccion_tipo_pk")
-     */
-    protected $seleccionTipoRel;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTipoIdentificacion", inversedBy="rhuSeleccionesTipoIdentificacionRel")
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTipoIdentificacion", inversedBy="rhuAspirantesTipoIdentificacionRel")
      * @ORM\JoinColumn(name="codigo_tipo_identificacion_fk", referencedColumnName="codigo_tipo_identificacion_pk")
      */
     protected $tipoIdentificacionRel;
 
     /**
-     * @ORM\ManyToOne(targetEntity="RhuEstadoCivil", inversedBy="seleccionesEstadoCivilRel")
+     * @ORM\ManyToOne(targetEntity="RhuEstadoCivil", inversedBy="aspirantesEstadoCivilRel")
      * @ORM\JoinColumn(name="codigo_estado_civil_fk", referencedColumnName="codigo_estado_civil_pk")
      */
     protected $estadoCivilRel;
 
     /**
-     * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="seleccionesCentroCostoRel")
-     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
-     */
-    protected $centroCostoRel;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuSeleccionesCiudadRel")
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuAspiranteesCiudadRel")
      * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
      */
     protected $ciudadRel;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuSeleccionesCiudadNacimientoRel")
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuAspiranteesCiudadNacimientoRel")
      * @ORM\JoinColumn(name="codigo_ciudad_nacimiento_fk", referencedColumnName="codigo_ciudad_pk")
      */
     protected $ciudadNacimientoRel;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuSeleccionesCiudadExpedicionRel")
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuAspiranteesCiudadExpedicionRel")
      * @ORM\JoinColumn(name="codigo_ciudad_expedicion_fk", referencedColumnName="codigo_ciudad_pk")
      */
     protected $ciudadExpedicionRel;
 
-
     /**
-     * @ORM\ManyToOne(targetEntity="RhuRh", inversedBy="seleccionesRhRel")
+     * @ORM\ManyToOne(targetEntity="RhuRh", inversedBy="aspirantesRhRel")
      * @ORM\JoinColumn(name="codigo_rh_fk", referencedColumnName="codigo_rh_pk")
      */
     protected $rhRel;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="RhuSeleccionRequisito", inversedBy="seleccionesSeleccionRequisitoRel")
-     * @ORM\JoinColumn(name="codigo_seleccion_requisito_fk", referencedColumnName="codigo_seleccion_requisito_pk")
-     */
-    protected $seleccionRequisitoRel;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="RhuFactura", inversedBy="seleccionesFacturaRel")
-     * @ORM\JoinColumn(name="codigo_factura_fk", referencedColumnName="codigo_factura_pk")
-     */
-    protected $facturaRel;
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuCargo", inversedBy="seleccionesCargoRel")
+     * @ORM\ManyToOne(targetEntity="RhuCargo", inversedBy="aspirantesCargoRel")
      * @ORM\JoinColumn(name="codigo_cargo_fk", referencedColumnName="codigo_cargo_pk")
      */
     protected $cargoRel;
 
     /**
-     * @ORM\OneToMany(targetEntity="RhuSeleccionReferencia", mappedBy="seleccionRel")
+     * @ORM\ManyToOne(targetEntity="RhuSeleccionRequisito", inversedBy="aspirantesSeleccionRequisitoRel")
+     * @ORM\JoinColumn(name="codigo_seleccion_requisito_fk", referencedColumnName="codigo_seleccion_requisito_pk")
      */
-    protected $seleccionesReferenciasSeleccionRel;
+    protected $seleccionRequisitoRel;  
 
     /**
-     * @ORM\OneToMany(targetEntity="RhuSeleccionPrueba", mappedBy="seleccionRel")
+     * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="aspirantesCentroCostoRel")
+     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
-    protected $seleccionesPruebasSeleccionRel;
+    protected $centroCostoRel;
+
+    
+
+    
 
     /**
-     * @ORM\OneToMany(targetEntity="RhuSeleccionVisita", mappedBy="seleccionRel")
-     */
-    protected $seleccionesVisitasSeleccionRel;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="RhuSeleccionEntrevista", mappedBy="seleccionRel")
-     */
-    protected $seleccionesEntrevistasSeleccionRel;
-    
-    
-    
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->seleccionesReferenciasSeleccionRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->seleccionesPruebasSeleccionRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->seleccionesVisitasSeleccionRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->seleccionesEntrevistasSeleccionRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Get codigoSeleccionPk
+     * Get codigoAspirantePk
      *
      * @return integer
      */
-    public function getCodigoSeleccionPk()
+    public function getCodigoAspirantePk()
     {
-        return $this->codigoSeleccionPk;
-    }
-
-    /**
-     * Set codigoSeleccionRequisitoFk
-     *
-     * @param integer $codigoSeleccionRequisitoFk
-     *
-     * @return RhuSeleccion
-     */
-    public function setCodigoSeleccionRequisitoFk($codigoSeleccionRequisitoFk)
-    {
-        $this->codigoSeleccionRequisitoFk = $codigoSeleccionRequisitoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoSeleccionRequisitoFk
-     *
-     * @return integer
-     */
-    public function getCodigoSeleccionRequisitoFk()
-    {
-        return $this->codigoSeleccionRequisitoFk;
-    }
-
-    /**
-     * Set codigoSeleccionTipoFk
-     *
-     * @param integer $codigoSeleccionTipoFk
-     *
-     * @return RhuSeleccion
-     */
-    public function setCodigoSeleccionTipoFk($codigoSeleccionTipoFk)
-    {
-        $this->codigoSeleccionTipoFk = $codigoSeleccionTipoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoSeleccionTipoFk
-     *
-     * @return integer
-     */
-    public function getCodigoSeleccionTipoFk()
-    {
-        return $this->codigoSeleccionTipoFk;
+        return $this->codigoAspirantePk;
     }
 
     /**
@@ -361,7 +231,7 @@ class RhuSeleccion
      *
      * @param \DateTime $fecha
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setFecha($fecha)
     {
@@ -385,7 +255,7 @@ class RhuSeleccion
      *
      * @param integer $codigoTipoIdentificacionFk
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setCodigoTipoIdentificacionFk($codigoTipoIdentificacionFk)
     {
@@ -405,11 +275,35 @@ class RhuSeleccion
     }
 
     /**
+     * Set codigoSeleccionRequisitoFk
+     *
+     * @param integer $codigoSeleccionRequisitoFk
+     *
+     * @return RhuAspirante
+     */
+    public function setCodigoSeleccionRequisitoFk($codigoSeleccionRequisitoFk)
+    {
+        $this->codigoSeleccionRequisitoFk = $codigoSeleccionRequisitoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSeleccionRequisitoFk
+     *
+     * @return integer
+     */
+    public function getCodigoSeleccionRequisitoFk()
+    {
+        return $this->codigoSeleccionRequisitoFk;
+    }
+
+    /**
      * Set numeroIdentificacion
      *
      * @param string $numeroIdentificacion
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setNumeroIdentificacion($numeroIdentificacion)
     {
@@ -433,7 +327,7 @@ class RhuSeleccion
      *
      * @param string $nombreCorto
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setNombreCorto($nombreCorto)
     {
@@ -457,7 +351,7 @@ class RhuSeleccion
      *
      * @param string $nombre1
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setNombre1($nombre1)
     {
@@ -481,7 +375,7 @@ class RhuSeleccion
      *
      * @param string $nombre2
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setNombre2($nombre2)
     {
@@ -505,7 +399,7 @@ class RhuSeleccion
      *
      * @param string $apellido1
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setApellido1($apellido1)
     {
@@ -529,7 +423,7 @@ class RhuSeleccion
      *
      * @param string $apellido2
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setApellido2($apellido2)
     {
@@ -553,7 +447,7 @@ class RhuSeleccion
      *
      * @param string $telefono
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setTelefono($telefono)
     {
@@ -577,7 +471,7 @@ class RhuSeleccion
      *
      * @param string $celular
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setCelular($celular)
     {
@@ -601,7 +495,7 @@ class RhuSeleccion
      *
      * @param string $direccion
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setDireccion($direccion)
     {
@@ -625,7 +519,7 @@ class RhuSeleccion
      *
      * @param integer $codigoCiudadFk
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setCodigoCiudadFk($codigoCiudadFk)
     {
@@ -649,7 +543,7 @@ class RhuSeleccion
      *
      * @param string $barrio
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setBarrio($barrio)
     {
@@ -673,7 +567,7 @@ class RhuSeleccion
      *
      * @param integer $codigoRhFk
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setCodigoRhFk($codigoRhFk)
     {
@@ -697,7 +591,7 @@ class RhuSeleccion
      *
      * @param string $codigoEstadoCivilFk
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setCodigoEstadoCivilFk($codigoEstadoCivilFk)
     {
@@ -721,7 +615,7 @@ class RhuSeleccion
      *
      * @param string $codigoSexoFk
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setCodigoSexoFk($codigoSexoFk)
     {
@@ -745,7 +639,7 @@ class RhuSeleccion
      *
      * @param string $correo
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setCorreo($correo)
     {
@@ -769,7 +663,7 @@ class RhuSeleccion
      *
      * @param \DateTime $fechaNacimiento
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setFechaNacimiento($fechaNacimiento)
     {
@@ -793,7 +687,7 @@ class RhuSeleccion
      *
      * @param integer $codigoCiudadNacimientoFk
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setCodigoCiudadNacimientoFk($codigoCiudadNacimientoFk)
     {
@@ -817,7 +711,7 @@ class RhuSeleccion
      *
      * @param integer $codigoCiudadExpedicionFk
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setCodigoCiudadExpedicionFk($codigoCiudadExpedicionFk)
     {
@@ -841,7 +735,7 @@ class RhuSeleccion
      *
      * @param integer $codigoCentroCostoFk
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setCodigoCentroCostoFk($codigoCentroCostoFk)
     {
@@ -865,7 +759,7 @@ class RhuSeleccion
      *
      * @param integer $codigoCargoFk
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setCodigoCargoFk($codigoCargoFk)
     {
@@ -889,7 +783,7 @@ class RhuSeleccion
      *
      * @param string $comentarios
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setComentarios($comentarios)
     {
@@ -913,7 +807,7 @@ class RhuSeleccion
      *
      * @param boolean $estadoAprobado
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setEstadoAprobado($estadoAprobado)
     {
@@ -933,179 +827,11 @@ class RhuSeleccion
     }
 
     /**
-     * Set presentaPruebas
-     *
-     * @param boolean $presentaPruebas
-     *
-     * @return RhuSeleccion
-     */
-    public function setPresentaPruebas($presentaPruebas)
-    {
-        $this->presentaPruebas = $presentaPruebas;
-
-        return $this;
-    }
-
-    /**
-     * Get presentaPruebas
-     *
-     * @return boolean
-     */
-    public function getPresentaPruebas()
-    {
-        return $this->presentaPruebas;
-    }
-
-    /**
-     * Set referenciasVerificadas
-     *
-     * @param boolean $referenciasVerificadas
-     *
-     * @return RhuSeleccion
-     */
-    public function setReferenciasVerificadas($referenciasVerificadas)
-    {
-        $this->referenciasVerificadas = $referenciasVerificadas;
-
-        return $this;
-    }
-
-    /**
-     * Get referenciasVerificadas
-     *
-     * @return boolean
-     */
-    public function getReferenciasVerificadas()
-    {
-        return $this->referenciasVerificadas;
-    }
-
-    /**
-     * Set estadoCobrado
-     *
-     * @param boolean $estadoCobrado
-     *
-     * @return RhuSeleccion
-     */
-    public function setEstadoCobrado($estadoCobrado)
-    {
-        $this->estadoCobrado = $estadoCobrado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoCobrado
-     *
-     * @return boolean
-     */
-    public function getEstadoCobrado()
-    {
-        return $this->estadoCobrado;
-    }
-
-    /**
-     * Set fechaEntrevista
-     *
-     * @param \DateTime $fechaEntrevista
-     *
-     * @return RhuSeleccion
-     */
-    public function setFechaEntrevista($fechaEntrevista)
-    {
-        $this->fecha_entrevista = $fechaEntrevista;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaEntrevista
-     *
-     * @return \DateTime
-     */
-    public function getFechaEntrevista()
-    {
-        return $this->fecha_entrevista;
-    }
-
-    /**
-     * Set fechaPruebas
-     *
-     * @param \DateTime $fechaPruebas
-     *
-     * @return RhuSeleccion
-     */
-    public function setFechaPruebas($fechaPruebas)
-    {
-        $this->fecha_pruebas = $fechaPruebas;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaPruebas
-     *
-     * @return \DateTime
-     */
-    public function getFechaPruebas()
-    {
-        return $this->fecha_pruebas;
-    }
-
-    /**
-     * Set vrServicio
-     *
-     * @param float $vrServicio
-     *
-     * @return RhuSeleccion
-     */
-    public function setVrServicio($vrServicio)
-    {
-        $this->vrServicio = $vrServicio;
-
-        return $this;
-    }
-
-    /**
-     * Get vrServicio
-     *
-     * @return float
-     */
-    public function getVrServicio()
-    {
-        return $this->vrServicio;
-    }
-
-    /**
-     * Set codigoFacturaFk
-     *
-     * @param integer $codigoFacturaFk
-     *
-     * @return RhuSeleccion
-     */
-    public function setCodigoFacturaFk($codigoFacturaFk)
-    {
-        $this->codigoFacturaFk = $codigoFacturaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoFacturaFk
-     *
-     * @return integer
-     */
-    public function getCodigoFacturaFk()
-    {
-        return $this->codigoFacturaFk;
-    }
-
-    /**
      * Set estadoCerrado
      *
      * @param boolean $estadoCerrado
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setEstadoCerrado($estadoCerrado)
     {
@@ -1129,7 +855,7 @@ class RhuSeleccion
      *
      * @param boolean $estadoAutorizado
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setEstadoAutorizado($estadoAutorizado)
     {
@@ -1153,7 +879,7 @@ class RhuSeleccion
      *
      * @param string $codigoUsuario
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setCodigoUsuario($codigoUsuario)
     {
@@ -1173,35 +899,11 @@ class RhuSeleccion
     }
 
     /**
-     * Set seleccionTipoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionTipo $seleccionTipoRel
-     *
-     * @return RhuSeleccion
-     */
-    public function setSeleccionTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionTipo $seleccionTipoRel = null)
-    {
-        $this->seleccionTipoRel = $seleccionTipoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get seleccionTipoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionTipo
-     */
-    public function getSeleccionTipoRel()
-    {
-        return $this->seleccionTipoRel;
-    }
-
-    /**
      * Set tipoIdentificacionRel
      *
      * @param \Brasa\GeneralBundle\Entity\GenTipoIdentificacion $tipoIdentificacionRel
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setTipoIdentificacionRel(\Brasa\GeneralBundle\Entity\GenTipoIdentificacion $tipoIdentificacionRel = null)
     {
@@ -1225,7 +927,7 @@ class RhuSeleccion
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEstadoCivil $estadoCivilRel
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setEstadoCivilRel(\Brasa\RecursoHumanoBundle\Entity\RhuEstadoCivil $estadoCivilRel = null)
     {
@@ -1245,35 +947,11 @@ class RhuSeleccion
     }
 
     /**
-     * Set centroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
-     *
-     * @return RhuSeleccion
-     */
-    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
-    {
-        $this->centroCostoRel = $centroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
-     */
-    public function getCentroCostoRel()
-    {
-        return $this->centroCostoRel;
-    }
-
-    /**
      * Set ciudadRel
      *
      * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
     {
@@ -1297,7 +975,7 @@ class RhuSeleccion
      *
      * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadNacimientoRel
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setCiudadNacimientoRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadNacimientoRel = null)
     {
@@ -1321,7 +999,7 @@ class RhuSeleccion
      *
      * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadExpedicionRel
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setCiudadExpedicionRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadExpedicionRel = null)
     {
@@ -1345,7 +1023,7 @@ class RhuSeleccion
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuRh $rhRel
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setRhRel(\Brasa\RecursoHumanoBundle\Entity\RhuRh $rhRel = null)
     {
@@ -1365,59 +1043,11 @@ class RhuSeleccion
     }
 
     /**
-     * Set seleccionRequisitoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionRequisitoRel
-     *
-     * @return RhuSeleccion
-     */
-    public function setSeleccionRequisitoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionRequisitoRel = null)
-    {
-        $this->seleccionRequisitoRel = $seleccionRequisitoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get seleccionRequisitoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito
-     */
-    public function getSeleccionRequisitoRel()
-    {
-        return $this->seleccionRequisitoRel;
-    }
-
-    /**
-     * Set facturaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuFactura $facturaRel
-     *
-     * @return RhuSeleccion
-     */
-    public function setFacturaRel(\Brasa\RecursoHumanoBundle\Entity\RhuFactura $facturaRel = null)
-    {
-        $this->facturaRel = $facturaRel;
-
-        return $this;
-    }
-
-    /**
-     * Get facturaRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuFactura
-     */
-    public function getFacturaRel()
-    {
-        return $this->facturaRel;
-    }
-
-    /**
      * Set cargoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuCargo $cargoRel
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
     public function setCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCargo $cargoRel = null)
     {
@@ -1437,138 +1067,50 @@ class RhuSeleccion
     }
 
     /**
-     * Add seleccionesReferenciasSeleccionRel
+     * Set seleccionRequisitoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $seleccionesReferenciasSeleccionRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionRequisitoRel
      *
-     * @return RhuSeleccion
+     * @return RhuAspirante
      */
-    public function addSeleccionesReferenciasSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $seleccionesReferenciasSeleccionRel)
+    public function setSeleccionRequisitoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionRequisitoRel = null)
     {
-        $this->seleccionesReferenciasSeleccionRel[] = $seleccionesReferenciasSeleccionRel;
+        $this->seleccionRequisitoRel = $seleccionRequisitoRel;
 
         return $this;
     }
 
     /**
-     * Remove seleccionesReferenciasSeleccionRel
+     * Get seleccionRequisitoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $seleccionesReferenciasSeleccionRel
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito
      */
-    public function removeSeleccionesReferenciasSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $seleccionesReferenciasSeleccionRel)
+    public function getSeleccionRequisitoRel()
     {
-        $this->seleccionesReferenciasSeleccionRel->removeElement($seleccionesReferenciasSeleccionRel);
+        return $this->seleccionRequisitoRel;
     }
 
     /**
-     * Get seleccionesReferenciasSeleccionRel
+     * Set centroCostoRel
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
+     *
+     * @return RhuAspirante
      */
-    public function getSeleccionesReferenciasSeleccionRel()
+    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
     {
-        return $this->seleccionesReferenciasSeleccionRel;
-    }
-
-    /**
-     * Add seleccionesPruebasSeleccionRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionPrueba $seleccionesPruebasSeleccionRel
-     *
-     * @return RhuSeleccion
-     */
-    public function addSeleccionesPruebasSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionPrueba $seleccionesPruebasSeleccionRel)
-    {
-        $this->seleccionesPruebasSeleccionRel[] = $seleccionesPruebasSeleccionRel;
+        $this->centroCostoRel = $centroCostoRel;
 
         return $this;
     }
 
     /**
-     * Remove seleccionesPruebasSeleccionRel
+     * Get centroCostoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionPrueba $seleccionesPruebasSeleccionRel
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
      */
-    public function removeSeleccionesPruebasSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionPrueba $seleccionesPruebasSeleccionRel)
+    public function getCentroCostoRel()
     {
-        $this->seleccionesPruebasSeleccionRel->removeElement($seleccionesPruebasSeleccionRel);
-    }
-
-    /**
-     * Get seleccionesPruebasSeleccionRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSeleccionesPruebasSeleccionRel()
-    {
-        return $this->seleccionesPruebasSeleccionRel;
-    }
-
-    /**
-     * Add seleccionesVisitasSeleccionRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionVisita $seleccionesVisitasSeleccionRel
-     *
-     * @return RhuSeleccion
-     */
-    public function addSeleccionesVisitasSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionVisita $seleccionesVisitasSeleccionRel)
-    {
-        $this->seleccionesVisitasSeleccionRel[] = $seleccionesVisitasSeleccionRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove seleccionesVisitasSeleccionRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionVisita $seleccionesVisitasSeleccionRel
-     */
-    public function removeSeleccionesVisitasSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionVisita $seleccionesVisitasSeleccionRel)
-    {
-        $this->seleccionesVisitasSeleccionRel->removeElement($seleccionesVisitasSeleccionRel);
-    }
-
-    /**
-     * Get seleccionesVisitasSeleccionRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSeleccionesVisitasSeleccionRel()
-    {
-        return $this->seleccionesVisitasSeleccionRel;
-    }
-
-    /**
-     * Add seleccionesEntrevistasSeleccionRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionEntrevista $seleccionesEntrevistasSeleccionRel
-     *
-     * @return RhuSeleccion
-     */
-    public function addSeleccionesEntrevistasSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionEntrevista $seleccionesEntrevistasSeleccionRel)
-    {
-        $this->seleccionesEntrevistasSeleccionRel[] = $seleccionesEntrevistasSeleccionRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove seleccionesEntrevistasSeleccionRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionEntrevista $seleccionesEntrevistasSeleccionRel
-     */
-    public function removeSeleccionesEntrevistasSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionEntrevista $seleccionesEntrevistasSeleccionRel)
-    {
-        $this->seleccionesEntrevistasSeleccionRel->removeElement($seleccionesEntrevistasSeleccionRel);
-    }
-
-    /**
-     * Get seleccionesEntrevistasSeleccionRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSeleccionesEntrevistasSeleccionRel()
-    {
-        return $this->seleccionesEntrevistasSeleccionRel;
+        return $this->centroCostoRel;
     }
 }
