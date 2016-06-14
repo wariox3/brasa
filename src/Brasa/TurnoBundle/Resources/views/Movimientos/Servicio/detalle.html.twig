@@ -97,9 +97,7 @@
                 <div id="detalles" style="width: 100%"><br>
                     <table class="table table-striped table-bordered table-condensed">
                         <tr>
-                            <th>COD</th>
-                            <th>PROYECTO</th>
-                            <th>PUESTO</th>                                                       
+                            <th>COD</th>                                                       
                             <th>SERVICIO</th>
                             <th>MODALIDAD</th>
                             <th>PERIODO</th>
@@ -107,7 +105,7 @@
                             <th>PLANTILLA</th>
                             <th>DESDE</th>
                             <th>HASTA</th>
-                            <th>CANT</th>
+                            <th><p data-toggle="tooltip" data-placement="top" title="Cantidad de recuresos">CANT</p></th>
                             <th>LU</th>
                             <th>MA</th>
                             <th>MI</th>
@@ -116,22 +114,28 @@
                             <th>SA</th>
                             <th>DO</th>
                             <th>FE</th>
-                            <th>HORAS</th>
-                            <th>H.D</th>
-                            <th>H.N</th>
+                            <th><p data-toggle="tooltip" data-placement="top" title="Horas totales">H</p></th>
+                            <th><p data-toggle="tooltip" data-placement="top" title="Horas diurnas">HD</p></th>
+                            <th><p data-toggle="tooltip" data-placement="top" title="Horas nocturnas">HN</p></th>
                             <th>DIAS</th>
-                            <th>P.MINIMO</th>
-                            <th>P.AJUSTADO</th>
+                            <th><p data-toggle="tooltip" data-placement="top" title="Precio minimo">P.MINIMO</p></th>
+                            <th><p data-toggle="tooltip" data-placement="top" title="Precio ajustado">P.AJUSTADO</p></th>
                             <th>TOTAL</th>
                             <th></th>
                             <th></th>
                             <th></th>
                         </tr>
+                        {% set intPuesto = '' %}
                         {% for arServicioDetalle in arServicioDetalle %}
+                            {% if intPuesto != arServicioDetalle.codigoPuestoFk or arServicioDetalle.codigoPuestoFk == '' %}                                
+                                 <tr>
+                                     <td id="suptipo" colspan="38"><b>{{ arServicioDetalle.puestoRel.nombre | default('') }}<b/>
+                                     </td>
+                                 </tr>
+                                 {% set intPuesto = arServicioDetalle.codigoPuestoFk %}
+                             {% endif %}                            
                             <tr>
                                 <td>{{ arServicioDetalle.codigoServicioDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arServicioDetalle.codigoServicioDetallePk }}"></td>
-                                <td>{{ arServicioDetalle.proyectoRel.nombre | default('') }}</td>                                 
-                                <td>{{ arServicioDetalle.puestoRel.nombre | default('') }}</td> 
                                 <td>{{ arServicioDetalle.conceptoServicioRel.nombre  }}</td>                    
                                 <td>{{ arServicioDetalle.modalidadServicioRel.nombre  }}</td>                    
                                 <td>{{ arServicioDetalle.periodoRel.nombre  }}</td>
@@ -139,34 +143,22 @@
                                 <td>{% if arServicioDetalle.codigoPlantillaFk is not null %} <a href="{{ path('brs_tur_base_plantilla_detalle', { 'codigoPlantilla': arServicioDetalle.codigoPlantillaFk }) }}" target="_blanck">{% endif %}{{ arServicioDetalle.plantillaRel.nombre | default('')  }}</a> ({{ arServicioDetalle.fechaIniciaPlantilla | date('Y/m/d')  }})</td>                    
                                 <td>{{ arServicioDetalle.fechaDesde |date('Y/m/d') }}</td>    
                                 <td>{{ arServicioDetalle.fechaHasta |date('Y/m/d') }}</td>                    
-                                {% if arServicio.estadoAutorizado == 0 %}                        
-                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arServicioDetalle.codigoServicioDetallePk }}" value="{{ arServicioDetalle.cantidad  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
-                                    <td><input type="checkbox" name="chkLunes{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.lunes == 1 %} checked="true" {% endif %}></td>
-                                    <td><input type="checkbox" name="chkMartes{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.martes == 1 %} checked="true" {% endif %}></td>
-                                    <td><input type="checkbox" name="chkMiercoles{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.miercoles == 1 %} checked="true" {% endif %}></td>
-                                    <td><input type="checkbox" name="chkJueves{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.jueves == 1 %} checked="true" {% endif %}></td>
-                                    <td><input type="checkbox" name="chkViernes{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.viernes == 1 %} checked="true" {% endif %}></td>
-                                    <td><input type="checkbox" name="chkSabado{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.sabado == 1 %} checked="true" {% endif %}></td>
-                                    <td><input type="checkbox" name="chkDomingo{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.domingo == 1 %} checked="true" {% endif %}></td>
-                                    <td><input type="checkbox" name="chkFestivo{{ arServicioDetalle.codigoServicioDetallePk }}" {% if arServicioDetalle.festivo == 1 %} checked="true" {% endif %}></td>                    
-                                    {% else %}                            
-                                    <td>{{ arServicioDetalle.cantidad  }}</td>                        
-                                    <td>{% if arServicioDetalle.lunes == 1 %} SI {% else %} NO {% endif %}</td>
-                                    <td>{% if arServicioDetalle.martes == 1 %} SI {% else %} NO {% endif %}</td>
-                                    <td>{% if arServicioDetalle.miercoles == 1 %} SI {% else %} NO {% endif %}</td>
-                                    <td>{% if arServicioDetalle.jueves == 1 %} SI {% else %} NO {% endif %}</td>
-                                    <td>{% if arServicioDetalle.viernes == 1 %} SI {% else %} NO {% endif %}</td>
-                                    <td>{% if arServicioDetalle.sabado == 1 %} SI {% else %} NO {% endif %}</td>
-                                    <td>{% if arServicioDetalle.domingo == 1 %} SI {% else %} NO {% endif %}</td>
-                                    <td>{% if arServicioDetalle.festivo == 1 %} SI {% else %} NO {% endif %}</td>
-                                {% endif %}
+                                <td>{{ arServicioDetalle.cantidad  }}</td>
+                                <td>{% if arServicioDetalle.lunes == 1 %} SI {% else %} NO {% endif %}</td>
+                                <td>{% if arServicioDetalle.martes == 1 %} SI {% else %} NO {% endif %}</td>
+                                <td>{% if arServicioDetalle.miercoles == 1 %} SI {% else %} NO {% endif %}</td>
+                                <td>{% if arServicioDetalle.jueves == 1 %} SI {% else %} NO {% endif %}</td>
+                                <td>{% if arServicioDetalle.viernes == 1 %} SI {% else %} NO {% endif %}</td>
+                                <td>{% if arServicioDetalle.sabado == 1 %} SI {% else %} NO {% endif %}</td>
+                                <td>{% if arServicioDetalle.domingo == 1 %} SI {% else %} NO {% endif %}</td>
+                                <td>{% if arServicioDetalle.festivo == 1 %} SI {% else %} NO {% endif %}</td>                                
                                 <td style="text-align: right">{{ arServicioDetalle.horas | number_format(0, '.', ',') }}</td> 
                                 <td style="text-align: right">{{ arServicioDetalle.horasDiurnas | number_format(0, '.', ',') }}</td> 
                                 <td style="text-align: right">{{ arServicioDetalle.horasNocturnas | number_format(0, '.', ',') }}</td> 
                                 <td style="text-align: right">{{ arServicioDetalle.dias | number_format(0, '.', ',') }}</td>                     
                                 <td style="text-align: right">{{ arServicioDetalle.vrPrecioMinimo | number_format(0, '.', ',') }}</td> 
                                 {% if arServicio.estadoAutorizado == 0 %}
-                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorAjustado{{ arServicioDetalle.codigoServicioDetallePk }}" value="{{ arServicioDetalle.vrPrecioAjustado  }}" size="10" style="text-align: right; width:80px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
+                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorAjustado{{ arServicioDetalle.codigoServicioDetallePk }}" value="{{ arServicioDetalle.vrPrecioAjustado  }}" size="10" style="text-align: right; width:60px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
                                     {% else %}
                                     <td style="text-align: right">{{ arServicioDetalle.vrPrecioAjustado | number_format(0, '.', ',') }}</td> 
                                 {% endif %}                    
@@ -177,6 +169,15 @@
                             </tr>
                         {% endfor %}
                     </table>
+                </div>
+            </div>
+            
+            <div class="btn-toolbar" style="float: left">    
+                <div class="btn-group">
+                    <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_movimiento_servicio') }}">Volver</a>
+                </div>
+                <div class="btn-group">
+                    <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arServicioDetalle.getTotalItemCount }}</span></div>                        
                 </div>
             </div>
             <div class="btn-toolbar" style="float: right">
@@ -198,6 +199,6 @@
 
         {{ form_rest(form) }}
         {{ form_end(form) }}
-        <a  class="btn btn-default btn-sm" href="{{ path('brs_tur_movimiento_servicio') }}">Volver</a>
+        
     </div>
 {% endblock %}

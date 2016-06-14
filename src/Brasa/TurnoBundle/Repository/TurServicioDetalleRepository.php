@@ -6,11 +6,20 @@ use Doctrine\ORM\EntityRepository;
 
 class TurServicioDetalleRepository extends EntityRepository {
 
+    public function listaDql($codigoServicio = "") {
+        $dql   = "SELECT sd FROM BrasaTurnoBundle:TurServicioDetalle sd WHERE sd.codigoServicioDetallePk <> 0 ";
+        
+        if($codigoServicio != '') {
+            $dql .= "AND sd.codigoServicioFk = " . $codigoServicio . " ";  
+        }        
+        $dql .= " ORDER BY sd.codigoPuestoFk";
+        return $dql;
+    }    
+    
     public function listaConsultaDql($codigoServicio = "", $codigoCliente = "") {
-        $dql   = "SELECT sd FROM BrasaTurnoBundle:TurServicioDetalle sd JOIN sd.servicioRel s WHERE sd.codigoServicioDetallePk <> 0 ";
-
+        $dql   = "SELECT sd FROM BrasaTurnoBundle:TurServicioDetalle sd JOIN sd.servicioRel s WHERE sd.codigoServicioDetallePk <> 0 ";                
         if($codigoCliente != '') {
-            $dql .= "AND s.codigoClienteFk = " . $codigoCliente . " ";  
+            $dql .= "AND s.codigoClienteFk = " . $codigoCliente;  
         }
         return $dql;
     }     

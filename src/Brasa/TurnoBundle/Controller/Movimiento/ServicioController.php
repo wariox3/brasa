@@ -101,6 +101,7 @@ class ServicioController extends Controller
     public function detalleAction($codigoServicio) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');
         $arServicio = new \Brasa\TurnoBundle\Entity\TurServicio();
         $arServicio = $em->getRepository('BrasaTurnoBundle:TurServicio')->find($codigoServicio);
@@ -160,8 +161,8 @@ class ServicioController extends Controller
             }            
         }
 
-        $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
-        $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->findBy(array ('codigoServicioFk' => $codigoServicio));
+        $dql = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->listaDql($codigoServicio);       
+        $arServicioDetalle = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 150);
         return $this->render('BrasaTurnoBundle:Movimientos/Servicio:detalle.html.twig', array(
                     'arServicio' => $arServicio,
                     'arServicioDetalle' => $arServicioDetalle,
@@ -627,11 +628,11 @@ class ServicioController extends Controller
             foreach ($arrControles['LblCodigo'] as $intCodigo) {
                 $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
                 $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($intCodigo);
-                $arServicioDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);
+                //$arServicioDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);
                 if($arrControles['TxtValorAjustado'.$intCodigo] != '') {
                     $arServicioDetalle->setVrPrecioAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
                 }            
-                if(isset($arrControles['chkLunes'.$intCodigo])) {
+                /*if(isset($arrControles['chkLunes'.$intCodigo])) {
                     $arServicioDetalle->setLunes(1);
                 } else {
                     $arServicioDetalle->setLunes(0);
@@ -670,7 +671,9 @@ class ServicioController extends Controller
                     $arServicioDetalle->setFestivo(1);
                 } else {
                     $arServicioDetalle->setFestivo(0);
-                }                    
+                }
+                 * 
+                 */                    
                 $em->persist($arServicioDetalle);
             }
             $em->flush();                
