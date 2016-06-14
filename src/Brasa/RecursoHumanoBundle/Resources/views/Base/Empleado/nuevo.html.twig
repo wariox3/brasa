@@ -110,7 +110,7 @@
                         {{ form_widget(form.padreFamilia, { 'attr': {'class': 'form-control'} }) }}
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox" name="ChkCabezaHogar"> Cabeza de hogar
+                                <input type="checkbox" name="ChkCabezaHogar" {% if arEmpleado.CabezaHogar == 1 %} checked="true" {% endif %}> Cabeza de hogar
                             </label>
                         </div>
                 </div>

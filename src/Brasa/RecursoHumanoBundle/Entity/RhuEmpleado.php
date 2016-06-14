@@ -157,12 +157,12 @@ class RhuEmpleado
     /**
      * @ORM\Column(name="auxilio_transporte", type="boolean")
      */    
-    private $auxilioTransporte = 0;     
+    private $auxilioTransporte = false;     
     
     /**
      * @ORM\Column(name="vr_salario", type="float")
      */
-    private $VrSalario = 0;
+    private $VrSalario = false;
     
     
     /**
@@ -199,17 +199,17 @@ class RhuEmpleado
     /**     
      * @ORM\Column(name="estado_activo", type="boolean")
      */    
-    private $estadoActivo = 1;
+    private $estadoActivo = true;
     
     /**     
      * @ORM\Column(name="estado_contrato_activo", type="boolean")
      */    
-    private $estadoContratoActivo = 0;
+    private $estadoContratoActivo = false;
     
     /**     
      * @ORM\Column(name="cabeza_hogar", type="boolean")
      */    
-    private $cabezaHogar= 0;
+    private $cabezaHogar= false;
     
     
     /**     
@@ -245,13 +245,13 @@ class RhuEmpleado
     /**     
      * @ORM\Column(name="contrato_indefinido", type="boolean")
      */    
-    private $contratoIndefinido = 0;
+    private $contratoIndefinido = false;
     
     /**     
      * Empleado pagado por la entidad de salud, exonerado de los pagos
      * @ORM\Column(name="pagado_entidad_salud", type="boolean")
      */    
-    private $pagadoEntidadSalud = 0;    
+    private $pagadoEntidadSalud = false;    
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -266,12 +266,12 @@ class RhuEmpleado
     /**
      * @ORM\Column(name="horas_laboradas_periodo", type="float")
      */
-    private $horasLaboradasPeriodo = 0;
+    private $horasLaboradasPeriodo = false;
     
     /**
      * @ORM\Column(name="padre_familia", type="float")
      */
-    private $padreFamilia = 0;
+    private $padreFamilia = false;
     
     /**
      * @ORM\Column(name="codigo_empleado_estudio_tipo_fk", type="integer", length=4, nullable=true)
@@ -304,9 +304,9 @@ class RhuEmpleado
     private $rutaFoto;
     
     /**
-     * @ORM\Column(name="empleado_informacion_interna", type="boolean", nullable=true)
+     * @ORM\Column(name="empleado_informacion_interna", type="boolean")
      */    
-    private $empleadoInformacionInterna = 0;
+    private $empleadoInformacionInterna = false;
     
     /**
      * @ORM\Column(name="codigo_horario_fk", type="integer", nullable=true)
@@ -615,6 +615,7 @@ class RhuEmpleado
      */
     protected $cartasEmpleadoRel;
        
+    
     
     /**
      * Constructor

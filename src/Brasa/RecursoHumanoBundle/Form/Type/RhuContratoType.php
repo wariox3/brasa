@@ -42,10 +42,16 @@ class RhuContratoType extends AbstractType
             ))                            
             ->add('cargoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCargo',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('c')
+                    ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
             ))  
             ->add('ssoTipoCotizanteRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSsoTipoCotizante',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('tc')
+                    ->orderBy('tc.codigoTipoCotizantePk', 'ASC');},
                 'property' => 'nombre',
             ))                            
             ->add('ssoSubtipoCotizanteRel', 'entity', array(
@@ -61,6 +67,9 @@ class RhuContratoType extends AbstractType
                 'required' => true))
             ->add('entidadPensionRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadPension',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('p')
+                    ->orderBy('p.nombre', 'ASC');},
                 'property' => 'nombre',
             ))
             ->add('entidadCajaRel', 'entity', array(
