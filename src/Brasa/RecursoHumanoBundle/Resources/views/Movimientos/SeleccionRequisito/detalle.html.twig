@@ -53,7 +53,7 @@
                     <td class="titulo">NIVEL ESTUDIO:</td>
                     <td class="td-in-well">{{ arRequisito.estudioTipoRel().nombre|default('') }}</td>
                     <td class="titulo">EDAD MIN-MAX:</td>
-                    <td class="td-in-well">{{ arRequisito.edadMinimaMaxima }}</td>
+                    <td class="td-in-well">{{ arRequisito.edadMinima }} - {{ arRequisito.edadMaxima }}</td>
                     <td class="titulo">NRO HIJOS:</td>
                     <td class="td-in-well">{{ arRequisito.numeroHijos }}</td>
                 </tr>
@@ -158,6 +158,10 @@
                         <td class="td-in-well">NO APLICA</td>
                     {% endif%}
                 </tr>
+                <tr>
+                   <td class="titulo">COMENTARIOS:</td>
+                   <td class="td-in-well" colspan="5">{{ arRequisito.comentarios}}</td>
+                </tr>    
             </table>
       </div>
     </div>

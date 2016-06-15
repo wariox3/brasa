@@ -61,9 +61,14 @@ class RhuSeleccionRequisito
     private $codigoCargoFk;
     
     /**
-     * @ORM\Column(name="edad_minima_maxima", type="string", length=20, nullable=true)
+     * @ORM\Column(name="edad_minima", type="string", length=20, nullable=true)
      */
-    private $edadMinimaMaxima;
+    private $edadMinima;
+    
+    /**
+     * @ORM\Column(name="edad_maxima", type="string", length=20, nullable=true)
+     */
+    private $edadMaxima;
     
     /**
      * @ORM\Column(name="numero_hijos", type="integer", nullable=true)
@@ -114,6 +119,11 @@ class RhuSeleccionRequisito
      * @ORM\Column(name="codigo_licencia_moto_fk", type="string", length=30, nullable=true)
      */
     private $codigoLicenciaMotoFk;
+    
+    /**
+     * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
+     */    
+    private $comentarios;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="seleccionesRequisitosCentroCostoRel")
@@ -368,27 +378,51 @@ class RhuSeleccionRequisito
     }
 
     /**
-     * Set edadMinimaMaxima
+     * Set edadMinima
      *
-     * @param string $edadMinimaMaxima
+     * @param string $edadMinima
      *
      * @return RhuSeleccionRequisito
      */
-    public function setEdadMinimaMaxima($edadMinimaMaxima)
+    public function setEdadMinima($edadMinima)
     {
-        $this->edadMinimaMaxima = $edadMinimaMaxima;
+        $this->edadMinima = $edadMinima;
 
         return $this;
     }
 
     /**
-     * Get edadMinimaMaxima
+     * Get edadMinima
      *
      * @return string
      */
-    public function getEdadMinimaMaxima()
+    public function getEdadMinima()
     {
-        return $this->edadMinimaMaxima;
+        return $this->edadMinima;
+    }
+
+    /**
+     * Set edadMaxima
+     *
+     * @param string $edadMaxima
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setEdadMaxima($edadMaxima)
+    {
+        $this->edadMaxima = $edadMaxima;
+
+        return $this;
+    }
+
+    /**
+     * Get edadMaxima
+     *
+     * @return string
+     */
+    public function getEdadMaxima()
+    {
+        return $this->edadMaxima;
     }
 
     /**
@@ -629,6 +663,30 @@ class RhuSeleccionRequisito
     public function getCodigoLicenciaMotoFk()
     {
         return $this->codigoLicenciaMotoFk;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
     }
 
     /**

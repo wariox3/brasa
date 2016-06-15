@@ -23,11 +23,11 @@ class RhuSeleccionRequisitoType extends AbstractType
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => false))
+                'required' => true))
             ->add('estadoCivilRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEstadoCivil',
                 'property' => 'nombre',
-                'required' => true
+                'required' => false
             ))
             ->add('ciudadRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
@@ -35,7 +35,7 @@ class RhuSeleccionRequisitoType extends AbstractType
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))
+                'required' => false))
             ->add('estudioTipoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEmpleadoEstudioTipo',
                 'property' => 'nombre',
@@ -48,9 +48,11 @@ class RhuSeleccionRequisitoType extends AbstractType
             ->add('codigoLicenciaMotoFk', 'choice', array('choices'   => array('1' => 'SI', '2' => 'NO', '0' => 'NO APLICA')))
             ->add('nombre', 'text', array('required' => true))
             ->add('numeroHijos', 'number', array('required' => false))
-            ->add('edadMinimaMaxima', 'text', array('required' => false))
+            ->add('edadMinima', 'text', array('required' => false))
+            ->add('edadMaxima', 'text', array('required' => false))
             ->add('codigoReligionFk', 'choice', array('choices'   => array('1' => 'CATOLICO', '2' => 'CRISTIANO', '3' => 'PROTESTANTE', '4' => 'INDIFERENTE')))
             ->add('cantidadSolicitida', 'number', array('label' => 'Cantidad Solicitada', 'required' => true))
+            ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

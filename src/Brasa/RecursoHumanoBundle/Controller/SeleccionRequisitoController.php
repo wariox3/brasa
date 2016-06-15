@@ -188,6 +188,8 @@ class SeleccionRequisitoController extends Controller
         $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'FECHA')
@@ -198,16 +200,18 @@ class SeleccionRequisitoController extends Controller
                     ->setCellValue('G1', 'CIUDAD')    
                     ->setCellValue('H1', 'ESTADO CIVIL')
                     ->setCellValue('I1', 'NIVEL DE ESTUDIO')
-                    ->setCellValue('J1', 'EDAD MIN-MAX')
-                    ->setCellValue('K1', 'NRO HIJOS')
-                    ->setCellValue('L1', 'SEXO')
-                    ->setCellValue('M1', 'TIPO VEHICULO')
-                    ->setCellValue('N1', 'RELIGION')
-                    ->setCellValue('O1', 'EXPERIENCIA')
-                    ->setCellValue('P1', 'DISPONIBILIDAD')
-                    ->setCellValue('Q1', 'LICENCIA CARRO')
-                    ->setCellValue('R1', 'LICENCIA MOTO')
-                    ->setCellValue('S1', 'ABIERTO');
+                    ->setCellValue('J1', 'EDAD MINIMA')
+                    ->setCellValue('K1', 'EDAD MAXIMA')
+                    ->setCellValue('L1', 'NRO HIJOS')
+                    ->setCellValue('M1', 'SEXO')
+                    ->setCellValue('N1', 'TIPO VEHICULO')
+                    ->setCellValue('O1', 'RELIGION')
+                    ->setCellValue('P1', 'EXPERIENCIA')
+                    ->setCellValue('Q1', 'DISPONIBILIDAD')
+                    ->setCellValue('R1', 'LICENCIA CARRO')
+                    ->setCellValue('S1', 'LICENCIA MOTO')
+                    ->setCellValue('T1', 'ABIERTO')
+                    ->setCellValue('U1', 'COMENTARIOS');
                     
 
         $i = 2;
@@ -340,16 +344,18 @@ class SeleccionRequisitoController extends Controller
                     ->setCellValue('G' . $i, $strCiudad)
                     ->setCellValue('H' . $i, $strEstadoCivil)
                     ->setCellValue('I' . $i, $strEstudioTipo)
-                    ->setCellValue('J' . $i, $arSeleccionRequisito->getEdadMinimaMaxima())
-                    ->setCellValue('K' . $i, $arSeleccionRequisito->getNumeroHijos())
-                    ->setCellValue('L' . $i, $sexo)
-                    ->setCellValue('M' . $i, $tipoVehiculo)
-                    ->setCellValue('N' . $i, $religion)
-                    ->setCellValue('O' . $i, $experiencia)
-                    ->setCellValue('P' . $i, $disponibilidad)
-                    ->setCellValue('Q' . $i, $licenciaCarro)
-                    ->setCellValue('R' . $i, $licenciaMoto)
-                    ->setCellValue('S' . $i, $abierto);
+                    ->setCellValue('J' . $i, $arSeleccionRequisito->getEdadMinima())
+                    ->setCellValue('K' . $i, $arSeleccionRequisito->getEdadMaxima())
+                    ->setCellValue('L' . $i, $arSeleccionRequisito->getNumeroHijos())
+                    ->setCellValue('M' . $i, $sexo)
+                    ->setCellValue('N' . $i, $tipoVehiculo)
+                    ->setCellValue('O' . $i, $religion)
+                    ->setCellValue('P' . $i, $experiencia)
+                    ->setCellValue('Q' . $i, $disponibilidad)
+                    ->setCellValue('R' . $i, $licenciaCarro)
+                    ->setCellValue('S' . $i, $licenciaMoto)
+                    ->setCellValue('T' . $i, $abierto)
+                    ->setCellValue('U' . $i, $arSeleccionRequisito->getComentarios());
             $i++;
         }
 
