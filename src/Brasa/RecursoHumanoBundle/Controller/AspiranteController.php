@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuAspiranteType;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
 
 class AspiranteController extends Controller
 {
@@ -86,6 +88,47 @@ class AspiranteController extends Controller
             'arAspirante' => $arAspirante,
             'form' => $form->createView()));
     }
+    
+    /**
+     * @Route("/rhu/movimientos/aspirante/aplicar/{codigoAspirante}", name="brs_rhu_movimiento_aspirante_aplicar")
+     */
+    public function aplicarAction($codigoAspirante) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arAspirante = new \Brasa\RecursoHumanoBundle\Entity\RhuAspirante();
+        $arAspirante = $em->getRepository('BrasaRecursoHumanoBundle:RhuAspirante')->find($codigoAspirante);
+        $form = $this->createFormBuilder()
+            ->add('seleccionRequisicionRel', 'entity',
+                array('class' => 'BrasaRecursoHumanoBundle:RhuSeleccionRequisito',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('sr')
+                    ->orderBy('sr.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true
+                ))    
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arRequisicionAspirante = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisicionAspirante();
+            $arRequisicionAspirante->setSeleccionRequisitoRel($form->get('seleccionRequisicionRel')->getData());
+            $arRequisicionAspirante->setAspiranteRel($arAspirante);
+            $em->persist($arRequisicionAspirante);
+            $arRequisicionDato = $form->get('seleccionRequisicionRel')->getData();
+            $arRequisicionAspiranteValidar = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisicionAspirante')->findBy(array('codigoSeleccionRequisitoFk' => $arRequisicionDato, 'codigoAspiranteFk' => $codigoAspirante));
+            if ($arRequisicionAspiranteValidar == null){
+                $em->flush();
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            } else {
+                $objMensaje->Mensaje("error", "El aspirante ya se encuenta en la requisicion", $this);
+            }
+        }
+
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Aspirante:aplicar.html.twig', array(
+            'arAspirante' => $arAspirante,
+            'form' => $form->createView()));
+    }
 
     public function detalleAction($codigoAspirante) {
         $em = $this->getDoctrine()->getManager();
@@ -142,8 +185,8 @@ class AspiranteController extends Controller
         $session->set('dqlAspiranteLista', $em->getRepository('BrasaRecursoHumanoBundle:RhuAspirante')->listaDQL(
                 $session->get('filtroNombreAspirante'),
                 $session->get('filtroIdentificacionAspirante'),
-                $session->get('filtroAbiertoAspirante'),
-                $session->get('filtroAprobadoAspirante'),
+                '',
+                '',
                 ''
                 ));
     }
@@ -152,8 +195,6 @@ class AspiranteController extends Controller
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder() 
-            ->add('estadoAprobado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAprobadoAspirante')))
-            ->add('estadoCerrado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAbiertoAspirante')))
             ->add('TxtNombre', 'text', array('label'  => 'Nombre', 'data' => $session->get('filtroNombreAspirante')))
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacionAspirante')))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -164,29 +205,9 @@ class AspiranteController extends Controller
     }
 
     private function formularioDetalle($ar) {
-        $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
-        $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
-        $arrBotonAprobar = array('label' => 'Aprobar', 'disabled' => false);
-        $arrBotonCerrar = array('label' => 'Cerrar', 'disabled' => false);
-        if($ar->getEstadoAutorizado() == 0) {
-            $arrBotonDesAutorizar['disabled'] = true;
-            $arrBotonAprobar['disabled'] = true;
-            $arrBotonCerrar['disabled'] = true;
-        } else {
-            $arrBotonAutorizar['disabled'] = true;
-        }
-        if($ar->getEstadoAprobado() == 1) {
-            $arrBotonDesAutorizar['disabled'] = true;
-            $arrBotonAprobar['disabled'] = true;
-        }
-        if ($ar->getEstadoCerrado() == 1){
-            $arrBotonCerrar['disabled'] = true;
-        }
+        
         $form = $this->createFormBuilder()
-                    ->add('BtnAprobar', 'submit', $arrBotonAprobar)
-                    ->add('BtnCerrar', 'submit', $arrBotonCerrar)
-                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)
-                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)
+                    
                     ->getForm();
         return $form;
     }
@@ -197,8 +218,6 @@ class AspiranteController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroNombreAspirante', $form->get('TxtNombre')->getData());
         $session->set('filtroIdentificacionAspirante', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroAbiertoAspirante', $form->get('estadoCerrado')->getData());
-        $session->set('filtroAprobadoAspirante', $form->get('estadoAprobado')->getData());
     }
 
     private function generarExcel() {
@@ -257,9 +276,7 @@ class AspiranteController extends Controller
                     ->setCellValue('P1', 'SEXO')
                     ->setCellValue('Q1', 'CORREO')
                     ->setCellValue('R1', 'DISPONIBILIDAD')
-                    ->setCellValue('S1', 'APROBADO')
-                    ->setCellValue('T1', 'CERRADO')
-                    ->setCellValue('U1', 'COMENTARIOS');
+                    ->setCellValue('S1', 'COMENTARIOS');
 
         $i = 2;
         $query = $em->createQuery($session->get('dqlAspiranteLista'));
@@ -326,9 +343,7 @@ class AspiranteController extends Controller
                     ->setCellValue('P' . $i, $sexo)
                     ->setCellValue('Q' . $i, $arAspirantes->getCorreo())
                     ->setCellValue('R' . $i, $disponibilidad)
-                    ->setCellValue('S' . $i, $objFunciones->devuelveBoolean($arAspirantes->getEstadoAprobado()))
-                    ->setCellValue('T' . $i, $objFunciones->devuelveBoolean($arAspirantes->getEstadoCerrado()))
-                    ->setCellValue('U' . $i, $arAspirantes->getComentarios());
+                    ->setCellValue('S' . $i, $arAspirantes->getComentarios());
             $i++;
         }
 

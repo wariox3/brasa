@@ -26,6 +26,11 @@ class RhuSeleccionRequisicionAspirante
      * @ORM\Column(name="codigo_aspirante_fk", type="integer")
      */
     private $codigoAspiranteFk;
+    
+    /**     
+     * @ORM\Column(name="estado_aprobado", type="boolean")
+     */    
+    private $estadoAprobado = false;
 
    /**
      * @ORM\ManyToOne(targetEntity="RhuSeleccionRequisito", inversedBy="seleccionesRequisicionesAspirantesSeleccionRequisitoRel")
@@ -145,5 +150,29 @@ class RhuSeleccionRequisicionAspirante
     public function getAspiranteRel()
     {
         return $this->aspiranteRel;
+    }
+
+    /**
+     * Set estadoAprobado
+     *
+     * @param boolean $estadoAprobado
+     *
+     * @return RhuSeleccionRequisicionAspirante
+     */
+    public function setEstadoAprobado($estadoAprobado)
+    {
+        $this->estadoAprobado = $estadoAprobado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAprobado
+     *
+     * @return boolean
+     */
+    public function getEstadoAprobado()
+    {
+        return $this->estadoAprobado;
     }
 }
