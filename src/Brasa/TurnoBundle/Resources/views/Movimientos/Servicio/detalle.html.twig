@@ -27,7 +27,8 @@
                 {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}            
-                {{ form_widget(form.BtnCerrar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnCerrar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_utilidad_simular_programacion', {'codigoServicio': arServicio.codigoServicioPk  }) }}', 'SimularProgramacion', 600, 900)" >Simular programacion</a>
             </div>
         </div>
         <div style="float:right">

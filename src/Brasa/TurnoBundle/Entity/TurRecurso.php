@@ -178,7 +178,10 @@ class TurRecurso
      */
     protected $novedadesRecursoReemplazoRel;    
     
-
+    /**
+     * @ORM\OneToMany(targetEntity="TurSimulacionDetalle", mappedBy="recursoRel")
+     */
+    protected $simulacionesDetallesRecursoRel; 
 
     /**
      * Constructor
@@ -1027,5 +1030,39 @@ class TurRecurso
     public function getCodigoInterface()
     {
         return $this->codigoInterface;
+    }
+
+    /**
+     * Add simulacionesDetallesRecursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSimulacionDetalle $simulacionesDetallesRecursoRel
+     *
+     * @return TurRecurso
+     */
+    public function addSimulacionesDetallesRecursoRel(\Brasa\TurnoBundle\Entity\TurSimulacionDetalle $simulacionesDetallesRecursoRel)
+    {
+        $this->simulacionesDetallesRecursoRel[] = $simulacionesDetallesRecursoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove simulacionesDetallesRecursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSimulacionDetalle $simulacionesDetallesRecursoRel
+     */
+    public function removeSimulacionesDetallesRecursoRel(\Brasa\TurnoBundle\Entity\TurSimulacionDetalle $simulacionesDetallesRecursoRel)
+    {
+        $this->simulacionesDetallesRecursoRel->removeElement($simulacionesDetallesRecursoRel);
+    }
+
+    /**
+     * Get simulacionesDetallesRecursoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSimulacionesDetallesRecursoRel()
+    {
+        return $this->simulacionesDetallesRecursoRel;
     }
 }

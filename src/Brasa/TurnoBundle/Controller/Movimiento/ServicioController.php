@@ -566,7 +566,7 @@ class ServicioController extends Controller
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);        
         $arrBotonDetalleConceptoActualizar = array('label' => 'Actualizar', 'disabled' => false);
-        $arrBotonDetalleConceptoEliminar = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonDetalleConceptoEliminar = array('label' => 'Eliminar', 'disabled' => false);          
         
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;                        
@@ -592,7 +592,7 @@ class ServicioController extends Controller
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
                     ->add('BtnDetalleConceptoActualizar', 'submit', $arrBotonDetalleConceptoActualizar)
-                    ->add('BtnDetalleConceptoEliminar', 'submit', $arrBotonDetalleConceptoEliminar)                
+                    ->add('BtnDetalleConceptoEliminar', 'submit', $arrBotonDetalleConceptoEliminar)                                    
                     ->getForm();
         return $form;
     }

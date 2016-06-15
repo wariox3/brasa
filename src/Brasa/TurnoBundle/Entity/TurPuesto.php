@@ -115,6 +115,11 @@ class TurPuesto
     protected $puestosDotacionesPuestoRel;     
     
     /**
+     * @ORM\OneToMany(targetEntity="TurSimulacionDetalle", mappedBy="puestoRel")
+     */
+    protected $simulacionesDetallesPuestoRel;    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -638,5 +643,39 @@ class TurPuesto
     public function getCodigoInterface()
     {
         return $this->codigoInterface;
+    }
+
+    /**
+     * Add simulacionesDetallesPuestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSimulacionDetalle $simulacionesDetallesPuestoRel
+     *
+     * @return TurPuesto
+     */
+    public function addSimulacionesDetallesPuestoRel(\Brasa\TurnoBundle\Entity\TurSimulacionDetalle $simulacionesDetallesPuestoRel)
+    {
+        $this->simulacionesDetallesPuestoRel[] = $simulacionesDetallesPuestoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove simulacionesDetallesPuestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSimulacionDetalle $simulacionesDetallesPuestoRel
+     */
+    public function removeSimulacionesDetallesPuestoRel(\Brasa\TurnoBundle\Entity\TurSimulacionDetalle $simulacionesDetallesPuestoRel)
+    {
+        $this->simulacionesDetallesPuestoRel->removeElement($simulacionesDetallesPuestoRel);
+    }
+
+    /**
+     * Get simulacionesDetallesPuestoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSimulacionesDetallesPuestoRel()
+    {
+        return $this->simulacionesDetallesPuestoRel;
     }
 }
