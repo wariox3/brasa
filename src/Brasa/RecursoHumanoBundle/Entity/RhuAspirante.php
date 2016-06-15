@@ -3,10 +3,13 @@
 namespace Brasa\RecursoHumanoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 
 /**
  * @ORM\Table(name="rhu_aspirante")
  * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuAspiranteRepository")
+ * @DoctrineAssert\UniqueEntity(fields={"numeroIdentificacion"},message="Ya existe este número de identificación") 
  */
 class RhuAspirante
 {
@@ -33,7 +36,7 @@ class RhuAspirante
     private $codigoSeleccionRequisitoFk;
 
     /**
-     * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false)
+     * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false, unique=true)
      */
     private $numeroIdentificacion;
 
@@ -140,17 +143,22 @@ class RhuAspirante
     /**
      * @ORM\Column(name="estado_aprobado", type="boolean")
      */
-    private $estadoAprobado = 0;
+    private $estadoAprobado = false;
 
     /**
      * @ORM\Column(name="estado_cerrado", type="boolean")
      */
-    private $estadoCerrado = 0;
+    private $estadoCerrado = false;
 
     /**
      * @ORM\Column(name="estado_autorizado", type="boolean")
      */
-    private $estadoAutorizado = 0;
+    private $estadoAutorizado = false;
+    
+    /**
+     * @ORM\Column(name="codigo_disponibilidad_fk", type="string", length=30, nullable=true)
+     */
+    private $codigoDisponibilidadFk;
     
     /**
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
@@ -213,8 +221,20 @@ class RhuAspirante
     protected $centroCostoRel;
 
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSeleccionRequisicionAspirante", mappedBy="aspiranteRel")
+     */
+    protected $seleccionesRequisicionesAspirantesAspiranteRel;
+    
 
     
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->seleccionesRequisicionesAspirantesAspiranteRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoAspirantePk
@@ -875,6 +895,30 @@ class RhuAspirante
     }
 
     /**
+     * Set codigoDisponibilidadFk
+     *
+     * @param string $codigoDisponibilidadFk
+     *
+     * @return RhuAspirante
+     */
+    public function setCodigoDisponibilidadFk($codigoDisponibilidadFk)
+    {
+        $this->codigoDisponibilidadFk = $codigoDisponibilidadFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoDisponibilidadFk
+     *
+     * @return string
+     */
+    public function getCodigoDisponibilidadFk()
+    {
+        return $this->codigoDisponibilidadFk;
+    }
+
+    /**
      * Set codigoUsuario
      *
      * @param string $codigoUsuario
@@ -1112,5 +1156,39 @@ class RhuAspirante
     public function getCentroCostoRel()
     {
         return $this->centroCostoRel;
+    }
+
+    /**
+     * Add seleccionesRequisicionesAspirantesAspiranteRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisicionAspirante $seleccionesRequisicionesAspirantesAspiranteRel
+     *
+     * @return RhuAspirante
+     */
+    public function addSeleccionesRequisicionesAspirantesAspiranteRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisicionAspirante $seleccionesRequisicionesAspirantesAspiranteRel)
+    {
+        $this->seleccionesRequisicionesAspirantesAspiranteRel[] = $seleccionesRequisicionesAspirantesAspiranteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove seleccionesRequisicionesAspirantesAspiranteRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisicionAspirante $seleccionesRequisicionesAspirantesAspiranteRel
+     */
+    public function removeSeleccionesRequisicionesAspirantesAspiranteRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisicionAspirante $seleccionesRequisicionesAspirantesAspiranteRel)
+    {
+        $this->seleccionesRequisicionesAspirantesAspiranteRel->removeElement($seleccionesRequisicionesAspirantesAspiranteRel);
+    }
+
+    /**
+     * Get seleccionesRequisicionesAspirantesAspiranteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeleccionesRequisicionesAspirantesAspiranteRel()
+    {
+        return $this->seleccionesRequisicionesAspirantesAspiranteRel;
     }
 }

@@ -30,18 +30,133 @@
                     <td class="td-in-well">{{ arRequisito.codigoSeleccionRequisitoPk }}</td>
                     <td class="titulo">FECHA:</td>
                     <td class="td-in-well">{{ arRequisito.fecha | date('Y/m/d') }}</td>
+                    <td class="titulo">ESTADO ABIERTO:</td>
+                    <td class="td-in-well" {% if arRequisito.estadoAbierto == 1 %}> SI {% else %}<td class="td-in-well">NO {% endif %}</td>
                 </tr>
                 <tr>
                     <td class="titulo">NOMBRE:</td>
                     <td class="td-in-well">{{ arRequisito.nombre }}</td>
+                    <td class="titulo">CENTRO COSTO:</td>
+                    <td class="td-in-well">{{ arRequisito.centroCostoRel().nombre|default('') }}</td>
                     <td class="titulo">CARGO:</td>
                     <td class="td-in-well">{{ arRequisito.cargoRel().nombre|default('') }}</td>
                 </tr>
                 <tr>
                     <td class="titulo">CANTIDAD SOLICITADA:</td>
                     <td class="td-in-well">{{ arRequisito.cantidadSolicitida }}</td>
-                    <td class="titulo">ESTADO ABIERTO:</td>
-                    <td class="td-in-well" {% if arRequisito.estadoAbierto == 1 %}> SI {% else %}<td class="td-in-well">NO {% endif %}</td>
+                    <td class="titulo">ESTADO CIVIL:</td>
+                    <td class="td-in-well">{{ arRequisito.estadoCivilRel().nombre|default('') }}</td>
+                    <td class="titulo">CIUDAD RESIDENCIA:</td>
+                    <td class="td-in-well">{{ arRequisito.ciudadRel().nombre|default('') }}</td>
+                </tr>
+                <tr>
+                    <td class="titulo">NIVEL ESTUDIO:</td>
+                    <td class="td-in-well">{{ arRequisito.estudioTipoRel().nombre|default('') }}</td>
+                    <td class="titulo">EDAD MIN-MAX:</td>
+                    <td class="td-in-well">{{ arRequisito.edadMinimaMaxima }}</td>
+                    <td class="titulo">NRO HIJOS:</td>
+                    <td class="td-in-well">{{ arRequisito.numeroHijos }}</td>
+                </tr>
+                <tr>
+                    <td class="titulo">SEXO:</td>
+                    {% if arRequisito.codigoSexoFk == "M" %}
+                        <td class="td-in-well">MASCULINO</td>
+                    {% endif%}    
+                    {% if arRequisito.codigoSexoFk == "F" %}
+                        <td class="td-in-well">FEMENINO</td>
+                    {% endif%}
+                    {% if arRequisito.codigoSexoFk == "I" %}
+                        <td class="td-in-well">INDIFERENTE</td>
+                    {% endif%}
+                    <td class="titulo">TIPO VEHICULO</td>
+                    {% if arRequisito.codigoTipoVehiculoFk == 1 %}
+                        <td class="td-in-well">CARRO</td>
+                    {% endif%}    
+                    {% if arRequisito.codigoTipoVehiculoFk == 2 %}
+                        <td class="td-in-well">MOTO</td>
+                    {% endif%}
+                    {% if arRequisito.codigoTipoVehiculoFk == 0 %}
+                        <td class="td-in-well">NO APLICA</td>
+                    {% endif%}
+                    <td class="titulo">RELIGION:</td>
+                    {% if arRequisito.codigoReligionFk == 1 %}
+                        <td class="td-in-well">CATOLICO</td>
+                    {% endif%}    
+                    {% if arRequisito.codigoReligionFk == 2 %}
+                        <td class="td-in-well">CRISTIANO</td>
+                    {% endif%}
+                    {% if arRequisito.codigoReligionFk == 3 %}
+                        <td class="td-in-well">PROTESTANTE</td>
+                    {% endif%}
+                    {% if arRequisito.codigoReligionFk == 4 %}
+                        <td class="td-in-well">INDIFERENTE</td>
+                    {% endif%}
+                </tr>
+                <tr>
+                    <td class="titulo">EXPERIENCIA:</td>
+                    {% if arRequisito.codigoExperienciaFk == 1 %}
+                        <td class="td-in-well">1 AÑO</td>
+                    {% endif%}
+                    {% if arRequisito.codigoExperienciaFk == 2 %}
+                        <td class="td-in-well">2 AÑOS</td>
+                    {% endif%}
+                    {% if arRequisito.codigoExperienciaFk == 3 %}
+                        <td class="td-in-well">3-4 AÑOS</td>
+                    {% endif%}
+                    {% if arRequisito.codigoExperienciaFk == 4 %}
+                        <td class="td-in-well">5-10 AÑOS</td>
+                    {% endif%}
+                    {% if arRequisito.codigoExperienciaFk == 5 %}
+                        <td class="td-in-well">GRADUADO</td>
+                    {% endif%}
+                    {% if arRequisito.codigoExperienciaFk == 6 %}
+                        <td class="td-in-well">SIN EXPERIENCIA</td>
+                    {% endif%}
+                    <td class="titulo">DISPONIBILIDAD</td>
+                    {% if arRequisito.codigoDisponibilidadFk == 1 %}
+                        <td class="td-in-well">TIEMPO COMPLETO</td>
+                    {% endif%}    
+                    {% if arRequisito.codigoDisponibilidadFk == 2 %}
+                        <td class="td-in-well">MEDIO TIEMPO</td>
+                    {% endif%}
+                    {% if arRequisito.codigoDisponibilidadFk == 3 %}
+                        <td class="td-in-well">POR HORAS</td>
+                    {% endif%}
+                    {% if arRequisito.codigoDisponibilidadFk == 4 %}
+                        <td class="td-in-well">DESDE CASA</td>
+                    {% endif%}
+                    {% if arRequisito.codigoDisponibilidadFk == 5 %}
+                        <td class="td-in-well">PRACTICAS</td>
+                    {% endif%}
+                    {% if arRequisito.codigoDisponibilidadFk == 0 %}
+                        <td class="td-in-well">NO APLICA</td>
+                    {% endif%}
+                    <td class="titulo">LICENCIA CARRO:</td>
+                    {% if arRequisito.codigoLicenciaCarroFk == 1 %}
+                        <td class="td-in-well">SI</td>
+                    {% endif%}    
+                    {% if arRequisito.codigoLicenciaCarroFk == 2 %}
+                        <td class="td-in-well">NO</td>
+                    {% endif%}
+                    {% if arRequisito.codigoLicenciaCarroFk == 3 %}
+                        <td class="td-in-well">NO APLICA</td>
+                    {% endif%}
+                </tr>
+                <tr>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo">LICENCIA MOTOO:</td>
+                    {% if arRequisito.codigoLicenciaMotoFk == 1 %}
+                        <td class="td-in-well">SI</td>
+                    {% endif%}    
+                    {% if arRequisito.codigoLicenciaMotoFk == 2 %}
+                        <td class="td-in-well">NO</td>
+                    {% endif%}
+                    {% if arRequisito.codigoLicenciaMotoFk == 3 %}
+                        <td class="td-in-well">NO APLICA</td>
+                    {% endif%}
                 </tr>
             </table>
       </div>

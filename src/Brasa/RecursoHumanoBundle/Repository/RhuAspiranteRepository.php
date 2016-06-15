@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityRepository;
 class RhuAspiranteRepository extends EntityRepository {
     
     public function listaDQL($strNombre = "", $strIdentificacion = "", $boolCerrado = "", $boolAprobado = "", $codigoCentroCosto = "") {
-        $dql   = "SELECT a FROM BrasaRecursoHumanoBundle:RhuAspirante a WHERE a.codigoAspirantePk <> 0";
+        $dql   = "SELECT a FROM BrasaRecursoHumanoBundle:RhuAspirante a WHERE a.codigoAspirantePk <> 0 ";
         if($strNombre != "" ) {
             $dql .= " AND a.nombreCorto LIKE '%" . $strNombre . "%'";
         }

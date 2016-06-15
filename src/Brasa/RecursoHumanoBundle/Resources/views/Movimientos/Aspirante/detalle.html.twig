@@ -29,8 +29,8 @@
                 <tr>
                     <td class="titulo">CÓDIGO:</td>
                     <td class="td-in-well">{{ arAspirante.codigoAspirantePk }}</td>
-                    <td class="titulo">REQUISICIÓN:</td>
-                    <td class="td-in-well">{{ arAspirante.seleccionRequisitoRel.nombre | default('') }}</td>
+                    <td class="titulo">FECHA:</td>
+                    <td class="td-in-well">{{ arAspirante.fecha|date("Y/m/d") }}</td>
                     <td class="titulo">DIRECCIÓN:</td>
                     <td class="td-in-well">{{ arAspirante.direccion }}</td>
                 </tr>
@@ -53,32 +53,49 @@
                 <tr>
                     <td class="titulo">ESTADO CIVIL:</td>
                     <td class="td-in-well">{{ arAspirante.estadoCivilRel.nombre }}</td>
-                    <td class="titulo">SEXO:</td>
-                    <td class="td-in-well"{% if arAspirante.codigoSexoFk == "M" %}> MASCULINO {% else %} FEMENINO {% endif%}</td>
+                    <td class="titulo">CIUDAD EXPEDICION:</td>
+                    <td class="td-in-well">{{ arAspirante.ciudadExpedicionRel.nombre }}</td>
                     <td class="titulo">CORREO:</td>
                     <td class="td-in-well">{{ arAspirante.correo }}</td>
                 </tr>
                 <tr>
                     <td class="titulo">FECHA NACIMIENTO:</td>
                     <td class="td-in-well">{{ arAspirante.fechaNacimiento|date("Y/m/d") }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">CIUDAD NACIMIENTO:</td>
+                    <td class="td-in-well">{{ arAspirante.ciudadNacimientoRel.nombre }}</td>
                     <td class="titulo">ESTADO AUTORIZADO:</td>
                     <td class="td-in-well">{% if arAspirante.estadoAutorizado == 1%}SI{% else %}NO{% endif %}</td>
                 </tr>
                 <tr>
                     <td class="titulo">CARGO</td>
                     <td class="td-in-well">{{ arAspirante.cargoRel.nombre }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">SEXO:</td>
+                    <td class="td-in-well">{% if arAspirante.codigoSexoFk == "M" %} MASCULINO {% else %} FEMENINO {% endif%}</td>
                     <td class="titulo">ESTADO APROBADO:</td>
                     <td class="td-in-well">{% if arAspirante.estadoAprobado == 1%}SI{% else %}NO{% endif %}</td>
                 </tr>
                 <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">ESTADO CIVIL</td>
+                    <td class="td-in-well">{{ arAspirante.estadoCivilRel.nombre }}</td>
+                    <td class="titulo">DISPONIBILIDAD</td>
+                    {% if arAspirante.codigoDisponibilidadFk == 1 %}
+                        <td class="td-in-well">TIEMPO COMPLETO</td>
+                    {% endif%}    
+                    {% if arAspirante.codigoDisponibilidadFk == 2 %}
+                        <td class="td-in-well">MEDIO TIEMPO</td>
+                    {% endif%}
+                    {% if arAspirante.codigoDisponibilidadFk == 3 %}
+                        <td class="td-in-well">POR HORAS</td>
+                    {% endif%}
+                    {% if arAspirante.codigoDisponibilidadFk == 4 %}
+                        <td class="td-in-well">DESDE CASA</td>
+                    {% endif%}
+                    {% if arAspirante.codigoDisponibilidadFk == 5 %}
+                        <td class="td-in-well">PRACTICAS</td>
+                    {% endif%}
+                    {% if arAspirante.codigoDisponibilidadFk == 0 %}
+                        <td class="td-in-well">NO APLICA</td>
+                    {% endif%}
                     <td class="titulo">ESTADO CERRADO:</td>
                     <td class="td-in-well">{% if arAspirante.estadoCerrado == 1%}SI{% else %}NO{% endif %}</td>
                 </tr>

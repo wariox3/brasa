@@ -106,6 +106,16 @@ class RhuSeleccionRequisito
     private $codigoTipoVehiculoFk;
     
     /**
+     * @ORM\Column(name="codigo_licencia_carro_fk", type="string", length=30, nullable=true)
+     */
+    private $codigoLicenciaCarroFk;
+    
+    /**
+     * @ORM\Column(name="codigo_licencia_moto_fk", type="string", length=30, nullable=true)
+     */
+    private $codigoLicenciaMotoFk;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="seleccionesRequisitosCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
@@ -141,10 +151,9 @@ class RhuSeleccionRequisito
     protected $seleccionesSeleccionRequisitoRel;
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuAspirante", mappedBy="seleccionRequisitoRel")
+     * @ORM\OneToMany(targetEntity="RhuSeleccionRequisicionAspirante", mappedBy="seleccionRequisitoRel")
      */
-    protected $aspirantesSeleccionRequisitoRel;
-    
+    protected $seleccionesRequisicionesAspirantesSeleccionRequisitoRel;
     
     
     /**
@@ -153,7 +162,7 @@ class RhuSeleccionRequisito
     public function __construct()
     {
         $this->seleccionesSeleccionRequisitoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->aspirantesSeleccionRequisitoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->seleccionesRequisicionesAspirantesSeleccionRequisitoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -503,6 +512,54 @@ class RhuSeleccionRequisito
     }
 
     /**
+     * Set codigoExperienciaFk
+     *
+     * @param string $codigoExperienciaFk
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setCodigoExperienciaFk($codigoExperienciaFk)
+    {
+        $this->codigoExperienciaFk = $codigoExperienciaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoExperienciaFk
+     *
+     * @return string
+     */
+    public function getCodigoExperienciaFk()
+    {
+        return $this->codigoExperienciaFk;
+    }
+
+    /**
+     * Set codigoDisponibilidadFk
+     *
+     * @param string $codigoDisponibilidadFk
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setCodigoDisponibilidadFk($codigoDisponibilidadFk)
+    {
+        $this->codigoDisponibilidadFk = $codigoDisponibilidadFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoDisponibilidadFk
+     *
+     * @return string
+     */
+    public function getCodigoDisponibilidadFk()
+    {
+        return $this->codigoDisponibilidadFk;
+    }
+
+    /**
      * Set codigoTipoVehiculoFk
      *
      * @param string $codigoTipoVehiculoFk
@@ -524,6 +581,54 @@ class RhuSeleccionRequisito
     public function getCodigoTipoVehiculoFk()
     {
         return $this->codigoTipoVehiculoFk;
+    }
+
+    /**
+     * Set codigoLicenciaCarroFk
+     *
+     * @param string $codigoLicenciaCarroFk
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setCodigoLicenciaCarroFk($codigoLicenciaCarroFk)
+    {
+        $this->codigoLicenciaCarroFk = $codigoLicenciaCarroFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoLicenciaCarroFk
+     *
+     * @return string
+     */
+    public function getCodigoLicenciaCarroFk()
+    {
+        return $this->codigoLicenciaCarroFk;
+    }
+
+    /**
+     * Set codigoLicenciaMotoFk
+     *
+     * @param string $codigoLicenciaMotoFk
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setCodigoLicenciaMotoFk($codigoLicenciaMotoFk)
+    {
+        $this->codigoLicenciaMotoFk = $codigoLicenciaMotoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoLicenciaMotoFk
+     *
+     * @return string
+     */
+    public function getCodigoLicenciaMotoFk()
+    {
+        return $this->codigoLicenciaMotoFk;
     }
 
     /**
@@ -681,84 +786,36 @@ class RhuSeleccionRequisito
     }
 
     /**
-     * Add aspirantesSeleccionRequisitoRel
+     * Add seleccionesRequisicionesAspirantesSeleccionRequisitoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesSeleccionRequisitoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisicionAspirante $seleccionesRequisicionesAspirantesSeleccionRequisitoRel
      *
      * @return RhuSeleccionRequisito
      */
-    public function addAspirantesSeleccionRequisitoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesSeleccionRequisitoRel)
+    public function addSeleccionesRequisicionesAspirantesSeleccionRequisitoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisicionAspirante $seleccionesRequisicionesAspirantesSeleccionRequisitoRel)
     {
-        $this->aspirantesSeleccionRequisitoRel[] = $aspirantesSeleccionRequisitoRel;
+        $this->seleccionesRequisicionesAspirantesSeleccionRequisitoRel[] = $seleccionesRequisicionesAspirantesSeleccionRequisitoRel;
 
         return $this;
     }
 
     /**
-     * Remove aspirantesSeleccionRequisitoRel
+     * Remove seleccionesRequisicionesAspirantesSeleccionRequisitoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesSeleccionRequisitoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisicionAspirante $seleccionesRequisicionesAspirantesSeleccionRequisitoRel
      */
-    public function removeAspirantesSeleccionRequisitoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesSeleccionRequisitoRel)
+    public function removeSeleccionesRequisicionesAspirantesSeleccionRequisitoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisicionAspirante $seleccionesRequisicionesAspirantesSeleccionRequisitoRel)
     {
-        $this->aspirantesSeleccionRequisitoRel->removeElement($aspirantesSeleccionRequisitoRel);
+        $this->seleccionesRequisicionesAspirantesSeleccionRequisitoRel->removeElement($seleccionesRequisicionesAspirantesSeleccionRequisitoRel);
     }
 
     /**
-     * Get aspirantesSeleccionRequisitoRel
+     * Get seleccionesRequisicionesAspirantesSeleccionRequisitoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getAspirantesSeleccionRequisitoRel()
+    public function getSeleccionesRequisicionesAspirantesSeleccionRequisitoRel()
     {
-        return $this->aspirantesSeleccionRequisitoRel;
-    }
-
-    /**
-     * Set codigoExperienciaFk
-     *
-     * @param string $codigoExperienciaFk
-     *
-     * @return RhuSeleccionRequisito
-     */
-    public function setCodigoExperienciaFk($codigoExperienciaFk)
-    {
-        $this->codigoExperienciaFk = $codigoExperienciaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoExperienciaFk
-     *
-     * @return string
-     */
-    public function getCodigoExperienciaFk()
-    {
-        return $this->codigoExperienciaFk;
-    }
-
-    /**
-     * Set codigoDisponibilidadFk
-     *
-     * @param string $codigoDisponibilidadFk
-     *
-     * @return RhuSeleccionRequisito
-     */
-    public function setCodigoDisponibilidadFk($codigoDisponibilidadFk)
-    {
-        $this->codigoDisponibilidadFk = $codigoDisponibilidadFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoDisponibilidadFk
-     *
-     * @return string
-     */
-    public function getCodigoDisponibilidadFk()
-    {
-        return $this->codigoDisponibilidadFk;
+        return $this->seleccionesRequisicionesAspirantesSeleccionRequisitoRel;
     }
 }

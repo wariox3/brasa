@@ -57,7 +57,6 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arAspirantes, 'CÓDIGO', 'a.codigoAspirantePk') }}</th>
                 <th>FECHA</th>
-                <th>REQUISICIÓN</th>
                 <th>CENTRO COSTO</th>
                 <th>IDENTIFICACION</th>
                 <th>{{ knp_pagination_sortable(arAspirantes, 'NOMBRE', 'a.nombreCorto') }}</th>
@@ -74,7 +73,6 @@
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arAspirantes.codigoAspirantePk }}">{{ arAspirantes.codigoAspirantePk }} </td>
                 <td>{{ arAspirantes.fecha |date("Y/m/d H:i")  }}</td>
-                <td>{{ arAspirantes.seleccionRequisitoRel.nombre |default('') }}</td>
                 <td>{{ arAspirantes.centroCostoRel.nombre |default('')  }}</td>
                 <td>{{ arAspirantes.numeroIdentificacion  }}</td>
                 <td>{{ arAspirantes.nombreCorto  }}</td>

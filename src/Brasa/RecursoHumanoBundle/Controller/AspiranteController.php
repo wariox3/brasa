@@ -243,30 +243,46 @@ class AspiranteController extends Controller
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
-                    ->setCellValue('B1', 'REQUISICION')
+                    ->setCellValue('B1', 'FECHA')
                     ->setCellValue('C1', 'CENTRO COSTO')
-                    ->setCellValue('D1', 'IDENTIFICACION')
-                    ->setCellValue('E1', 'NOMBRE')
-                    ->setCellValue('F1', 'CARGO')
-                    ->setCellValue('G1', 'TELEFONO')
-                    ->setCellValue('H1', 'CELULAR')
-                    ->setCellValue('I1', 'APROBADO')
-                    ->setCellValue('J1', 'CERRADO');
+                    ->setCellValue('D1', 'CARGO')
+                    ->setCellValue('E1', 'CIUDAD')
+                    ->setCellValue('F1', 'TIPO IDENTIFICACION')
+                    ->setCellValue('G1', 'IDENTIFICACION')
+                    ->setCellValue('H1', 'CIUDAD NACIMIENTO')
+                    ->setCellValue('I1', 'FECHA NACIMIENTO')
+                    ->setCellValue('J1', 'CIUDAD EXPEDICION')
+                    ->setCellValue('K1', 'RH')
+                    ->setCellValue('L1', 'NOMBRE')
+                    ->setCellValue('M1', 'TELEFONO')
+                    ->setCellValue('N1', 'CELULAR')
+                    ->setCellValue('O1', 'DIRECCION')
+                    ->setCellValue('P1', 'BARRIO')
+                    ->setCellValue('Q1', 'ESTADO CIVIL')
+                    ->setCellValue('R1', 'SEXO')
+                    ->setCellValue('S1', 'CORREO')
+                    ->setCellValue('T1', 'DISPONIBILIDAD')
+                    ->setCellValue('U1', 'APROBADO')
+                    ->setCellValue('V1', 'CERRADO');
 
         $i = 2;
         $query = $em->createQuery($session->get('dqlAspiranteLista'));
         $arAspirantes = $query->getResult();
         foreach ($arAspirantes as $arAspirantes) {
-            if ($arAspirantes->getCodigoSeleccionRequisitoFk() == null)
-            {
-                $seleccionRequisito = "";
-            }
-            else
-            {
-                $seleccionRequisito = $arAspirantes->getSeleccionRequisitoRel()->getNombre();
-            }
+            
             if ($arAspirantes->getCodigoCentroCostoFk() == null)
             {
                 $centroCosto = "";
@@ -275,17 +291,74 @@ class AspiranteController extends Controller
             {
                 $centroCosto = $arAspirantes->getCentroCostoRel()->getNombre();
             }
+            $cargo = "";
+            if ($arAspirantes->getCodigoCargoFk() <> null){
+                $cargo = $arAspirantes->getCargoRel()->getNombre();
+            }
+            $ciudad = "";
+            if ($arAspirantes->getCodigoCiudadFk() <> null){
+                $ciudad = $arAspirantes->getCiudadRel()->getNombre();
+            }
+            $ciudadNacimiento = "";
+            if ($arAspirantes->getCodigoCiudadNacimientoFk() <> null){
+                $ciudadNacimiento = $arAspirantes->getCiudadNacimientoRel()->getNombre();
+            }
+            $ciudadExpedicion = "";
+            if ($arAspirantes->getCodigoCiudadNacimientoFk() <> null){
+                $ciudadExpedicion = $arAspirantes->getCiudadExpedicionRel()->getNombre();
+            }
+            $estadoCivil = "";
+            if ($arAspirantes->getCodigoEstadoCivilFk() <> null){
+                $estadoCivil = $arAspirantes->getEstadoCivilRel()->getNombre();
+            }
+            $sexo = "";
+            if ($arAspirantes->getCodigoSexoFk() == "M"){
+                $sexo = "MASCULINO";
+            } else {
+                $sexo = "FEMENINO";
+            }
+            $disponibilidad = "";
+            if ($arAspirantes->getCodigoDisponibilidadFk() == "1"){
+                $disponibilidad = "TIEMPO COMPLETO";
+            }
+            if ($arAspirantes->getCodigoDisponibilidadFk() == "2"){
+                $disponibilidad = "MEDIO TIEMPO";
+            }
+            if ($arAspirantes->getCodigoDisponibilidadFk() == "3"){
+                $disponibilidad = "POR HORAS";
+            }
+            if ($arAspirantes->getCodigoDisponibilidadFk() == "4"){
+                $disponibilidad = "DESDE CASA";
+            }
+            if ($arAspirantes->getCodigoDisponibilidadFk() == "5"){
+                $disponibilidad = "PRACTICAS";
+            }
+            if ($arAspirantes->getCodigoDisponibilidadFk() == "0"){
+                $disponibilidad = "NO APLICA";
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arAspirantes->getCodigoAspirantePk())
-                    ->setCellValue('B' . $i, $seleccionRequisito)
-                    ->setCellValue('C' . $i, $centroCostos)
-                    ->setCellValue('D' . $i, $arAspirantes->getNumeroIdentificacion())
-                    ->setCellValue('E' . $i, $arAspirantes->getNombreCorto())
-                    ->setCellValue('F' . $i, $arAspirantes->getCargoRel()->getNombre())
-                    ->setCellValue('G' . $i, $arAspirantes->getTelefono())
-                    ->setCellValue('H' . $i, $arAspirantes->getCelular())
-                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arAspirantes->getEstadoAprobado()))
-                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arAspirantes->getEstadoCerrado()));
+                    ->setCellValue('B' . $i, $arAspirantes->getFecha()->format('Y-m-d'))
+                    ->setCellValue('C' . $i, $centroCosto)
+                    ->setCellValue('D' . $i, $cargo)
+                    ->setCellValue('E' . $i, $ciudad)
+                    ->setCellValue('F' . $i, $arAspirantes->getTipoIdentificacionRel()->getNombre())
+                    ->setCellValue('G' . $i, $arAspirantes->getNumeroIdentificacion())
+                    ->setCellValue('H' . $i, $ciudadNacimiento)
+                    ->setCellValue('I' . $i, $arAspirantes->getFechaNacimiento()->format('Y-m-d'))
+                    ->setCellValue('J' . $i, $ciudadExpedicion)
+                    ->setCellValue('K' . $i, $arAspirantes->getRhRel()->getTipo())
+                    ->setCellValue('L' . $i, $arAspirantes->getNombreCorto())
+                    ->setCellValue('M' . $i, $arAspirantes->getTelefono())
+                    ->setCellValue('N' . $i, $arAspirantes->getCelular())
+                    ->setCellValue('O' . $i, $arAspirantes->getDireccion())
+                    ->setCellValue('P' . $i, $arAspirantes->getBarrio())
+                    ->setCellValue('Q' . $i, $estadoCivil)
+                    ->setCellValue('R' . $i, $sexo)
+                    ->setCellValue('S' . $i, $arAspirantes->getCorreo())
+                    ->setCellValue('T' . $i, $disponibilidad)
+                    ->setCellValue('U' . $i, $objFunciones->devuelveBoolean($arAspirantes->getEstadoAprobado()))
+                    ->setCellValue('V' . $i, $objFunciones->devuelveBoolean($arAspirantes->getEstadoCerrado()));
             $i++;
         }
 

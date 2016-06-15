@@ -9,14 +9,7 @@ class RhuAspiranteType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('seleccionRequisitoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuSeleccionRequisito',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cc')
-                    ->orderBy('cc.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => false))                
+        $builder                
             ->add('tipoIdentificacionRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenTipoIdentificacion',
                 'query_builder' => function (EntityRepository $er) {
@@ -78,8 +71,10 @@ class RhuAspiranteType extends AbstractType
             ->add('telefono', 'text', array('required' => false))
             ->add('celular', 'text', array('required' => false))
             ->add('direccion', 'text', array('required' => false))
+            ->add('barrio', 'text', array('required' => false))                
             ->add('numeroIdentificacion', 'text', array('required' => true))
             ->add('codigoSexoFk', 'choice', array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO')))
+            ->add('codigoDisponibilidadFk', 'choice', array('choices'   => array('1' => 'TIEMPO COMPLETO', '2' => 'MEDIO TIEMPO', '3' => 'POR HORAS','4' => 'DESDE CASA', '5' => 'PRACTICAS')))                
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

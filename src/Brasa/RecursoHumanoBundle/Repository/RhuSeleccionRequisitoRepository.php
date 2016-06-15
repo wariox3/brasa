@@ -21,7 +21,7 @@ class RhuSeleccionRequisitoRepository extends EntityRepository {
         }     
     }     
     
-    public function listaDQL($strNombre = "", $boolAbierto = 2) {                
+    public function listaDQL($strNombre = "", $boolAbierto = 2, $strCargo = "", $strDesde = "", $strHasta= "") {                
         $dql   = "SELECT sq FROM BrasaRecursoHumanoBundle:RhuSeleccionRequisito sq WHERE sq.codigoSeleccionRequisitoPk <> 0";
         if($strNombre != "" ) {
             $dql .= " AND sq.nombre LIKE '%" . $strNombre . "%'";
@@ -32,6 +32,15 @@ class RhuSeleccionRequisitoRepository extends EntityRepository {
             } elseif($boolAbierto == 0) {
                 $dql .= " AND sq.estadoAbierto = 0";
             }            
+        }
+        if($strCargo != "") {
+            $dql .= " AND sq.codigoCargoFk = " . $strCargo;
+        }
+        if($strDesde != "" || $strDesde != 0){
+            $dql .= " AND sq.fecha >='" . date_format($strDesde, ('Y-m-d')) . "'";
+        }
+        if($strHasta != "" || $strHasta != 0) {
+            $dql .= " AND sq.fecha <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }
          
         $dql .= " ORDER BY sq.codigoSeleccionRequisitoPk";
