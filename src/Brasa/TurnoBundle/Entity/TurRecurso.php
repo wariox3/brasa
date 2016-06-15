@@ -116,6 +116,11 @@ class TurRecurso
     private $comentarios;     
     
     /**
+     * @ORM\Column(name="codigo_interface", type="string", length=30, nullable=true)
+     */
+    private $codigoInterface;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleado", inversedBy="turRecursosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -998,5 +1003,29 @@ class TurRecurso
     public function getNovedadesRecursoReemplazoRel()
     {
         return $this->novedadesRecursoReemplazoRel;
+    }
+
+    /**
+     * Set codigoInterface
+     *
+     * @param string $codigoInterface
+     *
+     * @return TurRecurso
+     */
+    public function setCodigoInterface($codigoInterface)
+    {
+        $this->codigoInterface = $codigoInterface;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoInterface
+     *
+     * @return string
+     */
+    public function getCodigoInterface()
+    {
+        return $this->codigoInterface;
     }
 }
