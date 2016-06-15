@@ -29,11 +29,6 @@ class RhuAspirante
      * @ORM\Column(name="codigo_tipo_identificacion_fk", type="integer")
      */
     private $codigoTipoIdentificacionFk;
-    
-    /**
-     * @ORM\Column(name="codigo_seleccion_requisito_fk", type="integer", nullable=true)
-     */
-    private $codigoSeleccionRequisitoFk;
 
     /**
      * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false, unique=true)
@@ -124,16 +119,6 @@ class RhuAspirante
      * @ORM\Column(name="codigo_ciudad_expedicion_fk", type="integer", nullable=true)
      */
     private $codigoCiudadExpedicionFk;
-    
-    /**
-     * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
-     */
-    private $codigoCentroCostoFk;
-    
-    /**
-     * @ORM\Column(name="codigo_cargo_fk", type="integer", nullable=true)
-     */    
-    private $codigoCargoFk;
 
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -201,25 +186,11 @@ class RhuAspirante
      */
     protected $rhRel;
 
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="RhuCargo", inversedBy="aspirantesCargoRel")
-     * @ORM\JoinColumn(name="codigo_cargo_fk", referencedColumnName="codigo_cargo_pk")
-     */
-    protected $cargoRel;
-
     /**
      * @ORM\ManyToOne(targetEntity="RhuSeleccionRequisito", inversedBy="aspirantesSeleccionRequisitoRel")
      * @ORM\JoinColumn(name="codigo_seleccion_requisito_fk", referencedColumnName="codigo_seleccion_requisito_pk")
      */
     protected $seleccionRequisitoRel;  
-
-    /**
-     * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="aspirantesCentroCostoRel")
-     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
-     */
-    protected $centroCostoRel;
-
     
     /**
      * @ORM\OneToMany(targetEntity="RhuSeleccionRequisicionAspirante", mappedBy="aspiranteRel")
@@ -227,7 +198,7 @@ class RhuAspirante
     protected $seleccionesRequisicionesAspirantesAspiranteRel;
     
 
-    
+   
     /**
      * Constructor
      */
@@ -292,30 +263,6 @@ class RhuAspirante
     public function getCodigoTipoIdentificacionFk()
     {
         return $this->codigoTipoIdentificacionFk;
-    }
-
-    /**
-     * Set codigoSeleccionRequisitoFk
-     *
-     * @param integer $codigoSeleccionRequisitoFk
-     *
-     * @return RhuAspirante
-     */
-    public function setCodigoSeleccionRequisitoFk($codigoSeleccionRequisitoFk)
-    {
-        $this->codigoSeleccionRequisitoFk = $codigoSeleccionRequisitoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoSeleccionRequisitoFk
-     *
-     * @return integer
-     */
-    public function getCodigoSeleccionRequisitoFk()
-    {
-        return $this->codigoSeleccionRequisitoFk;
     }
 
     /**
@@ -751,54 +698,6 @@ class RhuAspirante
     }
 
     /**
-     * Set codigoCentroCostoFk
-     *
-     * @param integer $codigoCentroCostoFk
-     *
-     * @return RhuAspirante
-     */
-    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
-    {
-        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCentroCostoFk
-     *
-     * @return integer
-     */
-    public function getCodigoCentroCostoFk()
-    {
-        return $this->codigoCentroCostoFk;
-    }
-
-    /**
-     * Set codigoCargoFk
-     *
-     * @param integer $codigoCargoFk
-     *
-     * @return RhuAspirante
-     */
-    public function setCodigoCargoFk($codigoCargoFk)
-    {
-        $this->codigoCargoFk = $codigoCargoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCargoFk
-     *
-     * @return integer
-     */
-    public function getCodigoCargoFk()
-    {
-        return $this->codigoCargoFk;
-    }
-
-    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -1087,30 +986,6 @@ class RhuAspirante
     }
 
     /**
-     * Set cargoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCargo $cargoRel
-     *
-     * @return RhuAspirante
-     */
-    public function setCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCargo $cargoRel = null)
-    {
-        $this->cargoRel = $cargoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get cargoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCargo
-     */
-    public function getCargoRel()
-    {
-        return $this->cargoRel;
-    }
-
-    /**
      * Set seleccionRequisitoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionRequisitoRel
@@ -1132,30 +1007,6 @@ class RhuAspirante
     public function getSeleccionRequisitoRel()
     {
         return $this->seleccionRequisitoRel;
-    }
-
-    /**
-     * Set centroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
-     *
-     * @return RhuAspirante
-     */
-    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
-    {
-        $this->centroCostoRel = $centroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
-     */
-    public function getCentroCostoRel()
-    {
-        return $this->centroCostoRel;
     }
 
     /**

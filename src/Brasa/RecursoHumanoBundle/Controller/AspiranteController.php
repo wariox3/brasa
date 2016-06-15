@@ -144,29 +144,14 @@ class AspiranteController extends Controller
                 $session->get('filtroIdentificacionAspirante'),
                 $session->get('filtroAbiertoAspirante'),
                 $session->get('filtroAprobadoAspirante'),
-                $session->get('filtroCodigoCentroCosto')
+                ''
                 ));
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $arrayPropiedades = array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cc')
-                    ->orderBy('cc.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => false,
-                'empty_data' => "",
-                'empty_value' => "TODOS",
-                'data' => ""
-            );
-        if($session->get('filtroCodigoCentroCosto')) {
-            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
-        }
-        $form = $this->createFormBuilder()
-            ->add('centroCostoRel', 'entity', $arrayPropiedades)    
+        $form = $this->createFormBuilder() 
             ->add('estadoAprobado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAprobadoAspirante')))
             ->add('estadoCerrado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAbiertoAspirante')))
             ->add('TxtNombre', 'text', array('label'  => 'Nombre', 'data' => $session->get('filtroNombreAspirante')))
@@ -214,7 +199,6 @@ class AspiranteController extends Controller
         $session->set('filtroIdentificacionAspirante', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroAbiertoAspirante', $form->get('estadoCerrado')->getData());
         $session->set('filtroAprobadoAspirante', $form->get('estadoAprobado')->getData());
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
     }
 
     private function generarExcel() {
@@ -257,44 +241,31 @@ class AspiranteController extends Controller
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'FECHA')
-                    ->setCellValue('C1', 'CENTRO COSTO')
-                    ->setCellValue('D1', 'CARGO')
-                    ->setCellValue('E1', 'CIUDAD')
-                    ->setCellValue('F1', 'TIPO IDENTIFICACION')
-                    ->setCellValue('G1', 'IDENTIFICACION')
-                    ->setCellValue('H1', 'CIUDAD NACIMIENTO')
-                    ->setCellValue('I1', 'FECHA NACIMIENTO')
-                    ->setCellValue('J1', 'CIUDAD EXPEDICION')
-                    ->setCellValue('K1', 'RH')
-                    ->setCellValue('L1', 'NOMBRE')
-                    ->setCellValue('M1', 'TELEFONO')
-                    ->setCellValue('N1', 'CELULAR')
-                    ->setCellValue('O1', 'DIRECCION')
-                    ->setCellValue('P1', 'BARRIO')
-                    ->setCellValue('Q1', 'ESTADO CIVIL')
-                    ->setCellValue('R1', 'SEXO')
-                    ->setCellValue('S1', 'CORREO')
-                    ->setCellValue('T1', 'DISPONIBILIDAD')
-                    ->setCellValue('U1', 'APROBADO')
-                    ->setCellValue('V1', 'CERRADO');
+                    ->setCellValue('C1', 'CIUDAD')
+                    ->setCellValue('D1', 'TIPO IDENTIFICACION')
+                    ->setCellValue('E1', 'IDENTIFICACION')
+                    ->setCellValue('F1', 'CIUDAD NACIMIENTO')
+                    ->setCellValue('G1', 'FECHA NACIMIENTO')
+                    ->setCellValue('H1', 'CIUDAD EXPEDICION')
+                    ->setCellValue('I1', 'RH')
+                    ->setCellValue('J1', 'NOMBRE')
+                    ->setCellValue('K1', 'TELEFONO')
+                    ->setCellValue('L1', 'CELULAR')
+                    ->setCellValue('M1', 'DIRECCION')
+                    ->setCellValue('N1', 'BARRIO')
+                    ->setCellValue('O1', 'ESTADO CIVIL')
+                    ->setCellValue('P1', 'SEXO')
+                    ->setCellValue('Q1', 'CORREO')
+                    ->setCellValue('R1', 'DISPONIBILIDAD')
+                    ->setCellValue('S1', 'APROBADO')
+                    ->setCellValue('T1', 'CERRADO')
+                    ->setCellValue('U1', 'COMENTARIOS');
 
         $i = 2;
         $query = $em->createQuery($session->get('dqlAspiranteLista'));
         $arAspirantes = $query->getResult();
         foreach ($arAspirantes as $arAspirantes) {
             
-            if ($arAspirantes->getCodigoCentroCostoFk() == null)
-            {
-                $centroCosto = "";
-            }
-            else
-            {
-                $centroCosto = $arAspirantes->getCentroCostoRel()->getNombre();
-            }
-            $cargo = "";
-            if ($arAspirantes->getCodigoCargoFk() <> null){
-                $cargo = $arAspirantes->getCargoRel()->getNombre();
-            }
             $ciudad = "";
             if ($arAspirantes->getCodigoCiudadFk() <> null){
                 $ciudad = $arAspirantes->getCiudadRel()->getNombre();
@@ -339,26 +310,25 @@ class AspiranteController extends Controller
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arAspirantes->getCodigoAspirantePk())
                     ->setCellValue('B' . $i, $arAspirantes->getFecha()->format('Y-m-d'))
-                    ->setCellValue('C' . $i, $centroCosto)
-                    ->setCellValue('D' . $i, $cargo)
-                    ->setCellValue('E' . $i, $ciudad)
-                    ->setCellValue('F' . $i, $arAspirantes->getTipoIdentificacionRel()->getNombre())
-                    ->setCellValue('G' . $i, $arAspirantes->getNumeroIdentificacion())
-                    ->setCellValue('H' . $i, $ciudadNacimiento)
-                    ->setCellValue('I' . $i, $arAspirantes->getFechaNacimiento()->format('Y-m-d'))
-                    ->setCellValue('J' . $i, $ciudadExpedicion)
-                    ->setCellValue('K' . $i, $arAspirantes->getRhRel()->getTipo())
-                    ->setCellValue('L' . $i, $arAspirantes->getNombreCorto())
-                    ->setCellValue('M' . $i, $arAspirantes->getTelefono())
-                    ->setCellValue('N' . $i, $arAspirantes->getCelular())
-                    ->setCellValue('O' . $i, $arAspirantes->getDireccion())
-                    ->setCellValue('P' . $i, $arAspirantes->getBarrio())
-                    ->setCellValue('Q' . $i, $estadoCivil)
-                    ->setCellValue('R' . $i, $sexo)
-                    ->setCellValue('S' . $i, $arAspirantes->getCorreo())
-                    ->setCellValue('T' . $i, $disponibilidad)
-                    ->setCellValue('U' . $i, $objFunciones->devuelveBoolean($arAspirantes->getEstadoAprobado()))
-                    ->setCellValue('V' . $i, $objFunciones->devuelveBoolean($arAspirantes->getEstadoCerrado()));
+                    ->setCellValue('C' . $i, $ciudad)
+                    ->setCellValue('D' . $i, $arAspirantes->getTipoIdentificacionRel()->getNombre())
+                    ->setCellValue('E' . $i, $arAspirantes->getNumeroIdentificacion())
+                    ->setCellValue('F' . $i, $ciudadNacimiento)
+                    ->setCellValue('G' . $i, $arAspirantes->getFechaNacimiento()->format('Y-m-d'))
+                    ->setCellValue('H' . $i, $ciudadExpedicion)
+                    ->setCellValue('I' . $i, $arAspirantes->getRhRel()->getTipo())
+                    ->setCellValue('J' . $i, $arAspirantes->getNombreCorto())
+                    ->setCellValue('K' . $i, $arAspirantes->getTelefono())
+                    ->setCellValue('L' . $i, $arAspirantes->getCelular())
+                    ->setCellValue('M' . $i, $arAspirantes->getDireccion())
+                    ->setCellValue('N' . $i, $arAspirantes->getBarrio())
+                    ->setCellValue('O' . $i, $estadoCivil)
+                    ->setCellValue('P' . $i, $sexo)
+                    ->setCellValue('Q' . $i, $arAspirantes->getCorreo())
+                    ->setCellValue('R' . $i, $disponibilidad)
+                    ->setCellValue('S' . $i, $objFunciones->devuelveBoolean($arAspirantes->getEstadoAprobado()))
+                    ->setCellValue('T' . $i, $objFunciones->devuelveBoolean($arAspirantes->getEstadoCerrado()))
+                    ->setCellValue('U' . $i, $arAspirantes->getComentarios());
             $i++;
         }
 

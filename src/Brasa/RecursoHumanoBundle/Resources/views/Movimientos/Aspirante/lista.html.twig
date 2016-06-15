@@ -27,12 +27,6 @@
                     <div class="col-sm-10">
                         {{ form_widget(form.TxtIdentificacion, { 'attr': {'class': 'form-control'} }) }}
                     </div>
-                </div>
-                <div class="form-group form-group-sm">
-                    <label for="form_centroCostoRel" class="col-sm-2 control-label">Centro costo:</label>
-                    <div class="col-sm-10">
-                        {{ form_widget(form.centroCostoRel, { 'attr': {'class': 'form-control'} }) }}
-                    </div>
                 </div>    
                 <div class="form-group form-group-sm">
                     <label for="form_estadoAprobado" class="col-sm-2 control-label">Aprobado</label>
@@ -57,10 +51,8 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arAspirantes, 'CÓDIGO', 'a.codigoAspirantePk') }}</th>
                 <th>FECHA</th>
-                <th>CENTRO COSTO</th>
                 <th>IDENTIFICACION</th>
                 <th>{{ knp_pagination_sortable(arAspirantes, 'NOMBRE', 'a.nombreCorto') }}</th>
-                <th>CARGO</th>
                 <th>TELEFONO</th>
                 <th>CELULAR</th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Aprobado">AP</p></th>
@@ -73,10 +65,8 @@
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arAspirantes.codigoAspirantePk }}">{{ arAspirantes.codigoAspirantePk }} </td>
                 <td>{{ arAspirantes.fecha |date("Y/m/d H:i")  }}</td>
-                <td>{{ arAspirantes.centroCostoRel.nombre |default('')  }}</td>
                 <td>{{ arAspirantes.numeroIdentificacion  }}</td>
                 <td>{{ arAspirantes.nombreCorto  }}</td>
-                <td>{{ arAspirantes.cargoRel.nombre |default('')  }}</td>
                 <td>{{ arAspirantes.telefono }}</td>
                 <td>{{ arAspirantes.celular }}</td>
                 <td>{% if arAspirantes.estadoAprobado == 1 %} SI {% else %} NO {% endif %}</td>

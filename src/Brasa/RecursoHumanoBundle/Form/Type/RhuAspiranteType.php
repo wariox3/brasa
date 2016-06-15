@@ -16,13 +16,6 @@ class RhuAspiranteType extends AbstractType
                     return $er->createQueryBuilder('ti')
                     ->orderBy('ti.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))
-            ->add('centroCostoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cc')
-                    ->orderBy('cc.nombre', 'ASC');},
-                'property' => 'nombre',
                 'required' => true))                
             ->add('estadoCivilRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEstadoCivil',
@@ -51,13 +44,6 @@ class RhuAspiranteType extends AbstractType
             ->add('ciudadNacimientoRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {
-                    return $er->createQueryBuilder('c')
-                    ->orderBy('c.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => true))
-            ->add('cargoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuCargo',
-                'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
