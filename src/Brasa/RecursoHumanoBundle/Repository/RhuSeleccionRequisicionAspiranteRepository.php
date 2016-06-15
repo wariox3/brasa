@@ -19,6 +19,7 @@ class RhuSeleccionRequisicionAspiranteRepository extends EntityRepository {
         }
         $em->flush();       
     }
+    
     public function aprobarDetallesSeleccionados($arrSeleccionados) {
         $em = $this->getEntityManager();
         if(count($arrSeleccionados) > 0) {
@@ -56,7 +57,7 @@ class RhuSeleccionRequisicionAspiranteRepository extends EntityRepository {
                     $arSeleccionTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionTipo();
                     $arSeleccionTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionTipo')->find(3);
                     $arSelecion->setSeleccionTipoRel($arSeleccionTipo);
-                    $arSelecion->setSeleccionRequisitoRel($arAspitante->getSeleccionRequisitoRel());
+                    $arSelecion->setSeleccionRequisitoRel($arRequisicionDetalle->getSeleccionRequisitoRel());
                     $em->persist($arSelecion);
                 }
             }                                            
