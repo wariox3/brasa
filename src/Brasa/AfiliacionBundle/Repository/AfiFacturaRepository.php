@@ -57,15 +57,29 @@ class AfiFacturaRepository extends EntityRepository {
 
     public function anular($codigoFactura) {        
         $em = $this->getEntityManager();        
-        $arFactura = new \Brasa\AfiliacionBundle\Entity\AfiFactura();        
+        $arFactura = new \Brasa\AfiliacionBundle\Entity\AfiFactura();                   
         $arFactura = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->find($codigoFactura);                 
-        /*$arFacturasDetalle = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();        
+        $arFacturasDetalle = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();        
         $arFacturasDetalle = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura));                 
         foreach ($arFacturasDetalle as $arFacturaDetalle) {
-            $floSubTotal +=  $arFacturaDetalle->getPrecio();
-        }
-         * 
-         */                           
+            $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
+            $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($arFacturaDetalle->getCodigoPeriodoFk());
+            $arPeriodo->setEstadoFacturado(0);
+            $em->persist($arPeriodo);
+            $arFacturaDetalleAct = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();
+            $arFacturaDetalleAct = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->find($arFacturaDetalle->getCodigoFacturaDetallePk());
+            $arFacturaDetalleAct->setAdministracion(0);
+            $arFacturaDetalleAct->setCaja(0);
+            $arFacturaDetalleAct->setIcbf(0);
+            $arFacturaDetalleAct->setSena(0);
+            $arFacturaDetalleAct->setRiesgos(0);
+            $arFacturaDetalleAct->setSalud(0);
+            $arFacturaDetalleAct->setPension(0);
+            $arFacturaDetalleAct->setSubtotal(0);
+            $arFacturaDetalleAct->setTotal(0);
+            $arFacturaDetalleAct->setIva(0);
+            $em->persist($arFacturaDetalleAct);
+        }                                           
         
         $arFacturasDetalleCursos = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso();        
         $arFacturasDetalleCursos = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleCurso')->findBy(array('codigoFacturaFk' => $codigoFactura));                 
@@ -80,6 +94,20 @@ class AfiFacturaRepository extends EntityRepository {
         $arFactura->setSubTotal(0);
         $arFactura->setTotal(0);
         $em->persist($arFactura);
+        //Anular cuenta por cobrar        
+        if($arFactura->getCodigoFacturaTipoFk() == 1) {
+            $tipoCuentaCobrar = 3;
+        } else {
+            $tipoCuentaCobrar = 4;
+        }
+        $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
+        $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->findOneBy(array('codigoCuentaCobrarTipoFk' => $tipoCuentaCobrar, 'numeroDocumento' => $arFactura->getNumero()));
+        if($arCuentaCobrar) {
+            $arCuentaCobrar->setSaldo(0);
+            $arCuentaCobrar->setValorOriginal(0);
+            $arCuentaCobrar->setAbono(0);
+            $em->persist($arCuentaCobrar);
+        }
         $em->flush();
         return "";
     }    

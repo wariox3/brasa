@@ -195,7 +195,7 @@ class Factura extends \FPDF_FPDF {
             $pdf->Cell(10, 4, "SEGURIDAD SOCIAL", 0, 0, 'L', 1);
 
             $pdf->Ln(5);          
-            $header = array('CODIGO', 'DESDE', 'HASTA', 'PRECIO');
+            $header = array('CODIGO', 'DESDE', 'HASTA', 'SUBTOTAL', 'IVA', 'TOTAL');
             $pdf->SetFillColor(236, 236, 236);
             $pdf->SetTextColor(0);
             $pdf->SetDrawColor(0, 0, 0);
@@ -203,7 +203,7 @@ class Factura extends \FPDF_FPDF {
             $pdf->SetFont('', 'B', 7);
 
             //creamos la cabecera de la tabla.
-            $w = array(15, 20, 20, 15, 30);
+            $w = array(15, 20, 20, 20, 20, 20);
             for ($i = 0; $i < count($header); $i++)
                 if ($i == 0)
                     $pdf->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -223,7 +223,9 @@ class Factura extends \FPDF_FPDF {
                 $pdf->Cell(15, 4, $arFacturaDetalle->getCodigoFacturaDetallePk(), 1, 0, 'L');
                 $pdf->Cell(20, 4, $arFacturaDetalle->getFechaDesde()->format('Y/m/d'), 1, 0, 'L');
                 $pdf->Cell(20, 4, $arFacturaDetalle->getFechaHasta()->format('Y/m/d'), 1, 0, 'L');
-                $pdf->Cell(15, 4, number_format($arFacturaDetalle->getPrecio(), 0, '.', ','), 1, 0, 'R');
+                $pdf->Cell(20, 4, number_format($arFacturaDetalle->getSubtotal(), 0, '.', ','), 1, 0, 'R');
+                $pdf->Cell(20, 4, number_format($arFacturaDetalle->getIva(), 0, '.', ','), 1, 0, 'R');
+                $pdf->Cell(20, 4, number_format($arFacturaDetalle->getTotal(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Ln();
                 $pdf->SetAutoPageBreak(true, 15);
             }            
