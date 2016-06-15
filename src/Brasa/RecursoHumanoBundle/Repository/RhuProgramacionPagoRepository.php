@@ -341,6 +341,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         //El ingreso base cotizacion del salacion integral es el 70% del salario                        
                         if($arProgramacionPagoDetalle->getSalarioIntegral() == 1) {
                             $douPagoDetalleCotizacion = ($douPagoDetalle * 70 / 100);    
+                        } else {
+                            $douPagoDetalleCotizacion = $douPagoDetalle;
                         }                        
                         $douIngresoBasePrestacional += $douPagoDetalle;
                         $douIngresoBaseCotizacion += $douPagoDetalleCotizacion;                        
