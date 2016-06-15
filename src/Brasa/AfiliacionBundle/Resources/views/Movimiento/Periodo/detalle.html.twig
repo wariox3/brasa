@@ -18,20 +18,26 @@
                     <tr>
                         <td class="titulo">NUMERO:</td>
                         <td class="td-in-well">{{ arPeriodo.codigoPeriodoPk }}</td>                        
-                        <td class="titulo"></td>
-                        <td align="right"></td>
+                        <td class="titulo">ADMINSITRACION:</td>
+                        <td align="right">{{ arPeriodo.administracion | number_format(0, '.', ',')}}</td>
                     </tr>                        
                     <tr>
                         <td class="titulo">DESDE:</td>
                         <td class="td-in-well">{{ arPeriodo.fechaDesde | date('Y/m/d') }}</td>
-                        <td class="titulo" ></td>
-                        <td align="right"></td>
+                        <td class="titulo">SUBTOTAL:</td>
+                        <td align="right">{{ arPeriodo.subtotal | number_format(0, '.', ',')}}</td>
                     </tr>                    
                     <tr>
                         <td class="titulo">HASTA:</td>
                         <td class="td-in-well">{{ arPeriodo.fechaHasta | date('Y/m/d') }}</td>
-                        <td class="titulo" ></td>
-                        <td align="right"></td>
+                        <td class="titulo">IVA:</td>
+                        <td align="right">{{ arPeriodo.iva | number_format(0, '.', ',')}}</td>
+                    </tr>                    
+                    <tr>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo">TOTAL:</td>
+                        <td align="right">{{ arPeriodo.total | number_format(0, '.', ',')}}</td>
                     </tr>                    
                 </table>
             </div>
@@ -58,7 +64,9 @@
                             <th>RIESGOS</th>
                             <th>SENA</th>
                             <th>ICBF</th>
-                            <th>ADMINISTRACION</th>
+                            <th>ADMIN</th>
+                            <th>SUBTOTAL</th>                            
+                            <th>IVA</th>
                             <th>TOTAL</th>
                             <th></th>
                         </tr>
@@ -78,6 +86,8 @@
                             <td style="text-align: right">{{ arPeriodoDetalles.sena | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPeriodoDetalles.icbf | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPeriodoDetalles.administracion | number_format(0, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPeriodoDetalles.subtotal | number_format(0, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPeriodoDetalles.iva | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPeriodoDetalles.total | number_format(0, '.', ',') }}</td>
                             <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPeriodoDetalles.codigoPeriodoDetallePk }}" /></td>
                         </tr>

@@ -6,15 +6,19 @@ use Doctrine\ORM\EntityRepository;
 
 class AfiEmpleadoRepository extends EntityRepository {    
     
-    public function listaDql($strNombre = "", $strCodigo = "") {
+    public function listaDql($strNombre = "", $codigoCliente = "", $identificacion = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT e FROM BrasaAfiliacionBundle:AfiEmpleado e WHERE e.codigoEmpleadoPk <> 0";
         if($strNombre != "" ) {
             $dql .= " AND e.nombreCorto LIKE '%" . $strNombre . "%'";
         }
-        if($strCodigo != "" ) {
-            $dql .= " AND e.codigoClienteFk = " . $strCodigo;
+        if($identificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion LIKE '%" . $identificacion . "%'";
+        }        
+        if($codigoCliente != "" ) {
+            $dql .= " AND e.codigoClienteFk = " . $codigoCliente;
         }
+        
         $dql .= " ORDER BY e.nombreCorto";
         return $dql;
     }            

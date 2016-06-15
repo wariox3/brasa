@@ -91,6 +91,16 @@ class AfiPeriodoDetalle
      * @ORM\Column(name="administracion", type="float")
      */
     private $administracion = 0;     
+
+    /**
+     * @ORM\Column(name="subtotal", type="float")
+     */
+    private $subtotal = 0;    
+    
+    /**
+     * @ORM\Column(name="iva", type="float")
+     */
+    private $iva = 0;
     
     /**
      * @ORM\Column(name="total", type="float")
@@ -608,5 +618,53 @@ class AfiPeriodoDetalle
     public function getAdministracion()
     {
         return $this->administracion;
+    }
+
+    /**
+     * Set iva
+     *
+     * @param float $iva
+     *
+     * @return AfiPeriodoDetalle
+     */
+    public function setIva($iva)
+    {
+        $this->iva = $iva;
+
+        return $this;
+    }
+
+    /**
+     * Get iva
+     *
+     * @return float
+     */
+    public function getIva()
+    {
+        return $this->iva;
+    }
+
+    /**
+     * Set subtotal
+     *
+     * @param float $subtotal
+     *
+     * @return AfiPeriodoDetalle
+     */
+    public function setSubtotal($subtotal)
+    {
+        $this->subtotal = $subtotal;
+
+        return $this;
+    }
+
+    /**
+     * Get subtotal
+     *
+     * @return float
+     */
+    public function getSubtotal()
+    {
+        return $this->subtotal;
     }
 }

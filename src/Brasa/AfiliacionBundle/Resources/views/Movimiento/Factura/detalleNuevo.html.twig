@@ -17,6 +17,8 @@
                 <th>SENA</th>
                 <th>ICBF</th>
                 <th>ADMIN</th>
+                <th>SUBTOTAL</th>
+                <th>IVA</th>
                 <th>TOTAL</th>
                 <th></th>
             </tr>
@@ -32,6 +34,8 @@
                 <td style="text-align: right">{{ arPeriodos.sena | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPeriodos.icbf | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPeriodos.administracion | number_format(0, '.', ',') }}</td>                                
+                <td style="text-align: right">{{ arPeriodos.subtotal | number_format(0, '.', ',') }}</td>                                
+                <td style="text-align: right">{{ arPeriodos.iva | number_format(0, '.', ',') }}</td>                                
                 <td style="text-align: right">{{ arPeriodos.total | number_format(0, '.', ',') }}</td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPeriodos.codigoPeriodoPk }}" /></td>
             </tr>

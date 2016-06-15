@@ -6,9 +6,18 @@ use Doctrine\ORM\EntityRepository;
 
 class AfiPeriodoRepository extends EntityRepository {  
     
-    public function ListaDql() {
+    public function listaDql($codigoCliente = "", $boolEstadoCerrado = "") {
         $em = $this->getEntityManager();
-        $dql   = "SELECT p FROM BrasaAfiliacionBundle:AfiPeriodo p WHERE p.codigoPeriodoPk <> 0";
+        $dql   = "SELECT p FROM BrasaAfiliacionBundle:AfiPeriodo p WHERE p.codigoPeriodoPk <> 0";        
+        if($codigoCliente != "" ) {
+            $dql .= " AND p.codigoClienteFk = " . $codigoCliente;
+        }        
+        if($boolEstadoCerrado == 1 ) {
+            $dql .= " AND p.estadoCerrado = 1";
+        }
+        if($boolEstadoCerrado == "0") {
+            $dql .= " AND p.estadoCerrado = 0";
+        }        
         $dql .= " ORDER BY p.codigoPeriodoPk";
         return $dql;
     }            
@@ -37,7 +46,9 @@ class AfiPeriodoRepository extends EntityRepository {
         $totalRiesgos = 0;
         $totalSena = 0;
         $totalIcbf = 0;  
-        $totalAdministracion = 0;
+        $totalAdministracion = 0;        
+        $subtotalGeneral = 0;
+        $ivaGeneral = 0;
         $totalGeneral = 0;
         $arContratos = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->contratosPeriodo($arPeriodo->getFechaDesde()->format('Y/m/d'), $arPeriodo->getFechaHasta()->format('Y/m/d'), $arPeriodo->getCodigoClienteFk());      
         foreach($arContratos as $arContrato) {
@@ -71,7 +82,9 @@ class AfiPeriodoRepository extends EntityRepository {
                 $icbf = ($salarioPeriodo * $porcentajeIcbf)/100;
                 $sena = ($salarioPeriodo * $porcentajeSena)/100;
             }
-            $total = $pension + $salud + $caja + $riesgos + $sena + $icbf + $administracion;
+            $subtotal = $pension + $salud + $caja + $riesgos + $sena + $icbf + $administracion;
+            $iva = $administracion*16/100;
+            $total = $subtotal + $iva;
             $arPeriodoDetalle = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle();
             $arPeriodoDetalle->setPeriodoRel($arPeriodo);
             $arPeriodoDetalle->setContratoRel($arContrato);
@@ -85,10 +98,13 @@ class AfiPeriodoRepository extends EntityRepository {
             $arPeriodoDetalle->setCaja($caja);
             $arPeriodoDetalle->setRiesgos($riesgos);
             $arPeriodoDetalle->setAdministracion($administracion);
+            $arPeriodoDetalle->setSubtotal($subtotal);
+            $arPeriodoDetalle->setIva($iva);
             $arPeriodoDetalle->setTotal($total);
             if($arContrato->getFechaDesde() >= $arPeriodo->getFechaDesde()) {
                 $arPeriodoDetalle->setIngreso(1);
             }
+            
             $em->persist($arPeriodoDetalle); 
             $totalPension += $pension;
             $totalSalud += $salud;
@@ -97,6 +113,8 @@ class AfiPeriodoRepository extends EntityRepository {
             $totalSena += $sena;
             $totalIcbf += $icbf;             
             $totalAdministracion += $administracion;
+            $subtotalGeneral += $subtotal;
+            $ivaGeneral += $iva;
             $totalGeneral += $total;
         }
             
@@ -108,6 +126,8 @@ class AfiPeriodoRepository extends EntityRepository {
         $arPeriodo->setSena($totalSena);
         $arPeriodo->setIcbf($totalIcbf);
         $arPeriodo->setAdministracion($totalAdministracion);
+        $arPeriodo->setSubtotal($subtotalGeneral);
+        $arPeriodo->setIva($ivaGeneral);
         $arPeriodo->setTotal($totalGeneral);
         $em->persist($arPeriodo);
         $em->flush();        

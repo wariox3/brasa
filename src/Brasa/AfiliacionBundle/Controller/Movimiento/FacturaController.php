@@ -206,6 +206,8 @@ class FacturaController extends Controller
                     $arFacturaDetalle->setFechaDesde($arPeriodo->getFechaDesde());
                     $arFacturaDetalle->setFechaHasta($arPeriodo->getFechaHasta());
                     $arFacturaDetalle->setPrecio($arPeriodo->getTotal());
+                    $arFacturaDetalle->setSubtotal($arPeriodo->getSubtotal());
+                    $arFacturaDetalle->setIva($arPeriodo->getIva());
                     $arFacturaDetalle->setTotal($arPeriodo->getTotal());
                     $arFacturaDetalle->setPension($arPeriodo->getPension());
                     $arFacturaDetalle->setSalud($arPeriodo->getSalud());

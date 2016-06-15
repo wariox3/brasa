@@ -103,15 +103,15 @@ class PeriodoCobro extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(12);
-        $header = array(utf8_decode('IDENTIF.'), 'NOMBRE', 'PENSION', 'SALUD', 'RIESGOS', 'CAJA', 'SENA', 'ICBF', 'ADMIN', 'TOTAL');
+        $header = array(utf8_decode('IDENTIF.'), 'NOMBRE', 'PENSION', 'SALUD', 'RIESGOS', 'CAJA', 'SENA', 'ICBF', 'ADMIN', 'SUBTOTAL', 'IVA', 'TOTAL');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
         $this->SetLineWidth(.2);
-        $this->SetFont('', 'B', 7);
+        $this->SetFont('', 'B', 6);
 
         //creamos la cabecera de la tabla.
-        $w = array(20, 60, 13, 13, 13, 13, 13, 13, 13, 19);
+        $w = array(20, 44, 13, 13, 13, 13, 8, 8, 13, 13, 13, 19);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -134,14 +134,16 @@ class PeriodoCobro extends \FPDF_FPDF {
         $var = 0;
         foreach ($arPeriodoDetalles as $arPeriodoDetalle) {                        
             $pdf->Cell(20, 4, $arPeriodoDetalle->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
-            $pdf->Cell(60, 4, utf8_decode($arPeriodoDetalle->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');                            
+            $pdf->Cell(44, 4, utf8_decode($arPeriodoDetalle->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');                            
             $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getPension(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getSalud(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getRiesgos(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getCaja(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getSena(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getIcbf(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(8, 4, number_format($arPeriodoDetalle->getSena(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(8, 4, number_format($arPeriodoDetalle->getIcbf(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getAdministracion(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getSubtotal(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getIva(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(19, 4, number_format($arPeriodoDetalle->getTotal(), 0, '.', ','), 1, 0, 'R');
             $var += $arPeriodoDetalle->getTotal();
             $pdf->Ln();

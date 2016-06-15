@@ -257,7 +257,7 @@ class Factura extends \FPDF_FPDF {
         }
 
         $totales2 = array(number_format($arFactura->getSubtotal(), 0, '.', ','),
-            number_format(0, 0, '.', ','),            
+            number_format($arFactura->getIva(), 0, '.', ','),            
             number_format(0, 0, '.', ','),
             number_format(0, 0, '.', ','),
             number_format($arFactura->getTotal(), 0, '.', ',')

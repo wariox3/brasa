@@ -25,13 +25,6 @@ class PeriodoController extends Controller
                 $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->generar($codigoPeriodo);
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
             }
-            
-            if($request->request->get('OpGenerarPago')) {            
-                $codigoPeriodo = $request->request->get('OpGenerarPago');
-                $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->generarPago($codigoPeriodo);
-                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
-            }            
-            
             if($request->request->get('OpDeshacer')) {            
                 $codigoPeriodo = $request->request->get('OpDeshacer');
                 $strSql = "DELETE FROM afi_periodo_detalle WHERE codigo_periodo_fk = " . $codigoPeriodo;           
@@ -39,10 +32,27 @@ class PeriodoController extends Controller
                 $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
                 $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);                
                 $arPeriodo->setEstadoGenerado(0);
+                $arPeriodo->setSubtotal(0);
+                $arPeriodo->setTotal(0);
+                $arPeriodo->setIva(0);
+                $arPeriodo->setAdministracion(0);
+                $arPeriodo->setSalud(0);
+                $arPeriodo->setPension(0);
+                $arPeriodo->setRiesgos(0);
+                $arPeriodo->setCaja(0);
+                $arPeriodo->setIcbf(0);
+                $arPeriodo->setSena(0);
                 $em->persist($arPeriodo);
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
+            }
+            
+            if($request->request->get('OpGenerarPago')) {            
+                $codigoPeriodo = $request->request->get('OpGenerarPago');
+                $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->generarPago($codigoPeriodo);
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
             }            
+                        
             if($request->request->get('OpDeshacerPago')) {            
                 $codigoPeriodo = $request->request->get('OpDeshacerPago');
                 $strSql = "DELETE FROM afi_periodo_detalle_pago WHERE codigo_periodo_fk = " . $codigoPeriodo;           
@@ -54,6 +64,18 @@ class PeriodoController extends Controller
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
             }            
+
+            if($request->request->get('OpCerrar')) {            
+                $codigoPeriodo = $request->request->get('OpCerrar');
+                $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
+                $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
+                if($arPeriodo->getEstadoCerrado() == 0) {
+                    $arPeriodo->setEstadoCerrado(1);
+                    $em->persist($arPeriodo);
+                    $em->flush();
+                }
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
+            }
             
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -62,6 +84,8 @@ class PeriodoController extends Controller
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
+                $form = $this->formularioFiltro();
+                $this->lista();
             }
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
@@ -309,7 +333,8 @@ class PeriodoController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->listaDQL(
-                $session->get('filtroPeriodoNombre')   
+                $session->get('filtroCodigoCliente'),
+                $session->get('filtroPeriodoEstadoCerrado')
                 ); 
     }
     
@@ -329,14 +354,31 @@ class PeriodoController extends Controller
     
     private function filtrar ($form) {        
         $session = $this->getRequest()->getSession();        
-        $session->set('filtroPeriodoNombre', $form->get('TxtNombre')->getData());
+        $session->set('filtroNit', $form->get('TxtNit')->getData()); 
+        $session->set('filtroPeriodoEstadoCerrado', $form->get('estadoCerrado')->getData());                  
         $this->lista();
     }
     
     private function formularioFiltro() {
+        $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
+        $strNombreCliente = "";
+        if($session->get('filtroNit')) {
+            $arCliente = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
+            if($arCliente) {
+                $session->set('filtroCodigoCliente', $arCliente->getCodigoClientePk());
+                $strNombreCliente = $arCliente->getNombreCorto();
+            }  else {
+                $session->set('filtroCodigoCliente', null);
+                $session->set('filtroNit', null);
+            }          
+        } else {
+            $session->set('filtroCodigoCliente', null);
+        } 
         $form = $this->createFormBuilder()            
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroPeriodoNombre')))
+            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                                                            
+            ->add('estadoCerrado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'CERRADO', '0' => 'SIN CERRAR'), 'data' => $session->get('filtroPeriodoEstadoCerrado')))                                                
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))

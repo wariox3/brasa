@@ -86,6 +86,8 @@
                             <th>SENA</th>
                             <th>ICBF</th>
                             <th>ADMIN</th>
+                            <th>SUBTOTAL</th>
+                            <th>IVA</th>
                             <th>TOTAL</th>
                             <th></th>
                         </tr>
@@ -101,6 +103,8 @@
                                 <td style="text-align: right">{{ arFacturaDetalles.sena | number_format(0, '.', ',') }}</td>
                                 <td style="text-align: right">{{ arFacturaDetalles.icbf | number_format(0, '.', ',') }}</td>                                
                                 <td style="text-align: right">{{ arFacturaDetalles.administracion | number_format(0, '.', ',') }}</td>                                
+                                <td style="text-align: right">{{ arFacturaDetalles.subtotal | number_format(0, '.', ',') }}</td>                                
+                                <td style="text-align: right">{{ arFacturaDetalles.iva | number_format(0, '.', ',') }}</td>                                
                                 <td style="text-align: right">{{ arFacturaDetalles.total | number_format(0, '.', ',') }}</td>                                
                                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturaDetalles.codigoFacturaDetallePk }}" /></td>
                             </tr>

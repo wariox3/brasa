@@ -14,14 +14,36 @@
         <div class="panel panel-default">
             <div class="panel-heading">Filtros de busqueda</div>
             <div class="panel-body">
-
-                <div class="form-group form-group-sm">
-                    <label for="form_TxtNombre" class="col-sm-3 control-label">Nombre:</label>
-                    <div class="col-sm-9">
-                        {{ form_widget(form.TxtNombre , { 'attr': {'class': 'form-control'} }) }}
+                <div     class="form-group form-group-sm">
+                    <label for="txtNit" class="col-sm-2 control-label">Cliente:</label>
+                    <div class="col-sm-10">
+                        <div class="row">
+                          <div class="col-lg-2">
+                            <div class="input-group">
+                              {{ form_widget(form.TxtNit, { 'attr': {'class': 'form-control'} }) }}                              
+                            </div>
+                          </div>
+                          <div class="col-lg-10">
+                            <div class="input-group">     
+                              {{ form_widget(form.TxtNombreCliente, { 'attr': {'class': 'form-control', 'readOnly': 'ReadOnly'} }) }}                              
+                              <span class="input-group-btn">                                        
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_afi_buscar_cliente', { 'campoCodigo': 'form_TxtNit', 'campoNombre': 'form_TxtNombreCliente' }) }}', 'buscarCliente', 600, 900)">Buscar</a>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
                     </div>
+                </div> 
+                <div class="form-group form-group-sm">  
+                    <label for="form_TxtNumero" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-4"> 
+                        
+                    </div>
+                    <label class="col-sm-2 control-label">Cerrado:</label>
+                    <div class="col-sm-4">                  
+                        {{ form_widget(form.estadoCerrado, { 'attr': {'class': 'form-control'} }) }}
+                    </div>                    
                 </div>
-
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
@@ -36,9 +58,10 @@
                 <th>CLIENTE</th>
                 <th>DESDE</th>
                 <th>HASTA</th>
-                <th></th>
-                <th></th>
-                <th></th>                
+                <th>TOTAL</th>
+                <th>COBRO</th>
+                <th>PAGO</th>
+                <th>CERRAR</th>                
                 <th></th>
                 <th></th>
                 <th></th>
@@ -50,21 +73,22 @@
                 <td>{{ arPeriodos.clienteRel.nombreCorto  }}</td>
                 <td>{{ arPeriodos.fechaDesde |date('Y/m/d') }}</td>
                 <td>{{ arPeriodos.fechaHasta |date('Y/m/d') }}</td>
+                <td style="text-align: right">{{ arPeriodos.total | number_format(0, '.', ',') }}</td>                
                 {% if arPeriodos.estadoGenerado == 0 %}
-                    <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arPeriodos.codigoPeriodoPk }}">Generar cobro</button></td>                    
+                    <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arPeriodos.codigoPeriodoPk }}">Generar</button></td>                    
                 {% else %}
                     {% if arPeriodos.estadoCerrado == 0 %}
-                        <td><button class="btn btn-default btn-xs" type="submit" name="OpDeshacer" value="{{ arPeriodos.codigoPeriodoPk }}">Deshacer cobro</button></td>                                                
+                        <td><button class="btn btn-default btn-xs" type="submit" name="OpDeshacer" value="{{ arPeriodos.codigoPeriodoPk }}">Deshacer</button></td>                                                
                     {% else %}                        
                         <td></td>                        
                     {% endif %}                                                                                            
                 {% endif %}   
                 
                 {% if arPeriodos.estadoPagoGenerado == 0 %}
-                    <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerarPago" value="{{ arPeriodos.codigoPeriodoPk }}">Generar pago</button></td>
+                    <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerarPago" value="{{ arPeriodos.codigoPeriodoPk }}">Generar</button></td>
                 {% else %}
                     {% if arPeriodos.estadoCerrado == 0 %}
-                        <td><button class="btn btn-default btn-xs" type="submit" name="OpDeshacerPago" value="{{ arPeriodos.codigoPeriodoPk }}">Deshacer pago</button></td>
+                        <td><button class="btn btn-default btn-xs" type="submit" name="OpDeshacerPago" value="{{ arPeriodos.codigoPeriodoPk }}">Deshacer</button></td>
                     {% else %}                        
                         <td></td>                        
                     {% endif %}                        

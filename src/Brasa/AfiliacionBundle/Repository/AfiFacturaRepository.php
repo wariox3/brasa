@@ -27,24 +27,29 @@ class AfiFacturaRepository extends EntityRepository {
     public function liquidar($codigoFactura) {        
         $em = $this->getEntityManager();        
         $arFactura = new \Brasa\AfiliacionBundle\Entity\AfiFactura();        
-        $arFactura = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->find($codigoFactura);                 
-        $floSubTotal = 0;
+        $arFactura = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->find($codigoFactura);                                 
+        $subtotal = 0;        
+        $iva = 0;        
+        $total = 0;
         $floCurso = 0;        
         $arFacturasDetalle = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();        
         $arFacturasDetalle = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura));                 
         foreach ($arFacturasDetalle as $arFacturaDetalle) {
-            $floSubTotal +=  $arFacturaDetalle->getPrecio();
+            $subtotal +=  $arFacturaDetalle->getSubtotal();
+            $iva += $arFacturaDetalle->getIva();
+            $total +=  $arFacturaDetalle->getTotal();
         }                           
         
         $arFacturasDetalleCursos = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso();        
         $arFacturasDetalleCursos = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleCurso')->findBy(array('codigoFacturaFk' => $codigoFactura));                 
         foreach ($arFacturasDetalleCursos as $arFacturasDetalleCurso) {
-            $floSubTotal +=  $arFacturasDetalleCurso->getPrecio();
+            $total +=  $arFacturasDetalleCurso->getPrecio();
             $floCurso +=  $arFacturasDetalleCurso->getPrecio();
         }        
         $arFactura->setCurso($floCurso);
-        $arFactura->setSubTotal($floSubTotal);
-        $arFactura->setTotal($floSubTotal);
+        $arFactura->setSubTotal($subtotal);
+        $arFactura->setIva($iva);
+        $arFactura->setTotal($total);
         $em->persist($arFactura);
         $em->flush();
         return true;
