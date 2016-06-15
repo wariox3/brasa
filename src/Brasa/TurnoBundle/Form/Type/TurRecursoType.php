@@ -31,7 +31,7 @@ class TurRecursoType extends AbstractType
             ->add('telefono', 'text', array('required' => false))
             ->add('celular', 'text', array('required' => false))
             ->add('direccion', 'text', array('required' => false))
-            ->add('correo', 'text', array('required' => true))
+            ->add('correo', 'text', array('required' => false))
             ->add('fechaNacimiento','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('BtnActualizar', 'submit', array('label'  => 'Actualizar datos desde empleado RH'))
