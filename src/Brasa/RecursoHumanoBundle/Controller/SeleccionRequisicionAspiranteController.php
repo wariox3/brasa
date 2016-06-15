@@ -25,6 +25,7 @@ class SeleccionRequisicionAspiranteController extends Controller
                 $this->filtrar($form, $request);
                 $this->listar();
             }
+            
         }                      
         $arRequisitos = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);                
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/SeleccionRequisitoAspirante:lista.html.twig', array('arRequisitos' => $arRequisitos, 'form' => $form->createView()));     
@@ -40,7 +41,10 @@ class SeleccionRequisicionAspiranteController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            
+            if($form->get('BtnImprimir')->isClicked()) {                
+                $objSeleccionRequisitoAspirante = new \Brasa\RecursoHumanoBundle\Formatos\FormatoSeleccionRequisitoAspirante();
+                $objSeleccionRequisitoAspirante->Generar($this, $codigoSeleccionRequisito);
+            }
             if($form->get('BtnEliminarDetalle')->isClicked()) {
                 if($arRequisicion->getEstadoAbierto() == 0) {
                     $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisicionAspirante')->eliminarDetallesSeleccionados($arrSeleccionados);

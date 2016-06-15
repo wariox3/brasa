@@ -52,8 +52,8 @@
                 <tr>
                     <td class="titulo">NIVEL ESTUDIO:</td>
                     <td class="td-in-well">{{ arRequisito.estudioTipoRel().nombre|default('') }}</td>
-                    <td class="titulo">EDAD MIN-MAX:</td>
-                    <td class="td-in-well">{{ arRequisito.edadMinima }} - {{ arRequisito.edadMaxima }}</td>
+                    <td class="titulo">EDAD MINIMA:</td>
+                    <td class="td-in-well">{{ arRequisito.edadMinima }}</td>
                     <td class="titulo">NRO HIJOS:</td>
                     <td class="td-in-well">{{ arRequisito.numeroHijos }}</td>
                 </tr>
@@ -71,16 +71,8 @@
                     {% if arRequisito.codigoSexoFk == "I" %}
                         <td class="td-in-well">INDIFERENTE</td>
                     {% endif%}
-                    <td class="titulo">TIPO VEHICULO</td>
-                    {% if arRequisito.codigoTipoVehiculoFk == 1 %}
-                        <td class="td-in-well">CARRO</td>
-                    {% endif%}    
-                    {% if arRequisito.codigoTipoVehiculoFk == 2 %}
-                        <td class="td-in-well">MOTO</td>
-                    {% endif%}
-                    {% if arRequisito.codigoTipoVehiculoFk == 0 %}
-                        <td class="td-in-well">NO APLICA</td>
-                    {% endif%}
+                    <td class="titulo">EDAD MAXIMA:</td>
+                    <td class="td-in-well">{{ arRequisito.edadMaxima }}</td>
                     <td class="titulo">RELIGION:</td>
                     {% if arRequisito.codigoReligionFk == "" %}
                         <td class="td-in-well"></td>
@@ -121,6 +113,30 @@
                     {% if arRequisito.codigoExperienciaFk == 6 %}
                         <td class="td-in-well">SIN EXPERIENCIA</td>
                     {% endif%}
+                    <td class="titulo">TIPO VEHICULO</td>
+                    {% if arRequisito.codigoTipoVehiculoFk == 1 %}
+                        <td class="td-in-well">CARRO</td>
+                    {% endif%}    
+                    {% if arRequisito.codigoTipoVehiculoFk == 2 %}
+                        <td class="td-in-well">MOTO</td>
+                    {% endif%}
+                    {% if arRequisito.codigoTipoVehiculoFk == 0 %}
+                        <td class="td-in-well">NO APLICA</td>
+                    {% endif%}
+                    <td class="titulo">LICENCIA CARRO:</td>
+                    {% if arRequisito.codigoLicenciaCarroFk == 1 %}
+                        <td class="td-in-well">SI</td>
+                    {% endif%}    
+                    {% if arRequisito.codigoLicenciaCarroFk == 2 %}
+                        <td class="td-in-well">NO</td>
+                    {% endif%}
+                    {% if arRequisito.codigoLicenciaCarroFk == 3 %}
+                        <td class="td-in-well">NO APLICA</td>
+                    {% endif%}
+                </tr>
+                <tr>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
                     <td class="titulo">DISPONIBILIDAD</td>
                     {% if arRequisito.codigoDisponibilidadFk == 1 %}
                         <td class="td-in-well">TIEMPO COMPLETO</td>
@@ -140,22 +156,6 @@
                     {% if arRequisito.codigoDisponibilidadFk == 0 %}
                         <td class="td-in-well">NO APLICA</td>
                     {% endif%}
-                    <td class="titulo">LICENCIA CARRO:</td>
-                    {% if arRequisito.codigoLicenciaCarroFk == 1 %}
-                        <td class="td-in-well">SI</td>
-                    {% endif%}    
-                    {% if arRequisito.codigoLicenciaCarroFk == 2 %}
-                        <td class="td-in-well">NO</td>
-                    {% endif%}
-                    {% if arRequisito.codigoLicenciaCarroFk == 3 %}
-                        <td class="td-in-well">NO APLICA</td>
-                    {% endif%}
-                </tr>
-                <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
                     <td class="titulo">LICENCIA MOTO:</td>
                     {% if arRequisito.codigoLicenciaMotoFk == 1 %}
                         <td class="td-in-well">SI</td>

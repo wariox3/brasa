@@ -139,7 +139,7 @@ class SeleccionRequisitoController extends Controller
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))        
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombreSeleccionRequisito')))
-            ->add('estadoAbierto', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '00' => 'NO'), 'data' => $session->get('filtroAbiertoSeleccionRequisito'))) 
+            ->add('estadoAbierto', 'choice', array('choices'   => array('2' => 'TODOS', '0' => 'SI', '1' => 'NO'), 'data' => $session->get('filtroAbiertoSeleccionRequisito'))) 
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEstadoAbierto', 'submit', array('label'  => 'Cerrar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))            

@@ -79,7 +79,7 @@
                 <td>{{ arRequisitos.centroCostoRel.nombre|default('SIN CENTRO COSTO')  }}</td>
                 <td>{{ arRequisitos.cargoRel.nombre|default('SIN CARGO')  }}</td>
                 <td>{{ arRequisitos.cantidadSolicitida  }}</td>
-                <td>{% if arRequisitos.estadoAbierto == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arRequisitos.estadoAbierto == 0 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_seleccionrequisito_nuevo', { 'codigoSeleccionRequisito':  arRequisitos.codigoSeleccionRequisitoPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar registro"></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_seleccionrequisito_detalle', { 'codigoSeleccionRequisito': arRequisitos.codigoSeleccionRequisitoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arRequisitos.codigoSeleccionRequisitoPk }}" /></td>

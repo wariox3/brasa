@@ -1,6 +1,6 @@
 <?php
 namespace Brasa\RecursoHumanoBundle\Formatos;
-class FormatoSeleccionRequisito extends \FPDF_FPDF {
+class FormatoSeleccionRequisitoAspirante extends \FPDF_FPDF {
     public static $em;
     public static $codigoSeleccionRequisito;
     public function Generar($miThis, $codigoSeleccionRequisito) {        
@@ -8,13 +8,13 @@ class FormatoSeleccionRequisito extends \FPDF_FPDF {
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
         self::$codigoSeleccionRequisito = $codigoSeleccionRequisito;
-        $pdf = new FormatoSeleccionRequisito();
+        $pdf = new FormatoSeleccionRequisitoAspirante();
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
         $this->Body($pdf);
 
-        $pdf->Output("SeleccionRequisito$codigoSeleccionRequisito.pdf", 'D');        
+        $pdf->Output("SeleccionRequisitoAspirante$codigoSeleccionRequisito.pdf", 'D');        
         
     } 
     
@@ -127,7 +127,7 @@ class FormatoSeleccionRequisito extends \FPDF_FPDF {
     public function EncabezadoDetalles() {
         
         $this->Ln(14);
-        $header = array('ID', 'TIPO', 'FECHA PRUEBA','IDENTIFICACION', 'NOMBRE', 'TELEFONO', 'CELULAR');
+        $header = array('ID', 'IDENTIFICACION', 'NOMBRE', 'APROBADO');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -135,7 +135,7 @@ class FormatoSeleccionRequisito extends \FPDF_FPDF {
         $this->SetFont('', 'B', 7);
 
         //creamos la cabecera de la tabla.
-        $w = array(10, 40, 22, 22, 65, 15, 20);
+        $w = array(15, 25, 133, 20);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -150,18 +150,20 @@ class FormatoSeleccionRequisito extends \FPDF_FPDF {
     }
 
     public function Body($pdf) {
-        $arSelecciones = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
-        $arSelecciones = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->findBy(array('codigoSeleccionRequisitoFk' => self::$codigoSeleccionRequisito));
+        $arSeleccionesAspirantes = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisicionAspirante();
+        $arSeleccionesAspirantes = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisicionAspirante')->findBy(array('codigoSeleccionRequisitoFk' => self::$codigoSeleccionRequisito));
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
-        foreach ($arSelecciones as $arSeleccion) {            
-            $pdf->Cell(10, 4, $arSeleccion->getCodigoSeleccionPk(), 1, 0, 'L');
-            $pdf->Cell(40, 4, utf8_decode($arSeleccion->getSeleccionTipoRel()->getNombre()), 1, 0, 'L');
-            $pdf->Cell(22, 4, '', 1, 0, 'L');
-            $pdf->Cell(22, 4, $arSeleccion->getNumeroIdentificacion(), 1, 0, 'L');
-            $pdf->Cell(65, 4, utf8_decode($arSeleccion->getNombreCorto()), 1, 0, 'L');
-            $pdf->Cell(15, 4, $arSeleccion->getTelefono(), 1, 0, 'L');
-            $pdf->Cell(20, 4, $arSeleccion->getCelular(), 1, 0, 'L');            
+        foreach ($arSeleccionesAspirantes as $arSeleccionesAspirante) {            
+            $pdf->Cell(15, 4, $arSeleccionesAspirante->getCodigoSeleccionRequisicionAspirantePk(), 1, 0, 'L');
+            $pdf->Cell(25, 4, $arSeleccionesAspirante->getAspiranteRel()->getNumeroIdentificacion(), 1, 0, 'L');
+            $pdf->Cell(133, 4, utf8_decode($arSeleccionesAspirante->getAspiranteRel()->getNombreCorto()), 1, 0, 'L');
+            if ($arSeleccionesAspirante->getEstadoAprobado() == 0){
+                $estado = "SI";
+            } else {
+                $estado = "NO";
+            }
+            $pdf->Cell(20, 4, $estado, 1, 0, 'L');            
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }        

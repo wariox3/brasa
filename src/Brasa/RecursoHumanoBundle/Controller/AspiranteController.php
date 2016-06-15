@@ -60,6 +60,9 @@ class AspiranteController extends Controller
         $arAspirante = new \Brasa\RecursoHumanoBundle\Entity\RhuAspirante();
         if($codigoAspirante != 0) {
             $arAspirante = $em->getRepository('BrasaRecursoHumanoBundle:RhuAspirante')->find($codigoAspirante);
+        } else {
+            $arAspirante->setFecha(new \DateTime('now'));
+            $arAspirante->setFechaNacimiento(new \DateTime('now'));
         } 
         $form = $this->createForm(new RhuAspiranteType, $arAspirante);
         $form->handleRequest($request);
@@ -67,7 +70,7 @@ class AspiranteController extends Controller
             $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arAspirante = $form->getData();
             $arAspirante->setNombreCorto($arAspirante->getNombre1() . " " . $arAspirante->getNombre2() . " " .$arAspirante->getApellido1() . " " . $arAspirante->getApellido2());
-            $arAspirante->setFecha(new \DateTime('now'));
+            
             if($codigoAspirante == 0) {
                 $arAspirante->setCodigoUsuario($arUsuario->getUserName());
             }
@@ -117,12 +120,33 @@ class AspiranteController extends Controller
             $em->persist($arRequisicionAspirante);
             $arRequisicionDato = $form->get('seleccionRequisicionRel')->getData();
             $arRequisicionAspiranteValidar = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisicionAspirante')->findBy(array('codigoSeleccionRequisitoFk' => $arRequisicionDato, 'codigoAspiranteFk' => $codigoAspirante));
-            if ($arRequisicionAspiranteValidar == null){
-                $em->flush();
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            if ($arRequisicionDato->getEstadoAbierto() == 0){
+                if ($arRequisicionAspiranteValidar == null){
+                    //Calculo edad
+                        $varFechaNacimientoAnio = $arAspirante->getFechaNacimiento()->format('Y');
+                        $varFechaNacimientoMes = $arAspirante->getFechaNacimiento()->format('m');
+                        $varMesActual = date('m');
+                        if ($varMesActual >= $varFechaNacimientoMes){
+                            $varEdad = date('Y') - $varFechaNacimientoAnio;
+                        } else {
+                            $varEdad = date('Y') - $varFechaNacimientoAnio -1;
+                        }
+                    //Fin calculo edad
+                    $edadMinima = $arRequisicionDato->getEdadMinima();
+                    $edadMaxima = $arRequisicionDato->getEdadMaxima();
+                    if ($varEdad <= $edadMaxima && $varEdad >= $edadMinima){
+                        $em->flush();
+                        echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                     
+                    } else {
+                        $objMensaje->Mensaje("error", "El aspirante debe tener una edad entre " .$edadMinima. " y " .$edadMaxima . " años para aplicar a la requisicion", $this);
+                    }
+
+                } else {
+                    $objMensaje->Mensaje("error", "El aspirante ya se encuenta en la requisicion", $this);
+                }
             } else {
-                $objMensaje->Mensaje("error", "El aspirante ya se encuenta en la requisicion", $this);
-            }
+                    $objMensaje->Mensaje('error','La requisicion esta cerrada, no puede aplicar',$this);
+            }    
         }
 
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Aspirante:aplicar.html.twig', array(

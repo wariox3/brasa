@@ -55,11 +55,11 @@ class RhuSeleccionRequisitoRepository extends EntityRepository {
                 $arSeleccionRequisito = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisito')->find($codigoSeleccion);
                 $arSeleccion = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
                 $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->findBy(array('codigoSeleccionRequisitoFk' => $codigoSeleccion));
-                if ($arSeleccionRequisito->getEstadoAbierto() == 1){
-                    $arSeleccionRequisito->setEstadoAbierto(0);
+                if ($arSeleccionRequisito->getEstadoAbierto() == 0){
+                    $arSeleccionRequisito->setEstadoAbierto(1);
                     if (count($arSeleccion) > 0){
                         foreach ($arSeleccion AS $arSeleccion) {
-                            $arSeleccion->setEstadoCerrado(0);
+                            $arSeleccion->setEstadoCerrado(1);
                         }
                         $em->persist($arSeleccion);
                     }

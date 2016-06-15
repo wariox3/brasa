@@ -52,8 +52,8 @@
                 <tr>
                     <td class="titulo">NIVEL ESTUDIO:</td>
                     <td class="td-in-well">{{ arRequisicion.estudioTipoRel().nombre|default('') }}</td>
-                    <td class="titulo">EDAD MIN-MAX:</td>
-                    <td class="td-in-well">{{ arRequisicion.edadMinima }} - {{ arRequisicion.edadMaxima }}</td>
+                    <td class="titulo">EDAD MINIMA:</td>
+                    <td class="td-in-well">{{ arRequisicion.edadMinima }}</td>
                     <td class="titulo">NRO HIJOS:</td>
                     <td class="td-in-well">{{ arRequisicion.numeroHijos }}</td>
                 </tr>
@@ -71,16 +71,8 @@
                     {% if arRequisicion.codigoSexoFk == "I" %}
                         <td class="td-in-well">INDIFERENTE</td>
                     {% endif%}
-                    <td class="titulo">TIPO VEHICULO</td>
-                    {% if arRequisicion.codigoTipoVehiculoFk == 1 %}
-                        <td class="td-in-well">CARRO</td>
-                    {% endif%}    
-                    {% if arRequisicion.codigoTipoVehiculoFk == 2 %}
-                        <td class="td-in-well">MOTO</td>
-                    {% endif%}
-                    {% if arRequisicion.codigoTipoVehiculoFk == 0 %}
-                        <td class="td-in-well">NO APLICA</td>
-                    {% endif%}
+                    <td class="titulo">EDAD MAXIMA:</td>
+                    <td class="td-in-well">{{ arRequisicion.edadMaxima }}</td>
                     <td class="titulo">RELIGION:</td>
                     {% if arRequisicion.codigoReligionFk == "" %}
                         <td class="td-in-well"></td>
@@ -118,6 +110,30 @@
                     {% if arRequisicion.codigoExperienciaFk == 6 %}
                         <td class="td-in-well">SIN EXPERIENCIA</td>
                     {% endif%}
+                    <td class="titulo">TIPO VEHICULO</td>
+                    {% if arRequisicion.codigoTipoVehiculoFk == 1 %}
+                        <td class="td-in-well">CARRO</td>
+                    {% endif%}    
+                    {% if arRequisicion.codigoTipoVehiculoFk == 2 %}
+                        <td class="td-in-well">MOTO</td>
+                    {% endif%}
+                    {% if arRequisicion.codigoTipoVehiculoFk == 0 %}
+                        <td class="td-in-well">NO APLICA</td>
+                    {% endif%}
+                    <td class="titulo">LICENCIA CARRO:</td>
+                    {% if arRequisicion.codigoLicenciaCarroFk == 1 %}
+                        <td class="td-in-well">SI</td>
+                    {% endif%}    
+                    {% if arRequisicion.codigoLicenciaCarroFk == 2 %}
+                        <td class="td-in-well">NO</td>
+                    {% endif%}
+                    {% if arRequisicion.codigoLicenciaCarroFk == 3 %}
+                        <td class="td-in-well">NO APLICA</td>
+                    {% endif%}
+                </tr>
+                <tr>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
                     <td class="titulo">DISPONIBILIDAD</td>
                     {% if arRequisicion.codigoDisponibilidadFk == "" %}
                         <td class="td-in-well"></td>
@@ -140,23 +156,7 @@
                     {% if arRequisicion.codigoDisponibilidadFk == 0 %}
                         <td class="td-in-well">NO APLICA</td>
                     {% endif%}
-                    <td class="titulo">LICENCIA CARRO:</td>
-                    {% if arRequisicion.codigoLicenciaCarroFk == 1 %}
-                        <td class="td-in-well">SI</td>
-                    {% endif%}    
-                    {% if arRequisicion.codigoLicenciaCarroFk == 2 %}
-                        <td class="td-in-well">NO</td>
-                    {% endif%}
-                    {% if arRequisicion.codigoLicenciaCarroFk == 3 %}
-                        <td class="td-in-well">NO APLICA</td>
-                    {% endif%}
-                </tr>
-                <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
-                    <td class="titulo">LICENCIA MOTOO:</td>
+                    <td class="titulo">LICENCIA MOTO:</td>
                     {% if arRequisicion.codigoLicenciaMotoFk == 1 %}
                         <td class="td-in-well">SI</td>
                     {% endif%}    
