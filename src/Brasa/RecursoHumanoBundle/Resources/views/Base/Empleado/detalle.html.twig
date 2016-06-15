@@ -34,7 +34,7 @@
                         <td class="titulo">CÓDIGO:</td>
                         <td class="td-in-well">{{ arEmpleado.codigoEmpleadoPk }}</td>
                         <td class="titulo">LIBRETA MILITAR:</td>
-                        <td class="td-in-well">{{ arEmpleado.libretaMilitar | dafaudate('NO APLICA')}}</td>
+                        <td class="td-in-well">{{ arEmpleado.libretaMilitar | default('NO APLICA')}}</td>
                         <td class="titulo">DIRECCIÓN:</td>
                         <td class="td-in-well">{{ arEmpleado.direccion }}</td>
                     </tr>
