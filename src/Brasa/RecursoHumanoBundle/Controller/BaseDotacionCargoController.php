@@ -157,6 +157,7 @@ class BaseDotacionCargoController extends Controller
     }
     
     private function generarExcel() {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         $objPHPExcel = new \PHPExcel();
         // Set document properties

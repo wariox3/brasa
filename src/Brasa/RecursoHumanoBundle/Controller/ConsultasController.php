@@ -1108,6 +1108,7 @@ class ConsultasController extends Controller
     }
 
     private function generarExcel() {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -1205,6 +1206,7 @@ class ConsultasController extends Controller
     }
 
     private function generarPagoPendientesBancoExcel() {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -1302,6 +1304,7 @@ class ConsultasController extends Controller
     }
 
     private function generarCostosIbcExcel() {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -1359,6 +1362,7 @@ class ConsultasController extends Controller
     }
 
     private function generarCreditoExcel() {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -1435,6 +1439,7 @@ class ConsultasController extends Controller
     }
 
     private function generarServiciosPorCobrarExcel() {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -1546,6 +1551,7 @@ class ConsultasController extends Controller
     }
 
     private function generarProgramacionesPagoExcel() {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -1615,6 +1621,7 @@ class ConsultasController extends Controller
     }
 
     private function generarIncapacidadesExcel() {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -1698,6 +1705,7 @@ class ConsultasController extends Controller
     }
 
     private function generarIncapacidadesCobrarExcel() {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -1781,6 +1789,7 @@ class ConsultasController extends Controller
     }
 
     private function generarProcesosDisciplinariosExcel() {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -1859,6 +1868,7 @@ class ConsultasController extends Controller
     }
     
     private function generarDotacionesPendientesExcel() {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -1927,6 +1937,7 @@ class ConsultasController extends Controller
     }
 
     private function generarEmpleadoExcel() {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
@@ -2200,6 +2211,7 @@ class ConsultasController extends Controller
     }
 
     private function generarAportesExcel() {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -2375,6 +2387,7 @@ class ConsultasController extends Controller
     }
 
     private function generarVacacionesPagarExcel() {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -2447,6 +2460,7 @@ class ConsultasController extends Controller
     }
     
     private function generarFechaTerminacionExcel() {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();

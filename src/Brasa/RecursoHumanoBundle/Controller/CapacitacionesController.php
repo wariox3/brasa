@@ -299,6 +299,7 @@ class CapacitacionesController extends Controller
     }
 
     private function generarExcel() {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
