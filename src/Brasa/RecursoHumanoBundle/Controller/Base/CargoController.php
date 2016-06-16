@@ -122,8 +122,8 @@ class CargoController extends Controller
     }
     
     private function generarExcel() {
-        ob_clean();
         $em = $this->getDoctrine()->getManager();
+        ob_clean();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")
