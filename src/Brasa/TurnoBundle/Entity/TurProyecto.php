@@ -54,6 +54,11 @@ class TurProyecto
     protected $programacionesDetallesProyectoRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="TurFactura", mappedBy="proyectoRel")
+     */
+    protected $facturasProyectoRel;    
+    
+    /**
      * Get codigoProyectoPk
      *
      * @return integer
@@ -278,5 +283,39 @@ class TurProyecto
     public function getCotizacionesDetallesProyectoRel()
     {
         return $this->cotizacionesDetallesProyectoRel;
+    }
+
+    /**
+     * Add facturasProyectoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFactura $facturasProyectoRel
+     *
+     * @return TurProyecto
+     */
+    public function addFacturasProyectoRel(\Brasa\TurnoBundle\Entity\TurFactura $facturasProyectoRel)
+    {
+        $this->facturasProyectoRel[] = $facturasProyectoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasProyectoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFactura $facturasProyectoRel
+     */
+    public function removeFacturasProyectoRel(\Brasa\TurnoBundle\Entity\TurFactura $facturasProyectoRel)
+    {
+        $this->facturasProyectoRel->removeElement($facturasProyectoRel);
+    }
+
+    /**
+     * Get facturasProyectoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasProyectoRel()
+    {
+        return $this->facturasProyectoRel;
     }
 }

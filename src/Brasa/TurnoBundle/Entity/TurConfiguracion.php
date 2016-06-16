@@ -87,6 +87,11 @@ class TurConfiguracion
     private $codigoConceptoHorasExtrasFestivasNocturnasFk;     
     
     /**
+     * @ORM\Column(name="fecha_ultima_simulacion", type="date", nullable=true)
+     */    
+    private $fechaUltimaSimulacion;    
+    
+    /**
      * Set codigoConfiguracionPk
      *
      * @param integer $codigoConfiguracionPk
@@ -444,5 +449,53 @@ class TurConfiguracion
     public function getCodigoConceptoHorasExtrasFestivasNocturnasFk()
     {
         return $this->codigoConceptoHorasExtrasFestivasNocturnasFk;
+    }
+
+    /**
+     * Set fecha
+     *
+     * @param \DateTime $fecha
+     *
+     * @return TurConfiguracion
+     */
+    public function setFecha($fecha)
+    {
+        $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    /**
+     * Get fecha
+     *
+     * @return \DateTime
+     */
+    public function getFecha()
+    {
+        return $this->fecha;
+    }
+
+    /**
+     * Set fechaUltimaSimulacion
+     *
+     * @param \DateTime $fechaUltimaSimulacion
+     *
+     * @return TurConfiguracion
+     */
+    public function setFechaUltimaSimulacion($fechaUltimaSimulacion)
+    {
+        $this->fechaUltimaSimulacion = $fechaUltimaSimulacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaUltimaSimulacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaUltimaSimulacion()
+    {
+        return $this->fechaUltimaSimulacion;
     }
 }

@@ -40,12 +40,17 @@ class TurFactura
     /**
      * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
      */    
-    private $codigoClienteFk;           
+    private $codigoClienteFk;                   
     
     /**
      * @ORM\Column(name="codigo_cliente_direccion_fk", type="integer", nullable=true)
      */    
     private $codigoClienteDireccionFk;    
+    
+    /**
+     * @ORM\Column(name="codigo_proyecto_fk", type="integer", nullable=true)
+     */    
+    private $codigoProyectoFk;    
     
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
@@ -108,6 +113,12 @@ class TurFactura
      * @ORM\JoinColumn(name="codigo_cliente_direccion_fk", referencedColumnName="codigo_cliente_direccion_pk")
      */
     protected $clienteDireccionRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurProyecto", inversedBy="facturasProyectoRel")
+     * @ORM\JoinColumn(name="codigo_proyecto_fk", referencedColumnName="codigo_proyecto_pk")
+     */
+    protected $proyectoRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="TurFacturaDetalle", mappedBy="facturaRel", cascade={"persist", "remove"})
@@ -636,5 +647,53 @@ class TurFactura
     public function getFacturasDetallesConceptosFacturaRel()
     {
         return $this->facturasDetallesConceptosFacturaRel;
+    }
+
+    /**
+     * Set codigoProyectoFk
+     *
+     * @param integer $codigoProyectoFk
+     *
+     * @return TurFactura
+     */
+    public function setCodigoProyectoFk($codigoProyectoFk)
+    {
+        $this->codigoProyectoFk = $codigoProyectoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoProyectoFk
+     *
+     * @return integer
+     */
+    public function getCodigoProyectoFk()
+    {
+        return $this->codigoProyectoFk;
+    }
+
+    /**
+     * Set proyectoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurProyecto $proyectoRel
+     *
+     * @return TurFactura
+     */
+    public function setProyectoRel(\Brasa\TurnoBundle\Entity\TurProyecto $proyectoRel = null)
+    {
+        $this->proyectoRel = $proyectoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get proyectoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurProyecto
+     */
+    public function getProyectoRel()
+    {
+        return $this->proyectoRel;
     }
 }

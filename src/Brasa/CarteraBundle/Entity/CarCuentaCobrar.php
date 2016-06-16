@@ -24,6 +24,11 @@ class CarCuentaCobrar
     private $codigoCuentaCobrarTipoFk;
     
     /**
+     * @ORM\Column(name="codigo_factura", type="integer", nullable=true)
+     */    
+    private $codigoFactura;     
+    
+    /**
      * @ORM\Column(name="numero_documento", type="string", length=30, nullable=true)
      */    
     private $numeroDocumento;
@@ -37,6 +42,11 @@ class CarCuentaCobrar
      * @ORM\Column(name="fecha_vence", type="date", nullable=true)
      */    
     private $fechaVence; 
+    
+    /**
+     * @ORM\Column(name="soporte", type="string", length=30, nullable=true)
+     */
+    private $soporte;    
     
     /**
      * @ORM\Column(name="plazo", type="string", length=10, nullable=true)
@@ -67,6 +77,16 @@ class CarCuentaCobrar
      * @ORM\Column(name="saldo", type="float")
      */    
     private $saldo = 0;                     
+    
+    /**
+     * @ORM\Column(name="grupo", type="string", length=120, nullable=true)
+     */
+    private $grupo;    
+    
+    /**
+     * @ORM\Column(name="subgrupo", type="string", length=120, nullable=true)
+     */
+    private $subgrupo;     
     
     /**
      * @ORM\ManyToOne(targetEntity="CarCliente", inversedBy="cuentaCobrarClientesRel")
@@ -536,5 +556,101 @@ class CarCuentaCobrar
     public function getAsesorRel()
     {
         return $this->asesorRel;
+    }
+
+    /**
+     * Set codigoFactura
+     *
+     * @param integer $codigoFactura
+     *
+     * @return CarCuentaCobrar
+     */
+    public function setCodigoFactura($codigoFactura)
+    {
+        $this->codigoFactura = $codigoFactura;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFactura
+     *
+     * @return integer
+     */
+    public function getCodigoFactura()
+    {
+        return $this->codigoFactura;
+    }
+
+    /**
+     * Set soporte
+     *
+     * @param string $soporte
+     *
+     * @return CarCuentaCobrar
+     */
+    public function setSoporte($soporte)
+    {
+        $this->soporte = $soporte;
+
+        return $this;
+    }
+
+    /**
+     * Get soporte
+     *
+     * @return string
+     */
+    public function getSoporte()
+    {
+        return $this->soporte;
+    }
+
+    /**
+     * Set grupo
+     *
+     * @param string $grupo
+     *
+     * @return CarCuentaCobrar
+     */
+    public function setGrupo($grupo)
+    {
+        $this->grupo = $grupo;
+
+        return $this;
+    }
+
+    /**
+     * Get grupo
+     *
+     * @return string
+     */
+    public function getGrupo()
+    {
+        return $this->grupo;
+    }
+
+    /**
+     * Set subgrupo
+     *
+     * @param string $subgrupo
+     *
+     * @return CarCuentaCobrar
+     */
+    public function setSubgrupo($subgrupo)
+    {
+        $this->subgrupo = $subgrupo;
+
+        return $this;
+    }
+
+    /**
+     * Get subgrupo
+     *
+     * @return string
+     */
+    public function getSubgrupo()
+    {
+        return $this->subgrupo;
     }
 }
