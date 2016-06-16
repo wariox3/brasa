@@ -35,7 +35,7 @@
                         <td class="titulo">EMPLEADO:</td>
                         <td class="td-in-well">{{ arDotacion.empleadoRel.nombreCorto }}</td>
                         <td class="titulo">CENTRO COSTOS:</td>
-                        <td class="td-in-well">{{ arDotacion.centroCostoRel.nombre}}</td>                                                
+                        <td class="td-in-well">{{ arDotacion.centroCostoRel.nombre | default('')}}</td>                                                
                     </tr>                    
                     <tr>
                         <td class="titulo" >COMENTARIOS: </td>
