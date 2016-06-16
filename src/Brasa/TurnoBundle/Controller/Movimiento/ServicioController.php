@@ -111,14 +111,10 @@ class ServicioController extends Controller
             if($form->get('BtnAutorizar')->isClicked()) {
                 $arrControles = $request->request->All();
                 $this->actualizarDetalle($arrControles, $codigoServicio);
-                if($arServicio->getEstadoAutorizado() == 0) {
-                    if($em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->numeroRegistros($codigoServicio) > 0) {
-                        $arServicio->setEstadoAutorizado(1);
-                        $em->persist($arServicio);
-                        $em->flush();                        
-                    } else {
-                        $objMensaje->Mensaje('error', 'Debe adicionar detalles al servicio', $this);
-                    }                    
+                if($arServicio->getEstadoAutorizado() == 0) {                    
+                    $arServicio->setEstadoAutorizado(1);
+                    $em->persist($arServicio);
+                    $em->flush();                                           
                 }
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle', array('codigoServicio' => $codigoServicio)));                
             }    
