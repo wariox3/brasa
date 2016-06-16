@@ -304,7 +304,7 @@ class RhuEmpleado
     private $rutaFoto;
     
     /**
-     * @ORM\Column(name="empleado_informacion_interna", type="boolean")
+     * @ORM\Column(name="empleado_informacion_interna", type="boolean", nullable=true)
      */    
     private $empleadoInformacionInterna = false;
     
