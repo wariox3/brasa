@@ -31,7 +31,7 @@ class GenerarSoportePagoController extends Controller
                 $intDiaFinal = $dateFechaHasta->format('j');
                 $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($dateFechaDesde->format('Y-m-').'01', $dateFechaHasta->format('Y-m-').'31');
                 $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
-                $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->periodo($dateFechaDesde->format('Y/m/') . "01",$dateFechaHasta->format('Y/m/') . "31", $arSoportePagoPeriodo->getCodigoCentroCostoFk());
+                $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->periodo($dateFechaDesde->format('Y/m/') . "01",$dateFechaHasta->format('Y/m/') . "31", $arSoportePagoPeriodo->getCodigoRecursoGrupoFk());
                 foreach ($arProgramacionDetalles as $arProgramacionDetalle) {                    
                     for($i = $intDiaInicial; $i <= $intDiaFinal; $i++) {
                         $strFecha = $dateFechaDesde->format('Y/m/') . $i;
@@ -123,7 +123,7 @@ class GenerarSoportePagoController extends Controller
                 $horasTope = $arSoportePagoPeriodo->getDiasPeriodo() * 8;
                 $horasFestivas = $festivos * 8;                
                 $horasLaborales = $horasTope - $horasFestivas;
-                $horasDescanso = $horasLaborales / $festivos;
+                //$horasDescanso = $horasLaborales / $festivos;
                 $arSoportePagos = new \Brasa\TurnoBundle\Entity\TurSoportePago();  
                 $arSoportePagos = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));
                 foreach ($arSoportePagos as $arSoportePago) {
@@ -159,7 +159,7 @@ class GenerarSoportePagoController extends Controller
                         
                     }
                     //Descanso    
-                    $horasFestivasDiurnas = $arSoportePago->getHorasFestivasDiurnas();
+                    /*$horasFestivasDiurnas = $arSoportePago->getHorasFestivasDiurnas();
                     $horasFestivasNocturnas = $arSoportePago->getHorasFestivasNocturnas();
                     $horasExtrasFestivasDiurnas = $arSoportePago->getHorasExtrasFestivasDiurnas();
                     $horasExtrasFestivasNocturnas = $arSoportePago->getHorasExtrasFestivasNocturnas();
@@ -176,6 +176,8 @@ class GenerarSoportePagoController extends Controller
                     } else {
                         $horasDescansoRecurso = 0;
                     }
+                     * 
+                     */
                     //Fin descanso 
                     
                     $arSoportePagoAct = new \Brasa\TurnoBundle\Entity\TurSoportePago();
@@ -184,8 +186,8 @@ class GenerarSoportePagoController extends Controller
                     $arSoportePagoAct->setHorasNocturnas($horasNoche);
                     $arSoportePagoAct->setHorasExtrasOrdinariasDiurnas($horasExtraDia);
                     $arSoportePagoAct->setHorasExtrasOrdinariasNocturnas($horasExtraNoche);
-                    //$arSoportePagoAct->setHorasDescanso($horasFestivas);
-                    $arSoportePagoAct->setHorasDescanso($horasDescansoRecurso);
+                    $arSoportePagoAct->setHorasDescanso($horasFestivas);
+                    //$arSoportePagoAct->setHorasDescanso($horasDescansoRecurso);
                     $horas = $horasFestivas + $horasDia + $horasNoche + $arSoportePagoAct->getHorasNovedad();
                     $arSoportePagoAct->setHoras($horas);
                     $em->persist($arSoportePagoAct);
@@ -314,9 +316,10 @@ class GenerarSoportePagoController extends Controller
     }
     
     private function insertarSoportePago ($arSoportePagoPeriodo, $arProgramacionDetalle, $dateFechaDesde, $dateFechaHasta, $codigoTurno, $dateFecha, $dateFecha2, $boolFestivo, $boolFestivo2) {
-        $em = $this->getDoctrine()->getManager();                
-        $strTurnoFijoNomina = $arProgramacionDetalle->getRecursoRel()->getCodigoTurnoFijoNominaFk();
-        $strTurnoFijoDescanso = $arProgramacionDetalle->getRecursoRel()->getCodigoTurnoFijoDescansoFk();
+        $em = $this->getDoctrine()->getManager();       
+        //$arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
+        $strTurnoFijoNomina = $arSoportePagoPeriodo->getRecursoGrupoRel()->getCodigoTurnoFijoNominaFk();
+        $strTurnoFijoDescanso = $arSoportePagoPeriodo->getRecursoGrupoRel()->getCodigoTurnoFijoDescansoFk();
         $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
         $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($codigoTurno);
         if($arTurno->getDescanso() == 0 && $arTurno->getNovedad() == 0) {                

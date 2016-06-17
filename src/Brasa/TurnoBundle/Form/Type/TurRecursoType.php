@@ -16,6 +16,13 @@ class TurRecursoType extends AbstractType
                     ->orderBy('rt.codigoRecursoTipoPk', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))  
+            ->add('recursoGrupoRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurRecursoGrupo',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('rg')
+                    ->orderBy('rg.codigoRecursoGrupoPk', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                             
             ->add('centroCostoRel', 'entity', array(
                 'class' => 'BrasaTurnoBundle:TurCentroCosto',
                 'query_builder' => function (EntityRepository $er)  {
@@ -25,8 +32,6 @@ class TurRecursoType extends AbstractType
                 'required' => true))                             
             ->add('numeroIdentificacion', 'text', array('required' => true))                             
             ->add('nombreCorto', 'text', array('required' => true))
-            ->add('codigoTurnoFijoNominaFk', 'text', array('required' => false))
-            ->add('codigoTurnoFijoDescansoFk', 'text', array('required' => false))
             ->add('apodo', 'text', array('required' => false))    
             ->add('telefono', 'text', array('required' => false))
             ->add('celular', 'text', array('required' => false))

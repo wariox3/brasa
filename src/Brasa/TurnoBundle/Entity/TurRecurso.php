@@ -24,11 +24,16 @@ class TurRecurso
      * @ORM\Column(name="codigo_recurso_tipo_fk", type="integer", nullable=true)
      */    
     private $codigoRecursoTipoFk;    
+
+    /**
+     * @ORM\Column(name="codigo_recurso_grupo_fk", type="integer", nullable=true)
+     */    
+    private $codigoRecursoGrupoFk;    
     
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */    
-    private $codigoCentroCostoFk;    
+    private $codigoCentroCostoFk;            
     
     /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
@@ -93,17 +98,7 @@ class TurRecurso
     /**     
      * @ORM\Column(name="estado_activo", type="boolean")
      */    
-    private $estadoActivo = true;    
-    
-    /**
-     * @ORM\Column(name="codigo_turno_fijo_nomina_fk", type="string", length=5, nullable=true)
-     */    
-    private $codigoTurnoFijoNominaFk;     
-    
-    /**
-     * @ORM\Column(name="codigo_turno_fijo_descanso_fk", type="string", length=5, nullable=true)
-     */    
-    private $codigoTurnoFijoDescansoFk;     
+    private $estadoActivo = true;           
     
     /**
      * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
@@ -131,6 +126,12 @@ class TurRecurso
      * @ORM\JoinColumn(name="codigo_recurso_tipo_fk", referencedColumnName="codigo_recurso_tipo_pk")
      */
     protected $recursoTipoRel;    
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TurRecursoGrupo", inversedBy="recursosRecursoTipoRel")
+     * @ORM\JoinColumn(name="codigo_recurso_grupo_fk", referencedColumnName="codigo_recurso_grupo_pk")
+     */
+    protected $recursoGrupoRel;
     
     /**
      * @ORM\ManyToOne(targetEntity="TurCentroCosto", inversedBy="recursosCentroCostoRel")
@@ -196,6 +197,7 @@ class TurRecurso
         $this->costosRecursosRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->novedadesRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->novedadesRecursoReemplazoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->simulacionesDetallesRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -230,6 +232,30 @@ class TurRecurso
     public function getCodigoRecursoTipoFk()
     {
         return $this->codigoRecursoTipoFk;
+    }
+
+    /**
+     * Set codigoRecursoGrupoFk
+     *
+     * @param integer $codigoRecursoGrupoFk
+     *
+     * @return TurRecurso
+     */
+    public function setCodigoRecursoGrupoFk($codigoRecursoGrupoFk)
+    {
+        $this->codigoRecursoGrupoFk = $codigoRecursoGrupoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoRecursoGrupoFk
+     *
+     * @return integer
+     */
+    public function getCodigoRecursoGrupoFk()
+    {
+        return $this->codigoRecursoGrupoFk;
     }
 
     /**
@@ -569,54 +595,6 @@ class TurRecurso
     }
 
     /**
-     * Set codigoTurnoFijoNominaFk
-     *
-     * @param string $codigoTurnoFijoNominaFk
-     *
-     * @return TurRecurso
-     */
-    public function setCodigoTurnoFijoNominaFk($codigoTurnoFijoNominaFk)
-    {
-        $this->codigoTurnoFijoNominaFk = $codigoTurnoFijoNominaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoTurnoFijoNominaFk
-     *
-     * @return string
-     */
-    public function getCodigoTurnoFijoNominaFk()
-    {
-        return $this->codigoTurnoFijoNominaFk;
-    }
-
-    /**
-     * Set codigoTurnoFijoDescansoFk
-     *
-     * @param string $codigoTurnoFijoDescansoFk
-     *
-     * @return TurRecurso
-     */
-    public function setCodigoTurnoFijoDescansoFk($codigoTurnoFijoDescansoFk)
-    {
-        $this->codigoTurnoFijoDescansoFk = $codigoTurnoFijoDescansoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoTurnoFijoDescansoFk
-     *
-     * @return string
-     */
-    public function getCodigoTurnoFijoDescansoFk()
-    {
-        return $this->codigoTurnoFijoDescansoFk;
-    }
-
-    /**
      * Set usuario
      *
      * @param string $usuario
@@ -665,6 +643,30 @@ class TurRecurso
     }
 
     /**
+     * Set codigoInterface
+     *
+     * @param string $codigoInterface
+     *
+     * @return TurRecurso
+     */
+    public function setCodigoInterface($codigoInterface)
+    {
+        $this->codigoInterface = $codigoInterface;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoInterface
+     *
+     * @return string
+     */
+    public function getCodigoInterface()
+    {
+        return $this->codigoInterface;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -710,6 +712,30 @@ class TurRecurso
     public function getRecursoTipoRel()
     {
         return $this->recursoTipoRel;
+    }
+
+    /**
+     * Set recursoGrupoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurRecursoGrupo $recursoGrupoRel
+     *
+     * @return TurRecurso
+     */
+    public function setRecursoGrupoRel(\Brasa\TurnoBundle\Entity\TurRecursoGrupo $recursoGrupoRel = null)
+    {
+        $this->recursoGrupoRel = $recursoGrupoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get recursoGrupoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurRecursoGrupo
+     */
+    public function getRecursoGrupoRel()
+    {
+        return $this->recursoGrupoRel;
     }
 
     /**
@@ -1006,30 +1032,6 @@ class TurRecurso
     public function getNovedadesRecursoReemplazoRel()
     {
         return $this->novedadesRecursoReemplazoRel;
-    }
-
-    /**
-     * Set codigoInterface
-     *
-     * @param string $codigoInterface
-     *
-     * @return TurRecurso
-     */
-    public function setCodigoInterface($codigoInterface)
-    {
-        $this->codigoInterface = $codigoInterface;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoInterface
-     *
-     * @return string
-     */
-    public function getCodigoInterface()
-    {
-        return $this->codigoInterface;
     }
 
     /**

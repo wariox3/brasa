@@ -62,6 +62,11 @@ class TurSoportePagoPeriodo
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */    
     private $codigoCentroCostoFk;    
+
+    /**
+     * @ORM\Column(name="codigo_recurso_grupo_fk", type="integer", nullable=true)
+     */    
+    private $codigoRecursoGrupoFk;
     
     /**     
      * @ORM\Column(name="estado_generado", type="boolean")
@@ -98,6 +103,12 @@ class TurSoportePagoPeriodo
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
     protected $centroCostoRel;     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurRecursoGrupo", inversedBy="soportesPagosPeriodosRecursoGrupoRel")
+     * @ORM\JoinColumn(name="codigo_recurso_grupo_fk", referencedColumnName="codigo_recurso_grupo_pk")
+     */
+    protected $recursoGrupoRel;    
     
    /**
      * @ORM\OneToMany(targetEntity="TurSoportePago", mappedBy="soportePagoPeriodoRel")
@@ -579,5 +590,53 @@ class TurSoportePagoPeriodo
     public function getDiaDescanso()
     {
         return $this->diaDescanso;
+    }
+
+    /**
+     * Set codigoRecursoGrupoFk
+     *
+     * @param integer $codigoRecursoGrupoFk
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setCodigoRecursoGrupoFk($codigoRecursoGrupoFk)
+    {
+        $this->codigoRecursoGrupoFk = $codigoRecursoGrupoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoRecursoGrupoFk
+     *
+     * @return integer
+     */
+    public function getCodigoRecursoGrupoFk()
+    {
+        return $this->codigoRecursoGrupoFk;
+    }
+
+    /**
+     * Set recursoGrupoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurRecursoGrupo $recursoGrupoRel
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setRecursoGrupoRel(\Brasa\TurnoBundle\Entity\TurRecursoGrupo $recursoGrupoRel = null)
+    {
+        $this->recursoGrupoRel = $recursoGrupoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get recursoGrupoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurRecursoGrupo
+     */
+    public function getRecursoGrupoRel()
+    {
+        return $this->recursoGrupoRel;
     }
 }

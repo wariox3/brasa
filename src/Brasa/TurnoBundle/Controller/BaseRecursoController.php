@@ -178,7 +178,8 @@ class BaseRecursoController extends Controller
                 $session->get('filtroNombreRecurso'),                
                 $session->get('filtroCodigoRecurso'),
                 $session->get('filtroCodigoCentroCostoRecurso'),
-                $session->get('filtroIdentificacionRecurso')                
+                $session->get('filtroIdentificacionRecurso'),
+                $session->get('filtroCodigoRecursoGrupo')                
                 ); 
     }
     
@@ -201,6 +202,10 @@ class BaseRecursoController extends Controller
         if($arCentroCosto) {
             $session->set('filtroCodigoCentroCostoRecurso', $arCentroCosto->getCodigoCentroCostoPk());
         }
+        $arRecursoGrupo = $form->get('recursoGrupoRel')->getData();
+        if($arRecursoGrupo) {
+            $session->set('filtroCodigoRecursoGrupo', $arRecursoGrupo->getCodigoRecursoGrupoPk());
+        }        
         $this->lista();
     }
     
@@ -230,9 +235,24 @@ class BaseRecursoController extends Controller
             );
         if($session->get('filtroCodigoCentroCostoRecurso')) {
             $arrayPropiedadesCentroCosto['data'] = $em->getReference("BrasaTurnoBundle:TurCentroCosto", $session->get('filtroCodigoCentroCostoRecurso'));
+        }     
+        $arrayPropiedadesRecursoGrupo = array(
+                'class' => 'BrasaTurnoBundle:TurRecursoGrupo',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('rg')
+                    ->orderBy('rg.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoRecursoGrupo')) {
+            $arrayPropiedadesRecursoGrupo['data'] = $em->getReference("BrasaTurnoBundle:TurRecursoGrupo", $session->get('filtroCodigoRecursoGrupo'));
         }        
         $form = $this->createFormBuilder()            
             ->add('centroCostoRel', 'entity', $arrayPropiedadesCentroCosto)
+            ->add('recursoGrupoRel', 'entity', $arrayPropiedadesRecursoGrupo)
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombreRecurso')))
             ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCodigoRecurso')))                  
             ->add('TxtNumeroIdentificacion', 'text', array('label'  => 'NumeroIdentificacion','data' => $session->get('filtroIdentificacionRecurso')))                            

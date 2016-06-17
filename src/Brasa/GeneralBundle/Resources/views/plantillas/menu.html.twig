@@ -116,17 +116,28 @@
                                         <li><a href="{{ path('brs_tur_base_puesto') }}">Puesto</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="{{ path('brs_tur_base_centro_costo_lista') }}">Centro costo</a></li>
-                                <li><a href="{{ path('brs_tur_base_prospecto_lista') }}">Prospecto</a></li>
-                                <li><a href="{{ path('brs_tur_base_recurso_lista') }}">Recurso</a></li>
-                                <li><a href="{{ path('brs_tur_base_turno_lista') }}">Turno</a></li>
-                                <li><a href="{{ path('brs_tur_base_plantilla_lista') }}">Plantilla de turno</a></li>
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Recurso</a>
+                                    <ul class="dropdown-menu">                                        
+                                        <li><a href="{{ path('brs_tur_base_recurso_lista') }}">Recurso</a></li>
+                                        <li><a href="{{ path('brs_tur_base_centro_costo_lista') }}">Centro costo</a></li>                                    
+                                        <li><a href="{{ path('brs_tur_base_recurso_grupo') }}">Grupo</a></li>
+                                        <li><a href="{{ path('brs_tur_base_recurso_tipo_lista') }}">Tipo recurso</a></li>                                        
+                                    </ul>
+                                </li>                                                                
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Turnos</a>
+                                    <ul class="dropdown-menu">                                        
+                                        <li><a href="{{ path('brs_tur_base_turno_lista') }}">Turno</a></li>
+                                        <li><a href="{{ path('brs_tur_base_plantilla_lista') }}">Plantilla</a></li>
+                                    </ul>
+                                </li>                                                                                                                                                                
+                                <li><a href="{{ path('brs_tur_base_prospecto_lista') }}">Prospecto</a></li>                                                                                                
                                 <li><a href="{{ path('brs_tur_base_concepto_servicio_lista') }}">Concepto servicio</a></li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">General</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ path('brs_tur_base_factura_concepto') }}">Conceptos factura</a></li>
-                                        <li><a href="{{ path('brs_tur_base_recurso_tipo_lista') }}">Tipo recurso</a></li>
+                                        <li><a href="{{ path('brs_tur_base_factura_concepto') }}">Conceptos factura</a></li>                                        
                                         <li><a href="{{ path('brs_tur_base_novedad_tipo') }}">Tipo novedad</a></li>
                                         <li><a href="{{ path('brs_tur_base_elemento_dotacion') }}">Elemento dotacion</a></li>
                                     </ul>
