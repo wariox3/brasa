@@ -89,6 +89,11 @@ class TurSoportePagoPeriodo
     private $diaDomingoReal = 0;    
     
     /**
+     * @ORM\Column(name="dia_descanso", type="integer")
+     */    
+    private $diaDescanso = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurCentroCosto", inversedBy="soportesPagosPeriodosCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
@@ -550,5 +555,29 @@ class TurSoportePagoPeriodo
     public function getVrPago()
     {
         return $this->vrPago;
+    }
+
+    /**
+     * Set diaDescanso
+     *
+     * @param integer $diaDescanso
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setDiaDescanso($diaDescanso)
+    {
+        $this->diaDescanso = $diaDescanso;
+
+        return $this;
+    }
+
+    /**
+     * Get diaDescanso
+     *
+     * @return integer
+     */
+    public function getDiaDescanso()
+    {
+        return $this->diaDescanso;
     }
 }
