@@ -28,7 +28,7 @@
                 {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}            
                 {{ form_widget(form.BtnCerrar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_utilidad_simular_programacion', {'codigoServicio': arServicio.codigoServicioPk  }) }}', 'SimularProgramacion', 600, 900)" >Simular programacion</a>
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_utilidad_simular_programacion', {'codigoServicio': arServicio.codigoServicioPk, 'codigoServicioDetalle': 0  }) }}', 'SimularProgramacion', 600, 900)" >Simular programacion</a>
             </div>
         </div>
         <div style="float:right">
@@ -131,7 +131,7 @@
                             <th>TOTAL</th>
                             <th></th>
                             <th></th>
-                            <th></th>
+                            <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodosTabla(this, 'ChkSeleccionar[]');"/></th>
                         </tr>
                         {% set intPuesto = '' %}
                         {% for arServicioDetalle in arServicioDetalle %}
@@ -142,7 +142,7 @@
                                  </tr>
                                  {% set intPuesto = arServicioDetalle.codigoPuestoFk %}
                              {% endif %}                            
-                            <tr>
+                            <tr {% if arServicioDetalle.marca == 1 %} class="success" {% endif %}>
                                 <td>{{ arServicioDetalle.codigoServicioDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arServicioDetalle.codigoServicioDetallePk }}"></td>
                                 <td>{{ arServicioDetalle.conceptoServicioRel.nombre  }}</td>                    
                                 <td>{{ arServicioDetalle.modalidadServicioRel.nombre  }}</td>                    
@@ -198,6 +198,7 @@
                             {{ form_widget(form.BtnDetalleActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                         </div>        
                         <div class="btn-group">
+                            {{ form_widget(form.BtnDetalleMarcar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                             {{ form_widget(form.BtnDetalleEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                         </div>
                     </div>                    
@@ -251,7 +252,7 @@
                         <div class="btn-group">
                             {{ form_widget(form.BtnDetalleConceptoActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                         </div>                        
-                        <div class="btn-group">
+                        <div class="btn-group">                            
                             {{ form_widget(form.BtnDetalleConceptoEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                         </div>
                     </div>

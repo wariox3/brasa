@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-{% block title %}Servicio detalle/detalle - Soga App{% endblock %}
+{% block title %}Servicio detalle programacion - Soga App{% endblock %}
 {% block content %}
     <script>
         $('#myTab a').click(function (e) {
@@ -56,7 +56,12 @@
                 </table>                    
             </div>
         </div>
-
+        <div class="btn-toolbar" style="float:left">
+            <div class="btn-group">
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_utilidad_simular_programacion', {'codigoServicio': arServicio.codigoServicioPk, 'codigoServicioDetalle': arServicioDetalle.codigoServicioDetallePk }) }}', 'SimularProgramacion', 600, 900)" >Simular programacion</a>
+            </div>
+        </div>
+        <br /><br />
         <div class="panel panel-default">
             <div class="panel-heading">Información de la programacion</div>
             <div class="panel-body"> 

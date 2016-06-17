@@ -13,9 +13,9 @@ class SimularProgramacionController extends Controller
 {
     var $strDqlLista = "";
     /**
-     * @Route("/tur/utilidad/simular/programacion/{codigoServicio}", name="brs_tur_utilidad_simular_programacion")
+     * @Route("/tur/utilidad/simular/programacion/{codigoServicio}/{codigoServicioDetalle}", name="brs_tur_utilidad_simular_programacion")
      */    
-    public function listaAction($codigoServicio) {
+    public function listaAction($codigoServicio, $codigoServicioDetalle) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();  
         $paginator  = $this->get('knp_paginator');        
@@ -29,7 +29,11 @@ class SimularProgramacionController extends Controller
                 $arServicio = new \Brasa\TurnoBundle\Entity\TurServicio();
                 $arServicio = $em->getRepository('BrasaTurnoBundle:TurServicio')->find($codigoServicio); 
                 $arServicioDetalles = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
-                $arServicioDetalles = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->findBy(array('codigoServicioFk' => $codigoServicio));                
+                if($codigoServicioDetalle == 0) {                    
+                    $arServicioDetalles = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->findBy(array('codigoServicioFk' => $codigoServicio));                                    
+                } else {
+                    $arServicioDetalles = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->findBy(array('codigoServicioFk' => $codigoServicio, 'codigoServicioDetallePk' => $codigoServicioDetalle));                                    
+                }                
                 foreach ($arServicioDetalles as $arServicioDetalle) {            
                     $em->getRepository('BrasaTurnoBundle:TurSimulacionDetalle')->nuevo($arServicioDetalle->getCodigoServicioDetallePk(), $fechaProgramacion);
                 }     
@@ -39,7 +43,7 @@ class SimularProgramacionController extends Controller
                 $arConfiguracion->setFechaUltimaSimulacion($fechaProgramacion);
                 $em->persist($arConfiguracion);
                 $em->flush();
-                return $this->redirect($this->generateUrl('brs_tur_utilidad_simular_programacion', array('codigoServicio' => $codigoServicio))); 
+                return $this->redirect($this->generateUrl('brs_tur_utilidad_simular_programacion', array('codigoServicio' => $codigoServicio, 'codigoServicioDetalle' => $codigoServicioDetalle))); 
             } 
         }                 
         $strAnioMes = $fechaProgramacion->format('Y/m');

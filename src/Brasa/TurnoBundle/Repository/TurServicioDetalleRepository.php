@@ -55,6 +55,22 @@ class TurServicioDetalleRepository extends EntityRepository {
         
     }        
     
+    public function marcarSeleccionados($arrSeleccionados) {        
+        if(count($arrSeleccionados) > 0) {
+            $em = $this->getEntityManager();
+            foreach ($arrSeleccionados AS $codigo) {                
+                $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigo);                
+                if($arServicioDetalle->getMarca() == 1) {
+                    $arServicioDetalle->setMarca(0);
+                } else {
+                    $arServicioDetalle->setMarca(1);
+                }                
+            }                                         
+            $em->flush();       
+        }
+        
+    }            
+    
     public function numeroRegistros($codigo) {
         $em = $this->getEntityManager();
         $arDetalles = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->findBy(array('codigoServicioFk' => $codigo));

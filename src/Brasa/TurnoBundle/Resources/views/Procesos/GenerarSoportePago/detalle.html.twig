@@ -105,7 +105,7 @@
                 <td style="text-align: right">{{ arSoportesPagos.horasPago | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horas | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horasDescanso | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arSoportesPagos.horasNovedad | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right" {% if arSoportesPagos.horasNovedad > 0 %} class="danger" {% endif %}>{{ arSoportesPagos.horasNovedad | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horasDiurnas | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horasNocturnas | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horasFestivasDiurnas | number_format(2, '.', ',') }}</td>

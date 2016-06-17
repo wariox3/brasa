@@ -20,6 +20,37 @@
                 </div>                
             </div>                
             <div class="form-group form-group-sm">
+                <label for="form_horas" class="col-sm-5 control-label">Horas descanso:</label>
+                <div class="col-sm-7">
+                    {{ form_widget(form.horasDescanso, { 'attr': {'class': 'form-control'} }) }}                        
+                </div>                
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_horas" class="col-sm-5 control-label">Horas diurnas:</label>
+                <div class="col-sm-7">
+                    {{ form_widget(form.horasDiurnas, { 'attr': {'class': 'form-control'} }) }}                        
+                </div>                
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_horas" class="col-sm-5 control-label">Horas nocturnas:</label>
+                <div class="col-sm-7">
+                    {{ form_widget(form.horasNocturnas, { 'attr': {'class': 'form-control'} }) }}                        
+                </div>                
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_horas" class="col-sm-5 control-label">Horas festivas diurnas:</label>
+                <div class="col-sm-7">
+                    {{ form_widget(form.horasFestivasDiurnas, { 'attr': {'class': 'form-control'} }) }}                        
+                </div>                
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_horas" class="col-sm-5 control-label">Horas festivas nocturnas:</label>
+                <div class="col-sm-7">
+                    {{ form_widget(form.horasFestivasNocturnas, { 'attr': {'class': 'form-control'} }) }}                        
+                </div>                
+            </div>
+                
+            <div class="form-group form-group-sm">
                 <label for="form_horas" class="col-sm-5 control-label">Horas extras ordinarias diurnas:</label>
                 <div class="col-sm-7">
                     {{ form_widget(form.horasExtrasOrdinariasDiurnas, { 'attr': {'class': 'form-control'} }) }}                        

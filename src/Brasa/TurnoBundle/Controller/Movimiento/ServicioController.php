@@ -145,6 +145,11 @@ class ServicioController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle', array('codigoServicio' => $codigoServicio)));
             }
+            if($form->get('BtnDetalleMarcar')->isClicked()) {   
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->marcarSeleccionados($arrSeleccionados);                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle', array('codigoServicio' => $codigoServicio)));
+            }            
             if($form->get('BtnDetalleConceptoActualizar')->isClicked()) {   
                 $arrControles = $request->request->All();
                 $this->actualizarDetalleConcepto($arrControles, $codigoServicio);                                 
@@ -366,6 +371,7 @@ class ServicioController extends Controller
         $em = $this->getDoctrine()->getManager();
         $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
         $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigoServicioDetalle);        
+        $arServicio = $arServicioDetalle->getServicioRel();
         $form = $this->formularioRecurso($arServicioDetalle->getDiasSecuencia(), $arServicioDetalle->getFechaIniciaPlantilla(), $arServicioDetalle->getPlantillaRel());
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -421,6 +427,7 @@ class ServicioController extends Controller
         $arServicioDetalleRecursos = $paginator->paginate($em->createQuery($strLista), $request->query->get('page', 1), 20);
         $arServicioDetallePlantilla = $paginator->paginate($em->createQuery($strListaPlantilla), $request->query->get('page', 1), 20);
         return $this->render('BrasaTurnoBundle:Movimientos/Servicio:detalleRecurso.html.twig', array(
+            'arServicio' => $arServicio,
             'arServicioDetalle' => $arServicioDetalle,
             'arServicioDetalleRecursos' => $arServicioDetalleRecursos,
             'arServicioDetallePlantilla' => $arServicioDetallePlantilla,
@@ -561,6 +568,7 @@ class ServicioController extends Controller
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);        
+        $arrBotonDetalleMarcar = array('label' => 'Marcar', 'disabled' => false);        
         $arrBotonDetalleConceptoActualizar = array('label' => 'Actualizar', 'disabled' => false);
         $arrBotonDetalleConceptoEliminar = array('label' => 'Eliminar', 'disabled' => false);          
         
@@ -587,6 +595,7 @@ class ServicioController extends Controller
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
+                    ->add('BtnDetalleMarcar', 'submit', $arrBotonDetalleMarcar)
                     ->add('BtnDetalleConceptoActualizar', 'submit', $arrBotonDetalleConceptoActualizar)
                     ->add('BtnDetalleConceptoEliminar', 'submit', $arrBotonDetalleConceptoEliminar)                                    
                     ->getForm();

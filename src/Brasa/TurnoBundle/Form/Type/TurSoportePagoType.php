@@ -11,6 +11,11 @@ class TurSoportePagoType extends AbstractType
         $builder                       
             ->add('dias', 'number')
             ->add('horas', 'number')
+            ->add('horasDiurnas', 'number')
+            ->add('horasNocturnas', 'number')  
+            ->add('horasDescanso', 'number')  
+            ->add('horasFestivasDiurnas', 'number')  
+            ->add('horasFestivasNocturnas', 'number')  
             ->add('horasExtrasOrdinariasDiurnas', 'number')
             ->add('horasExtrasOrdinariasNocturnas', 'number')
             ->add('horasExtrasFestivasDiurnas', 'number')

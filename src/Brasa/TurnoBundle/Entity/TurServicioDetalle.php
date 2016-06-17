@@ -172,6 +172,11 @@ class TurServicioDetalle
      */    
     private $fechaIniciaPlantilla;     
     
+    /**     
+     * @ORM\Column(name="marca", type="boolean")
+     */    
+    private $marca = false;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="TurServicio", inversedBy="serviciosDetallesServicioRel")
      * @ORM\JoinColumn(name="codigo_servicio_fk", referencedColumnName="codigo_servicio_pk")
@@ -1263,5 +1268,29 @@ class TurServicioDetalle
     public function getPedidosDetallesServicioDetalleRel()
     {
         return $this->pedidosDetallesServicioDetalleRel;
+    }
+
+    /**
+     * Set marca
+     *
+     * @param boolean $marca
+     *
+     * @return TurServicioDetalle
+     */
+    public function setMarca($marca)
+    {
+        $this->marca = $marca;
+
+        return $this;
+    }
+
+    /**
+     * Get marca
+     *
+     * @return boolean
+     */
+    public function getMarca()
+    {
+        return $this->marca;
     }
 }
