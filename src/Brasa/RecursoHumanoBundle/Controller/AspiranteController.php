@@ -134,13 +134,14 @@ class AspiranteController extends Controller
                     //Fin calculo edad
                     $edadMinima = $arRequisicionDato->getEdadMinima();
                     $edadMaxima = $arRequisicionDato->getEdadMaxima();
-                    if ($varEdad <= $edadMaxima && $varEdad >= $edadMinima){
-                        $em->flush();
-                        echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                     
-                    } else {
-                        $objMensaje->Mensaje("error", "El aspirante debe tener una edad entre " .$edadMinima. " y " .$edadMaxima . " años para aplicar a la requisicion", $this);
-                    }
-
+                    if ($edadMinima != "" && $edadMaxima != ""){
+                        if ($varEdad <= $edadMaxima && $varEdad >= $edadMinima){
+                            $em->flush();
+                            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                     
+                        } else {
+                            $objMensaje->Mensaje("error", "El aspirante debe tener una edad entre " .$edadMinima. " y " .$edadMaxima . " años para aplicar a la requisicion", $this);
+                        }
+                    }    
                 } else {
                     $objMensaje->Mensaje("error", "El aspirante ya se encuenta en la requisicion", $this);
                 }

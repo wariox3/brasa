@@ -18,7 +18,7 @@ class RhuCapacitacionTipo
     private $codigoCapacitacionTipoPk;
     
     /**
-     * @ORM\Column(name="nombre", type="string", length=50)
+     * @ORM\Column(name="nombre", type="string", length=200)
      */         
     private $nombre;
 
@@ -28,6 +28,7 @@ class RhuCapacitacionTipo
     protected $capacitacionesCapacitacionTipoRel;     
     
 
+    
     /**
      * Constructor
      */

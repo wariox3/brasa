@@ -69,7 +69,11 @@ class SeleccionRequisitoController extends Controller
     public function detalleAction($codigoSeleccionRequisito) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();    
-        $objMensaje = $this->get('mensajes_brasa');                     
+        $objMensaje = $this->get('mensajes_brasa');
+        $arRequisicion = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito();
+        $arRequisicion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisito')->find($codigoSeleccionRequisito);
+        $arRequisicionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisicionAspirante();
+        $arRequisicionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisicionAspirante')->findBy(array ('codigoSeleccionRequisitoFk' => $codigoSeleccionRequisito));
         $form = $this->formularioDetalle();
         $form->handleRequest($request);
         if($form->isValid()) {
@@ -78,17 +82,90 @@ class SeleccionRequisitoController extends Controller
                 $objSeleccionRequisito = new \Brasa\RecursoHumanoBundle\Formatos\FormatoSeleccionRequisito();
                 $objSeleccionRequisito->Generar($this, $codigoSeleccionRequisito);
             }
+            if($form->get('BtnEliminarDetalle')->isClicked()) {
+                if($arRequisicion->getEstadoAbierto() == 0) {
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisicionAspirante')->eliminarDetallesSeleccionados($arrSeleccionados);
+                    return $this->redirect($this->generateUrl('brs_rhu_seleccionrequisito_detalle', array('codigoSeleccionRequisito' => $codigoSeleccionRequisito)));
+                }
+            }
+            if($form->get('BtnAprobarDetalle')->isClicked()) {
+                if($arRequisicion->getEstadoAbierto() == 0) {
+                    $strRespuesta = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisicionAspirante')->aprobarDetallesSeleccionados($arrSeleccionados);
+                    if ($strRespuesta == ''){
+                        return $this->redirect($this->generateUrl('brs_rhu_seleccionrequisito_detalle', array('codigoSeleccionRequisito' => $codigoSeleccionRequisito)));
+                    }else{
+                        $objMensaje->Mensaje('error', $strRespuesta, $this);
+                    }
+                }
+            }
+            if($form->get('BtnExcelAspirante')->isClicked()) {
+                $objPHPExcel = new \PHPExcel();
+                ob_clean();
+                // Set document properties
+                $objPHPExcel->getProperties()->setCreator("EMPRESA")
+                    ->setLastModifiedBy("EMPRESA")
+                    ->setTitle("Office 2007 XLSX Test Document")
+                    ->setSubject("Office 2007 XLSX Test Document")
+                    ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+                    ->setKeywords("office 2007 openxml php")
+                    ->setCategory("Test result file");
+                for($col = 'A'; $col !== 'AR'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+                }
+                $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+                $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue('A1', 'CODIGO')
+                            ->setCellValue('B1', 'IDENTIFICACION')
+                            ->setCellValue('C1', 'NOMBRE')
+                            ->setCellValue('D1', 'APROBADO');
+                $i = 2;
+                //$arBancos = $em->getRepository('BrasaRecursoHumanoBundle:RhuBanco')->findAll();
+                
+                foreach ($arRequisicionDetalle as $arRequisicionDetalle) {
+                    if ($arRequisicionDetalle->getEstadoAprobado() == 1){
+                        $estado = "SI";
+                    } else {
+                        $estado = "NO";
+                    }
+                        
+                    $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue('A' . $i, $arRequisicionDetalle->getCodigoAspiranteFk())
+                            ->setCellValue('B' . $i, $arRequisicionDetalle->getAspiranteRel()->getNumeroIdentificacion())
+                            ->setCellValue('C' . $i, $arRequisicionDetalle->getAspiranteRel()->getNombreCorto())
+                            ->setCellValue('D' . $i, $estado);
+                    $i++;
+                }
+
+                $objPHPExcel->getActiveSheet()->setTitle('aspirantes');
+                $objPHPExcel->setActiveSheetIndex(0);
+
+                // Redirect output to a client’s web browser (Excel2007)
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                header('Content-Disposition: attachment;filename="aspirantes.xlsx"');
+                header('Cache-Control: max-age=0');
+                // If you're serving to IE 9, then the following may be needed
+                header('Cache-Control: max-age=1');
+                // If you're serving to IE over SSL, then the following may be needed
+                header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+                header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+                header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+                header ('Pragma: public'); // HTTP/1.0
+                $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+                $objWriter->save('php://output');
+                exit;
+            }
                       
         }        
         
         $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuSeleccion c where c.codigoSeleccionRequisitoFk = $codigoSeleccionRequisito";
         $query = $em->createQuery($dql);        
-        $arSeleccion = $query->getResult();
-        $arRequisito = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito();
-        $arRequisito = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisito')->find($codigoSeleccionRequisito);
+        $arSeleccion = $query->getResult();        
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/SeleccionRequisito:detalle.html.twig', array(
                     'arSeleccion' => $arSeleccion,
-                    'arRequisito' => $arRequisito,
+                    'arRequisito' => $arRequisicion,
+                    'arRequisicionDetalle' => $arRequisicionDetalle,
                     'form' => $form->createView()
                     ));
     }
@@ -151,6 +228,9 @@ class SeleccionRequisitoController extends Controller
     private function formularioDetalle() {        
         $form = $this->createFormBuilder()
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
+            ->add('BtnAprobarDetalle', 'submit', array('label'  => 'Aprobar',))
+            ->add('BtnEliminarDetalle', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnExcelAspirante', 'submit', array('label'  => 'Excel'))    
             ->getForm();        
         return $form;
     }    

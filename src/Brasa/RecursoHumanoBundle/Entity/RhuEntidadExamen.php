@@ -23,17 +23,17 @@ class RhuEntidadExamen
     private $nombre;    
     
     /**
-     * @ORM\Column(name="nit", type="string", length=10, nullable=true)
+     * @ORM\Column(name="nit", type="string", length=20, nullable=true)
      */    
     private $nit;    
     
     /**
-     * @ORM\Column(name="direccion", type="string", length=80, nullable=true)
+     * @ORM\Column(name="direccion", type="string", length=120, nullable=true)
      */    
     private $direccion;    
     
     /**
-     * @ORM\Column(name="telefono", type="string", length=15, nullable=true)
+     * @ORM\Column(name="telefono", type="string", length=80, nullable=true)
      */    
     private $telefono;
 
@@ -51,6 +51,7 @@ class RhuEntidadExamen
      * @ORM\OneToMany(targetEntity="RhuPagoExamen", mappedBy="entidadExamenRel")
      */
     protected $pagosExamenesEntidadExamenRel;
+    
     
     /**
      * Constructor
@@ -168,6 +169,30 @@ class RhuEntidadExamen
     }
 
     /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuEntidadExamen
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
+    }
+
+    /**
      * Add examenesEntidadExamenRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesEntidadExamenRel
@@ -233,29 +258,5 @@ class RhuEntidadExamen
     public function getPagosExamenesEntidadExamenRel()
     {
         return $this->pagosExamenesEntidadExamenRel;
-    }
-
-    /**
-     * Set codigoUsuario
-     *
-     * @param string $codigoUsuario
-     *
-     * @return RhuEntidadExamen
-     */
-    public function setCodigoUsuario($codigoUsuario)
-    {
-        $this->codigoUsuario = $codigoUsuario;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoUsuario
-     *
-     * @return string
-     */
-    public function getCodigoUsuario()
-    {
-        return $this->codigoUsuario;
     }
 }
