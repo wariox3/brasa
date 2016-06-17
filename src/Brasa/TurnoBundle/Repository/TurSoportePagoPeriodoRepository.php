@@ -5,8 +5,15 @@ namespace Brasa\TurnoBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 class TurSoportePagoPeriodoRepository extends EntityRepository {
-    public function listaDql() {
-        $dql   = "SELECT spp FROM BrasaTurnoBundle:TurSoportePagoPeriodo spp ORDER BY spp.codigoSoportePagoPeriodoPk DESC";
+    public function listaDql($boolEstadoCerrado = "", $codigoRecursoGrupo = "") {
+        $dql   = "SELECT spp FROM BrasaTurnoBundle:TurSoportePagoPeriodo spp WHERE spp.codigoSoportePagoPeriodoPk <> 0 ";
+        if($boolEstadoCerrado == 1 ) {
+            $dql .= " AND spp.estadoCerrado = 1";
+        }
+        if($boolEstadoCerrado == "0") {
+            $dql .= " AND spp.estadoCerrado = 0";
+        }
+        $dql .= " ORDER BY spp.codigoSoportePagoPeriodoPk DESC";
         return $dql;
     }
     

@@ -19,7 +19,8 @@ class GenerarSoportePagoController extends Controller
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioGenerar();
-        $form->handleRequest($request);        
+        $form->handleRequest($request); 
+        $this->listaPeriodo();
         if ($form->isValid()) {
             if($request->request->get('OpGenerar')) {  
                 set_time_limit(0);
@@ -86,10 +87,12 @@ class GenerarSoportePagoController extends Controller
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
                 
             }            
-            
-        }
-        $dql = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->listaDql();
-        $arSoportePagoPeriodos = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 20);
+            if ($form->get('BtnFiltrar')->isClicked()) {
+                $this->filtrar($form);                
+                $this->listaPeriodo();
+            }            
+        }        
+        $arSoportePagoPeriodos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
         return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:generar.html.twig', array(
             'arSoportePagoPeriodos' => $arSoportePagoPeriodos,
             'form' => $form->createView()));
@@ -286,10 +289,22 @@ class GenerarSoportePagoController extends Controller
             'arSoportePago' => $arSoportePago,
             'form' => $form->createView()));
     }    
+
+    private function listaPeriodo() {
+        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->listaDql(                
+                $session->get('filtroSoportePagoEstadoCerrado')
+                );        
+    }    
     
     private function lista($codigoSoportePagoPeriodo) {
+        $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurSoportePago')->listaDql($codigoSoportePagoPeriodo);        
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurSoportePago')->listaDql(
+                $codigoSoportePagoPeriodo,
+                $session->get('filtroSoportePagoEstadoCerrado')
+                );        
     }
 
     private function listaDetalle($codigoSoportePago, $codigoSoportePagoPeriodo) {
@@ -297,9 +312,35 @@ class GenerarSoportePagoController extends Controller
         $this->strListaDqlDetalle =  $em->getRepository('BrasaTurnoBundle:TurSoportePagoDetalle')->listaDql($codigoSoportePagoPeriodo, $codigoSoportePago);
     }    
 
+    private function filtrar ($form) {
+        $session = $this->getRequest()->getSession();        
+        $session->set('filtroSoportePagoEstadoCerrado', $form->get('estadoCerrado')->getData());          
+    }    
+    
     private function formularioGenerar() {
+        $session = $this->getRequest()->getSession();
+        $arrayPropiedadesRecursoGrupo = array(
+                'class' => 'BrasaTurnoBundle:TurRecursoGrupo',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('rg')
+                    ->orderBy('rg.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoRecursoGrupo')) {
+            $arrayPropiedadesRecursoGrupo['data'] = $em->getReference("BrasaTurnoBundle:TurRecursoGrupo", $session->get('filtroCodigoRecursoGrupo'));
+        }        
+        if($session->get('filtroSoportePagoEstadoCerrado') == null) {
+            $session->set('filtroSoportePagoEstadoCerrado', 0); 
+        }
         $form = $this->createFormBuilder()
+            ->add('recursoGrupoRel', 'entity', $arrayPropiedadesRecursoGrupo)
+            ->add('estadoCerrado', 'choice', array('choices'   => array('0' => 'SIN CERRAR', '1' => 'CERRADO', '2' => 'TODOS'), 'data' => $session->get('filtroSoportePagoEstadoCerrado')))                                
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar')) 
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))                
             ->getForm();
         return $form;
     }
@@ -896,14 +937,15 @@ class GenerarSoportePagoController extends Controller
     
     private function festivosDomingos($desde, $hasta, $arFestivos) {
         $arrDias = array('festivos' => 0, 'domingos' => 0);
+        $fechaDesde = date_create($desde->format('Y-m-d'));
         $domingos = 0;
-        $festivos = 0;
-        while($desde <= $hasta) {
-            $desde->modify('+1 day');  
-            if($desde->format('N') == 7) {
+        $festivos = 0;        
+        while($fechaDesde <= $hasta) {
+            $fechaDesde->modify('+1 day');  
+            if($fechaDesde->format('N') == 7) {
                $domingos++; 
             }
-            if($this->festivo($arFestivos, $desde) == true) {
+            if($this->festivo($arFestivos, $fechaDesde) == true) {
                $festivos++; 
             }
         }
