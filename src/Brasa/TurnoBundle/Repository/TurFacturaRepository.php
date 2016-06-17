@@ -295,7 +295,7 @@ class TurFacturaRepository extends EntityRepository {
             $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
             $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->findOneBy(array('codigoCuentaCobrarTipoFk' => 2, 'numeroDocumento' => $arFactura->getNumero()));
             if($arCuentaCobrar) {
-                if($arCuentaCobrar->getAbono() == $arCuentaCobrar->getSaldo()) {
+                if($arCuentaCobrar->getValorOriginal() == $arCuentaCobrar->getSaldo()) {
                     $arCuentaCobrar->setSaldo(0);
                     $arCuentaCobrar->setValorOriginal(0);
                     $arCuentaCobrar->setAbono(0);
