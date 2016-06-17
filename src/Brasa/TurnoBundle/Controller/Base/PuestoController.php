@@ -236,7 +236,8 @@ class PuestoController extends Controller
                     ->setCellValue('F1', 'TELEFONO')
                     ->setCellValue('G1', 'CELULAR')
                     ->setCellValue('H1', 'DIRECCION')
-                    ->setCellValue('I1', 'COSTO');
+                    ->setCellValue('I1', 'COSTO')
+                    ->setCellValue('J1', 'INTERFACE');
 
         $i = 2;
         
@@ -254,7 +255,8 @@ class PuestoController extends Controller
                     ->setCellValue('F' . $i, $arPuesto->getTelefono())
                     ->setCellValue('G' . $i, $arPuesto->getCelular())
                     ->setCellValue('H' . $i, $arPuesto->getDireccion())
-                    ->setCellValue('I' . $i, $arPuesto->getCostoDotacion());                                    
+                    ->setCellValue('I' . $i, $arPuesto->getCostoDotacion())
+                    ->setCellValue('J' . $i, $arPuesto->getCodigoInterface());                                    
             $i++;
         }
         
