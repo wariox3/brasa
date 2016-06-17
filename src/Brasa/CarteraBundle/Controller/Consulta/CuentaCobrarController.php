@@ -23,12 +23,18 @@ class CuentaCobrarController extends Controller
         $strWhere = "";
         if ($form->isValid()) {
             if ($form->get('BtnFiltrar')->isClicked()) {
+                $this->formularioFiltro();
                 $strWhere .= $this->devFiltro($form);
             }
             if ($form->get('BtnExcel')->isClicked()) {
                 $strWhere .= $this->devFiltro($form);
                 $this->generarExcel($strWhere);
             }
+            if ($form->get('BtnPdf')->isClicked()) {
+                $strWhere .= $this->devFiltro($form);
+                $objEstadoCuenta = new \Brasa\CarteraBundle\Formatos\EstadoCuenta();
+                $objEstadoCuenta->Generar($this, $strWhere);
+            }            
         }
         $connection = $em->getConnection();
         $strSql = "SELECT  
@@ -45,6 +51,8 @@ class CuentaCobrarController extends Controller
     }
 
     private function devFiltro($form) {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
         $strWhere = "";
         $arTipo = $form->get('cuentaCobrarTipoRel')->getData();  
         if($arTipo) {
@@ -57,7 +65,15 @@ class CuentaCobrarController extends Controller
         $intRango = $form->get('rango')->getData();
         if($intRango != 0) {
             $strWhere .= " AND rango = " . $intRango;
-        }        
+        } 
+        $nit = $form->get('TxtNit')->getData();
+        if($nit != "") {            
+            $arCliente = $em->getRepository('BrasaCarteraBundle:CarCliente')->findOneBy(array('nit' => $nit));
+            if($arCliente) {            
+                   $strWhere .= " AND codigoClienteFk = " . $arCliente->getCodigoClientePk(); 
+            }            
+        }
+
         return $strWhere;
     }
     
@@ -114,6 +130,7 @@ class CuentaCobrarController extends Controller
             ->add('rango', 'choice', array('choices' => array('0' => 'TODOS','30' => '1 - 30', '60' => '31 - 60', '90' => '61 - 90', '180' => '91 - 180')))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date')))
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date')))            
+            ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();

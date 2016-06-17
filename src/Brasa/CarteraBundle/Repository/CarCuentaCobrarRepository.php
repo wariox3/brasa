@@ -59,8 +59,7 @@ class CarCuentaCobrarRepository extends EntityRepository
             $dql .= " AND cc.fecha <='" . date_format($strFechaHasta, ('Y-m-d')) . "'";
         }        
         return $dql;
-    }
-        
+    }    
         
     /**
      * Aplicar cartera: Este metodo efectua el movimiento de cartera respectivo para un movimiento

@@ -28,6 +28,7 @@
         <div style="float:right">
             {% if arFactura.estadoAutorizado == 1 %}<span class="label label-default">Autorizado</span>{% endif %}
             {% if arFactura.numero != 0 %}<span class="label label-success">Impreso</span>{% endif %}
+            {% if arFactura.estadoContabilizado == 1 %}<span class="label label-success">Contabilizado</span>{% endif %}
             {% if arFactura.estadoAnulado == 1 %}<span class="label label-danger">Anulado</span>{% endif %}
         </div>
         <br /><br />

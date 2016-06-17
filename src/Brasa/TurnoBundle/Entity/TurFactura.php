@@ -62,6 +62,11 @@ class TurFactura
      */    
     private $estadoAnulado = false;    
 
+    /**     
+     * @ORM\Column(name="estado_contabilizado", type="boolean")
+     */    
+    private $estadoContabilizado = false;    
+    
     /**
      * @ORM\Column(name="vr_base_aiu", type="float")
      */
@@ -695,5 +700,29 @@ class TurFactura
     public function getProyectoRel()
     {
         return $this->proyectoRel;
+    }
+
+    /**
+     * Set estadoContabilizado
+     *
+     * @param boolean $estadoContabilizado
+     *
+     * @return TurFactura
+     */
+    public function setEstadoContabilizado($estadoContabilizado)
+    {
+        $this->estadoContabilizado = $estadoContabilizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoContabilizado
+     *
+     * @return boolean
+     */
+    public function getEstadoContabilizado()
+    {
+        return $this->estadoContabilizado;
     }
 }

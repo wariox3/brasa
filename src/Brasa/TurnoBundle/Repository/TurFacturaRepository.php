@@ -262,7 +262,7 @@ class TurFacturaRepository extends EntityRepository {
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();        
         $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);            
         $strResultado = "";        
-        if($arFactura->getEstadoAutorizado() == 1 && $arFactura->getEstadoAnulado() == 0 && $arFactura->getNumero() != 0) {
+        if($arFactura->getEstadoAutorizado() == 1 && $arFactura->getEstadoAnulado() == 0 && $arFactura->getNumero() != 0 && $arFactura->getEstadoContabilizado() == 0) {
             $boolAnular = TRUE;
             $arFacturaDetalles = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
             $arFacturaDetalles = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura));      
@@ -290,11 +290,37 @@ class TurFacturaRepository extends EntityRepository {
             $arFactura->setVrTotal(0);
             $arFactura->setEstadoAnulado(1);
             $em->persist($arFactura);
+            
+            //Anular cuenta por cobrar        
+            $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
+            $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->findOneBy(array('codigoCuentaCobrarTipoFk' => 2, 'numeroDocumento' => $arFactura->getNumero()));
+            if($arCuentaCobrar) {
+                if($arCuentaCobrar->getAbono() == $arCuentaCobrar->getSaldo()) {
+                    $arCuentaCobrar->setSaldo(0);
+                    $arCuentaCobrar->setValorOriginal(0);
+                    $arCuentaCobrar->setAbono(0);
+                    $em->persist($arCuentaCobrar);                    
+                }
+            }                                                   
             $em->flush();      
                            
         } else {
-            $strResultado = "La factura debe estar autorizada, no puede estar previamente anulada, debe estar impresa";
+            $strResultado = "La factura debe estar autorizada e impresa, no puede estar previamente anulada ni contabilizada";
         }        
         return $strResultado;
     }        
+    
+    public function contabilizar($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigo) {                                
+                $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigo);                    
+                if($arFactura->getEstadoAutorizado() == 1 && $arFactura->getEstadoContabilizado() == 0 && $arFactura->getNumero() != 0 ) {
+                    $arFactura->setEstadoContabilizado(1);
+                    $em->persist($arFactura);                   
+                }                                     
+            }
+            $em->flush();
+        }
+    }      
 }
