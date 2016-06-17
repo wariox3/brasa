@@ -755,7 +755,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                            $arCredito->setEstadoPagado(1);
                         }
                         $arPagoCredito->setSaldo($arCredito->getSaldo());
-                        $arPagoCredito->setNumeroCuotaActual($arCredito->getNumeroCuotaActual() + 1);
+                        $arPagoCredito->setNumeroCuotaActual($arCredito->getNumeroCuotaActual());
                         $em->persist($arPagoCredito);
                         $em->persist($arCredito);
                     }
