@@ -47,7 +47,7 @@
                     <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }}">Generar</button></td>
                     <td></td>                    
                     <td style="text-align: center"><a href="{{ path('brs_tur_proceso_generar_soporte_pago_nuevo', {'codigoSoportePagoPeriodo': arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
-                    <td></td>
+                    <td style="text-align: center"><a href="{{ path('brs_tur_proceso_generar_soporte_pago_detalle', { 'codigoSoportePagoPeriodo': arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                            
                 {% else %}
                     {% if arSoportePagoPeriodos.estadoCerrado == 0 %}
                         <td><button class="btn btn-default btn-xs" type="submit" name="OpDeshacer" value="{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }}">Deshacer</button></td>

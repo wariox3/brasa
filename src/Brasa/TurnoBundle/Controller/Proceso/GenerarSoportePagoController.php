@@ -249,7 +249,11 @@ class GenerarSoportePagoController extends Controller
         $form = $this->createForm(new TurSoportePagoPeriodoType, $arSoportePagoPeriodo);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arSoportePagoPeriodo = $form->getData();            
+            $arSoportePagoPeriodo = $form->getData();  
+            $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arSoportePagoPeriodo->getFechaDesde()->format('Y-m-d'), $arSoportePagoPeriodo->getFechaHasta()->format('Y-m-d'));
+            $arrDias = $this->festivosDomingos($arSoportePagoPeriodo->getFechaDesde(), $arSoportePagoPeriodo->getFechaHasta(), $arFestivos);
+            $arSoportePagoPeriodo->setDiaDomingoReal($arrDias['domingos']);
+            $arSoportePagoPeriodo->setDiaFestivoReal($arrDias['festivos']);
             $em->persist($arSoportePagoPeriodo);
             $em->flush();
             return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                                                                              
@@ -888,5 +892,23 @@ class GenerarSoportePagoController extends Controller
             $strTurno = $arProgramacionDetalle->getDia31();
         }
         return $strTurno;
+    }
+    
+    private function festivosDomingos($desde, $hasta, $arFestivos) {
+        $arrDias = array('festivos' => 0, 'domingos' => 0);
+        $domingos = 0;
+        $festivos = 0;
+        while($desde <= $hasta) {
+            $desde->modify('+1 day');  
+            if($desde->format('N') == 7) {
+               $domingos++; 
+            }
+            if($this->festivo($arFestivos, $desde) == true) {
+               $festivos++; 
+            }
+        }
+        $arrDias['domingos'] = $domingos;
+        $arrDias['festivos'] = $festivos;
+        return $arrDias;
     }
 }
