@@ -32,6 +32,15 @@ class RhuCreditoPago
      */
     private $vrCuota = 0;
     
+    /**
+     * @ORM\Column(name="saldo", type="float")
+     */
+    private $saldo = 0;
+    
+    /**
+     * @ORM\Column(name="numero_cuota_actual", type="integer")
+     */
+    private $numeroCuotaActual = 0;
     
     /**
      * @ORM\Column(name="fecha_pago", type="date")
@@ -143,6 +152,54 @@ class RhuCreditoPago
     public function getVrCuota()
     {
         return $this->vrCuota;
+    }
+
+    /**
+     * Set saldo
+     *
+     * @param float $saldo
+     *
+     * @return RhuCreditoPago
+     */
+    public function setSaldo($saldo)
+    {
+        $this->saldo = $saldo;
+
+        return $this;
+    }
+
+    /**
+     * Get saldo
+     *
+     * @return float
+     */
+    public function getSaldo()
+    {
+        return $this->saldo;
+    }
+
+    /**
+     * Set numeroCuotaActual
+     *
+     * @param integer $numeroCuotaActual
+     *
+     * @return RhuCreditoPago
+     */
+    public function setNumeroCuotaActual($numeroCuotaActual)
+    {
+        $this->numeroCuotaActual = $numeroCuotaActual;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroCuotaActual
+     *
+     * @return integer
+     */
+    public function getNumeroCuotaActual()
+    {
+        return $this->numeroCuotaActual;
     }
 
     /**

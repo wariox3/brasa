@@ -264,28 +264,13 @@ class FormatoPago extends \FPDF_FPDF {
                         $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
                         $arCredito = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arPagoDetalles->getCodigoCreditoFk());
                         $arCreditoPago = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
-                        $arCreditoPago = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoPago')->findOneBy(array('codigoPagoFk' =>$arPagoDetalles->getCodigoPagoFk()));
-                        $connection = self::$em->getConnection();
-                        $strSql = "SELECT
-                                    COUNT(rhu_credito_pago.fecha_pago) as registros,
-                                    SUM(rhu_credito_pago.vr_cuota) as total
-                                    FROM
-                                    rhu_credito_pago
-                                    INNER JOIN rhu_credito ON rhu_credito_pago.codigo_credito_fk = rhu_credito.codigo_credito_pk
-                                    WHERE
-                                    rhu_credito_pago.codigo_credito_fk = " .$arCredito->getCodigoCreditoPk(). " AND rhu_credito_pago.fecha_pago <= '" . date_format($arCreditoPago->getFechaPago(), ('Y-m-d')) . "' 
-                                    ORDER BY
-                                    rhu_credito_pago.fecha_pago ASC";                    
-                        $statement = $connection->prepare($strSql);        
-                        $statement->execute();
-                        $resultados = $statement->fetchAll();
-                        $saldo = $arCredito->getVrPagar() - $resultados[0]['total'];
+                        $arCreditoPago = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoPago')->findOneBy(array('codigoPagoFk' =>$arPagoDetalles->getCodigoPagoFk(), 'codigoCreditoFk' => $arPagoDetalles->getCodigoCreditoFk()));
                         $pdf->Cell(24, 4, $arCredito->getCodigoCreditoPk(), 1, 0, 'L');
                         $pdf->Cell(24, 4, $arCredito->getFecha()->format('Y/m/d'), 1, 0, 'L');
                         $pdf->Cell(25, 4, number_format($arCredito->getVrPagar(), 0, '.', ','), 1, 0, 'R');
                         $pdf->Cell(24, 4, $arCredito->getNumeroCuotas(), 1, 0, 'L');
-                        $pdf->Cell(24, 4, $resultados[0]['registros'], 1, 0, 'L');
-                        $pdf->Cell(24, 4, number_format($saldo, 0, '.', ','), 1, 0, 'R');
+                        $pdf->Cell(24, 4, $arCreditoPago->getNumeroCuotaActual(), 1, 0, 'L');
+                        $pdf->Cell(24, 4, number_format($arCreditoPago->getSaldo(), 0, '.', ','), 1, 0, 'R');
                         if ($arCredito->getAprobado() == 1){
                             $pdf->Cell(24, 4, "SI", 1, 0, 'L');
                         }
