@@ -746,7 +746,6 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $arPagoCredito->setfechaPago(new \ DateTime("now"));
                         $arPagoCredito->setCreditoTipoPagoRel($arCredito->getCreditoTipoPagoRel());
                         $arPagoCredito->setVrCuota($arPagoDetalle->getVrPago());
-                        $em->persist($arPagoCredito);
                         //Actualizar el saldo del credito
                         $arCredito->setNumeroCuotaActual($arCredito->getNumeroCuotaActual() + 1);
                         $arCredito->setSaldo($arCredito->getSaldo() - $arPagoDetalle->getVrPago());
@@ -755,6 +754,9 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         if($arCredito->getSaldo() <= 0) {
                            $arCredito->setEstadoPagado(1);
                         }
+                        $arPagoCredito->setSaldo($arCredito->getSaldo());
+                        $arPagoCredito->setNumeroCuotaActual($arCredito->getNumeroCuotaActual() + 1);
+                        $em->persist($arPagoCredito);
                         $em->persist($arCredito);
                     }
                     //Liquidacion
