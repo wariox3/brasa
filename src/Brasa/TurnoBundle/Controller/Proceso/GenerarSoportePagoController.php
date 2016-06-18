@@ -130,16 +130,16 @@ class GenerarSoportePagoController extends Controller
                 $arSoportePagos = new \Brasa\TurnoBundle\Entity\TurSoportePago();  
                 $arSoportePagos = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));
                 foreach ($arSoportePagos as $arSoportePago) {
-                    if($arSoportePago->getCodigoRecursoFk() == 172) {
+                    if($arSoportePago->getCodigoRecursoFk() == 6) {
                         echo "hola";
                     }
                     //$horasNovedad = $arSoportePago->getHorasNovedad(); 
                     //$horasLaboralesRecurso = $horasLaborales - $horasNovedad;                                     
                     
-                    $horasDia = $arSoportePago->getHorasDiurnas();
-                    $horasExtraDia = $arSoportePago->getHorasExtrasOrdinariasDiurnas();
-                    $horasNoche = $arSoportePago->getHorasNocturnas();
-                    $horasExtraNoche = $arSoportePago->getHorasExtrasOrdinariasNocturnas();                  
+                    $horasDia = $arSoportePago->getHorasDiurnasReales();
+                    $horasExtraDia = $arSoportePago->getHorasExtrasOrdinariasDiurnasReales();
+                    $horasNoche = $arSoportePago->getHorasNocturnasReales();
+                    $horasExtraNoche = $arSoportePago->getHorasExtrasOrdinariasNocturnasReales();                  
                     $totalHoras = $horasDia + $horasNoche;
                     if($totalHoras < $horasLaborales) {
                         $horasDia += $horasExtraDia;
@@ -150,17 +150,27 @@ class GenerarSoportePagoController extends Controller
                         $horasNoche += $horasExtraNoche;
                         $totalHoras += $horasExtraNoche;
                         $horasExtraNoche = 0;
+                        if($totalHoras > $horasLaborales) {
+                            $diferencia = $totalHoras - $horasLaborales;
+                            $totalHoras -= $diferencia;
+                            $diferenciaHoras = $diferencia / 2;    
+                            $horasDia -= $diferenciaHoras;
+                            $horasNoche -= $diferenciaHoras;
+                            $horasExtraDia += $diferenciaHoras;
+                            $horasExtraNoche += $diferenciaHoras;
+
+                        }                        
+                    } else {
+                        if($totalHoras > $horasLaborales) {
+                            $diferencia = $totalHoras - $horasLaborales;
+                            $totalHoras -= $diferencia;                            
+                            $horasDia -= $diferencia;                            
+                            $horasExtraDia += $diferencia;
+                            
+
+                        }                                                
                     }
-                    if($totalHoras > $horasLaborales) {
-                        $diferencia = $totalHoras - $horasLaborales;
-                        $totalHoras -= $diferencia;
-                        $diferenciaHoras = $diferencia / 2;    
-                        $horasDia -= $diferenciaHoras;
-                        $horasNoche -= $diferenciaHoras;
-                        $horasExtraDia += $diferenciaHoras;
-                        $horasExtraNoche += $diferenciaHoras;
-                        
-                    }
+
                     //Descanso    
                     /*$horasFestivasDiurnas = $arSoportePago->getHorasFestivasDiurnas();
                     $horasFestivasNocturnas = $arSoportePago->getHorasFestivasNocturnas();
@@ -530,7 +540,17 @@ class GenerarSoportePagoController extends Controller
                     ->setCellValue('R1', 'HEOD')
                     ->setCellValue('S1', 'HEON')
                     ->setCellValue('T1', 'HEFD')
-                    ->setCellValue('U1', 'HEFN');
+                    ->setCellValue('U1', 'HEFN')
+                    ->setCellValue('W1', 'HDSR')
+                    ->setCellValue('X1', 'HDR')
+                    ->setCellValue('Y1', 'HNR')
+                    ->setCellValue('Z1', 'HFDR')
+                    ->setCellValue('AA1', 'HFNR')                
+                    ->setCellValue('AB1', 'HEODR')
+                    ->setCellValue('AC1', 'HEONR')
+                    ->setCellValue('AD1', 'HEFDR')
+                    ->setCellValue('AE1', 'HEFNR')
+                    ->setCellValue('AF1', 'PAGO');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -558,7 +578,17 @@ class GenerarSoportePagoController extends Controller
                     ->setCellValue('R' . $i, $arSoportePago->getHorasExtrasOrdinariasDiurnas())
                     ->setCellValue('S' . $i, $arSoportePago->getHorasExtrasOrdinariasNocturnas())
                     ->setCellValue('T' . $i, $arSoportePago->getHorasExtrasFestivasDiurnas())
-                    ->setCellValue('U' . $i, $arSoportePago->getHorasExtrasFestivasNocturnas());
+                    ->setCellValue('U' . $i, $arSoportePago->getHorasExtrasFestivasNocturnas())
+                    ->setCellValue('W' . $i, $arSoportePago->getHorasDescansoReales())
+                    ->setCellValue('X' . $i, $arSoportePago->getHorasDiurnasReales())
+                    ->setCellValue('Y' . $i, $arSoportePago->getHorasNocturnasReales())
+                    ->setCellValue('Z' . $i, $arSoportePago->getHorasFestivasDiurnasReales())
+                    ->setCellValue('AA' . $i, $arSoportePago->getHorasFestivasNocturnasReales())                    
+                    ->setCellValue('AB' . $i, $arSoportePago->getHorasExtrasOrdinariasDiurnasReales())
+                    ->setCellValue('AC' . $i, $arSoportePago->getHorasExtrasOrdinariasNocturnasReales())
+                    ->setCellValue('AD' . $i, $arSoportePago->getHorasExtrasFestivasDiurnasReales())
+                    ->setCellValue('AE' . $i, $arSoportePago->getHorasExtrasFestivasNocturnasReales())
+                    ->setCellValue('AF' . $i, $arSoportePago->getVrPago());
 
             $i++;
         }

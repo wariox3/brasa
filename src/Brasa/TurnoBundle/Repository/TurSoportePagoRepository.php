@@ -101,6 +101,15 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePago->setHorasExtrasOrdinariasNocturnas($arrayResultado[$i]['horasExtrasOrdinariasNocturnas']);
             $arSoportePago->setHorasExtrasFestivasDiurnas($arrayResultado[$i]['horasExtrasFestivasDiurnas']);
             $arSoportePago->setHorasExtrasFestivasNocturnas($arrayResultado[$i]['horasExtrasFestivasNocturnas']);
+            $arSoportePago->setHorasDescansoReales($arrayResultado[$i]['horasDescanso']);
+            $arSoportePago->setHorasDiurnasReales($arrayResultado[$i]['horasDiurnas']);
+            $arSoportePago->setHorasNocturnasReales($arrayResultado[$i]['horasNocturnas']);
+            $arSoportePago->setHorasFestivasDiurnasReales($arrayResultado[$i]['horasFestivasDiurnas']);
+            $arSoportePago->setHorasFestivasNocturnasReales($arrayResultado[$i]['horasFestivasNocturnas']);            
+            $arSoportePago->setHorasExtrasOrdinariasDiurnasReales($arrayResultado[$i]['horasExtrasOrdinariasDiurnas']);
+            $arSoportePago->setHorasExtrasOrdinariasNocturnasReales($arrayResultado[$i]['horasExtrasOrdinariasNocturnas']);
+            $arSoportePago->setHorasExtrasFestivasDiurnasReales($arrayResultado[$i]['horasExtrasFestivasDiurnas']);
+            $arSoportePago->setHorasExtrasFestivasNocturnasReales($arrayResultado[$i]['horasExtrasFestivasNocturnas']);            
             if($arContrato) {
                 $arSoportePago->setCodigoContratoFk($arContrato->getCodigoContratoPk());
                 $arSoportePago->setVrSalario($arContrato->getVrSalario());

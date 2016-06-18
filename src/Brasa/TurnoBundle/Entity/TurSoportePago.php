@@ -53,7 +53,7 @@ class TurSoportePago
     private $vrPago = 0;    
     
     /**     
-     * @ORM\Column(name="estado_cerrado", type="boolean")
+     * @ORM\Column(name="estado_cerrado", type="boolean", nullable=true)
      */    
     private $estadoCerrado = false;    
 
@@ -147,6 +147,56 @@ class TurSoportePago
      */    
     private $horasExtrasFestivasNocturnas = 0;    
 
+    /**
+     * @ORM\Column(name="horas_descanso_reales", type="float")
+     */    
+    private $horasDescansoReales = 0;    
+    
+    /**
+     * @ORM\Column(name="horas_diurnas_reales", type="float")
+     */    
+    private $horasDiurnasReales = 0;     
+
+    /**
+     * @ORM\Column(name="horas_nocturnas_reales", type="float")
+     */    
+    private $horasNocturnasReales = 0;    
+        
+    /**
+     * @ORM\Column(name="horas_festivas_diurnas_reales", type="float")
+     */    
+    private $horasFestivasDiurnasReales = 0;     
+
+    /**
+     * @ORM\Column(name="horas_festivas_nocturnas_reales", type="float")
+     */    
+    private $horasFestivasNocturnasReales = 0;     
+    
+    /**
+     * @ORM\Column(name="horas_extras_ordinarias_diurnas_reales", type="float")
+     */    
+    private $horasExtrasOrdinariasDiurnasReales = 0;    
+
+    /**
+     * @ORM\Column(name="horas_extras_ordinarias_nocturnas_reales", type="float")
+     */    
+    private $horasExtrasOrdinariasNocturnasReales = 0;        
+
+    /**
+     * @ORM\Column(name="horas_extras_festivas_diurnas_reales", type="float")
+     */    
+    private $horasExtrasFestivasDiurnasReales = 0;    
+
+    /**
+     * @ORM\Column(name="horas_extras_festivas_nocturnas_reales", type="float")
+     */    
+    private $horasExtrasFestivasNocturnasReales = 0;    
+    
+    /**     
+     * @ORM\Column(name="terminacion_turno", type="integer", nullable=true)
+     */    
+    private $terminacionTurno;     
+    
     /**
      * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
      */    
@@ -964,5 +1014,245 @@ class TurSoportePago
     public function getVrPago()
     {
         return $this->vrPago;
+    }
+
+    /**
+     * Set horasDescansoReales
+     *
+     * @param float $horasDescansoReales
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasDescansoReales($horasDescansoReales)
+    {
+        $this->horasDescansoReales = $horasDescansoReales;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDescansoReales
+     *
+     * @return float
+     */
+    public function getHorasDescansoReales()
+    {
+        return $this->horasDescansoReales;
+    }
+
+    /**
+     * Set horasDiurnasReales
+     *
+     * @param float $horasDiurnasReales
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasDiurnasReales($horasDiurnasReales)
+    {
+        $this->horasDiurnasReales = $horasDiurnasReales;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDiurnasReales
+     *
+     * @return float
+     */
+    public function getHorasDiurnasReales()
+    {
+        return $this->horasDiurnasReales;
+    }
+
+    /**
+     * Set horasNocturnasReales
+     *
+     * @param float $horasNocturnasReales
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasNocturnasReales($horasNocturnasReales)
+    {
+        $this->horasNocturnasReales = $horasNocturnasReales;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNocturnasReales
+     *
+     * @return float
+     */
+    public function getHorasNocturnasReales()
+    {
+        return $this->horasNocturnasReales;
+    }
+
+    /**
+     * Set horasFestivasDiurnasReales
+     *
+     * @param float $horasFestivasDiurnasReales
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasFestivasDiurnasReales($horasFestivasDiurnasReales)
+    {
+        $this->horasFestivasDiurnasReales = $horasFestivasDiurnasReales;
+
+        return $this;
+    }
+
+    /**
+     * Get horasFestivasDiurnasReales
+     *
+     * @return float
+     */
+    public function getHorasFestivasDiurnasReales()
+    {
+        return $this->horasFestivasDiurnasReales;
+    }
+
+    /**
+     * Set horasFestivasNocturnasReales
+     *
+     * @param float $horasFestivasNocturnasReales
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasFestivasNocturnasReales($horasFestivasNocturnasReales)
+    {
+        $this->horasFestivasNocturnasReales = $horasFestivasNocturnasReales;
+
+        return $this;
+    }
+
+    /**
+     * Get horasFestivasNocturnasReales
+     *
+     * @return float
+     */
+    public function getHorasFestivasNocturnasReales()
+    {
+        return $this->horasFestivasNocturnasReales;
+    }
+
+    /**
+     * Set horasExtrasOrdinariasDiurnasReales
+     *
+     * @param float $horasExtrasOrdinariasDiurnasReales
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasExtrasOrdinariasDiurnasReales($horasExtrasOrdinariasDiurnasReales)
+    {
+        $this->horasExtrasOrdinariasDiurnasReales = $horasExtrasOrdinariasDiurnasReales;
+
+        return $this;
+    }
+
+    /**
+     * Get horasExtrasOrdinariasDiurnasReales
+     *
+     * @return float
+     */
+    public function getHorasExtrasOrdinariasDiurnasReales()
+    {
+        return $this->horasExtrasOrdinariasDiurnasReales;
+    }
+
+    /**
+     * Set horasExtrasOrdinariasNocturnasReales
+     *
+     * @param float $horasExtrasOrdinariasNocturnasReales
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasExtrasOrdinariasNocturnasReales($horasExtrasOrdinariasNocturnasReales)
+    {
+        $this->horasExtrasOrdinariasNocturnasReales = $horasExtrasOrdinariasNocturnasReales;
+
+        return $this;
+    }
+
+    /**
+     * Get horasExtrasOrdinariasNocturnasReales
+     *
+     * @return float
+     */
+    public function getHorasExtrasOrdinariasNocturnasReales()
+    {
+        return $this->horasExtrasOrdinariasNocturnasReales;
+    }
+
+    /**
+     * Set horasExtrasFestivasDiurnasReales
+     *
+     * @param float $horasExtrasFestivasDiurnasReales
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasExtrasFestivasDiurnasReales($horasExtrasFestivasDiurnasReales)
+    {
+        $this->horasExtrasFestivasDiurnasReales = $horasExtrasFestivasDiurnasReales;
+
+        return $this;
+    }
+
+    /**
+     * Get horasExtrasFestivasDiurnasReales
+     *
+     * @return float
+     */
+    public function getHorasExtrasFestivasDiurnasReales()
+    {
+        return $this->horasExtrasFestivasDiurnasReales;
+    }
+
+    /**
+     * Set horasExtrasFestivasNocturnasReales
+     *
+     * @param float $horasExtrasFestivasNocturnasReales
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasExtrasFestivasNocturnasReales($horasExtrasFestivasNocturnasReales)
+    {
+        $this->horasExtrasFestivasNocturnasReales = $horasExtrasFestivasNocturnasReales;
+
+        return $this;
+    }
+
+    /**
+     * Get horasExtrasFestivasNocturnasReales
+     *
+     * @return float
+     */
+    public function getHorasExtrasFestivasNocturnasReales()
+    {
+        return $this->horasExtrasFestivasNocturnasReales;
+    }
+
+    /**
+     * Set terminacionTurno
+     *
+     * @param integer $terminacionTurno
+     *
+     * @return TurSoportePago
+     */
+    public function setTerminacionTurno($terminacionTurno)
+    {
+        $this->terminacionTurno = $terminacionTurno;
+
+        return $this;
+    }
+
+    /**
+     * Get terminacionTurno
+     *
+     * @return integer
+     */
+    public function getTerminacionTurno()
+    {
+        return $this->terminacionTurno;
     }
 }
