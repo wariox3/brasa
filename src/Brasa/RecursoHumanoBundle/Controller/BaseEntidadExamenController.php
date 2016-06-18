@@ -55,6 +55,7 @@ class BaseEntidadExamenController extends Controller
         }    
         if($form->get('BtnExcel')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();
+                ob_clean();
                 // Set document properties
                 $objPHPExcel->getProperties()->setCreator("EMPRESA")
                     ->setLastModifiedBy("EMPRESA")

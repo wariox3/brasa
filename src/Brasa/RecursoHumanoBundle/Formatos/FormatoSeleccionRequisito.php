@@ -91,7 +91,11 @@ class FormatoSeleccionRequisito extends \FPDF_FPDF {
         $this->SetFont('Arial','B',7);
         $this->Cell(25, 6, "ESTADO CIVIL:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(22, 6, $arSeleccionRequisito->getEstadoCivilRel()->getNombre() , 1, 0, 'L', 1);
+        $estadoCivil = "";
+        if ($arSeleccionRequisito->getCodigoEstadoCivilFk() != null){
+            $estadoCivil = $arSeleccionRequisito->getEstadoCivilRel()->getNombre();
+        }
+        $this->Cell(22, 6, $estadoCivil , 1, 0, 'L', 1);
         $this->SetFont('Arial','B',7);
         $this->Cell(22, 6, "CIUDAD:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
