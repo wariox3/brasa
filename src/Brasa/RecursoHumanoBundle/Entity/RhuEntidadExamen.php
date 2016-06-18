@@ -18,7 +18,7 @@ class RhuEntidadExamen
     private $codigoEntidadExamenPk;
     
     /**
-     * @ORM\Column(name="nombre", type="string", length=60, nullable=true)
+     * @ORM\Column(name="nombre", type="string", length=120, nullable=true)
      */    
     private $nombre;    
     
@@ -51,6 +51,7 @@ class RhuEntidadExamen
      * @ORM\OneToMany(targetEntity="RhuPagoExamen", mappedBy="entidadExamenRel")
      */
     protected $pagosExamenesEntidadExamenRel;
+    
     
     
     /**
