@@ -120,33 +120,37 @@ class AspiranteController extends Controller
             $em->persist($arRequisicionAspirante);
             $arRequisicionDato = $form->get('seleccionRequisicionRel')->getData();
             $arRequisicionAspiranteValidar = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisicionAspirante')->findBy(array('codigoSeleccionRequisitoFk' => $arRequisicionDato, 'codigoAspiranteFk' => $codigoAspirante));
-            if ($arRequisicionDato->getEstadoAbierto() == 0){
-                if ($arRequisicionAspiranteValidar == null){
-                    //Calculo edad
-                        $varFechaNacimientoAnio = $arAspirante->getFechaNacimiento()->format('Y');
-                        $varFechaNacimientoMes = $arAspirante->getFechaNacimiento()->format('m');
-                        $varMesActual = date('m');
-                        if ($varMesActual >= $varFechaNacimientoMes){
-                            $varEdad = date('Y') - $varFechaNacimientoAnio;
-                        } else {
-                            $varEdad = date('Y') - $varFechaNacimientoAnio -1;
-                        }
-                    //Fin calculo edad
-                    $edadMinima = $arRequisicionDato->getEdadMinima();
-                    $edadMaxima = $arRequisicionDato->getEdadMaxima();
-                    if ($edadMinima != "" && $edadMaxima != ""){
-                        if ($varEdad <= $edadMaxima && $varEdad >= $edadMinima){
-                            $em->flush();
-                            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                     
-                        } else {
-                            $objMensaje->Mensaje("error", "El aspirante debe tener una edad entre " .$edadMinima. " y " .$edadMaxima . " años para aplicar a la requisicion", $this);
-                        }
-                    }    
+            if ($arAspirante->getInconsistencia() == 0){
+                if ($arRequisicionDato->getEstadoAbierto() == 0){
+                    if ($arRequisicionAspiranteValidar == null){
+                        //Calculo edad
+                            $varFechaNacimientoAnio = $arAspirante->getFechaNacimiento()->format('Y');
+                            $varFechaNacimientoMes = $arAspirante->getFechaNacimiento()->format('m');
+                            $varMesActual = date('m');
+                            if ($varMesActual >= $varFechaNacimientoMes){
+                                $varEdad = date('Y') - $varFechaNacimientoAnio;
+                            } else {
+                                $varEdad = date('Y') - $varFechaNacimientoAnio -1;
+                            }
+                        //Fin calculo edad
+                        $edadMinima = $arRequisicionDato->getEdadMinima();
+                        $edadMaxima = $arRequisicionDato->getEdadMaxima();
+                        if ($edadMinima != "" && $edadMaxima != ""){
+                            if ($varEdad <= $edadMaxima && $varEdad >= $edadMinima){
+                                $em->flush();
+                                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                     
+                            } else {
+                                $objMensaje->Mensaje("error", "El aspirante debe tener una edad entre " .$edadMinima. " y " .$edadMaxima . " años para aplicar a la requisicion", $this);
+                            }
+                        }    
+                    } else {
+                        $objMensaje->Mensaje("error", "El aspirante ya se encuenta en la requisicion", $this);
+                    }
                 } else {
-                    $objMensaje->Mensaje("error", "El aspirante ya se encuenta en la requisicion", $this);
+                    $objMensaje->Mensaje('error','La requisicion esta cerrada, no puede aplicar',$this);
                 }
             } else {
-                    $objMensaje->Mensaje('error','La requisicion esta cerrada, no puede aplicar',$this);
+                $objMensaje->Mensaje('error','El aspirante no puede aplicar a la requisión, tiene inconsistencis',$this);
             }    
         }
 
@@ -301,7 +305,8 @@ class AspiranteController extends Controller
                     ->setCellValue('P1', 'SEXO')
                     ->setCellValue('Q1', 'CORREO')
                     ->setCellValue('R1', 'DISPONIBILIDAD')
-                    ->setCellValue('S1', 'COMENTARIOS');
+                    ->setCellValue('S1', 'INCONSISTENCIA')
+                    ->setCellValue('T1', 'COMENTARIOS');
 
         $i = 2;
         $query = $em->createQuery($session->get('dqlAspiranteLista'));
@@ -349,6 +354,10 @@ class AspiranteController extends Controller
             if ($arAspirantes->getCodigoDisponibilidadFk() == "0"){
                 $disponibilidad = "NO APLICA";
             }
+            $inconsistencia = "NO";
+            if ($arAspirantes->getInconsistencia() == 1){
+                $inconsistencia = "SI";
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arAspirantes->getCodigoAspirantePk())
                     ->setCellValue('B' . $i, $arAspirantes->getFecha()->format('Y-m-d'))
@@ -368,7 +377,8 @@ class AspiranteController extends Controller
                     ->setCellValue('P' . $i, $sexo)
                     ->setCellValue('Q' . $i, $arAspirantes->getCorreo())
                     ->setCellValue('R' . $i, $disponibilidad)
-                    ->setCellValue('S' . $i, $arAspirantes->getComentarios());
+                    ->setCellValue('S' . $i, $inconsistencia)
+                    ->setCellValue('T' . $i, $arAspirantes->getComentarios());
             $i++;
         }
 

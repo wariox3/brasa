@@ -34,6 +34,18 @@ class RhuAspiranteRepository extends EntityRepository {
         $dql .= " ORDER BY a.fecha";
         return $dql;
     }
+    
+    public function aspirantesInconsistenciaDQL($strNombre = "", $strIdentificacion = "") {
+        $dql   = "SELECT a FROM BrasaRecursoHumanoBundle:RhuAspirante a WHERE a.codigoAspirantePk <> 0 and a.inconsistencia = 1";
+        if($strNombre != "" ) {
+            $dql .= " AND a.nombreCorto LIKE '%" . $strNombre . "%'";
+        }
+        if($strIdentificacion != "" ) {
+            $dql .= " AND a.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
+        }
+        $dql .= " ORDER BY a.fecha";
+        return $dql;
+    }
 
     public function estadoAprobadoAspirantes($codigoAspitante) {
         $em = $this->getEntityManager();

@@ -956,7 +956,11 @@ brs_rhu_consultas_permisos:
     
 brs_rhu_consultas_adicionales_pago:    
     path:     /rhu/consultas/adicionales/pago
-    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasAdicionalesPago:lista }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasAdicionalesPago:lista }
+    
+brs_rhu_consultas_aspirantes_inconsistencias:    
+    path:     /rhu/consultas/aspirantes/inconsistencias
+    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasAspiranteInconsistencias:lista }    
     
 brs_rhu_pago_examen_lista:
     path:     /rhu/pago/examen/lista

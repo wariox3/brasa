@@ -9,7 +9,10 @@ class GenContenidoFormatoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder                                                                                    
-            ->add('titulo', 'text', array('required' => true))                                
+            ->add('titulo', 'text', array('required' => true))
+            ->add('nombreFormatoIso', 'text', array('required' => false))
+            ->add('version', 'text', array('required' => false))
+            ->add('fechaVersion', 'date', array('required' => true))    
             ->add('contenido', 'textarea', array('required' => true))                                
             ->add('guardar', 'submit');        
     }

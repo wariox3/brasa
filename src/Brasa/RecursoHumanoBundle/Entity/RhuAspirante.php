@@ -146,6 +146,11 @@ class RhuAspirante
     private $codigoDisponibilidadFk;
     
     /**
+     * @ORM\Column(name="inconsistencia", type="boolean")
+     */
+    private $inconsistencia = false;
+    
+    /**
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
      */    
     private $codigoUsuario;
@@ -1041,5 +1046,29 @@ class RhuAspirante
     public function getSeleccionesRequisicionesAspirantesAspiranteRel()
     {
         return $this->seleccionesRequisicionesAspirantesAspiranteRel;
+    }
+
+    /**
+     * Set inconsistencia
+     *
+     * @param boolean $inconsistencia
+     *
+     * @return RhuAspirante
+     */
+    public function setInconsistencia($inconsistencia)
+    {
+        $this->inconsistencia = $inconsistencia;
+
+        return $this;
+    }
+
+    /**
+     * Get inconsistencia
+     *
+     * @return boolean
+     */
+    public function getInconsistencia()
+    {
+        return $this->inconsistencia;
     }
 }

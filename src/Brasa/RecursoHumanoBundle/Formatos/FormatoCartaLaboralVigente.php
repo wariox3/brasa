@@ -20,6 +20,8 @@ class FormatoCartaLaboralVigente extends \FPDF_FPDF {
     } 
     
     public function Header() {
+        $arContenidoFormatoA = new \Brasa\RecursoHumanoBundle\Entity\RhuContenidoFormato();
+        $arContenidoFormatoA = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContenidoFormato')->find(11);
         $this->SetFillColor(272, 272, 272);
         $this->SetFont('Arial','B',10);
         $this->SetXY(10, 10);
@@ -28,7 +30,7 @@ class FormatoCartaLaboralVigente extends \FPDF_FPDF {
         $this->Line(10, 50, 60, 50);
         $this->Cell(0, 0, $this->Image('imagenes/logos/logo.jpg' , 15 ,20, 40 , 20,'JPG'), 0, 0, 'C', 0); //cuadro para el logo
         $this->SetXY(60, 10);
-        $this->Cell(90, 10, utf8_decode(""), 1, 0, 'C', 1); //cuardo mitad arriba
+        $this->Cell(90, 10, utf8_decode(""), 1, 0, 'C', 1); //cuadro mitad arriba
         $this->SetXY(60, 20);
         $this->SetFillColor(236, 236, 236);
         $this->Cell(90, 20, utf8_decode(""), 1, 0, 'C', 1); //cuardo mitad medio
@@ -38,7 +40,7 @@ class FormatoCartaLaboralVigente extends \FPDF_FPDF {
         $this->SetXY(150, 10);
         $this->Cell(50, 10, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 1, 0, 'C', 1); //cuadro derecho arriba
         $this->SetXY(150, 20);
-        $this->Cell(50, 20, utf8_decode(""), 1, 0, 'C', 1); //cuadro derecho mitad 1
+        $this->Cell(50, 20, utf8_decode(utf8_decode($arContenidoFormatoA->getNombreFormatoIso())), 1, 0, 'C', 1); //cuadro derecho mitad 1
         $this->SetXY(150, 40);
         $this->Cell(50, 5, utf8_decode("Versión 01"), 1, 0, 'C', 1); //cuadro derecho abajo 1
         $this->SetXY(150, 45);

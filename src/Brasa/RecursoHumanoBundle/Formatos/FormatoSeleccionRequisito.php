@@ -3,6 +3,7 @@ namespace Brasa\RecursoHumanoBundle\Formatos;
 class FormatoSeleccionRequisito extends \FPDF_FPDF {
     public static $em;
     public static $codigoSeleccionRequisito;
+    
     public function Generar($miThis, $codigoSeleccionRequisito) {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();

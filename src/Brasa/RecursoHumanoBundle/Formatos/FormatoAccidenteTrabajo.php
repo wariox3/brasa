@@ -69,7 +69,11 @@ class FormatoAccidenteTrabajo extends \FPDF_FPDF {
         $pdf->SetFont('Arial','b',8);
         $pdf->Cell(80, 5, utf8_decode("FECHA EN QUE SE ENVÍA LA INVESTIGACIÓN:"), 1, 0, 'C', 0);
         $pdf->SetFont('Arial','',8);
-        $pdf->Cell(38, 5, $arAccidenteTrabajo->getFechaEnviaInvestigacion()->format('Y-m-d'), 1, 0, 'C', 0);
+        $fechaEnviaInvestigacion = "";
+        if ($arAccidenteTrabajo->getFechaEnviaInvestigacion() != null){
+            $fechaEnviaInvestigacion = $arAccidenteTrabajo->getFechaEnviaInvestigacion()->format('Y-m-d');
+        }
+        $pdf->Cell(38, 5, $fechaEnviaInvestigacion, 1, 0, 'C', 0);
         $pdf->SetXY($intX, $intY+5);
         $pdf->SetFont('Arial','b',8);
         $pdf->Cell(198, 5, utf8_decode("INFORMACIÓN GENERAL DE LA EMPRESA"), 1, 0, 'L', 0);
@@ -148,6 +152,10 @@ class FormatoAccidenteTrabajo extends \FPDF_FPDF {
         $pdf->SetFont('Arial','',8);
         $pdf->Cell(80, 5, utf8_decode($arAccidenteTrabajo->getCiudadRel()->getNombre()), 1, 0, 'L', 0);
         $pdf->Cell(59, 5, utf8_decode($arAccidenteTrabajo->getCodigoFurat()), 1, 0, 'L', 0);
+        $fechaAccidente = "";
+        if ($arAccidenteTrabajo->getFechaAccidente() != null){
+            $fechaAccidente = $arAccidenteTrabajo->getFechaAccidente()->format('Y-m-d');
+        }
         $pdf->Cell(59, 5, $arAccidenteTrabajo->getFechaAccidente()->format('Y-m-d'), 1, 0, 'L', 0);
         $pdf->SetXY($intX, $intY+95);
         $pdf->SetFont('Arial','B',8);
@@ -164,8 +172,16 @@ class FormatoAccidenteTrabajo extends \FPDF_FPDF {
         $pdf->Cell(66, 5, utf8_decode("DÍAS:"), 1, 0, 'L', 0);
         $pdf->SetXY($intX, $intY+110);
         $pdf->SetFont('Arial','',8);
-        $pdf->Cell(66, 5, $arAccidenteTrabajo->getFechaIncapacidadDesde()->format('Y-m-d'), 1, 0, 'L', 0);
-        $pdf->Cell(66, 5, $arAccidenteTrabajo->getFechaIncapacidadHasta()->format('Y-m-d'), 1, 0, 'L', 0);
+        $fechaIncacidadDesde = "";
+        if ($arAccidenteTrabajo->getFechaIncapacidadDesde() != null){
+            $fechaIncacidadDesde = $arAccidenteTrabajo->getFechaIncapacidadDesde()->format('Y-m-d');
+        }
+        $fechaIncacidadHasta = "";
+        if ($arAccidenteTrabajo->getFechaIncapacidadHasta() != null){
+            $fechaIncacidadHasta = $arAccidenteTrabajo->getFechaIncapacidadHasta()->format('Y-m-d');
+        }
+        $pdf->Cell(66, 5, $fechaIncacidadDesde, 1, 0, 'L', 0);
+        $pdf->Cell(66, 5, $fechaIncacidadHasta, 1, 0, 'L', 0);
         $pdf->Cell(66, 5, $arAccidenteTrabajo->getDias(), 1, 0, 'L', 0);
         $pdf->SetXY($intX, $intY+115);
         $pdf->SetFont('Arial','B',8);
@@ -223,7 +239,11 @@ class FormatoAccidenteTrabajo extends \FPDF_FPDF {
         $pdf->SetFont('Arial','',8);
         $pdf->Cell(70, 5, utf8_decode($arAccidenteTrabajo->getPlanAccion1()), 1, 0, 'L', 0);
         $pdf->Cell(30, 5, utf8_decode($arAccidenteTrabajo->getTipoControlUnoRel()->getNombre()), 1, 0, 'L', 0);
-        $pdf->Cell(35, 5, utf8_decode($arAccidenteTrabajo->getFechaVerificacion1()->format('Y-m-d')), 1, 0, 'L', 0);
+        $fechaVerificacion1 = "";
+        if ($arAccidenteTrabajo->getFechaVerificacion1() != null){
+            $fechaVerificacion1 = $arAccidenteTrabajo->getFechaVerificacion1()->format('Y-m-d');
+        }
+        $pdf->Cell(35, 5, utf8_decode($fechaVerificacion1), 1, 0, 'L', 0);
         $pdf->Cell(63, 5, utf8_decode($arAccidenteTrabajo->getAreaResponsable1()), 1, 0, 'L', 0);
         $pdf->SetXY($intX, $intY+175);
         $pdf->SetFont('Arial','B',8);
@@ -235,7 +255,11 @@ class FormatoAccidenteTrabajo extends \FPDF_FPDF {
         $pdf->SetFont('Arial','',8);
         $pdf->Cell(70, 5, utf8_decode($arAccidenteTrabajo->getPlanAccion2()), 1, 0, 'L', 0);
         $pdf->Cell(30, 5, utf8_decode($arAccidenteTrabajo->getTipoControlDosRel()->getNombre()), 1, 0, 'L', 0);
-        $pdf->Cell(35, 5, utf8_decode($arAccidenteTrabajo->getFechaVerificacion2()->format('Y-m-d')), 1, 0, 'L', 0);
+        $fechaVerificacion2 = "";
+        if ($arAccidenteTrabajo->getFechaVerificacion2() != null){
+            $fechaVerificacion2 = $arAccidenteTrabajo->getFechaVerificacion2()->format('Y-m-d');
+        }
+        $pdf->Cell(35, 5, utf8_decode($fechaVerificacion2), 1, 0, 'L', 0);
         $pdf->Cell(63, 5, utf8_decode($arAccidenteTrabajo->getAreaResponsable2()), 1, 0, 'L', 0);
         $pdf->SetXY($intX, $intY+185);
         $pdf->SetFont('Arial','B',8);
@@ -247,7 +271,11 @@ class FormatoAccidenteTrabajo extends \FPDF_FPDF {
         $pdf->SetFont('Arial','',8);
         $pdf->Cell(70, 5, utf8_decode($arAccidenteTrabajo->getPlanAccion3()), 1, 0, 'L', 0);
         $pdf->Cell(30, 5, utf8_decode($arAccidenteTrabajo->getTipoControlTresRel()->getNombre()), 1, 0, 'L', 0);
-        $pdf->Cell(35, 5, utf8_decode($arAccidenteTrabajo->getFechaVerificacion3()->format('Y-m-d')), 1, 0, 'L', 0);
+        $fechaVerificacion3 = "";
+        if ($arAccidenteTrabajo->getFechaVerificacion3() != null){
+            $fechaVerificacion3 = $arAccidenteTrabajo->getFechaVerificacion3()->format('Y-m-d');
+        }
+        $pdf->Cell(35, 5, utf8_decode($fechaVerificacion3), 1, 0, 'L', 0);
         $pdf->Cell(63, 5, utf8_decode($arAccidenteTrabajo->getAreaResponsable3()), 1, 0, 'L', 0);
         $pdf->SetXY($intX, $intY+195);
         $pdf->SetFont('Arial','B',8);
@@ -289,7 +317,11 @@ class FormatoAccidenteTrabajo extends \FPDF_FPDF {
         $pdf->SetXY($intX, $intY+240);
         $pdf->SetFont('Arial','B',8);
         $pdf->Cell(118, 5, utf8_decode("RESPONSABLE: ". $arAccidenteTrabajo->getResponsableVerificacion() .""), 1, 0, 'L', 0);
-        $pdf->Cell(80, 5, utf8_decode("FECHA VERIFICACIÓN: ". $arAccidenteTrabajo->getFechaVerificacion()->format('Y-m-d') .""), 1, 0, 'L', 0);
+        $fechaVerificacion = "";
+        if ($arAccidenteTrabajo->getFechaVerificacion() != null){
+           $fechaVerificacion = $arAccidenteTrabajo->getFechaVerificacion()->format('Y-m-d'); 
+        }
+        $pdf->Cell(80, 5, utf8_decode("FECHA VERIFICACIÓN: ". $fechaVerificacion .""), 1, 0, 'L', 0);
     }
 
     public function Footer() {

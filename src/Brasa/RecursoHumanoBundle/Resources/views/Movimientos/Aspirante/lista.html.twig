@@ -43,19 +43,25 @@
                 <th>{{ knp_pagination_sortable(arAspirantes, 'NOMBRE', 'a.nombreCorto') }}</th>
                 <th>TELEFONO</th>
                 <th>CELULAR</th>
+                <th>INCONSISTENCIA</th>
                 <th style="text-align: center"></th>
                 <th></th>
                 <th></th>
                 <th></th>
             </tr>
             {% for arAspirantes in arAspirantes %}
-            <tr>
+            {% if arAspirantes.inconsistencia == 1 %}
+                    <tr class="danger">
+                {% else %}
+                    <tr>
+                {% endif %} 
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arAspirantes.codigoAspirantePk }}">{{ arAspirantes.codigoAspirantePk }} </td>
                 <td>{{ arAspirantes.fecha |date("Y/m/d H:i")  }}</td>
                 <td>{{ arAspirantes.numeroIdentificacion  }}</td>
                 <td>{{ arAspirantes.nombreCorto  }}</td>
                 <td>{{ arAspirantes.telefono }}</td>
                 <td>{{ arAspirantes.celular }}</td>
+                <td>{% if arAspirantes.inconsistencia == 1%} SI {% else %} NO {% endif %}</td>
                 <td><a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_aspirante_aplicar', {'codigoAspirante': arAspirantes.codigoAspirantePk }) }}', 'Archivos', 500, 700)" >Aplicar</a></td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_aspirante_nuevo', { 'codigoAspirante':  arAspirantes.codigoAspirantePk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_aspirante_detalle', { 'codigoAspirante': arAspirantes.codigoAspirantePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>

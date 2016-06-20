@@ -30,7 +30,22 @@ class GenContenidoFormato
     /**
      * @ORM\Column(name="contenido", type="text", nullable=true)
      */    
-    private $contenido; 
+    private $contenido;
+    
+    /**
+     * @ORM\Column(name="nombre_formato_iso", type="string", length=300, nullable=true)
+     */    
+    private $nombreFormatoIso;
+    
+    /**
+     * @ORM\Column(name="version", type="string", length=100, nullable=true)
+     */    
+    private $version;
+    
+    /**
+     * @ORM\Column(name="fecha_version", type="date", nullable=true)
+     */    
+    private $fechaVersion;
     
      /**
      * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioTipo", mappedBy="contenidoFormatoRel")
@@ -239,5 +254,101 @@ class GenContenidoFormato
     public function getContratosTiposContenidoFormatoRel()
     {
         return $this->contratosTiposContenidoFormatoRel;
+    }
+
+    /**
+     * Set iso
+     *
+     * @param string $iso
+     *
+     * @return GenContenidoFormato
+     */
+    public function setIso($iso)
+    {
+        $this->iso = $iso;
+
+        return $this;
+    }
+
+    /**
+     * Get iso
+     *
+     * @return string
+     */
+    public function getIso()
+    {
+        return $this->iso;
+    }
+
+    /**
+     * Set version
+     *
+     * @param string $version
+     *
+     * @return GenContenidoFormato
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get version
+     *
+     * @return string
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Set fechaVersion
+     *
+     * @param \DateTime $fechaVersion
+     *
+     * @return GenContenidoFormato
+     */
+    public function setFechaVersion($fechaVersion)
+    {
+        $this->fechaVersion = $fechaVersion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVersion
+     *
+     * @return \DateTime
+     */
+    public function getFechaVersion()
+    {
+        return $this->fechaVersion;
+    }
+
+    /**
+     * Set nombreFormatoIso
+     *
+     * @param string $nombreFormatoIso
+     *
+     * @return GenContenidoFormato
+     */
+    public function setNombreFormatoIso($nombreFormatoIso)
+    {
+        $this->nombreFormatoIso = $nombreFormatoIso;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreFormatoIso
+     *
+     * @return string
+     */
+    public function getNombreFormatoIso()
+    {
+        return $this->nombreFormatoIso;
     }
 }
