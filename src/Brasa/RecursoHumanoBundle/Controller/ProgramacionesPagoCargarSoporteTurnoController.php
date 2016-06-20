@@ -29,7 +29,7 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arSoportePago->getCodigoContratoFk());
                     $floVrDia = $arContrato->getVrSalario() / 30;
                     $floVrHora = $floVrDia / 8;
-                    $intHoras = $arSoportePago->getHoras();
+                    $intHoras = $arSoportePago->getHoras() - ($arSoportePago->getIngreso()+$arSoportePago->getRetiro());
                     $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                     $arProgramacionPagoDetalle->setEmpleadoRel($arEmpleado);
                     $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
