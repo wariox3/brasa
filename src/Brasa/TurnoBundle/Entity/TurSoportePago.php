@@ -48,6 +48,11 @@ class TurSoportePago
     private $vrSalario = 0;    
     
     /**
+     * @ORM\Column(name="vr_auxilio_transporte", type="float")
+     */    
+    private $vrAuxilioTransporte = 0;     
+    
+    /**
      * @ORM\Column(name="vr_pago", type="float")
      */    
     private $vrPago = 0;    
@@ -1254,5 +1259,29 @@ class TurSoportePago
     public function getTerminacionTurno()
     {
         return $this->terminacionTurno;
+    }
+
+    /**
+     * Set vrAuxilioTransporte
+     *
+     * @param float $vrAuxilioTransporte
+     *
+     * @return TurSoportePago
+     */
+    public function setVrAuxilioTransporte($vrAuxilioTransporte)
+    {
+        $this->vrAuxilioTransporte = $vrAuxilioTransporte;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAuxilioTransporte
+     *
+     * @return float
+     */
+    public function getVrAuxilioTransporte()
+    {
+        return $this->vrAuxilioTransporte;
     }
 }

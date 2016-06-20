@@ -33,6 +33,7 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
         }        
         
         $arSoportePagoPeriodo->setRecursos($intRegistros);        
+        $diaAuxilioTransporte = 77700 / 30;
         $porRecargoNocturno = 35;
         $porFestivaDiurna = 175;
         $porFestivaNocturna = 210;
@@ -43,7 +44,7 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
         $arSoportePagos = new \Brasa\TurnoBundle\Entity\TurSoportePago();
         $arSoportePagos = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo)); 
         foreach ($arSoportePagos as $arSoportePago) {            
-            $arSoportePagoAct = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+            $arSoportePagoAct = new \Brasa\TurnoBundle\Entity\TurSoportePago();                        
             $arSoportePagoAct = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($arSoportePago->getCodigoSoportePagoPk()); 
             $salario = $arSoportePago->getVrSalario();
             $vrDia = $salario / 30;
@@ -58,7 +59,9 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
             $vrExtraOrdinariaNocturna = (($vrHora * $porExtraOrdinariaNocturna)/100) * $arSoportePago->getHorasExtrasOrdinariasNocturnas();                        
             $vrExtraFestivaDiurna = (($vrHora * $porExtraFestivaDiurna)/100) * $arSoportePago->getHorasExtrasFestivasDiurnas();
             $vrExtraFestivaNocturna = (($vrHora * $porExtraFestivaNocturna)/100) * $arSoportePago->getHorasExtrasFestivasNocturnas();            
-            $vrPago = $vrDiurna + $vrNocturna + $vrDescanso + $vrFestivaDiurna + $vrFestivaNocturna + $vrExtraOrdinariaDiurna + $vrExtraOrdinariaNocturna + $vrExtraFestivaDiurna + $vrExtraFestivaNocturna;
+            $vrAuxilioTransporte = $diaAuxilioTransporte * $arSoportePago->getDias();
+            $vrPago = $vrDiurna + $vrNocturna + $vrDescanso + $vrFestivaDiurna + $vrFestivaNocturna + $vrExtraOrdinariaDiurna + $vrExtraOrdinariaNocturna + $vrExtraFestivaDiurna + $vrExtraFestivaNocturna + $vrAuxilioTransporte;
+            $arSoportePagoAct->setVrAuxilioTransporte($vrAuxilioTransporte);
             $arSoportePagoAct->setVrPago($vrPago);
             $vrTotalPago += $vrPago;
         }

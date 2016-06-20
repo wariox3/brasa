@@ -120,7 +120,11 @@ class GenerarSoportePagoController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurSoportePago')->eliminar($arrSeleccionados);
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->liquidar($codigoSoportePagoPeriodo);
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago_detalle', array('codigoSoportePagoPeriodo' => $codigoSoportePagoPeriodo)));                                
-            }             
+            }  
+            if ($form->get('BtnLiquidar')->isClicked()) {                                                
+                $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->liquidar($codigoSoportePagoPeriodo);
+                return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago_detalle', array('codigoSoportePagoPeriodo' => $codigoSoportePagoPeriodo)));                                
+            }            
             if ($form->get('BtnLiquidarCompensacion')->isClicked()) {      
                 $festivos = $arSoportePagoPeriodo->getDiaFestivoReal() + $arSoportePagoPeriodo->getDiaDomingoReal();
                 $horasTope = $arSoportePagoPeriodo->getDiasPeriodo() * 8;
@@ -430,6 +434,7 @@ class GenerarSoportePagoController extends Controller
     private function formularioDetalle() {
         $form = $this->createFormBuilder()
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))                        
+            ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar'))                                        
             ->add('BtnLiquidarCompensacion', 'submit', array('label'  => 'Compensacion'))                            
             ->add('BtnLiquidarCompensacion2', 'submit', array('label'  => 'Compensacion2'))                        
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar')) 
