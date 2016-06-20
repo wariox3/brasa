@@ -38,6 +38,11 @@ class TurSoportePagoPeriodo
     private $vrPago = 0;    
     
     /**
+     * @ORM\Column(name="vr_devengado", type="float")
+     */    
+    private $vrDevengado = 0;     
+    
+    /**
      * @ORM\Column(name="festivos", type="integer")
      */    
     private $festivos = 0;    
@@ -638,5 +643,29 @@ class TurSoportePagoPeriodo
     public function getRecursoGrupoRel()
     {
         return $this->recursoGrupoRel;
+    }
+
+    /**
+     * Set vrDevengado
+     *
+     * @param float $vrDevengado
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setVrDevengado($vrDevengado)
+    {
+        $this->vrDevengado = $vrDevengado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrDevengado
+     *
+     * @return float
+     */
+    public function getVrDevengado()
+    {
+        return $this->vrDevengado;
     }
 }

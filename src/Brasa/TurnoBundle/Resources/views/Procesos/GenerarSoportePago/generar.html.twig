@@ -61,7 +61,7 @@
                 <td style="text-align: right">{{ arSoportePagoPeriodos.festivos | number_format(0, '.', ',') }}</td>                
                 <td style="text-align: right">{{ arSoportePagoPeriodos.diasAdicionales | number_format(0, '.', ',') }}</td>                
                 <td>{% if arSoportePagoPeriodos.descansoFestivoFijo == 1 %} SI {% else %} NO {% endif %}</td>
-                <td style="text-align: right">{{ arSoportePagoPeriodos.vrPago | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportePagoPeriodos.vrDevengado | number_format(0, '.', ',') }}</td>
                 {% if arSoportePagoPeriodos.estadoGenerado == 0 %}
                     <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }}">Generar</button></td>
                     <td></td>                    

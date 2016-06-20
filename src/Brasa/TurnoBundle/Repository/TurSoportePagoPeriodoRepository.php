@@ -21,6 +21,7 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
         $em = $this->getEntityManager();        
         $intRegistros = 0;
         $vrTotalPago = 0;
+        $vrTotalDevengado = 0;
         $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();        
         $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo); 
         $dql   = "SELECT COUNT(sp.codigoSoportePagoPk) as numeroRegistros "
@@ -66,8 +67,10 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
             $arSoportePagoAct->setVrAuxilioTransporte($vrAuxilioTransporte);
             $arSoportePagoAct->setVrDevengado($vrDevengado);            
             $vrTotalPago += $vrPago;
+            $vrTotalDevengado += $vrDevengado;
         }
         $arSoportePagoPeriodo->setVrPago($vrTotalPago);
+        $arSoportePagoPeriodo->setVrDevengado($vrTotalDevengado);
         $em->persist($arSoportePagoPeriodo);
         $em->flush();
         return true;
