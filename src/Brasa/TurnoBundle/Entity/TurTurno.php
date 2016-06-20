@@ -75,6 +75,16 @@ class TurTurno
      * @ORM\Column(name="vacacion", type="boolean")
      */    
     private $vacacion = false;    
+
+    /**
+     * @ORM\Column(name="ingreso", type="boolean")
+     */    
+    private $ingreso = false;
+    
+    /**
+     * @ORM\Column(name="retiro", type="boolean")
+     */    
+    private $retiro = false;    
     
     /**
      * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
@@ -618,5 +628,53 @@ class TurTurno
     public function getNovedadesTiposTurnoRel()
     {
         return $this->novedadesTiposTurnoRel;
+    }
+
+    /**
+     * Set ingreso
+     *
+     * @param boolean $ingreso
+     *
+     * @return TurTurno
+     */
+    public function setIngreso($ingreso)
+    {
+        $this->ingreso = $ingreso;
+
+        return $this;
+    }
+
+    /**
+     * Get ingreso
+     *
+     * @return boolean
+     */
+    public function getIngreso()
+    {
+        return $this->ingreso;
+    }
+
+    /**
+     * Set retiro
+     *
+     * @param boolean $retiro
+     *
+     * @return TurTurno
+     */
+    public function setRetiro($retiro)
+    {
+        $this->retiro = $retiro;
+
+        return $this;
+    }
+
+    /**
+     * Get retiro
+     *
+     * @return boolean
+     */
+    public function getRetiro()
+    {
+        return $this->retiro;
     }
 }

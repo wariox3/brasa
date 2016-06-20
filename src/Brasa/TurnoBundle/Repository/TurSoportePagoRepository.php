@@ -17,10 +17,12 @@ class TurSoportePagoRepository extends EntityRepository {
         $arSoportePagoPeriodoActualizar = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($arSoportePagoPeriodo->getCodigoSoportePagoPeriodoPk());
         $dql   = "SELECT spd.codigoRecursoFk, "
                 . "SUM(spd.descanso) as descanso, "                
-                . "SUM(spd.novedad) as novedad, "
-                . "SUM(spd.incapacidad) as incapacidad, "
+                . "SUM(spd.novedad) as novedad, "                
+                . "SUM(spd.incapacidad) as incapacidad, "                
                 . "SUM(spd.licencia) as licencia, "
                 . "SUM(spd.vacacion) as vacacion, "
+                . "SUM(spd.ingreso) as ingreso, "
+                . "SUM(spd.retiro) as retiro, "
                 . "SUM(spd.dias) as dias, "
                 . "SUM(spd.horasDescanso) as horasDescanso, "
                 . "SUM(spd.horasNovedad) as horasNovedad, "
@@ -91,6 +93,8 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePago->setIncapacidad($arrayResultado[$i]['incapacidad']);
             $arSoportePago->setLicencia($arrayResultado[$i]['licencia']);
             $arSoportePago->setVacacion($arrayResultado[$i]['vacacion']);
+            $arSoportePago->setIngreso($arrayResultado[$i]['ingreso']);
+            $arSoportePago->setRetiro($arrayResultado[$i]['retiro']);
             $arSoportePago->setHorasPago($intHorasPago);
             $arSoportePago->setHoras($intHoras);
             $arSoportePago->setHorasDescanso($arrayResultado[$i]['horasDescanso']);

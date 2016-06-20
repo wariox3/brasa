@@ -65,7 +65,7 @@
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
                 <td colspan="3"></td>
-                <td colspan="5" style="text-align: center">NOVEDADES</td>
+                <td colspan="7" style="text-align: center">NOVEDADES</td>
                 <td colspan="2" style="text-align: center">NOMINA</td>
                 <td colspan="6" style="text-align: center">HORAS</td>
                 <td colspan="4" style="text-align: center">TIEMPO ADICIONAL</td>
@@ -76,6 +76,8 @@
                 <th>D</th>
                 <th>DSC</th>
                 <th>NOV</th>
+                <th>ING</th>
+                <th>RET</th>
                 <th>INC</th>
                 <th>LIC</th>
                 <th>VAC</th>
@@ -105,6 +107,8 @@
                 <td style="text-align: right">{{ arSoportesPagos.dias | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.descanso | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.novedad | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagos.ingreso | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagos.retiro | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.incapacidad | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.licencia | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.vacacion | number_format(0, '.', ',') }}</td>

@@ -91,6 +91,16 @@ class TurSoportePago
      * @ORM\Column(name="vacacion", type="integer")
      */    
     private $vacacion = 0;    
+
+    /**
+     * @ORM\Column(name="ingreso", type="integer")
+     */    
+    private $ingreso = 0;
+    
+    /**
+     * @ORM\Column(name="retiro", type="integer")
+     */    
+    private $retiro = 0;    
     
     /**
      * @ORM\Column(name="dias", type="float")
@@ -1312,5 +1322,53 @@ class TurSoportePago
     public function getVrDevengado()
     {
         return $this->vrDevengado;
+    }
+
+    /**
+     * Set ingreso
+     *
+     * @param integer $ingreso
+     *
+     * @return TurSoportePago
+     */
+    public function setIngreso($ingreso)
+    {
+        $this->ingreso = $ingreso;
+
+        return $this;
+    }
+
+    /**
+     * Get ingreso
+     *
+     * @return integer
+     */
+    public function getIngreso()
+    {
+        return $this->ingreso;
+    }
+
+    /**
+     * Set retiro
+     *
+     * @param integer $retiro
+     *
+     * @return TurSoportePago
+     */
+    public function setRetiro($retiro)
+    {
+        $this->retiro = $retiro;
+
+        return $this;
+    }
+
+    /**
+     * Get retiro
+     *
+     * @return integer
+     */
+    public function getRetiro()
+    {
+        return $this->retiro;
     }
 }

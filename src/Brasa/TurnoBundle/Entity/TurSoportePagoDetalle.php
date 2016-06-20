@@ -66,6 +66,16 @@ class TurSoportePagoDetalle
      * @ORM\Column(name="vacacion", type="boolean")
      */    
     private $vacacion = false;    
+
+    /**
+     * @ORM\Column(name="ingreso", type="boolean")
+     */    
+    private $ingreso = false; 
+    
+    /**
+     * @ORM\Column(name="retiro", type="boolean")
+     */    
+    private $retiro = false;     
     
     /**
      * @ORM\Column(name="dias", type="float")
@@ -931,5 +941,53 @@ class TurSoportePagoDetalle
     public function getTurnoRel()
     {
         return $this->turnoRel;
+    }
+
+    /**
+     * Set ingreso
+     *
+     * @param boolean $ingreso
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setIngreso($ingreso)
+    {
+        $this->ingreso = $ingreso;
+
+        return $this;
+    }
+
+    /**
+     * Get ingreso
+     *
+     * @return boolean
+     */
+    public function getIngreso()
+    {
+        return $this->ingreso;
+    }
+
+    /**
+     * Set retiro
+     *
+     * @param boolean $retiro
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setRetiro($retiro)
+    {
+        $this->retiro = $retiro;
+
+        return $this;
+    }
+
+    /**
+     * Get retiro
+     *
+     * @return boolean
+     */
+    public function getRetiro()
+    {
+        return $this->retiro;
     }
 }
