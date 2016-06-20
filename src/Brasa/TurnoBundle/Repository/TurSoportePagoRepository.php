@@ -58,7 +58,7 @@ class TurSoportePagoRepository extends EntityRepository {
             }
             $intHorasPago = $arrayResultado[$i]['horasDescanso'] + $arrayResultado[$i]['horasDiurnas'] + $arrayResultado[$i]['horasNocturnas'] + $arrayResultado[$i]['horasFestivasDiurnas'] + $arrayResultado[$i]['horasFestivasNocturnas'];
             
-            if($arrayResultado[$i]['incapacidad'] > 0) {
+            /*if($arrayResultado[$i]['incapacidad'] > 0) {
                 $arrayResultado[$i]['dias'] += $arrayResultado[$i]['incapacidad'];
                 //$arrayResultado[$i]['horasDiurnas'] += $arrayResultado[$i]['incapacidad'] * 8;
             }
@@ -69,7 +69,9 @@ class TurSoportePagoRepository extends EntityRepository {
             if($arrayResultado[$i]['vacacion'] > 0) {
                 $arrayResultado[$i]['dias'] += $arrayResultado[$i]['licencia'];
                 //$arrayResultado[$i]['horasDiurnas'] += $arrayResultado[$i]['vacacion'] * 8;
-            }            
+            } 
+             * 
+             */           
             if($arSoportePagoPeriodoActualizar->getDescansoFestivoFijo()) {
                 $arrayResultado[$i]['horasDiurnas'] += $arSoportePagoPeriodoActualizar->getFestivos() * 8;
                 $arrayResultado[$i]['descanso'] += $arSoportePagoPeriodoActualizar->getFestivos();
