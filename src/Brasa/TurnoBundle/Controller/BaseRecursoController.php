@@ -38,8 +38,18 @@ class BaseRecursoController extends Controller
                 $this->filtrar($form);
             }
             if ($form->get('BtnExcel')->isClicked()) {
-                $this->filtrar($form);
-                $this->generarExcel();
+                $arRecursos = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findAll();
+                foreach ($arRecursos as $arRecurso) {
+                    $arRecursoAct = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($arRecurso->getCodigoRecursoPk());
+                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arRecurso->getNumeroIdentificacion()));
+                    if($arEmpleado) {
+                        $arRecursoAct->setCodigoEmpleadoFk($arEmpleado->getCodigoEmpleadoPk());
+                        $em->persist($arRecursoAct);
+                    }
+                }
+                $em->flush();
+                //$this->filtrar($form);
+                //$this->generarExcel();
             }
         }
         
@@ -87,14 +97,7 @@ class BaseRecursoController extends Controller
                 if($arrControles['txtNumeroIdentificacion'] != '') {
                     $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                     $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
-                    if(count($arEmpleado) > 0) {
-                        if($arRecurso->getCodigoTurnoFijoNominaFk()) {
-                            $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
-                            $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arRecurso->getCodigoTurnoFijoNominaFk());
-                            if(!$arTurno) {
-                                $arRecurso->setCodigoTurnoFijoNominaFk(NULL);
-                            }
-                        }                   
+                    if(count($arEmpleado) > 0) {                   
                         $arRecurso->setEmpleadoRel($arEmpleado);
                         $arUsuario = $this->getUser();
                         $arRecurso->setUsuario($arUsuario->getUserName());                        
