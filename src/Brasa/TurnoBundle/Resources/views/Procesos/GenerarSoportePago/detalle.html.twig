@@ -50,9 +50,15 @@
                     <tr>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
+                        <td class="titulo" >PAGO:</td>
+                        <td align="right">{{ arSoportePagoPeriodo.vrPago | number_format(0, '.', ',')}}</td>                        
+                    </tr>                     
+                    <tr>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
                         <td class="titulo" >DEVENGADO:</td>
                         <td align="right">{{ arSoportePagoPeriodo.vrDevengado | number_format(0, '.', ',')}}</td>                        
-                    </tr>                     
+                    </tr>                                         
                 </table>
             </div>
         </div>
