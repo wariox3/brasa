@@ -38,7 +38,7 @@ class BaseRecursoController extends Controller
                 $this->filtrar($form);
             }
             if ($form->get('BtnExcel')->isClicked()) {
-                $arRecursos = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findAll();
+                /*$arRecursos = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findAll();
                 foreach ($arRecursos as $arRecurso) {
                     $arRecursoAct = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($arRecurso->getCodigoRecursoPk());
                     $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arRecurso->getNumeroIdentificacion()));
@@ -48,8 +48,10 @@ class BaseRecursoController extends Controller
                     }
                 }
                 $em->flush();
-                //$this->filtrar($form);
-                //$this->generarExcel();
+                 * 
+                 */
+                $this->filtrar($form);
+                $this->generarExcel();
             }
         }
         
