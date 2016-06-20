@@ -38,20 +38,20 @@
                     <tr>
                         <td class="titulo">FECHA HASTA:</td>
                         <td class="td-in-well">{{ arSoportePagoPeriodo.fechaHasta |date("Y/m/d") }}</td>
-                        <td class="titulo" >DESCANSO FESTIVO FIJO:</td>
-                        <td>{% if arSoportePagoPeriodo.descansoFestivoFijo == 1 %}SI{% else %}NO{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
                         <td class="titulo" >FESTIVOS REALES:</td>
                         <td align="right">{{ arSoportePagoPeriodo.diaFestivoReal}}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo" >DESCANSO FESTIVO FIJO:</td>
+                        <td>{% if arSoportePagoPeriodo.descansoFestivoFijo == 1 %}SI{% else %}NO{% endif %}</td>
+                        <td class="titulo" >DOMINGOS REALES:</td>
+                        <td align="right">{{ arSoportePagoPeriodo.diaDomingoReal}}</td>
                     </tr>                    
                     <tr>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
-                        <td class="titulo" >DOMINGOS REALES:</td>
-                        <td align="right">{{ arSoportePagoPeriodo.diaDomingoReal}}</td>
+                        <td class="titulo" >DEVENGADO:</td>
+                        <td align="right">{{ arSoportePagoPeriodo.vrDevengado | number_format(0, '.', ',')}}</td>                        
                     </tr>                     
                 </table>
             </div>
@@ -75,7 +75,7 @@
                 <th colspan="2">RECURSO</th>
                 <th>D</th>
                 <th>DSC</th>
-                <th>NOV</th>
+                <th>{{ knp_pagination_sortable(arSoportesPagos, 'NOV', 'sp.novedad') }}</th>
                 <th>ING</th>
                 <th>RET</th>
                 <th>INC</th>
