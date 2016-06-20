@@ -170,8 +170,7 @@ class GenerarSoportePagoController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->liquidar($codigoSoportePagoPeriodo);                                
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago_detalle', array('codigoSoportePagoPeriodo' => $codigoSoportePagoPeriodo)));                
                 
-            }
-            
+            }            
             
             if ($form->get('BtnLiquidarCompensacion2')->isClicked()) {      
                 $festivos = $arSoportePagoPeriodo->getDiaFestivoReal() + $arSoportePagoPeriodo->getDiaDomingoReal();
@@ -628,7 +627,9 @@ class GenerarSoportePagoController extends Controller
                     ->setCellValue('AC1', 'HEONR')
                     ->setCellValue('AD1', 'HEFDR')
                     ->setCellValue('AE1', 'HEFNR')
-                    ->setCellValue('AF1', 'PAGO');
+                    ->setCellValue('AF1', 'AUX.T')
+                    ->setCellValue('AG1', 'PAGO')
+                    ->setCellValue('AH1', 'DEVENGADO');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -666,7 +667,9 @@ class GenerarSoportePagoController extends Controller
                     ->setCellValue('AC' . $i, $arSoportePago->getHorasExtrasOrdinariasNocturnasReales())
                     ->setCellValue('AD' . $i, $arSoportePago->getHorasExtrasFestivasDiurnasReales())
                     ->setCellValue('AE' . $i, $arSoportePago->getHorasExtrasFestivasNocturnasReales())
-                    ->setCellValue('AF' . $i, $arSoportePago->getVrPago());
+                    ->setCellValue('AF' . $i, $arSoportePago->getVrAuxilioTransporte())
+                    ->setCellValue('AG' . $i, $arSoportePago->getVrPago())
+                    ->setCellValue('AH' . $i, $arSoportePago->getVrDevengado());
 
             $i++;
         }

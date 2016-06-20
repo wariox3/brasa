@@ -60,9 +60,11 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
             $vrExtraFestivaDiurna = (($vrHora * $porExtraFestivaDiurna)/100) * $arSoportePago->getHorasExtrasFestivasDiurnas();
             $vrExtraFestivaNocturna = (($vrHora * $porExtraFestivaNocturna)/100) * $arSoportePago->getHorasExtrasFestivasNocturnas();            
             $vrAuxilioTransporte = $diaAuxilioTransporte * $arSoportePago->getDias();
-            $vrPago = $vrDiurna + $vrNocturna + $vrDescanso + $vrFestivaDiurna + $vrFestivaNocturna + $vrExtraOrdinariaDiurna + $vrExtraOrdinariaNocturna + $vrExtraFestivaDiurna + $vrExtraFestivaNocturna + $vrAuxilioTransporte;
-            $arSoportePagoAct->setVrAuxilioTransporte($vrAuxilioTransporte);
+            $vrPago = $vrDiurna + $vrNocturna + $vrDescanso + $vrFestivaDiurna + $vrFestivaNocturna + $vrExtraOrdinariaDiurna + $vrExtraOrdinariaNocturna + $vrExtraFestivaDiurna + $vrExtraFestivaNocturna;
+            $vrDevengado = $vrPago + $vrAuxilioTransporte;
             $arSoportePagoAct->setVrPago($vrPago);
+            $arSoportePagoAct->setVrAuxilioTransporte($vrAuxilioTransporte);
+            $arSoportePagoAct->setVrDevengado($vrDevengado);            
             $vrTotalPago += $vrPago;
         }
         $arSoportePagoPeriodo->setVrPago($vrTotalPago);
