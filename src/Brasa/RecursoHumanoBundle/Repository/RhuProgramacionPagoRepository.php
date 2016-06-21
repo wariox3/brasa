@@ -91,7 +91,6 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $douVrHoraSalarioMinimo = ($douVrSalarioMinimo / 30) / 8;
                         $douIngresoBasePrestacional = 0;
                         $douIngresoBaseCotizacion = 0;                        
-
                         //Procesar vacaciones
                         $intDiasVacaciones = $arProgramacionPagoDetalle->getDiasVacaciones();
                         $intHorasVacaciones = $intDiasVacaciones * $intFactorDia;
@@ -222,52 +221,55 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                 }
                             }
                         }
+                        //Esta condicion se debe quitar, se agrega para no permitir un descuento en vacaciones
+                        if($intHorasLaboradas > 0) {
+                            //Procesar los conceptos de pagos adicionales
+                            $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+                            $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->programacionPago($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getCodigoProgramacionPagoFk());
+                            foreach ($arPagosAdicionales as $arPagoAdicional) {
+                                $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                                $arPagoDetalle->setPagoRel($arPago);
+                                $arPagoDetalle->setPagoConceptoRel($arPagoAdicional->getPagoConceptoRel());
+                                $arPagoDetalle->setAdicional(1);
+                                if($arPagoAdicional->getPagoConceptoRel()->getComponePorcentaje() == 1) {
+                                    $douVrHoraAdicional = ($douVrHora * $arPagoAdicional->getPagoConceptoRel()->getPorPorcentaje())/100;
+                                    $douPagoDetalle = $douVrHoraAdicional * $arPagoAdicional->getCantidad();
+                                    $arPagoDetalle->setPorcentajeAplicado($arPagoAdicional->getPagoConceptoRel()->getPorPorcentaje());
+                                    $arPagoDetalle->setVrHora($douVrHoraAdicional);
+                                    $arPagoDetalle->setVrDia($douVrDia);
+                                    $arPagoDetalle->setNumeroHoras($arPagoAdicional->getCantidad());
+                                }
+                                if($arPagoAdicional->getPagoConceptoRel()->getComponeValor() == 1) {
+                                    $douPagoDetalle = $arPagoAdicional->getValor();
+                                    if($arPagoAdicional->getAplicaDiaLaborado() == 1) {
+                                        $douPagoDetalle = $arPagoAdicional->getValor() * ($intHorasLaboradas / $intFactorDia);
+                                    }
+                                    $arPagoDetalle->setVrDia($douVrDia);
+                                }
+                                $arPagoDetalle->setDetalle($arPagoAdicional->getDetalle());
+                                $arPagoDetalle->setVrPago($douPagoDetalle);
+                                $arPagoDetalle->setOperacion($arPagoAdicional->getPagoConceptoRel()->getOperacion());
+                                $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoAdicional->getPagoConceptoRel()->getOperacion());
+                                $arPagoDetalle->setDetalle($arPagoAdicional->getDetalle());
+                                $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);                            
 
-                        //Procesar los conceptos de pagos adicionales
-                        $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                        $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->programacionPago($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getCodigoProgramacionPagoFk());
-                        foreach ($arPagosAdicionales as $arPagoAdicional) {
-                            $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
-                            $arPagoDetalle->setPagoRel($arPago);
-                            $arPagoDetalle->setPagoConceptoRel($arPagoAdicional->getPagoConceptoRel());
-                            $arPagoDetalle->setAdicional(1);
-                            if($arPagoAdicional->getPagoConceptoRel()->getComponePorcentaje() == 1) {
-                                $douVrHoraAdicional = ($douVrHora * $arPagoAdicional->getPagoConceptoRel()->getPorPorcentaje())/100;
-                                $douPagoDetalle = $douVrHoraAdicional * $arPagoAdicional->getCantidad();
-                                $arPagoDetalle->setPorcentajeAplicado($arPagoAdicional->getPagoConceptoRel()->getPorPorcentaje());
-                                $arPagoDetalle->setVrHora($douVrHoraAdicional);
-                                $arPagoDetalle->setVrDia($douVrDia);
-                                $arPagoDetalle->setNumeroHoras($arPagoAdicional->getCantidad());
-                            }
-                            if($arPagoAdicional->getPagoConceptoRel()->getComponeValor() == 1) {
-                                $douPagoDetalle = $arPagoAdicional->getValor();
-                                if($arPagoAdicional->getAplicaDiaLaborado() == 1) {
-                                    $douPagoDetalle = $arPagoAdicional->getValor() * ($intHorasLaboradas / $intFactorDia);
+                                if($arPagoAdicional->getPagoConceptoRel()->getPrestacional() == 1) {
+                                    if($arPagoAdicional->getPagoConceptoRel()->getGeneraIngresoBaseCotizacion() == 1) {
+                                        $douIngresoBaseCotizacion += $douPagoDetalle;    
+                                        $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);
+                                        $arPagoDetalle->setCotizacion(1);
+                                    }
+                                    if($arPagoAdicional->getPagoConceptoRel()->getGeneraIngresoBasePrestacion() == 1) {
+                                        $douIngresoBasePrestacional += $douPagoDetalle;    
+                                        $arPagoDetalle->setVrIngresoBasePrestacion($douPagoDetalle);
+                                    }                                                                                                                                                                
+                                    $arPagoDetalle->setPrestacional(1);
                                 }
-                                $arPagoDetalle->setVrDia($douVrDia);
-                            }
-                            $arPagoDetalle->setDetalle($arPagoAdicional->getDetalle());
-                            $arPagoDetalle->setVrPago($douPagoDetalle);
-                            $arPagoDetalle->setOperacion($arPagoAdicional->getPagoConceptoRel()->getOperacion());
-                            $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoAdicional->getPagoConceptoRel()->getOperacion());
-                            $arPagoDetalle->setDetalle($arPagoAdicional->getDetalle());
-                            $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);                            
-                            
-                            if($arPagoAdicional->getPagoConceptoRel()->getPrestacional() == 1) {
-                                if($arPagoAdicional->getPagoConceptoRel()->getGeneraIngresoBaseCotizacion() == 1) {
-                                    $douIngresoBaseCotizacion += $douPagoDetalle;    
-                                    $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);
-                                    $arPagoDetalle->setCotizacion(1);
-                                }
-                                if($arPagoAdicional->getPagoConceptoRel()->getGeneraIngresoBasePrestacion() == 1) {
-                                    $douIngresoBasePrestacional += $douPagoDetalle;    
-                                    $arPagoDetalle->setVrIngresoBasePrestacion($douPagoDetalle);
-                                }                                                                                                                                                                
-                                $arPagoDetalle->setPrestacional(1);
-                            }
-                            
-                            $em->persist($arPagoDetalle);                            
+
+                                $em->persist($arPagoDetalle);                            
+                            }                            
                         }
+
 
                         //Procesar creditos
                         $arPagoConceptoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
