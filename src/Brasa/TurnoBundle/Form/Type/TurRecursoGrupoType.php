@@ -13,6 +13,7 @@ class TurRecursoGrupoType extends AbstractType
             ->add('nombre', 'text', array('required' => true))  
             ->add('codigoTurnoFijoNominaFk', 'text', array('required' => false))
             ->add('codigoTurnoFijoDescansoFk', 'text', array('required' => false))                
+            ->add('diasDescansoFijo', 'number', array('required' => false))                
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

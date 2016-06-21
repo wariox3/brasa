@@ -61,7 +61,7 @@ class BasePlantillaController extends Controller {
             if ($form->get('guardarnuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_tur_base_plantilla_nuevo', array('codigoPlantilla' => 0)));
             } else {
-                return $this->redirect($this->generateUrl('brs_tur_base_plantilla_lista'));
+                return $this->redirect($this->generateUrl('brs_tur_base_plantilla_detalle', array('codigoPlantilla' => $arPlantilla->getCodigoPlantillaPk())));
             }
         }
         return $this->render('BrasaTurnoBundle:Base/Plantilla:nuevo.html.twig', array(
@@ -479,6 +479,12 @@ class BasePlantillaController extends Controller {
                 } else {
                     $arPlantillaDetalle->setDomingo(null);
                 }
+                if ($arrControles['TxtDomingoFestivo' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDomingoFestivo' . $intCodigo]);
+                    $arPlantillaDetalle->setDomingoFestivo($strTurno);
+                } else {
+                    $arPlantillaDetalle->setDomingoFestivo(null);
+                }                
                 if ($arrControles['TxtFestivo' . $intCodigo] != '') {
                     $strTurno = $this->validarTurno($arrControles['TxtFestivo' . $intCodigo]);
                     $arPlantillaDetalle->setFestivo($strTurno);

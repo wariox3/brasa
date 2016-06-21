@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 
 class TurProgramacionDetalleRepository extends EntityRepository {
 
-    public function ListaDql() {
+    public function listaDql() {
         $em = $this->getEntityManager();
         $dql   = "SELECT pd FROM BrasaTurnoBundle:TurProgramacionDetalle pd WHERE pd.codigoProgramacionDetallePk <> 0";
         $dql .= " ORDER BY pd.codigoProgramacionDetallePk";
@@ -178,6 +178,14 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                             if($diaSemana == 7 && isset($arrTurnos['domingo'])) {
                                 $strTurno = $arrTurnos['domingo'];
                             }
+                            if($diaSemana == 7 && isset($arrTurnos['domingoFestivo'])) {
+                                $strFechaDiaSiguiente = $arProgramacion->getFecha()->format('Y-m-') . ($i+1);
+                                $dateFechaDiaSiguiente = date_create($strFechaDiaSiguiente);                            
+                                $boolFestivoSiguiente = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->festivo($arFestivos, $dateFechaDiaSiguiente);                                
+                                if($boolFestivoSiguiente == 1) {
+                                    $strTurno = $arrTurnos['domingoFestivo'];                                
+                                }                                
+                            }                            
                             if($boolFestivo == 1 && isset($arrTurnos['festivo'])) {
                                 $strTurno = $arrTurnos['festivo'];
                             }
@@ -586,6 +594,7 @@ class TurProgramacionDetalleRepository extends EntityRepository {
             'viernes' => $arPlantillaDetalle->getViernes(),
             'sabado' => $arPlantillaDetalle->getSabado(),
             'domingo' => $arPlantillaDetalle->getDomingo(),
+            'domingoFestivo' => $arPlantillaDetalle->getDomingoFestivo(),
             'festivo' => $arPlantillaDetalle->getFestivo(),);
         return $arrTurnos;
     }

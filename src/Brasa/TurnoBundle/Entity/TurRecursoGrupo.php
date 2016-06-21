@@ -38,6 +38,11 @@ class TurRecursoGrupo
     protected $recursosRecursoGrupoRel; 
 
     /**
+     * @ORM\Column(name="dias_descanso_fijo", type="integer", nullable=true)
+     */    
+    private $diasDescansoFijo = 0;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurSoportePagoPeriodo", mappedBy="recursoGrupoRel")
      */
     protected $soportesPagosPeriodosRecursoGrupoRel;    
@@ -198,5 +203,29 @@ class TurRecursoGrupo
     public function getCodigoTurnoFijoDescansoFk()
     {
         return $this->codigoTurnoFijoDescansoFk;
+    }
+
+    /**
+     * Set diasDescansoFijo
+     *
+     * @param integer $diasDescansoFijo
+     *
+     * @return TurRecursoGrupo
+     */
+    public function setDiasDescansoFijo($diasDescansoFijo)
+    {
+        $this->diasDescansoFijo = $diasDescansoFijo;
+
+        return $this;
+    }
+
+    /**
+     * Get diasDescansoFijo
+     *
+     * @return integer
+     */
+    public function getDiasDescansoFijo()
+    {
+        return $this->diasDescansoFijo;
     }
 }

@@ -263,5 +263,4 @@ class ProgramacionesDetallesController extends Controller
         exit;
     }      
 
-
 }

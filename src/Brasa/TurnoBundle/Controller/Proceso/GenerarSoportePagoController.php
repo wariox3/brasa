@@ -180,110 +180,60 @@ class GenerarSoportePagoController extends Controller
             }            
             
             if ($form->get('BtnLiquidarCompensacion2')->isClicked()) {      
-                $festivos = $arSoportePagoPeriodo->getDiaFestivoReal() + $arSoportePagoPeriodo->getDiaDomingoReal();
-                $horasTope = $arSoportePagoPeriodo->getDiasPeriodo() * 8;
-                $horasFestivas = $festivos * 8;                
-                $horasLaborales = $horasTope - $horasFestivas;
-                //$horasDescanso = $horasLaborales / $festivos;
+                $descanso = $arSoportePagoPeriodo->getDiasDescansoFijo();
+                $horasPeriodo = $arSoportePagoPeriodo->getDiasPeriodo() * 8;
+                $horasDescanso = $descanso * 8;                
+                $horasTope = $horasPeriodo - $horasDescanso;                
                 $arSoportePagos = new \Brasa\TurnoBundle\Entity\TurSoportePago();  
                 $arSoportePagos = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));
                 foreach ($arSoportePagos as $arSoportePago) {
-                    if($arSoportePago->getCodigoRecursoFk() == 7) {
+                    /*if($arSoportePago->getCodigoRecursoFk() == 2222) {
                         echo "hola";
                     }
-                    //$horasNovedad = $arSoportePago->getHorasNovedad(); 
-                    //$horasLaboralesRecurso = $horasLaborales - $horasNovedad;                                     
-                    
+                     * 
+                     */                       
+                                           
                     $horasDia = $arSoportePago->getHorasDiurnasReales();
-                    $horasExtraDia = $arSoportePago->getHorasExtrasOrdinariasDiurnasReales();
                     $horasNoche = $arSoportePago->getHorasNocturnasReales();
-                    $horasExtraNoche = $arSoportePago->getHorasExtrasOrdinariasNocturnasReales();                  
-                    $totalHoras = $horasDia + $horasNoche;
-                    if($totalHoras < $horasLaborales) {
-                        if($arSoportePago->getTerminacionTurno() == 1) {
-                            $horasNoche += $horasExtraNoche;
-                            $totalHoras += $horasExtraNoche;
-                            $horasExtraNoche = 0; 
-                            if($totalHoras < $horasLaborales) {
-                                $horasDia += $horasExtraDia;
-                                $totalHoras += $horasExtraDia;
-                                $horasExtraDia = 0;                                
-                            }
-                        } else {
-                            $horasDia += $horasExtraDia;
-                            $totalHoras += $horasExtraDia;
-                            $horasExtraDia = 0; 
-                            if($totalHoras < $horasLaborales) {
-                                $horasNoche += $horasExtraNoche;
-                                $totalHoras += $horasExtraNoche;
-                                $horasExtraNoche = 0;                                
-                            }
-                        }
-                    }
-                    if($totalHoras > $horasLaborales) {
-                        if($arSoportePago->getTerminacionTurno() == 1) {
-                            $diferencia = $totalHoras - $horasLaborales;
-                            $totalHoras -= $diferencia;
-                            $diferenciaHoras = $diferencia;  
-                            $horasDia -= $diferenciaHoras;
-                            $horasExtraDia += $diferenciaHoras;
-                        } else {
-                            $diferencia = $totalHoras - $horasLaborales;
-                            $totalHoras -= $diferencia;
-                            $diferenciaHoras = $diferencia;  
-                            $horasNoche -= $diferenciaHoras;                        
-                            $horasExtraNoche += $diferenciaHoras;                            
-                        }                            
-                    }                     
-                    /*if($totalHoras < $horasLaborales) {
-                        $horasNoche += $horasExtraNoche;
-                        $totalHoras += $horasExtraNoche;
-                        $horasExtraNoche = 0;
-                       
-                    } else {
-                        if($totalHoras > $horasLaborales) {
-                            $diferencia = $totalHoras - $horasLaborales;
-                            $totalHoras -= $diferencia;                            
-                            $horasDia -= $diferencia;                            
-                            $horasExtraDia += $diferencia;
-                            
-
-                        }                                                
-                    }
-                     * 
-                     */
-
-                    //Descanso    
-                    /*$horasFestivasDiurnas = $arSoportePago->getHorasFestivasDiurnas();
-                    $horasFestivasNocturnas = $arSoportePago->getHorasFestivasNocturnas();
-                    $horasExtrasFestivasDiurnas = $arSoportePago->getHorasExtrasFestivasDiurnas();
-                    $horasExtrasFestivasNocturnas = $arSoportePago->getHorasExtrasFestivasNocturnas();
-                    $horasNovedad = $arSoportePago->getHorasNovedad();
-                    $horasDescansoRecurso = ($horasDia + $horasNoche + $horasExtraDia + $horasExtraNoche + $horasFestivasDiurnas + $horasFestivasNocturnas  + $horasExtrasFestivasDiurnas + $horasExtrasFestivasNocturnas) - $horasNovedad;
-                    if($horasDescansoRecurso > 0) {
-                        $prueba = $horasDescansoRecurso / $horasDescanso;
-                        $prueba = round($prueba);
-                        if($prueba > $festivos) {
-                            $horasDescansoRecurso = $festivos * 8;
-                        } else {
-                            $horasDescansoRecurso = $prueba * 8;
-                        }
-                    } else {
-                        $horasDescansoRecurso = 0;
-                    }
-                     * 
-                     */
-                    //Fin descanso 
+                    $horasFestivasDia = $arSoportePago->getHorasFestivasDiurnasReales();
+                    $horasFestivasNoche = $arSoportePago->getHorasFestivasNocturnasReales();
+                    $horasExtraDia = $arSoportePago->getHorasExtrasOrdinariasDiurnasReales();                    
+                    $horasExtraNoche = $arSoportePago->getHorasExtrasOrdinariasNocturnasReales();
+                    $horasExtraFestivasDia = $arSoportePago->getHorasExtrasFestivasDiurnasReales();                    
+                    $horasExtraFestivasNoche = $arSoportePago->getHorasExtrasFestivasNocturnasReales();                    
+                    $totalHoras = $horasDia + $horasNoche + $horasFestivasDia + $horasFestivasNoche;
+                    $horasPorCompensar = $horasTope - $totalHoras;
+                    $totalExtras = $horasExtraDia + $horasExtraNoche + $horasExtraFestivasDia + $horasExtraFestivasNoche;
+                    $porExtraDiurna = $horasExtraDia / $totalExtras;
+                    $porExtraNocturna = $horasExtraNoche / $totalExtras;
+                    $porExtraFestivaDiurna = $horasExtraFestivasDia / $totalExtras;
+                    $porExtraFestivaNocturna = $horasExtraFestivasNoche / $totalExtras; 
+                    $horasCompensarDia = round($porExtraDiurna * $horasPorCompensar);
+                    $horasCompensarNoche = round($porExtraNocturna * $horasPorCompensar);
+                    $horasCompensarFestivaDia = round($porExtraFestivaDiurna * $horasPorCompensar);
+                    $horasCompensarFestivaNoche = round($porExtraFestivaNocturna * $horasPorCompensar);
+                    $horasDia += $horasCompensarDia;
+                    $horasNoche += $horasCompensarNoche;
+                    $horasFestivasDia += $horasCompensarFestivaDia;
+                    $horasFestivasNoche += $horasCompensarFestivaNoche;
+                    $horasExtraDia -= $horasCompensarDia;                    
+                    $horasExtraNoche -= $horasCompensarNoche;
+                    $horasExtraFestivasDia -= $horasCompensarFestivaDia;                    
+                    $horasExtraFestivasNoche -= $horasCompensarFestivaNoche;                    
                     
                     $arSoportePagoAct = new \Brasa\TurnoBundle\Entity\TurSoportePago();
                     $arSoportePagoAct = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($arSoportePago->getCodigoSoportePagoPk());                    
                     $arSoportePagoAct->setHorasDiurnas($horasDia);
                     $arSoportePagoAct->setHorasNocturnas($horasNoche);
+                    $arSoportePagoAct->setHorasFestivasDiurnas($horasFestivasDia);
+                    $arSoportePagoAct->setHorasFestivasNocturnas($horasFestivasNoche);
                     $arSoportePagoAct->setHorasExtrasOrdinariasDiurnas($horasExtraDia);
                     $arSoportePagoAct->setHorasExtrasOrdinariasNocturnas($horasExtraNoche);
-                    $arSoportePagoAct->setHorasDescanso($horasFestivas);
-                    //$arSoportePagoAct->setHorasDescanso($horasDescansoRecurso);
-                    $horas = $horasFestivas + $horasDia + $horasNoche + $arSoportePagoAct->getHorasNovedad();
+                    $arSoportePagoAct->setHorasExtrasFestivasDiurnas($horasExtraFestivasDia);
+                    $arSoportePagoAct->setHorasExtrasFestivasNocturnas($horasExtraFestivasNoche);                    
+                    $arSoportePagoAct->setHorasDescanso($horasDescanso);
+
+                    $horas = $horasDia + $horasNoche + $horasFestivasDia + $horasFestivasNoche + $horasDescanso + $arSoportePagoAct->getHorasNovedad();
                     $arSoportePagoAct->setHoras($horas);
                     $em->persist($arSoportePagoAct);
                 }
@@ -344,11 +294,12 @@ class GenerarSoportePagoController extends Controller
         $form = $this->createForm(new TurSoportePagoPeriodoType, $arSoportePagoPeriodo);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arSoportePagoPeriodo = $form->getData();  
+            $arSoportePagoPeriodo = $form->getData();
             $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arSoportePagoPeriodo->getFechaDesde()->format('Y-m-d'), $arSoportePagoPeriodo->getFechaHasta()->format('Y-m-d'));
             $arrDias = $this->festivosDomingos($arSoportePagoPeriodo->getFechaDesde(), $arSoportePagoPeriodo->getFechaHasta(), $arFestivos);
             $arSoportePagoPeriodo->setDiaDomingoReal($arrDias['domingos']);
             $arSoportePagoPeriodo->setDiaFestivoReal($arrDias['festivos']);
+            $arSoportePagoPeriodo->setDiasDescansoFijo($arSoportePagoPeriodo->getRecursoGrupoRel()->getDiasDescansoFijo());
             $em->persist($arSoportePagoPeriodo);
             $em->flush();
             return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                                                                              

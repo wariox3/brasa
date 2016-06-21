@@ -223,6 +223,11 @@ class TurPlantillaDetalle
     private $festivo;    
     
     /**
+     * @ORM\Column(name="domingo_festivo", type="string", length=5, nullable=true)
+     */    
+    private $domingoFestivo;
+    
+    /**
      * @ORM\Column(name="horas", type="integer")
      */    
     private $horas = 0;    
@@ -1275,5 +1280,29 @@ class TurPlantillaDetalle
     public function getFestivo()
     {
         return $this->festivo;
+    }
+
+    /**
+     * Set domingoFestivo
+     *
+     * @param string $domingoFestivo
+     *
+     * @return TurPlantillaDetalle
+     */
+    public function setDomingoFestivo($domingoFestivo)
+    {
+        $this->domingoFestivo = $domingoFestivo;
+
+        return $this;
+    }
+
+    /**
+     * Get domingoFestivo
+     *
+     * @return string
+     */
+    public function getDomingoFestivo()
+    {
+        return $this->domingoFestivo;
     }
 }

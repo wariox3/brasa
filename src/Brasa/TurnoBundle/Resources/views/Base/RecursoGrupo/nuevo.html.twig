@@ -32,6 +32,12 @@
                     <p style="font-size: 0.8em;">* Cuando el turno es de descanso es reemplazado por este turno</p>
                 </div>                
             </div>                     
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Dias de descanso fijo:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.diasDescansoFijo, { 'attr': {'class': 'form-control', 'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}                                            
+                </div>                
+            </div>                    
         </div>
     </div>                
     <div class="modal-footer">

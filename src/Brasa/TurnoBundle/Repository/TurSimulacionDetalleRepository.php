@@ -6,10 +6,10 @@ use Doctrine\ORM\EntityRepository;
 
 class TurSimulacionDetalleRepository extends EntityRepository {
 
-    public function ListaDql() {
+    public function listaDql() {
         $em = $this->getEntityManager();
-        $dql   = "SELECT pd FROM BrasaTurnoBundle:TurProgramacionDetalle pd WHERE pd.codigoProgramacionDetallePk <> 0";
-        $dql .= " ORDER BY pd.codigoProgramacionDetallePk";
+        $dql   = "SELECT sd FROM BrasaTurnoBundle:TurSimulacionDetalle sd WHERE sd.codigoSimulacionDetallePk <> 0";
+        $dql .= " ORDER BY sd.codigoSimulacionDetallePk";
         return $dql;
     }
 
@@ -124,9 +124,9 @@ class TurSimulacionDetalleRepository extends EntityRepository {
         $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigoServicioDetalle);
         $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$fechaProgramacion->format('m')+1,1,$fechaProgramacion->format('Y'))-1));
         $intDiaInicial = 1;
-        $intDiaFinal = 31;        
-        $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos("2016-06-" . $intDiaInicial, "2016-06-" . $intDiaFinal);
-        $strMesAnio = "2016/06";
+        $intDiaFinal = $intUltimoDia;        
+        $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($fechaProgramacion->format('Y-m-') . $intDiaInicial, $fechaProgramacion->format('Y-m-') . $intDiaFinal);
+        $strMesAnio = $fechaProgramacion->format('Y/m');
         for($j = 1; $j <= $arServicioDetalle->getCantidad(); $j++) {
             if($arServicioDetalle->getPlantillaRel()) {
                 if($arServicioDetalle->getPlantillaRel()) {
@@ -150,10 +150,9 @@ class TurSimulacionDetalleRepository extends EntityRepository {
                         $arSimulacionDetalle->setRecursoRel($arServicioDetalleRecurso->getRecursoRel());
                         for($i = 1; $i < 32; $i++) {                        
                             $strTurno = $arrTurnos[$intPosicionPlantilla];
-                            $strFechaDia = $fechaProgramacion->format('Y-m-') . $i;
+                            $strFechaDia = $fechaProgramacion->format('Y-m-') . $i;                            
                             $dateFechaDia = date_create($strFechaDia);
                             $diaSemana = $dateFechaDia->format('N');
-
                             $boolFestivo = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->festivo($arFestivos, $dateFechaDia);
                             if($diaSemana == 1 && isset($arrTurnos['lunes'])) {
                                 $strTurno = $arrTurnos['lunes'];
@@ -174,7 +173,15 @@ class TurSimulacionDetalleRepository extends EntityRepository {
                                 $strTurno = $arrTurnos['sabado'];
                             }
                             if($diaSemana == 7 && isset($arrTurnos['domingo'])) {
-                                $strTurno = $arrTurnos['domingo'];
+                                $strTurno = $arrTurnos['domingo'];                                                                
+                            }
+                            if($diaSemana == 7 && isset($arrTurnos['domingoFestivo'])) {
+                                $strFechaDiaSiguiente = $fechaProgramacion->format('Y-m-') . ($i+1);
+                                $dateFechaDiaSiguiente = date_create($strFechaDiaSiguiente);                            
+                                $boolFestivoSiguiente = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->festivo($arFestivos, $dateFechaDiaSiguiente);                                
+                                if($boolFestivoSiguiente == 1) {
+                                    $strTurno = $arrTurnos['domingoFestivo'];                                
+                                }                                
                             }
                             if($boolFestivo == 1 && isset($arrTurnos['festivo'])) {
                                 $strTurno = $arrTurnos['festivo'];
@@ -416,6 +423,7 @@ class TurSimulacionDetalleRepository extends EntityRepository {
             'viernes' => $arPlantillaDetalle->getViernes(),
             'sabado' => $arPlantillaDetalle->getSabado(),
             'domingo' => $arPlantillaDetalle->getDomingo(),
+            'domingoFestivo' => $arPlantillaDetalle->getDomingoFestivo(),
             'festivo' => $arPlantillaDetalle->getFestivo(),);
         return $arrTurnos;
     }

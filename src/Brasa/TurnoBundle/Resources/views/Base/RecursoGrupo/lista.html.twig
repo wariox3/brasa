@@ -34,7 +34,8 @@
                 <th>CODIGO</th>
                 <th>NOMBRE</th>   
                 <th><p data-toggle="tooltip" data-placement="top" title="Turno fijo de nomina">TF</p></th>                
-                <th><p data-toggle="tooltip" data-placement="top" title="Turno fijo de nomina para descansos">TFD</p></th>                                
+                <th><p data-toggle="tooltip" data-placement="top" title="Turno fijo de nomina para descansos">TFD</p></th>                               
+                <th><p data-toggle="tooltip" data-placement="top" title="Dias de descanso fijo">DF</p></th>                               
                 <th></th>
                 <th></th>
             </tr>
@@ -44,6 +45,7 @@
                 <td>{{ arRecursoGrupos.nombre }}</td>  
                 <td>{{ arRecursoGrupos.codigoTurnoFijoNominaFk }}</td> 
                 <td>{{ arRecursoGrupos.codigoTurnoFijoDescansoFk }}</td>                 
+                <td>{{ arRecursoGrupos.diasDescansoFijo }}</td>                 
                 <td style="text-align: center"><a href="{{ path('brs_tur_base_recurso_grupo_nuevo', {'codigoRecursoGrupo': arRecursoGrupos.codigoRecursoGrupoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arRecursoGrupos.codigoRecursoGrupoPk }}" /></td>
             </tr>
