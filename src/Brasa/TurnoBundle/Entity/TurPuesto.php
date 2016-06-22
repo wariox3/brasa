@@ -63,6 +63,11 @@ class TurPuesto
     private $codigoClienteFk;    
     
     /**
+     * @ORM\Column(name="codigo_programador_fk", type="integer", nullable=true)
+     */    
+    private $codigoProgramadorFk;    
+    
+    /**
      * @ORM\Column(name="codigo_ciudad_fk", type="integer", nullable=true)
      */
     private $codigoCiudadFk;     
@@ -88,6 +93,12 @@ class TurPuesto
      * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
      */
     protected $ciudadRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurProgramador", inversedBy="puestosProgramadorRel")
+     * @ORM\JoinColumn(name="codigo_programador_fk", referencedColumnName="codigo_programador_pk")
+     */
+    protected $programadorRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="puestoRel")
@@ -677,5 +688,53 @@ class TurPuesto
     public function getSimulacionesDetallesPuestoRel()
     {
         return $this->simulacionesDetallesPuestoRel;
+    }
+
+    /**
+     * Set codigoProgramadorFk
+     *
+     * @param integer $codigoProgramadorFk
+     *
+     * @return TurPuesto
+     */
+    public function setCodigoProgramadorFk($codigoProgramadorFk)
+    {
+        $this->codigoProgramadorFk = $codigoProgramadorFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoProgramadorFk
+     *
+     * @return integer
+     */
+    public function getCodigoProgramadorFk()
+    {
+        return $this->codigoProgramadorFk;
+    }
+
+    /**
+     * Set programadorRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurProgramador $programadorRel
+     *
+     * @return TurPuesto
+     */
+    public function setProgramadorRel(\Brasa\TurnoBundle\Entity\TurProgramador $programadorRel = null)
+    {
+        $this->programadorRel = $programadorRel;
+
+        return $this;
+    }
+
+    /**
+     * Get programadorRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurProgramador
+     */
+    public function getProgramadorRel()
+    {
+        return $this->programadorRel;
     }
 }

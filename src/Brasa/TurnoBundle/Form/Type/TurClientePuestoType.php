@@ -16,7 +16,14 @@ class TurClientePuestoType extends AbstractType
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                 
+                'required' => true))    
+            ->add('programadorRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurProgramador',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('p')
+                    ->orderBy('p.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                             
             ->add('nombre', 'text', array('required'  => true))
             ->add('direccion', 'text', array('required'  => false))
             ->add('telefono', 'text', array('required'  => false))
