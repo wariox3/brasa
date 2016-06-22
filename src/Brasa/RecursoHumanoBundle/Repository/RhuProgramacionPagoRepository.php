@@ -221,6 +221,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                 }
                             }
                         }
+                        
                         //Esta condicion se debe quitar, se agrega para no permitir un descuento en vacaciones
                         if($intHorasLaboradas > 0) {
                             //Procesar los conceptos de pagos adicionales
@@ -267,7 +268,45 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                                 }
 
                                 $em->persist($arPagoDetalle);                            
-                            }                            
+                            }  
+                            
+                            //Horas extra
+                            $arrHorasExtras = $this->horasExtra($arProgramacionPagoDetalle, $arConfiguracion);
+                            foreach($arrHorasExtras as $arrHorasExtra) {
+                                //$arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($arrHorasExtra['concepto']);                                
+                                $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                                $arPagoDetalle->setPagoRel($arPago);
+                                $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
+                                $arPagoDetalle->setAdicional(1);                                
+                                
+                                $douVrHoraAdicional = ($douVrHora * $arPagoConcepto->getPorPorcentaje())/100;
+                                $douPagoDetalle = $douVrHoraAdicional * $arrHorasExtra['horas'];
+                                $arPagoDetalle->setPorcentajeAplicado($arPagoConcepto->getPorPorcentaje());
+                                $arPagoDetalle->setVrHora($douVrHoraAdicional);
+                                $arPagoDetalle->setVrDia(0);
+                                $arPagoDetalle->setNumeroHoras($arrHorasExtra['horas']);
+                                
+                                $arPagoDetalle->setVrPago($douPagoDetalle);
+                                $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
+                                $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConcepto->getOperacion());                                
+                                $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);                            
+
+                                if($arPagoConcepto->getPrestacional() == 1) {
+                                    if($arPagoConcepto->getGeneraIngresoBaseCotizacion() == 1) {
+                                        $douIngresoBaseCotizacion += $douPagoDetalle;    
+                                        $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);
+                                        $arPagoDetalle->setCotizacion(1);
+                                    }
+                                    if($arPagoConcepto->getGeneraIngresoBasePrestacion() == 1) {
+                                        $douIngresoBasePrestacional += $douPagoDetalle;    
+                                        $arPagoDetalle->setVrIngresoBasePrestacion($douPagoDetalle);
+                                    }                                                                                                                                                                
+                                    $arPagoDetalle->setPrestacional(1);
+                                }
+
+                                $em->persist($arPagoDetalle);                                
+                            }
                         }
 
 
@@ -1318,6 +1357,37 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         }        
         set_time_limit(0);
         return true;
+    }
+    
+    private function horasExtra($arProgramacionPagoDetalle, $arConfiguracion) {
+        //$arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+        //$arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+        $arrExtra = array();
+        if($arProgramacionPagoDetalle->getHorasDescanso() > 0) {
+            $arrExtra[] = array('concepto' => $arConfiguracion->getCodigoHoraDescanso(), 'horas' => $arProgramacionPagoDetalle->getHorasDescanso());
+        }        
+        if($arProgramacionPagoDetalle->getHorasNocturnas() > 0) {
+            $arrExtra[] = array('concepto' => $arConfiguracion->getCodigoHoraNocturna(), 'horas' => $arProgramacionPagoDetalle->getHorasNocturnas());
+        }
+        if($arProgramacionPagoDetalle->getHorasFestivasDiurnas() > 0) {
+            $arrExtra[] = array('concepto' => $arConfiguracion->getCodigoHoraFestivaDiurna(), 'horas' => $arProgramacionPagoDetalle->getHorasFestivasDiurnas());
+        }
+        if($arProgramacionPagoDetalle->getHorasFestivasNocturnas() > 0) {
+            $arrExtra[] = array('concepto' => $arConfiguracion->getCodigoHoraFestivaNocturna(), 'horas' => $arProgramacionPagoDetalle->getHorasFestivasNocturnas());
+        }        
+        if($arProgramacionPagoDetalle->getHorasExtrasOrdinariasDiurnas() > 0) {
+            $arrExtra[] = array('concepto' => $arConfiguracion->getCodigoHoraExtraOrdinariaDiurna(), 'horas' => $arProgramacionPagoDetalle->getHorasExtrasOrdinariasDiurnas());
+        }
+        if($arProgramacionPagoDetalle->getHorasExtrasOrdinariasNocturnas() > 0) {
+            $arrExtra[] = array('concepto' => $arConfiguracion->getCodigoHoraExtraOrdinariaNocturna(), 'horas' => $arProgramacionPagoDetalle->getHorasExtrasOrdinariasNocturnas());
+        }        
+        if($arProgramacionPagoDetalle->getHorasExtrasFestivasDiurnas() > 0) {
+            $arrExtra[] = array('concepto' => $arConfiguracion->getCodigoHoraExtraFestivaDiurna(), 'horas' => $arProgramacionPagoDetalle->getHorasExtrasFestivasDiurnas());
+        }
+        if($arProgramacionPagoDetalle->getHorasExtrasFestivasNocturnas() > 0) {
+            $arrExtra[] = array('concepto' => $arConfiguracion->getCodigoHoraExtraFestivaNocturna(), 'horas' => $arProgramacionPagoDetalle->getHorasExtrasFestivasNocturnas());
+        }        
+        return $arrExtra;
     }
     
     //listado de programaciones de pago pagadas para generar archivo txt bancolombia

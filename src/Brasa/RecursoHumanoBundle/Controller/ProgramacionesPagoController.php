@@ -3,6 +3,7 @@
 namespace Brasa\RecursoHumanoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuProgramacionPagoType;
@@ -161,18 +162,6 @@ class ProgramacionesPagoController extends Controller
                     $objMensaje->Mensaje("error", "No puede eliminar empleados cuando la programacion esta generada", $this);
                 }
             }
-            if($form->get('BtnRetirarConceptoTiempo')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarTiempo');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados as $codigoPagoAdicional) {
-                        $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                        $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
-                        $em->remove($arPagoAdicional);
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
-                }
-            }
             if($form->get('BtnRetirarConceptoValor')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarValor');
                 if(count($arrSeleccionados) > 0) {
@@ -208,12 +197,6 @@ class ProgramacionesPagoController extends Controller
                 }
                 return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
             }
-            if($form->get('BtnEliminarTodoAdicionalesTiempo')->isClicked()) {
-                if ($arProgramacionPago->getEstadoGenerado() == 0 ){
-                    $resultado = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->eliminarTodoAdicionalesTiempo($codigoProgramacionPago);
-                }
-               return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
-            }
             if($form->get('BtnEliminarTodoAdicionalesValor')->isClicked()) {
                 if ($arProgramacionPago->getEstadoGenerado() == 0 ){
                     $resultado = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->eliminarTodoAdicionalesValor($codigoProgramacionPago);
@@ -236,8 +219,8 @@ class ProgramacionesPagoController extends Controller
         $arProgramacionPagoDetalleSedes = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede();
         $arProgramacionPagoDetalleSedes = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalleSede')->findAll();
         //adicionales al pago en tiempo
-        $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->listaTiempoDql($codigoProgramacionPago));
-        $arPagosAdicionalesTiempo = $paginator->paginate($query, $request->query->get('page', 1), 200);
+        //$query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->listaTiempoDql($codigoProgramacionPago));
+        //$arPagosAdicionalesTiempo = $paginator->paginate($query, $request->query->get('page', 1), 200);
         //adicionales al pago en valor
         $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->listaValorDql($codigoProgramacionPago));
         $arPagosAdicionalesValor = $paginator->paginate($query, $request->query->get('page', 1), 200);
@@ -250,8 +233,7 @@ class ProgramacionesPagoController extends Controller
         }
 
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:detalle.html.twig', array(
-                    'arCentroCosto' => $arCentroCosto,
-                    'arPagosAdicionalesTiempo' => $arPagosAdicionalesTiempo,
+                    'arCentroCosto' => $arCentroCosto,                    
                     'arPagosAdicionalesValor' => $arPagosAdicionalesValor,
                     'arIncapacidades' => $arIncapacidades,
                     'arLicencias' => $arLicencias,
@@ -368,6 +350,32 @@ class ProgramacionesPagoController extends Controller
             ));
     }
 
+    /**
+     * @Route("/rhu/programacion/pago/resumen/turno/ver/{codigoProgramacionPagoDetalle}/{codigoSoportePago}", name="brs_rhu_programacion_pago_resumen_turno_ver")
+     */    
+    public function verResumenTurnosAction($codigoProgramacionPagoDetalle, $codigoSoportePago) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $form = $this->formularioVerReusmenTurno();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+        }        
+        $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+        $arSoportePago =  $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($codigoSoportePago);                                
+        $strAnio = $arSoportePago->getFechaDesde()->format('Y');
+        $strMes = $arSoportePago->getFechaDesde()->format('m');
+        $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+        $arProgramacionDetalle =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arSoportePago->getCodigoRecursoFk()));                        
+        $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+        $arPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoProgramacionPagoDetalleFk' => $codigoProgramacionPagoDetalle));                
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:verResumenTurno.html.twig', array(                        
+            'arProgramacionDetalle' => $arProgramacionDetalle,  
+            'arPagoDetalles' => $arPagoDetalles,
+            'arSoportePago' => $arSoportePago,
+            'form' => $form->createView()));
+    }
+    
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->get('session');
@@ -413,16 +421,12 @@ class ProgramacionesPagoController extends Controller
     }
 
     private function formularioDetalle($arProgramacionPago) {
-
-        //$arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-        $arrBotonAplicarDiaLaborado = array('label' => 'Aplicar dia laborado', 'disabled' => false);
-        $arrBotonRetirarConceptoTiempo = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonAplicarDiaLaborado = array('label' => 'Aplicar dia laborado', 'disabled' => false);        
         $arrBotonRetirarConceptoValor = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonGenerarEmpleados = array('label' => 'Cargar contratos', 'disabled' => false);
         $arrBotonEliminarEmpleados = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonEliminarTodoEmpleados = array('label' => 'Eliminar todo', 'disabled' => false);
         $arrBotonEliminarTodoAdicionalesValor = array('label' => 'Eliminar todo', 'disabled' => false);
-        $arrBotonEliminarTodoAdicionalesTiempo = array('label' => 'Eliminar todo', 'disabled' => false);        
         if($arProgramacionPago->getEstadoGenerado() == 1) {            
             $arrBotonGenerarEmpleados['disabled'] = true;         
             $arrBotonEliminarEmpleados['disabled'] = true;
@@ -436,15 +440,19 @@ class ProgramacionesPagoController extends Controller
         $form = $this->createFormBuilder()    
                     ->add('BtnGenerarEmpleados', 'submit', $arrBotonGenerarEmpleados)                        
                     ->add('BtnEliminarEmpleados', 'submit', $arrBotonEliminarEmpleados)
-                    ->add('BtnRetirarConceptoTiempo', 'submit', $arrBotonRetirarConceptoTiempo)
                     ->add('BtnRetirarConceptoValor', 'submit', $arrBotonRetirarConceptoValor)
                     ->add('BtnAplicaDiaLaborado', 'submit', $arrBotonAplicarDiaLaborado)
-                    ->add('BtnEliminarTodoEmpleados', 'submit', $arrBotonEliminarTodoEmpleados)
-                    ->add('BtnEliminarTodoAdicionalesTiempo', 'submit', $arrBotonEliminarTodoAdicionalesTiempo)
+                    ->add('BtnEliminarTodoEmpleados', 'submit', $arrBotonEliminarTodoEmpleados)                    
                     ->add('BtnEliminarTodoAdicionalesValor', 'submit', $arrBotonEliminarTodoAdicionalesValor)
                     ->getForm();  
         return $form;
     }    
+
+    private function formularioVerReusmenTurno() {
+        $form = $this->createFormBuilder()                                   
+            ->getForm();
+        return $form;
+    }
     
     private function listar() {
         $em = $this->getDoctrine()->getManager();

@@ -159,7 +159,62 @@ class RhuProgramacionPagoDetalle
      * @ORM\Column(name="soporte_turno", type="boolean")
      */
     private $soporteTurno = 1;    
-        
+
+    /**
+     * @ORM\Column(name="codigo_soporte_pago_fk", type="integer", nullable=true)
+     */    
+    private $codigoSoportePagoFk; 
+    
+    /**
+     * @ORM\Column(name="horas_diurnas", type="float")
+     */    
+    private $horasDiurnas = 0;     
+
+    /**
+     * @ORM\Column(name="horas_nocturnas", type="float")
+     */    
+    private $horasNocturnas = 0;    
+    
+    /**
+     * @ORM\Column(name="horas_festivas_diurnas", type="float")
+     */    
+    private $horasFestivasDiurnas = 0;     
+
+    /**
+     * @ORM\Column(name="horas_festivas_nocturnas", type="float")
+     */    
+    private $horasFestivasNocturnas = 0;    
+    
+    /**
+     * @ORM\Column(name="horas_extras_ordinarias_diurnas", type="float")
+     */    
+    private $horasExtrasOrdinariasDiurnas = 0;    
+
+    /**
+     * @ORM\Column(name="horas_extras_ordinarias_nocturnas", type="float")
+     */    
+    private $horasExtrasOrdinariasNocturnas = 0;        
+
+    /**
+     * @ORM\Column(name="horas_extras_festivas_diurnas", type="float")
+     */    
+    private $horasExtrasFestivasDiurnas = 0;    
+
+    /**
+     * @ORM\Column(name="horas_extras_festivas_nocturnas", type="float")
+     */    
+    private $horasExtrasFestivasNocturnas = 0;    
+
+    /**
+     * @ORM\Column(name="horas_descanso", type="float")
+     */    
+    private $horasDescanso = 0;     
+    
+    /**
+     * @ORM\Column(name="horas_novedad", type="float")
+     */    
+    private $horasNovedad = 0;     
+    
     /**
      * @ORM\Column(name="comentarios", type="string", length=150, nullable=true)
      */    
@@ -1046,5 +1101,269 @@ class RhuProgramacionPagoDetalle
     public function getPagosDetallesProgramacionPagoDetalleRel()
     {
         return $this->pagosDetallesProgramacionPagoDetalleRel;
+    }
+
+    /**
+     * Set horasDiurnas
+     *
+     * @param float $horasDiurnas
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setHorasDiurnas($horasDiurnas)
+    {
+        $this->horasDiurnas = $horasDiurnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDiurnas
+     *
+     * @return float
+     */
+    public function getHorasDiurnas()
+    {
+        return $this->horasDiurnas;
+    }
+
+    /**
+     * Set horasNocturnas
+     *
+     * @param float $horasNocturnas
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setHorasNocturnas($horasNocturnas)
+    {
+        $this->horasNocturnas = $horasNocturnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNocturnas
+     *
+     * @return float
+     */
+    public function getHorasNocturnas()
+    {
+        return $this->horasNocturnas;
+    }
+
+    /**
+     * Set horasFestivasDiurnas
+     *
+     * @param float $horasFestivasDiurnas
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setHorasFestivasDiurnas($horasFestivasDiurnas)
+    {
+        $this->horasFestivasDiurnas = $horasFestivasDiurnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasFestivasDiurnas
+     *
+     * @return float
+     */
+    public function getHorasFestivasDiurnas()
+    {
+        return $this->horasFestivasDiurnas;
+    }
+
+    /**
+     * Set horasFestivasNocturnas
+     *
+     * @param float $horasFestivasNocturnas
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setHorasFestivasNocturnas($horasFestivasNocturnas)
+    {
+        $this->horasFestivasNocturnas = $horasFestivasNocturnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasFestivasNocturnas
+     *
+     * @return float
+     */
+    public function getHorasFestivasNocturnas()
+    {
+        return $this->horasFestivasNocturnas;
+    }
+
+    /**
+     * Set horasExtrasOrdinariasDiurnas
+     *
+     * @param float $horasExtrasOrdinariasDiurnas
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setHorasExtrasOrdinariasDiurnas($horasExtrasOrdinariasDiurnas)
+    {
+        $this->horasExtrasOrdinariasDiurnas = $horasExtrasOrdinariasDiurnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasExtrasOrdinariasDiurnas
+     *
+     * @return float
+     */
+    public function getHorasExtrasOrdinariasDiurnas()
+    {
+        return $this->horasExtrasOrdinariasDiurnas;
+    }
+
+    /**
+     * Set horasExtrasOrdinariasNocturnas
+     *
+     * @param float $horasExtrasOrdinariasNocturnas
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setHorasExtrasOrdinariasNocturnas($horasExtrasOrdinariasNocturnas)
+    {
+        $this->horasExtrasOrdinariasNocturnas = $horasExtrasOrdinariasNocturnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasExtrasOrdinariasNocturnas
+     *
+     * @return float
+     */
+    public function getHorasExtrasOrdinariasNocturnas()
+    {
+        return $this->horasExtrasOrdinariasNocturnas;
+    }
+
+    /**
+     * Set horasExtrasFestivasDiurnas
+     *
+     * @param float $horasExtrasFestivasDiurnas
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setHorasExtrasFestivasDiurnas($horasExtrasFestivasDiurnas)
+    {
+        $this->horasExtrasFestivasDiurnas = $horasExtrasFestivasDiurnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasExtrasFestivasDiurnas
+     *
+     * @return float
+     */
+    public function getHorasExtrasFestivasDiurnas()
+    {
+        return $this->horasExtrasFestivasDiurnas;
+    }
+
+    /**
+     * Set horasExtrasFestivasNocturnas
+     *
+     * @param float $horasExtrasFestivasNocturnas
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setHorasExtrasFestivasNocturnas($horasExtrasFestivasNocturnas)
+    {
+        $this->horasExtrasFestivasNocturnas = $horasExtrasFestivasNocturnas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasExtrasFestivasNocturnas
+     *
+     * @return float
+     */
+    public function getHorasExtrasFestivasNocturnas()
+    {
+        return $this->horasExtrasFestivasNocturnas;
+    }
+
+    /**
+     * Set horasDescanso
+     *
+     * @param float $horasDescanso
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setHorasDescanso($horasDescanso)
+    {
+        $this->horasDescanso = $horasDescanso;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDescanso
+     *
+     * @return float
+     */
+    public function getHorasDescanso()
+    {
+        return $this->horasDescanso;
+    }
+
+    /**
+     * Set horasNovedad
+     *
+     * @param float $horasNovedad
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setHorasNovedad($horasNovedad)
+    {
+        $this->horasNovedad = $horasNovedad;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNovedad
+     *
+     * @return float
+     */
+    public function getHorasNovedad()
+    {
+        return $this->horasNovedad;
+    }
+
+    /**
+     * Set codigoSoportePagoFk
+     *
+     * @param integer $codigoSoportePagoFk
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setCodigoSoportePagoFk($codigoSoportePagoFk)
+    {
+        $this->codigoSoportePagoFk = $codigoSoportePagoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSoportePagoFk
+     *
+     * @return integer
+     */
+    public function getCodigoSoportePagoFk()
+    {
+        return $this->codigoSoportePagoFk;
     }
 }

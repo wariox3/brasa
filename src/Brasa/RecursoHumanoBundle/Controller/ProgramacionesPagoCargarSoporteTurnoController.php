@@ -29,13 +29,14 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arSoportePago->getCodigoContratoFk());
                     $floVrDia = $arContrato->getVrSalario() / 30;
                     $floVrHora = $floVrDia / 8;
-                    $intHoras = $arSoportePago->getHoras() - (($arSoportePago->getIngreso()+$arSoportePago->getRetiro())*8);
+                    $intHoras = $arSoportePago->getHorasDiurnas();
                     $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                     $arProgramacionPagoDetalle->setEmpleadoRel($arEmpleado);
                     $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
                     $arProgramacionPagoDetalle->setContratoRel($arContrato);
                     $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalario());
                     $arProgramacionPagoDetalle->setSoporteTurno(TRUE);
+                    $arProgramacionPagoDetalle->setCodigoSoportePagoFk($arSoportePago->getCodigoSoportePagoPk());
                     $arProgramacionPagoDetalle->setFechaDesde($arSoportePago->getFechaDesde());
                     $arProgramacionPagoDetalle->setFechaHasta($arSoportePago->getFechaHasta());
                     $arProgramacionPagoDetalle->setFechaDesdePago($arSoportePago->getFechaDesde());
@@ -48,7 +49,16 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     $arProgramacionPagoDetalle->setFactorDia($arContrato->getFactorHorasDia());
                     $arProgramacionPagoDetalle->setVrDia($floVrDia);
                     $arProgramacionPagoDetalle->setVrHora($floVrHora);
-                    //$arProgramacionPagoDetalle->set
+                    //Tiempo adicional
+                    $arProgramacionPagoDetalle->setHorasDescanso($arSoportePago->getHorasDescanso());
+                    $arProgramacionPagoDetalle->setHorasDiurnas($arSoportePago->getHorasDiurnas());
+                    $arProgramacionPagoDetalle->setHorasNocturnas($arSoportePago->getHorasNocturnas());
+                    $arProgramacionPagoDetalle->setHorasFestivasDiurnas($arSoportePago->getHorasFestivasDiurnas());
+                    $arProgramacionPagoDetalle->setHorasFestivasNocturnas($arSoportePago->getHorasFestivasNocturnas());
+                    $arProgramacionPagoDetalle->setHorasExtrasOrdinariasDiurnas($arSoportePago->getHorasExtrasOrdinariasDiurnas());
+                    $arProgramacionPagoDetalle->setHorasExtrasOrdinariasNocturnas($arSoportePago->getHorasExtrasOrdinariasNocturnas());
+                    $arProgramacionPagoDetalle->setHorasExtrasFestivasDiurnas($arSoportePago->getHorasExtrasFestivasDiurnas());
+                    $arProgramacionPagoDetalle->setHorasExtrasFestivasNocturnas($arSoportePago->getHorasExtrasFestivasNocturnas());                    
                     //Pregunta por el tipo de pension, si es pensionado no le retiene pension (PABLO ARANZAZU 27/04/2016)
                     if ($arContrato->getCodigoTipoPensionFk() == 5){
                         $arProgramacionPagoDetalle->setDescuentoPension(0);
@@ -88,7 +98,7 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     $arProgramacionPagoDetalle->setComentarios($comentarios);                    
                     $em->persist($arProgramacionPagoDetalle);
 
-                    if($arSoportePago->getHorasNocturnas() > 0) {
+                    /*if($arSoportePago->getHorasNocturnas() > 0) {
                         $this->insertarAdicionalPago($arProgramacionPago, 48, $arSoportePago->getHorasNocturnas(), $arEmpleado);
                     }
                     if($arSoportePago->getHorasFestivasDiurnas() > 0) {
@@ -108,7 +118,9 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     }
                     if($arSoportePago->getHorasExtrasFestivasNocturnas() > 0) {
                         $this->insertarAdicionalPago($arProgramacionPago, 43, $arSoportePago->getHorasExtrasFestivasNocturnas(), $arEmpleado);
-                    }                    
+                    }   
+                     * 
+                     */                 
                 }                
                 $arProgramacionPago->setInconsistencias(0);
                 if(count($arrInconsistencias) > 0) {

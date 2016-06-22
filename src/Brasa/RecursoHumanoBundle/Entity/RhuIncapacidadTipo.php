@@ -23,7 +23,7 @@ class RhuIncapacidadTipo
     private $nombre;     
 
     /**
-     * @ORM\Column(name="codigo_pago_concepto_fk", type="integer")
+     * @ORM\Column(name="codigo_pago_concepto_fk", type="integer", nullable=true)
      */    
     private $codigoPagoConceptoFk;     
     

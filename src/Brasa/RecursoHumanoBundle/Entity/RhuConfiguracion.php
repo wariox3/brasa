@@ -157,6 +157,46 @@ class RhuConfiguracion
     private $cuentaPago;
     
     /**
+     * @ORM\Column(name="codigo_hora_descanso", type="integer")
+     */
+    private $codigoHoraDescanso;
+
+    /**
+     * @ORM\Column(name="codigo_hora_nocturna", type="integer")
+     */
+    private $codigoHoraNocturna;
+
+    /**
+     * @ORM\Column(name="codigo_hora_festiva_diurna", type="integer")
+     */
+    private $codigoHoraFestivaDiurna;
+
+    /**
+     * @ORM\Column(name="codigo_hora_festiva_nocturna", type="integer")
+     */
+    private $codigoHoraFestivaNocturna;
+
+    /**
+     * @ORM\Column(name="codigo_hora_extra_ordinaria_diurna", type="integer")
+     */
+    private $codigoHoraExtraOrdinariaDiurna;
+
+    /**
+     * @ORM\Column(name="codigo_hora_extra_ordinaria_nocturna", type="integer")
+     */
+    private $codigoHoraExtraOrdinariaNocturna;
+
+    /**
+     * @ORM\Column(name="codigo_hora_extra_festiva_diurna", type="integer")
+     */
+    private $codigoHoraExtraFestivaDiurna;
+
+    /**
+     * @ORM\Column(name="codigo_hora_extra_festiva_nocturna", type="integer")
+     */
+    private $codigoHoraExtraFestivaNocturna;    
+    
+    /**
      * Tipo de base para la liquidacion de vacaciones 1-salario 2-salario+prestaciones 3-salario+recargos
      * @ORM\Column(name="tipo_base_pago_vacaciones", type="integer")
      */
@@ -913,5 +953,197 @@ class RhuConfiguracion
     public function getEntidadRiesgoProfesionalRel()
     {
         return $this->entidadRiesgoProfesionalRel;
+    }
+
+    /**
+     * Set codigoHoraDescanso
+     *
+     * @param integer $codigoHoraDescanso
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoHoraDescanso($codigoHoraDescanso)
+    {
+        $this->codigoHoraDescanso = $codigoHoraDescanso;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoHoraDescanso
+     *
+     * @return integer
+     */
+    public function getCodigoHoraDescanso()
+    {
+        return $this->codigoHoraDescanso;
+    }
+
+    /**
+     * Set codigoHoraNocturna
+     *
+     * @param integer $codigoHoraNocturna
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoHoraNocturna($codigoHoraNocturna)
+    {
+        $this->codigoHoraNocturna = $codigoHoraNocturna;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoHoraNocturna
+     *
+     * @return integer
+     */
+    public function getCodigoHoraNocturna()
+    {
+        return $this->codigoHoraNocturna;
+    }
+
+    /**
+     * Set codigoHoraFestivaDiurna
+     *
+     * @param integer $codigoHoraFestivaDiurna
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoHoraFestivaDiurna($codigoHoraFestivaDiurna)
+    {
+        $this->codigoHoraFestivaDiurna = $codigoHoraFestivaDiurna;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoHoraFestivaDiurna
+     *
+     * @return integer
+     */
+    public function getCodigoHoraFestivaDiurna()
+    {
+        return $this->codigoHoraFestivaDiurna;
+    }
+
+    /**
+     * Set codigoHoraFestivaNocturna
+     *
+     * @param integer $codigoHoraFestivaNocturna
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoHoraFestivaNocturna($codigoHoraFestivaNocturna)
+    {
+        $this->codigoHoraFestivaNocturna = $codigoHoraFestivaNocturna;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoHoraFestivaNocturna
+     *
+     * @return integer
+     */
+    public function getCodigoHoraFestivaNocturna()
+    {
+        return $this->codigoHoraFestivaNocturna;
+    }
+
+    /**
+     * Set codigoHoraExtraOrdinariaDiurna
+     *
+     * @param integer $codigoHoraExtraOrdinariaDiurna
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoHoraExtraOrdinariaDiurna($codigoHoraExtraOrdinariaDiurna)
+    {
+        $this->codigoHoraExtraOrdinariaDiurna = $codigoHoraExtraOrdinariaDiurna;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoHoraExtraOrdinariaDiurna
+     *
+     * @return integer
+     */
+    public function getCodigoHoraExtraOrdinariaDiurna()
+    {
+        return $this->codigoHoraExtraOrdinariaDiurna;
+    }
+
+    /**
+     * Set codigoHoraExtraOrdinariaNocturna
+     *
+     * @param integer $codigoHoraExtraOrdinariaNocturna
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoHoraExtraOrdinariaNocturna($codigoHoraExtraOrdinariaNocturna)
+    {
+        $this->codigoHoraExtraOrdinariaNocturna = $codigoHoraExtraOrdinariaNocturna;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoHoraExtraOrdinariaNocturna
+     *
+     * @return integer
+     */
+    public function getCodigoHoraExtraOrdinariaNocturna()
+    {
+        return $this->codigoHoraExtraOrdinariaNocturna;
+    }
+
+    /**
+     * Set codigoHoraExtraFestivaDiurna
+     *
+     * @param integer $codigoHoraExtraFestivaDiurna
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoHoraExtraFestivaDiurna($codigoHoraExtraFestivaDiurna)
+    {
+        $this->codigoHoraExtraFestivaDiurna = $codigoHoraExtraFestivaDiurna;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoHoraExtraFestivaDiurna
+     *
+     * @return integer
+     */
+    public function getCodigoHoraExtraFestivaDiurna()
+    {
+        return $this->codigoHoraExtraFestivaDiurna;
+    }
+
+    /**
+     * Set codigoHoraExtraFestivaNocturna
+     *
+     * @param integer $codigoHoraExtraFestivaNocturna
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoHoraExtraFestivaNocturna($codigoHoraExtraFestivaNocturna)
+    {
+        $this->codigoHoraExtraFestivaNocturna = $codigoHoraExtraFestivaNocturna;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoHoraExtraFestivaNocturna
+     *
+     * @return integer
+     */
+    public function getCodigoHoraExtraFestivaNocturna()
+    {
+        return $this->codigoHoraExtraFestivaNocturna;
     }
 }
