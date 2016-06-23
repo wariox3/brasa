@@ -74,6 +74,13 @@ class AspiranteController extends Controller
             if($codigoAspirante == 0) {
                 $arAspirante->setCodigoUsuario($arUsuario->getUserName());
             }
+            if ($arAspirante->getCodigoTipoLibreta() != 0){
+                $arAspirante->setLibretaMilitar($arAspirante->getNumeroIdentificacion());
+            }
+            else {
+                $arAspirante->setLibretaMilitar("");
+            }
+            $arAspirante->setCodigoTipoLibreta($arAspirante->getCodigoTipoLibreta());
             $em->persist($arAspirante);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
@@ -286,6 +293,7 @@ class AspiranteController extends Controller
         $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'FECHA')
@@ -296,17 +304,19 @@ class AspiranteController extends Controller
                     ->setCellValue('G1', 'FECHA NACIMIENTO')
                     ->setCellValue('H1', 'CIUDAD EXPEDICION')
                     ->setCellValue('I1', 'RH')
-                    ->setCellValue('J1', 'NOMBRE')
-                    ->setCellValue('K1', 'TELEFONO')
-                    ->setCellValue('L1', 'CELULAR')
-                    ->setCellValue('M1', 'DIRECCION')
-                    ->setCellValue('N1', 'BARRIO')
-                    ->setCellValue('O1', 'ESTADO CIVIL')
-                    ->setCellValue('P1', 'SEXO')
-                    ->setCellValue('Q1', 'CORREO')
-                    ->setCellValue('R1', 'DISPONIBILIDAD')
-                    ->setCellValue('S1', 'INCONSISTENCIA')
-                    ->setCellValue('T1', 'COMENTARIOS');
+                    ->setCellValue('J1', 'ESTATURA')
+                    ->setCellValue('K1', 'PESO')
+                    ->setCellValue('L1', 'NOMBRE')
+                    ->setCellValue('M1', 'TELEFONO')
+                    ->setCellValue('N1', 'CELULAR')
+                    ->setCellValue('O1', 'DIRECCION')
+                    ->setCellValue('P1', 'BARRIO')
+                    ->setCellValue('Q1', 'ESTADO CIVIL')
+                    ->setCellValue('R1', 'SEXO')
+                    ->setCellValue('S1', 'CORREO')
+                    ->setCellValue('T1', 'DISPONIBILIDAD')
+                    ->setCellValue('U1', 'INCONSISTENCIA')
+                    ->setCellValue('V1', 'COMENTARIOS');
 
         $i = 2;
         $query = $em->createQuery($session->get('dqlAspiranteLista'));
@@ -368,17 +378,19 @@ class AspiranteController extends Controller
                     ->setCellValue('G' . $i, $arAspirantes->getFechaNacimiento()->format('Y-m-d'))
                     ->setCellValue('H' . $i, $ciudadExpedicion)
                     ->setCellValue('I' . $i, $arAspirantes->getRhRel()->getTipo())
-                    ->setCellValue('J' . $i, $arAspirantes->getNombreCorto())
-                    ->setCellValue('K' . $i, $arAspirantes->getTelefono())
-                    ->setCellValue('L' . $i, $arAspirantes->getCelular())
-                    ->setCellValue('M' . $i, $arAspirantes->getDireccion())
-                    ->setCellValue('N' . $i, $arAspirantes->getBarrio())
-                    ->setCellValue('O' . $i, $estadoCivil)
-                    ->setCellValue('P' . $i, $sexo)
-                    ->setCellValue('Q' . $i, $arAspirantes->getCorreo())
-                    ->setCellValue('R' . $i, $disponibilidad)
-                    ->setCellValue('S' . $i, $inconsistencia)
-                    ->setCellValue('T' . $i, $arAspirantes->getComentarios());
+                    ->setCellValue('J' . $i, $arAspirantes->getEstatura())
+                    ->setCellValue('K' . $i, $arAspirantes->getPeso())
+                    ->setCellValue('L' . $i, $arAspirantes->getNombreCorto())
+                    ->setCellValue('M' . $i, $arAspirantes->getTelefono())
+                    ->setCellValue('N' . $i, $arAspirantes->getCelular())
+                    ->setCellValue('O' . $i, $arAspirantes->getDireccion())
+                    ->setCellValue('P' . $i, $arAspirantes->getBarrio())
+                    ->setCellValue('Q' . $i, $estadoCivil)
+                    ->setCellValue('R' . $i, $sexo)
+                    ->setCellValue('S' . $i, $arAspirantes->getCorreo())
+                    ->setCellValue('T' . $i, $disponibilidad)
+                    ->setCellValue('U' . $i, $inconsistencia)
+                    ->setCellValue('V' . $i, $arAspirantes->getComentarios());
             $i++;
         }
 

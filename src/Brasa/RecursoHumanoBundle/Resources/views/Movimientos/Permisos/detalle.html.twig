@@ -41,7 +41,7 @@
                     <td class="titulo">IDENTIFICACIÓN:</td>
                     <td>{{ arPermiso.empleadoRel.numeroIdentificacion }}</td>
                     <td class="titulo">CENTRO COSTO</td>
-                    <td>{{ arPermiso.centroCostoRel.nombre }}</td>
+                    <td>{{ arPermiso.centroCostoRel.nombre |default('')}}</td>
                 </tr>
                 <tr>
                     <td class="titulo">DEPARTAMENTO:</td>

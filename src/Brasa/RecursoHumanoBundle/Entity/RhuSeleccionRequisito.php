@@ -96,9 +96,9 @@ class RhuSeleccionRequisito
     private $codigoReligionFk;
     
     /**
-     * @ORM\Column(name="codigo_experiencia_fk", type="string", length=30, nullable=true)
+     * @ORM\Column(name="codigo_experiencia_requisicion_fk", type="integer", nullable=true)
      */
-    private $codigoExperienciaFk;
+    private $codigoExperienciaRequisicionFk;
     
     /**
      * @ORM\Column(name="codigo_disponibilidad_fk", type="string", length=30, nullable=true)
@@ -138,6 +138,12 @@ class RhuSeleccionRequisito
     protected $cargoRel;
     
     /**
+     * @ORM\ManyToOne(targetEntity="RhuSeleccionRequisicionExperiencia", inversedBy="seleccionesRequisitosSeleccionRequisicionExperienciaRel")
+     * @ORM\JoinColumn(name="codigo_experiencia_requisicion_fk", referencedColumnName="codigo_experiencia_requisicion_pk")
+     */
+    protected $experienciaRequisicionRel;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEstadoCivil", inversedBy="seleccionesRequisitosEstadoCivilRel")
      * @ORM\JoinColumn(name="codigo_estado_civil_fk", referencedColumnName="codigo_estado_civil_pk")
      */
@@ -164,6 +170,7 @@ class RhuSeleccionRequisito
      * @ORM\OneToMany(targetEntity="RhuSeleccionRequisicionAspirante", mappedBy="seleccionRequisitoRel")
      */
     protected $seleccionesRequisicionesAspirantesSeleccionRequisitoRel;
+    
     
     
     /**
@@ -546,27 +553,27 @@ class RhuSeleccionRequisito
     }
 
     /**
-     * Set codigoExperienciaFk
+     * Set codigoExperienciaRequisicionFk
      *
-     * @param string $codigoExperienciaFk
+     * @param integer $codigoExperienciaRequisicionFk
      *
      * @return RhuSeleccionRequisito
      */
-    public function setCodigoExperienciaFk($codigoExperienciaFk)
+    public function setCodigoExperienciaRequisicionFk($codigoExperienciaRequisicionFk)
     {
-        $this->codigoExperienciaFk = $codigoExperienciaFk;
+        $this->codigoExperienciaRequisicionFk = $codigoExperienciaRequisicionFk;
 
         return $this;
     }
 
     /**
-     * Get codigoExperienciaFk
+     * Get codigoExperienciaRequisicionFk
      *
-     * @return string
+     * @return integer
      */
-    public function getCodigoExperienciaFk()
+    public function getCodigoExperienciaRequisicionFk()
     {
-        return $this->codigoExperienciaFk;
+        return $this->codigoExperienciaRequisicionFk;
     }
 
     /**
@@ -735,6 +742,30 @@ class RhuSeleccionRequisito
     public function getCargoRel()
     {
         return $this->cargoRel;
+    }
+
+    /**
+     * Set experienciaRequisicionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisicionExperiencia $experienciaRequisicionRel
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setExperienciaRequisicionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisicionExperiencia $experienciaRequisicionRel = null)
+    {
+        $this->experienciaRequisicionRel = $experienciaRequisicionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get experienciaRequisicionRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisicionExperiencia
+     */
+    public function getExperienciaRequisicionRel()
+    {
+        return $this->experienciaRequisicionRel;
     }
 
     /**

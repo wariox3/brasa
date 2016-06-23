@@ -358,24 +358,10 @@ class SeleccionRequisitoController extends Controller
                 $religion = "INDIFERENTE";
             }
             $experiencia = "";
-            if ($arSeleccionRequisito->getCodigoExperienciaFk() == "1"){
-                $experiencia = "1 AÑO";
+            if ($arSeleccionRequisito->getCodigoExperienciaRequisicionFk() != null){
+                $experiencia = $arSeleccionRequisito->getExperienciaRequisicionRel()->getNombre();
             }
-            if ($arSeleccionRequisito->getCodigoExperienciaFk() == "2"){
-                $experiencia = "2 AÑOS";
-            }
-            if ($arSeleccionRequisito->getCodigoExperienciaFk() == "3"){
-                $experiencia = "3-4 AÑOS";
-            }
-            if ($arSeleccionRequisito->getCodigoExperienciaFk() == "4"){
-                $experiencia = "5-10 AÑOS";
-            }
-            if ($arSeleccionRequisito->getCodigoExperienciaFk() == "5"){
-                $experiencia = "GRADUADO";
-            }
-            if ($arSeleccionRequisito->getCodigoExperienciaFk() == "6"){
-                $experiencia = "SIN EXPERIENCIA";
-            }
+            
             $disponibilidad = "";
             if ($arSeleccionRequisito->getCodigoDisponibilidadFk() == "1"){
                 $disponibilidad = "TIEMPO COMPLETO";

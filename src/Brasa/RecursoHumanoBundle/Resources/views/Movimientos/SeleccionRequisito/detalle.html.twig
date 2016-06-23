@@ -93,27 +93,7 @@
                 </tr>
                 <tr>
                     <td class="titulo">EXPERIENCIA:</td>
-                    {% if arRequisito.codigoExperienciaFk == "" %}
-                        <td class="td-in-well"></td>
-                    {% endif%}
-                    {% if arRequisito.codigoExperienciaFk == 1 %}
-                        <td class="td-in-well">1 AÑO</td>
-                    {% endif%}
-                    {% if arRequisito.codigoExperienciaFk == 2 %}
-                        <td class="td-in-well">2 AÑOS</td>
-                    {% endif%}
-                    {% if arRequisito.codigoExperienciaFk == 3 %}
-                        <td class="td-in-well">3-4 AÑOS</td>
-                    {% endif%}
-                    {% if arRequisito.codigoExperienciaFk == 4 %}
-                        <td class="td-in-well">5-10 AÑOS</td>
-                    {% endif%}
-                    {% if arRequisito.codigoExperienciaFk == 5 %}
-                        <td class="td-in-well">GRADUADO</td>
-                    {% endif%}
-                    {% if arRequisito.codigoExperienciaFk == 6 %}
-                        <td class="td-in-well">SIN EXPERIENCIA</td>
-                    {% endif%}
+                    <td class="td-in-well">{{ arRequisito.experienciaRequisicionRel().nombre |default('') }}</td>
                     <td class="titulo">TIPO VEHICULO</td>
                     {% if arRequisito.codigoTipoVehiculoFk == 1 %}
                         <td class="td-in-well">CARRO</td>

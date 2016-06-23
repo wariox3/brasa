@@ -34,6 +34,12 @@ class RhuAspirante
      * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false, unique=true)
      */
     private $numeroIdentificacion;
+    
+    /**
+     * @ORM\Column(name="libreta_militar", type="string", length=20, nullable=true)
+     */
+         
+    private $libretaMilitar;
 
     /**
      * @ORM\Column(name="nombre_corto", type="string", length=80, nullable=true)
@@ -154,6 +160,21 @@ class RhuAspirante
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
      */    
     private $codigoUsuario;
+    
+    /**
+     * @ORM\Column(name="peso", type="string", length=20, nullable=true)
+     */
+    private $peso;
+    
+    /**
+     * @ORM\Column(name="estatura", type="string", length=20, nullable=true)
+     */
+    private $estatura;
+    
+    /**
+     * @ORM\Column(name="codigo_tipo_libreta", type="integer", nullable=true)
+     */    
+    private $codigoTipoLibreta;
 
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTipoIdentificacion", inversedBy="rhuAspirantesTipoIdentificacionRel")
@@ -203,7 +224,6 @@ class RhuAspirante
     protected $seleccionesRequisicionesAspirantesAspiranteRel;
     
 
-   
     /**
      * Constructor
      */
@@ -292,6 +312,30 @@ class RhuAspirante
     public function getNumeroIdentificacion()
     {
         return $this->numeroIdentificacion;
+    }
+
+    /**
+     * Set libretaMilitar
+     *
+     * @param string $libretaMilitar
+     *
+     * @return RhuAspirante
+     */
+    public function setLibretaMilitar($libretaMilitar)
+    {
+        $this->libretaMilitar = $libretaMilitar;
+
+        return $this;
+    }
+
+    /**
+     * Get libretaMilitar
+     *
+     * @return string
+     */
+    public function getLibretaMilitar()
+    {
+        return $this->libretaMilitar;
     }
 
     /**
@@ -823,6 +867,30 @@ class RhuAspirante
     }
 
     /**
+     * Set inconsistencia
+     *
+     * @param boolean $inconsistencia
+     *
+     * @return RhuAspirante
+     */
+    public function setInconsistencia($inconsistencia)
+    {
+        $this->inconsistencia = $inconsistencia;
+
+        return $this;
+    }
+
+    /**
+     * Get inconsistencia
+     *
+     * @return boolean
+     */
+    public function getInconsistencia()
+    {
+        return $this->inconsistencia;
+    }
+
+    /**
      * Set codigoUsuario
      *
      * @param string $codigoUsuario
@@ -844,6 +912,78 @@ class RhuAspirante
     public function getCodigoUsuario()
     {
         return $this->codigoUsuario;
+    }
+
+    /**
+     * Set peso
+     *
+     * @param string $peso
+     *
+     * @return RhuAspirante
+     */
+    public function setPeso($peso)
+    {
+        $this->peso = $peso;
+
+        return $this;
+    }
+
+    /**
+     * Get peso
+     *
+     * @return string
+     */
+    public function getPeso()
+    {
+        return $this->peso;
+    }
+
+    /**
+     * Set estatura
+     *
+     * @param string $estatura
+     *
+     * @return RhuAspirante
+     */
+    public function setEstatura($estatura)
+    {
+        $this->estatura = $estatura;
+
+        return $this;
+    }
+
+    /**
+     * Get estatura
+     *
+     * @return string
+     */
+    public function getEstatura()
+    {
+        return $this->estatura;
+    }
+
+    /**
+     * Set codigoTipoLibreta
+     *
+     * @param integer $codigoTipoLibreta
+     *
+     * @return RhuAspirante
+     */
+    public function setCodigoTipoLibreta($codigoTipoLibreta)
+    {
+        $this->codigoTipoLibreta = $codigoTipoLibreta;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTipoLibreta
+     *
+     * @return integer
+     */
+    public function getCodigoTipoLibreta()
+    {
+        return $this->codigoTipoLibreta;
     }
 
     /**
@@ -1046,29 +1186,5 @@ class RhuAspirante
     public function getSeleccionesRequisicionesAspirantesAspiranteRel()
     {
         return $this->seleccionesRequisicionesAspirantesAspiranteRel;
-    }
-
-    /**
-     * Set inconsistencia
-     *
-     * @param boolean $inconsistencia
-     *
-     * @return RhuAspirante
-     */
-    public function setInconsistencia($inconsistencia)
-    {
-        $this->inconsistencia = $inconsistencia;
-
-        return $this;
-    }
-
-    /**
-     * Get inconsistencia
-     *
-     * @return boolean
-     */
-    public function getInconsistencia()
-    {
-        return $this->inconsistencia;
     }
 }

@@ -253,11 +253,11 @@ class BaseEmpleadoController extends Controller
                 $arEmpleado->setCodigoUsuario($arUsuario->getUserName());
             }
             $arEmpleado->setNombreCorto($arEmpleado->getNombre1() . " " . $arEmpleado->getNombre2() . " " .$arEmpleado->getApellido1() . " " . $arEmpleado->getApellido2());
-            if ($arEmpleado->getLibretaMilitar() <> 0){
+            if ($arEmpleado->getCodigoTipoLibreta() != 0){
                 $arEmpleado->setLibretaMilitar($arEmpleado->getNumeroIdentificacion());
             }
             else {
-                $arEmpleado->setLibretaMilitar("");
+                $arEmpleado->setLibretaMilitar('');
             }
             $arEmpleado->setCodigoTipoLibreta($arEmpleado->getCodigoTipoLibreta());
             if($arEmpleado->getCuenta() != "") {

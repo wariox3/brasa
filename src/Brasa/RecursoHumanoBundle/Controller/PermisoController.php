@@ -62,7 +62,6 @@ class PermisoController extends Controller
             $arPermiso = $em->getRepository('BrasaRecursoHumanoBundle:RhuPermiso')->find($codigoPermiso);
         } else {
             $arUsuario = $this->get('security.context')->getToken()->getUser();
-            $arPermiso->setJefeAutoriza($arUsuario->getNombreCorto());
             $arPermiso->setFechaPermiso(new \DateTime('now'));
         }
         $form = $this->createForm(new RhuPermisoType, $arPermiso);
@@ -260,11 +259,14 @@ class PermisoController extends Controller
                 $arPermisos = $query->getResult();
 
                 foreach ($arPermisos as $arPermisos) {
-                
+                    $centroCosto = "";
+                    if ($arPermisos->getCodigoCentroCostoFk() != null){
+                        $centroCosto = $arPermisos->getCentroCostoRel()->getNombre();
+                    }
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arPermisos->getCodigoPermisoPk())
                             ->setCellValue('B' . $i, $arPermisos->getFechaPermiso()->format('Y/m/d'))
-                            ->setCellValue('C' . $i, $arPermisos->getCentroCostoRel()->getNombre())
+                            ->setCellValue('C' . $i, $centroCosto)
                             ->setCellValue('D' . $i, $arPermisos->getEmpleadoRel()->getNumeroIdentificacion())
                             ->setCellValue('E' . $i, $arPermisos->getEmpleadoRel()->getNombreCorto())
                             ->setCellValue('F' . $i, $arPermisos->getCargoRel()->getNombre())

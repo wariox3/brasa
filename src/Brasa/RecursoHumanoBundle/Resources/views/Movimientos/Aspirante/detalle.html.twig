@@ -48,8 +48,10 @@
                     <td class="td-in-well">{{ arAspirante.barrio }}</td>
                 </tr>
                 <tr>
-                    <td class="titulo">ESTADO CIVIL:</td>
-                    <td class="td-in-well">{{ arAspirante.estadoCivilRel.nombre }}</td>
+                    <td class="titulo">LIBRETA MILITAR:</td>
+                        {% if arAspirante.codigoTipoLibreta == 1 %}<td class="td-in-well">1° CLASE</td>{% endif %}
+                        {% if arAspirante.codigoTipoLibreta == 2 %}<td class="td-in-well">2° CLASE</td>{% endif %}
+                        {% if arAspirante.codigoTipoLibreta == 0 %}<td class="td-in-well">NO APLICA</td>{% endif %}
                     <td class="titulo">CIUDAD EXPEDICION:</td>
                     <td class="td-in-well">{{ arAspirante.ciudadExpedicionRel.nombre }}</td>
                     <td class="titulo">RH:</td>
@@ -92,11 +94,12 @@
                 <tr>
                     <td class="titulo" >INCONSISTENCIA:</td>
                     <td class="td-in-well">{% if arAspirante.inconsistencia == 1 %} SI {% else %} NO {% endif%}</td>
-                    <td class="titulo" ></td>
-                    <td class="td-in-well"></td>
-                    <td class="titulo" ></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo" >ESTATURA:</td>
+                    <td class="td-in-well">{{ arAspirante.estatura }}</td>
+                    <td class="titulo" >PESO:</td>
+                    <td class="td-in-well">{{ arAspirante.peso }}</td>
                 </tr>
+                
                 <tr>
                     <td class="titulo" colspan="8">COMENTARIOS: {{ arAspirante.comentarios }}</td>
                 </tr>

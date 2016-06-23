@@ -72,7 +72,7 @@
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arPermisos.codigoPermisoPk }}">{{ arPermisos.codigoPermisoPk }} </td>
                 <td>{{ arPermisos.fechaPermiso |date("Y-m-d")  }}</td>
-                <td>{{ arPermisos.centroCostoRel.nombre  }}</td>
+                <td>{{ arPermisos.centroCostoRel.nombre |default('') }}</td>
                 <td>{{ arPermisos.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arPermisos.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arPermisos.empleadoRel.cargoDescripcion  }}</td>

@@ -56,7 +56,7 @@
                     <tr>
                 {% endif %} 
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arAspirantes.codigoAspirantePk }}">{{ arAspirantes.codigoAspirantePk }} </td>
-                <td>{{ arAspirantes.fecha |date("Y/m/d H:i")  }}</td>
+                <td>{{ arAspirantes.fecha |date("Y/m/d")  }}</td>
                 <td>{{ arAspirantes.numeroIdentificacion  }}</td>
                 <td>{{ arAspirantes.nombreCorto  }}</td>
                 <td>{{ arAspirantes.telefono }}</td>

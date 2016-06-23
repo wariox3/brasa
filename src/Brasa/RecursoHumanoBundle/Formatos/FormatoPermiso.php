@@ -87,7 +87,11 @@ class FormatoPermiso extends \FPDF_FPDF {
         $this->Cell(24, 6, utf8_decode("CENTRO COSTO:") , 1, 0, 'L', 1);
         $this->SetFillColor(255, 255, 255);
         $this->SetFont('Arial','',7);
-        $this->Cell(78, 6, utf8_decode($arPermiso->getCentroCostoRel()->getNombre()) , 1, 0, 'L', 1);
+        $centroCosto = "";
+        if ($arPermiso->getCodigoCentroCostoFk() != null){
+            $centroCosto = $arPermiso->getCentroCostoRel()->getNombre();
+        }
+        $this->Cell(78, 6, utf8_decode($centroCosto) , 1, 0, 'L', 1);
         $this->SetFont('Arial','B',7);
         $this->SetFillColor(200, 200, 200);
         $this->Cell(24, 6, utf8_decode("DEPARTAMENTO:") , 1, 0, 'L', 1);
