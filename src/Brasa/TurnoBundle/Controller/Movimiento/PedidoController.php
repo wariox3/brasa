@@ -182,6 +182,17 @@ class PedidoController extends Controller
                 }                                         
                 $em->flush();  
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));
+            }         
+            if($form->get('BtnDetalleConceptoActualizar')->isClicked()) {   
+                $arrControles = $request->request->All();
+                $this->actualizarDetalleConcepto($arrControles, $codigoPedido);                                 
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));
+            }            
+            if($form->get('BtnDetalleConceptoEliminar')->isClicked()) {   
+                $arrSeleccionados = $request->request->get('ChkSeleccionarPedidoConcepto');
+                $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleConcepto')->eliminar($arrSeleccionados);
+                $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));
             }            
             if($form->get('BtnImprimir')->isClicked()) {
                 if($arPedido->getEstadoAutorizado() == 1) {
@@ -190,7 +201,8 @@ class PedidoController extends Controller
                 } else {
                     $objMensaje->Mensaje("error", "No puede imprimir una cotizacion sin estar autorizada", $this);
                 }
-            }            
+            }  
+            
         }
 
         $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
@@ -215,8 +227,8 @@ class PedidoController extends Controller
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $em = $this->getDoctrine()->getManager();
-        $arServicio = new \Brasa\TurnoBundle\Entity\TurServicio();
-        $arServicio = $em->getRepository('BrasaTurnoBundle:TurServicio')->find($codigoServicio);        
+        $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
+        $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);        
         $form = $this->formularioDetalleOtroNuevo();
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -233,20 +245,20 @@ class PedidoController extends Controller
                         $subtotalAIU = $subtotal * 10/100;
                         $iva = ($subtotalAIU * $arFacturaConcepto->getPorIva())/100;
                         $total = $subtotal + $iva;
-                        $arServicioDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto();
-                        $arServicioDetalleConcepto->setServicioRel($arServicio);                        
-                        $arServicioDetalleConcepto->setFacturaConceptoRel($arFacturaConcepto);
-                        $arServicioDetalleConcepto->setPorIva($arFacturaConcepto->getPorIva());
-                        $arServicioDetalleConcepto->setCantidad($cantidad);
-                        $arServicioDetalleConcepto->setPrecio($precio);
-                        $arServicioDetalleConcepto->setSubtotal($subtotal);                        
-                        $arServicioDetalleConcepto->setIva($iva);
-                        $arServicioDetalleConcepto->setTotal($total);
-                        $em->persist($arServicioDetalleConcepto);  
+                        $arPedidoDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto();
+                        $arPedidoDetalleConcepto->setPedidoRel($arPedido);                        
+                        $arPedidoDetalleConcepto->setFacturaConceptoRel($arFacturaConcepto);
+                        $arPedidoDetalleConcepto->setPorIva($arFacturaConcepto->getPorIva());
+                        $arPedidoDetalleConcepto->setCantidad($cantidad);
+                        $arPedidoDetalleConcepto->setPrecio($precio);
+                        $arPedidoDetalleConcepto->setSubtotal($subtotal);                        
+                        $arPedidoDetalleConcepto->setIva($iva);
+                        $arPedidoDetalleConcepto->setTotal($total);
+                        $em->persist($arPedidoDetalleConcepto);  
                     }
                 }
                 $em->flush();
-                $em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);
+                $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
             } 
             if ($form->get('BtnFiltrar')->isClicked()) {            
@@ -256,10 +268,55 @@ class PedidoController extends Controller
         
         $arFacturaConceptos = new \Brasa\TurnoBundle\Entity\TurFacturaConcepto();
         $arFacturaConceptos = $em->getRepository('BrasaTurnoBundle:TurFacturaConcepto')->findAll();        
-        return $this->render('BrasaTurnoBundle:Movimientos/Servicio:detalleOtroNuevo.html.twig', array(
+        return $this->render('BrasaTurnoBundle:Movimientos/Pedido:detalleOtroNuevo.html.twig', array(
             'arFacturaConceptos' => $arFacturaConceptos,
             'form' => $form->createView()));
     }         
+    
+    /**
+     * @Route("/tur/movimiento/pedido/detalle/concepto/Servicio/nuevo/{codigoPedido}", name="brs_tur_movimiento_pedido_detalle_concepto_servicio_nuevo")
+     */     
+    public function detalleNuevoConceptoServicioAction($codigoPedido) {
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $em = $this->getDoctrine()->getManager();
+        $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
+        $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            if ($form->get('BtnGuardar')->isClicked()) {                
+                $arrSeleccionados = $request->request->get('ChkSeleccionarServicioConcepto');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigo) {   
+                        $arServicioDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto();
+                        $arServicioDetalleConcepto = $em->getRepository('BrasaTurnoBundle:TurServicioDetalleConcepto')->find($codigo);
+                        
+                        $arPedidoDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto();                        
+                        $arPedidoDetalleConcepto->setPedidoRel($arPedido);                         
+                        $arPedidoDetalleConcepto->setFacturaConceptoRel($arServicioDetalleConcepto->getFacturaConceptoRel());
+                        $arPedidoDetalleConcepto->setCantidad($arServicioDetalleConcepto->getCantidad());
+                        $arPedidoDetalleConcepto->setIva($arServicioDetalleConcepto->getIva());
+                        $arPedidoDetalleConcepto->setPrecio($arServicioDetalleConcepto->getPrecio());
+                        $arPedidoDetalleConcepto->setSubtotal($arServicioDetalleConcepto->getSubtotal());
+                        $arPedidoDetalleConcepto->setTotal($arServicioDetalleConcepto->getTotal());
+                        $em->persist($arPedidoDetalleConcepto);                        
+                    }
+                    $em->flush();
+                }
+                $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);
+            }
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+        }
+        $dql = $em->getRepository('BrasaTurnoBundle:TurServicioDetalleConcepto')->listaClienteDql($arPedido->getCodigoClienteFk());
+        $arServicioDetallesConceptos = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 50);                
+        return $this->render('BrasaTurnoBundle:Movimientos/Pedido:detalleNuevoServicioConcepto.html.twig', array(
+            'arPedido' => $arPedido,
+            'arServicioDetalleConceptos' => $arServicioDetallesConceptos,
+            'form' => $form->createView()));
+    }     
     
     /**
      * @Route("/tur/movimiento/pedido/detalle/nuevo/{codigoPedido}/{codigoPedidoDetalle}", name="brs_tur_movimiento_pedido_detalle_nuevo")
@@ -815,6 +872,13 @@ class PedidoController extends Controller
             ->getForm();
         return $form;
     }    
+
+    private function formularioDetalleOtroNuevo() {
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        return $form;
+    } 
     
     private function generarExcel() {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
@@ -1007,4 +1071,29 @@ class PedidoController extends Controller
         }
         return $codigoProgramacion;
     }    
+    
+    private function actualizarDetalleConcepto($arrControles, $codigoPedido) {
+        $em = $this->getDoctrine()->getManager();
+        $intIndice = 0;
+        if(isset($arrControles['LblCodigoConcepto'])) {
+            foreach ($arrControles['LblCodigoConcepto'] as $intCodigo) {
+                $arPedidoDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto();
+                $arPedidoDetalleConcepto = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleConcepto')->find($intCodigo);                
+                $cantidad = $arrControles['TxtCantidadConcepto' . $intCodigo];
+                $precio = $arrControles['TxtPrecioConcepto'. $intCodigo];                
+                $subtotal = $cantidad * $precio;
+                $subtotalAIU = $subtotal * 10/100;
+                $iva = ($subtotalAIU * $arPedidoDetalleConcepto->getPorIva())/100;                
+                $total = $subtotal + $iva;                
+                $arPedidoDetalleConcepto->setCantidad($cantidad);
+                $arPedidoDetalleConcepto->setPrecio($precio);
+                $arPedidoDetalleConcepto->setSubtotal($subtotal);                        
+                $arPedidoDetalleConcepto->setIva($iva);
+                $arPedidoDetalleConcepto->setTotal($total);                                                             
+                $em->persist($arPedidoDetalleConcepto);
+            }
+            $em->flush();                
+            $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);            
+        }        
+    }            
 }

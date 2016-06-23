@@ -30,12 +30,7 @@ class TurRecursoGrupo
     /**
      * @ORM\Column(name="codigo_turno_fijo_descanso_fk", type="string", length=5, nullable=true)
      */    
-    private $codigoTurnoFijoDescansoFk;     
-    
-    /**
-     * @ORM\OneToMany(targetEntity="TurRecurso", mappedBy="recursoGrupoRel")
-     */
-    protected $recursosRecursoGrupoRel; 
+    private $codigoTurnoFijoDescansoFk;         
 
     /**
      * @ORM\Column(name="dias_descanso_fijo", type="integer", nullable=true)
@@ -43,16 +38,23 @@ class TurRecursoGrupo
     private $diasDescansoFijo = 0;    
     
     /**
+     * @ORM\OneToMany(targetEntity="TurRecurso", mappedBy="recursoGrupoRel")
+     */
+    protected $recursosRecursoGrupoRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurSoportePagoPeriodo", mappedBy="recursoGrupoRel")
      */
     protected $soportesPagosPeriodosRecursoGrupoRel;    
     
+
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->recursosRecursoGrupoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->soportesPagosPeriodosRecursoGrupoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -87,74 +89,6 @@ class TurRecursoGrupo
     public function getNombre()
     {
         return $this->nombre;
-    }
-
-    /**
-     * Add recursosRecursoGrupoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurRecurso $recursosRecursoGrupoRel
-     *
-     * @return TurRecursoGrupo
-     */
-    public function addRecursosRecursoGrupoRel(\Brasa\TurnoBundle\Entity\TurRecurso $recursosRecursoGrupoRel)
-    {
-        $this->recursosRecursoGrupoRel[] = $recursosRecursoGrupoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove recursosRecursoGrupoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurRecurso $recursosRecursoGrupoRel
-     */
-    public function removeRecursosRecursoGrupoRel(\Brasa\TurnoBundle\Entity\TurRecurso $recursosRecursoGrupoRel)
-    {
-        $this->recursosRecursoGrupoRel->removeElement($recursosRecursoGrupoRel);
-    }
-
-    /**
-     * Get recursosRecursoGrupoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRecursosRecursoGrupoRel()
-    {
-        return $this->recursosRecursoGrupoRel;
-    }
-
-    /**
-     * Add soportesPagosPeriodosRecursoGrupoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportesPagosPeriodosRecursoGrupoRel
-     *
-     * @return TurRecursoGrupo
-     */
-    public function addSoportesPagosPeriodosRecursoGrupoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportesPagosPeriodosRecursoGrupoRel)
-    {
-        $this->soportesPagosPeriodosRecursoGrupoRel[] = $soportesPagosPeriodosRecursoGrupoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove soportesPagosPeriodosRecursoGrupoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportesPagosPeriodosRecursoGrupoRel
-     */
-    public function removeSoportesPagosPeriodosRecursoGrupoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportesPagosPeriodosRecursoGrupoRel)
-    {
-        $this->soportesPagosPeriodosRecursoGrupoRel->removeElement($soportesPagosPeriodosRecursoGrupoRel);
-    }
-
-    /**
-     * Get soportesPagosPeriodosRecursoGrupoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSoportesPagosPeriodosRecursoGrupoRel()
-    {
-        return $this->soportesPagosPeriodosRecursoGrupoRel;
     }
 
     /**
@@ -227,5 +161,73 @@ class TurRecursoGrupo
     public function getDiasDescansoFijo()
     {
         return $this->diasDescansoFijo;
+    }
+
+    /**
+     * Add recursosRecursoGrupoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurRecurso $recursosRecursoGrupoRel
+     *
+     * @return TurRecursoGrupo
+     */
+    public function addRecursosRecursoGrupoRel(\Brasa\TurnoBundle\Entity\TurRecurso $recursosRecursoGrupoRel)
+    {
+        $this->recursosRecursoGrupoRel[] = $recursosRecursoGrupoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove recursosRecursoGrupoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurRecurso $recursosRecursoGrupoRel
+     */
+    public function removeRecursosRecursoGrupoRel(\Brasa\TurnoBundle\Entity\TurRecurso $recursosRecursoGrupoRel)
+    {
+        $this->recursosRecursoGrupoRel->removeElement($recursosRecursoGrupoRel);
+    }
+
+    /**
+     * Get recursosRecursoGrupoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRecursosRecursoGrupoRel()
+    {
+        return $this->recursosRecursoGrupoRel;
+    }
+
+    /**
+     * Add soportesPagosPeriodosRecursoGrupoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportesPagosPeriodosRecursoGrupoRel
+     *
+     * @return TurRecursoGrupo
+     */
+    public function addSoportesPagosPeriodosRecursoGrupoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportesPagosPeriodosRecursoGrupoRel)
+    {
+        $this->soportesPagosPeriodosRecursoGrupoRel[] = $soportesPagosPeriodosRecursoGrupoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove soportesPagosPeriodosRecursoGrupoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportesPagosPeriodosRecursoGrupoRel
+     */
+    public function removeSoportesPagosPeriodosRecursoGrupoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportesPagosPeriodosRecursoGrupoRel)
+    {
+        $this->soportesPagosPeriodosRecursoGrupoRel->removeElement($soportesPagosPeriodosRecursoGrupoRel);
+    }
+
+    /**
+     * Get soportesPagosPeriodosRecursoGrupoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSoportesPagosPeriodosRecursoGrupoRel()
+    {
+        return $this->soportesPagosPeriodosRecursoGrupoRel;
     }
 }

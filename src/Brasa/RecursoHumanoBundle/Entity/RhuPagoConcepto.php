@@ -108,6 +108,7 @@ class RhuPagoConcepto
     private $tipoCuentaOperacion = 1;   
     
     /**
+     * 1=Bonificacion, 2=Descuento, 3=Comision
      * @ORM\Column(name="tipo_adicional", type="smallint")
      */    
     private $tipoAdicional = 1;       

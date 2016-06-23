@@ -28,6 +28,11 @@ class TurFacturaDetalleConcepto
     private $codigoFacturaConceptoFk;        
     
     /**
+     * @ORM\Column(name="codigo_pedido_detalle_concepto_fk", type="integer", nullable=true)
+     */    
+    private $codigoPedidoDetalleConceptoFk;     
+    
+    /**
      * @ORM\Column(name="cantidad", type="float")
      */
     private $cantidad = 0;    
@@ -69,7 +74,12 @@ class TurFacturaDetalleConcepto
      */
     protected $facturaConceptoRel; 
     
-
+    /**
+     * @ORM\ManyToOne(targetEntity="TurPedidoDetalleConcepto", inversedBy="facturasDetallesConceptosPedidoDetalleConceptoRel")
+     * @ORM\JoinColumn(name="codigo_pedido_detalle_concepto_fk", referencedColumnName="codigo_pedido_detalle_concepto_pk")
+     */
+    protected $pedidoDetalleConceptoRel; 
+    
     /**
      * Get codigoFacturaDetalleConceptoPk
      *
@@ -342,5 +352,53 @@ class TurFacturaDetalleConcepto
     public function getIva()
     {
         return $this->iva;
+    }
+
+    /**
+     * Set codigoPedidoDetalleConceptoFk
+     *
+     * @param integer $codigoPedidoDetalleConceptoFk
+     *
+     * @return TurFacturaDetalleConcepto
+     */
+    public function setCodigoPedidoDetalleConceptoFk($codigoPedidoDetalleConceptoFk)
+    {
+        $this->codigoPedidoDetalleConceptoFk = $codigoPedidoDetalleConceptoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPedidoDetalleConceptoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPedidoDetalleConceptoFk()
+    {
+        return $this->codigoPedidoDetalleConceptoFk;
+    }
+
+    /**
+     * Set pedidoDetalleConceptoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidoDetalleConceptoRel
+     *
+     * @return TurFacturaDetalleConcepto
+     */
+    public function setPedidoDetalleConceptoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidoDetalleConceptoRel = null)
+    {
+        $this->pedidoDetalleConceptoRel = $pedidoDetalleConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pedidoDetalleConceptoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto
+     */
+    public function getPedidoDetalleConceptoRel()
+    {
+        return $this->pedidoDetalleConceptoRel;
     }
 }

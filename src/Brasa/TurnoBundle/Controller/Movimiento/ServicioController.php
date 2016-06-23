@@ -152,7 +152,7 @@ class ServicioController extends Controller
             }            
             if($form->get('BtnDetalleConceptoActualizar')->isClicked()) {   
                 $arrControles = $request->request->All();
-                $this->actualizarDetalleConcepto($arrControles, $codigoServicio);                                 
+                $this->actualizarDetalleConcepto($arrControles, $codigoServicio);                                                 
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle', array('codigoServicio' => $codigoServicio)));
             }            
             if($form->get('BtnDetalleConceptoEliminar')->isClicked()) {   

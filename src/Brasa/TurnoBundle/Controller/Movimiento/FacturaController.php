@@ -260,7 +260,7 @@ class FacturaController extends Controller
                         $total = $subtotal + $iva;
                         $arFacturaDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto();
                         $arFacturaDetalleConcepto->setFacturaRel($arFactura);                        
-                        $arFacturaDetalleConcepto->setFacturaConceptoRel($arFacturaConcepto);
+                        $arFacturaDetalleConcepto->setFacturaConceptoRel($arFacturaConcepto);                        
                         $arFacturaDetalleConcepto->setPorIva($arFacturaConcepto->getPorIva());
                         $arFacturaDetalleConcepto->setCantidad($cantidad);
                         $arFacturaDetalleConcepto->setPrecio($precio);
@@ -285,6 +285,54 @@ class FacturaController extends Controller
             'arFacturaConceptos' => $arFacturaConceptos,
             'form' => $form->createView()));
     }    
+    
+    /**
+     * @Route("/tur/movimiento/factura/detalle/concepto/pedido/nuevo/{codigoFactura}", name="brs_tur_movimiento_factura_detalle_concepto_pedido_nuevo")
+     */     
+    public function detalleNuevoConceptoPedidoAction($codigoFactura) {
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $em = $this->getDoctrine()->getManager();
+        $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
+        $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            if ($form->get('BtnGuardar')->isClicked()) {                
+                $arrSeleccionados = $request->request->get('ChkSeleccionarServicioConcepto');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigo) {   
+                        $arPedidoDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto();
+                        $arPedidoDetalleConcepto = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleConcepto')->find($codigo);
+                        
+                        $arFacturaDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto();                        
+                        $arFacturaDetalleConcepto->setFacturaRel($arFactura);                         
+                        $arFacturaDetalleConcepto->setFacturaConceptoRel($arPedidoDetalleConcepto->getFacturaConceptoRel());
+                        $arFacturaDetalleConcepto->setPedidoDetalleConceptoRel($arPedidoDetalleConcepto);
+                        $arFacturaDetalleConcepto->setCantidad($arPedidoDetalleConcepto->getCantidad());
+                        $arFacturaDetalleConcepto->setIva($arPedidoDetalleConcepto->getIva());
+                        $arFacturaDetalleConcepto->setPrecio($arPedidoDetalleConcepto->getPrecio());
+                        $arFacturaDetalleConcepto->setSubtotal($arPedidoDetalleConcepto->getSubtotal());
+                        $arFacturaDetalleConcepto->setTotal($arPedidoDetalleConcepto->getTotal());
+                        $em->persist($arFacturaDetalleConcepto);
+                        $arPedidoDetalleConcepto->setEstadoFacturado(1);
+                        $em->persist($arPedidoDetalleConcepto);                        
+                    }
+                    $em->flush();
+                }
+                $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoFactura);
+            }
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+        }
+        $dql = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleConcepto')->listaClienteDql($arFactura->getCodigoClienteFk());
+        $arPedidoDetallesConceptos = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 50);                
+        return $this->render('BrasaTurnoBundle:Movimientos/Factura:detalleNuevoPedidoConcepto.html.twig', array(
+            'arFactura' => $arFactura,
+            'arPedidoDetalleConceptos' => $arPedidoDetallesConceptos,
+            'form' => $form->createView()));
+    }         
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();

@@ -15,6 +15,14 @@ class TurPedidoDetalleConceptoRepository extends EntityRepository {
         return $dql;
     }        
     
+    public function listaClienteDql($codigoCliente = "") {
+        $dql   = "SELECT pdc FROM BrasaTurnoBundle:TurPedidoDetalleConcepto pdc JOIN pdc.pedidoRel p WHERE pdc.estadoFacturado = 0 ";        
+        if($codigoCliente != '') {
+            $dql .= "AND p.codigoClienteFk = " . $codigoCliente . " ";  
+        }               
+        return $dql;
+    }    
+    
     public function eliminar($arrSeleccionados) {        
         if(count($arrSeleccionados) > 0) {
             $em = $this->getEntityManager();

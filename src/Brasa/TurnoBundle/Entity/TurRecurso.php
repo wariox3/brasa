@@ -128,7 +128,7 @@ class TurRecurso
     protected $recursoTipoRel;    
 
     /**
-     * @ORM\ManyToOne(targetEntity="TurRecursoGrupo", inversedBy="recursosRecursoTipoRel")
+     * @ORM\ManyToOne(targetEntity="TurRecursoGrupo", inversedBy="recursosRecursoGrupoRel")
      * @ORM\JoinColumn(name="codigo_recurso_grupo_fk", referencedColumnName="codigo_recurso_grupo_pk")
      */
     protected $recursoGrupoRel;
@@ -183,6 +183,7 @@ class TurRecurso
      * @ORM\OneToMany(targetEntity="TurSimulacionDetalle", mappedBy="recursoRel")
      */
     protected $simulacionesDetallesRecursoRel; 
+
 
     /**
      * Constructor

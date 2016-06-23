@@ -68,6 +68,11 @@ class TurFactura
     private $estadoContabilizado = false;    
     
     /**
+     * @ORM\Column(name="vr_subtotal_otros", type="float")
+     */
+    private $vrSubtotalOtros = 0;    
+    
+    /**
      * @ORM\Column(name="vr_base_aiu", type="float")
      */
     private $VrBaseAIU = 0;    
@@ -299,6 +304,30 @@ class TurFactura
     }
 
     /**
+     * Set codigoProyectoFk
+     *
+     * @param integer $codigoProyectoFk
+     *
+     * @return TurFactura
+     */
+    public function setCodigoProyectoFk($codigoProyectoFk)
+    {
+        $this->codigoProyectoFk = $codigoProyectoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoProyectoFk
+     *
+     * @return integer
+     */
+    public function getCodigoProyectoFk()
+    {
+        return $this->codigoProyectoFk;
+    }
+
+    /**
      * Set estadoAutorizado
      *
      * @param boolean $estadoAutorizado
@@ -344,6 +373,54 @@ class TurFactura
     public function getEstadoAnulado()
     {
         return $this->estadoAnulado;
+    }
+
+    /**
+     * Set estadoContabilizado
+     *
+     * @param boolean $estadoContabilizado
+     *
+     * @return TurFactura
+     */
+    public function setEstadoContabilizado($estadoContabilizado)
+    {
+        $this->estadoContabilizado = $estadoContabilizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoContabilizado
+     *
+     * @return boolean
+     */
+    public function getEstadoContabilizado()
+    {
+        return $this->estadoContabilizado;
+    }
+
+    /**
+     * Set vrSubtotalOtros
+     *
+     * @param float $vrSubtotalOtros
+     *
+     * @return TurFactura
+     */
+    public function setVrSubtotalOtros($vrSubtotalOtros)
+    {
+        $this->vrSubtotalOtros = $vrSubtotalOtros;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSubtotalOtros
+     *
+     * @return float
+     */
+    public function getVrSubtotalOtros()
+    {
+        return $this->vrSubtotalOtros;
     }
 
     /**
@@ -587,6 +664,30 @@ class TurFactura
     }
 
     /**
+     * Set proyectoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurProyecto $proyectoRel
+     *
+     * @return TurFactura
+     */
+    public function setProyectoRel(\Brasa\TurnoBundle\Entity\TurProyecto $proyectoRel = null)
+    {
+        $this->proyectoRel = $proyectoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get proyectoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurProyecto
+     */
+    public function getProyectoRel()
+    {
+        return $this->proyectoRel;
+    }
+
+    /**
      * Add facturasDetallesFacturaRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesFacturaRel
@@ -652,77 +753,5 @@ class TurFactura
     public function getFacturasDetallesConceptosFacturaRel()
     {
         return $this->facturasDetallesConceptosFacturaRel;
-    }
-
-    /**
-     * Set codigoProyectoFk
-     *
-     * @param integer $codigoProyectoFk
-     *
-     * @return TurFactura
-     */
-    public function setCodigoProyectoFk($codigoProyectoFk)
-    {
-        $this->codigoProyectoFk = $codigoProyectoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoProyectoFk
-     *
-     * @return integer
-     */
-    public function getCodigoProyectoFk()
-    {
-        return $this->codigoProyectoFk;
-    }
-
-    /**
-     * Set proyectoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurProyecto $proyectoRel
-     *
-     * @return TurFactura
-     */
-    public function setProyectoRel(\Brasa\TurnoBundle\Entity\TurProyecto $proyectoRel = null)
-    {
-        $this->proyectoRel = $proyectoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get proyectoRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurProyecto
-     */
-    public function getProyectoRel()
-    {
-        return $this->proyectoRel;
-    }
-
-    /**
-     * Set estadoContabilizado
-     *
-     * @param boolean $estadoContabilizado
-     *
-     * @return TurFactura
-     */
-    public function setEstadoContabilizado($estadoContabilizado)
-    {
-        $this->estadoContabilizado = $estadoContabilizado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoContabilizado
-     *
-     * @return boolean
-     */
-    public function getEstadoContabilizado()
-    {
-        return $this->estadoContabilizado;
     }
 }

@@ -14,6 +14,14 @@ class TurServicioDetalleConceptoRepository extends EntityRepository {
         }               
         return $dql;
     }        
+
+    public function listaClienteDql($codigoCliente = "") {
+        $dql   = "SELECT sdc FROM BrasaTurnoBundle:TurServicioDetalleConcepto sdc JOIN sdc.servicioRel s WHERE sdc.codigoServicioDetalleConceptoPk <> 0 ";        
+        if($codigoCliente != '') {
+            $dql .= "AND s.codigoClienteFk = " . $codigoCliente . " ";  
+        }               
+        return $dql;
+    }
     
     public function eliminar($arrSeleccionados) {        
         if(count($arrSeleccionados) > 0) {

@@ -292,12 +292,32 @@ class TurPedidoRepository extends EntityRepository {
             $douTotalServicio += $floVrServicio;
             $intCantidad++;
         }
+        
+        //Otros conceptos
+        $floSubTotalConceptos = 0;
+        $arPedidoDetalleConceptos = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto();
+        $arPedidoDetalleConceptos = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleConcepto')->findBy(array('codigoPedidoFk' => $codigoPedido));
+        foreach ($arPedidoDetalleConceptos as $arPedidoDetalleConcepto) {
+            $floSubTotalConceptos += $arPedidoDetalleConcepto->getSubtotal();            
+        }      
+        
         $arPedido->setHoras($douTotalHoras);
         $arPedido->setHorasDiurnas($douTotalHorasDiurnas);
         $arPedido->setHorasNocturnas($douTotalHorasNocturnas);
-        $arPedido->setVrTotal($douTotalServicio);
+        
+        $arPedido->setVrTotalServicio($douTotalServicio);
         $arPedido->setVrTotalPrecioMinimo($douTotalMinimoServicio);
+        $arPedido->setVrTotalOtros($floSubTotalConceptos);
         $arPedido->setVrTotalCosto($douTotalCostoCalculado);
+        $subtotal = $douTotalServicio + $floSubTotalConceptos;
+        $baseAiu = $subtotal*10/100;
+        $iva = $baseAiu*16/100;
+        $total = $subtotal + $iva;
+        $arPedido->setVrSubtotal($subtotal);
+        $arPedido->setVrBaseAiu($baseAiu);
+        $arPedido->setVrIva($iva);
+        $arPedido->setVrTotal($total);
+        
         $em->persist($arPedido);
         $em->flush();
         return true;
@@ -342,23 +362,19 @@ class TurPedidoRepository extends EntityRepository {
         $em = $this->getEntityManager();                
         $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);            
         $strResultado = "";        
-        if($arPedido->getEstadoAutorizado() == 0) {
-            if($em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->numeroRegistros($codigoPedido) > 0) {
-                $intSinPuesto = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->validarPuesto($codigoPedido);
-                if($intSinPuesto <= 0) {
-                    $arPedido->setEstadoAutorizado(1);
-                    if($arPedido->getNumero() == 0) {
-                        $intNumero = $em->getRepository('BrasaTurnoBundle:TurConsecutivo')->consecutivo(1);
-                        $arPedido->setNumero($intNumero);
-                    }
-                    $em->persist($arPedido);
-                    $em->flush();                    
-                } else {
-                    $strResultado = $intSinPuesto . " servicios no tienen puesto asignado";
-                }                        
+        if($arPedido->getEstadoAutorizado() == 0) {            
+            $intSinPuesto = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->validarPuesto($codigoPedido);
+            if($intSinPuesto <= 0) {
+                $arPedido->setEstadoAutorizado(1);
+                if($arPedido->getNumero() == 0) {
+                    $intNumero = $em->getRepository('BrasaTurnoBundle:TurConsecutivo')->consecutivo(1);
+                    $arPedido->setNumero($intNumero);
+                }
+                $em->persist($arPedido);
+                $em->flush();                    
             } else {
-                $strResultado = "Debe adicionar detalles al pedido";
-            }            
+                $strResultado = $intSinPuesto . " servicios no tienen puesto asignado";
+            }                                    
         } else {
             $strResultado = "El pedido ya esta autorizado";
         }        
@@ -425,31 +441,49 @@ class TurPedidoRepository extends EntityRepository {
         $codigoFactura = 0;
         $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
         $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido); 
+        $arPedido->setEstadoFacturado(1);
+        $em->persist($arPedido);            
+        $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
+        $arFactura->setFecha(new \DateTime('now'));
+        $dateFechaVence = $objFunciones->sumarDiasFecha($arPedido->getClienteRel()->getPlazoPago(), $arFactura->getFecha());
+        $arFactura->setFechaVence($dateFechaVence);            
+        $arFactura->setClienteRel($arPedido->getClienteRel());                   
+        $arFactura->setUsuario($usuario);             
+        $em->persist($arFactura);   
         $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
-        $arPedidoDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigoPedido, 'estadoFacturado' => 0));         
-        if(count($arPedidoDetalles) > 0) {            
-            $arPedido->setEstadoFacturado(1);
-            $em->persist($arPedido);            
-            $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
-            $arFactura->setFecha(new \DateTime('now'));
-            $dateFechaVence = $objFunciones->sumarDiasFecha($arPedido->getClienteRel()->getPlazoPago(), $arFactura->getFecha());
-            $arFactura->setFechaVence($dateFechaVence);            
-            $arFactura->setClienteRel($arPedido->getClienteRel());                   
-            $arFactura->setUsuario($usuario);             
-            $em->persist($arFactura);                        
-            foreach ($arPedidoDetalles as $arPedidoDetalle) {  
-                $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
-                $arFacturaDetalle->setFacturaRel($arFactura);                        
-                $arFacturaDetalle->setConceptoServicioRel($arPedidoDetalle->getConceptoServicioRel());
-                $arFacturaDetalle->setPedidoDetalleRel($arPedidoDetalle);
-                $arFacturaDetalle->setCantidad($arPedidoDetalle->getCantidad());
-                $arFacturaDetalle->setVrPrecio($arPedidoDetalle->getVrTotalDetallePendiente());                        
-                $em->persist($arFacturaDetalle);                                
-            }                    
-            $em->flush();  
-            $codigoFactura = $arFactura->getCodigoFacturaPk();
-            $em->getRepository('BrasaTurnoBundle:TurFactura')->liquidar($codigoFactura);            
+        $arPedidoDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigoPedido, 'estadoFacturado' => 0));                                    
+        foreach ($arPedidoDetalles as $arPedidoDetalle) {  
+            $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
+            $arFacturaDetalle->setFacturaRel($arFactura);                        
+            $arFacturaDetalle->setConceptoServicioRel($arPedidoDetalle->getConceptoServicioRel());
+            $arFacturaDetalle->setPedidoDetalleRel($arPedidoDetalle);
+            $arFacturaDetalle->setCantidad($arPedidoDetalle->getCantidad());
+            $arFacturaDetalle->setVrPrecio($arPedidoDetalle->getVrTotalDetallePendiente());                        
+            $em->persist($arFacturaDetalle);                                
+        }                         
+        $arPedidoDetalleConceptos = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto();
+        $arPedidoDetalleConceptos =  $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleConcepto')->findBy(array('codigoPedidoFk' => $codigoPedido));                     
+        foreach ($arPedidoDetalleConceptos as $arPedidoDetalleConcepto) {
+            $arPedidoDetalleConceptoAct = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto();
+            $arPedidoDetalleConceptoAct = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleConcepto')->find($arPedidoDetalleConcepto->getCodigoPedidoDetalleConceptoPk());
+            $arPedidoDetalleConceptoAct->setEstadoFacturado(1);
+            $em->persist($arPedidoDetalleConceptoAct);
+
+            $arFacturaDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto();                        
+            $arFacturaDetalleConcepto->setFacturaRel($arFactura);                         
+            $arFacturaDetalleConcepto->setFacturaConceptoRel($arPedidoDetalleConcepto->getFacturaConceptoRel());
+            $arFacturaDetalleConcepto->setPedidoDetalleConceptoRel($arPedidoDetalleConcepto);
+            $arFacturaDetalleConcepto->setCantidad($arPedidoDetalleConcepto->getCantidad());
+            $arFacturaDetalleConcepto->setIva($arPedidoDetalleConcepto->getIva());
+            $arFacturaDetalleConcepto->setPrecio($arPedidoDetalleConcepto->getPrecio());
+            $arFacturaDetalleConcepto->setSubtotal($arPedidoDetalleConcepto->getSubtotal());
+            $arFacturaDetalleConcepto->setTotal($arPedidoDetalleConcepto->getTotal());
+            $em->persist($arFacturaDetalleConcepto);                          
         }
+                    
+        $em->flush();  
+        $codigoFactura = $arFactura->getCodigoFacturaPk();
+        $em->getRepository('BrasaTurnoBundle:TurFactura')->liquidar($codigoFactura);                  
         return $codigoFactura;
     }    
     

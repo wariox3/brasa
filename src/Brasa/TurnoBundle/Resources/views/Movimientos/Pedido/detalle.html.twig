@@ -257,7 +257,7 @@
                                 <td>{{ arPedidoDetalleConceptos.codigoPedidoDetalleConceptoPk  }}<input type="hidden" name="LblCodigoConcepto[]" value="{{ arPedidoDetalleConceptos.codigoPedidoDetalleConceptoPk }}"></td>
                                 <td>{{ arPedidoDetalleConceptos.facturaConceptoRel.nombre | default('') }}</td>
                                 <td style="text-align: right">{{ arPedidoDetalleConceptos.porIva | number_format(0, '.', ',') }}</td>                                
-                                {% if arServicio.estadoAutorizado == 0 %}
+                                {% if arPedido.estadoAutorizado == 0 %}
                                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidadConcepto{{ arPedidoDetalleConceptos.codigoPedidoDetalleConceptoPk }}" value="{{ arPedidoDetalleConceptos.cantidad  }}" size="20" style="width:120px; text-align: right" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtPrecioConcepto{{ arPedidoDetalleConceptos.codigoPedidoDetalleConceptoPk }}" value="{{ arPedidoDetalleConceptos.precio  }}" size="20" style="width:120px; text-align: right" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                                 {% else %}
@@ -267,7 +267,7 @@
                                 <td style="text-align: right">{{ arPedidoDetalleConceptos.subtotal | number_format(0, '.', ',') }}</td>
                                 <td style="text-align: right">{{ arPedidoDetalleConceptos.iva | number_format(0, '.', ',') }}</td>
                                 <td style="text-align: right">{{ arPedidoDetalleConceptos.total | number_format(0, '.', ',') }}</td>
-                                <td><input type="checkbox" name="ChkSeleccionarServicioConcepto[]" value="{{ arPedidoDetalleConceptos.codigoPedidoDetalleConceptoPk }}" /></td>
+                                <td><input type="checkbox" name="ChkSeleccionarPedidoConcepto[]" value="{{ arPedidoDetalleConceptos.codigoPedidoDetalleConceptoPk }}" /></td>
                             </tr>
                         {% endfor %}
                     </table>
@@ -280,9 +280,12 @@
                         </div>
                     </div>                    
                     <div class="btn-toolbar" style="float: right">
+                        {% if arPedido.estadoAutorizado == 0 %}
                         <div class="btn-group">
                             <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_pedido_detalle_concepto_nuevo', {'codigoPedido': arPedido.codigoPedidoPk}) }}', 'AgregarServicioDetalleOtro', 600, 900)">Nuevo</a>
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_pedido_detalle_concepto_servicio_nuevo', {'codigoPedido': arPedido.codigoPedidoPk}) }}', 'AgregarServicioDetalleOtro', 600, 900)">Nuevo desde servicio</a>
                         </div>
+                        {% endif %}
                         <div class="btn-group">
                             {{ form_widget(form.BtnDetalleConceptoActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                         </div>                        

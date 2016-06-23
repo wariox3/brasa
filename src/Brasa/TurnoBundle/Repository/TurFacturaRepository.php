@@ -61,6 +61,7 @@ class TurFacturaRepository extends EntityRepository {
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();        
         $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura); 
         $floSubTotal = 0;
+        $subtotal = 0;
         $floSubTotalConceptos = 0;
         $floBaseAIU = 0;
         $floIva = 0;
@@ -76,21 +77,19 @@ class TurFacturaRepository extends EntityRepository {
         $arFacturasDetalleConceptos = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalleConcepto')->findBy(array('codigoFacturaFk' => $codigoFactura));                         
         foreach ($arFacturasDetalleConceptos as $arFacturasDetalleConcepto) {            
             $floSubTotalConceptos += $arFacturasDetalleConcepto->getSubtotal();
-            $floIvaConceptos += $arFacturasDetalleConcepto->getIva();
         }
-        
-        $floBaseAIU = ($floSubTotal * 10) / 100;
-        $floIva = (($floBaseAIU * 16 ) / 100) + $floIvaConceptos;
+        $subtotal = $floSubTotal + $floSubTotalConceptos;
+        $floBaseAIU = ($subtotal * 10) / 100;
+        $floIva = (($floBaseAIU * 16 ) / 100);
         $floBaseRetencionFuente = $arConfiguracion->getBaseRetencionFuente();
-        if(($floBaseAIU+$floSubTotalConceptos) >= $floBaseRetencionFuente) {
-            $floRetencionFuente = (($floBaseAIU+$floSubTotalConceptos) * 2 ) / 100;
+        if(($floBaseAIU) >= $floBaseRetencionFuente) {
+            $floRetencionFuente = (($floBaseAIU) * 2 ) / 100;
         }                
 
-        $floSubTotal += $floSubTotalConceptos;
-        $floIva += $floIvaConceptos;
-        $floTotal = $floSubTotal + $floIva - $floRetencionFuente;
+        $floTotal = $subtotal + $floIva - $floRetencionFuente;
         $arFactura->setVrBaseAIU($floBaseAIU);
         $arFactura->setVrSubtotal($floSubTotal);
+        $arFactura->setVrSubtotalOtros($floSubTotalConceptos);        
         $arFactura->setVrRetencionFuente($floRetencionFuente);
         $arFactura->setVrIva($floIva);
         $arFactura->setvrTotal($floTotal);
@@ -128,8 +127,7 @@ class TurFacturaRepository extends EntityRepository {
         $em = $this->getEntityManager();                
         $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);            
         $strResultado = "";        
-        if($arFactura->getEstadoAutorizado() == 0) {
-            if($em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->numeroRegistros($codigoFactura) > 0) {            
+        if($arFactura->getEstadoAutorizado() == 0) {           
                 // Validar valor pendiente
                 $dql   = "SELECT fd.codigoPedidoDetalleFk, SUM(fd.vrPrecio) as vrPrecio FROM BrasaTurnoBundle:TurFacturaDetalle fd "
                         . "WHERE fd.codigoFacturaFk = " . $codigoFactura . " "
@@ -163,9 +161,7 @@ class TurFacturaRepository extends EntityRepository {
                     $em->flush();                              
                 }
               
-            } else {
-                $strResultado = "Debe adicionar detalles";
-            }            
+           
         } else {
             $strResultado = "Ya esta autorizado";
         }        

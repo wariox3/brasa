@@ -46,15 +46,15 @@
                     <tr>
                         <td class="titulo">CLIENTE:</td>
                         <td class="td-in-well">{{ arFactura.clienteRel.nombreCorto }}</td>
-                        <td class="titulo" ></td>
-                        <td align="right"></td>
+                        <td class="titulo" >SUBTOTAL:</td>
+                        <td align="right">{{ arFactura.vrSubtotal | number_format(0, '.', ',')}}</td>
                     </tr>
 
                     <tr>
                         <td class="titulo">FECHA:</td>
                         <td class="td-in-well">{{ arFactura.fecha |date("Y/m/d") }}</td>
-                        <td class="titulo" >SUBTOTAL:</td>
-                        <td align="right">{{ arFactura.vrSubtotal | number_format(0, '.', ',')}}</td>
+                        <td class="titulo" >SUBTOTAL OTROS:</td>
+                        <td align="right">{{ arFactura.vrSubtotalOtros | number_format(0, '.', ',')}}</td>
                     </tr>
                     <tr>
                         <td class="titulo">VENCE:</td>
@@ -181,9 +181,12 @@
                         {% endfor %}
                     </table>
                     <div class="btn-toolbar" style="float: right">
+                        {% if arFactura.estadoAutorizado == 0 %}
                         <div class="btn-group">
                             <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_factura_detalle_concepto_nuevo', {'codigoFactura': arFactura.codigoFacturaPk}) }}', 'AgregarFacturaDetalleOtro', 600, 900)">Nuevo</a>
-                        </div>
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_factura_detalle_concepto_pedido_nuevo', {'codigoFactura': arFactura.codigoFacturaPk}) }}', 'AgregarServicioDetalleOtro', 600, 900)">Nuevo desde pedido</a>
+                        </div>                        
+                        {% endif %}                        
                         <div class="btn-group">
                             {{ form_widget(form.BtnDetalleConceptoActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                         </div>                        

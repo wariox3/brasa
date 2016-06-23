@@ -57,6 +57,11 @@ class TurPedidoDetalleConcepto
      */
     private $total = 0;    
     
+    /**     
+     * @ORM\Column(name="estado_facturado", type="boolean")
+     */    
+    private $estadoFacturado = false;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="TurPedido", inversedBy="pedidosDetallesConceptosPedidoRel")
      * @ORM\JoinColumn(name="codigo_pedido_fk", referencedColumnName="codigo_pedido_pk")
@@ -69,7 +74,10 @@ class TurPedidoDetalleConcepto
      */
     protected $facturaConceptoRel; 
     
-
+    /**
+     * @ORM\OneToMany(targetEntity="TurFacturaDetalleConcepto", mappedBy="pedidoDetalleConceptoRel")
+     */
+    protected $facturasDetallesConceptosPedidoDetalleConceptoRel; 
 
 
     /**
@@ -320,5 +328,70 @@ class TurPedidoDetalleConcepto
     public function getFacturaConceptoRel()
     {
         return $this->facturaConceptoRel;
+    }
+
+    /**
+     * Set estadoFacturado
+     *
+     * @param boolean $estadoFacturado
+     *
+     * @return TurPedidoDetalleConcepto
+     */
+    public function setEstadoFacturado($estadoFacturado)
+    {
+        $this->estadoFacturado = $estadoFacturado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoFacturado
+     *
+     * @return boolean
+     */
+    public function getEstadoFacturado()
+    {
+        return $this->estadoFacturado;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->facturasDetallesConceptosPedidoDetalleConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add facturasDetallesConceptosPedidoDetalleConceptoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosPedidoDetalleConceptoRel
+     *
+     * @return TurPedidoDetalleConcepto
+     */
+    public function addFacturasDetallesConceptosPedidoDetalleConceptoRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosPedidoDetalleConceptoRel)
+    {
+        $this->facturasDetallesConceptosPedidoDetalleConceptoRel[] = $facturasDetallesConceptosPedidoDetalleConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasDetallesConceptosPedidoDetalleConceptoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosPedidoDetalleConceptoRel
+     */
+    public function removeFacturasDetallesConceptosPedidoDetalleConceptoRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosPedidoDetalleConceptoRel)
+    {
+        $this->facturasDetallesConceptosPedidoDetalleConceptoRel->removeElement($facturasDetallesConceptosPedidoDetalleConceptoRel);
+    }
+
+    /**
+     * Get facturasDetallesConceptosPedidoDetalleConceptoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasDetallesConceptosPedidoDetalleConceptoRel()
+    {
+        return $this->facturasDetallesConceptosPedidoDetalleConceptoRel;
     }
 }

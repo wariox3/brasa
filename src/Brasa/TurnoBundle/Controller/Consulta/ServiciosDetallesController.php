@@ -84,7 +84,7 @@ class ServiciosDetallesController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'AC'; $col++) {
+        for($col = 'A'; $col !== 'AD'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
         }     
@@ -122,7 +122,8 @@ class ServiciosDetallesController extends Controller
                     ->setCellValue('Y1', 'DIAS')
                     ->setCellValue('Z1', 'VR.MINIMO')
                     ->setCellValue('AA1', 'VR.AJUSTE')
-                    ->setCellValue('AB1', 'VALOR');
+                    ->setCellValue('AB1', 'VALOR')
+                    ->setCellValue('AC1', 'M');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -156,7 +157,8 @@ class ServiciosDetallesController extends Controller
                     ->setCellValue('Y' . $i, $arServicioDetalle->getDias())
                     ->setCellValue('Z' . $i, $arServicioDetalle->getVrPrecioMinimo())
                     ->setCellValue('AA' . $i, $arServicioDetalle->getVrPrecioAjustado())
-                    ->setCellValue('AB' . $i, $arServicioDetalle->getVrTotalDetalle());
+                    ->setCellValue('AB' . $i, $arServicioDetalle->getVrTotalDetalle())
+                    ->setCellValue('AC' . $i, $objFunciones->devuelveBoolean($arServicioDetalle->getMarca()));
             
             if($arServicioDetalle->getPuestoRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)

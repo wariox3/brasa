@@ -122,7 +122,21 @@ class GenerarPedidoController extends Controller
                             }                        
                         }
                     }                   
-                    $arServicio->setFechaGeneracion($fecha);
+                    
+                    $arServicioDetallesConceptos = new \Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto();
+                    $arServicioDetallesConceptos =  $em->getRepository('BrasaTurnoBundle:TurServicioDetalleConcepto')->findBy(array('codigoServicioFk' => $arServicio->getCodigoServicioPk()));                     
+                    foreach ($arServicioDetallesConceptos as $arServicioDetalleConcepto) {
+                        $arPedidoDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto();                        
+                        $arPedidoDetalleConcepto->setPedidoRel($arPedidoNuevo);                         
+                        $arPedidoDetalleConcepto->setFacturaConceptoRel($arServicioDetalleConcepto->getFacturaConceptoRel());
+                        $arPedidoDetalleConcepto->setCantidad($arServicioDetalleConcepto->getCantidad());
+                        $arPedidoDetalleConcepto->setIva($arServicioDetalleConcepto->getIva());
+                        $arPedidoDetalleConcepto->setPrecio($arServicioDetalleConcepto->getPrecio());
+                        $arPedidoDetalleConcepto->setSubtotal($arServicioDetalleConcepto->getSubtotal());
+                        $arPedidoDetalleConcepto->setTotal($arServicioDetalleConcepto->getTotal());
+                        $em->persist($arPedidoDetalleConcepto);                          
+                    }
+                    $arServicio->setFechaGeneracion($fecha);                    
                     $em->persist($arServicio);
                     $em->flush();
                     $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($arPedidoNuevo->getCodigoPedidoPk());
