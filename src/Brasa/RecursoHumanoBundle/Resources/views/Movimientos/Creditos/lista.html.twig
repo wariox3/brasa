@@ -112,7 +112,7 @@
                 {{ form_widget(form.BtnSuspender, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnDesaprobar, { 'attr': {'class': 'btn btn-warning btn-sm'} }) }}
                 {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm', 'onclick': 'return confirm("Esta seguro de eliminar el registro?")'} }) }}
             </div>
         </div>
         <!-- Fin Botones Menu Items -->

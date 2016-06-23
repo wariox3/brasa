@@ -41,6 +41,11 @@ class RhuSeleccionEntrevista
      * @ORM\Column(name="resultado_cuantitativo", type="integer", nullable=true)
      */    
     private $resultadoCuantitativo;
+    
+    /**
+     * @ORM\Column(name="nombre_quien_entrevista", type="string", length=100, nullable=true)
+     */    
+    private $nombreQuienEntrevista;
        
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -60,6 +65,7 @@ class RhuSeleccionEntrevista
      */
     protected $seleccionEntrevistaTipoRel;
     
+
 
 
     /**
@@ -190,6 +196,30 @@ class RhuSeleccionEntrevista
     public function getResultadoCuantitativo()
     {
         return $this->resultadoCuantitativo;
+    }
+
+    /**
+     * Set nombreQuienEntrevista
+     *
+     * @param string $nombreQuienEntrevista
+     *
+     * @return RhuSeleccionEntrevista
+     */
+    public function setNombreQuienEntrevista($nombreQuienEntrevista)
+    {
+        $this->nombreQuienEntrevista = $nombreQuienEntrevista;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreQuienEntrevista
+     *
+     * @return string
+     */
+    public function getNombreQuienEntrevista()
+    {
+        return $this->nombreQuienEntrevista;
     }
 
     /**

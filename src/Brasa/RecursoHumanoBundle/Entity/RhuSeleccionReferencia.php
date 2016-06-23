@@ -50,7 +50,7 @@ class RhuSeleccionReferencia
     /**
      * @ORM\Column(name="codigo_ciudad_fk", type="integer", nullable=true)
      */    
-    private $codigoCiudadFk;     
+    private $codigoCiudadFk;
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -80,6 +80,7 @@ class RhuSeleccionReferencia
      */
     protected $ciudadRel;    
     
+
 
     /**
      * Get codigoSeleccionReferenciaPk
@@ -236,6 +237,30 @@ class RhuSeleccionReferencia
     }
 
     /**
+     * Set codigoCiudadFk
+     *
+     * @param integer $codigoCiudadFk
+     *
+     * @return RhuSeleccionReferencia
+     */
+    public function setCodigoCiudadFk($codigoCiudadFk)
+    {
+        $this->codigoCiudadFk = $codigoCiudadFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCiudadFk
+     *
+     * @return integer
+     */
+    public function getCodigoCiudadFk()
+    {
+        return $this->codigoCiudadFk;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -329,30 +354,6 @@ class RhuSeleccionReferencia
     public function getSeleccionTipoReferenciaRel()
     {
         return $this->seleccionTipoReferenciaRel;
-    }
-
-    /**
-     * Set codigoCiudadFk
-     *
-     * @param integer $codigoCiudadFk
-     *
-     * @return RhuSeleccionReferencia
-     */
-    public function setCodigoCiudadFk($codigoCiudadFk)
-    {
-        $this->codigoCiudadFk = $codigoCiudadFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCiudadFk
-     *
-     * @return integer
-     */
-    public function getCodigoCiudadFk()
-    {
-        return $this->codigoCiudadFk;
     }
 
     /**

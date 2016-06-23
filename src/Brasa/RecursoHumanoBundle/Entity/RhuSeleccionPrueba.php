@@ -38,6 +38,11 @@ class RhuSeleccionPrueba
     private $resultadoCuantitativo;
     
     /**
+     * @ORM\Column(name="nombre_quien_hace_prueba", type="string", length=100, nullable=true)
+     */    
+    private $nombreQuienHacePrueba;
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;              
@@ -55,7 +60,6 @@ class RhuSeleccionPrueba
     protected $seleccionPruebaTipoRel;
 
 
-    
 
     /**
      * Get codigoSeleccionPruebaPk
@@ -161,6 +165,30 @@ class RhuSeleccionPrueba
     public function getResultadoCuantitativo()
     {
         return $this->resultadoCuantitativo;
+    }
+
+    /**
+     * Set nombreQuienHacePrueba
+     *
+     * @param string $nombreQuienHacePrueba
+     *
+     * @return RhuSeleccionPrueba
+     */
+    public function setNombreQuienHacePrueba($nombreQuienHacePrueba)
+    {
+        $this->nombreQuienHacePrueba = $nombreQuienHacePrueba;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreQuienHacePrueba
+     *
+     * @return string
+     */
+    public function getNombreQuienHacePrueba()
+    {
+        return $this->nombreQuienHacePrueba;
     }
 
     /**

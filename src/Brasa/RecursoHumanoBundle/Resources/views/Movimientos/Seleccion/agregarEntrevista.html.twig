@@ -34,6 +34,12 @@
                 <div class="col-sm-8">
                     {{ form_widget(form.resultadoCuantitativo, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
                 </div>                
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_nombreQuienEntrevista" class="col-sm-4 control-label">Persona que entrevista:</label>
+                <div class="col-sm-8">
+                    {{ form_widget(form.nombreQuienEntrevista, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                </div>                
             </div>    
             <div class="form-group">
                 <label for="form_comentarios" class="col-sm-4 control-label">Comentarios:</label>

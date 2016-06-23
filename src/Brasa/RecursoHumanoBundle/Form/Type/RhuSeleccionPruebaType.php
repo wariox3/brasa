@@ -16,6 +16,7 @@ class RhuSeleccionPruebaType extends AbstractType
             ))    
             ->add('resultado', 'text', array('required' => false))
             ->add('resultadoCuantitativo', 'number', array('required' => true))
+            ->add('nombreQuienHacePrueba', 'text', array('required' => false))    
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

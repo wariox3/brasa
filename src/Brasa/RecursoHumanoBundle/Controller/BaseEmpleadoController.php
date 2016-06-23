@@ -574,6 +574,11 @@ class BaseEmpleadoController extends Controller
             }else{
                 $horario = $arEmpleado->getHorarioRel()->getNombre();
             }
+            if ($arEmpleado->getCodigoEmpleadoEstudioTipoFk() == null){
+                $empleadoEstudioTipo = "";
+            }else{
+                $empleadoEstudioTipo = $arEmpleado->getEmpleadoEstudioTipoRel()->getNombre();
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arEmpleado->getCodigoEmpleadoPk())
                     ->setCellValue('B' . $i, $arEmpleado->getTipoIdentificacionRel()->getNombre())
@@ -596,7 +601,7 @@ class BaseEmpleadoController extends Controller
                     ->setCellValue('S' . $i, $arEmpleado->getEstadoCivilRel()->getNombre())
                     ->setCellValue('T' . $i, $padreFamilia)
                     ->setCellValue('U' . $i, $cabezaHogar)
-                    ->setCellValue('V' . $i, $arEmpleado->getEmpleadoEstudioTipoRel()->getNombre())
+                    ->setCellValue('V' . $i, $empleadoEstudioTipo)
                     ->setCellValue('W' . $i, $entidadSalud)
                     ->setCellValue('X' . $i, $entidadPension)
                     ->setCellValue('Y' . $i, $entidadCaja)

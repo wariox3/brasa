@@ -18,7 +18,8 @@ class RhuSeleccionEntrevistaType extends AbstractType
             ))    
             ->add('resultado', 'text', array('required' => false))
             ->add('resultadoCuantitativo', 'number', array('required' => false))
-            ->add('fecha', 'datetime', array('required' => true, 'data' => new \DateTime('now')))    
+            ->add('fecha', 'datetime', array('required' => true, 'data' => new \DateTime('now')))
+            ->add('nombreQuienEntrevista', 'text', array('required' => false))    
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

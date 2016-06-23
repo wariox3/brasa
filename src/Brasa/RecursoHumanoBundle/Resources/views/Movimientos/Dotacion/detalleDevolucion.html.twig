@@ -2,7 +2,8 @@
 {% block title %}Dotación devolución - Soga App{% endblock %}
 {% block content %}
 <div class="container">
-    {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
+    {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+        {{ form_errors(form) }}
     <h3>Devolución dotación</h3>
     
         <table class="table table-striped table-bordered table-condensed table-hover">
@@ -28,5 +29,6 @@
     <div class="modal-footer">            
             {{ form_widget(form.BtnGuardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
     </div>
+    {{ form_rest(form) }}
     {{ form_end(form) }}
 {% endblock %}

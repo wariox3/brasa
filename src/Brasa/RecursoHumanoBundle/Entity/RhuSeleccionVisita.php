@@ -26,6 +26,11 @@ class RhuSeleccionVisita
      * @ORM\Column(name="fecha", type="datetime", nullable=true)
      */    
     private $fecha;
+    
+    /**
+     * @ORM\Column(name="nombre_quien_visita", type="string", length=100, nullable=true)
+     */    
+    private $nombreQuienVisita;
        
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -39,6 +44,7 @@ class RhuSeleccionVisita
     protected $seleccionRel; 
     
     
+
 
     /**
      * Get codigoSeleccionVisitaPk
@@ -96,6 +102,30 @@ class RhuSeleccionVisita
     public function getFecha()
     {
         return $this->fecha;
+    }
+
+    /**
+     * Set nombreQuienVisita
+     *
+     * @param string $nombreQuienVisita
+     *
+     * @return RhuSeleccionVisita
+     */
+    public function setNombreQuienVisita($nombreQuienVisita)
+    {
+        $this->nombreQuienVisita = $nombreQuienVisita;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreQuienVisita
+     *
+     * @return string
+     */
+    public function getNombreQuienVisita()
+    {
+        return $this->nombreQuienVisita;
     }
 
     /**

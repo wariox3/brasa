@@ -144,7 +144,7 @@
                 <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_nuevo') }}', 'NuevaProgramacionPago', 600, 900)" >Nuevo</a>
             </div>                        
             <div class="btn-group">                                
-                {{ form_widget(form.BtnEliminarPago, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+                {{ form_widget(form.BtnEliminarPago, { 'attr': {'class': 'btn btn-danger btn-sm', 'onclick': 'return confirm("Esta seguro de eliminar el registro?")'} }) }}
             </div>
         </div>
         

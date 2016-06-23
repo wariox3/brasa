@@ -84,7 +84,7 @@
                 <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_aspirante_nuevo', { 'codigoAspirante': 0 }) }}" style="float:left">Nuevo</a>                
             </div>
             <div class="btn-group">
-                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                
+                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm', 'onclick': 'return confirm("Esta seguro de eliminar el registro?")'} }) }}                
             </div>
         </div>
         <!-- Fin Botones Menu Items -->

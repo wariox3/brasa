@@ -107,6 +107,7 @@
                             <th>TIPO ENTREVISTA</th>
                             <th>RESULTADO CUALITATIVO</th>
                             <th>RESULTADO CUANTITATIVO</th>
+                            <th>ENTREVISTADO POR</th>
                             <th>COMENTARIOS</th>
                             <th></th>
                             <th></th>
@@ -122,6 +123,7 @@
                             <td>{{ arSeleccionEntrevista.seleccionEntrevistaTipoRel.nombre }}</td>
                             <td>{{ arSeleccionEntrevista.resultado }}</td>
                             <td>{{ arSeleccionEntrevista.resultadoCuantitativo }}</td>
+                            <td>{{ arSeleccionEntrevista.nombreQuienEntrevista }}</td>
                             <td>{{ arSeleccionEntrevista.comentarios }}</td>
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 14,  'numero': arSeleccionEntrevista.codigoSeleccionEntrevistaPk}) }}', 'Archivos', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_144_folder_open.png') }}" width=20 height=20></a></td>
                             <td>{% if arSeleccion.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_entrevista', {'codigoSeleccion': arSeleccion.codigoSeleccionPk, 'codigoSeleccionEntrevista': arSeleccionEntrevista.codigoSeleccionEntrevistaPk }) }}', 'AgregarSeleccionEntrevista', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a>{% endif %}</td>
@@ -153,6 +155,7 @@
                             <th>TIPO PRUEBA</th>
                             <th>RESULTADO CUALITATIVO</th>
                             <th>RESULTADO CUANTITATIVO</th>
+                            <th>PRUEBA ASIGNADA POR</th>
                             <th>COMENTARIOS</th>
                             <th></th>
                             <th></th>
@@ -167,6 +170,7 @@
                             <td>{{ arSeleccionPruebas.seleccionPruebaTipoRel.nombre }}</td>
                             <td>{{ arSeleccionPruebas.resultado }}</td>
                             <td>{{ arSeleccionPruebas.resultadoCuantitativo }}</td>
+                            <td>{{ arSeleccionPruebas.nombreQuienHacePrueba }}</td>
                             <td>{{ arSeleccionPruebas.comentarios }}</td>
                             <td>{% if arSeleccion.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_prueba', {'codigoSeleccion': arSeleccion.codigoSeleccionPk, 'codigoSeleccionPrueba': arSeleccionPruebas.codigoSeleccionPruebaPk }) }}', 'AgregarSeleccionPrueba', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a>{% endif %}</td>
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 2,  'numero': arSeleccionPruebas.codigoSeleccionPruebaPk}) }}', 'Archivos', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_144_folder_open.png') }}" width=20 height=20></a></td>
@@ -246,6 +250,7 @@
                         <tr>
                             <th>CÓDIGO</th>
                             <th>FECHA/HORA</th>
+                            <th>PERSONA REALIZA VISITA</th>
                             <th>COMENTARIOS</th>
                             <th></th>
                             <th></th>
@@ -258,6 +263,7 @@
                                 <span class="badge">{{ arSeleccionVisita.codigoSeleccionVisitaPk }}</span>
                             </td>
                             <td>{{ arSeleccionVisita.fecha|date('Y-m-d H:i:s A') }}</td>
+                            <td>{{ arSeleccionVisita.nombreQuienVisita }}</td>
                             <td>{{ arSeleccionVisita.comentarios }}</td>
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 11,  'numero': arSeleccionVisita.codigoSeleccionVisitaPk}) }}', 'Archivos', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_144_folder_open.png') }}" width=20 height=20></a></td>
                             <td>{% if arSeleccion.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_rhu_seleccion_agregar_visita', {'codigoSeleccion': arSeleccion.codigoSeleccionPk, 'codigoSeleccionVisita': arSeleccionVisita.codigoSeleccionVisitaPk }) }}', 'AgregarSeleccionVisita', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a>{% endif %}</td>

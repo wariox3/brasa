@@ -24,6 +24,12 @@
                 <div class="col-sm-8">
                         {{ form_widget(form.resultadoCuantitativo, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
                 </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_nombreQuienHacePrueba" class="col-sm-4 control-label">Prueba asignada por:</label>
+                <div class="col-sm-8">
+                        {{ form_widget(form.nombreQuienHacePrueba, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                </div>
             </div>    
             <div class="form-group">
                 <label for="form_comentarios" class="col-sm-4 control-label">Comentarios:</label>
