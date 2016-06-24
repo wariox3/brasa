@@ -149,6 +149,11 @@ class ServicioController extends Controller
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->marcarSeleccionados($arrSeleccionados);                
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle', array('codigoServicio' => $codigoServicio)));
+            } 
+            if($form->get('BtnDetalleAjuste')->isClicked()) {   
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->ajustarSeleccionados($arrSeleccionados);                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle', array('codigoServicio' => $codigoServicio)));
             }            
             if($form->get('BtnDetalleConceptoActualizar')->isClicked()) {   
                 $arrControles = $request->request->All();
@@ -569,6 +574,7 @@ class ServicioController extends Controller
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);        
         $arrBotonDetalleMarcar = array('label' => 'Marcar', 'disabled' => false);        
+        $arrBotonDetalleAjuste = array('label' => 'Ajuste', 'disabled' => false);        
         $arrBotonDetalleConceptoActualizar = array('label' => 'Actualizar', 'disabled' => false);
         $arrBotonDetalleConceptoEliminar = array('label' => 'Eliminar', 'disabled' => false);          
         
@@ -596,6 +602,7 @@ class ServicioController extends Controller
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
                     ->add('BtnDetalleMarcar', 'submit', $arrBotonDetalleMarcar)
+                    ->add('BtnDetalleAjuste', 'submit', $arrBotonDetalleAjuste)
                     ->add('BtnDetalleConceptoActualizar', 'submit', $arrBotonDetalleConceptoActualizar)
                     ->add('BtnDetalleConceptoEliminar', 'submit', $arrBotonDetalleConceptoEliminar)                                    
                     ->getForm();

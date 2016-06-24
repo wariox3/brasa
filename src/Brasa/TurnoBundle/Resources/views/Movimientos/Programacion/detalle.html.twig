@@ -141,7 +141,7 @@
                                  </tr>
                                  {% set intPuesto = arProgramacionDetalle.codigoPuestoFk %}
                              {% endif %}
-                            <tr>
+                            <tr {% if arProgramacionDetalle.ajusteProgramacion == 1 %} class="danger" {% endif %}>
                                 <td><a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_programacion_detalle_resumen', {'codigoProgramacionDetalle': arProgramacionDetalle.codigoProgramacionDetallePk }) }}', 'pedidoDetalleResumen', 600, 900)">{{ arProgramacionDetalle.codigoProgramacionDetallePk }}</a><input type="hidden" name="LblCodigo[]" value="{{ arProgramacionDetalle.codigoProgramacionDetallePk }}"></td>
                                 {% if arProgramacionDetalle.codigoRecursoFk is not null %}
                                     <td><a href="javascript:abrirVentana3('{{ path('brs_tur_consultas_recursos_disponibles_programacion', { 'anio': arProgramacionDetalle.anio, 'mes': arProgramacionDetalle.mes, 'codigoRecurso': arProgramacionDetalle.codigoRecursoFk }) }}', 'VerProgramaciones', 600, 900)">{{ arProgramacionDetalle.recursoRel.nombreCorto | default('') }}</a></td>
@@ -196,6 +196,8 @@
                     {% endif %}
                 </div>
                 <div class="btn-group">
+                    {{ form_widget(form.BtnDetalleAjuste, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                    {{ form_widget(form.BtnDetalleMarcar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                                                                            
                     {{ form_widget(form.BtnDetalleEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                 </div>
             </div>

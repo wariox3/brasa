@@ -150,6 +150,7 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                         $arProgramacionDetalle->setAnio($arProgramacion->getFecha()->format('Y'));
                         $arProgramacionDetalle->setMes($arProgramacion->getFecha()->format('m'));                        
                         $arProgramacionDetalle->setRecursoRel($arPedidoDetalleRecurso->getRecursoRel());
+                        $arProgramacionDetalle->setAjusteProgramacion($arPedidoDetalle->getAjusteProgramacion());
                         for($i = 1; $i < 32; $i++) {                        
                             $strTurno = $arrTurnos[$intPosicionPlantilla];
                             $strFechaDia = $arProgramacion->getFecha()->format('Y-m-') . $i;
@@ -311,6 +312,7 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                         $arProgramacionDetalle->setPedidoDetalleRel($arPedidoDetalle);
                         $arProgramacionDetalle->setProyectoRel($arPedidoDetalle->getProyectoRel());
                         $arProgramacionDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
+                        $arProgramacionDetalle->setAjusteProgramacion($arPedidoDetalle->getAjusteProgramacion());
                         $arPedidoDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso();
                         $arPedidoDetalleRecurso = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->findOneBy(array('codigoPedidoDetalleFk' => $codigoPedidoDetalle, 'posicion' => $arPlantillaDetalle->getPosicion()));
                         if(count($arPedidoDetalleRecurso) > 0) {
@@ -459,6 +461,7 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                             $arProgramacionDetalle->setPedidoDetalleRel($arPedidoDetalle);
                             $arProgramacionDetalle->setProyectoRel($arPedidoDetalle->getProyectoRel());
                             $arProgramacionDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
+                            $arProgramacionDetalle->setAjusteProgramacion($arPedidoDetalle->getAjusteProgramacion());
                             $em->persist($arProgramacionDetalle);
                         }
                     }
@@ -642,4 +645,35 @@ class TurProgramacionDetalleRepository extends EntityRepository {
         return $results[0];        
     }
     
+    public function marcarSeleccionados($arrSeleccionados) {        
+        if(count($arrSeleccionados) > 0) {
+            $em = $this->getEntityManager();
+            foreach ($arrSeleccionados AS $codigo) {                
+                $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($codigo);                
+                if($arProgramacionDetalle->getMarca() == 1) {
+                    $arProgramacionDetalle->setMarca(0);
+                } else {
+                    $arProgramacionDetalle->setMarca(1);
+                }                
+            }                                         
+            $em->flush();       
+        }
+        
+    }            
+    
+    public function ajustarSeleccionados($arrSeleccionados) {        
+        if(count($arrSeleccionados) > 0) {
+            $em = $this->getEntityManager();
+            foreach ($arrSeleccionados AS $codigo) {                
+                $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($codigo);                
+                if($arProgramacionDetalle->getAjusteProgramacion() == 1) {
+                    $arProgramacionDetalle->setAjusteProgramacion(0);
+                } else {
+                    $arProgramacionDetalle->setAjusteProgramacion(1);
+                }                
+            }                                         
+            $em->flush();       
+        }
+        
+    }     
 }

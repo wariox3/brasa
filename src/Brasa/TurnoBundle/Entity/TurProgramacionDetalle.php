@@ -227,6 +227,16 @@ class TurProgramacionDetalle
      */
     private $vrHoraRecurso = 0;    
     
+    /**     
+     * @ORM\Column(name="marca", type="boolean")
+     */    
+    private $marca = false;     
+
+    /**     
+     * @ORM\Column(name="ajuste_programacion", type="boolean")
+     */    
+    private $ajusteProgramacion = false;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="TurProgramacion", inversedBy="programacionesDetallesProgramacionRel")
      * @ORM\JoinColumn(name="codigo_programacion_fk", referencedColumnName="codigo_programacion_pk")
@@ -1442,5 +1452,53 @@ class TurProgramacionDetalle
     public function getSoportesPagosDetallesProgramacionDetalleRel()
     {
         return $this->soportesPagosDetallesProgramacionDetalleRel;
+    }
+
+    /**
+     * Set marca
+     *
+     * @param boolean $marca
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setMarca($marca)
+    {
+        $this->marca = $marca;
+
+        return $this;
+    }
+
+    /**
+     * Get marca
+     *
+     * @return boolean
+     */
+    public function getMarca()
+    {
+        return $this->marca;
+    }
+
+    /**
+     * Set ajusteProgramacion
+     *
+     * @param boolean $ajusteProgramacion
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setAjusteProgramacion($ajusteProgramacion)
+    {
+        $this->ajusteProgramacion = $ajusteProgramacion;
+
+        return $this;
+    }
+
+    /**
+     * Get ajusteProgramacion
+     *
+     * @return boolean
+     */
+    public function getAjusteProgramacion()
+    {
+        return $this->ajusteProgramacion;
     }
 }

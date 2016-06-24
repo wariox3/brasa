@@ -109,6 +109,7 @@ class GenerarPedidoController extends Controller
                         $arPedidoDetalleNuevo->setFestivo($arServicioDetalle->getFestivo());    
                         $arPedidoDetalleNuevo->setVrPrecioAjustado($arServicioDetalle->getVrPrecioAjustado());
                         $arPedidoDetalleNuevo->setFechaIniciaPlantilla($arServicioDetalle->getFechaIniciaPlantilla());
+                        $arPedidoDetalleNuevo->setAjusteProgramacion($arServicioDetalle->getAjusteProgramacion());
                         if($intDiaInicial != 0 && $intDiaFinal != 0) { 
                             $em->persist($arPedidoDetalleNuevo);                      
                             $arServicioDetalleRecursos = new \Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso();
@@ -219,6 +220,7 @@ class GenerarPedidoController extends Controller
                                 $arPedidoDetalleNuevo->setFestivo($arServicioDetalle->getFestivo());    
                                 $arPedidoDetalleNuevo->setVrPrecioAjustado($arServicioDetalle->getVrPrecioAjustado());
                                 $arPedidoDetalleNuevo->setFechaIniciaPlantilla($arServicioDetalle->getFechaIniciaPlantilla());
+                                $arPedidoDetalleNuevo->setAjusteProgramacion($arServicioDetalle->getAjusteProgramacion());
                                 if($intDiaInicial != 0 && $intDiaFinal != 0) { 
                                     $em->persist($arPedidoDetalleNuevo);                      
                                     $arServicioDetalleRecursos = new \Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso();

@@ -161,7 +161,7 @@
                                  </tr>
                                  {% set intPuesto = arPedidoDetalle.codigoPuestoFk %}
                              {% endif %}                             
-                            <tr>
+                            <tr {% if arPedidoDetalle.marca == 1 %} class="success" {% endif %}>
                                 <td><a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_pedido_detalle_resumen', {'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'pedidoDetalleResumen', 600, 900)">{{ arPedidoDetalle.codigoPedidoDetallePk }}</a><input type="hidden" name="LblCodigo[]" value="{{ arPedidoDetalle.codigoPedidoDetallePk }}"></td>                                
                                 <td>{{ arPedidoDetalle.conceptoServicioRel.nombre  }}</td>                    
                                 <td>{{ arPedidoDetalle.modalidadServicioRel.nombre  }}</td>                    
@@ -207,7 +207,7 @@
                                 <td>{% if arPedidoDetalle.estadoProgramado == 1 %} SI {% else %} NO {% endif %}</td>
                                 <td>{% if arPedidoDetalle.estadoFacturado == 1 %} SI {% else %} NO {% endif %}</td>
                                 <td>{% if arPedido.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                                        
-                                <td style="text-align: center"><a href="{{ path('brs_tur_movimiento_pedido_detalle_recurso', { 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" width=22 height=22></a></td>                                                        
+                                <td style="text-align: center" {% if arPedidoDetalle.ajusteProgramacion == 1 %} class="danger" {% endif %}><a href="{{ path('brs_tur_movimiento_pedido_detalle_recurso', { 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" width=22 height=22></a></td>                                                        
                                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidoDetalle.codigoPedidoDetallePk }}" /></td>
                             </tr>
                         {% endfor %}
@@ -232,7 +232,9 @@
                             {{ form_widget(form.BtnDetalleActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                         </div>        
                         <div class="btn-group">
-                            {{ form_widget(form.BtnDetalleDesprogramar, { 'attr': {'class': 'btn btn-sm'} }) }}
+                            {{ form_widget(form.BtnDetalleDesprogramar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                            {{ form_widget(form.BtnDetalleAjuste, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                            {{ form_widget(form.BtnDetalleMarcar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                                                        
                             {{ form_widget(form.BtnDetalleEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                         </div>
                     </div>                    

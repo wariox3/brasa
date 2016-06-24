@@ -176,6 +176,11 @@ class TurServicioDetalle
      * @ORM\Column(name="marca", type="boolean")
      */    
     private $marca = false;     
+
+    /**     
+     * @ORM\Column(name="ajuste_programacion", type="boolean")
+     */    
+    private $ajusteProgramacion = false;
     
     /**
      * @ORM\ManyToOne(targetEntity="TurServicio", inversedBy="serviciosDetallesServicioRel")
@@ -1292,5 +1297,29 @@ class TurServicioDetalle
     public function getMarca()
     {
         return $this->marca;
+    }
+
+    /**
+     * Set ajusteProgramacion
+     *
+     * @param boolean $ajusteProgramacion
+     *
+     * @return TurServicioDetalle
+     */
+    public function setAjusteProgramacion($ajusteProgramacion)
+    {
+        $this->ajusteProgramacion = $ajusteProgramacion;
+
+        return $this;
+    }
+
+    /**
+     * Get ajusteProgramacion
+     *
+     * @return boolean
+     */
+    public function getAjusteProgramacion()
+    {
+        return $this->ajusteProgramacion;
     }
 }

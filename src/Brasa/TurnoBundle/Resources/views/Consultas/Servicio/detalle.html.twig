@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-{% block title %}Consutla servicio detalle - Soga App{% endblock %}
+{% block title %}Consulta servicio detalle - Soga App{% endblock %}
 {% block content %}
 <script>
     $(function () {
@@ -49,11 +49,8 @@
             </div>
         </div>
             <table class="table table-striped table-bordered table-condensed">
-            <tr>
-                <th>COD</th>
-                <th>CLIENTE</th>                
-                <th>PUESTO</th>
-                <th></th>
+            <tr>                
+                <th colspan="2">PUESTO</th>
                 <th>SERVICIO</th>
                 <th>MODALIDAD</th>
                 <th>PERIODO</th>
@@ -75,10 +72,17 @@
                 <th>H.N</th>
                 <th>DIAS</th>
             </tr>
+            {% set intCodigoCliente = '' %}
             {% for arServiciosDetalles in arServiciosDetalles %}
+               {% if intCodigoCliente != arServiciosDetalles.servicioRel.codigoClienteFk %}
+                    <tr> 
+                        <td id="suptipo" colspan="38"><b>{{ arServiciosDetalles.servicioRel.clienteRel.nombreCorto | default('') }}</b></td>
+                    </tr>
+                    {% set intCodigoCliente = arServiciosDetalles.servicioRel.codigoClienteFk %}                    
+                {% endif %} 
+                
                 <tr>
-                    <td>{{ arServiciosDetalles.codigoServicioDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arServiciosDetalles.codigoServicioDetallePk }}"></td>
-                    <td>{{ arServiciosDetalles.servicioRel.clienteRel.nombreCorto }}</td> 
+                    <input type="hidden" name="LblCodigo[]" value="{{ arServiciosDetalles.codigoServicioDetallePk }}">                    
                     <td>{{ arServiciosDetalles.codigoPuestoFk }}</td> 
                     <td>{{ arServiciosDetalles.puestoRel.nombre | default('') }}</td> 
                     <td>{{ arServiciosDetalles.conceptoServicioRel.nombre  }}</td>                    

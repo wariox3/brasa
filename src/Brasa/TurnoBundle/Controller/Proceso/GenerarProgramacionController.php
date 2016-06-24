@@ -38,7 +38,8 @@ class GenerarProgramacionController extends Controller
                 $arPedidoDetalles =  $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigoPedido)); 
                 foreach ($arPedidoDetalles as $arPedidoDetalle) {
                     $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->nuevo($arPedidoDetalle->getCodigoPedidoDetallePk(), $arProgramacion);
-                }                
+                }        
+                $em->getRepository('BrasaTurnoBundle:TurProgramacion')->liquidar($arProgramacion->getCodigoProgramacionPk());
                 $em->flush();               
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_programacion_lista')); 
             }    
@@ -61,6 +62,7 @@ class GenerarProgramacionController extends Controller
                                 } 
                                 $arPedidoActualizar->setEstadoProgramado(true);
                                 $em->persist($arPedidoActualizar);
+                                $em->getRepository('BrasaTurnoBundle:TurProgramacion')->liquidar($arProgramacion->getCodigoProgramacionPk());                                
                                 $em->flush();
                             }
                         }

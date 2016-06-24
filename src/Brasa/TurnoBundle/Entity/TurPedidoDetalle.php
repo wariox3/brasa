@@ -202,6 +202,16 @@ class TurPedidoDetalle
      */    
     private $fechaIniciaPlantilla;    
     
+    /**     
+     * @ORM\Column(name="marca", type="boolean")
+     */    
+    private $marca = false;     
+
+    /**     
+     * @ORM\Column(name="ajuste_programacion", type="boolean")
+     */    
+    private $ajusteProgramacion = false;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="TurPedido", inversedBy="pedidosDetallesPedidoRel")
      * @ORM\JoinColumn(name="codigo_pedido_fk", referencedColumnName="codigo_pedido_pk")
@@ -1546,5 +1556,53 @@ class TurPedidoDetalle
     public function getCierresMesServiciosPedidoDetalleRel()
     {
         return $this->cierresMesServiciosPedidoDetalleRel;
+    }
+
+    /**
+     * Set marca
+     *
+     * @param boolean $marca
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setMarca($marca)
+    {
+        $this->marca = $marca;
+
+        return $this;
+    }
+
+    /**
+     * Get marca
+     *
+     * @return boolean
+     */
+    public function getMarca()
+    {
+        return $this->marca;
+    }
+
+    /**
+     * Set ajusteProgramacion
+     *
+     * @param boolean $ajusteProgramacion
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setAjusteProgramacion($ajusteProgramacion)
+    {
+        $this->ajusteProgramacion = $ajusteProgramacion;
+
+        return $this;
+    }
+
+    /**
+     * Get ajusteProgramacion
+     *
+     * @return boolean
+     */
+    public function getAjusteProgramacion()
+    {
+        return $this->ajusteProgramacion;
     }
 }

@@ -134,6 +134,16 @@ class ProgramacionController extends Controller
                     return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
                 }
             }
+            if($form->get('BtnDetalleMarcar')->isClicked()) {   
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->marcarSeleccionados($arrSeleccionados);                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
+            } 
+            if($form->get('BtnDetalleAjuste')->isClicked()) {   
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->ajustarSeleccionados($arrSeleccionados);                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
+            }            
             if($form->get('BtnDetalleEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $strResultado =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->eliminarDetallesSeleccionados($arrSeleccionados);
@@ -402,6 +412,9 @@ class ProgramacionController extends Controller
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);        
+        $arrBotonDetalleMarcar = array('label' => 'Marcar', 'disabled' => false);        
+        $arrBotonDetalleAjuste = array('label' => 'Ajuste', 'disabled' => false);                
+        
         if($ar->getEstadoAutorizado() == 1) {
             $arrBotonAutorizar['disabled'] = true;
             $arrBotonAprobar['disabled'] = false;
@@ -427,6 +440,8 @@ class ProgramacionController extends Controller
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
                     ->add('BtnAnular', 'submit', $arrBotonAnular)                    
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
+                    ->add('BtnDetalleMarcar', 'submit', $arrBotonDetalleMarcar)
+                    ->add('BtnDetalleAjuste', 'submit', $arrBotonDetalleAjuste)
                     ->getForm();
         return $form;
     }

@@ -161,7 +161,17 @@ class PedidoController extends Controller
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
                 }
-            }               
+            }       
+            if($form->get('BtnDetalleMarcar')->isClicked()) {   
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->marcarSeleccionados($arrSeleccionados);                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
+            } 
+            if($form->get('BtnDetalleAjuste')->isClicked()) {   
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->ajustarSeleccionados($arrSeleccionados);                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
+            }            
             if($form->get('BtnDetalleActualizar')->isClicked()) {                
                 $arrControles = $request->request->All();
                 $this->actualizarDetalle($arrControles, $codigoPedido);                                
@@ -511,6 +521,7 @@ class PedidoController extends Controller
                         $arPedidoDetalle->setCantidad($arServicioDetalle->getCantidad());
                         $arPedidoDetalle->setVrPrecioAjustado($arServicioDetalle->getVrPrecioAjustado());
                         $arPedidoDetalle->setFechaIniciaPlantilla($arServicioDetalle->getFechaIniciaPlantilla());
+                        $arPedidoDetalle->setAjusteProgramacion($arServicioDetalle->getAjusteProgramacion());
                         $arPedidoDetalle->setLiquidarDiasReales($arServicioDetalle->getLiquidarDiasReales());
                         
                         $strAnioMes = $arPedido->getFechaProgramacion()->format('Y/m/');
@@ -803,6 +814,8 @@ class PedidoController extends Controller
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
         $arrBotonDetalleDesprogramar = array('label' => 'Desprogramar', 'disabled' => false);
+        $arrBotonDetalleMarcar = array('label' => 'Marcar', 'disabled' => false);        
+        $arrBotonDetalleAjuste = array('label' => 'Ajuste', 'disabled' => false);                
         $arrBotonDesprogramar = array('label' => 'Desprogramar', 'disabled' => true);        
         $arrBotonDetalleConceptoActualizar = array('label' => 'Actualizar', 'disabled' => false);
         $arrBotonDetalleConceptoEliminar = array('label' => 'Eliminar', 'disabled' => false);
@@ -846,6 +859,8 @@ class PedidoController extends Controller
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
                     ->add('BtnDetalleDesprogramar', 'submit', $arrBotonDetalleDesprogramar)
+                    ->add('BtnDetalleMarcar', 'submit', $arrBotonDetalleMarcar)
+                    ->add('BtnDetalleAjuste', 'submit', $arrBotonDetalleAjuste)                
                     ->add('BtnDesprogramar', 'submit', $arrBotonDesprogramar)  
                     ->add('BtnDetalleConceptoActualizar', 'submit', $arrBotonDetalleConceptoActualizar)
                     ->add('BtnDetalleConceptoEliminar', 'submit', $arrBotonDetalleConceptoEliminar)                                
