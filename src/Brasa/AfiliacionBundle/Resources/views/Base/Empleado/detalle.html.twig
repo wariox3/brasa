@@ -65,6 +65,7 @@
                         <tr>
                             <th>COD</th>
                             <th>CLIENTE</th>
+                            <th>SUCURSAL</th>
                             <th>NUMERO</th>
                             <th>DESDE</th>
                             <th>HASTA</th>
@@ -88,6 +89,7 @@
                             <tr>
                                 <td>{{ arContratos.codigoContratoPk  }}<input type="hidden" name="LblCodigo[]" value="{{ arContratos.codigoContratoPk }}"></td>
                                 <td>{{ arContratos.clienteRel.nombreCorto  }}</td>
+                                <td>{{ arContratos.sucursalRel.nombre | default('')  }}</td>
                                 <td>{{ arContratos.numero  }}</td>
                                 <td>{{ arContratos.fechaDesde |date('Y/m/d')  }}</td>
                                 <td>{{ arContratos.fechaHasta |date('Y/m/d')  }}</td>

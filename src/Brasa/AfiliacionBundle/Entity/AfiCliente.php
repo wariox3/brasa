@@ -168,6 +168,11 @@ class AfiCliente
      */    
     private $comentarios;                            
     
+    /**     
+     * @ORM\Column(name="redondear_cobro", type="boolean")
+     */    
+    private $redondearCobro = true;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenAsesor", inversedBy="afiClientesAsesorRel")
      * @ORM\JoinColumn(name="codigo_asesor_fk", referencedColumnName="codigo_asesor_pk")
@@ -1233,5 +1238,29 @@ class AfiCliente
     public function getCodigoSucursal()
     {
         return $this->codigoSucursal;
+    }
+
+    /**
+     * Set redondearCobro
+     *
+     * @param boolean $redondearCobro
+     *
+     * @return AfiCliente
+     */
+    public function setRedondearCobro($redondearCobro)
+    {
+        $this->redondearCobro = $redondearCobro;
+
+        return $this;
+    }
+
+    /**
+     * Get redondearCobro
+     *
+     * @return boolean
+     */
+    public function getRedondearCobro()
+    {
+        return $this->redondearCobro;
     }
 }

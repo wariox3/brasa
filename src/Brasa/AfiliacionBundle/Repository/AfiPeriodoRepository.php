@@ -18,7 +18,7 @@ class AfiPeriodoRepository extends EntityRepository {
         if($boolEstadoCerrado == "0") {
             $dql .= " AND p.estadoCerrado = 0";
         }        
-        $dql .= " ORDER BY p.codigoPeriodoPk";
+        $dql .= " ORDER BY p.codigoPeriodoPk DESC";
         return $dql;
     }            
     
@@ -117,7 +117,9 @@ class AfiPeriodoRepository extends EntityRepository {
             $ivaGeneral += $iva;
             $totalGeneral += $total;
         }
-            
+        //if($arPeriodo->getClienteRel()->getRedondearCobro() == 1) {
+        //    $totalGeneral = $this->redondearCien($totalGeneral);
+        //}    
         $arPeriodo->setEstadoGenerado(1);
         $arPeriodo->setPension($totalPension);
         $arPeriodo->setSalud($totalSalud);
@@ -439,5 +441,20 @@ class AfiPeriodoRepository extends EntityRepository {
         $dql   = "SELECT p FROM BrasaAfiliacionBundle:AfiPeriodo p WHERE p.estadoFacturado = 0 AND p.codigoClienteFk = " . $codigoCliente;
         $dql .= " ORDER BY p.codigoPeriodoPk DESC";
         return $dql;
-    }                    
+    }  
+    
+    public function redondearCien($valor) {               
+        $valor = round($valor);   
+        if($valor != 0) {
+            $residuo = fmod($valor, 1000);        
+            if($residuo != 0) {
+                if($residuo > 500) {
+                    $valor = intval($valor/1000)*1000+1000;
+                } else {
+                    $valor = intval($valor/1000)*1000-1000;
+                }               
+            }         
+        }
+        return $valor;
+    }    
 }

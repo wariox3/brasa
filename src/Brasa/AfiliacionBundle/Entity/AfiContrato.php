@@ -33,6 +33,11 @@ class AfiContrato
     private $codigoClienteFk;
     
     /**
+     * @ORM\Column(name="codigo_sucursal_fk", type="integer", nullable=true)
+     */    
+    private $codigoSucursalFk;    
+    
+    /**
      * @ORM\Column(name="fecha_desde", type="date", nullable=true)
      */    
     private $fechaDesde;    
@@ -169,6 +174,12 @@ class AfiContrato
      * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
      */
     protected $clienteRel;    
+   
+    /**
+     * @ORM\ManyToOne(targetEntity="AfiSucursal", inversedBy="contratosSucursalRel")
+     * @ORM\JoinColumn(name="codigo_sucursal_fk", referencedColumnName="codigo_sucursal_pk")
+     */
+    protected $sucursalRel;    
     
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo", inversedBy="afiContratosClasificacionRiesgoRel")
@@ -227,12 +238,15 @@ class AfiContrato
      */
     protected $novedadesContratoRel;    
     
+
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->periodosDetallesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->periodosDetallesPagosContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->novedadesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -315,6 +329,30 @@ class AfiContrato
     public function getCodigoClienteFk()
     {
         return $this->codigoClienteFk;
+    }
+
+    /**
+     * Set codigoSucursalFk
+     *
+     * @param integer $codigoSucursalFk
+     *
+     * @return AfiContrato
+     */
+    public function setCodigoSucursalFk($codigoSucursalFk)
+    {
+        $this->codigoSucursalFk = $codigoSucursalFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSucursalFk
+     *
+     * @return integer
+     */
+    public function getCodigoSucursalFk()
+    {
+        return $this->codigoSucursalFk;
     }
 
     /**
@@ -963,6 +1001,30 @@ class AfiContrato
     public function getClienteRel()
     {
         return $this->clienteRel;
+    }
+
+    /**
+     * Set sucursalRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiSucursal $sucursalRel
+     *
+     * @return AfiContrato
+     */
+    public function setSucursalRel(\Brasa\AfiliacionBundle\Entity\AfiSucursal $sucursalRel = null)
+    {
+        $this->sucursalRel = $sucursalRel;
+
+        return $this;
+    }
+
+    /**
+     * Get sucursalRel
+     *
+     * @return \Brasa\AfiliacionBundle\Entity\AfiSucursal
+     */
+    public function getSucursalRel()
+    {
+        return $this->sucursalRel;
     }
 
     /**

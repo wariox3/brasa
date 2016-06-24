@@ -17,6 +17,13 @@ class AfiContratoType extends AbstractType
                     ->orderBy('c.nombreCorto', 'ASC');},
                 'property' => 'nombreCorto',
                 'required' => true))                                                         
+            ->add('sucursalRel', 'entity', array(
+                'class' => 'BrasaAfiliacionBundle:AfiSucursal',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('s')
+                    ->orderBy('s.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                            
             ->add('cargoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCargo',
                 'query_builder' => function (EntityRepository $er)  {
