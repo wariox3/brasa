@@ -10,8 +10,24 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuCapacitacionRepository extends EntityRepository {
-    public function listaDQL() {        
+    /*public function listaDQL() {        
         $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuCapacitacion c WHERE c.codigoCapacitacionPk <> 0";
         return $dql;
-    }                                
+    }*/
+    
+    public function listaDql($strTema = "", $boolEstado = "", $strDesde = "", $strHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuCapacitacion c WHERE c.codigoCapacitacionPk <> 0";       
+        if($strTema != "" ) {
+            $dql .= " AND c.tema = '" . $strTema . "'";
+        }
+        if($strDesde != "" || $strDesde != 0){
+            $dql .= " AND p.fechaDesde >='" . date_format($strDesde, ('Y-m-d')) . "'";
+        }
+        if($strHasta != "" || $strHasta != 0) {
+            $dql .= " AND p.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        $dql .= " ORDER BY p.codigoPagoPk DESC";
+        return $dql;
+    }
 }

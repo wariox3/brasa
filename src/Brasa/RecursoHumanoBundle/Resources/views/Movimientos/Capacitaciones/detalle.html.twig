@@ -12,6 +12,7 @@
             {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}            
             {{ form_widget(form.BtnImprimirNotas, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}            
+            {{ form_widget(form.BtnCerrar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}            
         </div>
         <br /> <br />
         <div class="panel panel-default">
@@ -23,8 +24,8 @@
                     <td class="td-in-well">{{ arCapacitacion.codigoCapacitacionPk }}</td>
                     <td class="titulo">FECHA:</td>
                     <td class="td-in-well">{{ arCapacitacion.fecha|date("Y/m/d") }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">ABIERTO</td>
+                    <td class="td-in-well">{% if arCapacitacion.estado == 0%}SI{% else %}NO{% endif%}</td>
                 </tr>                 
                 <tr>
                     <td colspan="8">COMENTARIOS: {{ arCapacitacion.comentarios }}</td>

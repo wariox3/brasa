@@ -84,8 +84,9 @@
                 <th>CODIGO</th>
                 <th>EXAMEN</th>
                 <th style="text-align: right">PRECIO</th>
+                <th>F. EXAMEN</th>
                 <th>VENCE</th>
-                <th>VALIDAR</th>
+                <th>VALIDAR VENCE</th>
                 <th>APROBADO</th>
                 <th>CERRADO</th>
                 <th>COMENTARIOS</th>
@@ -98,6 +99,7 @@
                 <td>{{ arExamenDetalle.examenTipoRel.nombre|default('ERROR')}}</td>
                 {% if arExamen.estadoAutorizado == 0 %}
                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtPrecio{{ arExamenDetalle.codigoExamenDetallePk }}" value="{{ arExamenDetalle.vrPrecio  }}" size="20" style="text-align: right; width:85px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtFechaExamen{{ arExamenDetalle.codigoExamenDetallePk }}" value="{{ arExamenDetalle.fechaExamen | date("Y/m/d")}}" size="15" style="width:85px" onclick="this.select()"/></td>
                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtVence{{ arExamenDetalle.codigoExamenDetallePk }}" value="{{ arExamenDetalle.fechaVence | date("Y/m/d")}}" size="15" style="width:85px" onclick="this.select()"/></td>
                     <td>
                         <select name="cboValidarVencimiento{{ arExamenDetalle.codigoExamenDetallePk }}">
@@ -108,6 +110,7 @@
                 {% else %}
                     <td class="td-in-well" align="right">{{ arExamenDetalle.vrPrecio | number_format(0, '.', ',') }}</td>
                     <td>{{ arExamenDetalle.fechaVence | date("Y/m/d")}}</td>
+                    <td>{{ arExamenDetalle.fechaExamen | date("Y/m/d")}}</td>
                     <td>{% if arExamenDetalle.validarVencimiento == 1 %} SI {% else %} NO {% endif %}</td>
                 {% endif %}
                 <td>{% if arExamenDetalle.estadoAprobado == 1 %} SI {% else %} NO {% endif %}</td>
@@ -135,7 +138,7 @@
                 <div class="btn-group">
                     {{ form_widget(form.BtnCerrarDetalle, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                     {{ form_widget(form.BtnAprobarDetalle, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                    {{ form_widget(form.BtnEliminarDetalle, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+                    {{ form_widget(form.BtnEliminarDetalle, { 'attr': {'class': 'btn btn-danger btn-sm', 'onclick': 'return confirm("Esta seguro de eliminar el registro?")'} }) }}
                 </div>
             </div>
         </div>
@@ -182,7 +185,7 @@
                             </div>
                         {% endif %}        
                         <div class="btn-group">
-                            {{ form_widget(form.BtnEliminarRestriccion, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+                            {{ form_widget(form.BtnEliminarRestriccion, { 'attr': {'class': 'btn btn-danger btn-sm', 'onclick': 'return confirm("Esta seguro de eliminar el registro?")'} }) }}
                         </div>
                     </div>
                     <!-- Fin Botones Menu Items -->

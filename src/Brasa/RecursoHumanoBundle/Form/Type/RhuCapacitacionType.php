@@ -13,9 +13,10 @@ class RhuCapacitacionType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuCapacitacionTipo',
                         'property' => 'nombre',
             ))                          
-            ->add('fecha', 'date')            
+            //->add('fecha', 'date')
+            ->add('fechaCapacitacion', 'date')
             ->add('tema', 'text', array('required' => false))
-            ->add('comentarios', 'textarea', array('required' => false))
+            ->add('comentarios', 'textarea', array('required' => false))    
             ->add('guardar', 'submit');        
     }
  

@@ -92,17 +92,28 @@ class BaseEmpleadoInformacionInternaTipoController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
-                    ->setCellValue('B1', 'INFORMACIÓN INTERNA TIPO');
+                    ->setCellValue('B1', 'INFORMACIÓN INTERNA TIPO')
+                    ->setCellValue('C1', 'ACCION');
         $i = 2;
         $arEmpleadoInformacionInternaTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoInformacionInternaTipo')->findAll();
 
         foreach ($arEmpleadoInformacionInternaTipos as $arEmpleadoInformacionInternaTipo) {
-
+            $accion = "DESBLOQUEADO";
+            if ($arEmpleadoInformacionInternaTipo->getAccion() == 1){
+                $accion = "BLOQUEADO";
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arEmpleadoInformacionInternaTipo->getCodigoEmpleadoInformacionInternaTipoPk())
-                    ->setCellValue('B' . $i, $arEmpleadoInformacionInternaTipo->getNombre());
+                    ->setCellValue('B' . $i, $arEmpleadoInformacionInternaTipo->getNombre())
+                    ->setCellValue('C' . $i, $accion);
             $i++;
         }
 

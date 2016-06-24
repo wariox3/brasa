@@ -18,10 +18,12 @@ class RhuEmpleadoFamiliaType extends AbstractType
             ->add('entidadSaludRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadSalud',
                 'property' => 'nombre',
-            ))
+                'required' => false,
+            ))    
             ->add('entidadCajaRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadCaja',
                 'property' => 'nombre',
+                'required' => false,
             ))   
             ->add('fechaNacimiento','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                
             ->add('ocupacion', 'text', array('required' => true))

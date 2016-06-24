@@ -50,7 +50,12 @@ class RhuExamenDetalle
     /**     
      * @ORM\Column(name="validar_vencimiento", type="boolean")
      */    
-    private $validarVencimiento = 0;     
+    private $validarVencimiento = 0;
+    
+    /**
+     * @ORM\Column(name="fecha_examen", type="date")
+     */    
+    private $fechaExamen;
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -318,5 +323,29 @@ class RhuExamenDetalle
     public function getEstadoCerrado()
     {
         return $this->estadoCerrado;
+    }
+
+    /**
+     * Set fechaExamen
+     *
+     * @param \DateTime $fechaExamen
+     *
+     * @return RhuExamenDetalle
+     */
+    public function setFechaExamen($fechaExamen)
+    {
+        $this->fechaExamen = $fechaExamen;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaExamen
+     *
+     * @return \DateTime
+     */
+    public function getFechaExamen()
+    {
+        return $this->fechaExamen;
     }
 }

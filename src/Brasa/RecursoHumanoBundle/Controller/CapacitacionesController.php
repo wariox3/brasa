@@ -119,7 +119,25 @@ class CapacitacionesController extends Controller
                     } 
                     return $this->redirect($this->generateUrl('brs_rhu_capacitacion_detalle', array('codigoCapacitacion' => $codigoCapacitacion)));           
                 }    
-            }             
+            }
+            if($form->get('BtnCerrar')->isClicked()) {
+                if ($arCapacitacion->getEstadoAutorizado() == 1){
+                    $arCapacitacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionDetalle')->findBy(array('codigoCapacitacionFk' => $codigoCapacitacion));
+                    if ($arCapacitacionDetalle != null){
+                        if ($arCapacitacion->getEstado() == 1){
+                            $arCapacitacion->setEstado(0);
+                        } else {
+                            $arCapacitacion->setEstado(1);
+                        }
+                        $em->persist($arCapacitacion);
+                        $em->flush();
+                        return $this->redirect($this->generateUrl('brs_rhu_capacitacion_detalle', array('codigoCapacitacion' => $codigoCapacitacion)));           
+                    } else {
+                        $objMensaje->Mensaje("error", "La capacitación no tiene detalles, no se puede cerrar", $this);
+                    }
+                        
+                }    
+            }
         }
         $arCapacitacionesDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle();
         $arCapacitacionesDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionDetalle')->findBy(array('codigoCapacitacionFk' => $codigoCapacitacion));
@@ -238,8 +256,14 @@ class CapacitacionesController extends Controller
     }    
     
     private function listar() {
+        $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacion')->listaDql();
+        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacion')->listaDql(
+            $session->get('filtroTema'),
+            $session->get('filtroEstado'),
+            $session->get('filtroDesde'),
+            $session->get('filtroHasta')    
+            );
     }
 
     private function formularioLista() {
@@ -247,6 +271,8 @@ class CapacitacionesController extends Controller
         $form = $this->createFormBuilder()
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('TxtTema', 'text', array('label'  => 'TEMA','data' => $session->get('filtroTema')))
+            ->add('estado', 'choice', array('choices'   => array('2' => 'TODOS', '0' => 'SI', '1' => 'NO'), 'data' => $session->get('filtroEstado')))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
@@ -260,23 +286,38 @@ class CapacitacionesController extends Controller
         $arrBotonImprimir = array('label' => 'Imprimir asistencia', 'disabled' => true);                        
         $arrBotonImprimirNotas = array('label' => 'Imprimir notas', 'disabled' => true);                        
         $arrBotonEliminarDetalle = array('label' => 'Eliminar', 'disabled' => false);                      
-        $arrBotonEliminarNota = array('label' => 'Eliminar', 'disabled' => false);                      
-        if($ar->getEstadoAutorizado() == 1) {            
-            $arrBotonAutorizar['disabled'] = true;
-            $arrBotonEliminarDetalle['disabled'] = true;            
-            $arrBotonEliminarNota['disabled'] = true;            
-            $arrBotonImprimir['disabled'] = false;
-            $arrBotonImprimirNotas['disabled'] = false;
+        $arrBotonEliminarNota = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonCerrar = array('label' => 'Cerrar/Abrir', 'disabled' => false);
+        if($ar->getEstadoAutorizado() == 1) {
+            if ($ar->getEstado() == 1){
+                $arrBotonAutorizar['disabled'] = true;
+                $arrBotonDesAutorizar['disabled'] = true;
+                $arrBotonEliminarDetalle['disabled'] = true;            
+                $arrBotonEliminarNota['disabled'] = true;            
+                $arrBotonImprimir['disabled'] = true;
+                $arrBotonImprimirNotas['disabled'] = true;
+            } else {
+                $arrBotonAutorizar['disabled'] = true;
+                $arrBotonEliminarDetalle['disabled'] = true;            
+                $arrBotonEliminarNota['disabled'] = true;            
+                $arrBotonImprimir['disabled'] = false;
+                $arrBotonImprimirNotas['disabled'] = false;
+            }
+            
+            
         } else {            
             $arrBotonDesAutorizar['disabled'] = true;
-        }                        
+            $arrBotonCerrar['disabled'] = true;
+        }
+        
         $form = $this->createFormBuilder()    
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)                                         
                     ->add('BtnImprimirNotas', 'submit', $arrBotonImprimirNotas)                                         
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)                                         
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                                                             
                     ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)                                         
-                    ->add('BtnEliminarNota', 'submit', $arrBotonEliminarNota)                                         
+                    ->add('BtnEliminarNota', 'submit', $arrBotonEliminarNota)
+                    ->add('BtnCerrar', 'submit', $arrBotonCerrar)
                     ->getForm();  
         return $form;
     }    
@@ -285,17 +326,11 @@ class CapacitacionesController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
-        if($controles['fechaDesde']) {
-            $this->fechaDesdeInicia = $controles['fechaDesde'];
-        }
-        if($controles['fechaHasta']) {
-            $this->fechaHastaInicia = $controles['fechaHasta'];
-        }
-        //$session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
-
-        /*$session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroContratoActivo', $form->get('estadoActivo')->getData());
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);*/
+        
+        $session->set('filtroTema', $form->get('TxtTema')->getData());
+        $session->set('filtroEstado', $form->get('estado')->getData());
+        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }
 
     private function generarExcel() {

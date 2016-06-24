@@ -85,12 +85,12 @@
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arPermisos.codigoPermisoPk }}">{{ arPermisos.codigoPermisoPk }} </td>
                 <td>{{ arPermisos.fechaPermiso |date("Y-m-d")  }}</td>
-                <td>{{ arPermisos.centroCostoRel.nombre  }}</td>
+                <td>{{ arPermisos.centroCostoRel.nombre | default('')  }}</td>
                 <td>{{ arPermisos.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arPermisos.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arPermisos.cargoRel.nombre  }}</td>
-                <td>{{ arPermisos.departamentoEmpresaRel.nombre  }}</td>
-                <td>{{ arPermisos.permisoTipoRel.nombre  }}</td>
+                <td>{{ arPermisos.departamentoEmpresaRel.nombre  | default('')}}</td>
+                <td>{{ arPermisos.permisoTipoRel.nombre  | default('')}}</td>
                 <td>{{ arPermisos.jefeAutoriza  }}</td>
                 <td>{{ arPermisos.horaSalida |date('H:i:s')  }}</td>
                 <td>{{ arPermisos.horaLlegada |date('H:i:s')  }}</td>

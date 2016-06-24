@@ -25,7 +25,12 @@ class RhuCapacitacion
     /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
      */    
-    private $fecha;             
+    private $fecha;
+    
+    /**
+     * @ORM\Column(name="fecha_capacitacion", type="date", nullable=true)
+     */    
+    private $fechaCapacitacion;
 
     /**
      * @ORM\Column(name="tema", type="string", length=150, nullable=true)
@@ -35,12 +40,17 @@ class RhuCapacitacion
     /**
      * @ORM\Column(name="comentarios", type="string", length=250, nullable=true)
      */    
-    private $comentarios;           
+    private $comentarios;
+    
+    /**     
+     * @ORM\Column(name="estado", type="boolean")
+     */    
+    private $estado = false;
 
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
      */    
-    private $estadoAutorizado = 0;    
+    private $estadoAutorizado = false;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuCapacitacionTipo", inversedBy="capacitacionesCapacitacionTipoRel")
@@ -57,6 +67,8 @@ class RhuCapacitacion
      * @ORM\OneToMany(targetEntity="RhuCapacitacionNota", mappedBy="capacitacionRel", cascade={"persist", "remove"})
      */
     protected $capacitacionesNotasCapacitacionRel;        
+    
+    
     
     /**
      * Constructor
@@ -126,6 +138,30 @@ class RhuCapacitacion
     }
 
     /**
+     * Set fechaCapacitacion
+     *
+     * @param \DateTime $fechaCapacitacion
+     *
+     * @return RhuCapacitacion
+     */
+    public function setFechaCapacitacion($fechaCapacitacion)
+    {
+        $this->fechaCapacitacion = $fechaCapacitacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaCapacitacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaCapacitacion()
+    {
+        return $this->fechaCapacitacion;
+    }
+
+    /**
      * Set tema
      *
      * @param string $tema
@@ -171,6 +207,30 @@ class RhuCapacitacion
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return RhuCapacitacion
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 
     /**

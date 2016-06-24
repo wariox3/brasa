@@ -141,7 +141,11 @@ class ConsultasPermisosController extends Controller
                     ->setKeywords("office 2007 openxml php")
                     ->setCategory("Test result file");
                 $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
-                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);    
+                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+                for($col = 'A'; $col !== 'AR'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+                }
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'CÓDIGO')
                             ->setCellValue('B1', 'FECHA')
@@ -166,11 +170,14 @@ class ConsultasPermisosController extends Controller
                 $arPermisos = $query->getResult();
 
                 foreach ($arPermisos as $arPermisos) {
-                
+                    $centroCosto = "";
+                    if ($arPermisos->getCodigoCentroCostoFk() != null){
+                        $centroCosto = $arPermisos->getCentroCostoRel()->getNombre();
+                    }
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arPermisos->getCodigoPermisoPk())
                             ->setCellValue('B' . $i, $arPermisos->getFechaPermiso()->format('Y/m/d'))
-                            ->setCellValue('C' . $i, $arPermisos->getCentroCostoRel()->getNombre())
+                            ->setCellValue('C' . $i, $centroCosto)
                             ->setCellValue('D' . $i, $arPermisos->getEmpleadoRel()->getNumeroIdentificacion())
                             ->setCellValue('E' . $i, $arPermisos->getEmpleadoRel()->getNombreCorto())
                             ->setCellValue('F' . $i, $arPermisos->getCargoRel()->getNombre())

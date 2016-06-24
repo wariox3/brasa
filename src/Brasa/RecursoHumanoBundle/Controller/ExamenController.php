@@ -227,6 +227,7 @@ class ExamenController extends Controller
                             $floPrecio = $arrControles['TxtPrecio'.$intCodigo];
                             $arExamenDetalle->setValidarVencimiento($arrControles['cboValidarVencimiento'.$intCodigo]);
                             $arExamenDetalle->setFechaVence(date_create($arrControles['TxtVence'.$intCodigo]));
+                            $arExamenDetalle->setFechaExamen(date_create($arrControles['TxtFechaExamen'.$intCodigo]));
                             $arExamenDetalle->setVrPrecio($floPrecio);
                             $em->persist($arExamenDetalle);
                         }
@@ -294,6 +295,7 @@ class ExamenController extends Controller
                             $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
                             $arExamenDetalle->setExamenTipoRel($arExamenTipo);
                             $arExamenDetalle->setExamenRel($arExamen);
+                            $arExamenDetalle->setFechaExamen(new \DateTime('now'));
                             $arExamenDetalle->setFechaVence(new \DateTime('now'));
                             $douPrecio = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->devuelvePrecio($arExamen->getCodigoEntidadExamenFk(), $codigoExamenTipo);
                             $arExamenDetalle->setVrPrecio($douPrecio);
