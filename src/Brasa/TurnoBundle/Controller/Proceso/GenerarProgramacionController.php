@@ -22,6 +22,7 @@ class GenerarProgramacionController extends Controller
         $this->lista();
         if ($form->isValid()) {            
             if($request->request->get('OpGenerar')) {
+                set_time_limit(0);
                 $codigoPedido = $request->request->get('OpGenerar');
                 $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
                 $arPedido =  $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);                 
@@ -40,7 +41,8 @@ class GenerarProgramacionController extends Controller
                     $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->nuevo($arPedidoDetalle->getCodigoPedidoDetallePk(), $arProgramacion);
                 }        
                 $em->getRepository('BrasaTurnoBundle:TurProgramacion')->liquidar($arProgramacion->getCodigoProgramacionPk());
-                $em->flush();               
+                $em->flush();    
+                set_time_limit(60);
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_programacion_lista')); 
             }    
             if ($form->get('BtnGenerar')->isClicked()) {  
@@ -91,7 +93,7 @@ class GenerarProgramacionController extends Controller
             }                        
         }
         
-        $arPedidos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 100);
+        $arPedidos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 300);
         return $this->render('BrasaTurnoBundle:Procesos/GenerarProgramacion:lista.html.twig', array(
             'arPedidos' => $arPedidos, 
             'form' => $form->createView()));

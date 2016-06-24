@@ -32,6 +32,7 @@ class GenerarPedidoController extends Controller
             $dateFechaDesde = $fecha;
             
             if($request->request->get('OpGenerar')) {
+                
                 $codigoServicio = $request->request->get('OpGenerar');
                 $arServicio = new \Brasa\TurnoBundle\Entity\TurServicio();
                 $arServicio = $em->getRepository('BrasaTurnoBundle:TurServicio')->find($codigoServicio);                
@@ -144,11 +145,11 @@ class GenerarPedidoController extends Controller
                     $em->getRepository('BrasaTurnoBundle:TurPedido')->autorizar($arPedidoNuevo->getCodigoPedidoPk());                      
                 } else {
                     $mensaje->Mensaje('error', "Ya esta generado este servicio para este periodo", $this);
-                }
-                
+                }                
                 //return $this->redirect($this->generateUrl('brs_tur_proceso_generar_pedido_lista'));                                                 
             }
             if ($form->get('BtnGenerar')->isClicked()) {                 
+                set_time_limit(0);
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados as $codigoServicio) {
@@ -233,7 +234,8 @@ class GenerarPedidoController extends Controller
                                         $em->persist($arPedidoDetalleRecursoNuevo);
                                     }                        
                                 }
-                            }                   
+                            }  
+                            
                             $arServicio->setFechaGeneracion($fecha);
                             $em->persist($arServicio);
                             $em->flush();
@@ -242,6 +244,7 @@ class GenerarPedidoController extends Controller
                         }
                     }
                 }
+                set_time_limit(60);
                 //return $this->redirect($this->generateUrl('brs_tur_proceso_generar_pedido_lista'));
             }                           
             if ($form->get('BtnExcel')->isClicked()) {
@@ -251,7 +254,7 @@ class GenerarPedidoController extends Controller
             }
         }
         
-        $arServicios = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 100);
+        $arServicios = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 500);
         return $this->render('BrasaTurnoBundle:Procesos/GenerarPedido:lista.html.twig', array(
             'arServicios' => $arServicios, 
             'form' => $form->createView()));
