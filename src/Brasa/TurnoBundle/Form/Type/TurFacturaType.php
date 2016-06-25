@@ -11,6 +11,13 @@ class TurFacturaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder  
+            ->add('facturaTipoRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurFacturaTipo',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('ft')
+                    ->orderBy('ft.codigoFacturaTipoPk', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                 
             ->add('proyectoRel', 'entity', array(
                 'class' => 'BrasaTurnoBundle:TurProyecto',
                 'query_builder' => function (EntityRepository $er)  {

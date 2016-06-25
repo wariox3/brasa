@@ -18,6 +18,11 @@ class TurFactura
     private $codigoFacturaPk;           
     
     /**
+     * @ORM\Column(name="codigo_factura_tipo_fk", type="integer", nullable=true)
+     */    
+    private $codigoFacturaTipoFk;      
+    
+    /**
      * @ORM\Column(name="numero", type="integer")
      */    
     private $numero = 0;    
@@ -111,6 +116,12 @@ class TurFactura
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;                  
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TurFacturaTipo", inversedBy="facturasFacturaTipoRel")
+     * @ORM\JoinColumn(name="codigo_factura_tipo_fk", referencedColumnName="codigo_factura_tipo_pk")
+     */
+    protected $facturaTipoRel;
     
     /**
      * @ORM\ManyToOne(targetEntity="TurCliente", inversedBy="facturasClienteRel")
@@ -157,6 +168,30 @@ class TurFactura
     public function getCodigoFacturaPk()
     {
         return $this->codigoFacturaPk;
+    }
+
+    /**
+     * Set codigoFacturaTipoFk
+     *
+     * @param integer $codigoFacturaTipoFk
+     *
+     * @return TurFactura
+     */
+    public function setCodigoFacturaTipoFk($codigoFacturaTipoFk)
+    {
+        $this->codigoFacturaTipoFk = $codigoFacturaTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFacturaTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoFacturaTipoFk()
+    {
+        return $this->codigoFacturaTipoFk;
     }
 
     /**
@@ -613,6 +648,30 @@ class TurFactura
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Set facturaTipoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaTipo $facturaTipoRel
+     *
+     * @return TurFactura
+     */
+    public function setFacturaTipoRel(\Brasa\TurnoBundle\Entity\TurFacturaTipo $facturaTipoRel = null)
+    {
+        $this->facturaTipoRel = $facturaTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get facturaTipoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurFacturaTipo
+     */
+    public function getFacturaTipoRel()
+    {
+        return $this->facturaTipoRel;
     }
 
     /**

@@ -169,7 +169,7 @@ class FacturaController extends Controller
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 } else {
-                    $objFactura = new \Brasa\TurnoBundle\Formatos\FormatoFactura();
+                    $objFactura = new \Brasa\TurnoBundle\Formatos\Factura2();
                     $objFactura->Generar($this, $codigoFactura);                    
                 }
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));                                                
@@ -508,7 +508,8 @@ class FacturaController extends Controller
             foreach ($arrControles['LblCodigo'] as $intCodigo) {
                 $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
                 $arFacturaDetalle = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->find($intCodigo);
-                $arFacturaDetalle->setVrPrecio($arrControles['TxtPrecio'.$intCodigo]);                             
+                $arFacturaDetalle->setVrPrecio($arrControles['TxtPrecio'.$intCodigo]); 
+                $arFacturaDetalle->setDetalle($arrControles['TxtDetalle'.$intCodigo]); 
                 $em->persist($arFacturaDetalle);
             }
             $em->flush();                

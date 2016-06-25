@@ -196,11 +196,11 @@ class TurFacturaRepository extends EntityRepository {
         
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         $strResultado = "";
-        $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();        
-        $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);        
+        $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();                
+        $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);
         if($arFactura->getEstadoAutorizado() == 1) {
             if($arFactura->getNumero() == 0) {            
-                $intNumero = $em->getRepository('BrasaTurnoBundle:TurConsecutivo')->consecutivo(2);
+                $intNumero = $em->getRepository('BrasaTurnoBundle:TurFacturaTipo')->consecutivo($arFactura->getCodigoFacturaTipoFk());
                 $arFactura->setNumero($intNumero);
                 $arFactura->setFecha(new \DateTime('now'));                
                 $dateFechaVence = $objFunciones->sumarDiasFecha($arFactura->getClienteRel()->getPlazoPago(), $arFactura->getFecha());

@@ -44,39 +44,39 @@
                         <td class="td-in-well"></td>
                     </tr>
                     <tr>
-                        <td class="titulo">CLIENTE:</td>
-                        <td class="td-in-well">{{ arFactura.clienteRel.nombreCorto }}</td>
+                        <td class="titulo">TIPO:</td>
+                        <td class="td-in-well">{{ arFactura.facturaTipoRel.nombre }}</td>
                         <td class="titulo" >SUBTOTAL:</td>
                         <td align="right">{{ arFactura.vrSubtotal | number_format(0, '.', ',')}}</td>
                     </tr>
 
                     <tr>
-                        <td class="titulo">FECHA:</td>
-                        <td class="td-in-well">{{ arFactura.fecha |date("Y/m/d") }}</td>
+                        <td class="titulo">CLIENTE:</td>
+                        <td class="td-in-well">{{ arFactura.clienteRel.nombreCorto }}</td>
                         <td class="titulo" >SUBTOTAL OTROS:</td>
                         <td align="right">{{ arFactura.vrSubtotalOtros | number_format(0, '.', ',')}}</td>
                     </tr>
                     <tr>
-                        <td class="titulo">VENCE:</td>
-                        <td class="td-in-well">{{ arFactura.fechaVence |date("Y/m/d") }}</td>
+                        <td class="titulo">FECHA:</td>
+                        <td class="td-in-well">{{ arFactura.fecha |date("Y/m/d") }}</td>
                         <td class="titulo" >BASE AIU:</td>
                         <td align="right">{{ arFactura.vrBaseAIU | number_format(0, '.', ',')}}</td>
                     </tr>
                     <tr>
-                        <td class="titulo">SOPORTE:</td>
-                        <td class="td-in-well">{{ arFactura.soporte }}</td>
+                        <td class="titulo">VENCE:</td>
+                        <td class="td-in-well">{{ arFactura.fechaVence |date("Y/m/d") }}</td>
                         <td class="titulo" >IVA:</td>
                         <td align="right">{{ arFactura.vrIva | number_format(0, '.', ',')}}</td>
                     </tr>
                     <tr>
-                        <td class="titulo">PROYECTO:</td>
-                        <td class="td-in-well">{{ arFactura.proyectoRel.nombre | default('') }}</td>
+                        <td class="titulo">SOPORTE:</td>
+                        <td class="td-in-well">{{ arFactura.soporte }}</td>
                         <td class="titulo" >RETENCION IVA:</td>
                         <td align="right">{{ arFactura.vrRetencionIva | number_format(0, '.', ',')}}</td>
                     </tr>
                     <tr>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">PROYECTO:</td>
+                        <td class="td-in-well">{{ arFactura.proyectoRel.nombre | default('') }}</td>
                         <td class="titulo" >RETENCION FUENTE:</td>
                         <td align="right">{{ arFactura.vrRetencionFuente | number_format(0, '.', ',')}}</td>
                     </tr>
@@ -104,30 +104,30 @@
                     <table class="table table-striped table-bordered table-condensed">
                         <tr>
                             <th>COD</th>
-                            <th>PROYECTO</th>
                             <th>SERVICIO</th>
                             <th>PUESTO</th>
                             <th>MODALIDAD</th>
                             <th>CANT</th>
                             <th>PRECIO</th>
-                            <th>PED</th>
+                            <th>DETALLE</th>                            
                             <th></th>
                         </tr>
                         {% for arFacturaDetalle in arFacturaDetalle %}
                             <tr>
                                 <td>{{ arFacturaDetalle.codigoFacturaDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arFacturaDetalle.codigoFacturaDetallePk }}"></td>
-                                <td>{{ arFacturaDetalle.pedidoDetalleRel.proyectoRel.nombre | default('') }}</td>
                                 <td>{{ arFacturaDetalle.conceptoServicioRel.nombre | default('') }}</td>                                                                
                                 <td>{{ arFacturaDetalle.pedidoDetalleRel.puestoRel.nombre | default('') }}</td>
                                 <td>{{ arFacturaDetalle.pedidoDetalleRel.modalidadServicioRel.nombre | default('') }}</td>
                                 <td style="text-align: right">{{ arFacturaDetalle.cantidad | number_format(0, '.', ',') }}</td>
                                 {% if arFactura.estadoAutorizado == 0 %}
                                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtPrecio{{ arFacturaDetalle.codigoFacturaDetallePk }}" value="{{ arFacturaDetalle.vrPrecio  }}" size="20" style="width:120px; text-align: right" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                                    <td style="text-align: center"><input class="input-grid" type="text" name="TxtDetalle{{ arFacturaDetalle.codigoFacturaDetallePk }}" value="{{ arFacturaDetalle.detalle  }}" size="20" style="width:240px;" onclick="this.select()"/></td>
                                     {% else %}
                                     <td style="text-align: right">{{ arFacturaDetalle.vrPrecio | number_format(0, '.', ',') }}</td>
+                                    <td>{{ arFacturaDetalle.detalle }}</td>
                                 {% endif %}
 
-                                <td>{{ arFacturaDetalle.codigoPedidoDetalleFk }}</td>
+                                
                                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturaDetalle.codigoFacturaDetallePk }}" /></td>
                             </tr>
                         {% endfor %}

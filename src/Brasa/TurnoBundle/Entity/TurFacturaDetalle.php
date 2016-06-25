@@ -40,7 +40,12 @@ class TurFacturaDetalle
     /**
      * @ORM\Column(name="vr_precio", type="float")
      */
-    private $vrPrecio = 0;     
+    private $vrPrecio = 0;   
+    
+    /**
+     * @ORM\Column(name="detalle", type="string", length=120, nullable=true)
+     */
+    private $detalle;    
     
     /**
      * @ORM\ManyToOne(targetEntity="TurFactura", inversedBy="facturasDetallesFacturaRel")
@@ -261,5 +266,29 @@ class TurFacturaDetalle
     public function getPedidoDetalleRel()
     {
         return $this->pedidoDetalleRel;
+    }
+
+    /**
+     * Set detalle
+     *
+     * @param string $detalle
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setDetalle($detalle)
+    {
+        $this->detalle = $detalle;
+
+        return $this;
+    }
+
+    /**
+     * Get detalle
+     *
+     * @return string
+     */
+    public function getDetalle()
+    {
+        return $this->detalle;
     }
 }
