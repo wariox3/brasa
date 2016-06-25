@@ -15,9 +15,15 @@
             <div class="panel-heading">Filtros de busqueda</div>
             <div class="panel-body">
                 <div class="form-group form-group-sm">
+                    <label for="form_capacitacionTipoRel" class="col-sm-2 control-label">Tipo:</label>
+                    <div class="col-sm-10">
+                        {{ form_widget(form.capacitacionTipoRel, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
                     <label for="form_TxtTema" class="col-sm-2 control-label">Tema:</label>
                     <div class="col-sm-10">
-                        {{ form_widget(form.TxtTema, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.TxtTema, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
                     </div>
                 </div>
                 <div class="form-group form-group-sm">
@@ -51,17 +57,27 @@
                         <th>FECHA</th>
                         <th>TIPO</th>
                         <th>TEMA</th>
+                        <th>PERSONAS CAPACITAR</th>
+                        <th>PERSONAS ASISTIERON</th>
                         <th>ABIERTO</th>
+                        <th></th>
                         <th></th>
                         <th></th>
                     </tr>
                     {% for arCapacitaciones in arCapacitaciones %}
                         <tr>
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arCapacitaciones.codigoCapacitacionPk }}">{{ arCapacitaciones.codigoCapacitacionPk }} </td>
-                            <td>{{ arCapacitaciones.fecha |date("Y/m/d")  }}</td>
+                            <td>{{ arCapacitaciones.fechaCapacitacion |date("Y/m/d")  }}</td>
                             <td>{{ arCapacitaciones.capacitacionTipoRel.nombre  }}</td>
                             <td>{{ arCapacitaciones.tema  }}</td>
+                            <td align="right">{{ arCapacitaciones.numeroPersonasCapacitar  }}</td>
+                            <td align="right">{{ arCapacitaciones.numeroPersonasAsistieron  }}</td>
                             <td>{% if arCapacitaciones.estado == 0 %}SI{% else %}NO{% endif %}</td>
+                            {% if arCapacitaciones.estado == 0 %}
+                                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_capacitacion_nuevo', { 'codigoCapacitacion':  arCapacitaciones.codigoCapacitacionPk }) }}', 'EditarCapacitacion', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                            {% else %}
+                                <td style="text-align: center"><a href="#" onclick="alert('Esta cerrada la capacitación, no se puede editar');"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                            {% endif %}
                             <td style="text-align: center"><a href="{{ path('brs_rhu_capacitacion_detalle', { 'codigoCapacitacion': arCapacitaciones.codigoCapacitacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>                
                             <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCapacitaciones.codigoCapacitacionPk }}" /></td>
                         </tr>
@@ -83,7 +99,7 @@
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
             </div>
             <div class="btn-group">                
-                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                
+                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm', 'onclick': 'return confirm("Esta seguro de eliminar el registro?")'} }) }}                
             </div>            
         </div>          
         <!-- Fin Botones Menu Items -->

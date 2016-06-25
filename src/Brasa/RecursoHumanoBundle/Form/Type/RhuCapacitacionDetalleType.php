@@ -10,7 +10,7 @@ class RhuCapacitacionDetalleType extends AbstractType
     {
         $builder                            
             ->add('numeroIdentificacion', 'text', array('required' => true))
-            ->add('nombreCorto', 'text', array('required' => false))                
+            ->add('nombreCorto', 'text', array('required' => false))
             ->add('guardar', 'submit');        
     }
  

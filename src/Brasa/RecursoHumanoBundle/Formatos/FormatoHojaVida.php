@@ -23,6 +23,9 @@ class FormatoHojaVida extends \FPDF_FPDF {
     public function Header() {
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleado = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find(self::$codigoEmpleado);
+        $arContenidoFormatoA = new \Brasa\GeneralBundle\Entity\GenContenidoFormatoSecundario();
+        $arContenidoFormatoA = self::$em->getRepository('BrasaGeneralBundle:GenContenidoFormatoSecundario')->find(18);
+        
         $this->SetFillColor(272, 272, 272);        
         $this->SetFont('Arial','b',8);
         $this->SetXY(10, 5);
@@ -35,11 +38,11 @@ class FormatoHojaVida extends \FPDF_FPDF {
         $this->SetFont('Arial','b',12);
         $this->Cell(100, 21, "HOJA DE VIDA EMPRESARIAL" , 1, 0, 'C', 1);
         $this->SetFont('Arial','b',8);
-        $this->Cell(45, 7, "" , 1, 0, 'C', 1);
+        $this->Cell(45, 7, $arContenidoFormatoA->getCodigoFormatoIso() , 1, 0, 'C', 1);
         $this->SetXY(150, 12);
-        $this->Cell(45, 7, "" , 1, 0, 'C', 1);
+        $this->Cell(45, 7, $arContenidoFormatoA->getVersion() , 1, 0, 'C', 1);
         $this->SetXY(150, 19);
-        $this->Cell(45, 7, "" , 1, 0, 'C', 1);
+        $this->Cell(45, 7, $arContenidoFormatoA->getFechaVersion()->format('Y-m-d') , 1, 0, 'C', 1);
         $this->SetXY(195, 5);
         $this->Cell(9, 7, "" , 1, 0, 'C', 1);
         $this->SetXY(195, 12);

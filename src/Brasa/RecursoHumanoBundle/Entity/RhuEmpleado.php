@@ -615,8 +615,13 @@ class RhuEmpleado
      */
     protected $cartasEmpleadoRel;
        
-    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuCapacitacionDetalle", mappedBy="empleadoRel")
+     */
+    protected $capacitacionesDetallesEmpleadoRel;
    
+    
+    
     /**
      * Constructor
      */
@@ -653,6 +658,7 @@ class RhuEmpleado
         $this->soportesPagosHorariosDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->permisosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cartasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->capacitacionesDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -3685,5 +3691,39 @@ class RhuEmpleado
     public function getCartasEmpleadoRel()
     {
         return $this->cartasEmpleadoRel;
+    }
+
+    /**
+     * Add capacitacionesDetallesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle $capacitacionesDetallesEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addCapacitacionesDetallesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle $capacitacionesDetallesEmpleadoRel)
+    {
+        $this->capacitacionesDetallesEmpleadoRel[] = $capacitacionesDetallesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove capacitacionesDetallesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle $capacitacionesDetallesEmpleadoRel
+     */
+    public function removeCapacitacionesDetallesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle $capacitacionesDetallesEmpleadoRel)
+    {
+        $this->capacitacionesDetallesEmpleadoRel->removeElement($capacitacionesDetallesEmpleadoRel);
+    }
+
+    /**
+     * Get capacitacionesDetallesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCapacitacionesDetallesEmpleadoRel()
+    {
+        return $this->capacitacionesDetallesEmpleadoRel;
     }
 }

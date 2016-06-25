@@ -11,12 +11,21 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuCapacitacionDetalleRepository extends EntityRepository {
     
-    public function listaDql($strIdentificacion = "", $strFecha = "") {        
+    public function listaDql($strCargo = "", $strCentroCosto = "", $strIdentificacion = "", $strNombre = "") {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT rd, r FROM BrasaRecursoHumanoBundle:RhuRequisitoDetalle rd JOIN rd.requisitoRel r WHERE rd.estadoPendiente = 1";
-   
+        $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuEmpleado e WHERE e.estadoContratoActivo = 1";
+  
+        if($strCargo != "") {
+            $dql .= " AND e.codigoCargoFk = " . $strCargo;
+        }
+        if($strCentroCosto != "") {
+            $dql .= " AND e.codigoCentroCostoFk = " . $strCentroCosto;
+        }
         if($strIdentificacion != "" ) {
-            $dql .= " AND r.numeroIdentificacion = '" . $strIdentificacion . "'";
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if($strNombre != "" ) {
+            $dql .= " AND e.nombreCorto LIKE '%" . $strNombre . "%'";
         }
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
         return $dql;

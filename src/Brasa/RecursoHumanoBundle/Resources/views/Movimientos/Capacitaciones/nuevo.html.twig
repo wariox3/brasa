@@ -8,7 +8,7 @@
         <div class="panel-heading">Información general</div>
         <div class="panel-body">      
             <div class="form-group form-group-sm">
-                <label for="form_capacitacionTipo" class="col-sm-3 control-label">Tipo:</label>
+                <label for="form_capacitacionTipoRel" class="col-sm-3 control-label">Tipo:</label>
                 <div class="col-sm-9">
                         {{ form_widget(form.capacitacionTipoRel, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
                 </div>
@@ -24,7 +24,13 @@
                 <div class="col-sm-9">
                     {{ form_widget(form.tema, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
                 </div>
-            </div>                
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_numeroPersonasCapacitar" class="col-sm-3 control-label">Personas a capacitar:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.numeroPersonasCapacitar, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>
             <div class="form-group">
                 <label for="form_comentarios" class="col-sm-3 control-label">Comentarios:</label>
                 <div class="col-sm-9">

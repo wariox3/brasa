@@ -25,6 +25,8 @@ class FormatoCapacitacionNotas extends \FPDF_FPDF {
         $arCapacitacion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacion')->find(self::$codigoCapacitacion);
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $arContenidoFormatoA = new \Brasa\GeneralBundle\Entity\GenContenidoFormatoSecundario();
+        $arContenidoFormatoA = self::$em->getRepository('BrasaGeneralBundle:GenContenidoFormatoSecundario')->find(17);
         $this->SetFillColor(200, 200, 200);
         $this->SetFillColor(272, 272, 272);
         $this->SetFont('Arial','B',10);
@@ -37,18 +39,18 @@ class FormatoCapacitacionNotas extends \FPDF_FPDF {
         $this->Cell(90, 10, utf8_decode(""), 1, 0, 'C', 1); //cuardo mitad arriba
         $this->SetXY(60, 20);
         $this->SetFillColor(236, 236, 236);
-        $this->Cell(90, 20, utf8_decode("TEMAS DE LA CAPACITACION"), 1, 0, 'C', 1); //cuardo mitad medio
+        $this->Cell(90, 20, utf8_decode("NOTAS DE CAPACITACION"), 1, 0, 'C', 1); //cuardo mitad medio
         $this->SetFillColor(272, 272, 272);
         $this->SetXY(60, 40);
-        $this->Cell(90, 10, utf8_decode(""), 1, 0, 'C', 1); //cuardo mitad abajo
+        $this->Cell(90, 10, utf8_decode(" "), 1, 0, 'C', 1); //cuardo mitad abajo
         $this->SetXY(150, 10);
         $this->Cell(53, 10, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 1, 0, 'C', 1); //cuadro derecho arriba
         $this->SetXY(150, 20);
-        $this->Cell(53, 20, utf8_decode("2"), 1, 0, 'C', 1); //cuadro derecho mitad 1
+        $this->Cell(53, 20, utf8_decode($arContenidoFormatoA->getCodigoFormatoIso()), 1, 0, 'C', 1); //cuadro derecho mitad 1
         $this->SetXY(150, 40);
-        $this->Cell(53, 5, utf8_decode("Versión 01"), 1, 0, 'C', 1); //cuadro derecho abajo 1
+        $this->Cell(53, 5, utf8_decode($arContenidoFormatoA->getVersion()), 1, 0, 'C', 1); //cuadro derecho abajo 1
         $this->SetXY(150, 45);
-        $this->Cell(53, 5, "Fecha: 01/09/2015", 1, 0, 'C', 1); //cuadro derecho abajo 2       
+        $this->Cell(53, 5, $arContenidoFormatoA->getFechaVersion()->format('Y-m-d'), 1, 0, 'C', 1); //cuadro derecho abajo 2       
         $this->EncabezadoDetalles();
 
     }

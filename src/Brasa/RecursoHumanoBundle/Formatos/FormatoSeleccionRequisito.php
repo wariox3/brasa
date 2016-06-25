@@ -24,6 +24,8 @@ class FormatoSeleccionRequisito extends \FPDF_FPDF {
         $arSeleccionRequisito = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisito')->find(self::$codigoSeleccionRequisito);
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $arContenidoFormatoA = new \Brasa\GeneralBundle\Entity\GenContenidoFormatoSecundario();
+        $arContenidoFormatoA = self::$em->getRepository('BrasaGeneralBundle:GenContenidoFormatoSecundario')->find(1);
         $this->SetFillColor(200, 200, 200);        
         $this->SetFont('Arial','B',10);
         //Logo
@@ -47,9 +49,11 @@ class FormatoSeleccionRequisito extends \FPDF_FPDF {
         //FORMATO ISO
         $this->SetXY(168, 18);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(35, 8, "FECHA: 01/09/2015", 1, 0, 'L', 1);
-        $this->SetXY(168, 26);
-        $this->Cell(35, 8, utf8_decode("VERSIÓN: 01"), 1, 0, 'L', 1);
+        $this->Cell(35, 6, "CODIGO: ".$arContenidoFormatoA->getCodigoFormatoIso(), 1, 0, 'L', 1);
+        $this->SetXY(168, 24);
+        $this->Cell(35, 6, utf8_decode("VERSIÓN: ".$arContenidoFormatoA->getVersion()), 1, 0, 'L', 1);
+        $this->SetXY(168, 30);
+        $this->Cell(35, 6, utf8_decode("FECHA: ".$arContenidoFormatoA->getFechaVersion()->format('Y-m-d')), 1, 0, 'L', 1);
         //ENCABEZADO
         $this->SetXY(10, 40);
         $this->SetFont('Arial','B',7);

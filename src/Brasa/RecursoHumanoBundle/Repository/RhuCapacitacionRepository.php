@@ -15,19 +15,28 @@ class RhuCapacitacionRepository extends EntityRepository {
         return $dql;
     }*/
     
-    public function listaDql($strTema = "", $boolEstado = "", $strDesde = "", $strHasta = "") {        
+    public function listaDql($strTipo = "", $strTema = "", $boolEstado = "", $strDesde = "", $strHasta = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuCapacitacion c WHERE c.codigoCapacitacionPk <> 0";       
+        if($strTipo != "") {
+            $dql .= " AND c.codigoCapacitacionTipoFk = " . $strTipo;
+        }
         if($strTema != "" ) {
-            $dql .= " AND c.tema = '" . $strTema . "'";
+            $dql .= " AND c.tema LIKE '%" . $strTema . "%'";
+        }
+        if($boolEstado == 1 ) {
+            $dql .= " AND c.estado = 1";
+        }
+        if($boolEstado == "0") {
+            $dql .= " AND c.estado = 0";
         }
         if($strDesde != "" || $strDesde != 0){
-            $dql .= " AND p.fechaDesde >='" . date_format($strDesde, ('Y-m-d')) . "'";
+            $dql .= " AND c.fechaCapacitacion >='" . date_format($strDesde, ('Y-m-d')) . "'";
         }
         if($strHasta != "" || $strHasta != 0) {
-            $dql .= " AND p.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND c.fechaCapacitacion <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }
-        $dql .= " ORDER BY p.codigoPagoPk DESC";
+        $dql .= " ORDER BY c.fechaCapacitacion DESC";
         return $dql;
     }
 }

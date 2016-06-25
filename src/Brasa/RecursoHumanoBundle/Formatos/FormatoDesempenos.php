@@ -28,7 +28,10 @@ class FormatoDesempenos extends \FPDF_FPDF {
     }
 
     public function EncabezadoDetalles() {
-
+        
+        $arContenidoFormatoA = new \Brasa\GeneralBundle\Entity\GenContenidoFormatoSecundario();
+        $arContenidoFormatoA = self::$em->getRepository('BrasaGeneralBundle:GenContenidoFormatoSecundario')->find(14);
+        $this->SetFillColor(200, 200, 200);
         $this->SetFillColor(272, 272, 272);
         $this->SetFont('Arial','B',10);
         $this->SetXY(10, 10);
@@ -39,7 +42,7 @@ class FormatoDesempenos extends \FPDF_FPDF {
         $this->SetXY(60, 10);
         $this->Cell(90, 10, utf8_decode(""), 1, 0, 'C', 1); //cuardo mitad arriba
         $this->SetXY(60, 20);
-        $this->SetFillColor(200, 200, 200);
+        $this->SetFillColor(236, 236, 236);
         $this->Cell(90, 20, utf8_decode("GESTIÓN DEL DESEMPEÑO"), 1, 0, 'C', 1); //cuardo mitad medio
         $this->SetFillColor(272, 272, 272);
         $this->SetXY(60, 40);
@@ -47,11 +50,11 @@ class FormatoDesempenos extends \FPDF_FPDF {
         $this->SetXY(150, 10);
         $this->Cell(53, 10, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 1, 0, 'C', 1); //cuadro derecho arriba
         $this->SetXY(150, 20);
-        $this->Cell(53, 20, utf8_decode(""), 1, 0, 'C', 1); //cuadro derecho mitad 1
+        $this->Cell(53, 20, utf8_decode($arContenidoFormatoA->getCodigoFormatoIso()), 1, 0, 'C', 1); //cuadro derecho mitad 1
         $this->SetXY(150, 40);
-        $this->Cell(53, 5, utf8_decode("Versión 01"), 1, 0, 'C', 1); //cuadro derecho abajo 1
+        $this->Cell(53, 5, utf8_decode($arContenidoFormatoA->getVersion()), 1, 0, 'C', 1); //cuadro derecho abajo 1
         $this->SetXY(150, 45);
-        $this->Cell(53, 5, "Fecha: 01/09/2015", 1, 0, 'C', 1); //cuadro derecho abajo 2
+        $this->Cell(53, 5, $arContenidoFormatoA->getFechaVersion()->format('Y-m-d'), 1, 0, 'C', 1); //cuadro derecho abajo 2
 
         //Restauracion de colores y fuentes
         $this->SetFillColor(224, 235, 255);

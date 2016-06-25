@@ -50,7 +50,17 @@ class RhuCapacitacion
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
      */    
-    private $estadoAutorizado = false;    
+    private $estadoAutorizado = false;
+
+    /**
+     * @ORM\Column(name="numero_personas_capacitar", type="integer", nullable=true)
+     */    
+    private $numeroPersonasCapacitar;
+    
+    /**
+     * @ORM\Column(name="numero_personas_asistieron", type="integer", nullable=true)
+     */    
+    private $numeroPersonasAsistieron;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuCapacitacionTipo", inversedBy="capacitacionesCapacitacionTipoRel")
@@ -67,6 +77,7 @@ class RhuCapacitacion
      * @ORM\OneToMany(targetEntity="RhuCapacitacionNota", mappedBy="capacitacionRel", cascade={"persist", "remove"})
      */
     protected $capacitacionesNotasCapacitacionRel;        
+    
     
     
     
@@ -255,6 +266,54 @@ class RhuCapacitacion
     public function getEstadoAutorizado()
     {
         return $this->estadoAutorizado;
+    }
+
+    /**
+     * Set numeroPersonasCapacitar
+     *
+     * @param integer $numeroPersonasCapacitar
+     *
+     * @return RhuCapacitacion
+     */
+    public function setNumeroPersonasCapacitar($numeroPersonasCapacitar)
+    {
+        $this->numeroPersonasCapacitar = $numeroPersonasCapacitar;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroPersonasCapacitar
+     *
+     * @return integer
+     */
+    public function getNumeroPersonasCapacitar()
+    {
+        return $this->numeroPersonasCapacitar;
+    }
+
+    /**
+     * Set numeroPersonasAsistieron
+     *
+     * @param integer $numeroPersonasAsistieron
+     *
+     * @return RhuCapacitacion
+     */
+    public function setNumeroPersonasAsistieron($numeroPersonasAsistieron)
+    {
+        $this->numeroPersonasAsistieron = $numeroPersonasAsistieron;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroPersonasAsistieron
+     *
+     * @return integer
+     */
+    public function getNumeroPersonasAsistieron()
+    {
+        return $this->numeroPersonasAsistieron;
     }
 
     /**

@@ -110,6 +110,7 @@ class FormatoProcesoDisciplinario extends \FPDF_FPDF {
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arProcesoDisciplinario->getEmpleadoRel()->getCodigoContratoActivoFk());
         $sustitucion9 = $arContrato->getContratoTipoRel()->getNombre();
+        $sustitucion10 = $arProcesoDisciplinario->getDisciplinarioTipoRel()->getNombre();
         //$cadena = $arContenidoFormato->getContenido();
         $patron1 = '/#1/';
         $patron2 = '/#2/';
@@ -120,6 +121,7 @@ class FormatoProcesoDisciplinario extends \FPDF_FPDF {
         $patron7 = '/#7/';
         $patron8 = '/#8/';
         $patron9 = '/#9/';
+        $patron10 = '/#a/';
         $cadenaCambiada = preg_replace($patron1, $sustitucion1, $cadena);
         $cadenaCambiada = preg_replace($patron2, $sustitucion2, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron3, $sustitucion3, $cadenaCambiada);
@@ -129,6 +131,7 @@ class FormatoProcesoDisciplinario extends \FPDF_FPDF {
         $cadenaCambiada = preg_replace($patron7, $sustitucion7, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron8, $sustitucion8, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron9, $sustitucion9, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron10, $sustitucion10, $cadenaCambiada);
         $pdf->MultiCell(0,5, $cadenaCambiada);
     }
 

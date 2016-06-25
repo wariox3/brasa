@@ -30,13 +30,30 @@ class RhuCapacitacionDetalle
     /**
      * @ORM\Column(name="nombre_corto", type="string", length=80, nullable=true)
      */    
-    private $nombreCorto;            
+    private $nombreCorto;
+    
+    /**     
+     * @ORM\Column(name="asistencia", type="boolean")
+     */    
+    private $asistencia = false;
+    
+    /**
+     * @ORM\Column(name="codigo_empleado_fk", type="integer")
+     */    
+    private $codigoEmpleadoFk;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuCapacitacion", inversedBy="capacitacionesDetallesCapacitacionRel")
      * @ORM\JoinColumn(name="codigo_capacitacion_fk", referencedColumnName="codigo_capacitacion_pk")
      */
     protected $capacitacionRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="capacitacionesDetallesEmpleadoRel")
+     * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
+     */
+    protected $empleadoRel;
+
 
 
 
@@ -123,6 +140,54 @@ class RhuCapacitacionDetalle
     }
 
     /**
+     * Set asistencia
+     *
+     * @param boolean $asistencia
+     *
+     * @return RhuCapacitacionDetalle
+     */
+    public function setAsistencia($asistencia)
+    {
+        $this->asistencia = $asistencia;
+
+        return $this;
+    }
+
+    /**
+     * Get asistencia
+     *
+     * @return boolean
+     */
+    public function getAsistencia()
+    {
+        return $this->asistencia;
+    }
+
+    /**
+     * Set codigoEmpleadoFk
+     *
+     * @param integer $codigoEmpleadoFk
+     *
+     * @return RhuCapacitacionDetalle
+     */
+    public function setCodigoEmpleadoFk($codigoEmpleadoFk)
+    {
+        $this->codigoEmpleadoFk = $codigoEmpleadoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEmpleadoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEmpleadoFk()
+    {
+        return $this->codigoEmpleadoFk;
+    }
+
+    /**
      * Set capacitacionRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacion $capacitacionRel
@@ -144,5 +209,29 @@ class RhuCapacitacionDetalle
     public function getCapacitacionRel()
     {
         return $this->capacitacionRel;
+    }
+
+    /**
+     * Set empleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
+     *
+     * @return RhuCapacitacionDetalle
+     */
+    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
+    {
+        $this->empleadoRel = $empleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
+     */
+    public function getEmpleadoRel()
+    {
+        return $this->empleadoRel;
     }
 }

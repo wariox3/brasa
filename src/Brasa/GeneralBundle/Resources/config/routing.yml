@@ -24,7 +24,15 @@ brs_gen_base_contenido_formato_lista:
     
 brs_gen_base_contenido_formato_nuevo:
    path:     /general/base/contenido/formato/nuevo/{codigoContenidoFormato}
-   defaults: { _controller: BrasaGeneralBundle:BaseContenidoFormato:nuevo }    
+   defaults: { _controller: BrasaGeneralBundle:BaseContenidoFormato:nuevo }
+   
+brs_gen_base_contenido_formato_secundario_lista:
+   path:     /general/base/contenido/formato/secundario/lista/
+   defaults: { _controller: BrasaGeneralBundle:BaseContenidoFormatoSecundario:lista }    
+    
+brs_gen_base_contenido_formato_secundario_nuevo:
+   path:     /general/base/contenido/formato/secundario/nuevo/{codigoContenidoFormato}
+   defaults: { _controller: BrasaGeneralBundle:BaseContenidoFormatoSecundario:nuevo }   
 
 brs_gen_base_cuentas:
     path:     /general/base/cuentas

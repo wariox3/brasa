@@ -101,7 +101,7 @@
                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtPrecio{{ arExamenDetalle.codigoExamenDetallePk }}" value="{{ arExamenDetalle.vrPrecio  }}" size="20" style="text-align: right; width:85px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtFechaExamen{{ arExamenDetalle.codigoExamenDetallePk }}" value="{{ arExamenDetalle.fechaExamen | date("Y/m/d")}}" size="15" style="width:85px" onclick="this.select()"/></td>
                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtVence{{ arExamenDetalle.codigoExamenDetallePk }}" value="{{ arExamenDetalle.fechaVence | date("Y/m/d")}}" size="15" style="width:85px" onclick="this.select()"/></td>
-                    <td>
+                    <td align="center">
                         <select name="cboValidarVencimiento{{ arExamenDetalle.codigoExamenDetallePk }}">
                             <option value="0" {% if arExamenDetalle.validarVencimiento == 0 %} selected="true" {% endif %}>NO</option>
                             <option value="1" {% if arExamenDetalle.validarVencimiento == 1 %} selected="true" {% endif %}>SI</option>

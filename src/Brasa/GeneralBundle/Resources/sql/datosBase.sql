@@ -1221,6 +1221,7 @@ INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('16','EMPLEA
 INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('17','CLIENTES (AFI)');
 INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('18','ASPIRANTES');
 INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('19','REQUISICION');
+INSERT INTO `ad_documento` (`codigo_documento_pk`, `nombre`) VALUES('20','CAPACITACIONES');
 
 /** Contabilidad **/
 
