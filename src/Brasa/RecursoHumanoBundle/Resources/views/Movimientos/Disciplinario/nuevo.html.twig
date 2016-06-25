@@ -35,24 +35,66 @@
                 </div>
             </div>
             <div class="form-group form-group-sm">
-                <label for="form_causal" class="col-sm-3 control-label">Causal:</label>
+                <label for="form_causal" class="col-sm-3 control-label">Causal o motivo:</label>
                 <div class="col-sm-9">
-                        {{ form_widget(form.asunto, { 'attr': {'class': 'form-control', 'placeholder': 'Aplica para los procesos de suspensión, terminación y llamado de atención'} }) }}
+                        {{ form_widget(form.asunto, { 'attr': {'class': 'form-control', 'placeholder': ''} }) }}
                 </div>
             </div>
-                <div class="form-group">
+            <div class="form-group form-group-sm">
                 <label for="form_descargos" class="col-sm-3 control-label">Descargos:</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.descargos, { 'attr': {'class': 'form-control', 'placeholder': 'Aplica solo para el proceso de Descargos'} }) }}
+                            {{ form_widget(form.descargos, { 'attr': {'class': 'form-control', 'placeholder': 'Aplica solo para el proceso de Descargos y es la descipcion completa del descargo'} }) }}
                 </div>
             </div>
-                <div class="form-group">
-                <label for="form_comentarios" class="col-sm-3 control-label">Fecha Suspensión:</label>
+            <div class="form-group form-group-sm">
+                <label for="form_fechaAplicaProceso" class="col-sm-3 control-label">Fecha proceso:</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.suspension, { 'attr': {'class': 'form-control', 'placeholder': 'Aplica para la suspensión y terminacion de contrato ejemplo: sabado 3 de marzo de 2015'} }) }}
+                            {{ form_widget(form.fechaAplicaProceso, { 'attr': {'class': 'form-control', 'placeholder': 'Ejemplo: sabado 3 de marzo de 2015','style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group form-group-sm">
+                <label for="form_fechaAplicaHastaProceso" class="col-sm-3 control-label">Fecha proceso hasta:</label>
+                <div class="col-sm-9">
+                            {{ form_widget(form.fechaAplicaHastaProceso, { 'attr': {'class': 'form-control', 'placeholder': 'Ejemplo: sabado 3 de marzo de 2015','style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_diasSuspencion" class="col-sm-3 control-label">Días de sanción:</label>
+                <div class="col-sm-9">
+                            {{ form_widget(form.diasSuspencion, { 'attr': {'class': 'form-control', 'placeholder': 'Aplica solo para el proceso de Descargos y es la descipcion completa del descargo'} }) }}
+                </div>
+            </div>    
+            <div class="form-group form-group-sm">
+                <label for="form_fechaIngresoTrabajo" class="col-sm-3 control-label">Fecha ingreso trabajo:</label>
+                <div class="col-sm-9">
+                            {{ form_widget(form.fechaIngresoTrabajo, { 'attr': {'class': 'form-control', 'placeholder': 'Ejemplo: sabado 3 de marzo de 2015','style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_puesto" class="col-sm-3 control-label">Puesto:</label>
+                <div class="col-sm-9">
+                            {{ form_widget(form.puesto, { 'attr': {'class': 'form-control', 'placeholder': 'Aplica solo para el proceso de Descargos y es la descipcion completa del descargo','style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_zona" class="col-sm-3 control-label">Zona:</label>
+                <div class="col-sm-9">
+                            {{ form_widget(form.zona, { 'attr': {'class': 'form-control', 'placeholder': 'Ejemplo: norte, sur','style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_operacion" class="col-sm-3 control-label">Operación:</label>
+                <div class="col-sm-9">
+                            {{ form_widget(form.operacion, { 'attr': {'class': 'form-control', 'placeholder': 'Ejemplo: Medellin, Bogota entre otros ','style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_reentrenamiento" class="col-sm-3 control-label">Reentrenamiento:</label>
+                <div class="col-sm-9">
+                            {{ form_widget(form.reentrenamiento, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>    
+            <div class="form-group form-group-sm">
                 <label for="form_comentarios" class="col-sm-3 control-label">Comentarios:</label>
                 <div class="col-sm-9">
                             {{ form_widget(form.comentarios, { 'attr': {'class': 'form-control'} }) }}

@@ -225,18 +225,30 @@ class DisciplinarioController extends Controller
                     ->setKeywords("office 2007 openxml php")
                     ->setCategory("Test result file");
                 $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
-                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);    
+                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+                for($col = 'A'; $col !== 'AR'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+                }
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'CÓDIGO')
-                            ->setCellValue('B1', 'FECHA')
-                            ->setCellValue('C1', 'CENTRO COSTOS')
-                            ->setCellValue('D1', 'IDENTIFICACIÓN')
-                            ->setCellValue('E1', 'EMPLEADO')
-                            ->setCellValue('F1', 'CARGO')
-                            ->setCellValue('G1', 'PROCESO')
-                            ->setCellValue('H1', 'CAUSAL')
-                            ->setCellValue('I1', 'DESCARGOS')
-                            ->setCellValue('J1', 'FECHA SUSPENSIÓN');
+                            ->setCellValue('B1', 'CENTRO COSTOS')
+                            ->setCellValue('C1', 'IDENTIFICACIÓN')
+                            ->setCellValue('D1', 'EMPLEADO')
+                            ->setCellValue('E1', 'CARGO')
+                            ->setCellValue('F1', 'PUESTO')
+                            ->setCellValue('G1', 'OPERACION')
+                            ->setCellValue('H1', 'ZONA')
+                            ->setCellValue('I1', 'PROCESO')
+                            ->setCellValue('J1', 'CAUSAL O MOTIVO')
+                            ->setCellValue('K1', 'DESCARGOS')
+                            ->setCellValue('L1', 'FECHA PROCESO')
+                            ->setCellValue('M1', 'FECHA PROCESO HASTA')
+                            ->setCellValue('N1', 'DÍAS SANCIÓN')
+                            ->setCellValue('OL1', 'FECHA INGRESO TRABAJO')
+                            ->setCellValue('P1', 'REENTRENAMIENTO')
+                            ->setCellValue('Q1', 'AUTORIZADO')
+                            ->setCellValue('R1', 'OBSERVACIONES');
 
                 $i = 2;
                 $query = $em->createQuery($this->strListaDql);
@@ -254,22 +266,50 @@ class DisciplinarioController extends Controller
                 } else {
                     $descargos = $arDisciplinario->getDescargos();
                 }
-                if ($arDisciplinario->getSuspension() == Null){
-                    $suspension = "NO APLICA";
+                if ($arDisciplinario->getFechaAplicaProceso() == Null){
+                    $fechaProceso = "NO APLICA";
                 } else {
-                    $suspension = $arDisciplinario->getSuspension();
+                    $fechaProceso = $arDisciplinario->getFechaAplicaProceso();
+                }
+                if ($arDisciplinario->getFechaAplicaHastaProceso() == Null){
+                    $fechaProcesoHasta = "NO APLICA";
+                } else {
+                    $fechaProcesoHasta = $arDisciplinario->getFechaAplicaHastaProceso();
+                }
+                if ($arDisciplinario->getFechaIngresoTrabajo() == Null){
+                    $fechaIngresoTrabajo = "NO APLICA";
+                } else {
+                    $fechaIngresoTrabajo = $arDisciplinario->getFechaIngresoTrabajo();
+                }
+                if ($arDisciplinario->getEstadoAutorizado() == 1){
+                    $autorizado = "SI";
+                } else {
+                    $autorizado = "NO";
+                }
+                if ($arDisciplinario->getReentrenamiento() == 1){
+                    $reentrenamiento = "SI";
+                } else {
+                    $reentrenamiento = "NO";
                 }
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arDisciplinario->getCodigoDisciplinarioPk())
-                            ->setCellValue('B' . $i, $arDisciplinario->getFecha()->format('Y/m/d'))
-                            ->setCellValue('C' . $i, $arDisciplinario->getCentroCostoRel()->getNombre())
-                            ->setCellValue('D' . $i, $arDisciplinario->getEmpleadoRel()->getNumeroIdentificacion())
-                            ->setCellValue('E' . $i, $arDisciplinario->getEmpleadoRel()->getNombreCorto())
-                            ->setCellValue('F' . $i, $arDisciplinario->getEmpleadoRel()->getCargoDescripcion())
-                            ->setCellValue('G' . $i, $arDisciplinario->getDisciplinarioTipoRel()->getNombre())
-                            ->setCellValue('H' . $i, $asunto)
-                            ->setCellValue('I' . $i, $descargos)
-                            ->setCellValue('J' . $i, $suspension);
+                            ->setCellValue('B' . $i, $arDisciplinario->getCentroCostoRel()->getNombre())
+                            ->setCellValue('C' . $i, $arDisciplinario->getEmpleadoRel()->getNumeroIdentificacion())
+                            ->setCellValue('D' . $i, $arDisciplinario->getEmpleadoRel()->getNombreCorto())
+                            ->setCellValue('E' . $i, $arDisciplinario->getEmpleadoRel()->getCargoDescripcion())
+                            ->setCellValue('F' . $i, $arDisciplinario->getPuesto())
+                            ->setCellValue('G' . $i, $arDisciplinario->getZona())
+                            ->setCellValue('H' . $i, $arDisciplinario->getOperacion())
+                            ->setCellValue('I' . $i, $arDisciplinario->getDisciplinarioTipoRel()->getNombre())
+                            ->setCellValue('J' . $i, $asunto)
+                            ->setCellValue('K' . $i, $descargos)
+                            ->setCellValue('L' . $i, $fechaProceso)
+                            ->setCellValue('M' . $i, $fechaProcesoHasta)
+                            ->setCellValue('N' . $i, $arDisciplinario->getDiasSuspencion())
+                            ->setCellValue('O' . $i, $fechaIngresoTrabajo)
+                            ->setCellValue('P' . $i, $reentrenamiento)
+                            ->setCellValue('Q' . $i, $autorizado)
+                            ->setCellValue('R' . $i, $arDisciplinario->getComentarios());
                     $i++;
                 }
 

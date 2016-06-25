@@ -44,9 +44,44 @@ class RhuDisciplinario
     private $comentarios;
     
     /**
-     * @ORM\Column(name="suspension", type="string", length=200, nullable=true)
+     * @ORM\Column(name="fecha_aplica_proceso", type="string", length=100, nullable=true)
      */    
-    private $suspension;
+    private $fechaAplicaProceso;
+    
+    /**
+     * @ORM\Column(name="fecha_aplica_hasta_proceso", type="string", length=100, nullable=true)
+     */    
+    private $fechaAplicaHastaProceso;
+    
+    /**
+     * @ORM\Column(name="fecha_ingreso_trabajo", type="string", length=100, nullable=true)
+     */    
+    private $fechaIngresoTrabajo;
+    
+    /**
+     * @ORM\Column(name="dias_suspencion", type="string", length=100, nullable=true)
+     */    
+    private $diasSuspencion;
+    
+    /**     
+     * @ORM\Column(name="reentrenamiento", type="boolean")
+     */    
+    private $reentrenamiento = false;
+    
+    /**
+     * @ORM\Column(name="puesto", type="string", length=100, nullable=true)
+     */    
+    private $puesto;
+    
+    /**
+     * @ORM\Column(name="zona", type="string", length=100, nullable=true)
+     */    
+    private $zona;
+    
+    /**
+     * @ORM\Column(name="operacion", type="string", length=100, nullable=true)
+     */    
+    private $operacion;
     
     /**
      * @ORM\Column(name="descargos", type="text", nullable=true)
@@ -56,7 +91,7 @@ class RhuDisciplinario
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
      */    
-    private $estadoAutorizado = 0;
+    private $estadoAutorizado = false;
     
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer")
@@ -97,7 +132,7 @@ class RhuDisciplinario
      */
     protected $cargoRel;
     
-    
+
 
     /**
      * Get codigoDisciplinarioPk
@@ -230,27 +265,195 @@ class RhuDisciplinario
     }
 
     /**
-     * Set suspension
+     * Set fechaAplicaProceso
      *
-     * @param string $suspension
+     * @param string $fechaAplicaProceso
      *
      * @return RhuDisciplinario
      */
-    public function setSuspension($suspension)
+    public function setFechaAplicaProceso($fechaAplicaProceso)
     {
-        $this->suspension = $suspension;
+        $this->fechaAplicaProceso = $fechaAplicaProceso;
 
         return $this;
     }
 
     /**
-     * Get suspension
+     * Get fechaAplicaProceso
      *
      * @return string
      */
-    public function getSuspension()
+    public function getFechaAplicaProceso()
     {
-        return $this->suspension;
+        return $this->fechaAplicaProceso;
+    }
+
+    /**
+     * Set fechaAplicaHastaProceso
+     *
+     * @param string $fechaAplicaHastaProceso
+     *
+     * @return RhuDisciplinario
+     */
+    public function setFechaAplicaHastaProceso($fechaAplicaHastaProceso)
+    {
+        $this->fechaAplicaHastaProceso = $fechaAplicaHastaProceso;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaAplicaHastaProceso
+     *
+     * @return string
+     */
+    public function getFechaAplicaHastaProceso()
+    {
+        return $this->fechaAplicaHastaProceso;
+    }
+
+    /**
+     * Set fechaIngresoTrabajo
+     *
+     * @param string $fechaIngresoTrabajo
+     *
+     * @return RhuDisciplinario
+     */
+    public function setFechaIngresoTrabajo($fechaIngresoTrabajo)
+    {
+        $this->fechaIngresoTrabajo = $fechaIngresoTrabajo;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaIngresoTrabajo
+     *
+     * @return string
+     */
+    public function getFechaIngresoTrabajo()
+    {
+        return $this->fechaIngresoTrabajo;
+    }
+
+    /**
+     * Set diasSuspencion
+     *
+     * @param string $diasSuspencion
+     *
+     * @return RhuDisciplinario
+     */
+    public function setDiasSuspencion($diasSuspencion)
+    {
+        $this->diasSuspencion = $diasSuspencion;
+
+        return $this;
+    }
+
+    /**
+     * Get diasSuspencion
+     *
+     * @return string
+     */
+    public function getDiasSuspencion()
+    {
+        return $this->diasSuspencion;
+    }
+
+    /**
+     * Set reentrenamiento
+     *
+     * @param boolean $reentrenamiento
+     *
+     * @return RhuDisciplinario
+     */
+    public function setReentrenamiento($reentrenamiento)
+    {
+        $this->reentrenamiento = $reentrenamiento;
+
+        return $this;
+    }
+
+    /**
+     * Get reentrenamiento
+     *
+     * @return boolean
+     */
+    public function getReentrenamiento()
+    {
+        return $this->reentrenamiento;
+    }
+
+    /**
+     * Set puesto
+     *
+     * @param string $puesto
+     *
+     * @return RhuDisciplinario
+     */
+    public function setPuesto($puesto)
+    {
+        $this->puesto = $puesto;
+
+        return $this;
+    }
+
+    /**
+     * Get puesto
+     *
+     * @return string
+     */
+    public function getPuesto()
+    {
+        return $this->puesto;
+    }
+
+    /**
+     * Set zona
+     *
+     * @param string $zona
+     *
+     * @return RhuDisciplinario
+     */
+    public function setZona($zona)
+    {
+        $this->zona = $zona;
+
+        return $this;
+    }
+
+    /**
+     * Get zona
+     *
+     * @return string
+     */
+    public function getZona()
+    {
+        return $this->zona;
+    }
+
+    /**
+     * Set operacion
+     *
+     * @param string $operacion
+     *
+     * @return RhuDisciplinario
+     */
+    public function setOperacion($operacion)
+    {
+        $this->operacion = $operacion;
+
+        return $this;
+    }
+
+    /**
+     * Get operacion
+     *
+     * @return string
+     */
+    public function getOperacion()
+    {
+        return $this->operacion;
     }
 
     /**

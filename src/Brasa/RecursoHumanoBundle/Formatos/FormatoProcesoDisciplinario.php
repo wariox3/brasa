@@ -102,15 +102,21 @@ class FormatoProcesoDisciplinario extends \FPDF_FPDF {
             $cargo = $arProcesoDisciplinario->getCargoRel()->getNombre();
         }
         $sustitucion3 = $cargo;
-        $sustitucion4 = $arProcesoDisciplinario->getSuspension();
+        $sustitucion4 = $arProcesoDisciplinario->getFechaAplicaProceso();
         $sustitucion5 = $arConfiguracion->getNombreEmpresa();
         $sustitucion6 = $arProcesoDisciplinario->getAsunto();
-        $sustitucion7 = $arProcesoDisciplinario->getAsunto();
+        //$sustitucion7 = $arProcesoDisciplinario->getAsunto();
         $sustitucion8 = $arProcesoDisciplinario->getDescargos();
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arProcesoDisciplinario->getEmpleadoRel()->getCodigoContratoActivoFk());
         $sustitucion9 = $arContrato->getContratoTipoRel()->getNombre();
         $sustitucion10 = $arProcesoDisciplinario->getDisciplinarioTipoRel()->getNombre();
+        $sustitucion11 = $arProcesoDisciplinario->getFechaAplicaHastaProceso();
+        $sustitucion12 = $arProcesoDisciplinario->getFechaIngresoTrabajo();
+        $sustitucion13 = $arProcesoDisciplinario->getDiasSuspencion();
+        $sustitucion14 = $arProcesoDisciplinario->getPuesto();
+        $sustitucion15 = $arProcesoDisciplinario->getZona();
+        $sustitucion16 = $arProcesoDisciplinario->getOperacion();
         //$cadena = $arContenidoFormato->getContenido();
         $patron1 = '/#1/';
         $patron2 = '/#2/';
@@ -118,20 +124,33 @@ class FormatoProcesoDisciplinario extends \FPDF_FPDF {
         $patron4 = '/#4/';
         $patron5 = '/#5/';
         $patron6 = '/#6/';
-        $patron7 = '/#7/';
+        //$patron7 = '/#7/';
         $patron8 = '/#8/';
         $patron9 = '/#9/';
         $patron10 = '/#a/';
+        $patron11 = '/#b/';
+        $patron12 = '/#c/';
+        $patron13 = '/#d/';
+        $patron14 = '/#e/';
+        $patron15 = '/#f/';
+        $patron16 = '/#g/';
         $cadenaCambiada = preg_replace($patron1, $sustitucion1, $cadena);
         $cadenaCambiada = preg_replace($patron2, $sustitucion2, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron3, $sustitucion3, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron4, $sustitucion4, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron5, $sustitucion5, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron6, $sustitucion6, $cadenaCambiada);
-        $cadenaCambiada = preg_replace($patron7, $sustitucion7, $cadenaCambiada);
+        //$cadenaCambiada = preg_replace($patron7, $sustitucion7, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron8, $sustitucion8, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron9, $sustitucion9, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron10, $sustitucion10, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron11, $sustitucion11, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron12, $sustitucion12, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron13, $sustitucion13, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron14, $sustitucion14, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron15, $sustitucion15, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron16, $sustitucion16, $cadenaCambiada);
+        
         $pdf->MultiCell(0,5, $cadenaCambiada);
     }
 
