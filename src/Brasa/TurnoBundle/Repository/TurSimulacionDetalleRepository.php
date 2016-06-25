@@ -294,6 +294,165 @@ class TurSimulacionDetalleRepository extends EntityRepository {
                         $em->persist($arSimulacionDetalle);                        
                     }
                 }
+            } else {                
+                $arPlantillaDetalles = new \Brasa\TurnoBundle\Entity\TurServicioDetallePlantilla();
+                $arPlantillaDetalles = $em->getRepository('BrasaTurnoBundle:TurServicioDetallePlantilla')->findBy(array('codigoServicioDetalleFk' => $codigoServicioDetalle));
+                foreach ($arPlantillaDetalles as $arPlantillaDetalle) {
+                    $strFechaDesde = $fechaProgramacion->format('Y/m') . "/1";
+                    $strAnio = $fechaProgramacion->format('Y');
+                    $intPosicion = $this->devuelvePosicionInicialMatrizPlantilla($strAnio, $arServicioDetalle->getDiasSecuencia(), $strFechaDesde, $arServicioDetalle->getFechaIniciaPlantilla());
+                    $arrTurnos = $this->devuelveTurnosMes($arPlantillaDetalle);
+                    $arServicioDetalleRecursos = new \Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso();
+                    $arServicioDetalleRecursos = $em->getRepository('BrasaTurnoBundle:TurServicioDetalleRecurso')->findBy(array('codigoServicioDetalleFk' => $codigoServicioDetalle, 'posicion' => $arPlantillaDetalle->getPosicion()));
+                    foreach ($arServicioDetalleRecursos as $arServicioDetalleRecurso) {
+                        $intPosicionPlantilla = $intPosicion;
+                        $arSimulacionDetalle = new \Brasa\TurnoBundle\Entity\TurSimulacionDetalle();                                                                        
+                        $arSimulacionDetalle->setPuestoRel($arServicioDetalle->getPuestoRel());
+                        $arSimulacionDetalle->setAnio($fechaProgramacion->format('Y'));
+                        $arSimulacionDetalle->setMes($fechaProgramacion->format('m')); 
+                        $arSimulacionDetalle->setRecursoRel($arServicioDetalleRecurso->getRecursoRel());
+                        for($i = 1; $i < 32; $i++) {                            
+                            $strTurno = $arrTurnos[$intPosicionPlantilla];
+                            $strFechaDia = $fechaProgramacion->format('Y-m-') . $i;
+                            $dateFechaDia = date_create($strFechaDia);
+                            $diaSemana = $dateFechaDia->format('N');
+                            $boolFestivo = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->festivo($arFestivos, $dateFechaDia);
+                            if($diaSemana == 1 && isset($arrTurnos['lunes'])) {
+                                $strTurno = $arrTurnos['lunes'];
+                            }
+                            if($diaSemana == 2 && isset($arrTurnos['martes'])) {
+                                $strTurno = $arrTurnos['martes'];
+                            }
+                            if($diaSemana == 3 && isset($arrTurnos['miercoles'])) {
+                                $strTurno = $arrTurnos['miercoles'];
+                            }
+                            if($diaSemana == 4 && isset($arrTurnos['jueves'])) {
+                                $strTurno = $arrTurnos['jueves'];
+                            }
+                            if($diaSemana == 5 && isset($arrTurnos['viernes'])) {
+                                $strTurno = $arrTurnos['viernes'];
+                            }
+                            if($diaSemana == 6 && isset($arrTurnos['sabado'])) {
+                                $strTurno = $arrTurnos['sabado'];
+                            }
+                            if($diaSemana == 7 && isset($arrTurnos['domingo'])) {
+                                $strTurno = $arrTurnos['domingo'];
+                            }
+                            if($boolFestivo == 1 && isset($arrTurnos['festivo'])) {
+                                $strTurno = $arrTurnos['festivo'];
+                            }    
+                            if($diaSemana == 7 && isset($arrTurnos['domingoFestivo'])) {
+                                $strFechaDiaSiguiente = $fechaProgramacion->format('Y-m-') . ($i+1);
+                                $dateFechaDiaSiguiente = date_create($strFechaDiaSiguiente);                            
+                                $boolFestivoSiguiente = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->festivo($arFestivos, $dateFechaDiaSiguiente);                                
+                                if($boolFestivoSiguiente == 1) {
+                                    $strTurno = $arrTurnos['domingoFestivo'];                                
+                                }                                
+                            }                            
+                            $boolAplica = $this->aplicaPlantilla($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arServicioDetalle, $strTurno, $boolFestivo);
+                            if($boolAplica == TRUE) {
+                                if($i == 1) {
+                                    $arSimulacionDetalle->setDia1($strTurno);
+                                }
+                                if($i == 2) {
+                                    $arSimulacionDetalle->setDia2($strTurno);
+                                }
+                                if($i == 3) {
+                                    $arSimulacionDetalle->setDia3($strTurno);
+                                }
+                                if($i == 4) {
+                                    $arSimulacionDetalle->setDia4($strTurno);
+                                }
+                                if($i == 5) {
+                                    $arSimulacionDetalle->setDia5($strTurno);
+                                }
+                                if($i == 6) {
+                                    $arSimulacionDetalle->setDia6($strTurno);
+                                }
+                                if($i == 7) {
+                                    $arSimulacionDetalle->setDia7($strTurno);
+                                }
+                                if($i == 8) {
+                                    $arSimulacionDetalle->setDia8($strTurno);
+                                }
+                                if($i == 9) {
+                                    $arSimulacionDetalle->setDia9($strTurno);
+                                }
+                                if($i == 10) {
+                                    $arSimulacionDetalle->setDia10($strTurno);
+                                }
+                                if($i == 11) {
+                                    $arSimulacionDetalle->setDia11($strTurno);
+                                }
+                                if($i == 12) {
+                                    $arSimulacionDetalle->setDia12($strTurno);
+                                }
+                                if($i == 13) {
+                                    $arSimulacionDetalle->setDia13($strTurno);
+                                }
+                                if($i == 14) {
+                                    $arSimulacionDetalle->setDia14($strTurno);
+                                }
+                                if($i == 15) {
+                                    $arSimulacionDetalle->setDia15($strTurno);
+                                }
+                                if($i == 16) {
+                                    $arSimulacionDetalle->setDia16($strTurno);
+                                }
+                                if($i == 17) {
+                                    $arSimulacionDetalle->setDia17($strTurno);
+                                }
+                                if($i == 18) {
+                                    $arSimulacionDetalle->setDia18($strTurno);
+                                }
+                                if($i == 19) {
+                                    $arSimulacionDetalle->setDia19($strTurno);
+                                }
+                                if($i == 20) {
+                                    $arSimulacionDetalle->setDia20($strTurno);
+                                }
+                                if($i == 21) {
+                                    $arSimulacionDetalle->setDia21($strTurno);
+                                }
+                                if($i == 22) {
+                                    $arSimulacionDetalle->setDia22($strTurno);
+                                }
+                                if($i == 23) {
+                                    $arSimulacionDetalle->setDia23($strTurno);
+                                }
+                                if($i == 24) {
+                                    $arSimulacionDetalle->setDia24($strTurno);
+                                }
+                                if($i == 25) {
+                                    $arSimulacionDetalle->setDia25($strTurno);
+                                }
+                                if($i == 26) {
+                                    $arSimulacionDetalle->setDia26($strTurno);
+                                }
+                                if($i == 27) {
+                                    $arSimulacionDetalle->setDia27($strTurno);
+                                }
+                                if($i == 28) {
+                                    $arSimulacionDetalle->setDia28($strTurno);
+                                }
+                                if($i == 29) {
+                                    $arSimulacionDetalle->setDia29($strTurno);
+                                }
+                                if($i == 30) {
+                                    $arSimulacionDetalle->setDia30($strTurno);
+                                }
+                                if($i == 31) {
+                                    $arSimulacionDetalle->setDia31($strTurno);
+                                }
+                            }
+                            $intPosicionPlantilla++;
+                            if($intPosicionPlantilla == ($arServicioDetalle->getDiasSecuencia() + 1)) {
+                                $intPosicionPlantilla = 1;
+                            }
+                        }
+                        $em->persist($arSimulacionDetalle);                    
+                    }
+                }                
             }
         }
         $em->flush();

@@ -216,6 +216,11 @@ class TurServicioDetallePlantilla
      * @ORM\Column(name="domingo", type="string", length=5, nullable=true)
      */    
     private $domingo;
+
+    /**
+     * @ORM\Column(name="domingo_festivo", type="string", length=5, nullable=true)
+     */    
+    private $domingoFestivo;
     
     /**
      * @ORM\Column(name="festivo", type="string", length=5, nullable=true)
@@ -1275,5 +1280,29 @@ class TurServicioDetallePlantilla
     public function getServicioDetalleRel()
     {
         return $this->servicioDetalleRel;
+    }
+
+    /**
+     * Set domingoFestivo
+     *
+     * @param string $domingoFestivo
+     *
+     * @return TurServicioDetallePlantilla
+     */
+    public function setDomingoFestivo($domingoFestivo)
+    {
+        $this->domingoFestivo = $domingoFestivo;
+
+        return $this;
+    }
+
+    /**
+     * Get domingoFestivo
+     *
+     * @return string
+     */
+    public function getDomingoFestivo()
+    {
+        return $this->domingoFestivo;
     }
 }
