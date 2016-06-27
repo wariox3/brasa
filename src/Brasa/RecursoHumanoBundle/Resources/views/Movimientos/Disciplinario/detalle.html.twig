@@ -32,24 +32,48 @@
                     <td>{{ arDisciplinario.codigoDisciplinarioPk }}</td>
                     <td class="titulo">PROCESO:</td>
                     <td>{{ arDisciplinario.disciplinarioTipoRel.nombre }}</td>
-                    <td class="titulo">CAUSAL</td>
-                    <td>{{ arDisciplinario.asunto|default('NO APLICA') }}</td>
+                    <td class="titulo">FECHA PROCESO</td>
+                    <td>{{ arDisciplinario.fechaAplicaProceso|default('NO APLICA') }}</td>
                 </tr>
                 <tr>
+                    <td class="titulo">CAUSAL O MOTIVO</td>
+                    <td>{{ arDisciplinario.asunto|default('NO APLICA') }}</td>
                     <td class="titulo">DESCARGOS:</td>
                     <td>{{ arDisciplinario.descargos|default('NO APLICA') }}</td>
-                    <td class="titulo">FECHA SUSPENSIÓN</td>
-                    <td>{{ arDisciplinario.suspension|default('NO APLICA') }}</td>
-                    <td class="titulo">AUTORIZADO:</td>
-                    <td>{% if arDisciplinario.estadoAutorizado == 1%}SI{% else %}NO{% endif %}</td>
+                    <td class="titulo">FECHA PROCESO HASTA</td>
+                    <td>{{ arDisciplinario.fechaAplicaHastaProceso| default('NO APLICA') }}</td>
                 </tr>
                 <tr>
                     <td class="titulo">EMPLEADO:</td>
                     <td>{{ arDisciplinario.empleadoRel.nombreCorto }}</td>
                     <td class="titulo">IDENTIFICACIÓN:</td>
                     <td>{{ arDisciplinario.empleadoRel.numeroIdentificacion }}</td>
-                    <td class="titulo">FECHA CREACIÓN</td>
-                    <td>{{ arDisciplinario.fecha | date('Y/m/d') }}</td>
+                    <td class="titulo">FECHA INGRESO A TRABAJAR</td>
+                    <td>{{ arDisciplinario.fechaIngresoTrabajo | default('NO APLICA') }}</td>
+                </tr>
+                <tr>
+                    <td class="titulo">CENTRO COSTO:</td>
+                    <td>{{ arDisciplinario.centroCostoRel.nombre | default('') }}</td>
+                    <td class="titulo">CARGO:</td>
+                    <td>{{ arDisciplinario.cargoRel.nombre | default('') }}</td>
+                    <td class="titulo">DÍAS SANCIÓN</td>
+                    <td>{{ arDisciplinario.diasSuspencion }}</td>
+                </tr>
+                <tr>
+                    <td class="titulo">PUESTO:</td>
+                    <td>{{ arDisciplinario.puesto }}</td>
+                    <td class="titulo">ZONA:</td>
+                    <td>{{ arDisciplinario.zona }}</td>
+                    <td class="titulo">OPERACIÓN</td>
+                    <td>{{ arDisciplinario.operacion }}</td>
+                </tr>
+                <tr>
+                    <td class="titulo"></td>
+                    <td></td>
+                    <td class="titulo">REENTRANAMIENTO:</td>
+                    <td>{% if arDisciplinario.reentrenamiento == 1%}SI {% else %}NO {% endif%}</td>
+                    <td class="titulo">AUTORIZADO</td>
+                    <td>{% if arDisciplinario.estadoAutorizado == 1%}SI {% else %}NO {% endif%}</td>
                 </tr>
                 <tr>
                     <td class="titulo">COMENTARIOS:</td>
