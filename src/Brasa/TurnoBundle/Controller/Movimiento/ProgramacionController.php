@@ -100,6 +100,7 @@ class ProgramacionController extends Controller
      */    
     public function detalleAction($codigoProgramacion) {
         $em = $this->getDoctrine()->getManager();
+        $paginator  = $this->get('knp_paginator');
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
         $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
@@ -181,9 +182,9 @@ class ProgramacionController extends Controller
             }
             $arrDiaSemana[$i] = array('dia' => $i, 'diaSemana' => $diaSemana, 'festivo' => $boolFestivo);
         }
-        $formDetalle = $this->createFormBuilder()->getForm();        
-        $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
-        $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array ('codigoProgramacionFk' => $codigoProgramacion));
+        $formDetalle = $this->createFormBuilder()->getForm(); 
+        $dql = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->listaDql($codigoProgramacion);       
+        $arProgramacionDetalle = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 300);
         return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalle.html.twig', array(
                     'arProgramacion' => $arProgramacion,
                     'arProgramacionDetalle' => $arProgramacionDetalle,
