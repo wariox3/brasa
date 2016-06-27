@@ -317,15 +317,20 @@ class BaseRecursoController extends Controller
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
-        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);        
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true); 
+        for($col = 'A'; $col !== 'H'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }
+        
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
                     ->setCellValue('B1', 'IDENTIFICACION')
                     ->setCellValue('C1', 'NOMBRE')
                     ->setCellValue('D1', 'TIPO')
                     ->setCellValue('E1', 'CENTRO COSTOS')
-                    ->setCellValue('F1', 'ACTIVO')
-                    ->setCellValue('G1', 'TURNO FIJO');
+                    ->setCellValue('F1', 'GRUPO')
+                    ->setCellValue('G1', 'ACTIVO');
 
         $i = 2;
         
@@ -340,8 +345,8 @@ class BaseRecursoController extends Controller
                     ->setCellValue('C' . $i, $arRecurso->getNombreCorto())
                     ->setCellValue('D' . $i, $arRecurso->getRecursoTipoRel()->getNombre())
                     ->setCellValue('E' . $i, $arRecurso->getCentroCostoRel()->getNombre())
-                    ->setCellValue('F' . $i, $objFunciones->devuelveBoolean($arRecurso->getEstadoActivo())) 
-                    ->setCellValue('G' . $i, $arRecurso->getCodigoTurnoFijoNominaFk());
+                    ->setCellValue('F' . $i, $arRecurso->getRecursoGrupoRel()->getNombre())
+                    ->setCellValue('G' . $i, $objFunciones->devuelveBoolean($arRecurso->getEstadoActivo()));
                         
             $i++;
         }
