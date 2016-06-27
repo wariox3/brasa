@@ -30,13 +30,16 @@ class BaseEmpleadoController extends Controller
                 $objFormatoEmpleado->Generar($this, $this->strSqlLista);
 
             }
-
             if($form->get('BtnExcel')->isClicked()) {
                 $this->filtrarLista($form);
                 $this->listar();
                 $this->generarExcel();
             }
-
+            if($form->get('BtnInterfaz')->isClicked()) {
+                $this->filtrarLista($form);
+                $this->listar();
+                $this->generarExcelInterfaz();
+            }
             if($form->get('BtnInactivar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
@@ -392,6 +395,7 @@ class BaseEmpleadoController extends Controller
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnInterfaz', 'submit', array('label'  => 'Interfaz',))
             ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnInactivar', 'submit', array('label'  => 'Activar / Inactivar',))
@@ -644,5 +648,310 @@ class BaseEmpleadoController extends Controller
         $objWriter->save('php://output');
         exit;
     }
+    
+    private function generarExcelInterfaz() {
+        ob_clean();
+        $em = $this->getDoctrine()->getManager();
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'AR'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }        
 
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'APELLIDO1')
+                    ->setCellValue('B1', 'APELLIDO2')
+                    ->setCellValue('C1', 'AUTORET')
+                    ->setCellValue('D1', 'AVALCOD')
+                    ->setCellValue('E1', 'AVALDIREC')
+                    ->setCellValue('F1', 'AVALNOMBRE')
+                    ->setCellValue('G1', 'AVALTEL')
+                    ->setCellValue('H1', 'BANCO')
+                    ->setCellValue('I1', 'CALIFCALID')
+                    ->setCellValue('J1', 'CALIFTIEMP')
+                    ->setCellValue('K1', 'CANAL')
+                    ->setCellValue('L1', 'CDCIIU')
+                    ->setCellValue('M1', 'CIIU')
+                    ->setCellValue('N1', 'CIUDAD')
+                    ->setCellValue('O1', 'CIUDADMX')
+                    ->setCellValue('P1', 'CIUDADPRV')
+                    ->setCellValue('Q1', 'CLASE')
+                    ->setCellValue('R1', 'CODALTERNO')
+                    ->setCellValue('S1', 'CODCTANIIF')
+                    ->setCellValue('T1', 'CODDEPTO')
+                    ->setCellValue('U1', 'CODDESFIN')
+                    ->setCellValue('V1', 'CODDESFINP')
+                    ->setCellValue('W1', 'CODIGOCTA')
+                    ->setCellValue('X1', 'CODIGOCTAP')
+                    ->setCellValue('Y1', 'CODPOSTAL')
+                    ->setCellValue('Z1', 'CODPOSTALP')
+                    ->setCellValue('AA1', 'CODPRECIO')
+                    ->setCellValue('AB1', 'CODPRECIOP')
+                    ->setCellValue('AC1', 'CODRETE')
+                    ->setCellValue('AD1', 'CODRETEP')
+                    ->setCellValue('AE1', 'CODRUTA')
+                    ->setCellValue('AF1', 'COL_DEL')						                
+                    ->setCellValue('AG1', 'COMENTARIO')
+                    ->setCellValue('AH1', 'CONSUMIDOR')
+                    ->setCellValue('AI1', 'CONTACTO')
+                    ->setCellValue('AJ1', 'CONTESP')
+                    ->setCellValue('AK1', 'CONTRIBUYE')
+                    ->setCellValue('AL1', 'CTACTE')
+                    ->setCellValue('AM1', 'CTANIIFPRV')		
+                    ->setCellValue('AN1', 'CUPOCR')
+                    ->setCellValue('AO1', 'CUPOCRP')
+                    ->setCellValue('AP1', 'CURP')
+                    ->setCellValue('AQ1', 'DELEGACION')
+                    ->setCellValue('AR1', 'DESCCOMER')
+                    ->setCellValue('AS1', 'DESCCOMERP')
+                    ->setCellValue('AT1', 'DESCFINAN')
+                    ->setCellValue('AU1', 'DESCFINANP')
+                    ->setCellValue('AV1', 'DETALLE')
+                    ->setCellValue('AW1', 'DIRECCION')
+                    ->setCellValue('AX1', 'EMAIL')
+                    ->setCellValue('AY1', 'EMAILP')
+                    ->setCellValue('AZ1', 'ENTRECALLE')
+                    ->setCellValue('BA1', 'ESCLIENTE')
+                    ->setCellValue('BB1', 'ESDECLARA')
+                    ->setCellValue('BC1', 'ESMAQUILA')
+                    ->setCellValue('BD1', 'ESPERCAR')
+                    ->setCellValue('BE1', 'ESPROVEE')						                
+                    ->setCellValue('BF1', 'ESTADOMX')
+                    ->setCellValue('BG1', 'ESRETCREE')
+                    ->setCellValue('BH1', 'ESTADOMX')
+                    ->setCellValue('BI1', 'ESTRATO')
+                    ->setCellValue('BJ1', 'EXTERIOR')
+                    ->setCellValue('BK1', 'FACELECTRO')
+                    ->setCellValue('BL1', 'FECHAING')
+                    ->setCellValue('BM1', 'FECING')
+                    ->setCellValue('BN1', 'FECMOD')
+                    ->setCellValue('BO1', 'FECNAC')
+                    ->setCellValue('BP1', 'HABILITADO')
+                    ->setCellValue('BQ1', 'IDADJUNTOS')
+                    ->setCellValue('BR1', 'IDCANALENT')
+                    ->setCellValue('BS1', 'IDENTIFICA')
+                    ->setCellValue('BT1', 'INDEPENDIE')
+                    ->setCellValue('BU1', 'INTCAR')
+                    ->setCellValue('BV1', 'ISPROSPECT')
+                    ->setCellValue('BW1', 'LOCAL')
+                    ->setCellValue('BX1', 'LOCALIDAD')
+                    ->setCellValue('BY1', 'MEADENDA')
+                    ->setCellValue('BZ1', 'NDIAGRACIA')
+                    ->setCellValue('CA1', 'NIT')
+                    ->setCellValue('CB1', 'NITSUCUR')
+                    ->setCellValue('CC1', 'NOMBRE')
+                    ->setCellValue('CD1', 'NOMBRE1')
+                    ->setCellValue('CE1', 'NOMBRE2')
+                    ->setCellValue('CF1', 'NROENTREGA')
+                    ->setCellValue('CG1', 'NROINTERNO')
+                    ->setCellValue('CH1', 'NRORESOL')
+                    ->setCellValue('CI1', 'NUMCTA')										                
+                    ->setCellValue('CJ1', 'NUMCUENTA')
+                    ->setCellValue('CK1', 'PAGINAWEB')
+                    ->setCellValue('CL1', 'PAIS')
+                    ->setCellValue('CM1', 'PAISMX')
+                    ->setCellValue('CN1', 'PASSWORD')
+                    ->setCellValue('CO1', 'PASSWORDIN')
+                    ->setCellValue('CP1', 'PASSWORDMO')
+                    ->setCellValue('CQ1', 'PASSWPROV')
+                    ->setCellValue('CR1', 'PERIODOFAC')
+                    ->setCellValue('CS1', 'PERSONANJ')
+                    ->setCellValue('CT1', 'PLAZO')								                
+                    ->setCellValue('CU1', 'PLAZOP')
+                    ->setCellValue('CV1', 'PORAIU')
+                    ->setCellValue('CW1', 'PORAIUP')
+                    ->setCellValue('CX1', 'PRETICA')
+                    ->setCellValue('CY1', 'PRETICAP')
+                    ->setCellValue('CZ1', 'PRETIVA')
+                    ->setCellValue('DA1', 'PRETIVAP')
+                    ->setCellValue('DB1', 'PRETPERC')
+                    ->setCellValue('DC1', 'PRETPERP')
+                    ->setCellValue('DD1', 'REGSIMP')
+                    ->setCellValue('DE1', 'REPORTDC')
+                    ->setCellValue('DF1', 'RESPRETE')
+                    ->setCellValue('DG1', 'RETICA')
+                    ->setCellValue('DH1', 'RETICAP')
+                    ->setCellValue('DI1', 'STADSINCRO')
+                    ->setCellValue('DJ1', 'SUCURSAL')
+                    ->setCellValue('DK1', 'TEL1')
+                    ->setCellValue('DL1', 'TEL2')
+                    ->setCellValue('DM1', 'TIDENTI')
+                    ->setCellValue('DN1', 'TIPOCAR')
+                    ->setCellValue('DO1', 'TIPOCLI')
+                    ->setCellValue('DP1', 'TIPOCTA')
+                    ->setCellValue('DQ1', 'TIPOCXP')
+                    ->setCellValue('DR1', 'TIPOIDEN')
+                    ->setCellValue('DS1', 'TIPOPER')
+                    ->setCellValue('DT1', 'TIPOPRV')
+                    ->setCellValue('DU1', 'VENDEDOR')
+                    ->setCellValue('DV1', 'ZONA');
+
+        $i = 2;
+        $query = $em->createQuery($this->strSqlLista);
+        $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+        $arEmpleados = $query->getResult();
+        foreach ($arEmpleados as $arEmpleado) {
+            if ($arEmpleado->getCodigoCentroCostoFk() == null){
+                $centroCosto = "";
+            }else{
+                $centroCosto = $arEmpleado->getCentroCostoRel()->getNombre();
+            }
+            if ($arEmpleado->getCodigoClasificacionRiesgoFk() == null){
+                $clasificacionRiesgo = "";
+            }else{
+                $clasificacionRiesgo = $arEmpleado->getClasificacionRiesgoRel()->getNombre();
+            }
+            if ($arEmpleado->getCodigoCargoFk() == null){
+                $cargo = "";
+            }else{
+                $cargo = $arEmpleado->getCargoRel()->getNombre();
+            }
+            if ($arEmpleado->getCodigoTipoPensionFk() == null){
+                $tipoPension = "";
+            }else{
+                $tipoPension = $arEmpleado->getTipoPensionRel()->getNombre();
+            }
+            if ($arEmpleado->getCodigoTipoCotizanteFk() == null){
+                $tipoCotizante = "";
+            }else{
+                $tipoCotizante = $arEmpleado->getSsoTipoCotizanteRel()->getNombre();
+            }
+            if ($arEmpleado->getCodigoSubtipoCotizanteFk() == null){
+                $subtipoCotizante = "";
+            }else{
+                $subtipoCotizante = $arEmpleado->getSsoSubtipoCotizanteRel()->getNombre();
+            }
+            if ($arEmpleado->getCodigoEntidadSaludFk() == null){
+                $entidadSalud = "";
+            }else{
+                $entidadSalud = $arEmpleado->getEntidadSaludRel()->getNombre();
+            }
+            
+            if ($arEmpleado->getCodigoEntidadPensionFk() == null){
+                $entidadPension = "";
+            }else{
+                $entidadPension = $arEmpleado->getEntidadPensionRel()->getNombre();
+            }
+            
+            if ($arEmpleado->getCodigoEntidadCajaFk() == null){
+                $entidadCaja = "";
+            }else{
+                $entidadCaja = $arEmpleado->getEntidadCajaRel()->getNombre();
+            }        
+            if ($arEmpleado->getCodigoSexoFk() == "M"){
+                $sexo = "MASCULINO";
+            }else{
+                $sexo = "FEMENINO";
+            }
+            if ($arEmpleado->getPadreFamilia() == 0){
+                $padreFamilia = "NO";
+            }else{
+                $padreFamilia = "SI";
+            }
+            if ($arEmpleado->getCabezaHogar() == 0){
+                $cabezaHogar = "NO";
+            }else{
+                $cabezaHogar = "SI";
+            }
+            if ($arEmpleado->getEstadoActivo() == 0){
+                $estadoActivo = "NO";
+            }else{
+                $estadoActivo = "SI";
+            }
+            if ($arEmpleado->getEstadoContratoActivo() == 0){
+                $estadoContratoActivo = "NO VIGENTE";
+            }else{
+                $estadoContratoActivo = "VIGENTE";
+            }
+            if ($arEmpleado->getCodigoDepartamentoEmpresaFk() == null){
+                $departamentoEmpresa = "";
+            }else{
+                $departamentoEmpresa = $arEmpleado->getDepartamentoEmpresaRel()->getNombre();
+            }
+            if ($arEmpleado->getCodigoHorarioFk() == null){
+                $horario = "";
+            }else{
+                $horario = $arEmpleado->getHorarioRel()->getNombre();
+            }
+            if ($arEmpleado->getCodigoEmpleadoEstudioTipoFk() == null){
+                $empleadoEstudioTipo = "";
+            }else{
+                $empleadoEstudioTipo = $arEmpleado->getEmpleadoEstudioTipoRel()->getNombre();
+            }
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arEmpleado->getCodigoEmpleadoPk())
+                    ->setCellValue('B' . $i, $arEmpleado->getTipoIdentificacionRel()->getNombre())
+                    ->setCellValue('C' . $i, $arEmpleado->getNumeroIdentificacion())
+                    ->setCellValue('D' . $i, $arEmpleado->getciudadExpedicionRel()->getNombre())
+                    ->setCellValue('E' . $i, $arEmpleado->getFechaExpedicionIdentificacion())
+                    ->setCellValue('F' . $i, $arEmpleado->getLibretaMilitar())
+                    ->setCellValue('G' . $i, $centroCosto)
+                    ->setCellValue('H' . $i, $arEmpleado->getNombreCorto())
+                    ->setCellValue('I' . $i, $arEmpleado->getTelefono())
+                    ->setCellValue('J' . $i, $arEmpleado->getCelular())
+                    ->setCellValue('K' . $i, $arEmpleado->getDireccion())
+                    ->setCellValue('L' . $i, $arEmpleado->getBarrio())
+                    ->setCellValue('M' . $i, $arEmpleado->getciudadRel()->getNombre())
+                    ->setCellValue('N' . $i, $arEmpleado->getRhRel()->getTipo())
+                    ->setCellValue('O' . $i, $sexo)
+                    ->setCellValue('P' . $i, $arEmpleado->getCorreo())
+                    ->setCellValue('Q' . $i, $arEmpleado->getFechaNacimiento())
+                    ->setCellValue('R' . $i, $arEmpleado->getCiudadNacimientoRel()->getNombre())
+                    ->setCellValue('S' . $i, $arEmpleado->getEstadoCivilRel()->getNombre())
+                    ->setCellValue('T' . $i, $padreFamilia)
+                    ->setCellValue('U' . $i, $cabezaHogar)
+                    ->setCellValue('V' . $i, $empleadoEstudioTipo)
+                    ->setCellValue('W' . $i, $entidadSalud)
+                    ->setCellValue('X' . $i, $entidadPension)
+                    ->setCellValue('Y' . $i, $entidadCaja)
+                    ->setCellValue('Z' . $i, $clasificacionRiesgo)
+                    ->setCellValue('AA' . $i, $arEmpleado->getCuenta())
+                    ->setCellValue('AB' . $i, $arEmpleado->getBancoRel()->getNombre())
+                    ->setCellValue('AC' . $i, $arEmpleado->getFechaContrato())
+                    ->setCellValue('AD' . $i, $arEmpleado->getFechaFinalizaContrato())
+                    ->setCellValue('AE' . $i, $cargo)
+                    ->setCellValue('AF' . $i, $arEmpleado->getCargoDescripcion())
+                    ->setCellValue('AG' . $i, $tipoPension)
+                    ->setCellValue('AH' . $i, $tipoCotizante)
+                    ->setCellValue('AI' . $i, $subtipoCotizante)
+                    ->setCellValue('AJ' . $i, $estadoActivo)
+                    ->setCellValue('AK' . $i, $estadoContratoActivo)
+                    ->setCellValue('AL' . $i, $arEmpleado->getCodigoContratoActivoFk())
+                    ->setCellValue('AM' . $i, $arEmpleado->getCamisa())
+                    ->setCellValue('AN' . $i, $arEmpleado->getJeans())
+                    ->setCellValue('AO' . $i, $arEmpleado->getCalzado())
+                    ->setCellValue('AP' . $i, $departamentoEmpresa)
+                    ->setCellValue('AQ' . $i, $horario);
+            $i++;
+        }
+
+        $objPHPExcel->getActiveSheet()->setTitle('Empleados');
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="Empleados.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }
+    
 }

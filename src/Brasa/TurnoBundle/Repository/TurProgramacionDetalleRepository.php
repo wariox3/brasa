@@ -306,151 +306,162 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                         $strFechaDesde = $arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('Y/m') . "/" . $arPedidoDetalle->getDiaDesde();
                         $strAnio = $arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('Y');
                         $intPosicion = $this->devuelvePosicionInicialMatrizPlantilla($strAnio, $arPedidoDetalle->getServicioDetalleRel()->getDiasSecuencia(), $strFechaDesde, $arPedidoDetalle->getFechaIniciaPlantilla());
-                        $arrTurnos = $this->devuelveTurnosMes($arPlantillaDetalle);
-                        $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
-                        $arProgramacionDetalle->setProgramacionRel($arProgramacion);
-                        $arProgramacionDetalle->setPedidoDetalleRel($arPedidoDetalle);
-                        $arProgramacionDetalle->setProyectoRel($arPedidoDetalle->getProyectoRel());
-                        $arProgramacionDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
-                        $arProgramacionDetalle->setAjusteProgramacion($arPedidoDetalle->getAjusteProgramacion());
-                        $arPedidoDetalleRecurso = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso();
-                        $arPedidoDetalleRecurso = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->findOneBy(array('codigoPedidoDetalleFk' => $codigoPedidoDetalle, 'posicion' => $arPlantillaDetalle->getPosicion()));
-                        if(count($arPedidoDetalleRecurso) > 0) {
-                            $arProgramacionDetalle->setRecursoRel($arPedidoDetalleRecurso->getRecursoRel());
-                        }
-                        for($i = 1; $i < 32; $i++) {                            
-                            $strTurno = $arrTurnos[$intPosicion];
-                            $strFechaDia = $arProgramacion->getFecha()->format('Y-m-') . $i;
-                            $dateFechaDia = date_create($strFechaDia);
-                            $diaSemana = $dateFechaDia->format('N');
+                        $arrTurnos = $this->devuelveTurnosMes($arPlantillaDetalle);                        
+                        $arPedidoDetalleRecursos = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleRecurso();
+                        $arPedidoDetalleRecursos = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleRecurso')->findBy(array('codigoPedidoDetalleFk' => $codigoPedidoDetalle, 'posicion' => $arPlantillaDetalle->getPosicion()));
+                        foreach ($arPedidoDetalleRecursos as $arPedidoDetalleRecurso) {
+                            $intPosicionPlantilla = $intPosicion;
+                            $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+                            $arProgramacionDetalle->setProgramacionRel($arProgramacion);
+                            $arProgramacionDetalle->setPedidoDetalleRel($arPedidoDetalle);
+                            $arProgramacionDetalle->setProyectoRel($arPedidoDetalle->getProyectoRel());
+                            $arProgramacionDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
+                            $arProgramacionDetalle->setAjusteProgramacion($arPedidoDetalle->getAjusteProgramacion());                                                        
+                            $arProgramacionDetalle->setRecursoRel($arPedidoDetalleRecurso->getRecursoRel());                            
+                            for($i = 1; $i < 32; $i++) {                            
+                                $strTurno = $arrTurnos[$intPosicionPlantilla];
+                                $strFechaDia = $arProgramacion->getFecha()->format('Y-m-') . $i;
+                                $dateFechaDia = date_create($strFechaDia);
+                                $diaSemana = $dateFechaDia->format('N');
 
-                            $boolFestivo = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->festivo($arFestivos, $dateFechaDia);
-                            if($diaSemana == 1 && isset($arrTurnos['lunes'])) {
-                                $strTurno = $arrTurnos['lunes'];
+                                $boolFestivo = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->festivo($arFestivos, $dateFechaDia);
+                                if($diaSemana == 1 && isset($arrTurnos['lunes'])) {
+                                    $strTurno = $arrTurnos['lunes'];
+                                }
+                                if($diaSemana == 2 && isset($arrTurnos['martes'])) {
+                                    $strTurno = $arrTurnos['martes'];
+                                }
+                                if($diaSemana == 3 && isset($arrTurnos['miercoles'])) {
+                                    $strTurno = $arrTurnos['miercoles'];
+                                }
+                                if($diaSemana == 4 && isset($arrTurnos['jueves'])) {
+                                    $strTurno = $arrTurnos['jueves'];
+                                }
+                                if($diaSemana == 5 && isset($arrTurnos['viernes'])) {
+                                    $strTurno = $arrTurnos['viernes'];
+                                }
+                                if($diaSemana == 6 && isset($arrTurnos['sabado'])) {
+                                    $strTurno = $arrTurnos['sabado'];
+                                }
+                                if($diaSemana == 7 && isset($arrTurnos['domingo'])) {
+                                    $strTurno = $arrTurnos['domingo'];
+                                }
+                                if($boolFestivo == 1 && isset($arrTurnos['festivo'])) {
+                                    $strTurno = $arrTurnos['festivo'];
+                                }                 
+                                if($diaSemana == 7 && isset($arrTurnos['domingoFestivo'])) {
+                                    $strFechaDiaSiguiente = $arProgramacion->getFecha()->format('Y-m-') . ($i+1);
+                                    $dateFechaDiaSiguiente = date_create($strFechaDiaSiguiente);                            
+                                    $boolFestivoSiguiente = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->festivo($arFestivos, $dateFechaDiaSiguiente);                                
+                                    if($boolFestivoSiguiente == 1) {
+                                        $strTurno = $arrTurnos['domingoFestivo'];                                
+                                    }                                
+                                }                                
+                                $boolAplica = $this->aplicaPlantilla($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle, $strTurno, $boolFestivo);
+                                if($boolAplica == TRUE) {
+                                    if($i == 1) {
+                                        $arProgramacionDetalle->setDia1($strTurno);
+                                    }
+                                    if($i == 2) {
+                                        $arProgramacionDetalle->setDia2($strTurno);
+                                    }
+                                    if($i == 3) {
+                                        $arProgramacionDetalle->setDia3($strTurno);
+                                    }
+                                    if($i == 4) {
+                                        $arProgramacionDetalle->setDia4($strTurno);
+                                    }
+                                    if($i == 5) {
+                                        $arProgramacionDetalle->setDia5($strTurno);
+                                    }
+                                    if($i == 6) {
+                                        $arProgramacionDetalle->setDia6($strTurno);
+                                    }
+                                    if($i == 7) {
+                                        $arProgramacionDetalle->setDia7($strTurno);
+                                    }
+                                    if($i == 8) {
+                                        $arProgramacionDetalle->setDia8($strTurno);
+                                    }
+                                    if($i == 9) {
+                                        $arProgramacionDetalle->setDia9($strTurno);
+                                    }
+                                    if($i == 10) {
+                                        $arProgramacionDetalle->setDia10($strTurno);
+                                    }
+                                    if($i == 11) {
+                                        $arProgramacionDetalle->setDia11($strTurno);
+                                    }
+                                    if($i == 12) {
+                                        $arProgramacionDetalle->setDia12($strTurno);
+                                    }
+                                    if($i == 13) {
+                                        $arProgramacionDetalle->setDia13($strTurno);
+                                    }
+                                    if($i == 14) {
+                                        $arProgramacionDetalle->setDia14($strTurno);
+                                    }
+                                    if($i == 15) {
+                                        $arProgramacionDetalle->setDia15($strTurno);
+                                    }
+                                    if($i == 16) {
+                                        $arProgramacionDetalle->setDia16($strTurno);
+                                    }
+                                    if($i == 17) {
+                                        $arProgramacionDetalle->setDia17($strTurno);
+                                    }
+                                    if($i == 18) {
+                                        $arProgramacionDetalle->setDia18($strTurno);
+                                    }
+                                    if($i == 19) {
+                                        $arProgramacionDetalle->setDia19($strTurno);
+                                    }
+                                    if($i == 20) {
+                                        $arProgramacionDetalle->setDia20($strTurno);
+                                    }
+                                    if($i == 21) {
+                                        $arProgramacionDetalle->setDia21($strTurno);
+                                    }
+                                    if($i == 22) {
+                                        $arProgramacionDetalle->setDia22($strTurno);
+                                    }
+                                    if($i == 23) {
+                                        $arProgramacionDetalle->setDia23($strTurno);
+                                    }
+                                    if($i == 24) {
+                                        $arProgramacionDetalle->setDia24($strTurno);
+                                    }
+                                    if($i == 25) {
+                                        $arProgramacionDetalle->setDia25($strTurno);
+                                    }
+                                    if($i == 26) {
+                                        $arProgramacionDetalle->setDia26($strTurno);
+                                    }
+                                    if($i == 27) {
+                                        $arProgramacionDetalle->setDia27($strTurno);
+                                    }
+                                    if($i == 28) {
+                                        $arProgramacionDetalle->setDia28($strTurno);
+                                    }
+                                    if($i == 29) {
+                                        $arProgramacionDetalle->setDia29($strTurno);
+                                    }
+                                    if($i == 30) {
+                                        $arProgramacionDetalle->setDia30($strTurno);
+                                    }
+                                    if($i == 31) {
+                                        $arProgramacionDetalle->setDia31($strTurno);
+                                    }
+                                }
+                                $intPosicionPlantilla++;
+                                if($intPosicionPlantilla == ($arPedidoDetalle->getServicioDetalleRel()->getDiasSecuencia() + 1)) {
+                                    $intPosicionPlantilla = 1;
+                                }
                             }
-                            if($diaSemana == 2 && isset($arrTurnos['martes'])) {
-                                $strTurno = $arrTurnos['martes'];
-                            }
-                            if($diaSemana == 3 && isset($arrTurnos['miercoles'])) {
-                                $strTurno = $arrTurnos['miercoles'];
-                            }
-                            if($diaSemana == 4 && isset($arrTurnos['jueves'])) {
-                                $strTurno = $arrTurnos['jueves'];
-                            }
-                            if($diaSemana == 5 && isset($arrTurnos['viernes'])) {
-                                $strTurno = $arrTurnos['viernes'];
-                            }
-                            if($diaSemana == 6 && isset($arrTurnos['sabado'])) {
-                                $strTurno = $arrTurnos['sabado'];
-                            }
-                            if($diaSemana == 7 && isset($arrTurnos['domingo'])) {
-                                $strTurno = $arrTurnos['domingo'];
-                            }
-                            if($boolFestivo == 1 && isset($arrTurnos['festivo'])) {
-                                $strTurno = $arrTurnos['festivo'];
-                            }                            
-                            $boolAplica = $this->aplicaPlantilla($i, $intDiaInicial, $intDiaFinal, $strMesAnio, $arPedidoDetalle, $strTurno, $boolFestivo);
-                            if($boolAplica == TRUE) {
-                                if($i == 1) {
-                                    $arProgramacionDetalle->setDia1($strTurno);
-                                }
-                                if($i == 2) {
-                                    $arProgramacionDetalle->setDia2($strTurno);
-                                }
-                                if($i == 3) {
-                                    $arProgramacionDetalle->setDia3($strTurno);
-                                }
-                                if($i == 4) {
-                                    $arProgramacionDetalle->setDia4($strTurno);
-                                }
-                                if($i == 5) {
-                                    $arProgramacionDetalle->setDia5($strTurno);
-                                }
-                                if($i == 6) {
-                                    $arProgramacionDetalle->setDia6($strTurno);
-                                }
-                                if($i == 7) {
-                                    $arProgramacionDetalle->setDia7($strTurno);
-                                }
-                                if($i == 8) {
-                                    $arProgramacionDetalle->setDia8($strTurno);
-                                }
-                                if($i == 9) {
-                                    $arProgramacionDetalle->setDia9($strTurno);
-                                }
-                                if($i == 10) {
-                                    $arProgramacionDetalle->setDia10($strTurno);
-                                }
-                                if($i == 11) {
-                                    $arProgramacionDetalle->setDia11($strTurno);
-                                }
-                                if($i == 12) {
-                                    $arProgramacionDetalle->setDia12($strTurno);
-                                }
-                                if($i == 13) {
-                                    $arProgramacionDetalle->setDia13($strTurno);
-                                }
-                                if($i == 14) {
-                                    $arProgramacionDetalle->setDia14($strTurno);
-                                }
-                                if($i == 15) {
-                                    $arProgramacionDetalle->setDia15($strTurno);
-                                }
-                                if($i == 16) {
-                                    $arProgramacionDetalle->setDia16($strTurno);
-                                }
-                                if($i == 17) {
-                                    $arProgramacionDetalle->setDia17($strTurno);
-                                }
-                                if($i == 18) {
-                                    $arProgramacionDetalle->setDia18($strTurno);
-                                }
-                                if($i == 19) {
-                                    $arProgramacionDetalle->setDia19($strTurno);
-                                }
-                                if($i == 20) {
-                                    $arProgramacionDetalle->setDia20($strTurno);
-                                }
-                                if($i == 21) {
-                                    $arProgramacionDetalle->setDia21($strTurno);
-                                }
-                                if($i == 22) {
-                                    $arProgramacionDetalle->setDia22($strTurno);
-                                }
-                                if($i == 23) {
-                                    $arProgramacionDetalle->setDia23($strTurno);
-                                }
-                                if($i == 24) {
-                                    $arProgramacionDetalle->setDia24($strTurno);
-                                }
-                                if($i == 25) {
-                                    $arProgramacionDetalle->setDia25($strTurno);
-                                }
-                                if($i == 26) {
-                                    $arProgramacionDetalle->setDia26($strTurno);
-                                }
-                                if($i == 27) {
-                                    $arProgramacionDetalle->setDia27($strTurno);
-                                }
-                                if($i == 28) {
-                                    $arProgramacionDetalle->setDia28($strTurno);
-                                }
-                                if($i == 29) {
-                                    $arProgramacionDetalle->setDia29($strTurno);
-                                }
-                                if($i == 30) {
-                                    $arProgramacionDetalle->setDia30($strTurno);
-                                }
-                                if($i == 31) {
-                                    $arProgramacionDetalle->setDia31($strTurno);
-                                }
-                            }
-                            $intPosicion++;
-                            if($intPosicion == ($arPedidoDetalle->getServicioDetalleRel()->getDiasSecuencia() + 1)) {
-                                $intPosicion = 1;
-                            }
+                            $em->persist($arProgramacionDetalle);                            
                         }
-                        $em->persist($arProgramacionDetalle);
+
+
                     }
                 } else {
                     if($arPedidoDetalle->getCantidadRecurso() != 0) {
