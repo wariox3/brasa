@@ -23,6 +23,10 @@ class TurConceptoServicio
     private $nombre;             
     
     /**
+     * @ORM\Column(name="nombre_facturacion", type="string", length=100, nullable=true)
+     */    
+    private $nombreFacturacion;    
+    /**
      * @ORM\Column(name="horas", type="float")
      */    
     private $horas = 0;    
@@ -375,5 +379,29 @@ class TurConceptoServicio
     public function getCierresMesServiciosConceptoServicioRel()
     {
         return $this->cierresMesServiciosConceptoServicioRel;
+    }
+
+    /**
+     * Set nombreFacturacion
+     *
+     * @param string $nombreFacturacion
+     *
+     * @return TurConceptoServicio
+     */
+    public function setNombreFacturacion($nombreFacturacion)
+    {
+        $this->nombreFacturacion = $nombreFacturacion;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreFacturacion
+     *
+     * @return string
+     */
+    public function getNombreFacturacion()
+    {
+        return $this->nombreFacturacion;
     }
 }
