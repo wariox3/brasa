@@ -108,6 +108,11 @@ class TurFactura
     private $vrTotal = 0;    
     
     /**
+     * @ORM\Column(name="vr_total_neto", type="float")
+     */
+    private $vrTotalNeto = 0;
+    
+    /**
      * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
      */    
     private $usuario;     
@@ -812,5 +817,29 @@ class TurFactura
     public function getFacturasDetallesConceptosFacturaRel()
     {
         return $this->facturasDetallesConceptosFacturaRel;
+    }
+
+    /**
+     * Set vrTotalNeto
+     *
+     * @param float $vrTotalNeto
+     *
+     * @return TurFactura
+     */
+    public function setVrTotalNeto($vrTotalNeto)
+    {
+        $this->vrTotalNeto = $vrTotalNeto;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalNeto
+     *
+     * @return float
+     */
+    public function getVrTotalNeto()
+    {
+        return $this->vrTotalNeto;
     }
 }

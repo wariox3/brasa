@@ -86,13 +86,15 @@ class TurFacturaRepository extends EntityRepository {
             $floRetencionFuente = (($floBaseAIU) * 2 ) / 100;
         }                
 
-        $floTotal = $subtotal + $floIva - $floRetencionFuente;
+        $floTotal = $subtotal + $floIva;
+        $floTotalNeto = $floTotal - $floRetencionFuente;
         $arFactura->setVrBaseAIU($floBaseAIU);
         $arFactura->setVrSubtotal($floSubTotal);
         $arFactura->setVrSubtotalOtros($floSubTotalConceptos);        
         $arFactura->setVrRetencionFuente($floRetencionFuente);
         $arFactura->setVrIva($floIva);
         $arFactura->setvrTotal($floTotal);
+        $arFactura->setVrTotalNeto($floTotalNeto);
         $em->persist($arFactura);
         $em->flush();
         return true;
