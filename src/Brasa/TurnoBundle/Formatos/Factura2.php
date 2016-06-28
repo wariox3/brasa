@@ -41,19 +41,19 @@ class Factura2 extends \FPDF_FPDF {
         $arFactura = self::$em->getRepository('BrasaTurnoBundle:TurFactura')->find(self::$codigoFactura);
         
         
-        $this->SetFont('Arial', '', 8);
-        $this->Text(15, 70, "Fecha Factura");
-        $this->Text(50, 70, "Junio 07 del 2016");
-        $this->Text(140, 70, "Fecha Vence");
-        $this->Text(170, 70, "Junio 07 del 2016");        
-        $this->Text(15, 75, utf8_decode("Señores"));
-        $this->Text(50, 75, "CONSTRUCTORA CONCONCRETO S.A");
-        $this->Text(140, 75, "Nit");
-        $this->Text(170, 75, "811010416");        
+        $this->SetFont('Arial', '', 9);
+        $this->Text(15, 65, "Fecha Factura");
+        $this->Text(50, 65, ucwords(strtolower($this->devuelveMes($arFactura->getFecha()->format('m')))) . " " . $arFactura->getFecha()->format('d') . " de " . $arFactura->getFecha()->format('Y'));
+        $this->Text(140, 65, "Fecha Vence");
+        $this->Text(170, 65, ucwords(strtolower($this->devuelveMes($arFactura->getFechaVence()->format('m')))) . " " . $arFactura->getFechaVence()->format('d') . " de " . $arFactura->getFechaVence()->format('Y'));        
+        $this->Text(15, 70, utf8_decode("Señores"));
+        $this->Text(50, 70, $arFactura->getClienteRel()->getNombreCorto());
+        $this->Text(140, 70, "Nit");
+        $this->Text(170, 70, $arFactura->getClienteRel()->getNit());        
         $this->Text(15, 80, "Direccion");
-        $this->Text(50, 80, "Cra 5 numero 35-25");
+        $this->Text(50, 80, $arFactura->getClienteRel()->getDireccion());
         $this->Text(140, 80, "Telefono");
-        $this->Text(170, 80, "444444");                
+        $this->Text(170, 80, $arFactura->getClienteRel()->getTelefono());                
         
         $this->SetXY(110, 75);
         $this->SetMargins(10, 1, 10);
@@ -118,7 +118,7 @@ class Factura2 extends \FPDF_FPDF {
             $pdf->Ln();
             $pdf->SetX(15);
             $pdf->Cell(10, 4, '', 0, 0, 'R');                                   
-            $strCampo = $arFacturaDetalle->getPedidoDetalleRel()->getConceptoServicioRel()->getNombreFacturacion() . $strDetalle2 . " " . $arFacturaDetalle->getDetalle();            
+            $strCampo = $arFacturaDetalle->getPedidoDetalleRel()->getConceptoServicioRel()->getNombreFacturacion() . " " . $arFacturaDetalle->getDetalle();            
             $pdf->MultiCell(110, 4, $strCampo, 0, 'L'); 
             //$pdf->Cell(110, 4, $strCampo, 0, 0, 'L');                        
             $pdf->Cell(30, 4, '', 0, 0, 'R');
