@@ -443,8 +443,11 @@ class TurPedidoRepository extends EntityRepository {
         $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido); 
         $arPedido->setEstadoFacturado(1);
         $em->persist($arPedido);            
+        $arFacturaTipo = new \Brasa\TurnoBundle\Entity\TurFacturaTipo();
+        $arFacturaTipo = $em->getRepository('BrasaTurnoBundle:TurFacturaTipo')->find(1);
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
         $arFactura->setFecha(new \DateTime('now'));
+        $arFactura->setFacturaTipoRel($arFacturaTipo);
         $dateFechaVence = $objFunciones->sumarDiasFecha($arPedido->getClienteRel()->getPlazoPago(), $arFactura->getFecha());
         $arFactura->setFechaVence($dateFechaVence);            
         $arFactura->setClienteRel($arPedido->getClienteRel());                   
