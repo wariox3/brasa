@@ -33,6 +33,11 @@ class TurFacturaDetalle
     private $codigoPedidoDetalleFk;    
     
     /**
+     * @ORM\Column(name="fecha_programacion", type="date", nullable=true)
+     */    
+    private $fechaProgramacion;    
+    
+    /**
      * @ORM\Column(name="cantidad", type="float")
      */
     private $cantidad = 0;    
@@ -290,5 +295,29 @@ class TurFacturaDetalle
     public function getDetalle()
     {
         return $this->detalle;
+    }
+
+    /**
+     * Set fechaProgramacion
+     *
+     * @param \DateTime $fechaProgramacion
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setFechaProgramacion($fechaProgramacion)
+    {
+        $this->fechaProgramacion = $fechaProgramacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaProgramacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaProgramacion()
+    {
+        return $this->fechaProgramacion;
     }
 }

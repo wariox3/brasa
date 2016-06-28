@@ -71,7 +71,7 @@ class Factura2 extends \FPDF_FPDF {
         $this->SetFont('', 'B', 9);
 
         //creamos la cabecera de la tabla.
-        $w = array(10, 120, 30, 30);
+        $w = array(10, 124, 28, 28);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0)
                 $this->Cell($w[$i], 7, $header[$i], 1, 0, 'L');
@@ -87,15 +87,33 @@ class Factura2 extends \FPDF_FPDF {
 
     public function Body($pdf) {
         $pdf->Rect(15, 96, 10, 84);
-        $pdf->Rect(25, 96, 120, 84);
-        $pdf->Rect(145, 96, 30, 84);
-        $pdf->Rect(175, 96, 30, 84);
+        $pdf->Rect(25, 96, 124, 84);
+        $pdf->Rect(149, 96, 28, 84);
+        $pdf->Rect(177, 96, 28, 84);
+         
         $arFacturaDetalles = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
         $arFacturaDetalles = self::$em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array('codigoFacturaFk' => self::$codigoFactura));
+        $arrMeses = array();
+        foreach ($arFacturaDetalles as $arFacturaDetalle) {
+            $strMes = $this->devuelveMes($arFacturaDetalle->getFechaProgramacion()->format('m')) . $arFacturaDetalle->getFechaProgramacion()->format('/Y');
+            $nuevo = true;
+            foreach ($arrMeses as $mes) {
+               if($mes['mes'] == $strMes) {
+                 $nuevo = false;  
+               }
+            }
+            if($nuevo == true) {
+                $arrMeses[] = array('mes' => $strMes);
+            }            
+        }
+        $strMeses = "";
+        foreach ($arrMeses as $mes) {           
+            $strMeses .= $mes['mes'];             
+        }
         $pdf->SetX(15);
         $pdf->Cell(10, 4, '', 0, 0, 'R');                        
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(120, 4, "SERVICIOS DE SEGURIDAD", 0, 0, 'L');                        
+        $pdf->Cell(120, 4, "SERVICIOS DE SEGURIDAD " . $strMeses, 0, 0, 'L');                        
         $pdf->SetFont('Arial', '', 9);
         $pdf->Cell(30, 4, '', 0, 0, 'R');
         $pdf->Cell(30, 4, '', 0, 0, 'R'); 
@@ -111,19 +129,19 @@ class Factura2 extends \FPDF_FPDF {
             $this->devuelveMes($arFacturaDetalle->getPedidoDetalleRel()->getPedidoRel()->getFechaProgramacion()->format('n')) . " " . $arFacturaDetalle->getPedidoDetalleRel()->getPedidoRel()->getFechaProgramacion()->format('Y');            
             $pdf->Cell(10, 4, number_format($arFacturaDetalle->getCantidad(), 0, '.', ','), 0, 0, 'R');                        
             $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(120, 4, substr($arFacturaDetalle->getPedidoDetalleRel()->getPuestoRel()->getNombre(), 0, 55), 0, 0, 'L');                        
+            $pdf->Cell(124, 4, substr($arFacturaDetalle->getPedidoDetalleRel()->getPuestoRel()->getNombre() . '-'  . $arFacturaDetalle->getPedidoDetalleRel()->getModalidadServicioRel()->getNombre(), 0, 61), 0, 0, 'L');                        
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(30, 4, number_format($arFacturaDetalle->getVrPrecio(), 0, '.', ','), 0, 0, 'R');
-            $pdf->Cell(30, 4, number_format($arFacturaDetalle->getVrPrecio(), 0, '.', ','), 0, 0, 'R');
+            $pdf->Cell(28, 4, number_format($arFacturaDetalle->getVrPrecio(), 0, '.', ','), 0, 0, 'R');
+            $pdf->Cell(28, 4, number_format($arFacturaDetalle->getVrPrecio(), 0, '.', ','), 0, 0, 'R');
             $pdf->Ln();
             $pdf->SetX(15);
             $pdf->Cell(10, 4, '', 0, 0, 'R');                                   
             $strCampo = $arFacturaDetalle->getPedidoDetalleRel()->getConceptoServicioRel()->getNombreFacturacion() . " " . $arFacturaDetalle->getDetalle();            
-            $pdf->MultiCell(120, 4, $strCampo, 0, 'L'); 
+            $pdf->MultiCell(124, 4, $strCampo, 0, 'L'); 
             //$pdf->Cell(110, 4, $strCampo, 0, 0, 'L');                        
-            $pdf->Cell(30, 4, '', 0, 0, 'R');
-            $pdf->Cell(30, 4, '', 0, 0, 'R');            
-            //$pdf->Ln();
+            $pdf->Cell(28, 4, '', 0, 0, 'R');
+            $pdf->Cell(28, 4, '', 0, 0, 'R');            
+            $pdf->Ln(0.8);
             $pdf->SetAutoPageBreak(true, 15);
         }
     }
@@ -178,21 +196,21 @@ class Factura2 extends \FPDF_FPDF {
         $arConfiguracion = self::$em->getRepository('BrasaTurnoBundle:TurConfiguracion')->find(1);        
         $this->SetXY(15,180);
         $this->Cell(50, 21, '', 1, 0, 'R');        
-        $this->Cell(80, 21, '', 1, 0, 'R'); 
+        $this->Cell(84, 21, '', 1, 0, 'R'); 
         $this->SetXY(15,201);
-        $this->Cell(130, 7, '', 1, 0, 'R');        
-        $this->SetXY(145,180);
-        $this->Cell(30, 7, 'SUB TOTAL', 1, 0, 'L');        
-        $this->Cell(30, 7, number_format($arFactura->getVrSubtotal(), 0, '.', ','), 1, 0, 'R');
-        $this->SetXY(145,187);
-        $this->Cell(30, 7, 'Base Gravable', 1, 0, 'L');        
-        $this->Cell(30, 7, number_format($arFactura->getVrBaseAIU(), 0, '.', ',') , 1, 0, 'R');
-        $this->SetXY(145,194);
-        $this->Cell(30, 7, 'IVA 16 %', 1, 0, 'L');        
-        $this->Cell(30, 7, number_format($arFactura->getVrIva(), 0, '.', ','), 1, 0, 'R'); 
-        $this->SetXY(145,201);
-        $this->Cell(30, 7, 'TOTAL', 1, 0, 'L');        
-        $this->Cell(30, 7, number_format($arFactura->getVrTotal(), 0, '.', ','), 1, 0, 'R');                    
+        $this->Cell(134, 7, '', 1, 0, 'R');        
+        $this->SetXY(149,180);
+        $this->Cell(28, 7, 'SUB TOTAL', 1, 0, 'L');        
+        $this->Cell(28, 7, number_format($arFactura->getVrSubtotal(), 0, '.', ','), 1, 0, 'R');
+        $this->SetXY(149,187);
+        $this->Cell(28, 7, 'Base Gravable', 1, 0, 'L');        
+        $this->Cell(28, 7, number_format($arFactura->getVrBaseAIU(), 0, '.', ',') , 1, 0, 'R');
+        $this->SetXY(149,194);
+        $this->Cell(28, 7, 'IVA 16 %', 1, 0, 'L');        
+        $this->Cell(28, 7, number_format($arFactura->getVrIva(), 0, '.', ','), 1, 0, 'R'); 
+        $this->SetXY(149,201);
+        $this->Cell(28, 7, 'TOTAL', 1, 0, 'L');        
+        $this->Cell(28, 7, number_format($arFactura->getVrTotal(), 0, '.', ','), 1, 0, 'R');                    
         $this->SetFont('Arial', '', 8);
         $plazoPago = $arFactura->getClienteRel()->getPlazoPago();
         $this->Text(66, 185, "CONDICIONES DE PAGO: A $plazoPago DIAS A PARTIR");
