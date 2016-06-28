@@ -239,13 +239,14 @@ class PedidoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
         $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);        
-        $form = $this->formularioDetalleOtroNuevo();
+        $form = $this->formularioDetalleOtroNuevo($arPedido->getCodigoClienteFk());
         $form->handleRequest($request);
         if ($form->isValid()) {
             if ($form->get('BtnGuardar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $arrControles = $request->request->All();
-                if(count($arrSeleccionados) > 0) {    
+                if(count($arrSeleccionados) > 0) {  
+                    $arPuesto = $form->get('puestoRel')->getData();
                     foreach ($arrSeleccionados AS $codigo) {
                         $arFacturaConcepto = new \Brasa\TurnoBundle\Entity\TurFacturaConcepto();
                         $arFacturaConcepto = $em->getRepository('BrasaTurnoBundle:TurFacturaConcepto')->find($codigo);
@@ -258,6 +259,7 @@ class PedidoController extends Controller
                         $arPedidoDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto();
                         $arPedidoDetalleConcepto->setPedidoRel($arPedido);                        
                         $arPedidoDetalleConcepto->setFacturaConceptoRel($arFacturaConcepto);
+                        $arPedidoDetalleConcepto->setPuestoRel($arPuesto);
                         $arPedidoDetalleConcepto->setPorIva($arFacturaConcepto->getPorIva());
                         $arPedidoDetalleConcepto->setCantidad($cantidad);
                         $arPedidoDetalleConcepto->setPrecio($precio);
@@ -307,6 +309,7 @@ class PedidoController extends Controller
                         $arPedidoDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto();                        
                         $arPedidoDetalleConcepto->setPedidoRel($arPedido);                         
                         $arPedidoDetalleConcepto->setFacturaConceptoRel($arServicioDetalleConcepto->getFacturaConceptoRel());
+                        $arPedidoDetalleConcepto->setPuestoRel($arServicioDetalleConcepto->getPuestoRel());
                         $arPedidoDetalleConcepto->setCantidad($arServicioDetalleConcepto->getCantidad());
                         $arPedidoDetalleConcepto->setIva($arServicioDetalleConcepto->getIva());
                         $arPedidoDetalleConcepto->setPrecio($arServicioDetalleConcepto->getPrecio());
@@ -888,8 +891,17 @@ class PedidoController extends Controller
         return $form;
     }    
 
-    private function formularioDetalleOtroNuevo() {
+    private function formularioDetalleOtroNuevo($codigoCliente) {
         $form = $this->createFormBuilder()
+            ->add('puestoRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurPuesto',
+                'query_builder' => function (EntityRepository $er) use($codigoCliente) {
+                    return $er->createQueryBuilder('p')
+                    ->where('p.codigoClienteFk = :cliente')
+                    ->setParameter('cliente', $codigoCliente)
+                    ->orderBy('p.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->getForm();
         return $form;

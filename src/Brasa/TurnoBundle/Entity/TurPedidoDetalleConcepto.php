@@ -28,6 +28,11 @@ class TurPedidoDetalleConcepto
     private $codigoFacturaConceptoFk;        
     
     /**
+     * @ORM\Column(name="codigo_puesto_fk", type="integer", nullable=true)
+     */    
+    private $codigoPuestoFk;    
+    
+    /**
      * @ORM\Column(name="cantidad", type="float")
      */
     private $cantidad = 0;    
@@ -73,6 +78,12 @@ class TurPedidoDetalleConcepto
      * @ORM\JoinColumn(name="codigo_factura_concepto_fk", referencedColumnName="codigo_factura_concepto_pk")
      */
     protected $facturaConceptoRel; 
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurPuesto", inversedBy="pedidosDetallesConceptosPuestoRel")
+     * @ORM\JoinColumn(name="codigo_puesto_fk", referencedColumnName="codigo_puesto_pk")
+     */
+    protected $puestoRel;     
     
     /**
      * @ORM\OneToMany(targetEntity="TurFacturaDetalleConcepto", mappedBy="pedidoDetalleConceptoRel")
@@ -393,5 +404,53 @@ class TurPedidoDetalleConcepto
     public function getFacturasDetallesConceptosPedidoDetalleConceptoRel()
     {
         return $this->facturasDetallesConceptosPedidoDetalleConceptoRel;
+    }
+
+    /**
+     * Set codigoPuestoFk
+     *
+     * @param integer $codigoPuestoFk
+     *
+     * @return TurPedidoDetalleConcepto
+     */
+    public function setCodigoPuestoFk($codigoPuestoFk)
+    {
+        $this->codigoPuestoFk = $codigoPuestoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPuestoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPuestoFk()
+    {
+        return $this->codigoPuestoFk;
+    }
+
+    /**
+     * Set puestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPuesto $puestoRel
+     *
+     * @return TurPedidoDetalleConcepto
+     */
+    public function setPuestoRel(\Brasa\TurnoBundle\Entity\TurPuesto $puestoRel = null)
+    {
+        $this->puestoRel = $puestoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get puestoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPuesto
+     */
+    public function getPuestoRel()
+    {
+        return $this->puestoRel;
     }
 }

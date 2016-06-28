@@ -106,9 +106,19 @@ class TurPuesto
     protected $pedidosDetallesPuestoRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="TurPedidoDetalleConcepto", mappedBy="puestoRel")
+     */
+    protected $pedidosDetallesConceptosPuestoRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurServicioDetalle", mappedBy="puestoRel")
      */
     protected $serviciosDetallesPuestoRel;     
+    
+    /**
+     * @ORM\OneToMany(targetEntity="TurServicioDetalleConcepto", mappedBy="puestoRel")
+     */
+    protected $serviciosDetallesConceptosPuestoRel;     
     
     /**
      * @ORM\OneToMany(targetEntity="TurProgramacionDetalle", mappedBy="puestoRel")
@@ -130,14 +140,20 @@ class TurPuesto
      */
     protected $simulacionesDetallesPuestoRel;    
     
+
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->pedidosDetallesPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pedidosDetallesConceptosPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->serviciosDetallesPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->serviciosDetallesConceptosPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->programacionesDetallesPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cierresMesServiciosPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->puestosDotacionesPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->simulacionesDetallesPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -172,6 +188,30 @@ class TurPuesto
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set direccion
+     *
+     * @param string $direccion
+     *
+     * @return TurPuesto
+     */
+    public function setDireccion($direccion)
+    {
+        $this->direccion = $direccion;
+
+        return $this;
+    }
+
+    /**
+     * Get direccion
+     *
+     * @return string
+     */
+    public function getDireccion()
+    {
+        return $this->direccion;
     }
 
     /**
@@ -295,6 +335,30 @@ class TurPuesto
     }
 
     /**
+     * Set costoDotacion
+     *
+     * @param float $costoDotacion
+     *
+     * @return TurPuesto
+     */
+    public function setCostoDotacion($costoDotacion)
+    {
+        $this->costoDotacion = $costoDotacion;
+
+        return $this;
+    }
+
+    /**
+     * Get costoDotacion
+     *
+     * @return float
+     */
+    public function getCostoDotacion()
+    {
+        return $this->costoDotacion;
+    }
+
+    /**
      * Set codigoClienteFk
      *
      * @param integer $codigoClienteFk
@@ -316,6 +380,54 @@ class TurPuesto
     public function getCodigoClienteFk()
     {
         return $this->codigoClienteFk;
+    }
+
+    /**
+     * Set codigoProgramadorFk
+     *
+     * @param integer $codigoProgramadorFk
+     *
+     * @return TurPuesto
+     */
+    public function setCodigoProgramadorFk($codigoProgramadorFk)
+    {
+        $this->codigoProgramadorFk = $codigoProgramadorFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoProgramadorFk
+     *
+     * @return integer
+     */
+    public function getCodigoProgramadorFk()
+    {
+        return $this->codigoProgramadorFk;
+    }
+
+    /**
+     * Set codigoCiudadFk
+     *
+     * @param integer $codigoCiudadFk
+     *
+     * @return TurPuesto
+     */
+    public function setCodigoCiudadFk($codigoCiudadFk)
+    {
+        $this->codigoCiudadFk = $codigoCiudadFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCiudadFk
+     *
+     * @return integer
+     */
+    public function getCodigoCiudadFk()
+    {
+        return $this->codigoCiudadFk;
     }
 
     /**
@@ -343,6 +455,30 @@ class TurPuesto
     }
 
     /**
+     * Set codigoInterface
+     *
+     * @param string $codigoInterface
+     *
+     * @return TurPuesto
+     */
+    public function setCodigoInterface($codigoInterface)
+    {
+        $this->codigoInterface = $codigoInterface;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoInterface
+     *
+     * @return string
+     */
+    public function getCodigoInterface()
+    {
+        return $this->codigoInterface;
+    }
+
+    /**
      * Set clienteRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurCliente $clienteRel
@@ -364,6 +500,54 @@ class TurPuesto
     public function getClienteRel()
     {
         return $this->clienteRel;
+    }
+
+    /**
+     * Set ciudadRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
+     *
+     * @return TurPuesto
+     */
+    public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
+    {
+        $this->ciudadRel = $ciudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     */
+    public function getCiudadRel()
+    {
+        return $this->ciudadRel;
+    }
+
+    /**
+     * Set programadorRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurProgramador $programadorRel
+     *
+     * @return TurPuesto
+     */
+    public function setProgramadorRel(\Brasa\TurnoBundle\Entity\TurProgramador $programadorRel = null)
+    {
+        $this->programadorRel = $programadorRel;
+
+        return $this;
+    }
+
+    /**
+     * Get programadorRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurProgramador
+     */
+    public function getProgramadorRel()
+    {
+        return $this->programadorRel;
     }
 
     /**
@@ -401,6 +585,40 @@ class TurPuesto
     }
 
     /**
+     * Add pedidosDetallesConceptosPuestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidosDetallesConceptosPuestoRel
+     *
+     * @return TurPuesto
+     */
+    public function addPedidosDetallesConceptosPuestoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidosDetallesConceptosPuestoRel)
+    {
+        $this->pedidosDetallesConceptosPuestoRel[] = $pedidosDetallesConceptosPuestoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pedidosDetallesConceptosPuestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidosDetallesConceptosPuestoRel
+     */
+    public function removePedidosDetallesConceptosPuestoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidosDetallesConceptosPuestoRel)
+    {
+        $this->pedidosDetallesConceptosPuestoRel->removeElement($pedidosDetallesConceptosPuestoRel);
+    }
+
+    /**
+     * Get pedidosDetallesConceptosPuestoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPedidosDetallesConceptosPuestoRel()
+    {
+        return $this->pedidosDetallesConceptosPuestoRel;
+    }
+
+    /**
      * Add serviciosDetallesPuestoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurServicioDetalle $serviciosDetallesPuestoRel
@@ -435,6 +653,40 @@ class TurPuesto
     }
 
     /**
+     * Add serviciosDetallesConceptosPuestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto $serviciosDetallesConceptosPuestoRel
+     *
+     * @return TurPuesto
+     */
+    public function addServiciosDetallesConceptosPuestoRel(\Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto $serviciosDetallesConceptosPuestoRel)
+    {
+        $this->serviciosDetallesConceptosPuestoRel[] = $serviciosDetallesConceptosPuestoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove serviciosDetallesConceptosPuestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto $serviciosDetallesConceptosPuestoRel
+     */
+    public function removeServiciosDetallesConceptosPuestoRel(\Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto $serviciosDetallesConceptosPuestoRel)
+    {
+        $this->serviciosDetallesConceptosPuestoRel->removeElement($serviciosDetallesConceptosPuestoRel);
+    }
+
+    /**
+     * Get serviciosDetallesConceptosPuestoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiciosDetallesConceptosPuestoRel()
+    {
+        return $this->serviciosDetallesConceptosPuestoRel;
+    }
+
+    /**
      * Add programacionesDetallesPuestoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurProgramacionDetalle $programacionesDetallesPuestoRel
@@ -466,30 +718,6 @@ class TurPuesto
     public function getProgramacionesDetallesPuestoRel()
     {
         return $this->programacionesDetallesPuestoRel;
-    }
-
-    /**
-     * Set direccion
-     *
-     * @param string $direccion
-     *
-     * @return TurPuesto
-     */
-    public function setDireccion($direccion)
-    {
-        $this->direccion = $direccion;
-
-        return $this;
-    }
-
-    /**
-     * Get direccion
-     *
-     * @return string
-     */
-    public function getDireccion()
-    {
-        return $this->direccion;
     }
 
     /**
@@ -561,102 +789,6 @@ class TurPuesto
     }
 
     /**
-     * Set costoDotacion
-     *
-     * @param float $costoDotacion
-     *
-     * @return TurPuesto
-     */
-    public function setCostoDotacion($costoDotacion)
-    {
-        $this->costoDotacion = $costoDotacion;
-
-        return $this;
-    }
-
-    /**
-     * Get costoDotacion
-     *
-     * @return float
-     */
-    public function getCostoDotacion()
-    {
-        return $this->costoDotacion;
-    }
-
-    /**
-     * Set codigoCiudadFk
-     *
-     * @param integer $codigoCiudadFk
-     *
-     * @return TurPuesto
-     */
-    public function setCodigoCiudadFk($codigoCiudadFk)
-    {
-        $this->codigoCiudadFk = $codigoCiudadFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCiudadFk
-     *
-     * @return integer
-     */
-    public function getCodigoCiudadFk()
-    {
-        return $this->codigoCiudadFk;
-    }
-
-    /**
-     * Set ciudadRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
-     *
-     * @return TurPuesto
-     */
-    public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
-    {
-        $this->ciudadRel = $ciudadRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudadRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenCiudad
-     */
-    public function getCiudadRel()
-    {
-        return $this->ciudadRel;
-    }
-
-    /**
-     * Set codigoInterface
-     *
-     * @param string $codigoInterface
-     *
-     * @return TurPuesto
-     */
-    public function setCodigoInterface($codigoInterface)
-    {
-        $this->codigoInterface = $codigoInterface;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoInterface
-     *
-     * @return string
-     */
-    public function getCodigoInterface()
-    {
-        return $this->codigoInterface;
-    }
-
-    /**
      * Add simulacionesDetallesPuestoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurSimulacionDetalle $simulacionesDetallesPuestoRel
@@ -688,53 +820,5 @@ class TurPuesto
     public function getSimulacionesDetallesPuestoRel()
     {
         return $this->simulacionesDetallesPuestoRel;
-    }
-
-    /**
-     * Set codigoProgramadorFk
-     *
-     * @param integer $codigoProgramadorFk
-     *
-     * @return TurPuesto
-     */
-    public function setCodigoProgramadorFk($codigoProgramadorFk)
-    {
-        $this->codigoProgramadorFk = $codigoProgramadorFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoProgramadorFk
-     *
-     * @return integer
-     */
-    public function getCodigoProgramadorFk()
-    {
-        return $this->codigoProgramadorFk;
-    }
-
-    /**
-     * Set programadorRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurProgramador $programadorRel
-     *
-     * @return TurPuesto
-     */
-    public function setProgramadorRel(\Brasa\TurnoBundle\Entity\TurProgramador $programadorRel = null)
-    {
-        $this->programadorRel = $programadorRel;
-
-        return $this;
-    }
-
-    /**
-     * Get programadorRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurProgramador
-     */
-    public function getProgramadorRel()
-    {
-        return $this->programadorRel;
     }
 }

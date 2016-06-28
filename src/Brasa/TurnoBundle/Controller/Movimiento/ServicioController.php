@@ -200,7 +200,7 @@ class ServicioController extends Controller
         $em = $this->getDoctrine()->getManager();
         $arServicio = new \Brasa\TurnoBundle\Entity\TurServicio();
         $arServicio = $em->getRepository('BrasaTurnoBundle:TurServicio')->find($codigoServicio);        
-        $form = $this->formularioDetalleOtroNuevo();
+        $form = $this->formularioDetalleOtroNuevo($arServicio->getCodigoClienteFk());
         $form->handleRequest($request);
         if ($form->isValid()) {
             if ($form->get('BtnGuardar')->isClicked()) {
@@ -633,8 +633,17 @@ class ServicioController extends Controller
         return $form;
     }    
     
-    private function formularioDetalleOtroNuevo() {
+    private function formularioDetalleOtroNuevo($codigoCliente) {
         $form = $this->createFormBuilder()
+            ->add('puestoRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurPuesto',
+                'query_builder' => function (EntityRepository $er) use($codigoCliente) {
+                    return $er->createQueryBuilder('p')
+                    ->where('p.codigoClienteFk = :cliente')
+                    ->setParameter('cliente', $codigoCliente)
+                    ->orderBy('p.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                 
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->getForm();
         return $form;

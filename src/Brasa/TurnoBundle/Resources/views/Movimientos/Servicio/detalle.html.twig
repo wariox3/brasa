@@ -210,6 +210,7 @@
                     <table class="table table-striped table-bordered table-condensed">
                         <tr>
                             <th>COD</th>
+                            <th>PUESTO</th>
                             <th>NOMBRE</th>
                             <th>%IVA</th>
                             <th>CANTIDAD</th>
@@ -222,6 +223,7 @@
                         {% for arServicioDetalleConceptos in arServicioDetalleConceptos %}
                             <tr>
                                 <td>{{ arServicioDetalleConceptos.codigoServicioDetalleConceptoPk  }}<input type="hidden" name="LblCodigoConcepto[]" value="{{ arServicioDetalleConceptos.codigoServicioDetalleConceptoPk }}"></td>
+                                <td>{{ arServicioDetalleConceptos.puestoRel.nombre | default('') }}</td>
                                 <td>{{ arServicioDetalleConceptos.facturaConceptoRel.nombre | default('') }}</td>
                                 <td style="text-align: right">{{ arServicioDetalleConceptos.porIva | number_format(0, '.', ',') }}</td>                                
                                 {% if arServicio.estadoAutorizado == 0 %}

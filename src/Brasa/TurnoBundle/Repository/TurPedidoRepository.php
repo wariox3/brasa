@@ -85,7 +85,8 @@ class TurPedidoRepository extends EntityRepository {
                 if($arPedidoDetalle->getDiaHasta() == 0 || $arPedidoDetalle->getDiaDesde() == 0) {
                     $intDias = 0;
                 }
-            } else {                
+            } else {  
+                //$intDias = date("d",(mktime(0,0,0,$arPedido->getFechaProgramacion()->format('m')+1,1,$arPedido->getFechaProgramacion()->format('Y'))-1));
                 $intDias = 30;
             }
 

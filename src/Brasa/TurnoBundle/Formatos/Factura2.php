@@ -117,13 +117,13 @@ class Factura2 extends \FPDF_FPDF {
             $pdf->Cell(30, 4, number_format($arFacturaDetalle->getVrPrecio(), 0, '.', ','), 0, 0, 'R');
             $pdf->Ln();
             $pdf->SetX(15);
-            $pdf->Cell(10, 4, '', 0, 0, 'R'); 
+            $pdf->Cell(10, 4, '', 0, 0, 'R');                                   
             $strCampo = $arFacturaDetalle->getPedidoDetalleRel()->getConceptoServicioRel()->getNombreFacturacion() . $strDetalle2 . " " . $arFacturaDetalle->getDetalle();            
             $pdf->MultiCell(110, 4, $strCampo, 0, 'L'); 
-            //$pdf->Cell(110, 4, substr( $strCampo,0,65), 0, 0, 'L');                        
+            //$pdf->Cell(110, 4, $strCampo, 0, 0, 'L');                        
             $pdf->Cell(30, 4, '', 0, 0, 'R');
             $pdf->Cell(30, 4, '', 0, 0, 'R');            
-            
+            //$pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }
     }
@@ -194,7 +194,8 @@ class Factura2 extends \FPDF_FPDF {
         $this->Cell(30, 7, 'TOTAL', 1, 0, 'L');        
         $this->Cell(30, 7, number_format($arFactura->getVrTotal(), 0, '.', ','), 1, 0, 'R');                    
         $this->SetFont('Arial', '', 8);
-        $this->Text(66, 185, "CONDICIONES DE PAGO: A 30 DIAS A PARTIR");
+        $plazoPago = $arFactura->getClienteRel()->getPlazoPago();
+        $this->Text(66, 185, "CONDICIONES DE PAGO: A $plazoPago DIAS A PARTIR");
         $this->Text(66, 189, "DE LA FECHA DE EXPEDICION");
         $this->SetFont('Arial', '', 9);
         $this->Text(20, 185, "Recibi conforme:");
@@ -216,7 +217,7 @@ class Factura2 extends \FPDF_FPDF {
         $this->Text(50, 235, "Favor remitir copia de la consignacion a los correos a.mona@seracis.com y d.mejia@seracis.com");
 
         //Número de página
-        $this->Text(188, 273, 'Pagina ' . $this->PageNo() . ' de {nb}');
+        //$this->Text(188, 273, 'Pagina ' . $this->PageNo() . ' de {nb}');
     }
 
     public function GenerarEncabezadoFactura($em) {

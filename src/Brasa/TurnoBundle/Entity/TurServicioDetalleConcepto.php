@@ -28,6 +28,11 @@ class TurServicioDetalleConcepto
     private $codigoFacturaConceptoFk;        
     
     /**
+     * @ORM\Column(name="codigo_puesto_fk", type="integer", nullable=true)
+     */    
+    private $codigoPuestoFk;    
+    
+    /**
      * @ORM\Column(name="cantidad", type="float")
      */
     private $cantidad = 0;    
@@ -69,7 +74,12 @@ class TurServicioDetalleConcepto
      */
     protected $facturaConceptoRel; 
     
-
+    /**
+     * @ORM\ManyToOne(targetEntity="TurPuesto", inversedBy="serviciosDetallesConceptosPuestoRel")
+     * @ORM\JoinColumn(name="codigo_puesto_fk", referencedColumnName="codigo_puesto_pk")
+     */
+    protected $puestoRel; 
+    
     /**
      * Get codigoServicioDetalleConceptoPk
      *
@@ -318,5 +328,53 @@ class TurServicioDetalleConcepto
     public function getFacturaConceptoRel()
     {
         return $this->facturaConceptoRel;
+    }
+
+    /**
+     * Set codigoPuestoFk
+     *
+     * @param integer $codigoPuestoFk
+     *
+     * @return TurServicioDetalleConcepto
+     */
+    public function setCodigoPuestoFk($codigoPuestoFk)
+    {
+        $this->codigoPuestoFk = $codigoPuestoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPuestoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPuestoFk()
+    {
+        return $this->codigoPuestoFk;
+    }
+
+    /**
+     * Set puestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPuesto $puestoRel
+     *
+     * @return TurServicioDetalleConcepto
+     */
+    public function setPuestoRel(\Brasa\TurnoBundle\Entity\TurPuesto $puestoRel = null)
+    {
+        $this->puestoRel = $puestoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get puestoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPuesto
+     */
+    public function getPuestoRel()
+    {
+        return $this->puestoRel;
     }
 }
