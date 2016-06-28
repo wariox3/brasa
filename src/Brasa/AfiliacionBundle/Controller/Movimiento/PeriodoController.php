@@ -162,11 +162,19 @@ class PeriodoController extends Controller
                 $this->listaDetallePago($codigoPeriodo);
                 $this->generarDetallePagoExcel();
             }            
-            if ($form->get('BtnDetallePagoArchivo')->isClicked()) {                
+            if ($form->get('BtnDetallePagoArchivo')->isClicked()) {             
+                $arPeriodoDetallePagos = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago();
+                $arPeriodoDetallePagos = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetallePago')->findBy(array('codigoPeriodoFk' => $codigoPeriodo));
+                $totalCotizacion = 0;
+                foreach ($arPeriodoDetallePagos as $arPeriodoDetallesumaTotales){
+                    $totalCotizacion += $arPeriodoDetallesumaTotales->getTotalCotizacion();
+                }
                 $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
                 $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-                $strRutaArchivo = $arConfiguracion->getRutaTemporal();
+                //$strRutaArchivo = $arConfiguracion->getRutaTemporal();
+                $strRutaArchivo = "c:/xampp/";
                 $strNombreArchivo = "pila" . date('YmdHis') . ".txt";
+                ob_clean();
                 $ar = fopen($strRutaArchivo . $strNombreArchivo, "a") or
                     die("Problemas en la creacion del archivo plano");
                 fputs($ar, '01');
@@ -178,29 +186,29 @@ class PeriodoController extends Controller
                 fputs($ar, '3');
                 fputs($ar, 'E');
                 fputs($ar, '          ');
-                fputs($ar, '          ');
-                fputs($ar, 'S');
+                fputs($ar, '          '); // Nro 9 del formato
+                fputs($ar, 'S'); // Nro 10 del formato
                 fputs($ar, $this->RellenarNr($arPeriodo->getClienteRel()->getCodigoSucursal(), " ", 10, "D"));
-                fputs($ar, $this->RellenarNr($arPeriodo->getClienteRel()->getCodigoSucursal(), " ", 40, "D"));
+                fputs($ar, $this->RellenarNr('PAGO CONTADO', " ", 40, "D")); //ESTABA $arPeriodo->getClienteRel()->getNombreCorto()
                 //Arp del aportante
                 fputs($ar, '14-18 ');
                 //Periodo pago para los diferentes sistemas
-                fputs($ar, $arPeriodo->getAnioPago().'-'. $this->RellenarNr($arPeriodo->getMesPago(), "0", 2, "I"));
                 fputs($ar, $arPeriodo->getAnio().'-'. $this->RellenarNr($arPeriodo->getMes(), "0", 2, "I"));
+                fputs($ar, $arPeriodo->getAnio().'-'. $this->RellenarNr($arPeriodo->getMesPago(), "0", 2, "I"));
                 //Numero radicacion de la planilla
-                fputs($ar, '0000000000');
+                fputs($ar, '0000000000'); //Nro 16
                 //Fecha de pago
                 fputs($ar, $arPeriodo->getFechaPago()->format('Y-m-d'));
                 //Numero total de empleados
-                fputs($ar, $this->RellenarNr(0, "0", 5, "I"));
+                fputs($ar, $this->RellenarNr(count($arPeriodoDetallePagos), "0", 5, "I"));
                 //Valor total de la nomina
-                fputs($ar, $this->RellenarNr(0, "0", 12, "I"));
+                fputs($ar, $this->RellenarNr($totalCotizacion, "0", 12, "I"));
+                //fputs($ar, '000000000000'); //Es el anterior
                 fputs($ar, '1');
                 fputs($ar, '89');
                 fputs($ar, "\n");
-
-                $arPeriodoDetallePagos = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago();
-                $arPeriodoDetallePagos = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetallePago')->findBy(array('codigoPeriodoFk' => $codigoPeriodo));
+                //$arPeriodoDetallePagos = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago();
+                //$arPeriodoDetallePagos = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetallePago')->findBy(array('codigoPeriodoFk' => $codigoPeriodo));
                 foreach($arPeriodoDetallePagos as $arPeriodoDetallePago) {
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getTipoRegistro(), "0", 2, "I"));
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getSecuencia(), "0", 5, "I"));
@@ -226,8 +234,8 @@ class PeriodoController extends Controller
                     fputs($ar, $arPeriodoDetallePago->getCorrecciones());
                     fputs($ar, $arPeriodoDetallePago->getVariacionTransitoriaSalario());
                     fputs($ar, $arPeriodoDetallePago->getSuspensionTemporalContratoLicenciaServicios());
-                    fputs($ar, $arPeriodoDetallePago->getIncapacidadGeneral());
-                    fputs($ar, $arPeriodoDetallePago->getLicenciaMaternidad());
+                    fputs($ar, $arPeriodoDetallePago->getIncapacidadGeneral().$arPeriodoDetallePago->getDiasIncapacidadGeneral());
+                    fputs($ar, $arPeriodoDetallePago->getLicenciaMaternidad().$arPeriodoDetallePago->getDiasLicenciaMaternidad());
                     fputs($ar, $arPeriodoDetallePago->getVacaciones());
                     fputs($ar, $arPeriodoDetallePago->getAporteVoluntario());
                     fputs($ar, $arPeriodoDetallePago->getVariacionCentrosTrabajo());
@@ -247,7 +255,7 @@ class PeriodoController extends Controller
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getIbcSalud(), "0", 9, "I"));
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getIbcRiesgosProfesionales(), "0", 9, "I"));
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getIbcCaja(), "0", 9, "I"));
-                    fputs($ar, $this->RellenarNr(($arPeriodoDetallePago->getTarifaPension()/100), "0", 7, "D"));
+                    fputs($ar, $this->RellenarNr(number_format(($arPeriodoDetallePago->getTarifaPension()/100), 5, '.',''), "0", 7, "D"));
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCotizacionPension(), "0", 9, "I"));
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getAporteVoluntarioFondoPensionesObligatorias(), "0", 9, "I"));
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCotizacionVoluntarioFondoPensionesObligatorias(), "0", 9, "I"));
@@ -255,53 +263,43 @@ class PeriodoController extends Controller
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getAportesFondoSolidaridadPensionalSolidaridad(), "0", 9, "I"));
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getAportesFondoSolidaridadPensionalSubsistencia(), "0", 9, "I"));
                     fputs($ar, '000000000');
-                    fputs($ar, $this->RellenarNr(($arPeriodoDetallePago->getTarifaSalud()/100), "0", 7, "D"));
+                    fputs($ar, $this->RellenarNr(number_format($arPeriodoDetallePago->getTarifaSalud()/100, 5, '.',''), "0", 7, "D"));
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCotizacionSalud(), "0", 9, "I"));
-                    //fputs($ar, $arSsoAporte->getValorUpcAdicional());
-                    fputs($ar, "000000000");
-                    //fputs($ar, $arSsoAporte->getNumeroAutorizacionIncapacidadEnfermedadGeneral());
-                    fputs($ar, "               ");
-                    //fputs($ar, $arSsoAporte->getValorIncapacidadEnfermedadGeneral());
-                    fputs($ar, "000000000");
-                    //fputs($ar, $arSsoAporte->getNumeroAutorizacionLicenciaMaternidadPaternidad());
-                    fputs($ar, "               ");
-                    //fputs($ar, $arSsoAporte->getValorLicenciaMaternidadPaternidad());
-                    fputs($ar, "000000000");
-                    fputs($ar, $this->RellenarNr(($arPeriodoDetallePago->getTarifaRiesgos()/100), "0", 9, "D"));
-                    //fputs($ar, $arSsoAporte->getCentroTrabajoCodigoCt());
-                    fputs($ar, "000000000");
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getValorUpcAdicional(), "0", 9, "I"));
+                    //fputs($ar, "000000000");
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getNumeroAutorizacionIncapacidadEnfermedadGeneral(), " ", 15, "D")); 
+                    //fputs($ar, "               ");
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getValorIncapacidadEnfermedadGeneral(), "0", 9, "D"));
+                    //fputs($ar, "000000000");
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getNumeroAutorizacionLicenciaMaternidadPaternidad(), " ", 15, "D"));                   
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getValorIncapacidadLicenciaMaternidadPaternidad(), "0", 9, "D"));
+                    fputs($ar, $this->RellenarNr(number_format($arPeriodoDetallePago->getTarifaRiesgos()/100, 7, '.',''), "0", 9, "D"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCentroTrabajoCodigoCt(), "0", 9, "I"));
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCotizacionRiesgos(), "0", 9, "I"));
-                    fputs($ar, $this->RellenarNr(($arPeriodoDetallePago->getTarifaCaja()/100), "0", 7, "D"));
+                    fputs($ar, $this->RellenarNr(number_format($arPeriodoDetallePago->getTarifaCaja()/100, 5, '.',''), "0", 7, "D"));
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCotizacionCaja(), "0", 9, "I"));
-                    //fputs($ar, $arSsoAporte->getTarifaAportesSENA());
-                    fputs($ar, "0.00000");
-                    //fputs($ar, $arSsoAporte->getValorAportesSENA());
-                    fputs($ar, "000000000");
-                    //fputs($ar, $arSsoAporte->getTarifaAportesICBF());
-                    fputs($ar, "0.00000");
-                    //fputs($ar, $arSsoAporte->getValorAporteICBF());
-                    fputs($ar, "000000000");
-                    //fputs($ar, $arSsoAporte->getTarifaAportesESAP());
-                    fputs($ar, "0.00000");
-                    //fputs($ar, $arSsoAporte->getValorAporteESAP());
-                    fputs($ar, "000000000");
-                    //fputs($ar, $arSsoAporte->getTarifaAportesMEN());
-                    fputs($ar, "0.00000");
-                    //fputs($ar, $arSsoAporte->getValorAporteMEN());
-                    fputs($ar, "000000000");                    
-                    //fputs($ar, $arSsoAporte->getTipoDocumentoResponsableUPC());
-                    fputs($ar, "  ");
-                    //fputs($ar, $arSsoAporte->getNumeroIdentificacionResponsableUPCAdicional());
+                    fputs($ar, $this->RellenarNr(number_format($arPeriodoDetallePago->getTarifaSENA()/100, 5, '.', ''), "0", 7, "D"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCotizacionSena(), "0", 9, "I"));                    
+                    fputs($ar, $this->RellenarNr(number_format($arPeriodoDetallePago->getTarifaIcbf()/100, 5, '.', '') , "0", 7, "D"));                    
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCotizacionIcbf(), "0", 9, "I"));                    
+                    fputs($ar, $this->RellenarNr(number_format($arPeriodoDetallePago->getTarifaAportesESAP()/100, 5, '.', '') , "0", 7, "D"));                   
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getValorAportesESAP(), "0", 9, "I"));                    
+                    fputs($ar, $this->RellenarNr(number_format($arPeriodoDetallePago->getTarifaAportesMEN()/100, 5, '.', '') , "0", 7, "D"));
+                    //fputs($ar, "0.00000");
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getValorAportesMEN(), "0", 9, "I"));
+                    //fputs($ar, "000000000");                    
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getTipoDocumentoResponsableUPC(), " ", 2, "D"));
+                    //fputs($ar, "  ");
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getNumeroIdentificacionResponsableUPCAdicional(), " ", 2, "I"));
+                    //fputs($ar, "                ");
+                    fputs($ar, $arPeriodoDetallePago->getCotizanteExoneradoPagoAporteParafiscalesSalud());
+                    //fputs($ar, " ");
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCodigoAdministradoraRiesgosLaborales(), " ", 6, "D"));
+                    //fputs($ar, "      ");
+                    fputs($ar, $arPeriodoDetallePago->getClaseRiesgoAfiliado());
                     fputs($ar, "                ");
-                    //fputs($ar, $arSsoAporte->getCotizanteExoneradoPagoAporteParafiscalesSalud());
-                    fputs($ar, " ");
-                    //fputs($ar, $arSsoAporte->getCodigoAdministradoraRiesgosLaborales());
-                    fputs($ar, "      ");
-                    //fputs($ar, $arSsoAporte->getClaseRiesgoAfiliado());
-                    fputs($ar, " ");
                     fputs($ar, "\n");
                 }
-                
                 fclose($ar);
                 $strArchivo = $strRutaArchivo.$strNombreArchivo;
                 header('Content-Description: File Transfer');
@@ -315,10 +313,8 @@ class PeriodoController extends Controller
                 $em->flush();
                 exit;
                 //return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo_detalle', array('codigoPeriodo' => $codigoPeriodo)));
-            }            
-            
-        }
-        
+            }               
+        }        
         $arPeriodoDetalles = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
         $dql = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetallePago')->listaDQL($codigoPeriodo);         
         $arPeriodoDetallesPagos = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 20);
@@ -558,39 +554,104 @@ class PeriodoController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'R'; $col++) {
+        for($col = 'A'; $col !== 'AL'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
         }      
         for($col = 'D'; $col !== 'J'; $col++) {            
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }        
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'COD')
-                    ->setCellValue('B1', 'IDENTIFICACION')
-                    ->setCellValue('C1', 'NOMBRE')
-                    ->setCellValue('D1', 'PENSION')
-                    ->setCellValue('E1', 'SALUD')
-                    ->setCellValue('F1', 'CAJA')
-                    ->setCellValue('G1', 'RIESGO')
-                    ->setCellValue('H1', 'SENA')
-                    ->setCellValue('I1', 'ICBF');
+                ->setCellValue('A1', 'IDENTIFICACIÓN')
+                ->setCellValue('B1', 'NOMBRE')
+                ->setCellValue('C1', 'CONTRATO')
+                ->setCellValue('D1', 'ING')
+                ->setCellValue('E1', 'RET')
+                ->setCellValue('F1', 'VST')
+                ->setCellValue('G1', 'SLN')
+                ->setCellValue('H1', 'IGE')
+                ->setCellValue('I1', 'LMA')
+                ->setCellValue('J1', 'VAC')    
+                ->setCellValue('K1', 'IRP')
+                ->setCellValue('L1', 'SALARIO')
+                ->setCellValue('M1', 'SUPLE')
+                ->setCellValue('N1', 'DIAS.P')
+                ->setCellValue('O1', 'DIAS.S')
+                ->setCellValue('P1', 'DIAS.R.P')
+                ->setCellValue('Q1', 'DIAS.C')
+                ->setCellValue('R1', 'IBC P')
+                ->setCellValue('S1', 'IBC S')
+                ->setCellValue('T1', 'IBC R')
+                ->setCellValue('U1', 'IBC C')
+                ->setCellValue('V1', 'T.P')
+                ->setCellValue('W1', 'T.S')
+                ->setCellValue('X1', 'T.R')
+                ->setCellValue('Y1', 'T.C')
+                ->setCellValue('Z1', 'T.SN')
+                ->setCellValue('AA1', 'T.I')
+                ->setCellValue('AB1', 'C.P')
+                ->setCellValue('AC1', 'C.S')
+                ->setCellValue('AD1', 'C.R')
+                ->setCellValue('AE1', 'C.C')
+                ->setCellValue('AF1', 'C.SN')
+                ->setCellValue('AG1', 'C.I')
+                ->setCellValue('AH1', 'TOTAL');
         $i = 2;
-        
         $query = $em->createQuery($this->strDqlLista);
         $arPeriodoDetallesPagos = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago();
         $arPeriodoDetallesPagos = $query->getResult();
                 
-        foreach ($arPeriodoDetallesPagos as $arPeriodoDetallePago) {            
+        foreach ($arPeriodoDetallesPagos as $arPeriodoDetallePago) {
+            $suspension = '';
+            if ($arPeriodoDetallePago->getSuspensionTemporalContratoLicenciaServicios() == 'X'){
+                $suspension = $arPeriodoDetallePago->getDiasCotizadosPension(); 
+            }
+            $incapacidadGeneral = '';
+            if ($arPeriodoDetallePago->getIncapacidadGeneral() == 'X'){
+                $incapacidadGeneral = $arPeriodoDetallePago->getDiasIncapacidadGeneral(); 
+            }
+            $incapacidadLaboral = '';
+            if ($arPeriodoDetallePago->getIncapacidadAccidenteTrabajoEnfermedadProfesional() == 'X'){
+                $incapacidadLaboral = $arPeriodoDetallePago->getDiasIncapacidadLaboral(); 
+            }
+            $licenciaMaternidad = '';
+            if ($arPeriodoDetallePago->getLicenciaMaternidad() == 'X'){
+                $licenciaMaternidad = $arPeriodoDetallePago->getDiasLicenciaMaternidad(); 
+            }
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPeriodoDetallePago->getCodigoPeriodoDetallePagoPk())
-                    ->setCellValue('B' . $i, $arPeriodoDetallePago->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('C' . $i, $arPeriodoDetallePago->getEmpleadoRel()->getNombreCorto())                    
-                    ->setCellValue('D' . $i, $arPeriodoDetallePago->getCotizacionPension())
-                    ->setCellValue('E' . $i, $arPeriodoDetallePago->getCotizacionSalud())
-                    ->setCellValue('F' . $i, $arPeriodoDetallePago->getCotizacionCaja())
-                    ->setCellValue('G' . $i, $arPeriodoDetallePago->getCotizacionRiesgos())
-                    ->setCellValue('H' . $i, $arPeriodoDetallePago->getCotizacionSena())
-                    ->setCellValue('I' . $i, $arPeriodoDetallePago->getCotizacionIcbf());                                    
+                    ->setCellValue('A' . $i, $arPeriodoDetallePago->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('B' . $i, $arPeriodoDetallePago->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('C' . $i, $arPeriodoDetallePago->getCodigoContratoFk())                    
+                    ->setCellValue('D' . $i, $arPeriodoDetallePago->getIngreso())
+                    ->setCellValue('E' . $i, $arPeriodoDetallePago->getRetiro())
+                    ->setCellValue('F' . $i, $arPeriodoDetallePago->getVariacionTransitoriaSalario())
+                    ->setCellValue('G' . $i, $arPeriodoDetallePago->getSuspensionTemporalContratoLicenciaServicios().$suspension)
+                    ->setCellValue('H' . $i, $arPeriodoDetallePago->getIncapacidadGeneral().$incapacidadGeneral)
+                    ->setCellValue('I' . $i, $arPeriodoDetallePago->getLicenciaMaternidad().$licenciaMaternidad)
+                    ->setCellValue('J' . $i, $arPeriodoDetallePago->getVacaciones())
+                    ->setCellValue('K' . $i, $arPeriodoDetallePago->getIncapacidadAccidenteTrabajoEnfermedadProfesional().$incapacidadLaboral)
+                    ->setCellValue('L' . $i, $arPeriodoDetallePago->getSalarioBasico())
+                    ->setCellValue('M' . $i, $arPeriodoDetallePago->getSuplementario())
+                    ->setCellValue('N' . $i, $arPeriodoDetallePago->getDiasCotizadosPension())
+                    ->setCellValue('O' . $i, $arPeriodoDetallePago->getDiasCotizadosSalud())
+                    ->setCellValue('P' . $i, $arPeriodoDetallePago->getDiasCotizadosRiesgosProfesionales())
+                    ->setCellValue('Q' . $i, $arPeriodoDetallePago->getDiasCotizadosCajaCompensacion())
+                    ->setCellValue('R' . $i, $arPeriodoDetallePago->getIbcPension())
+                    ->setCellValue('S' . $i, $arPeriodoDetallePago->getIbcSalud())
+                    ->setCellValue('T' . $i, $arPeriodoDetallePago->getIbcRiesgosProfesionales())
+                    ->setCellValue('U' . $i, $arPeriodoDetallePago->getIbcCaja())
+                    ->setCellValue('V' . $i, $arPeriodoDetallePago->getTarifaPension())
+                    ->setCellValue('W' . $i, $arPeriodoDetallePago->getTarifaSalud())
+                    ->setCellValue('X' . $i, $arPeriodoDetallePago->getTarifaRiesgos())
+                    ->setCellValue('Y' . $i, $arPeriodoDetallePago->getTarifaCaja())
+                    ->setCellValue('Z' . $i, $arPeriodoDetallePago->getTarifaSena())
+                    ->setCellValue('AA' . $i, $arPeriodoDetallePago->getTarifaIcbf())
+                    ->setCellValue('AB' . $i, $arPeriodoDetallePago->getCotizacionPension())
+                    ->setCellValue('AC' . $i, $arPeriodoDetallePago->getCotizacionSalud())
+                    ->setCellValue('AD' . $i, $arPeriodoDetallePago->getCotizacionRiesgos())
+                    ->setCellValue('AE' . $i, $arPeriodoDetallePago->getCotizacionCaja())
+                    ->setCellValue('AF' . $i, $arPeriodoDetallePago->getCotizacionSena())
+                    ->setCellValue('AG' . $i, $arPeriodoDetallePago->getCotizacionIcbf())
+                    ->setCellValue('AH' . $i, $arPeriodoDetallePago->getTotalCotizacion());                                    
             $i++;
         }
         

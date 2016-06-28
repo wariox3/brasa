@@ -213,9 +213,14 @@ class AfiPeriodoDetallePago
     private $variacionCentrosTrabajo = ' ';         
     
     /**
-     * @ORM\Column(name="incapacidad_accidente_trabajo_enfermedad_profesional", type="integer")
+     * @ORM\Column(name="incapacidad_accidente_trabajo_enfermedad_profesional", type="string", length=1)
      */
-    private $incapacidadAccidenteTrabajoEnfermedadProfesional = 0;    
+    private $incapacidadAccidenteTrabajoEnfermedadProfesional =' ';
+
+    /**
+     * @ORM\Column(name="dias_incapacidad_laboral", type="integer")
+     */
+    private $diasIncapacidadLaboral = 0;
     
     /**
      * @ORM\Column(name="codigo_entidad_pension_pertenece", type="string", length=6)
@@ -385,12 +390,87 @@ class AfiPeriodoDetallePago
     /**
      * @ORM\Column(name="aportes_fondo_solidaridad_pensional_subsistencia", type="float")
      */
-    private $aportesFondoSolidaridadPensionalSubsistencia = 0;      
+    private $aportesFondoSolidaridadPensionalSubsistencia = 0;
+    
+    /**
+     * @ORM\Column(name="valor_upc_adicional", type="float")
+     */
+    private $valorUpcAdicional = 0;
+    
+    /**
+     * @ORM\Column(name="numero_autorizacion_incapacidad_enfermedad_general", type="string", length=30, nullable=true)
+     */
+    private $numeroAutorizacionIncapacidadEnfermedadGeneral;
+    
+    /**
+     * @ORM\Column(name="valor_incapacidad_enfermedad_general", type="float")
+     */
+    private $valorIncapacidadEnfermedadGeneral = 0;
+    
+    /**
+     * @ORM\Column(name="numero_autorizacion_licencia_maternidad_paternidad", type="string", length=30, nullable=true)
+     */
+    private $numeroAutorizacionLicenciaMaternidadPaternidad;
+    
+    /**
+     * @ORM\Column(name="valor_incapacidad_licencia_maternidad_paternidad", type="float")
+     */
+    private $valorIncapacidadLicenciaMaternidadPaternidad = 0;
+    
+    /**
+     * @ORM\Column(name="centro_trabajo_codigo_ct", type="string", length=30, nullable=true)
+     */
+    private $centroTrabajoCodigoCt;
     
     /**
      * @ORM\Column(name="codigo_cargo_fk", type="integer", nullable=true)
      */    
-    private $codigoCargoFk;    
+    private $codigoCargoFk;
+
+    /**
+     * @ORM\Column(name="tarifa_aporte_esap", type="float")
+     */
+    private $tarifaAportesESAP = 0;
+    
+    /**
+     * @ORM\Column(name="valor_aporte_esap", type="float")
+     */
+    private $valorAportesESAP = 0;
+    
+    /**
+     * @ORM\Column(name="tarifa_aporte_men", type="float")
+     */
+    private $tarifaAportesMEN = 0;
+    
+    /**
+     * @ORM\Column(name="valor_aporte_men", type="float")
+     */
+    private $valorAportesMEN = 0;
+    
+    /**
+     * @ORM\Column(name="tipo_documento_responsable_upc", type="string", length=4, nullable=true)
+     */    
+    private $tipoDocumentoResponsableUPC;
+    
+    /**
+     * @ORM\Column(name="numero_identificacion_responsable_upc_adicional", type="string", length=30, nullable=true)
+     */    
+    private $numeroIdentificacionResponsableUPCAdicional;
+    
+    /**
+     * @ORM\Column(name="cotizante_exonerado_pago_aporte_parafiscales_salud", type="string", length=20, nullable=true)
+     */    
+    private $cotizanteExoneradoPagoAporteParafiscalesSalud;
+    
+    /**
+     * @ORM\Column(name="codigo_administradora_riesgos_laborales", type="string", length=20, nullable=true)
+     */    
+    private $codigoAdministradoraRiesgosLaborales;
+    
+    /**
+     * @ORM\Column(name="clase_riesgo_afiliado", type="string", length=20, nullable=true)
+     */    
+    private $claseRiesgoAfiliado;
     
     /**
      * @ORM\ManyToOne(targetEntity="AfiPeriodo", inversedBy="periodosDetallesPagosPeriodoRel")
@@ -410,6 +490,7 @@ class AfiPeriodoDetallePago
      */
     protected $contratoRel;    
     
+
 
 
     /**
@@ -1361,7 +1442,7 @@ class AfiPeriodoDetallePago
     /**
      * Set incapacidadAccidenteTrabajoEnfermedadProfesional
      *
-     * @param integer $incapacidadAccidenteTrabajoEnfermedadProfesional
+     * @param string $incapacidadAccidenteTrabajoEnfermedadProfesional
      *
      * @return AfiPeriodoDetallePago
      */
@@ -1375,11 +1456,35 @@ class AfiPeriodoDetallePago
     /**
      * Get incapacidadAccidenteTrabajoEnfermedadProfesional
      *
-     * @return integer
+     * @return string
      */
     public function getIncapacidadAccidenteTrabajoEnfermedadProfesional()
     {
         return $this->incapacidadAccidenteTrabajoEnfermedadProfesional;
+    }
+
+    /**
+     * Set diasIncapacidadLaboral
+     *
+     * @param integer $diasIncapacidadLaboral
+     *
+     * @return AfiPeriodoDetallePago
+     */
+    public function setDiasIncapacidadLaboral($diasIncapacidadLaboral)
+    {
+        $this->diasIncapacidadLaboral = $diasIncapacidadLaboral;
+
+        return $this;
+    }
+
+    /**
+     * Get diasIncapacidadLaboral
+     *
+     * @return integer
+     */
+    public function getDiasIncapacidadLaboral()
+    {
+        return $this->diasIncapacidadLaboral;
     }
 
     /**
@@ -2199,6 +2304,150 @@ class AfiPeriodoDetallePago
     }
 
     /**
+     * Set valorUpcAdicional
+     *
+     * @param float $valorUpcAdicional
+     *
+     * @return AfiPeriodoDetallePago
+     */
+    public function setValorUpcAdicional($valorUpcAdicional)
+    {
+        $this->valorUpcAdicional = $valorUpcAdicional;
+
+        return $this;
+    }
+
+    /**
+     * Get valorUpcAdicional
+     *
+     * @return float
+     */
+    public function getValorUpcAdicional()
+    {
+        return $this->valorUpcAdicional;
+    }
+
+    /**
+     * Set numeroAutorizacionIncapacidadEnfermedadGeneral
+     *
+     * @param string $numeroAutorizacionIncapacidadEnfermedadGeneral
+     *
+     * @return AfiPeriodoDetallePago
+     */
+    public function setNumeroAutorizacionIncapacidadEnfermedadGeneral($numeroAutorizacionIncapacidadEnfermedadGeneral)
+    {
+        $this->numeroAutorizacionIncapacidadEnfermedadGeneral = $numeroAutorizacionIncapacidadEnfermedadGeneral;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroAutorizacionIncapacidadEnfermedadGeneral
+     *
+     * @return string
+     */
+    public function getNumeroAutorizacionIncapacidadEnfermedadGeneral()
+    {
+        return $this->numeroAutorizacionIncapacidadEnfermedadGeneral;
+    }
+
+    /**
+     * Set valorIncapacidadEnfermedadGeneral
+     *
+     * @param float $valorIncapacidadEnfermedadGeneral
+     *
+     * @return AfiPeriodoDetallePago
+     */
+    public function setValorIncapacidadEnfermedadGeneral($valorIncapacidadEnfermedadGeneral)
+    {
+        $this->valorIncapacidadEnfermedadGeneral = $valorIncapacidadEnfermedadGeneral;
+
+        return $this;
+    }
+
+    /**
+     * Get valorIncapacidadEnfermedadGeneral
+     *
+     * @return float
+     */
+    public function getValorIncapacidadEnfermedadGeneral()
+    {
+        return $this->valorIncapacidadEnfermedadGeneral;
+    }
+
+    /**
+     * Set numeroAutorizacionLicenciaMaternidadPaternidad
+     *
+     * @param string $numeroAutorizacionLicenciaMaternidadPaternidad
+     *
+     * @return AfiPeriodoDetallePago
+     */
+    public function setNumeroAutorizacionLicenciaMaternidadPaternidad($numeroAutorizacionLicenciaMaternidadPaternidad)
+    {
+        $this->numeroAutorizacionLicenciaMaternidadPaternidad = $numeroAutorizacionLicenciaMaternidadPaternidad;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroAutorizacionLicenciaMaternidadPaternidad
+     *
+     * @return string
+     */
+    public function getNumeroAutorizacionLicenciaMaternidadPaternidad()
+    {
+        return $this->numeroAutorizacionLicenciaMaternidadPaternidad;
+    }
+
+    /**
+     * Set valorIncapacidadLicenciaMaternidadPaternidad
+     *
+     * @param float $valorIncapacidadLicenciaMaternidadPaternidad
+     *
+     * @return AfiPeriodoDetallePago
+     */
+    public function setValorIncapacidadLicenciaMaternidadPaternidad($valorIncapacidadLicenciaMaternidadPaternidad)
+    {
+        $this->valorIncapacidadLicenciaMaternidadPaternidad = $valorIncapacidadLicenciaMaternidadPaternidad;
+
+        return $this;
+    }
+
+    /**
+     * Get valorIncapacidadLicenciaMaternidadPaternidad
+     *
+     * @return float
+     */
+    public function getValorIncapacidadLicenciaMaternidadPaternidad()
+    {
+        return $this->valorIncapacidadLicenciaMaternidadPaternidad;
+    }
+
+    /**
+     * Set centroTrabajoCodigoCt
+     *
+     * @param string $centroTrabajoCodigoCt
+     *
+     * @return AfiPeriodoDetallePago
+     */
+    public function setCentroTrabajoCodigoCt($centroTrabajoCodigoCt)
+    {
+        $this->centroTrabajoCodigoCt = $centroTrabajoCodigoCt;
+
+        return $this;
+    }
+
+    /**
+     * Get centroTrabajoCodigoCt
+     *
+     * @return string
+     */
+    public function getCentroTrabajoCodigoCt()
+    {
+        return $this->centroTrabajoCodigoCt;
+    }
+
+    /**
      * Set codigoCargoFk
      *
      * @param integer $codigoCargoFk
@@ -2220,6 +2469,222 @@ class AfiPeriodoDetallePago
     public function getCodigoCargoFk()
     {
         return $this->codigoCargoFk;
+    }
+
+    /**
+     * Set tarifaAportesESAP
+     *
+     * @param float $tarifaAportesESAP
+     *
+     * @return AfiPeriodoDetallePago
+     */
+    public function setTarifaAportesESAP($tarifaAportesESAP)
+    {
+        $this->tarifaAportesESAP = $tarifaAportesESAP;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaAportesESAP
+     *
+     * @return float
+     */
+    public function getTarifaAportesESAP()
+    {
+        return $this->tarifaAportesESAP;
+    }
+
+    /**
+     * Set valorAportesESAP
+     *
+     * @param float $valorAportesESAP
+     *
+     * @return AfiPeriodoDetallePago
+     */
+    public function setValorAportesESAP($valorAportesESAP)
+    {
+        $this->valorAportesESAP = $valorAportesESAP;
+
+        return $this;
+    }
+
+    /**
+     * Get valorAportesESAP
+     *
+     * @return float
+     */
+    public function getValorAportesESAP()
+    {
+        return $this->valorAportesESAP;
+    }
+
+    /**
+     * Set tarifaAportesMEN
+     *
+     * @param float $tarifaAportesMEN
+     *
+     * @return AfiPeriodoDetallePago
+     */
+    public function setTarifaAportesMEN($tarifaAportesMEN)
+    {
+        $this->tarifaAportesMEN = $tarifaAportesMEN;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifaAportesMEN
+     *
+     * @return float
+     */
+    public function getTarifaAportesMEN()
+    {
+        return $this->tarifaAportesMEN;
+    }
+
+    /**
+     * Set valorAportesMEN
+     *
+     * @param float $valorAportesMEN
+     *
+     * @return AfiPeriodoDetallePago
+     */
+    public function setValorAportesMEN($valorAportesMEN)
+    {
+        $this->valorAportesMEN = $valorAportesMEN;
+
+        return $this;
+    }
+
+    /**
+     * Get valorAportesMEN
+     *
+     * @return float
+     */
+    public function getValorAportesMEN()
+    {
+        return $this->valorAportesMEN;
+    }
+
+    /**
+     * Set tipoDocumentoResponsableUPC
+     *
+     * @param string $tipoDocumentoResponsableUPC
+     *
+     * @return AfiPeriodoDetallePago
+     */
+    public function setTipoDocumentoResponsableUPC($tipoDocumentoResponsableUPC)
+    {
+        $this->tipoDocumentoResponsableUPC = $tipoDocumentoResponsableUPC;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoDocumentoResponsableUPC
+     *
+     * @return string
+     */
+    public function getTipoDocumentoResponsableUPC()
+    {
+        return $this->tipoDocumentoResponsableUPC;
+    }
+
+    /**
+     * Set numeroIdentificacionResponsableUPCAdicional
+     *
+     * @param string $numeroIdentificacionResponsableUPCAdicional
+     *
+     * @return AfiPeriodoDetallePago
+     */
+    public function setNumeroIdentificacionResponsableUPCAdicional($numeroIdentificacionResponsableUPCAdicional)
+    {
+        $this->numeroIdentificacionResponsableUPCAdicional = $numeroIdentificacionResponsableUPCAdicional;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroIdentificacionResponsableUPCAdicional
+     *
+     * @return string
+     */
+    public function getNumeroIdentificacionResponsableUPCAdicional()
+    {
+        return $this->numeroIdentificacionResponsableUPCAdicional;
+    }
+
+    /**
+     * Set cotizanteExoneradoPagoAporteParafiscalesSalud
+     *
+     * @param string $cotizanteExoneradoPagoAporteParafiscalesSalud
+     *
+     * @return AfiPeriodoDetallePago
+     */
+    public function setCotizanteExoneradoPagoAporteParafiscalesSalud($cotizanteExoneradoPagoAporteParafiscalesSalud)
+    {
+        $this->cotizanteExoneradoPagoAporteParafiscalesSalud = $cotizanteExoneradoPagoAporteParafiscalesSalud;
+
+        return $this;
+    }
+
+    /**
+     * Get cotizanteExoneradoPagoAporteParafiscalesSalud
+     *
+     * @return string
+     */
+    public function getCotizanteExoneradoPagoAporteParafiscalesSalud()
+    {
+        return $this->cotizanteExoneradoPagoAporteParafiscalesSalud;
+    }
+
+    /**
+     * Set codigoAdministradoraRiesgosLaborales
+     *
+     * @param string $codigoAdministradoraRiesgosLaborales
+     *
+     * @return AfiPeriodoDetallePago
+     */
+    public function setCodigoAdministradoraRiesgosLaborales($codigoAdministradoraRiesgosLaborales)
+    {
+        $this->codigoAdministradoraRiesgosLaborales = $codigoAdministradoraRiesgosLaborales;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoAdministradoraRiesgosLaborales
+     *
+     * @return string
+     */
+    public function getCodigoAdministradoraRiesgosLaborales()
+    {
+        return $this->codigoAdministradoraRiesgosLaborales;
+    }
+
+    /**
+     * Set claseRiesgoAfiliado
+     *
+     * @param string $claseRiesgoAfiliado
+     *
+     * @return AfiPeriodoDetallePago
+     */
+    public function setClaseRiesgoAfiliado($claseRiesgoAfiliado)
+    {
+        $this->claseRiesgoAfiliado = $claseRiesgoAfiliado;
+
+        return $this;
+    }
+
+    /**
+     * Get claseRiesgoAfiliado
+     *
+     * @return string
+     */
+    public function getClaseRiesgoAfiliado()
+    {
+        return $this->claseRiesgoAfiliado;
     }
 
     /**
