@@ -172,27 +172,19 @@
                                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiaDesde{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.diaDesde  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
                                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiaHasta{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.diaHasta  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
                                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.cantidad  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
-                                    <td><input type="checkbox" name="chkLunes{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.lunes == 1 %} checked="true" {% endif %}></td>
-                                    <td><input type="checkbox" name="chkMartes{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.martes == 1 %} checked="true" {% endif %}></td>
-                                    <td><input type="checkbox" name="chkMiercoles{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.miercoles == 1 %} checked="true" {% endif %}></td>
-                                    <td><input type="checkbox" name="chkJueves{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.jueves == 1 %} checked="true" {% endif %}></td>
-                                    <td><input type="checkbox" name="chkViernes{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.viernes == 1 %} checked="true" {% endif %}></td>
-                                    <td><input type="checkbox" name="chkSabado{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.sabado == 1 %} checked="true" {% endif %}></td>
-                                    <td><input type="checkbox" name="chkDomingo{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.domingo == 1 %} checked="true" {% endif %}></td>
-                                    <td><input type="checkbox" name="chkFestivo{{ arPedidoDetalle.codigoPedidoDetallePk }}" {% if arPedidoDetalle.festivo == 1 %} checked="true" {% endif %}></td>                    
                                     {% else %}                        
                                     <td>{{ arPedidoDetalle.diaDesde }}</td>    
                                     <td>{{ arPedidoDetalle.diaHasta }}</td>    
                                     <td>{{ arPedidoDetalle.cantidad  }}</td>
-                                    <td>{% if arPedidoDetalle.lunes == 1 %} SI {% else %} NO {% endif %}</td>
-                                    <td>{% if arPedidoDetalle.martes == 1 %} SI {% else %} NO {% endif %}</td>
-                                    <td>{% if arPedidoDetalle.miercoles == 1 %} SI {% else %} NO {% endif %}</td>
-                                    <td>{% if arPedidoDetalle.jueves == 1 %} SI {% else %} NO {% endif %}</td>
-                                    <td>{% if arPedidoDetalle.viernes == 1 %} SI {% else %} NO {% endif %}</td>
-                                    <td>{% if arPedidoDetalle.sabado == 1 %} SI {% else %} NO {% endif %}</td>
-                                    <td>{% if arPedidoDetalle.domingo == 1 %} SI {% else %} NO {% endif %}</td>
-                                    <td>{% if arPedidoDetalle.festivo == 1 %} SI {% else %} NO {% endif %}</td>
                                 {% endif %}
+                                <td>{% if arPedidoDetalle.lunes == 1 %} SI {% else %} NO {% endif %}</td>
+                                <td>{% if arPedidoDetalle.martes == 1 %} SI {% else %} NO {% endif %}</td>
+                                <td>{% if arPedidoDetalle.miercoles == 1 %} SI {% else %} NO {% endif %}</td>
+                                <td>{% if arPedidoDetalle.jueves == 1 %} SI {% else %} NO {% endif %}</td>
+                                <td>{% if arPedidoDetalle.viernes == 1 %} SI {% else %} NO {% endif %}</td>
+                                <td>{% if arPedidoDetalle.sabado == 1 %} SI {% else %} NO {% endif %}</td>
+                                <td>{% if arPedidoDetalle.domingo == 1 %} SI {% else %} NO {% endif %}</td>
+                                <td>{% if arPedidoDetalle.festivo == 1 %} SI {% else %} NO {% endif %}</td>                                
                                 <td style="text-align: right">{{ arPedidoDetalle.horas | number_format(0, '.', ',') }}({{ arPedidoDetalle.horasProgramadas | number_format(0, '.', ',') }})</td> 
                                 <td style="text-align: right">{{ arPedidoDetalle.horasDiurnas | number_format(0, '.', ',') }}({{ arPedidoDetalle.horasDiurnasProgramadas | number_format(0, '.', ',') }})</td> 
                                 <td style="text-align: right">{{ arPedidoDetalle.horasNocturnas | number_format(0, '.', ',') }}({{ arPedidoDetalle.horasNocturnasProgramadas | number_format(0, '.', ',') }})</td> 

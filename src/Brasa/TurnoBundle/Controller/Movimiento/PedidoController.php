@@ -1010,46 +1010,6 @@ class PedidoController extends Controller
                 if($arrControles['TxtValorAjustado'.$intCodigo] != '') {
                     $arPedidoDetalle->setVrPrecioAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
                 }            
-                if(isset($arrControles['chkLunes'.$intCodigo])) {
-                    $arPedidoDetalle->setLunes(1);
-                } else {
-                    $arPedidoDetalle->setLunes(0);
-                }
-                if(isset($arrControles['chkMartes'.$intCodigo])) {
-                    $arPedidoDetalle->setMartes(1);
-                } else {
-                    $arPedidoDetalle->setMartes(0);
-                }
-                if(isset($arrControles['chkMiercoles'.$intCodigo])) {
-                    $arPedidoDetalle->setMiercoles(1);
-                } else {
-                    $arPedidoDetalle->setMiercoles(0);
-                }
-                if(isset($arrControles['chkJueves'.$intCodigo])) {
-                    $arPedidoDetalle->setJueves(1);
-                } else {
-                    $arPedidoDetalle->setJueves(0);
-                }
-                if(isset($arrControles['chkViernes'.$intCodigo])) {
-                    $arPedidoDetalle->setViernes(1);
-                } else {
-                    $arPedidoDetalle->setViernes(0);
-                }
-                if(isset($arrControles['chkSabado'.$intCodigo])) {
-                    $arPedidoDetalle->setSabado(1);
-                } else {
-                    $arPedidoDetalle->setSabado(0);
-                }
-                if(isset($arrControles['chkDomingo'.$intCodigo])) {
-                    $arPedidoDetalle->setDomingo(1);
-                } else {
-                    $arPedidoDetalle->setDomingo(0);
-                }
-                if(isset($arrControles['chkFestivo'.$intCodigo])) {
-                    $arPedidoDetalle->setFestivo(1);
-                } else {
-                    $arPedidoDetalle->setFestivo(0);
-                }                    
                 $em->persist($arPedidoDetalle);
             }
             $em->flush();                
