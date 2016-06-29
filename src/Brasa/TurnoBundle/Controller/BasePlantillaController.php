@@ -3,6 +3,7 @@
 namespace Brasa\TurnoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurPlantillaType;
@@ -136,6 +137,43 @@ class BasePlantillaController extends Controller {
         ));
     }
 
+    /**
+     * @Route("/tur/base/plantilla/detalle/editar/{codigoPlantillaDetalle}", name="brs_tur_base_plantilla_detalle_editar")
+     */     
+    public function detalleEditarAction($codigoPlantillaDetalle) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $arPlantillaDetalleAct = new \Brasa\TurnoBundle\Entity\TurPlantillaDetalle();
+        $arPlantillaDetalleAct = $em->getRepository('BrasaTurnoBundle:TurPlantillaDetalle')->find($codigoPlantillaDetalle);        
+        $arPlantillaDetalle = new \Brasa\TurnoBundle\Entity\TurPlantillaDetalle();
+        $arPlantillaDetalle = $em->getRepository('BrasaTurnoBundle:TurPlantillaDetalle')->findBy(array('codigoPlantillaDetallePk'=>$codigoPlantillaDetalle));
+        $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);       
+        $form = $this->createFormBuilder()
+            ->setAction($this->generateUrl('brs_tur_base_plantilla_detalle_editar', array('codigoPlantillaDetalle' => $codigoPlantillaDetalle)))
+                ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
+                ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');
+            $arrControles = $request->request->All();
+
+            if ($form->get('BtnDetalleEliminar')->isClicked()) {
+                $em->getRepository('BrasaTurnoBundle:TurPlantillaDetalle')->eliminarDetalles($arrSeleccionados);
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }
+            if ($form->get('BtnDetalleActualizar')->isClicked()) {
+                $this->actualizarDetalle($arrControles);
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }
+        }
+        return $this->render('BrasaTurnoBundle:Base/Plantilla:detalleEditar.html.twig', array(
+                    'arPlantillaDetalle' => $arPlantillaDetalle,
+                    'form' => $form->createView()
+        ));
+    }    
+    
     private function lista() {
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurPlantilla')->listaDQL(
