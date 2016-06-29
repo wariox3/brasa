@@ -215,8 +215,8 @@ class PedidoController extends Controller
             
         }
 
-        $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
-        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array ('codigoPedidoFk' => $codigoPedido));
+        //$arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+        //$arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array ('codigoPedidoFk' => $codigoPedido));
         
         $dql = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->listaDql($codigoPedido);       
         $arPedidoDetalle = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 150);
@@ -510,6 +510,7 @@ class PedidoController extends Controller
                         $arPedidoDetalle->setConceptoServicioRel($arServicioDetalle->getConceptoServicioRel());
                         $arPedidoDetalle->setPlantillaRel($arServicioDetalle->getPlantillaRel());                        
                         $arPedidoDetalle->setProyectoRel($arServicioDetalle->getProyectoRel());
+                        $arPedidoDetalle->setGrupoFacturacionRel($arServicioDetalle->getGrupoFacturacionRel());
                         $arPedidoDetalle->setPuestoRel($arServicioDetalle->getPuestoRel());
                         $arPedidoDetalle->setServicioDetalleRel($arServicioDetalle);
                         $arPedidoDetalle->setDias($arServicioDetalle->getDias());

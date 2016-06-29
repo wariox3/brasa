@@ -27,6 +27,15 @@ class TurPedidoDetalleType extends AbstractType
                     ->setParameter('codigoCliente', $options['data']->getPedidoRel()->getCodigoClienteFk())
                     ->orderBy('p.nombre', 'ASC');},
                 'property' => 'nombre',
+                'required' => false)) 
+            ->add('grupoFacturacionRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurGrupoFacturacion',
+                'query_builder' => function (EntityRepository $er) use ($options) {
+                    return $er->createQueryBuilder('gf')
+                    ->where('gf.codigoClienteFk = :codigoCliente ')
+                    ->setParameter('codigoCliente', $options['data']->getServicioRel()->getCodigoClienteFk())
+                    ->orderBy('gf.nombre', 'ASC');},
+                'property' => 'nombre',
                 'required' => false))                            
             ->add('conceptoServicioRel', 'entity', array(
                 'class' => 'BrasaTurnoBundle:TurConceptoServicio',

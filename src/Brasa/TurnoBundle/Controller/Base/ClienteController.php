@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurClienteType;
 use Brasa\TurnoBundle\Form\Type\TurClientePuestoType;
 use Brasa\TurnoBundle\Form\Type\TurProyectoType;
+use Brasa\TurnoBundle\Form\Type\TurGrupoFacturacionType;
 use Brasa\TurnoBundle\Form\Type\TurClienteDireccionType;
 class ClienteController extends Controller
 {
@@ -120,12 +121,15 @@ class ClienteController extends Controller
         $arPuestos = $em->getRepository('BrasaTurnoBundle:TurPuesto')->findBy(array ('codigoClienteFk' => $codigoCliente));
         $arProyectos = new \Brasa\TurnoBundle\Entity\TurProyecto();
         $arProyectos = $em->getRepository('BrasaTurnoBundle:TurProyecto')->findBy(array ('codigoClienteFk' => $codigoCliente));        
+        $arGruposFacturacion = new \Brasa\TurnoBundle\Entity\TurGrupoFacturacion();
+        $arGruposFacturacion = $em->getRepository('BrasaTurnoBundle:TurGrupoFacturacion')->findBy(array ('codigoClienteFk' => $codigoCliente));                
         $arClienteDirecciones = new \Brasa\TurnoBundle\Entity\TurClienteDireccion();
         $arClienteDirecciones = $em->getRepository('BrasaTurnoBundle:TurClienteDireccion')->findBy(array ('codigoClienteFk' => $codigoCliente));        
         return $this->render('BrasaTurnoBundle:Base/Cliente:detalle.html.twig', array(
                     'arCliente' => $arCliente,
                     'arPuestos' => $arPuestos,
                     'arProyectos' => $arProyectos,
+                    'arGruposFacturacion' => $arGruposFacturacion,
                     'arClienteDirecciones' => $arClienteDirecciones,
                     'form' => $form->createView()
                     ));
@@ -189,6 +193,37 @@ class ClienteController extends Controller
             }            
         }
         return $this->render('BrasaTurnoBundle:Base/Cliente:proyectoNuevo.html.twig', array(
+            'arCliente' => $arCliente,
+            'form' => $form->createView()));
+    }    
+    
+    /**
+     * @Route("/tur/base/cliente/grupo/facturacion/nuevo/{codigoCliente}/{codigoGrupoFacturacion}", name="brs_tur_base_cliente_grupo_facturacion_nuevo")
+     */    
+    public function grupoFacturacionNuevoAction($codigoCliente, $codigoGrupoFacturacion) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();        
+        $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
+        $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->find($codigoCliente);
+        $arGrupoFacturacion = new \Brasa\TurnoBundle\Entity\TurGrupoFacturacion();
+        if($codigoGrupoFacturacion != '' && $codigoGrupoFacturacion != '0') {
+            $arGrupoFacturacion = $em->getRepository('BrasaTurnoBundle:TurGrupoFacturacion')->find($codigoGrupoFacturacion);
+        }        
+        $form = $this->createForm(new TurGrupoFacturacionType, $arGrupoFacturacion);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arGrupoFacturacion = $form->getData();
+            $arGrupoFacturacion->setClienteRel($arCliente);
+            $em->persist($arGrupoFacturacion);
+            $em->flush();            
+            
+            if($form->get('guardarnuevo')->isClicked()) {
+                return $this->redirect($this->generateUrl('brs_tur_cliente_grupo_facturacion_nuevo', array('codigoCliente' => $codigoCliente )));
+            } else {
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }            
+        }
+        return $this->render('BrasaTurnoBundle:Base/Cliente:grupoFacturacionNuevo.html.twig', array(
             'arCliente' => $arCliente,
             'form' => $form->createView()));
     }    

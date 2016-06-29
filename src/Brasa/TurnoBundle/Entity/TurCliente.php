@@ -207,6 +207,11 @@ class TurCliente
     protected $proyectosClienteRel;     
     
     /**
+     * @ORM\OneToMany(targetEntity="TurGrupoFacturacion", mappedBy="clienteRel")
+     */
+    protected $gruposFacturacionesClienteRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurContrato", mappedBy="clienteRel")
      */
     protected $contratosClienteRel;    
@@ -1346,5 +1351,39 @@ class TurCliente
     public function getCodigoInterface()
     {
         return $this->codigoInterface;
+    }
+
+    /**
+     * Add gruposFacturacionesClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurGrupoFacturacion $gruposFacturacionesClienteRel
+     *
+     * @return TurCliente
+     */
+    public function addGruposFacturacionesClienteRel(\Brasa\TurnoBundle\Entity\TurGrupoFacturacion $gruposFacturacionesClienteRel)
+    {
+        $this->gruposFacturacionesClienteRel[] = $gruposFacturacionesClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove gruposFacturacionesClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurGrupoFacturacion $gruposFacturacionesClienteRel
+     */
+    public function removeGruposFacturacionesClienteRel(\Brasa\TurnoBundle\Entity\TurGrupoFacturacion $gruposFacturacionesClienteRel)
+    {
+        $this->gruposFacturacionesClienteRel->removeElement($gruposFacturacionesClienteRel);
+    }
+
+    /**
+     * Get gruposFacturacionesClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGruposFacturacionesClienteRel()
+    {
+        return $this->gruposFacturacionesClienteRel;
     }
 }

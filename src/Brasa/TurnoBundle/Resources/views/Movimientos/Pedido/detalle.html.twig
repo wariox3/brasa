@@ -145,7 +145,8 @@
                             <th>DIAS</th>
                             <th><p data-toggle="tooltip" data-placement="top" title="Precio minimo">P.MIN</p></th>                            
                             <th><p data-toggle="tooltip" data-placement="top" title="Precio ajustado">P.AJU</p></th>                            
-                            <th>TOTAL</th>                            
+                            <th>TOTAL</th>  
+                            <th><p data-toggle="tooltip" data-placement="top" title="Grupo facturacion">GF</p></th>                            
                             <th>PRG</th>
                             <th>FAC</th>
                             <th></th>
@@ -196,6 +197,7 @@
                                     <td style="text-align: right">{{ arPedidoDetalle.vrPrecioAjustado | number_format(0, '.', ',') }}</td> 
                                 {% endif %}                    
                                 <td style="text-align: right">{{ arPedidoDetalle.vrTotalDetalle | number_format(0, '.', ',') }}</td>                                                     
+                                <td>{{ arPedidoDetalle.grupoFacturacionRel.abreviatura | default('')  }}</td>                                                                
                                 <td>{% if arPedidoDetalle.estadoProgramado == 1 %} SI {% else %} NO {% endif %}</td>
                                 <td>{% if arPedidoDetalle.estadoFacturado == 1 %} SI {% else %} NO {% endif %}</td>
                                 <td>{% if arPedido.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                                        

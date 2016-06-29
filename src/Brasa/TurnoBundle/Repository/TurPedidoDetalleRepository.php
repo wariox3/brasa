@@ -12,7 +12,7 @@ class TurPedidoDetalleRepository extends EntityRepository {
         if($codigoPedido != '') {
             $dql .= "AND pd.codigoPedidoFk = " . $codigoPedido . " ";  
         }        
-        $dql .= " ORDER BY pd.codigoPuestoFk";
+        $dql .= " ORDER BY pd.codigoGrupoFacturacionFk, pd.codigoPuestoFk";
         return $dql;
     }        
     

@@ -97,6 +97,7 @@ class GenerarPedidoController extends Controller
                         $arPedidoDetalleNuevo->setConceptoServicioRel($arServicioDetalle->getConceptoServicioRel());
                         $arPedidoDetalleNuevo->setModalidadServicioRel($arServicioDetalle->getModalidadServicioRel());                    
                         $arPedidoDetalleNuevo->setProyectoRel($arServicioDetalle->getProyectoRel());
+                        $arPedidoDetalleNuevo->setGrupoFacturacionRel($arServicioDetalle->getGrupoFacturacionRel());
                         $arPedidoDetalleNuevo->setPuestoRel($arServicioDetalle->getPuestoRel());
                         $arPedidoDetalleNuevo->setPlantillaRel($arServicioDetalle->getPlantillaRel());
                         $arPedidoDetalleNuevo->setServicioDetalleRel($arServicioDetalle);
@@ -211,6 +212,8 @@ class GenerarPedidoController extends Controller
                                 $arPedidoDetalleNuevo->setPuestoRel($arServicioDetalle->getPuestoRel());
                                 $arPedidoDetalleNuevo->setPlantillaRel($arServicioDetalle->getPlantillaRel());
                                 $arPedidoDetalleNuevo->setServicioDetalleRel($arServicioDetalle);
+                                $arPedidoDetalleNuevo->setGrupoFacturacionRel($arServicioDetalle->getGrupoFacturacionRel());                                
+                                $arPedidoDetalleNuevo->setProyectoRel($arServicioDetalle->getProyectoRel());                                
                                 $arPedidoDetalleNuevo->setLunes($arServicioDetalle->getLunes());
                                 $arPedidoDetalleNuevo->setMartes($arServicioDetalle->getMartes());
                                 $arPedidoDetalleNuevo->setMiercoles($arServicioDetalle->getMiercoles());

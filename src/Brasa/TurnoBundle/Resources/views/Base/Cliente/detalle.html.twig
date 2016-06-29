@@ -110,6 +110,7 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#puestos" data-toggle="tab">Puestos</a></li>
             <li><a href="#proyectos" data-toggle="tab">Proyectos</a></li>
+            <li><a href="#gruposfacturacion" data-toggle="tab">Grupos facturacion</a></li>
             <li><a href="#direcciones" data-toggle="tab">Direcciones</a></li>
         </ul>
 
@@ -191,6 +192,39 @@
                     </div>                    
                 </div>
             </div>
+
+            <div class="tab-pane" id="gruposfacturacion">
+                <!-- Menu Encabezado Movimiento -->
+                <div id="gruposfacturacion" style="width: 100%"><br>
+                    <table class="table table-striped table-bordered table-condensed">
+                        <tr>
+                            <th>COD</th>                                
+                            <th>NOMBRE</th>
+                            <th>ABREVIATURA</th>
+                            <th></th>
+                            <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
+                        </tr>
+                        {% for arGruposFacturacion in arGruposFacturacion %}
+                            <tr>
+                                <td>{{ arGruposFacturacion.codigoGrupoFacturacionPk  }}<input type="hidden" name="LblCodigo[]" value="{{ arGruposFacturacion.codigoGrupoFacturacionPk }}"></td>                    
+                                <td>{{ arGruposFacturacion.nombre  }}</td>                                
+                                <td>{{ arGruposFacturacion.abreviatura  }}</td>                                
+                                <td><a href="javascript:abrirVentana3('{{ path('brs_tur_base_cliente_grupo_facturacion_nuevo', {'codigoCliente': arCliente.codigoClientePk, 'codigoGrupoFacturacion': arGruposFacturacion.codigoGrupoFacturacionPk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                                        
+                                <td><input type="checkbox" name="ChkSeleccionarGrupoFacturacion[]" value="{{ arGruposFacturacion.codigoGrupoFacturacionPk }}" /></td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    <div class="btn-toolbar" style="float: right">
+                        <div class="btn-group">            
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_base_cliente_grupo_facturacion_nuevo', {'codigoCliente': arCliente.codigoClientePk, 'codigoGrupoFacturacion': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>            
+                        </div>
+                        <div class="btn-group">
+                            {{ form_widget(form.BtnEliminarProyecto, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+                        </div>
+                    </div>                    
+                </div>
+            </div>                        
+                        
             <div class="tab-pane" id="direcciones">
                 <!-- Menu Encabezado Movimiento -->
                 <div id="direcciones" style="width: 100%"><br>
