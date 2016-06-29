@@ -69,7 +69,7 @@ class AfiPeriodoRepository extends EntityRepository {
             $icbf = 0;
             if($arContrato->getGeneraPension() == 1) {
                 $pension = ($salarioPeriodo * $arContrato->getPorcentajePension())/100;
-                $pension = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getPorcentajePension(), $intDias, $salarioMinimo);
+                $pension = $this->redondearAporte($arContrato->getVrSalario(), $salarioPeriodo, $arContrato->getPorcentajePension(), $intDias, $salarioMinimo);
             }
             if($arContrato->getGeneraSalud() == 1) {
                 $salud = ($salarioPeriodo * $arContrato->getPorcentajeSalud())/100;
@@ -237,10 +237,10 @@ class AfiPeriodoRepository extends EntityRepository {
                         
             //Dias
             $intDiasCotizar = $this->diasContrato($arPeriodo, $arContrato);            
-            $intDiasCotizarPension = $intDiasCotizar - $intDiasLicenciaNoRemunerada;
-            $intDiasCotizarSalud = $intDiasCotizar - $intDiasLicenciaNoRemunerada;
-            $intDiasCotizarRiesgos = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasVacaciones;
-            $intDiasCotizarCaja = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad;
+            $intDiasCotizarPension = $intDiasCotizar - $intDiasLicenciaNoRemunerada - $intDiasSuspension;
+            $intDiasCotizarSalud = $intDiasCotizar - $intDiasLicenciaNoRemunerada - $intDiasSuspension;
+            $intDiasCotizarRiesgos = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasVacaciones - $intDiasSuspension;
+            $intDiasCotizarCaja = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasSuspension;
             if($arContrato->getCodigoTipoCotizanteFk() == '19' || $arContrato->getCodigoTipoCotizanteFk() == '12' || $arContrato->getCodigoTipoCotizanteFk() == '23') {
                 $intDiasCotizarPension = 0;
                 $intDiasCotizarCaja = 0;
@@ -294,7 +294,7 @@ class AfiPeriodoRepository extends EntityRepository {
             $floCotizacionFSPSubsistencia = 0;            
             $floAporteVoluntarioFondoPensionesObligatorias = 0;
             $floCotizacionVoluntariaFondoPensionesObligatorias = 0;
-            $floCotizacionPension = $this->redondearAporte($floSalario + $floSuplementario, $floIbcPension, $floTarifaPension, $intDiasCotizarPension, $salarioMinimo);            
+            $floCotizacionPension = $this->redondearAporte($floSalario, $floIbcPension, $floTarifaPension, $intDiasCotizarPension, $salarioMinimo);            
             if($floSalario >= ($salarioMinimo * 4)) {
                 $floCotizacionFSPSolidaridad = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
                 $floCotizacionFSPSubsistencia = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
@@ -348,12 +348,12 @@ class AfiPeriodoRepository extends EntityRepository {
                 $floSuplementario = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->tiempoSuplementario($arPeriodo->getFechaDesde()->format('Y-m-d'), $arPeriodo->getFechaHasta()->format('Y-m-d'), $arContrato->getCodigoContratoPk());            
                 $floIbcIncapacidades = 0;
                 $fechaTerminaCotrato = $arContrato->getFechaHasta()->format('Y-m-d');
-                if($arContrato->getFechaDesde() >= $arPeriodo->getFechaDesde()) {
+                /*if($arContrato->getFechaDesde() >= $arPeriodo->getFechaDesde()) {
                     $arPeriodoDetallePago->setIngreso('X');
                 }
                 if($arContrato->getIndefinido() == 0 && $fechaTerminaCotrato <= $arPeriodo->getFechaHasta()) {                    
                     $arPeriodoDetallePago->setRetiro('X');
-                }
+                }*/
                 if($intDiasSuspension > 0) {
                     $arPeriodoDetallePago->setSuspensionTemporalContratoLicenciaServicios('X');
                     $arPeriodoDetallePago->setDiasLicencia($intDiasLicenciaNoRemunerada);
@@ -369,6 +369,7 @@ class AfiPeriodoRepository extends EntityRepository {
                         $intDiasCotizarSalud = $intDiasSuspension;
                         $intDiasCotizarRiesgos = $intDiasSuspension;
                         $intDiasCotizarCaja = $intDiasSuspension;
+                        
                     }
                 }         
                 
@@ -400,6 +401,10 @@ class AfiPeriodoRepository extends EntityRepository {
                 }
                 
                 $arPeriodoDetallePago->setIbcPension($floIbcPension);
+                $arPeriodoDetallePago->setIbcSalud($floIbcSalud);
+                $arPeriodoDetallePago->setIbcRiesgosProfesionales($floIbcRiesgos);
+                $arPeriodoDetallePago->setIbcCaja($floIbcCaja);
+                
                 if ($intDiasSuspension <=0){
                     $arPeriodoDetallePago->setIbcSalud($floIbcSalud);
                     $arPeriodoDetallePago->setIbcRiesgosProfesionales($floIbcRiesgos);

@@ -56,7 +56,6 @@ class AfiClienteType extends AbstractType
             ->add('porcentajePension', 'number', array('required' => true))
             ->add('porcentajeSalud', 'number', array('required' => true))
             ->add('porcentajeCaja', 'number', array('required' => true))  
-            ->add('codigoSucursal', 'text', array('required' => false))                             
             ->add('redondearCobro', 'checkbox', array('required'  => false))                            
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')

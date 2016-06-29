@@ -188,7 +188,7 @@ class PeriodoController extends Controller
                 fputs($ar, '          ');
                 fputs($ar, '          '); // Nro 9 del formato
                 fputs($ar, 'S'); // Nro 10 del formato
-                fputs($ar, $this->RellenarNr($arPeriodo->getClienteRel()->getCodigoSucursal(), " ", 10, "D"));
+                fputs($ar, $this->RellenarNr($arPeriodoDetallePagos->getContratoRel()->getCodigoSucursalFk(), " ", 10, "D"));
                 fputs($ar, $this->RellenarNr('PAGO CONTADO', " ", 40, "D")); //ESTABA $arPeriodo->getClienteRel()->getNombreCorto()
                 //Arp del aportante
                 fputs($ar, '14-18 ');

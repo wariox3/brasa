@@ -127,10 +127,14 @@
                             <th>COD</th>
                             <th>IDENTIFICACION</th>
                             <th>NOMBRE</th>
+                            <th>DÍAS</th>
+                            <th>SALARIO</th>
                             <th>PENSION</th>
                             <th>SALUD</th>
-                            <th>RIESGOS</th>
                             <th>CAJA</th>
+                            <th>RIESGOS</th>
+                            <th>SENA</th>
+                            <th>ICBF</th>
                             <th>TOTAL</th>
                             <th></th>
                         </tr>
@@ -139,10 +143,14 @@
                             <td>{{ arPeriodoDetallesPagos.codigoPeriodoDetallePagoPk  }}</td>
                             <td>{{ arPeriodoDetallesPagos.empleadoRel.numeroIdentificacion }}</td>
                             <td>{{ arPeriodoDetallesPagos.empleadoRel.nombreCorto }}</td>
+                            <td style="text-align: right">{{ arPeriodoDetallesPagos.diasCotizadosPension }}</td>
+                            <td style="text-align: right">{{ arPeriodoDetallesPagos.salarioBasico }}</td>
                             <td style="text-align: right">{{ arPeriodoDetallesPagos.cotizacionPension | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPeriodoDetallesPagos.cotizacionSalud | number_format(0, '.', ',') }}</td>
-                            <td style="text-align: right">{{ arPeriodoDetallesPagos.cotizacionRiesgos | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPeriodoDetallesPagos.cotizacionCaja | number_format(0, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPeriodoDetallesPagos.cotizacionRiesgos | number_format(0, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPeriodoDetallesPagos.cotizacionSena | number_format(0, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPeriodoDetallesPagos.cotizacionIcbf | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPeriodoDetallesPagos.totalCotizacion | number_format(0, '.', ',') }}</td>
                             <td><input type="checkbox" name="ChkSeleccionarDetallePago[]" value="{{ arPeriodoDetallesPagos.codigoPeriodoDetallePagoPk }}" /></td>
                         </tr>
