@@ -103,11 +103,15 @@ class TurPedidoDetalleRepository extends EntityRepository {
     public function eliminarSeleccionados($arrSeleccionados) {        
         if(count($arrSeleccionados) > 0) {
             $em = $this->getEntityManager();
-            foreach ($arrSeleccionados AS $codigo) {                
-                $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigo);                
-                $em->remove($arPedidoDetalle);                  
+            foreach ($arrSeleccionados AS $codigo) {  
+                $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoPedidoDetalleFk' => $codigo));
+                $arFacturaDetalle = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array('codigoPedidoDetalleFk' => $codigo));
+                if(!$arProgramacionDetalle && !$arFacturaDetalle) {
+                    $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigo);                
+                    $em->remove($arPedidoDetalle);                     
+                }                                     
             }                                         
-            $em->flush();       
+            $em->flush();         
         }
         
     }        
