@@ -231,7 +231,11 @@ class FormatoHojaVida extends \FPDF_FPDF {
         $this->Cell(33, 5, "CALZADO", 1, 0, 'C', 1);
         $this->SetXY($intX, $intY + 75);
         $this->SetFont('Arial','',8);
-        $this->Cell(41, 8, $arEmpleado->getEmpleadoEstudioTipoRel()->getNombre(), 1, 0, 'C', 1);
+        $empleadoEstudio = "";
+        if ($arEmpleado->getCodigoEmpleadoEstudioTipoFk() != null){
+            $empleadoEstudio = $arEmpleado->getEmpleadoEstudioTipoRel()->getNombre();
+        }
+        $this->Cell(41, 8, $empleadoEstudio, 1, 0, 'C', 1);
         //Calculo edad
         $varFechaNacimientoAnio = $arEmpleado->getFechaNacimiento()->format('Y');
         $varFechaNacimientoMes = $arEmpleado->getFechaNacimiento()->format('m');
