@@ -226,7 +226,7 @@ class AfiPeriodoRepository extends EntityRepository {
                 $arPeriodoDetallePago->setDiasLicenciaMaternidad($intDiasLicenciaMaternidad);
             }       
             if($intDiasIncapacidadLaboral > 0) {
-                $arPeriodoDetallePago->setIncapacidadAccidenteTrabajoEnfermedadProfesional('X');
+                $arPeriodoDetallePago->setIncapacidadAccidenteTrabajoEnfermedadProfesional($intDiasIncapacidadLaboral);
                 $arPeriodoDetallePago->setDiasIncapacidadLaboral($intDiasIncapacidadLaboral);
                 
                 $floSalarioMesActual = $floSalario + $floSuplementario;   

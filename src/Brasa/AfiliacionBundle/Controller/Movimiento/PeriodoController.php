@@ -222,10 +222,10 @@ class PeriodoController extends Controller
                     fputs($ar, $arPeriodoDetallePago->getCodigoMunicipioUbicacionlaboral());
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getPrimerApellido(), " ", 20, "D"));
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getSegundoApellido(), " ", 30, "D"));
-                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getPrimerNombre(), " ", 20, "D"));
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getPrimerNombre(), " ", 20, "D"));                                        
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getSegundoNombre(), " ", 30, "D"));
-                    fputs($ar, $arPeriodoDetallePago->getIngreso());
-                    fputs($ar, $arPeriodoDetallePago->getRetiro());
+                    fputs($ar, $arPeriodoDetallePago->getIngreso()); //
+                    fputs($ar, $arPeriodoDetallePago->getRetiro()); //
                     fputs($ar, $arPeriodoDetallePago->getTrasladoDesdeOtraEps());
                     fputs($ar, $arPeriodoDetallePago->getTrasladoAOtraEps());
                     fputs($ar, $arPeriodoDetallePago->getTrasladoDesdeOtraPension());
@@ -234,16 +234,16 @@ class PeriodoController extends Controller
                     fputs($ar, $arPeriodoDetallePago->getCorrecciones());
                     fputs($ar, $arPeriodoDetallePago->getVariacionTransitoriaSalario());
                     fputs($ar, $arPeriodoDetallePago->getSuspensionTemporalContratoLicenciaServicios());
-                    fputs($ar, $arPeriodoDetallePago->getIncapacidadGeneral().$arPeriodoDetallePago->getDiasIncapacidadGeneral());
-                    fputs($ar, $arPeriodoDetallePago->getLicenciaMaternidad().$arPeriodoDetallePago->getDiasLicenciaMaternidad());
+                    fputs($ar, $arPeriodoDetallePago->getIncapacidadGeneral());
+                    fputs($ar, $arPeriodoDetallePago->getLicenciaMaternidad());
                     fputs($ar, $arPeriodoDetallePago->getVacaciones());
                     fputs($ar, $arPeriodoDetallePago->getAporteVoluntario());
                     fputs($ar, $arPeriodoDetallePago->getVariacionCentrosTrabajo());
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getIncapacidadAccidenteTrabajoEnfermedadProfesional(), "0", 2, "I"));
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCodigoEntidadPensionPertenece(), " ", 6, "D"));
-                    fputs($ar, $arPeriodoDetallePago->getCodigoEntidadPensionTraslada());
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCodigoEntidadPensionTraslada(), " ", 6, "D"));
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCodigoEntidadSaludPertenece(), " ", 6, "D"));
-                    fputs($ar, $arPeriodoDetallePago->getCodigoEntidadSaludTraslada());
+                    fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCodigoEntidadSaludTraslada(), " ", 6, "D"));
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCodigoEntidadCajaPertenece(), " ", 6, "D"));
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getDiasCotizadosPension(), "0", 2, "I"));
                     fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getDiasCotizadosSalud(), "0", 2, "I"));
@@ -609,10 +609,7 @@ class PeriodoController extends Controller
             if ($arPeriodoDetallePago->getIncapacidadGeneral() == 'X'){
                 $incapacidadGeneral = $arPeriodoDetallePago->getDiasIncapacidadGeneral(); 
             }
-            $incapacidadLaboral = '';
-            if ($arPeriodoDetallePago->getIncapacidadAccidenteTrabajoEnfermedadProfesional() == 'X'){
-                $incapacidadLaboral = $arPeriodoDetallePago->getDiasIncapacidadLaboral(); 
-            }
+            
             $licenciaMaternidad = '';
             if ($arPeriodoDetallePago->getLicenciaMaternidad() == 'X'){
                 $licenciaMaternidad = $arPeriodoDetallePago->getDiasLicenciaMaternidad(); 
@@ -628,7 +625,7 @@ class PeriodoController extends Controller
                     ->setCellValue('H' . $i, $arPeriodoDetallePago->getIncapacidadGeneral().$incapacidadGeneral)
                     ->setCellValue('I' . $i, $arPeriodoDetallePago->getLicenciaMaternidad().$licenciaMaternidad)
                     ->setCellValue('J' . $i, $arPeriodoDetallePago->getVacaciones())
-                    ->setCellValue('K' . $i, $arPeriodoDetallePago->getIncapacidadAccidenteTrabajoEnfermedadProfesional().$incapacidadLaboral)
+                    ->setCellValue('K' . $i, $arPeriodoDetallePago->getIncapacidadAccidenteTrabajoEnfermedadProfesional())
                     ->setCellValue('L' . $i, $arPeriodoDetallePago->getSalarioBasico())
                     ->setCellValue('M' . $i, $arPeriodoDetallePago->getSuplementario())
                     ->setCellValue('N' . $i, $arPeriodoDetallePago->getDiasCotizadosPension())

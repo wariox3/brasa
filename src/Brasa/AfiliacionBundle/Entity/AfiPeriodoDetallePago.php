@@ -213,9 +213,9 @@ class AfiPeriodoDetallePago
     private $variacionCentrosTrabajo = ' ';         
     
     /**
-     * @ORM\Column(name="incapacidad_accidente_trabajo_enfermedad_profesional", type="string", length=1)
+     * @ORM\Column(name="incapacidad_accidente_trabajo_enfermedad_profesional", type="integer")
      */
-    private $incapacidadAccidenteTrabajoEnfermedadProfesional =' ';
+    private $incapacidadAccidenteTrabajoEnfermedadProfesional = 0;
 
     /**
      * @ORM\Column(name="dias_incapacidad_laboral", type="integer")
@@ -1442,7 +1442,7 @@ class AfiPeriodoDetallePago
     /**
      * Set incapacidadAccidenteTrabajoEnfermedadProfesional
      *
-     * @param string $incapacidadAccidenteTrabajoEnfermedadProfesional
+     * @param integer $incapacidadAccidenteTrabajoEnfermedadProfesional
      *
      * @return AfiPeriodoDetallePago
      */
@@ -1456,7 +1456,7 @@ class AfiPeriodoDetallePago
     /**
      * Get incapacidadAccidenteTrabajoEnfermedadProfesional
      *
-     * @return string
+     * @return integer
      */
     public function getIncapacidadAccidenteTrabajoEnfermedadProfesional()
     {
