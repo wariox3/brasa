@@ -5,12 +5,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 
-class ActualizarHoraPedidoController extends Controller
+class MantenimientoPedidoController extends Controller
 {
     var $strListaDql = "";
     
     /**
-     * @Route("/tur/proceso/actualizar/hora/pedido", name="brs_tur_proceso_actualizar_hora_pedido")
+     * @Route("/tur/proceso/mantenimiento/pedido", name="brs_tur_proceso_mantenimiento_pedido")
      */     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();                                        
@@ -27,7 +27,7 @@ class ActualizarHoraPedidoController extends Controller
             $dateFechaHasta = date_create($anio . "/" . $mes . "/" . $strUltimoDiaMes); 
             $dateFechaDesde = $fecha;            
             
-            if ($form->get('BtnActualizar')->isClicked()) {                 
+            if ($form->get('BtnActualizarHorasProgramadas')->isClicked()) {                 
                 $dql = $em->getRepository('BrasaTurnoBundle:TurPedido')->listaDql('','','','','',0,$dateFechaDesde->format('Y/m/d'),$dateFechaHasta->format('Y/m/d'));
                 $query = $em->createQuery($dql);
                 $arPedidos = $query->getResult();
@@ -35,9 +35,17 @@ class ActualizarHoraPedidoController extends Controller
                     $em->getRepository('BrasaTurnoBundle:TurPedido')->actualizarHorasProgramadas($arPedido->getCodigoPedidoPk());
                 }
             }                           
+            if ($form->get('BtnActualizarEstadoProgramado')->isClicked()) {                 
+                $dql = $em->getRepository('BrasaTurnoBundle:TurPedido')->listaDql('','','','','',0,$dateFechaDesde->format('Y/m/d'),$dateFechaHasta->format('Y/m/d'));
+                $query = $em->createQuery($dql);
+                $arPedidos = $query->getResult();
+                foreach ($arPedidos as $arPedido) {
+                    //$em->getRepository('BrasaTurnoBundle:TurPedido')->actualizarEstadoProgramado($arPedido->getCodigoPedidoPk());
+                }
+            }             
         }
                 
-        return $this->render('BrasaTurnoBundle:Procesos/ActualizarFechaPedido:lista.html.twig', array(        
+        return $this->render('BrasaTurnoBundle:Procesos/MantenimientoPedido:lista.html.twig', array(        
             'form' => $form->createView()));
     }           
     
@@ -59,7 +67,8 @@ class ActualizarHoraPedidoController extends Controller
                 ),
                 'data' => $anio,
             ))                
-            ->add('BtnActualizar', 'submit', array('label'  => 'Actualizar'))            
+            ->add('BtnActualizarHorasProgramadas', 'submit', array('label'  => 'Actualizar horas programadas'))            
+            ->add('BtnActualizarEstadoProgramado', 'submit', array('label'  => 'Actualizar estado programado'))            
             ->getForm();
         return $form;
     }        

@@ -144,9 +144,21 @@ class TurPedidoDetalleRepository extends EntityRepository {
         $query = $em->createQuery($dql);
         $arrProgramacionDetalle = $query->getSingleResult(); 
         if($arrProgramacionDetalle) {
-            $arPedidoDetalle->setHorasProgramadas($arrProgramacionDetalle['horas']);
-            $arPedidoDetalle->setHorasDiurnasProgramadas($arrProgramacionDetalle['horasDiurnas']);
-            $arPedidoDetalle->setHorasNocturnasProgramadas($arrProgramacionDetalle['horasNocturnas']);
+            $horasProgramadas = 0;
+            $horasDiurnas = 0;
+            $horasNocturnas = 0;
+            if($arrProgramacionDetalle['horas']) {
+                $horasProgramadas = $arrProgramacionDetalle['horas'];
+            }
+            if($arrProgramacionDetalle['horasDiurnas']) {
+                $horasDiurnas = $arrProgramacionDetalle['horasDiurnas'];
+            }
+            if($arrProgramacionDetalle['horasNocturnas']) {
+                $horasNocturnas = $arrProgramacionDetalle['horasNocturnas'];
+            }
+            $arPedidoDetalle->setHorasProgramadas($horasProgramadas);
+            $arPedidoDetalle->setHorasDiurnasProgramadas($horasDiurnas);
+            $arPedidoDetalle->setHorasNocturnasProgramadas($horasNocturnas);
             $em->persist($arPedidoDetalle);
         }       
     }  
