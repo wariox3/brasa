@@ -33,7 +33,7 @@ class TurPedidoDetalleType extends AbstractType
                 'query_builder' => function (EntityRepository $er) use ($options) {
                     return $er->createQueryBuilder('gf')
                     ->where('gf.codigoClienteFk = :codigoCliente ')
-                    ->setParameter('codigoCliente', $options['data']->getServicioRel()->getCodigoClienteFk())
+                    ->setParameter('codigoCliente', $options['data']->getPedidoRel()->getCodigoClienteFk())
                     ->orderBy('gf.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => false))                            
