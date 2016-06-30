@@ -184,10 +184,8 @@ class ServiciosDetallesController extends Controller
                 ->setCellValue('G1', 'TOTAL');
             $objPHPExcel->setActiveSheetIndex(1); 
             
-            $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(9); 
-            $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
             //$objPHPExcel->getActiveSheet()->get
-            for($col = 'A'; $col !== 'h'; $col++) {
+            for($col = 'A'; $col !== 'H'; $col++) {
                 $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
                 $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
             }     
