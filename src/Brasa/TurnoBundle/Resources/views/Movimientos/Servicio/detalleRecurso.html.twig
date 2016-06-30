@@ -237,6 +237,7 @@
                                     <th>VI</th>
                                     <th>SA</th>
                                     <th>DO</th>
+                                    <th>DF</th>
                                     <th>FE</th>
                                     <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                                 </tr>
@@ -282,6 +283,7 @@
                                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtViernes{{ arServicioDetallePlantilla.codigoServicioDetallePlantillaPk }}" value="{{ arServicioDetallePlantilla.viernes  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtSabado{{ arServicioDetallePlantilla.codigoServicioDetallePlantillaPk }}" value="{{ arServicioDetallePlantilla.sabado  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtDomingo{{ arServicioDetallePlantilla.codigoServicioDetallePlantillaPk }}" value="{{ arServicioDetallePlantilla.domingo  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDomingoFestivo{{ arServicioDetallePlantilla.codigoServicioDetallePlantillaPk }}" value="{{ arServicioDetallePlantilla.domingoFestivo  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                        
                                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtFestivo{{ arServicioDetallePlantilla.codigoServicioDetallePlantillaPk }}" value="{{ arServicioDetallePlantilla.festivo  }}" size="5" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                                         <td><input type="checkbox" name="ChkSeleccionarPlantilla[]" value="{{ arServicioDetallePlantilla.codigoServicioDetallePlantillaPk }}" /></td>
                                     </tr>

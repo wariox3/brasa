@@ -997,6 +997,11 @@ class ServicioController extends Controller
                 } else {
                     $arServicioDetallePlantilla->setDomingo(null);
                 }
+                if ($arrControles['TxtDomingoFestivo' . $intCodigo] != '') {
+                    $arServicioDetallePlantilla->setDomingoFestivo($arrControles['TxtDomingoFestivo' . $intCodigo]);
+                } else {
+                    $arServicioDetallePlantilla->setDomingoFestivo(null);
+                }                
                 if ($arrControles['TxtFestivo' . $intCodigo] != '') {
                     $arServicioDetallePlantilla->setFestivo($arrControles['TxtFestivo' . $intCodigo]);
                 } else {
