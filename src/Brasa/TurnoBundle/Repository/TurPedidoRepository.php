@@ -225,7 +225,15 @@ class TurPedidoRepository extends EntityRepository {
             } else {
                 $floVrServicio = $floVrMinimoServicio;
             }            
-            $arPedidoDetalleActualizar->setVrTotalDetalle($floVrServicio);
+            $subTotalDetalle = $floVrServicio;
+            $baseAiuDetalle = $subTotalDetalle*10/100;
+            $ivaDetalle = $baseAiuDetalle*16/100;
+            $totalDetalle = $subTotalDetalle + $ivaDetalle;
+            
+            $arPedidoDetalleActualizar->setVrSubtotal($subTotalDetalle);
+            $arPedidoDetalleActualizar->setVrBaseAiu($baseAiuDetalle);
+            $arPedidoDetalleActualizar->setVrIva($ivaDetalle);
+            $arPedidoDetalleActualizar->setVrTotalDetalle($totalDetalle); 
             $arPedidoDetalleActualizar->setVrTotalDetallePendiente($floVrServicio);
             $arPedidoDetalleActualizar->setVrPrecioMinimo($floVrMinimoServicio);
             $arPedidoDetalleActualizar->setVrCosto($douCostoCalculado);

@@ -39,6 +39,11 @@ class ServiciosDetallesController extends Controller
                 $this->lista();
                 $this->generarExcel();
             }
+            if ($form->get('BtnExcelResumido')->isClicked()) {
+                $this->filtrar($form);
+                $this->lista();
+                $this->generarExcelResumido();
+            }            
         }
         $arServiciosDetalles = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 100);
         return $this->render('BrasaTurnoBundle:Consultas/Servicio:detalle.html.twig', array(
@@ -62,11 +67,112 @@ class ServiciosDetallesController extends Controller
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
             ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoServicio))                        
+            ->add('BtnExcelResumido', 'submit', array('label'  => 'Excel resumido',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }    
+
+    private function generarExcelResumido() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
+        ob_clean();
+        $em = $this->getDoctrine()->getManager();            
+        $objPHPExcel = new \PHPExcel();
+        
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'AE'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }     
+        for($col = 'M'; $col !== 'Q'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('right');
+        }        
+        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'CLIENTE')
+                    ->setCellValue('B1', 'GRUPO')
+                    ->setCellValue('C1', 'PUESTO')
+                    ->setCellValue('D1', 'SERVICIO')
+                    ->setCellValue('E1', 'MODALIDAD')                                    
+                    ->setCellValue('F1', 'DESDE')
+                    ->setCellValue('G1', 'HASTA')
+                    ->setCellValue('H1', 'ZONA')
+                    ->setCellValue('I1', 'CANT')
+                    ->setCellValue('J1', 'H')
+                    ->setCellValue('K1', 'HD')
+                    ->setCellValue('L1', 'HN')
+                    ->setCellValue('M1', 'SUBTOTAL')
+                    ->setCellValue('N1', 'BASE AIU')
+                    ->setCellValue('O1', 'IVA')
+                    ->setCellValue('P1', 'TOTAL');
+
+        $i = 2;
+        $query = $em->createQuery($this->strListaDql);
+        $arServiciosDetalles = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
+        $arServiciosDetalles = $query->getResult();
+
+        foreach ($arServiciosDetalles as $arServicioDetalle) {   
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arServicioDetalle->getServicioRel()->getClienteRel()->getNombreCorto())                                        
+                    ->setCellValue('D' . $i, $arServicioDetalle->getConceptoServicioRel()->getNombreFacturacion())
+                    ->setCellValue('E' . $i, $arServicioDetalle->getModalidadServicioRel()->getNombre())                    
+                    ->setCellValue('F' . $i, $arServicioDetalle->getFechaDesde()->format('Y/m/d'))
+                    ->setCellValue('G' . $i, $arServicioDetalle->getFechaHasta()->format('Y/m/d'))                    
+                    ->setCellValue('I' . $i, $arServicioDetalle->getCantidad())                    
+                    ->setCellValue('J' . $i, $arServicioDetalle->getHoras())
+                    ->setCellValue('K' . $i, $arServicioDetalle->getHorasDiurnas())
+                    ->setCellValue('L' . $i, $arServicioDetalle->getHorasNocturnas())                    
+                    ->setCellValue('M' . $i, $arServicioDetalle->getVrSubtotal())
+                    ->setCellValue('N' . $i, $arServicioDetalle->getVrBaseAiu())
+                    ->setCellValue('O' . $i, $arServicioDetalle->getVrIva())
+                    ->setCellValue('P' . $i, $arServicioDetalle->getVrTotalDetalle());
+            
+            if($arServicioDetalle->getGrupoFacturacionRel()) {
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('B' . $i, $arServicioDetalle->getGrupoFacturacionRel()->getNombre());
+            }            
+            
+            if($arServicioDetalle->getPuestoRel()) {
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('C' . $i, $arServicioDetalle->getPuestoRel()->getNombre());
+                if($arServicioDetalle->getPuestoRel()->getZonaRel()) {
+                    $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue('H' . $i, $arServicioDetalle->getPuestoRel()->getZonaRel()->getNombre());
+                }                
+            }
+
+            $i++;
+        }
+
+        $objPHPExcel->getActiveSheet()->setTitle('ServiciosDetalles');
+        $objPHPExcel->setActiveSheetIndex(0);
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="ServiciosDetalles.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }      
 
     private function generarExcel() {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
@@ -189,7 +295,6 @@ class ServiciosDetallesController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }      
-
+    }     
 
 }

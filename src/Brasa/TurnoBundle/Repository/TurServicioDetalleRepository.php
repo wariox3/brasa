@@ -21,6 +21,7 @@ class TurServicioDetalleRepository extends EntityRepository {
         if($codigoCliente != '') {
             $dql .= "AND s.codigoClienteFk = " . $codigoCliente;  
         }
+        $dql .= " ORDER BY s.codigoClienteFk, sd.codigoGrupoFacturacionFk, sd.codigoPuestoFk";
         return $dql;
     }     
     

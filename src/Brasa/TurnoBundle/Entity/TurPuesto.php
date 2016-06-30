@@ -68,6 +68,11 @@ class TurPuesto
     private $codigoProgramadorFk;    
     
     /**
+     * @ORM\Column(name="codigo_zona_fk", type="integer", nullable=true)
+     */    
+    private $codigoZonaFk;     
+    
+    /**
      * @ORM\Column(name="codigo_ciudad_fk", type="integer", nullable=true)
      */
     private $codigoCiudadFk;     
@@ -99,6 +104,12 @@ class TurPuesto
      * @ORM\JoinColumn(name="codigo_programador_fk", referencedColumnName="codigo_programador_pk")
      */
     protected $programadorRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurZona", inversedBy="puestosZonaRel")
+     * @ORM\JoinColumn(name="codigo_zona_fk", referencedColumnName="codigo_zona_pk")
+     */
+    protected $zonaRel;     
     
     /**
      * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="puestoRel")
@@ -820,5 +831,53 @@ class TurPuesto
     public function getSimulacionesDetallesPuestoRel()
     {
         return $this->simulacionesDetallesPuestoRel;
+    }
+
+    /**
+     * Set codigoZonaFk
+     *
+     * @param integer $codigoZonaFk
+     *
+     * @return TurPuesto
+     */
+    public function setCodigoZonaFk($codigoZonaFk)
+    {
+        $this->codigoZonaFk = $codigoZonaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoZonaFk
+     *
+     * @return integer
+     */
+    public function getCodigoZonaFk()
+    {
+        return $this->codigoZonaFk;
+    }
+
+    /**
+     * Set zonaRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurZona $zonaRel
+     *
+     * @return TurPuesto
+     */
+    public function setZonaRel(\Brasa\TurnoBundle\Entity\TurZona $zonaRel = null)
+    {
+        $this->zonaRel = $zonaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get zonaRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurZona
+     */
+    public function getZonaRel()
+    {
+        return $this->zonaRel;
     }
 }

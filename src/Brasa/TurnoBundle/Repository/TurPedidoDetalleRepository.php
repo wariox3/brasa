@@ -53,7 +53,8 @@ class TurPedidoDetalleRepository extends EntityRepository {
         }        
         if($strFechaHasta != "") {
             $dql .= " AND p.fechaProgramacion <= '" . $strFechaHasta . "'";
-        }        
+        }      
+        $dql .= " ORDER BY p.codigoClienteFk, pd.codigoGrupoFacturacionFk, pd.codigoPuestoFk";        
         return $dql;
     }     
     

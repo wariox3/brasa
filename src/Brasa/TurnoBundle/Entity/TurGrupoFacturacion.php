@@ -33,7 +33,7 @@ class TurGrupoFacturacion
     private $codigoClienteFk;            
     
     /**
-     * @ORM\ManyToOne(targetEntity="TurCliente", inversedBy="gruposfacturacionesClienteRel")
+     * @ORM\ManyToOne(targetEntity="TurCliente", inversedBy="gruposFacturacionesClienteRel")
      * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
      */
     protected $clienteRel;              
@@ -48,6 +48,7 @@ class TurGrupoFacturacion
      */
     protected $pedidosDetallesGrupoFacturacionRel;    
     
+
     /**
      * Constructor
      */
@@ -89,6 +90,30 @@ class TurGrupoFacturacion
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set abreviatura
+     *
+     * @param string $abreviatura
+     *
+     * @return TurGrupoFacturacion
+     */
+    public function setAbreviatura($abreviatura)
+    {
+        $this->abreviatura = $abreviatura;
+
+        return $this;
+    }
+
+    /**
+     * Get abreviatura
+     *
+     * @return string
+     */
+    public function getAbreviatura()
+    {
+        return $this->abreviatura;
     }
 
     /**
@@ -205,29 +230,5 @@ class TurGrupoFacturacion
     public function getPedidosDetallesGrupoFacturacionRel()
     {
         return $this->pedidosDetallesGrupoFacturacionRel;
-    }
-
-    /**
-     * Set abreviatura
-     *
-     * @param string $abreviatura
-     *
-     * @return TurGrupoFacturacion
-     */
-    public function setAbreviatura($abreviatura)
-    {
-        $this->abreviatura = $abreviatura;
-
-        return $this;
-    }
-
-    /**
-     * Get abreviatura
-     *
-     * @return string
-     */
-    public function getAbreviatura()
-    {
-        return $this->abreviatura;
     }
 }

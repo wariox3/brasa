@@ -123,6 +123,7 @@
                             <th>COD</th>                                
                             <th>NOMBRE</th>
                             <th>PROGRAMADOR</th>
+                            <th>ZONA</th>
                             <th>DIRECCION</th>
                             <th>CIUDAD</th>
                             <th>TELEFONO</th>
@@ -139,6 +140,7 @@
                                 <td>{{ arPuestos.codigoPuestoPk  }}<input type="hidden" name="LblCodigo[]" value="{{ arPuestos.codigoPuestoPk }}"></td>                    
                                 <td>{{ arPuestos.nombre  }}</td>
                                 <td>{{ arPuestos.programadorRel.nombre | default('')}}</td>
+                                <td>{{ arPuestos.zonaRel.nombre | default('')}}</td>
                                 <td>{{ arPuestos.direccion  }}</td>
                                 <td>{{ arPuestos.ciudadRel.nombre | default('')}}</td>  
                                 <td>{{ arPuestos.telefono  }}</td>                                

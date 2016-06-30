@@ -231,6 +231,7 @@ class TurCliente
      */
     protected $puestosDotacionesClienteRel;    
     
+
     /**
      * Constructor
      */
@@ -243,6 +244,7 @@ class TurCliente
         $this->programacionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->puestosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->proyectosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->gruposFacturacionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contratosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->clientesDireccionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cierresMesServiciosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -860,6 +862,30 @@ class TurCliente
     }
 
     /**
+     * Set codigoInterface
+     *
+     * @param string $codigoInterface
+     *
+     * @return TurCliente
+     */
+    public function setCodigoInterface($codigoInterface)
+    {
+        $this->codigoInterface = $codigoInterface;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoInterface
+     *
+     * @return string
+     */
+    public function getCodigoInterface()
+    {
+        return $this->codigoInterface;
+    }
+
+    /**
      * Set sectorRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurSector $sectorRel
@@ -1194,6 +1220,40 @@ class TurCliente
     }
 
     /**
+     * Add gruposFacturacionesClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurGrupoFacturacion $gruposFacturacionesClienteRel
+     *
+     * @return TurCliente
+     */
+    public function addGruposFacturacionesClienteRel(\Brasa\TurnoBundle\Entity\TurGrupoFacturacion $gruposFacturacionesClienteRel)
+    {
+        $this->gruposFacturacionesClienteRel[] = $gruposFacturacionesClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove gruposFacturacionesClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurGrupoFacturacion $gruposFacturacionesClienteRel
+     */
+    public function removeGruposFacturacionesClienteRel(\Brasa\TurnoBundle\Entity\TurGrupoFacturacion $gruposFacturacionesClienteRel)
+    {
+        $this->gruposFacturacionesClienteRel->removeElement($gruposFacturacionesClienteRel);
+    }
+
+    /**
+     * Get gruposFacturacionesClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGruposFacturacionesClienteRel()
+    {
+        return $this->gruposFacturacionesClienteRel;
+    }
+
+    /**
      * Add contratosClienteRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurContrato $contratosClienteRel
@@ -1327,63 +1387,5 @@ class TurCliente
     public function getPuestosDotacionesClienteRel()
     {
         return $this->puestosDotacionesClienteRel;
-    }
-
-    /**
-     * Set codigoInterface
-     *
-     * @param string $codigoInterface
-     *
-     * @return TurCliente
-     */
-    public function setCodigoInterface($codigoInterface)
-    {
-        $this->codigoInterface = $codigoInterface;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoInterface
-     *
-     * @return string
-     */
-    public function getCodigoInterface()
-    {
-        return $this->codigoInterface;
-    }
-
-    /**
-     * Add gruposFacturacionesClienteRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurGrupoFacturacion $gruposFacturacionesClienteRel
-     *
-     * @return TurCliente
-     */
-    public function addGruposFacturacionesClienteRel(\Brasa\TurnoBundle\Entity\TurGrupoFacturacion $gruposFacturacionesClienteRel)
-    {
-        $this->gruposFacturacionesClienteRel[] = $gruposFacturacionesClienteRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove gruposFacturacionesClienteRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurGrupoFacturacion $gruposFacturacionesClienteRel
-     */
-    public function removeGruposFacturacionesClienteRel(\Brasa\TurnoBundle\Entity\TurGrupoFacturacion $gruposFacturacionesClienteRel)
-    {
-        $this->gruposFacturacionesClienteRel->removeElement($gruposFacturacionesClienteRel);
-    }
-
-    /**
-     * Get gruposFacturacionesClienteRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getGruposFacturacionesClienteRel()
-    {
-        return $this->gruposFacturacionesClienteRel;
     }
 }

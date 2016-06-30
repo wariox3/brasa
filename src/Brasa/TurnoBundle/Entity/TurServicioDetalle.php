@@ -118,6 +118,21 @@ class TurServicioDetalle
     private $vrPrecioMinimo = 0;        
     
     /**
+     * @ORM\Column(name="vr_subtotal", type="float")
+     */
+    private $vrSubtotal = 0; 
+
+    /**
+     * @ORM\Column(name="vr_iva", type="float")
+     */
+    private $vrIva = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_base_aiu", type="float")
+     */
+    private $vrBaseAiu = 0;     
+    
+    /**
      * @ORM\Column(name="vr_total_detalle", type="float")
      */
     private $vrTotalDetalle = 0;
@@ -1380,5 +1395,77 @@ class TurServicioDetalle
     public function getGrupoFacturacionRel()
     {
         return $this->grupoFacturacionRel;
+    }
+
+    /**
+     * Set vrSubtotal
+     *
+     * @param float $vrSubtotal
+     *
+     * @return TurServicioDetalle
+     */
+    public function setVrSubtotal($vrSubtotal)
+    {
+        $this->vrSubtotal = $vrSubtotal;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSubtotal
+     *
+     * @return float
+     */
+    public function getVrSubtotal()
+    {
+        return $this->vrSubtotal;
+    }
+
+    /**
+     * Set vrIva
+     *
+     * @param float $vrIva
+     *
+     * @return TurServicioDetalle
+     */
+    public function setVrIva($vrIva)
+    {
+        $this->vrIva = $vrIva;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIva
+     *
+     * @return float
+     */
+    public function getVrIva()
+    {
+        return $this->vrIva;
+    }
+
+    /**
+     * Set vrBaseAiu
+     *
+     * @param float $vrBaseAiu
+     *
+     * @return TurServicioDetalle
+     */
+    public function setVrBaseAiu($vrBaseAiu)
+    {
+        $this->vrBaseAiu = $vrBaseAiu;
+
+        return $this;
+    }
+
+    /**
+     * Get vrBaseAiu
+     *
+     * @return float
+     */
+    public function getVrBaseAiu()
+    {
+        return $this->vrBaseAiu;
     }
 }

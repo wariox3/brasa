@@ -24,6 +24,13 @@ class TurClientePuestoType extends AbstractType
                     ->orderBy('p.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                             
+            ->add('zonaRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurZona',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('z')
+                    ->orderBy('z.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                            
             ->add('nombre', 'text', array('required'  => true))
             ->add('direccion', 'text', array('required'  => false))
             ->add('telefono', 'text', array('required'  => false))

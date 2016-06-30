@@ -188,12 +188,21 @@ class TurServicioRepository extends EntityRepository {
             $floVrHoraNocturna = ((($floValorBaseServicioMes * 40.3) / 100)/30)/8;
             $floVrMinimoServicio = (($intHorasRealesDiurnas * $floVrHoraDiurna) + ($intHorasRealesNocturnas * $floVrHoraNocturna)) * $arServicioDetalle->getCantidad();
             $floVrServicio = 0;
+            $subTotalDetalle = 0;
             if($arServicioDetalleActualizar->getVrPrecioAjustado() != 0) {
                 $floVrServicio = $arServicioDetalleActualizar->getVrPrecioAjustado();
             } else {
                 $floVrServicio = $floVrMinimoServicio;
             }
-            $arServicioDetalleActualizar->setVrTotalDetalle($floVrServicio);
+            $subTotalDetalle = $floVrServicio;
+            $baseAiuDetalle = $subTotalDetalle*10/100;
+            $ivaDetalle = $baseAiuDetalle*16/100;
+            $totalDetalle = $subTotalDetalle + $ivaDetalle;
+            
+            $arServicioDetalleActualizar->setVrSubtotal($subTotalDetalle);
+            $arServicioDetalleActualizar->setVrBaseAiu($baseAiuDetalle);
+            $arServicioDetalleActualizar->setVrIva($ivaDetalle);
+            $arServicioDetalleActualizar->setVrTotalDetalle($totalDetalle);                        
             $arServicioDetalleActualizar->setVrPrecioMinimo($floVrMinimoServicio);
             $arServicioDetalleActualizar->setVrCosto($douCostoCalculado);
 
