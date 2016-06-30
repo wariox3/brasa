@@ -130,6 +130,9 @@ class ServiciosDetallesController extends Controller
                 $cliente = $arServicioDetalle->getServicioRel()->getClienteRel()->getNombreCorto();
                 $codigoCliente = $arServicioDetalle->getServicioRel()->getCodigoClienteFk();
                 $cambio=true;
+                if($i == 2) {
+                   $cambio=false; 
+                }
             } else {
                 $cliente = "";
                 $cambio = false;
