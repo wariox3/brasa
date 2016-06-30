@@ -171,9 +171,51 @@ class ServiciosDetallesController extends Controller
                        
             $i++;
         }
-
         $objPHPExcel->getActiveSheet()->setTitle('ServiciosDetalles');
         $objPHPExcel->setActiveSheetIndex(0);
+                   
+        $objPHPExcel->createSheet(1)->setTitle('Otros')
+                ->setCellValue('A1', 'CLIENTE')
+                ->setCellValue('B1', 'CONCEPTO')
+                ->setCellValue('C1', 'CANT')
+                ->setCellValue('D1', 'PRECIO')
+                ->setCellValue('E1', 'SUBTOTAL')
+                ->setCellValue('F1', 'IVA')
+                ->setCellValue('G1', 'TOTAL');
+            $objPHPExcel->setActiveSheetIndex(1); 
+            
+            $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(9); 
+            $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+            //$objPHPExcel->getActiveSheet()->get
+            for($col = 'A'; $col !== 'h'; $col++) {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+            }     
+            for($col = 'C'; $col !== 'H'; $col++) {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('right');
+            } 
+        
+            $objPHPExcel->getActiveSheet()->setTitle('Otros');                                     
+            $i = 2;
+            $query = $em->createQuery($em->getRepository('BrasaTurnoBundle:TurServicioDetalleConcepto')->listaDql());
+            $arServiciosDetallesConceptos = new \Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto();
+            $arServiciosDetallesConceptos = $query->getResult();
+            foreach ($arServiciosDetallesConceptos as $arServicioDetalleConcepto) {   
+                $objPHPExcel->setActiveSheetIndex(1)
+                        ->setCellValue('A' . $i, $arServicioDetalleConcepto->getServicioRel()->getClienteRel()->getNombreCorto())                                        
+                        ->setCellValue('B' . $i, $arServicioDetalleConcepto->getFacturaConceptoRel()->getNombre())                                        
+                        ->setCellValue('C' . $i, $arServicioDetalleConcepto->getCantidad())
+                        ->setCellValue('D' . $i, $arServicioDetalleConcepto->getPrecio())                    
+                        ->setCellValue('E' . $i, $arServicioDetalleConcepto->getSubtotal())
+                        ->setCellValue('F' . $i, $arServicioDetalleConcepto->getIva()) 
+                        ->setCellValue('G' . $i, $arServicioDetalleConcepto->getTotal());               
+                $i++;
+            }
+   
+        $objPHPExcel->setActiveSheetIndex(0);
+        
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="ServiciosDetalles.xlsx"');
