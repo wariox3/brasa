@@ -123,10 +123,22 @@ class ServiciosDetallesController extends Controller
         $query = $em->createQuery($this->strListaDql);
         $arServiciosDetalles = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
         $arServiciosDetalles = $query->getResult();
-
+        $codigoCliente = "";
+        $cambio = false;
         foreach ($arServiciosDetalles as $arServicioDetalle) {   
+            if($arServicioDetalle->getServicioRel()->getCodigoClienteFk() != $codigoCliente) {
+                $cliente = $arServicioDetalle->getServicioRel()->getClienteRel()->getNombreCorto();
+                $codigoCliente = $arServicioDetalle->getServicioRel()->getCodigoClienteFk();
+                $cambio=true;
+            } else {
+                $cliente = "";
+                $cambio = false;
+            }
+            if($cambio==true) {
+                $i++;                
+            } 
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arServicioDetalle->getServicioRel()->getClienteRel()->getNombreCorto())                                        
+                    ->setCellValue('A' . $i, $cliente)                                        
                     ->setCellValue('D' . $i, $arServicioDetalle->getConceptoServicioRel()->getNombreFacturacion())
                     ->setCellValue('E' . $i, $arServicioDetalle->getModalidadServicioRel()->getNombre())                    
                     ->setCellValue('F' . $i, $arServicioDetalle->getFechaDesde()->format('Y/m/d'))
@@ -139,12 +151,12 @@ class ServiciosDetallesController extends Controller
                     ->setCellValue('N' . $i, $arServicioDetalle->getVrBaseAiu())
                     ->setCellValue('O' . $i, $arServicioDetalle->getVrIva())
                     ->setCellValue('P' . $i, $arServicioDetalle->getVrTotalDetalle());
-            
+
             if($arServicioDetalle->getGrupoFacturacionRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('B' . $i, $arServicioDetalle->getGrupoFacturacionRel()->getNombre());
             }            
-            
+
             if($arServicioDetalle->getPuestoRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('C' . $i, $arServicioDetalle->getPuestoRel()->getNombre());
@@ -152,8 +164,8 @@ class ServiciosDetallesController extends Controller
                     $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('H' . $i, $arServicioDetalle->getPuestoRel()->getZonaRel()->getNombre());
                 }                
-            }
-
+            }                 
+                       
             $i++;
         }
 
