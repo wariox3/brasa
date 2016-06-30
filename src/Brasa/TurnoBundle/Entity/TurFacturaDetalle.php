@@ -48,7 +48,7 @@ class TurFacturaDetalle
     private $vrPrecio = 0;   
     
     /**
-     * @ORM\Column(name="detalle", type="string", length=120, nullable=true)
+     * @ORM\Column(name="detalle", type="string", length=300, nullable=true)
      */
     private $detalle;    
     

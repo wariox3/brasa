@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurPedidoType;
 use Brasa\TurnoBundle\Form\Type\TurPedidoDetalleType;
+use PHPExcel_Style_Border;
 class PedidoController extends Controller
 {
     var $strListaDql = ""; 
@@ -177,6 +178,9 @@ class PedidoController extends Controller
                 $this->actualizarDetalle($arrControles, $codigoPedido);                                
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));
             }
+            if($form->get('BtnDetalleExcel')->isClicked()) {                
+                $this->generarExcelDetalle($codigoPedido);
+            }            
             if($form->get('BtnDetalleEliminar')->isClicked()) {   
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->eliminarSeleccionados($arrSeleccionados);
@@ -816,6 +820,7 @@ class PedidoController extends Controller
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);        
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonDetalleExcel = array('label' => 'Excel', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
         $arrBotonDetalleDesprogramar = array('label' => 'Desprogramar', 'disabled' => false);
         $arrBotonDetalleMarcar = array('label' => 'Marcar', 'disabled' => false);        
@@ -861,6 +866,7 @@ class PedidoController extends Controller
                     ->add('BtnAnular', 'submit', $arrBotonAnular)                                     
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
+                    ->add('BtnDetalleExcel', 'submit', $arrBotonDetalleExcel)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
                     ->add('BtnDetalleDesprogramar', 'submit', $arrBotonDetalleDesprogramar)
                     ->add('BtnDetalleMarcar', 'submit', $arrBotonDetalleMarcar)
@@ -1083,5 +1089,83 @@ class PedidoController extends Controller
             $em->flush();                
             $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);            
         }        
-    }            
+    }  
+    
+    private function generarExcelDetalle($codigoPedido) {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
+        ob_clean();        
+        $em = $this->getDoctrine()->getManager();        
+        $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
+        $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);        
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', 'PREFACTURACION DEL MES DE JUNIO DE 2016 ' . $arPedido->getClienteRel()->getNombreCorto() . " - SEVICIOS VIGILANCIA");
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal('center');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:E1');
+
+        //$objPHPExcel->getActiveSheet()->getStyle('A1:O1')->getBorders()->getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THICK);
+        
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(9);         
+        $objPHPExcel->getActiveSheet()->getStyle('4')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'F'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
+        }     
+        for($col = 'C'; $col !== 'F'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }
+        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A4', 'DETALLE')
+                    ->setCellValue('B4', 'MODALIDAD')
+                    ->setCellValue('C4', 'Vr. UNITARIO')
+                    ->setCellValue('D4', 'No. DIAS')
+                    ->setCellValue('E4', 'Vr. TOTAL');
+        $i = 5;
+        
+        $query = $em->createQuery($em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->listaDql($codigoPedido));
+        $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+        $arPedidoDetalles = $query->getResult();
+
+        foreach ($arPedidoDetalles as $arPedidoDetalle) {            
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arPedidoDetalle->getPuestoRel()->getNombre())
+                    ->setCellValue('B' . $i, $arPedidoDetalle->getModalidadServicioRel()->getNombre())
+                    ->setCellValue('C' . $i, $arPedidoDetalle->getVrSubtotal() / $arPedidoDetalle->getDias())
+                    ->setCellValue('D' . $i, $arPedidoDetalle->getDias())
+                    ->setCellValue('E' . $i, $arPedidoDetalle->getVrSubtotal());
+                    $objPHPExcel->getActiveSheet()->getStyle('A' . $i)->getFont()->setBold(true);
+            $i++;
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A' . $i, $arPedidoDetalle->getConceptoServicioRel()->getNombreFacturacion(). ' ' . $arPedidoDetalle->getDetalle());            
+            $i++;
+        }
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C' . ($i+1), 'SUB TOTAL')->setCellValue('E' . ($i+1), $arPedido->getVrSubtotal());        
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C' . ($i+2), 'BASE GRAVABLE')->setCellValue('E' . ($i+2), $arPedido->getVrBaseAiu());        
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C' . ($i+3), 'IVA 16%')->setCellValue('E' . ($i+3), $arPedido->getVrIva());        
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C' . ($i+4), 'TOTAL')->setCellValue('E' . ($i+4), $arPedido->getVrTotal());        
+        
+        $objPHPExcel->getActiveSheet()->setTitle('relacion');
+        $objPHPExcel->setActiveSheetIndex(0);
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="Pedidos.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }    
 }

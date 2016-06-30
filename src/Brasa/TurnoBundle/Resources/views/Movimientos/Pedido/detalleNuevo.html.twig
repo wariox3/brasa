@@ -80,7 +80,13 @@
                     Jue{{ form_widget(form.jueves) }} Vie{{ form_widget(form.viernes) }} Sab{{ form_widget(form.sabado) }} 
                     Dom{{ form_widget(form.domingo) }} Fes{{ form_widget(form.festivo) }}
                 </div>                
-            </div>                                                                                             
+            </div>  
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Detalle:</label>
+                <div class="col-sm-9">
+                   {{ form_widget(form.detalle, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                 
         </div>
     </div>               
     <div class="modal-footer">        

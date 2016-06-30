@@ -233,6 +233,11 @@ class TurPedidoDetalle
     private $ajusteProgramacion = false;    
     
     /**
+     * @ORM\Column(name="detalle", type="string", length=300, nullable=true)
+     */
+    private $detalle;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurPedido", inversedBy="pedidosDetallesPedidoRel")
      * @ORM\JoinColumn(name="codigo_pedido_fk", referencedColumnName="codigo_pedido_pk")
      */
@@ -1750,5 +1755,29 @@ class TurPedidoDetalle
     public function getVrBaseAiu()
     {
         return $this->vrBaseAiu;
+    }
+
+    /**
+     * Set detalle
+     *
+     * @param string $detalle
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setDetalle($detalle)
+    {
+        $this->detalle = $detalle;
+
+        return $this;
+    }
+
+    /**
+     * Get detalle
+     *
+     * @return string
+     */
+    public function getDetalle()
+    {
+        return $this->detalle;
     }
 }
