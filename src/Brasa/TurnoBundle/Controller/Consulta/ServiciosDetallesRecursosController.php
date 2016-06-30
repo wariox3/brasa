@@ -75,7 +75,7 @@ class ServiciosDetallesRecursosController extends Controller
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
         
-        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(9); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         for($col = 'A'; $col !== 'AD'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
