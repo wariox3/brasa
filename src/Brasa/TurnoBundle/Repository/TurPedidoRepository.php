@@ -226,10 +226,10 @@ class TurPedidoRepository extends EntityRepository {
             $floVrServicio = 0;
             $subTotalDetalle = 0;
             if($arPedidoDetalleActualizar->getVrPrecioAjustado() != 0) {
-                $floVrServicio = $arPedidoDetalleActualizar->getVrPrecioAjustado() * $arServicioDetalle->getCantidad();
+                $floVrServicio = $arPedidoDetalleActualizar->getVrPrecioAjustado() * $arPedidoDetalle->getCantidad();
                 $precio = $arPedidoDetalleActualizar->getVrPrecioAjustado();
             } else {
-                $floVrServicio = $floVrMinimoServicio * $arServicioDetalle->getCantidad();                
+                $floVrServicio = $floVrMinimoServicio * $arPedidoDetalle->getCantidad();                
             }
             $subTotalDetalle = $floVrServicio;
             $baseAiuDetalle = $subTotalDetalle*10/100;
