@@ -138,6 +138,11 @@ class TurPedidoDetalle
     private $vrPrecioMinimo = 0;        
     
     /**
+     * @ORM\Column(name="vr_precio", type="float")
+     */
+    private $vrPrecio = 0;     
+    
+    /**
      * @ORM\Column(name="vr_subtotal", type="float")
      */
     private $vrSubtotal = 0; 
@@ -1779,5 +1784,29 @@ class TurPedidoDetalle
     public function getDetalle()
     {
         return $this->detalle;
+    }
+
+    /**
+     * Set vrPrecio
+     *
+     * @param float $vrPrecio
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setVrPrecio($vrPrecio)
+    {
+        $this->vrPrecio = $vrPrecio;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPrecio
+     *
+     * @return float
+     */
+    public function getVrPrecio()
+    {
+        return $this->vrPrecio;
     }
 }

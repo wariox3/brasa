@@ -218,13 +218,19 @@ class TurPedidoRepository extends EntityRepository {
             $floValorBaseServicioMes = $floValorBaseServicio + ($floValorBaseServicio * $arPedidoDetalle->getModalidadServicioRel()->getPorcentaje() / 100);                        
             $floVrHoraDiurna = ((($floValorBaseServicioMes * 59.7) / 100)/30)/16;            
             $floVrHoraNocturna = ((($floValorBaseServicioMes * 40.3) / 100)/30)/8;                                  
-            $floVrMinimoServicio = (($intHorasDiurnasLiquidacion * $floVrHoraDiurna) + ($intHorasNocturnasLiquidacion * $floVrHoraNocturna)) * $arPedidoDetalle->getCantidad();                        
-            $floVrServicio = 0;            
+            
+            $precio = ($intHorasRealesDiurnas * $floVrHoraDiurna) + ($intHorasRealesNocturnas * $floVrHoraNocturna);
+            $precio = round($precio);
+            $floVrMinimoServicio = $precio;
+            
+            $floVrServicio = 0;
+            $subTotalDetalle = 0;
             if($arPedidoDetalleActualizar->getVrPrecioAjustado() != 0) {
-                $floVrServicio = $arPedidoDetalleActualizar->getVrPrecioAjustado();
+                $floVrServicio = $arPedidoDetalleActualizar->getVrPrecioAjustado() * $arServicioDetalle->getCantidad();
+                $precio = $arPedidoDetalleActualizar->getVrPrecioAjustado();
             } else {
-                $floVrServicio = $floVrMinimoServicio;
-            }            
+                $floVrServicio = $floVrMinimoServicio * $arServicioDetalle->getCantidad();                
+            }
             $subTotalDetalle = $floVrServicio;
             $baseAiuDetalle = $subTotalDetalle*10/100;
             $ivaDetalle = $baseAiuDetalle*16/100;
@@ -236,6 +242,7 @@ class TurPedidoRepository extends EntityRepository {
             $arPedidoDetalleActualizar->setVrTotalDetalle($totalDetalle); 
             $arPedidoDetalleActualizar->setVrTotalDetallePendiente($floVrServicio);
             $arPedidoDetalleActualizar->setVrPrecioMinimo($floVrMinimoServicio);
+            $arPedidoDetalleActualizar->setVrPrecio($precio);
             $arPedidoDetalleActualizar->setVrCosto($douCostoCalculado);
             
             $arPedidoDetalleActualizar->setHoras($douHoras);
@@ -424,7 +431,9 @@ class TurPedidoRepository extends EntityRepository {
             $arFacturaDetalle->setGrupoFacturacionRel($arPedidoDetalle->getGrupoFacturacionRel());
             $arFacturaDetalle->setPedidoDetalleRel($arPedidoDetalle);
             $arFacturaDetalle->setCantidad($arPedidoDetalle->getCantidad());
-            $arFacturaDetalle->setVrPrecio($arPedidoDetalle->getVrTotalDetallePendiente());   
+            $arFacturaDetalle->setVrPrecio($arPedidoDetalle->getVrTotalDetallePendiente()); 
+            $arFacturaDetalle->setPorIva($arPedidoDetalle->getConceptoServicioRel()->getPorIva());
+            $arFacturaDetalle->setPorBaseIva($arPedidoDetalle->getConceptoServicioRel()->getPorBaseIva());            
             $arFacturaDetalle->setFechaProgramacion($arPedido->getFechaProgramacion());
             $arFacturaDetalle->setDetalle($arPedidoDetalle->getDetalle());
             $em->persist($arFacturaDetalle);                                

@@ -116,6 +116,11 @@ class TurServicioDetalle
      * @ORM\Column(name="vr_precio_minimo", type="float")
      */
     private $vrPrecioMinimo = 0;        
+
+    /**
+     * @ORM\Column(name="vr_precio", type="float")
+     */
+    private $vrPrecio = 0; 
     
     /**
      * @ORM\Column(name="vr_subtotal", type="float")
@@ -1467,5 +1472,29 @@ class TurServicioDetalle
     public function getVrBaseAiu()
     {
         return $this->vrBaseAiu;
+    }
+
+    /**
+     * Set vrPrecio
+     *
+     * @param float $vrPrecio
+     *
+     * @return TurServicioDetalle
+     */
+    public function setVrPrecio($vrPrecio)
+    {
+        $this->vrPrecio = $vrPrecio;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPrecio
+     *
+     * @return float
+     */
+    public function getVrPrecio()
+    {
+        return $this->vrPrecio;
     }
 }

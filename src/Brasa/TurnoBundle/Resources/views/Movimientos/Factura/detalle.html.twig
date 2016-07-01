@@ -54,8 +54,8 @@
                     <tr>
                         <td class="titulo">CLIENTE:</td>
                         <td class="td-in-well">{{ arFactura.clienteRel.nombreCorto }}</td>
-                        <td class="titulo" >SUBTOTAL OTROS:</td>
-                        <td align="right">{{ arFactura.vrSubtotalOtros | number_format(0, '.', ',')}}</td>
+                        <td class="titulo" ></td>
+                        <td align="right"></td>
                     </tr>
                     <tr>
                         <td class="titulo">FECHA:</td>
@@ -116,6 +116,8 @@
                             <th>MODALIDAD</th>
                             <th>CANT</th>
                             <th>PRECIO</th>
+                            <th>IVA</th>
+                            <th>SUBTOTAL</th>
                             <th>DETALLE</th>
                             <th><p data-toggle="tooltip" data-placement="top" title="Grupo facturacion">GF</p></th>                            
                             <th></th>                            
@@ -129,12 +131,17 @@
                                 <td>{{ arFacturaDetalle.modalidadServicioRel.nombre | default('') }}</td>
                                 <td style="text-align: right">{{ arFacturaDetalle.cantidad | number_format(0, '.', ',') }}</td>
                                 {% if arFactura.estadoAutorizado == 0 %}
-                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtPrecio{{ arFacturaDetalle.codigoFacturaDetallePk }}" value="{{ arFacturaDetalle.vrPrecio  }}" size="20" style="width:120px; text-align: right" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                                    <td style="text-align: center"><input class="input-grid" type="text" name="TxtDetalle{{ arFacturaDetalle.codigoFacturaDetallePk }}" value="{{ arFacturaDetalle.detalle  }}" size="20" style="width:240px;" onclick="this.select()"/></td>
+                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtPrecio{{ arFacturaDetalle.codigoFacturaDetallePk }}" value="{{ arFacturaDetalle.vrPrecio  }}" size="20" style="width:120px; text-align: right" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                    
                                     {% else %}
-                                    <td style="text-align: right">{{ arFacturaDetalle.vrPrecio | number_format(0, '.', ',') }}</td>
-                                    <td>{{ arFacturaDetalle.detalle }}</td>
+                                    <td style="text-align: right">{{ arFacturaDetalle.vrPrecio | number_format(0, '.', ',') }}</td>                                    
                                 {% endif %}
+                                <td style="text-align: right">{{ arFacturaDetalle.porIva | number_format(0, '.', ',') }}</td>
+                                <td style="text-align: right">{{ arFacturaDetalle.subtotal | number_format(0, '.', ',') }}</td>                                
+                                {% if arFactura.estadoAutorizado == 0 %}                                    
+                                    <td style="text-align: center"><input class="input-grid" type="text" name="TxtDetalle{{ arFacturaDetalle.codigoFacturaDetallePk }}" value="{{ arFacturaDetalle.detalle  }}" size="20" style="width:240px;" onclick="this.select()"/></td>
+                                {% else %}                                    
+                                    <td>{{ arFacturaDetalle.detalle }}</td>
+                                {% endif %}                                
                                 <td>{{ arFacturaDetalle.grupoFacturacionRel.abreviatura | default('')  }}</td>                                                                
                                 <td>{% if arFactura.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_factura_detalle_editar', {'codigoFactura': arFactura.codigoFacturaPk, 'codigoFacturaDetalle': arFacturaDetalle.codigoFacturaDetallePk }) }}', 'AgregarNuevoDetalle', 400, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                                        
                                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturaDetalle.codigoFacturaDetallePk }}" /></td>
@@ -144,7 +151,8 @@
                     <div class="btn-toolbar" style="float: right">
                         {% if arFactura.estadoAutorizado == 0 %}
                             <div class="btn-group">
-                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_factura_detalle_nuevo', {'codigoFactura': arFactura.codigoFacturaPk }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_factura_detalle_nuevo', {'codigoFactura': arFactura.codigoFacturaPk, 'codigoFacturaDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_factura_detalle_pedido_nuevo', {'codigoFactura': arFactura.codigoFacturaPk }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo desde pedido</a>
                             </div>
                         {% endif %}
                         <div class="btn-group">

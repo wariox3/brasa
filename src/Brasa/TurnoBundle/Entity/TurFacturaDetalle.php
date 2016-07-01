@@ -50,7 +50,22 @@ class TurFacturaDetalle
     /**
      * @ORM\Column(name="fecha_programacion", type="date", nullable=true)
      */    
-    private $fechaProgramacion;    
+    private $fechaProgramacion;       
+    
+    /**
+     * @ORM\Column(name="por_iva", type="integer")
+     */
+    private $porIva = 0;     
+
+    /**
+     * @ORM\Column(name="por_base_iva", type="integer")
+     */
+    private $porBaseIva = 0;    
+    
+    /**
+     * @ORM\Column(name="base_iva", type="integer")
+     */
+    private $baseIva = 0;    
     
     /**
      * @ORM\Column(name="cantidad", type="float")
@@ -61,6 +76,21 @@ class TurFacturaDetalle
      * @ORM\Column(name="vr_precio", type="float")
      */
     private $vrPrecio = 0;   
+    
+    /**
+     * @ORM\Column(name="subtotal", type="integer")
+     */
+    private $subtotal = 0; 
+
+    /**
+     * @ORM\Column(name="iva", type="integer")
+     */
+    private $iva = 0;    
+    
+    /**
+     * @ORM\Column(name="total", type="integer")
+     */
+    private $total = 0;     
     
     /**
      * @ORM\Column(name="detalle", type="string", length=300, nullable=true)
@@ -495,5 +525,149 @@ class TurFacturaDetalle
     public function getGrupoFacturacionRel()
     {
         return $this->grupoFacturacionRel;
+    }
+
+    /**
+     * Set porIva
+     *
+     * @param integer $porIva
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setPorIva($porIva)
+    {
+        $this->porIva = $porIva;
+
+        return $this;
+    }
+
+    /**
+     * Get porIva
+     *
+     * @return integer
+     */
+    public function getPorIva()
+    {
+        return $this->porIva;
+    }
+
+    /**
+     * Set subtotal
+     *
+     * @param integer $subtotal
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setSubtotal($subtotal)
+    {
+        $this->subtotal = $subtotal;
+
+        return $this;
+    }
+
+    /**
+     * Get subtotal
+     *
+     * @return integer
+     */
+    public function getSubtotal()
+    {
+        return $this->subtotal;
+    }
+
+    /**
+     * Set total
+     *
+     * @param integer $total
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
+
+        return $this;
+    }
+
+    /**
+     * Get total
+     *
+     * @return integer
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
+     * Set baseIva
+     *
+     * @param integer $baseIva
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setBaseIva($baseIva)
+    {
+        $this->baseIva = $baseIva;
+
+        return $this;
+    }
+
+    /**
+     * Get baseIva
+     *
+     * @return integer
+     */
+    public function getBaseIva()
+    {
+        return $this->baseIva;
+    }
+
+    /**
+     * Set iva
+     *
+     * @param integer $iva
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setIva($iva)
+    {
+        $this->iva = $iva;
+
+        return $this;
+    }
+
+    /**
+     * Get iva
+     *
+     * @return integer
+     */
+    public function getIva()
+    {
+        return $this->iva;
+    }
+
+    /**
+     * Set porBaseIva
+     *
+     * @param integer $porBaseIva
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setPorBaseIva($porBaseIva)
+    {
+        $this->porBaseIva = $porBaseIva;
+
+        return $this;
+    }
+
+    /**
+     * Get porBaseIva
+     *
+     * @return integer
+     */
+    public function getPorBaseIva()
+    {
+        return $this->porBaseIva;
     }
 }

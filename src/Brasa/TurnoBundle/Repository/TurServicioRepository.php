@@ -54,6 +54,7 @@ class TurServicioRepository extends EntityRepository {
         $arServicio = new \Brasa\TurnoBundle\Entity\TurServicio();
         $arServicio = $em->getRepository('BrasaTurnoBundle:TurServicio')->find($codigoServicio);
         $intCantidad = 0;
+        $precio = 0;
         $douTotalHoras = 0;
         $douTotalHorasDiurnas = 0;
         $douTotalHorasNocturnas = 0;
@@ -184,15 +185,20 @@ class TurServicioRepository extends EntityRepository {
             $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
             $floValorBaseServicio = $arConfiguracionNomina->getVrSalario() * $arServicio->getSectorRel()->getPorcentaje();
             $floValorBaseServicioMes = $floValorBaseServicio + ($floValorBaseServicio * $arServicioDetalle->getModalidadServicioRel()->getPorcentaje() / 100);
-            $floVrHoraDiurna = ((($floValorBaseServicioMes * 59.7) / 100)/30)/16;
-            $floVrHoraNocturna = ((($floValorBaseServicioMes * 40.3) / 100)/30)/8;
-            $floVrMinimoServicio = (($intHorasRealesDiurnas * $floVrHoraDiurna) + ($intHorasRealesNocturnas * $floVrHoraNocturna)) * $arServicioDetalle->getCantidad();
+            $floVrHoraDiurna = ((($floValorBaseServicioMes * 59.7) / 100)/30)/16;             
+            $floVrHoraNocturna = ((($floValorBaseServicioMes * 40.3) / 100)/30)/8;            
+            
+            $precio = ($intHorasRealesDiurnas * $floVrHoraDiurna) + ($intHorasRealesNocturnas * $floVrHoraNocturna);
+            $precio = round($precio);
+            $floVrMinimoServicio = $precio;
+            
             $floVrServicio = 0;
             $subTotalDetalle = 0;
             if($arServicioDetalleActualizar->getVrPrecioAjustado() != 0) {
-                $floVrServicio = $arServicioDetalleActualizar->getVrPrecioAjustado();
+                $floVrServicio = $arServicioDetalleActualizar->getVrPrecioAjustado() * $arServicioDetalle->getCantidad();
+                $precio = $arServicioDetalleActualizar->getVrPrecioAjustado();
             } else {
-                $floVrServicio = $floVrMinimoServicio;
+                $floVrServicio = $floVrMinimoServicio * $arServicioDetalle->getCantidad();                
             }
             $subTotalDetalle = $floVrServicio;
             $baseAiuDetalle = $subTotalDetalle*10/100;
@@ -204,6 +210,7 @@ class TurServicioRepository extends EntityRepository {
             $arServicioDetalleActualizar->setVrIva($ivaDetalle);
             $arServicioDetalleActualizar->setVrTotalDetalle($totalDetalle);                        
             $arServicioDetalleActualizar->setVrPrecioMinimo($floVrMinimoServicio);
+            $arServicioDetalleActualizar->setVrPrecio($precio);
             $arServicioDetalleActualizar->setVrCosto($douCostoCalculado);
 
             $arServicioDetalleActualizar->setHoras($douHoras);

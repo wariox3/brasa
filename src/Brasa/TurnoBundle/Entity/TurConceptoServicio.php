@@ -18,10 +18,15 @@ class TurConceptoServicio
     private $codigoConceptoServicioPk;               
     
     /**
+     * @ORM\Column(name="tipo", type="integer")
+     */
+    private $tipo = 1;    
+    
+    /**
      * @ORM\Column(name="nombre", type="string", length=50, nullable=true)
      */    
     private $nombre;             
-    
+        
     /**
      * @ORM\Column(name="nombre_facturacion", type="string", length=100, nullable=true)
      */    
@@ -45,6 +50,16 @@ class TurConceptoServicio
      * @ORM\Column(name="vr_costo", type="float")
      */
     private $vrCosto = 0;    
+
+    /**
+     * @ORM\Column(name="por_base_iva", type="integer")
+     */
+    private $porBaseIva = 0; 
+    
+    /**
+     * @ORM\Column(name="por_iva", type="integer")
+     */
+    private $porIva = 0;     
     
     /**
      * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="conceptoServicioRel")
@@ -71,6 +86,7 @@ class TurConceptoServicio
      */
     protected $cierresMesServiciosConceptoServicioRel;    
     
+
     /**
      * Constructor
      */
@@ -79,6 +95,8 @@ class TurConceptoServicio
         $this->pedidosDetallesConceptoServicioRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->serviciosDetallesConceptoServicioRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cotizacionesDetallesConceptoServicioRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facturasDetallesConceptoServicioRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cierresMesServiciosConceptoServicioRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -89,6 +107,30 @@ class TurConceptoServicio
     public function getCodigoConceptoServicioPk()
     {
         return $this->codigoConceptoServicioPk;
+    }
+
+    /**
+     * Set tipo
+     *
+     * @param integer $tipo
+     *
+     * @return TurConceptoServicio
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return integer
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
     }
 
     /**
@@ -113,6 +155,30 @@ class TurConceptoServicio
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set nombreFacturacion
+     *
+     * @param string $nombreFacturacion
+     *
+     * @return TurConceptoServicio
+     */
+    public function setNombreFacturacion($nombreFacturacion)
+    {
+        $this->nombreFacturacion = $nombreFacturacion;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreFacturacion
+     *
+     * @return string
+     */
+    public function getNombreFacturacion()
+    {
+        return $this->nombreFacturacion;
     }
 
     /**
@@ -209,6 +275,54 @@ class TurConceptoServicio
     public function getVrCosto()
     {
         return $this->vrCosto;
+    }
+
+    /**
+     * Set porBaseIva
+     *
+     * @param integer $porBaseIva
+     *
+     * @return TurConceptoServicio
+     */
+    public function setPorBaseIva($porBaseIva)
+    {
+        $this->porBaseIva = $porBaseIva;
+
+        return $this;
+    }
+
+    /**
+     * Get porBaseIva
+     *
+     * @return integer
+     */
+    public function getPorBaseIva()
+    {
+        return $this->porBaseIva;
+    }
+
+    /**
+     * Set porIva
+     *
+     * @param integer $porIva
+     *
+     * @return TurConceptoServicio
+     */
+    public function setPorIva($porIva)
+    {
+        $this->porIva = $porIva;
+
+        return $this;
+    }
+
+    /**
+     * Get porIva
+     *
+     * @return integer
+     */
+    public function getPorIva()
+    {
+        return $this->porIva;
     }
 
     /**
@@ -379,29 +493,5 @@ class TurConceptoServicio
     public function getCierresMesServiciosConceptoServicioRel()
     {
         return $this->cierresMesServiciosConceptoServicioRel;
-    }
-
-    /**
-     * Set nombreFacturacion
-     *
-     * @param string $nombreFacturacion
-     *
-     * @return TurConceptoServicio
-     */
-    public function setNombreFacturacion($nombreFacturacion)
-    {
-        $this->nombreFacturacion = $nombreFacturacion;
-
-        return $this;
-    }
-
-    /**
-     * Get nombreFacturacion
-     *
-     * @return string
-     */
-    public function getNombreFacturacion()
-    {
-        return $this->nombreFacturacion;
     }
 }

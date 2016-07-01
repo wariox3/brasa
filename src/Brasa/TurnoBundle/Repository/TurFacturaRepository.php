@@ -60,41 +60,49 @@ class TurFacturaRepository extends EntityRepository {
         $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();        
         $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura); 
-        $floSubTotal = 0;
         $subtotal = 0;
-        $floSubTotalConceptos = 0;
-        $floBaseAIU = 0;
-        $floIva = 0;
-        $floIvaConceptos = 0;
-        $floRetencionFuente = 0;
-        $floTotal = 0;
+        $iva = 0;
+        $baseIva = 0;
+        $total = 0;
+        
         $arFacturasDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();        
         $arFacturasDetalle = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura));                 
-        foreach ($arFacturasDetalle as $arFacturaDetalle) {
-            $floSubTotal +=  $arFacturaDetalle->getVrPrecio();
+        foreach ($arFacturasDetalle as $arFacturaDetalle) { 
+            $arFacturasDetalleAct = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
+            $arFacturasDetalleAct = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->find($arFacturaDetalle->getCodigoFacturaDetallePk());
+            $subtotalDetalle = $arFacturaDetalle->getVrPrecio() * $arFacturaDetalle->getCantidad();
+            $baseIvaDetalle = ($subtotalDetalle * $arFacturaDetalle->getPorBaseIva()) / 100;
+            $ivaDetalle = ($baseIvaDetalle * $arFacturaDetalle->getPorIva()) / 100;
+            $totalDetalle = $subtotalDetalle + $ivaDetalle;                        
+            $arFacturasDetalleAct->setSubtotal($subtotalDetalle);
+            $arFacturasDetalleAct->setBaseIva($baseIvaDetalle);
+            $arFacturasDetalleAct->setIva($ivaDetalle);
+            $arFacturasDetalleAct->setTotal($totalDetalle);
+            $em->persist($arFacturasDetalleAct);
+            
+            $subtotal += $subtotalDetalle;
+            $iva += $ivaDetalle;
+            $baseIva += $baseIvaDetalle;
+            $total += $totalDetalle;
         }
-        $arFacturasDetalleConceptos = new \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto();        
+        /*$arFacturasDetalleConceptos = new \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto();        
         $arFacturasDetalleConceptos = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalleConcepto')->findBy(array('codigoFacturaFk' => $codigoFactura));                         
         foreach ($arFacturasDetalleConceptos as $arFacturasDetalleConcepto) {            
             $floSubTotalConceptos += $arFacturasDetalleConcepto->getSubtotal();
-        }
-        $subtotal = $floSubTotal + $floSubTotalConceptos;
-        $floBaseAIU = ($subtotal * 10) / 100;
-        $floIva = (($floBaseAIU * 16 ) / 100);
-        $floBaseRetencionFuente = $arConfiguracion->getBaseRetencionFuente();
-        if(($floBaseAIU) >= $floBaseRetencionFuente) {
-            $floRetencionFuente = (($floBaseAIU) * 2 ) / 100;
+        }*/
+        $retencionFuente = 0;
+        if(($baseIva) >= $arConfiguracion->getBaseRetencionFuente()) {
+            $retencionFuente = (($baseIva) * 2 ) / 100;
         }                
-
-        $floTotal = $subtotal + $floIva;
-        $floTotalNeto = $floTotal - $floRetencionFuente;
-        $arFactura->setVrBaseAIU($floBaseAIU);
-        $arFactura->setVrSubtotal($floSubTotal);
-        $arFactura->setVrSubtotalOtros($floSubTotalConceptos);        
-        $arFactura->setVrRetencionFuente($floRetencionFuente);
-        $arFactura->setVrIva($floIva);
-        $arFactura->setvrTotal($floTotal);
-        $arFactura->setVrTotalNeto($floTotalNeto);
+        
+        $totalNeto = $total - $retencionFuente;
+        $arFactura->setVrBaseAIU($baseIva);
+        $arFactura->setVrSubtotal($subtotal);
+        //$arFactura->setVrSubtotalOtros($floSubTotalConceptos);        
+        $arFactura->setVrRetencionFuente($retencionFuente);
+        $arFactura->setVrIva($iva);
+        $arFactura->setvrTotal($total);
+        $arFactura->setVrTotalNeto($totalNeto);
         $em->persist($arFactura);
         $em->flush();
         return true;
