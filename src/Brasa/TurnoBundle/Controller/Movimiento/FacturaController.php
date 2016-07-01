@@ -5,6 +5,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurFacturaType;
+use Brasa\TurnoBundle\Form\Type\TurFacturaDetalleType;
 class FacturaController extends Controller
 {
     var $strListaDql = "";    
@@ -116,6 +117,7 @@ class FacturaController extends Controller
     public function detalleAction($codigoFactura) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
         $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);
@@ -185,9 +187,9 @@ class FacturaController extends Controller
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));                                                
             }            
         }
-
-        $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
-        $arFacturaDetalle = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array ('codigoFacturaFk' => $codigoFactura));
+        
+        $dql = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->listaDql($codigoFactura);       
+        $arFacturaDetalle = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 150);                
         $arFacturaDetalleConceptos = new \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto();
         $arFacturaDetalleConceptos = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalleConcepto')->findBy(array ('codigoFacturaFk' => $codigoFactura));        
         return $this->render('BrasaTurnoBundle:Movimientos/Factura:detalle.html.twig', array(
@@ -221,6 +223,7 @@ class FacturaController extends Controller
                         $arFacturaDetalle->setConceptoServicioRel($arPedidoDetalle->getConceptoServicioRel());
                         $arFacturaDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
                         $arFacturaDetalle->setModalidadServicioRel($arPedidoDetalle->getModalidadServicioRel());
+                        $arFacturaDetalle->setGrupoFacturacionRel($arPedidoDetalle->getGrupoFacturacionRel());
                         $arFacturaDetalle->setPedidoDetalleRel($arPedidoDetalle);
                         $arFacturaDetalle->setCantidad($arPedidoDetalle->getCantidad());
                         $arFacturaDetalle->setVrPrecio($arPedidoDetalle->getVrTotalDetalle());  
@@ -248,6 +251,31 @@ class FacturaController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/movimiento/factura/detalle/editar/{codigoFactura}/{codigoFacturaDetalle}", name="brs_tur_movimiento_factura_detalle_editar")
+     */    
+    public function detalleEditarAction($codigoFactura, $codigoFacturaDetalle = 0) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
+        $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);
+        $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
+        if($codigoFacturaDetalle != 0) {
+            $arFacturaDetalle = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->find($codigoFacturaDetalle);
+        } 
+        $form = $this->createForm(new TurFacturaDetalleType, $arFacturaDetalle);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arFacturaDetalle = $form->getData();                        
+            $em->persist($arFacturaDetalle);
+            $em->flush();
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";            
+        }
+        return $this->render('BrasaTurnoBundle:Movimientos/Factura:detalleEditar.html.twig', array(
+            'arFactura' => $arFactura,
+            'form' => $form->createView()));
+    }    
+    
     /**
      * @Route("/tur/movimiento/factura/detalle/concepto/nuevo/{codigoFactura}", name="brs_tur_movimiento_factura_detalle_concepto_nuevo")
      */

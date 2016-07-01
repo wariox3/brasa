@@ -421,6 +421,7 @@ class TurPedidoRepository extends EntityRepository {
             $arFacturaDetalle->setConceptoServicioRel($arPedidoDetalle->getConceptoServicioRel());
             $arFacturaDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
             $arFacturaDetalle->setModalidadServicioRel($arPedidoDetalle->getModalidadServicioRel());
+            $arFacturaDetalle->setGrupoFacturacionRel($arPedidoDetalle->getGrupoFacturacionRel());
             $arFacturaDetalle->setPedidoDetalleRel($arPedidoDetalle);
             $arFacturaDetalle->setCantidad($arPedidoDetalle->getCantidad());
             $arFacturaDetalle->setVrPrecio($arPedidoDetalle->getVrTotalDetallePendiente());   

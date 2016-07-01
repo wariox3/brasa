@@ -143,24 +143,25 @@ class Factura2 extends \FPDF_FPDF {
                 }                
             } else {
                 
-                $strSql = "SELECT tur_puesto.nombre as puesto, SUM(cantidad)                            
+                $strSql = "SELECT tur_puesto.nombre AS puesto, tur_modalidad_servicio.nombre AS modalidadServicio, tur_concepto_servicio.nombre_facturacion AS conceptoServicio, SUM(cantidad)  AS cantidad, SUM(vr_precio) AS precio                           
                             FROM
                             tur_factura_detalle
                             LEFT JOIN tur_puesto ON tur_factura_detalle.codigo_puesto_fk = tur_puesto.codigo_puesto_pk                            
-                            LEFT JOIN tur_modalidad_servicio ON tur_factura_detalle.codigo_modalidad_servicio_fk = tur_modalidad_servicio.codigo_modalidad_servicio_pk                            
+                            LEFT JOIN tur_modalidad_servicio ON tur_factura_detalle.codigo_modalidad_servicio_fk = tur_modalidad_servicio.codigo_modalidad_servicio_pk
+														LEFT JOIN tur_concepto_servicio ON tur_factura_detalle.codigo_concepto_servicio_fk = tur_concepto_servicio.codigo_concepto_servicio_pk                            
                             WHERE codigo_factura_fk = " . self::$codigoFactura . "
-                        ORDER BY tur_factura_detalle.codigo_puesto_fk, tur_factura_detalle.codigo_modalidad_servicio_fk"; 
+                        GROUP BY tur_factura_detalle.codigo_concepto_servicio_fk, tur_factura_detalle.codigo_modalidad_servicio_fk, tur_factura_detalle.codigo_puesto_fk "; 
                 $connection = self::$em->getConnection();
                 $statement = $connection->prepare($strSql);        
                 $statement->execute();
                 $results = $statement->fetchAll();                
                 
-                $dql   = "SELECT p.nombre as puesto, SUM(fd.cantidad) as cantidad FROM BrasaTurnoBundle:TurFacturaDetalle fd JOIN fd.puestoRel p "
+                /*$dql   = "SELECT p.nombre as puesto, SUM(fd.cantidad) as cantidad FROM BrasaTurnoBundle:TurFacturaDetalle fd JOIN fd.puestoRel p "
                         . "WHERE fd.codigoFacturaFk = " . self::$codigoFactura . " "
                         . "GROUP BY fd.codigoPuestoFk";
                 $query = self::$em->createQuery($dql);
-                $arFacturaDetalles = $query->getResult();
-                foreach ($arFacturaDetalles as $arFacturaDetalle) {
+                $arFacturaDetalles = $query->getResult();*/
+                foreach ($results as $arFacturaDetalle) {
                     $pdf->SetX(15);
                     $pdf->Cell(10, 4, number_format($arFacturaDetalle['cantidad'], 0, '.', ','), 0, 0, 'R');                        
                     $pdf->SetFont('Arial', 'B', 9);

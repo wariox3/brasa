@@ -116,15 +116,17 @@
                             <th>MODALIDAD</th>
                             <th>CANT</th>
                             <th>PRECIO</th>
-                            <th>DETALLE</th>                            
+                            <th>DETALLE</th>
+                            <th><p data-toggle="tooltip" data-placement="top" title="Grupo facturacion">GF</p></th>                            
+                            <th></th>                            
                             <th><input type="checkbox" name="ChkSeleccionarTodosDetalle" OnClick="ChequearTodosTabla(this, 'ChkSeleccionar[]');"/></th>
                         </tr>
                         {% for arFacturaDetalle in arFacturaDetalle %}
                             <tr>
                                 <td>{{ arFacturaDetalle.codigoFacturaDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arFacturaDetalle.codigoFacturaDetallePk }}"></td>
                                 <td>{{ arFacturaDetalle.conceptoServicioRel.nombre | default('') }}</td>                                                                
-                                <td>{{ arFacturaDetalle.pedidoDetalleRel.puestoRel.nombre | default('') }}</td>
-                                <td>{{ arFacturaDetalle.pedidoDetalleRel.modalidadServicioRel.nombre | default('') }}</td>
+                                <td>{{ arFacturaDetalle.puestoRel.nombre | default('') }}</td>
+                                <td>{{ arFacturaDetalle.modalidadServicioRel.nombre | default('') }}</td>
                                 <td style="text-align: right">{{ arFacturaDetalle.cantidad | number_format(0, '.', ',') }}</td>
                                 {% if arFactura.estadoAutorizado == 0 %}
                                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtPrecio{{ arFacturaDetalle.codigoFacturaDetallePk }}" value="{{ arFacturaDetalle.vrPrecio  }}" size="20" style="width:120px; text-align: right" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
@@ -133,8 +135,8 @@
                                     <td style="text-align: right">{{ arFacturaDetalle.vrPrecio | number_format(0, '.', ',') }}</td>
                                     <td>{{ arFacturaDetalle.detalle }}</td>
                                 {% endif %}
-
-                                
+                                <td>{{ arFacturaDetalle.grupoFacturacionRel.abreviatura | default('')  }}</td>                                                                
+                                <td>{% if arFactura.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_factura_detalle_editar', {'codigoFactura': arFactura.codigoFacturaPk, 'codigoFacturaDetalle': arFacturaDetalle.codigoFacturaDetallePk }) }}', 'AgregarNuevoDetalle', 400, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                                        
                                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturaDetalle.codigoFacturaDetallePk }}" /></td>
                             </tr>
                         {% endfor %}

@@ -47,7 +47,11 @@ class TurGrupoFacturacion
      * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="grupoFacturacionRel")
      */
     protected $pedidosDetallesGrupoFacturacionRel;    
-    
+
+    /**
+     * @ORM\OneToMany(targetEntity="TurFacturaDetalle", mappedBy="grupoFacturacionRel")
+     */
+    protected $facturasDetallesGrupoFacturacionRel;     
 
     /**
      * Constructor
@@ -230,5 +234,39 @@ class TurGrupoFacturacion
     public function getPedidosDetallesGrupoFacturacionRel()
     {
         return $this->pedidosDetallesGrupoFacturacionRel;
+    }
+
+    /**
+     * Add facturasDetallesGrupoFacturacionRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesGrupoFacturacionRel
+     *
+     * @return TurGrupoFacturacion
+     */
+    public function addFacturasDetallesGrupoFacturacionRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesGrupoFacturacionRel)
+    {
+        $this->facturasDetallesGrupoFacturacionRel[] = $facturasDetallesGrupoFacturacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasDetallesGrupoFacturacionRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesGrupoFacturacionRel
+     */
+    public function removeFacturasDetallesGrupoFacturacionRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesGrupoFacturacionRel)
+    {
+        $this->facturasDetallesGrupoFacturacionRel->removeElement($facturasDetallesGrupoFacturacionRel);
+    }
+
+    /**
+     * Get facturasDetallesGrupoFacturacionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasDetallesGrupoFacturacionRel()
+    {
+        return $this->facturasDetallesGrupoFacturacionRel;
     }
 }

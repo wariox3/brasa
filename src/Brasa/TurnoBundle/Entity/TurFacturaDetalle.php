@@ -38,6 +38,11 @@ class TurFacturaDetalle
     private $codigoModalidadServicioFk;    
     
     /**
+     * @ORM\Column(name="codigo_grupo_facturacion_fk", type="integer", nullable=true)
+     */    
+    private $codigoGrupoFacturacionFk;    
+    
+    /**
      * @ORM\Column(name="codigo_pedido_detalle_fk", type="integer", nullable=true)
      */    
     private $codigoPedidoDetalleFk;                          
@@ -92,7 +97,11 @@ class TurFacturaDetalle
      */
     protected $modalidadServicioRel;    
     
-
+    /**
+     * @ORM\ManyToOne(targetEntity="TurGrupoFacturacion", inversedBy="facturasDetallesGrupoFacturacionRel")
+     * @ORM\JoinColumn(name="codigo_grupo_facturacion_fk", referencedColumnName="codigo_grupo_facturacion_pk")
+     */
+    protected $grupoFacturacionRel; 
 
     /**
      * Get codigoFacturaDetallePk
@@ -438,5 +447,53 @@ class TurFacturaDetalle
     public function getModalidadServicioRel()
     {
         return $this->modalidadServicioRel;
+    }
+
+    /**
+     * Set codigoGrupoFacturacionFk
+     *
+     * @param integer $codigoGrupoFacturacionFk
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setCodigoGrupoFacturacionFk($codigoGrupoFacturacionFk)
+    {
+        $this->codigoGrupoFacturacionFk = $codigoGrupoFacturacionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoGrupoFacturacionFk
+     *
+     * @return integer
+     */
+    public function getCodigoGrupoFacturacionFk()
+    {
+        return $this->codigoGrupoFacturacionFk;
+    }
+
+    /**
+     * Set grupoFacturacionRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurGrupoFacturacion $grupoFacturacionRel
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setGrupoFacturacionRel(\Brasa\TurnoBundle\Entity\TurGrupoFacturacion $grupoFacturacionRel = null)
+    {
+        $this->grupoFacturacionRel = $grupoFacturacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get grupoFacturacionRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurGrupoFacturacion
+     */
+    public function getGrupoFacturacionRel()
+    {
+        return $this->grupoFacturacionRel;
     }
 }
