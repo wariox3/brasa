@@ -12,6 +12,7 @@ class TurGrupoFacturacionType extends AbstractType
         $builder                
             ->add('nombre', 'text', array('required'  => true))
             ->add('abreviatura', 'text', array('required'  => false))
+            ->add('concepto', 'text', array('required'  => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

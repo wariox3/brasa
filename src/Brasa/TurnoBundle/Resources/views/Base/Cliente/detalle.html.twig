@@ -203,6 +203,7 @@
                             <th>COD</th>                                
                             <th>NOMBRE</th>
                             <th>ABREVIATURA</th>
+                            <th>CONCEPTO</th>
                             <th></th>
                             <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                         </tr>
@@ -210,7 +211,8 @@
                             <tr>
                                 <td>{{ arGruposFacturacion.codigoGrupoFacturacionPk  }}<input type="hidden" name="LblCodigo[]" value="{{ arGruposFacturacion.codigoGrupoFacturacionPk }}"></td>                    
                                 <td>{{ arGruposFacturacion.nombre  }}</td>                                
-                                <td>{{ arGruposFacturacion.abreviatura  }}</td>                                
+                                <td>{{ arGruposFacturacion.abreviatura  }}</td> 
+                                <td>{{ arGruposFacturacion.concepto  }}</td> 
                                 <td><a href="javascript:abrirVentana3('{{ path('brs_tur_base_cliente_grupo_facturacion_nuevo', {'codigoCliente': arCliente.codigoClientePk, 'codigoGrupoFacturacion': arGruposFacturacion.codigoGrupoFacturacionPk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                                        
                                 <td><input type="checkbox" name="ChkSeleccionarGrupoFacturacion[]" value="{{ arGruposFacturacion.codigoGrupoFacturacionPk }}" /></td>
                             </tr>
