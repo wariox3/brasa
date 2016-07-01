@@ -40,6 +40,9 @@
                 <th>{{ knp_pagination_sortable(arConceptoServicios, 'CÓDIGO', 'codigo') }}</th>
                 <th>NOMBRE</th>
                 <th>NOMBRE FACTURACION</th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Tipo">T</p></th>                            
+                <th><p data-toggle="tooltip" data-placement="top" title="Porcentaje base iva">%BI</p></th>                            
+                <th><p data-toggle="tooltip" data-placement="top" title="Porcentaje iva">%I</p></th>                            
                 <th>HORAS</th>
                 <th>HORAS DIURNAS</th>                
                 <th>HORAS NOCTURAS</th>
@@ -52,6 +55,9 @@
                 <td>{{ arConceptoServicios.codigoConceptoServicioPk  }}</td>                               
                 <td>{{ arConceptoServicios.nombre }}</td>
                 <td>{{ arConceptoServicios.nombreFacturacion }}</td>
+                <td>{{ arConceptoServicios.tipo }}</td>
+                <td>{{ arConceptoServicios.porBaseIva }}</td>
+                <td>{{ arConceptoServicios.porIva }}</td>
                 <td>{{ arConceptoServicios.horas }}</td>
                 <td>{{ arConceptoServicios.horasDiurnas }}</td>
                 <td>{{ arConceptoServicios.horasNocturnas }}</td>

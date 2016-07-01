@@ -19,6 +19,24 @@
                 </div>                
             </div>                
             <div class="form-group form-group-sm">
+                <label  class="col-sm-3 control-label">Tipo:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.tipo, { 'attr': {'class': 'form-control'} }) }}                        
+                </div>                
+            </div>                
+            <div class="form-group form-group-sm">
+                <label  class="col-sm-3 control-label">% base iva:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.porBaseIva, { 'attr': {'class': 'form-control'} }) }}                        
+                </div>                
+            </div>     
+            <div class="form-group form-group-sm">
+                <label  class="col-sm-3 control-label">% iva:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.porIva, { 'attr': {'class': 'form-control'} }) }}                        
+                </div>                
+            </div>                               
+            <div class="form-group form-group-sm">
                 <label for="form_horas" class="col-sm-3 control-label">Horas:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.horas, { 'attr': {'class': 'form-control'} }) }}                        

@@ -154,6 +154,7 @@ class Factura2 extends \FPDF_FPDF {
                     $pdf->SetFont('Arial', 'B', 9);
                     $pdf->Cell(124, 4, substr(utf8_decode($arFacturaDetalle['puesto']) . '-'  . $arFacturaDetalle['modalidadServicio'], 0, 61), 0, 0, 'L');                        
                     $pdf->SetFont('Arial', '', 9);
+
                     $pdf->Cell(28, 4, number_format($arFacturaDetalle['precio'], 0, '.', ','), 0, 0, 'R');
                     $pdf->Cell(28, 4, number_format($arFacturaDetalle['precio'], 0, '.', ','), 0, 0, 'R');
                     $pdf->Ln();
@@ -187,7 +188,10 @@ class Factura2 extends \FPDF_FPDF {
                     $pdf->SetFont('Arial', 'B', 9);
                     $pdf->Cell(124, 4, substr(utf8_decode($arFacturaDetalle['puesto']), 0, 61), 0, 0, 'L');                        
                     $pdf->SetFont('Arial', '', 9);
-                    $pdf->Cell(28, 4, number_format($arFacturaDetalle['precio'], 0, '.', ','), 0, 0, 'R');
+                    if($arFacturaDetalle['cantidad'] > 0) {
+                        $precioUnitario = $arFacturaDetalle['precio'] / $arFacturaDetalle['cantidad'];
+                    }                    
+                    $pdf->Cell(28, 4, number_format($precioUnitario, 0, '.', ','), 0, 0, 'R');
                     $pdf->Cell(28, 4, number_format($arFacturaDetalle['precio'], 0, '.', ','), 0, 0, 'R');
                     $pdf->Ln();
                     $pdf->SetX(15);
