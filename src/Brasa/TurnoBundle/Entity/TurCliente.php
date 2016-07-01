@@ -207,6 +207,11 @@ class TurCliente
     protected $puestosClienteRel;     
 
     /**
+     * @ORM\OneToMany(targetEntity="TurOperacion", mappedBy="clienteRel")
+     */
+    protected $operacionesClienteRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurProyecto", mappedBy="clienteRel")
      */
     protected $proyectosClienteRel;     
@@ -1416,5 +1421,39 @@ class TurCliente
     public function getFacturaAgrupada()
     {
         return $this->facturaAgrupada;
+    }
+
+    /**
+     * Add operacionesClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurOperacion $operacionesClienteRel
+     *
+     * @return TurCliente
+     */
+    public function addOperacionesClienteRel(\Brasa\TurnoBundle\Entity\TurOperacion $operacionesClienteRel)
+    {
+        $this->operacionesClienteRel[] = $operacionesClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove operacionesClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurOperacion $operacionesClienteRel
+     */
+    public function removeOperacionesClienteRel(\Brasa\TurnoBundle\Entity\TurOperacion $operacionesClienteRel)
+    {
+        $this->operacionesClienteRel->removeElement($operacionesClienteRel);
+    }
+
+    /**
+     * Get operacionesClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getOperacionesClienteRel()
+    {
+        return $this->operacionesClienteRel;
     }
 }

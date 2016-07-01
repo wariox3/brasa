@@ -73,6 +73,11 @@ class TurPuesto
     private $codigoZonaFk;     
     
     /**
+     * @ORM\Column(name="codigo_operacion_fk", type="integer", nullable=true)
+     */    
+    private $codigoOperacionFk;    
+    
+    /**
      * @ORM\Column(name="codigo_ciudad_fk", type="integer", nullable=true)
      */
     private $codigoCiudadFk;     
@@ -110,6 +115,12 @@ class TurPuesto
      * @ORM\JoinColumn(name="codigo_zona_fk", referencedColumnName="codigo_zona_pk")
      */
     protected $zonaRel;     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurOperacion", inversedBy="puestosOperacionRel")
+     * @ORM\JoinColumn(name="codigo_operacion_fk", referencedColumnName="codigo_operacion_pk")
+     */
+    protected $operacionRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="puestoRel")
@@ -917,5 +928,53 @@ class TurPuesto
     public function getFacturasDetallesPuestoRel()
     {
         return $this->facturasDetallesPuestoRel;
+    }
+
+    /**
+     * Set codigoOperacionFk
+     *
+     * @param integer $codigoOperacionFk
+     *
+     * @return TurPuesto
+     */
+    public function setCodigoOperacionFk($codigoOperacionFk)
+    {
+        $this->codigoOperacionFk = $codigoOperacionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoOperacionFk
+     *
+     * @return integer
+     */
+    public function getCodigoOperacionFk()
+    {
+        return $this->codigoOperacionFk;
+    }
+
+    /**
+     * Set operacionRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurOperacion $operacionRel
+     *
+     * @return TurPuesto
+     */
+    public function setOperacionRel(\Brasa\TurnoBundle\Entity\TurOperacion $operacionRel = null)
+    {
+        $this->operacionRel = $operacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get operacionRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurOperacion
+     */
+    public function getOperacionRel()
+    {
+        return $this->operacionRel;
     }
 }

@@ -34,6 +34,11 @@ class TurProyecto
     protected $clienteRel;          
     
     /**
+     * @ORM\OneToMany(targetEntity="TurOperacion", mappedBy="proyectoRel")
+     */
+    protected $operacionesProyectoRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurCotizacionDetalle", mappedBy="proyectoRel")
      */
     protected $cotizacionesDetallesProyectoRel;    
@@ -317,5 +322,39 @@ class TurProyecto
     public function getFacturasProyectoRel()
     {
         return $this->facturasProyectoRel;
+    }
+
+    /**
+     * Add operacionesProyectoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurOperacion $operacionesProyectoRel
+     *
+     * @return TurProyecto
+     */
+    public function addOperacionesProyectoRel(\Brasa\TurnoBundle\Entity\TurOperacion $operacionesProyectoRel)
+    {
+        $this->operacionesProyectoRel[] = $operacionesProyectoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove operacionesProyectoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurOperacion $operacionesProyectoRel
+     */
+    public function removeOperacionesProyectoRel(\Brasa\TurnoBundle\Entity\TurOperacion $operacionesProyectoRel)
+    {
+        $this->operacionesProyectoRel->removeElement($operacionesProyectoRel);
+    }
+
+    /**
+     * Get operacionesProyectoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getOperacionesProyectoRel()
+    {
+        return $this->operacionesProyectoRel;
     }
 }
