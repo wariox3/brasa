@@ -49,7 +49,7 @@ class Factura2 extends \FPDF_FPDF {
         $this->Text(15, 70, utf8_decode("Señores"));
         $this->Text(45, 70, $arFactura->getClienteRel()->getNombreCorto());
         $this->Text(135, 70, "Nit");
-        $this->Text(170, 70, $arFactura->getClienteRel()->getNit());        
+        $this->Text(170, 70, $arFactura->getClienteRel()->getNit(). "-" . $arFactura->getClienteRel()->getDigitoVerificacion());        
         $this->Text(15, 80, "Direccion");
         $this->Text(45, 80, $arFactura->getClienteRel()->getDireccion());
         $this->Text(135, 80, "Telefono");
