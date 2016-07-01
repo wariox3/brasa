@@ -126,7 +126,7 @@ class Factura2 extends \FPDF_FPDF {
                     $pdf->SetX(15);
                     $pdf->Cell(10, 4, number_format($arFacturaDetalle->getCantidad(), 0, '.', ','), 0, 0, 'R');                        
                     $pdf->SetFont('Arial', 'B', 9);
-                    $pdf->Cell(124, 4, substr($arFacturaDetalle->getPedidoDetalleRel()->getPuestoRel()->getNombre() . '-'  . $arFacturaDetalle->getPedidoDetalleRel()->getModalidadServicioRel()->getNombre(), 0, 61), 0, 0, 'L');                        
+                    $pdf->Cell(124, 4, substr(utf8_decode($arFacturaDetalle->getPedidoDetalleRel()->getPuestoRel()->getNombre()) . '-'  . $arFacturaDetalle->getPedidoDetalleRel()->getModalidadServicioRel()->getNombre(), 0, 61), 0, 0, 'L');                        
                     $pdf->SetFont('Arial', '', 9);
                     $pdf->Cell(28, 4, number_format($arFacturaDetalle->getVrPrecio(), 0, '.', ','), 0, 0, 'R');
                     $pdf->Cell(28, 4, number_format($arFacturaDetalle->getVrPrecio(), 0, '.', ','), 0, 0, 'R');
@@ -158,7 +158,7 @@ class Factura2 extends \FPDF_FPDF {
                     $pdf->SetX(15);
                     $pdf->Cell(10, 4, number_format($arFacturaDetalle['cantidad'], 0, '.', ','), 0, 0, 'R');                        
                     $pdf->SetFont('Arial', 'B', 9);
-                    $pdf->Cell(124, 4, substr($arFacturaDetalle['puesto'] . '-'  . $arFacturaDetalle['modalidadServicio'], 0, 61), 0, 0, 'L');                        
+                    $pdf->Cell(124, 4, substr(utf8_decode($arFacturaDetalle['puesto']) . '-'  . $arFacturaDetalle['modalidadServicio'], 0, 61), 0, 0, 'L');                        
                     $pdf->SetFont('Arial', '', 9);
                     $pdf->Cell(28, 4, number_format($arFacturaDetalle['precio'], 0, '.', ','), 0, 0, 'R');
                     $pdf->Cell(28, 4, number_format($arFacturaDetalle['precio'], 0, '.', ','), 0, 0, 'R');
@@ -191,7 +191,7 @@ class Factura2 extends \FPDF_FPDF {
                     $pdf->SetX(15);
                     $pdf->Cell(10, 4, number_format($arFacturaDetalle['cantidad'], 0, '.', ','), 0, 0, 'R');                        
                     $pdf->SetFont('Arial', 'B', 9);
-                    $pdf->Cell(124, 4, substr($arFacturaDetalle['puesto'], 0, 61), 0, 0, 'L');                        
+                    $pdf->Cell(124, 4, substr(utf8_decode($arFacturaDetalle['puesto']), 0, 61), 0, 0, 'L');                        
                     $pdf->SetFont('Arial', '', 9);
                     $pdf->Cell(28, 4, number_format($arFacturaDetalle['precio'], 0, '.', ','), 0, 0, 'R');
                     $pdf->Cell(28, 4, number_format($arFacturaDetalle['precio'], 0, '.', ','), 0, 0, 'R');
