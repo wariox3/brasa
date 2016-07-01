@@ -76,8 +76,8 @@
                         <td align="right">{{ arFactura.vrRetencionIva | number_format(0, '.', ',')}}</td>
                     </tr>
                     <tr>
-                        <td class="titulo">PROYECTO:</td>
-                        <td class="td-in-well">{{ arFactura.proyectoRel.nombre | default('') }}</td>
+                        <td class="titulo">DESCRIPCION:</td>
+                        <td class="td-in-well">{{ arFactura.descripcion }}</td>
                         <td class="titulo" >RETENCION FUENTE:</td>
                         <td align="right">{{ arFactura.vrRetencionFuente | number_format(0, '.', ',')}}</td>
                     </tr>

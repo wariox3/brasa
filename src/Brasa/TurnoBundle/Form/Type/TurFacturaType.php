@@ -20,6 +20,7 @@ class TurFacturaType extends AbstractType
                 'required' => true))                  
             ->add('imprimirRelacion', 'checkbox', array('required'  => false))                            
             ->add('soporte', 'text', array('required' => false))
+            ->add('descripcion', 'text', array('required' => false))                            
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
