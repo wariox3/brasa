@@ -226,7 +226,7 @@ class FacturaController extends Controller
                         $arFacturaDetalle->setGrupoFacturacionRel($arPedidoDetalle->getGrupoFacturacionRel());
                         $arFacturaDetalle->setPedidoDetalleRel($arPedidoDetalle);
                         $arFacturaDetalle->setCantidad($arPedidoDetalle->getCantidad());
-                        $arFacturaDetalle->setVrPrecio($arPedidoDetalle->getVrTotalDetalle());  
+                        $arFacturaDetalle->setVrPrecio($arPedidoDetalle->getVrSubtotal());  
                         $arFacturaDetalle->setFechaProgramacion($arPedidoDetalle->getPedidoRel()->getFechaProgramacion());
                         $arFacturaDetalle->setDetalle($arPedidoDetalle->getDetalle());
                         $em->persist($arFacturaDetalle);  
