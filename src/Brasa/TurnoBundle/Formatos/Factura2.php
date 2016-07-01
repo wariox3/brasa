@@ -90,7 +90,8 @@ class Factura2 extends \FPDF_FPDF {
         $pdf->Rect(25, 96, 124, 84);
         $pdf->Rect(149, 96, 28, 84);
         $pdf->Rect(177, 96, 28, 84);
-         
+        $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
+        $arFactura = self::$em->getRepository('BrasaTurnoBundle:TurFactura')->find(self::$codigoFactura);         
         $arFacturaDetalles = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
         $arFacturaDetalles = self::$em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array('codigoFacturaFk' => self::$codigoFactura));
         $arrMeses = array();
@@ -119,31 +120,84 @@ class Factura2 extends \FPDF_FPDF {
         $pdf->Cell(30, 4, '', 0, 0, 'R'); 
         $pdf->Ln(8);
         $pdf->SetFont('Arial', '', 9);
-        foreach ($arFacturaDetalles as $arFacturaDetalle) {
-            $pdf->SetX(15);
-            $strDetalle = "SERVICIO " . $arFacturaDetalle->getConceptoServicioRel()->getNombre() . " DESDE EL DIA " . $arFacturaDetalle->getPedidoDetalleRel()->getDiaDesde()
-                    . " HASTA EL DIA " . $arFacturaDetalle->getPedidoDetalleRel()->getDiaHasta() . " DE " .
-            $this->devuelveMes($arFacturaDetalle->getPedidoDetalleRel()->getPedidoRel()->getFechaProgramacion()->format('n')) . " " . $arFacturaDetalle->getPedidoDetalleRel()->getPedidoRel()->getFechaProgramacion()->format('Y');
-            $strDetalle2 = " del " . $arFacturaDetalle->getPedidoDetalleRel()->getDiaDesde()
-                    . " al " . $arFacturaDetalle->getPedidoDetalleRel()->getDiaHasta() . " DE " .
-            $this->devuelveMes($arFacturaDetalle->getPedidoDetalleRel()->getPedidoRel()->getFechaProgramacion()->format('n')) . " " . $arFacturaDetalle->getPedidoDetalleRel()->getPedidoRel()->getFechaProgramacion()->format('Y');            
-            $pdf->Cell(10, 4, number_format($arFacturaDetalle->getCantidad(), 0, '.', ','), 0, 0, 'R');                        
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(124, 4, substr($arFacturaDetalle->getPedidoDetalleRel()->getPuestoRel()->getNombre() . '-'  . $arFacturaDetalle->getPedidoDetalleRel()->getModalidadServicioRel()->getNombre(), 0, 61), 0, 0, 'L');                        
-            $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(28, 4, number_format($arFacturaDetalle->getVrPrecio(), 0, '.', ','), 0, 0, 'R');
-            $pdf->Cell(28, 4, number_format($arFacturaDetalle->getVrPrecio(), 0, '.', ','), 0, 0, 'R');
-            $pdf->Ln();
-            $pdf->SetX(15);
-            $pdf->Cell(10, 4, '', 0, 0, 'R');                                   
-            $strCampo = $arFacturaDetalle->getPedidoDetalleRel()->getConceptoServicioRel()->getNombreFacturacion() . " " . $arFacturaDetalle->getDetalle();            
-            $pdf->MultiCell(124, 4, $strCampo, 0, 'L'); 
-            //$pdf->Cell(110, 4, $strCampo, 0, 0, 'L');                        
-            $pdf->Cell(28, 4, '', 0, 0, 'R');
-            $pdf->Cell(28, 4, '', 0, 0, 'R');            
-            $pdf->Ln(0.8);
-            $pdf->SetAutoPageBreak(true, 15);
+        if($arFactura->getImprimirRelacion() == false) {
+            if($arFactura->getClienteRel()->getFacturaAgrupada() == 0) {                
+                foreach ($arFacturaDetalles as $arFacturaDetalle) {
+                    $pdf->SetX(15);
+                    $pdf->Cell(10, 4, number_format($arFacturaDetalle->getCantidad(), 0, '.', ','), 0, 0, 'R');                        
+                    $pdf->SetFont('Arial', 'B', 9);
+                    $pdf->Cell(124, 4, substr($arFacturaDetalle->getPedidoDetalleRel()->getPuestoRel()->getNombre() . '-'  . $arFacturaDetalle->getPedidoDetalleRel()->getModalidadServicioRel()->getNombre(), 0, 61), 0, 0, 'L');                        
+                    $pdf->SetFont('Arial', '', 9);
+                    $pdf->Cell(28, 4, number_format($arFacturaDetalle->getVrPrecio(), 0, '.', ','), 0, 0, 'R');
+                    $pdf->Cell(28, 4, number_format($arFacturaDetalle->getVrPrecio(), 0, '.', ','), 0, 0, 'R');
+                    $pdf->Ln();
+                    $pdf->SetX(15);
+                    $pdf->Cell(10, 4, '', 0, 0, 'R');                                   
+                    $strCampo = $arFacturaDetalle->getPedidoDetalleRel()->getConceptoServicioRel()->getNombreFacturacion() . " " . $arFacturaDetalle->getDetalle();            
+                    $pdf->MultiCell(124, 4, $strCampo, 0, 'L'); 
+                    //$pdf->Cell(110, 4, $strCampo, 0, 0, 'L');                        
+                    $pdf->Cell(28, 4, '', 0, 0, 'R');
+                    $pdf->Cell(28, 4, '', 0, 0, 'R');            
+                    $pdf->Ln(0.8);
+                    $pdf->SetAutoPageBreak(true, 15);
+                }                
+            } else {
+                
+                $strSql = "SELECT tur_puesto.nombre as puesto, SUM(cantidad)                            
+                            FROM
+                            tur_factura_detalle
+                            LEFT JOIN tur_puesto ON tur_factura_detalle.codigo_puesto_fk = tur_puesto.codigo_puesto_pk                            
+                            LEFT JOIN tur_modalidad_servicio ON tur_factura_detalle.codigo_modalidad_servicio_fk = tur_modalidad_servicio.codigo_modalidad_servicio_pk                            
+                            WHERE codigo_factura_fk = " . self::$codigoFactura . "
+                        ORDER BY tur_factura_detalle.codigo_puesto_fk, tur_factura_detalle.codigo_modalidad_servicio_fk"; 
+                $connection = self::$em->getConnection();
+                $statement = $connection->prepare($strSql);        
+                $statement->execute();
+                $results = $statement->fetchAll();                
+                
+                $dql   = "SELECT p.nombre as puesto, SUM(fd.cantidad) as cantidad FROM BrasaTurnoBundle:TurFacturaDetalle fd JOIN fd.puestoRel p "
+                        . "WHERE fd.codigoFacturaFk = " . self::$codigoFactura . " "
+                        . "GROUP BY fd.codigoPuestoFk";
+                $query = self::$em->createQuery($dql);
+                $arFacturaDetalles = $query->getResult();
+                foreach ($arFacturaDetalles as $arFacturaDetalle) {
+                    $pdf->SetX(15);
+                    $pdf->Cell(10, 4, number_format($arFacturaDetalle['cantidad'], 0, '.', ','), 0, 0, 'R');                        
+                    $pdf->SetFont('Arial', 'B', 9);
+                    $pdf->Cell(124, 4, substr($arFacturaDetalle['puesto'] . '-'  . $arFacturaDetalle['modalidadServicio'], 0, 61), 0, 0, 'L');                        
+                    $pdf->SetFont('Arial', '', 9);
+                    $pdf->Cell(28, 4, number_format($arFacturaDetalle['precio'], 0, '.', ','), 0, 0, 'R');
+                    $pdf->Cell(28, 4, number_format($arFacturaDetalle['precio'], 0, '.', ','), 0, 0, 'R');
+                    $pdf->Ln();
+                    $pdf->SetX(15);
+                    $pdf->Cell(10, 4, '', 0, 0, 'R');                                   
+                    $strCampo = $arFacturaDetalle['conceptoServicio'];            
+                    $pdf->MultiCell(124, 4, $strCampo, 0, 'L'); 
+                    //$pdf->Cell(110, 4, $strCampo, 0, 0, 'L');                        
+                    $pdf->Cell(28, 4, '', 0, 0, 'R');
+                    $pdf->Cell(28, 4, '', 0, 0, 'R');            
+                    $pdf->Ln(0.8);
+                    $pdf->SetAutoPageBreak(true, 15);
+                }                                
+            }            
+        } else {
+                $pdf->SetX(15);
+                $pdf->Cell(10, 4, number_format(1, 0, '.', ','), 0, 0, 'R');                        
+                $pdf->SetFont('Arial', 'B', 9);
+                $pdf->Cell(124, 4, $arFactura->getClienteRel()->getNombreCorto(), 0, 0, 'L');                        
+                $pdf->SetFont('Arial', '', 9);
+                $pdf->Cell(28, 4, number_format($arFactura->getVrSubtotal(), 0, '.', ','), 0, 0, 'R');
+                $pdf->Cell(28, 4, number_format($arFactura->getVrSubtotal(), 0, '.', ','), 0, 0, 'R');
+                $pdf->Ln();
+                $pdf->SetX(15);
+                $pdf->Cell(10, 4, '', 0, 0, 'R');                                                   
+                $pdf->MultiCell(124, 4, 'SERVICIOS DE VIGILANCIA FIJA DEL MES ' . $strMeses . ' SEGUN RELACION ANEXA', 0, 'L'); 
+                //$pdf->Cell(110, 4, $strCampo, 0, 0, 'L');                        
+                $pdf->Cell(28, 4, '', 0, 0, 'R');
+                $pdf->Cell(28, 4, '', 0, 0, 'R');            
+                $pdf->Ln(0.8);            
         }
+
     }
 
     public function devuelveMes($intMes) {

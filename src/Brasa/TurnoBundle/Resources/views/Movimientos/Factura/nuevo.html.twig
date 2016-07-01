@@ -52,19 +52,19 @@
                       </div>
                     </div>
                 </div>
-            </div>    
-            <div class="form-group form-group-sm">
-                <label class="col-sm-3 control-label">Proyecto:</label>
-                <div class="col-sm-9">
-                    {{ form_widget(form.proyectoRel, { 'attr': {'class': 'form-control'} }) }}                        
-                </div>                
-            </div>                          
+            </div>                             
             <div class="form-group form-group-sm">
                 <label for="form_soporte" class="col-sm-3 control-label">Soporte:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.soporte, { 'attr': {'class': 'form-control'} }) }}                        
                 </div>                
-            </div>                          
+            </div>    
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    Con relacion {{ form_widget(form.imprimirRelacion) }}
+                </div>                
+            </div>                
             <div class="form-group">
                 <label for="form_comentarios" class="col-sm-3 control-label">Comentarios:</label>
                 <div class="col-sm-9">

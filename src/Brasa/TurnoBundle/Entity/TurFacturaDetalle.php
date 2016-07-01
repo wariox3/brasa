@@ -28,9 +28,19 @@ class TurFacturaDetalle
     private $codigoConceptoServicioFk;     
     
     /**
+     * @ORM\Column(name="codigo_puesto_fk", type="integer", nullable=true)
+     */    
+    private $codigoPuestoFk;    
+    
+    /**
+     * @ORM\Column(name="codigo_modalidad_servicio_fk", type="integer", nullable=true)
+     */    
+    private $codigoModalidadServicioFk;    
+    
+    /**
      * @ORM\Column(name="codigo_pedido_detalle_fk", type="integer", nullable=true)
      */    
-    private $codigoPedidoDetalleFk;    
+    private $codigoPedidoDetalleFk;                          
     
     /**
      * @ORM\Column(name="fecha_programacion", type="date", nullable=true)
@@ -70,6 +80,19 @@ class TurFacturaDetalle
      */
     protected $pedidoDetalleRel;    
     
+    /**
+     * @ORM\ManyToOne(targetEntity="TurPuesto", inversedBy="facturasDetallesPuestoRel")
+     * @ORM\JoinColumn(name="codigo_puesto_fk", referencedColumnName="codigo_puesto_pk")
+     */
+    protected $puestoRel;         
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TurModalidadServicio", inversedBy="facturasDetallesModalidadServicioRel")
+     * @ORM\JoinColumn(name="codigo_modalidad_servicio_fk", referencedColumnName="codigo_modalidad_servicio_pk")
+     */
+    protected $modalidadServicioRel;    
+    
+
 
     /**
      * Get codigoFacturaDetallePk
@@ -130,6 +153,54 @@ class TurFacturaDetalle
     }
 
     /**
+     * Set codigoPuestoFk
+     *
+     * @param integer $codigoPuestoFk
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setCodigoPuestoFk($codigoPuestoFk)
+    {
+        $this->codigoPuestoFk = $codigoPuestoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPuestoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPuestoFk()
+    {
+        return $this->codigoPuestoFk;
+    }
+
+    /**
+     * Set codigoModalidadServicioFk
+     *
+     * @param integer $codigoModalidadServicioFk
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setCodigoModalidadServicioFk($codigoModalidadServicioFk)
+    {
+        $this->codigoModalidadServicioFk = $codigoModalidadServicioFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoModalidadServicioFk
+     *
+     * @return integer
+     */
+    public function getCodigoModalidadServicioFk()
+    {
+        return $this->codigoModalidadServicioFk;
+    }
+
+    /**
      * Set codigoPedidoDetalleFk
      *
      * @param integer $codigoPedidoDetalleFk
@@ -151,6 +222,30 @@ class TurFacturaDetalle
     public function getCodigoPedidoDetalleFk()
     {
         return $this->codigoPedidoDetalleFk;
+    }
+
+    /**
+     * Set fechaProgramacion
+     *
+     * @param \DateTime $fechaProgramacion
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setFechaProgramacion($fechaProgramacion)
+    {
+        $this->fechaProgramacion = $fechaProgramacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaProgramacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaProgramacion()
+    {
+        return $this->fechaProgramacion;
     }
 
     /**
@@ -199,6 +294,30 @@ class TurFacturaDetalle
     public function getVrPrecio()
     {
         return $this->vrPrecio;
+    }
+
+    /**
+     * Set detalle
+     *
+     * @param string $detalle
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setDetalle($detalle)
+    {
+        $this->detalle = $detalle;
+
+        return $this;
+    }
+
+    /**
+     * Get detalle
+     *
+     * @return string
+     */
+    public function getDetalle()
+    {
+        return $this->detalle;
     }
 
     /**
@@ -274,50 +393,50 @@ class TurFacturaDetalle
     }
 
     /**
-     * Set detalle
+     * Set puestoRel
      *
-     * @param string $detalle
+     * @param \Brasa\TurnoBundle\Entity\TurPuesto $puestoRel
      *
      * @return TurFacturaDetalle
      */
-    public function setDetalle($detalle)
+    public function setPuestoRel(\Brasa\TurnoBundle\Entity\TurPuesto $puestoRel = null)
     {
-        $this->detalle = $detalle;
+        $this->puestoRel = $puestoRel;
 
         return $this;
     }
 
     /**
-     * Get detalle
+     * Get puestoRel
      *
-     * @return string
+     * @return \Brasa\TurnoBundle\Entity\TurPuesto
      */
-    public function getDetalle()
+    public function getPuestoRel()
     {
-        return $this->detalle;
+        return $this->puestoRel;
     }
 
     /**
-     * Set fechaProgramacion
+     * Set modalidadServicioRel
      *
-     * @param \DateTime $fechaProgramacion
+     * @param \Brasa\TurnoBundle\Entity\TurModalidadServicio $modalidadServicioRel
      *
      * @return TurFacturaDetalle
      */
-    public function setFechaProgramacion($fechaProgramacion)
+    public function setModalidadServicioRel(\Brasa\TurnoBundle\Entity\TurModalidadServicio $modalidadServicioRel = null)
     {
-        $this->fechaProgramacion = $fechaProgramacion;
+        $this->modalidadServicioRel = $modalidadServicioRel;
 
         return $this;
     }
 
     /**
-     * Get fechaProgramacion
+     * Get modalidadServicioRel
      *
-     * @return \DateTime
+     * @return \Brasa\TurnoBundle\Entity\TurModalidadServicio
      */
-    public function getFechaProgramacion()
+    public function getModalidadServicioRel()
     {
-        return $this->fechaProgramacion;
+        return $this->modalidadServicioRel;
     }
 }

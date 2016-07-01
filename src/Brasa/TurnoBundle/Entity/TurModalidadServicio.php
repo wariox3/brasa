@@ -36,6 +36,11 @@ class TurModalidadServicio
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;     
+  
+    /**
+     * @ORM\OneToMany(targetEntity="TurFacturaDetalle", mappedBy="modalidadServicioRel")
+     */
+    protected $facturasDetallesModalidadServicioRel;     
     
     /**
      * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="modalidadServicioRel")
@@ -304,5 +309,39 @@ class TurModalidadServicio
     public function getCierresMesServiciosModalidadServicioRel()
     {
         return $this->cierresMesServiciosModalidadServicioRel;
+    }
+
+    /**
+     * Add facturasDetallesModalidadServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesModalidadServicioRel
+     *
+     * @return TurModalidadServicio
+     */
+    public function addFacturasDetallesModalidadServicioRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesModalidadServicioRel)
+    {
+        $this->facturasDetallesModalidadServicioRel[] = $facturasDetallesModalidadServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasDetallesModalidadServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesModalidadServicioRel
+     */
+    public function removeFacturasDetallesModalidadServicioRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesModalidadServicioRel)
+    {
+        $this->facturasDetallesModalidadServicioRel->removeElement($facturasDetallesModalidadServicioRel);
+    }
+
+    /**
+     * Get facturasDetallesModalidadServicioRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasDetallesModalidadServicioRel()
+    {
+        return $this->facturasDetallesModalidadServicioRel;
     }
 }

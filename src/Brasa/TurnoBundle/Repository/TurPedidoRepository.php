@@ -419,6 +419,8 @@ class TurPedidoRepository extends EntityRepository {
             $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
             $arFacturaDetalle->setFacturaRel($arFactura);                        
             $arFacturaDetalle->setConceptoServicioRel($arPedidoDetalle->getConceptoServicioRel());
+            $arFacturaDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
+            $arFacturaDetalle->setModalidadServicioRel($arPedidoDetalle->getModalidadServicioRel());
             $arFacturaDetalle->setPedidoDetalleRel($arPedidoDetalle);
             $arFacturaDetalle->setCantidad($arPedidoDetalle->getCantidad());
             $arFacturaDetalle->setVrPrecio($arPedidoDetalle->getVrTotalDetallePendiente());   

@@ -22,6 +22,7 @@
                 {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnVistaPrevia, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnAnular, { 'attr': {'class': 'btn btn-default btn-sm', 'onclick': 'return confirm("Esta seguro de anular la factura?")'} }) }}
             </div>
         </div>
@@ -81,11 +82,17 @@
                         <td align="right">{{ arFactura.vrRetencionFuente | number_format(0, '.', ',')}}</td>
                     </tr>
                     <tr>
+                        <td class="titulo">ANEXO:</td>
+                        <td class="td-in-well">{% if arFactura.imprimirRelacion == 1 %}SI{% else %}NO{% endif %}</td>
+                        <td class="titulo" >TOTAL BRUTO:</td>
+                        <td align="right">{{ arFactura.vrTotalNeto | number_format(0, '.', ',')}}</td>
+                    </tr>
+                    <tr>
                         <td class="titulo">USUARIO:</td>
                         <td class="td-in-well">{{ arFactura.usuario }}</td>
-                        <td class="titulo" >TOTAL:</td>
+                        <td class="titulo" >TOTAL NETO:</td>
                         <td align="right">{{ arFactura.vrTotal | number_format(0, '.', ',')}}</td>
-                    </tr>
+                    </tr>                    
                 </table>
             </div>
         </div>
@@ -110,7 +117,7 @@
                             <th>CANT</th>
                             <th>PRECIO</th>
                             <th>DETALLE</th>                            
-                            <th></th>
+                            <th><input type="checkbox" name="ChkSeleccionarTodosDetalle" OnClick="ChequearTodosTabla(this, 'ChkSeleccionar[]');"/></th>
                         </tr>
                         {% for arFacturaDetalle in arFacturaDetalle %}
                             <tr>

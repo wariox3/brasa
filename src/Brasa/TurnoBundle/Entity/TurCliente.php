@@ -132,11 +132,16 @@ class TurCliente
      */
     private $telefonoContacto;    
     
+    /**     
+     * @ORM\Column(name="factura_agrupada", type="boolean")
+     */    
+    private $facturaAgrupada = false;    
+    
     /**
      * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
      */    
     private $usuario;     
-    
+            
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
@@ -1387,5 +1392,29 @@ class TurCliente
     public function getPuestosDotacionesClienteRel()
     {
         return $this->puestosDotacionesClienteRel;
+    }
+
+    /**
+     * Set facturaAgrupada
+     *
+     * @param boolean $facturaAgrupada
+     *
+     * @return TurCliente
+     */
+    public function setFacturaAgrupada($facturaAgrupada)
+    {
+        $this->facturaAgrupada = $facturaAgrupada;
+
+        return $this;
+    }
+
+    /**
+     * Get facturaAgrupada
+     *
+     * @return boolean
+     */
+    public function getFacturaAgrupada()
+    {
+        return $this->facturaAgrupada;
     }
 }

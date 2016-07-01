@@ -56,7 +56,8 @@ class TurClienteType extends AbstractType
             ->add('celularFinanciero', 'text', array('required' => false))                                  
             ->add('contacto', 'text', array('required' => false))                  
             ->add('celularContacto', 'text', array('required' => false))  
-            ->add('telefonoContacto', 'text', array('required' => false))  
+            ->add('telefonoContacto', 'text', array('required' => false))
+            ->add('facturaAgrupada', 'checkbox', array('required'  => false))                            
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

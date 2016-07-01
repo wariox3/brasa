@@ -151,7 +151,11 @@ class TurPuesto
      */
     protected $simulacionesDetallesPuestoRel;    
     
-
+    /**
+     * @ORM\OneToMany(targetEntity="TurFacturaDetalle", mappedBy="puestoRel")
+     */
+    protected $facturasDetallesPuestoRel; 
+    
     /**
      * Constructor
      */
@@ -879,5 +883,39 @@ class TurPuesto
     public function getZonaRel()
     {
         return $this->zonaRel;
+    }
+
+    /**
+     * Add facturasDetallesPuestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesPuestoRel
+     *
+     * @return TurPuesto
+     */
+    public function addFacturasDetallesPuestoRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesPuestoRel)
+    {
+        $this->facturasDetallesPuestoRel[] = $facturasDetallesPuestoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasDetallesPuestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesPuestoRel
+     */
+    public function removeFacturasDetallesPuestoRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesPuestoRel)
+    {
+        $this->facturasDetallesPuestoRel->removeElement($facturasDetallesPuestoRel);
+    }
+
+    /**
+     * Get facturasDetallesPuestoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasDetallesPuestoRel()
+    {
+        return $this->facturasDetallesPuestoRel;
     }
 }

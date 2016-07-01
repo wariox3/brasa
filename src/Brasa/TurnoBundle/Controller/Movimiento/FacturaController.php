@@ -178,6 +178,11 @@ class FacturaController extends Controller
                     $objFactura->Generar($this, $codigoFactura);                    
                 }
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));                                                
+            }
+            if($form->get('BtnVistaPrevia')->isClicked()) {                                
+                $objFactura = new \Brasa\TurnoBundle\Formatos\Factura2();
+                $objFactura->Generar($this, $codigoFactura);                                    
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));                                                
             }            
         }
 
@@ -214,6 +219,8 @@ class FacturaController extends Controller
                         $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
                         $arFacturaDetalle->setFacturaRel($arFactura);                        
                         $arFacturaDetalle->setConceptoServicioRel($arPedidoDetalle->getConceptoServicioRel());
+                        $arFacturaDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
+                        $arFacturaDetalle->setModalidadServicioRel($arPedidoDetalle->getModalidadServicioRel());
                         $arFacturaDetalle->setPedidoDetalleRel($arPedidoDetalle);
                         $arFacturaDetalle->setCantidad($arPedidoDetalle->getCantidad());
                         $arFacturaDetalle->setVrPrecio($arPedidoDetalle->getVrTotalDetalle());  
@@ -434,6 +441,7 @@ class FacturaController extends Controller
         $arrBotonAnular = array('label' => 'Anular', 'disabled' => true);        
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
+        $arrBotonVistaPrevia = array('label' => 'Vista previa', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
         $arrBotonDetalleConceptoActualizar = array('label' => 'Actualizar', 'disabled' => false);
@@ -459,6 +467,7 @@ class FacturaController extends Controller
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                                     
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
+                    ->add('BtnVistaPrevia', 'submit', $arrBotonVistaPrevia)
                     ->add('BtnAnular', 'submit', $arrBotonAnular)                
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)

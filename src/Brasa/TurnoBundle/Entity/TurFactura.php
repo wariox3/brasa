@@ -112,6 +112,11 @@ class TurFactura
      */
     private $vrTotalNeto = 0;
     
+    /**     
+     * @ORM\Column(name="imprimir_relacion", type="boolean")
+     */    
+    private $imprimirRelacion = false;
+    
     /**
      * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
      */    
@@ -841,5 +846,29 @@ class TurFactura
     public function getVrTotalNeto()
     {
         return $this->vrTotalNeto;
+    }
+
+    /**
+     * Set imprimirRelacion
+     *
+     * @param boolean $imprimirRelacion
+     *
+     * @return TurFactura
+     */
+    public function setImprimirRelacion($imprimirRelacion)
+    {
+        $this->imprimirRelacion = $imprimirRelacion;
+
+        return $this;
+    }
+
+    /**
+     * Get imprimirRelacion
+     *
+     * @return boolean
+     */
+    public function getImprimirRelacion()
+    {
+        return $this->imprimirRelacion;
     }
 }
