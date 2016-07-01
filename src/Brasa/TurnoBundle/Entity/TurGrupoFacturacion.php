@@ -18,14 +18,19 @@ class TurGrupoFacturacion
     private $codigoGrupoFacturacionPk;        
     
     /**
-     * @ORM\Column(name="nombre", type="string", length=50)
+     * @ORM\Column(name="nombre", type="string", length=120, nullable=true)
      */
     private $nombre;                       
     
     /**
-     * @ORM\Column(name="abreviatura", type="string", length=10)
+     * @ORM\Column(name="abreviatura", type="string", length=10, nullable=true)
      */
     private $abreviatura;    
+    
+    /**
+     * @ORM\Column(name="concepto", type="string", length=120, nullable=true)
+     */
+    private $concepto;    
     
     /**
      * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
@@ -268,5 +273,29 @@ class TurGrupoFacturacion
     public function getFacturasDetallesGrupoFacturacionRel()
     {
         return $this->facturasDetallesGrupoFacturacionRel;
+    }
+
+    /**
+     * Set concepto
+     *
+     * @param string $concepto
+     *
+     * @return TurGrupoFacturacion
+     */
+    public function setConcepto($concepto)
+    {
+        $this->concepto = $concepto;
+
+        return $this;
+    }
+
+    /**
+     * Get concepto
+     *
+     * @return string
+     */
+    public function getConcepto()
+    {
+        return $this->concepto;
     }
 }
