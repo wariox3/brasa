@@ -289,10 +289,10 @@ class Factura2 extends \FPDF_FPDF {
         $this->Cell(28, 7, number_format($arFactura->getVrBaseAIU(), 0, '.', ',') , 1, 0, 'R');
         $this->SetXY(149,210);
         $this->Cell(28, 7, 'IVA 16 %', 1, 0, 'L');        
-        $this->Cell(28, 7, number_format($arFactura->getVrIva(), 2, '.', ','), 1, 0, 'R'); 
+        $this->Cell(28, 7, number_format($arFactura->getVrIva(), 3, '.', ','), 1, 0, 'R'); 
         $this->SetXY(149,217);
         $this->Cell(28, 7, 'TOTAL', 1, 0, 'L');        
-        $this->Cell(28, 7, number_format($arFactura->getVrTotal(), 2, '.', ','), 1, 0, 'R');                    
+        $this->Cell(28, 7, number_format($arFactura->getVrTotal(), 3, '.', ','), 1, 0, 'R');                    
         $this->SetFont('Arial', '', 8);
         $plazoPago = $arFactura->getClienteRel()->getPlazoPago();
         $this->Text(66, 201, "CONDICIONES DE PAGO: A $plazoPago DIAS A PARTIR");
