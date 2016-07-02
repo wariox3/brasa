@@ -5359,6 +5359,16 @@ INSERT INTO `rhu_seleccion_tipo_referencia` (`codigo_seleccion_tipo_referencia_p
 INSERT INTO `rhu_seleccion_tipo_referencia` (`codigo_seleccion_tipo_referencia_pk`, `nombre`) VALUES('3','COMERCIAL');
 INSERT INTO `rhu_seleccion_tipo_referencia` (`codigo_seleccion_tipo_referencia_pk`, `nombre`) VALUES('4','FAMILIAR');
 
+insert into `rhu_seleccion_requisicion_experiencia` (`codigo_experiencia_requisicion_pk`, `nombre`) values('1','Mas de 3 meses');
+insert into `rhu_seleccion_requisicion_experiencia` (`codigo_experiencia_requisicion_pk`, `nombre`) values('2','1 año');
+insert into `rhu_seleccion_requisicion_experiencia` (`codigo_experiencia_requisicion_pk`, `nombre`) values('3','2 años');
+insert into `rhu_seleccion_requisicion_experiencia` (`codigo_experiencia_requisicion_pk`, `nombre`) values('4','3-4 años');
+insert into `rhu_seleccion_requisicion_experiencia` (`codigo_experiencia_requisicion_pk`, `nombre`) values('5','5-10 años');
+insert into `rhu_seleccion_requisicion_experiencia` (`codigo_experiencia_requisicion_pk`, `nombre`) values('6','Mas de 10 años');
+insert into `rhu_seleccion_requisicion_experiencia` (`codigo_experiencia_requisicion_pk`, `nombre`) values('7','Practicas');
+insert into `rhu_seleccion_requisicion_experiencia` (`codigo_experiencia_requisicion_pk`, `nombre`) values('8','Graduado');
+insert into `rhu_seleccion_requisicion_experiencia` (`codigo_experiencia_requisicion_pk`, `nombre`) values('9','Sin experiencia');
+
 INSERT INTO `rhu_sso_tipo_cotizante` (`codigo_tipo_cotizante_pk`, `nombre`) VALUES('1','1 Dependiente');
 INSERT INTO `rhu_sso_tipo_cotizante` (`codigo_tipo_cotizante_pk`, `nombre`) VALUES('2','2 Servicio Doméstico');
 INSERT INTO `rhu_sso_tipo_cotizante` (`codigo_tipo_cotizante_pk`, `nombre`) VALUES('3','3 Independiente');

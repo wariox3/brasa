@@ -217,7 +217,7 @@ class GenCiudad
     protected $afiEmpleadosCiudadRel;    
     
     
-    
+
     /**
      * Constructor
      */

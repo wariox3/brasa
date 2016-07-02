@@ -35,7 +35,12 @@ class RhuCapacitacion
     /**
      * @ORM\Column(name="tema", type="string", length=150, nullable=true)
      */    
-    private $tema;     
+    private $tema;
+    
+    /**
+     * @ORM\Column(name="vr_capacitacion", type="float")
+     */
+    private $VrCapacitacion = 0;
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=250, nullable=true)
@@ -406,5 +411,29 @@ class RhuCapacitacion
     public function getCapacitacionesNotasCapacitacionRel()
     {
         return $this->capacitacionesNotasCapacitacionRel;
+    }
+
+    /**
+     * Set vrCapacitacion
+     *
+     * @param float $vrCapacitacion
+     *
+     * @return RhuCapacitacion
+     */
+    public function setVrCapacitacion($vrCapacitacion)
+    {
+        $this->VrCapacitacion = $vrCapacitacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrCapacitacion
+     *
+     * @return float
+     */
+    public function getVrCapacitacion()
+    {
+        return $this->VrCapacitacion;
     }
 }

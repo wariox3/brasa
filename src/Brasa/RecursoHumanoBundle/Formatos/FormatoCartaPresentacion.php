@@ -159,7 +159,7 @@ class FormatoCartaPresentacion extends \FPDF_FPDF {
     }
 
     public static function MesesEspañol($mes) {
-        
+        $mesEspañol = "";
         if ($mes == 01){
             $mesEspañol = "Enero";
         }

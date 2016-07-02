@@ -44,6 +44,11 @@ class RhuDisciplinario
     private $comentarios;
     
     /**
+     * @ORM\Column(name="fecha_incidente", type="string", length=100, nullable=true)
+     */    
+    private $fechaIncidente;
+    
+    /**
      * @ORM\Column(name="fecha_aplica_proceso", type="string", length=100, nullable=true)
      */    
     private $fechaAplicaProceso;
@@ -102,6 +107,11 @@ class RhuDisciplinario
      * @ORM\Column(name="codigo_cargo_fk", type="integer", nullable=true)
      */    
     private $codigoCargoFk;
+    
+    /**     
+     * @ORM\Column(name="estado", type="boolean")
+     */    
+    private $estado = false;
     
     /**
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
@@ -670,5 +680,53 @@ class RhuDisciplinario
     public function getCargoRel()
     {
         return $this->cargoRel;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return RhuDisciplinario
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
+
+    /**
+     * Set fechaIncidente
+     *
+     * @param string $fechaIncidente
+     *
+     * @return RhuDisciplinario
+     */
+    public function setFechaIncidente($fechaIncidente)
+    {
+        $this->fechaIncidente = $fechaIncidente;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaIncidente
+     *
+     * @return string
+     */
+    public function getFechaIncidente()
+    {
+        return $this->fechaIncidente;
     }
 }

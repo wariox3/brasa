@@ -134,6 +134,21 @@ class DisciplinarioController extends Controller
                     $objFormatoCarta->Generar($this, $codigoProcesoDisciplinarioTipo, $codigoProcesoDisciplinario);
                 }    
             }
+            if($form->get('BtnCerrar')->isClicked()) {
+                if($arProcesoDisciplinario->getEstadoAutorizado() == 1) {
+                    if($arProcesoDisciplinario->getEstado() == 0) {
+                        $arProcesoDisciplinario->setEstado(1);
+                        $em->persist($arProcesoDisciplinario);
+                    } else {
+                        $arProcesoDisciplinario->setEstado(0);
+                        $em->persist($arProcesoDisciplinario);
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_disciplinario_detalle', array('codigoDisciplinario' => $codigoDisciplinario)));                                                
+                } else {
+                    $objMensaje = "Debe estar autorizado";
+                }    
+            }
 
         }
         $arDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
@@ -197,18 +212,22 @@ class DisciplinarioController extends Controller
     private function formularioDetalle($ar) {
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
+        $arrBotonCerrar = array('label' => 'Cerrar / abrir', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);               
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;                        
         } else {
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonImprimir['disabled'] = true;
+            $arrBotonCerrar['disabled'] = true;
         }
+        
         $form = $this->createFormBuilder()    
-                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
-                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)            
-                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)                                            
-                    ->getForm();  
+            ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
+            ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)
+            ->add('BtnCerrar', 'submit', $arrBotonCerrar)
+            ->add('BtnImprimir', 'submit', $arrBotonImprimir)                                            
+            ->getForm();  
         return $form;
     }
 
@@ -242,13 +261,15 @@ class DisciplinarioController extends Controller
                             ->setCellValue('I1', 'PROCESO')
                             ->setCellValue('J1', 'CAUSAL O MOTIVO')
                             ->setCellValue('K1', 'DESCARGOS')
-                            ->setCellValue('L1', 'FECHA PROCESO')
-                            ->setCellValue('M1', 'FECHA PROCESO HASTA')
-                            ->setCellValue('N1', 'DÍAS SANCIÓN')
-                            ->setCellValue('OL1', 'FECHA INGRESO TRABAJO')
-                            ->setCellValue('P1', 'REENTRENAMIENTO')
-                            ->setCellValue('Q1', 'AUTORIZADO')
-                            ->setCellValue('R1', 'OBSERVACIONES');
+                            ->setCellValue('L1', 'FECHA DEL INCIDENTE')
+                            ->setCellValue('M1', 'FECHA PROCESO INICIO')
+                            ->setCellValue('N1', 'FECHA PROCESO HASTA')
+                            ->setCellValue('O1', 'DÍAS SANCIÓN')
+                            ->setCellValue('P1', 'FECHA INGRESO TRABAJO')
+                            ->setCellValue('Q1', 'REENTRENAMIENTO')
+                            ->setCellValue('R1', 'AUTORIZADO')
+                            ->setCellValue('S1', 'ABIERTO')
+                            ->setCellValue('T1', 'OBSERVACIONES');
 
                 $i = 2;
                 $query = $em->createQuery($this->strListaDql);
@@ -265,6 +286,11 @@ class DisciplinarioController extends Controller
                     $descargos = "NO APLICA";
                 } else {
                     $descargos = $arDisciplinario->getDescargos();
+                }
+                if ($arDisciplinario->getFechaIncidente() == Null){
+                    $fechaIncidente = "NO APLICA";
+                } else {
+                    $fechaIncidente = $arDisciplinario->getFechaIncidente();
                 }
                 if ($arDisciplinario->getFechaAplicaProceso() == Null){
                     $fechaProceso = "NO APLICA";
@@ -291,6 +317,11 @@ class DisciplinarioController extends Controller
                 } else {
                     $reentrenamiento = "NO";
                 }
+                if ($arDisciplinario->getEstado() == 1){
+                    $estado = "NO";
+                } else {
+                    $estado = "SI";
+                }
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arDisciplinario->getCodigoDisciplinarioPk())
                             ->setCellValue('B' . $i, $arDisciplinario->getCentroCostoRel()->getNombre())
@@ -303,13 +334,15 @@ class DisciplinarioController extends Controller
                             ->setCellValue('I' . $i, $arDisciplinario->getDisciplinarioTipoRel()->getNombre())
                             ->setCellValue('J' . $i, $asunto)
                             ->setCellValue('K' . $i, $descargos)
-                            ->setCellValue('L' . $i, $fechaProceso)
-                            ->setCellValue('M' . $i, $fechaProcesoHasta)
-                            ->setCellValue('N' . $i, $arDisciplinario->getDiasSuspencion())
-                            ->setCellValue('O' . $i, $fechaIngresoTrabajo)
-                            ->setCellValue('P' . $i, $reentrenamiento)
-                            ->setCellValue('Q' . $i, $autorizado)
-                            ->setCellValue('R' . $i, $arDisciplinario->getComentarios());
+                            ->setCellValue('L' . $i, $fechaIncidente)
+                            ->setCellValue('M' . $i, $fechaProceso)
+                            ->setCellValue('N' . $i, $fechaProcesoHasta)
+                            ->setCellValue('O' . $i, $arDisciplinario->getDiasSuspencion())
+                            ->setCellValue('P' . $i, $fechaIngresoTrabajo)
+                            ->setCellValue('Q' . $i, $reentrenamiento)
+                            ->setCellValue('R' . $i, $autorizado)
+                            ->setCellValue('S' . $i, $estado)
+                            ->setCellValue('T' . $i, $arDisciplinario->getComentarios());
                     $i++;
                 }
 

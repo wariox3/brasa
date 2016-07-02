@@ -72,10 +72,6 @@ class RhuCargo
      */
     protected $seleccionesCargoRel;
     
-    /**
-     * @ORM\OneToMany(targetEntity="RhuAspirante", mappedBy="cargoRel")
-     */
-    protected $aspirantesCargoRel;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuDisciplinario", mappedBy="cargoRel")
@@ -98,7 +94,7 @@ class RhuCargo
     protected $afiContratosCargoRel;    
     
     
-    
+
     /**
      * Constructor
      */
@@ -114,7 +110,6 @@ class RhuCargo
         $this->permisosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->examenesCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->seleccionesCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->aspirantesCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->disciplinariosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->examenesCargosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dotacionesCargosCargoRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -493,40 +488,6 @@ class RhuCargo
     public function getSeleccionesCargoRel()
     {
         return $this->seleccionesCargoRel;
-    }
-
-    /**
-     * Add aspirantesCargoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesCargoRel
-     *
-     * @return RhuCargo
-     */
-    public function addAspirantesCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesCargoRel)
-    {
-        $this->aspirantesCargoRel[] = $aspirantesCargoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove aspirantesCargoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesCargoRel
-     */
-    public function removeAspirantesCargoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesCargoRel)
-    {
-        $this->aspirantesCargoRel->removeElement($aspirantesCargoRel);
-    }
-
-    /**
-     * Get aspirantesCargoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAspirantesCargoRel()
-    {
-        return $this->aspirantesCargoRel;
     }
 
     /**
