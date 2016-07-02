@@ -177,14 +177,24 @@ class FacturaController extends Controller
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 } else {
-                    $objFactura = new \Brasa\TurnoBundle\Formatos\Factura2();
-                    $objFactura->Generar($this, $codigoFactura);                    
+                    if($arFactura->getFacturaTipoRel()->getTipo() == 1) {
+                        $objFactura = new \Brasa\TurnoBundle\Formatos\Factura2();
+                        $objFactura->Generar($this, $codigoFactura);                                            
+                    } else {
+                        $objNotaCredito = new \Brasa\TurnoBundle\Formatos\NotaCredito2();
+                        $objNotaCredito->Generar($this, $codigoFactura);                        
+                    }
                 }
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));                                                
             }
             if($form->get('BtnVistaPrevia')->isClicked()) {                                
-                $objFactura = new \Brasa\TurnoBundle\Formatos\Factura2();
-                $objFactura->Generar($this, $codigoFactura);                                    
+                if($arFactura->getFacturaTipoRel()->getTipo() == 1) {
+                    $objFactura = new \Brasa\TurnoBundle\Formatos\Factura2();
+                    $objFactura->Generar($this, $codigoFactura);                                            
+                } else {
+                    $objNotaCredito = new \Brasa\TurnoBundle\Formatos\NotaCredito2();
+                    $objNotaCredito->Generar($this, $codigoFactura);                        
+                }                                   
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));                                                
             }            
         }
@@ -284,6 +294,61 @@ class FacturaController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/movimiento/factura/detalle/factura/nuevo/{codigoFactura}", name="brs_tur_movimiento_factura_detalle_factura_nuevo")
+     */
+    public function detalleFacturaNuevoAction($codigoFactura) {
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $em = $this->getDoctrine()->getManager();
+        $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
+        $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);        
+        $form = $this->createFormBuilder()            
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar',))
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            if ($form->get('BtnGuardar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {    
+                    foreach ($arrSeleccionados AS $codigo) {
+                        $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
+                        $arFacturaDetalle = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->find($codigo);                        
+                        $arFacturaDetalleNueva = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
+                        $arFacturaDetalleNueva->setFacturaRel($arFactura);                        
+                        $arFacturaDetalleNueva->setConceptoServicioRel($arFacturaDetalle->getConceptoServicioRel());
+                        $arFacturaDetalleNueva->setPuestoRel($arFacturaDetalle->getPuestoRel());
+                        $arFacturaDetalleNueva->setModalidadServicioRel($arFacturaDetalle->getModalidadServicioRel());
+                        $arFacturaDetalleNueva->setGrupoFacturacionRel($arFacturaDetalle->getGrupoFacturacionRel());
+                        $arFacturaDetalleNueva->setPedidoDetalleRel($arFacturaDetalle->getPedidoDetalleRel());
+                        $arFacturaDetalleNueva->setFacturaDetalleRel($arFacturaDetalle);
+                        $arFacturaDetalleNueva->setCantidad($arFacturaDetalle->getCantidad());
+                        $arFacturaDetalleNueva->setVrPrecio($arFacturaDetalle->getVrPrecio());
+                        $arFacturaDetalleNueva->setPorIva($arFacturaDetalle->getConceptoServicioRel()->getPorIva());
+                        $arFacturaDetalleNueva->setPorBaseIva($arFacturaDetalle->getConceptoServicioRel()->getPorBaseIva());
+                        $arFacturaDetalleNueva->setFechaProgramacion($arFacturaDetalle->getFechaProgramacion());
+                        $arFacturaDetalleNueva->setDetalle($arFacturaDetalle->getDetalle());
+                        $em->persist($arFacturaDetalleNueva);   
+                    }
+                }
+                $em->flush();
+                $em->getRepository('BrasaTurnoBundle:TurFactura')->liquidar($codigoFactura);
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+            } 
+            if ($form->get('BtnFiltrar')->isClicked()) {            
+                //$this->filtrarDetalleNuevo($form);
+            }
+        }
+        
+        $dql = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->listaCliente($arFactura->getCodigoClienteFk());
+        $arFacturaDetalles = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 500);        
+        return $this->render('BrasaTurnoBundle:Movimientos/Factura:detalleNuevoFactura.html.twig', array(
+            'arFactura' => $arFactura,
+            'arFacturaDetalles' => $arFacturaDetalles,            
+            'form' => $form->createView()));
+    }    
+    
     /**
      * @Route("/tur/movimiento/factura/detalle/editar/{codigoFactura}/{codigoFacturaDetalle}", name="brs_tur_movimiento_factura_detalle_editar")
      */    

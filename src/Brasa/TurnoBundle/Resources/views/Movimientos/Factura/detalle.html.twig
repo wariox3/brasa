@@ -153,6 +153,7 @@
                             <div class="btn-group">
                                 <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_factura_detalle_nuevo', {'codigoFactura': arFactura.codigoFacturaPk, 'codigoFacturaDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
                                 <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_factura_detalle_pedido_nuevo', {'codigoFactura': arFactura.codigoFacturaPk }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo desde pedido</a>
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_factura_detalle_factura_nuevo', {'codigoFactura': arFactura.codigoFacturaPk }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo desde factura</a>
                             </div>
                         {% endif %}
                         <div class="btn-group">

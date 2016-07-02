@@ -48,6 +48,11 @@ class TurFacturaDetalle
     private $codigoPedidoDetalleFk;                          
     
     /**
+     * @ORM\Column(name="codigo_factura_detalle_fk", type="integer", nullable=true)
+     */    
+    private $codigoFacturaDetalleFk;    
+    
+    /**
      * @ORM\Column(name="fecha_programacion", type="date", nullable=true)
      */    
     private $fechaProgramacion;       
@@ -116,6 +121,12 @@ class TurFacturaDetalle
     protected $pedidoDetalleRel;    
     
     /**
+     * @ORM\ManyToOne(targetEntity="TurFacturaDetalle", inversedBy="facturasDetallesFacturaDetalleRel")
+     * @ORM\JoinColumn(name="codigo_factura_detalle_fk", referencedColumnName="codigo_factura_detalle_pk")
+     */
+    protected $facturaDetalleRel;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurPuesto", inversedBy="facturasDetallesPuestoRel")
      * @ORM\JoinColumn(name="codigo_puesto_fk", referencedColumnName="codigo_puesto_pk")
      */
@@ -133,6 +144,11 @@ class TurFacturaDetalle
      */
     protected $grupoFacturacionRel; 
 
+    /**
+     * @ORM\OneToMany(targetEntity="TurFacturaDetalle", mappedBy="facturaDetalleRel")
+     */
+    protected $facturasDetallesFacturaDetalleRel;     
+    
     /**
      * Get codigoFacturaDetallePk
      *
@@ -669,5 +685,94 @@ class TurFacturaDetalle
     public function getPorBaseIva()
     {
         return $this->porBaseIva;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->facturasDetallesFacturaDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set codigoFacturaDetalleFk
+     *
+     * @param integer $codigoFacturaDetalleFk
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setCodigoFacturaDetalleFk($codigoFacturaDetalleFk)
+    {
+        $this->codigoFacturaDetalleFk = $codigoFacturaDetalleFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFacturaDetalleFk
+     *
+     * @return integer
+     */
+    public function getCodigoFacturaDetalleFk()
+    {
+        return $this->codigoFacturaDetalleFk;
+    }
+
+    /**
+     * Set facturaDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturaDetalleRel
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setFacturaDetalleRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturaDetalleRel = null)
+    {
+        $this->facturaDetalleRel = $facturaDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Get facturaDetalleRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurFacturaDetalle
+     */
+    public function getFacturaDetalleRel()
+    {
+        return $this->facturaDetalleRel;
+    }
+
+    /**
+     * Add facturasDetallesFacturaDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesFacturaDetalleRel
+     *
+     * @return TurFacturaDetalle
+     */
+    public function addFacturasDetallesFacturaDetalleRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesFacturaDetalleRel)
+    {
+        $this->facturasDetallesFacturaDetalleRel[] = $facturasDetallesFacturaDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasDetallesFacturaDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesFacturaDetalleRel
+     */
+    public function removeFacturasDetallesFacturaDetalleRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesFacturaDetalleRel)
+    {
+        $this->facturasDetallesFacturaDetalleRel->removeElement($facturasDetallesFacturaDetalleRel);
+    }
+
+    /**
+     * Get facturasDetallesFacturaDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasDetallesFacturaDetalleRel()
+    {
+        return $this->facturasDetallesFacturaDetalleRel;
     }
 }

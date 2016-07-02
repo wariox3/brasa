@@ -28,6 +28,17 @@ class TurFacturaConcepto
     private $porIva = 0;    
     
     /**
+     * @ORM\Column(name="codigo_concepto_servicio_fk", type="integer", nullable=true)
+     */    
+    private $codigoConceptoServicioFk;     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurConceptoServicio", inversedBy="facturasConceptosConceptoServicioRel")
+     * @ORM\JoinColumn(name="codigo_concepto_servicio_fk", referencedColumnName="codigo_concepto_servicio_pk")
+     */
+    protected $conceptoServicioRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurFacturaDetalleConcepto", mappedBy="facturaConceptoRel")
      */
     protected $facturasDetallesConceptosFacturaConceptoRel; 
@@ -209,5 +220,53 @@ class TurFacturaConcepto
     public function getPedidosDetallesConceptosFacturaConceptoRel()
     {
         return $this->pedidosDetallesConceptosFacturaConceptoRel;
+    }
+
+    /**
+     * Set codigoConceptoServicioFk
+     *
+     * @param integer $codigoConceptoServicioFk
+     *
+     * @return TurFacturaConcepto
+     */
+    public function setCodigoConceptoServicioFk($codigoConceptoServicioFk)
+    {
+        $this->codigoConceptoServicioFk = $codigoConceptoServicioFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoConceptoServicioFk
+     *
+     * @return integer
+     */
+    public function getCodigoConceptoServicioFk()
+    {
+        return $this->codigoConceptoServicioFk;
+    }
+
+    /**
+     * Set conceptoServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel
+     *
+     * @return TurFacturaConcepto
+     */
+    public function setConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel = null)
+    {
+        $this->conceptoServicioRel = $conceptoServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Get conceptoServicioRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurConceptoServicio
+     */
+    public function getConceptoServicioRel()
+    {
+        return $this->conceptoServicioRel;
     }
 }

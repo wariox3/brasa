@@ -86,6 +86,10 @@ class TurConceptoServicio
      */
     protected $cierresMesServiciosConceptoServicioRel;    
     
+    /**
+     * @ORM\OneToMany(targetEntity="TurFacturaConcepto", mappedBy="conceptoServicioRel")
+     */
+    protected $facturasConceptosConceptoServicioRel;     
 
     /**
      * Constructor
@@ -493,5 +497,39 @@ class TurConceptoServicio
     public function getCierresMesServiciosConceptoServicioRel()
     {
         return $this->cierresMesServiciosConceptoServicioRel;
+    }
+
+    /**
+     * Add facturasConceptosConceptoServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaConcepto $facturasConceptosConceptoServicioRel
+     *
+     * @return TurConceptoServicio
+     */
+    public function addFacturasConceptosConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurFacturaConcepto $facturasConceptosConceptoServicioRel)
+    {
+        $this->facturasConceptosConceptoServicioRel[] = $facturasConceptosConceptoServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasConceptosConceptoServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaConcepto $facturasConceptosConceptoServicioRel
+     */
+    public function removeFacturasConceptosConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurFacturaConcepto $facturasConceptosConceptoServicioRel)
+    {
+        $this->facturasConceptosConceptoServicioRel->removeElement($facturasConceptosConceptoServicioRel);
+    }
+
+    /**
+     * Get facturasConceptosConceptoServicioRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasConceptosConceptoServicioRel()
+    {
+        return $this->facturasConceptosConceptoServicioRel;
     }
 }

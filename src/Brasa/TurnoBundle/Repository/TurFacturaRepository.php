@@ -134,10 +134,12 @@ class TurFacturaRepository extends EntityRepository {
     }  
     
     public function autorizar($codigoFactura) {
-        $em = $this->getEntityManager();                
+        $em = $this->getEntityManager();   
+        $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
         $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);            
         $strResultado = "";        
-        if($arFactura->getEstadoAutorizado() == 0) {           
+        if($arFactura->getEstadoAutorizado() == 0) { 
+            if($arFactura->getFacturaTipoRel()->getTipo() == 1) {
                 // Validar valor pendiente
                 $dql   = "SELECT fd.codigoPedidoDetalleFk, SUM(fd.vrPrecio) as vrPrecio FROM BrasaTurnoBundle:TurFacturaDetalle fd "
                         . "WHERE fd.codigoFacturaFk = " . $codigoFactura . " "
@@ -151,10 +153,10 @@ class TurFacturaRepository extends EntityRepository {
                     if(round($arPedidoDetalle->getVrTotalDetallePendiente()) < round($floPrecio)) {
                         $strResultado .= "Para el detalle de pedido " . $arrFacturaDetalle['codigoPedidoDetalleFk'] . " no puede facturar mas de lo pendiente valor a facturar = " . $floPrecio . " valor pendiente = " . $arPedidoDetalle->getVrTotalDetallePendiente();
                     }
-                }
-
-                
-                if($strResultado == "") {
+                }                
+            }                    
+            if($strResultado == "") {
+                if($arFactura->getFacturaTipoRel()->getTipo() == 1) {
                     $arFacturaDetalles = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
                     $arFacturaDetalles = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura));                
                     foreach ($arFacturaDetalles as $arFacturaDetalle) {
@@ -165,13 +167,12 @@ class TurFacturaRepository extends EntityRepository {
                             $arPedidoDetalle->setEstadoFacturado(1);
                         }
                         $em->persist($arPedidoDetalle);
-                    }
-                    $arFactura->setEstadoAutorizado(1);
-                    $em->persist($arFactura);
-                    $em->flush();                              
+                    }                    
                 }
-              
-           
+                $arFactura->setEstadoAutorizado(1);
+                $em->persist($arFactura);
+                $em->flush();                              
+            }                         
         } else {
             $strResultado = "Ya esta autorizado";
         }        
