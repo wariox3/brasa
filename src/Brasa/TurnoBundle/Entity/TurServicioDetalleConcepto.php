@@ -33,6 +33,11 @@ class TurServicioDetalleConcepto
     private $codigoPuestoFk;    
     
     /**
+     * @ORM\Column(name="codigo_concepto_servicio_fk", type="integer", nullable=true)
+     */    
+    private $codigoConceptoServicioFk;     
+    
+    /**
      * @ORM\Column(name="cantidad", type="float")
      */
     private $cantidad = 0;    
@@ -79,6 +84,12 @@ class TurServicioDetalleConcepto
      * @ORM\JoinColumn(name="codigo_puesto_fk", referencedColumnName="codigo_puesto_pk")
      */
     protected $puestoRel; 
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurConceptoServicio", inversedBy="serviciosDetallesConceptosConceptoServicioRel")
+     * @ORM\JoinColumn(name="codigo_concepto_servicio_fk", referencedColumnName="codigo_concepto_servicio_pk")
+     */
+    protected $conceptoServicioRel;     
     
     /**
      * Get codigoServicioDetalleConceptoPk
@@ -376,5 +387,53 @@ class TurServicioDetalleConcepto
     public function getPuestoRel()
     {
         return $this->puestoRel;
+    }
+
+    /**
+     * Set codigoConceptoServicioFk
+     *
+     * @param integer $codigoConceptoServicioFk
+     *
+     * @return TurServicioDetalleConcepto
+     */
+    public function setCodigoConceptoServicioFk($codigoConceptoServicioFk)
+    {
+        $this->codigoConceptoServicioFk = $codigoConceptoServicioFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoConceptoServicioFk
+     *
+     * @return integer
+     */
+    public function getCodigoConceptoServicioFk()
+    {
+        return $this->codigoConceptoServicioFk;
+    }
+
+    /**
+     * Set conceptoServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel
+     *
+     * @return TurServicioDetalleConcepto
+     */
+    public function setConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel = null)
+    {
+        $this->conceptoServicioRel = $conceptoServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Get conceptoServicioRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurConceptoServicio
+     */
+    public function getConceptoServicioRel()
+    {
+        return $this->conceptoServicioRel;
     }
 }

@@ -92,6 +92,16 @@ class TurConceptoServicio
     protected $facturasConceptosConceptoServicioRel;     
 
     /**
+     * @ORM\OneToMany(targetEntity="TurPedidoDetalleConcepto", mappedBy="conceptoServicioRel")
+     */
+    protected $pedidosDetallesConceptosConceptoServicioRel;     
+
+    /**
+     * @ORM\OneToMany(targetEntity="TurServicioDetalleConcepto", mappedBy="conceptoServicioRel")
+     */
+    protected $serviciosDetallesConceptosConceptoServicioRel;     
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -531,5 +541,73 @@ class TurConceptoServicio
     public function getFacturasConceptosConceptoServicioRel()
     {
         return $this->facturasConceptosConceptoServicioRel;
+    }
+
+    /**
+     * Add pedidosDetallesConceptosConceptoServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidosDetallesConceptosConceptoServicioRel
+     *
+     * @return TurConceptoServicio
+     */
+    public function addPedidosDetallesConceptosConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidosDetallesConceptosConceptoServicioRel)
+    {
+        $this->pedidosDetallesConceptosConceptoServicioRel[] = $pedidosDetallesConceptosConceptoServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pedidosDetallesConceptosConceptoServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidosDetallesConceptosConceptoServicioRel
+     */
+    public function removePedidosDetallesConceptosConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidosDetallesConceptosConceptoServicioRel)
+    {
+        $this->pedidosDetallesConceptosConceptoServicioRel->removeElement($pedidosDetallesConceptosConceptoServicioRel);
+    }
+
+    /**
+     * Get pedidosDetallesConceptosConceptoServicioRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPedidosDetallesConceptosConceptoServicioRel()
+    {
+        return $this->pedidosDetallesConceptosConceptoServicioRel;
+    }
+
+    /**
+     * Add serviciosDetallesConceptosConceptoServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto $serviciosDetallesConceptosConceptoServicioRel
+     *
+     * @return TurConceptoServicio
+     */
+    public function addServiciosDetallesConceptosConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto $serviciosDetallesConceptosConceptoServicioRel)
+    {
+        $this->serviciosDetallesConceptosConceptoServicioRel[] = $serviciosDetallesConceptosConceptoServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove serviciosDetallesConceptosConceptoServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto $serviciosDetallesConceptosConceptoServicioRel
+     */
+    public function removeServiciosDetallesConceptosConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto $serviciosDetallesConceptosConceptoServicioRel)
+    {
+        $this->serviciosDetallesConceptosConceptoServicioRel->removeElement($serviciosDetallesConceptosConceptoServicioRel);
+    }
+
+    /**
+     * Get serviciosDetallesConceptosConceptoServicioRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiciosDetallesConceptosConceptoServicioRel()
+    {
+        return $this->serviciosDetallesConceptosConceptoServicioRel;
     }
 }
