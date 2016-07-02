@@ -18,7 +18,8 @@ class TurFacturaType extends AbstractType
                     ->orderBy('ft.codigoFacturaTipoPk', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                  
-            ->add('imprimirRelacion', 'checkbox', array('required'  => false))                            
+            ->add('imprimirRelacion', 'checkbox', array('required'  => false))  
+            ->add('imprimirAgrupada', 'checkbox', array('required'  => false))
             ->add('soporte', 'text', array('required' => false))
             ->add('descripcion', 'text', array('required' => false))                            
             ->add('comentarios', 'textarea', array('required' => false))

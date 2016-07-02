@@ -122,6 +122,11 @@ class TurFactura
      */    
     private $imprimirRelacion = false;
     
+    /**     
+     * @ORM\Column(name="imprimir_agrupada", type="boolean")
+     */    
+    private $imprimirAgrupada = false;    
+    
     /**
      * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
      */    
@@ -899,5 +904,29 @@ class TurFactura
     public function getDescripcion()
     {
         return $this->descripcion;
+    }
+
+    /**
+     * Set imprimirAgrupada
+     *
+     * @param boolean $imprimirAgrupada
+     *
+     * @return TurFactura
+     */
+    public function setImprimirAgrupada($imprimirAgrupada)
+    {
+        $this->imprimirAgrupada = $imprimirAgrupada;
+
+        return $this;
+    }
+
+    /**
+     * Get imprimirAgrupada
+     *
+     * @return boolean
+     */
+    public function getImprimirAgrupada()
+    {
+        return $this->imprimirAgrupada;
     }
 }

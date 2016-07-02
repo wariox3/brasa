@@ -90,6 +90,9 @@ class FacturaController extends Controller
                             }                            
                         }                        
                     }
+                    if($codigoFactura == 0) {
+                        $arFactura->setImprimirAgrupada($arFactura->getClienteRel()->getFacturaAgrupada());
+                    }
                     $dateFechaVence = $objFunciones->sumarDiasFecha($arCliente->getPlazoPago(), $arFactura->getFecha());
                     $arFactura->setFechaVence($dateFechaVence); 
                     $arUsuario = $this->getUser();

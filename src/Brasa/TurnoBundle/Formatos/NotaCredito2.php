@@ -115,7 +115,7 @@ class NotaCredito2 extends \FPDF_FPDF {
         $pdf->Ln(6);
         $pdf->SetFont('Arial', '', 9);
         if($arFactura->getImprimirRelacion() == false) {
-            if($arFactura->getClienteRel()->getFacturaAgrupada() == 0) {                
+            if($arFactura->getImprimirAgrupada() == 0) {                
                 foreach ($arFacturaDetalles as $arFacturaDetalle) {
                     $pdf->SetX(15);
                     $pdf->Cell(10, 4, number_format($arFacturaDetalle->getCantidad(), 0, '.', ','), 0, 0, 'C');                        
