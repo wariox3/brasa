@@ -117,6 +117,7 @@ class FormatoProcesoDisciplinario extends \FPDF_FPDF {
         $sustitucion14 = $arProcesoDisciplinario->getPuesto();
         $sustitucion15 = $arProcesoDisciplinario->getZona();
         $sustitucion16 = $arProcesoDisciplinario->getOperacion();
+        $sustitucion17 = $arProcesoDisciplinario->getFechaIncidente();
         //$cadena = $arContenidoFormato->getContenido();
         $patron1 = '/#1/';
         $patron2 = '/#2/';
@@ -134,6 +135,7 @@ class FormatoProcesoDisciplinario extends \FPDF_FPDF {
         $patron14 = '/#e/';
         $patron15 = '/#f/';
         $patron16 = '/#g/';
+        $patron17 = '/#h/';
         $cadenaCambiada = preg_replace($patron1, $sustitucion1, $cadena);
         $cadenaCambiada = preg_replace($patron2, $sustitucion2, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron3, $sustitucion3, $cadenaCambiada);
@@ -150,6 +152,7 @@ class FormatoProcesoDisciplinario extends \FPDF_FPDF {
         $cadenaCambiada = preg_replace($patron14, $sustitucion14, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron15, $sustitucion15, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron16, $sustitucion16, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron17, $sustitucion17, $cadenaCambiada);
         
         $pdf->MultiCell(0,5, $cadenaCambiada);
     }

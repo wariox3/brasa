@@ -168,11 +168,6 @@ class RhuCentroCosto
     protected $seleccionesCentroCostoRel; 
 
     /**
-     * @ORM\OneToMany(targetEntity="RhuAspirante", mappedBy="centroCostoRel")
-     */
-    protected $aspirantesCentroCostoRel;
-
-    /**
      * @ORM\OneToMany(targetEntity="RhuSeleccionRequisito", mappedBy="centroCostoRel")
      */
     protected $seleccionesRequisitosCentroCostoRel;              
@@ -263,7 +258,7 @@ class RhuCentroCosto
     protected $soportesPagosHorariosCentroCostoRel;    
     
 
-    
+
     /**
      * Constructor
      */
@@ -272,7 +267,6 @@ class RhuCentroCosto
         $this->programacionesPagosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->seleccionesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->aspirantesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->seleccionesRequisitosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->incapacidadesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->licenciasCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -1027,40 +1021,6 @@ class RhuCentroCosto
     public function getSeleccionesCentroCostoRel()
     {
         return $this->seleccionesCentroCostoRel;
-    }
-
-    /**
-     * Add aspirantesCentroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesCentroCostoRel
-     *
-     * @return RhuCentroCosto
-     */
-    public function addAspirantesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesCentroCostoRel)
-    {
-        $this->aspirantesCentroCostoRel[] = $aspirantesCentroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove aspirantesCentroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesCentroCostoRel
-     */
-    public function removeAspirantesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesCentroCostoRel)
-    {
-        $this->aspirantesCentroCostoRel->removeElement($aspirantesCentroCostoRel);
-    }
-
-    /**
-     * Get aspirantesCentroCostoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAspirantesCentroCostoRel()
-    {
-        return $this->aspirantesCentroCostoRel;
     }
 
     /**

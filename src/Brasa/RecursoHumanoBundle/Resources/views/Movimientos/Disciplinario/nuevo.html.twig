@@ -47,39 +47,45 @@
                 </div>
             </div>
             <div class="form-group form-group-sm">
-                <label for="form_fechaAplicaProceso" class="col-sm-3 control-label">Fecha proceso:</label>
+                <label for="form_fechaIncidente" class="col-sm-3 control-label">Fecha de incidente:</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.fechaAplicaProceso, { 'attr': {'class': 'form-control', 'placeholder': 'Ejemplo: sabado 3 de marzo de 2015','style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}
+                            {{ form_widget(form.fechaIncidente, { 'attr': {'class': 'form-control', 'placeholder': 'Fecha en la que se presento el caso o incidente Ejemplo: sabado 3 de marzo de 2015'} }) }}
+                </div>
+            </div>    
+            <div class="form-group form-group-sm">
+                <label for="form_fechaAplicaProceso" class="col-sm-3 control-label">Fecha proceso inicio:</label>
+                <div class="col-sm-9">
+                            {{ form_widget(form.fechaAplicaProceso, { 'attr': {'class': 'form-control', 'placeholder': 'Fecha en la que se inicia la sancion Ejemplo: sabado 3 de marzo de 2015'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">
                 <label for="form_fechaAplicaHastaProceso" class="col-sm-3 control-label">Fecha proceso hasta:</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.fechaAplicaHastaProceso, { 'attr': {'class': 'form-control', 'placeholder': 'Ejemplo: sabado 3 de marzo de 2015','style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}
+                            {{ form_widget(form.fechaAplicaHastaProceso, { 'attr': {'class': 'form-control', 'placeholder': 'Fecha en la que se termina la sancion Ejemplo: sabado 3 de marzo de 2015'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">
                 <label for="form_diasSuspencion" class="col-sm-3 control-label">Días de sanción:</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.diasSuspencion, { 'attr': {'class': 'form-control', 'placeholder': 'Aplica solo para el proceso de Descargos y es la descipcion completa del descargo'} }) }}
+                            {{ form_widget(form.diasSuspencion, { 'attr': {'class': 'form-control', 'placeholder': 'numero de dias de la sancion Ejemplo: 2'} }) }}
                 </div>
             </div>    
             <div class="form-group form-group-sm">
                 <label for="form_fechaIngresoTrabajo" class="col-sm-3 control-label">Fecha ingreso trabajo:</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.fechaIngresoTrabajo, { 'attr': {'class': 'form-control', 'placeholder': 'Ejemplo: sabado 3 de marzo de 2015','style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}
+                            {{ form_widget(form.fechaIngresoTrabajo, { 'attr': {'class': 'form-control', 'placeholder': 'Fecha en la que el trabajador empieza laborales despues de la sancion Ejemplo: sabado 3 de marzo de 2015'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">
                 <label for="form_puesto" class="col-sm-3 control-label">Puesto:</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.puesto, { 'attr': {'class': 'form-control', 'placeholder': 'Aplica solo para el proceso de Descargos y es la descipcion completa del descargo','style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}
+                            {{ form_widget(form.puesto, { 'attr': {'class': 'form-control', 'placeholder': ''} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">
                 <label for="form_zona" class="col-sm-3 control-label">Zona:</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.zona, { 'attr': {'class': 'form-control', 'placeholder': 'Ejemplo: norte, sur','style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}
+                            {{ form_widget(form.zona, { 'attr': {'class': 'form-control', 'placeholder': 'Ejemplo: norte, sur'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">

@@ -513,7 +513,8 @@ class CapacitacionesController extends Controller
                             ->setCellValue('D1', 'TEMA')
                             ->setCellValue('E1', 'A CAPACITAR')
                             ->setCellValue('F1', 'ASISTIERON')
-                            ->setCellValue('G1', 'ABIERTO');
+                            ->setCellValue('G1', 'ABIERTO')
+                            ->setCellValue('H1', 'VR CAPACITACION');
 
                 $i = 2;
                 $query = $em->createQuery($this->strDqlLista);
@@ -537,7 +538,8 @@ class CapacitacionesController extends Controller
                             ->setCellValue('D' . $i, $arCapacitacion->getTema())
                             ->setCellValue('E' . $i, $arCapacitacion->getNumeroPersonasCapacitar())
                             ->setCellValue('F' . $i, $arCapacitacion->getNumeroPersonasAsistieron())
-                            ->setCellValue('G' . $i, $estado);
+                            ->setCellValue('G' . $i, $estado)
+                            ->setCellValue('H' . $i, $arCapacitacion->getVrCapacitacion());
                     $i++;
                 }
 
