@@ -61,6 +61,11 @@ class TurCliente
      * @ORM\Column(name="codigo_forma_pago_fk", type="integer", nullable=true)
      */    
     private $codigoFormaPagoFk;     
+
+    /**
+     * @ORM\Column(name="codigo_sector_comercial_fk", type="integer", nullable=true)
+     */    
+    private $codigoSectorComercialFk;
     
     /**
      * @ORM\Column(name="direccion", type="string", length=120, nullable=true)
@@ -175,6 +180,12 @@ class TurCliente
      * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
      */
     protected $ciudadRel;     
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenSectorComercial", inversedBy="turClientesSectorComercialRel")
+     * @ORM\JoinColumn(name="codigo_sector_comercial_fk", referencedColumnName="codigo_sector_comercial_pk")
+     */
+    protected $sectorComercialRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="TurCotizacion", mappedBy="clienteRel")
@@ -1455,5 +1466,53 @@ class TurCliente
     public function getOperacionesClienteRel()
     {
         return $this->operacionesClienteRel;
+    }
+
+    /**
+     * Set codigoSectorComercialFk
+     *
+     * @param integer $codigoSectorComercialFk
+     *
+     * @return TurCliente
+     */
+    public function setCodigoSectorComercialFk($codigoSectorComercialFk)
+    {
+        $this->codigoSectorComercialFk = $codigoSectorComercialFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSectorComercialFk
+     *
+     * @return integer
+     */
+    public function getCodigoSectorComercialFk()
+    {
+        return $this->codigoSectorComercialFk;
+    }
+
+    /**
+     * Set sectorComercialRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenSectorComercial $sectorComercialRel
+     *
+     * @return TurCliente
+     */
+    public function setSectorComercialRel(\Brasa\GeneralBundle\Entity\GenSectorComercial $sectorComercialRel = null)
+    {
+        $this->sectorComercialRel = $sectorComercialRel;
+
+        return $this;
+    }
+
+    /**
+     * Get sectorComercialRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenSectorComercial
+     */
+    public function getSectorComercialRel()
+    {
+        return $this->sectorComercialRel;
     }
 }

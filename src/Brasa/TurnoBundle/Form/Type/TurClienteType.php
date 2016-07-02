@@ -38,6 +38,13 @@ class TurClienteType extends AbstractType
                     ->orderBy('a.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                            
+            ->add('sectorComercialRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenSectorComercial',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('sc')
+                    ->orderBy('sc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                             
             ->add('nit', 'number', array('required' => true))
             ->add('digitoVerificacion', 'text', array('required' => false))  
             ->add('nombreCorto', 'text', array('required' => true)) 

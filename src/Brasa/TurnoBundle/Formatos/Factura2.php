@@ -298,7 +298,7 @@ class Factura2 extends \FPDF_FPDF {
         $this->Text(20, 206, "Fecha y Nombre:");
         $this->Text(20, 211, "Sello:");
         $this->Text(20, 221, "Actividad Comercial");
-        $this->Text(60, 221, "Construcion");
+        $this->Text(60, 221, $arFactura->getClienteRel()->getSectorComercialRel()->getNombre());
         $this->Text(90, 221, "Estrato =");
         $this->Ln(4);
         $this->SetFont('Arial', '', 8);
