@@ -108,7 +108,7 @@ class Factura2 extends \FPDF_FPDF {
         $pdf->SetX(15);
         $pdf->Cell(10, 4, '', 0, 0, 'R');                        
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(120, 4, $arFactura->getDescripcion(), 0, 0, 'L');                        
+        $pdf->Cell(120, 4, utf8_decode($arFactura->getDescripcion()), 0, 0, 'L');                        
         $pdf->SetFont('Arial', '', 9);
         $pdf->Cell(30, 4, '', 0, 0, 'R');
         $pdf->Cell(30, 4, '', 0, 0, 'R'); 
