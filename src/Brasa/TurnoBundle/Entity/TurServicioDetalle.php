@@ -198,6 +198,11 @@ class TurServicioDetalle
     private $fechaIniciaPlantilla;     
     
     /**     
+     * @ORM\Column(name="estado_cerrado", type="boolean")
+     */    
+    private $estadoCerrado = false;     
+    
+    /**     
      * @ORM\Column(name="marca", type="boolean")
      */    
     private $marca = false;     
@@ -1496,5 +1501,29 @@ class TurServicioDetalle
     public function getVrPrecio()
     {
         return $this->vrPrecio;
+    }
+
+    /**
+     * Set estadoCerrado
+     *
+     * @param boolean $estadoCerrado
+     *
+     * @return TurServicioDetalle
+     */
+    public function setEstadoCerrado($estadoCerrado)
+    {
+        $this->estadoCerrado = $estadoCerrado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCerrado
+     *
+     * @return boolean
+     */
+    public function getEstadoCerrado()
+    {
+        return $this->estadoCerrado;
     }
 }

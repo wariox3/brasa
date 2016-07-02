@@ -150,10 +150,14 @@
                     <div class="btn-toolbar" style="float: right">
                         {% if arFactura.estadoAutorizado == 0 %}
                             <div class="btn-group">
-                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_factura_detalle_nuevo', {'codigoFactura': arFactura.codigoFacturaPk, 'codigoFacturaDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo concepto</a>
-                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_factura_detalle_concepto_pedido_nuevo', {'codigoFactura': arFactura.codigoFacturaPk, 'codigoFacturaDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo concepto desde pedido</a>
-                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_factura_detalle_pedido_nuevo', {'codigoFactura': arFactura.codigoFacturaPk }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo desde pedido</a>
-                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_factura_detalle_factura_nuevo', {'codigoFactura': arFactura.codigoFacturaPk }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo desde factura</a>
+                                {% if arFactura.facturaTipoRel.tipo == 1 %}
+                                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_factura_detalle_nuevo', {'codigoFactura': arFactura.codigoFacturaPk, 'codigoFacturaDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo concepto</a>
+                                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_factura_detalle_concepto_pedido_nuevo', {'codigoFactura': arFactura.codigoFacturaPk, 'codigoFacturaDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo concepto desde pedido</a>
+                                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_factura_detalle_pedido_nuevo', {'codigoFactura': arFactura.codigoFacturaPk }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo desde pedido</a>
+                                {% endif %}
+                                {% if arFactura.facturaTipoRel.tipo == 2 %}
+                                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_factura_detalle_factura_nuevo', {'codigoFactura': arFactura.codigoFacturaPk }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo desde factura</a>
+                                {% endif %}
                             </div>
                         {% endif %}
                         <div class="btn-group">

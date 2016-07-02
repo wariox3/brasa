@@ -145,6 +145,16 @@ class ServicioController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle', array('codigoServicio' => $codigoServicio)));
             }
+            if($form->get('BtnDetalleCerrar')->isClicked()) {   
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->cerrarSeleccionados($arrSeleccionados);                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle', array('codigoServicio' => $codigoServicio)));
+            }  
+            if($form->get('BtnDetalleAbrir')->isClicked()) {   
+                $arrSeleccionados = $request->request->get('ChkSeleccionarCerrado');
+                $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->AbrirSeleccionados($arrSeleccionados);                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_detalle', array('codigoServicio' => $codigoServicio)));
+            }            
             if($form->get('BtnDetalleMarcar')->isClicked()) {   
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->marcarSeleccionados($arrSeleccionados);                
@@ -179,13 +189,16 @@ class ServicioController extends Controller
             }            
         }
 
-        $dql = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->listaDql($codigoServicio);       
+        $dql = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->listaDql($codigoServicio, "0");       
         $arServicioDetalle = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 150);
+        $dql = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->listaDql($codigoServicio, "1");       
+        $arServicioDetalleCerrado = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 150);        
         $dql = $em->getRepository('BrasaTurnoBundle:TurServicioDetalleConcepto')->listaDql($codigoServicio);       
         $arServicioDetalleConcepto = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 150);        
         return $this->render('BrasaTurnoBundle:Movimientos/Servicio:detalle.html.twig', array(
                     'arServicio' => $arServicio,
                     'arServicioDetalle' => $arServicioDetalle,
+                    'arServicioDetalleCerrado' => $arServicioDetalleCerrado,
                     'arServicioDetalleConceptos' => $arServicioDetalleConcepto,
                     'form' => $form->createView()
                     ));
@@ -576,6 +589,8 @@ class ServicioController extends Controller
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);        
+        $arrBotonDetalleCerrar = array('label' => 'Cerrar', 'disabled' => false);        
+        $arrBotonDetalleAbrir = array('label' => 'Abrir', 'disabled' => false);        
         $arrBotonDetalleMarcar = array('label' => 'Marcar', 'disabled' => false);        
         $arrBotonDetalleAjuste = array('label' => 'Ajuste', 'disabled' => false);        
         $arrBotonDetalleConceptoActualizar = array('label' => 'Actualizar', 'disabled' => false);
@@ -604,6 +619,8 @@ class ServicioController extends Controller
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
+                    ->add('BtnDetalleCerrar', 'submit', $arrBotonDetalleCerrar)    
+                    ->add('BtnDetalleAbrir', 'submit', $arrBotonDetalleAbrir)    
                     ->add('BtnDetalleMarcar', 'submit', $arrBotonDetalleMarcar)
                     ->add('BtnDetalleAjuste', 'submit', $arrBotonDetalleAjuste)
                     ->add('BtnDetalleConceptoActualizar', 'submit', $arrBotonDetalleConceptoActualizar)

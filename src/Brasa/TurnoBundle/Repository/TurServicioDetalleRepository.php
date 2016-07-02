@@ -6,11 +6,18 @@ use Doctrine\ORM\EntityRepository;
 
 class TurServicioDetalleRepository extends EntityRepository {
 
-    public function listaDql($codigoServicio = "") {
+    public function listaDql($codigoServicio = "", $estadoCerrado = "") {
         $dql   = "SELECT sd FROM BrasaTurnoBundle:TurServicioDetalle sd WHERE sd.codigoServicioDetallePk <> 0 ";
         
         if($codigoServicio != '') {
-            $dql .= "AND sd.codigoServicioFk = " . $codigoServicio . " ";  
+            $dql .= " AND sd.codigoServicioFk = " . $codigoServicio;  
+        }        
+        
+        if($estadoCerrado == 1) {
+            $dql .= " AND sd.estadoCerrado = 1"; 
+        }
+        if($estadoCerrado == 0) {
+            $dql .= " AND sd.estadoCerrado = 0"; 
         }        
         $dql .= " ORDER BY sd.codigoGrupoFacturacionFk, sd.codigoPuestoFk";
         return $dql;
@@ -55,6 +62,34 @@ class TurServicioDetalleRepository extends EntityRepository {
         }
         
     }        
+    
+    public function cerrarSeleccionados($arrSeleccionados) {        
+        if(count($arrSeleccionados) > 0) {
+            $em = $this->getEntityManager();
+            foreach ($arrSeleccionados AS $codigo) {                
+                $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigo);                
+                if($arServicioDetalle->getEstadoCerrado() == 0) {
+                    $arServicioDetalle->setEstadoCerrado(1);
+                }              
+            }                                         
+            $em->flush();       
+        }
+        
+    }    
+    
+    public function AbrirSeleccionados($arrSeleccionados) {        
+        if(count($arrSeleccionados) > 0) {
+            $em = $this->getEntityManager();
+            foreach ($arrSeleccionados AS $codigo) {                
+                $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigo);                
+                if($arServicioDetalle->getEstadoCerrado() == 1) {
+                    $arServicioDetalle->setEstadoCerrado(0);
+                }              
+            }                                         
+            $em->flush();       
+        }
+        
+    } 
     
     public function marcarSeleccionados($arrSeleccionados) {        
         if(count($arrSeleccionados) > 0) {

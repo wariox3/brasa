@@ -88,17 +88,17 @@ class TurFacturaDetalle
     private $vrPrecio = 0;   
     
     /**
-     * @ORM\Column(name="subtotal", type="integer")
+     * @ORM\Column(name="subtotal", type="float")
      */
     private $subtotal = 0; 
 
     /**
-     * @ORM\Column(name="iva", type="integer")
+     * @ORM\Column(name="iva", type="float")
      */
     private $iva = 0;    
     
     /**
-     * @ORM\Column(name="total", type="integer")
+     * @ORM\Column(name="total", type="float")
      */
     private $total = 0;     
     
@@ -160,6 +160,15 @@ class TurFacturaDetalle
      */
     protected $facturasDetallesFacturaDetalleRel;     
     
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->facturasDetallesFacturaDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get codigoFacturaDetallePk
      *
@@ -267,6 +276,30 @@ class TurFacturaDetalle
     }
 
     /**
+     * Set codigoGrupoFacturacionFk
+     *
+     * @param integer $codigoGrupoFacturacionFk
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setCodigoGrupoFacturacionFk($codigoGrupoFacturacionFk)
+    {
+        $this->codigoGrupoFacturacionFk = $codigoGrupoFacturacionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoGrupoFacturacionFk
+     *
+     * @return integer
+     */
+    public function getCodigoGrupoFacturacionFk()
+    {
+        return $this->codigoGrupoFacturacionFk;
+    }
+
+    /**
      * Set codigoPedidoDetalleFk
      *
      * @param integer $codigoPedidoDetalleFk
@@ -291,6 +324,54 @@ class TurFacturaDetalle
     }
 
     /**
+     * Set codigoPedidoDetalleConceptoFk
+     *
+     * @param integer $codigoPedidoDetalleConceptoFk
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setCodigoPedidoDetalleConceptoFk($codigoPedidoDetalleConceptoFk)
+    {
+        $this->codigoPedidoDetalleConceptoFk = $codigoPedidoDetalleConceptoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPedidoDetalleConceptoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPedidoDetalleConceptoFk()
+    {
+        return $this->codigoPedidoDetalleConceptoFk;
+    }
+
+    /**
+     * Set codigoFacturaDetalleFk
+     *
+     * @param integer $codigoFacturaDetalleFk
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setCodigoFacturaDetalleFk($codigoFacturaDetalleFk)
+    {
+        $this->codigoFacturaDetalleFk = $codigoFacturaDetalleFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFacturaDetalleFk
+     *
+     * @return integer
+     */
+    public function getCodigoFacturaDetalleFk()
+    {
+        return $this->codigoFacturaDetalleFk;
+    }
+
+    /**
      * Set fechaProgramacion
      *
      * @param \DateTime $fechaProgramacion
@@ -312,6 +393,78 @@ class TurFacturaDetalle
     public function getFechaProgramacion()
     {
         return $this->fechaProgramacion;
+    }
+
+    /**
+     * Set porIva
+     *
+     * @param integer $porIva
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setPorIva($porIva)
+    {
+        $this->porIva = $porIva;
+
+        return $this;
+    }
+
+    /**
+     * Get porIva
+     *
+     * @return integer
+     */
+    public function getPorIva()
+    {
+        return $this->porIva;
+    }
+
+    /**
+     * Set porBaseIva
+     *
+     * @param integer $porBaseIva
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setPorBaseIva($porBaseIva)
+    {
+        $this->porBaseIva = $porBaseIva;
+
+        return $this;
+    }
+
+    /**
+     * Get porBaseIva
+     *
+     * @return integer
+     */
+    public function getPorBaseIva()
+    {
+        return $this->porBaseIva;
+    }
+
+    /**
+     * Set baseIva
+     *
+     * @param integer $baseIva
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setBaseIva($baseIva)
+    {
+        $this->baseIva = $baseIva;
+
+        return $this;
+    }
+
+    /**
+     * Get baseIva
+     *
+     * @return integer
+     */
+    public function getBaseIva()
+    {
+        return $this->baseIva;
     }
 
     /**
@@ -360,6 +513,78 @@ class TurFacturaDetalle
     public function getVrPrecio()
     {
         return $this->vrPrecio;
+    }
+
+    /**
+     * Set subtotal
+     *
+     * @param float $subtotal
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setSubtotal($subtotal)
+    {
+        $this->subtotal = $subtotal;
+
+        return $this;
+    }
+
+    /**
+     * Get subtotal
+     *
+     * @return float
+     */
+    public function getSubtotal()
+    {
+        return $this->subtotal;
+    }
+
+    /**
+     * Set iva
+     *
+     * @param float $iva
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setIva($iva)
+    {
+        $this->iva = $iva;
+
+        return $this;
+    }
+
+    /**
+     * Get iva
+     *
+     * @return float
+     */
+    public function getIva()
+    {
+        return $this->iva;
+    }
+
+    /**
+     * Set total
+     *
+     * @param float $total
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
+
+        return $this;
+    }
+
+    /**
+     * Get total
+     *
+     * @return float
+     */
+    public function getTotal()
+    {
+        return $this->total;
     }
 
     /**
@@ -459,6 +684,54 @@ class TurFacturaDetalle
     }
 
     /**
+     * Set pedidoDetalleConceptoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidoDetalleConceptoRel
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setPedidoDetalleConceptoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidoDetalleConceptoRel = null)
+    {
+        $this->pedidoDetalleConceptoRel = $pedidoDetalleConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pedidoDetalleConceptoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto
+     */
+    public function getPedidoDetalleConceptoRel()
+    {
+        return $this->pedidoDetalleConceptoRel;
+    }
+
+    /**
+     * Set facturaDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturaDetalleRel
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setFacturaDetalleRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturaDetalleRel = null)
+    {
+        $this->facturaDetalleRel = $facturaDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Get facturaDetalleRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurFacturaDetalle
+     */
+    public function getFacturaDetalleRel()
+    {
+        return $this->facturaDetalleRel;
+    }
+
+    /**
      * Set puestoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurPuesto $puestoRel
@@ -507,30 +780,6 @@ class TurFacturaDetalle
     }
 
     /**
-     * Set codigoGrupoFacturacionFk
-     *
-     * @param integer $codigoGrupoFacturacionFk
-     *
-     * @return TurFacturaDetalle
-     */
-    public function setCodigoGrupoFacturacionFk($codigoGrupoFacturacionFk)
-    {
-        $this->codigoGrupoFacturacionFk = $codigoGrupoFacturacionFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoGrupoFacturacionFk
-     *
-     * @return integer
-     */
-    public function getCodigoGrupoFacturacionFk()
-    {
-        return $this->codigoGrupoFacturacionFk;
-    }
-
-    /**
      * Set grupoFacturacionRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurGrupoFacturacion $grupoFacturacionRel
@@ -552,205 +801,6 @@ class TurFacturaDetalle
     public function getGrupoFacturacionRel()
     {
         return $this->grupoFacturacionRel;
-    }
-
-    /**
-     * Set porIva
-     *
-     * @param integer $porIva
-     *
-     * @return TurFacturaDetalle
-     */
-    public function setPorIva($porIva)
-    {
-        $this->porIva = $porIva;
-
-        return $this;
-    }
-
-    /**
-     * Get porIva
-     *
-     * @return integer
-     */
-    public function getPorIva()
-    {
-        return $this->porIva;
-    }
-
-    /**
-     * Set subtotal
-     *
-     * @param integer $subtotal
-     *
-     * @return TurFacturaDetalle
-     */
-    public function setSubtotal($subtotal)
-    {
-        $this->subtotal = $subtotal;
-
-        return $this;
-    }
-
-    /**
-     * Get subtotal
-     *
-     * @return integer
-     */
-    public function getSubtotal()
-    {
-        return $this->subtotal;
-    }
-
-    /**
-     * Set total
-     *
-     * @param integer $total
-     *
-     * @return TurFacturaDetalle
-     */
-    public function setTotal($total)
-    {
-        $this->total = $total;
-
-        return $this;
-    }
-
-    /**
-     * Get total
-     *
-     * @return integer
-     */
-    public function getTotal()
-    {
-        return $this->total;
-    }
-
-    /**
-     * Set baseIva
-     *
-     * @param integer $baseIva
-     *
-     * @return TurFacturaDetalle
-     */
-    public function setBaseIva($baseIva)
-    {
-        $this->baseIva = $baseIva;
-
-        return $this;
-    }
-
-    /**
-     * Get baseIva
-     *
-     * @return integer
-     */
-    public function getBaseIva()
-    {
-        return $this->baseIva;
-    }
-
-    /**
-     * Set iva
-     *
-     * @param integer $iva
-     *
-     * @return TurFacturaDetalle
-     */
-    public function setIva($iva)
-    {
-        $this->iva = $iva;
-
-        return $this;
-    }
-
-    /**
-     * Get iva
-     *
-     * @return integer
-     */
-    public function getIva()
-    {
-        return $this->iva;
-    }
-
-    /**
-     * Set porBaseIva
-     *
-     * @param integer $porBaseIva
-     *
-     * @return TurFacturaDetalle
-     */
-    public function setPorBaseIva($porBaseIva)
-    {
-        $this->porBaseIva = $porBaseIva;
-
-        return $this;
-    }
-
-    /**
-     * Get porBaseIva
-     *
-     * @return integer
-     */
-    public function getPorBaseIva()
-    {
-        return $this->porBaseIva;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->facturasDetallesFacturaDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Set codigoFacturaDetalleFk
-     *
-     * @param integer $codigoFacturaDetalleFk
-     *
-     * @return TurFacturaDetalle
-     */
-    public function setCodigoFacturaDetalleFk($codigoFacturaDetalleFk)
-    {
-        $this->codigoFacturaDetalleFk = $codigoFacturaDetalleFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoFacturaDetalleFk
-     *
-     * @return integer
-     */
-    public function getCodigoFacturaDetalleFk()
-    {
-        return $this->codigoFacturaDetalleFk;
-    }
-
-    /**
-     * Set facturaDetalleRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturaDetalleRel
-     *
-     * @return TurFacturaDetalle
-     */
-    public function setFacturaDetalleRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturaDetalleRel = null)
-    {
-        $this->facturaDetalleRel = $facturaDetalleRel;
-
-        return $this;
-    }
-
-    /**
-     * Get facturaDetalleRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurFacturaDetalle
-     */
-    public function getFacturaDetalleRel()
-    {
-        return $this->facturaDetalleRel;
     }
 
     /**
@@ -785,53 +835,5 @@ class TurFacturaDetalle
     public function getFacturasDetallesFacturaDetalleRel()
     {
         return $this->facturasDetallesFacturaDetalleRel;
-    }
-
-    /**
-     * Set codigoPedidoDetalleConceptoFk
-     *
-     * @param integer $codigoPedidoDetalleConceptoFk
-     *
-     * @return TurFacturaDetalle
-     */
-    public function setCodigoPedidoDetalleConceptoFk($codigoPedidoDetalleConceptoFk)
-    {
-        $this->codigoPedidoDetalleConceptoFk = $codigoPedidoDetalleConceptoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoPedidoDetalleConceptoFk
-     *
-     * @return integer
-     */
-    public function getCodigoPedidoDetalleConceptoFk()
-    {
-        return $this->codigoPedidoDetalleConceptoFk;
-    }
-
-    /**
-     * Set pedidoDetalleConceptoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidoDetalleConceptoRel
-     *
-     * @return TurFacturaDetalle
-     */
-    public function setPedidoDetalleConceptoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidoDetalleConceptoRel = null)
-    {
-        $this->pedidoDetalleConceptoRel = $pedidoDetalleConceptoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get pedidoDetalleConceptoRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto
-     */
-    public function getPedidoDetalleConceptoRel()
-    {
-        return $this->pedidoDetalleConceptoRel;
     }
 }
