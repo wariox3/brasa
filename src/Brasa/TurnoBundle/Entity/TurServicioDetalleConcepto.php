@@ -48,6 +48,11 @@ class TurServicioDetalleConcepto
     private $porIva = 0;    
 
     /**
+     * @ORM\Column(name="por_base_iva", type="integer")
+     */
+    private $porBaseIva = 0;     
+    
+    /**
      * @ORM\Column(name="iva", type="float")
      */
     private $iva = 0;         
@@ -67,12 +72,6 @@ class TurServicioDetalleConcepto
      * @ORM\JoinColumn(name="codigo_servicio_fk", referencedColumnName="codigo_servicio_pk")
      */
     protected $servicioRel;          
-
-    /**
-     * @ORM\ManyToOne(targetEntity="TurFacturaConcepto", inversedBy="serviciosDetallesConceptosFacturaConceptoRel")
-     * @ORM\JoinColumn(name="codigo_factura_concepto_fk", referencedColumnName="codigo_factura_concepto_pk")
-     */
-    protected $facturaConceptoRel; 
     
     /**
      * @ORM\ManyToOne(targetEntity="TurPuesto", inversedBy="serviciosDetallesConceptosPuestoRel")
@@ -243,6 +242,30 @@ class TurServicioDetalleConcepto
     }
 
     /**
+     * Set porBaseIva
+     *
+     * @param integer $porBaseIva
+     *
+     * @return TurServicioDetalleConcepto
+     */
+    public function setPorBaseIva($porBaseIva)
+    {
+        $this->porBaseIva = $porBaseIva;
+
+        return $this;
+    }
+
+    /**
+     * Get porBaseIva
+     *
+     * @return integer
+     */
+    public function getPorBaseIva()
+    {
+        return $this->porBaseIva;
+    }
+
+    /**
      * Set iva
      *
      * @param float $iva
@@ -336,30 +359,6 @@ class TurServicioDetalleConcepto
     public function getServicioRel()
     {
         return $this->servicioRel;
-    }
-
-    /**
-     * Set facturaConceptoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurFacturaConcepto $facturaConceptoRel
-     *
-     * @return TurServicioDetalleConcepto
-     */
-    public function setFacturaConceptoRel(\Brasa\TurnoBundle\Entity\TurFacturaConcepto $facturaConceptoRel = null)
-    {
-        $this->facturaConceptoRel = $facturaConceptoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get facturaConceptoRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurFacturaConcepto
-     */
-    public function getFacturaConceptoRel()
-    {
-        return $this->facturaConceptoRel;
     }
 
     /**

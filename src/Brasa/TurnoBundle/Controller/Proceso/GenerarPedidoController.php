@@ -131,8 +131,11 @@ class GenerarPedidoController extends Controller
                     foreach ($arServicioDetallesConceptos as $arServicioDetalleConcepto) {
                         $arPedidoDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto();                        
                         $arPedidoDetalleConcepto->setPedidoRel($arPedidoNuevo);                         
-                        $arPedidoDetalleConcepto->setFacturaConceptoRel($arServicioDetalleConcepto->getFacturaConceptoRel());
+                        $arPedidoDetalleConcepto->setConceptoServicioRel($arServicioDetalleConcepto->getConceptoServicioRel());
+                        $arPedidoDetalleConcepto->setPuestoRel($arServicioDetalleConcepto->getPuestoRel());
                         $arPedidoDetalleConcepto->setCantidad($arServicioDetalleConcepto->getCantidad());
+                        $arPedidoDetalleConcepto->setPorIva($arServicioDetalleConcepto->getPorIva());
+                        $arPedidoDetalleConcepto->setPorBaseIva($arServicioDetalleConcepto->getPorBaseIva());
                         $arPedidoDetalleConcepto->setIva($arServicioDetalleConcepto->getIva());
                         $arPedidoDetalleConcepto->setPrecio($arServicioDetalleConcepto->getPrecio());
                         $arPedidoDetalleConcepto->setSubtotal($arServicioDetalleConcepto->getSubtotal());

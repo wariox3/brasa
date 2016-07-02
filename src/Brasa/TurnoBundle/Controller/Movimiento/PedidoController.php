@@ -252,19 +252,20 @@ class PedidoController extends Controller
                 if(count($arrSeleccionados) > 0) {  
                     $arPuesto = $form->get('puestoRel')->getData();
                     foreach ($arrSeleccionados AS $codigo) {
-                        $arFacturaConcepto = new \Brasa\TurnoBundle\Entity\TurFacturaConcepto();
-                        $arFacturaConcepto = $em->getRepository('BrasaTurnoBundle:TurFacturaConcepto')->find($codigo);
+                        $arConceptoServicio = new \Brasa\TurnoBundle\Entity\TurConceptoServicio();
+                        $arConceptoServicio = $em->getRepository('BrasaTurnoBundle:TurConceptoServicio')->find($codigo);
                         $cantidad = $arrControles['TxtCantidad' . $codigo];
                         $precio = $arrControles['TxtPrecio' . $codigo];                        
                         $subtotal = $cantidad * $precio;
-                        $subtotalAIU = $subtotal * 10/100;
-                        $iva = ($subtotalAIU * $arFacturaConcepto->getPorIva())/100;
+                        $subtotalAIU = $subtotal * $arConceptoServicio->getPorBaseIva()/100;
+                        $iva = ($subtotalAIU * $arConceptoServicio->getPorIva())/100;
                         $total = $subtotal + $iva;
                         $arPedidoDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto();
                         $arPedidoDetalleConcepto->setPedidoRel($arPedido);                        
-                        $arPedidoDetalleConcepto->setFacturaConceptoRel($arFacturaConcepto);
+                        $arPedidoDetalleConcepto->setConceptoServicioRel($arConceptoServicio);
                         $arPedidoDetalleConcepto->setPuestoRel($arPuesto);
-                        $arPedidoDetalleConcepto->setPorIva($arFacturaConcepto->getPorIva());
+                        $arPedidoDetalleConcepto->setPorIva($arConceptoServicio->getPorIva());
+                        $arPedidoDetalleConcepto->setPorBaseIva($arConceptoServicio->getPorBaseIva());
                         $arPedidoDetalleConcepto->setCantidad($cantidad);
                         $arPedidoDetalleConcepto->setPrecio($precio);
                         $arPedidoDetalleConcepto->setSubtotal($subtotal);                        
@@ -282,10 +283,10 @@ class PedidoController extends Controller
             }
         }
         
-        $arFacturaConceptos = new \Brasa\TurnoBundle\Entity\TurFacturaConcepto();
-        $arFacturaConceptos = $em->getRepository('BrasaTurnoBundle:TurFacturaConcepto')->findAll();        
+        $arConceptosServicio = new \Brasa\TurnoBundle\Entity\TurConceptoServicio();
+        $arConceptosServicio = $em->getRepository('BrasaTurnoBundle:TurConceptoServicio')->findBy(array('tipo' => 2));        
         return $this->render('BrasaTurnoBundle:Movimientos/Pedido:detalleOtroNuevo.html.twig', array(
-            'arFacturaConceptos' => $arFacturaConceptos,
+            'arConceptosServicio' => $arConceptosServicio,
             'form' => $form->createView()));
     }         
     
@@ -312,8 +313,10 @@ class PedidoController extends Controller
                         
                         $arPedidoDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto();                        
                         $arPedidoDetalleConcepto->setPedidoRel($arPedido);                         
-                        $arPedidoDetalleConcepto->setFacturaConceptoRel($arServicioDetalleConcepto->getFacturaConceptoRel());
+                        $arPedidoDetalleConcepto->setConceptoServicioRel($arServicioDetalleConcepto->getConceptoServicioRel());
                         $arPedidoDetalleConcepto->setPuestoRel($arServicioDetalleConcepto->getPuestoRel());
+                        $arPedidoDetalleConcepto->setPorIva($arServicioDetalleConcepto->getPorIva());
+                        $arPedidoDetalleConcepto->setPorBaseIva($arServicioDetalleConcepto->getPorBaseIva());
                         $arPedidoDetalleConcepto->setCantidad($arServicioDetalleConcepto->getCantidad());
                         $arPedidoDetalleConcepto->setIva($arServicioDetalleConcepto->getIva());
                         $arPedidoDetalleConcepto->setPrecio($arServicioDetalleConcepto->getPrecio());

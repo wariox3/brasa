@@ -44,6 +44,12 @@ class TurFacturaDetalleRepository extends EntityRepository {
                 $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($arFacturaDetalle->getCodigoPedidoDetalleFk());  
                 $arPedidoDetalle->setEstadoFacturado(0);
                 $em->persist($arPedidoDetalle);*/
+                if($arFacturaDetalle->getCodigoPedidoDetalleConceptoFk()) {
+                    $arPedidoDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto();
+                    $arPedidoDetalleConcepto = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleConcepto')->find($arFacturaDetalle->getCodigoPedidoDetalleConceptoFk());  
+                    $arPedidoDetalleConcepto->setEstadoFacturado(0);
+                    $em->persist($arPedidoDetalleConcepto);
+                }
                 $em->remove($arFacturaDetalle);                  
             }                                         
             $em->flush();       

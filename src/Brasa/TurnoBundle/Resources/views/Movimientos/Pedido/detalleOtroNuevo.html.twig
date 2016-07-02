@@ -23,13 +23,13 @@
                 <th>PRECIO</th>
                 <th></th>
             </tr>
-            {% for arFacturaConceptos in arFacturaConceptos %}
+            {% for arConceptosServicio in arConceptosServicio %}
             <tr>
-                <td>{{ arFacturaConceptos.codigoFacturaConceptoPk  }}</td>
-                <td>{{ arFacturaConceptos.nombre  }}</td>
-                <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arFacturaConceptos.codigoFacturaConceptoPk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
-                <td style="text-align: right"><input class="input-grid" type="text" name="TxtPrecio{{ arFacturaConceptos.codigoFacturaConceptoPk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                        
-                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturaConceptos.codigoFacturaConceptoPk }}" /></td>
+                <td>{{ arConceptosServicio.codigoConceptoServicioPk  }}</td>
+                <td>{{ arConceptosServicio.nombre  }}</td>
+                <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arConceptosServicio.codigoConceptoServicioPk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
+                <td style="text-align: right"><input class="input-grid" type="text" name="TxtPrecio{{ arConceptosServicio.codigoConceptoServicioPk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                        
+                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arConceptosServicio.codigoConceptoServicioPk }}" /></td>
             </tr>
 
             {% endfor %}

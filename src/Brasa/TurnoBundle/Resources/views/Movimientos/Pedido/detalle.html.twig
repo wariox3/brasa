@@ -256,7 +256,7 @@
                             <tr>
                                 <td>{{ arPedidoDetalleConceptos.codigoPedidoDetalleConceptoPk  }}<input type="hidden" name="LblCodigoConcepto[]" value="{{ arPedidoDetalleConceptos.codigoPedidoDetalleConceptoPk }}"></td>
                                 <td>{{ arPedidoDetalleConceptos.puestoRel.nombre | default('') }}</td>
-                                <td>{{ arPedidoDetalleConceptos.facturaConceptoRel.nombre | default('') }}</td>
+                                <td>{{ arPedidoDetalleConceptos.conceptoServicioRel.nombre | default('') }}</td>
                                 <td style="text-align: right">{{ arPedidoDetalleConceptos.porIva | number_format(0, '.', ',') }}</td>                                
                                 {% if arPedido.estadoAutorizado == 0 %}
                                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidadConcepto{{ arPedidoDetalleConceptos.codigoPedidoDetalleConceptoPk }}" value="{{ arPedidoDetalleConceptos.cantidad  }}" size="20" style="width:120px; text-align: right" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>

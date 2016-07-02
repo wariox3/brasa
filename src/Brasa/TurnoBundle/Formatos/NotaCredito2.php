@@ -120,14 +120,18 @@ class NotaCredito2 extends \FPDF_FPDF {
                     $pdf->SetX(15);
                     $pdf->Cell(10, 4, number_format($arFacturaDetalle->getCantidad(), 0, '.', ','), 0, 0, 'C');                        
                     $pdf->SetFont('Arial', 'B', 9);
-                    $pdf->Cell(124, 4, substr(utf8_decode($arFacturaDetalle->getPedidoDetalleRel()->getPuestoRel()->getNombre()) . '-'  . $arFacturaDetalle->getPedidoDetalleRel()->getModalidadServicioRel()->getNombre(), 0, 61), 0, 0, 'L');                        
+                    $modalidad = "";
+                    if($arFacturaDetalle->getCodigoModalidadServicioFk()) {
+                        $modalidad = $arFacturaDetalle->getModalidadServicioRel()->getNombre();
+                    }                    
+                    $pdf->Cell(124, 4, substr(utf8_decode($arFacturaDetalle->getPuestoRel()->getNombre()) . '-'  . $modalidad, 0, 61), 0, 0, 'L');                        
                     $pdf->SetFont('Arial', '', 9);
                     $pdf->Cell(28, 4, number_format($arFacturaDetalle->getVrPrecio(), 0, '.', ','), 0, 0, 'R');
                     $pdf->Cell(28, 4, number_format($arFacturaDetalle->getVrPrecio(), 0, '.', ','), 0, 0, 'R');
                     $pdf->Ln();
                     $pdf->SetX(15);
                     $pdf->Cell(10, 4, '', 0, 0, 'R');                                   
-                    $strCampo = $arFacturaDetalle->getPedidoDetalleRel()->getConceptoServicioRel()->getNombreFacturacion() . " " . $arFacturaDetalle->getDetalle();            
+                    $strCampo = $arFacturaDetalle->getConceptoServicioRel()->getNombreFacturacion() . " " . $arFacturaDetalle->getDetalle();            
                     $pdf->MultiCell(124, 4, $strCampo, 0, 'L'); 
                     //$pdf->Cell(110, 4, $strCampo, 0, 0, 'L');                        
                     $pdf->Cell(28, 4, '', 0, 0, 'R');

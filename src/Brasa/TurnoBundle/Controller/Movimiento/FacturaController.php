@@ -145,13 +145,7 @@ class FacturaController extends Controller
                 $arrControles = $request->request->All();
                 $this->actualizarDetalle($arrControles, $codigoFactura);                                 
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));
-            }
-            
-            if($form->get('BtnDetalleConceptoActualizar')->isClicked()) {   
-                $arrControles = $request->request->All();
-                $this->actualizarDetalleConcepto($arrControles, $codigoFactura);                                 
-                return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));
-            }
+            }           
             
             if($form->get('BtnAnular')->isClicked()) {                                 
                 $strResultado = $em->getRepository('BrasaTurnoBundle:TurFactura')->anular($codigoFactura);
@@ -166,12 +160,7 @@ class FacturaController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurFactura')->liquidar($codigoFactura);
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));
             }
-            if($form->get('BtnDetalleConceptoEliminar')->isClicked()) {   
-                $arrSeleccionados = $request->request->get('ChkSeleccionarFacturaConcepto');
-                $em->getRepository('BrasaTurnoBundle:TurFacturaDetalleConcepto')->eliminar($arrSeleccionados);
-                $em->getRepository('BrasaTurnoBundle:TurFactura')->liquidar($codigoFactura);
-                return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));
-            }            
+           
             if($form->get('BtnImprimir')->isClicked()) {
                 $strResultado = $em->getRepository('BrasaTurnoBundle:TurFactura')->imprimir($codigoFactura);
                 if($strResultado != "") {
@@ -201,12 +190,9 @@ class FacturaController extends Controller
         
         $dql = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->listaDql($codigoFactura);       
         $arFacturaDetalle = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 150);                
-        $arFacturaDetalleConceptos = new \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto();
-        $arFacturaDetalleConceptos = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalleConcepto')->findBy(array ('codigoFacturaFk' => $codigoFactura));        
         return $this->render('BrasaTurnoBundle:Movimientos/Factura:detalle.html.twig', array(
                     'arFactura' => $arFactura,
                     'arFacturaDetalle' => $arFacturaDetalle,
-                    'arFacturaDetalleConceptos' => $arFacturaDetalleConceptos,
                     'form' => $form->createView()
                     ));
     }
@@ -372,59 +358,7 @@ class FacturaController extends Controller
         return $this->render('BrasaTurnoBundle:Movimientos/Factura:detalleEditar.html.twig', array(
             'arFactura' => $arFactura,
             'form' => $form->createView()));
-    }    
-    
-    /**
-     * @Route("/tur/movimiento/factura/detalle/concepto/nuevo/{codigoFactura}", name="brs_tur_movimiento_factura_detalle_concepto_nuevo")
-     */
-    public function detalleConceptoNuevoAction($codigoFactura) {
-        $request = $this->getRequest();
-        $paginator  = $this->get('knp_paginator');
-        $em = $this->getDoctrine()->getManager();
-        $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
-        $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);        
-        $form = $this->formularioDetalleOtroNuevo();
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            if ($form->get('BtnGuardar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $arrControles = $request->request->All();
-                if(count($arrSeleccionados) > 0) {    
-                    foreach ($arrSeleccionados AS $codigo) {
-                        $arFacturaConcepto = new \Brasa\TurnoBundle\Entity\TurFacturaConcepto();
-                        $arFacturaConcepto = $em->getRepository('BrasaTurnoBundle:TurFacturaConcepto')->find($codigo);
-                        $cantidad = $arrControles['TxtCantidad' . $codigo];
-                        $precio = $arrControles['TxtPrecio' . $codigo];
-                        $subtotal = $cantidad * $precio;
-                        $iva = ($subtotal * $arFacturaConcepto->getPorIva())/100;
-                        $total = $subtotal + $iva;
-                        $arFacturaDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto();
-                        $arFacturaDetalleConcepto->setFacturaRel($arFactura);                        
-                        $arFacturaDetalleConcepto->setFacturaConceptoRel($arFacturaConcepto);                        
-                        $arFacturaDetalleConcepto->setPorIva($arFacturaConcepto->getPorIva());
-                        $arFacturaDetalleConcepto->setCantidad($cantidad);
-                        $arFacturaDetalleConcepto->setPrecio($precio);
-                        $arFacturaDetalleConcepto->setSubtotal($subtotal);                        
-                        $arFacturaDetalleConcepto->setIva($iva);
-                        $arFacturaDetalleConcepto->setTotal($total);
-                        $em->persist($arFacturaDetalleConcepto);  
-                    }
-                }
-                $em->flush();
-                $em->getRepository('BrasaTurnoBundle:TurFactura')->liquidar($codigoFactura);
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
-            } 
-            if ($form->get('BtnFiltrar')->isClicked()) {            
-                $this->filtrarDetalleNuevo($form);
-            }
-        }
-        
-        $arFacturaConceptos = new \Brasa\TurnoBundle\Entity\TurFacturaConcepto();
-        $arFacturaConceptos = $em->getRepository('BrasaTurnoBundle:TurFacturaConcepto')->findAll();        
-        return $this->render('BrasaTurnoBundle:Movimientos/Factura:detalleOtroNuevo.html.twig', array(
-            'arFacturaConceptos' => $arFacturaConceptos,
-            'form' => $form->createView()));
-    }    
+    }          
     
     /**
      * @Route("/tur/movimiento/factura/detalle/concepto/pedido/nuevo/{codigoFactura}", name="brs_tur_movimiento_factura_detalle_concepto_pedido_nuevo")
@@ -446,23 +380,23 @@ class FacturaController extends Controller
                     foreach ($arrSeleccionados AS $codigo) {   
                         $arPedidoDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto();
                         $arPedidoDetalleConcepto = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleConcepto')->find($codigo);
-                        
-                        $arFacturaDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto();                        
-                        $arFacturaDetalleConcepto->setFacturaRel($arFactura);                         
-                        $arFacturaDetalleConcepto->setFacturaConceptoRel($arPedidoDetalleConcepto->getFacturaConceptoRel());
-                        $arFacturaDetalleConcepto->setPedidoDetalleConceptoRel($arPedidoDetalleConcepto);
-                        $arFacturaDetalleConcepto->setCantidad($arPedidoDetalleConcepto->getCantidad());
-                        $arFacturaDetalleConcepto->setIva($arPedidoDetalleConcepto->getIva());
-                        $arFacturaDetalleConcepto->setPrecio($arPedidoDetalleConcepto->getPrecio());
-                        $arFacturaDetalleConcepto->setSubtotal($arPedidoDetalleConcepto->getSubtotal());
-                        $arFacturaDetalleConcepto->setTotal($arPedidoDetalleConcepto->getTotal());
-                        $em->persist($arFacturaDetalleConcepto);
+                        $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
+                        $arFacturaDetalle->setFacturaRel($arFactura);
+                        $arFacturaDetalle->setPuestoRel($arPedidoDetalleConcepto->getPuestoRel());
+                        $arFacturaDetalle->setConceptoServicioRel($arPedidoDetalleConcepto->getConceptoServicioRel());                        
+                        $arFacturaDetalle->setPedidoDetalleConceptoRel($arPedidoDetalleConcepto);
+                        $arFacturaDetalle->setCantidad($arPedidoDetalleConcepto->getCantidad());
+                        $arFacturaDetalle->setPorIva($arPedidoDetalleConcepto->getPorIva());                        
+                        $arFacturaDetalle->setPorBaseIva($arPedidoDetalleConcepto->getPorBaseIva());                                                
+                        $arFacturaDetalle->setVrPrecio($arPedidoDetalleConcepto->getPrecio());                                                                                                
+                        $arFacturaDetalle->setFechaProgramacion($arPedidoDetalleConcepto->getPedidoRel()->getFechaProgramacion());
+                        $em->persist($arFacturaDetalle);
                         $arPedidoDetalleConcepto->setEstadoFacturado(1);
                         $em->persist($arPedidoDetalleConcepto);                        
                     }
                     $em->flush();
                 }
-                $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoFactura);
+                $em->getRepository('BrasaTurnoBundle:TurFactura')->liquidar($codigoFactura);
             }
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
@@ -570,15 +504,11 @@ class FacturaController extends Controller
         $arrBotonVistaPrevia = array('label' => 'Vista previa', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
-        $arrBotonDetalleConceptoActualizar = array('label' => 'Actualizar', 'disabled' => false);
-        $arrBotonDetalleConceptoEliminar = array('label' => 'Eliminar', 'disabled' => false);
         
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;                        
             $arrBotonDetalleEliminar['disabled'] = true;            
-            $arrBotonDetalleActualizar['disabled'] = true;
-            $arrBotonDetalleConceptoActualizar['disabled'] = true;
-            $arrBotonDetalleConceptoEliminar['disabled'] = true;
+            $arrBotonDetalleActualizar['disabled'] = true;           
             $arrBotonAnular['disabled'] = false; 
             if($ar->getEstadoAnulado() == 1) {
                 $arrBotonDesAutorizar['disabled'] = true;
@@ -597,8 +527,6 @@ class FacturaController extends Controller
                     ->add('BtnAnular', 'submit', $arrBotonAnular)                
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
-                    ->add('BtnDetalleConceptoActualizar', 'submit', $arrBotonDetalleConceptoActualizar)
-                    ->add('BtnDetalleConceptoEliminar', 'submit', $arrBotonDetalleConceptoEliminar)
                     ->getForm();
         return $form;
     }
@@ -611,38 +539,7 @@ class FacturaController extends Controller
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->getForm();
         return $form;
-    }    
-    
-    private function formularioDetalleOtroNuevo() {
-        $form = $this->createFormBuilder()
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
-            ->getForm();
-        return $form;
-    } 
-    
-    private function actualizarDetalleConcepto($arrControles, $codigoFactura) {
-        $em = $this->getDoctrine()->getManager();
-        $intIndice = 0;
-        if(isset($arrControles['LblCodigoConcepto'])) {
-            foreach ($arrControles['LblCodigoConcepto'] as $intCodigo) {
-                $arFacturaDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto();
-                $arFacturaDetalleConcepto = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalleConcepto')->find($intCodigo);                
-                $cantidad = $arrControles['TxtCantidadConcepto' . $intCodigo];
-                $precio = $arrControles['TxtPrecioConcepto'. $intCodigo];                
-                $subtotal = $cantidad * $precio;
-                $iva = ($subtotal * $arFacturaDetalleConcepto->getPorIva())/100;
-                $total = $subtotal + $iva;                
-                $arFacturaDetalleConcepto->setCantidad($cantidad);
-                $arFacturaDetalleConcepto->setPrecio($precio);
-                $arFacturaDetalleConcepto->setSubtotal($subtotal);                        
-                $arFacturaDetalleConcepto->setIva($iva);
-                $arFacturaDetalleConcepto->setTotal($total);                                                             
-                $em->persist($arFacturaDetalleConcepto);
-            }
-            $em->flush();                
-            $em->getRepository('BrasaTurnoBundle:TurFactura')->liquidar($codigoFactura);            
-        }        
-    }    
+    }               
     
     private function actualizarDetalle($arrControles, $codigoFactura) {
         $em = $this->getDoctrine()->getManager();

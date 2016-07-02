@@ -19,7 +19,7 @@
         {% for arServicioDetalleConceptos in arServicioDetalleConceptos %}
             <tr>
                 <td>{{ arServicioDetalleConceptos.codigoServicioDetalleConceptoPk  }}<input type="hidden" name="LblCodigoConcepto[]" value="{{ arServicioDetalleConceptos.codigoServicioDetalleConceptoPk }}"></td>
-                <td>{{ arServicioDetalleConceptos.facturaConceptoRel.nombre | default('') }}</td>
+                <td>{{ arServicioDetalleConceptos.conceptoServicioRel.nombre | default('') }}</td>
                 <td style="text-align: right">{{ arServicioDetalleConceptos.porIva | number_format(0, '.', ',') }}</td>                                
                 <td style="text-align: right">{{ arServicioDetalleConceptos.cantidad | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arServicioDetalleConceptos.precio | number_format(0, '.', ',') }}</td>

@@ -206,20 +206,23 @@ class ServicioController extends Controller
             if ($form->get('BtnGuardar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $arrControles = $request->request->All();
+                $arPuesto = $form->get('puestoRel')->getData();
                 if(count($arrSeleccionados) > 0) {    
                     foreach ($arrSeleccionados AS $codigo) {
-                        $arFacturaConcepto = new \Brasa\TurnoBundle\Entity\TurFacturaConcepto();
-                        $arFacturaConcepto = $em->getRepository('BrasaTurnoBundle:TurFacturaConcepto')->find($codigo);
+                        $arConceptoServicio = new \Brasa\TurnoBundle\Entity\TurConceptoServicio();
+                        $arConceptoServicio = $em->getRepository('BrasaTurnoBundle:TurConceptoServicio')->find($codigo);
                         $cantidad = $arrControles['TxtCantidad' . $codigo];
                         $precio = $arrControles['TxtPrecio' . $codigo];                        
                         $subtotal = $cantidad * $precio;
-                        $subtotalAIU = $subtotal * 10/100;
-                        $iva = ($subtotalAIU * $arFacturaConcepto->getPorIva())/100;
+                        $subtotalAIU = $subtotal * $arConceptoServicio->getPorBaseIva()/100;
+                        $iva = ($subtotalAIU * $arConceptoServicio->getPorIva())/100;
                         $total = $subtotal + $iva;
                         $arServicioDetalleConcepto = new \Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto();
                         $arServicioDetalleConcepto->setServicioRel($arServicio);                        
-                        $arServicioDetalleConcepto->setFacturaConceptoRel($arFacturaConcepto);
-                        $arServicioDetalleConcepto->setPorIva($arFacturaConcepto->getPorIva());
+                        $arServicioDetalleConcepto->setConceptoServicioRel($arConceptoServicio);
+                        $arServicioDetalleConcepto->setPuestoRel($arPuesto);
+                        $arServicioDetalleConcepto->setPorIva($arConceptoServicio->getPorIva());
+                        $arServicioDetalleConcepto->setPorBaseIva($arConceptoServicio->getPorBaseIva());
                         $arServicioDetalleConcepto->setCantidad($cantidad);
                         $arServicioDetalleConcepto->setPrecio($precio);
                         $arServicioDetalleConcepto->setSubtotal($subtotal);                        
@@ -237,10 +240,10 @@ class ServicioController extends Controller
             }
         }
         
-        $arFacturaConceptos = new \Brasa\TurnoBundle\Entity\TurFacturaConcepto();
-        $arFacturaConceptos = $em->getRepository('BrasaTurnoBundle:TurFacturaConcepto')->findAll();        
+        $arConceptosServicio = new \Brasa\TurnoBundle\Entity\TurConceptoServicio();
+        $arConceptosServicio = $em->getRepository('BrasaTurnoBundle:TurConceptoServicio')->findBy(array('tipo' => 2));        
         return $this->render('BrasaTurnoBundle:Movimientos/Servicio:detalleOtroNuevo.html.twig', array(
-            'arFacturaConceptos' => $arFacturaConceptos,
+            'arConceptosServicio' => $arConceptosServicio,
             'form' => $form->createView()));
     }     
     

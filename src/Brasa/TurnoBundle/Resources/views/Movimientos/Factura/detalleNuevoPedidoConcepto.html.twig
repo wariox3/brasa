@@ -7,6 +7,7 @@
     <table class="table table-striped table-bordered table-condensed">
         <tr>
             <th>COD</th>
+            <th>PUESTO</th>
             <th>NOMBRE</th>
             <th>%IVA</th>
             <th>CANTIDAD</th>
@@ -19,7 +20,8 @@
         {% for arPedidoDetalleConceptos in arPedidoDetalleConceptos %}
             <tr>
                 <td>{{ arPedidoDetalleConceptos.codigoPedidoDetalleConceptoPk  }}<input type="hidden" name="LblCodigoConcepto[]" value="{{ arPedidoDetalleConceptos.codigoPedidoDetalleConceptoPk }}"></td>
-                <td>{{ arPedidoDetalleConceptos.facturaConceptoRel.nombre | default('') }}</td>
+                <td>{{ arPedidoDetalleConceptos.puestoRel.nombre | default('')}}</td>
+                <td>{{ arPedidoDetalleConceptos.conceptoServicioRel.nombre | default('') }}</td>
                 <td style="text-align: right">{{ arPedidoDetalleConceptos.porIva | number_format(0, '.', ',') }}</td>                                
                 <td style="text-align: right">{{ arPedidoDetalleConceptos.cantidad | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidoDetalleConceptos.precio | number_format(0, '.', ',') }}</td>

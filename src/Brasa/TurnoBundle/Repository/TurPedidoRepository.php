@@ -438,7 +438,7 @@ class TurPedidoRepository extends EntityRepository {
             $arFacturaDetalle->setDetalle($arPedidoDetalle->getDetalle());
             $em->persist($arFacturaDetalle);                                
         }                         
-        $arPedidoDetalleConceptos = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto();
+        /*$arPedidoDetalleConceptos = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto();
         $arPedidoDetalleConceptos =  $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleConcepto')->findBy(array('codigoPedidoFk' => $codigoPedido));                     
         foreach ($arPedidoDetalleConceptos as $arPedidoDetalleConcepto) {
             $arPedidoDetalleConceptoAct = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto();
@@ -456,7 +456,7 @@ class TurPedidoRepository extends EntityRepository {
             $arFacturaDetalleConcepto->setSubtotal($arPedidoDetalleConcepto->getSubtotal());
             $arFacturaDetalleConcepto->setTotal($arPedidoDetalleConcepto->getTotal());
             $em->persist($arFacturaDetalleConcepto);                          
-        }
+        }*/
                     
         $em->flush();  
         $codigoFactura = $arFactura->getCodigoFacturaPk();

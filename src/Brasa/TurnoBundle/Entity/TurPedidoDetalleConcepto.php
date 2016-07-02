@@ -48,6 +48,11 @@ class TurPedidoDetalleConcepto
     private $porIva = 0;    
 
     /**
+     * @ORM\Column(name="por_base_iva", type="integer")
+     */
+    private $porBaseIva = 0;     
+    
+    /**
      * @ORM\Column(name="iva", type="float")
      */
     private $iva = 0;         
@@ -90,6 +95,11 @@ class TurPedidoDetalleConcepto
      */
     protected $facturasDetallesConceptosPedidoDetalleConceptoRel; 
 
+    /**
+     * @ORM\OneToMany(targetEntity="TurFacturaDetalle", mappedBy="pedidoDetalleConceptoRel")
+     */
+    protected $facturasDetallesPedidoDetalleConceptoRel; 
+    
     /**
      * Constructor
      */
@@ -452,5 +462,63 @@ class TurPedidoDetalleConcepto
     public function getFacturasDetallesConceptosPedidoDetalleConceptoRel()
     {
         return $this->facturasDetallesConceptosPedidoDetalleConceptoRel;
+    }
+
+    /**
+     * Set porBaseIva
+     *
+     * @param integer $porBaseIva
+     *
+     * @return TurPedidoDetalleConcepto
+     */
+    public function setPorBaseIva($porBaseIva)
+    {
+        $this->porBaseIva = $porBaseIva;
+
+        return $this;
+    }
+
+    /**
+     * Get porBaseIva
+     *
+     * @return integer
+     */
+    public function getPorBaseIva()
+    {
+        return $this->porBaseIva;
+    }
+
+    /**
+     * Add facturasDetallesPedidoDetalleConceptoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesPedidoDetalleConceptoRel
+     *
+     * @return TurPedidoDetalleConcepto
+     */
+    public function addFacturasDetallesPedidoDetalleConceptoRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesPedidoDetalleConceptoRel)
+    {
+        $this->facturasDetallesPedidoDetalleConceptoRel[] = $facturasDetallesPedidoDetalleConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasDetallesPedidoDetalleConceptoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesPedidoDetalleConceptoRel
+     */
+    public function removeFacturasDetallesPedidoDetalleConceptoRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesPedidoDetalleConceptoRel)
+    {
+        $this->facturasDetallesPedidoDetalleConceptoRel->removeElement($facturasDetallesPedidoDetalleConceptoRel);
+    }
+
+    /**
+     * Get facturasDetallesPedidoDetalleConceptoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasDetallesPedidoDetalleConceptoRel()
+    {
+        return $this->facturasDetallesPedidoDetalleConceptoRel;
     }
 }

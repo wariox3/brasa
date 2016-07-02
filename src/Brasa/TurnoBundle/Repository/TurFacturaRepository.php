@@ -85,11 +85,6 @@ class TurFacturaRepository extends EntityRepository {
             $baseIva += $baseIvaDetalle;
             $total += $totalDetalle;
         }
-        /*$arFacturasDetalleConceptos = new \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto();        
-        $arFacturasDetalleConceptos = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalleConcepto')->findBy(array('codigoFacturaFk' => $codigoFactura));                         
-        foreach ($arFacturasDetalleConceptos as $arFacturasDetalleConcepto) {            
-            $floSubTotalConceptos += $arFacturasDetalleConcepto->getSubtotal();
-        }*/
         $retencionFuente = 0;
         if(($baseIva) >= $arConfiguracion->getBaseRetencionFuente()) {
             $retencionFuente = (($baseIva) * 2 ) / 100;
