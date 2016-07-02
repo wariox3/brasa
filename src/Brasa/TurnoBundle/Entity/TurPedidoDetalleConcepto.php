@@ -20,12 +20,7 @@ class TurPedidoDetalleConcepto
     /**
      * @ORM\Column(name="codigo_pedido_fk", type="integer")
      */    
-    private $codigoPedidoFk;         
-    
-    /**
-     * @ORM\Column(name="codigo_factura_concepto_fk", type="integer")
-     */    
-    private $codigoFacturaConceptoFk;        
+    private $codigoPedidoFk;                    
     
     /**
      * @ORM\Column(name="codigo_puesto_fk", type="integer", nullable=true)
@@ -77,12 +72,6 @@ class TurPedidoDetalleConcepto
      * @ORM\JoinColumn(name="codigo_pedido_fk", referencedColumnName="codigo_pedido_pk")
      */
     protected $pedidoRel;          
-
-    /**
-     * @ORM\ManyToOne(targetEntity="TurFacturaConcepto", inversedBy="pedidosDetallesConceptosFacturaConceptoRel")
-     * @ORM\JoinColumn(name="codigo_factura_concepto_fk", referencedColumnName="codigo_factura_concepto_pk")
-     */
-    protected $facturaConceptoRel; 
     
     /**
      * @ORM\ManyToOne(targetEntity="TurPuesto", inversedBy="pedidosDetallesConceptosPuestoRel")
@@ -101,6 +90,13 @@ class TurPedidoDetalleConcepto
      */
     protected $facturasDetallesConceptosPedidoDetalleConceptoRel; 
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->facturasDetallesConceptosPedidoDetalleConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoPedidoDetalleConceptoPk
@@ -137,27 +133,51 @@ class TurPedidoDetalleConcepto
     }
 
     /**
-     * Set codigoFacturaConceptoFk
+     * Set codigoPuestoFk
      *
-     * @param integer $codigoFacturaConceptoFk
+     * @param integer $codigoPuestoFk
      *
      * @return TurPedidoDetalleConcepto
      */
-    public function setCodigoFacturaConceptoFk($codigoFacturaConceptoFk)
+    public function setCodigoPuestoFk($codigoPuestoFk)
     {
-        $this->codigoFacturaConceptoFk = $codigoFacturaConceptoFk;
+        $this->codigoPuestoFk = $codigoPuestoFk;
 
         return $this;
     }
 
     /**
-     * Get codigoFacturaConceptoFk
+     * Get codigoPuestoFk
      *
      * @return integer
      */
-    public function getCodigoFacturaConceptoFk()
+    public function getCodigoPuestoFk()
     {
-        return $this->codigoFacturaConceptoFk;
+        return $this->codigoPuestoFk;
+    }
+
+    /**
+     * Set codigoConceptoServicioFk
+     *
+     * @param integer $codigoConceptoServicioFk
+     *
+     * @return TurPedidoDetalleConcepto
+     */
+    public function setCodigoConceptoServicioFk($codigoConceptoServicioFk)
+    {
+        $this->codigoConceptoServicioFk = $codigoConceptoServicioFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoConceptoServicioFk
+     *
+     * @return integer
+     */
+    public function getCodigoConceptoServicioFk()
+    {
+        return $this->codigoConceptoServicioFk;
     }
 
     /**
@@ -305,6 +325,30 @@ class TurPedidoDetalleConcepto
     }
 
     /**
+     * Set estadoFacturado
+     *
+     * @param boolean $estadoFacturado
+     *
+     * @return TurPedidoDetalleConcepto
+     */
+    public function setEstadoFacturado($estadoFacturado)
+    {
+        $this->estadoFacturado = $estadoFacturado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoFacturado
+     *
+     * @return boolean
+     */
+    public function getEstadoFacturado()
+    {
+        return $this->estadoFacturado;
+    }
+
+    /**
      * Set pedidoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurPedido $pedidoRel
@@ -329,58 +373,51 @@ class TurPedidoDetalleConcepto
     }
 
     /**
-     * Set facturaConceptoRel
+     * Set puestoRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurFacturaConcepto $facturaConceptoRel
+     * @param \Brasa\TurnoBundle\Entity\TurPuesto $puestoRel
      *
      * @return TurPedidoDetalleConcepto
      */
-    public function setFacturaConceptoRel(\Brasa\TurnoBundle\Entity\TurFacturaConcepto $facturaConceptoRel = null)
+    public function setPuestoRel(\Brasa\TurnoBundle\Entity\TurPuesto $puestoRel = null)
     {
-        $this->facturaConceptoRel = $facturaConceptoRel;
+        $this->puestoRel = $puestoRel;
 
         return $this;
     }
 
     /**
-     * Get facturaConceptoRel
+     * Get puestoRel
      *
-     * @return \Brasa\TurnoBundle\Entity\TurFacturaConcepto
+     * @return \Brasa\TurnoBundle\Entity\TurPuesto
      */
-    public function getFacturaConceptoRel()
+    public function getPuestoRel()
     {
-        return $this->facturaConceptoRel;
+        return $this->puestoRel;
     }
 
     /**
-     * Set estadoFacturado
+     * Set conceptoServicioRel
      *
-     * @param boolean $estadoFacturado
+     * @param \Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel
      *
      * @return TurPedidoDetalleConcepto
      */
-    public function setEstadoFacturado($estadoFacturado)
+    public function setConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel = null)
     {
-        $this->estadoFacturado = $estadoFacturado;
+        $this->conceptoServicioRel = $conceptoServicioRel;
 
         return $this;
     }
 
     /**
-     * Get estadoFacturado
+     * Get conceptoServicioRel
      *
-     * @return boolean
+     * @return \Brasa\TurnoBundle\Entity\TurConceptoServicio
      */
-    public function getEstadoFacturado()
+    public function getConceptoServicioRel()
     {
-        return $this->estadoFacturado;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->facturasDetallesConceptosPedidoDetalleConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        return $this->conceptoServicioRel;
     }
 
     /**
@@ -415,101 +452,5 @@ class TurPedidoDetalleConcepto
     public function getFacturasDetallesConceptosPedidoDetalleConceptoRel()
     {
         return $this->facturasDetallesConceptosPedidoDetalleConceptoRel;
-    }
-
-    /**
-     * Set codigoPuestoFk
-     *
-     * @param integer $codigoPuestoFk
-     *
-     * @return TurPedidoDetalleConcepto
-     */
-    public function setCodigoPuestoFk($codigoPuestoFk)
-    {
-        $this->codigoPuestoFk = $codigoPuestoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoPuestoFk
-     *
-     * @return integer
-     */
-    public function getCodigoPuestoFk()
-    {
-        return $this->codigoPuestoFk;
-    }
-
-    /**
-     * Set puestoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurPuesto $puestoRel
-     *
-     * @return TurPedidoDetalleConcepto
-     */
-    public function setPuestoRel(\Brasa\TurnoBundle\Entity\TurPuesto $puestoRel = null)
-    {
-        $this->puestoRel = $puestoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get puestoRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurPuesto
-     */
-    public function getPuestoRel()
-    {
-        return $this->puestoRel;
-    }
-
-    /**
-     * Set codigoConceptoServicioFk
-     *
-     * @param integer $codigoConceptoServicioFk
-     *
-     * @return TurPedidoDetalleConcepto
-     */
-    public function setCodigoConceptoServicioFk($codigoConceptoServicioFk)
-    {
-        $this->codigoConceptoServicioFk = $codigoConceptoServicioFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoConceptoServicioFk
-     *
-     * @return integer
-     */
-    public function getCodigoConceptoServicioFk()
-    {
-        return $this->codigoConceptoServicioFk;
-    }
-
-    /**
-     * Set conceptoServicioRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel
-     *
-     * @return TurPedidoDetalleConcepto
-     */
-    public function setConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel = null)
-    {
-        $this->conceptoServicioRel = $conceptoServicioRel;
-
-        return $this;
-    }
-
-    /**
-     * Get conceptoServicioRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurConceptoServicio
-     */
-    public function getConceptoServicioRel()
-    {
-        return $this->conceptoServicioRel;
     }
 }

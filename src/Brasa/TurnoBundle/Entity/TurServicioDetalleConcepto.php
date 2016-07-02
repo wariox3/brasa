@@ -20,12 +20,7 @@ class TurServicioDetalleConcepto
     /**
      * @ORM\Column(name="codigo_servicio_fk", type="integer")
      */    
-    private $codigoServicioFk;         
-    
-    /**
-     * @ORM\Column(name="codigo_factura_concepto_fk", type="integer")
-     */    
-    private $codigoFacturaConceptoFk;        
+    private $codigoServicioFk;                   
     
     /**
      * @ORM\Column(name="codigo_puesto_fk", type="integer", nullable=true)
@@ -91,6 +86,8 @@ class TurServicioDetalleConcepto
      */
     protected $conceptoServicioRel;     
     
+
+
     /**
      * Get codigoServicioDetalleConceptoPk
      *
@@ -126,27 +123,51 @@ class TurServicioDetalleConcepto
     }
 
     /**
-     * Set codigoFacturaConceptoFk
+     * Set codigoPuestoFk
      *
-     * @param integer $codigoFacturaConceptoFk
+     * @param integer $codigoPuestoFk
      *
      * @return TurServicioDetalleConcepto
      */
-    public function setCodigoFacturaConceptoFk($codigoFacturaConceptoFk)
+    public function setCodigoPuestoFk($codigoPuestoFk)
     {
-        $this->codigoFacturaConceptoFk = $codigoFacturaConceptoFk;
+        $this->codigoPuestoFk = $codigoPuestoFk;
 
         return $this;
     }
 
     /**
-     * Get codigoFacturaConceptoFk
+     * Get codigoPuestoFk
      *
      * @return integer
      */
-    public function getCodigoFacturaConceptoFk()
+    public function getCodigoPuestoFk()
     {
-        return $this->codigoFacturaConceptoFk;
+        return $this->codigoPuestoFk;
+    }
+
+    /**
+     * Set codigoConceptoServicioFk
+     *
+     * @param integer $codigoConceptoServicioFk
+     *
+     * @return TurServicioDetalleConcepto
+     */
+    public function setCodigoConceptoServicioFk($codigoConceptoServicioFk)
+    {
+        $this->codigoConceptoServicioFk = $codigoConceptoServicioFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoConceptoServicioFk
+     *
+     * @return integer
+     */
+    public function getCodigoConceptoServicioFk()
+    {
+        return $this->codigoConceptoServicioFk;
     }
 
     /**
@@ -342,30 +363,6 @@ class TurServicioDetalleConcepto
     }
 
     /**
-     * Set codigoPuestoFk
-     *
-     * @param integer $codigoPuestoFk
-     *
-     * @return TurServicioDetalleConcepto
-     */
-    public function setCodigoPuestoFk($codigoPuestoFk)
-    {
-        $this->codigoPuestoFk = $codigoPuestoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoPuestoFk
-     *
-     * @return integer
-     */
-    public function getCodigoPuestoFk()
-    {
-        return $this->codigoPuestoFk;
-    }
-
-    /**
      * Set puestoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurPuesto $puestoRel
@@ -387,30 +384,6 @@ class TurServicioDetalleConcepto
     public function getPuestoRel()
     {
         return $this->puestoRel;
-    }
-
-    /**
-     * Set codigoConceptoServicioFk
-     *
-     * @param integer $codigoConceptoServicioFk
-     *
-     * @return TurServicioDetalleConcepto
-     */
-    public function setCodigoConceptoServicioFk($codigoConceptoServicioFk)
-    {
-        $this->codigoConceptoServicioFk = $codigoConceptoServicioFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoConceptoServicioFk
-     *
-     * @return integer
-     */
-    public function getCodigoConceptoServicioFk()
-    {
-        return $this->codigoConceptoServicioFk;
     }
 
     /**

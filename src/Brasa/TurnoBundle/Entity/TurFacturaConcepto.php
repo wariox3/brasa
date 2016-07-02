@@ -42,24 +42,13 @@ class TurFacturaConcepto
      * @ORM\OneToMany(targetEntity="TurFacturaDetalleConcepto", mappedBy="facturaConceptoRel")
      */
     protected $facturasDetallesConceptosFacturaConceptoRel; 
-    
-    /**
-     * @ORM\OneToMany(targetEntity="TurServicioDetalleConcepto", mappedBy="facturaConceptoRel")
-     */
-    protected $serviciosDetallesConceptosFacturaConceptoRel;     
-    
-    /**
-     * @ORM\OneToMany(targetEntity="TurPedidoDetalleConcepto", mappedBy="facturaConceptoRel")
-     */
-    protected $pedidosDetallesConceptosFacturaConceptoRel;      
-    
+         
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->facturasDetallesConceptosFacturaConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->serviciosDetallesConceptosFacturaConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -121,108 +110,6 @@ class TurFacturaConcepto
     }
 
     /**
-     * Add facturasDetallesConceptosFacturaConceptoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosFacturaConceptoRel
-     *
-     * @return TurFacturaConcepto
-     */
-    public function addFacturasDetallesConceptosFacturaConceptoRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosFacturaConceptoRel)
-    {
-        $this->facturasDetallesConceptosFacturaConceptoRel[] = $facturasDetallesConceptosFacturaConceptoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove facturasDetallesConceptosFacturaConceptoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosFacturaConceptoRel
-     */
-    public function removeFacturasDetallesConceptosFacturaConceptoRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosFacturaConceptoRel)
-    {
-        $this->facturasDetallesConceptosFacturaConceptoRel->removeElement($facturasDetallesConceptosFacturaConceptoRel);
-    }
-
-    /**
-     * Get facturasDetallesConceptosFacturaConceptoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFacturasDetallesConceptosFacturaConceptoRel()
-    {
-        return $this->facturasDetallesConceptosFacturaConceptoRel;
-    }
-
-    /**
-     * Add serviciosDetallesConceptosFacturaConceptoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto $serviciosDetallesConceptosFacturaConceptoRel
-     *
-     * @return TurFacturaConcepto
-     */
-    public function addServiciosDetallesConceptosFacturaConceptoRel(\Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto $serviciosDetallesConceptosFacturaConceptoRel)
-    {
-        $this->serviciosDetallesConceptosFacturaConceptoRel[] = $serviciosDetallesConceptosFacturaConceptoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove serviciosDetallesConceptosFacturaConceptoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto $serviciosDetallesConceptosFacturaConceptoRel
-     */
-    public function removeServiciosDetallesConceptosFacturaConceptoRel(\Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto $serviciosDetallesConceptosFacturaConceptoRel)
-    {
-        $this->serviciosDetallesConceptosFacturaConceptoRel->removeElement($serviciosDetallesConceptosFacturaConceptoRel);
-    }
-
-    /**
-     * Get serviciosDetallesConceptosFacturaConceptoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getServiciosDetallesConceptosFacturaConceptoRel()
-    {
-        return $this->serviciosDetallesConceptosFacturaConceptoRel;
-    }
-
-    /**
-     * Add pedidosDetallesConceptosFacturaConceptoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidosDetallesConceptosFacturaConceptoRel
-     *
-     * @return TurFacturaConcepto
-     */
-    public function addPedidosDetallesConceptosFacturaConceptoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidosDetallesConceptosFacturaConceptoRel)
-    {
-        $this->pedidosDetallesConceptosFacturaConceptoRel[] = $pedidosDetallesConceptosFacturaConceptoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove pedidosDetallesConceptosFacturaConceptoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidosDetallesConceptosFacturaConceptoRel
-     */
-    public function removePedidosDetallesConceptosFacturaConceptoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto $pedidosDetallesConceptosFacturaConceptoRel)
-    {
-        $this->pedidosDetallesConceptosFacturaConceptoRel->removeElement($pedidosDetallesConceptosFacturaConceptoRel);
-    }
-
-    /**
-     * Get pedidosDetallesConceptosFacturaConceptoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPedidosDetallesConceptosFacturaConceptoRel()
-    {
-        return $this->pedidosDetallesConceptosFacturaConceptoRel;
-    }
-
-    /**
      * Set codigoConceptoServicioFk
      *
      * @param integer $codigoConceptoServicioFk
@@ -268,5 +155,39 @@ class TurFacturaConcepto
     public function getConceptoServicioRel()
     {
         return $this->conceptoServicioRel;
+    }
+
+    /**
+     * Add facturasDetallesConceptosFacturaConceptoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosFacturaConceptoRel
+     *
+     * @return TurFacturaConcepto
+     */
+    public function addFacturasDetallesConceptosFacturaConceptoRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosFacturaConceptoRel)
+    {
+        $this->facturasDetallesConceptosFacturaConceptoRel[] = $facturasDetallesConceptosFacturaConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasDetallesConceptosFacturaConceptoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosFacturaConceptoRel
+     */
+    public function removeFacturasDetallesConceptosFacturaConceptoRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosFacturaConceptoRel)
+    {
+        $this->facturasDetallesConceptosFacturaConceptoRel->removeElement($facturasDetallesConceptosFacturaConceptoRel);
+    }
+
+    /**
+     * Get facturasDetallesConceptosFacturaConceptoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasDetallesConceptosFacturaConceptoRel()
+    {
+        return $this->facturasDetallesConceptosFacturaConceptoRel;
     }
 }
