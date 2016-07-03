@@ -11,6 +11,7 @@ class TurConceptoServicioType extends AbstractType
         $builder
             ->add('nombre', 'text', array('required' => true))            
             ->add('nombreFacturacion', 'text', array('required' => true))            
+            ->add('nombreFacturacionAdicional', 'text', array('required' => true))            
             ->add('tipo', 'number')
             ->add('porBaseIva', 'number')
             ->add('porIva', 'number')

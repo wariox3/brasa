@@ -130,8 +130,13 @@ class Factura2 extends \FPDF_FPDF {
                     $pdf->Cell(28, 4, number_format($arFacturaDetalle->getVrPrecio(), 0, '.', ','), 0, 0, 'R');
                     $pdf->Ln();
                     $pdf->SetX(15);
-                    $pdf->Cell(10, 4, '', 0, 0, 'R');                                   
-                    $strCampo = $arFacturaDetalle->getConceptoServicioRel()->getNombreFacturacion() . " " . $arFacturaDetalle->getDetalle();            
+                    $pdf->Cell(10, 4, '', 0, 0, 'R');     
+                    if($arFacturaDetalle->getTipoPedido() == 'FIJO') {
+                        $strCampo = $arFacturaDetalle->getConceptoServicioRel()->getNombreFacturacion() . " " . $arFacturaDetalle->getDetalle();                                    
+                    } else {
+                        $strCampo = $arFacturaDetalle->getConceptoServicioRel()->getNombreFacturacionAdicional() . " " . $arFacturaDetalle->getDetalle();                                    
+                    }
+                    
                     $pdf->MultiCell(124, 4, $strCampo, 0, 'L'); 
                     //$pdf->Cell(110, 4, $strCampo, 0, 0, 'L');                        
                     $pdf->Cell(28, 4, '', 0, 0, 'R');
