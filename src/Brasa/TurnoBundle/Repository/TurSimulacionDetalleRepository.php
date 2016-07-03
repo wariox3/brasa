@@ -118,7 +118,7 @@ class TurSimulacionDetalleRepository extends EntityRepository {
         return $boolResultado;
     }    
 
-    public function nuevo($codigoServicioDetalle, $fechaProgramacion) {
+    public function nuevo($codigoServicioDetalle, $fechaProgramacion, $usuario = '') {
         $em = $this->getEntityManager();
         $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
         $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigoServicioDetalle);
@@ -147,6 +147,7 @@ class TurSimulacionDetalleRepository extends EntityRepository {
                     $arSimulacionDetalle->setAnio($fechaProgramacion->format('Y'));
                     $arSimulacionDetalle->setMes($fechaProgramacion->format('m'));                        
                     $arSimulacionDetalle->setRecursoRel($arServicioDetalleRecurso->getRecursoRel());
+                    $arSimulacionDetalle->setUsuario($usuario);
                     for($i = 1; $i < 32; $i++) {                        
                         $strTurno = $arrTurnos[$intPosicionPlantilla];
                         $strFechaDia = $fechaProgramacion->format('Y-m-') . $i;                            
@@ -310,6 +311,7 @@ class TurSimulacionDetalleRepository extends EntityRepository {
                     $arSimulacionDetalle->setAnio($fechaProgramacion->format('Y'));
                     $arSimulacionDetalle->setMes($fechaProgramacion->format('m')); 
                     $arSimulacionDetalle->setRecursoRel($arServicioDetalleRecurso->getRecursoRel());
+                    $arSimulacionDetalle->setUsuario($usuario);
                     for($i = 1; $i < 32; $i++) {                            
                         $strTurno = $arrTurnos[$intPosicionPlantilla];
                         $strFechaDia = $fechaProgramacion->format('Y-m-') . $i;

@@ -213,6 +213,11 @@ class TurSimulacionDetalle
     private $vrHoraRecurso = 0;      
 
     /**
+     * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
+     */    
+    private $usuario;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurRecurso", inversedBy="simulacionesDetallesRecursoRel")
      * @ORM\JoinColumn(name="codigo_recurso_fk", referencedColumnName="codigo_recurso_pk")
      */
@@ -1217,5 +1222,29 @@ class TurSimulacionDetalle
     public function getPuestoRel()
     {
         return $this->puestoRel;
+    }
+
+    /**
+     * Set usuario
+     *
+     * @param string $usuario
+     *
+     * @return TurSimulacionDetalle
+     */
+    public function setUsuario($usuario)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return string
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
     }
 }

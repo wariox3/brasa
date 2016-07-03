@@ -22,10 +22,14 @@ class SimularProgramacionController extends Controller
         $form = $this->formularioLista();
         $form->handleRequest($request);        
         $fechaProgramacion = $form->get('fecha')->getData();
+        $usuario = $this->getUser()->getUserName();
         if($form->isValid()) {
             if($form->get('BtnGenerar')->isClicked()) {      
-                $strSql = "DELETE FROM tur_simulacion_detalle WHERE 1 ";           
-                $em->getConnection()->executeQuery($strSql);                
+                
+                $strSql = "DELETE FROM tur_simulacion_detalle WHERE usuario = '" . $usuario . "'";           
+                $em->getConnection()->executeQuery($strSql);      
+
+                
                 $arServicio = new \Brasa\TurnoBundle\Entity\TurServicio();
                 $arServicio = $em->getRepository('BrasaTurnoBundle:TurServicio')->find($codigoServicio); 
                 $arServicioDetalles = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
@@ -35,7 +39,7 @@ class SimularProgramacionController extends Controller
                     $arServicioDetalles = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->findBy(array('codigoServicioFk' => $codigoServicio, 'codigoServicioDetallePk' => $codigoServicioDetalle));                                    
                 }                
                 foreach ($arServicioDetalles as $arServicioDetalle) {            
-                    $em->getRepository('BrasaTurnoBundle:TurSimulacionDetalle')->nuevo($arServicioDetalle->getCodigoServicioDetallePk(), $fechaProgramacion);
+                    $em->getRepository('BrasaTurnoBundle:TurSimulacionDetalle')->nuevo($arServicioDetalle->getCodigoServicioDetallePk(), $fechaProgramacion, $usuario);
                 }     
                 $fechaProgramacion = $form->get('fecha')->getData();
                 $arConfiguracion = new \Brasa\TurnoBundle\Entity\TurConfiguracion();
@@ -64,7 +68,7 @@ class SimularProgramacionController extends Controller
         }        
         //$dql = $em->getRepository('BrasaTurnoBundle:TurProgramacionInconsistencia')->listaDql();
         //$arProgramacionInconsistencias = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 200);
-        $arSimulacionDetalle = $em->getRepository('BrasaTurnoBundle:TurSimulacionDetalle')->findAll();
+        $arSimulacionDetalle = $em->getRepository('BrasaTurnoBundle:TurSimulacionDetalle')->findBy(array('usuario' => $usuario));
         return $this->render('BrasaTurnoBundle:Utilidades/Simular:programacion.html.twig', array(            
             'arSimulacionDetalle' => $arSimulacionDetalle,
             'arrDiaSemana' => $arrDiaSemana,

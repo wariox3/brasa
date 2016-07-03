@@ -203,7 +203,7 @@ class ServiciosDetallesController extends Controller
             foreach ($arServiciosDetallesConceptos as $arServicioDetalleConcepto) {   
                 $objPHPExcel->setActiveSheetIndex(1)
                         ->setCellValue('A' . $i, $arServicioDetalleConcepto->getServicioRel()->getClienteRel()->getNombreCorto())                                        
-                        ->setCellValue('B' . $i, $arServicioDetalleConcepto->getFacturaConceptoRel()->getNombre())                                        
+                        ->setCellValue('B' . $i, $arServicioDetalleConcepto->getConceptoServicioRel()->getNombre())                                        
                         ->setCellValue('C' . $i, $arServicioDetalleConcepto->getCantidad())
                         ->setCellValue('D' . $i, $arServicioDetalleConcepto->getPrecio())                    
                         ->setCellValue('E' . $i, $arServicioDetalleConcepto->getSubtotal())
