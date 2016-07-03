@@ -23,11 +23,20 @@ class TurServicioDetalleRepository extends EntityRepository {
         return $dql;
     }    
     
-    public function listaConsultaDql($codigoServicio = "", $codigoCliente = "") {
+    public function listaConsultaDql($codigoServicio = "", $codigoCliente = "", $estadoCerrado, $fechaHasta = "") {
         $dql   = "SELECT sd FROM BrasaTurnoBundle:TurServicioDetalle sd JOIN sd.servicioRel s WHERE sd.codigoServicioDetallePk <> 0 ";                
         if($codigoCliente != '') {
             $dql .= "AND s.codigoClienteFk = " . $codigoCliente;  
         }
+        if($estadoCerrado == 1 ) {
+            $dql .= " AND sd.estadoCerrad0 = 1";
+        }
+        if($estadoCerrado == "0") {
+            $dql .= " AND sd.estadoCerrado = 0";
+        } 
+        if($fechaHasta != "") {
+            $dql .= " AND sd.fechaHasta >= '" . $fechaHasta . "'";
+        }         
         $dql .= " ORDER BY s.codigoClienteFk, sd.codigoGrupoFacturacionFk, sd.codigoPuestoFk";
         return $dql;
     }     

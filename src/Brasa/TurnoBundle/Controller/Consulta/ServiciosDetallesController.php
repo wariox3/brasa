@@ -23,24 +23,21 @@ class ServiciosDetallesController extends Controller
         $this->lista();
         $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
         if ($form->isValid()) {    
-            $arrControles = $request->request->All();
-            if($arrControles['txtNit'] != '') {                
-                $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));
-                if($arCliente) {
-                    $this->codigoCliente = $arCliente->getCodigoClientePk();
-                }
-            }            
+            $arrControles = $request->request->All();          
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
-                $this->lista();
+                $form = $this->formularioFiltro();
+                $this->lista();                
             }
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
+                $form = $this->formularioFiltro();
                 $this->lista();
                 $this->generarExcel();
             }
             if ($form->get('BtnExcelResumido')->isClicked()) {
                 $this->filtrar($form);
+                $form = $this->formularioFiltro();
                 $this->lista();
                 $this->generarExcelResumido();
             }            
@@ -52,21 +49,56 @@ class ServiciosDetallesController extends Controller
     }
             
     private function lista() {
-        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();        
+        $strFechaHasta = "";                
+        $strFechaHasta = $session->get('filtroServicioDetalleFechaHasta');                         
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->listaConsultaDql(
                 $this->codigoServicio, 
-                $this->codigoCliente);
+                $session->get('filtroCodigoCliente'),
+                $session->get('filtroServicioDetalleEstadoCerrado'),
+                $strFechaHasta                
+                );
     }
 
-    private function filtrar ($form) {                
+    private function filtrar ($form) {   
+        $session = $this->getRequest()->getSession();
         $this->codigoServicio = $form->get('TxtCodigo')->getData();
+        $session->set('filtroNit', $form->get('TxtNit')->getData());
+        $session->set('filtroServicioDetalleEstadoCerrado', $form->get('estadoCerrado')->getData());        
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        $session->set('filtroServicioDetalleFechaHasta', $dateFechaHasta->format('Y/m/d'));        
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
+        $strNombreCliente = "";
+        if($session->get('filtroNit')) {
+            $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
+            if($arCliente) {
+                $session->set('filtroCodigoCliente', $arCliente->getCodigoClientePk());
+                $strNombreCliente = $arCliente->getNombreCorto();
+            }  else {
+                $session->set('filtroCodigoCliente', null);
+                $session->set('filtroNit', null);
+            }          
+        } else {
+            $session->set('filtroCodigoCliente', null);
+        }        
+        $dateFecha = new \DateTime('now');
+        $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
+        $strFechaHasta = $dateFecha->format('Y/m/').$intUltimoDia;
+        if($session->get('filtroServicioDetalleFechaHasta') != "") {
+            $strFechaHasta = $session->get('filtroServicioDetalleFechaHasta');
+        }    
+        $dateFechaHasta = date_create($strFechaHasta);        
         $form = $this->createFormBuilder()
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoServicio))                        
+            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                                
+            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoServicio))
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta)) 
+            ->add('estadoCerrado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'CERRADO', '0' => 'SIN CERRAR'), 'data' => $session->get('filtroServicioDetalleEstadoCerrado')))                                                
             ->add('BtnExcelResumido', 'submit', array('label'  => 'Excel resumido',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -144,8 +176,7 @@ class ServiciosDetallesController extends Controller
                     ->setCellValue('A' . $i, $cliente)                                        
                     ->setCellValue('D' . $i, $arServicioDetalle->getConceptoServicioRel()->getNombreFacturacion())
                     ->setCellValue('E' . $i, $arServicioDetalle->getModalidadServicioRel()->getNombre())                    
-                    ->setCellValue('F' . $i, $arServicioDetalle->getFechaDesde()->format('Y/m/d'))
-                    ->setCellValue('G' . $i, $arServicioDetalle->getFechaHasta()->format('Y/m/d'))                    
+                    ->setCellValue('F' . $i, $arServicioDetalle->getFechaDesde()->format('Y/m/d'))                                        
                     ->setCellValue('I' . $i, $arServicioDetalle->getCantidad())                    
                     ->setCellValue('J' . $i, $arServicioDetalle->getHoras())
                     ->setCellValue('K' . $i, $arServicioDetalle->getHorasDiurnas())
@@ -154,7 +185,9 @@ class ServiciosDetallesController extends Controller
                     ->setCellValue('N' . $i, $arServicioDetalle->getVrBaseAiu())
                     ->setCellValue('O' . $i, $arServicioDetalle->getVrIva())
                     ->setCellValue('P' . $i, $arServicioDetalle->getVrTotalDetalle());
-
+            if($arServicioDetalle->getEstadoCerrado() == 1) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G' . $i, $arServicioDetalle->getFechaHasta()->format('Y/m/d'));
+            }
             if($arServicioDetalle->getGrupoFacturacionRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('B' . $i, $arServicioDetalle->getGrupoFacturacionRel()->getNombre());
