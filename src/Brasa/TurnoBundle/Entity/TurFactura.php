@@ -53,6 +53,11 @@ class TurFactura
     private $tituloRelacion;     
     
     /**
+     * @ORM\Column(name="detalle_relacion", type="string", length=120, nullable=true)
+     */
+    private $detalleRelacion;    
+    
+    /**
      * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
      */    
     private $codigoClienteFk;                   
@@ -957,5 +962,29 @@ class TurFactura
     public function getTituloRelacion()
     {
         return $this->tituloRelacion;
+    }
+
+    /**
+     * Set detalleRelacion
+     *
+     * @param string $detalleRelacion
+     *
+     * @return TurFactura
+     */
+    public function setDetalleRelacion($detalleRelacion)
+    {
+        $this->detalleRelacion = $detalleRelacion;
+
+        return $this;
+    }
+
+    /**
+     * Get detalleRelacion
+     *
+     * @return string
+     */
+    public function getDetalleRelacion()
+    {
+        return $this->detalleRelacion;
     }
 }
