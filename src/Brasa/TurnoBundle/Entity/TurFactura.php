@@ -48,6 +48,11 @@ class TurFactura
     private $descripcion;    
     
     /**
+     * @ORM\Column(name="titulo_relacion", type="string", length=120, nullable=true)
+     */
+    private $tituloRelacion;     
+    
+    /**
      * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
      */    
     private $codigoClienteFk;                   
@@ -928,5 +933,29 @@ class TurFactura
     public function getImprimirAgrupada()
     {
         return $this->imprimirAgrupada;
+    }
+
+    /**
+     * Set tituloRelacion
+     *
+     * @param string $tituloRelacion
+     *
+     * @return TurFactura
+     */
+    public function setTituloRelacion($tituloRelacion)
+    {
+        $this->tituloRelacion = $tituloRelacion;
+
+        return $this;
+    }
+
+    /**
+     * Get tituloRelacion
+     *
+     * @return string
+     */
+    public function getTituloRelacion()
+    {
+        return $this->tituloRelacion;
     }
 }
