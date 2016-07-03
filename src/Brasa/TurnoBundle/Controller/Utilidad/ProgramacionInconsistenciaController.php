@@ -124,6 +124,7 @@ class ProgramacionInconsistenciaController extends Controller
                 $arProgramacionInconsistencia = new \Brasa\TurnoBundle\Entity\TurProgramacionInconsistencia();
                 $arProgramacionInconsistencia->setInconsistencia('Recurso sin programacion en el mes');
                 $arProgramacionInconsistencia->setDetalle("El recurso " . $arRecurso->getCodigoRecursoPk() . " " . $arRecurso->getNombreCorto() . " no registra programaciones para el mes");
+                $arProgramacionInconsistencia->setNumeroIdentificacion($arRecurso->getNumeroIdentificacion());
                 $em->persist($arProgramacionInconsistencia);                         
             }
         }

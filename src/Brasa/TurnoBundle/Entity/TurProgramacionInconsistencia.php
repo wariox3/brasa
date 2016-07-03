@@ -27,6 +27,10 @@ class TurProgramacionInconsistencia
      */    
     private $detalle;                    
 
+    /**
+     * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=true)
+     */    
+    private $numeroIdentificacion;     
 
     /**
      * Get codigoProgramacionInconsistenciaPk
@@ -84,5 +88,29 @@ class TurProgramacionInconsistencia
     public function getDetalle()
     {
         return $this->detalle;
+    }
+
+    /**
+     * Set numeroIdentificacion
+     *
+     * @param string $numeroIdentificacion
+     *
+     * @return TurProgramacionInconsistencia
+     */
+    public function setNumeroIdentificacion($numeroIdentificacion)
+    {
+        $this->numeroIdentificacion = $numeroIdentificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroIdentificacion
+     *
+     * @return string
+     */
+    public function getNumeroIdentificacion()
+    {
+        return $this->numeroIdentificacion;
     }
 }
