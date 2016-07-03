@@ -116,6 +116,7 @@
                     <table class="table table-striped table-bordered table-condensed">
                         <tr>
                             <th>COD</th>
+                            <th>TIPO</th>                            
                             <th>SERVICIO</th>
                             <th>PUESTO</th>
                             <th>MODALIDAD</th>
@@ -131,6 +132,7 @@
                         {% for arFacturaDetalle in arFacturaDetalle %}
                             <tr>
                                 <td>{{ arFacturaDetalle.codigoFacturaDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arFacturaDetalle.codigoFacturaDetallePk }}"></td>
+                                <td>{{ arFacturaDetalle.tipoPedido | default('') }}</td>                                                                
                                 <td>{{ arFacturaDetalle.conceptoServicioRel.nombre | default('') }}</td>                                                                
                                 <td>{{ arFacturaDetalle.puestoRel.nombre | default('') }}</td>
                                 <td>{{ arFacturaDetalle.modalidadServicioRel.nombre | default('') }}</td>
