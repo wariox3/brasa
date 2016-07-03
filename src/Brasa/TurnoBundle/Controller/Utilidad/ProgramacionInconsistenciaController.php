@@ -82,7 +82,8 @@ class ProgramacionInconsistenciaController extends Controller
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'INCONSISTENCIA')
-                    ->setCellValue('C1', 'DETALLE');
+                    ->setCellValue('C1', 'DETALLE')
+                    ->setCellValue('C1', 'IDENTIFICACION');
 
         $i = 2;
         $dql = $em->getRepository('BrasaTurnoBundle:TurProgramacionInconsistencia')->listaDql();
@@ -93,7 +94,8 @@ class ProgramacionInconsistenciaController extends Controller
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arProgramacionInconsistencia->getCodigoProgramacionInconsistenciaPk())
                     ->setCellValue('B' . $i, $arProgramacionInconsistencia->getInconsistencia())
-                    ->setCellValue('C' . $i, $arProgramacionInconsistencia->getDetalle());
+                    ->setCellValue('C' . $i, $arProgramacionInconsistencia->getDetalle())
+                    ->setCellValue('D' . $i, $arProgramacionInconsistencia->getNumeroIdentificacion());
             $i++;
         }
 
