@@ -159,7 +159,7 @@
                 <tr>
                     <input type="hidden" name="LblCodigo[]" value="{{ arProgramacionDetalle.codigoProgramacionDetallePk }}">
                     <td>{{ arProgramacionDetalle.codigoRecursoFk }}</td>
-                    <td>{{ arProgramacionDetalle.recursoRel.nombreCorto | default('') }}</td>                                                                                 
+                    <td><a href="javascript:abrirVentana3('{{ path('brs_tur_utilidad_recurso_programacion_masiva', { 'anio': arProgramacionDetalle.anio, 'mes': arProgramacionDetalle.mes, 'codigoRecurso': arProgramacionDetalle.codigoRecursoFk }) }}', 'VerProgramaciones', 600, 1200)">{{ arProgramacionDetalle.recursoRel.nombreCorto | default('') }}</a></td>                                                                                                    
                     <td>{{ arProgramacionDetalle.dia1  }}</td>
                     <td>{{ arProgramacionDetalle.dia2  }}</td>
                     <td>{{ arProgramacionDetalle.dia3  }}</td>

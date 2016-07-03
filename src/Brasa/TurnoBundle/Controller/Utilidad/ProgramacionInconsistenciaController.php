@@ -83,7 +83,7 @@ class ProgramacionInconsistenciaController extends Controller
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'INCONSISTENCIA')
                     ->setCellValue('C1', 'DETALLE')
-                    ->setCellValue('C1', 'IDENTIFICACION');
+                    ->setCellValue('D1', 'IDENTIFICACION');
 
         $i = 2;
         $dql = $em->getRepository('BrasaTurnoBundle:TurProgramacionInconsistencia')->listaDql();

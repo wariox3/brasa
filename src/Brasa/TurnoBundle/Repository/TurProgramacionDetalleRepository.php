@@ -319,6 +319,8 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                         $arProgramacionDetalle->setProyectoRel($arPedidoDetalle->getProyectoRel());
                         $arProgramacionDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
                         $arProgramacionDetalle->setAjusteProgramacion($arPedidoDetalle->getAjusteProgramacion());                                                        
+                        $arProgramacionDetalle->setAnio($arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('Y'));
+                        $arProgramacionDetalle->setMes($arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('m'));                        
                         $arProgramacionDetalle->setRecursoRel($arPedidoDetalleRecurso->getRecursoRel());                            
                         for($i = 1; $i < 32; $i++) {                            
                             $strTurno = $arrTurnos[$intPosicionPlantilla];
@@ -475,6 +477,8 @@ class TurProgramacionDetalleRepository extends EntityRepository {
                         $arProgramacionDetalle->setProyectoRel($arPedidoDetalle->getProyectoRel());
                         $arProgramacionDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
                         $arProgramacionDetalle->setAjusteProgramacion($arPedidoDetalle->getAjusteProgramacion());
+                        $arProgramacionDetalle->setAnio($arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('Y'));
+                        $arProgramacionDetalle->setMes($arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('m'));
                         $em->persist($arProgramacionDetalle);
                     }
                 }
