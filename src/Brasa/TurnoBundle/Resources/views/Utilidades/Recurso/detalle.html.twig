@@ -52,9 +52,23 @@
                     <th>{{ arrDiaSemana.dia }}{{ arrDiaSemana.diaSemana }}</th>
                     {% endfor %}
                 <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
-            </tr>
-            {% set intRecurso = '' %}
-            {% for arProgramacionDetalle in arProgramacionDetalle %}                                    
+            </tr>            
+            {% set intCodigoCliente = '' %}
+            {% for arProgramacionDetalle in arProgramacionDetalle %}  
+               {% if intCodigoCliente != arProgramacionDetalle.programacionRel.codigoClienteFk %}
+                    <tr> 
+                        <td id="suptipo" colspan="32"><b>{{ arProgramacionDetalle.programacionRel.clienteRel.nombreCorto | default('') }}</b></td>
+                    </tr>
+                    {% set intCodigoCliente = arProgramacionDetalle.programacionRel.codigoClienteFk %}                    
+                    {% set intCodigoPuesto = '' %}
+                {% endif %} 
+                {% if intCodigoPuesto != arProgramacionDetalle.codigoPuestoFk %}
+                    <tr> 
+                        <td colspan="2"></td>
+                        <td id="suptipo" colspan="30">{{ arProgramacionDetalle.puestoRel.nombre | default('') }}</td>
+                    </tr>                    
+                    {% set intCodigoPuesto = arProgramacionDetalle.codigoPuestoFk %}
+                {% endif %}                 
                     <tr>
                     <input type="hidden" name="LblCodigo[]" value="{{ arProgramacionDetalle.codigoProgramacionDetallePk }}">                                                                   
                     {% if arProgramacionDetalle.programacionRel.estadoAutorizado == 0 %}                                    
