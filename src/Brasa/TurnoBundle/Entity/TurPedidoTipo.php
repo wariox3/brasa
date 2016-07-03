@@ -22,6 +22,11 @@ class TurPedidoTipo
      */    
     private $nombre;             
     
+    /**
+     * @ORM\Column(name="tipo", type="string", length=50, nullable=true)
+     */    
+    private $tipo;    
+    
     /**     
      * @ORM\Column(name="control", type="boolean")
      */    
@@ -131,5 +136,29 @@ class TurPedidoTipo
     public function getPedidosPedidoTipoRel()
     {
         return $this->pedidosPedidoTipoRel;
+    }
+
+    /**
+     * Set tipo
+     *
+     * @param string $tipo
+     *
+     * @return TurPedidoTipo
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return string
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
     }
 }

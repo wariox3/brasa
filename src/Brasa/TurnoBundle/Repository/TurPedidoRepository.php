@@ -441,6 +441,7 @@ class TurPedidoRepository extends EntityRepository {
             $arFacturaDetalle->setPorIva($arPedidoDetalle->getConceptoServicioRel()->getPorIva());
             $arFacturaDetalle->setPorBaseIva($arPedidoDetalle->getConceptoServicioRel()->getPorBaseIva());            
             $arFacturaDetalle->setFechaProgramacion($arPedido->getFechaProgramacion());
+            $arFacturaDetalle->setTipoPedido($arPedido->getPedidoTipoRel()->getTipo());
             $arFacturaDetalle->setDetalle($arPedidoDetalle->getDetalle());
             $em->persist($arFacturaDetalle);                                
         }                         

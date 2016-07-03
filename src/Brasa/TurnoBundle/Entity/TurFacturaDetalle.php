@@ -108,6 +108,11 @@ class TurFacturaDetalle
     private $detalle;    
     
     /**
+     * @ORM\Column(name="tipo_pedido", type="string", length=50, nullable=true)
+     */    
+    private $tipo_pedido;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurFactura", inversedBy="facturasDetallesFacturaRel")
      * @ORM\JoinColumn(name="codigo_factura_fk", referencedColumnName="codigo_factura_pk")
      */
@@ -835,5 +840,29 @@ class TurFacturaDetalle
     public function getFacturasDetallesFacturaDetalleRel()
     {
         return $this->facturasDetallesFacturaDetalleRel;
+    }
+
+    /**
+     * Set tipoPedido
+     *
+     * @param string $tipoPedido
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setTipoPedido($tipoPedido)
+    {
+        $this->tipo_pedido = $tipoPedido;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoPedido
+     *
+     * @return string
+     */
+    public function getTipoPedido()
+    {
+        return $this->tipo_pedido;
     }
 }

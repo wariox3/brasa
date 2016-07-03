@@ -262,6 +262,7 @@ class FacturaController extends Controller
                         $arFacturaDetalle->setPorIva($arPedidoDetalle->getConceptoServicioRel()->getPorIva());
                         $arFacturaDetalle->setPorBaseIva($arPedidoDetalle->getConceptoServicioRel()->getPorBaseIva());
                         $arFacturaDetalle->setFechaProgramacion($arPedidoDetalle->getPedidoRel()->getFechaProgramacion());
+                        $arFacturaDetalle->setTipoPedido($arPedidoDetalle->getPedidoRel()->getPedidoTipoRel()->getTipo());
                         $arFacturaDetalle->setDetalle($arPedidoDetalle->getDetalle());
                         $em->persist($arFacturaDetalle);   
                     }
