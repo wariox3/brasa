@@ -78,7 +78,9 @@ class ProgramacionInconsistenciaController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(9); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);       
-        
+        for($col = 'A'; $col !== 'E'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                
+        }         
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'INCONSISTENCIA')
@@ -165,6 +167,7 @@ class ProgramacionInconsistenciaController extends Controller
                             $arProgramacionInconsistencia->setDetalle("Recurso " . $registro['codigoRecursoFk'] . " " .
                             "Identificacion: " . $registro['numeroIdentificacion'] . " " .
                             $registro['nombreCorto'] . " dia " . $i);
+                            $arProgramacionInconsistencia->setNumeroIdentificacion($registro['numeroIdentificacion']);
                             $em->persist($arProgramacionInconsistencia);                                
                         }
                     }                        
