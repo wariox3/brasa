@@ -80,15 +80,17 @@ class TurPedidoRepository extends EntityRepository {
         $arPedidosDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigoPedido));         
         foreach ($arPedidosDetalle as $arPedidoDetalle) {
             $prueba = $arPedidoDetalle->getPeriodoRel()->getCodigoPeriodoPk();
+            $intDiasFacturar = 0;
             if($arPedidoDetalle->getPeriodoRel()->getCodigoPeriodoPk() == 2 || $arPedidoDetalle->getLiquidarDiasReales() == 1) {
                 $intDias = $arPedidoDetalle->getDiaHasta() - $arPedidoDetalle->getDiaDesde();
                 $intDias += 1;
                 if($arPedidoDetalle->getDiaHasta() == 0 || $arPedidoDetalle->getDiaDesde() == 0) {
                     $intDias = 0;
                 }
+                $intDiasFacturar = $intDias;
             } else {  
                 $intDias = date("d",(mktime(0,0,0,$arPedido->getFechaProgramacion()->format('m')+1,1,$arPedido->getFechaProgramacion()->format('Y'))-1));
-                //$intDias = 30;
+                $intDiasFacturar = 30;
             }
 
             $intHorasRealesDiurnas = 0;
@@ -218,8 +220,12 @@ class TurPedidoRepository extends EntityRepository {
             $floValorBaseServicioMes = $floValorBaseServicio + ($floValorBaseServicio * $arPedidoDetalle->getModalidadServicioRel()->getPorcentaje() / 100);                        
             $floVrHoraDiurna = ((($floValorBaseServicioMes * 59.7) / 100)/30)/16;            
             $floVrHoraNocturna = ((($floValorBaseServicioMes * 40.3) / 100)/30)/8;                                  
+            if($arPedidoDetalle->getPeriodoRel()->getCodigoPeriodoPk() == 1) {
+                $precio = ($intHorasDiurnasLiquidacion * $floVrHoraDiurna) + ($intHorasNocturnasLiquidacion * $floVrHoraNocturna);
+            } else {
+                $precio = ($intHorasRealesDiurnas * $floVrHoraDiurna) + ($intHorasRealesNocturnas * $floVrHoraNocturna);    
+            }
             
-            $precio = ($intHorasRealesDiurnas * $floVrHoraDiurna) + ($intHorasRealesNocturnas * $floVrHoraNocturna);
             $precio = round($precio);
             $floVrMinimoServicio = $precio;
             
