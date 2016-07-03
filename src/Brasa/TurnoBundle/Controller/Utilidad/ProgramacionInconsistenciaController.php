@@ -181,7 +181,8 @@ class ProgramacionInconsistenciaController extends Controller
         for($i = 1; $i <= 31; $i++) {
             $strSql = "SELECT
                         codigo_recurso_fk as codigoRecursoFk, 
-                        tur_recurso.nombre_corto as nombreCorto,                                                                   
+                        tur_recurso.nombre_corto as nombreCorto,
+                        tur_recurso.numero_identificacion as numeroIdentificacion,
                         COUNT(dia_$i) AS numero
                         FROM
                         tur_programacion_detalle
@@ -201,6 +202,7 @@ class ProgramacionInconsistenciaController extends Controller
                         $arProgramacionInconsistencia->setInconsistencia('Asignacion doble de turno');
                         $arProgramacionInconsistencia->setDetalle("Recurso " . $registro['codigoRecursoFk'] . " " . 
                                 $registro['nombreCorto'] . " dia " . $i);
+                        $arProgramacionInconsistencia->setNumeroIdentificacion($registro['numeroIdentificacion']);
                         $em->persist($arProgramacionInconsistencia);                                
                     }
                 }                        
