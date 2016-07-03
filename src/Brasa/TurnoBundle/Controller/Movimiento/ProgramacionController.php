@@ -234,14 +234,15 @@ class ProgramacionController extends Controller
                     'arProgramacion' => $arProgramacion,
                     'arProgramacionDetalle' => $arProgramacionDetalle,
                     'arrDiaSemana' => $arrDiaSemana,
+                    'codigoPuesto' => $codigoPuesto,
                     'form' => $form->createView(),                    
                     ));
     } 
     
     /**
-     * @Route("/tur/movimiento/programacion/detalle/nuevo/{codigoProgramacion}/{codigoProgramacionDetalle}", name="brs_tur_movimiento_programacion_detalle_nuevo")
+     * @Route("/tur/movimiento/programacion/detalle/nuevo/{codigoProgramacion}/{codigoPuesto}", name="brs_tur_movimiento_programacion_detalle_nuevo")
      */        
-    public function detalleNuevoAction($codigoProgramacion, $codigoProgramacionDetalle = 0) {
+    public function detalleNuevoAction($codigoProgramacion, $codigoPuesto) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
@@ -263,6 +264,7 @@ class ProgramacionController extends Controller
                             $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                             $arProgramacionDetalle->setProgramacionRel($arProgramacion);
                             $arProgramacionDetalle->setPedidoDetalleRel($arPedidoDetalle);
+                            $arProgramacionDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());                            
                             $arProgramacionDetalle->setAnio($arProgramacion->getFecha()->format('Y'));
                             $arProgramacionDetalle->setMes($arProgramacion->getFecha()->format('m'));
                             $em->persist($arProgramacionDetalle);
@@ -274,10 +276,11 @@ class ProgramacionController extends Controller
             }
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
-        $arPedidosDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->listaCliente($arProgramacion->getCodigoClienteFk());
+        $arPedidosDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->listaCliente($arProgramacion->getCodigoClienteFk(), "", $codigoPuesto);
         return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalleNuevo.html.twig', array(
             'arProgramacion' => $arProgramacion,
             'arPedidosDetalle' => $arPedidosDetalle,
+            'codigoPuesto' => $codigoPuesto,
             'form' => $form->createView()));
     }    
     
