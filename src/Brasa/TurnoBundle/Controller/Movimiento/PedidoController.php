@@ -1146,7 +1146,7 @@ class PedidoController extends Controller
                     ->setCellValue('E' . $i, $arPedidoDetalle->getVrSubtotal());
                     $objPHPExcel->getActiveSheet()->getStyle('A' . $i)->getFont()->setBold(true);
             $i++;
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A' . $i, $arPedidoDetalle->getConceptoServicioRel()->getNombreFacturacion(). ' ' . $arPedidoDetalle->getDetalle() . " DESDE " . $arPedidoDetalle->getDiaDesde() . " HASTA " . $arPedidoDetalle->getDiaHasta());            
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A' . $i, $arPedidoDetalle->getConceptoServicioRel()->getNombreFacturacion(). ' ' . $arPedidoDetalle->getDetalle() . " desde " . $arPedidoDetalle->getDiaDesde() . " hasta " . $arPedidoDetalle->getDiaHasta());            
             $i++;
         }
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C' . ($i+1), 'SUB TOTAL')->setCellValue('E' . ($i+1), $arPedido->getVrSubtotal());        
