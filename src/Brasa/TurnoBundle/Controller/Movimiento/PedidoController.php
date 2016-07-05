@@ -1140,13 +1140,13 @@ class PedidoController extends Controller
         foreach ($arPedidoDetalles as $arPedidoDetalle) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arPedidoDetalle->getPuestoRel()->getNombre())
-                    ->setCellValue('B' . $i, $arPedidoDetalle->getModalidadServicioRel()->getNombre() . " DESDE " . $arPedidoDetalle->getDiaDesde() . " HASTA " . $arPedidoDetalle->getDiaHasta())
+                    ->setCellValue('B' . $i, $arPedidoDetalle->getModalidadServicioRel()->getNombre())
                     ->setCellValue('C' . $i, $arPedidoDetalle->getVrSubtotal() / $arPedidoDetalle->getDias())
                     ->setCellValue('D' . $i, $arPedidoDetalle->getDias())
                     ->setCellValue('E' . $i, $arPedidoDetalle->getVrSubtotal());
                     $objPHPExcel->getActiveSheet()->getStyle('A' . $i)->getFont()->setBold(true);
             $i++;
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A' . $i, $arPedidoDetalle->getConceptoServicioRel()->getNombreFacturacion(). ' ' . $arPedidoDetalle->getDetalle());            
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A' . $i, $arPedidoDetalle->getConceptoServicioRel()->getNombreFacturacion(). ' ' . $arPedidoDetalle->getDetalle() . " DESDE " . $arPedidoDetalle->getDiaDesde() . " HASTA " . $arPedidoDetalle->getDiaHasta());            
             $i++;
         }
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C' . ($i+1), 'SUB TOTAL')->setCellValue('E' . ($i+1), $arPedido->getVrSubtotal());        
