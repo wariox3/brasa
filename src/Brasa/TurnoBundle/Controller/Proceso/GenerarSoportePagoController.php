@@ -125,7 +125,7 @@ class GenerarSoportePagoController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->liquidar($codigoSoportePagoPeriodo);
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago_detalle', array('codigoSoportePagoPeriodo' => $codigoSoportePagoPeriodo)));                                
             }            
-            if ($form->get('BtnLiquidarCompensacion')->isClicked()) {      
+            /*if ($form->get('BtnLiquidarCompensacion')->isClicked()) {      
                 $festivos = $arSoportePagoPeriodo->getDiaFestivoReal() + $arSoportePagoPeriodo->getDiaDomingoReal();
                 $horasTope = $arSoportePagoPeriodo->getDiasPeriodo() * 8;
                 $horasFestivas = $festivos * 8;                
@@ -133,12 +133,7 @@ class GenerarSoportePagoController extends Controller
                 //$horasDescanso = $horasLaborales / $festivos;
                 $arSoportePagos = new \Brasa\TurnoBundle\Entity\TurSoportePago();  
                 $arSoportePagos = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));
-                foreach ($arSoportePagos as $arSoportePago) {
-                    /*if($arSoportePago->getCodigoRecursoFk() == 78) {
-                        echo "hola";
-                    }
-                     * 
-                     */                                                      
+                foreach ($arSoportePagos as $arSoportePago) {                                                    
                     $horasDia = $arSoportePago->getHorasDiurnasReales();
                     $horasDiaTotales = $horasDia;
                     $horasExtraDia = $arSoportePago->getHorasExtrasOrdinariasDiurnasReales();
@@ -177,7 +172,9 @@ class GenerarSoportePagoController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->liquidar($codigoSoportePagoPeriodo);                                
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago_detalle', array('codigoSoportePagoPeriodo' => $codigoSoportePagoPeriodo)));                
                 
-            }            
+            }  
+             * 
+             */          
             
             if ($form->get('BtnLiquidarCompensacion2')->isClicked()) {      
                 $descanso = $arSoportePagoPeriodo->getDiasDescansoFijo();
@@ -187,11 +184,9 @@ class GenerarSoportePagoController extends Controller
                 $arSoportePagos = new \Brasa\TurnoBundle\Entity\TurSoportePago();  
                 $arSoportePagos = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));
                 foreach ($arSoportePagos as $arSoportePago) {
-                    /*if($arSoportePago->getCodigoRecursoFk() == 2222) {
+                    if($arSoportePago->getCodigoRecursoFk() == 3) {
                         echo "hola";
-                    }
-                     * 
-                     */                       
+                    }                       
                                            
                     $horasDia = $arSoportePago->getHorasDiurnasReales();
                     $horasNoche = $arSoportePago->getHorasNocturnasReales();
@@ -204,10 +199,20 @@ class GenerarSoportePagoController extends Controller
                     $totalHoras = $horasDia + $horasNoche + $horasFestivasDia + $horasFestivasNoche;
                     $horasPorCompensar = $horasTope - $totalHoras;
                     $totalExtras = $horasExtraDia + $horasExtraNoche + $horasExtraFestivasDia + $horasExtraFestivasNoche;
-                    $porExtraDiurna = $horasExtraDia / $totalExtras;
-                    $porExtraNocturna = $horasExtraNoche / $totalExtras;
-                    $porExtraFestivaDiurna = $horasExtraFestivasDia / $totalExtras;
-                    $porExtraFestivaNocturna = $horasExtraFestivasNoche / $totalExtras; 
+                    if($horasPorCompensar > $totalExtras) {
+                        $horasPorCompensar = $totalExtras;
+                    }
+                    $porExtraDiurna = 0;
+                    $porExtraNocturna = 0;
+                    $porExtraFestivaDiurna = 0;
+                    $porExtraFestivaNocturna = 0; 
+                    if($totalExtras > 0) {
+                        $porExtraDiurna = $horasExtraDia / $totalExtras;
+                        $porExtraNocturna = $horasExtraNoche / $totalExtras;
+                        $porExtraFestivaDiurna = $horasExtraFestivasDia / $totalExtras;
+                        $porExtraFestivaNocturna = $horasExtraFestivasNoche / $totalExtras;
+                    }
+ 
                     $horasCompensarDia = round($porExtraDiurna * $horasPorCompensar);
                     $horasCompensarNoche = round($porExtraNocturna * $horasPorCompensar);
                     $horasCompensarFestivaDia = round($porExtraFestivaDiurna * $horasPorCompensar);
@@ -391,9 +396,8 @@ class GenerarSoportePagoController extends Controller
     private function formularioDetalle() {
         $form = $this->createFormBuilder()
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))                        
-            ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar'))                                        
-            ->add('BtnLiquidarCompensacion', 'submit', array('label'  => 'Compensacion'))                            
-            ->add('BtnLiquidarCompensacion2', 'submit', array('label'  => 'Compensacion2'))                        
+            ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar'))                                                    
+            ->add('BtnLiquidarCompensacion2', 'submit', array('label'  => 'Compensacion'))                        
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar')) 
             ->getForm();
         return $form;
@@ -561,38 +565,39 @@ class GenerarSoportePagoController extends Controller
                     ->setCellValue('B1', 'CODIGO RECURSO')
                     ->setCellValue('C1', 'IDENTIFICACION')
                     ->setCellValue('D1', 'RECURSO')
-                    ->setCellValue('E1', 'DESDE')
-                    ->setCellValue('F1', 'HASTA')
-                    ->setCellValue('G1', 'DÍAS')
-                    ->setCellValue('H1', 'DES')
-                    ->setCellValue('I1', 'NOV')
-                    ->setCellValue('J1', 'ING')    
-                    ->setCellValue('K1', 'RET')
-                    ->setCellValue('L1', 'VAC')
-                    ->setCellValue('M1', 'INC')
-                    ->setCellValue('N1', 'LIC')
-                    ->setCellValue('O1', 'H')
-                    ->setCellValue('P1', 'HDS')
-                    ->setCellValue('Q1', 'HD')
-                    ->setCellValue('R1', 'HN')
-                    ->setCellValue('S1', 'HFD')
-                    ->setCellValue('T1', 'HFN')                
-                    ->setCellValue('U1', 'HEOD')
-                    ->setCellValue('V1', 'HEON')
-                    ->setCellValue('W1', 'HEFD')
-                    ->setCellValue('X1', 'HEFN')
-                    ->setCellValue('Y1', 'HDSR')
-                    ->setCellValue('Z1', 'HDR')
-                    ->setCellValue('AA1', 'HNR')
-                    ->setCellValue('AB1', 'HFDR')
-                    ->setCellValue('AC1', 'HFNR')                
-                    ->setCellValue('AD1', 'HEODR')
-                    ->setCellValue('AE1', 'HEONR')
-                    ->setCellValue('AF1', 'HEFDR')
-                    ->setCellValue('AG1', 'HEFNR')
-                    ->setCellValue('AH1', 'AUX.T')
-                    ->setCellValue('AI1', 'PAGO')
-                    ->setCellValue('AJ1', 'DEVENGADO');
+                    ->setCellValue('E1', 'CONTRATO')
+                    ->setCellValue('F1', 'DESDE')
+                    ->setCellValue('G1', 'HASTA')
+                    ->setCellValue('H1', 'DÍAS')
+                    ->setCellValue('I1', 'DES')
+                    ->setCellValue('J1', 'NOV')
+                    ->setCellValue('K1', 'ING')    
+                    ->setCellValue('L1', 'RET')
+                    ->setCellValue('M1', 'VAC')
+                    ->setCellValue('N1', 'INC')
+                    ->setCellValue('O1', 'LIC')
+                    ->setCellValue('P1', 'H')
+                    ->setCellValue('Q1', 'HDS')
+                    ->setCellValue('R1', 'HD')
+                    ->setCellValue('S1', 'HN')
+                    ->setCellValue('T1', 'HFD')
+                    ->setCellValue('U1', 'HFN')                
+                    ->setCellValue('V1', 'HEOD')
+                    ->setCellValue('W1', 'HEON')
+                    ->setCellValue('X1', 'HEFD')
+                    ->setCellValue('Y1', 'HEFN')
+                    ->setCellValue('Z1', 'HDSR')
+                    ->setCellValue('AA1', 'HDR')
+                    ->setCellValue('AB1', 'HNR')
+                    ->setCellValue('AC1', 'HFDR')
+                    ->setCellValue('AD1', 'HFNR')                
+                    ->setCellValue('AE1', 'HEODR')
+                    ->setCellValue('AF1', 'HEONR')
+                    ->setCellValue('AG1', 'HEFDR')
+                    ->setCellValue('AH1', 'HEFNR')
+                    ->setCellValue('AI1', 'AUX.T')
+                    ->setCellValue('AJ1', 'PAGO')
+                    ->setCellValue('AK1', 'DEVENGADO');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -604,38 +609,39 @@ class GenerarSoportePagoController extends Controller
                     ->setCellValue('B' . $i, $arSoportePago->getCodigoRecursoFk())
                     ->setCellValue('C' . $i, $arSoportePago->getRecursoRel()->getNumeroIdentificacion())
                     ->setCellValue('D' . $i, $arSoportePago->getRecursoRel()->getNombreCorto())
-                    ->setCellValue('E' . $i, $arSoportePago->getFechaDesde()->format('Y/m/d'))
-                    ->setCellValue('F' . $i, $arSoportePago->getFechaHasta()->format('Y/m/d'))
-                    ->setCellValue('G' . $i, $arSoportePago->getDias())
-                    ->setCellValue('H' . $i, $arSoportePago->getDescanso())
-                    ->setCellValue('I' . $i, $arSoportePago->getNovedad())
-                    ->setCellValue('J' . $i, $arSoportePago->getIngreso())
-                    ->setCellValue('K' . $i, $arSoportePago->getRetiro())
-                    ->setCellValue('L' . $i, $arSoportePago->getVacacion())
-                    ->setCellValue('M' . $i, $arSoportePago->getIncapacidad())
-                    ->setCellValue('N' . $i, $arSoportePago->getLicencia())
-                    ->setCellValue('O' . $i, $arSoportePago->getHoras())
-                    ->setCellValue('P' . $i, $arSoportePago->getHorasDescanso())
-                    ->setCellValue('Q' . $i, $arSoportePago->getHorasDiurnas())
-                    ->setCellValue('R' . $i, $arSoportePago->getHorasNocturnas())
-                    ->setCellValue('S' . $i, $arSoportePago->getHorasFestivasDiurnas())
-                    ->setCellValue('T' . $i, $arSoportePago->getHorasFestivasNocturnas())                    
-                    ->setCellValue('U' . $i, $arSoportePago->getHorasExtrasOrdinariasDiurnas())
-                    ->setCellValue('V' . $i, $arSoportePago->getHorasExtrasOrdinariasNocturnas())
-                    ->setCellValue('W' . $i, $arSoportePago->getHorasExtrasFestivasDiurnas())
-                    ->setCellValue('X' . $i, $arSoportePago->getHorasExtrasFestivasNocturnas())
-                    ->setCellValue('Y' . $i, $arSoportePago->getHorasDescansoReales())
-                    ->setCellValue('Z' . $i, $arSoportePago->getHorasDiurnasReales())
-                    ->setCellValue('AA' . $i, $arSoportePago->getHorasNocturnasReales())
-                    ->setCellValue('AB' . $i, $arSoportePago->getHorasFestivasDiurnasReales())
-                    ->setCellValue('AC' . $i, $arSoportePago->getHorasFestivasNocturnasReales())                    
-                    ->setCellValue('AD' . $i, $arSoportePago->getHorasExtrasOrdinariasDiurnasReales())
-                    ->setCellValue('AE' . $i, $arSoportePago->getHorasExtrasOrdinariasNocturnasReales())
-                    ->setCellValue('AF' . $i, $arSoportePago->getHorasExtrasFestivasDiurnasReales())
-                    ->setCellValue('AG' . $i, $arSoportePago->getHorasExtrasFestivasNocturnasReales())
-                    ->setCellValue('AH' . $i, $arSoportePago->getVrAuxilioTransporte())
-                    ->setCellValue('AI' . $i, $arSoportePago->getVrPago())
-                    ->setCellValue('AJ' . $i, $arSoportePago->getVrDevengado());
+                    ->setCellValue('E' . $i, $arSoportePago->getCodigoContratoFk())
+                    ->setCellValue('F' . $i, $arSoportePago->getFechaDesde()->format('Y/m/d'))
+                    ->setCellValue('G' . $i, $arSoportePago->getFechaHasta()->format('Y/m/d'))
+                    ->setCellValue('H' . $i, $arSoportePago->getDias())
+                    ->setCellValue('I' . $i, $arSoportePago->getDescanso())
+                    ->setCellValue('J' . $i, $arSoportePago->getNovedad())
+                    ->setCellValue('K' . $i, $arSoportePago->getIngreso())
+                    ->setCellValue('L' . $i, $arSoportePago->getRetiro())
+                    ->setCellValue('M' . $i, $arSoportePago->getVacacion())
+                    ->setCellValue('N' . $i, $arSoportePago->getIncapacidad())
+                    ->setCellValue('O' . $i, $arSoportePago->getLicencia())
+                    ->setCellValue('P' . $i, $arSoportePago->getHoras())
+                    ->setCellValue('Q' . $i, $arSoportePago->getHorasDescanso())
+                    ->setCellValue('R' . $i, $arSoportePago->getHorasDiurnas())
+                    ->setCellValue('S' . $i, $arSoportePago->getHorasNocturnas())
+                    ->setCellValue('T' . $i, $arSoportePago->getHorasFestivasDiurnas())
+                    ->setCellValue('U' . $i, $arSoportePago->getHorasFestivasNocturnas())                    
+                    ->setCellValue('V' . $i, $arSoportePago->getHorasExtrasOrdinariasDiurnas())
+                    ->setCellValue('W' . $i, $arSoportePago->getHorasExtrasOrdinariasNocturnas())
+                    ->setCellValue('X' . $i, $arSoportePago->getHorasExtrasFestivasDiurnas())
+                    ->setCellValue('Y' . $i, $arSoportePago->getHorasExtrasFestivasNocturnas())
+                    ->setCellValue('Z' . $i, $arSoportePago->getHorasDescansoReales())
+                    ->setCellValue('AA' . $i, $arSoportePago->getHorasDiurnasReales())
+                    ->setCellValue('AB' . $i, $arSoportePago->getHorasNocturnasReales())
+                    ->setCellValue('AC' . $i, $arSoportePago->getHorasFestivasDiurnasReales())
+                    ->setCellValue('AD' . $i, $arSoportePago->getHorasFestivasNocturnasReales())                    
+                    ->setCellValue('AE' . $i, $arSoportePago->getHorasExtrasOrdinariasDiurnasReales())
+                    ->setCellValue('AF' . $i, $arSoportePago->getHorasExtrasOrdinariasNocturnasReales())
+                    ->setCellValue('AG' . $i, $arSoportePago->getHorasExtrasFestivasDiurnasReales())
+                    ->setCellValue('AH' . $i, $arSoportePago->getHorasExtrasFestivasNocturnasReales())
+                    ->setCellValue('AI' . $i, $arSoportePago->getVrAuxilioTransporte())
+                    ->setCellValue('AJ' . $i, $arSoportePago->getVrPago())
+                    ->setCellValue('AK' . $i, $arSoportePago->getVrDevengado());
 
             $i++;
         }
@@ -786,7 +792,7 @@ class GenerarSoportePagoController extends Controller
         }        
         $objPHPExcel->getActiveSheet()->setTitle('RecursoProgramacion');     
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        
+        $objPHPExcel->setActiveSheetIndex(0);
         
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
