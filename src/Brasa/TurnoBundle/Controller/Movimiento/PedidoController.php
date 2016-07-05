@@ -1140,7 +1140,7 @@ class PedidoController extends Controller
         foreach ($arPedidoDetalles as $arPedidoDetalle) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arPedidoDetalle->getPuestoRel()->getNombre())
-                    ->setCellValue('B' . $i, $arPedidoDetalle->getModalidadServicioRel()->getNombre())
+                    ->setCellValue('B' . $i, $arPedidoDetalle->getModalidadServicioRel()->getNombre() . " DESDE " . $arPedidoDetalle->getDiaDesde() . " HASTA " . $arPedidoDetalle->getDiaHasta())
                     ->setCellValue('C' . $i, $arPedidoDetalle->getVrSubtotal() / $arPedidoDetalle->getDias())
                     ->setCellValue('D' . $i, $arPedidoDetalle->getDias())
                     ->setCellValue('E' . $i, $arPedidoDetalle->getVrSubtotal());
