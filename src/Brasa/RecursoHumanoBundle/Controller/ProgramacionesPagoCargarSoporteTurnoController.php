@@ -29,7 +29,7 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arSoportePago->getCodigoContratoFk());
                     $floVrDia = $arContrato->getVrSalario() / 30;
                     $floVrHora = $floVrDia / 8;
-                    $intHoras = $arSoportePago->getHorasDiurnas();
+                    
                     $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                     $arProgramacionPagoDetalle->setEmpleadoRel($arEmpleado);
                     $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
@@ -41,8 +41,6 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     $arProgramacionPagoDetalle->setFechaHasta($arSoportePago->getFechaHasta());
                     $arProgramacionPagoDetalle->setFechaDesdePago($arSoportePago->getFechaDesde());
                     $arProgramacionPagoDetalle->setFechaHastaPago($arSoportePago->getFechaHasta());
-                    $arProgramacionPagoDetalle->setHorasPeriodo($intHoras);
-                    $arProgramacionPagoDetalle->setHorasPeriodoReales($intHoras);
                     $intDias = $arSoportePago->getDias();
                     $arProgramacionPagoDetalle->setDias($intDias);
                     $arProgramacionPagoDetalle->setDiasReales($intDias);    
@@ -50,6 +48,12 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     $arProgramacionPagoDetalle->setVrDia($floVrDia);
                     $arProgramacionPagoDetalle->setVrHora($floVrHora);
                     //Tiempo adicional
+                    $horasNovedad = $arSoportePago->getNovedad() * 8;
+                    $intHoras = $arSoportePago->getHorasDescanso() + $arSoportePago->getHorasDiurnas() + $arSoportePago->getHorasNocturnas() + $arSoportePago->getHorasFestivasDiurnas() + $arSoportePago->getHorasFestivasNocturnas();
+                    $intHorasReales = $intHoras + $horasNovedad;
+                    $arProgramacionPagoDetalle->setHorasPeriodo($intHoras);
+                    $arProgramacionPagoDetalle->setHorasPeriodoReales($intHorasReales);                    
+                    $arProgramacionPagoDetalle->setHorasNovedad($horasNovedad);
                     $arProgramacionPagoDetalle->setHorasDescanso($arSoportePago->getHorasDescanso());
                     $arProgramacionPagoDetalle->setHorasDiurnas($arSoportePago->getHorasDiurnas());
                     $arProgramacionPagoDetalle->setHorasNocturnas($arSoportePago->getHorasNocturnas());

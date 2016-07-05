@@ -373,7 +373,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $arPagoDetalle->setVrDia($douVrDia);
                         $arPagoDetalle->setPorcentajeAplicado($arPagoConcepto->getPorPorcentaje());
                         $arPagoDetalle->setNumeroHoras($intHorasLaboradas);
-                        $arPagoDetalle->setNumeroDias($intHorasLaboradas / $intFactorDia);
+                        $arPagoDetalle->setNumeroDias(0);
                         $arPagoDetalle->setVrPago($douPagoDetalle);
                         $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
                         $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConcepto->getOperacion());

@@ -178,7 +178,8 @@ class GenerarSoportePagoController extends Controller
             
             if ($form->get('BtnLiquidarCompensacion2')->isClicked()) {      
                 $descanso = $arSoportePagoPeriodo->getDiasDescansoFijo();
-                $horasPeriodo = $arSoportePagoPeriodo->getDiasPeriodo() * 8;
+                $diasPeriodo = $arSoportePagoPeriodo->getDiasPeriodo();
+                $horasPeriodo =  $diasPeriodo * 8;
                 $horasDescanso = $descanso * 8;                
                 $horasTope = $horasPeriodo - $horasDescanso;                
                 $arSoportePagos = new \Brasa\TurnoBundle\Entity\TurSoportePago();  
@@ -186,8 +187,7 @@ class GenerarSoportePagoController extends Controller
                 foreach ($arSoportePagos as $arSoportePago) {
                     if($arSoportePago->getCodigoRecursoFk() == 3) {
                         echo "hola";
-                    }                       
-                                           
+                    }                                                            
                     $horasDia = $arSoportePago->getHorasDiurnasReales();
                     $horasNoche = $arSoportePago->getHorasNocturnasReales();
                     $horasFestivasDia = $arSoportePago->getHorasFestivasDiurnasReales();
@@ -235,10 +235,13 @@ class GenerarSoportePagoController extends Controller
                     $arSoportePagoAct->setHorasExtrasOrdinariasDiurnas($horasExtraDia);
                     $arSoportePagoAct->setHorasExtrasOrdinariasNocturnas($horasExtraNoche);
                     $arSoportePagoAct->setHorasExtrasFestivasDiurnas($horasExtraFestivasDia);
-                    $arSoportePagoAct->setHorasExtrasFestivasNocturnas($horasExtraFestivasNoche);                    
-                    $arSoportePagoAct->setHorasDescanso($horasDescanso);
-
-                    $horas = $horasDia + $horasNoche + $horasFestivasDia + $horasFestivasNoche + $horasDescanso + $arSoportePagoAct->getHorasNovedad();
+                    $arSoportePagoAct->setHorasExtrasFestivasNocturnas($horasExtraFestivasNoche);                                        
+                    $horasDescansoRecurso = $horasDescanso;
+                    if($diasPeriodo == $arSoportePago->getNovedad()) {
+                       $horasDescansoRecurso = 0; 
+                    }
+                    $arSoportePagoAct->setHorasDescanso($horasDescansoRecurso);
+                    $horas = $horasDia + $horasNoche + $horasFestivasDia + $horasFestivasNoche + $horasDescansoRecurso;
                     $arSoportePagoAct->setHoras($horas);
                     $em->persist($arSoportePagoAct);
                 }
