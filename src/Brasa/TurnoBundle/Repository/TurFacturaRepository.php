@@ -134,10 +134,10 @@ class TurFacturaRepository extends EntityRepository {
         $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);            
         $strResultado = "";        
         if($arFactura->getEstadoAutorizado() == 0) { 
-            /*
+            
             if($arFactura->getFacturaTipoRel()->getTipo() == 1) {
                 // Validar valor pendiente
-                dql   = "SELECT fd.codigoPedidoDetalleFk, SUM(fd.vrPrecio) as vrPrecio FROM BrasaTurnoBundle:TurFacturaDetalle fd "
+                $dql   = "SELECT fd.codigoPedidoDetalleFk, SUM(fd.vrPrecio) as vrPrecio FROM BrasaTurnoBundle:TurFacturaDetalle fd "
                         . "WHERE fd.codigoFacturaFk = " . $codigoFactura . " "
                         . "GROUP BY fd.codigoPedidoDetalleFk";
                 $query = $em->createQuery($dql);
@@ -151,8 +151,7 @@ class TurFacturaRepository extends EntityRepository {
                     }
                 }                                                  
             } 
-             * 
-             */                   
+                                
             if($strResultado == "") {
                 if($arFactura->getFacturaTipoRel()->getTipo() == 1) {
                     $arFacturaDetalles = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
