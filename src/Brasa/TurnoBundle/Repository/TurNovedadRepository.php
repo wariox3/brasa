@@ -55,7 +55,8 @@ class TurNovedadRepository extends EntityRepository {
                 $arProgramacionDetalleAct = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                 $arProgramacionDetalleAct = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($arProgramacionDetalle->getCodigoProgramacionDetallePk());
                 //Actualizar o crear programacion para el recurso reemplazo
-                if($boorReemplazo = 1) {
+                if(count($arProgramacionDetalles) <= 1) {
+                    if($boorReemplazo = 1) {
                     if($arNovedad->getCodigoRecursoReemplazoFk() != '') {
                         $arProgramacionDetalleReemplazo = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                         $arProgramacionDetalleReemplazo = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findOneBy(array('codigoProgramacionFk' => $arProgramacionDetalleAct->getCodigoProgramacionFk(), 'codigoRecursoFk' => $arNovedad->getCodigoRecursoReemplazoFk()));
@@ -261,6 +262,7 @@ class TurNovedadRepository extends EntityRepository {
                         }
                         $em->persist($arProgramacionDetalleReemplazoAct);                         
                     }                    
+                }                    
                 }
 
 
