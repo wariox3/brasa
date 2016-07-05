@@ -22,7 +22,7 @@ class GenerarPedidoController extends Controller
         $mensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioLista();
         $form->handleRequest($request);
-        $this->lista();
+        $this->lista($form);
         if ($form->isValid()) {
             $anio = $form->get('anio')->getData();
             $mes = $form->get('mes')->getData();
@@ -255,7 +255,7 @@ class GenerarPedidoController extends Controller
             }                           
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
-                $this->lista();
+                $this->lista($form);
                 $this->generarExcel();
             }
         }
@@ -266,9 +266,12 @@ class GenerarPedidoController extends Controller
             'form' => $form->createView()));
     }        
     
-    private function lista() {
+    private function lista($form) {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurServicio')->listaDql("","",1,0);
+        $anio = $form->get('anio')->getData();
+        $mes = $form->get('mes')->getData();
+        $fecha = $anio . "/" . $mes . "/01";                     
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurServicio')->listaDql("","",1,0, $fecha);
     }
     
     private function formularioLista() {  

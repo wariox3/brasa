@@ -7,12 +7,22 @@
     <div class="panel panel-default">
         <div class="panel-heading">Informacion general</div>
         <div class="panel-body">                            
+                <div class="form-group form-group-sm">  
+                    <label class="col-sm-2 control-label">Numero:</label>
+                    <div class="col-sm-4">
+                        {{ form_widget(form.TxtNumero, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-4">                                          
+                    </div>                    
+                </div>            
             <div class="form-group form-group-sm">
                 <label for="form_mostrarTodo" class="col-sm-3 control-label">Mostrar todo</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.mostrarTodo) }}
                 </div>                
-            </div>                                           
+            </div>                    
+                
             <div class="form-group form-group-sm">
                 <div class="col-sm-offset-2 col-sm-10">
                     {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}

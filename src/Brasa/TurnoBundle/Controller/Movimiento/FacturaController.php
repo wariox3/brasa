@@ -412,6 +412,24 @@ class FacturaController extends Controller
             'form' => $form->createView()));
     }         
     
+    /**
+     * @Route("/tur/movimiento/factura/detalle/resumen/{codigoFacturaDetalle}", name="brs_tur_movimiento_factura_detalle_resumen")
+     */    
+    public function detalleResumenAction($codigoFacturaDetalle) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();        
+        $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
+        $arFacturaDetalle = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->find($codigoFacturaDetalle);
+        $arPedido = null;
+        if($arFacturaDetalle->getCodigoPedidoDetalleFk()) {
+            $arPedido = $arFacturaDetalle->getPedidoDetalleRel()->getPedidoRel();
+        }
+        return $this->render('BrasaTurnoBundle:Movimientos/Factura:detalleResumen.html.twig', array(
+                    'arFacturaDetalle' => $arFacturaDetalle,
+                    'arPedido' => $arPedido
+                    ));
+    }     
+    
     private function lista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -433,7 +451,12 @@ class FacturaController extends Controller
     
     private function listaDetalleNuevo($codigoCliente) {
         $em = $this->getDoctrine()->getManager();
-        $strDql =  $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->pendientesFacturarDql($codigoCliente, $this->boolMostrarTodo);
+        $session = $this->getRequest()->getSession();
+        $strDql =  $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->pendientesFacturarDql(
+                $codigoCliente, 
+                $this->boolMostrarTodo,
+                $session->get('filtroPedidoNumero')
+                );
         return $strDql;
     }
 
@@ -450,8 +473,10 @@ class FacturaController extends Controller
         $session->set('filtroFacturaFiltrarFecha', $form->get('filtrarFecha')->getData());
     }
 
-    private function filtrarDetalleNuevo ($form) {                
+    private function filtrarDetalleNuevo ($form) {
+        $session = $this->getRequest()->getSession();
         $this->boolMostrarTodo = $form->get('mostrarTodo')->getData();
+        $session->set('filtroPedidoNumero', $form->get('TxtNumero')->getData());
     }    
     
     private function formularioFiltro() {
@@ -536,9 +561,11 @@ class FacturaController extends Controller
     }
     
     private function formularioDetalleNuevo() {
+        $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();        
         $form = $this->createFormBuilder()
             ->add('mostrarTodo', 'checkbox', array('required'  => false))
+            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroPedidoNumero')))                
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar',))
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->getForm();
