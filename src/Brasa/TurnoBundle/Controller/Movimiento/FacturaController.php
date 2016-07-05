@@ -565,7 +565,7 @@ class FacturaController extends Controller
         $em = $this->getDoctrine()->getManager();        
         $form = $this->createFormBuilder()
             ->add('mostrarTodo', 'checkbox', array('required'  => false))
-            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroPedidoNumero')))                
+            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroPedidoNumero'), 'required'  => false))                
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar',))
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->getForm();
