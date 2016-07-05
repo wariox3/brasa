@@ -611,19 +611,20 @@ class FacturaController extends Controller
         }        
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'NUMERO')
-                    ->setCellValue('C1', 'FECHA')
-                    ->setCellValue('D1', 'VENCE')
-                    ->setCellValue('E1', 'NIT')                    
-                    ->setCellValue('F1', 'CLIENTE')
-                    ->setCellValue('G1', 'AUT')
-                    ->setCellValue('H1', 'ANU')
-                    ->setCellValue('I1', 'SUBTOTAL')    
-                    ->setCellValue('J1', 'BASE AUI')
-                    ->setCellValue('K1', 'IVA')
-                    ->setCellValue('L1', 'RTEIVA')
-                    ->setCellValue('M1', 'RTEFTE')
-                    ->setCellValue('N1', 'TOTAL');
+                    ->setCellValue('B1', 'TIPO')
+                    ->setCellValue('C1', 'NUMERO')
+                    ->setCellValue('D1', 'FECHA')
+                    ->setCellValue('E1', 'VENCE')
+                    ->setCellValue('F1', 'NIT')                    
+                    ->setCellValue('G1', 'CLIENTE')
+                    ->setCellValue('H1', 'AUT')
+                    ->setCellValue('I1', 'ANU')
+                    ->setCellValue('J1', 'SUBTOTAL')    
+                    ->setCellValue('K1', 'BASE AUI')
+                    ->setCellValue('L1', 'IVA')
+                    ->setCellValue('M1', 'RTEIVA')
+                    ->setCellValue('N1', 'RTEFTE')
+                    ->setCellValue('O1', 'TOTAL');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -633,19 +634,20 @@ class FacturaController extends Controller
         foreach ($arFacturas as $arFactura) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arFactura->getCodigoFacturaPk())
-                    ->setCellValue('B' . $i, $arFactura->getNumero())
-                    ->setCellValue('C' . $i, $arFactura->getFecha()->format('Y/m/d'))
-                    ->setCellValue('D' . $i, $arFactura->getFechaVence()->format('Y/m/d'))
-                    ->setCellValue('E' . $i, $arFactura->getClienteRel()->getNit())
-                    ->setCellValue('F' . $i, $arFactura->getClienteRel()->getNombreCorto())
-                    ->setCellValue('G' . $i, $objFunciones->devuelveBoolean($arFactura->getEstadoAutorizado()))
-                    ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arFactura->getEstadoAnulado()))
-                    ->setCellValue('I' . $i, $arFactura->getVrSubtotal())
-                    ->setCellValue('J' . $i, $arFactura->getVrBaseAIU())
-                    ->setCellValue('K' . $i, $arFactura->getVrIva())
-                    ->setCellValue('L' . $i, $arFactura->getVrRetencionIva())
-                    ->setCellValue('M' . $i, $arFactura->getVrRetencionFuente())
-                    ->setCellValue('N' . $i, $arFactura->getVrTotal());
+                    ->setCellValue('B' . $i, $arFactura->getFacturaTipoRel()->getNombre())
+                    ->setCellValue('C' . $i, $arFactura->getNumero())
+                    ->setCellValue('D' . $i, $arFactura->getFecha()->format('Y/m/d'))
+                    ->setCellValue('E' . $i, $arFactura->getFechaVence()->format('Y/m/d'))
+                    ->setCellValue('F' . $i, $arFactura->getClienteRel()->getNit())
+                    ->setCellValue('G' . $i, $arFactura->getClienteRel()->getNombreCorto())
+                    ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arFactura->getEstadoAutorizado()))
+                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arFactura->getEstadoAnulado()))
+                    ->setCellValue('J' . $i, $arFactura->getVrSubtotal())
+                    ->setCellValue('K' . $i, $arFactura->getVrBaseAIU())
+                    ->setCellValue('L' . $i, $arFactura->getVrIva())
+                    ->setCellValue('M' . $i, $arFactura->getVrRetencionIva())
+                    ->setCellValue('N' . $i, $arFactura->getVrRetencionFuente())
+                    ->setCellValue('O' . $i, $arFactura->getVrTotal());
             $i++;
         }
 
