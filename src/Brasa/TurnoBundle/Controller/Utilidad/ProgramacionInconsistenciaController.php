@@ -22,7 +22,8 @@ class ProgramacionInconsistenciaController extends Controller
         $form = $this->formularioLista();
         $form->handleRequest($request);
         if($form->isValid()) {
-            if($form->get('BtnGenerar')->isClicked()) {   
+            if($form->get('BtnGenerar')->isClicked()) {  
+                set_time_limit(0);
                 $strSql = "DELETE FROM tur_programacion_inconsistencia WHERE 1";           
                 $em->getConnection()->executeQuery($strSql);                
                 $dateFecha = $form->get('fecha')->getData();
@@ -33,6 +34,7 @@ class ProgramacionInconsistenciaController extends Controller
                 $this->recursosTurnoDoble($strAnio, $strMes);
                 $this->recursosSinProgramacionMes($arRecursos, $strAnio, $strMes);
                 $this->recursosSinTurno($arRecursos, $strAnio, $strMes);
+                set_time_limit(60);
                 return $this->redirect($this->generateUrl('brs_tur_utilidad_programacion_inconsistencias')); 
             } 
             if($form->get('BtnEliminar')->isClicked()) {            
