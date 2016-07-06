@@ -130,4 +130,14 @@ class RhuCargoSupervigilancia
     {
         return $this->codigoCargoSupervigilanciaFk;
     }
+
+    /**
+     * Get codigoCargoSuperVigilanciaPk
+     *
+     * @return integer
+     */
+    public function getCodigoCargoSuperVigilanciaPk()
+    {
+        return $this->codigoCargoSuperVigilanciaPk;
+    }
 }
