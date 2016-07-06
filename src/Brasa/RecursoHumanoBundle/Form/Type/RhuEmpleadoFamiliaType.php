@@ -29,7 +29,7 @@ class RhuEmpleadoFamiliaType extends AbstractType
             ->add('ocupacion', 'text', array('required' => true))
             ->add('telefono', 'text', array('required' => false))
             ->add('codigoSexoFk', 'choice', array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO')))
-            ->add('guardar', 'submit')
+            ->add('guardar', 'submit') 
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }
 
