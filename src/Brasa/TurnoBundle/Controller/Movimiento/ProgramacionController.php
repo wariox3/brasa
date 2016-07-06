@@ -184,7 +184,7 @@ class ProgramacionController extends Controller
         }
         $formDetalle = $this->createFormBuilder()->getForm(); 
         $dql = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->listaDql($codigoProgramacion);       
-        $arProgramacionDetalle = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 300);
+        $arProgramacionDetalle = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 1000);
         return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalle.html.twig', array(
                     'arProgramacion' => $arProgramacion,
                     'arProgramacionDetalle' => $arProgramacionDetalle,

@@ -798,140 +798,22 @@ class BaseEmpleadoController extends Controller
 
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
-        $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+        $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();        
         $arEmpleados = $query->getResult();
         foreach ($arEmpleados as $arEmpleado) {
-            if ($arEmpleado->getCodigoCentroCostoFk() == null){
-                $centroCosto = "";
-            }else{
-                $centroCosto = $arEmpleado->getCentroCostoRel()->getNombre();
-            }
-            if ($arEmpleado->getCodigoClasificacionRiesgoFk() == null){
-                $clasificacionRiesgo = "";
-            }else{
-                $clasificacionRiesgo = $arEmpleado->getClasificacionRiesgoRel()->getNombre();
-            }
-            if ($arEmpleado->getCodigoCargoFk() == null){
-                $cargo = "";
-            }else{
-                $cargo = $arEmpleado->getCargoRel()->getNombre();
-            }
-            if ($arEmpleado->getCodigoTipoPensionFk() == null){
-                $tipoPension = "";
-            }else{
-                $tipoPension = $arEmpleado->getTipoPensionRel()->getNombre();
-            }
-            if ($arEmpleado->getCodigoTipoCotizanteFk() == null){
-                $tipoCotizante = "";
-            }else{
-                $tipoCotizante = $arEmpleado->getSsoTipoCotizanteRel()->getNombre();
-            }
-            if ($arEmpleado->getCodigoSubtipoCotizanteFk() == null){
-                $subtipoCotizante = "";
-            }else{
-                $subtipoCotizante = $arEmpleado->getSsoSubtipoCotizanteRel()->getNombre();
-            }
-            if ($arEmpleado->getCodigoEntidadSaludFk() == null){
-                $entidadSalud = "";
-            }else{
-                $entidadSalud = $arEmpleado->getEntidadSaludRel()->getNombre();
-            }
-            
-            if ($arEmpleado->getCodigoEntidadPensionFk() == null){
-                $entidadPension = "";
-            }else{
-                $entidadPension = $arEmpleado->getEntidadPensionRel()->getNombre();
-            }
-            
-            if ($arEmpleado->getCodigoEntidadCajaFk() == null){
-                $entidadCaja = "";
-            }else{
-                $entidadCaja = $arEmpleado->getEntidadCajaRel()->getNombre();
-            }        
-            if ($arEmpleado->getCodigoSexoFk() == "M"){
-                $sexo = "MASCULINO";
-            }else{
-                $sexo = "FEMENINO";
-            }
-            if ($arEmpleado->getPadreFamilia() == 0){
-                $padreFamilia = "NO";
-            }else{
-                $padreFamilia = "SI";
-            }
-            if ($arEmpleado->getCabezaHogar() == 0){
-                $cabezaHogar = "NO";
-            }else{
-                $cabezaHogar = "SI";
-            }
-            if ($arEmpleado->getEstadoActivo() == 0){
-                $estadoActivo = "NO";
-            }else{
-                $estadoActivo = "SI";
-            }
-            if ($arEmpleado->getEstadoContratoActivo() == 0){
-                $estadoContratoActivo = "NO VIGENTE";
-            }else{
-                $estadoContratoActivo = "VIGENTE";
-            }
-            if ($arEmpleado->getCodigoDepartamentoEmpresaFk() == null){
-                $departamentoEmpresa = "";
-            }else{
-                $departamentoEmpresa = $arEmpleado->getDepartamentoEmpresaRel()->getNombre();
-            }
-            if ($arEmpleado->getCodigoHorarioFk() == null){
-                $horario = "";
-            }else{
-                $horario = $arEmpleado->getHorarioRel()->getNombre();
-            }
-            if ($arEmpleado->getCodigoEmpleadoEstudioTipoFk() == null){
-                $empleadoEstudioTipo = "";
-            }else{
-                $empleadoEstudioTipo = $arEmpleado->getEmpleadoEstudioTipoRel()->getNombre();
-            }
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arEmpleado->getCodigoEmpleadoPk())
-                    ->setCellValue('B' . $i, $arEmpleado->getTipoIdentificacionRel()->getNombre())
-                    ->setCellValue('C' . $i, $arEmpleado->getNumeroIdentificacion())
-                    ->setCellValue('D' . $i, $arEmpleado->getciudadExpedicionRel()->getNombre())
-                    ->setCellValue('E' . $i, $arEmpleado->getFechaExpedicionIdentificacion())
-                    ->setCellValue('F' . $i, $arEmpleado->getLibretaMilitar())
-                    ->setCellValue('G' . $i, $centroCosto)
-                    ->setCellValue('H' . $i, $arEmpleado->getNombreCorto())
-                    ->setCellValue('I' . $i, $arEmpleado->getTelefono())
-                    ->setCellValue('J' . $i, $arEmpleado->getCelular())
-                    ->setCellValue('K' . $i, $arEmpleado->getDireccion())
-                    ->setCellValue('L' . $i, $arEmpleado->getBarrio())
-                    ->setCellValue('M' . $i, $arEmpleado->getciudadRel()->getNombre())
-                    ->setCellValue('N' . $i, $arEmpleado->getRhRel()->getTipo())
-                    ->setCellValue('O' . $i, $sexo)
-                    ->setCellValue('P' . $i, $arEmpleado->getCorreo())
-                    ->setCellValue('Q' . $i, $arEmpleado->getFechaNacimiento())
-                    ->setCellValue('R' . $i, $arEmpleado->getCiudadNacimientoRel()->getNombre())
-                    ->setCellValue('S' . $i, $arEmpleado->getEstadoCivilRel()->getNombre())
-                    ->setCellValue('T' . $i, $padreFamilia)
-                    ->setCellValue('U' . $i, $cabezaHogar)
-                    ->setCellValue('V' . $i, $empleadoEstudioTipo)
-                    ->setCellValue('W' . $i, $entidadSalud)
-                    ->setCellValue('X' . $i, $entidadPension)
-                    ->setCellValue('Y' . $i, $entidadCaja)
-                    ->setCellValue('Z' . $i, $clasificacionRiesgo)
-                    ->setCellValue('AA' . $i, $arEmpleado->getCuenta())
-                    ->setCellValue('AB' . $i, $arEmpleado->getBancoRel()->getNombre())
-                    ->setCellValue('AC' . $i, $arEmpleado->getFechaContrato())
-                    ->setCellValue('AD' . $i, $arEmpleado->getFechaFinalizaContrato())
-                    ->setCellValue('AE' . $i, $cargo)
-                    ->setCellValue('AF' . $i, $arEmpleado->getCargoDescripcion())
-                    ->setCellValue('AG' . $i, $tipoPension)
-                    ->setCellValue('AH' . $i, $tipoCotizante)
-                    ->setCellValue('AI' . $i, $subtipoCotizante)
-                    ->setCellValue('AJ' . $i, $estadoActivo)
-                    ->setCellValue('AK' . $i, $estadoContratoActivo)
-                    ->setCellValue('AL' . $i, $arEmpleado->getCodigoContratoActivoFk())
-                    ->setCellValue('AM' . $i, $arEmpleado->getCamisa())
-                    ->setCellValue('AN' . $i, $arEmpleado->getJeans())
-                    ->setCellValue('AO' . $i, $arEmpleado->getCalzado())
-                    ->setCellValue('AP' . $i, $departamentoEmpresa)
-                    ->setCellValue('AQ' . $i, $horario);
+                    ->setCellValue('A' . $i, $arEmpleado->getApellido1())
+                    ->setCellValue('B' . $i, $arEmpleado->getApellido2())
+                    ->setCellValue('Q' . $i, '13')
+                    ->setCellValue('AW' . $i, $arEmpleado->getDireccion())
+                    ->setCellValue('AY' . $i, $arEmpleado->getCorreo())
+                    ->setCellValue('BE' . $i, 'S')
+                    ->setCellValue('CA' . $i, $arEmpleado->getNumeroIdentificacion())
+                    ->setCellValue('CC' . $i, $arEmpleado->getNombreCorto())
+                    ->setCellValue('CD' . $i, $arEmpleado->getNombre1())
+                    ->setCellValue('CE' . $i, $arEmpleado->getNombre2())
+                    ->setCellValue('CL' . $i, '169')
+                    ;
             $i++;
         }
 
