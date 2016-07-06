@@ -24,6 +24,7 @@ DELETE FROM car_cuenta_cobrar;
 DELETE FROM car_cliente;
 
 /*Turnos*/
+DELETE FROM tur_simulacion_detalle;
 DELETE FROM tur_novedad;
 DELETE FROM tur_costo_recurso;
 DELETE FROM tur_cierre_mes_servicio_detalle;
@@ -46,7 +47,7 @@ DELETE FROM tur_servicio;
 DELETE FROM tur_cotizacion_otro;
 DELETE FROM tur_cotizacion_detalle;
 DELETE FROM tur_cotizacion;
-DELETE FROM tur_recurso;
+/*DELETE FROM tur_recurso;*/
 
 /*Turnos*/
 DELETE FROM rhu_soporte_pago_horario_detalle;
