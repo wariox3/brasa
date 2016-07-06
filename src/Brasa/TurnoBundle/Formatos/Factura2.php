@@ -41,11 +41,11 @@ class Factura2 extends \FPDF_FPDF {
         $this->Text(135, 65, "Fecha Vence");
         $this->Text(170, 65, ucwords(strtolower($this->devuelveMes($arFactura->getFechaVence()->format('m')))) . " " . $arFactura->getFechaVence()->format('d') . " de " . $arFactura->getFechaVence()->format('Y'));        
         $this->Text(15, 70, utf8_decode("Señores"));
-        $this->Text(45, 70, $arFactura->getClienteRel()->getNombreCorto());
+        $this->Text(45, 70, utf8_decode($arFactura->getClienteRel()->getNombreCorto()));
         $this->Text(135, 70, "Nit");
         $this->Text(170, 70, $arFactura->getClienteRel()->getNit(). "-" . $arFactura->getClienteRel()->getDigitoVerificacion());        
         $this->Text(15, 80, "Direccion");
-        $this->Text(45, 80, $arFactura->getClienteRel()->getDireccion());
+        $this->Text(45, 80, utf8_decode($arFactura->getClienteRel()->getDireccion()));
         $this->Text(135, 80, "Telefono");
         $this->Text(170, 80, $arFactura->getClienteRel()->getTelefono());                
         
@@ -122,7 +122,7 @@ class Factura2 extends \FPDF_FPDF {
                     $pdf->SetFont('Arial', 'B', 9);
                     $modalidad = "";
                     if($arFacturaDetalle->getCodigoModalidadServicioFk()) {
-                        $modalidad = "-" . $arFacturaDetalle->getModalidadServicioRel()->getNombre();
+                        $modalidad = "-" . utf8_decode($arFacturaDetalle->getModalidadServicioRel()->getNombre());
                     }
                     $pdf->Cell(124, 4, substr(utf8_decode($arFacturaDetalle->getPuestoRel()->getNombre()) . $modalidad, 0, 61), 0, 0, 'L');                        
                     $pdf->SetFont('Arial', '', 9);
@@ -307,7 +307,7 @@ class Factura2 extends \FPDF_FPDF {
         $this->Text(20, 206, "Fecha y Nombre:");
         $this->Text(20, 211, "Sello:");
         $this->Text(20, 221, "Actividad Comercial");
-        $this->Text(60, 221, $arFactura->getClienteRel()->getSectorComercialRel()->getNombre());
+        $this->Text(60, 221, utf8_decode($arFactura->getClienteRel()->getSectorComercialRel()->getNombre()));
         $this->Text(90, 221, "Estrato =");
         $this->Ln(4);
         $this->SetFont('Arial', '', 8);
