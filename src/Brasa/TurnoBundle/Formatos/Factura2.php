@@ -302,6 +302,8 @@ class Factura2 extends \FPDF_FPDF {
         $plazoPago = $arFactura->getClienteRel()->getPlazoPago();
         $this->Text(66, 201, "CONDICIONES DE PAGO: A $plazoPago DIAS A PARTIR");
         $this->Text(66, 205, "DE LA FECHA DE EXPEDICION");
+        $this->SetXY(65,207);
+        $this->MultiCell(80, 4, $arFactura->getComentarios(), 0, 'L');        
         $this->SetFont('Arial', '', 9);
         $this->Text(20, 201, "Recibi conforme:");
         $this->Text(20, 206, "Fecha y Nombre:");
