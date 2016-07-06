@@ -44,10 +44,16 @@ class RhuEmpleadoEstudio
     private $titulo;
     
     /**
-     * @ORM\Column(name="fecha_vencimiento", type="date", nullable=true)
+     * @ORM\Column(name="fecha_inicio", type="date", nullable=true)
      */     
     
-    private $fechaVencimiento;     
+    private $fechaInicio;
+    
+    /**
+     * @ORM\Column(name="fecha_terminacion", type="date", nullable=true)
+     */     
+    
+    private $fechaTerminacion;     
     
     /**     
      * @ORM\Column(name="validar_vencimiento", type="boolean")
@@ -77,6 +83,7 @@ class RhuEmpleadoEstudio
      */
     protected $ciudadRel;
     
+
 
 
     /**
@@ -210,27 +217,51 @@ class RhuEmpleadoEstudio
     }
 
     /**
-     * Set fechaVencimiento
+     * Set fechaInicio
      *
-     * @param \DateTime $fechaVencimiento
+     * @param \DateTime $fechaInicio
      *
      * @return RhuEmpleadoEstudio
      */
-    public function setFechaVencimiento($fechaVencimiento)
+    public function setFechaInicio($fechaInicio)
     {
-        $this->fechaVencimiento = $fechaVencimiento;
+        $this->fechaInicio = $fechaInicio;
 
         return $this;
     }
 
     /**
-     * Get fechaVencimiento
+     * Get fechaInicio
      *
      * @return \DateTime
      */
-    public function getFechaVencimiento()
+    public function getFechaInicio()
     {
-        return $this->fechaVencimiento;
+        return $this->fechaInicio;
+    }
+
+    /**
+     * Set fechaTerminacion
+     *
+     * @param \DateTime $fechaTerminacion
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setFechaTerminacion($fechaTerminacion)
+    {
+        $this->fechaTerminacion = $fechaTerminacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaTerminacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaTerminacion()
+    {
+        return $this->fechaTerminacion;
     }
 
     /**
@@ -255,6 +286,30 @@ class RhuEmpleadoEstudio
     public function getValidarVencimiento()
     {
         return $this->validarVencimiento;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
     }
 
     /**
@@ -327,29 +382,5 @@ class RhuEmpleadoEstudio
     public function getCiudadRel()
     {
         return $this->ciudadRel;
-    }
-
-    /**
-     * Set comentarios
-     *
-     * @param string $comentarios
-     *
-     * @return RhuEmpleadoEstudio
-     */
-    public function setComentarios($comentarios)
-    {
-        $this->comentarios = $comentarios;
-
-        return $this;
-    }
-
-    /**
-     * Get comentarios
-     *
-     * @return string
-     */
-    public function getComentarios()
-    {
-        return $this->comentarios;
     }
 }

@@ -216,8 +216,12 @@ class GenCiudad
      */
     protected $afiEmpleadosCiudadRel;    
     
-    
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuAcademiaCurso", mappedBy="ciudadRel")
+     */
+    protected $rhuAcademiaCursosCiudadRel;
 
+    
     /**
      * Constructor
      */
@@ -255,6 +259,7 @@ class GenCiudad
         $this->rhuClientesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->afiClientesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->afiEmpleadosCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rhuAcademiaCursosCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1521,5 +1526,39 @@ class GenCiudad
     public function getAfiEmpleadosCiudadRel()
     {
         return $this->afiEmpleadosCiudadRel;
+    }
+
+    /**
+     * Add rhuAcademiaCursosCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAcademiaCurso $rhuAcademiaCursosCiudadRel
+     *
+     * @return GenCiudad
+     */
+    public function addRhuAcademiaCursosCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuAcademiaCurso $rhuAcademiaCursosCiudadRel)
+    {
+        $this->rhuAcademiaCursosCiudadRel[] = $rhuAcademiaCursosCiudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuAcademiaCursosCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAcademiaCurso $rhuAcademiaCursosCiudadRel
+     */
+    public function removeRhuAcademiaCursosCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuAcademiaCurso $rhuAcademiaCursosCiudadRel)
+    {
+        $this->rhuAcademiaCursosCiudadRel->removeElement($rhuAcademiaCursosCiudadRel);
+    }
+
+    /**
+     * Get rhuAcademiaCursosCiudadRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuAcademiaCursosCiudadRel()
+    {
+        return $this->rhuAcademiaCursosCiudadRel;
     }
 }
