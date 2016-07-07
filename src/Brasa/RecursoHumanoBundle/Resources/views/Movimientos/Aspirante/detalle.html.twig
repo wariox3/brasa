@@ -99,7 +99,22 @@
                     <td class="titulo" >PESO:</td>
                     <td class="td-in-well">{{ arAspirante.peso }}</td>
                 </tr>
-                
+                <tr>
+                    <td class="titulo" >CARGO QUE ASPIRA:</td>
+                    <td class="td-in-well">{{ arAspirante.cargoAspira }}</td>
+                    <td class="titulo" >RECOMENDADO POR:</td>
+                    <td class="td-in-well">{{ arAspirante.recomendado }}</td>
+                    <td class="titulo" >OPERACION:</td>
+                    <td class="td-in-well">{{ arAspirante.operacion }}</td>
+                </tr>
+                <tr>
+                    <td class="titulo" ></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo" ></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo" >REINGRESO:</td>
+                    <td class="td-in-well">{% if arAspirante.reintegro == 1 %} SI {% else %} NO {% endif%}</td>
+                </tr>
                 <tr>
                     <td class="titulo" colspan="8">COMENTARIOS: {{ arAspirante.comentarios }}</td>
                 </tr>

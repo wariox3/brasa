@@ -192,9 +192,9 @@ class RhuAspirante
     private $operacion;
     
     /**
-     * @ORM\Column(name="reintrego", type="boolean")
+     * @ORM\Column(name="reintegro", type="boolean")
      */
-    private $reintrego = false;
+    private $reintegro = false;
 
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTipoIdentificacion", inversedBy="rhuAspirantesTipoIdentificacionRel")
@@ -244,6 +244,7 @@ class RhuAspirante
     protected $seleccionesRequisicionesAspirantesAspiranteRel;
     
 
+    
     
     /**
      * Constructor
@@ -1080,27 +1081,27 @@ class RhuAspirante
     }
 
     /**
-     * Set reintrego
+     * Set reintegro
      *
-     * @param boolean $reintrego
+     * @param boolean $reintegro
      *
      * @return RhuAspirante
      */
-    public function setReintrego($reintrego)
+    public function setReintegro($reintegro)
     {
-        $this->reintrego = $reintrego;
+        $this->reintegro = $reintegro;
 
         return $this;
     }
 
     /**
-     * Get reintrego
+     * Get reintegro
      *
      * @return boolean
      */
-    public function getReintrego()
+    public function getReintegro()
     {
-        return $this->reintrego;
+        return $this->reintegro;
     }
 
     /**

@@ -66,6 +66,10 @@ class RhuAspiranteType extends AbstractType
             ->add('codigoDisponibilidadFk', 'choice', array('choices'   => array('1' => 'TIEMPO COMPLETO', '2' => 'MEDIO TIEMPO', '3' => 'POR HORAS','4' => 'DESDE CASA', '5' => 'PRACTICAS')))                
             ->add('inconsistencia', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('comentarios', 'textarea', array('required' => false))
+            ->add('cargoAspira', 'text', array('required' => false))                
+            ->add('recomendado', 'text', array('required' => false))                
+            ->add('operacion', 'text', array('required' => false))
+            ->add('reintegro', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))                
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }
