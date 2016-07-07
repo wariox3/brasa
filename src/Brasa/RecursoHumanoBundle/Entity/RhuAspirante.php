@@ -77,7 +77,7 @@ class RhuAspirante
     private $celular;
 
     /**
-     * @ORM\Column(name="direccion", type="string", length=30, nullable=true)
+     * @ORM\Column(name="direccion", type="string", length=60, nullable=true)
      */
     private $direccion;
 
@@ -175,6 +175,26 @@ class RhuAspirante
      * @ORM\Column(name="codigo_tipo_libreta", type="integer", nullable=true)
      */    
     private $codigoTipoLibreta;
+    
+    /**
+     * @ORM\Column(name="cargo_aspira", type="string", length=50, nullable=true)
+     */
+    private $cargoAspira;
+    
+    /**
+     * @ORM\Column(name="recomendado", type="string", length=80, nullable=true)
+     */
+    private $recomendado;
+    
+    /**
+     * @ORM\Column(name="operacion", type="string", length=50, nullable=true)
+     */
+    private $operacion;
+    
+    /**
+     * @ORM\Column(name="reintrego", type="boolean")
+     */
+    private $reintrego = false;
 
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTipoIdentificacion", inversedBy="rhuAspirantesTipoIdentificacionRel")
@@ -224,6 +244,7 @@ class RhuAspirante
     protected $seleccionesRequisicionesAspirantesAspiranteRel;
     
 
+    
     /**
      * Constructor
      */
@@ -984,6 +1005,102 @@ class RhuAspirante
     public function getCodigoTipoLibreta()
     {
         return $this->codigoTipoLibreta;
+    }
+
+    /**
+     * Set cargoAspira
+     *
+     * @param string $cargoAspira
+     *
+     * @return RhuAspirante
+     */
+    public function setCargoAspira($cargoAspira)
+    {
+        $this->cargoAspira = $cargoAspira;
+
+        return $this;
+    }
+
+    /**
+     * Get cargoAspira
+     *
+     * @return string
+     */
+    public function getCargoAspira()
+    {
+        return $this->cargoAspira;
+    }
+
+    /**
+     * Set recomendado
+     *
+     * @param string $recomendado
+     *
+     * @return RhuAspirante
+     */
+    public function setRecomendado($recomendado)
+    {
+        $this->recomendado = $recomendado;
+
+        return $this;
+    }
+
+    /**
+     * Get recomendado
+     *
+     * @return string
+     */
+    public function getRecomendado()
+    {
+        return $this->recomendado;
+    }
+
+    /**
+     * Set operacion
+     *
+     * @param string $operacion
+     *
+     * @return RhuAspirante
+     */
+    public function setOperacion($operacion)
+    {
+        $this->operacion = $operacion;
+
+        return $this;
+    }
+
+    /**
+     * Get operacion
+     *
+     * @return string
+     */
+    public function getOperacion()
+    {
+        return $this->operacion;
+    }
+
+    /**
+     * Set reintrego
+     *
+     * @param boolean $reintrego
+     *
+     * @return RhuAspirante
+     */
+    public function setReintrego($reintrego)
+    {
+        $this->reintrego = $reintrego;
+
+        return $this;
+    }
+
+    /**
+     * Get reintrego
+     *
+     * @return boolean
+     */
+    public function getReintrego()
+    {
+        return $this->reintrego;
     }
 
     /**
