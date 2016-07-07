@@ -293,7 +293,7 @@ class AspiranteController extends Controller
         $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'FECHA')
@@ -316,7 +316,11 @@ class AspiranteController extends Controller
                     ->setCellValue('S1', 'CORREO')
                     ->setCellValue('T1', 'DISPONIBILIDAD')
                     ->setCellValue('U1', 'INCONSISTENCIA')
-                    ->setCellValue('V1', 'COMENTARIOS');
+                    ->setCellValue('V1', 'CARGO ASPIRA')
+                    ->setCellValue('W1', 'RECOMENDADO')
+                    ->setCellValue('X1', 'OPERACION')
+                    ->setCellValue('Y1', 'REINGRESO')
+                    ->setCellValue('Z1', 'COMENTARIOS');
 
         $i = 2;
         $query = $em->createQuery($session->get('dqlAspiranteLista'));
@@ -368,6 +372,10 @@ class AspiranteController extends Controller
             if ($arAspirantes->getInconsistencia() == 1){
                 $inconsistencia = "SI";
             }
+            $reingreso = "NO";
+            if ($arAspirantes->getReintegro() == 1){
+                $reingreso = "SI";
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arAspirantes->getCodigoAspirantePk())
                     ->setCellValue('B' . $i, $arAspirantes->getFecha()->format('Y-m-d'))
@@ -390,7 +398,11 @@ class AspiranteController extends Controller
                     ->setCellValue('S' . $i, $arAspirantes->getCorreo())
                     ->setCellValue('T' . $i, $disponibilidad)
                     ->setCellValue('U' . $i, $inconsistencia)
-                    ->setCellValue('V' . $i, $arAspirantes->getComentarios());
+                    ->setCellValue('V' . $i, $arAspirantes->getCargoAspira())
+                    ->setCellValue('W' . $i, $arAspirantes->getRecomendado())
+                    ->setCellValue('X' . $i, $arAspirantes->getOperacion())
+                    ->setCellValue('Y' . $i, $reingreso)
+                    ->setCellValue('Z' . $i, $arAspirantes->getComentarios());
             $i++;
         }
 
