@@ -62,7 +62,7 @@ class EstudioController extends Controller
             $arEstudio = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudio')->find($codigoEstudio);
         } else {
             $arUsuario = $this->get('security.context')->getToken()->getUser();
-            $arEstudio->setFechaEstudio(new \DateTime('now'));
+            $arEstudio->setFecha(new \DateTime('now'));
         }
         $form = $this->createForm(new RhuEmpleadoEstudioType, $arEstudio);
         $form->handleRequest($request);
@@ -73,7 +73,7 @@ class EstudioController extends Controller
             if($arrControles['form_txtNumeroIdentificacion'] != '') {
                 $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                 $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));
-                if(count($arEmpleadopleado) > 0) {
+                if(count($arEmpleado) > 0) {
                     $arEstudio->setEmpleadoRel($arEmpleado);
                     if($arEmpleado->getCodigoContratoActivoFk() != '') {
                         if ($codigoEstudio == 0){
@@ -85,7 +85,7 @@ class EstudioController extends Controller
                             return $this->redirect($this->generateUrl('brs_rhu_estudio_nuevo', array('codigoEstudio' => 0 )));
                         } else {
                             if ($codigoEstudio == 0){
-                                return $this->redirect($this->generateUrl('brs_rhu_estudio_detalle', array('codigoEstudio' => $arEstudio->getCodigoEstudioPk())));
+                                return $this->redirect($this->generateUrl('brs_rhu_estudio_detalle', array('codigoEstudio' => $arEstudio->getCodigoEmpleadoEstudioPk())));
                             } else {
                                 return $this->redirect($this->generateUrl('brs_rhu_estudio_lista'));
                             }
@@ -221,12 +221,12 @@ class EstudioController extends Controller
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);               
-        if($ar->getEstadoAutorizado() == 1) {            
+        /*if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;                        
         } else {
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonImprimir['disabled'] = true;
-        }
+        }*/
         $form = $this->createFormBuilder()    
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)            
@@ -249,24 +249,55 @@ class EstudioController extends Controller
                     ->setKeywords("office 2007 openxml php")
                     ->setCategory("Test result file");
                 $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
-                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);    
+                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setAutoSize(true);
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'CÓDIGO')
                             ->setCellValue('B1', 'FECHA')
-                            ->setCellValue('C1', 'CENTRO COSTOS')
-                            ->setCellValue('D1', 'IDENTIFICACIÓN')
-                            ->setCellValue('E1', 'EMPLEADO')
-                            ->setCellValue('F1', 'CARGO')
-                            ->setCellValue('G1', 'DEPARTAMENTO EMPRESA')
-                            ->setCellValue('H1', 'JEFE PERMISO')
-                            ->setCellValue('I1', 'TIPO PERMISO')
-                            ->setCellValue('J1', 'MOTIVO')
-                            ->setCellValue('K1', 'HORA SALIDA')
-                            ->setCellValue('L1', 'HORA LLEGADA')
-                            ->setCellValue('M1', 'HORAS')
-                            ->setCellValue('N1', 'AFECTA HORARIO')
-                            ->setCellValue('O1', 'AUTORIZADO')
-                            ->setCellValue('P1', 'OBSERVACIONES');
+                            ->setCellValue('C1', 'IDENTIFICACIÓN')
+                            ->setCellValue('D1', 'EMPLEADO')
+                            ->setCellValue('E1', 'CARGO')
+                            ->setCellValue('F1', 'TIPO ESTUDIO')
+                            ->setCellValue('G1', 'INSTITUCION')
+                            ->setCellValue('H1', 'TITULO')
+                            ->setCellValue('I1', 'CIUDAD')
+                            ->setCellValue('J1', 'FECHA INICIO')
+                            ->setCellValue('K1', 'FECHA TERMINACIÓN')
+                            ->setCellValue('L1', 'GRADO BACHILLER')
+                            ->setCellValue('M1', 'GRADUADO')
+                            ->setCellValue('N1', 'CURSO ACREDITACIÓN')
+                            ->setCellValue('O1', 'ACADEMIA')
+                            ->setCellValue('P1', 'FECHA INICIO ACREDITACIÓN')
+                            ->setCellValue('Q1', 'FECHA TER ACREDITACIÓN')
+                            ->setCellValue('R1', 'NUMERO REGISTRO')
+                            ->setCellValue('S1', 'NUMERO APROBACIÓN')
+                            ->setCellValue('T1', 'VALIDAR')
+                            ->setCellValue('U1', 'ESTADO')
+                            ->setCellValue('V1', 'ESTADO INVALIDO')
+                            ->setCellValue('W1', 'COMENTARIOS');
 
                 $i = 2;
                 $query = $em->createQuery($this->strListaDql);
@@ -274,27 +305,72 @@ class EstudioController extends Controller
                 $arEstudios = $query->getResult();
 
                 foreach ($arEstudios as $arEstudios) {
-                    $centroCosto = "";
-                    if ($arEstudios->getCodigoCentroCostoFk() != null){
-                        $centroCosto = $arEstudios->getCentroCostoRel()->getNombre();
+                    $fechaInicio = "";
+                    if ($arEstudios->getFechaInicio() != null) {
+                        $fechaInicio = $arEstudios->getFechaInicio()->format('Y/m/d');
+                    }
+                    $fechaTerminacion = "";
+                    if ($arEstudios->getFechaTerminacion() != null) {
+                        $fechaTerminacion = $arEstudios->getFechaTerminacion()->format('Y/m/d');
+                    }
+                    $fechaInicioAcreditacion = "";
+                    if ($arEstudios->getFechaInicioAcreditacion() != null) {
+                        $fechaInicioAcreditacion = $arEstudios->getFechaInicioAcreditacion()->format('Y/m/d');
+                    }
+                    $fechaTerminacionAcreditacion = "";
+                    if ($arEstudios->getFechaTerminacionAcreditacion() != null) {
+                        $fechaTerminacionAcreditacion = $arEstudios->getFechaTerminacionAcreditacion()->format('Y/m/d');
+                    }
+                    $tipoAcreditacion = "";
+                    if ($arEstudios->getCodigoEstudioTipoAcreditacionFk() != null) {
+                        $tipoAcreditacion = $arEstudios->getEstudioTipoAcreditacionRel()->getNombre();
+                    }
+                    $academia = "";
+                    if ($arEstudios->getCodigoAcademiaFk() != null) {
+                        $academia = $arEstudios->getAcademiaRel()->getNombre();
+                    }
+                    $estadoInvalidado = "";
+                    if ($arEstudios->getCodigoEstudioEstadoInvalidoFk() != null) {
+                        $estadoInvalidado = $arEstudios->getEstudioEstadoInvalidoRel()->getNombre();
+                    }
+                    $gradoBachiller = "";
+                    if ($arEstudios->getCodigoGradoBachillerFk() != null) {
+                        $gradoBachiller = $arEstudios->getGradoBachillerRel()->getGrado();
+                    }
+                    $estado = "";
+                    if ($arEstudios->getCodigoEstudioEstadoFk() != null) {
+                        $estado = $arEstudios->getEstudioEstadoRel()->getNombre();
+                    }
+                    $graduado = "";
+                    if ($arEstudios->getGraduado() == 1){
+                        $graduado = "SI";
+                    } else {
+                        $graduado = "NO";
                     }
                     $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A' . $i, $arEstudios->getCodigoEstudioPk())
-                            ->setCellValue('B' . $i, $arEstudios->getFechaEstudio()->format('Y/m/d'))
-                            ->setCellValue('C' . $i, $centroCosto)
-                            ->setCellValue('D' . $i, $arEstudios->getEmpleadoRel()->getNumeroIdentificacion())
-                            ->setCellValue('E' . $i, $arEstudios->getEmpleadoRel()->getNombreCorto())
-                            ->setCellValue('F' . $i, $arEstudios->getCargoRel()->getNombre())
-                            ->setCellValue('G' . $i, $arEstudios->getDepartamentoEmpresaRel()->getNombre())
-                            ->setCellValue('H' . $i, $arEstudios->getJefeAutoriza())
-                            ->setCellValue('I' . $i, $arEstudios->getEstudioTipoRel()->getNombre())
-                            ->setCellValue('J' . $i, $arEstudios->getMotivo())
-                            ->setCellValue('K' . $i, $arEstudios->getHoraSalida()->format('H:i'))
-                            ->setCellValue('L' . $i, $arEstudios->getHoraLlegada()->format('H:i'))
-                            ->setCellValue('M' . $i, $arEstudios->getHorasEstudio())
-                            ->setCellValue('N' . $i, $objFunciones->devuelveBoolean($arEstudios->getAfectaHorario()))
-                            ->setCellValue('O' . $i, $objFunciones->devuelveBoolean($arEstudios->getEstadoAutorizado()))
-                            ->setCellValue('P' . $i, $arEstudios->getObservaciones());
+                            ->setCellValue('A' . $i, $arEstudios->getCodigoEmpleadoEstudioPk())
+                            ->setCellValue('B' . $i, $arEstudios->getFecha()->format('Y/m/d'))
+                            ->setCellValue('C' . $i, $arEstudios->getEmpleadoRel()->getNumeroIdentificacion())
+                            ->setCellValue('D' . $i, $arEstudios->getEmpleadoRel()->getNombreCorto())
+                            ->setCellValue('E' . $i, $arEstudios->getEmpleadoRel()->getCargoRel()->getNombre())
+                            ->setCellValue('F' . $i, $arEstudios->getEmpleadoEstudioTipoRel()->getNombre())
+                            ->setCellValue('G' . $i, $arEstudios->getInstitucion())
+                            ->setCellValue('H' . $i, $arEstudios->getTitulo())
+                            ->setCellValue('I' . $i, $arEstudios->getCiudadRel()->getNombre())
+                            ->setCellValue('J' . $i, $fechaInicio)
+                            ->setCellValue('K' . $i, $fechaTerminacion)
+                            ->setCellValue('L' . $i, $gradoBachiller)
+                            ->setCellValue('M' . $i, $objFunciones->devuelveBoolean($arEstudios->getGraduado()))
+                            ->setCellValue('N' . $i, $tipoAcreditacion)
+                            ->setCellValue('O' . $i, $academia)
+                            ->setCellValue('P' . $i, $fechaInicioAcreditacion)
+                            ->setCellValue('Q' . $i, $fechaTerminacionAcreditacion)
+                            ->setCellValue('R' . $i, $arEstudios->getNumeroRegistro())
+                            ->setCellValue('S' . $i, $arEstudios->getNumeroAcreditacion())
+                            ->setCellValue('T' . $i, $objFunciones->devuelveBoolean($arEstudios->getValidarVencimiento()))
+                            ->setCellValue('U' . $i, $estado)
+                            ->setCellValue('V' . $i, $estadoInvalidado)
+                            ->setCellValue('W' . $i, $arEstudios->getComentarios());
                     $i++;
                 }
 

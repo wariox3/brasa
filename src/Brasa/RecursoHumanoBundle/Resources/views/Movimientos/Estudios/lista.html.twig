@@ -63,9 +63,9 @@
                 <th>IDENTIFICACIÓN</th>
                 <th>{{ knp_pagination_sortable(arEstudios, 'NOMBRE', 'e.nombreCorto') }}</th>
                 <th>ESTUDIO</th>
-                <th>ESTADO</th>
                 <th>FECHA INICIO</th>
                 <th>FECHA TERMINACIÓN</th>
+                <th>ESTADO</th>
                 <th>VALIDADO</th>
                 <th style="text-align: center"></th>
                 <th></th>
@@ -74,10 +74,12 @@
             {% for arEstudios in arEstudios %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arEstudios.codigoEmpleadoEstudioPk }}">{{ arEstudios.codigoEmpleadoEstudioPk }} </td>
-                <td>{{ arEstudios.fechaInicio |date("Y-m-d")  }}</td>
+                <td>{{ arEstudios.fecha |date("Y-m-d")  }}</td>
                 <td>{{ arEstudios.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arEstudios.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arEstudios.empleadoEstudioTipoRel.nombre  }}</td>
+                <td>{{ arEstudios.fechaInicio |date('Y-m-d')  }}</td>
+                <td>{{ arEstudios.fechaTerminacion |date('Y-m-d')  }}</td>
                 <td>{{ arEstudios.estudioEstadoRel.nombre  | default('')}}</td>
                 <td>{% if arEstudios.validarVencimiento == 1%} SI {% else %}NO{% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_estudio_nuevo', {'codigoEstudio': arEstudios.codigoEmpleadoEstudioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>

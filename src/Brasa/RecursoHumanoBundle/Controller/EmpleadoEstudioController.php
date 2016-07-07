@@ -19,7 +19,7 @@ class EmpleadoEstudioController extends Controller
             $arEmpleadoEstudio = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudio')->find($codigoEmpleadoEstudio);
         } else {
             $arUsuario = $this->get('security.context')->getToken()->getUser();
-            //$arEmpleadoEstudio->setFechaInicio(new \DateTime('now'));
+            $arEmpleadoEstudio->setFecha(new \DateTime('now'));
             //$arEmpleadoEstudio->setFechaInicioAcreditacion(new \DateTime('now'));
             //$arEmpleadoEstudio->setFechaTerminacion(new \DateTime('now'));
             //$arEmpleadoEstudio->setFechaTerminacionAcreditacion(new \DateTime('now'));

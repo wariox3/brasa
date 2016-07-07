@@ -42,10 +42,10 @@ class RhuEmpleadoEstudioRepository extends EntityRepository {
             $dql .= " AND ee.codigoEstudioEstadoFk = " . $strEstado;
         }
         if($fechaInicio != "" ) {
-            $dql .= " AND ee.fechaInicio >= '" . $fechaInicio . "'";
+            $dql .= " AND ee.fechaInicio >='" . date_format($fechaInicio, ('Y-m-d')) . "'";
         }        
         if($fechaTerminacion != "" ) {
-            $dql .= " AND ee.fechaTerminacion <= '" . $fechaTerminacion . "'";
+            $dql .= " AND ee.fechaTerminacion <='" . date_format($fechaTerminacion, ('Y-m-d')) . "'";
         }
         $dql .= " ORDER BY ee.codigoEmpleadoEstudioPk desc";
         return $dql;
