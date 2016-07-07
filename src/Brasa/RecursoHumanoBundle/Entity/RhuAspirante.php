@@ -243,8 +243,6 @@ class RhuAspirante
      */
     protected $seleccionesRequisicionesAspirantesAspiranteRel;
     
-
-    
     
     /**
      * Constructor

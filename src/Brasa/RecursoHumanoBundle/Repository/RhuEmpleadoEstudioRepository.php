@@ -23,5 +23,31 @@ class RhuEmpleadoEstudioRepository extends EntityRepository {
         }
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
         return $dql;
-    }                 
+    } 
+    
+    public function listaMovimientoDql($strIdentificacion = "", $strNombre = "", $strEstudio = "", $strEstado = "", $fechaInicio = "", $fechaTerminacion = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT ee, e FROM BrasaRecursoHumanoBundle:RhuEmpleadoEstudio ee JOIN ee.empleadoRel e WHERE ee.codigoEmpleadoEstudioPk <> 0";
+   
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if($strNombre != "" ) {
+            $dql .= " AND e.nombreCorto LIKE '%" . $strNombre . "%'";
+        }
+        if($strEstudio != "") {
+            $dql .= " AND ee.codigoEmpleadoEstudioTipoFk = " . $strEstudio;
+        }
+        if($strEstado != "") {
+            $dql .= " AND ee.codigoEstudioEstadoFk = " . $strEstado;
+        }
+        if($fechaInicio != "" ) {
+            $dql .= " AND ee.fechaInicio >= '" . $fechaInicio . "'";
+        }        
+        if($fechaTerminacion != "" ) {
+            $dql .= " AND ee.fechaTerminacion <= '" . $fechaTerminacion . "'";
+        }
+        $dql .= " ORDER BY ee.codigoEmpleadoEstudioPk desc";
+        return $dql;
+    }
 }

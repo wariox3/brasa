@@ -53,17 +53,74 @@ class RhuEmpleadoEstudio
      * @ORM\Column(name="fecha_terminacion", type="date", nullable=true)
      */     
     
-    private $fechaTerminacion;     
+    private $fechaTerminacion;
+    
+    /**
+     * @ORM\Column(name="fecha_inicio_acreditacion", type="date", nullable=true)
+     */     
+    
+    private $fechaInicioAcreditacion;
+    
+    /**
+     * @ORM\Column(name="fecha_terminacion_acreditacion", type="date", nullable=true)
+     */     
+    
+    private $fechaTerminacionAcreditacion;
     
     /**     
      * @ORM\Column(name="validar_vencimiento", type="boolean")
      */    
-    private $validarVencimiento = 0;        
+    private $validarVencimiento = false;
+    
+    /**
+     * @ORM\Column(name="codigo_grado_bachiller_fk", type="integer", nullable=true)
+     */    
+    private $codigoGradoBachillerFk;
+    
+    /**
+     * @ORM\Column(name="codigo_academia_fk", type="integer", nullable=true)
+     */    
+    private $codigoAcademiaFk;
+    
+    /**     
+     * @ORM\Column(name="graduado", type="boolean")
+     */    
+    private $graduado = false;
+    
+    /**
+     * @ORM\Column(name="numero_registro", type="string", length=20, nullable=true)
+     */    
+    private $numeroRegistro;
+    
+    /**
+     * @ORM\Column(name="numero_acreditacion", type="string", length=20, nullable=true)
+     */    
+    private $numeroAcreditacion;
+    
+    /**
+     * @ORM\Column(name="codigo_estudio_tipo_acreditacion_fk", type="integer", nullable=true)
+     */    
+    private $codigoEstudioTipoAcreditacionFk;
+    
+    /**
+     * @ORM\Column(name="codigo_estudio_estado_fk", type="integer", nullable=true)
+     */    
+    private $codigoEstudioEstadoFk;
+    
+    /**
+     * @ORM\Column(name="codigo_estudio_estado_invalido_fk", type="integer", nullable=true)
+     */    
+    private $codigoEstudioEstadoInvalidoFk;
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
-    private $comentarios;    
+    private $comentarios;
+
+    /**
+     * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
+     */    
+    private $codigoUsuario;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="empleadosEstudiosEmpleadoRel")
@@ -83,8 +140,38 @@ class RhuEmpleadoEstudio
      */
     protected $ciudadRel;
     
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuAcademia", inversedBy="empleadosEstudiosAcademiaRel")
+     * @ORM\JoinColumn(name="codigo_academia_fk", referencedColumnName="codigo_academia_pk")
+     */
+    protected $academiaRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuGradoBachiller", inversedBy="empleadosEstudiosGradoBachillerRel")
+     * @ORM\JoinColumn(name="codigo_grado_bachiller_fk", referencedColumnName="codigo_grado_bachiller_pk")
+     */
+    protected $gradoBachillerRel; 
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEstudioTipoAcreditacion", inversedBy="empleadosEstudiosEstudioTipoAcreditacionRel")
+     * @ORM\JoinColumn(name="codigo_estudio_tipo_acreditacion_fk", referencedColumnName="codigo_estudio_tipo_acreditacion_pk")
+     */
+    protected $estudioTipoAcreditacionRel; 
 
 
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEstudioEstado", inversedBy="empleadosEstudiosEstudioEstadoRel")
+     * @ORM\JoinColumn(name="codigo_estudio_estado_fk", referencedColumnName="codigo_estudio_estado_pk")
+     */
+    protected $estudioEstadoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEstudioEstadoInvalido", inversedBy="empleadosEstudiosEstudioEstadoInvalidoRel")
+     * @ORM\JoinColumn(name="codigo_estudio_estado_invalido_fk", referencedColumnName="codigo_estudio_estado_invalido_pk")
+     */
+    protected $estudioEstadoInvalidoRel;
+    
+    
 
     /**
      * Get codigoEmpleadoEstudioPk
@@ -265,6 +352,54 @@ class RhuEmpleadoEstudio
     }
 
     /**
+     * Set fechaInicioAcreditacion
+     *
+     * @param \DateTime $fechaInicioAcreditacion
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setFechaInicioAcreditacion($fechaInicioAcreditacion)
+    {
+        $this->fechaInicioAcreditacion = $fechaInicioAcreditacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaInicioAcreditacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaInicioAcreditacion()
+    {
+        return $this->fechaInicioAcreditacion;
+    }
+
+    /**
+     * Set fechaTerminacionAcreditacion
+     *
+     * @param \DateTime $fechaTerminacionAcreditacion
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setFechaTerminacionAcreditacion($fechaTerminacionAcreditacion)
+    {
+        $this->fechaTerminacionAcreditacion = $fechaTerminacionAcreditacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaTerminacionAcreditacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaTerminacionAcreditacion()
+    {
+        return $this->fechaTerminacionAcreditacion;
+    }
+
+    /**
      * Set validarVencimiento
      *
      * @param boolean $validarVencimiento
@@ -286,6 +421,198 @@ class RhuEmpleadoEstudio
     public function getValidarVencimiento()
     {
         return $this->validarVencimiento;
+    }
+
+    /**
+     * Set codigoGradoBachillerFk
+     *
+     * @param integer $codigoGradoBachillerFk
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setCodigoGradoBachillerFk($codigoGradoBachillerFk)
+    {
+        $this->codigoGradoBachillerFk = $codigoGradoBachillerFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoGradoBachillerFk
+     *
+     * @return integer
+     */
+    public function getCodigoGradoBachillerFk()
+    {
+        return $this->codigoGradoBachillerFk;
+    }
+
+    /**
+     * Set codigoAcademiaFk
+     *
+     * @param integer $codigoAcademiaFk
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setCodigoAcademiaFk($codigoAcademiaFk)
+    {
+        $this->codigoAcademiaFk = $codigoAcademiaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoAcademiaFk
+     *
+     * @return integer
+     */
+    public function getCodigoAcademiaFk()
+    {
+        return $this->codigoAcademiaFk;
+    }
+
+    /**
+     * Set graduado
+     *
+     * @param boolean $graduado
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setGraduado($graduado)
+    {
+        $this->graduado = $graduado;
+
+        return $this;
+    }
+
+    /**
+     * Get graduado
+     *
+     * @return boolean
+     */
+    public function getGraduado()
+    {
+        return $this->graduado;
+    }
+
+    /**
+     * Set numeroRegistro
+     *
+     * @param string $numeroRegistro
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setNumeroRegistro($numeroRegistro)
+    {
+        $this->numeroRegistro = $numeroRegistro;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroRegistro
+     *
+     * @return string
+     */
+    public function getNumeroRegistro()
+    {
+        return $this->numeroRegistro;
+    }
+
+    /**
+     * Set numeroAcreditacion
+     *
+     * @param string $numeroAcreditacion
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setNumeroAcreditacion($numeroAcreditacion)
+    {
+        $this->numeroAcreditacion = $numeroAcreditacion;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroAcreditacion
+     *
+     * @return string
+     */
+    public function getNumeroAcreditacion()
+    {
+        return $this->numeroAcreditacion;
+    }
+
+    /**
+     * Set codigoEstudioTipoAcreditacionFk
+     *
+     * @param integer $codigoEstudioTipoAcreditacionFk
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setCodigoEstudioTipoAcreditacionFk($codigoEstudioTipoAcreditacionFk)
+    {
+        $this->codigoEstudioTipoAcreditacionFk = $codigoEstudioTipoAcreditacionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEstudioTipoAcreditacionFk
+     *
+     * @return integer
+     */
+    public function getCodigoEstudioTipoAcreditacionFk()
+    {
+        return $this->codigoEstudioTipoAcreditacionFk;
+    }
+
+    /**
+     * Set codigoEstudioEstadoFk
+     *
+     * @param integer $codigoEstudioEstadoFk
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setCodigoEstudioEstadoFk($codigoEstudioEstadoFk)
+    {
+        $this->codigoEstudioEstadoFk = $codigoEstudioEstadoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEstudioEstadoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEstudioEstadoFk()
+    {
+        return $this->codigoEstudioEstadoFk;
+    }
+
+    /**
+     * Set codigoEstudioEstadoInvalidoFk
+     *
+     * @param integer $codigoEstudioEstadoInvalidoFk
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setCodigoEstudioEstadoInvalidoFk($codigoEstudioEstadoInvalidoFk)
+    {
+        $this->codigoEstudioEstadoInvalidoFk = $codigoEstudioEstadoInvalidoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEstudioEstadoInvalidoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEstudioEstadoInvalidoFk()
+    {
+        return $this->codigoEstudioEstadoInvalidoFk;
     }
 
     /**
@@ -382,5 +709,149 @@ class RhuEmpleadoEstudio
     public function getCiudadRel()
     {
         return $this->ciudadRel;
+    }
+
+    /**
+     * Set academiaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAcademia $academiaRel
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setAcademiaRel(\Brasa\RecursoHumanoBundle\Entity\RhuAcademia $academiaRel = null)
+    {
+        $this->academiaRel = $academiaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get academiaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuAcademia
+     */
+    public function getAcademiaRel()
+    {
+        return $this->academiaRel;
+    }
+
+    /**
+     * Set gradoBachillerRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuGradoBachiller $gradoBachillerRel
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setGradoBachillerRel(\Brasa\RecursoHumanoBundle\Entity\RhuGradoBachiller $gradoBachillerRel = null)
+    {
+        $this->gradoBachillerRel = $gradoBachillerRel;
+
+        return $this;
+    }
+
+    /**
+     * Get gradoBachillerRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuGradoBachiller
+     */
+    public function getGradoBachillerRel()
+    {
+        return $this->gradoBachillerRel;
+    }
+
+    /**
+     * Set estudioTipoAcreditacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEstudioTipoAcreditacion $estudioTipoAcreditacionRel
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setEstudioTipoAcreditacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEstudioTipoAcreditacion $estudioTipoAcreditacionRel = null)
+    {
+        $this->estudioTipoAcreditacionRel = $estudioTipoAcreditacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get estudioTipoAcreditacionRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEstudioTipoAcreditacion
+     */
+    public function getEstudioTipoAcreditacionRel()
+    {
+        return $this->estudioTipoAcreditacionRel;
+    }
+
+    /**
+     * Set estudioEstadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEstudioEstado $estudioEstadoRel
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setEstudioEstadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEstudioEstado $estudioEstadoRel = null)
+    {
+        $this->estudioEstadoRel = $estudioEstadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get estudioEstadoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEstudioEstado
+     */
+    public function getEstudioEstadoRel()
+    {
+        return $this->estudioEstadoRel;
+    }
+
+    /**
+     * Set estudioEstadoInvalidoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEstudioEstadoInvalido $estudioEstadoInvalidoRel
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setEstudioEstadoInvalidoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEstudioEstadoInvalido $estudioEstadoInvalidoRel = null)
+    {
+        $this->estudioEstadoInvalidoRel = $estudioEstadoInvalidoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get estudioEstadoInvalidoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEstudioEstadoInvalido
+     */
+    public function getEstudioEstadoInvalidoRel()
+    {
+        return $this->estudioEstadoInvalidoRel;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
     }
 }

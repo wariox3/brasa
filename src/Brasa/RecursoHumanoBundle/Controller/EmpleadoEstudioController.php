@@ -18,7 +18,11 @@ class EmpleadoEstudioController extends Controller
         if($codigoEmpleadoEstudio != 0) {
             $arEmpleadoEstudio = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudio')->find($codigoEmpleadoEstudio);
         } else {
-            $arEmpleadoEstudio->setFechaVencimiento(new \DateTime('now'));
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
+            //$arEmpleadoEstudio->setFechaInicio(new \DateTime('now'));
+            //$arEmpleadoEstudio->setFechaInicioAcreditacion(new \DateTime('now'));
+            //$arEmpleadoEstudio->setFechaTerminacion(new \DateTime('now'));
+            //$arEmpleadoEstudio->setFechaTerminacionAcreditacion(new \DateTime('now'));
         }            
         
         $form = $this->createForm(new RhuEmpleadoEstudioType, $arEmpleadoEstudio);
@@ -27,6 +31,7 @@ class EmpleadoEstudioController extends Controller
             $arEmpleadoEstudio = $form->getData();            
             //$arEmpleadoEstudio->setFecha(new \DateTime('now'));
             $arEmpleadoEstudio->setEmpleadoRel($arEmpleado);
+            $arEmpleadoEstudio->setCodigoUsuario($arUsuario->getUserName());
             $em->persist($arEmpleadoEstudio);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {

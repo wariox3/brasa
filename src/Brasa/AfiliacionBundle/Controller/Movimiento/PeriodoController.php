@@ -171,8 +171,8 @@ class PeriodoController extends Controller
                 }
                 $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
                 $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-                //$strRutaArchivo = $arConfiguracion->getRutaTemporal();
-                $strRutaArchivo = "c:/xampp/";
+                $strRutaArchivo = $arConfiguracion->getRutaTemporal();
+                //$strRutaArchivo = "c:/xampp/";
                 $strNombreArchivo = "pila" . date('YmdHis') . ".txt";
                 ob_clean();
                 $ar = fopen($strRutaArchivo . $strNombreArchivo, "a") or

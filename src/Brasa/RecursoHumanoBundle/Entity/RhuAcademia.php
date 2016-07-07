@@ -5,17 +5,17 @@ namespace Brasa\RecursoHumanoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="rhu_academia_curso")
- * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuAcademiaCursoRepository")
+ * @ORM\Table(name="rhu_academia")
+ * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuAcademiaRepository")
  */
-class RhuAcademiaCurso
+class RhuAcademia
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_academia_curso_pk", type="integer")
+     * @ORM\Column(name="codigo_academia_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoAcademiaCursoPk;
+    private $codigoAcademiaPk;
     
     /**
      * @ORM\Column(name="nit", type="string", length=10, nullable=true)
@@ -23,7 +23,7 @@ class RhuAcademiaCurso
     private $nit;
     
     /**
-     * @ORM\Column(name="nombre", type="string", length=60, nullable=true)
+     * @ORM\Column(name="nombre", type="string", length=160, nullable=true)
      */    
     private $nombre;
     
@@ -48,21 +48,35 @@ class RhuAcademiaCurso
     private $codigoCiudadFk;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuAcademiaCursosCiudadRel")
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuAcademiasCiudadRel")
      * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
      */
     protected $ciudadRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuEmpleadoEstudio", mappedBy="academiaRel")
+     */
+    protected $empleadosEstudiosAcademiaRel;
+
     
 
+
     /**
-     * Get codigoAcademiaCursoPk
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->empleadosEstudiosAcademiaRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Get codigoAcademiaPk
      *
      * @return integer
      */
-    public function getCodigoAcademiaCursoPk()
+    public function getCodigoAcademiaPk()
     {
-        return $this->codigoAcademiaCursoPk;
+        return $this->codigoAcademiaPk;
     }
 
     /**
@@ -70,7 +84,7 @@ class RhuAcademiaCurso
      *
      * @param string $nit
      *
-     * @return RhuAcademiaCurso
+     * @return RhuAcademia
      */
     public function setNit($nit)
     {
@@ -94,7 +108,7 @@ class RhuAcademiaCurso
      *
      * @param string $nombre
      *
-     * @return RhuAcademiaCurso
+     * @return RhuAcademia
      */
     public function setNombre($nombre)
     {
@@ -118,7 +132,7 @@ class RhuAcademiaCurso
      *
      * @param string $sede
      *
-     * @return RhuAcademiaCurso
+     * @return RhuAcademia
      */
     public function setSede($sede)
     {
@@ -142,7 +156,7 @@ class RhuAcademiaCurso
      *
      * @param string $direccion
      *
-     * @return RhuAcademiaCurso
+     * @return RhuAcademia
      */
     public function setDireccion($direccion)
     {
@@ -166,7 +180,7 @@ class RhuAcademiaCurso
      *
      * @param string $telefono
      *
-     * @return RhuAcademiaCurso
+     * @return RhuAcademia
      */
     public function setTelefono($telefono)
     {
@@ -190,7 +204,7 @@ class RhuAcademiaCurso
      *
      * @param integer $codigoCiudadFk
      *
-     * @return RhuAcademiaCurso
+     * @return RhuAcademia
      */
     public function setCodigoCiudadFk($codigoCiudadFk)
     {
@@ -214,7 +228,7 @@ class RhuAcademiaCurso
      *
      * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
      *
-     * @return RhuAcademiaCurso
+     * @return RhuAcademia
      */
     public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
     {
@@ -231,5 +245,39 @@ class RhuAcademiaCurso
     public function getCiudadRel()
     {
         return $this->ciudadRel;
+    }
+
+    /**
+     * Add empleadosEstudiosAcademiaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $empleadosEstudiosAcademiaRel
+     *
+     * @return RhuAcademia
+     */
+    public function addEmpleadosEstudiosAcademiaRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $empleadosEstudiosAcademiaRel)
+    {
+        $this->empleadosEstudiosAcademiaRel[] = $empleadosEstudiosAcademiaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove empleadosEstudiosAcademiaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $empleadosEstudiosAcademiaRel
+     */
+    public function removeEmpleadosEstudiosAcademiaRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $empleadosEstudiosAcademiaRel)
+    {
+        $this->empleadosEstudiosAcademiaRel->removeElement($empleadosEstudiosAcademiaRel);
+    }
+
+    /**
+     * Get empleadosEstudiosAcademiaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmpleadosEstudiosAcademiaRel()
+    {
+        return $this->empleadosEstudiosAcademiaRel;
     }
 }

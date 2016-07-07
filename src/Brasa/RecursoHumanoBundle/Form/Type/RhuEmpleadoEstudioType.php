@@ -13,8 +13,8 @@ class RhuEmpleadoEstudioType extends AbstractType
             ->add('empleadoEstudioTipoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEmpleadoEstudioTipo',
                 'property' => 'nombre',
-            ))               
-            ->add('institucion', 'text', array('required' => true))            
+            ))
+            ->add('institucion', 'text', array('required' => true))
             ->add('ciudadRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {
@@ -22,11 +22,50 @@ class RhuEmpleadoEstudioType extends AbstractType
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))
-            //->add('fechaVencimiento', 'date')
-            ->add('fechaVencimiento','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                
-            ->add('validarVencimiento', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))                            
+            ->add('gradoBachillerRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuGradoBachiller',
+                'query_builder' => function (EntityRepository $er)  {
+                return $er->createQueryBuilder('c');},
+                'property' => 'grado',
+                'required' => true))
+            ->add('estudioTipoAcreditacionRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEstudioTipoAcreditacion',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('c')
+                    ->orderBy('c.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false))
+            ->add('academiaRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuAcademia',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('c')
+                    ->orderBy('c.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false))
+            ->add('estudioEstadoInvalidoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEstudioEstadoInvalido',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('c')
+                    ->orderBy('c.codigoEstudioEstadoInvalidoPk', 'ASC');},
+                'property' => 'nombre',
+                'required' => false))
+            ->add('estudioEstadoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEstudioEstado',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('c')
+                    ->orderBy('c.codigoEstudioEstadoPk', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                
+            ->add('fechaInicio','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'required' => false,'attr' => array('class' => 'date',)))
+            ->add('fechaTerminacion','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'required' => false,'attr' => array('class' => 'date',)))
+            ->add('fechaInicioAcreditacion','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'required' => false,'attr' => array('class' => 'date',)))
+            ->add('fechaTerminacionAcreditacion','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'required' => false,'attr' => array('class' => 'date',)))                
+            ->add('validarVencimiento', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))
+            ->add('graduado', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))                
             ->add('titulo', 'text', array('required' => true))
-            ->add('comentarios', 'textarea', array('required' => false))                
+            ->add('comentarios', 'textarea', array('required' => false))
+            ->add('numeroRegistro', 'text', array('required' => false))                
+            ->add('numeroAcreditacion', 'text', array('required' => false))                
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }
