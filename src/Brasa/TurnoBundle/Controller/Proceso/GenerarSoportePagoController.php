@@ -24,6 +24,7 @@ class GenerarSoportePagoController extends Controller
         if ($form->isValid()) {
             if($request->request->get('OpGenerar')) {  
                 set_time_limit(0);
+                ini_set("memory_limit", -1);
                 $codigoSoportePagoPeriodo = $request->request->get('OpGenerar');
                 $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);
                 $dateFechaDesde = $arSoportePagoPeriodo->getFechaDesde();
@@ -54,6 +55,7 @@ class GenerarSoportePagoController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurSoportePago')->resumen($dateFechaDesde, $dateFechaHasta, $arSoportePagoPeriodo);                
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->liquidar($codigoSoportePagoPeriodo);                                
                 set_time_limit(60);
+                ini_set('memory_limit', '512m');
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));
             }
             if($request->request->get('OpDeshacer')) {
@@ -92,7 +94,7 @@ class GenerarSoportePagoController extends Controller
                 $this->listaPeriodo();
             }            
         }        
-        $arSoportePagoPeriodos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
+        $arSoportePagoPeriodos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 100);
         return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:generar.html.twig', array(
             'arSoportePagoPeriodos' => $arSoportePagoPeriodos,
             'form' => $form->createView()));
@@ -185,9 +187,7 @@ class GenerarSoportePagoController extends Controller
                 $arSoportePagos = new \Brasa\TurnoBundle\Entity\TurSoportePago();  
                 $arSoportePagos = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));
                 foreach ($arSoportePagos as $arSoportePago) {
-                    if($arSoportePago->getCodigoRecursoFk() == 3) {
-                        echo "hola";
-                    }                                                            
+                                                           
                     $horasDia = $arSoportePago->getHorasDiurnasReales();
                     $horasNoche = $arSoportePago->getHorasNocturnasReales();
                     $horasFestivasDia = $arSoportePago->getHorasFestivasDiurnasReales();
@@ -212,11 +212,17 @@ class GenerarSoportePagoController extends Controller
                         $porExtraFestivaDiurna = $horasExtraFestivasDia / $totalExtras;
                         $porExtraFestivaNocturna = $horasExtraFestivasNoche / $totalExtras;
                     }
- 
-                    $horasCompensarDia = round($porExtraDiurna * $horasPorCompensar);
-                    $horasCompensarNoche = round($porExtraNocturna * $horasPorCompensar);
-                    $horasCompensarFestivaDia = round($porExtraFestivaDiurna * $horasPorCompensar);
-                    $horasCompensarFestivaNoche = round($porExtraFestivaNocturna * $horasPorCompensar);
+                    /*if($arSoportePago->getCodigoRecursoFk() == 839) {
+                        echo "hola";
+                    } */
+                    $horasCompensarDia = round($porExtraDiurna * $horasPorCompensar, 0, PHP_ROUND_HALF_DOWN);
+                    $horasCompensarNoche = round($porExtraNocturna * $horasPorCompensar, 0, PHP_ROUND_HALF_DOWN);
+                    $horasCompensarFestivaDia = round($porExtraFestivaDiurna * $horasPorCompensar, 0, PHP_ROUND_HALF_DOWN);
+                    $horasCompensarFestivaNoche = round($horasCompensarFestivaNoche, 0, PHP_ROUND_HALF_DOWN);                    
+                    
+                    //$horasCompensarFestivaNoche = $this->truncateFloat($porExtraFestivaNocturna * $horasPorCompensar, 1);                    
+                    
+                    
                     $horasDia += $horasCompensarDia;
                     $horasNoche += $horasCompensarNoche;
                     $horasFestivasDia += $horasCompensarFestivaDia;
@@ -251,7 +257,7 @@ class GenerarSoportePagoController extends Controller
                 
             }            
         }
-        $arSoportesPago = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 200);        
+        $arSoportesPago = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 1500);        
         return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:detalle.html.twig', array(            
             'arSoportesPagos' => $arSoportesPago,
             'arSoportePagoPeriodo' => $arSoportePagoPeriodo,
@@ -412,7 +418,7 @@ class GenerarSoportePagoController extends Controller
         return $form;
     }
     
-    private function insertarSoportePago ($arSoportePagoPeriodo, $arProgramacionDetalle, $dateFechaDesde, $dateFechaHasta, $codigoTurno, $dateFecha, $dateFecha2, $boolFestivo, $boolFestivo2) {
+    private function insertarSoportePago ($arSoportePagoPeriodo, $arProgramacionDetalle, $dateFechaDesde, $dateFechaHasta, $codigoTurno, $dateFecha, $dateFecha2, $boolFestivo, $boolFestivo2) {        
         $em = $this->getDoctrine()->getManager();       
         //$arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
         $strTurnoFijoNomina = $arSoportePagoPeriodo->getRecursoGrupoRel()->getCodigoTurnoFijoNominaFk();
@@ -1039,4 +1045,13 @@ class GenerarSoportePagoController extends Controller
         $arrDias['festivos'] = $festivos;
         return $arrDias;
     }
+    
+    private function truncateFloat($number, $digitos)
+    {
+        $raiz = 10;
+        $multiplicador = pow ($raiz,$digitos);
+        $resultado = ((int)($number * $multiplicador)) / $multiplicador;
+        return number_format($resultado, $digitos);
+
+    }    
 }
