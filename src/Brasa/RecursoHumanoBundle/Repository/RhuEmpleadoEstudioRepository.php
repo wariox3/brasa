@@ -25,7 +25,7 @@ class RhuEmpleadoEstudioRepository extends EntityRepository {
         return $dql;
     } 
     
-    public function listaMovimientoDql($strIdentificacion = "", $strNombre = "", $strEstudio = "", $strEstado = "", $fechaInicio = "", $fechaTerminacion = "") {        
+    public function listaMovimientoDql($strIdentificacion = "", $strNombre = "", $strEstudio = "", $strEstado = "", $fechaInicio = "", $fechaTerminacion = "", $fechaTerminacionAcreditacion = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT ee, e FROM BrasaRecursoHumanoBundle:RhuEmpleadoEstudio ee JOIN ee.empleadoRel e WHERE ee.codigoEmpleadoEstudioPk <> 0";
    
@@ -47,6 +47,10 @@ class RhuEmpleadoEstudioRepository extends EntityRepository {
         if($fechaTerminacion != "" ) {
             $dql .= " AND ee.fechaTerminacion <='" . date_format($fechaTerminacion, ('Y-m-d')) . "'";
         }
+        
+        if($fechaTerminacionAcreditacion != "" ) {
+            $dql .= " AND ee.fechaTerminacionAcreditacion <='" . date_format($fechaTerminacionAcreditacion, ('Y-m-d')) . "'";
+        }        
         $dql .= " ORDER BY ee.codigoEmpleadoEstudioPk desc";
         return $dql;
     }

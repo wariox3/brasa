@@ -27,7 +27,7 @@ class RhuEmpleadoEstudioType extends AbstractType
                 'query_builder' => function (EntityRepository $er)  {
                 return $er->createQueryBuilder('c');},
                 'property' => 'grado',
-                'required' => true))
+                'required' => false))
             ->add('estudioTipoAcreditacionRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEstudioTipoAcreditacion',
                 'query_builder' => function (EntityRepository $er)  {

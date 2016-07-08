@@ -205,7 +205,8 @@ class EstudioController extends Controller
                 $session->get('filtroEstudio'),
                 $session->get('filtroEstado'),
                 $session->get('filtroDesde'),
-                $session->get('filtroHasta')
+                $session->get('filtroHasta'),
+                $session->get('filtroHastaAcreditacion')
                 );
     }
 
@@ -248,6 +249,7 @@ class EstudioController extends Controller
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))    
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaHastaAcreditacion','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))    
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
@@ -270,6 +272,7 @@ class EstudioController extends Controller
         $session->set('filtroEstado', $controles['estudioEstadoRel']);     
         $session->set('filtroDesde', $form->get('fechaDesde')->getData());
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        $session->set('filtroHastaAcreditacion', $form->get('fechaHastaAcreditacion')->getData());
     }
     
     private function formularioDetalle($ar) {
@@ -449,6 +452,7 @@ class EstudioController extends Controller
     private function generarInformeExcel() {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
+        $nombreArchivo = "";
         $em = $this->getDoctrine()->getManager();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
@@ -504,11 +508,12 @@ class EstudioController extends Controller
                             ->setCellValue('P1', 'TipoEstablecimiento')
                             ->setCellValue('Q1', 'TelefonoR')
                             ->setCellValue('R1', 'DireccionR')
-                            ->setCellValue('S1', 'Departamento')
-                            ->setCellValue('T1', 'Ciudad')
-                            ->setCellValue('U1', 'EducacionBM')
-                            ->setCellValue('V1', 'EducacionSuperior')
-                            ->setCellValue('W1', 'Discapacidad');
+                            ->setCellValue('S1', 'DireccionP')
+                            ->setCellValue('T1', 'Departamento')
+                            ->setCellValue('U1', 'Ciudad')
+                            ->setCellValue('V1', 'EducacionBM')
+                            ->setCellValue('W1', 'EducacionSuperior')
+                            ->setCellValue('X1', 'Discapacidad');
 
                 $i = 2;
                 $query = $em->createQuery($this->strListaDql);
@@ -627,10 +632,28 @@ class EstudioController extends Controller
                         $telefono = $arEstudios->getEmpleadoRel()->getCelular();
                     }
                     $ciudadLabora = $arContrato->getCiudadLaboraRel()->getNombre();
-                    
                     $ciudadLabora = explode(" ", $ciudadLabora);
                     $ciudadLabora = $ciudadLabora[0];
                     
+                    $nivelEstudio = "";
+                    $gradoBachiller = "Ninguna";
+                    $superior = "Ninguna";
+                    
+                    $arEmpleadoBachiller = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio();
+                    $arEmpleadoBachiller = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudio')->findBy(array('codigoEmpleadoFk' => $arEstudios->getCodigoEmpleadoFk()));
+                    foreach ($arEmpleadoBachiller as $arEmpleadoBachiller){
+                        if ($arEmpleadoBachiller->getGraduado() == 1){
+                            $gradoBachiller = 11;
+                        }
+                        if ($arEmpleadoBachiller->getCodigoGradoBachillerFk() != null){
+                            $gradoBachiller = $arEmpleadoBachiller->getGradoBachillerRel()->getGrado();
+                        }
+                        if ($arEmpleadoBachiller->getCodigoEmpleadoEstudioTipoFk() == 3){
+                            $superior = $arEmpleadoBachiller->getTitulo();
+                            $gradoBachiller = 11;
+                        }
+                    }
+                        
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arConfiguracion->getNitEmpresa().$arConfiguracion->getDigitoVerificacionEmpresa())
                             ->setCellValue('B' . $i, strtoupper($arConfiguracion->getNombreEmpresa()))
@@ -653,18 +676,19 @@ class EstudioController extends Controller
                             ->setCellValue('S' . $i, "duda")
                             ->setCellValue('T' . $i, $arContrato->getCiudadLaboraRel()->getDepartamentoRel()->getNombre())
                             ->setCellValue('U' . $i, $ciudadLabora)
-                            ->setCellValue('V' . $i, "")
-                            ->setCellValue('W' . $i, "")
-                            ->setCellValue('X' . $i, "");
+                            ->setCellValue('V' . $i, $gradoBachiller)
+                            ->setCellValue('W' . $i, ucfirst($superior))
+                            ->setCellValue('X' . $i, "Ninguna");
                     $i++;
                 }
-
+                
+                $nombreArchivo = "APO".$arConfiguracion->getNitEmpresa()."".date('Y-m-d');
                 $objPHPExcel->getActiveSheet()->setTitle('EstudiosInforme');
                 $objPHPExcel->setActiveSheetIndex(0);
 
                 // Redirect output to a client’s web browser (Excel2007)
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="Informe.xlsx"');
+                header('Content-Disposition: attachment;filename="'.$nombreArchivo.'.xlsx"');
                 header('Cache-Control: max-age=0');
                 // If you're serving to IE 9, then the following may be needed
                 header('Cache-Control: max-age=1');
