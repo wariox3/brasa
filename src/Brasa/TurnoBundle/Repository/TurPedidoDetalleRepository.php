@@ -82,7 +82,7 @@ class TurPedidoDetalleRepository extends EntityRepository {
     public function listaCliente($codigoCliente, $fechaProgramacion = '', $codigoPuesto = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT pd FROM BrasaTurnoBundle:TurPedidoDetalle pd JOIN pd.pedidoRel p "
-                . "WHERE p.codigoClienteFk = " . $codigoCliente . " AND p.estadoAutorizado = 1 AND p.estadoAnulado = 0";
+                . "WHERE p.codigoClienteFk = " . $codigoCliente . " AND p.estadoAutorizado = 1 AND p.estadoAnulado = 0 AND pd.estadoProgramado = 0 ";
         if($fechaProgramacion != '') {
             $dql .= " AND p.fechaProgramacion >= '" . $fechaProgramacion . "'";
         }
