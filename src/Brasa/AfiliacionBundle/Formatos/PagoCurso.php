@@ -91,12 +91,26 @@ class PagoCurso extends \FPDF_FPDF {
         $this->Cell(30, 5, '' , 1, 0, 'R', 1);
         $this->SetFont('Arial','B',8);
         $this->SetFillColor(200, 200, 200);
+        $this->Cell(30, 5, "PROVEEDOR:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->SetFillColor(272, 272, 272); 
+        $this->Cell(100, 5, $arPagoCurso->getProveedorRel()->getNombreCorto() , 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);      
+        //linea 4
+        $this->SetXY(10, 55);
+        $this->SetFont('Arial','B',8);
+        $this->SetFillColor(200, 200, 200);
+        $this->Cell(30, 5, utf8_decode("") , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->SetFillColor(272, 272, 272);
+        $this->Cell(30, 5, '' , 1, 0, 'R', 1);
+        $this->SetFont('Arial','B',8);
+        $this->SetFillColor(200, 200, 200);
         $this->Cell(30, 5, "TOTAL:" , 1, 0, 'R', 1);
         $this->SetFont('Arial','',8);
         $this->SetFillColor(272, 272, 272); 
         $this->Cell(100, 5, number_format($arPagoCurso->getTotal(), 0, '.', ',') , 1, 0, 'R', 1);
-        $this->SetFont('Arial','B',8);      
-        
+        $this->SetFont('Arial','B',8);        
         $this->EncabezadoDetalles();
         
     }
@@ -134,9 +148,9 @@ class PagoCurso extends \FPDF_FPDF {
         $var = 0;
         foreach ($arPagoCursoDetalles as $arPagoCursoDetalle) {            
             $pdf->Cell(20, 4, $arPagoCursoDetalle->getCodigoPagoCursoDetallePk(), 1, 0, 'L');            
-            if($arPagoCursoDetalle->getCursoRel()->getCodigoEmpleadoFk() != null) {
-                $pdf->Cell(25, 4, $arPagoCursoDetalle->getCursoRel()->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
-                $pdf->Cell(130, 4, utf8_decode($arPagoCursoDetalle->getCursoRel()->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');                
+            if($arPagoCursoDetalle->getCursoDetalleRel()->getCursoRel()->getCodigoEmpleadoFk() != null) {
+                $pdf->Cell(25, 4, $arPagoCursoDetalle->getCursoDetalleRel()->getCursoRel()->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
+                $pdf->Cell(130, 4, utf8_decode($arPagoCursoDetalle->getCursoDetalleRel()->getCursoRel()->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');                
             } else {
                 $pdf->Cell(25, 4, '', 1, 0, 'L');
                 $pdf->Cell(130, 4, '', 1, 0, 'L');                

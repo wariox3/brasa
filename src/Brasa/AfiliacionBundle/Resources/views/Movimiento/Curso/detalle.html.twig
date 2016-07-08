@@ -85,6 +85,7 @@
             <tr>
                 <th>CODIGO</th>
                 <th>NOMBRE</th>
+                <th>PROVEEDOR</th>
                 <th>COSTO</th>
                 <th>PRECIO</th>
                 <th></th>
@@ -93,6 +94,7 @@
             <tr>
                 <td>{{ arCursoDetalles.codigoCursoDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arCursoDetalles.codigoCursoDetallePk }}"></td>                
                 <td>{{ arCursoDetalles.cursoTipoRel.nombre }}</td>                                
+                <td>{{ arCursoDetalles.proveedorRel.nombreCorto | default('') }}</td>                                
                 {% if arCurso.estadoAutorizado == 0 %}                    
                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtCosto{{ arCursoDetalles.codigoCursoDetallePk }}" value="{{ arCursoDetalles.costo  }}" size="20" style="width:120px; text-align: right" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                    
                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtPrecio{{ arCursoDetalles.codigoCursoDetallePk }}" value="{{ arCursoDetalles.precio  }}" size="20" style="width:120px; text-align: right" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                    

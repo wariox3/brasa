@@ -5,17 +5,17 @@ namespace Brasa\AfiliacionBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="afi_entidad_entrenamiento")
- * @ORM\Entity(repositoryClass="Brasa\AfiliacionBundle\Repository\AfiEntidadEntrenamientoRepository")
+ * @ORM\Table(name="afi_proveedor")
+ * @ORM\Entity(repositoryClass="Brasa\AfiliacionBundle\Repository\AfiProveedorRepository")
  */
-class AfiEntidadEntrenamiento
+class AfiProveedor
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_entidad_entrenamiento_pk", type="integer")
+     * @ORM\Column(name="codigo_proveedor_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoEntidadEntrenamientoPk;                   
+    private $codigoProveedorPk;                   
     
     /**
      * @ORM\Column(name="nit", type="string", length=15, nullable=false)
@@ -28,7 +28,7 @@ class AfiEntidadEntrenamiento
     private $digitoVerificacion;     
     
     /**
-     * @ORM\Column(name="nombreCorto", type="string", length=50)
+     * @ORM\Column(name="nombre_corto", type="string", length=50)
      */
     private $nombreCorto;                             
       
@@ -78,33 +78,23 @@ class AfiEntidadEntrenamiento
     private $comentarios;                                  
 
     /**
-     * @ORM\OneToMany(targetEntity="AfiCurso", mappedBy="entidadEntrenamientoRel")
+     * @ORM\OneToMany(targetEntity="AfiPagoCurso", mappedBy="proveedorRel")
      */
-    protected $cursosEntidadEntrenamientoRel;     
+    protected $pagosCursosProveedorRel;    
 
     /**
-     * @ORM\OneToMany(targetEntity="AfiEntidadEntrenamientoCosto", mappedBy="entidadEntrenamientoRel")
+     * @ORM\OneToMany(targetEntity="AfiCursoDetalle", mappedBy="proveedorRel")
      */
-    protected $entidadesEntrenamientosCostosEntidadEntrenamientoRel;
-
-
+    protected $cursosDetallesProveedorRel;     
+    
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->cursosEntidadEntrenamientoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->entidadesEntrenamientosCostosEntidadEntrenamientoRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Get codigoEntidadEntrenamientoPk
+     * Get codigoProveedorPk
      *
      * @return integer
      */
-    public function getCodigoEntidadEntrenamientoPk()
+    public function getCodigoProveedorPk()
     {
-        return $this->codigoEntidadEntrenamientoPk;
+        return $this->codigoProveedorPk;
     }
 
     /**
@@ -112,7 +102,7 @@ class AfiEntidadEntrenamiento
      *
      * @param string $nit
      *
-     * @return AfiEntidadEntrenamiento
+     * @return AfiProveedor
      */
     public function setNit($nit)
     {
@@ -136,7 +126,7 @@ class AfiEntidadEntrenamiento
      *
      * @param string $digitoVerificacion
      *
-     * @return AfiEntidadEntrenamiento
+     * @return AfiProveedor
      */
     public function setDigitoVerificacion($digitoVerificacion)
     {
@@ -160,7 +150,7 @@ class AfiEntidadEntrenamiento
      *
      * @param string $nombreCorto
      *
-     * @return AfiEntidadEntrenamiento
+     * @return AfiProveedor
      */
     public function setNombreCorto($nombreCorto)
     {
@@ -184,7 +174,7 @@ class AfiEntidadEntrenamiento
      *
      * @param string $direccion
      *
-     * @return AfiEntidadEntrenamiento
+     * @return AfiProveedor
      */
     public function setDireccion($direccion)
     {
@@ -208,7 +198,7 @@ class AfiEntidadEntrenamiento
      *
      * @param string $telefono
      *
-     * @return AfiEntidadEntrenamiento
+     * @return AfiProveedor
      */
     public function setTelefono($telefono)
     {
@@ -232,7 +222,7 @@ class AfiEntidadEntrenamiento
      *
      * @param string $celular
      *
-     * @return AfiEntidadEntrenamiento
+     * @return AfiProveedor
      */
     public function setCelular($celular)
     {
@@ -256,7 +246,7 @@ class AfiEntidadEntrenamiento
      *
      * @param string $email
      *
-     * @return AfiEntidadEntrenamiento
+     * @return AfiProveedor
      */
     public function setEmail($email)
     {
@@ -280,7 +270,7 @@ class AfiEntidadEntrenamiento
      *
      * @param string $contacto
      *
-     * @return AfiEntidadEntrenamiento
+     * @return AfiProveedor
      */
     public function setContacto($contacto)
     {
@@ -304,7 +294,7 @@ class AfiEntidadEntrenamiento
      *
      * @param string $celularContacto
      *
-     * @return AfiEntidadEntrenamiento
+     * @return AfiProveedor
      */
     public function setCelularContacto($celularContacto)
     {
@@ -328,7 +318,7 @@ class AfiEntidadEntrenamiento
      *
      * @param string $telefonoContacto
      *
-     * @return AfiEntidadEntrenamiento
+     * @return AfiProveedor
      */
     public function setTelefonoContacto($telefonoContacto)
     {
@@ -352,7 +342,7 @@ class AfiEntidadEntrenamiento
      *
      * @param string $usuario
      *
-     * @return AfiEntidadEntrenamiento
+     * @return AfiProveedor
      */
     public function setUsuario($usuario)
     {
@@ -376,7 +366,7 @@ class AfiEntidadEntrenamiento
      *
      * @param string $comentarios
      *
-     * @return AfiEntidadEntrenamiento
+     * @return AfiProveedor
      */
     public function setComentarios($comentarios)
     {
@@ -394,72 +384,79 @@ class AfiEntidadEntrenamiento
     {
         return $this->comentarios;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->pagosCursosProveedorRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
-     * Add cursosEntidadEntrenamientoRel
+     * Add pagosCursosProveedorRel
      *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiCurso $cursosEntidadEntrenamientoRel
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPagoCurso $pagosCursosProveedorRel
      *
-     * @return AfiEntidadEntrenamiento
+     * @return AfiProveedor
      */
-    public function addCursosEntidadEntrenamientoRel(\Brasa\AfiliacionBundle\Entity\AfiCurso $cursosEntidadEntrenamientoRel)
+    public function addPagosCursosProveedorRel(\Brasa\AfiliacionBundle\Entity\AfiPagoCurso $pagosCursosProveedorRel)
     {
-        $this->cursosEntidadEntrenamientoRel[] = $cursosEntidadEntrenamientoRel;
+        $this->pagosCursosProveedorRel[] = $pagosCursosProveedorRel;
 
         return $this;
     }
 
     /**
-     * Remove cursosEntidadEntrenamientoRel
+     * Remove pagosCursosProveedorRel
      *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiCurso $cursosEntidadEntrenamientoRel
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPagoCurso $pagosCursosProveedorRel
      */
-    public function removeCursosEntidadEntrenamientoRel(\Brasa\AfiliacionBundle\Entity\AfiCurso $cursosEntidadEntrenamientoRel)
+    public function removePagosCursosProveedorRel(\Brasa\AfiliacionBundle\Entity\AfiPagoCurso $pagosCursosProveedorRel)
     {
-        $this->cursosEntidadEntrenamientoRel->removeElement($cursosEntidadEntrenamientoRel);
+        $this->pagosCursosProveedorRel->removeElement($pagosCursosProveedorRel);
     }
 
     /**
-     * Get cursosEntidadEntrenamientoRel
+     * Get pagosCursosProveedorRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getCursosEntidadEntrenamientoRel()
+    public function getPagosCursosProveedorRel()
     {
-        return $this->cursosEntidadEntrenamientoRel;
+        return $this->pagosCursosProveedorRel;
     }
 
     /**
-     * Add entidadesEntrenamientosCostosEntidadEntrenamientoRel
+     * Add cursosDetallesProveedorRel
      *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamientoCosto $entidadesEntrenamientosCostosEntidadEntrenamientoRel
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle $cursosDetallesProveedorRel
      *
-     * @return AfiEntidadEntrenamiento
+     * @return AfiProveedor
      */
-    public function addEntidadesEntrenamientosCostosEntidadEntrenamientoRel(\Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamientoCosto $entidadesEntrenamientosCostosEntidadEntrenamientoRel)
+    public function addCursosDetallesProveedorRel(\Brasa\AfiliacionBundle\Entity\AfiCursoDetalle $cursosDetallesProveedorRel)
     {
-        $this->entidadesEntrenamientosCostosEntidadEntrenamientoRel[] = $entidadesEntrenamientosCostosEntidadEntrenamientoRel;
+        $this->cursosDetallesProveedorRel[] = $cursosDetallesProveedorRel;
 
         return $this;
     }
 
     /**
-     * Remove entidadesEntrenamientosCostosEntidadEntrenamientoRel
+     * Remove cursosDetallesProveedorRel
      *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamientoCosto $entidadesEntrenamientosCostosEntidadEntrenamientoRel
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle $cursosDetallesProveedorRel
      */
-    public function removeEntidadesEntrenamientosCostosEntidadEntrenamientoRel(\Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamientoCosto $entidadesEntrenamientosCostosEntidadEntrenamientoRel)
+    public function removeCursosDetallesProveedorRel(\Brasa\AfiliacionBundle\Entity\AfiCursoDetalle $cursosDetallesProveedorRel)
     {
-        $this->entidadesEntrenamientosCostosEntidadEntrenamientoRel->removeElement($entidadesEntrenamientosCostosEntidadEntrenamientoRel);
+        $this->cursosDetallesProveedorRel->removeElement($cursosDetallesProveedorRel);
     }
 
     /**
-     * Get entidadesEntrenamientosCostosEntidadEntrenamientoRel
+     * Get cursosDetallesProveedorRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getEntidadesEntrenamientosCostosEntidadEntrenamientoRel()
+    public function getCursosDetallesProveedorRel()
     {
-        return $this->entidadesEntrenamientosCostosEntidadEntrenamientoRel;
+        return $this->cursosDetallesProveedorRel;
     }
 }

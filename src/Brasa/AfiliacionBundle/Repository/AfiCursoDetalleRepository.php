@@ -38,6 +38,12 @@ class AfiCursoDetalleRepository extends EntityRepository {
             $intNumeroRegistros = $arrCursosDetalles['numeroRegistros'];
         }
         return $intNumeroRegistros;
-    }              
+    } 
+    
+    public function pendientePagoDql($codigoProveedor) {        
+        $dql   = "SELECT cd FROM BrasaAfiliacionBundle:AfiCursoDetalle cd WHERE cd.estadoPagado = 0 AND cd.codigoProveedorFk = " . $codigoProveedor;
+        $dql .= " ORDER BY cd.codigoCursoDetallePk DESC";
+        return $dql;
+    }     
         
 }

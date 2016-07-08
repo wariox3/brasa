@@ -10,16 +10,16 @@
                 <th>CODIGO</th>
                 <th>IDENTIFICACION</th>  
                 <th>EMPLEADO</th>  
-                <th>TOTAL</th>               
+                <th>COSTO</th>               
                 <th></th>
             </tr>
-            {% for arCursos in arCursos %}
+            {% for arCursosDetalles in arCursosDetalles %}
             <tr>
-                <td><input type="hidden" name="LblCodigo[]" value="{{ arCursos.codigoCursoPk }}">{{ arCursos.codigoCursoPk }} </td>                                
-                <td>{{ arCursos.empleadoRel.numeroIdentificacion | default('') }}</td>
-                <td>{{ arCursos.empleadoRel.nombreCorto | default('') }}</td>                                                
-                <td style="text-align: right">{{ arCursos.costo | number_format(0, '.', ',') }}</td>                
-                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCursos.codigoCursoPk }}" /></td>
+                <td><input type="hidden" name="LblCodigo[]" value="{{ arCursosDetalles.codigoCursoDetallePk }}">{{ arCursosDetalles.codigoCursoDetallePk }} </td>                                
+                <td>{{ arCursosDetalles.cursoRel.empleadoRel.numeroIdentificacion | default('') }}</td>
+                <td>{{ arCursosDetalles.cursoRel.empleadoRel.nombreCorto | default('') }}</td>                                                
+                <td style="text-align: right">{{ arCursosDetalles.costo | number_format(0, '.', ',') }}</td>                
+                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCursosDetalles.codigoCursoDetallePk }}" /></td>
             </tr>
             {% endfor %} 
         </table>                

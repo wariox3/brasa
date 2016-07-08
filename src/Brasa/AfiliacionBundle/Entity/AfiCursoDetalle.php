@@ -28,6 +28,11 @@ class AfiCursoDetalle
     private $codigoCursoTipoFk;    
 
     /**
+     * @ORM\Column(name="codigo_proveedor_fk", type="integer", nullable=true)
+     */    
+    private $codigoProveedorFk;    
+    
+    /**
      * @ORM\Column(name="costo", type="float")
      */
     private $costo = 0;    
@@ -36,6 +41,11 @@ class AfiCursoDetalle
      * @ORM\Column(name="precio", type="float")
      */
     private $precio = 0;    
+    
+    /**     
+     * @ORM\Column(name="estado_pagado", type="boolean")
+     */    
+    private $estadoPagado = false;     
     
     /**
      * @ORM\ManyToOne(targetEntity="AfiCurso", inversedBy="cursosDetallesCursoRel")
@@ -49,7 +59,16 @@ class AfiCursoDetalle
      */
     protected $cursoTipoRel;     
 
-
+    /**
+     * @ORM\ManyToOne(targetEntity="AfiProveedor", inversedBy="cursosDetallesProveedorRel")
+     * @ORM\JoinColumn(name="codigo_proveedor_fk", referencedColumnName="codigo_proveedor_pk")
+     */
+    protected $proveedorRel;    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="AfiPagoCursoDetalle", mappedBy="cursoDetalleRel")
+     */
+    protected $pagosCursosDetallesCursoDetalleRel;  
 
     /**
      * Get codigoCursoDetallePk
@@ -203,5 +222,118 @@ class AfiCursoDetalle
     public function getCursoTipoRel()
     {
         return $this->cursoTipoRel;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->pagosCursosDetallesCursoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add pagosCursosDetallesCursoDetalleRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPagoCursoDetalle $pagosCursosDetallesCursoDetalleRel
+     *
+     * @return AfiCursoDetalle
+     */
+    public function addPagosCursosDetallesCursoDetalleRel(\Brasa\AfiliacionBundle\Entity\AfiPagoCursoDetalle $pagosCursosDetallesCursoDetalleRel)
+    {
+        $this->pagosCursosDetallesCursoDetalleRel[] = $pagosCursosDetallesCursoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosCursosDetallesCursoDetalleRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPagoCursoDetalle $pagosCursosDetallesCursoDetalleRel
+     */
+    public function removePagosCursosDetallesCursoDetalleRel(\Brasa\AfiliacionBundle\Entity\AfiPagoCursoDetalle $pagosCursosDetallesCursoDetalleRel)
+    {
+        $this->pagosCursosDetallesCursoDetalleRel->removeElement($pagosCursosDetallesCursoDetalleRel);
+    }
+
+    /**
+     * Get pagosCursosDetallesCursoDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosCursosDetallesCursoDetalleRel()
+    {
+        return $this->pagosCursosDetallesCursoDetalleRel;
+    }
+
+    /**
+     * Set codigoProveedorFk
+     *
+     * @param integer $codigoProveedorFk
+     *
+     * @return AfiCursoDetalle
+     */
+    public function setCodigoProveedorFk($codigoProveedorFk)
+    {
+        $this->codigoProveedorFk = $codigoProveedorFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoProveedorFk
+     *
+     * @return integer
+     */
+    public function getCodigoProveedorFk()
+    {
+        return $this->codigoProveedorFk;
+    }
+
+    /**
+     * Set proveedorRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiProveedor $proveedorRel
+     *
+     * @return AfiCursoDetalle
+     */
+    public function setProveedorRel(\Brasa\AfiliacionBundle\Entity\AfiProveedor $proveedorRel = null)
+    {
+        $this->proveedorRel = $proveedorRel;
+
+        return $this;
+    }
+
+    /**
+     * Get proveedorRel
+     *
+     * @return \Brasa\AfiliacionBundle\Entity\AfiProveedor
+     */
+    public function getProveedorRel()
+    {
+        return $this->proveedorRel;
+    }
+
+    /**
+     * Set estadoPagado
+     *
+     * @param boolean $estadoPagado
+     *
+     * @return AfiCursoDetalle
+     */
+    public function setEstadoPagado($estadoPagado)
+    {
+        $this->estadoPagado = $estadoPagado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagado
+     *
+     * @return boolean
+     */
+    public function getEstadoPagado()
+    {
+        return $this->estadoPagado;
     }
 }

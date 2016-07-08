@@ -17,11 +17,11 @@ class AfiPagoCursoType extends AbstractType
                     ->orderBy('c.codigoCuentaPk', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                 
-            ->add('entidadEntrenamientoRel', 'entity', array(
-                'class' => 'BrasaAfiliacionBundle:AfiEntidadEntrenamiento',
+            ->add('proveedorRel', 'entity', array(
+                'class' => 'BrasaAfiliacionBundle:AfiProveedor',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('ee')
-                    ->orderBy('ee.codigoEntidadEntrenamientoPk', 'ASC');},
+                    ->orderBy('ee.codigoProveedorPk', 'ASC');},
                 'property' => 'nombreCorto',
                 'required' => true))                
             ->add('soporte', 'text', array('required' => false))

@@ -38,9 +38,9 @@ class AfiPagoCurso
     private $soporte;     
     
     /**
-     * @ORM\Column(name="codigo_entidad_entrenamiento_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_proveedor_fk", type="integer", nullable=true)
      */    
-    private $codigoEntidadEntrenamientoFk;               
+    private $codigoProveedorFk;               
     
     /**
      * @ORM\Column(name="total", type="float")
@@ -68,10 +68,10 @@ class AfiPagoCurso
     private $comentarios;     
     
     /**
-     * @ORM\ManyToOne(targetEntity="AfiEntidadEntrenamiento", inversedBy="pagosCursosEntidadEntrenamientoRel")
-     * @ORM\JoinColumn(name="codigo_entidad_entrenamiento_fk", referencedColumnName="codigo_entidad_entrenamiento_pk")
+     * @ORM\ManyToOne(targetEntity="AfiProveedor", inversedBy="pagosCursosProveedorRel")
+     * @ORM\JoinColumn(name="codigo_proveedor_fk", referencedColumnName="codigo_proveedor_pk")
      */
-    protected $entidadEntrenamientoRel;    
+    protected $proveedorRel;    
 
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCuenta", inversedBy="afiPagosCursosCuentaRel")
@@ -83,6 +83,15 @@ class AfiPagoCurso
      * @ORM\OneToMany(targetEntity="AfiPagoCursoDetalle", mappedBy="pagoCursoRel")
      */
     protected $pagosCursosDetallesPagoCursoRel;     
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->pagosCursosDetallesPagoCursoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoPagoCursoPk
@@ -143,6 +152,30 @@ class AfiPagoCurso
     }
 
     /**
+     * Set codigoCuentaFk
+     *
+     * @param integer $codigoCuentaFk
+     *
+     * @return AfiPagoCurso
+     */
+    public function setCodigoCuentaFk($codigoCuentaFk)
+    {
+        $this->codigoCuentaFk = $codigoCuentaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCuentaFk
+     *
+     * @return integer
+     */
+    public function getCodigoCuentaFk()
+    {
+        return $this->codigoCuentaFk;
+    }
+
+    /**
      * Set soporte
      *
      * @param string $soporte
@@ -167,27 +200,27 @@ class AfiPagoCurso
     }
 
     /**
-     * Set codigoEntidadEntrenamientoFk
+     * Set codigoProveedorFk
      *
-     * @param integer $codigoEntidadEntrenamientoFk
+     * @param integer $codigoProveedorFk
      *
      * @return AfiPagoCurso
      */
-    public function setCodigoEntidadEntrenamientoFk($codigoEntidadEntrenamientoFk)
+    public function setCodigoProveedorFk($codigoProveedorFk)
     {
-        $this->codigoEntidadEntrenamientoFk = $codigoEntidadEntrenamientoFk;
+        $this->codigoProveedorFk = $codigoProveedorFk;
 
         return $this;
     }
 
     /**
-     * Get codigoEntidadEntrenamientoFk
+     * Get codigoProveedorFk
      *
      * @return integer
      */
-    public function getCodigoEntidadEntrenamientoFk()
+    public function getCodigoProveedorFk()
     {
-        return $this->codigoEntidadEntrenamientoFk;
+        return $this->codigoProveedorFk;
     }
 
     /**
@@ -311,34 +344,51 @@ class AfiPagoCurso
     }
 
     /**
-     * Set entidadEntrenamientoRel
+     * Set proveedorRel
      *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamiento $entidadEntrenamientoRel
+     * @param \Brasa\AfiliacionBundle\Entity\AfiProveedor $proveedorRel
      *
      * @return AfiPagoCurso
      */
-    public function setEntidadEntrenamientoRel(\Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamiento $entidadEntrenamientoRel = null)
+    public function setProveedorRel(\Brasa\AfiliacionBundle\Entity\AfiProveedor $proveedorRel = null)
     {
-        $this->entidadEntrenamientoRel = $entidadEntrenamientoRel;
+        $this->proveedorRel = $proveedorRel;
 
         return $this;
     }
 
     /**
-     * Get entidadEntrenamientoRel
+     * Get proveedorRel
      *
-     * @return \Brasa\AfiliacionBundle\Entity\AfiEntidadEntrenamiento
+     * @return \Brasa\AfiliacionBundle\Entity\AfiProveedor
      */
-    public function getEntidadEntrenamientoRel()
+    public function getProveedorRel()
     {
-        return $this->entidadEntrenamientoRel;
+        return $this->proveedorRel;
     }
+
     /**
-     * Constructor
+     * Set cuentaRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCuenta $cuentaRel
+     *
+     * @return AfiPagoCurso
      */
-    public function __construct()
+    public function setCuentaRel(\Brasa\GeneralBundle\Entity\GenCuenta $cuentaRel = null)
     {
-        $this->pagosCursosDetallesPagoCursoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cuentaRel = $cuentaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get cuentaRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCuenta
+     */
+    public function getCuentaRel()
+    {
+        return $this->cuentaRel;
     }
 
     /**
@@ -373,53 +423,5 @@ class AfiPagoCurso
     public function getPagosCursosDetallesPagoCursoRel()
     {
         return $this->pagosCursosDetallesPagoCursoRel;
-    }
-
-    /**
-     * Set codigoCuentaFk
-     *
-     * @param integer $codigoCuentaFk
-     *
-     * @return AfiPagoCurso
-     */
-    public function setCodigoCuentaFk($codigoCuentaFk)
-    {
-        $this->codigoCuentaFk = $codigoCuentaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCuentaFk
-     *
-     * @return integer
-     */
-    public function getCodigoCuentaFk()
-    {
-        return $this->codigoCuentaFk;
-    }
-
-    /**
-     * Set cuentaRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenCuenta $cuentaRel
-     *
-     * @return AfiPagoCurso
-     */
-    public function setCuentaRel(\Brasa\GeneralBundle\Entity\GenCuenta $cuentaRel = null)
-    {
-        $this->cuentaRel = $cuentaRel;
-
-        return $this;
-    }
-
-    /**
-     * Get cuentaRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenCuenta
-     */
-    public function getCuentaRel()
-    {
-        return $this->cuentaRel;
     }
 }

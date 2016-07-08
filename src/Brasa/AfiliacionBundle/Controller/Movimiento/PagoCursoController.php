@@ -155,27 +155,27 @@ class PagoCursoController extends Controller
             $arrSeleccionados = $request->request->get('ChkSeleccionar');                                      
             if ($form->get('BtnGuardar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                foreach ($arrSeleccionados as $codigoCurso) {
-                    $arCurso = new \Brasa\AfiliacionBundle\Entity\AfiCurso();
-                    $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($codigoCurso);
+                foreach ($arrSeleccionados as $codigoCursoDetalle) {
+                    $arCursoDetalle = new \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle();
+                    $arCursoDetalle = $em->getRepository('BrasaAfiliacionBundle:AfiCursoDetalle')->find($codigoCursoDetalle);
                     $arPagoCursoDetalle = new \Brasa\AfiliacionBundle\Entity\AfiPagoCursoDetalle();
                     $arPagoCursoDetalle->setPagoCursoRel($arPagoCurso);          
-                    $arPagoCursoDetalle->setCursoRel($arCurso);
-                    $arPagoCursoDetalle->setCosto($arCurso->getCosto());
+                    $arPagoCursoDetalle->setCursoDetalleRel($arCursoDetalle);
+                    $arPagoCursoDetalle->setCosto($arCursoDetalle->getCosto());
                     $em->persist($arPagoCursoDetalle);   
-                    $arCurso->setEstadoPagado(1);
-                    $em->persist($arCurso);
+                    $arCursoDetalle->setEstadoPagado(1);
+                    $em->persist($arCursoDetalle);
                 }
                 $em->flush();
                 $em->getRepository('BrasaAfiliacionBundle:AfiPagoCurso')->liquidar($codigoPagoCurso);
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }
         }
-        $dqlCursosPendientes = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->pendientePagoDql($arPagoCurso->getCodigoEntidadEntrenamientoFk());
-        $arCursos = $paginator->paginate($em->createQuery($dqlCursosPendientes), $request->query->get('page', 1), 20);
+        $dqlCursosPendientes = $em->getRepository('BrasaAfiliacionBundle:AfiCursoDetalle')->pendientePagoDql($arPagoCurso->getCodigoProveedorFk());
+        $arCursosDetalles = $paginator->paginate($em->createQuery($dqlCursosPendientes), $request->query->get('page', 1), 20);
         return $this->render('BrasaAfiliacionBundle:Movimiento/PagoCurso:detalleCursoNuevo.html.twig', array(
             'arPagoCurso' => $arPagoCurso, 
-            'arCursos' => $arCursos, 
+            'arCursosDetalles' => $arCursosDetalles, 
             'form' => $form->createView()));
     }    
     

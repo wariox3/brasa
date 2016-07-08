@@ -40,8 +40,8 @@
                         <td>{{ arPagoCurso.cuentaRel.nombre }}</td>
                     </tr> 
                     <tr>
-                        <td class="titulo">ENTIDAD ENTRENAMIENTO:</td>
-                        <td class="td-in-well">{{ arPagoCurso.entidadEntrenamientoRel.nombreCorto }}</td>                        
+                        <td class="titulo">PROVEEDOR:</td>
+                        <td class="td-in-well">{{ arPagoCurso.proveedorRel.nombreCorto }}</td>                        
                         <td class="titulo"></td>
                         <td align="right"></td>
                     </tr>                     
@@ -72,9 +72,9 @@
                         {% for arPagoCursoDetalles in arPagoCursoDetalles %}
                             <tr>
                                 <td>{{ arPagoCursoDetalles.codigoPagoCursoDetallePk  }}</td>
-                                <td>{{ arPagoCursoDetalles.cursoRel.empleadoRel.numeroIdentificacion | default('') }}</td>
-                                <td>{{ arPagoCursoDetalles.cursoRel.empleadoRel.nombreCorto | default('') }}</td>                                
-                                <td>{{ arPagoCursoDetalles.cursoRel.fecha | date('Y/m/d')  }}</td>                                
+                                <td>{{ arPagoCursoDetalles.cursoDetalleRel.cursoRel.empleadoRel.numeroIdentificacion | default('') }}</td>
+                                <td>{{ arPagoCursoDetalles.cursoDetalleRel.cursoRel.empleadoRel.nombreCorto | default('') }}</td>                                
+                                <td>{{ arPagoCursoDetalles.cursoDetalleRel.cursoRel.fecha | date('Y/m/d')  }}</td>                                
                                 <td style="text-align: right">{{ arPagoCursoDetalles.costo | number_format(0, '.', ',') }}</td>                
                                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagoCursoDetalles.codigoPagoCursoDetallePk }}" /></td>
                             </tr>

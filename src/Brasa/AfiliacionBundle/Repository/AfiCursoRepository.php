@@ -59,13 +59,7 @@ class AfiCursoRepository extends EntityRepository {
         $dql   = "SELECT c FROM BrasaAfiliacionBundle:AfiCurso c WHERE c.estadoFacturado = 0 AND c.estadoAnulado = 0 AND c.codigoClienteFk = " . $codigoCliente;
         $dql .= " ORDER BY c.codigoCursoPk DESC";
         return $dql;
-    }                    
-    
-    public function pendientePagoDql($codigoEntidadEntrenamiento) {        
-        $dql   = "SELECT c FROM BrasaAfiliacionBundle:AfiCurso c WHERE c.estadoPagado = 0 AND c.estadoAnulado = 0 AND c.codigoEntidadEntrenamientoFk = " . $codigoEntidadEntrenamiento;
-        $dql .= " ORDER BY c.codigoCursoPk DESC";
-        return $dql;
-    }                        
+    }                                              
     
     public function eliminar($arrSeleccionados) {
         $em = $this->getEntityManager();

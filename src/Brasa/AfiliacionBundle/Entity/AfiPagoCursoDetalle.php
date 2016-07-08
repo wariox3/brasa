@@ -5,7 +5,7 @@ namespace Brasa\AfiliacionBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="afi_pago_curso_detalle_curso")
+ * @ORM\Table(name="afi_pago_curso_detalle")
  * @ORM\Entity(repositoryClass="Brasa\AfiliacionBundle\Repository\AfiPagoCursoDetalleRepository")
  */
 class AfiPagoCursoDetalle
@@ -23,9 +23,9 @@ class AfiPagoCursoDetalle
     private $codigoPagoCursoFk;            
 
     /**
-     * @ORM\Column(name="codigo_curso_fk", type="integer")
+     * @ORM\Column(name="codigo_curso_detalle_fk", type="integer")
      */    
-    private $codigoCursoFk; 
+    private $codigoCursoDetalleFk; 
     
     /**
      * @ORM\Column(name="costo", type="float")
@@ -41,14 +41,15 @@ class AfiPagoCursoDetalle
      * @ORM\ManyToOne(targetEntity="AfiPagoCurso", inversedBy="pagosCursosDetallesPagoCursoRel")
      * @ORM\JoinColumn(name="codigo_pago_curso_fk", referencedColumnName="codigo_pago_curso_pk")
      */
-    protected $pagoCursoRel;    
-    
+    protected $pagoCursoRel;           
+
     /**
-     * @ORM\ManyToOne(targetEntity="AfiCurso", inversedBy="pagosCursosDetallesCursoRel")
-     * @ORM\JoinColumn(name="codigo_curso_fk", referencedColumnName="codigo_curso_pk")
+     * @ORM\ManyToOne(targetEntity="AfiCursoDetalle", inversedBy="pagosCursosDetallesCursoDetalleRel")
+     * @ORM\JoinColumn(name="codigo_curso_detalle_fk", referencedColumnName="codigo_curso_detalle_pk")
      */
-    protected $cursoRel; 
+    protected $cursoDetalleRel;     
     
+
 
     /**
      * Get codigoPagoCursoDetallePk
@@ -85,27 +86,27 @@ class AfiPagoCursoDetalle
     }
 
     /**
-     * Set codigoCursoFk
+     * Set codigoCursoDetalleFk
      *
-     * @param integer $codigoCursoFk
+     * @param integer $codigoCursoDetalleFk
      *
      * @return AfiPagoCursoDetalle
      */
-    public function setCodigoCursoFk($codigoCursoFk)
+    public function setCodigoCursoDetalleFk($codigoCursoDetalleFk)
     {
-        $this->codigoCursoFk = $codigoCursoFk;
+        $this->codigoCursoDetalleFk = $codigoCursoDetalleFk;
 
         return $this;
     }
 
     /**
-     * Get codigoCursoFk
+     * Get codigoCursoDetalleFk
      *
      * @return integer
      */
-    public function getCodigoCursoFk()
+    public function getCodigoCursoDetalleFk()
     {
-        return $this->codigoCursoFk;
+        return $this->codigoCursoDetalleFk;
     }
 
     /**
@@ -181,26 +182,26 @@ class AfiPagoCursoDetalle
     }
 
     /**
-     * Set cursoRel
+     * Set cursoDetalleRel
      *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiCurso $cursoRel
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle $cursoDetalleRel
      *
      * @return AfiPagoCursoDetalle
      */
-    public function setCursoRel(\Brasa\AfiliacionBundle\Entity\AfiCurso $cursoRel = null)
+    public function setCursoDetalleRel(\Brasa\AfiliacionBundle\Entity\AfiCursoDetalle $cursoDetalleRel = null)
     {
-        $this->cursoRel = $cursoRel;
+        $this->cursoDetalleRel = $cursoDetalleRel;
 
         return $this;
     }
 
     /**
-     * Get cursoRel
+     * Get cursoDetalleRel
      *
-     * @return \Brasa\AfiliacionBundle\Entity\AfiCurso
+     * @return \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle
      */
-    public function getCursoRel()
+    public function getCursoDetalleRel()
     {
-        return $this->cursoRel;
+        return $this->cursoDetalleRel;
     }
 }

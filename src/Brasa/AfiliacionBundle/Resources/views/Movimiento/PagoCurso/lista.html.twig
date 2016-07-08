@@ -44,7 +44,7 @@
             <tr>
                 <td>{{ arPagoCursos.codigoPagoCursoPk  }}</td>                
                 <td>{{ arPagoCursos.cuentaRel.nombre  }}</td>
-                <td>{{ arPagoCursos.entidadEntrenamientoRel.nombreCorto  }}</td>
+                <td>{{ arPagoCursos.proveedorRel.nombreCorto | default('') }}</td>
                 <td>{{ arPagoCursos.fecha |date('Y/m/d') }}</td>
                 <td style="text-align: right">{{ arPagoCursos.total | number_format(0, '.', ',') }}</td>
                 <td style="text-align: center"><a href="{{ path('brs_afi_movimiento_pago_curso_nuevo', {'codigoPagoCurso': arPagoCursos.codigoPagoCursoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
