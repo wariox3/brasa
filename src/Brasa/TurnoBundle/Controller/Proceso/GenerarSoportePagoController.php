@@ -218,7 +218,7 @@ class GenerarSoportePagoController extends Controller
                     $horasCompensarDia = round($porExtraDiurna * $horasPorCompensar, 0, PHP_ROUND_HALF_DOWN);
                     $horasCompensarNoche = round($porExtraNocturna * $horasPorCompensar, 0, PHP_ROUND_HALF_DOWN);
                     $horasCompensarFestivaDia = round($porExtraFestivaDiurna * $horasPorCompensar, 0, PHP_ROUND_HALF_DOWN);
-                    $horasCompensarFestivaNoche = round($horasCompensarFestivaNoche, 0, PHP_ROUND_HALF_DOWN);                    
+                    $horasCompensarFestivaNoche = round($porExtraFestivaDiurna * $horasPorCompensar, 0, PHP_ROUND_HALF_DOWN);                    
                     
                     //$horasCompensarFestivaNoche = $this->truncateFloat($porExtraFestivaNocturna * $horasPorCompensar, 1);                    
                     
