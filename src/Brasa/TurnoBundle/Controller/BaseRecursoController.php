@@ -19,22 +19,6 @@ class BaseRecursoController extends Controller
         $this->lista();
         if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if ($form->get('BtnActivarInactivar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados as $codigo) {
-                        $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigo);
-                        if($arRecurso->getEstadoActivo() == 1) {
-                            $arRecurso->setEstadoActivo(0);
-                        } else {
-                            $arRecurso->setEstadoActivo(1);
-                        }
-                        $em->persist($arRecurso);
-                        $em->flush();
-                    }
-                }                
-                return $this->redirect($this->generateUrl('brs_tur_base_recurso_lista'));
-            }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
             }
@@ -294,8 +278,7 @@ class BaseRecursoController extends Controller
             ->add('recursoGrupoRel', 'entity', $arrayPropiedadesRecursoGrupo)
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombreRecurso')))
             ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCodigoRecurso')))                  
-            ->add('TxtNumeroIdentificacion', 'text', array('label'  => 'NumeroIdentificacion','data' => $session->get('filtroIdentificacionRecurso')))                            
-            ->add('BtnActivarInactivar', 'submit', array('label'  => 'Activar / Inactivar',))            
+            ->add('TxtNumeroIdentificacion', 'text', array('label'  => 'NumeroIdentificacion','data' => $session->get('filtroIdentificacionRecurso')))                                        
             ->add('estadoRetirado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'RETIRADO', '0' => 'SIN RETIRAR'), 'data' => $session->get('filtroRecursoEstadoRetirado')))                
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
