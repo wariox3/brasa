@@ -209,6 +209,11 @@ class RhuContrato
     private $codigoCiudadContratoFk;
     
     /**
+     * @ORM\Column(name="codigo_ciudad_labora_fk", type="integer", nullable=true)
+     */    
+    private $codigoCiudadLaboraFk;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="contratosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -299,6 +304,12 @@ class RhuContrato
     protected $ciudadContratoRel;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="rhuContratosCiudadLaboraRel")
+     * @ORM\JoinColumn(name="codigo_ciudad_labora_fk", referencedColumnName="codigo_ciudad_pk")
+     */
+    protected $ciudadLaboraRel;
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuLiquidacion", mappedBy="contratoRel")
      */
     protected $liquidacionesContratoRel; 
@@ -379,6 +390,7 @@ class RhuContrato
     protected $soportesPagosHorariosDetallesContratoRel;    
     
 
+    
     /**
      * Constructor
      */
@@ -1325,6 +1337,30 @@ class RhuContrato
     }
 
     /**
+     * Set codigoCiudadLaboraFk
+     *
+     * @param integer $codigoCiudadLaboraFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoCiudadLaboraFk($codigoCiudadLaboraFk)
+    {
+        $this->codigoCiudadLaboraFk = $codigoCiudadLaboraFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCiudadLaboraFk
+     *
+     * @return integer
+     */
+    public function getCodigoCiudadLaboraFk()
+    {
+        return $this->codigoCiudadLaboraFk;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -1682,6 +1718,30 @@ class RhuContrato
     public function getCiudadContratoRel()
     {
         return $this->ciudadContratoRel;
+    }
+
+    /**
+     * Set ciudadLaboraRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadLaboraRel
+     *
+     * @return RhuContrato
+     */
+    public function setCiudadLaboraRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadLaboraRel = null)
+    {
+        $this->ciudadLaboraRel = $ciudadLaboraRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadLaboraRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
+     */
+    public function getCiudadLaboraRel()
+    {
+        return $this->ciudadLaboraRel;
     }
 
     /**

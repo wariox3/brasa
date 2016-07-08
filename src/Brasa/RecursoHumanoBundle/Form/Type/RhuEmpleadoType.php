@@ -73,6 +73,7 @@ class RhuEmpleadoType extends AbstractType
             ->add('tipoCuenta', 'choice', array('choices' => array('S' => 'AHORRO', 'D' => 'CORRIENTE')))
             ->add('numeroIdentificacion', 'text', array('required' => true))
             ->add('auxilioTransporte', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
+            ->add('discapacidad', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))                
             ->add('padreFamilia', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('pagadoEntidadSalud', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('comentarios', 'textarea', array('required' => false))

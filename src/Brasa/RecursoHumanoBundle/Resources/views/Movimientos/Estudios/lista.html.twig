@@ -69,7 +69,7 @@
                 <th>VALIDADO</th>
                 <th style="text-align: center"></th>
                 <th></th>
-                <th></th>
+                <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
             </tr>
             {% for arEstudios in arEstudios %}
             <tr>
@@ -97,6 +97,15 @@
                 {{ knp_pagination_render(arEstudios) }}
         </div>
         <div class="btn-toolbar" style="float: right">
+            <div class="btn-group">
+                {{ form_widget(form.BtnGenerar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnValidado, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnNoValidado, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnAcreditado, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            </div>
+            <div class="btn-group">
+                {{ form_widget(form.BtnExcelInforme, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            </div>
             <div class="btn-group">
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>

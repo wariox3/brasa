@@ -77,8 +77,8 @@
                         <td class="td-in-well">{{ arEmpleado.tipoPensionRel.nombre|default('SIN CONTRATO') }}</td>
                         <td class="titulo">TIPO SALUD:</td>
                         <td class="td-in-well">{{ arEmpleado.tipoSaludRel.nombre|default('SIN CONTRATO') }}</td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">DISCAPACIDAD</td>
+                        <td class="td-in-well">{% if arEmpleado.discapacidad == 1 %} SI {% else %} NO{% endif %}</td>
                     </tr>
                     <tr>
                         <td class="titulo">ENTIDAD PENSIÓN:</td>

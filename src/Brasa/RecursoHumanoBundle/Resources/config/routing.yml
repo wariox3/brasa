@@ -610,6 +610,22 @@ brs_rhu_base_banco_nuevo:
    path:     /rhu/base/banco/nuevo/{codigoBancoPk}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseBanco:nuevo }
    
+brs_rhu_base_academia_listar:
+   path:     /rhu/base/academia/listar
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseAcademia:listar }
+   
+brs_rhu_base_academia_nuevo:
+   path:     /rhu/base/academia/nuevo/{codigoAcademiaPk}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseAcademia:nuevo }
+   
+brs_rhu_base_estudiotipoacreditacion_listar:
+   path:     /rhu/base/estudiotipoacreditacion/listar
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseEstudioTipoAcreditacion:listar }
+   
+brs_rhu_base_estudiotipoacreditacion_nuevo:
+   path:     /rhu/base/estudiotipoacreditacion/nuevo/{codigoEstudioTipoAcreditacionPk}
+   defaults: { _controller: BrasaRecursoHumanoBundle:BaseEstudioTipoAcreditacion:nuevo }   
+   
 brs_rhu_base_horario_listar:
    path:     /rhu/base/horario/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseHorario:listar }

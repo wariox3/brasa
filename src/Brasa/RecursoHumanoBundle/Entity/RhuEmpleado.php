@@ -334,6 +334,11 @@ class RhuEmpleado
     private $codigoTipoLibreta;
     
     /**
+     * @ORM\Column(name="discapacidad", type="boolean")
+     */    
+    private $discapacidad = false;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuClasificacionRiesgo", inversedBy="empleadosClasificacionRiesgoRel")
      * @ORM\JoinColumn(name="codigo_clasificacion_riesgo_fk", referencedColumnName="codigo_clasificacion_riesgo_pk")
      */
@@ -3725,5 +3730,29 @@ class RhuEmpleado
     public function getCapacitacionesDetallesEmpleadoRel()
     {
         return $this->capacitacionesDetallesEmpleadoRel;
+    }
+
+    /**
+     * Set discapacidad
+     *
+     * @param boolean $discapacidad
+     *
+     * @return RhuEmpleado
+     */
+    public function setDiscapacidad($discapacidad)
+    {
+        $this->discapacidad = $discapacidad;
+
+        return $this;
+    }
+
+    /**
+     * Get discapacidad
+     *
+     * @return boolean
+     */
+    public function getDiscapacidad()
+    {
+        return $this->discapacidad;
     }
 }

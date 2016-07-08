@@ -192,6 +192,12 @@ class GenCiudad
     protected $rhuContratosCiudadContratoRel;
     
     /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuContrato", mappedBy="ciudadLaboraRel")
+     */
+    protected $rhuContratosCiudadLaboraRel;
+    
+    
+    /**
      * @ORM\OneToMany(targetEntity="GenConfiguracion", mappedBy="ciudadRel")
      */
     protected $configuracionesRel;
@@ -263,6 +269,8 @@ class GenCiudad
         $this->afiEmpleadosCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuAcademiasCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
+    
 
     /**
      * Get codigoCiudadPk
@@ -1358,6 +1366,40 @@ class GenCiudad
     public function getRhuContratosCiudadContratoRel()
     {
         return $this->rhuContratosCiudadContratoRel;
+    }
+
+    /**
+     * Add rhuContratosCiudadLaboraRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $rhuContratosCiudadLaboraRel
+     *
+     * @return GenCiudad
+     */
+    public function addRhuContratosCiudadLaboraRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $rhuContratosCiudadLaboraRel)
+    {
+        $this->rhuContratosCiudadLaboraRel[] = $rhuContratosCiudadLaboraRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuContratosCiudadLaboraRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $rhuContratosCiudadLaboraRel
+     */
+    public function removeRhuContratosCiudadLaboraRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $rhuContratosCiudadLaboraRel)
+    {
+        $this->rhuContratosCiudadLaboraRel->removeElement($rhuContratosCiudadLaboraRel);
+    }
+
+    /**
+     * Get rhuContratosCiudadLaboraRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuContratosCiudadLaboraRel()
+    {
+        return $this->rhuContratosCiudadLaboraRel;
     }
 
     /**

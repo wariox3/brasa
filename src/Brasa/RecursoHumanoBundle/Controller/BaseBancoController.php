@@ -53,6 +53,7 @@ class BaseBancoController extends Controller
         }    
         
         if($form->get('BtnExcel')->isClicked()) {
+            ob_clean();
                 $objPHPExcel = new \PHPExcel();
                 // Set document properties
                 $objPHPExcel->getProperties()->setCreator("EMPRESA")

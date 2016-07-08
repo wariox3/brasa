@@ -489,7 +489,8 @@ class BaseEmpleadoController extends Controller
                     ->setCellValue('AN1', 'TALLA JEANS')
                     ->setCellValue('AO1', 'TALLA CALZADO')
                     ->setCellValue('AP1', 'DEPARTAMENTO')
-                    ->setCellValue('AQ1', 'HORARIO');
+                    ->setCellValue('AQ1', 'HORARIO')
+                    ->setCellValue('AR1', 'DISCAPACIDAD');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
@@ -563,6 +564,11 @@ class BaseEmpleadoController extends Controller
             }else{
                 $estadoActivo = "SI";
             }
+            if ($arEmpleado->getDiscapacidad() == 0){
+                $discapacidad = "NO";
+            }else{
+                $discapacidad = "SI";
+            }
             if ($arEmpleado->getEstadoContratoActivo() == 0){
                 $estadoContratoActivo = "NO VIGENTE";
             }else{
@@ -626,7 +632,8 @@ class BaseEmpleadoController extends Controller
                     ->setCellValue('AN' . $i, $arEmpleado->getJeans())
                     ->setCellValue('AO' . $i, $arEmpleado->getCalzado())
                     ->setCellValue('AP' . $i, $departamentoEmpresa)
-                    ->setCellValue('AQ' . $i, $horario);
+                    ->setCellValue('AQ' . $i, $horario)
+                    ->setCellValue('AR' . $i, $discapacidad);
             $i++;
         }
 

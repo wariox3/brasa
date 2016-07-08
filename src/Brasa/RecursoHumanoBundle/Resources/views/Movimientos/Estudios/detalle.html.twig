@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-{% block title %}Permiso detalle - Soga App{% endblock %}
+{% block title %}Estudio detalle - Soga App{% endblock %}
 {% block content %}
 <script>
     $('#myTab a').click(function(e) {
@@ -9,75 +9,92 @@
 </script>
 <div class="container">
     <div class="page-header">
-        <h3>Permiso</h3>
+        <h3>Estudio</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
-                {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 12,  'numero': arPermiso.codigoPermisoPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
+                {{ form_widget(form.BtnGenerar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnValidado, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnNoValidado, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnAcreditado, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 9,  'numero': arEstudio.codigoEmpleadoEstudioPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
             </div>
         </div>
         <br /><br />
     <!-- Encabezado Movimiento -->
     <div class="panel panel-default">
-      <div class="panel-heading">Información disciplinario</div>
+      <div class="panel-heading">Información estudios</div>
       <div class="panel-body">
             <table width="100%" class="table table-condensed table-bordered">
                 <tr>
                     <td class="titulo">CÓDIGO:</td>
-                    <td>{{ arPermiso.codigoPermisoPk }}</td>
+                    <td>{{ arEstudio.codigoEmpleadoEstudioPk }}</td>
                     <td class="titulo">FECHA:</td>
-                    <td>{{ arPermiso.fechaPermiso | date('Y/m/d') }}</td>
+                    <td>{{ arEstudio.fecha | date('Y/m/d') }}</td>
                     <td class="titulo"></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td class="titulo">EMPLEADO:</td>
-                    <td>{{ arPermiso.empleadoRel.nombreCorto }}</td>
+                    <td>{{ arEstudio.empleadoRel.nombreCorto }}</td>
                     <td class="titulo">IDENTIFICACIÓN:</td>
-                    <td>{{ arPermiso.empleadoRel.numeroIdentificacion }}</td>
-                    <td class="titulo">CENTRO COSTO</td>
-                    <td>{{ arPermiso.centroCostoRel.nombre |default('')}}</td>
-                </tr>
-                <tr>
-                    <td class="titulo">DEPARTAMENTO:</td>
-                    <td>{{ arPermiso.departamentoEmpresaRel.nombre|default('') }}</td>
+                    <td>{{ arEstudio.empleadoRel.numeroIdentificacion }}</td>
                     <td class="titulo">CARGO</td>
-                    <td>{{ arPermiso.cargoRel.nombre|default('') }}</td>
+                    <td>{{ arEstudio.empleadoRel.cargoRel.nombre |default('')}}</td>
+                </tr>
+                <tr>
+                    <td class="titulo">TIPO ESTUDIO:</td>
+                    <td>{{ arEstudio.empleadoEstudioTipoRel.nombre|default('') }}</td>
+                    <td class="titulo">INSTITUCIÓN:</td>
+                    <td>{{ arEstudio.institucion }}</td>
+                    <td class="titulo">TITULO:</td>
+                    <td>{{ arEstudio.titulo }}</td>
+                </tr>
+                <tr>
+                    <td class="titulo">FECHA INICIO:</td>
+                    <td>{% if arEstudio.fechaInicio != null %}{{ arEstudio.fechaInicio | date('Y/m/d') }}{% else %}{% endif%}</td>
+                    <td class="titulo">FECHA TERMINACIÓN:</td>
+                    <td>{% if arEstudio.fechaTerminacion != null %}{{ arEstudio.fechaInicio | date('Y/m/d') }}{% else %}{% endif%}</td>
+                    <td class="titulo">CIUDAD:</td>
+                    <td>{{ arEstudio.ciudadRel.nombre }}</td>
+                </tr>
+                <tr>
+                    <td class="titulo">GRADO BACHILLER:</td>
+                    <td>{{arEstudio.gradoBachillerRel.grado |default('')}}</td>
+                    <td class="titulo">GRADUADO:</td>
+                    <td>{% if arEstudio.graduado == 1%}SI{% else %}NO{% endif %}</td>
+                    <td class="titulo">VALIDAR:</td>
+                    <td>{% if arEstudio.validarVencimiento == 1%}SI{% else %}NO{% endif %}</td>
+                </tr>
+                <tr>
+                    <td class="titulo">TIPO ACREDITACIÓN:</td>
+                    <td>{{arEstudio.estudioTipoAcreditacionRel.nombre |default('')}}</td>
+                    <td class="titulo">ACADEMIA:</td>
+                    <td>{{arEstudio.academiaRel.nombre |default('')}}</td>
+                    <td class="titulo">ESTADO:</td>
+                    <td>{{ arEstudio.estudioEstadoRel.nombre |default('')}}</td>
+                </tr>
+                <tr>
+                    <td class="titulo">NUMERO REGISTRO:</td>
+                    <td>{{arEstudio.numeroRegistro}}</td>
+                    <td class="titulo">NUMERO ACREDITACIÓN:</td>
+                    <td>{{arEstudio.numeroAcreditacion}}</td>
+                    <td class="titulo">ESTADO INVALIDO:</td>
+                    <td>{{ arEstudio.estudioEstadoInvalidoRel.nombre |default('')}}</td>
+                </tr>
+                <tr>
+                    <td class="titulo">FECHA INICIO ACREDITACIÓN:</td>
+                    <td>{% if arEstudio.fechaInicioAcreditacion != null %}{{ arEstudio.fechaInicio | date('Y/m/d') }}{% else %}{% endif%}</td>
+                    <td class="titulo">FECHA TERMINACIÓN ACREDITACIÓN:</td>
+                    <td>{% if arEstudio.fechaTerminacionAcreditacion != null %}{{ arEstudio.fechaInicio | date('Y/m/d') }}{% else %}{% endif%}</td>
                     <td class="titulo"></td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td class="titulo">TIPO PERMISO</td>
-                    <td>{{ arPermiso.permisoTipoRel.nombre|default('') }}</td>
-                    <td class="titulo">MOTIVO:</td>
-                    <td>{{ arPermiso.motivo }}</td>
-                    <td class="titulo">JEFE AUTORIZA</td>
-                    <td>{{ arPermiso.jefeAutoriza }}</td>
-                </tr>
-                <tr>
-                    <td class="titulo">HORA SALIDA</td>
-                    <td>{{ arPermiso.horaSalida|date('H:i') }}</td>
-                    <td class="titulo">HORA LLEGADA:</td>
-                    <td>{{ arPermiso.horaLlegada|date('H:i') }}</td>
-                    <td class="titulo">HORAS PERMISO</td>
-                    <td>{{ arPermiso.horasPermiso }}</td>
-                </tr>
-                <tr>
-                    <td class="titulo"></td>
-                    <td></td>
-                    <td class="titulo">AFECTA HORARIO:</td>
-                    <td>{% if arPermiso.afectaHorario == 1%}SI{% else %}NO{% endif %}</td>
-                    <td class="titulo">AUTORIZADO:</td>
-                    <td>{% if arPermiso.estadoAutorizado == 1%}SI{% else %}NO{% endif %}</td>
-                </tr>
-                <tr>
-                    <td class="titulo">OBSERVACIONES:</td>
-                    <td colspan="5" >{{ arPermiso.observaciones }}</td>
+                    <td class="titulo">COMENTARIOS:</td>
+                    <td colspan="5" >{{ arEstudio.comentarios }}</td>
                 </tr>
             </table>
       </div>
@@ -87,6 +104,6 @@
     
         {{ form_rest(form) }}
     {{ form_end(form) }}
-    <a  class="btn btn-default btn-sm" href="{{ path('brs_rhu_permiso_lista') }}">Volver</a>
+    <a  class="btn btn-default btn-sm" href="{{ path('brs_rhu_estudio_lista') }}">Volver</a>
 </div>
 {% endblock %}
