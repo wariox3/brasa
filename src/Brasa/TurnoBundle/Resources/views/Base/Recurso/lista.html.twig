@@ -40,9 +40,9 @@
                     <div class="col-sm-4">                  
                         {{ form_widget(form.TxtNumeroIdentificacion , { 'attr': {'class': 'form-control'} }) }}
                     </div> 
-                    <label for="form_centroCostoRel" class="col-sm-2 control-label"></label>
+                    <label class="col-sm-2 control-label">Retirado:</label>
                     <div class="col-sm-4">                  
-                        
+                        {{ form_widget(form.estadoRetirado , { 'attr': {'class': 'form-control'} }) }}
                     </div>                    
                 </div>                    
                 <div class="form-group form-group-sm">
@@ -62,6 +62,7 @@
                 <th>GRUPO</th>
                 <th>APODO</th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Activo">ACT</p></th>
+                <th>RETIRO</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -75,7 +76,12 @@
                 <td>{{ arRecursos.centroCostoRel.nombre | default('') }}</td>   
                 <td>{{ arRecursos.recursoGrupoRel.nombre | default('') }}</td>   
                 <td>{{ arRecursos.apodo }}</td> 
-                <td>{% if arRecursos.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>                
+                <td>{% if arRecursos.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td> 
+                {% if arRecursos.estadoRetiro == 0 %}
+                    <td style="text-align: center"><a class="btn btn-default btn-xs" id="{{ path('brs_tur_base_recurso_retiro', { 'codigoRecurso': arRecursos.codigoRecursoPk}) }}" style="float:left">Retiro</a></td>                                
+                {% else %} 
+                    <td>{{ arRecursos.fechaRetiro | date('Y/m/d') }}</td>                     
+                {% endif %}
                 <td style="text-align: center"><a href="{{ path('brs_tur_base_recurso_nuevo', {'codigoRecurso': arRecursos.codigoRecursoPk, 'codigoEmpleado': 0 }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
                 <td style="text-align: center"><a href="{{ path('brs_tur_base_recurso_detalle', { 'codigoRecurso': arRecursos.codigoRecursoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arRecursos.codigoRecursoPk }}" /></td>

@@ -1,6 +1,7 @@
 <?php
 namespace Brasa\TurnoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurRecursoType;
@@ -176,6 +177,37 @@ class BaseRecursoController extends Controller
             'form' => $form->createView()));
     }    
     
+    /**
+     * @Route("/tur/base/recurso/retiro/{codigoRecurso}", name="brs_tur_base_recurso_retiro")
+     */    
+    public function retiroAction($codigoRecurso) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
+        $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigoRecurso);
+        $form = $this->createFormBuilder()
+            ->setAction($this->generateUrl('brs_tur_base_recurso_retiro', array('codigoRecurso' => $codigoRecurso)))
+            ->add('fechaTerminacion', 'date', array('label'  => 'Terminacion', 'data' => new \DateTime('now')))
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        $form->handleRequest($request);    
+        if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
+            $dateFechaRetiro = $form->get('fechaTerminacion')->getData();
+            $arRecurso->setFechaRetiro($dateFechaRetiro);
+            $arRecurso->setEstadoRetiro(1);
+            $arRecurso->setEstadoActivo(0);
+            $em->persist($arRecurso);                            
+            $em->flush();           
+            return $this->redirect($this->generateUrl('brs_tur_base_recurso_lista'));
+        }
+        return $this->render('BrasaTurnoBundle:Base/Recurso:retiro.html.twig', array(
+            'arRecurso' => $arRecurso,
+            'form' => $form->createView()
+        ));
+    }
+    
     private function lista() {        
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -184,7 +216,8 @@ class BaseRecursoController extends Controller
                 $session->get('filtroCodigoRecurso'),
                 $session->get('filtroCodigoCentroCostoRecurso'),
                 $session->get('filtroIdentificacionRecurso'),
-                $session->get('filtroCodigoRecursoGrupo')                
+                $session->get('filtroCodigoRecursoGrupo'),
+                $session->get('filtroRecursoEstadoRetirado')                
                 ); 
     }
     
@@ -211,6 +244,7 @@ class BaseRecursoController extends Controller
         if($arRecursoGrupo) {
             $session->set('filtroCodigoRecursoGrupo', $arRecursoGrupo->getCodigoRecursoGrupoPk());
         }        
+        $session->set('filtroRecursoEstadoRetirado', $form->get('estadoRetirado')->getData());
         $this->lista();
     }
     
@@ -262,6 +296,7 @@ class BaseRecursoController extends Controller
             ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCodigoRecurso')))                  
             ->add('TxtNumeroIdentificacion', 'text', array('label'  => 'NumeroIdentificacion','data' => $session->get('filtroIdentificacionRecurso')))                            
             ->add('BtnActivarInactivar', 'submit', array('label'  => 'Activar / Inactivar',))            
+            ->add('estadoRetirado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'RETIRADO', '0' => 'SIN RETIRAR'), 'data' => $session->get('filtroRecursoEstadoRetirado')))                
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
@@ -330,7 +365,9 @@ class BaseRecursoController extends Controller
                     ->setCellValue('D1', 'TIPO')
                     ->setCellValue('E1', 'CENTRO COSTOS')
                     ->setCellValue('F1', 'GRUPO')
-                    ->setCellValue('G1', 'ACTIVO');
+                    ->setCellValue('G1', 'ACTIVO')
+                    ->setCellValue('H1', 'RETIRO')
+                    ->setCellValue('I1', 'F.RETIRO');
 
         $i = 2;
         
@@ -346,7 +383,9 @@ class BaseRecursoController extends Controller
                     ->setCellValue('D' . $i, $arRecurso->getRecursoTipoRel()->getNombre())
                     ->setCellValue('E' . $i, $arRecurso->getCentroCostoRel()->getNombre())
                     ->setCellValue('F' . $i, $arRecurso->getRecursoGrupoRel()->getNombre())
-                    ->setCellValue('G' . $i, $objFunciones->devuelveBoolean($arRecurso->getEstadoActivo()));
+                    ->setCellValue('G' . $i, $objFunciones->devuelveBoolean($arRecurso->getEstadoActivo()))
+                    ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arRecurso->getEstadoRetiro()))
+                    ->setCellValue('I' . $i, $arRecurso->getFechaRetiro()->format('Y/m/d'));
                         
             $i++;
         }

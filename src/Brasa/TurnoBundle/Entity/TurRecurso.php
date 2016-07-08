@@ -116,6 +116,16 @@ class TurRecurso
     private $codigoInterface;     
     
     /**
+     * @ORM\Column(name="fecha_retiro", type="date", nullable=true)
+     */ 
+    private $fechaRetiro;     
+    
+    /**     
+     * @ORM\Column(name="estado_retiro", type="boolean")
+     */    
+    private $estadoRetiro = false;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleado", inversedBy="turRecursosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -665,6 +675,54 @@ class TurRecurso
     public function getCodigoInterface()
     {
         return $this->codigoInterface;
+    }
+
+    /**
+     * Set fechaRetiro
+     *
+     * @param \DateTime $fechaRetiro
+     *
+     * @return TurRecurso
+     */
+    public function setFechaRetiro($fechaRetiro)
+    {
+        $this->fechaRetiro = $fechaRetiro;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaRetiro
+     *
+     * @return \DateTime
+     */
+    public function getFechaRetiro()
+    {
+        return $this->fechaRetiro;
+    }
+
+    /**
+     * Set estadoRetiro
+     *
+     * @param boolean $estadoRetiro
+     *
+     * @return TurRecurso
+     */
+    public function setEstadoRetiro($estadoRetiro)
+    {
+        $this->estadoRetiro = $estadoRetiro;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoRetiro
+     *
+     * @return boolean
+     */
+    public function getEstadoRetiro()
+    {
+        return $this->estadoRetiro;
     }
 
     /**
