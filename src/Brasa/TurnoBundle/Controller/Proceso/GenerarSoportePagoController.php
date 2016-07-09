@@ -187,7 +187,9 @@ class GenerarSoportePagoController extends Controller
                 $arSoportePagos = new \Brasa\TurnoBundle\Entity\TurSoportePago();  
                 $arSoportePagos = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));
                 foreach ($arSoportePagos as $arSoportePago) {
-                                                           
+                    if($arSoportePago->getCodigoRecursoFk() == 20) {
+                        echo "hola";
+                    }                                                           
                     $horasDia = $arSoportePago->getHorasDiurnasReales();
                     $horasNoche = $arSoportePago->getHorasNocturnasReales();
                     $horasFestivasDia = $arSoportePago->getHorasFestivasDiurnasReales();
@@ -212,13 +214,11 @@ class GenerarSoportePagoController extends Controller
                         $porExtraFestivaDiurna = $horasExtraFestivasDia / $totalExtras;
                         $porExtraFestivaNocturna = $horasExtraFestivasNoche / $totalExtras;
                     }
-                    /*if($arSoportePago->getCodigoRecursoFk() == 839) {
-                        echo "hola";
-                    } */
-                    $horasCompensarDia = round($porExtraDiurna * $horasPorCompensar, 0, PHP_ROUND_HALF_DOWN);
-                    $horasCompensarNoche = round($porExtraNocturna * $horasPorCompensar, 0, PHP_ROUND_HALF_DOWN);
-                    $horasCompensarFestivaDia = round($porExtraFestivaDiurna * $horasPorCompensar, 0, PHP_ROUND_HALF_DOWN);
-                    $horasCompensarFestivaNoche = round($porExtraFestivaDiurna * $horasPorCompensar, 0, PHP_ROUND_HALF_DOWN);                    
+
+                    $horasCompensarDia = round($porExtraDiurna * $horasPorCompensar);
+                    $horasCompensarNoche = round($porExtraNocturna * $horasPorCompensar);
+                    $horasCompensarFestivaDia = round($porExtraFestivaDiurna * $horasPorCompensar);
+                    $horasCompensarFestivaNoche = round($porExtraFestivaNocturna * $horasPorCompensar);                    
                     
                     //$horasCompensarFestivaNoche = $this->truncateFloat($porExtraFestivaNocturna * $horasPorCompensar, 1);                    
                     
