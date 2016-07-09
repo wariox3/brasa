@@ -34,7 +34,27 @@
                         </div>
                     </div>
                 </div>                 
-                    
+
+                <div     class="form-group form-group-sm">
+                    <label class="col-sm-2 control-label">Empleado:</label>
+                    <div class="col-sm-10">
+                        <div class="row">
+                          <div class="col-lg-2">
+                            <div class="input-group">
+                              {{ form_widget(form.TxtNumeroIdentificacion, { 'attr': {'class': 'form-control'} }) }}                              
+                            </div>
+                          </div>
+                          <div class="col-lg-10">
+                            <div class="input-group">     
+                              {{ form_widget(form.TxtNombreEmpleado, { 'attr': {'class': 'form-control', 'readOnly': 'ReadOnly'} }) }}                              
+                              <span class="input-group-btn">                                        
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_afi_buscar_empleado', { 'campoCodigo': 'form_TxtNumeroIdentificacion', 'campoNombre': 'form_TxtNombreEmpleado' }) }}', 'buscarCliente', 600, 900)">Buscar</a>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>                               
                 <div class="form-group form-group-sm">  
                     <label for="form_TxtNumero" class="col-sm-2 control-label">Numero:</label>
                     <div class="col-sm-4">

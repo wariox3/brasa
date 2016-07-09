@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 
 class AfiCursoRepository extends EntityRepository {  
     
-    public function listaDql($numero = "", $codigoCliente = "", $boolEstadoAutorizado = "", $boolAsistencia = "", $boolEstadoFacturado = "", $boolEstadoPagado = "", $boolEstadoAnulado = "", $strFechaDesde = "", $strFechaHasta = "") {
+    public function listaDql($numero = "", $codigoCliente = "", $boolEstadoAutorizado = "", $boolAsistencia = "", $boolEstadoFacturado = "", $boolEstadoPagado = "", $boolEstadoAnulado = "", $strFechaDesde = "", $strFechaHasta = "", $codigoEmpleado = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT c FROM BrasaAfiliacionBundle:AfiCurso c WHERE c.codigoCursoPk <> 0";
         if($numero != "") {
@@ -14,7 +14,10 @@ class AfiCursoRepository extends EntityRepository {
         }        
         if($codigoCliente != "") {
             $dql .= " AND c.codigoClienteFk = " . $codigoCliente;  
-        }    
+        }  
+        if($codigoEmpleado != "") {
+            $dql .= " AND c.codigoEmpleadoFk = " . $codigoEmpleado;  
+        }        
         if($boolEstadoAutorizado == 1 ) {
             $dql .= " AND c.estadoAutorizado = 1";
         }

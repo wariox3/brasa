@@ -369,7 +369,8 @@ class CursoController extends Controller
                 $session->get('filtroCursoEstadoPagado'),
                 $session->get('filtroCursoEstadoAnulado'),
                 $strFechaDesde,
-                $strFechaHasta  
+                $strFechaHasta,
+                $session->get('filtroCodigoEmpleado')
                 ); 
     }
     
@@ -398,6 +399,7 @@ class CursoController extends Controller
         $session->set('filtroCursoEstadoPagado', $form->get('estadoPagado')->getData());          
         $session->set('filtroCursoEstadoAnulado', $form->get('estadoAnulado')->getData());          
         $session->set('filtroNit', $form->get('TxtNit')->getData());                         
+        $session->set('filtroNumeroIdentificacion', $form->get('TxtNumeroIdentificacion')->getData());                         
         $dateFechaDesde = $form->get('fechaDesde')->getData();
         $dateFechaHasta = $form->get('fechaHasta')->getData();
         $session->set('filtroCursoFechaDesde', $dateFechaDesde->format('Y/m/d'));
@@ -425,7 +427,21 @@ class CursoController extends Controller
             }          
         } else {
             $session->set('filtroCodigoCliente', null);
-        }       
+        }  
+        $strNombreEmpleado = "";
+        if($session->get('filtroNumeroIdentificacion')) {
+            $arEmpleado = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->findOneBy(array('numeroIdentificacion' => $session->get('filtroNumeroIdentificacion')));
+            if($arEmpleado) {
+                $session->set('filtroCodigoEmpleado', $arEmpleado->getCodigoEmpleadoPk());
+                $strNombreEmpleado = $arEmpleado->getNombreCorto();
+            }  else {
+                $session->set('filtroCodigoEmpleado', null);
+                $session->set('filtroNumeroIdentificacion', null);
+            }          
+        } else {
+            $session->set('filtroCodigoEmpleado', null);
+        }        
+        
         $dateFecha = new \DateTime('now');
         $strFechaDesde = $dateFecha->format('Y/m/')."01";
         $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
@@ -441,6 +457,8 @@ class CursoController extends Controller
         $form = $this->createFormBuilder()
             ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
             ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                
+            ->add('TxtNumeroIdentificacion', 'text', array('label'  => 'Nit','data' => $session->get('filtroNumeroIdentificacion')))
+            ->add('TxtNombreEmpleado', 'text', array('label'  => 'NombreCliente','data' => $strNombreEmpleado))                                
             ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCursoNumero')))
             ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroCursoEstadoAutorizado')))                
             ->add('asistencia', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ASISTIO', '0' => 'NO ASISTIO'), 'data' => $session->get('filtroCursoAsistencia')))                                
