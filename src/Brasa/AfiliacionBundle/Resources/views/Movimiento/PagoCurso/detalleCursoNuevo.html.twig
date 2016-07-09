@@ -9,7 +9,8 @@
             <tr>
                 <th>CODIGO</th>
                 <th>IDENTIFICACION</th>  
-                <th>EMPLEADO</th>  
+                <th>EMPLEADO</th>
+                <th>TIPO</th>
                 <th>COSTO</th>               
                 <th></th>
             </tr>
@@ -18,6 +19,7 @@
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arCursosDetalles.codigoCursoDetallePk }}">{{ arCursosDetalles.codigoCursoDetallePk }} </td>                                
                 <td>{{ arCursosDetalles.cursoRel.empleadoRel.numeroIdentificacion | default('') }}</td>
                 <td>{{ arCursosDetalles.cursoRel.empleadoRel.nombreCorto | default('') }}</td>                                                
+                <td>{{ arCursosDetalles.cursoTipoRel.nombre | default('') }}</td>                                                
                 <td style="text-align: right">{{ arCursosDetalles.costo | number_format(0, '.', ',') }}</td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCursosDetalles.codigoCursoDetallePk }}" /></td>
             </tr>

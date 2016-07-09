@@ -57,7 +57,7 @@ class PagoCurso extends \FPDF_FPDF {
         $this->SetXY(10, 40);
         $this->SetFillColor(200, 200, 200); 
         $this->SetFont('Arial','B',8);
-        $this->Cell(30, 6, utf8_decode("CÓDIGO:") , 1, 0, 'L', 1);
+        $this->Cell(30, 6, utf8_decode("NUMERO:") , 1, 0, 'L', 1);
         $this->SetFillColor(272, 272, 272); 
         $this->SetFont('Arial','',8);
         $this->Cell(30, 6, $arPagoCurso->getCodigoPagoCursoPk(), 1, 0, 'R', 1);
