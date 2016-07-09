@@ -17,7 +17,8 @@ class RhuCapacitacionType extends AbstractType
             ->add('fechaCapacitacion', 'date')
             ->add('tema', 'text', array('required' => false))
             ->add('numeroPersonasCapacitar', 'number', array('required' => true))
-            ->add('vrCapacitacion', 'text', array('required' => false))    
+            ->add('vrCapacitacion', 'text', array('required' => false))
+            ->add('lugar', 'text', array('required' => false))    
             ->add('comentarios', 'textarea', array('required' => false))    
             ->add('guardar', 'submit');        
     }

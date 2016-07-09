@@ -138,7 +138,52 @@ class CapacitacionesController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_capacitacion_detalle', array('codigoCapacitacion' => $codigoCapacitacion)));
                 }
             }
-            
+            if($form->get('BtnAsistio')->isClicked()) {
+                $contador = 0;
+                if ($arCapacitacion->getEstadoAutorizado() == 0){
+                    $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados as $codigoCapacitacionDetalle) {
+                            $arCapacitacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle();
+                            $arCapacitacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionDetalle')->find($codigoCapacitacionDetalle);
+                            $arCapacitacionDetalle->setAsistencia(1);
+                            $em->persist($arCapacitacion);
+                        }
+                        $em->flush();
+                        $arCapacitacionDetalleAsistencia = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle();
+                        $arCapacitacionDetalleAsistencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionDetalle')->findBy(array('codigoCapacitacionFk' => $codigoCapacitacion, 'asistencia' => 1));
+                        $arCapacitacion = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacion();
+                        $arCapacitacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacion')->find($codigoCapacitacion);
+                        $arCapacitacion->setNumeroPersonasAsistieron(count($arCapacitacionDetalleAsistencia));
+                        $em->persist($arCapacitacion);
+                        $em->flush();
+                    }
+                    return $this->redirect($this->generateUrl('brs_rhu_capacitacion_detalle', array('codigoCapacitacion' => $codigoCapacitacion)));
+                }
+            }
+            if($form->get('BtnNoAsistio')->isClicked()) {
+                $contador = 0;
+                if ($arCapacitacion->getEstadoAutorizado() == 0){
+                    $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados as $codigoCapacitacionDetalle) {
+                            $arCapacitacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle();
+                            $arCapacitacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionDetalle')->find($codigoCapacitacionDetalle);
+                            $arCapacitacionDetalle->setAsistencia(0);
+                            $em->persist($arCapacitacion);
+                        }
+                        $em->flush();
+                        $arCapacitacionDetalleAsistencia = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle();
+                        $arCapacitacionDetalleAsistencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionDetalle')->findBy(array('codigoCapacitacionFk' => $codigoCapacitacion, 'asistencia' => 1));
+                        $arCapacitacion = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacion();
+                        $arCapacitacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacion')->find($codigoCapacitacion);
+                        $arCapacitacion->setNumeroPersonasAsistieron(count($arCapacitacionDetalleAsistencia));
+                        $em->persist($arCapacitacion);
+                        $em->flush();
+                    }
+                    return $this->redirect($this->generateUrl('brs_rhu_capacitacion_detalle', array('codigoCapacitacion' => $codigoCapacitacion)));
+                }
+            }
             if($form->get('BtnActualizar')->isClicked()) {
                 if ($arCapacitacion->getEstadoAutorizado() == 0){
                     $arrControles = $request->request->All();
@@ -160,7 +205,23 @@ class CapacitacionesController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_capacitacion_detalle', array('codigoCapacitacion' => $codigoCapacitacion)));
                 }
             }
-            
+            if ($form->get('BtnActualizarDetalle')->isClicked()) {
+                if ($arCapacitacion->getEstadoAutorizado() == 0){
+                    $arrControles = $request->request->All();
+                    $intIndice = 0;
+                    foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                        if($arrControles['TxtEvaluacion'.$intCodigo] != "") {                     
+                            $arCapacitacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle();
+                            $arCapacitacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionDetalle')->find($intCodigo);
+                            $evaluacion = $arrControles['TxtEvaluacion'.$intCodigo];
+                            $arCapacitacionDetalle->setEvaluacion($evaluacion);
+                            $em->persist($arCapacitacionDetalle);
+                        }
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_capacitacion_detalle', array('codigoCapacitacion' => $codigoCapacitacion)));
+                }
+            }
             if($form->get('BtnCerrar')->isClicked()) {
                 if ($arCapacitacion->getEstadoAutorizado() == 1){
                     $arCapacitacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionDetalle')->findBy(array('codigoCapacitacionFk' => $codigoCapacitacion));
@@ -381,7 +442,9 @@ class CapacitacionesController extends Controller
         $arrBotonImprimir = array('label' => 'Imprimir asistencia', 'disabled' => true);
         $arrBotonImprimirNotas = array('label' => 'Imprimir notas', 'disabled' => true);
         $arrBotonEliminarDetalle = array('label' => 'Eliminar', 'disabled' => false);
-        $arrBotonActualizarAsistencia = array('label' => 'Actualizar asistencia', 'disabled' => false);
+        $arrBotonAsistio = array('label' => 'Asistio', 'disabled' => false);
+        $arrBotonNoAsistio = array('label' => 'No asistio', 'disabled' => false);
+        $arrBotonActualizarDetalle = array('label' => 'Actualizar', 'disabled' => false);
         $arrBotonEliminarNota = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonCerrar = array('label' => 'Cerrar/Abrir', 'disabled' => false);
         if($ar->getEstadoAutorizado() == 1) {
@@ -389,14 +452,18 @@ class CapacitacionesController extends Controller
                 $arrBotonAutorizar['disabled'] = true;
                 $arrBotonDesAutorizar['disabled'] = true;
                 $arrBotonEliminarDetalle['disabled'] = true;
-                $arrBotonActualizarAsistencia['disabled'] = true;
+                $arrBotonAsistio['disabled'] = true;
+                $arrBotonNoAsistio['disabled'] = true;
+                $arrBotonActualizarDetalle['disabled'] = true;
                 $arrBotonEliminarNota['disabled'] = true;
                 $arrBotonImprimir['disabled'] = true;
                 $arrBotonImprimirNotas['disabled'] = true;
             } else {
                 $arrBotonAutorizar['disabled'] = true;
                 $arrBotonEliminarDetalle['disabled'] = true;
-                $arrBotonActualizarAsistencia['disabled'] = true;
+                $arrBotonAsistio['disabled'] = true;
+                $arrBotonNoAsistio['disabled'] = true;
+                $arrBotonActualizarDetalle['disabled'] = true;
                 $arrBotonEliminarNota['disabled'] = true;
                 $arrBotonImprimir['disabled'] = false;
                 $arrBotonImprimirNotas['disabled'] = false;
@@ -413,7 +480,9 @@ class CapacitacionesController extends Controller
                     ->add('BtnImprimirNotas', 'submit', $arrBotonImprimirNotas)
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)
-                    ->add('BtnActualizar', 'submit', $arrBotonActualizarAsistencia)
+                    ->add('BtnAsistio', 'submit', $arrBotonAsistio)
+                    ->add('BtnNoAsistio', 'submit', $arrBotonNoAsistio)
+                    ->add('BtnActualizarDetalle', 'submit', $arrBotonActualizarDetalle)
                     ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)
                     ->add('BtnEliminarNota', 'submit', $arrBotonEliminarNota)
                     ->add('BtnCerrar', 'submit', $arrBotonCerrar)
@@ -506,6 +575,8 @@ class CapacitacionesController extends Controller
                 $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
                 $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
                 $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'CÓDIGO')
                             ->setCellValue('B1', 'FECHA')
@@ -514,7 +585,8 @@ class CapacitacionesController extends Controller
                             ->setCellValue('E1', 'A CAPACITAR')
                             ->setCellValue('F1', 'ASISTIERON')
                             ->setCellValue('G1', 'ABIERTO')
-                            ->setCellValue('H1', 'VR CAPACITACION');
+                            ->setCellValue('H1', 'VR CAPACITACION')
+                            ->setCellValue('I1', 'LUGAR');
 
                 $i = 2;
                 $query = $em->createQuery($this->strDqlLista);
@@ -539,7 +611,8 @@ class CapacitacionesController extends Controller
                             ->setCellValue('E' . $i, $arCapacitacion->getNumeroPersonasCapacitar())
                             ->setCellValue('F' . $i, $arCapacitacion->getNumeroPersonasAsistieron())
                             ->setCellValue('G' . $i, $estado)
-                            ->setCellValue('H' . $i, $arCapacitacion->getVrCapacitacion());
+                            ->setCellValue('H' . $i, $arCapacitacion->getVrCapacitacion())
+                            ->setCellValue('I' . $i, $arCapacitacion->getLugar());
                     $i++;
                 }
 

@@ -33,8 +33,8 @@
                     <td class="td-in-well">{{ arCapacitacion.capacitacionTipoRel.nombre |default('') }}</td>
                     <td class="titulo">TEMA:</td>
                     <td class="td-in-well">{{ arCapacitacion.tema }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">LUGAR:</td>
+                    <td class="td-in-well">{{ arCapacitacion.lugar }}</td>
                 </tr>
                 <tr>
                     <td class="titulo">PERSONAS CAPACITAR:</td>
@@ -65,6 +65,7 @@
                         <th>EMPLEADO</th>
                         <th>CENTRO COSTO</th>
                         <th>CARGO</th>
+                        <th>EVALUACIÓN</th>
                         <th>ASISTENCIA</th>
                         <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                     </tr>
@@ -76,15 +77,11 @@
                             <td>{{ arCapacitacionesDetalles.empleadoRel.centroCostoRel.nombre | default('') }}</td>
                             <td>{{ arCapacitacionesDetalles.empleadoRel.cargoRel.nombre | default('') }}</td>
                             {% if arCapacitacion.estadoAutorizado == 0 %}
-                            <td align="center">
-                                <select name="cboAsistencia{{ arCapacitacionesDetalles.codigoCapacitacionDetallePk }}">
-                                    <option value="0" {% if arCapacitacionesDetalles.asistencia == 0 %} selected="true" {% endif %}>NO</option>
-                                    <option value="1" {% if arCapacitacionesDetalles.asistencia == 1 %} selected="true" {% endif %}>SI</option>
-                                </select>
-                            </td>
+                                <td style="text-align: center"><input class="input-grid" type="text" name="TxtEvaluacion{{ arCapacitacionesDetalles.codigoCapacitacionDetallePk }}" value="{{ arCapacitacionesDetalles.evaluacion  }}" size="20" style="text-align: right; width:85px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                             {% else %}
-                                <td>{% if arCapacitacionesDetalles.asistencia == 1 %}SI {% else %}NO{% endif %}</td>
+                                <td>{{ arCapacitacionesDetalles.evaluacion }}</td>
                             {% endif %}
+                            <td>{% if arCapacitacionesDetalles.asistencia == 1 %}SI {% else%} NO {% endif %}</td>
                             <td align="center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCapacitacionesDetalles.codigoCapacitacionDetallePk }}" /></td>
                         </tr>
                     {% endfor %}
@@ -101,7 +98,13 @@
                         {% endif %}    
                     </div>
                     <div class="btn-group">
-                        {{ form_widget(form.BtnActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}               
+                        {{ form_widget(form.BtnActualizarDetalle, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}               
+                    </div>
+                    <div class="btn-group">
+                        {{ form_widget(form.BtnNoAsistio, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}               
+                    </div>
+                    <div class="btn-group">
+                        {{ form_widget(form.BtnAsistio, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}               
                     </div>
                     <div class="btn-group">
                         {{ form_widget(form.BtnEliminarDetalle, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}               

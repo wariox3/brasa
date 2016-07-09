@@ -68,6 +68,11 @@ class RhuCapacitacion
     private $numeroPersonasAsistieron;
     
     /**
+     * @ORM\Column(name="lugar", type="string", length=150, nullable=true)
+     */    
+    private $lugar;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuCapacitacionTipo", inversedBy="capacitacionesCapacitacionTipoRel")
      * @ORM\JoinColumn(name="codigo_capacitacion_tipo_fk", referencedColumnName="codigo_capacitacion_tipo_pk")
      */
@@ -82,6 +87,7 @@ class RhuCapacitacion
      * @ORM\OneToMany(targetEntity="RhuCapacitacionNota", mappedBy="capacitacionRel", cascade={"persist", "remove"})
      */
     protected $capacitacionesNotasCapacitacionRel;        
+    
     
     
     
@@ -199,6 +205,30 @@ class RhuCapacitacion
     public function getTema()
     {
         return $this->tema;
+    }
+
+    /**
+     * Set vrCapacitacion
+     *
+     * @param float $vrCapacitacion
+     *
+     * @return RhuCapacitacion
+     */
+    public function setVrCapacitacion($vrCapacitacion)
+    {
+        $this->VrCapacitacion = $vrCapacitacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrCapacitacion
+     *
+     * @return float
+     */
+    public function getVrCapacitacion()
+    {
+        return $this->VrCapacitacion;
     }
 
     /**
@@ -322,6 +352,30 @@ class RhuCapacitacion
     }
 
     /**
+     * Set lugar
+     *
+     * @param string $lugar
+     *
+     * @return RhuCapacitacion
+     */
+    public function setLugar($lugar)
+    {
+        $this->lugar = $lugar;
+
+        return $this;
+    }
+
+    /**
+     * Get lugar
+     *
+     * @return string
+     */
+    public function getLugar()
+    {
+        return $this->lugar;
+    }
+
+    /**
      * Set capacitacionTipoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionTipo $capacitacionTipoRel
@@ -411,29 +465,5 @@ class RhuCapacitacion
     public function getCapacitacionesNotasCapacitacionRel()
     {
         return $this->capacitacionesNotasCapacitacionRel;
-    }
-
-    /**
-     * Set vrCapacitacion
-     *
-     * @param float $vrCapacitacion
-     *
-     * @return RhuCapacitacion
-     */
-    public function setVrCapacitacion($vrCapacitacion)
-    {
-        $this->VrCapacitacion = $vrCapacitacion;
-
-        return $this;
-    }
-
-    /**
-     * Get vrCapacitacion
-     *
-     * @return float
-     */
-    public function getVrCapacitacion()
-    {
-        return $this->VrCapacitacion;
     }
 }

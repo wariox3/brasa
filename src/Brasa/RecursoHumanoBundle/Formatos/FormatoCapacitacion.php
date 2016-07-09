@@ -59,7 +59,7 @@ class FormatoCapacitacion extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(10);
-        $header = array(utf8_decode('NRO'), 'IDENTIFICACION', 'NOMBRE', utf8_decode('CARGO'),'ASISTIO', 'FIRMA');
+        $header = array(utf8_decode('NRO'), 'IDENTIFICACION', 'NOMBRE', utf8_decode('CARGO'),'EVAL %','ASISTIO', 'FIRMA');
         $this->SetFillColor(200, 200, 200);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -67,7 +67,7 @@ class FormatoCapacitacion extends \FPDF_FPDF {
         $this->SetFont('', 'B', 7);
 
         //creamos la cabecera de la tabla.
-        $w = array(10, 25, 60, 60,12,26);
+        $w = array(10, 22, 57, 57,12,12,26);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -94,11 +94,12 @@ class FormatoCapacitacion extends \FPDF_FPDF {
             }
             $pdf->SetFont('Arial', '', 7);
             $pdf->Cell(10, 8, '1', 1, 0, 'L');
-            $pdf->Cell(25, 8, $arCapacitacionDetalle->getNumeroIdentificacion(), 1, 0, 'L');
-            $pdf->Cell(60, 8, $arCapacitacionDetalle->getNombreCorto(), 1, 0, 'L');
+            $pdf->Cell(22, 8, $arCapacitacionDetalle->getNumeroIdentificacion(), 1, 0, 'L');
+            $pdf->Cell(57, 8, $arCapacitacionDetalle->getNombreCorto(), 1, 0, 'L');
             $pdf->SetFont('Arial', '', 6);
-            $pdf->Cell(60, 8, $arCapacitacionDetalle->getEmpleadoRel()->getCargoRel()->getNombre(), 1, 0, 'L');
+            $pdf->Cell(57, 8, $arCapacitacionDetalle->getEmpleadoRel()->getCargoRel()->getNombre(), 1, 0, 'L');
             $pdf->SetFont('Arial', '', 7);
+            $pdf->Cell(12, 8, $arCapacitacionDetalle->getEvaluacion(), 1, 0, 'L');
             $pdf->Cell(12, 8, $asistencia, 1, 0, 'L');
             $pdf->Cell(26, 8, '', 1, 0, 'L');
             $pdf->Ln();

@@ -114,7 +114,8 @@ class FormatoContrato extends \FPDF_FPDF {
         $sustitucion26 = $salarioLetras." $(";
         $sustitucion26 .= number_format($arContrato->getVrSalario(), 2,'.',',');
         $sustitucion26 .= ")";
-        $sustitucion27 = $arConfiguracion->getCiudadRel()->getNombre();
+        $sustitucion27 = $arContrato->getCiudadContratoRel()->getNombre();
+        $sustitucion28 = $arContrato->getCiudadLaboraRel()->getNombre();
         //contenido de la cadena
         //$cadena = $arContenidoFormato->getContenido();
         $patron1 = '/#1/';
@@ -144,6 +145,7 @@ class FormatoContrato extends \FPDF_FPDF {
         $patron25 = '/#p/';
         $patron26 = '/#q/';
         $patron27 = '/#r/';
+        $patron28 = '/#s/';
         //reemplazar en la cadena
         $cadenaCambiada = preg_replace($patron1, $sustitucion1, $cadena);
         $cadenaCambiada = preg_replace($patron2, $sustitucion2, $cadenaCambiada);
@@ -172,6 +174,7 @@ class FormatoContrato extends \FPDF_FPDF {
         $cadenaCambiada = preg_replace($patron25, $sustitucion25, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron26, $sustitucion26, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron27, $sustitucion27, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron28, $sustitucion28, $cadenaCambiada);
         $pdf->MultiCell(0,5, $cadenaCambiada);
    
     }

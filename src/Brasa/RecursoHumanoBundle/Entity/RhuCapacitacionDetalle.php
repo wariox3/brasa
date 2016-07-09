@@ -43,6 +43,11 @@ class RhuCapacitacionDetalle
     private $codigoEmpleadoFk;
     
     /**
+     * @ORM\Column(name="evaluacion", type="string", length=80, nullable=true)
+     */    
+    private $evaluacion;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuCapacitacion", inversedBy="capacitacionesDetallesCapacitacionRel")
      * @ORM\JoinColumn(name="codigo_capacitacion_fk", referencedColumnName="codigo_capacitacion_pk")
      */
@@ -233,5 +238,29 @@ class RhuCapacitacionDetalle
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
+    }
+
+    /**
+     * Set evaluacion
+     *
+     * @param string $evaluacion
+     *
+     * @return RhuCapacitacionDetalle
+     */
+    public function setEvaluacion($evaluacion)
+    {
+        $this->evaluacion = $evaluacion;
+
+        return $this;
+    }
+
+    /**
+     * Get evaluacion
+     *
+     * @return string
+     */
+    public function getEvaluacion()
+    {
+        return $this->evaluacion;
     }
 }

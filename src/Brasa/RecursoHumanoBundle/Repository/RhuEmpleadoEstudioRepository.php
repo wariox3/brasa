@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuEmpleadoEstudioRepository extends EntityRepository {
     
-    public function listaDql($strIdentificacion = "", $strFecha = "") {        
+    public function listaDql($strIdentificacion = "", $strFecha = "", $strFechaAcreditacion = "" ) {        
         $em = $this->getEntityManager();
         $dql   = "SELECT ee, e FROM BrasaRecursoHumanoBundle:RhuEmpleadoEstudio ee JOIN ee.empleadoRel e WHERE ee.validarVencimiento = 1";
    
@@ -19,7 +19,10 @@ class RhuEmpleadoEstudioRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if ($strFecha != ""){
-            $dql .= " AND ee.fechaVencimiento >='" . $strFecha . "'";
+            $dql .= " AND ee.fechaTerminacion <='" . date_format($strFecha, ('Y-m-d')) . "'";
+        }
+        if ($strFechaAcreditacion != ""){
+            $dql .= " AND ee.fechaTerminacionAcreditacion <='" . date_format($strFechaAcreditacion, ('Y-m-d')) . "'";
         }
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
         return $dql;
