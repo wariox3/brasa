@@ -63,10 +63,11 @@ class PagoCurso extends \FPDF_FPDF {
         $this->Cell(30, 6, $arPagoCurso->getCodigoPagoCursoPk(), 1, 0, 'R', 1);
         $this->SetFont('Arial','B',8);
         $this->SetFillColor(200, 200, 200);
-        $this->Cell(30, 6, "CUENTA:" , 1, 0, 'L', 1);
+        $this->Cell(30, 6, "PROVEEDOR:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
         $this->SetFillColor(272, 272, 272); 
-        $this->Cell(100, 6, utf8_decode($arPagoCurso->getCuentaRel()->getNombre()), 1, 0, 'L', 1);
+        $this->Cell(100, 6, $arPagoCurso->getProveedorRel()->getNombreCorto() , 1, 0, 'L', 1); 
+        
         //linea 2
         $this->SetXY(10, 45);
         $this->SetFont('Arial','B',8);
@@ -85,17 +86,16 @@ class PagoCurso extends \FPDF_FPDF {
         $this->SetXY(10, 50);
         $this->SetFont('Arial','B',8);
         $this->SetFillColor(200, 200, 200);
-        $this->Cell(30, 5, utf8_decode("") , 1, 0, 'L', 1);
+        $this->Cell(30, 5, utf8_decode("FECHA:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
         $this->SetFillColor(272, 272, 272);
-        $this->Cell(30, 5, '' , 1, 0, 'R', 1);
+        $this->Cell(30, 5, $arPagoCurso->getFecha()->format('Y/m/d') , 1, 0, 'R', 1);
         $this->SetFont('Arial','B',8);
         $this->SetFillColor(200, 200, 200);
-        $this->Cell(30, 5, "PROVEEDOR:" , 1, 0, 'L', 1);
+        $this->Cell(30, 6, "CUENTA:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
         $this->SetFillColor(272, 272, 272); 
-        $this->Cell(100, 5, $arPagoCurso->getProveedorRel()->getNombreCorto() , 1, 0, 'L', 1);
-        $this->SetFont('Arial','B',8);      
+        $this->Cell(100, 6, utf8_decode($arPagoCurso->getCuentaRel()->getNombre()), 1, 0, 'L', 1);    
         //linea 4
         $this->SetXY(10, 55);
         $this->SetFont('Arial','B',8);
@@ -117,7 +117,7 @@ class PagoCurso extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(12);
-        $header = array(utf8_decode('CÓDIGO'), utf8_decode('IDENTIFICACIÓN'), 'NOMBRE', 'VR PAGO');
+        $header = array(utf8_decode('CÓDIGO'), utf8_decode('IDENTIFICACIÓN'), 'NOMBRE', 'CURSO', 'VR PAGO');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -125,7 +125,7 @@ class PagoCurso extends \FPDF_FPDF {
         $this->SetFont('', 'B', 7);
 
         //creamos la cabecera de la tabla.
-        $w = array(20, 25, 130, 15);
+        $w = array(20, 25, 80, 50, 15);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -148,14 +148,9 @@ class PagoCurso extends \FPDF_FPDF {
         $var = 0;
         foreach ($arPagoCursoDetalles as $arPagoCursoDetalle) {            
             $pdf->Cell(20, 4, $arPagoCursoDetalle->getCodigoPagoCursoDetallePk(), 1, 0, 'L');            
-            if($arPagoCursoDetalle->getCursoDetalleRel()->getCursoRel()->getCodigoEmpleadoFk() != null) {
-                $pdf->Cell(25, 4, $arPagoCursoDetalle->getCursoDetalleRel()->getCursoRel()->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
-                $pdf->Cell(130, 4, utf8_decode($arPagoCursoDetalle->getCursoDetalleRel()->getCursoRel()->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');                
-            } else {
-                $pdf->Cell(25, 4, '', 1, 0, 'L');
-                $pdf->Cell(130, 4, '', 1, 0, 'L');                
-            }
-            
+            $pdf->Cell(25, 4, $arPagoCursoDetalle->getCursoDetalleRel()->getCursoRel()->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
+            $pdf->Cell(80, 4, utf8_decode($arPagoCursoDetalle->getCursoDetalleRel()->getCursoRel()->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');                
+            $pdf->Cell(50, 4, utf8_decode($arPagoCursoDetalle->getCursoDetalleRel()->getCursoTipoRel()->getNombre()), 1, 0, 'L');                            
             $pdf->Cell(15, 4, number_format($arPagoCursoDetalle->getCosto(), 0, '.', ','), 1, 0, 'R');
             $var += $arPagoCursoDetalle->getCosto();
             $pdf->Ln();

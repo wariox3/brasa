@@ -83,6 +83,11 @@ class CursoController extends Controller
                 $this->lista();
                 $this->generarExcel();
             }
+            if ($form->get('BtnExcelDetalle')->isClicked()) {
+                $this->filtrar($form);
+                $form = $this->formularioFiltro();                
+                $this->generarExcelDetallado();
+            }            
         }
         
         $arCursos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
@@ -327,6 +332,7 @@ class CursoController extends Controller
                     $arCursoDetalle = new \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle();
                     $arCursoDetalle->setCursoRel($arCurso);          
                     $arCursoDetalle->setCursoTipoRel($arCursoTipo);
+                    $arCursoDetalle->setProveedorRel($arCursoTipo->getProveedorRel());
                     $costo = $em->getRepository('BrasaAfiliacionBundle:AfiEntidadEntrenamientoCosto')->costoCursoEntidadEntrenamiento($arCurso->getCodigoEntidadEntrenamientoFk(), $codigoCursoTipo);
                     $arCursoDetalle->setCosto($costo);
                     $arCursoDetalle->setPrecio($arCursoTipo->getPrecio());
@@ -448,6 +454,7 @@ class CursoController extends Controller
             ->add('BtnAsistencia', 'submit', array('label'  => 'Asistencia',))            
             ->add('BtnCertificado', 'submit', array('label'  => 'Certificado',))                            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('BtnExcelDetalle', 'submit', array('label'  => 'Excel detalle',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
@@ -642,6 +649,122 @@ class CursoController extends Controller
         exit;
     }   
 
+    private function generarExcelDetallado() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
+        ob_clean();
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'V'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
+        }      
+        for($col = 'S'; $col !== 'V'; $col++) {            
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }         
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'CÓDIG0')
+                    ->setCellValue('B1', 'NUMERO')
+                    ->setCellValue('C1', 'FECHA')
+                    ->setCellValue('D1', 'VENCE')
+                    ->setCellValue('E1', 'PROGRAMADO')
+                    ->setCellValue('F1', 'NIT')
+                    ->setCellValue('G1', 'CLIENTE')
+                    ->setCellValue('H1', 'IDENTIFICACION')
+                    ->setCellValue('I1', 'EMPLEADO')
+                    ->setCellValue('J1', 'FAC')
+                    ->setCellValue('K1', 'PAG')
+                    ->setCellValue('L1', 'AUT')
+                    ->setCellValue('M1', 'ASI')
+                    ->setCellValue('N1', 'CER')
+                    ->setCellValue('O1', 'ANU')
+                    ->setCellValue('P1', 'TIPO')
+                    ->setCellValue('Q1', 'PROVEEDOR')
+                    ->setCellValue('R1', 'ASESOR')
+                    ->setCellValue('S1', 'COSTO')
+                    ->setCellValue('T1', 'TOTAL')
+                    ->setCellValue('U1', 'UTILIDAD');
+
+        $i = 2;    
+        $strFechaDesde = "";
+        $strFechaHasta = "";        
+        $filtrarFecha = $session->get('filtroCursoFiltrarFecha');
+        if($filtrarFecha) {
+            $strFechaDesde = $session->get('filtroCursoFechaDesde');
+            $strFechaHasta = $session->get('filtroCursoFechaHasta');                    
+        }        
+        $dql= $em->getRepository('BrasaAfiliacionBundle:AfiCursoDetalle')->listaDqlConsulta(
+                $session->get('filtroCursoNumero'), 
+                $session->get('filtroCodigoCliente'), 
+                $session->get('filtroCursoEstadoAutorizado'), 
+                $session->get('filtroCursoAsistencia'),
+                $session->get('filtroCursoEstadoFacturado'),
+                $session->get('filtroCursoEstadoPagado'),
+                $session->get('filtroCursoEstadoAnulado'),
+                $strFechaDesde,
+                $strFechaHasta  
+                );         
+        
+        $query = $em->createQuery($dql);        
+        $arCursosDetalles = new \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle();
+        $arCursosDetalles = $query->getResult();
+                
+        foreach ($arCursosDetalles as $arCursoDetalle) {            
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arCursoDetalle->getCursoRel()->getCodigoCursoPk())
+                    ->setCellValue('B' . $i, $arCursoDetalle->getCursoRel()->getNumero())
+                    ->setCellValue('C' . $i, $arCursoDetalle->getCursoRel()->getFecha()->format('Y/m/d'))
+                    ->setCellValue('D' . $i, $arCursoDetalle->getCursoRel()->getFechaVence()->format('Y/m/d'))
+                    ->setCellValue('E' . $i, $arCursoDetalle->getCursoRel()->getFechaProgramacion()->format('Y/m/d'))
+                    ->setCellValue('F' . $i, $arCursoDetalle->getCursoRel()->getClienteRel()->getNit())
+                    ->setCellValue('G' . $i, $arCursoDetalle->getCursoRel()->getClienteRel()->getNombreCorto())
+                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arCursoDetalle->getCursoRel()->getEstadoFacturado()))
+                    ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arCursoDetalle->getCursoRel()->getEstadoPagado()))
+                    ->setCellValue('L' . $i, $objFunciones->devuelveBoolean($arCursoDetalle->getCursoRel()->getEstadoAutorizado()))
+                    ->setCellValue('M' . $i, $objFunciones->devuelveBoolean($arCursoDetalle->getCursoRel()->getAsistencia()))
+                    ->setCellValue('N' . $i, $objFunciones->devuelveBoolean($arCursoDetalle->getCursoRel()->getCertificado()))
+                    ->setCellValue('O' . $i, $objFunciones->devuelveBoolean($arCursoDetalle->getCursoRel()->getEstadoAnulado()))
+                    ->setCellValue('P' . $i, $arCursoDetalle->getCursoTipoRel()->getNombre())
+                    ->setCellValue('Q' . $i, $arCursoDetalle->getProveedorRel()->getNombreCorto())
+                    ->setCellValue('R' . $i, $arCursoDetalle->getCursoRel()->getClienteRel()->getAsesorRel()->getNombre())
+                    ->setCellValue('S' . $i, $arCursoDetalle->getCursoRel()->getCosto())
+                    ->setCellValue('T' . $i, $arCursoDetalle->getCursoRel()->getTotal())
+                    ->setCellValue('U' . $i, $arCursoDetalle->getCursoRel()->getTotal()-$arCursoDetalle->getCursoRel()->getCosto());
+            
+            if($arCursoDetalle->getCursoRel()->getCodigoEmpleadoFk() != null) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H' . $i, $arCursoDetalle->getCursoRel()->getEmpleadoRel()->getNumeroIdentificacion());
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I' . $i, $arCursoDetalle->getCursoRel()->getEmpleadoRel()->getNombreCorto());
+            }
+            $i++;
+        }
+        
+        $objPHPExcel->getActiveSheet()->setTitle('CursoDetalle');
+        $objPHPExcel->setActiveSheetIndex(0);
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="CursosDetalles.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }       
+    
     private function actualizarDetalle($arrControles, $codigoCurso) {
         $em = $this->getDoctrine()->getManager();        
         if(isset($arrControles['LblCodigo'])) {

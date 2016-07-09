@@ -88,6 +88,11 @@ class AfiProveedor
     protected $cursosDetallesProveedorRel;     
     
     /**
+     * @ORM\OneToMany(targetEntity="AfiCursoTipo", mappedBy="proveedorRel")
+     */
+    protected $cursosTiposProveedorRel;    
+    
+    /**
      * Get codigoProveedorPk
      *
      * @return integer
@@ -458,5 +463,39 @@ class AfiProveedor
     public function getCursosDetallesProveedorRel()
     {
         return $this->cursosDetallesProveedorRel;
+    }
+
+    /**
+     * Add cursosTiposProveedorRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCursoTipo $cursosTiposProveedorRel
+     *
+     * @return AfiProveedor
+     */
+    public function addCursosTiposProveedorRel(\Brasa\AfiliacionBundle\Entity\AfiCursoTipo $cursosTiposProveedorRel)
+    {
+        $this->cursosTiposProveedorRel[] = $cursosTiposProveedorRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove cursosTiposProveedorRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCursoTipo $cursosTiposProveedorRel
+     */
+    public function removeCursosTiposProveedorRel(\Brasa\AfiliacionBundle\Entity\AfiCursoTipo $cursosTiposProveedorRel)
+    {
+        $this->cursosTiposProveedorRel->removeElement($cursosTiposProveedorRel);
+    }
+
+    /**
+     * Get cursosTiposProveedorRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCursosTiposProveedorRel()
+    {
+        return $this->cursosTiposProveedorRel;
     }
 }

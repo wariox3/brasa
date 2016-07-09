@@ -9,7 +9,14 @@ class AfiCursoTipoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder                                                          
+        $builder     
+            ->add('proveedorRel', 'entity', array(
+                'class' => 'BrasaAfiliacionBundle:AfiProveedor',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('ee')
+                    ->orderBy('ee.codigoProveedorPk', 'ASC');},
+                'property' => 'nombreCorto',
+                'required' => true))                 
             ->add('nombre', 'text', array('required' => true))                          
             ->add('precio', 'number', array('required' => true))              
             ->add('guardar', 'submit')

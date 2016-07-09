@@ -26,13 +26,15 @@
             <tr>
                 <th>CODIGO</th>
                 <th>NOMBRE</th>
+                <th>PROVEEDOR</th>
                 <th>PRECIO</th>
                 <th></th>
             </tr>
             {% for arCursoTipos in arCursoTipos %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arCursoTipos.codigoCursoTipoPk }}">{{ arCursoTipos.codigoCursoTipoPk }} </td>                
-                <td>{{ arCursoTipos.nombre }}</td>                
+                <td>{{ arCursoTipos.nombre }}</td>
+                <td>{{ arCursoTipos.proveedorRel.nombreCorto | default('') }}</td>                
                 <td style="text-align: right">{{ arCursoTipos.precio | number_format(0, '.', ',') }}</td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCursoTipos.codigoCursoTipoPk }}" /></td>
             </tr>

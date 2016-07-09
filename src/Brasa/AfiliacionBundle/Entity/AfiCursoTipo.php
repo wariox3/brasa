@@ -28,6 +28,17 @@ class AfiCursoTipo
     private $precio = 0;    
     
     /**
+     * @ORM\Column(name="codigo_proveedor_fk", type="integer", nullable=true)
+     */    
+    private $codigoProveedorFk;     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="AfiProveedor", inversedBy="cursosTiposProveedorRel")
+     * @ORM\JoinColumn(name="codigo_proveedor_fk", referencedColumnName="codigo_proveedor_pk")
+     */
+    protected $proveedorRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="AfiCursoDetalle", mappedBy="cursoTipoRel")
      */
     protected $cursosDetallesCursoTipoRel; 
@@ -170,5 +181,53 @@ class AfiCursoTipo
     public function getEntidadesEntrenamientoCostosCursoTipoRel()
     {
         return $this->entidadesEntrenamientoCostosCursoTipoRel;
+    }
+
+    /**
+     * Set codigoProveedorFk
+     *
+     * @param integer $codigoProveedorFk
+     *
+     * @return AfiCursoTipo
+     */
+    public function setCodigoProveedorFk($codigoProveedorFk)
+    {
+        $this->codigoProveedorFk = $codigoProveedorFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoProveedorFk
+     *
+     * @return integer
+     */
+    public function getCodigoProveedorFk()
+    {
+        return $this->codigoProveedorFk;
+    }
+
+    /**
+     * Set proveedorRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiProveedor $proveedorRel
+     *
+     * @return AfiCursoTipo
+     */
+    public function setProveedorRel(\Brasa\AfiliacionBundle\Entity\AfiProveedor $proveedorRel = null)
+    {
+        $this->proveedorRel = $proveedorRel;
+
+        return $this;
+    }
+
+    /**
+     * Get proveedorRel
+     *
+     * @return \Brasa\AfiliacionBundle\Entity\AfiProveedor
+     */
+    public function getProveedorRel()
+    {
+        return $this->proveedorRel;
     }
 }

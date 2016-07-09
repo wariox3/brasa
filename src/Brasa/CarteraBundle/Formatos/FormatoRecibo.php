@@ -122,14 +122,9 @@ class FormatoRecibo extends \FPDF_FPDF {
         }
         $this->Cell(52, 5, $estadoAnulado, 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
-        $this->Cell(21, 5, utf8_decode("IMPRESO:") , 1, 0, 'L', 1);
+        $this->Cell(21, 5, utf8_decode("ASESOR:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        if ($arRecibo->getEstadoImpreso() == 1){
-            $estadoImpreso = "SI";
-        } else {
-            $estadoImpreso = "NO";
-        }
-        $this->Cell(52, 5, $estadoImpreso, 1, 0, 'L', 1);
+        $this->Cell(52, 5, $arRecibo->getAsesorRel()->getNombre(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(23, 5, utf8_decode("T. RET FUENTE:") , 1, 0, 'R', 1);
         $this->SetFont('Arial','',8);

@@ -33,7 +33,8 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arCursoTipos, 'CÓDIGO', 'p.codigoCursoTipoPk') }}</th>
                 <th>NOMBRE</th>
-                <th>PRECIO</th>
+                <th>PROVEEDOR</th>
+                <th>PRECIO</th>                
                 <th></th>
                 <th></th>                
             </tr>
@@ -41,6 +42,7 @@
             <tr>
                 <td>{{ arCursoTipos.codigoCursoTipoPk  }}</td>
                 <td>{{ arCursoTipos.nombre }}</td>
+                <td>{{ arCursoTipos.proveedorRel.nombreCorto | default('') }}</td>
                 <td style="text-align: right">{{ arCursoTipos.precio | number_format(0, '.', ',') }}</td>
                 <td style="text-align: center"><a href="{{ path('brs_afi_base_curso_tipo_nuevo', {'codigoCursoTipo': arCursoTipos.codigoCursoTipoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCursoTipos.codigoCursoTipoPk }}" /></td>
