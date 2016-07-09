@@ -197,14 +197,6 @@ brs_rhu_liquidaciones_detalle:
 brs_rhu_liquidaciones_detalle_nuevo_concepto:
     path:     /rhu/liquidaciones/detalle/nuevo/concepto/{codigoLiquidacion}/{codigoConcepto}
     defaults: { _controller: BrasaRecursoHumanoBundle:Liquidaciones:detalleNuevoConcepto } 
-
-brs_rhu_incapacidades_lista:
-    path:     /rhu/incapacidades/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:Incapacidades:lista }    
-
-brs_rhu_incapacidades_nuevo:
-    path:     /rhu/incapacidades/nuevo/{codigoIncapacidad}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Incapacidades:nuevo }
     
 brs_rhu_base_empleado_estudio_tipo_lista:
     path:     /rhu/empleado/estudio/tipo/lista

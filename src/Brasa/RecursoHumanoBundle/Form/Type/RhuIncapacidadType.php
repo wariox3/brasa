@@ -16,13 +16,6 @@ class RhuIncapacidadType extends AbstractType
                     return $er->createQueryBuilder('it')
                     ->orderBy('it.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true)) 
-            ->add('incapacidadDiagnosticoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuIncapacidadDiagnostico',
-                'query_builder' => function (EntityRepository $er)  {
-                    return $er->createQueryBuilder('id')                                        
-                    ->orderBy('id.nombre', 'ASC');},
-                'property' => 'nombre',
                 'required' => true))                            
             ->add('numeroEps', 'text', array('required' => true))   
             ->add('fechaDesde', 'date')                
