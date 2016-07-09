@@ -134,7 +134,7 @@ class PagoCursoController extends Controller
             }            
         }
         $dql = $em->getRepository('BrasaAfiliacionBundle:AfiPagoCursoDetalle')->listaDQL($codigoPagoCurso); 
-        $arPagoCursoDetalles = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 20);
+        $arPagoCursoDetalles = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 200);
         return $this->render('BrasaAfiliacionBundle:Movimiento/PagoCurso:detalle.html.twig', array(
             'arPagoCurso' => $arPagoCurso,            
             'arPagoCursoDetalles' => $arPagoCursoDetalles,
