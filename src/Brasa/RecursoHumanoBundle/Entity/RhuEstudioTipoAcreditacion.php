@@ -33,12 +33,19 @@ class RhuEstudioTipoAcreditacion
     private $cargo; 
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuEstudioTipoAcreditacion", mappedBy="estudioTipoAcreditacionRel")
+     * @ORM\OneToMany(targetEntity="RhuEmpleadoEstudio", mappedBy="estudioTipoAcreditacionRel")
      */
     protected $empleadosEstudiosEstudioTipoAcreditacionRel;
-    
-    
 
+
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->empleadosEstudiosEstudioTipoAcreditacionRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoEstudioTipoAcreditacionPk
@@ -121,22 +128,15 @@ class RhuEstudioTipoAcreditacion
     {
         return $this->cargo;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->empleadosEstudiosEstudioTipoAcreditacionRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Add empleadosEstudiosEstudioTipoAcreditacionRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEstudioTipoAcreditacion $empleadosEstudiosEstudioTipoAcreditacionRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $empleadosEstudiosEstudioTipoAcreditacionRel
      *
      * @return RhuEstudioTipoAcreditacion
      */
-    public function addEmpleadosEstudiosEstudioTipoAcreditacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEstudioTipoAcreditacion $empleadosEstudiosEstudioTipoAcreditacionRel)
+    public function addEmpleadosEstudiosEstudioTipoAcreditacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $empleadosEstudiosEstudioTipoAcreditacionRel)
     {
         $this->empleadosEstudiosEstudioTipoAcreditacionRel[] = $empleadosEstudiosEstudioTipoAcreditacionRel;
 
@@ -146,9 +146,9 @@ class RhuEstudioTipoAcreditacion
     /**
      * Remove empleadosEstudiosEstudioTipoAcreditacionRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEstudioTipoAcreditacion $empleadosEstudiosEstudioTipoAcreditacionRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $empleadosEstudiosEstudioTipoAcreditacionRel
      */
-    public function removeEmpleadosEstudiosEstudioTipoAcreditacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEstudioTipoAcreditacion $empleadosEstudiosEstudioTipoAcreditacionRel)
+    public function removeEmpleadosEstudiosEstudioTipoAcreditacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio $empleadosEstudiosEstudioTipoAcreditacionRel)
     {
         $this->empleadosEstudiosEstudioTipoAcreditacionRel->removeElement($empleadosEstudiosEstudioTipoAcreditacionRel);
     }

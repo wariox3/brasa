@@ -23,12 +23,13 @@ class RhuEstudioEstado
     private $nombre;
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuEmpleadoEstudio", mappedBy="estadoEstudioRel")
+     * @ORM\OneToMany(targetEntity="RhuEmpleadoEstudio", mappedBy="estudioEstadoRel")
      */
     protected $empleadosEstudiosEstudioEstadoRel;
 
 
 
+    
     
     /**
      * Constructor

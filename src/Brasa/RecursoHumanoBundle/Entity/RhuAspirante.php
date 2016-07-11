@@ -231,17 +231,13 @@ class RhuAspirante
      * @ORM\JoinColumn(name="codigo_rh_fk", referencedColumnName="codigo_rh_pk")
      */
     protected $rhRel;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="RhuSeleccionRequisito", inversedBy="aspirantesSeleccionRequisitoRel")
-     * @ORM\JoinColumn(name="codigo_seleccion_requisito_fk", referencedColumnName="codigo_seleccion_requisito_pk")
-     */
-    protected $seleccionRequisitoRel;  
+  
     
     /**
      * @ORM\OneToMany(targetEntity="RhuSeleccionRequisicionAspirante", mappedBy="aspiranteRel")
      */
     protected $seleccionesRequisicionesAspirantesAspiranteRel;
+    
     
     
     /**
@@ -1244,30 +1240,6 @@ class RhuAspirante
     public function getRhRel()
     {
         return $this->rhRel;
-    }
-
-    /**
-     * Set seleccionRequisitoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionRequisitoRel
-     *
-     * @return RhuAspirante
-     */
-    public function setSeleccionRequisitoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionRequisitoRel = null)
-    {
-        $this->seleccionRequisitoRel = $seleccionRequisitoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get seleccionRequisitoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito
-     */
-    public function getSeleccionRequisitoRel()
-    {
-        return $this->seleccionRequisitoRel;
     }
 
     /**

@@ -162,7 +162,7 @@ class RhuEmpleadoEstudio
      * @ORM\ManyToOne(targetEntity="RhuEstudioTipoAcreditacion", inversedBy="empleadosEstudiosEstudioTipoAcreditacionRel")
      * @ORM\JoinColumn(name="codigo_estudio_tipo_acreditacion_fk", referencedColumnName="codigo_estudio_tipo_acreditacion_pk")
      */
-    protected $estudioTipoAcreditacionRel; 
+    protected $estudioTipoAcreditacionRel;
 
 
     /**
@@ -175,9 +175,11 @@ class RhuEmpleadoEstudio
      * @ORM\ManyToOne(targetEntity="RhuEstudioEstadoInvalido", inversedBy="empleadosEstudiosEstudioEstadoInvalidoRel")
      * @ORM\JoinColumn(name="codigo_estudio_estado_invalido_fk", referencedColumnName="codigo_estudio_estado_invalido_pk")
      */
-    protected $estudioEstadoInvalidoRel;
+    protected $estadoEstudioInvalidoRel;
     
     
+
+
 
     /**
      * Get codigoEmpleadoEstudioPk
@@ -307,6 +309,30 @@ class RhuEmpleadoEstudio
     public function getTitulo()
     {
         return $this->titulo;
+    }
+
+    /**
+     * Set fecha
+     *
+     * @param \DateTime $fecha
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setFecha($fecha)
+    {
+        $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    /**
+     * Get fecha
+     *
+     * @return \DateTime
+     */
+    public function getFecha()
+    {
+        return $this->fecha;
     }
 
     /**
@@ -646,6 +672,30 @@ class RhuEmpleadoEstudio
     }
 
     /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -814,74 +864,26 @@ class RhuEmpleadoEstudio
     }
 
     /**
-     * Set estudioEstadoInvalidoRel
+     * Set estadoEstudioInvalidoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEstudioEstadoInvalido $estudioEstadoInvalidoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEstudioEstadoInvalido $estadoEstudioInvalidoRel
      *
      * @return RhuEmpleadoEstudio
      */
-    public function setEstudioEstadoInvalidoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEstudioEstadoInvalido $estudioEstadoInvalidoRel = null)
+    public function setEstadoEstudioInvalidoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEstudioEstadoInvalido $estadoEstudioInvalidoRel = null)
     {
-        $this->estudioEstadoInvalidoRel = $estudioEstadoInvalidoRel;
+        $this->estadoEstudioInvalidoRel = $estadoEstudioInvalidoRel;
 
         return $this;
     }
 
     /**
-     * Get estudioEstadoInvalidoRel
+     * Get estadoEstudioInvalidoRel
      *
      * @return \Brasa\RecursoHumanoBundle\Entity\RhuEstudioEstadoInvalido
      */
-    public function getEstudioEstadoInvalidoRel()
+    public function getEstadoEstudioInvalidoRel()
     {
-        return $this->estudioEstadoInvalidoRel;
-    }
-
-    /**
-     * Set codigoUsuario
-     *
-     * @param string $codigoUsuario
-     *
-     * @return RhuEmpleadoEstudio
-     */
-    public function setCodigoUsuario($codigoUsuario)
-    {
-        $this->codigoUsuario = $codigoUsuario;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoUsuario
-     *
-     * @return string
-     */
-    public function getCodigoUsuario()
-    {
-        return $this->codigoUsuario;
-    }
-
-    /**
-     * Set fecha
-     *
-     * @param \DateTime $fecha
-     *
-     * @return RhuEmpleadoEstudio
-     */
-    public function setFecha($fecha)
-    {
-        $this->fecha = $fecha;
-
-        return $this;
-    }
-
-    /**
-     * Get fecha
-     *
-     * @return \DateTime
-     */
-    public function getFecha()
-    {
-        return $this->fecha;
+        return $this->estadoEstudioInvalidoRel;
     }
 }

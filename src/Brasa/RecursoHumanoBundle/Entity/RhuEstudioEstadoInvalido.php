@@ -29,6 +29,15 @@ class RhuEstudioEstadoInvalido
 
 
 
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->empleadosEstudiosEstudioEstadoInvalidoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get codigoEstudioEstadoInvalidoPk
      *
@@ -61,13 +70,6 @@ class RhuEstudioEstadoInvalido
     public function getNombre()
     {
         return $this->nombre;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->empleadosEstudiosEstudioEstadoInvalidoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
