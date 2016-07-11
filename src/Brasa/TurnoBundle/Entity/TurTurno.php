@@ -70,6 +70,11 @@ class TurTurno
      * @ORM\Column(name="licencia", type="boolean")
      */    
     private $licencia = false;    
+
+    /**
+     * @ORM\Column(name="licencia_no_remunerada", type="boolean")
+     */    
+    private $licenciaNoRemunerada = false;
     
     /**
      * @ORM\Column(name="vacacion", type="boolean")
@@ -676,5 +681,29 @@ class TurTurno
     public function getRetiro()
     {
         return $this->retiro;
+    }
+
+    /**
+     * Set licenciaNoRemunerada
+     *
+     * @param boolean $licenciaNoRemunerada
+     *
+     * @return TurTurno
+     */
+    public function setLicenciaNoRemunerada($licenciaNoRemunerada)
+    {
+        $this->licenciaNoRemunerada = $licenciaNoRemunerada;
+
+        return $this;
+    }
+
+    /**
+     * Get licenciaNoRemunerada
+     *
+     * @return boolean
+     */
+    public function getLicenciaNoRemunerada()
+    {
+        return $this->licenciaNoRemunerada;
     }
 }

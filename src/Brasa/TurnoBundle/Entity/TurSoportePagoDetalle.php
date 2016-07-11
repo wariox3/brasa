@@ -63,6 +63,11 @@ class TurSoportePagoDetalle
     private $licencia = false;     
     
     /**
+     * @ORM\Column(name="licencia_no_remunerada", type="integer")
+     */    
+    private $licenciaNoRemunerada = 0;    
+    
+    /**
      * @ORM\Column(name="vacacion", type="boolean")
      */    
     private $vacacion = false;    
@@ -989,5 +994,29 @@ class TurSoportePagoDetalle
     public function getRetiro()
     {
         return $this->retiro;
+    }
+
+    /**
+     * Set licenciaNoRemunerada
+     *
+     * @param integer $licenciaNoRemunerada
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setLicenciaNoRemunerada($licenciaNoRemunerada)
+    {
+        $this->licenciaNoRemunerada = $licenciaNoRemunerada;
+
+        return $this;
+    }
+
+    /**
+     * Get licenciaNoRemunerada
+     *
+     * @return integer
+     */
+    public function getLicenciaNoRemunerada()
+    {
+        return $this->licenciaNoRemunerada;
     }
 }

@@ -70,6 +70,7 @@ class GenerarSoportePagoController extends Controller
                 $arSoportePagoPeriodo->setEstadoGenerado(0);
                 $arSoportePagoPeriodo->setRecursos(0);
                 $arSoportePagoPeriodo->setVrPago(0);
+                $arSoportePagoPeriodo->setVrDevengado(0);
                 $em->persist($arSoportePagoPeriodo);
                 $em->flush();                                                  
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
@@ -183,13 +184,10 @@ class GenerarSoportePagoController extends Controller
                 $diasPeriodo = $arSoportePagoPeriodo->getDiasPeriodo();
                 $horasPeriodo =  $diasPeriodo * 8;
                 $horasDescanso = $descanso * 8;                
-                $horasTope = $horasPeriodo - $horasDescanso;                
+                $horasTope = $horasPeriodo - $horasDescanso;                                
                 $arSoportePagos = new \Brasa\TurnoBundle\Entity\TurSoportePago();  
                 $arSoportePagos = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));
-                foreach ($arSoportePagos as $arSoportePago) {
-                    if($arSoportePago->getCodigoRecursoFk() == 20) {
-                        echo "hola";
-                    }                                                           
+                foreach ($arSoportePagos as $arSoportePago) {                                                           
                     $horasDia = $arSoportePago->getHorasDiurnasReales();
                     $horasNoche = $arSoportePago->getHorasNocturnasReales();
                     $horasFestivasDia = $arSoportePago->getHorasFestivasDiurnasReales();
@@ -472,6 +470,7 @@ class GenerarSoportePagoController extends Controller
         $arSoportePagoDetalle->setNovedad($arTurno->getNovedad());
         $arSoportePagoDetalle->setIncapacidad($arTurno->getIncapacidad());
         $arSoportePagoDetalle->setLicencia($arTurno->getLicencia());
+        $arSoportePagoDetalle->setLicenciaNoRemunerada($arTurno->getLicenciaNoRemunerada());
         $arSoportePagoDetalle->setVacacion($arTurno->getVacacion());
         $arSoportePagoDetalle->setIngreso($arTurno->getIngreso());
         $arSoportePagoDetalle->setRetiro($arTurno->getRetiro());
