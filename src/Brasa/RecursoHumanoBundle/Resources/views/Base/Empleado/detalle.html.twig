@@ -435,7 +435,7 @@
                             <td>{{ arEmpleadoEstudios.ciudadRel.nombre  }}</td>
                             <td>{{ arEmpleadoEstudios.titulo  }}</td>
                             {% if arEmpleadoEstudios.validarVencimiento == 1 %}
-                                <td>{{ arEmpleadoEstudios.fechaVencimiento |date("Y/m/d")  }}</td>
+                                <td>{{ arEmpleadoEstudios.fechaTerminacion |date("Y/m/d")  }}</td>
                             {% else %}
                                 <td>NO REQUIERE</td>
                             {% endif %}

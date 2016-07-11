@@ -113,7 +113,13 @@
     </div> 
     <div class="panel panel-default">
         <div class="panel-heading">Liquidacion</div>
-        <div class="panel-body">                                          
+        <div class="panel-body">
+            <div class="form-group form-group-sm">
+                <label for="form_codigoSucursal" class="col-sm-3 control-label">Sucursal:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.codigoSucursal, { 'attr': {'class': 'form-control'} }) }}                        
+                </div>                
+            </div>
             <div class="form-group form-group-sm">
                 <label for="form_afiliacion" class="col-sm-3 control-label">Afiliacion:</label>
                 <div class="col-sm-9">

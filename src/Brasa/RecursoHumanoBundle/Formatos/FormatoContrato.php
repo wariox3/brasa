@@ -60,11 +60,11 @@ class FormatoContrato extends \FPDF_FPDF {
           }
         $pdf->SetXY(50, 36);
         $pdf->SetFont('Arial','B',12);
-        $pdf->Cell(110, 6, utf8_decode($arContenidoFormato->getTitulo()) , 0, 0, 'C');
+        $pdf->MultiCell(110, 6, utf8_decode($arContenidoFormato->getTitulo()) , 0, 0, 'C');
         $pdf->SetXY(50, 44);
         $pdf->Cell(110, 6, utf8_decode($arConfiguracion->getNombreEmpresa()) , 0, 0, 'C');
-        $pdf->SetXY(50, 50);
-        $pdf->Cell(110, 6, utf8_decode("REGIONAL " . $arConfiguracion->getCiudadRel()->getDepartamentoRel()->getNombre()) , 0, 0, 'C');
+        //$pdf->SetXY(50, 50);
+        //$pdf->Cell(110, 6, utf8_decode("REGIONAL " . $arConfiguracion->getCiudadRel()->getDepartamentoRel()->getNombre()) , 0, 0, 'C');
         $pdf->SetXY(177, 56);
         $pdf->SetFont('Arial','B',9);
         $pdf->Cell(25, 6, utf8_decode("N° " . $arContrato->getCodigoContratoPk()) , 0, 0, 'C');
