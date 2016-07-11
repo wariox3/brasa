@@ -184,10 +184,49 @@ class GenerarSoportePagoController extends Controller
                 $diasPeriodo = $arSoportePagoPeriodo->getDiasPeriodo();
                 $horasPeriodo =  $diasPeriodo * 8;
                 $horasDescanso = $descanso * 8;                
-                $horasTope = $horasPeriodo - $horasDescanso;                                
+                $horasTope = $horasPeriodo - $horasDescanso;
+                //Semanas para ausentismo y descontar descansos
+                $arrSemanas = array();
+                $dateFechaDesde = $arSoportePagoPeriodo->getFechaDesde();
+                $dateFechaHasta = $arSoportePagoPeriodo->getFechaHasta();
+                $intDiaInicial = $dateFechaDesde->format('j');
+                $intDiaFinal = $dateFechaHasta->format('j');               
+                $diaInicialSemana = $intDiaInicial;
+                for($i = $intDiaInicial; $i <= $intDiaFinal; $i++) {                                    
+                    $strFecha = $dateFechaDesde->format('Y/m/') . $i;
+                    $dateFecha = date_create($strFecha);
+                    $diaSemana = $dateFecha->format('N');
+                    if($diaSemana == 7) {
+                        $arrSemanas[] = array('diaInicial' => $diaInicialSemana, 'diaFinal' => $i, 'fechaInicial' => $dateFechaDesde->format('Y/m/') . $diaInicialSemana, 'fechaFinal' => $dateFechaDesde->format('Y/m/') . $i);                            
+                        $diaInicialSemana = $i + 1;
+                    }                    
+                }
                 $arSoportePagos = new \Brasa\TurnoBundle\Entity\TurSoportePago();  
                 $arSoportePagos = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));
-                foreach ($arSoportePagos as $arSoportePago) {                                                           
+                foreach ($arSoportePagos as $arSoportePago) {
+                    $diasDescansoSoportePago = $descanso;
+                    /*if($arSoportePago->getCodigoRecursoFk() == 1074) {
+                        echo "hola";
+                    }
+                     * 
+                     */
+                    
+                    if($arSoportePago->getLicenciaNoRemunerada() > 0) {
+                        $descansoDescontar = 0;
+                        foreach ($arrSemanas as $arrSemana) {
+                           $numeroLicenciasNoRemuneradas =  $em->getRepository('BrasaTurnoBundle:TurSoportePagoDetalle')->numeroLicenciasNoRemunerada($arSoportePago->getCodigoSoportePagoPk(), $arrSemana['fechaInicial'], $arrSemana['fechaFinal']);
+                           if($numeroLicenciasNoRemuneradas > 0) {
+                               $descansoDescontar++;
+                           }
+                        } 
+                        if($descansoDescontar <= $diasDescansoSoportePago) {
+                            $diasDescansoSoportePago = $diasDescansoSoportePago - $descansoDescontar;
+                        } else {
+                            $diasDescansoSoportePago = 0;
+                        }                        
+                    }
+                    $horasDescansoSoportePago = $diasDescansoSoportePago * 8;
+                    
                     $horasDia = $arSoportePago->getHorasDiurnasReales();
                     $horasNoche = $arSoportePago->getHorasNocturnasReales();
                     $horasFestivasDia = $arSoportePago->getHorasFestivasDiurnasReales();
@@ -240,7 +279,7 @@ class GenerarSoportePagoController extends Controller
                     $arSoportePagoAct->setHorasExtrasOrdinariasNocturnas($horasExtraNoche);
                     $arSoportePagoAct->setHorasExtrasFestivasDiurnas($horasExtraFestivasDia);
                     $arSoportePagoAct->setHorasExtrasFestivasNocturnas($horasExtraFestivasNoche);                                        
-                    $horasDescansoRecurso = $horasDescanso;
+                    $horasDescansoRecurso = $horasDescansoSoportePago;
                     if($diasPeriodo == $arSoportePago->getNovedad()) {
                        $horasDescansoRecurso = 0; 
                     }

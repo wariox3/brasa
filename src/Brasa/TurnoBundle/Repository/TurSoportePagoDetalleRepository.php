@@ -182,5 +182,23 @@ class TurSoportePagoDetalleRepository extends EntityRepository {
             }
             $em->flush();
         }
-    }    
+    }   
+    
+    public function numeroLicenciasNoRemunerada($codigoSoportePago, $fechaDesde, $fechaHasta) {                
+        $em = $this->getEntityManager();
+        $intRegistros = 0;        
+        $dql   = "SELECT SUM(spd.licenciaNoRemunerada) as numeroRegistros "
+                . "FROM BrasaTurnoBundle:TurSoportePagoDetalle spd "
+                . "WHERE spd.codigoSoportePagoFk =  " . $codigoSoportePago . " AND (spd.fecha >='" . $fechaDesde . "' AND spd.fecha <= '" . $fechaHasta . "')";
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();         
+        if($arrayResultado) {
+            $intRegistros = $arrayResultado[0]['numeroRegistros'];
+            if($intRegistros == null) {
+                $intRegistros = 0;
+            }            
+        } 
+        return $intRegistros;        
+    }
+    
 }
