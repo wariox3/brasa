@@ -673,7 +673,7 @@ class EstudioController extends Controller
                             ->setCellValue('P' . $i, "Principal")
                             ->setCellValue('Q' . $i, $telefono)
                             ->setCellValue('R' . $i, $arEstudios->getEmpleadoRel()->getDireccion())
-                            ->setCellValue('S' . $i, "duda")
+                            ->setCellValue('S' . $i, $arEstudios->getEmpleadoRel()->getDireccion())//FALTA LA DIRECCION DEL PUESTO
                             ->setCellValue('T' . $i, $arContrato->getCiudadLaboraRel()->getDepartamentoRel()->getNombre())
                             ->setCellValue('U' . $i, $ciudadLabora)
                             ->setCellValue('V' . $i, $gradoBachiller)
