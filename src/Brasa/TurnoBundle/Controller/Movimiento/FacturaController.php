@@ -955,7 +955,7 @@ class FacturaController extends Controller
                     ->setCellValue('W' . $i, 'false')
                     ->setCellValue('X' . $i, $arFactura->getClienteRel()->getCiudadRel()->getNombre())
                     ->setCellValue('Y' . $i, 0)
-                    ->setCellValue('Z' . $i, '0001100701')
+                    ->setCellValue('Z' . $i, '0')
                     ->setCellValue('AB' . $i, 0)
                     ->setCellValue('AC' . $i, '13050501')
                     ->setCellValue('AD' . $i, '401')
@@ -1017,7 +1017,7 @@ class FacturaController extends Controller
                     ->setCellValue('DI' . $i, 'false')
                     ->setCellValue('DL' . $i, 0)
                     ->setCellValue('DM' . $i, 'false')
-                    ->setCellValue('DQ' . $i, '11')
+                    ->setCellValue('DQ' . $i, $arFactura->getNumero())
                     ->setCellValue('DT' . $i, '1')
                     ->setCellValue('DW' . $i, 'FAC')
                     ->setCellValue('DX' . $i, 'N')
@@ -1113,7 +1113,7 @@ class FacturaController extends Controller
                     ->setCellValue('IB' . $i, 0)
                     ->setCellValue('IC' . $i, 0)
                     ->setCellValue('ID' . $i, 'false')
-                    ->setCellValue('IE' . $i, 0);
+                    ->setCellValue('IE' . $i, $arFactura->getVrBaseAIU());
             $i++;
         }
 

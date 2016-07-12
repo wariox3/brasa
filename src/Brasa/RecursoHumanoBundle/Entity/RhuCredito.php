@@ -114,7 +114,7 @@ class RhuCredito
     private $vrAbonos = 0;
     
     /**
-     * @ORM\Column(name="nro_libranza", type="integer", nullable=true)
+     * @ORM\Column(name="nro_libranza", type="string", length=50, nullable=true)
      */
     private $numeroLibranza;
     
@@ -172,8 +172,7 @@ class RhuCredito
      */
     protected $VacacionesCreditosCreditoRel;
     
-       
-    
+
     /**
      * Constructor
      */
@@ -654,7 +653,7 @@ class RhuCredito
     /**
      * Set numeroLibranza
      *
-     * @param integer $numeroLibranza
+     * @param string $numeroLibranza
      *
      * @return RhuCredito
      */
@@ -668,11 +667,59 @@ class RhuCredito
     /**
      * Get numeroLibranza
      *
-     * @return integer
+     * @return string
      */
     public function getNumeroLibranza()
     {
         return $this->numeroLibranza;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuCredito
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
+    }
+
+    /**
+     * Set validarCuotas
+     *
+     * @param boolean $validarCuotas
+     *
+     * @return RhuCredito
+     */
+    public function setValidarCuotas($validarCuotas)
+    {
+        $this->validarCuotas = $validarCuotas;
+
+        return $this;
+    }
+
+    /**
+     * Get validarCuotas
+     *
+     * @return boolean
+     */
+    public function getValidarCuotas()
+    {
+        return $this->validarCuotas;
     }
 
     /**
@@ -905,53 +952,5 @@ class RhuCredito
     public function getVacacionesCreditosCreditoRel()
     {
         return $this->VacacionesCreditosCreditoRel;
-    }
-
-    /**
-     * Set codigoUsuario
-     *
-     * @param string $codigoUsuario
-     *
-     * @return RhuCredito
-     */
-    public function setCodigoUsuario($codigoUsuario)
-    {
-        $this->codigoUsuario = $codigoUsuario;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoUsuario
-     *
-     * @return string
-     */
-    public function getCodigoUsuario()
-    {
-        return $this->codigoUsuario;
-    }
-
-    /**
-     * Set validarCuotas
-     *
-     * @param boolean $validarCuotas
-     *
-     * @return RhuCredito
-     */
-    public function setValidarCuotas($validarCuotas)
-    {
-        $this->validarCuotas = $validarCuotas;
-
-        return $this;
-    }
-
-    /**
-     * Get validarCuotas
-     *
-     * @return boolean
-     */
-    public function getValidarCuotas()
-    {
-        return $this->validarCuotas;
     }
 }
