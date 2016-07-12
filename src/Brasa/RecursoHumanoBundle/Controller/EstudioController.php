@@ -361,6 +361,10 @@ class EstudioController extends Controller
                 $arEstudios = $query->getResult();
 
                 foreach ($arEstudios as $arEstudios) {
+                    $fecha = "";
+                    if ($arEstudios->getFecha() != null) {
+                        $fecha = $arEstudios->getFecha()->format('Y/m/d');
+                    }
                     $fechaInicio = "";
                     if ($arEstudios->getFechaInicio() != null) {
                         $fechaInicio = $arEstudios->getFechaInicio()->format('Y/m/d');
@@ -405,7 +409,7 @@ class EstudioController extends Controller
                     }
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arEstudios->getCodigoEmpleadoEstudioPk())
-                            ->setCellValue('B' . $i, $arEstudios->getFecha()->format('Y/m/d'))
+                            ->setCellValue('B' . $i, $fecha)
                             ->setCellValue('C' . $i, $arEstudios->getEmpleadoRel()->getNumeroIdentificacion())
                             ->setCellValue('D' . $i, $arEstudios->getEmpleadoRel()->getNombreCorto())
                             ->setCellValue('E' . $i, $arEstudios->getEmpleadoRel()->getCargoRel()->getNombre())
