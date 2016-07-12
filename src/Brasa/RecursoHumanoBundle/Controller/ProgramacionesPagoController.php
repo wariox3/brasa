@@ -351,25 +351,46 @@ class ProgramacionesPagoController extends Controller
     }
 
     /**
-     * @Route("/rhu/programacion/pago/resumen/turno/ver/{codigoProgramacionPagoDetalle}/{codigoSoportePago}", name="brs_rhu_programacion_pago_resumen_turno_ver")
+     * @Route("/rhu/programacion/pago/resumen/turno/ver/{codigoProgramacionPagoDetalle}", name="brs_rhu_programacion_pago_resumen_turno_ver")
      */    
-    public function verResumenTurnosAction($codigoProgramacionPagoDetalle, $codigoSoportePago) {
+    public function verResumenTurnosAction($codigoProgramacionPagoDetalle) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
+        $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+        $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($codigoProgramacionPagoDetalle);        
         $form = $this->formularioVerReusmenTurno();
         $form->handleRequest($request);
         if ($form->isValid()) {
-        }        
+            if($form->get('BtnActualizar')->isClicked()) {
+                $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+                $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoDetalleFk' => $codigoProgramacionPagoDetalle));
+                foreach ($arPagos as $arPago) {
+                    $strSql = "DELETE FROM rhu_pago_detalle WHERE codigo_pago_fk = " . $arPago->getCodigoPagoPk();                           
+                    $em->getConnection()->executeQuery($strSql);                    
+                    $em->remove($arPago);
+                }                                
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->generarPago($arProgramacionPagoDetalle, $arProgramacionPagoDetalle->getProgramacionPagoRel(), $arProgramacionPagoDetalle->getProgramacionPagoRel()->getCentroCostoRel(), $arConfiguracion);                   
+                $em->flush();                
+                return $this->redirect($this->generateUrl('brs_rhu_programacion_pago_resumen_turno_ver', array('codigoProgramacionPagoDetalle' => $codigoProgramacionPagoDetalle)));
+            }            
+        }
         $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
-        $arSoportePago =  $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($codigoSoportePago);                                
-        $strAnio = $arSoportePago->getFechaDesde()->format('Y');
-        $strMes = $arSoportePago->getFechaDesde()->format('m');
         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
-        $arProgramacionDetalle =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arSoportePago->getCodigoRecursoFk()));                        
+        $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+        $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($codigoProgramacionPagoDetalle);
+        if($arProgramacionPagoDetalle->getCodigoSoportePagoFk()) {
+            $arSoportePago =  $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($arProgramacionPagoDetalle->getCodigoSoportePagoFk());                                
+            $strAnio = $arSoportePago->getFechaDesde()->format('Y');
+            $strMes = $arSoportePago->getFechaDesde()->format('m');        
+            $arProgramacionDetalle =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arSoportePago->getCodigoRecursoFk()));                                    
+        }        
+        
         $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
         $arPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoProgramacionPagoDetalleFk' => $codigoProgramacionPagoDetalle));                
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:verResumenTurno.html.twig', array(                        
+            'arProgramacionPagoDetalle' => $arProgramacionPagoDetalle,
             'arProgramacionDetalle' => $arProgramacionDetalle,  
             'arPagoDetalles' => $arPagoDetalles,
             'arSoportePago' => $arSoportePago,
@@ -429,12 +450,13 @@ class ProgramacionesPagoController extends Controller
         $arrBotonEliminarTodoAdicionalesValor = array('label' => 'Eliminar todo', 'disabled' => false);
         if($arProgramacionPago->getEstadoGenerado() == 1) {            
             $arrBotonGenerarEmpleados['disabled'] = true;         
-            $arrBotonEliminarEmpleados['disabled'] = true;
-            $arrBotonRetirarConceptoTiempo['disabled'] = true;
+            $arrBotonEliminarEmpleados['disabled'] = true;                                    
+            $arrBotonEliminarTodoEmpleados['disabled'] = true;            
+            
+        }
+        if($arProgramacionPago->getEstadoPagado() == 1) {            
             $arrBotonRetirarConceptoValor['disabled'] = true;
             $arrBotonAplicarDiaLaborado['disabled'] = true;
-            $arrBotonEliminarTodoEmpleados['disabled'] = true;
-            $arrBotonEliminarTodoAdicionalesTiempo['disabled'] = true;
             $arrBotonEliminarTodoAdicionalesValor['disabled'] = true;
         }
         $form = $this->createFormBuilder()    
@@ -449,7 +471,8 @@ class ProgramacionesPagoController extends Controller
     }    
 
     private function formularioVerReusmenTurno() {
-        $form = $this->createFormBuilder()                                   
+        $form = $this->createFormBuilder() 
+            ->add('BtnActualizar', 'submit', array('label'  => 'Actualizar',))
             ->getForm();
         return $form;
     }

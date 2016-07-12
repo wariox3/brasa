@@ -8,7 +8,7 @@
 </script>
 <div class="container">
     <div class="page-header">
-        <h4>{{ arSoportePago.recursoRel.nombreCorto }}</h4>
+        <h4>{{ arProgramacionPagoDetalle.empleadoRel.nombreCorto }}</h4>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
@@ -79,10 +79,7 @@
             {% set douTotalIBP = 0  %}
             {% for arPagoDetalles in arPagoDetalles %}
             <tr>
-                <td>
-                    <input type="hidden" name="LblCodigoGuia[]" value="{{ arPagoDetalles.codigoPagoDetallePk }}">
-                    <span class="badge">{{ arPagoDetalles.codigoPagoConceptoFk }}</span>
-                </td>
+                <td><input type="hidden" name="LblCodigoGuia[]" value="{{ arPagoDetalles.codigoPagoDetallePk }}">{{ arPagoDetalles.codigoPagoConceptoFk }}</td>
                 <td>{{ arPagoDetalles.pagoConceptoRel.nombre | default('')}}</td>
                 <td>{{ arPagoDetalles.detalle }}</td>
                 <td style="text-align: right">{{ arPagoDetalles.porcentajeAplicado | number_format(0, '.', ',') }}</td>
@@ -100,6 +97,11 @@
             <td style="text-align: right">{{ douTotalIBP | number_format(0, '.', ',') }}</td>
             <td style="text-align: right">{{ douTotalIBC | number_format(0, '.', ',') }}</td>
         </table>
+        <div class="btn-toolbar" style="float: right">
+            <div class="btn-group">
+                {{ form_widget(form.BtnActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            </div>
+        </div>        
     {{ form_rest(form) }}
     {{ form_end(form) }}
 </div>

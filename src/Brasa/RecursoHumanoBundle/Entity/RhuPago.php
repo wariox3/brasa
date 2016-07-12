@@ -43,6 +43,11 @@ class RhuPago
     private $codigoProgramacionPagoFk;     
     
     /**
+     * @ORM\Column(name="codigo_programacion_pago_detalle_fk", type="integer", nullable=true)
+     */    
+    private $codigoProgramacionPagoDetalleFk;     
+    
+    /**
      * @ORM\Column(name="fecha_desde", type="date", nullable=true)
      */    
     private $fechaDesde;    
@@ -303,6 +308,12 @@ class RhuPago
      * @ORM\JoinColumn(name="codigo_programacion_pago_fk", referencedColumnName="codigo_programacion_pago_pk")
      */
     protected $programacionPagoRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuProgramacionPagoDetalle", inversedBy="pagosProgramacionPagoDetalleRel")
+     * @ORM\JoinColumn(name="codigo_programacion_pago_detalle_fk", referencedColumnName="codigo_programacion_pago_detalle_pk")
+     */
+    protected $programacionPagoDetalleRel;     
     
     /**
      * @ORM\OneToMany(targetEntity="RhuPagoDetalle", mappedBy="pagoRel")
@@ -1904,5 +1915,53 @@ class RhuPago
     public function getPagosBancosDetallePagoRel()
     {
         return $this->pagosBancosDetallePagoRel;
+    }
+
+    /**
+     * Set codigoProgramacionPagoDetalleFk
+     *
+     * @param integer $codigoProgramacionPagoDetalleFk
+     *
+     * @return RhuPago
+     */
+    public function setCodigoProgramacionPagoDetalleFk($codigoProgramacionPagoDetalleFk)
+    {
+        $this->codigoProgramacionPagoDetalleFk = $codigoProgramacionPagoDetalleFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoProgramacionPagoDetalleFk
+     *
+     * @return integer
+     */
+    public function getCodigoProgramacionPagoDetalleFk()
+    {
+        return $this->codigoProgramacionPagoDetalleFk;
+    }
+
+    /**
+     * Set programacionPagoDetalleRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle $programacionPagoDetalleRel
+     *
+     * @return RhuPago
+     */
+    public function setProgramacionPagoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle $programacionPagoDetalleRel = null)
+    {
+        $this->programacionPagoDetalleRel = $programacionPagoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Get programacionPagoDetalleRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle
+     */
+    public function getProgramacionPagoDetalleRel()
+    {
+        return $this->programacionPagoDetalleRel;
     }
 }

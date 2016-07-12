@@ -249,6 +249,11 @@ class RhuProgramacionPagoDetalle
     protected $pagosDetallesProgramacionPagoDetalleRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuPago", mappedBy="programacionPagoDetalleRel")
+     */
+    protected $pagosProgramacionPagoDetalleRel;    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -1365,5 +1370,39 @@ class RhuProgramacionPagoDetalle
     public function getCodigoSoportePagoFk()
     {
         return $this->codigoSoportePagoFk;
+    }
+
+    /**
+     * Add pagosProgramacionPagoDetalleRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosProgramacionPagoDetalleRel
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function addPagosProgramacionPagoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosProgramacionPagoDetalleRel)
+    {
+        $this->pagosProgramacionPagoDetalleRel[] = $pagosProgramacionPagoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosProgramacionPagoDetalleRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosProgramacionPagoDetalleRel
+     */
+    public function removePagosProgramacionPagoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuPago $pagosProgramacionPagoDetalleRel)
+    {
+        $this->pagosProgramacionPagoDetalleRel->removeElement($pagosProgramacionPagoDetalleRel);
+    }
+
+    /**
+     * Get pagosProgramacionPagoDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosProgramacionPagoDetalleRel()
+    {
+        return $this->pagosProgramacionPagoDetalleRel;
     }
 }
