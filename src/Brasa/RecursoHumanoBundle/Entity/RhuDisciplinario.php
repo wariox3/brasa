@@ -100,7 +100,12 @@ class RhuDisciplinario
     /**     
      * @ORM\Column(name="estado_cerrado", type="boolean")
      */    
-    private $estadoCerrado = false;    
+    private $estadoCerrado = false;
+
+    /**     
+     * @ORM\Column(name="estado_procede", type="boolean")
+     */    
+    private $estadoProcede = false;
     
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer")
@@ -152,6 +157,15 @@ class RhuDisciplinario
      */
     protected $disciplinariosDescargosDisciplinarioRel;     
 
+
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->disciplinariosDescargosDisciplinarioRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoDisciplinarioPk
@@ -548,6 +562,54 @@ class RhuDisciplinario
     }
 
     /**
+     * Set estadoCerrado
+     *
+     * @param boolean $estadoCerrado
+     *
+     * @return RhuDisciplinario
+     */
+    public function setEstadoCerrado($estadoCerrado)
+    {
+        $this->estadoCerrado = $estadoCerrado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCerrado
+     *
+     * @return boolean
+     */
+    public function getEstadoCerrado()
+    {
+        return $this->estadoCerrado;
+    }
+
+    /**
+     * Set estadoProcede
+     *
+     * @param boolean $estadoProcede
+     *
+     * @return RhuDisciplinario
+     */
+    public function setEstadoProcede($estadoProcede)
+    {
+        $this->estadoProcede = $estadoProcede;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoProcede
+     *
+     * @return boolean
+     */
+    public function getEstadoProcede()
+    {
+        return $this->estadoProcede;
+    }
+
+    /**
      * Set codigoCentroCostoFk
      *
      * @param integer $codigoCentroCostoFk
@@ -593,30 +655,6 @@ class RhuDisciplinario
     public function getCodigoCargoFk()
     {
         return $this->codigoCargoFk;
-    }
-
-    /**
-     * Set estado
-     *
-     * @param boolean $estado
-     *
-     * @return RhuDisciplinario
-     */
-    public function setEstado($estado)
-    {
-        $this->estado = $estado;
-
-        return $this;
-    }
-
-    /**
-     * Get estado
-     *
-     * @return boolean
-     */
-    public function getEstado()
-    {
-        return $this->estado;
     }
 
     /**
@@ -761,37 +799,6 @@ class RhuDisciplinario
     public function getCargoRel()
     {
         return $this->cargoRel;
-    }
-
-    /**
-     * Set estadoCerrado
-     *
-     * @param boolean $estadoCerrado
-     *
-     * @return RhuDisciplinario
-     */
-    public function setEstadoCerrado($estadoCerrado)
-    {
-        $this->estadoCerrado = $estadoCerrado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoCerrado
-     *
-     * @return boolean
-     */
-    public function getEstadoCerrado()
-    {
-        return $this->estadoCerrado;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->disciplinariosDescargosDisciplinarioRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

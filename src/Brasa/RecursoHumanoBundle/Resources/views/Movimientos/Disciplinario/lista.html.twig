@@ -31,7 +31,19 @@
                         {{ form_widget(form.TxtIdentificacion, { 'attr': {'class': 'form-control'} }) }}
                     </div>
                 </div>
-                    <div class="form-group form-group-sm">
+                <div class="form-group form-group-sm">
+                    <label for="form_estadoCerrado" class="col-sm-2 control-label">Cerrado:</label>
+                    <div class="col-sm-10">
+                        {{ form_widget(form.estadoCerrado, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label for="form_estadoProcede" class="col-sm-2 control-label">Procede:</label>
+                    <div class="col-sm-10">
+                        {{ form_widget(form.estadoProcede, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>    
+                <div class="form-group form-group-sm">
                     <label for="form_fechaDesde" class="col-sm-2 control-label">Desde:</label>
                     <div class="col-sm-10">
                         {{ form_widget(form.fechaDesde, {'attr': {'maxlength' : 10} }) }} 
@@ -60,6 +72,7 @@
                 <th>CENTRO COSTO</th>                                                                                                
                 <th>F.INGRESO</th>
                 <th>USUARIO</th>
+                <th>PROCEDE</th>
                 <th>AUT</th>
                 <th>CER</th>
                 <th style="text-align: center"></th>
@@ -77,8 +90,9 @@
                 <td>{{ arDisciplinarios.centroCostoRel.nombre  }}</td>                
                 <td>{{ arDisciplinarios.fechaIngresoTrabajo|default('NO APLICA')  }}</td>
                 <td>{{ arDisciplinarios.codigoUsuario  }}</td>
+                <td>{% if arDisciplinarios.estadoProcede == 1%}SI{% else %}NO{% endif %}</td>
                 <td>{% if arDisciplinarios.estadoAutorizado == 1%}SI{% else %}NO{% endif %}</td>
-                <td>{% if arDisciplinarios.estadoCerrado == 0%}SI{% else %}NO{% endif %}</td>
+                <td>{% if arDisciplinarios.estadoCerrado == 1%}SI{% else %}NO{% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_movimiento_disciplinario_nuevo', {'codigoCentroCosto':  arDisciplinarios.codigoCentroCostoFk, 'codigoEmpleado':  arDisciplinarios.codigoEmpleadoFk, 'codigoDisciplinario': arDisciplinarios.codigoDisciplinarioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_movimiento_disciplinario_detalle', { 'codigoDisciplinario': arDisciplinarios.codigoDisciplinarioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDisciplinarios.codigoDisciplinarioPk }}" /></td>

@@ -10,13 +10,25 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuDisciplinarioRepository extends EntityRepository {
-    public function listaDQL($strIdentificacion = "", $codigoCentroCosto = "", $strDesde = "", $strHasta = "") {        
+    public function listaDQL($strIdentificacion = "", $codigoCentroCosto = "", $estadoCerrado = "", $estadoProcede = "", $strDesde = "", $strHasta = "") {        
         $dql   = "SELECT d, e FROM BrasaRecursoHumanoBundle:RhuDisciplinario d JOIN d.empleadoRel e WHERE d.codigoDisciplinarioPk <> 0";
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
         }
         if($codigoCentroCosto != "" || $codigoCentroCosto != 0 ) {
             $dql .= " AND e.codigoCentroCostoFk = " . $codigoCentroCosto;
+        }
+        if($estadoCerrado == 1 ) {
+            $dql .= " AND d.estadoCerrado = 1";
+        }
+        if($estadoCerrado == "0" ) {
+            $dql .= " AND d.estadoCerrado = 0";
+        }
+        if($estadoProcede == 1 ) {
+            $dql .= " AND d.estadoProcede = 1";
+        }
+        if($estadoProcede == "0" ) {
+            $dql .= " AND d.estadoProcede = 0";
         }
         if ($strDesde != ""){
             $dql .= " AND d.fecha >='" . date_format($strDesde, ('Y-m-d')) . "'";

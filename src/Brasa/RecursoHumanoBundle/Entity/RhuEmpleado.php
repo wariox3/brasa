@@ -499,7 +499,12 @@ class RhuEmpleado
     /**
      * @ORM\OneToMany(targetEntity="RhuDisciplinario", mappedBy="empleadoRel")
      */
-    protected $disciplinariosEmpleadoRel;             
+    protected $disciplinariosEmpleadoRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuDisciplinarioDescargo", mappedBy="empleadoRel")
+     */
+    protected $disciplinariosDescargosEmpleadoRel;
     
     
      /**
@@ -627,6 +632,7 @@ class RhuEmpleado
    
     
     
+    
     /**
      * Constructor
      */
@@ -643,6 +649,7 @@ class RhuEmpleado
         $this->programacionesPagosDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->liquidacionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->disciplinariosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->disciplinariosDescargosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosFamiliasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosEstudiosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ssoPeriodosEmpleadosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -2141,6 +2148,30 @@ class RhuEmpleado
     }
 
     /**
+     * Set discapacidad
+     *
+     * @param boolean $discapacidad
+     *
+     * @return RhuEmpleado
+     */
+    public function setDiscapacidad($discapacidad)
+    {
+        $this->discapacidad = $discapacidad;
+
+        return $this;
+    }
+
+    /**
+     * Get discapacidad
+     *
+     * @return boolean
+     */
+    public function getDiscapacidad()
+    {
+        return $this->discapacidad;
+    }
+
+    /**
      * Set clasificacionRiesgoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo $clasificacionRiesgoRel
@@ -2947,6 +2978,40 @@ class RhuEmpleado
     }
 
     /**
+     * Add disciplinariosDescargosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioDescargo $disciplinariosDescargosEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addDisciplinariosDescargosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioDescargo $disciplinariosDescargosEmpleadoRel)
+    {
+        $this->disciplinariosDescargosEmpleadoRel[] = $disciplinariosDescargosEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove disciplinariosDescargosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioDescargo $disciplinariosDescargosEmpleadoRel
+     */
+    public function removeDisciplinariosDescargosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioDescargo $disciplinariosDescargosEmpleadoRel)
+    {
+        $this->disciplinariosDescargosEmpleadoRel->removeElement($disciplinariosDescargosEmpleadoRel);
+    }
+
+    /**
+     * Get disciplinariosDescargosEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDisciplinariosDescargosEmpleadoRel()
+    {
+        return $this->disciplinariosDescargosEmpleadoRel;
+    }
+
+    /**
      * Set rhRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuRh $rhRel
@@ -3730,29 +3795,5 @@ class RhuEmpleado
     public function getCapacitacionesDetallesEmpleadoRel()
     {
         return $this->capacitacionesDetallesEmpleadoRel;
-    }
-
-    /**
-     * Set discapacidad
-     *
-     * @param boolean $discapacidad
-     *
-     * @return RhuEmpleado
-     */
-    public function setDiscapacidad($discapacidad)
-    {
-        $this->discapacidad = $discapacidad;
-
-        return $this;
-    }
-
-    /**
-     * Get discapacidad
-     *
-     * @return boolean
-     */
-    public function getDiscapacidad()
-    {
-        return $this->discapacidad;
     }
 }

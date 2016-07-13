@@ -29,7 +29,8 @@ class RhuDisciplinarioType extends AbstractType
             ->add('fechaIncidente', 'text', array('required' => false))    
             ->add('fechaAplicaHastaProceso', 'text', array('required' => false))
             ->add('fechaIngresoTrabajo', 'text', array('required' => false))    
-            ->add('estadoCerrado', 'checkbox', array('required'  => false))                
+            ->add('estadoCerrado', 'checkbox', array('required'  => false))
+            ->add('estadoProcede', 'checkbox', array('required'  => false))
             ->add('comentarios', 'textarea', array('required' => false))            
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

@@ -20,7 +20,12 @@ class RhuDisciplinarioDescargo
     /**
      * @ORM\Column(name="codigo_disciplinario_fk", type="integer")
      */    
-    private $codigoDisciplinarioFk;             
+    private $codigoDisciplinarioFk;
+    
+    /**
+     * @ORM\Column(name="codigo_empleado_fk", type="integer")
+     */    
+    private $codigoEmpleadoFk;
     
     /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
@@ -37,7 +42,15 @@ class RhuDisciplinarioDescargo
      * @ORM\JoinColumn(name="codigo_disciplinario_fk", referencedColumnName="codigo_disciplinario_pk")
      */
     protected $disciplinarioRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="disciplinariosDescargosEmpleadoRel")
+     * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
+     */
+    protected $empleadoRel;
 
+
+    
 
     /**
      * Get codigoDisciplinarioDescargoPk
@@ -71,6 +84,30 @@ class RhuDisciplinarioDescargo
     public function getCodigoDisciplinarioFk()
     {
         return $this->codigoDisciplinarioFk;
+    }
+
+    /**
+     * Set codigoEmpleadoFk
+     *
+     * @param integer $codigoEmpleadoFk
+     *
+     * @return RhuDisciplinarioDescargo
+     */
+    public function setCodigoEmpleadoFk($codigoEmpleadoFk)
+    {
+        $this->codigoEmpleadoFk = $codigoEmpleadoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEmpleadoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEmpleadoFk()
+    {
+        return $this->codigoEmpleadoFk;
     }
 
     /**
@@ -143,5 +180,29 @@ class RhuDisciplinarioDescargo
     public function getDisciplinarioRel()
     {
         return $this->disciplinarioRel;
+    }
+
+    /**
+     * Set empleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
+     *
+     * @return RhuDisciplinarioDescargo
+     */
+    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
+    {
+        $this->empleadoRel = $empleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
+     */
+    public function getEmpleadoRel()
+    {
+        return $this->empleadoRel;
     }
 }
