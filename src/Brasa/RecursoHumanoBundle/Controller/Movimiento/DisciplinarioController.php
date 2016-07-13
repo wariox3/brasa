@@ -191,6 +191,7 @@ class DisciplinarioController extends Controller
     public function nuevoDescargoAction($codigoDisciplinario, $codigoDisciplinarioDescargo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arDisciplinario = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
         $arDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
         $arDisciplinarioDescargo = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioDescargo();
