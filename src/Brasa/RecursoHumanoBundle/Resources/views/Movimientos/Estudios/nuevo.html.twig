@@ -3,6 +3,10 @@
 {% block content %}
 <div class="container">
     {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+        $('.date').datepicker({ dateFormat: 'yy-mm-dd' ,dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Deciembre" ], monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]})  });
+    </script>
     <h3>Nuevo estudio</h3>    
     <div class="panel panel-default">
         <div class="panel-heading">Información general</div>
@@ -77,6 +81,12 @@
                 </div>
             </div>
             <div class="form-group form-group-sm">
+                <label for="form_fechaVencimientoControl" class="col-sm-3 control-label">Fecha ven estudio/curso:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.fechaVencimientoControl) }}
+                </div>
+            </div>    
+            <div class="form-group form-group-sm">
                 <label for="form_numeroRegistro" class="col-sm-3 control-label">Numero registro:</label>
                 <div class="col-sm-9">
                         {{ form_widget(form.numeroRegistro, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
@@ -106,6 +116,12 @@
                         {{ form_widget(form.fechaTerminacionAcreditacion) }}
                 </div>
             </div>
+            <div class="form-group form-group-sm">
+                <label for="form_fechaVencimientoAcreditacion" class="col-sm-3 control-label">Fecha ven acreditación:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.fechaVencimientoAcreditacion) }}
+                </div>
+            </div>    
             <div class="form-group form-group-sm">
                 <label for="form_estudioEstadoRel" class="col-sm-3 control-label">Estado:</label>
                 <div class="col-sm-9">

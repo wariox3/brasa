@@ -26,6 +26,8 @@
                     <ul class="dropdown-menu" role="menu">
                         <li class="dropdown-submenu">{{ form_widget(form.BtnArchivoBancolombiaPab, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}</li>
                         <li class="dropdown-submenu">{{ form_widget(form.BtnArchivoBancolombiaSap, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}</li>
+                        <li class="dropdown-submenu">{{ form_widget(form.BtnArchivoAvvillasInterno, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}</li>
+                        <li class="dropdown-submenu">{{ form_widget(form.BtnArchivoAvvillasOtros, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}</li>
                     </ul>
                 </div> 
                 <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 7,  'numero': arPagoBanco.codigoPagoBancoPK }) }}', 'Archivos', 500, 700)" >Archivos</a>                    

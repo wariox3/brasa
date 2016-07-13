@@ -120,6 +120,7 @@ class ConsultasEmpleadoEstudiosVencimientoController extends Controller
                 $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setAutoSize(true);
                 $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setAutoSize(true);
                 $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setAutoSize(true);
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'CÓDIGO')
                             ->setCellValue('B1', 'FECHA')
@@ -132,18 +133,20 @@ class ConsultasEmpleadoEstudiosVencimientoController extends Controller
                             ->setCellValue('I1', 'CIUDAD')
                             ->setCellValue('J1', 'FECHA INICIO')
                             ->setCellValue('K1', 'FECHA TERMINACIÓN')
-                            ->setCellValue('L1', 'GRADO BACHILLER')
-                            ->setCellValue('M1', 'GRADUADO')
-                            ->setCellValue('N1', 'CURSO ACREDITACIÓN')
-                            ->setCellValue('O1', 'ACADEMIA')
-                            ->setCellValue('P1', 'FECHA INICIO ACREDITACIÓN')
-                            ->setCellValue('Q1', 'FECHA TER ACREDITACIÓN')
-                            ->setCellValue('R1', 'NUMERO REGISTRO')
-                            ->setCellValue('S1', 'NUMERO APROBACIÓN')
-                            ->setCellValue('T1', 'VALIDAR')
-                            ->setCellValue('U1', 'ESTADO')
-                            ->setCellValue('V1', 'ESTADO INVALIDO')
-                            ->setCellValue('W1', 'COMENTARIOS');
+                            ->setCellValue('L1', 'FECHA VENCIMIENTO ESTUDIO/CURSO')
+                            ->setCellValue('M1', 'GRADO BACHILLER')
+                            ->setCellValue('N1', 'GRADUADO')
+                            ->setCellValue('O1', 'CURSO ACREDITACIÓN')
+                            ->setCellValue('P1', 'ACADEMIA')
+                            ->setCellValue('Q1', 'FECHA INICIO ACREDITACIÓN')
+                            ->setCellValue('R1', 'FECHA TER ACREDITACIÓN')
+                            ->setCellValue('S1', 'FECHA VENCIMIENTO ACREDITACIÓN')
+                            ->setCellValue('T1', 'NUMERO REGISTRO')
+                            ->setCellValue('U1', 'NUMERO APROBACIÓN')
+                            ->setCellValue('V1', 'VALIDAR')
+                            ->setCellValue('W1', 'ESTADO')
+                            ->setCellValue('X1', 'ESTADO INVALIDO')
+                            ->setCellValue('Y1', 'COMENTARIOS');
 
                 $i = 2;
                 $query = $em->createQuery($this->strDqlLista);
@@ -166,6 +169,14 @@ class ConsultasEmpleadoEstudiosVencimientoController extends Controller
                     $fechaTerminacionAcreditacion = "";
                     if ($arEstudios->getFechaTerminacionAcreditacion() != null) {
                         $fechaTerminacionAcreditacion = $arEstudios->getFechaTerminacionAcreditacion()->format('Y/m/d');
+                    }
+                    $fechaVencimientoControl = "";
+                    if ($arEstudios->getFechaVencimientoControl() != null) {
+                        $fechaVencimientoControl = $arEstudios->getFechaVencimientoControl()->format('Y/m/d');
+                    }
+                    $fechaVencimientoAcreditacion = "";
+                    if ($arEstudios->getFechaVencimientoAcreditacion() != null) {
+                        $fechaVencimientoAcreditacion = $arEstudios->getFechaVencimientoAcreditacion()->format('Y/m/d');
                     }
                     $tipoAcreditacion = "";
                     if ($arEstudios->getCodigoEstudioTipoAcreditacionFk() != null) {
@@ -205,18 +216,20 @@ class ConsultasEmpleadoEstudiosVencimientoController extends Controller
                             ->setCellValue('I' . $i, $arEstudios->getCiudadRel()->getNombre())
                             ->setCellValue('J' . $i, $fechaInicio)
                             ->setCellValue('K' . $i, $fechaTerminacion)
-                            ->setCellValue('L' . $i, $gradoBachiller)
-                            ->setCellValue('M' . $i, $objFunciones->devuelveBoolean($arEstudios->getGraduado()))
-                            ->setCellValue('N' . $i, $tipoAcreditacion)
-                            ->setCellValue('O' . $i, $academia)
-                            ->setCellValue('P' . $i, $fechaInicioAcreditacion)
-                            ->setCellValue('Q' . $i, $fechaTerminacionAcreditacion)
-                            ->setCellValue('R' . $i, $arEstudios->getNumeroRegistro())
-                            ->setCellValue('S' . $i, $arEstudios->getNumeroAcreditacion())
-                            ->setCellValue('T' . $i, $objFunciones->devuelveBoolean($arEstudios->getValidarVencimiento()))
-                            ->setCellValue('U' . $i, $estado)
-                            ->setCellValue('V' . $i, $estadoInvalidado)
-                            ->setCellValue('W' . $i, $arEstudios->getComentarios());
+                            ->setCellValue('L' . $i, $fechaVencimientoControl)
+                            ->setCellValue('M' . $i, $gradoBachiller)
+                            ->setCellValue('N' . $i, $objFunciones->devuelveBoolean($arEstudios->getGraduado()))
+                            ->setCellValue('O' . $i, $tipoAcreditacion)
+                            ->setCellValue('P' . $i, $academia)
+                            ->setCellValue('Q' . $i, $fechaInicioAcreditacion)
+                            ->setCellValue('R' . $i, $fechaTerminacionAcreditacion)
+                            ->setCellValue('S' . $i, $fechaVencimientoAcreditacion)
+                            ->setCellValue('T' . $i, $arEstudios->getNumeroRegistro())
+                            ->setCellValue('U' . $i, $arEstudios->getNumeroAcreditacion())
+                            ->setCellValue('V' . $i, $objFunciones->devuelveBoolean($arEstudios->getValidarVencimiento()))
+                            ->setCellValue('W' . $i, $estado)
+                            ->setCellValue('X' . $i, $estadoInvalidado)
+                            ->setCellValue('Y' . $i, $arEstudios->getComentarios());
                     $i++;
                 }
 

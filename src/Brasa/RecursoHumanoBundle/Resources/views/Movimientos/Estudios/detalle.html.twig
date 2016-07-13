@@ -33,32 +33,32 @@
                     <td>{{ arEstudio.codigoEmpleadoEstudioPk }}</td>
                     <td class="titulo">FECHA:</td>
                     <td>{{ arEstudio.fecha | date('Y/m/d') }}</td>
-                    <td class="titulo"></td>
-                    <td></td>
+                    <td class="titulo">CARGO</td>
+                    <td>{{ arEstudio.empleadoRel.cargoRel.nombre |default('')}}</td>
                 </tr>
                 <tr>
                     <td class="titulo">EMPLEADO:</td>
                     <td>{{ arEstudio.empleadoRel.nombreCorto }}</td>
                     <td class="titulo">IDENTIFICACIÓN:</td>
                     <td>{{ arEstudio.empleadoRel.numeroIdentificacion }}</td>
-                    <td class="titulo">CARGO</td>
-                    <td>{{ arEstudio.empleadoRel.cargoRel.nombre |default('')}}</td>
+                    <td class="titulo">TITULO:</td>
+                    <td>{{ arEstudio.titulo }}</td>
                 </tr>
                 <tr>
                     <td class="titulo">TIPO ESTUDIO:</td>
                     <td>{{ arEstudio.empleadoEstudioTipoRel.nombre|default('') }}</td>
                     <td class="titulo">INSTITUCIÓN:</td>
                     <td>{{ arEstudio.institucion }}</td>
-                    <td class="titulo">TITULO:</td>
-                    <td>{{ arEstudio.titulo }}</td>
+                    <td class="titulo">CIUDAD:</td>
+                    <td>{{ arEstudio.ciudadRel.nombre }}</td>
                 </tr>
                 <tr>
                     <td class="titulo">FECHA INICIO:</td>
                     <td>{% if arEstudio.fechaInicio != null %}{{ arEstudio.fechaInicio | date('Y/m/d') }}{% else %}{% endif%}</td>
                     <td class="titulo">FECHA TERMINACIÓN:</td>
                     <td>{% if arEstudio.fechaTerminacion != null %}{{ arEstudio.fechaInicio | date('Y/m/d') }}{% else %}{% endif%}</td>
-                    <td class="titulo">CIUDAD:</td>
-                    <td>{{ arEstudio.ciudadRel.nombre }}</td>
+                    <td class="titulo">FECHA VEN ESTUDIO/CURSO:</td>
+                    <td>{% if arEstudio.fechaVencimientoControl != null %}{{ arEstudio.fechaVencimientoControl | date('Y/m/d') }}{% else %}{% endif%}</td>
                 </tr>
                 <tr>
                     <td class="titulo">GRADO BACHILLER:</td>
@@ -89,8 +89,8 @@
                     <td>{% if arEstudio.fechaInicioAcreditacion != null %}{{ arEstudio.fechaInicio | date('Y/m/d') }}{% else %}{% endif%}</td>
                     <td class="titulo">FECHA TERMINACIÓN ACREDITACIÓN:</td>
                     <td>{% if arEstudio.fechaTerminacionAcreditacion != null %}{{ arEstudio.fechaInicio | date('Y/m/d') }}{% else %}{% endif%}</td>
-                    <td class="titulo"></td>
-                    <td></td>
+                    <td class="titulo">FECHA VEN ACREDITACIÓN:</td>
+                    <td>{% if arEstudio.fechaVencimientoAcreditacion != null %}{{ arEstudio.fechaVencimientoAcreditacion | date('Y/m/d') }}{% else %}{% endif%}</td>
                 </tr>
                 <tr>
                     <td class="titulo">COMENTARIOS:</td>

@@ -60,6 +60,12 @@
                 </div>
             </div>
             <div class="form-group form-group-sm">
+                <label for="form_fechaVencimientoControl" class="col-sm-4 control-label">Fecha vencimiento estudio/curso:</label>
+                <div class="col-sm-8">
+                        {{ form_widget(form.fechaVencimientoControl) }}
+                </div>
+            </div>    
+            <div class="form-group form-group-sm">
                 <label for="form_numeroRegistro" class="col-sm-4 control-label">Numero registro:</label>
                 <div class="col-sm-8">
                         {{ form_widget(form.numeroRegistro, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
@@ -89,6 +95,12 @@
                         {{ form_widget(form.fechaTerminacionAcreditacion) }}
                 </div>
             </div>
+            <div class="form-group form-group-sm">
+                <label for="form_fechaVencimientoAcreditacion" class="col-sm-4 control-label">Fecha vencimiento acreditación:</label>
+                <div class="col-sm-8">
+                        {{ form_widget(form.fechaVencimientoAcreditacion) }}
+                </div>
+            </div>    
             <div class="form-group form-group-sm">
                 <label for="form_estudioEstadoRel" class="col-sm-4 control-label">Estado:</label>
                 <div class="col-sm-8">

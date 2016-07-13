@@ -147,6 +147,20 @@ class PagoBancoController extends Controller
                     $objMensaje->Mensaje('error', 'El pago al banco debe estar autorizado', $this);
                 }
             }
+            if($form->get('BtnArchivoAvvillasInterno')->isClicked()) {
+                if($arPagoBanco->getEstadoAutorizado() == 1) {
+                    $this->generarArchivoAvvillasInterno($arPagoBanco);
+                } else {
+                    $objMensaje->Mensaje('error', 'El pago al banco debe estar autorizado', $this);
+                }
+            }
+            if($form->get('BtnArchivoAvvillasOtros')->isClicked()) {
+                if($arPagoBanco->getEstadoAutorizado() == 1) {
+                    $this->generarArchivoAvvillasOtros($arPagoBanco);
+                } else {
+                    $objMensaje->Mensaje('error', 'El pago al banco debe estar autorizado', $this);
+                }
+            }
             
         }        
         $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
@@ -360,7 +374,9 @@ class PagoBancoController extends Controller
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);        
         $arrBotonArchivoBancolombiaPab = array('label' => 'Bancolombia Pab', 'disabled' => false);
-        $arrBotonArchivoBancolombiaSap = array('label' => 'Bancolombia Sap', 'disabled' => false);        
+        $arrBotonArchivoBancolombiaSap = array('label' => 'Bancolombia Sap', 'disabled' => false);
+        $arrBotonArchivoAvvillasInterno = array('label' => 'Av Villas Interno', 'disabled' => false);
+        $arrBotonArchivoAvvillasOtros = array('label' => 'Av Villas Otros', 'disabled' => false);        
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;
             $arrBotonEliminarDetalle['disabled'] = true;
@@ -377,6 +393,8 @@ class PagoBancoController extends Controller
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)                                
                     ->add('BtnArchivoBancolombiaPab', 'submit', $arrBotonArchivoBancolombiaPab)
                     ->add('BtnArchivoBancolombiaSap', 'submit', $arrBotonArchivoBancolombiaSap)
+                    ->add('BtnArchivoAvvillasInterno', 'submit', $arrBotonArchivoAvvillasInterno)
+                    ->add('BtnArchivoAvvillasOtros', 'submit', $arrBotonArchivoAvvillasOtros)
                     ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)
                     ->getForm();  
         return $form;
@@ -493,6 +511,149 @@ class PagoBancoController extends Controller
         exit;         
     }
     
+    private function generarArchivoAvvillasInterno ($arPagoBanco) {
+        $em = $this->getDoctrine()->getManager();
+        //$arPagoBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco();
+        $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $strNombreArchivo = "pagoAvvillasInterno" . date('YmdHis') . ".txt";
+        //$strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
+        $strArchivo = "c:/xampp/" . $strNombreArchivo;                                    
+        ob_clean();
+        $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
+        $strValorTotal = 0;
+        $arPagosBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
+        $arPagosBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->findBy(array ('codigoPagoBancoFk' => $arPagoBanco->getCodigoPagoBancoPk()));                        
+        foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
+            $strValorTotal += round($arPagoBancoDetalle->getVrPago());
+        }        
+        // Encabezado
+        /*$strNitEmpresa = $this->RellenarNr(utf8_decode($arConfiguracionGeneral->getNitEmpresa()),"0",10);
+        $strNombreEmpresa = $this->RellenarNr(utf8_decode(substr($arConfiguracionGeneral->getNombreEmpresa(), 0, 16)), 0, 16);*/
+        $strSecuencia = $arPagoBanco->getSecuencia();
+        $strSecuencia = $this->secuencia($strSecuencia);
+        //$strNumeroRegistros = $this->RellenarNr($arPagoBanco->getNumeroRegistros(), "0", 6);
+        $strValorTotal = $this->RellenarNr($strValorTotal, "0", 20);
+        $strTipoRegistro = "01";
+        $strFechaCreacion = $arPagoBanco->getFechaTrasmision()->format('Ymd');
+        $strHoraCreacion = date('His');
+        $oficina = "088";
+        $adquiriente = "02";
+        $nombreArchivo = "NominaVillas                                      ";
+        $relleno = "                                                                                                                        ";
+        //Fin encabezado
+        //(1) Tipo de registro, (10) Nit empresa, (225PAGO NOMI) descripcion transacion, (yymmdd) fecha creacion, (yymmdd) fecha aplicacion, (6) Numero de registros, (17) sumatoria de creditos, (11) Cuenta cliente a debitar, (1) Tipo de cuenta a debitar         
+        fputs($ar, $strTipoRegistro . $strFechaCreacion . $strHoraCreacion . $oficina . $adquiriente . $nombreArchivo . $relleno . "\n");
+        //Inicio cuerpo
+        foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
+            fputs($ar, "02"); //(1)Tipo registro            
+            fputs($ar, "000023"); // codigo transaccion
+            fputs($ar, "06"); // tipo producto origen
+            fputs($ar, $this->RellenarNr($arPagoBanco->getCuentaRel()->getCuenta(), "0", 16)); // Nro cuenta origen
+            fputs($ar, "052"); // entidad destino av villas 052
+            fputs($ar, "01");// tipo producto destino
+            fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getCuenta(), "0", 16)); // Nro cuenta destino
+            fputs($ar, ($this->RellenarNr($strSecuencia, "0", 9))); //secuencia
+            $duoValorNetoPagar = round($arPagoBancoDetalle->getVrPago()); // (17) Valor transacción
+            fputs($ar, ($this->RellenarNr($duoValorNetoPagar, "0", 18)));
+            fputs($ar, "0000000000000000"); // numero factura duda
+            fputs($ar, "0000000000000000"); // referencia 1
+            fputs($ar, "0000000000000000"); // referencia 2
+            fputs($ar, $this->RellenarNr2($arPagoBancoDetalle->getNombreCorto(), " ", 30, "D")); // (30) Nombre del beneficiario
+            fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getNumeroIdentificacion(), "0", 11)); // (30) Numero identificacion
+            fputs($ar, "000000"); // numero de autorizacion
+            fputs($ar, "00"); // codigo respuesta
+            fputs($ar, "000000000000000000"); // retencion contigente
+            fputs($ar, "00"); // relleno
+            fputs($ar, "\n");
+        }
+        
+        fputs($ar, "03" . $this->RellenarNr(count($arPagosBancoDetalle), "0", 9) . $strValorTotal . "\n");
+        fclose($ar);
+        $em->flush();
+        //Fin cuerpo                        
+        header('Content-Description: File Transfer');
+        header('Content-Type: text/csv; charset=ISO-8859-15');
+        header('Content-Disposition: attachment; filename='.basename($strArchivo));
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($strArchivo));
+        readfile($strArchivo);
+        exit;         
+    }
+    
+    private function generarArchivoAvvillasOtros ($arPagoBanco) {
+        $em = $this->getDoctrine()->getManager();
+        //$arPagoBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco();
+        $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $strNombreArchivo = "pagoAvvillasOtros" . date('YmdHis') . ".txt";
+        //$strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
+        $strArchivo = "c:/xampp/" . $strNombreArchivo;                                    
+        ob_clean();
+        $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
+        $strValorTotal = 0;
+        $arPagosBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
+        $arPagosBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->findBy(array ('codigoPagoBancoFk' => $arPagoBanco->getCodigoPagoBancoPk()));                        
+        foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
+            $strValorTotal += round($arPagoBancoDetalle->getVrPago());
+        }        
+        // Encabezado
+        $strSecuencia = $arPagoBanco->getSecuencia();
+        $strSecuencia = $this->secuencia($strSecuencia);
+        $strSecuencia = $this->RellenarNr($strSecuencia, "0", 6);
+        //$strNumeroRegistros = $this->RellenarNr($arPagoBanco->getNumeroRegistros(), "0", 6);
+        $cuentaOrigen = $this->RellenarNr($arPagoBanco->getCuentaRel()->getCuenta(), " ", 17);
+        $tipoCuentaOrigen = "0"; //duda
+        $codigoProducto = "PP"; //duda
+        $strNitEmpresa = $this->RellenarNr(utf8_decode($arConfiguracionGeneral->getNitEmpresa()),"0",15);
+        $tipoId = "30"; //duda
+        $codPlazaOrigen = "0000"; //duda
+        $tipoRegistros = "1"; //duda
+        $canal = "1"; //duda
+        $strNombreEmpresa = $this->RellenarNr(utf8_decode(substr($arConfiguracionGeneral->getNombreEmpresa(), 0, 16)), " ", 16);
+        $strValorTotal = $this->RellenarNr(number_format($strValorTotal, 16, '.', '') , "0", 18);
+        $strTipoRegistro = "1";
+        $strFechaCreacion = $arPagoBanco->getFechaTrasmision()->format('Ymd');
+        
+        //Fin encabezado
+        //(1) Tipo de registro, (10) Nit empresa, (225PAGO NOMI) descripcion transacion, (yymmdd) fecha creacion, (yymmdd) fecha aplicacion, (6) Numero de registros, (17) sumatoria de creditos, (11) Cuenta cliente a debitar, (1) Tipo de cuenta a debitar         
+        fputs($ar, $strTipoRegistro . $cuentaOrigen . $tipoCuentaOrigen . $codigoProducto . $strFechaCreacion . $strNitEmpresa . $tipoId . $strNitEmpresa . $codPlazaOrigen . $tipoRegistros . $strSecuencia . $canal . "\n");
+        //Inicio cuerpo
+        foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
+            fputs($ar, "2"); //(1)Tipo registro            
+            fputs($ar, "21"); // codigo transaccion DUDA DUDA DUDA DUDA DUDA
+            fputs($ar, "4000"); // codigo banco des
+            fputs($ar, "0000"); // codigo plaza des
+            fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getNumeroIdentificacion(), "0", 15)); //(15) Nit del beneficiario           
+            fputs($ar, "01"); //(15) tipo identificacion
+            fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getCuenta(), "0", 17)); // Nro cuenta destino
+            fputs($ar, "1");// tipo cuenta destino
+            fputs($ar, $this->RellenarNr(utf8_decode(substr($arPagoBancoDetalle->getNombreCorto(), 0, 22))," ", 22)); // (22) Nombre del beneficiario
+            fputs($ar, "0");// duda addendas
+            $duoValorNetoPagar = round($arPagoBancoDetalle->getVrPago()); // (17) Valor transacción
+            fputs($ar, ($this->RellenarNr($duoValorNetoPagar, "0", 18)));
+            fputs($ar, "1"); // valida identificacion
+            fputs($ar, "0000000000000000"); // referencia 1
+            fputs($ar, "\n");
+        }
+        
+        fputs($ar, "4" . $this->RellenarNr(count($arPagosBancoDetalle), "0", 8) . $strValorTotal . "\n");
+        fclose($ar);
+        $em->flush();
+        //Fin cuerpo                        
+        header('Content-Description: File Transfer');
+        header('Content-Type: text/csv; charset=ISO-8859-15');
+        header('Content-Disposition: attachment; filename='.basename($strArchivo));
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($strArchivo));
+        readfile($strArchivo);
+        exit;         
+    }
+    
     //Rellenar numeros
     public static function RellenarNr($Nro, $Str, $NroCr) {
         $Longitud = strlen($Nro);
@@ -502,5 +663,106 @@ class PagoBancoController extends Controller
             $Nro = $Str . $Nro;
 
         return (string) $Nro;
+    }
+    
+    public static function RellenarNr2($Nro, $Str, $NroCr, $strPosicion) {
+        $Nro = utf8_decode($Nro);
+        $Longitud = strlen($Nro);
+        $Nc = $NroCr - $Longitud;
+        for ($i = 0; $i < $Nc; $i++) {
+            if($strPosicion == "I") {
+                $Nro = $Str . $Nro;
+            } else {
+                $Nro = $Nro . $Str;
+            }
+
+        }
+
+        return (string) $Nro;
+    }
+    
+    //secuencia
+    public static function secuencia($letra) {
+        $nro = 0;
+        if ($letra == "A"){
+            $nro = 1;
+        }
+        if ($letra == "B"){
+            $nro = 2;
+        }
+        if ($letra == "C"){
+            $nro = 3;
+        }
+        if ($letra == "D"){
+            $nro = 4;
+        }
+        if ($letra == "E"){
+            $nro = 5;
+        }
+        if ($letra == "F"){
+            $nro = 6;
+        }
+        if ($letra == "G"){
+            $nro = 7;
+        }
+        if ($letra == "H"){
+            $nro = 8;
+        }
+        if ($letra == "I"){
+            $nro = 9;
+        }
+        if ($letra == "J"){
+            $nro = 10;
+        }
+        if ($letra == "K"){
+            $nro = 11;
+        }
+        if ($letra == "L"){
+            $nro = 12;
+        }
+        if ($letra == "M"){
+            $nro = 13;
+        }
+        if ($letra == "N"){
+            $nro = 14;
+        }
+        if ($letra == "O"){
+            $nro = 15;
+        }
+        if ($letra == "P"){
+            $nro = 16;
+        }
+        if ($letra == "Q"){
+            $nro = 17;
+        }
+        if ($letra == "R"){
+            $nro = 18;
+        }
+        if ($letra == "S"){
+            $nro = 19;
+        }
+        if ($letra == "T"){
+            $nro = 20;
+        }
+        if ($letra == "U"){
+            $nro = 21;
+        }
+        if ($letra == "V"){
+            $nro = 22;
+        }
+        if ($letra == "W"){
+            $nro = 23;
+        }
+        if ($letra == "X"){
+            $nro = 24;
+        }
+        if ($letra == "Y"){
+            $nro = 25;
+        }
+        if ($letra == "Z"){
+            $nro = 26;
+        }
+        
+        return $nro;
     }                
 }

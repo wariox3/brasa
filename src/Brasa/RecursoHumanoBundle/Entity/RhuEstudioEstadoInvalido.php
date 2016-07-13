@@ -23,13 +23,12 @@ class RhuEstudioEstadoInvalido
     private $nombre;
     
     /**
-     * @ORM\OneToMany(targetEntity="RhuEmpleadoEstudio", mappedBy="estadoEstudioInvalidoRel")
+     * @ORM\OneToMany(targetEntity="RhuEmpleadoEstudio", mappedBy="estudioEstadoInvalidoRel")
      */
     protected $empleadosEstudiosEstudioEstadoInvalidoRel;
 
 
 
-    
     /**
      * Constructor
      */

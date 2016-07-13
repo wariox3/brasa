@@ -62,6 +62,12 @@ class RhuEmpleadoEstudio
     private $fechaTerminacion;
     
     /**
+     * @ORM\Column(name="fecha_vencimiento_control", type="date", nullable=true)
+     */     
+    
+    private $fechaVencimientoControl;
+    
+    /**
      * @ORM\Column(name="fecha_inicio_acreditacion", type="date", nullable=true)
      */     
     
@@ -72,6 +78,12 @@ class RhuEmpleadoEstudio
      */     
     
     private $fechaTerminacionAcreditacion;
+    
+    /**
+     * @ORM\Column(name="fecha_vencimiento_acreditacion", type="date", nullable=true)
+     */     
+    
+    private $fechaVencimientoAcreditacion;
     
     /**     
      * @ORM\Column(name="validar_vencimiento", type="boolean")
@@ -175,11 +187,9 @@ class RhuEmpleadoEstudio
      * @ORM\ManyToOne(targetEntity="RhuEstudioEstadoInvalido", inversedBy="empleadosEstudiosEstudioEstadoInvalidoRel")
      * @ORM\JoinColumn(name="codigo_estudio_estado_invalido_fk", referencedColumnName="codigo_estudio_estado_invalido_pk")
      */
-    protected $estadoEstudioInvalidoRel;
+    protected $estudioEstadoInvalidoRel;
     
     
-
-
 
     /**
      * Get codigoEmpleadoEstudioPk
@@ -384,6 +394,30 @@ class RhuEmpleadoEstudio
     }
 
     /**
+     * Set fechaVencimientoControl
+     *
+     * @param \DateTime $fechaVencimientoControl
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setFechaVencimientoControl($fechaVencimientoControl)
+    {
+        $this->fechaVencimientoControl = $fechaVencimientoControl;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVencimientoControl
+     *
+     * @return \DateTime
+     */
+    public function getFechaVencimientoControl()
+    {
+        return $this->fechaVencimientoControl;
+    }
+
+    /**
      * Set fechaInicioAcreditacion
      *
      * @param \DateTime $fechaInicioAcreditacion
@@ -429,6 +463,30 @@ class RhuEmpleadoEstudio
     public function getFechaTerminacionAcreditacion()
     {
         return $this->fechaTerminacionAcreditacion;
+    }
+
+    /**
+     * Set fechaVencimientoAcreditacion
+     *
+     * @param \DateTime $fechaVencimientoAcreditacion
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setFechaVencimientoAcreditacion($fechaVencimientoAcreditacion)
+    {
+        $this->fechaVencimientoAcreditacion = $fechaVencimientoAcreditacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVencimientoAcreditacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaVencimientoAcreditacion()
+    {
+        return $this->fechaVencimientoAcreditacion;
     }
 
     /**
@@ -864,26 +922,26 @@ class RhuEmpleadoEstudio
     }
 
     /**
-     * Set estadoEstudioInvalidoRel
+     * Set estudioEstadoInvalidoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEstudioEstadoInvalido $estadoEstudioInvalidoRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEstudioEstadoInvalido $estudioEstadoInvalidoRel
      *
      * @return RhuEmpleadoEstudio
      */
-    public function setEstadoEstudioInvalidoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEstudioEstadoInvalido $estadoEstudioInvalidoRel = null)
+    public function setEstudioEstadoInvalidoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEstudioEstadoInvalido $estudioEstadoInvalidoRel = null)
     {
-        $this->estadoEstudioInvalidoRel = $estadoEstudioInvalidoRel;
+        $this->estudioEstadoInvalidoRel = $estudioEstadoInvalidoRel;
 
         return $this;
     }
 
     /**
-     * Get estadoEstudioInvalidoRel
+     * Get estudioEstadoInvalidoRel
      *
      * @return \Brasa\RecursoHumanoBundle\Entity\RhuEstudioEstadoInvalido
      */
-    public function getEstadoEstudioInvalidoRel()
+    public function getEstudioEstadoInvalidoRel()
     {
-        return $this->estadoEstudioInvalidoRel;
+        return $this->estudioEstadoInvalidoRel;
     }
 }

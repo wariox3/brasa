@@ -30,9 +30,9 @@
                     </div>                    
                 </div>
                 <div class="form-group form-group-sm">
-                    <label for="form_fechaDesde" class="col-sm-2 control-label">Fecha inicio:</label>
+                    <label for="form_fechaVencimientoControl" class="col-sm-2 control-label">F. ven curso/estudio:</label>
                     <div class="col-sm-4">
-                        {{ form_widget(form.fechaDesde, {'attr': {'maxlength' : 10} }) }} 
+                        {{ form_widget(form.fechaVencimientoControl, {'attr': {'maxlength' : 10} }) }} 
                     </div>
                     <label for="form_empleadoEstudioTipoRel" class="col-sm-2 control-label">Estudio:</label>
                     <div class="col-sm-4">                  
@@ -40,19 +40,13 @@
                     </div>
                 </div>
                 <div class="form-group form-group-sm">
-                    <label for="form_fechaHasta" class="col-sm-2 control-label">Fecha terminacion:</label>
+                    <label for="form_fechaVencimientoAcreditacion" class="col-sm-2 control-label">F. ven acreditación:</label>
                     <div class="col-sm-4">
-                        {{ form_widget(form.fechaHasta, {'attr': {'maxlength' : 10} }) }} 
+                        {{ form_widget(form.fechaVencimientoAcreditacion, {'attr': {'maxlength' : 10} }) }} 
                     </div>
                     <label for="form_estudioEstadoRel" class="col-sm-2 control-label">Estado:</label>
                     <div class="col-sm-4">                  
                         {{ form_widget(form.estudioEstadoRel, { 'attr': {'class': 'form-control'} }) }}
-                    </div>
-                </div>
-                <div class="form-group form-group-sm">
-                    <label for="form_fechaHastaAcreditacion" class="col-sm-2 control-label">F. ven acreditación:</label>
-                    <div class="col-sm-4">
-                        {{ form_widget(form.fechaHastaAcreditacion, {'attr': {'maxlength' : 10} }) }} 
                     </div>
                 </div>    
                 <div class="form-group form-group-sm">
@@ -71,6 +65,7 @@
                 <th>ESTUDIO</th>
                 <th>FECHA INICIO</th>
                 <th>FECHA TERMINACIÓN</th>
+                <th>FECHA VEN CURSO/ESTUDIO</th>
                 <th>FECHA VEN ACREDITACIÓN</th>
                 <th>ESTADO</th>
                 <th>VALIDADO</th>
@@ -87,7 +82,8 @@
                 <td>{{ arEstudios.empleadoEstudioTipoRel.nombre  }}</td>
                 <td>{% if arEstudios.fechaInicio != null %}{{ arEstudios.fechaInicio | date('Y/m/d') }}{% else %}{% endif%}</td>
                 <td>{% if arEstudios.fechaTerminacion != null %}{{ arEstudios.fechaTerminacion | date('Y/m/d') }}{% else %}{% endif%}</td>
-                <td>{% if arEstudios.fechaTerminacionAcreditacion != null %}{{ arEstudios.fechaTerminacionAcreditacion | date('Y/m/d') }}{% else %}{% endif%}</td>
+                <td>{% if arEstudios.fechaVencimientoControl != null %}{{ arEstudios.fechaVencimientoControl | date('Y/m/d') }}{% else %}{% endif%}</td>
+                <td>{% if arEstudios.fechaVencimientoAcreditacion != null %}{{ arEstudios.fechaVencimientoAcreditacion | date('Y/m/d') }}{% else %}{% endif%}</td>
                 <td>{{ arEstudios.estudioEstadoRel.nombre  | default('')}}</td>
                 <td>{% if arEstudios.validarVencimiento == 1%} SI {% else %}NO{% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_estudio_nuevo', {'codigoEstudio': arEstudios.codigoEmpleadoEstudioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
