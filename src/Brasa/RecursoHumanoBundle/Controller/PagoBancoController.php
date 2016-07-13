@@ -528,11 +528,9 @@ class PagoBancoController extends Controller
             $strValorTotal += round($arPagoBancoDetalle->getVrPago());
         }        
         // Encabezado
-        /*$strNitEmpresa = $this->RellenarNr(utf8_decode($arConfiguracionGeneral->getNitEmpresa()),"0",10);
-        $strNombreEmpresa = $this->RellenarNr(utf8_decode(substr($arConfiguracionGeneral->getNombreEmpresa(), 0, 16)), 0, 16);*/
-        $strSecuencia = $arPagoBanco->getSecuencia();
-        $strSecuencia = $this->secuencia($strSecuencia);
-        //$strNumeroRegistros = $this->RellenarNr($arPagoBanco->getNumeroRegistros(), "0", 6);
+        //$strSecuencia = $arPagoBanco->getSecuencia();
+        //$strSecuencia = $this->secuencia($strSecuencia);
+        $strNumeroRegistros = $this->RellenarNr($arPagoBanco->getNumeroRegistros(), "0", 6);
         $strValorTotal = $this->RellenarNr($strValorTotal, "0", 20);
         $strTipoRegistro = "01";
         $strFechaCreacion = $arPagoBanco->getFechaTrasmision()->format('Ymd');
@@ -546,6 +544,7 @@ class PagoBancoController extends Controller
         fputs($ar, $strTipoRegistro . $strFechaCreacion . $strHoraCreacion . $oficina . $adquiriente . $nombreArchivo . $relleno . "\n");
         //Inicio cuerpo
         foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
+            $strSecuencia = 1;
             fputs($ar, "02"); //(1)Tipo registro            
             fputs($ar, "000023"); // codigo transaccion
             fputs($ar, "06"); // tipo producto origen
@@ -566,9 +565,9 @@ class PagoBancoController extends Controller
             fputs($ar, "000000000000000000"); // retencion contigente
             fputs($ar, "00"); // relleno
             fputs($ar, "\n");
+            $strSecuencia ++;
         }
-        
-        fputs($ar, "03" . $this->RellenarNr(count($arPagosBancoDetalle), "0", 9) . $strValorTotal . "\n");
+        fputs($ar, "03" . $this->RellenarNr($strNumeroRegistros, "0", 9) . $strValorTotal . "\n");
         fclose($ar);
         $em->flush();
         //Fin cuerpo                        
@@ -590,7 +589,7 @@ class PagoBancoController extends Controller
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $strNombreArchivo = "pagoAvvillasOtros" . date('YmdHis') . ".txt";
         //$strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
-        $strArchivo = "c:/xampp/" . $strNombreArchivo;                                    
+        $strArchivo = "c:/xampp/" . $strNombreArchivo;   
         ob_clean();
         $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
         $strValorTotal = 0;
@@ -600,45 +599,42 @@ class PagoBancoController extends Controller
             $strValorTotal += round($arPagoBancoDetalle->getVrPago());
         }        
         // Encabezado
-        $strSecuencia = $arPagoBanco->getSecuencia();
-        $strSecuencia = $this->secuencia($strSecuencia);
-        $strSecuencia = $this->RellenarNr($strSecuencia, "0", 6);
-        //$strNumeroRegistros = $this->RellenarNr($arPagoBanco->getNumeroRegistros(), "0", 6);
-        $cuentaOrigen = $this->RellenarNr($arPagoBanco->getCuentaRel()->getCuenta(), " ", 17);
+        $strTipoRegistro = "1";
+        $cuentaOrigen = $this->RellenarNr2($arPagoBanco->getCuentaRel()->getCuenta(), " ", 17, "D");
         $tipoCuentaOrigen = "0"; //duda
         $codigoProducto = "PP"; //duda
-        $strNitEmpresa = $this->RellenarNr(utf8_decode($arConfiguracionGeneral->getNitEmpresa()),"0",15);
-        $tipoId = "30"; //duda
-        $codPlazaOrigen = "0000"; //duda
-        $tipoRegistros = "1"; //duda
-        $canal = "1"; //duda
-        $strNombreEmpresa = $this->RellenarNr(utf8_decode(substr($arConfiguracionGeneral->getNombreEmpresa(), 0, 16)), " ", 16);
-        $strValorTotal = $this->RellenarNr(number_format($strValorTotal, 16, '.', '') , "0", 18);
-        $strTipoRegistro = "1";
         $strFechaCreacion = $arPagoBanco->getFechaTrasmision()->format('Ymd');
-        
+        $strNitEmpresa = $this->RellenarNr(utf8_decode($arConfiguracionGeneral->getNitEmpresa()),"0",15);
+        $tipoId = "03"; //duda
+        $strNombreEmpresa = $this->RellenarNr2($arConfiguracionGeneral->getNombreEmpresa(), " ", 16, "D");
+        $codPlazaOrigen = "0002"; //duda
+        $tipoRegistros = "PPD"; //duda
+        //$strSecuencia = $arPagoBanco->getSecuencia();
+        //$strSecuencia = $this->secuencia($strSecuencia);
+        //$strSecuencia = $this->RellenarNr($strSecuencia, "0", 6);
+        $strSecuencia = "000000";
+        $canal = "4"; //duda
+        $strValorTotal = $this->RellenarNr($strValorTotal, "0", 18);
         //Fin encabezado
         //(1) Tipo de registro, (10) Nit empresa, (225PAGO NOMI) descripcion transacion, (yymmdd) fecha creacion, (yymmdd) fecha aplicacion, (6) Numero de registros, (17) sumatoria de creditos, (11) Cuenta cliente a debitar, (1) Tipo de cuenta a debitar         
-        fputs($ar, $strTipoRegistro . $cuentaOrigen . $tipoCuentaOrigen . $codigoProducto . $strFechaCreacion . $strNitEmpresa . $tipoId . $strNitEmpresa . $codPlazaOrigen . $tipoRegistros . $strSecuencia . $canal . "\n");
+        fputs($ar, $strTipoRegistro . $cuentaOrigen . $tipoCuentaOrigen . $codigoProducto . $strFechaCreacion . $strNitEmpresa . $tipoId . $strNombreEmpresa . $codPlazaOrigen . $tipoRegistros . $strSecuencia . $canal . "\n");
         //Inicio cuerpo
         foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
             fputs($ar, "2"); //(1)Tipo registro            
-            fputs($ar, "21"); // codigo transaccion DUDA DUDA DUDA DUDA DUDA
-            fputs($ar, "4000"); // codigo banco des
-            fputs($ar, "0000"); // codigo plaza des
-            fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getNumeroIdentificacion(), "0", 15)); //(15) Nit del beneficiario           
+            fputs($ar, "23"); // codigo transaccion DUDA
+            fputs($ar, "0040"); // codigo banco des
+            fputs($ar, "0002"); // codigo plaza des
+            fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getNumeroIdentificacion(), " ", 15)); //(15) Nit del beneficiario           
             fputs($ar, "01"); //(15) tipo identificacion
-            fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getCuenta(), "0", 17)); // Nro cuenta destino
+            fputs($ar, $this->RellenarNr2($arPagoBancoDetalle->getCuenta(), " ", 17, "D")); // Nro cuenta destino
             fputs($ar, "1");// tipo cuenta destino
             fputs($ar, $this->RellenarNr(utf8_decode(substr($arPagoBancoDetalle->getNombreCorto(), 0, 22))," ", 22)); // (22) Nombre del beneficiario
             fputs($ar, "0");// duda addendas
             $duoValorNetoPagar = round($arPagoBancoDetalle->getVrPago()); // (17) Valor transacción
             fputs($ar, ($this->RellenarNr($duoValorNetoPagar, "0", 18)));
             fputs($ar, "1"); // valida identificacion
-            fputs($ar, "0000000000000000"); // referencia 1
             fputs($ar, "\n");
         }
-        
         fputs($ar, "4" . $this->RellenarNr(count($arPagosBancoDetalle), "0", 8) . $strValorTotal . "\n");
         fclose($ar);
         $em->flush();

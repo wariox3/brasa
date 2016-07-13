@@ -428,7 +428,7 @@ class SeleccionController extends Controller
             $arrBotonAutorizar['disabled'] = true;
             $arrBotonEliminarReferencia['disabled'] = true;
             $arrBotonEliminarPrueba['disabled'] = true;
-            $arrBotonEliminarVisita['disabled'] = true;
+            //$arrBotonEliminarVisita['disabled'] = true;
             $arrBotonEliminarEntrevista['disabled'] = true;
         }
         if($ar->getEstadoAprobado() == 1) {
