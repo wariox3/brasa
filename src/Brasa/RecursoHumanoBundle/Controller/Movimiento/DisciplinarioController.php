@@ -1,15 +1,19 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
-
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuDisciplinarioType;
-
+use Brasa\RecursoHumanoBundle\Form\Type\RhuDisciplinarioDescargoType;
 
 class DisciplinarioController extends Controller
 {
     var $strListaDql = "";
+    
+    /**
+     * @Route("/rhu/movimiento/disciplinario/", name="brs_rhu_movimiento_disciplinario")
+     */     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -33,7 +37,7 @@ class DisciplinarioController extends Controller
                         }   
                     }
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_disciplinario_lista'));
+                    return $this->redirect($this->generateUrl('brs_rhu_movimiento_disciplinario'));
                 }
             }
 
@@ -53,6 +57,9 @@ class DisciplinarioController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Disciplinario:lista.html.twig', array('arDisciplinarios' => $arDisciplinarios, 'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/movimiento/disciplinario/nuevo/{codigoDisciplinario}", name="brs_rhu_movimiento_disciplinario_nuevo")
+     */    
     public function nuevoAction($codigoDisciplinario = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -83,9 +90,9 @@ class DisciplinarioController extends Controller
                         $em->persist($arDisciplinario);
                         $em->flush();
                         if($form->get('guardarnuevo')->isClicked()) {
-                            return $this->redirect($this->generateUrl('brs_rhu_disciplinario_nuevo', array('codigoDisciplinario' => 0 )));
+                            return $this->redirect($this->generateUrl('brs_rhu_movimiento_disciplinario_nuevo', array('codigoDisciplinario' => 0 )));
                         } else {
-                            return $this->redirect($this->generateUrl('brs_rhu_disciplinario_lista'));
+                            return $this->redirect($this->generateUrl('brs_rhu_movimiento_disciplinario'));
                         }
                     } else {
                         $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
@@ -101,6 +108,9 @@ class DisciplinarioController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/movimiento/disciplinario/detalle/{codigoDisciplinario}", name="brs_rhu_movimiento_disciplinario_detalle")
+     */    
     public function detalleAction($codigoDisciplinario) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -115,7 +125,7 @@ class DisciplinarioController extends Controller
                     $arProcesoDisciplinario->setEstadoAutorizado(1);
                     $em->persist($arProcesoDisciplinario);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_disciplinario_detalle', array('codigoDisciplinario' => $codigoDisciplinario)));                                                
+                    return $this->redirect($this->generateUrl('brs_rhu_movimiento_disciplinario_detalle', array('codigoDisciplinario' => $codigoDisciplinario)));                                                
                 }
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {            
@@ -123,7 +133,7 @@ class DisciplinarioController extends Controller
                     $arProcesoDisciplinario->setEstadoAutorizado(0);
                     $em->persist($arProcesoDisciplinario);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_disciplinario_detalle', array('codigoDisciplinario' => $codigoDisciplinario)));                                                
+                    return $this->redirect($this->generateUrl('brs_rhu_movimiento_disciplinario_detalle', array('codigoDisciplinario' => $codigoDisciplinario)));                                                
                 }
             }
             if($form->get('BtnImprimir')->isClicked()) {
@@ -144,7 +154,7 @@ class DisciplinarioController extends Controller
                         $em->persist($arProcesoDisciplinario);
                     }
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_disciplinario_detalle', array('codigoDisciplinario' => $codigoDisciplinario)));                                                
+                    return $this->redirect($this->generateUrl('brs_rhu_movimiento_disciplinario_detalle', array('codigoDisciplinario' => $codigoDisciplinario)));                                                
                 } else {
                     $objMensaje = "Debe estar autorizado";
                 }    
@@ -152,12 +162,40 @@ class DisciplinarioController extends Controller
 
         }
         $arDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
+        $arDescargos = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinarioDescargo')->findBy(array('codigoDisciplinarioFk' => $codigoDisciplinario));
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Disciplinario:detalle.html.twig', array(
                     'arDisciplinario' => $arDisciplinario,
+                    'arDescargos' => $arDescargos,
                     'form' => $form->createView()
                     ));
     }
 
+    /**
+     * @Route("/rhu/movimiento/disciplinario/descargo/nuevo/{codigoDisciplinario}/{codigoDisciplinarioDescargo}", name="brs_rhu_movimiento_disciplinario_descargo_nuevo")
+     */     
+    public function nuevoDescargoAction($codigoDisciplinario, $codigoDisciplinarioDescargo) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $arDisciplinario = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
+        $arDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
+        $arDisciplinarioDescargo = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioDescargo();
+        if($codigoDisciplinarioDescargo != 0) {
+            $arDisciplinarioDescargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinarioDescargo')->find($codigoDisciplinarioDescargo);
+        }
+        $form = $this->createForm(new RhuDisciplinarioDescargoType(), $arDisciplinarioDescargo);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arDisciplinarioDescargo = $form->getData();
+            $arDisciplinarioDescargo->setDisciplinarioRel($arDisciplinario);
+            $em->persist($arDisciplinarioDescargo);
+            $em->flush();
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Disciplinario:nuevoDescargo.html.twig', array(
+            'form' => $form->createView()
+            ));
+    }    
+    
     private function listar() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -214,6 +252,7 @@ class DisciplinarioController extends Controller
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonCerrar = array('label' => 'Cerrar / abrir', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);               
+        $arrBotonEliminarDescargo = array('label' => 'Eliminar descargo', 'disabled' => false);               
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;                        
         } else {
@@ -227,6 +266,7 @@ class DisciplinarioController extends Controller
             ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)
             ->add('BtnCerrar', 'submit', $arrBotonCerrar)
             ->add('BtnImprimir', 'submit', $arrBotonImprimir)                                            
+            ->add('BtnEliminarDescargo', 'submit', $arrBotonEliminarDescargo)                                            
             ->getForm();  
         return $form;
     }

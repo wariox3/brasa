@@ -22,6 +22,10 @@ class RhuDisciplinario
      */    
     private $codigoDisciplinarioTipoFk; 
     
+    /**
+     * @ORM\Column(name="codigo_disciplinario_motivo_fk", type="integer", nullable=true)
+     */    
+    private $codigoDisciplinarioMotivoFk;    
     
     /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
@@ -86,17 +90,17 @@ class RhuDisciplinario
     /**
      * @ORM\Column(name="operacion", type="string", length=100, nullable=true)
      */    
-    private $operacion;
-    
-    /**
-     * @ORM\Column(name="descargos", type="text", nullable=true)
-     */    
-    private $descargos;
+    private $operacion;   
     
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
      */    
     private $estadoAutorizado = false;
+    
+    /**     
+     * @ORM\Column(name="estado_cerrado", type="boolean")
+     */    
+    private $estadoCerrado = false;    
     
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer")
@@ -106,12 +110,7 @@ class RhuDisciplinario
     /**
      * @ORM\Column(name="codigo_cargo_fk", type="integer", nullable=true)
      */    
-    private $codigoCargoFk;
-    
-    /**     
-     * @ORM\Column(name="estado", type="boolean")
-     */    
-    private $estado = false;
+    private $codigoCargoFk;    
     
     /**
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
@@ -131,6 +130,12 @@ class RhuDisciplinario
     protected $disciplinarioTipoRel;
     
     /**
+     * @ORM\ManyToOne(targetEntity="RhuDisciplinarioMotivo", inversedBy="disciplinariosDisciplinarioMotivoRel")
+     * @ORM\JoinColumn(name="codigo_disciplinario_motivo_fk", referencedColumnName="codigo_disciplinario_motivo_pk")
+     */
+    protected $disciplinarioMotivoRel;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="disciplinariosCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
@@ -142,6 +147,10 @@ class RhuDisciplinario
      */
     protected $cargoRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuDisciplinarioDescargo", mappedBy="disciplinarioRel")
+     */
+    protected $disciplinariosDescargosDisciplinarioRel;     
 
 
     /**
@@ -176,6 +185,30 @@ class RhuDisciplinario
     public function getCodigoDisciplinarioTipoFk()
     {
         return $this->codigoDisciplinarioTipoFk;
+    }
+
+    /**
+     * Set codigoDisciplinarioMotivoFk
+     *
+     * @param integer $codigoDisciplinarioMotivoFk
+     *
+     * @return RhuDisciplinario
+     */
+    public function setCodigoDisciplinarioMotivoFk($codigoDisciplinarioMotivoFk)
+    {
+        $this->codigoDisciplinarioMotivoFk = $codigoDisciplinarioMotivoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoDisciplinarioMotivoFk
+     *
+     * @return integer
+     */
+    public function getCodigoDisciplinarioMotivoFk()
+    {
+        return $this->codigoDisciplinarioMotivoFk;
     }
 
     /**
@@ -272,6 +305,30 @@ class RhuDisciplinario
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Set fechaIncidente
+     *
+     * @param string $fechaIncidente
+     *
+     * @return RhuDisciplinario
+     */
+    public function setFechaIncidente($fechaIncidente)
+    {
+        $this->fechaIncidente = $fechaIncidente;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaIncidente
+     *
+     * @return string
+     */
+    public function getFechaIncidente()
+    {
+        return $this->fechaIncidente;
     }
 
     /**
@@ -467,30 +524,6 @@ class RhuDisciplinario
     }
 
     /**
-     * Set descargos
-     *
-     * @param string $descargos
-     *
-     * @return RhuDisciplinario
-     */
-    public function setDescargos($descargos)
-    {
-        $this->descargos = $descargos;
-
-        return $this;
-    }
-
-    /**
-     * Get descargos
-     *
-     * @return string
-     */
-    public function getDescargos()
-    {
-        return $this->descargos;
-    }
-
-    /**
      * Set estadoAutorizado
      *
      * @param boolean $estadoAutorizado
@@ -560,6 +593,30 @@ class RhuDisciplinario
     public function getCodigoCargoFk()
     {
         return $this->codigoCargoFk;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return RhuDisciplinario
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 
     /**
@@ -635,6 +692,30 @@ class RhuDisciplinario
     }
 
     /**
+     * Set disciplinarioMotivoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioMotivo $disciplinarioMotivoRel
+     *
+     * @return RhuDisciplinario
+     */
+    public function setDisciplinarioMotivoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioMotivo $disciplinarioMotivoRel = null)
+    {
+        $this->disciplinarioMotivoRel = $disciplinarioMotivoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get disciplinarioMotivoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioMotivo
+     */
+    public function getDisciplinarioMotivoRel()
+    {
+        return $this->disciplinarioMotivoRel;
+    }
+
+    /**
      * Set centroCostoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
@@ -683,50 +764,67 @@ class RhuDisciplinario
     }
 
     /**
-     * Set estado
+     * Set estadoCerrado
      *
-     * @param boolean $estado
+     * @param boolean $estadoCerrado
      *
      * @return RhuDisciplinario
      */
-    public function setEstado($estado)
+    public function setEstadoCerrado($estadoCerrado)
     {
-        $this->estado = $estado;
+        $this->estadoCerrado = $estadoCerrado;
 
         return $this;
     }
 
     /**
-     * Get estado
+     * Get estadoCerrado
      *
      * @return boolean
      */
-    public function getEstado()
+    public function getEstadoCerrado()
     {
-        return $this->estado;
+        return $this->estadoCerrado;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->disciplinariosDescargosDisciplinarioRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Set fechaIncidente
+     * Add disciplinariosDescargosDisciplinarioRel
      *
-     * @param string $fechaIncidente
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioDescargo $disciplinariosDescargosDisciplinarioRel
      *
      * @return RhuDisciplinario
      */
-    public function setFechaIncidente($fechaIncidente)
+    public function addDisciplinariosDescargosDisciplinarioRel(\Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioDescargo $disciplinariosDescargosDisciplinarioRel)
     {
-        $this->fechaIncidente = $fechaIncidente;
+        $this->disciplinariosDescargosDisciplinarioRel[] = $disciplinariosDescargosDisciplinarioRel;
 
         return $this;
     }
 
     /**
-     * Get fechaIncidente
+     * Remove disciplinariosDescargosDisciplinarioRel
      *
-     * @return string
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioDescargo $disciplinariosDescargosDisciplinarioRel
      */
-    public function getFechaIncidente()
+    public function removeDisciplinariosDescargosDisciplinarioRel(\Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioDescargo $disciplinariosDescargosDisciplinarioRel)
     {
-        return $this->fechaIncidente;
+        $this->disciplinariosDescargosDisciplinarioRel->removeElement($disciplinariosDescargosDisciplinarioRel);
+    }
+
+    /**
+     * Get disciplinariosDescargosDisciplinarioRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDisciplinariosDescargosDisciplinarioRel()
+    {
+        return $this->disciplinariosDescargosDisciplinarioRel;
     }
 }
