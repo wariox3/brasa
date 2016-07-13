@@ -51,8 +51,7 @@
             </div>
         </div>
         <table  class="table table-striped table-bordered table-condensed table-hover">
-            <tr>
-                <th>{{ knp_pagination_sortable(arDisciplinarios, 'CODIGO', 'd.codigoDisciplinarioPk') }}</th>                
+            <tr>                                
                 <th>FECHA</th>                
                 <th>PROCESO</th>
                 <th>MOTIVO</th>
@@ -60,6 +59,7 @@
                 <th>{{ knp_pagination_sortable(arDisciplinarios, 'NOMBRE', 'd.nombreCorto') }}</th>                
                 <th>CENTRO COSTO</th>                                                                                                
                 <th>F.INGRESO</th>
+                <th>USUARIO</th>
                 <th>AUT</th>
                 <th>CER</th>
                 <th style="text-align: center"></th>
@@ -68,7 +68,7 @@
             </tr>
             {% for arDisciplinarios in arDisciplinarios %}
             <tr>
-                <td><input type="hidden" name="LblCodigo[]" value="{{ arDisciplinarios.codigoDisciplinarioPk }}">{{ arDisciplinarios.codigoDisciplinarioPk }} </td>
+                <input type="hidden" name="LblCodigo[]" value="{{ arDisciplinarios.codigoDisciplinarioPk }}">
                 <td>{{ arDisciplinarios.fecha |date('Y/m/d')  }}</td>
                 <td>{{ arDisciplinarios.disciplinarioTipoRel.nombre  }}</td>
                 <td>{{ arDisciplinarios.disciplinarioMotivoRel.nombre |default('')  }}</td>                
@@ -76,6 +76,7 @@
                 <td>{{ arDisciplinarios.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arDisciplinarios.centroCostoRel.nombre  }}</td>                
                 <td>{{ arDisciplinarios.fechaIngresoTrabajo|default('NO APLICA')  }}</td>
+                <td>{{ arDisciplinarios.codigoUsuario  }}</td>
                 <td>{% if arDisciplinarios.estadoAutorizado == 1%}SI{% else %}NO{% endif %}</td>
                 <td>{% if arDisciplinarios.estadoCerrado == 0%}SI{% else %}NO{% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_movimiento_disciplinario_nuevo', {'codigoCentroCosto':  arDisciplinarios.codigoCentroCostoFk, 'codigoEmpleado':  arDisciplinarios.codigoEmpleadoFk, 'codigoDisciplinario': arDisciplinarios.codigoDisciplinarioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
