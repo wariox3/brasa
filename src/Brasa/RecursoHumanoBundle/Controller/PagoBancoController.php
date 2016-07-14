@@ -554,7 +554,7 @@ class PagoBancoController extends Controller
             fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getCuenta(), "0", 16)); // Nro cuenta destino
             fputs($ar, ($this->RellenarNr($strSecuencia, "0", 9))); //secuencia
             $duoValorNetoPagar = round($arPagoBancoDetalle->getVrPago()); // (17) Valor transacción
-            fputs($ar, ($this->RellenarNr($duoValorNetoPagar, "0", 18)));
+            fputs($ar, $this->RellenarNr($duoValorNetoPagar, "0", 16) . "00");
             fputs($ar, "0000000000000000"); // numero factura duda
             fputs($ar, "0000000000000000"); // referencia 1
             fputs($ar, "0000000000000000"); // referencia 2
@@ -583,7 +583,6 @@ class PagoBancoController extends Controller
     }
     
     private function generarArchivoAvvillasOtros ($arPagoBanco) {
-        ob_clean();
         $em = $this->getDoctrine()->getManager();
         //$arPagoBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco();
         $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
@@ -613,11 +612,9 @@ class PagoBancoController extends Controller
         $strSecuencia = "000000";
         $canal = "4"; //duda
         $strValorTotal = $this->RellenarNr($strValorTotal, "0", 18);
-        ob_clean();
         //Fin encabezado
         fputs($ar, $strTipoRegistro . $cuentaOrigen . $tipoCuentaOrigen . $codigoProducto . $strFechaCreacion . $strNitEmpresa . $tipoId . $strNombreEmpresa . $codPlazaOrigen . $tipoRegistros . $strSecuencia . $canal . "\n");
         //Inicio cuerpo
-        ob_clean();
         foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
             fputs($ar, "2"); //(1)Tipo registro            
             fputs($ar, "23"); // codigo transaccion DUDA
@@ -630,12 +627,12 @@ class PagoBancoController extends Controller
             fputs($ar, $this->RellenarNr(utf8_decode(substr($arPagoBancoDetalle->getNombreCorto(), 0, 22))," ", 22)); // (22) Nombre del beneficiario
             fputs($ar, "0");// duda addendas
             $duoValorNetoPagar = round($arPagoBancoDetalle->getVrPago()); // (17) Valor transacción
-            fputs($ar, ($this->RellenarNr($duoValorNetoPagar, "0", 18)));
+            fputs($ar, $this->RellenarNr($duoValorNetoPagar, "0", 16) . "00");
             fputs($ar, "1"); // valida identificacion
             fputs($ar, "\n");
         }
         //Fin cuerpo 
-        //PIE DE PAGINA
+        //Pie de pagina
         fputs($ar, "4" . $this->RellenarNr(count($arPagosBancoDetalle), "0", 8) . $strValorTotal . "\n");
         fclose($ar);
         $em->flush();
