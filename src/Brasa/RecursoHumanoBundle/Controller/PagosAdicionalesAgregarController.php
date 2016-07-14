@@ -452,6 +452,7 @@ class PagosAdicionalesAgregarController extends Controller
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->add('BtnGuardaryNuevo', 'submit', array('label'  => 'Guardar y nuevo',))
             ->getForm();
+                    
         $form->handleRequest($request);
         if($form->isValid()) {
             $arUsuario = $this->get('security.context')->getToken()->getUser();
@@ -543,8 +544,12 @@ class PagosAdicionalesAgregarController extends Controller
     public function valorAdicionalEditarAction($tipo, $codigoPagoAdicional) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
         $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
+        $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+        $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($arPagoAdicional->getCodigoPagoConceptoFk());
+        $codigoAdicionalDetalle = $arPagoConcepto->getTipoAdicional();
         if ($arPagoAdicional->getAplicaDiaLaborado() == 1){
             $intAplicaDiaLaborado = "SI";
         } else {
@@ -554,7 +559,6 @@ class PagosAdicionalesAgregarController extends Controller
         $codigoCentroCosto = $arPagoAdicional->getEmpleadoRel()->getCodigoCentroCostoFk();
         $codigoPagoConcepto = $arPagoAdicional->getCodigoPagoConceptoFk();
         $pagoConcepto = $arPagoAdicional->getPagoConceptoRel()->getNombre();
-        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         //$arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $intTipoAdicional = $tipo;
         $aplicaDiaLaborado = $arPagoAdicional->getAplicaDiaLaborado();
@@ -592,6 +596,10 @@ class PagosAdicionalesAgregarController extends Controller
             ->add('BtnGuardaryNuevo', 'submit', array('label'  => 'Guardar y nuevo',))
             ->getForm();
         $form->handleRequest($request);
+        
+        if ($codigoAdicionalDetalle == 0){
+            $objMensaje->Mensaje("error", "El tipo de adicional al pago para el item " . $arPagoConcepto->getNombre() . " en la tabla pago concepto no debe estar en cero (0), 1: bonificación, 2:descuento, 3: comisión, 4: tiempo suplementario!", $this);
+        }
         if($form->isValid()) {
             $arrControles = $request->request->All();
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arPagoAdicional->getCodigoEmpleadoFk());        
