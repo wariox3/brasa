@@ -400,7 +400,13 @@ class RhuContrato
      */
     protected $soportesPagosHorariosDetallesContratoRel;    
     
-
+    /**
+     * @ORM\OneToMany(targetEntity="RhuCambioTipoContrato", mappedBy="contratoRel")
+     */
+    protected $cambiosTiposContratosContratoRel;
+    
+    
+    
     
     /**
      * Constructor
@@ -423,6 +429,7 @@ class RhuContrato
         $this->trasladosSaludContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contratosProrrogasContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->soportesPagosHorariosDetallesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cambiosTiposContratosContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -457,6 +464,30 @@ class RhuContrato
     public function getCodigoContratoTipoFk()
     {
         return $this->codigoContratoTipoFk;
+    }
+
+    /**
+     * Set codigoSalarioTipoFk
+     *
+     * @param integer $codigoSalarioTipoFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoSalarioTipoFk($codigoSalarioTipoFk)
+    {
+        $this->codigoSalarioTipoFk = $codigoSalarioTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSalarioTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoSalarioTipoFk()
+    {
+        return $this->codigoSalarioTipoFk;
     }
 
     /**
@@ -1468,6 +1499,30 @@ class RhuContrato
     }
 
     /**
+     * Set salarioTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSalarioTipo $salarioTipoRel
+     *
+     * @return RhuContrato
+     */
+    public function setSalarioTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSalarioTipo $salarioTipoRel = null)
+    {
+        $this->salarioTipoRel = $salarioTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get salarioTipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSalarioTipo
+     */
+    public function getSalarioTipoRel()
+    {
+        return $this->salarioTipoRel;
+    }
+
+    /**
      * Set clasificacionRiesgoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo $clasificacionRiesgoRel
@@ -2300,50 +2355,36 @@ class RhuContrato
     }
 
     /**
-     * Set codigoSalarioTipoFk
+     * Add cambiosTiposContratosContratoRel
      *
-     * @param integer $codigoSalarioTipoFk
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCambioTipoContrato $cambiosTiposContratosContratoRel
      *
      * @return RhuContrato
      */
-    public function setCodigoSalarioTipoFk($codigoSalarioTipoFk)
+    public function addCambiosTiposContratosContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCambioTipoContrato $cambiosTiposContratosContratoRel)
     {
-        $this->codigoSalarioTipoFk = $codigoSalarioTipoFk;
+        $this->cambiosTiposContratosContratoRel[] = $cambiosTiposContratosContratoRel;
 
         return $this;
     }
 
     /**
-     * Get codigoSalarioTipoFk
+     * Remove cambiosTiposContratosContratoRel
      *
-     * @return integer
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCambioTipoContrato $cambiosTiposContratosContratoRel
      */
-    public function getCodigoSalarioTipoFk()
+    public function removeCambiosTiposContratosContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCambioTipoContrato $cambiosTiposContratosContratoRel)
     {
-        return $this->codigoSalarioTipoFk;
+        $this->cambiosTiposContratosContratoRel->removeElement($cambiosTiposContratosContratoRel);
     }
 
     /**
-     * Set salarioTipoRel
+     * Get cambiosTiposContratosContratoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSalarioTipo $salarioTipoRel
-     *
-     * @return RhuContrato
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setSalarioTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuSalarioTipo $salarioTipoRel = null)
+    public function getCambiosTiposContratosContratoRel()
     {
-        $this->salarioTipoRel = $salarioTipoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get salarioTipoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSalarioTipo
-     */
-    public function getSalarioTipoRel()
-    {
-        return $this->salarioTipoRel;
+        return $this->cambiosTiposContratosContratoRel;
     }
 }

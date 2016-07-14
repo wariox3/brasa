@@ -58,6 +58,11 @@ class RhuContratoType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuSsoSubtipoCotizante',
                 'property' => 'nombre',
             ))
+            ->add('salarioTipoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuSalarioTipo',
+                'property' => 'nombre',
+                'required' => true
+            ))                
             ->add('entidadSaludRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadSalud',
                 'query_builder' => function (EntityRepository $er)  {

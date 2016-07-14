@@ -90,6 +90,12 @@
                 </div>
             </div>
             <div class="form-group form-group-sm">
+                <label for="form_salarioTipoRel" class="col-sm-3 control-label">Tipo salario:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.salarioTipoRel, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>    
+            <div class="form-group form-group-sm">
                 <label for="form_ibpAdicional" class="col-sm-3 control-label">Ibp adicional:</label>
                 <div class="col-sm-9">
                         {{ form_widget(form.ibpAdicional, { 'attr': {'class': 'form-control'} }) }}

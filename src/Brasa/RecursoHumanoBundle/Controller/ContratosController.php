@@ -440,6 +440,54 @@ class ContratosController extends Controller
         ));
     }
     
+    public function cambioContratoAction($codigoContrato) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
+        $arCambioTipoContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuCambioTipoContrato();
+        $formContrato = $this->createFormBuilder()
+            ->setAction($this->generateUrl('brs_rhu_contratos_cambiotipocontrato', array('codigoContrato' => $codigoContrato)))
+            //->add('fechaTerminacion', 'date', array('label'  => 'Terminacion', 'data' => new \DateTime('now')))
+            ->add('contratoTipoNuevoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuContratoTipo',
+                'property' => 'nombre',
+                'required' => true        
+            ))
+            ->add('VrSalarioNuevo', 'number', array('data' =>$arContrato->getVrSalario() ,'required' => true))          
+            ->add('detalle', 'text', array('required' => true))          
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        $formContrato->handleRequest($request);
+           
+        if ($formContrato->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
+            $arCambioTipoContrato->setContratoRel($arContrato);
+            $arCambioTipoContrato->setEmpleadoRel($arContrato->getEmpleadoRel());
+            $arCambioTipoContrato->setContratoTipoAnteriorRel($arContrato->getContratoTipoRel());
+            $arCambioTipoContrato->setContratoTipoNuevoRel($formContrato->get('contratoTipoNuevoRel')->getData());
+            $arCambioTipoContrato->setFecha(new \DateTime('now'));
+            $arCambioTipoContrato->setVrSalarioAnterior($arContrato->getVrSalario());
+            $arCambioTipoContrato->setVrSalarioNuevo($formContrato->get('VrSalarioNuevo')->getData());
+            $arCambioTipoContrato->setDetalle($formContrato->get('detalle')->getData());
+            $arCambioTipoContrato->setCodigoUsuario($arUsuario->getUserName());
+            $arContrato->setContratoTipoRel($formContrato->get('contratoTipoNuevoRel')->getData());
+            $arContrato->setVrSalario($formContrato->get('VrSalarioNuevo')->getData());
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato->getCodigoEmpleadoFk());
+            $arEmpleado->setVrSalario($formContrato->get('VrSalarioNuevo')->getData());
+            $em->persist($arContrato);
+            $em->persist($arCambioTipoContrato);
+            $em->persist($arEmpleado);
+            $em->flush();
+            return $this->redirect($this->generateUrl('brs_rhu_base_contratos_lista'));
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:cambioTipoContrato.html.twig', array(
+            'arContrato' => $arContrato,
+            'formContrato' => $formContrato->createView()
+        ));
+    }
+    
     public function actualizarContratoTerminadoAction($codigoContrato) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -606,7 +654,7 @@ class ContratosController extends Controller
         }
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            //->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('fechaDesdeInicia', 'date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHastaInicia', 'date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('estadoActivo', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ACTIVOS', '0' => 'INACTIVOS')))
@@ -620,15 +668,15 @@ class ContratosController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
+        $arrControles = $request->request->All();
         if($controles['fechaDesdeInicia']) {
             $this->fechaDesdeInicia = $controles['fechaDesdeInicia'];
         }
         if($controles['fechaHastaInicia']) {
             $this->fechaHastaInicia = $controles['fechaHastaInicia'];
         }
-        //$session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
-
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        //$session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        $session->set('filtroIdentificacion', $arrControles['form_TxtIdentificacion']);
         $session->set('filtroContratoActivo', $form->get('estadoActivo')->getData());
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
     }
@@ -671,6 +719,7 @@ class ContratosController extends Controller
         $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'CODIGO EMPLEADO')
@@ -688,18 +737,24 @@ class ContratosController extends Controller
                     ->setCellValue('N1', 'DESDE')
                     ->setCellValue('O1', 'HASTA')
                     ->setCellValue('P1', 'SALARIO')
-                    ->setCellValue('Q1', 'CARGO')
-                    ->setCellValue('R1', 'CARGO DESCRIPCION')
-                    ->setCellValue('S1', 'CLA. RIESGO')
-                    ->setCellValue('T1', 'ULT. PAGO')
-                    ->setCellValue('U1', 'ULT. PAGO PRIMAS')
-                    ->setCellValue('V1', 'ULT. PAGO CESANTIAS')
-                    ->setCellValue('W1', 'ULT. PAGO VACACIONES');
+                    ->setCellValue('Q1', 'TIPO SALARIO')
+                    ->setCellValue('R1', 'CARGO')
+                    ->setCellValue('S1', 'CARGO DESCRIPCION')
+                    ->setCellValue('T1', 'CLA. RIESGO')
+                    ->setCellValue('U1', 'ULT. PAGO')
+                    ->setCellValue('V1', 'ULT. PAGO PRIMAS')
+                    ->setCellValue('W1', 'ULT. PAGO CESANTIAS')
+                    ->setCellValue('X1', 'ULT. PAGO VACACIONES');
         $i = 2;
         $query = $em->createQuery($session->get('dqlContratoLista'));
         //$arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContratos = $query->getResult();
         foreach ($arContratos as $arContrato) {
+            if ($arContrato->getCodigoSalarioTipoFk() == null){
+                $tipoSalario = "";
+            } else {
+                $tipoSalario = $arContrato->getSalarioTipoRel()->getNombre();
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arContrato->getCodigoContratoPk())
                     ->setCellValue('B' . $i, $arContrato->getCodigoEmpleadoFk())
@@ -717,13 +772,14 @@ class ContratosController extends Controller
                     ->setCellValue('N' . $i, $arContrato->getFechaDesde()->Format('Y-m-d'))
                     ->setCellValue('O' . $i, $arContrato->getFechaHasta()->Format('Y-m-d'))
                     ->setCellValue('P' . $i, $arContrato->getVrSalario())
-                    ->setCellValue('Q' . $i, $arContrato->getCargoRel()->getNombre())
-                    ->setCellValue('R' . $i, $arContrato->getCargoDescripcion())
-                    ->setCellValue('S' . $i, $arContrato->getClasificacionRiesgoRel()->getNombre())
-                    ->setCellValue('T' . $i, $arContrato->getFechaUltimoPago()->Format('Y-m-d'))
-                    ->setCellValue('U' . $i, $arContrato->getFechaUltimoPagoPrimas()->Format('Y-m-d'))
-                    ->setCellValue('V' . $i, $arContrato->getFechaUltimoPagoCesantias()->Format('Y-m-d'))
-                    ->setCellValue('W' . $i, $arContrato->getFechaUltimoPagoVacaciones()->Format('Y-m-d'));
+                    ->setCellValue('Q' . $i, $tipoSalario)
+                    ->setCellValue('R' . $i, $arContrato->getCargoRel()->getNombre())
+                    ->setCellValue('S' . $i, $arContrato->getCargoDescripcion())
+                    ->setCellValue('T' . $i, $arContrato->getClasificacionRiesgoRel()->getNombre())
+                    ->setCellValue('U' . $i, $arContrato->getFechaUltimoPago()->Format('Y-m-d'))
+                    ->setCellValue('V' . $i, $arContrato->getFechaUltimoPagoPrimas()->Format('Y-m-d'))
+                    ->setCellValue('W' . $i, $arContrato->getFechaUltimoPagoCesantias()->Format('Y-m-d'))
+                    ->setCellValue('X' . $i, $arContrato->getFechaUltimoPagoVacaciones()->Format('Y-m-d'));
             $i++;
         }
         $objPHPExcel->getActiveSheet()->setTitle('contratos');

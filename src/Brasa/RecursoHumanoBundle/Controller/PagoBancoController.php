@@ -517,8 +517,8 @@ class PagoBancoController extends Controller
         $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $strNombreArchivo = "pagoAvvillasInterno" . date('YmdHis') . ".txt";
-        $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
-        //$strArchivo = "c:/xampp/" . $strNombreArchivo;                                    
+        //$strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
+        $strArchivo = "c:/xampp/" . $strNombreArchivo;                                    
         ob_clean();
         $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
         $strValorTotal = 0;
@@ -558,7 +558,7 @@ class PagoBancoController extends Controller
             fputs($ar, "0000000000000000"); // numero factura duda
             fputs($ar, "0000000000000000"); // referencia 1
             fputs($ar, "0000000000000000"); // referencia 2
-            fputs($ar, $this->RellenarNr2($arPagoBancoDetalle->getNombreCorto(), " ", 30, "D")); // (30) Nombre del beneficiario
+            fputs($ar, $this->RellenarNr2(utf8_decode(substr($arPagoBancoDetalle->getNombreCorto(), 0, 30))," ", 30, "D")); // (30) Nombre del beneficiario
             fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getNumeroIdentificacion(), "0", 11)); // (30) Numero identificacion
             fputs($ar, "000000"); // numero de autorizacion
             fputs($ar, "00"); // codigo respuesta
@@ -583,13 +583,14 @@ class PagoBancoController extends Controller
     }
     
     private function generarArchivoAvvillasOtros ($arPagoBanco) {
+        ob_clean();
         $em = $this->getDoctrine()->getManager();
         //$arPagoBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco();
         $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $strNombreArchivo = "pagoAvvillasOtros" . date('YmdHis') . ".txt";
-        $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
-        //$strArchivo = "c:/xampp/" . $strNombreArchivo;   
+        //$strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
+        $strArchivo = "c:/xampp/" . $strNombreArchivo;   
         ob_clean();
         $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
         $strValorTotal = 0;
@@ -606,19 +607,17 @@ class PagoBancoController extends Controller
         $strFechaCreacion = $arPagoBanco->getFechaTrasmision()->format('Ymd');
         $strNitEmpresa = $this->RellenarNr(utf8_decode($arConfiguracionGeneral->getNitEmpresa()),"0",15);
         $tipoId = "03"; //duda
-        $strNombreEmpresa = $this->RellenarNr2($arConfiguracionGeneral->getNombreEmpresa(), " ", 16, "D");
+        $strNombreEmpresa = $this->RellenarNr2(utf8_decode(substr($arConfiguracionGeneral->getNombreEmpresa(), 0, 16)), " ", 16, "D");
         $codPlazaOrigen = "0002"; //duda
         $tipoRegistros = "PPD"; //duda
-        //$strSecuencia = $arPagoBanco->getSecuencia();
-        //$strSecuencia = $this->secuencia($strSecuencia);
-        //$strSecuencia = $this->RellenarNr($strSecuencia, "0", 6);
         $strSecuencia = "000000";
         $canal = "4"; //duda
         $strValorTotal = $this->RellenarNr($strValorTotal, "0", 18);
+        ob_clean();
         //Fin encabezado
-        //(1) Tipo de registro, (10) Nit empresa, (225PAGO NOMI) descripcion transacion, (yymmdd) fecha creacion, (yymmdd) fecha aplicacion, (6) Numero de registros, (17) sumatoria de creditos, (11) Cuenta cliente a debitar, (1) Tipo de cuenta a debitar         
         fputs($ar, $strTipoRegistro . $cuentaOrigen . $tipoCuentaOrigen . $codigoProducto . $strFechaCreacion . $strNitEmpresa . $tipoId . $strNombreEmpresa . $codPlazaOrigen . $tipoRegistros . $strSecuencia . $canal . "\n");
         //Inicio cuerpo
+        ob_clean();
         foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
             fputs($ar, "2"); //(1)Tipo registro            
             fputs($ar, "23"); // codigo transaccion DUDA
@@ -635,10 +634,12 @@ class PagoBancoController extends Controller
             fputs($ar, "1"); // valida identificacion
             fputs($ar, "\n");
         }
+        //Fin cuerpo 
+        //PIE DE PAGINA
         fputs($ar, "4" . $this->RellenarNr(count($arPagosBancoDetalle), "0", 8) . $strValorTotal . "\n");
         fclose($ar);
         $em->flush();
-        //Fin cuerpo                        
+                    
         header('Content-Description: File Transfer');
         header('Content-Type: text/csv; charset=ISO-8859-15');
         header('Content-Disposition: attachment; filename='.basename($strArchivo));
@@ -647,7 +648,9 @@ class PagoBancoController extends Controller
         header('Pragma: public');
         header('Content-Length: ' . filesize($strArchivo));
         readfile($strArchivo);
-        exit;         
+        exit;
+        
+        
     }
     
     //Rellenar numeros

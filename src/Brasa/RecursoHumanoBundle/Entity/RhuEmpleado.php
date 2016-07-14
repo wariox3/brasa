@@ -630,6 +630,11 @@ class RhuEmpleado
      */
     protected $capacitacionesDetallesEmpleadoRel;
    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuCambioTipoContrato", mappedBy="empleadoRel")
+     */
+    protected $cambiosTiposContratosEmpleadoRel;
+    
     
     
     
@@ -671,6 +676,7 @@ class RhuEmpleado
         $this->permisosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cartasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->capacitacionesDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cambiosTiposContratosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -3795,5 +3801,39 @@ class RhuEmpleado
     public function getCapacitacionesDetallesEmpleadoRel()
     {
         return $this->capacitacionesDetallesEmpleadoRel;
+    }
+
+    /**
+     * Add cambiosTiposContratosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCambioTipoContrato $cambiosTiposContratosEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addCambiosTiposContratosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCambioTipoContrato $cambiosTiposContratosEmpleadoRel)
+    {
+        $this->cambiosTiposContratosEmpleadoRel[] = $cambiosTiposContratosEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove cambiosTiposContratosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCambioTipoContrato $cambiosTiposContratosEmpleadoRel
+     */
+    public function removeCambiosTiposContratosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCambioTipoContrato $cambiosTiposContratosEmpleadoRel)
+    {
+        $this->cambiosTiposContratosEmpleadoRel->removeElement($cambiosTiposContratosEmpleadoRel);
+    }
+
+    /**
+     * Get cambiosTiposContratosEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCambiosTiposContratosEmpleadoRel()
+    {
+        return $this->cambiosTiposContratosEmpleadoRel;
     }
 }

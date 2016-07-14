@@ -526,6 +526,10 @@ brs_rhu_contratos_terminar:
     path:     /rhu/contratos/terminar/{codigoContrato}
     defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:terminar }
     
+brs_rhu_contratos_cambiotipocontrato:
+    path:     /rhu/contratos/cambiotipocontrato/{codigoContrato}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:cambioContrato }    
+    
 brs_rhu_contratos_ibp_adicional:
     path:     /rhu/contratos/ibp/adicional/{codigoContrato}
     defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:ibpAdicional }
