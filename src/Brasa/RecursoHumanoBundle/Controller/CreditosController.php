@@ -398,6 +398,7 @@ class CreditosController extends Controller
     }
 
     private function generarExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -411,71 +412,58 @@ class CreditosController extends Controller
                     ->setKeywords("office 2007 openxml php")
                     ->setCategory("Test result file");
                 $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
-                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);    
+                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true); 
+                for($col = 'A'; $col !== 'O'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
+                }     
+                for($col = 'G'; $col !== 'M'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+                }                
+                
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'CÓDIGO')
                             ->setCellValue('B1', 'TIPO CRÉDITO')
                             ->setCellValue('C1', 'FECHA')
                             ->setCellValue('D1', 'IDENTIFICACIÓN')
                             ->setCellValue('E1', 'EMPLEADO')
-                            ->setCellValue('F1', 'VALOR CRÉDITO')
-                            ->setCellValue('G1', 'VALOR CUOTA')
-                            ->setCellValue('H1', 'VALOR SEGURO')
-                            ->setCellValue('I1', 'CUOTAS')
-                            ->setCellValue('J1', 'CUOTA ACTUAL')
-                            ->setCellValue('K1', 'PAGADO')
-                            ->setCellValue('L1', 'APROBADO')
-                            ->setCellValue('M1', 'SUSPENDIDO');
+                            ->setCellValue('F1', 'CENTRO COSTO')                        
+                            ->setCellValue('G1', 'CRÉDITO')
+                            ->setCellValue('H1', 'CUOTA')
+                            ->setCellValue('I1', 'SEGURO')
+                            ->setCellValue('J1', 'SALDO')
+                            ->setCellValue('K1', 'CUOTAS')
+                            ->setCellValue('L1', 'CUOTA ACTUAL')
+                            ->setCellValue('M1', 'PAGADO')
+                            ->setCellValue('N1', 'APROBADO')
+                            ->setCellValue('O1', 'SUSPENDIDO');
 
                 $i = 2;
                 $query = $em->createQuery($this->strSqlLista);
                 $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
                 $arCreditos = $query->getResult();
 
-                foreach ($arCreditos as $arCredito) {
-                    if ($arCredito->getEstadoPagado() == 1)
-                    {
-                        $Estado = "SI";
-                    }
-                    else
-                    {
-                        $Estado = "NO";
-                    }
-                    if ($arCredito->getAprobado() == 1)
-                    {
-                        $Aprobado = "SI";
-                    }
-                    else
-                    {
-                        $Aprobado = "NO";
-                    }
-                    if ($arCredito->getEstadoSuspendido() == 1)
-                    {
-                        $Suspendido = "SI";
-                    }
-                    else
-                    {
-                        $Suspendido = "NO";
-                    }
-                    if ($arCredito->getCodigoCreditoTipoFk() == null){
-                        $strCreditoTipo = "";
-                    }else{
-                        $strCreditoTipo = $arCredito->getCreditoTipoRel()->getNombre();
-                    }
+                foreach ($arCreditos as $arCredito) {                    
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arCredito->getCodigoCreditoPk())
-                            ->setCellValue('B' . $i, $strCreditoTipo)
                             ->setCellValue('C' . $i, $arCredito->getFecha())
                             ->setCellValue('D' . $i, $arCredito->getEmpleadoRel()->getNumeroIdentificacion())
                             ->setCellValue('E' . $i, $arCredito->getEmpleadoRel()->getNombreCorto())
-                            ->setCellValue('F' . $i, $arCredito->getVrPagar())
-                            ->setCellValue('G' . $i, $arCredito->getVrCuota())
-                            ->setCellValue('H' . $i, $arCredito->getSeguro())
-                            ->setCellValue('I' . $i, $arCredito->getNumeroCuotas())
-                            ->setCellValue('J' . $i, $arCredito->getNumeroCuotaActual())
-                            ->setCellValue('K' . $i, $Estado)
-                            ->setCellValue('L' . $i, $Aprobado)
-                            ->setCellValue('M' . $i, $Suspendido);
+                            ->setCellValue('G' . $i, $arCredito->getVrPagar())
+                            ->setCellValue('H' . $i, $arCredito->getVrCuota())
+                            ->setCellValue('I' . $i, $arCredito->getSeguro())
+                            ->setCellValue('J' . $i, $arCredito->getSaldoTotal())
+                            ->setCellValue('K' . $i, $arCredito->getNumeroCuotas())
+                            ->setCellValue('L' . $i, $arCredito->getNumeroCuotaActual())
+                            ->setCellValue('M' . $i, $objFunciones->devuelveBoolean($arCredito->getEstadoPagado()))
+                            ->setCellValue('N' . $i, $objFunciones->devuelveBoolean($arCredito->getAprobado()))
+                            ->setCellValue('O' . $i, $objFunciones->devuelveBoolean($arCredito->getEstadoSuspendido()));
+                        if ($arCredito->getCodigoCreditoTipoFk()){
+                            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B' . $i, $arCredito->getCreditoTipoRel()->getNombre());
+                        }   
+                        if ($arCredito->getEmpleadoRel()->getCodigoCentroCostoFk()){
+                            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F' . $i, $arCredito->getEmpleadoRel()->getCentroCostoRel()->getNombre());
+                        }                         
                     $i++;
                 }
 

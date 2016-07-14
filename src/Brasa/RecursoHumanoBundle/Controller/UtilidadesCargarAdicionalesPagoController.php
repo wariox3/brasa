@@ -8,6 +8,7 @@ class UtilidadesCargarAdicionalesPagoController extends Controller
 {
     public function cargarAction($codigoProgramacionPago) {
         $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $request = $this->getRequest();
         $rutaTemporal = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $rutaTemporal = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
@@ -20,6 +21,8 @@ class UtilidadesCargarAdicionalesPagoController extends Controller
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);                                                                        
         if($form->isValid()) {
             if($form->get('BtnCargar')->isClicked()) {
+                set_time_limit(0);
+                ini_set("memory_limit", -1);
                 $form['attachment']->getData()->move($rutaTemporal->getRutaTemporal(), "archivo.xls");                
                 $ruta = $rutaTemporal->getRutaTemporal(). "archivo.xls";                
                 $arrCarga = array();
@@ -49,24 +52,43 @@ class UtilidadesCargarAdicionalesPagoController extends Controller
                             'detalle' => $detalle);
                     }
                 }
+                $error = "";
                 foreach ($arrCarga as $carga) {
-                    //$arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                    $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($carga['concepto']);
-                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $carga['identificacion']));
-                    if($arPagoConcepto && $arEmpleado) {
-                        $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                        $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
-                        $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
-                        $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                        $arPagoAdicional->setPermanente(0);
-                        $arPagoAdicional->setValor($carga['valor']);
-                        $arPagoAdicional->setTipoAdicional($carga['tipo']);
-                        $arPagoAdicional->setDetalle($carga['detalle']);
-                        $em->persist($arPagoAdicional);                        
+                    $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                    if($carga['concepto']) {
+                        $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($carga['concepto']);                        
+                    } 
+                    $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                    if($carga['identificacion']) {
+                        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $carga['identificacion']));    
+                    }                    
+                    if($arPagoConcepto) {
+                        if($arEmpleado) {
+                            $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+                            $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
+                            $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
+                            $arPagoAdicional->setEmpleadoRel($arEmpleado);
+                            $arPagoAdicional->setPermanente(0);
+                            $arPagoAdicional->setValor($carga['valor']);
+                            $arPagoAdicional->setTipoAdicional($carga['tipo']);
+                            $arPagoAdicional->setDetalle($carga['detalle']);
+                            $em->persist($arPagoAdicional);                             
+                        } else {
+                            $error .= "Empleado" . $carga['identificacion'] . " no existe ";
+                        }                       
+                    } else {
+                        $error .= "Concepto" . $carga['concepto'] . " no existe ";
                     }                    
                 }
-                $em->flush();
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+                if($error != "") {
+                    //echo "Error al cargar:" . $error;
+                    $objMensaje->Mensaje('error', "Error al cargar:" . $error, $this);
+                } else {
+                    $em->flush();
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+                }
+                
+                
             }                                   
         }         
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:cargarAdicionalesPago.html.twig', array(
