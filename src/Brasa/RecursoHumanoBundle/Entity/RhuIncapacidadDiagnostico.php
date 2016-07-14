@@ -18,7 +18,7 @@ class RhuIncapacidadDiagnostico
     private $codigoIncapacidadDiagnosticoPk;                        
     
     /**
-     * @ORM\Column(name="nombre", type="string", length=120, nullable=true)
+     * @ORM\Column(name="nombre", type="string", length=200, nullable=true)
      */    
     private $nombre;     
 
@@ -31,6 +31,14 @@ class RhuIncapacidadDiagnostico
      * @ORM\OneToMany(targetEntity="RhuIncapacidad", mappedBy="incapacidadDiagnosticoRel")
      */
     protected $incapacidadesIncapacidadDiagnosticoRel;      
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->incapacidadesIncapacidadDiagnosticoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoIncapacidadDiagnosticoPk
@@ -88,13 +96,6 @@ class RhuIncapacidadDiagnostico
     public function getCodigo()
     {
         return $this->codigo;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->incapacidadesIncapacidadDiagnosticoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
