@@ -43,19 +43,19 @@
                 </div>
             </div>
             <div class="form-group form-group-sm">
-                <label for="form_numeroCuotas" class="col-sm-3 control-label">Cuotas:</label>
+                <label for="form_vrCuota" class="col-sm-3 control-label">Valor cuota:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.vrCuota, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                
+            <div class="form-group form-group-sm">
+                <label for="form_numeroCuotas" class="col-sm-3 control-label">Numero cuotas:</label>
                 <div class="col-sm-9">
                             {{ form_widget(form.numeroCuotas, { 'attr': {'class': 'form-control'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">
-                <label for="form_vrCuota" class="col-sm-3 control-label">Valor cuota:</label>
-                <div class="col-sm-9">
-                            {{ form_widget(form.vrCuota, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_numeroCuotaActual" class="col-sm-3 control-label">Cuota actual:</label>
+                <label for="form_numeroCuotaActual" class="col-sm-3 control-label">Numero cuota actual:</label>
                 <div class="col-sm-9">
                             {{ form_widget(form.numeroCuotaActual, { 'attr': {'class': 'form-control'} }) }}
                 </div>
@@ -71,7 +71,13 @@
                 <div class="col-sm-9">
                     {{ form_widget(form.creditoTipoPagoRel, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>    
+            </div>  
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Fecha credito:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.fechaCredito, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                
             <div class="form-group form-group-sm">
                 <label for="form_fechaInicio" class="col-sm-3 control-label">Fecha inicio:</label>
                 <div class="col-sm-9">

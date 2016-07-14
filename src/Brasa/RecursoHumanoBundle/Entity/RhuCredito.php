@@ -48,6 +48,11 @@ class RhuCredito
     private $fechaInicio;
     
     /**
+     * @ORM\Column(name="fecha_credito", type="date", nullable=true)
+     */    
+    private $fechaCredito;    
+    
+    /**
      * @ORM\Column(name="vr_pagar", type="float")
      */
     private $vrPagar = 0;    
@@ -96,7 +101,7 @@ class RhuCredito
     /**
      * @ORM\Column(name="aprobado", type="integer")
      */
-    private $aprobado = 0;
+    private $aprobado = 1;
     
     /**
      * @ORM\Column(name="seguro", type="integer")
@@ -336,6 +341,30 @@ class RhuCredito
     public function getFechaInicio()
     {
         return $this->fechaInicio;
+    }
+
+    /**
+     * Set fechaCredito
+     *
+     * @param \DateTime $fechaCredito
+     *
+     * @return RhuCredito
+     */
+    public function setFechaCredito($fechaCredito)
+    {
+        $this->fechaCredito = $fechaCredito;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaCredito
+     *
+     * @return \DateTime
+     */
+    public function getFechaCredito()
+    {
+        return $this->fechaCredito;
     }
 
     /**

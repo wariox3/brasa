@@ -187,6 +187,7 @@ class CreditosController extends Controller
             $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
         } else {
             $arCredito->setFechaInicio(new \DateTime('now'));
+            $arCredito->setFechaCredito(new \DateTime('now'));
         }
         $form = $this->createForm(new RhuCreditoType, $arCredito);         
         $form->handleRequest($request);
