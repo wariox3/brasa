@@ -53,6 +53,11 @@ class RhuCredito
     private $fechaCredito;    
     
     /**
+     * @ORM\Column(name="vr_inicial", type="float")
+     */
+    private $vrInicial = 0;    
+    
+    /**
      * @ORM\Column(name="vr_pagar", type="float")
      */
     private $vrPagar = 0;    
@@ -981,5 +986,29 @@ class RhuCredito
     public function getVacacionesCreditosCreditoRel()
     {
         return $this->VacacionesCreditosCreditoRel;
+    }
+
+    /**
+     * Set vrInicial
+     *
+     * @param float $vrInicial
+     *
+     * @return RhuCredito
+     */
+    public function setVrInicial($vrInicial)
+    {
+        $this->vrInicial = $vrInicial;
+
+        return $this;
+    }
+
+    /**
+     * Get vrInicial
+     *
+     * @return float
+     */
+    public function getVrInicial()
+    {
+        return $this->vrInicial;
     }
 }

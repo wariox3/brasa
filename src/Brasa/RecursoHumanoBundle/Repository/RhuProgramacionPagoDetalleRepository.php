@@ -204,8 +204,10 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                 }
                 if($arPagoAdicional->getPagoConceptoRel()->getComponeValor() == 1) {
                     $douPagoDetalle = $arPagoAdicional->getValor();
-                    if($arPagoAdicional->getAplicaDiaLaborado() == 1) {
-                        $douPagoDetalle = $arPagoAdicional->getValor() * ($intHorasLaboradas / $intFactorDia);
+                    if($arPagoAdicional->getAplicaDiaLaborado() == 1) {                                                
+                        $diasPeriodo = $arCentroCosto->getPeriodoPagoRel()->getDias();
+                        $valorDia = $arPagoAdicional->getValor() / $diasPeriodo;
+                        $douPagoDetalle = $valorDia * ($intHorasLaboradas / $intFactorDia);
                     }
                     $arPagoDetalle->setVrDia($douVrDia);
                 }
@@ -281,15 +283,12 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                 $arCreditoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
                 $arCreditoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arCredito->getCodigoCreditoPk());
                 $douCuota = 0;
-                if ($arCreditoProcesar->getSaldoTotal() >= $arCreditoProcesar->getVrCuota()){
+                if($arCreditoProcesar->getSaldoTotal() >= $arCreditoProcesar->getVrCuota()){
                     $douCuota = $arCreditoProcesar->getVrCuota();
                 }
                 else {
                     $douCuota = $arCreditoProcesar->getSaldoTotal();
                 }
-                $arCreditoProcesar->setVrCuotaTemporal($arCreditoProcesar->getVrCuotaTemporal() + $douCuota);
-                $arCreditoProcesar->setSaldoTotal($arCreditoProcesar->getSaldo() - $arCreditoProcesar->getVrCuotaTemporal());
-                $em->persist($arCreditoProcesar);
 
                 $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                 $arPagoDetalle->setPagoRel($arPago);

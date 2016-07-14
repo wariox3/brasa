@@ -150,11 +150,41 @@ class FormatoVacaciones extends \FPDF_FPDF {
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
         $this->Cell(65, 6, number_format($arVacaciones->getVrSalarioPromedio(), 0, '.', ','), 1, 0, 'R', 1);                
-        
+
         //FILA 7
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
         $this->SetXY(10, $intY + 36);        
+        $this->Cell(31, 6, "DIAS DISFRUTADOS", 1, 0, 'L', 1);
+        $this->SetFont('Arial', '', 8);
+        $this->SetFillColor(255, 255, 255);
+        $this->Cell(63, 6, $arVacaciones->getDiasDisfrutados(), 1, 0, 'L', 1);
+        $this->SetFont('Arial', 'B', 7);
+        $this->SetFillColor(217, 217, 217);
+        $this->Cell(26, 6, utf8_decode(""), 1, 0, 'L', 1);         
+        $this->SetFont('Arial', '', 8);
+        $this->SetFillColor(255, 255, 255);
+        $this->Cell(65, 6, "", 1, 0, 'R', 1);                
+
+        //FILA 8
+        $this->SetFont('Arial', 'B', 7);
+        $this->SetFillColor(217, 217, 217);
+        $this->SetXY(10, $intY + 42);        
+        $this->Cell(31, 6, "DIAS PAGADOS:", 1, 0, 'L', 1);
+        $this->SetFont('Arial', '', 8);
+        $this->SetFillColor(255, 255, 255);
+        $this->Cell(63, 6, $arVacaciones->getDiasPagados(), 1, 0, 'L', 1);
+        $this->SetFont('Arial', 'B', 7);
+        $this->SetFillColor(217, 217, 217);
+        $this->Cell(26, 6, utf8_decode(""), 1, 0, 'L', 1);         
+        $this->SetFont('Arial', '', 8);
+        $this->SetFillColor(255, 255, 255);
+        $this->Cell(65, 6, "", 1, 0, 'R', 1);                
+        
+        //FILA 9
+        $this->SetFont('Arial', 'B', 7);
+        $this->SetFillColor(217, 217, 217);
+        $this->SetXY(10, $intY + 48);        
         $this->Cell(31, 6, utf8_decode("COMENTARIOS:"), 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
@@ -162,7 +192,7 @@ class FormatoVacaciones extends \FPDF_FPDF {
         
         //BLOQUE VACACIONES
         $intX = 120;
-        $intY = 90;
+        $intY = 102;
         $this->SetFont('Arial', 'B', 8);
         $this->SetFillColor(217, 217, 217);                
         $this->SetXY($intX, $intY);
@@ -178,7 +208,7 @@ class FormatoVacaciones extends \FPDF_FPDF {
         $this->SetXY($intX, $intY + 30);
         $this->Cell(43, 5, "TOTAL A PAGAR:", 1, 0, 'L', 1);
         $intX = 163;
-        $intY = 90;
+        $intY = 102;
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(272, 272, 272);        
         $this->SetXY($intX, $intY);

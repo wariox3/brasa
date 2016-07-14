@@ -11,6 +11,20 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuPagoDetalleRepository extends EntityRepository {
     
+    public function listaDql($codigoPago = "", $codigoProgramacionPagoDetalle = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT pd FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd WHERE pd.codigoPagoDetallePk <> 0";
+
+        if($codigoPago != "") {
+            $dql .= " AND pd.codigoPagoFk = " . $codigoPago;
+        } 
+        if($codigoProgramacionPagoDetalle != "") {
+            $dql .= " AND pd.codigoProgramacionPagoDetalleFk = " . $codigoProgramacionPagoDetalle;
+        }        
+        $dql .= " ORDER BY pd.codigoPagoConceptoFk";
+        return $dql;
+    }                            
+    
     public function pagosDetallesProgramacionPago($codigoProgramacionPago) {
         $em = $this->getEntityManager();
         $dql   = "SELECT pd FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "

@@ -61,6 +61,11 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 //Nomina
                 if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 1) { 
                     ini_set("memory_limit", -1);
+                    $strSql = "DELETE rhu_pago_detalle, rhu_pago FROM rhu_pago_detalle LEFT JOIN rhu_pago on rhu_pago_detalle.codigo_pago_fk = rhu_pago.codigo_pago_pk WHERE rhu_pago.codigo_programacion_pago_fk = " . $codigoProgramacionPago;                           
+                    $em->getConnection()->executeQuery($strSql); 
+                    //$strSql = "DELETE FROM rhu_pago WHERE rhu_pago.codigo_programacion_pago_fk = " . $codigoProgramacionPago;                           
+                    //$em->getConnection()->executeQuery($strSql);
+                    
                     $arProgramacionPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $arProgramacionPagoProcesar->getCodigoProgramacionPagoPk()));
                     foreach ($arProgramacionPagoDetalles as $arProgramacionPagoDetalle) {                        
                         $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->generarPago($arProgramacionPagoDetalle, $arProgramacionPagoProcesar, $arCentroCosto, $arConfiguracion);   
@@ -251,15 +256,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         foreach ($arPagos as $arPago) {
             $arPagosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
             $arPagosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $arPago->getCodigoPagoPk()));
-            foreach ($arPagosDetalles as $arPagoDetalle) {
-                //Desahacer creditos
-                if($arPagoDetalle->getCodigoCreditoFk() != "" && $arPagoDetalle->getCodigoPagoConceptoFk() == 14) {
-                    $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                    $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arPagoDetalle->getCodigoCreditoFk());
-                    $arCredito->setVrCuotaTemporal($arCredito->getVrCuotaTemporal() - $arPagoDetalle->getVrPago());
-                    $arCredito->setSaldoTotal($arCredito->getSaldo() - $arCredito->getVrCuotaTemporal());
-                    $em->persist($arCredito);
-                }                 
+            foreach ($arPagosDetalles as $arPagoDetalle) {                
                 $em->remove($arPagoDetalle);
             }
             $em->remove($arPago);
@@ -319,22 +316,6 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             foreach ($arPagos as $arPago) {
                 $arPagoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
                 $arPagoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($arPago->getCodigoPagoPk());                        
-                /*$douSalario = 0;
-                $douAuxilioTransporte = 0;
-                $douAdicionTiempo = 0;
-                $douAdicionValor = 0;
-                $douPension = 0;
-                $douCaja = 0;
-                $douCesantias = 0;
-                $douVacaciones = 0;
-                $douAdministracion = 0;
-                $douDeducciones = 0;
-                $douDevengado = 0;        
-                $douNeto = 0;
-                $douIngresoBaseCotizacion = 0;
-                $douIngresoBasePrestacion = 0;
-                 * 
-                 */
                 $arPagosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                 $arPagosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $arPago->getCodigoPagoPk()));
                 foreach ($arPagosDetalles AS $arPagoDetalle) {
@@ -351,9 +332,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $arPagoCredito->setVrCuota($arPagoDetalle->getVrPago());
                         //Actualizar el saldo del credito
                         $arCredito->setNumeroCuotaActual($arCredito->getNumeroCuotaActual() + 1);
-                        $arCredito->setSaldo($arCredito->getSaldo() - $arPagoDetalle->getVrPago());
-                        $arCredito->setVrCuotaTemporal($arCredito->getVrCuotaTemporal() - $arPagoDetalle->getVrPago());
-                        $arCredito->setSaldoTotal($arCredito->getSaldo() - $arCredito->getVrCuotaTemporal());
+                        $arCredito->setSaldo($arCredito->getSaldo() - $arPagoDetalle->getVrPago());                        
+                        $arCredito->setSaldoTotal($arCredito->getSaldo() - $arPagoDetalle->getVrPago());
                         if($arCredito->getSaldo() <= 0) {
                            $arCredito->setEstadoPagado(1);
                         }
@@ -361,90 +341,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $arPagoCredito->setNumeroCuotaActual($arCredito->getNumeroCuotaActual());
                         $em->persist($arPagoCredito);
                         $em->persist($arCredito);
-                    }
-                    //Liquidacion
-                    /*if($arPagoDetalle->getOperacion() == 1) {
-                        $douDevengado = $douDevengado + $arPagoDetalle->getVrPago();
-                    }
-                    if($arPagoDetalle->getOperacion() == -1) {
-                        $douDeducciones = $douDeducciones + $arPagoDetalle->getVrPago();
-                    }
-                    if($arPagoDetalle->getPagoConceptoRel()->getComponeSalario() == 1) {
-                        $douSalario = $douSalario + $arPagoDetalle->getVrPago();
-                    }            
-                    if($arPagoDetalle->getPagoConceptoRel()->getConceptoAuxilioTransporte() == 1) {
-                        $douAuxilioTransporte = $douAuxilioTransporte + $arPagoDetalle->getVrPago();
-                    }            
-                    if($arPagoDetalle->getPagoConceptoRel()->getConceptoAdicion() == 1) {
-                        if($arPagoDetalle->getPagoConceptoRel()->getComponeValor() == 1) {
-                            $douAdicionValor = $douAdicionValor + $arPagoDetalle->getVrPago();    
-                        } else {
-                            $douAdicionTiempo = $douAdicionTiempo + $arPagoDetalle->getVrPago();    
-                        }                
-                    }
-                    $douIngresoBaseCotizacion = $douIngresoBaseCotizacion + $arPagoDetalle->getVrIngresoBaseCotizacion();                            
-                    $douIngresoBasePrestacion = $douIngresoBasePrestacion + $arPagoDetalle->getVrIngresoBasePrestacion();                                                
-                    
-                     * 
-                     */
-                }
-                /*if($arPagoProcesar->getCodigoEmpleadoFk() == 855) {
-                    echo "hola";
-                }*/
-                /*$douSalarioPeriodo = $arPagoProcesar->getVrSalarioPeriodo();                
-                $douIBS = $douSalarioPeriodo + $douAdicionTiempo + $douAdicionValor;
-                $douDiaAuxilioTransporte = 74000 / 30;
-                $douAuxilioTransporteCotizacion = $arPagoProcesar->getDiasPeriodo() * $douDiaAuxilioTransporte;
-                $douArp = ($douIBS * $arPagoProcesar->getContratoRel()->getClasificacionRiesgoRel()->getPorcentaje())/100;        
-                $douPension = ($douIBS * $arPagoProcesar->getContratoRel()->getTipoPensionRel()->getPorcentajeEmpleador()) / 100; 
-                $douSalud = 0;
-                $douCaja = ($douIBS * 4) / 100; // este porcentaje debe parametrizarse en configuracion                
-                $douCesantias = (($douIBS + $douAuxilioTransporteCotizacion) * 17.66) / 100; // este porcentaje debe parametrizarse en configuracion                
-                $douVacaciones = ($douSalarioPeriodo * 4.5) / 100; // este porcentaje debe parametrizarse en configuracion                        
-                 * 
-                 */
-                /*$douTotalEjercicio = $douSalario+$douAdicionTiempo+$douAdicionValor+$douAuxilioTransporte+$douArp+$douPension+$douSalud+$douCaja+$douCesantias+$douVacaciones;
-                if($arPagoProcesar->getCentroCostoRel()->getPorcentajeAdministracion() != 0 ) {
-                    $douAdministracion = ($douTotalEjercicio * $arPagoProcesar->getCentroCostoRel()->getPorcentajeAdministracion()) / 100;            
-                } else {
-                    $douAdministracion = $arPagoProcesar->getCentroCostoRel()->getPorcentajeAdministracion();
-                }
-                if ($arCentroCosto->getGeneraServicioCobrar() == 1){
-                    $arServicioCobrar = new \Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar();                        
-                    $arServicioCobrar->setPagoRel($arPagoProcesar);
-                    $arServicioCobrar->setCentroCostoRel($arPagoProcesar->getCentroCostoRel());
-                    $arServicioCobrar->setEmpleadoRel($arPagoProcesar->getEmpleadoRel());
-                    $arServicioCobrar->setProgramacionPagoRel($arPagoProcesar->getProgramacionPagoRel());
-                    $arServicioCobrar->setFechaDesde($arPagoProcesar->getFechaDesde());
-                    $arServicioCobrar->setFechaHasta($arPagoProcesar->getFechaHasta());
-                    $arServicioCobrar->setVrDevengado($douDevengado);
-                    $arServicioCobrar->setVrDeducciones($douDeducciones);
-                    $douNeto = $douDevengado - $douDeducciones;
-                    $arServicioCobrar->setVrNeto($douNeto);
-                    $arServicioCobrar->setDiasPeriodo($arPagoProcesar->getDiasPeriodo());
-                    $arServicioCobrar->setVrSalario($arPagoProcesar->getVrSalarioEmpleado());
-                    $arServicioCobrar->setVrSalarioPeriodo($douSalarioPeriodo);                
-
-                    $arServicioCobrar->setVrAuxilioTransporte($douAuxilioTransporte);
-                    $arServicioCobrar->setVrAuxilioTransporteCotizacion($douAuxilioTransporteCotizacion);
-                    $arServicioCobrar->setVrAdicionalTiempo($douAdicionTiempo);
-                    $arServicioCobrar->setVrAdicionalValor($douAdicionValor);
-                    $arServicioCobrar->setVrArp($douArp);
-                    $arServicioCobrar->setVrPension($douPension);
-                    $arServicioCobrar->setVrEps($douSalud);
-                    $arServicioCobrar->setVrCaja($douCaja);
-                    $arServicioCobrar->setVrCesantias($douCesantias);
-                    $arServicioCobrar->setVrVacaciones($douVacaciones);
-                    $arServicioCobrar->setVrAdministracion($douAdministracion);
-                    //Tambien llamado total ejercicio
-                    $arServicioCobrar->setVrCosto($douTotalEjercicio);
-                    $arServicioCobrar->setVrTotalCobrar($douTotalEjercicio + $douAdministracion);        
-                    $arServicioCobrar->setVrIngresoBaseCotizacion($douIngresoBaseCotizacion);
-                    $em->persist($arServicioCobrar);
-                }
-                 * 
-                 */
-                                      
+                    }                    
+                }                                      
 
                 $arPagoProcesar->setNumero($em->getRepository('BrasaRecursoHumanoBundle:RhuConsecutivo')->consecutivo(1));
                 $arPagoProcesar->setEstadoPagado(1);

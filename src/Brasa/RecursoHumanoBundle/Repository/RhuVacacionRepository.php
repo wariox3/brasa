@@ -52,13 +52,13 @@ class RhuVacacionRepository extends EntityRepository {
             $floSalarioPromedio = $floSalario;
         }        
         $floTotalVacacionBruto = $floSalarioPromedio / 30 * $intDias;                        
-        $douSalud = ($floSalario * 2) / 100;
+        $douSalud = ($floTotalVacacionBruto * 4) / 100;
         $arVacacion->setVrSalud($douSalud);
         if ($floTotalVacacionBruto >= ($arConfiguracion->getVrSalario() * 4)){
             $douPorcentaje = $arConfiguracion->getPorcentajePensionExtra();
             $douPension = ($floSalario * $douPorcentaje) /100;
         } else {
-            $douPension = ($floSalario * 2) / 100;
+            $douPension = ($floTotalVacacionBruto * 4) / 100;
         }
         $arVacacion->setVrPension($douPension);                                   
         $floDeducciones = 0;
