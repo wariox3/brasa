@@ -262,7 +262,7 @@ class PagosAdicionalesAgregarController extends Controller
         $codigoCentroCosto = $arProgramacionPago->getCodigoCentroCostoFk();
         $intTipoAdicional = $tipo;
         $form = $this->createFormBuilder()
-            ->add('empleadoRel', 'entity', array(
+            /*->add('empleadoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEmpleado',
                 'query_builder' => function (EntityRepository $er) use($codigoCentroCosto) {
                     return $er->createQueryBuilder('e')
@@ -270,7 +270,7 @@ class PagosAdicionalesAgregarController extends Controller
                     ->setParameter('centroCosto', $codigoCentroCosto)
                     ->orderBy('e.nombreCorto', 'ASC');},
                 'property' => 'nombreCorto',
-                'required' => true))                            
+                'required' => true)) */                           
             ->add('pagoConceptoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
                 'query_builder' => function (EntityRepository $er) use($intTipoAdicional) {
@@ -288,12 +288,15 @@ class PagosAdicionalesAgregarController extends Controller
     
         if($form->isValid()) {
             $arUsuario = $this->get('security.context')->getToken()->getUser();
+            $arrControles = $request->request->All();
             if($form->get('BtnAgregar')->isClicked()) {                
                 if($form->get('TxtValor')->getData() != "" && $form->get('TxtValor')->getData() != 0) {                    
                     $boolError = FALSE;
                     $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
                     $arPagoConcepto = $form->get('pagoConceptoRel')->getData();
-                    $arEmpleado = $form->get('empleadoRel')->getData();
+                    $identificacion = $arrControles['form_TxtIdentificacion'];
+                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $identificacion));
+                    //$arEmpleado = $form->get('empleadoRel')->getData();
                     if($arPagoConcepto->getPrestacional() == 0 && $tipo == 1) {
                         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
                         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);        
@@ -333,6 +336,7 @@ class PagosAdicionalesAgregarController extends Controller
     
     //editar adicionales al pago desde la programacion de pago
     public function valorEditarAction($codigoProgramacionPago, $tipo, $codigoPagoAdicional) {
+        $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
@@ -344,8 +348,9 @@ class PagosAdicionalesAgregarController extends Controller
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);        
         $codigoCentroCosto = $arProgramacionPago->getCodigoCentroCostoFk();
         $intTipoAdicional = $tipo;
+        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arPagoAdicional->getCodigoEmpleadoFk());
         $form = $this->createFormBuilder()
-            ->add('empleadoRel', 'entity', array(
+            /*->add('empleadoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEmpleado',
                 'query_builder' => function (EntityRepository $er) use($codigoEmpleado) {
                     return $er->createQueryBuilder('e')
@@ -354,7 +359,7 @@ class PagosAdicionalesAgregarController extends Controller
                     ->orderBy('e.nombreCorto', 'ASC');},
                 'property' => 'nombreCorto',
                 'disabled' => 'disabled',            
-                'required' => true))                            
+                'required' => true))*/                            
             ->add('pagoConceptoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
                 'query_builder' => function (EntityRepository $er) use($intTipoAdicional,$codigoPagoConcepto,$pagoConcepto) {
@@ -373,6 +378,9 @@ class PagosAdicionalesAgregarController extends Controller
             ->add('BtnAgregar', 'submit', array('label'  => 'Agregar',))
             ->getForm();
         $form->handleRequest($request);
+        /*$arrControles = $request->request->All();
+        $identificacion = $arrControles['form_TxtIdentificacion'];
+        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $identificacion));*/
         if($form->isValid()) {            
             if($form->get('BtnAgregar')->isClicked()) {                
                 if($form->get('TxtValor')->getData() != "" && $form->get('TxtValor')->getData() != 0) {                    
@@ -380,7 +388,10 @@ class PagosAdicionalesAgregarController extends Controller
                     $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
                     $arPagoConcepto = $form->get('pagoConceptoRel')->getData();
                     //$arEmpleado = $form->get('empleadoRel')->getData();
-                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arPagoAdicional->getCodigoEmpleadoFk());                             
+                    //$arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arPagoAdicional->getCodigoEmpleadoFk());                             
+                    $arrControles = $request->request->All();
+                    $identificacion = $arrControles['form_TxtIdentificacion'];
+                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $identificacion));
                     if($arPagoConcepto->getPrestacional() == 0 && $tipo == 1) {
                         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
                         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);        
@@ -397,7 +408,7 @@ class PagosAdicionalesAgregarController extends Controller
                         }                                                                        
                     }
                     if($boolError == FALSE) {
-                        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arPagoAdicional->getCodigoEmpleadoFk());                             
+                        //$arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arPagoAdicional->getCodigoEmpleadoFk());                             
                         $arPagoAdicional->setEmpleadoRel($arEmpleado);
                         $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);                                   
                         $arPagoAdicional->setValor($form->get('TxtValor')->getData());                    
@@ -414,7 +425,8 @@ class PagosAdicionalesAgregarController extends Controller
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:agregarValor.html.twig', array(                        
             'form' => $form->createView(),
-            'tipo' => $intTipoAdicional));
+            'tipo' => $intTipoAdicional,
+            'arEmpleado' => $arEmpleado));
     }
     
     //agregar adicionales al pago desde movimientos y solo permanente
@@ -543,8 +555,14 @@ class PagosAdicionalesAgregarController extends Controller
         $codigoPagoConcepto = $arPagoAdicional->getCodigoPagoConceptoFk();
         $pagoConcepto = $arPagoAdicional->getPagoConceptoRel()->getNombre();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+        //$arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $intTipoAdicional = $tipo;
+        $aplicaDiaLaborado = $arPagoAdicional->getAplicaDiaLaborado();
+        if ($aplicaDiaLaborado == false ){
+            $aplicaDiaLaborado = 0;
+        } else {
+            $aplicaDiaLaborado = 1;
+        }
         $form = $this->createFormBuilder() 
             ->add('empleadoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEmpleado',
@@ -569,7 +587,7 @@ class PagosAdicionalesAgregarController extends Controller
                 ))
             ->add('TxtValor', 'number', array('required' => true, 'data' => $arPagoAdicional->getValor()))                             
             ->add('TxtDetalle', 'text', array('required' => false, 'data' => $arPagoAdicional->getDetalle()))
-            ->add('aplicarDiaLaborado', 'choice', array('choices' => array($arPagoAdicional->getAplicaDiaLaborado() => $intAplicaDiaLaborado, '0' => 'NO', '1' => 'SI')))                
+            ->add('aplicarDiaLaborado', 'choice', array('choices' => array($aplicaDiaLaborado => $intAplicaDiaLaborado, '0' => 'NO', '1' => 'SI')))                
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->add('BtnGuardaryNuevo', 'submit', array('label'  => 'Guardar y nuevo',))
             ->getForm();

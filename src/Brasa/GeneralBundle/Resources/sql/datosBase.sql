@@ -4218,6 +4218,9 @@ insert into `rhu_academia` (`codigo_academia_pk`, `codigo_ciudad_fk`, `nit`, `no
 insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('1','ADMINISTRATIVO');
 insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('2','OPERATIVO');
 
+INSERT INTO `rhu_salario_tipo` (`codigo_salario_tipo_pk`, `nombre`) VALUES ('1', 'FIJO');
+INSERT INTO `rhu_salario_tipo` (`codigo_salario_tipo_pk`, `nombre`) VALUES ('2', 'VARIABLE');
+
 insert into `rhu_horario` (`codigo_horario_pk`, `nombre`, `hora_entrada`, `hora_salida`, `genera_hora_extra`, `lunes`, `martes`, `miercoles`, `jueves`, `viernes`, `sabado`, `domingo`, `festivo`, `control_horario`) values('1','ADMINISTRATIVO','08:00:00','16:00:00','0','D','D','D','D','D','D','DS','DS','0');
 insert into `rhu_horario` (`codigo_horario_pk`, `nombre`, `hora_entrada`, `hora_salida`, `genera_hora_extra`, `lunes`, `martes`, `miercoles`, `jueves`, `viernes`, `sabado`, `domingo`, `festivo`, `control_horario`) values('2','OPERATIVO','08:00:00','17:00:00','1','D','D','D','D','D','D','DS','DS','0');
 insert into `rhu_horario` (`codigo_horario_pk`, `nombre`, `hora_entrada`, `hora_salida`, `genera_hora_extra`, `lunes`, `martes`, `miercoles`, `jueves`, `viernes`, `sabado`, `domingo`, `festivo`, `control_horario`) values('3','OPERATIVO NOCTURNO','20:00:00','04:00:00','0','N','N','N','N','N','N','DS','DS','0');

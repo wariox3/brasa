@@ -46,8 +46,8 @@
                 <tr>
                     <td class="titulo">FECHA INICIO:</td>
                     <td class="td-in-well">{{ arContrato.fechaDesde|date("Y/m/d") }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">TIPO SALARIO:</td>
+                    <td class="td-in-well">{{ arContrato.salarioTipoRel.nombre|default('') }}</td>
                     <td class="titulo">SALARIO:</td>
                     <td class="td-in-well-numerico" align="right">$ {{ arContrato.vrSalario | number_format(2, '.', ',') }}</td>                   
                 </tr>    

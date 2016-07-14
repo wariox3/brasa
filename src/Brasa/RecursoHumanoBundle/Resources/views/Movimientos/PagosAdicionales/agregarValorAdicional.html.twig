@@ -9,24 +9,24 @@
                 <div class="panel-body">
                     
                 <div class="form-group form-group-sm">
-                    <label for="form_txtNumeroIdentificacion" class="col-sm-3 control-label">Empleado:</label>
-                    <div class="col-sm-9">
-                        <div class="row">
-                          <div class="col-lg-2">
-                            <div class="input-group">
-                              <input id="form_txtNumeroIdentificacion"  name="form_txtNumeroIdentificacion"  type="text" class="form-control" value="{{ arEmpleado.numeroIdentificacion |default('') }}"/>
-                            </div>
-                          </div>
-                          <div class="col-lg-10">
-                            <div class="input-group">                                      
-                              <input id="form_txtNombreCorto"  name="form_txtNombreCorto"  type="text" class="form-control" value="{{ arEmpleado.nombreCorto |default('') }}" readOnly="ReadOnly" />
-                              <span class="input-group-btn">                                        
-                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_buscar_empleado') }}', 'buscarEmpleado', 600, 900)">Buscar</a>
-                              </span>
-                            </div>
-                          </div>
+                <label for="form_txtNumeroIdentificacion" class="col-sm-3 control-label">Empleado:</label>
+                <div class="col-sm-9">
+                    <div class="row">
+                      <div class="col-lg-2">
+                        <div class="input-group">
+                          <input id="form_txtNumeroIdentificacion"  name="form_txtNumeroIdentificacion"  type="text" class="form-control" value="{{ arCredito.empleadoRel.numeroIdentificacion |default('') }}"/>
                         </div>
+                      </div>
+                      <div class="col-lg-10">
+                        <div class="input-group">                                      
+                          <input id="form_txtNombreCorto"  name="form_txtNombreCorto"  type="text" class="form-control" value="{{ arCredito.empleadoRel.nombreCorto |default('') }}" readOnly="ReadOnly" />
+                          <span class="input-group-btn">                                        
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_buscar_empleado') }}', 'buscarEmpleado', 600, 900)">Buscar</a>
+                          </span>
+                        </div>
+                      </div>
                     </div>
+                </div>
                 </div>
                     
                     

@@ -101,9 +101,9 @@
                     <td style="text-align: right">{{ arPagosAdicionalesValor.valor | number_format(2, '.', ',') }}</td>
                     <td>{% if arPagosAdicionalesValor.aplicaDiaLaborado == 1 %} SI {% else %} NO {% endif %}</td>                    
                     {% if  arPagosAdicionalesValor.tipoAdicional != 4 %}
-                        <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_pagos_adicionales_agregar_valoreditar', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk, 'tipo': arPagosAdicionalesValor.tipoAdicional, 'codigoPagoAdicional': arPagosAdicionalesValor.codigoPagoAdicionalPk }) }}', 'EditarAdicionalPago', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                            
+                        <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_pagos_adicionales_agregar_valoreditar', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk, 'tipo': arPagosAdicionalesValor.tipoAdicional, 'codigoPagoAdicional': arPagosAdicionalesValor.codigoPagoAdicionalPk }) }}', 'EditarAdicionalPago', 600, 1200)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                            
                     {% else %}    
-                        <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_pagos_adicionales_agregar_tiempoeditar', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk, 'tipo': arPagosAdicionalesValor.tipoAdicional, 'codigoPagoAdicional': arPagosAdicionalesValor.codigoPagoAdicionalPk }) }}', 'EditarAdicionalPago', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                            
+                        <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_pagos_adicionales_agregar_tiempoeditar', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk, 'tipo': arPagosAdicionalesValor.tipoAdicional, 'codigoPagoAdicional': arPagosAdicionalesValor.codigoPagoAdicionalPk }) }}', 'EditarAdicionalPago', 600, 1200)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                            
                     {% endif %}
                     <td style="text-align: center"><input type="checkbox" name="ChkSeleccionarValor[]" value="{{ arPagosAdicionalesValor.codigoPagoAdicionalPk }}" /></td>
                 </tr>
@@ -120,9 +120,9 @@
                     <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_cargar_adicionales_pago', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar</a>
                 </div>    
                 <div class="btn-group">
-                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_pagos_adicionales_agregar_valor', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk, 'tipo': 1 }) }}', 'AgregarValor', 600, 900)" >Bonificacion</a>                        
-                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_pagos_adicionales_agregar_valor', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk, 'tipo': 3 }) }}', 'AgregarValor', 600, 900)" >Comision</a>                                                
-                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_pagos_adicionales_agregar_valor', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk, 'tipo': 2 }) }}', 'AgregarValor', 600, 900)" >Descuento</a>
+                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_pagos_adicionales_agregar_valor', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk, 'tipo': 1 }) }}', 'AgregarValor', 600, 1200)" >Bonificacion</a>                        
+                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_pagos_adicionales_agregar_valor', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk, 'tipo': 3 }) }}', 'AgregarValor', 600, 1200)" >Comision</a>                                                
+                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_pagos_adicionales_agregar_valor', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk, 'tipo': 2 }) }}', 'AgregarValor', 600, 1200)" >Descuento</a>
                 </div>
             {% endif %}
                 <div class="btn-group">

@@ -111,7 +111,23 @@
                         <td class="td-in-well">{% if arEmpleado.tipocuenta == "S" %}AHORRO{% else %}{% if arEmpleado.tipoCuenta == "D" %}CORRIENTE{% else %}SIN TIPO CUENTA{% endif%}{% endif %}</td>
                         <td class="titulo">AUXILIO TRANSPORTE:</td>
                         <td class="td-in-well">{% if arEmpleado.auxilioTransporte == 1 %} SI {% else %} NO{% endif %}</td>
-                    </tr>                    
+                    </tr>
+                    <tr>
+                        <td class="titulo">TIPO SALARIO:</td>
+                        <td>{{ arEmpleado.salarioTipoRel.nombre|default('') }}</td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">TIPO EMPLEADO:</td>
+                        <td>{{ arEmpleado.empleadoTipoRel.nombre|default('') }}</td>
+                        <td class="titulo">ZONA:</td>
+                        <td class="td-in-well">{{ arEmpleado.zonaRel.nombre|default('') }}</td>
+                        <td class="titulo">SUB ZONA:</td>
+                        <td class="td-in-well">{{ arEmpleado.subZonaRel.nombre|default('') }}</td>
+                    </tr>
                     <tr>
                         <td class="titulo" >COMENTARIOS: </td>
                         <td class="td-in-well" colspan="7">{{ arEmpleado.comentarios }}</td>
