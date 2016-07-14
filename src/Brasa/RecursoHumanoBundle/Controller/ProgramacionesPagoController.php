@@ -371,7 +371,10 @@ class ProgramacionesPagoController extends Controller
                     $em->getConnection()->executeQuery($strSql);                    
                     $em->remove($arPago);
                 }                                
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->generarPago($arProgramacionPagoDetalle, $arProgramacionPagoDetalle->getProgramacionPagoRel(), $arProgramacionPagoDetalle->getProgramacionPagoRel()->getCentroCostoRel(), $arConfiguracion);                   
+                $codigoPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->generarPago($arProgramacionPagoDetalle, $arProgramacionPagoDetalle->getProgramacionPagoRel(), $arProgramacionPagoDetalle->getProgramacionPagoRel()->getCentroCostoRel(), $arConfiguracion, 1);                   
+                if($codigoPago > 0) {
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->liquidar($codigoPago, $arConfiguracion);
+                }                
                 $em->flush();                
                 return $this->redirect($this->generateUrl('brs_rhu_programacion_pago_resumen_turno_ver', array('codigoProgramacionPagoDetalle' => $codigoProgramacionPagoDetalle)));
             }            

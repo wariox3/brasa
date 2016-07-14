@@ -29,6 +29,8 @@ class RhuVacacionRepository extends EntityRepository {
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);
         $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
         $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);                 
+        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $arContrato = $arVacacion->getContratoRel();
         $intDias = $arVacacion->getDiasVacaciones();
         $floSalario = $arVacacion->getEmpleadoRel()->getVrSalario();        
         //Analizar cambios de salario
@@ -37,7 +39,7 @@ class RhuVacacionRepository extends EntityRepository {
         $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
         $fechaDesdeCambioSalario = date_create_from_format('Y-m-d H:i', $nuevafecha . " 00:00");        
         $floSalarioPromedio = 0;        
-        $arCambiosSalario = new \Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario();
+        /*$arCambiosSalario = new \Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario();
         $arCambiosSalario = $em->getRepository('BrasaRecursoHumanoBundle:RhuCambioSalario')->cambiosSalario($arVacacion->getContratoRel()->getCodigoContratoPk(), $fechaDesdeCambioSalario->format('Y-m-d'), $arVacacion->getFecha()->format('Y-m-d'));                 
         if(count($arCambiosSalario) > 0) {
             $floPrimerSalario = $arCambiosSalario[0]->getVrSalarioAnterior();
@@ -50,7 +52,15 @@ class RhuVacacionRepository extends EntityRepository {
             
         } else {
             $floSalarioPromedio = $floSalario;
-        }        
+        }         
+         * 
+         */
+        $promedioRecargosNocturnos = $arVacacion->getVrPromedioRecargoNocturno();
+        if($arContrato->getCodigoSalarioTipoFk() == 1) {
+            $floSalarioPromedio = $arContrato->getVrSalario();
+        } else {
+            $floSalarioPromedio = $arContrato->getVrSalario() + $promedioRecargosNocturnos;
+        }
         $floTotalVacacionBruto = $floSalarioPromedio / 30 * $intDias;                        
         $douSalud = ($floTotalVacacionBruto * 4) / 100;
         $arVacacion->setVrSalud($douSalud);

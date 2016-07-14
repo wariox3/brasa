@@ -21,7 +21,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         return $dql;
     }      
     
-    public function generarPago($arProgramacionPagoDetalle, $arProgramacionPagoProcesar, $arCentroCosto, $arConfiguracion) {                
+    public function generarPago($arProgramacionPagoDetalle, $arProgramacionPagoProcesar, $arCentroCosto, $arConfiguracion, $guardar = 0) {                
         $em = $this->getEntityManager();
         $arContrato = $arProgramacionPagoDetalle->getContratoRel();
         $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
@@ -461,9 +461,13 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         $douAuxilioTransporteCotizacion = $arProgramacionPagoDetalle->getDiasReales() * ($arConfiguracion->getVrAuxilioTransporte() / 30);
         $arPago->setVrAuxilioTransporteCotizacion($douAuxilioTransporteCotizacion);
         $arPago->setDiasLaborados($intDiasLaborados);
-        $em->persist($arPago);                                                             
-        
-        return true;
+        $em->persist($arPago);
+        $codigoPago = 0;
+        if($guardar == 1) {
+            $em->flush();
+            $codigoPago = $arPago->getCodigoPagoPk();
+        }
+        return $codigoPago;
     }
     
     public function generarProgramacionPagoDetallePorSede($codigoProgramacionPago) {
