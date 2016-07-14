@@ -10,7 +10,6 @@ class RhuEmpleadoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-
             ->add('tipoIdentificacionRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenTipoIdentificacion',
                 'query_builder' => function (EntityRepository $er) {
@@ -52,6 +51,27 @@ class RhuEmpleadoType extends AbstractType
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))
+            ->add('zonaRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuZona',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('z')
+                    ->orderBy('z.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                            
+            ->add('subzonaRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuSubzona',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('sz')
+                    ->orderBy('sz.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))
+            ->add('empleadoTipoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEmpleadoTipo',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('et')
+                    ->orderBy('et.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                            
             ->add('codigoSexoFk', 'choice', array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO')))
             ->add('fechaNacimiento','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaExpedicionIdentificacion','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))

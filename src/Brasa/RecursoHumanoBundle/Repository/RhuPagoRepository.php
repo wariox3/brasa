@@ -488,6 +488,9 @@ class RhuPagoRepository extends EntityRepository {
         $query = $em->createQuery($dql);
         $arrayResultado = $query->getResult();
         $intDiasAusentismo = $arrayResultado[0]['diasAusentismo'];
+        if($intDiasAusentismo == null) {
+            $intDiasAusentismo = 0;
+        }
         return $intDiasAusentismo;
     }  
     

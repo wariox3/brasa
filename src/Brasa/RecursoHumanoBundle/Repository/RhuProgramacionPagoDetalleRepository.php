@@ -193,6 +193,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                 $arPagoDetalle->setPagoRel($arPago);
                 $arPagoDetalle->setPagoConceptoRel($arPagoAdicional->getPagoConceptoRel());
                 $arPagoDetalle->setAdicional(1);
+                $douPagoDetalle = 0;
                 if($arPagoAdicional->getPagoConceptoRel()->getComponePorcentaje() == 1) {
                     $douVrHoraAdicional = ($douVrHora * $arPagoAdicional->getPagoConceptoRel()->getPorPorcentaje())/100;
                     $douPagoDetalle = $douVrHoraAdicional * $arPagoAdicional->getCantidad();

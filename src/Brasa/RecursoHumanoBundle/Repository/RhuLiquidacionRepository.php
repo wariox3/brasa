@@ -34,7 +34,7 @@ class RhuLiquidacionRepository extends EntityRepository {
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);
         $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();        
         $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion); 
-        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();        
+        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();           
         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arLiquidacion->getCodigoContratoFk()); 
         $floIBPAdicionalContrato = $arContrato->getIbpAdicional();
         $boolPeriodoContinuo = $arLiquidacion->getContratoRel()->getCentroCostoRel()->getPeriodoPagoRel()->getContinuo();
@@ -82,13 +82,18 @@ class RhuLiquidacionRepository extends EntityRepository {
             if($douSalario <= $arConfiguracion->getVrSalario() * 2) {
                 $douAuxilioTransporte = $arConfiguracion->getVrAuxilioTransporte();
             }
+            if($arContrato->getCodigoSalarioTipoFk() == 2) {
+                $douBasePrestacionesTotal = $douBasePrestaciones + $douAuxilioTransporte;
+            } else {
+                $douBasePrestacionesTotal = $arContrato->getVrSalario() + $douAuxilioTransporte;
+            }
             
-            $douBasePrestacionesTotal = $douBasePrestaciones + $douAuxilioTransporte;
             $arLiquidacion->setVrBasePrestaciones($douBasePrestaciones);
             $arLiquidacion->setVrAuxilioTransporte($douAuxilioTransporte);
             $arLiquidacion->setVrBasePrestacionesTotal($douBasePrestacionesTotal);            
         }  
-
+        
+        //Liquidar cesantias
         if($arLiquidacion->getLiquidarCesantias() == 1) {            
             $dateFechaDesde = $arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias();            
             $dateFechaHasta = $arLiquidacion->getContratoRel()->getFechaHasta();
@@ -113,9 +118,6 @@ class RhuLiquidacionRepository extends EntityRepository {
             $dateFechaHasta = $arLiquidacion->getContratoRel()->getFechaHasta();
             $intDiasPrima = 0;
             $intDiasAusentismo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->diasAusentismo($dateFechaDesde->format('Y-m-d'), $dateFechaHasta->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());                                        
-            if($intDiasAusentismo == null) {
-                $intDiasAusentismo = 0;
-            }
             if($dateFechaDesde <= $dateFechaHasta) {
                 $intDiasPrima = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta);    
                 $intDiasPrimaLiquidar = $intDiasPrima - $intDiasAusentismo;

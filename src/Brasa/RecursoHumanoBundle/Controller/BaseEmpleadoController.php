@@ -429,6 +429,8 @@ class BaseEmpleadoController extends Controller
 
     private function generarExcel() {
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
@@ -441,7 +443,7 @@ class BaseEmpleadoController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'AR'; $col++) {
+        for($col = 'A'; $col !== 'AV'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
         }        
@@ -490,7 +492,10 @@ class BaseEmpleadoController extends Controller
                     ->setCellValue('AO1', 'TALLA CALZADO')
                     ->setCellValue('AP1', 'DEPARTAMENTO')
                     ->setCellValue('AQ1', 'HORARIO')
-                    ->setCellValue('AR1', 'DISCAPACIDAD');
+                    ->setCellValue('AR1', 'DISCAPACIDAD')
+                    ->setCellValue('AS1', 'ZONA')
+                    ->setCellValue('AT1', 'SUBZONA')
+                    ->setCellValue('AU1', 'TIPO');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
@@ -634,6 +639,15 @@ class BaseEmpleadoController extends Controller
                     ->setCellValue('AP' . $i, $departamentoEmpresa)
                     ->setCellValue('AQ' . $i, $horario)
                     ->setCellValue('AR' . $i, $discapacidad);
+            if($arEmpleado->getCodigoZonaFk()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AS' . $i, $arEmpleado->getZonaRel()->getNombre()); 
+            }
+            if($arEmpleado->getCodigoSubzonaFk()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AT' . $i, $arEmpleado->getSubzonaRel()->getNombre()); 
+            }
+            if($arEmpleado->getCodigoEmpleadoTipoFk()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AU' . $i, $arEmpleado->getEmpleadoTipoRel()->getNombre()); 
+            }            
             $i++;
         }
 
@@ -654,6 +668,8 @@ class BaseEmpleadoController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
+        ini_set('memory_limit', '512m');
+        set_time_limit(60);
     }
     
     private function generarExcelInterfaz() {
