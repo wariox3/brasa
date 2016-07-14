@@ -324,6 +324,7 @@ class NovedadController extends Controller
     }
 
     private function generarExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
@@ -345,19 +346,12 @@ class NovedadController extends Controller
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }        
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CÓDIGO')
-                    ->setCellValue('B1', 'NUMERO')
-                    ->setCellValue('C1', 'FECHA')
-                    ->setCellValue('D1', 'VENCE')                
-                    ->setCellValue('E1', 'CLIENTE')
-                    ->setCellValue('F1', 'PROSPECTO')
-                    ->setCellValue('G1', 'SECTOR')
-                    ->setCellValue('H1', 'HORAS')
-                    ->setCellValue('I1', 'H.DIURNAS')
-                    ->setCellValue('J1', 'H.NOCTURNAS')
-                    ->setCellValue('K1', 'P.MINIMO')
-                    ->setCellValue('L1', 'P.AJUSTADO')
-                    ->setCellValue('M1', 'TOTAL');
+                    ->setCellValue('A1', 'CODIGO')
+                    ->setCellValue('B1', 'TIPO')
+                    ->setCellValue('C1', 'DESDE')                
+                    ->setCellValue('D1', 'HASTA')
+                    ->setCellValue('E1', 'RECURSO')
+                    ->setCellValue('F1', 'APLICADA');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -367,24 +361,11 @@ class NovedadController extends Controller
         foreach ($arNovedades as $arNovedad) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arNovedad->getCodigoNovedadPk())
-                    ->setCellValue('B' . $i, $arNovedad->getNumero())
-                    ->setCellValue('C' . $i, $arNovedad->getFecha()->format('Y/m/d'))
-                    ->setCellValue('D' . $i, $arNovedad->getFechaVence()->format('Y/m/d'))
-                    ->setCellValue('G' . $i, $arNovedad->getSectorRel()->getNombre())
-                    ->setCellValue('H' . $i, $arNovedad->getHoras())
-                    ->setCellValue('I' . $i, $arNovedad->getHorasDiurnas())
-                    ->setCellValue('J' . $i, $arNovedad->getHorasNocturnas())
-                    ->setCellValue('K' . $i, $arNovedad->getVrTotalPrecioMinimo())
-                    ->setCellValue('L' . $i, $arNovedad->getVrTotalPrecioAjustado())
-                    ->setCellValue('M' . $i, $arNovedad->getVrTotal());
-            if($arNovedad->getClienteRel()) {
-                $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('E' . $i, $arNovedad->getClienteRel()->getNombreCorto());
-            }
-            if($arNovedad->getProspectoRel()) {
-                $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('F' . $i, $arNovedad->getProspectoRel()->getNombreCorto());
-            }            
+                    ->setCellValue('B' . $i, $arNovedad->getNovedadTipoRel()->getNombre())
+                    ->setCellValue('C' . $i, $arNovedad->getFechaDesde()->format('Y/m/d'))
+                    ->setCellValue('D' . $i, $arNovedad->getFechaHasta()->format('Y/m/d'))
+                    ->setCellValue('E' . $i, $arNovedad->getRecursoRel()->getNombreCorto())
+                    ->setCellValue('F' . $i, $objFunciones->devuelveBoolean($arNovedad->getEstadoAplicada()));          
             $i++;
         }
 
