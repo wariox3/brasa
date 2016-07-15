@@ -10,6 +10,8 @@
             
             <th>CÓDIGO</th>
             <th>NOMBRE</th>
+            <th>CUOTA</th>
+            <th>SALDO</th>
             <th>VALOR</th>
             <th></th>
         </tr>
@@ -18,7 +20,9 @@
                <tr>
                 <td>{{arCreditos.codigoCreditoPk}}</td>
                 <td>{{arCreditos.creditoTipoRel.nombre}}</td>
-                <td>{{arCreditos.saldoTotal | number_format(2, '.', ',') }}</td>            
+                <td>{{arCreditos.vrCuota | number_format(2, '.', ',') }}</td>
+                <td>{{arCreditos.saldoTotal | number_format(2, '.', ',') }}</td>   
+                <td style="text-align: right"><input class="input-grid" type="text" name="TxtValor{{ arCreditos.codigoCreditoPk }}" value="{{ arCreditos.vrCuota  }}" size="10" style="text-align: right; width:80px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCreditos.codigoCreditoPk }}" /></td>
             {%endfor%}
             </tr>            

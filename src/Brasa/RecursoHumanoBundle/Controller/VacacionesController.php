@@ -162,23 +162,22 @@ class VacacionesController extends Controller
                                         $arVacacion->setCodigoUsuario($arUsuario->getUserName());
                                     }
                                     $em->persist($arVacacion);
+                                    
                                     //Calcular deducciones credito
-                                    $floVrDeducciones = 0;
-                                    $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                                    $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arEmpleado->getCodigoEmpleadoPk());
-                                    foreach ($arCreditos as $arCredito) {
-                                        $arVacacionCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
-                                        $arVacacionCredito->setCreditoRel($arCredito);
-                                        $arVacacionCredito->setVacacionRel($arVacacion);
-                                        $arVacacionCredito->setVrDeduccion($arCredito->getSaldoTotal());
-                                        $em->persist($arVacacionCredito);            
-                                        $floVrDeducciones += $arCredito->getSaldoTotal();
+                                    if($codigoVacacion == 0) {
+                                        $floVrDeducciones = 0;
+                                        $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+                                        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arEmpleado->getCodigoEmpleadoPk());
+                                        foreach ($arCreditos as $arCredito) {
+                                            $arVacacionCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
+                                            $arVacacionCredito->setCreditoRel($arCredito);
+                                            $arVacacionCredito->setVacacionRel($arVacacion);
+                                            $arVacacionCredito->setVrDeduccion($arCredito->getVrCuota());
+                                            $em->persist($arVacacionCredito);            
+                                            $floVrDeducciones += $arCredito->getVrCuota();
+                                        }                                         
                                     }
-
-                                    //$arContratoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-                                    //$arContratoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arContrato->getCodigoContratoPk());                    
-                                    //$arContratoActualizar->setFechaUltimoPagoVacaciones($arVacacion->getFechaHastaPeriodo());                
-                                    //$em->persist($arContratoActualizar);                                     
+                                   
                                     $em->flush();
                                     $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->liquidar($arVacacion->getCodigoVacacionPk());
                                     return $this->redirect($this->generateUrl('brs_rhu_vacaciones_lista'));                                                                                               
@@ -288,22 +287,28 @@ class VacacionesController extends Controller
         $form->handleRequest($request); 
         if ($form->isValid()) { 
             if ($form->get('BtnGuardar')->isClicked()) {
+                $arrControles = $request->request->All();
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $floVrDeducciones = 0;
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoCredito) {                    
                         $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
                         $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
+                        $valor = 0;
+                        if($arrControles['TxtValor'.$codigoCredito] != '') {
+                            $valor = $arrControles['TxtValor'.$codigoCredito];                
+                        }
                         $arVacacionCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
                         $arVacacionCredito->setCreditoRel($arCreditos);
                         $arVacacionCredito->setVacacionRel($arVacacion);
-                        $arVacacionCredito->setVrDeduccion($arCreditos->getSaldoTotal());
+                        $arVacacionCredito->setVrDeduccion($valor);
                         $em->persist($arVacacionCredito);            
-                        $floVrDeducciones += $arCreditos->getSaldoTotal();
-            }                    
-            $em->flush();                        
-            $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->liquidar($arVacacion->getCodigoVacacionPk());                    
-                }                
+                        $floVrDeducciones += $valor;
+                    }                                                       
+                    $em->flush();                        
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->liquidar($arVacacion->getCodigoVacacionPk());                    
+                }
+                
             }            
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
         }
