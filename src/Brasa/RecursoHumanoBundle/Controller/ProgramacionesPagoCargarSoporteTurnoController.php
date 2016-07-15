@@ -91,7 +91,7 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                         $arrInconsistencias[] = array('inconsistencia' => "El empleado " . $arEmpleado->getNombreCorto() . " tiene vacaciones de " . $arSoportePago->getVacacion() . " dias en turnos y de " . $intDiasVacaciones . " en recurso humano");
                     }
                     
-                    if($intDiasLicencia != $arSoportePago->getLicencia()) {
+                    if($intDiasLicencia != ($arSoportePago->getLicencia()+$arSoportePago->getLicenciaNoRemunerada())) {
                         $arrInconsistencias[] = array('inconsistencia' => "El empleado " . $arEmpleado->getNombreCorto() . " tiene licencias de " . $arSoportePago->getLicencia() . " dias en turnos y de " . $intDiasLicencia . " en recurso humano");
                     }
                     
@@ -100,31 +100,7 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     }                    
                     $comentarios = "Diurnas[" . $arSoportePago->getHorasDiurnas() . "] Nocturnas[" . $arSoportePago->getHorasNocturnas() . "], Descanso[" . $arSoportePago->getHorasDescanso() . "]";
                     $arProgramacionPagoDetalle->setComentarios($comentarios);                    
-                    $em->persist($arProgramacionPagoDetalle);
-
-                    /*if($arSoportePago->getHorasNocturnas() > 0) {
-                        $this->insertarAdicionalPago($arProgramacionPago, 48, $arSoportePago->getHorasNocturnas(), $arEmpleado);
-                    }
-                    if($arSoportePago->getHorasFestivasDiurnas() > 0) {
-                        $this->insertarAdicionalPago($arProgramacionPago, 51, $arSoportePago->getHorasFestivasDiurnas(), $arEmpleado);
-                    }
-                    if($arSoportePago->getHorasFestivasNocturnas() > 0) {
-                        $this->insertarAdicionalPago($arProgramacionPago, 52, $arSoportePago->getHorasFestivasNocturnas(), $arEmpleado);
-                    }                    
-                    if($arSoportePago->getHorasExtrasOrdinariasDiurnas() > 0) {
-                        $this->insertarAdicionalPago($arProgramacionPago, 44, $arSoportePago->getHorasExtrasOrdinariasDiurnas(), $arEmpleado);
-                    }
-                    if($arSoportePago->getHorasExtrasOrdinariasNocturnas() > 0) {
-                        $this->insertarAdicionalPago($arProgramacionPago, 45, $arSoportePago->getHorasExtrasOrdinariasNocturnas(), $arEmpleado);
-                    }                    
-                    if($arSoportePago->getHorasExtrasFestivasDiurnas() > 0) {
-                        $this->insertarAdicionalPago($arProgramacionPago, 42, $arSoportePago->getHorasExtrasFestivasDiurnas(), $arEmpleado);
-                    }
-                    if($arSoportePago->getHorasExtrasFestivasNocturnas() > 0) {
-                        $this->insertarAdicionalPago($arProgramacionPago, 43, $arSoportePago->getHorasExtrasFestivasNocturnas(), $arEmpleado);
-                    }   
-                     * 
-                     */                 
+                    $em->persist($arProgramacionPagoDetalle);                
                 }                
                 $arProgramacionPago->setInconsistencias(0);
                 if(count($arrInconsistencias) > 0) {
@@ -151,20 +127,6 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
             'arSoportePagoPeriodos' => $arSoportePagoPeriodo,
             'form' => $form->createView()
             ));
-    }
-    
-    private function insertarAdicionalPago($arProgramacionPago, $codigoPagoConcepto, $cantidad, $arEmpleado) {
-        $em = $this->getDoctrine()->getManager();
-        $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-        $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($codigoPagoConcepto);                
-        $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-        $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
-        $arPagoAdicional->setCantidad($cantidad);
-        $arPagoAdicional->setEmpleadoRel($arEmpleado);
-        $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
-        $arPagoAdicional->setTipoAdicional($arPagoConcepto->getTipoAdicional());
-        $em->persist($arPagoAdicional);
-        return false;
-    }
+    }    
     
 }
