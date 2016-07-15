@@ -75,8 +75,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         //Procesar Incapacidades
         $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
         $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->periodo($arProgramacionPagoDetalle->getFechaDesdePago(), $arProgramacionPagoDetalle->getFechaHasta(), $arProgramacionPagoDetalle->getCodigoEmpleadoFk());                                                                        
-        foreach ($arIncapacidades as $arIncapacidad) {
-            if($intHorasLaboradas > 0) { 
+        foreach ($arIncapacidades as $arIncapacidad) {             
                 $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                 $arPagoDetalle->setPagoRel($arPago);
                 $arPagoDetalle->setPagoConceptoRel($arIncapacidad->getIncapacidadTipoRel()->getPagoConceptoRel());
@@ -130,8 +129,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                 $douIngresoBaseCotizacion  += $douPagoDetalle;                                                                        
                 $arPagoDetalle->setVrIngresoBasePrestacion($douIngresoBaseCotizacionIncapacidad);                                                                            
                 $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);                                                                                                            
-                $em->persist($arPagoDetalle);                                                                                                         
-            }                                                                                                 
+                $em->persist($arPagoDetalle);                                                                                                                                                                                                                      
         }
 
         //Procesar Licencias                                                
