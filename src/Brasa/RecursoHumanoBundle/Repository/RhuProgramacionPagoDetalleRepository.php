@@ -42,7 +42,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         $arPago->setComentarios($arProgramacionPagoDetalle->getComentarios());
 
         //Parametros generales
-        $intHorasLaboradas = $arProgramacionPagoDetalle->getHorasPeriodoReales();
+        $intHorasLaboradas = $arProgramacionPagoDetalle->getHorasPeriodoReales();      
         $horasDiurnas = $arProgramacionPagoDetalle->getHorasDiurnas();
         $intDiasTransporte = $arProgramacionPagoDetalle->getDiasReales(); 
         $intFactorDia = $arProgramacionPagoDetalle->getFactorDia();
@@ -207,7 +207,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                     if($arPagoAdicional->getAplicaDiaLaborado() == 1) {                                                
                         $diasPeriodo = $arCentroCosto->getPeriodoPagoRel()->getDias();
                         $valorDia = $arPagoAdicional->getValor() / $diasPeriodo;
-                        $douPagoDetalle = $valorDia * ($intHorasLaboradas / $intFactorDia);
+                        $douPagoDetalle = $valorDia * ($arProgramacionPagoDetalle->getHorasPeriodo() / $intFactorDia);
                     }
                     $arPagoDetalle->setVrDia($douVrDia);
                 }
