@@ -531,7 +531,8 @@ class PagoBancoController extends Controller
         //$strSecuencia = $arPagoBanco->getSecuencia();
         //$strSecuencia = $this->secuencia($strSecuencia);
         $strNumeroRegistros = $this->RellenarNr($arPagoBanco->getNumeroRegistros(), "0", 6);
-        $strValorTotal = $this->RellenarNr($strValorTotal, "0", 20);
+        $strValorTotal = ($this->RellenarNr($strValorTotal, "0", 18) . "00");
+        
         $strTipoRegistro = "01";
         $strFechaCreacion = $arPagoBanco->getFechaTrasmision()->format('Ymd');
         $strHoraCreacion = date('His');
@@ -592,6 +593,7 @@ class PagoBancoController extends Controller
         $strArchivo = "c:/xampp/" . $strNombreArchivo;   
         ob_clean();
         $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
+        ob_clean();
         $strValorTotal = 0;
         $arPagosBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
         $arPagosBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->findBy(array ('codigoPagoBancoFk' => $arPagoBanco->getCodigoPagoBancoPk()));                        
@@ -611,7 +613,8 @@ class PagoBancoController extends Controller
         $tipoRegistros = "PPD"; //duda
         $strSecuencia = "000000";
         $canal = "4"; //duda
-        $strValorTotal = $this->RellenarNr($strValorTotal, "0", 18);
+        //$strValorTotal = $this->RellenarNr($strValorTotal, "0", 18);
+        $strValorTotal = ($this->RellenarNr($strValorTotal, "0", 16) . "00");
         //Fin encabezado
         fputs($ar, $strTipoRegistro . $cuentaOrigen . $tipoCuentaOrigen . $codigoProducto . $strFechaCreacion . $strNitEmpresa . $tipoId . $strNombreEmpresa . $codPlazaOrigen . $tipoRegistros . $strSecuencia . $canal . "\n");
         //Inicio cuerpo

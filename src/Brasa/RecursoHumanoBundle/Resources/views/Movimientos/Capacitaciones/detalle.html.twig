@@ -93,9 +93,9 @@
                         {% endif %}
                     </div>
                     <div class="btn-group">
-                        {% if arCapacitacion.estadoAutorizado == 0 %}
+                        {#{% if arCapacitacion.estadoAutorizado == 0 %}
                             <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_capacitacion_detalle_nuevo', {'codigoCapacitacion': arCapacitacion.codigoCapacitacionPk }) }}', 'AgregarEmpleadoCapacitacion', 600, 900)" >Nuevo</a>
-                        {% endif %}    
+                        {% endif %}#}    
                     </div>
                     <div class="btn-group">
                         {{ form_widget(form.BtnActualizarDetalle, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}               

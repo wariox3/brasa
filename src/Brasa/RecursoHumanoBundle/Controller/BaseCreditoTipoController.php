@@ -48,6 +48,7 @@ class BaseCreditoTipoController extends Controller
                 $objFormatoTipoCredito->Generar($this);
         }    
         if($form->get('BtnExcel')->isClicked()) {
+            ob_clean();
                 $objPHPExcel = new \PHPExcel();
                 // Set document properties
                 $objPHPExcel->getProperties()->setCreator("EMPRESA")
@@ -62,16 +63,22 @@ class BaseCreditoTipoController extends Controller
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'CÓDIGO')
                             ->setCellValue('B1', 'NOMBRE')
-                            ->setCellValue('C1', 'CUPO MAXIMO');
+                            ->setCellValue('C1', 'CUPO MAXIMO')
+                            ->setCellValue('D1', 'PAGO CONCEPTO');
 
                 $i = 2;
                 $arCreditoTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoTipo')->findAll();
                 
                 foreach ($arCreditoTipos as $arCreditoTipo) {
+                    $pagoConcepto = "";
+                    if ($arCreditoTipo->getCodigoPagoConceptoFk() != null){
+                        $pagoConcepto = $arCreditoTipo->getPagoConceptoRel()->getNombre();
+                    }
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arCreditoTipo->getcodigoCreditoTipoPk())
                             ->setCellValue('B' . $i, $arCreditoTipo->getnombre())
-                            ->setCellValue('C' . $i, $arCreditoTipo->getCupoMaximo());
+                            ->setCellValue('C' . $i, $arCreditoTipo->getCupoMaximo())
+                            ->setCellValue('D' . $i, $pagoConcepto);
                     $i++;
                 }
 
@@ -109,6 +116,7 @@ class BaseCreditoTipoController extends Controller
     public function nuevoAction($codigoCreditoTipoPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arCreditoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipo();
         if ($codigoCreditoTipoPk != 0)
         {
@@ -119,10 +127,15 @@ class BaseCreditoTipoController extends Controller
         if ($formCreditoTipo->isValid())
         {
             // guardar la tarea en la base de datos
-            $em->persist($arCreditoTipo);
             $arCreditoTipo = $formCreditoTipo->getData();
-            $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_base_creditotipo_listar'));
+            if ($formCreditoTipo->get('pagoConceptoRel')->getData() == null){
+                $objMensaje->Mensaje("error", "Se debe asociar en pago concepto al tipo de credito", $this);
+            } else {
+                $em->persist($arCreditoTipo);
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_rhu_base_creditotipo_listar'));
+            }
+            
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/CreditoTipo:nuevo.html.twig', array(
             'formCreditoTipo' => $formCreditoTipo->createView(),

@@ -8,7 +8,12 @@ class RhuCreditoTipoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder                                                                                    
+        $builder
+            ->add('pagoConceptoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
+                'property' => 'nombre',
+                'required' => false
+            ))    
             ->add('nombre', 'text', array('required' => true))
             ->add('cupoMaximo', 'number', array('required' => false))
             ->add('guardar', 'submit');        
