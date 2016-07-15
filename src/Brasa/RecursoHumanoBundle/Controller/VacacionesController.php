@@ -249,7 +249,21 @@ class VacacionesController extends Controller
             if($form->get('BtnLiquidar')->isClicked()) {
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->liquidar($codigoVacacion);
                 return $this->redirect($this->generateUrl('brs_rhu_vacaciones_detalle', array('codigoVacacion' => $codigoVacacion)));                                                
-            }     
+            }
+
+            if($form->get('BtnGenerarPago')->isClicked()) {            
+                if($arVacacion->getEstadoAutorizado() == 1) {
+                    $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                    $arContrato =  $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arVacacion->getCodigoContratoFk());
+                    $arContrato->setFechaUltimoPagoVacaciones($arVacacion->getFechaHastaPeriodo());
+                    $arVacacion->setEstadoPagoGenerado(1);
+                    $em->persist($arContrato);
+                    $em->persist($arVacacion);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_vacaciones_detalle', array('codigoVacacion' => $codigoVacacion)));                                                
+                }
+            }            
+            
             if($form->get('BtnEliminarDeduccion')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
@@ -322,18 +336,24 @@ class VacacionesController extends Controller
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
+        $arrBotonGenerarPago = array('label' => 'Generar pago', 'disabled' => false);
         $arrBotonLiquidar = array('label' => 'Liquidar', 'disabled' => false);
         if($arVacacion->getEstadoAutorizado() == 1) {            
             $arrBotonLiquidar['disabled'] = true;
             $arrBotonAutorizar['disabled'] = true;            
         } else {
             $arrBotonDesAutorizar['disabled'] = true;
-            $arrBotonImprimir['disabled'] = true;
+            $arrBotonGenerarPago['disabled'] = true;
+        }
+        if($arVacacion->getEstadoPagoGenerado() == 1) {
+            $arrBotonDesAutorizar['disabled'] = true;
+            $arrBotonGenerarPago['disabled'] = true;
         }
         $form = $this->createFormBuilder()    
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)            
-                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)            
+                    ->add('BtnImprimir', 'submit', $arrBotonImprimir) 
+                    ->add('BtnGenerarPago', 'submit', $arrBotonGenerarPago)
                     ->add('BtnLiquidar', 'submit', $arrBotonLiquidar)
                     ->add('BtnEliminarDeduccion', 'submit', array('label'  => 'Eliminar deduccion',))
                     ->getForm();  

@@ -128,6 +128,11 @@ class RhuVacacion
     private $estadoAutorizado = 0;
 
     /**
+     * @ORM\Column(name="estado_pago_generado", type="boolean")
+     */
+    private $estadoPagoGenerado = 0;          
+    
+    /**
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
      */    
     private $codigoUsuario;
@@ -859,5 +864,29 @@ class RhuVacacion
     public function getVrPromedioRecargoNocturno()
     {
         return $this->vrPromedioRecargoNocturno;
+    }
+
+    /**
+     * Set estadoPagoGenerado
+     *
+     * @param boolean $estadoPagoGenerado
+     *
+     * @return RhuVacacion
+     */
+    public function setEstadoPagoGenerado($estadoPagoGenerado)
+    {
+        $this->estadoPagoGenerado = $estadoPagoGenerado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagoGenerado
+     *
+     * @return boolean
+     */
+    public function getEstadoPagoGenerado()
+    {
+        return $this->estadoPagoGenerado;
     }
 }
