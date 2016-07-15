@@ -221,6 +221,11 @@ class RhuProgramacionPagoDetalle
     private $comentarios;    
     
     /**
+     * @ORM\Column(name="marca", type="boolean", nullable=true)
+     */
+    private $marca = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuProgramacionPago", inversedBy="programacionesPagosDetallesProgramacionPagoRel")
      * @ORM\JoinColumn(name="codigo_programacion_pago_fk", referencedColumnName="codigo_programacion_pago_pk")
      */
@@ -1404,5 +1409,29 @@ class RhuProgramacionPagoDetalle
     public function getPagosProgramacionPagoDetalleRel()
     {
         return $this->pagosProgramacionPagoDetalleRel;
+    }
+
+    /**
+     * Set marca
+     *
+     * @param boolean $marca
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setMarca($marca)
+    {
+        $this->marca = $marca;
+
+        return $this;
+    }
+
+    /**
+     * Get marca
+     *
+     * @return boolean
+     */
+    public function getMarca()
+    {
+        return $this->marca;
     }
 }

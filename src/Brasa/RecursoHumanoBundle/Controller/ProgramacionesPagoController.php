@@ -380,7 +380,13 @@ class ProgramacionesPagoController extends Controller
                 }                
                 $em->flush();                
                 return $this->redirect($this->generateUrl('brs_rhu_programacion_pago_resumen_turno_ver', array('codigoProgramacionPagoDetalle' => $codigoProgramacionPagoDetalle)));
-            }            
+            } 
+            
+            if($form->get('BtnMarcar')->isClicked()) {
+                $arProgramacionPagoDetalle->setMarca(1);
+                $em->persist($arProgramacionPagoDetalle);
+                $em->flush();
+            }
         }
         $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
@@ -480,6 +486,7 @@ class ProgramacionesPagoController extends Controller
     private function formularioVerReusmenTurno() {
         $form = $this->createFormBuilder() 
             ->add('BtnActualizar', 'submit', array('label'  => 'Actualizar',))
+            ->add('BtnMarcar', 'submit', array('label'  => 'Marcar',))
             ->getForm();
         return $form;
     }
