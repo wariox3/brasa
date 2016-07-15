@@ -66,9 +66,9 @@
                 <td style="text-align: right">{{ arVacaciones.vrDeduccion | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arVacaciones.vrVacacion | number_format(2, '.', ',') }}</td>
                 <td>{% if arVacaciones.estadoPagado == 1 %} SI {% else %} NO {% endif %}</td>
-                <td style="text-align: center"><a href="{{ path('brs_rhu_vacaciones_nuevo', {'codigoContrato': arVacaciones.codigoContratoFk, 'codigoVacacion': arVacaciones.codigoVacacionPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                            
+                <td style="text-align: center"><a href="{{ path('brs_rhu_movimiento_vacacion_nuevo', {'codigoContrato': arVacaciones.codigoContratoFk, 'codigoVacacion': arVacaciones.codigoVacacionPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                            
                 
-                <td><a href="{{ path('brs_rhu_vacaciones_detalle', { 'codigoVacacion': arVacaciones.codigoVacacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
+                <td><a href="{{ path('brs_rhu_movimiento_vacacion_detalle', { 'codigoVacacion': arVacaciones.codigoVacacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arVacaciones.codigoVacacionPk }}" /></td>
             </tr>
             {% endfor %}
@@ -86,7 +86,7 @@
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
             <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_vacaciones_nuevo', {'codigoVacacion': 0}) }}">Nuevo</a>                
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_movimiento_vacacion_nuevo', {'codigoVacacion': 0}) }}">Nuevo</a>                
             </div>
             <div class="btn-group">
                 {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}

@@ -54,13 +54,7 @@
                 <div class="col-sm-9">
                     {{ form_widget(form.fechaHastaDisfrute, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div> 
-            <div class="form-group form-group-sm">
-                <label class="col-sm-3 control-label">Promedio recargo nocturno:</label>
-                <div class="col-sm-9">
-                    {{ form_widget(form.vrPromedioRecargoNocturno , { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>                
+            </div>                 
             <div class="form-group">
                 <label for="form_comentarios" class="col-sm-3 control-label">Comentarios:</label>
                 <div class="col-sm-9">
@@ -114,7 +108,7 @@
     </table>
     
     <div class="modal-footer">
-        <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_vacaciones_lista') }}">Cancelar</a>        
+        <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_movimiento_vacacion') }}">Cancelar</a>        
         {{ form_widget(form.ver, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
         {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
     </div>    

@@ -163,6 +163,12 @@ class RhuContrato
     private $ibpAdicional = 0;
     
     /**
+     * Se utiliza para liquidar vacaciones cuando no se tiene historia de los recargos nocturnos
+     * @ORM\Column(name="promedio_recargo_nocturno_inicial", type="float", nullable=true)
+     */
+    private $promedioRecargoNocturnoInicial = 0;    
+    
+    /**
      * Este factor se utiliza para saber de cuantas horas se compone un dia
      * @ORM\Column(name="factor", type="integer", nullable=true)     
      */    
@@ -2386,5 +2392,29 @@ class RhuContrato
     public function getCambiosTiposContratosContratoRel()
     {
         return $this->cambiosTiposContratosContratoRel;
+    }
+
+    /**
+     * Set promedioRecargoNocturnoInicial
+     *
+     * @param float $promedioRecargoNocturnoInicial
+     *
+     * @return RhuContrato
+     */
+    public function setPromedioRecargoNocturnoInicial($promedioRecargoNocturnoInicial)
+    {
+        $this->promedioRecargoNocturnoInicial = $promedioRecargoNocturnoInicial;
+
+        return $this;
+    }
+
+    /**
+     * Get promedioRecargoNocturnoInicial
+     *
+     * @return float
+     */
+    public function getPromedioRecargoNocturnoInicial()
+    {
+        return $this->promedioRecargoNocturnoInicial;
     }
 }

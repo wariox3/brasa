@@ -27,7 +27,7 @@ class RhuVacacionRepository extends EntityRepository {
     public function liquidar($codigoVacacion) {        
         $em = $this->getEntityManager();
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);
-        $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
+        $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();        
         $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);                 
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = $arVacacion->getContratoRel();
@@ -55,12 +55,13 @@ class RhuVacacionRepository extends EntityRepository {
         }         
          * 
          */
-        $promedioRecargosNocturnos = $arVacacion->getVrPromedioRecargoNocturno();
+        $promedioRecargosNocturnos = $arContrato->getPromedioRecargoNocturnoInicial();
+        $arVacacion->setVrPromedioRecargoNocturno($promedioRecargosNocturnos);
         if($arContrato->getCodigoSalarioTipoFk() == 1) {
             $floSalarioPromedio = $arContrato->getVrSalario();
         } else {
             $floSalarioPromedio = $arContrato->getVrSalario() + $promedioRecargosNocturnos;
-        }
+        }        
         $floTotalVacacionBruto = $floSalarioPromedio / 30 * $intDias;                        
         $douSalud = ($floTotalVacacionBruto * 4) / 100;
         $arVacacion->setVrSalud($douSalud);
@@ -77,9 +78,16 @@ class RhuVacacionRepository extends EntityRepository {
         foreach ($arVacacionDeducciones as $arVacacionDeduccion) {
             $floDeducciones += $arVacacionDeduccion->getVrDeduccion();
         }
+        $floBonificaciones = 0;
+        $arVacacionBonificaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionBonificacion();
+        $arVacacionBonificaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionBonificacion')->FindBy(array('codigoVacacionFk' => $codigoVacacion));        
+        foreach ($arVacacionBonificaciones as $arVacacionBonificacion) {
+            $floBonificaciones += $arVacacionBonificacion->getVrBonificacion();
+        }        
+        $arVacacion->setVrBonificacion($floBonificaciones);
         $arVacacion->setVrDeduccion($floDeducciones);
         $arVacacion->setVrVacacionBruto($floTotalVacacionBruto);
-        $floTotalVacacion = $floTotalVacacionBruto - $floDeducciones - $arVacacion->getVrPension() - $arVacacion->getVrSalud();        
+        $floTotalVacacion = ($floTotalVacacionBruto+$floBonificaciones) - $floDeducciones - $arVacacion->getVrPension() - $arVacacion->getVrSalud();        
         $arVacacion->setVrVacacion($floTotalVacacion);        
         $arVacacion->setVrSalarioActual($floSalario);
         $arVacacion->setVrSalarioPromedio($floSalarioPromedio);

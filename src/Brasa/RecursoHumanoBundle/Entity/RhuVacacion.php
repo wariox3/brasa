@@ -73,6 +73,11 @@ class RhuVacacion
     private $vrDeduccion = 0;
     
     /**
+     * @ORM\Column(name="vr_bonificacion", type="float")
+     */
+    private $vrBonificacion = 0;    
+    
+    /**
      * @ORM\Column(name="vr_vacacion", type="float")
      */
     private $vrVacacion = 0;    
@@ -165,6 +170,10 @@ class RhuVacacion
      */
     protected $VacacionesCreditosVacacionRel;
       
+    /**
+     * @ORM\OneToMany(targetEntity="RhuVacacionBonificacion", mappedBy="vacacionRel")
+     */
+    protected $vacacionesBonificacionesVacacionRel;    
 
     /**
      * Constructor
@@ -888,5 +897,63 @@ class RhuVacacion
     public function getEstadoPagoGenerado()
     {
         return $this->estadoPagoGenerado;
+    }
+
+    /**
+     * Add vacacionesBonificacionesVacacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionBonificacion $vacacionesBonificacionesVacacionRel
+     *
+     * @return RhuVacacion
+     */
+    public function addVacacionesBonificacionesVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionBonificacion $vacacionesBonificacionesVacacionRel)
+    {
+        $this->vacacionesBonificacionesVacacionRel[] = $vacacionesBonificacionesVacacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove vacacionesBonificacionesVacacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionBonificacion $vacacionesBonificacionesVacacionRel
+     */
+    public function removeVacacionesBonificacionesVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionBonificacion $vacacionesBonificacionesVacacionRel)
+    {
+        $this->vacacionesBonificacionesVacacionRel->removeElement($vacacionesBonificacionesVacacionRel);
+    }
+
+    /**
+     * Get vacacionesBonificacionesVacacionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVacacionesBonificacionesVacacionRel()
+    {
+        return $this->vacacionesBonificacionesVacacionRel;
+    }
+
+    /**
+     * Set vrBonificacion
+     *
+     * @param float $vrBonificacion
+     *
+     * @return RhuVacacion
+     */
+    public function setVrBonificacion($vrBonificacion)
+    {
+        $this->vrBonificacion = $vrBonificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrBonificacion
+     *
+     * @return float
+     */
+    public function getVrBonificacion()
+    {
+        return $this->vrBonificacion;
     }
 }
