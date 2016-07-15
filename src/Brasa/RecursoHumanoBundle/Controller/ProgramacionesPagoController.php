@@ -359,6 +359,8 @@ class ProgramacionesPagoController extends Controller
         $paginator  = $this->get('knp_paginator');
         $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
         $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($codigoProgramacionPagoDetalle);        
+        $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+        $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findOneBy(array('codigoProgramacionPagoDetalleFk' => $codigoProgramacionPagoDetalle));                
         $form = $this->formularioVerReusmenTurno();
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -397,6 +399,7 @@ class ProgramacionesPagoController extends Controller
             'arProgramacionDetalle' => $arProgramacionDetalle,  
             'arPagoDetalles' => $arPagoDetalles,
             'arSoportePago' => $arSoportePago,
+            'arPago' => $arPago,
             'form' => $form->createView()));
     }
     

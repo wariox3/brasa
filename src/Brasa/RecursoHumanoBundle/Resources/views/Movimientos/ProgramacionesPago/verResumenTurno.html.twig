@@ -95,7 +95,22 @@
             {% endfor %}
             <td colspan="8"></td>
             <td style="text-align: right">{{ douTotalIBP | number_format(0, '.', ',') }}</td>
-            <td style="text-align: right">{{ douTotalIBC | number_format(0, '.', ',') }}</td>           
+            <td style="text-align: right">{{ douTotalIBC | number_format(0, '.', ',') }}</td>  
+            <tr>
+                <td style="text-align: right" colspan="8"><b>DEVENGADO:</b></td>
+                <td style="text-align: right">{{ arPago.vrDevengado | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right"></td>  
+            </tr>
+            <tr>
+                <td style="text-align: right" colspan="8"><b>DEDUCCIONES:</b></td>
+                <td style="text-align: right">{{ arPago.vrDeducciones | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right"></td>  
+            </tr>
+            <tr>
+                <td style="text-align: right" colspan="8"><b>NETO:</b></td>
+                <td style="text-align: right">{{ arPago.vrNeto | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right"></td>  
+            </tr>            
         </table>
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
