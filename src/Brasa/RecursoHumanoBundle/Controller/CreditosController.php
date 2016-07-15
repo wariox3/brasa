@@ -178,6 +178,7 @@ class CreditosController extends Controller
         $session->set('filtroIdentificacion', $arrControles['form_TxtIdentificacion']);
         $session->set('filtroDesde', $form->get('fechaDesde')->getData());
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        
     }
 
     public function nuevoAction($codigoCredito = 0) {
