@@ -193,7 +193,7 @@
         <div class="tab-pane active" id="empleados">
             <br />
             <table class="table table-striped table-bordered table-condensed">
-            <tr>                
+            <tr >                
                 <th>ID</th>
                 <th>NOMBRE</th>
                 <th>P. DESDE</th>
@@ -219,7 +219,7 @@
                 <th><input type="checkbox" name="ChkSeleccionarEmpleado" OnClick="ChequearTodosTabla(this, 'ChkSeleccionarDetalle[]');"/></th>
             </tr>
             {% for arProgramacionPagoDetalles in arProgramacionPagoDetalles %}
-            <tr>                
+            <tr {% if arProgramacionPagoDetalles.marca == 1 %} class="success" {% endif %}>                
                 <input type="hidden" name="LblCodigoDetalle[]" value="{{ arProgramacionPagoDetalles.codigoProgramacionPagoDetallePk }}">                                    
                 <td>{{ arProgramacionPagoDetalles.empleadoRel.numeroIdentificacion}}</td>
                 <td>{{ arProgramacionPagoDetalles.empleadoRel.nombreCorto }}</td>

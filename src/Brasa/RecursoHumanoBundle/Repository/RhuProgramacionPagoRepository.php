@@ -61,10 +61,10 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 //Nomina
                 if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 1) { 
                     ini_set("memory_limit", -1);
-                    $strSql = "DELETE rhu_pago_detalle, rhu_pago FROM rhu_pago_detalle LEFT JOIN rhu_pago on rhu_pago_detalle.codigo_pago_fk = rhu_pago.codigo_pago_pk WHERE rhu_pago.codigo_programacion_pago_fk = " . $codigoProgramacionPago;                           
+                    $strSql = "DELETE rhu_pago_detalle FROM rhu_pago_detalle LEFT JOIN rhu_pago on rhu_pago_detalle.codigo_pago_fk = rhu_pago.codigo_pago_pk WHERE rhu_pago.codigo_programacion_pago_fk = " . $codigoProgramacionPago;                           
                     $em->getConnection()->executeQuery($strSql); 
-                    //$strSql = "DELETE FROM rhu_pago WHERE rhu_pago.codigo_programacion_pago_fk = " . $codigoProgramacionPago;                           
-                    //$em->getConnection()->executeQuery($strSql);
+                    $strSql = "DELETE FROM rhu_pago WHERE rhu_pago.codigo_programacion_pago_fk = " . $codigoProgramacionPago;                           
+                    $em->getConnection()->executeQuery($strSql);
                     
                     $arProgramacionPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $arProgramacionPagoProcesar->getCodigoProgramacionPagoPk()));
                     foreach ($arProgramacionPagoDetalles as $arProgramacionPagoDetalle) {                        
@@ -550,7 +550,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     . " AND c.fechaUltimoPago < '" . $arProgramacionPago->getFechaHastaReal()->format('Y-m-d') . "' "
                     . " AND c.fechaDesde <= '" . $arProgramacionPago->getFechaHastaReal()->format('Y-m-d') . "' "
                     . " AND (c.fechaHasta >= '" . $arProgramacionPago->getFechaDesde()->format('Y-m-d') . "' "
-                    . " OR c.indefinido = 1)";            
+                    . " OR c.indefinido = 1)"; 
             $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
             $query = $em->createQuery($dql);
             $arContratos = $query->getResult();
@@ -817,6 +817,131 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         set_time_limit(0);
         return true;
     }
+    
+    public function actualizarEmpleado($codigoProgramacionPagoDetalle) {
+        $em = $this->getEntityManager();
+        set_time_limit(0);
+        $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+        $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($codigoProgramacionPagoDetalle);        
+        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+        $arProgramacionPago = $arProgramacionPagoDetalle->getProgramacionPagoRel();        
+        
+        $arContrato = $arProgramacionPagoDetalle->getContratoRel();                            
+        $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalarioPago());
+        $arProgramacionPagoDetalle->setIndefinido($arContrato->getIndefinido());
+        $arProgramacionPagoDetalle->setSalarioIntegral($arContrato->getSalarioIntegral());
+        if($arContrato->getCodigoContratoTipoFk() == 4 || $arContrato->getCodigoContratoTipoFk() == 5) {
+            $arProgramacionPagoDetalle->setDescuentoPension(0);
+            $arProgramacionPagoDetalle->setDescuentoSalud(0);
+            $arProgramacionPagoDetalle->setPagoAuxilioTransporte(0);
+        }
+        if ($arContrato->getCodigoTipoPensionFk() == 5){
+            $arProgramacionPagoDetalle->setDescuentoPension(0);
+        }
+        
+        $dateFechaDesde =  "";
+        $dateFechaHasta =  "";
+        $intDiasDevolver = 0;
+        $fechaFinalizaContrato = $arContrato->getFechaHasta();
+        if($arContrato->getIndefinido() == 1) {
+            $fecha = date_create(date('Y-m-d'));
+            date_modify($fecha, '+100000 day');
+            $fechaFinalizaContrato = $fecha;
+        }
+        if($arContrato->getFechaDesde() <  $arProgramacionPago->getFechaDesde() == true) {
+            $dateFechaDesde = $arProgramacionPago->getFechaDesde();
+        } else {
+            if($arContrato->getFechaDesde() > $arProgramacionPago->getFechaHasta() == true) {
+                if($arContrato->getFechaDesde() == $arProgramacionPago->getFechaHastaReal()) {
+                    $dateFechaDesde = $arProgramacionPago->getFechaHastaReal();
+                    $intDiasDevolver = 1;                        
+                } else {
+                    $intDiasDevolver = 0;                        
+                }
+
+            } else {
+                $dateFechaDesde = $arContrato->getFechaDesde();
+            }
+        }
+        if($fechaFinalizaContrato >  $arProgramacionPago->getFechaHasta() == true) {
+            $dateFechaHasta = $arProgramacionPago->getFechaHasta();
+        } else {
+            if($fechaFinalizaContrato < $arProgramacionPago->getFechaDesde() == true) {
+                $intDiasDevolver = 0;
+            } else {
+                $dateFechaHasta = $fechaFinalizaContrato;
+            }
+        }
+        if($dateFechaDesde != "" && $dateFechaHasta != "") {
+            $intDias = $dateFechaDesde->diff($dateFechaHasta);
+            $intDias = $intDias->format('%a');
+            $intDiasDevolver = $intDias + 1;
+            //Mes de febrero para periodos NO continuos
+            $intDiasInhabilesFebrero = 0;
+            if($arProgramacionPago->getCentroCostoRel()->getPeriodoPagoRel()->getContinuo() == 0) {
+                if($dateFechaHasta->format('md') == '0228' || $dateFechaHasta->format('md') == '0229') {
+                    //Verificar si el año es bisiesto
+
+                    if(date('L',mktime(1,1,1,1,1,$dateFechaHasta->format('Y'))) == 1) {
+                        $intDiasInhabilesFebrero = 1;
+                    } else {
+                        $intDiasInhabilesFebrero = 2;
+                    }
+                }
+
+                if($dateFechaDesde->format('d') == "31") {
+                    $intDiasDevolver = 1;
+                } else {
+                    $intDiasDevolver += $intDiasInhabilesFebrero;
+                }
+            } else {
+                $intDiasDevolver += $intDiasInhabilesFebrero;
+            }                    
+        }
+
+        $arProgramacionPagoDetalle->setDias($intDiasDevolver);
+        $arProgramacionPagoDetalle->setDiasReales($intDiasDevolver);
+
+        $floValorDia = $arContrato->getVrSalarioPago() / 30;       
+        $floValorHora = $floValorDia / $arContrato->getFactorHorasDia();   
+        $arProgramacionPagoDetalle->setVrDia($floValorDia);
+        $arProgramacionPagoDetalle->setVrHora($floValorHora);
+        $floDevengado = $arProgramacionPagoDetalle->getDias() * $floValorDia;
+        $arProgramacionPagoDetalle->setVrDevengado($floDevengado);
+        $floCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->cuotaCreditosNomina($arContrato->getCodigoEmpleadoFk());
+        $arProgramacionPagoDetalle->setVrCreditos($floCreditos);
+        $floDeducciones = $floCreditos;
+        $arProgramacionPagoDetalle->setVrDeducciones($floDeducciones);
+        $floNeto = $floDevengado - $floDeducciones;
+        $arProgramacionPagoDetalle->setVrNetoPagar($floNeto);                
+
+        //dias vacaciones
+        $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                
+        if($intDiasVacaciones > 0) {                                        
+            $arProgramacionPagoDetalle->setDiasVacaciones($intDiasVacaciones);
+        }                
+        //Licencias
+        $intDiasLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicenciaPeriodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), $arContrato->getCodigoEmpleadoFk());                
+        if($intDiasLicencia > 0) {                                        
+            $arProgramacionPagoDetalle->setDiasLicencia($intDiasLicencia);
+        }     
+        //dias incapacidad
+        $intDiasIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->diasIncapacidadPeriodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), $arContrato->getCodigoEmpleadoFk());                
+        if($intDiasIncapacidad > 0) {                                        
+            $arProgramacionPagoDetalle->setDiasIncapacidad($intDiasIncapacidad);
+        }                
+        $horasNovedad = ($intDiasIncapacidad + $intDiasLicencia + $intDiasVacaciones) * 8;
+        $horasDiurnas = ($intDiasDevolver * $arContrato->getFactorHorasDia()) - $horasNovedad;
+        $arProgramacionPagoDetalle->setHorasPeriodo($horasDiurnas);
+        $arProgramacionPagoDetalle->setHorasDiurnas($horasDiurnas);
+        $arProgramacionPagoDetalle->setHorasPeriodoReales($horasDiurnas);
+        $arProgramacionPagoDetalle->setFactorDia($arContrato->getFactorHorasDia());                
+        $em->persist($arProgramacionPagoDetalle);                                
+        
+        $em->flush();                                    
+        set_time_limit(0);
+        return true;
+    }    
     
     private function horasExtra($arProgramacionPagoDetalle, $arConfiguracion) {
         //$arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();

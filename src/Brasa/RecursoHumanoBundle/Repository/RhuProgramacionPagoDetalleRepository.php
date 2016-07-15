@@ -21,7 +21,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         return $dql;
     }      
     
-    public function generarPago($arProgramacionPagoDetalle, $arProgramacionPagoProcesar, $arCentroCosto, $arConfiguracion) {                
+    public function generarPago($arProgramacionPagoDetalle, $arProgramacionPagoProcesar, $arCentroCosto, $arConfiguracion, $guardar = 0) {                
         $em = $this->getEntityManager();
         $arContrato = $arProgramacionPagoDetalle->getContratoRel();
         $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
@@ -42,7 +42,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         $arPago->setComentarios($arProgramacionPagoDetalle->getComentarios());
 
         //Parametros generales
-        $intHorasLaboradas = $arProgramacionPagoDetalle->getHorasPeriodoReales();
+        $intHorasLaboradas = $arProgramacionPagoDetalle->getHorasPeriodoReales();      
         $horasDiurnas = $arProgramacionPagoDetalle->getHorasDiurnas();
         $intDiasTransporte = $arProgramacionPagoDetalle->getDiasReales(); 
         $intFactorDia = $arProgramacionPagoDetalle->getFactorDia();
@@ -58,7 +58,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         if($intDiasVacaciones > 0) {
             $intHorasLaboradas = $intHorasLaboradas - $intHorasVacaciones;
             $intDiasTransporte = $intDiasTransporte - $intDiasVacaciones;                                        
-            $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(31);
+            $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(16);
             $douIngresoBaseCotizacionVacaciones = $intHorasVacaciones * $douVrHora;
             $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
             $arPagoDetalle->setPagoRel($arPago);
@@ -75,8 +75,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         //Procesar Incapacidades
         $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
         $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->periodo($arProgramacionPagoDetalle->getFechaDesdePago(), $arProgramacionPagoDetalle->getFechaHasta(), $arProgramacionPagoDetalle->getCodigoEmpleadoFk());                                                                        
-        foreach ($arIncapacidades as $arIncapacidad) {
-            if($intHorasLaboradas > 0) { 
+        foreach ($arIncapacidades as $arIncapacidad) {             
                 $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                 $arPagoDetalle->setPagoRel($arPago);
                 $arPagoDetalle->setPagoConceptoRel($arIncapacidad->getIncapacidadTipoRel()->getPagoConceptoRel());
@@ -130,8 +129,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                 $douIngresoBaseCotizacion  += $douPagoDetalle;                                                                        
                 $arPagoDetalle->setVrIngresoBasePrestacion($douIngresoBaseCotizacionIncapacidad);                                                                            
                 $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);                                                                                                            
-                $em->persist($arPagoDetalle);                                                                                                         
-            }                                                                                                 
+                $em->persist($arPagoDetalle);                                                                                                                                                                                                                      
         }
 
         //Procesar Licencias                                                
@@ -207,7 +205,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                     if($arPagoAdicional->getAplicaDiaLaborado() == 1) {                                                
                         $diasPeriodo = $arCentroCosto->getPeriodoPagoRel()->getDias();
                         $valorDia = $arPagoAdicional->getValor() / $diasPeriodo;
-                        $douPagoDetalle = $valorDia * ($intHorasLaboradas / $intFactorDia);
+                        $douPagoDetalle = $valorDia * ($arProgramacionPagoDetalle->getHorasPeriodo() / $intFactorDia);
                     }
                     $arPagoDetalle->setVrDia($douVrDia);
                 }
@@ -274,12 +272,11 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         }
 
         //Procesar creditos
-        $arPagoConceptoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-        $arPagoConceptoCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($arConfiguracion->getCodigoCredito());
         $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
         $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findBy(array('codigoEmpleadoFk' => $arProgramacionPagoDetalle->getCodigoEmpleadoFk(), 'codigoCreditoTipoPagoFk' => 1, 'estadoPagado' => 0, 'aprobado' => 1, 'estadoSuspendido' => 0));
         foreach ($arCreditos as $arCredito) {
             if($arCredito->getSaldoTotal() > 0) {
+                $arPagoConceptoCredito = $arCredito->getCreditoTipoRel()->getPagoConceptoRel();
                 $arCreditoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
                 $arCreditoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arCredito->getCodigoCreditoPk());
                 $douCuota = 0;
@@ -461,9 +458,13 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         $douAuxilioTransporteCotizacion = $arProgramacionPagoDetalle->getDiasReales() * ($arConfiguracion->getVrAuxilioTransporte() / 30);
         $arPago->setVrAuxilioTransporteCotizacion($douAuxilioTransporteCotizacion);
         $arPago->setDiasLaborados($intDiasLaborados);
-        $em->persist($arPago);                                                             
-        
-        return true;
+        $em->persist($arPago);
+        $codigoPago = 0;
+        if($guardar == 1) {
+            $em->flush();
+            $codigoPago = $arPago->getCodigoPagoPk();
+        }
+        return $codigoPago;
     }
     
     public function generarProgramacionPagoDetallePorSede($codigoProgramacionPago) {

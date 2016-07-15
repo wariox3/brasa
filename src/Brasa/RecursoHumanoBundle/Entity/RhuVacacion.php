@@ -133,6 +133,11 @@ class RhuVacacion
     private $codigoUsuario;
     
     /**
+     * @ORM\Column(name="vr_promedio_recargo_nocturno", type="float")
+     */
+    private $vrPromedioRecargoNocturno = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="vacacionesCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
@@ -830,5 +835,29 @@ class RhuVacacion
     public function getCodigoUsuario()
     {
         return $this->codigoUsuario;
+    }
+
+    /**
+     * Set vrPromedioRecargoNocturno
+     *
+     * @param float $vrPromedioRecargoNocturno
+     *
+     * @return RhuVacacion
+     */
+    public function setVrPromedioRecargoNocturno($vrPromedioRecargoNocturno)
+    {
+        $this->vrPromedioRecargoNocturno = $vrPromedioRecargoNocturno;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPromedioRecargoNocturno
+     *
+     * @return float
+     */
+    public function getVrPromedioRecargoNocturno()
+    {
+        return $this->vrPromedioRecargoNocturno;
     }
 }

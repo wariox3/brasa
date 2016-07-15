@@ -359,6 +359,8 @@ class ProgramacionesPagoController extends Controller
         $paginator  = $this->get('knp_paginator');
         $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
         $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($codigoProgramacionPagoDetalle);        
+        $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+        $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findOneBy(array('codigoProgramacionPagoDetalleFk' => $codigoProgramacionPagoDetalle));                
         $form = $this->formularioVerReusmenTurno();
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -370,11 +372,21 @@ class ProgramacionesPagoController extends Controller
                     $strSql = "DELETE FROM rhu_pago_detalle WHERE codigo_pago_fk = " . $arPago->getCodigoPagoPk();                           
                     $em->getConnection()->executeQuery($strSql);                    
                     $em->remove($arPago);
-                }                                
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->generarPago($arProgramacionPagoDetalle, $arProgramacionPagoDetalle->getProgramacionPagoRel(), $arProgramacionPagoDetalle->getProgramacionPagoRel()->getCentroCostoRel(), $arConfiguracion);                   
+                } 
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->actualizarEmpleado($codigoProgramacionPagoDetalle);
+                $codigoPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->generarPago($arProgramacionPagoDetalle, $arProgramacionPagoDetalle->getProgramacionPagoRel(), $arProgramacionPagoDetalle->getProgramacionPagoRel()->getCentroCostoRel(), $arConfiguracion, 1);                   
+                if($codigoPago > 0) {
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->liquidar($codigoPago, $arConfiguracion);
+                }                
                 $em->flush();                
                 return $this->redirect($this->generateUrl('brs_rhu_programacion_pago_resumen_turno_ver', array('codigoProgramacionPagoDetalle' => $codigoProgramacionPagoDetalle)));
-            }            
+            } 
+            
+            if($form->get('BtnMarcar')->isClicked()) {
+                $arProgramacionPagoDetalle->setMarca(1);
+                $em->persist($arProgramacionPagoDetalle);
+                $em->flush();
+            }
         }
         $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
@@ -394,6 +406,7 @@ class ProgramacionesPagoController extends Controller
             'arProgramacionDetalle' => $arProgramacionDetalle,  
             'arPagoDetalles' => $arPagoDetalles,
             'arSoportePago' => $arSoportePago,
+            'arPago' => $arPago,
             'form' => $form->createView()));
     }
     
@@ -473,6 +486,7 @@ class ProgramacionesPagoController extends Controller
     private function formularioVerReusmenTurno() {
         $form = $this->createFormBuilder() 
             ->add('BtnActualizar', 'submit', array('label'  => 'Actualizar',))
+            ->add('BtnMarcar', 'submit', array('label'  => 'Marcar',))
             ->getForm();
         return $form;
     }

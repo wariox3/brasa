@@ -402,10 +402,12 @@ class PagosAdicionalesAgregarController extends Controller
                         $floBonificacionNoPrestacional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->bonificacionNoPrestacional($arEmpleado->getCodigoEmpleadoPk(), $codigoProgramacionPago);                                
                         $floBonificacion = $form->get('TxtValor')->getData();
                         $floBonificacionTotal = $floBonificacionNoPrestacional+ $floBonificacion;
-                        if($floBonificacionTotal > $floBonificacionMaxima) {
+                        /*if($floBonificacionTotal > $floBonificacionMaxima) {
                             echo "La bonificacion NO PRESTACIONAL no puede superar: " . $floBonificacionMaxima . " ya tiene bonificaciones por:" . $floBonificacionNoPrestacional;
                             $boolError = TRUE;
-                        }                                                                        
+                        } 
+                         * 
+                         */                                                                       
                     }
                     if($boolError == FALSE) {
                         //$arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arPagoAdicional->getCodigoEmpleadoFk());                             
@@ -634,10 +636,12 @@ class PagosAdicionalesAgregarController extends Controller
                         $floBonificacionNoPrestacional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->bonificacionNoPrestacional($arPagoAdicional->getCodigoEmpleadoFk(), 0);                                
                         $floBonificacion = $form->get('TxtValor')->getData();
                         $floBonificacionTotal = $floBonificacionNoPrestacional+ $floBonificacion;
-                        if($floBonificacionTotal > $floBonificacionMaxima) {
+                        /*if($floBonificacionTotal > $floBonificacionMaxima) {
                             echo "La bonificacion NO PRESTACIONAL no puede superar: " . $floBonificacionMaxima . " ya tiene bonificaciones por:" . $floBonificacionNoPrestacional;
                             $boolError = TRUE;
-                        }                                                                        
+                        } 
+                         * 
+                         */                                                                       
                     }
                     if($boolError == FALSE) {
                         $arPagoAdicional->setEmpleadoRel($arEmpleado);

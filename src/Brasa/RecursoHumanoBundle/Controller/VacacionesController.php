@@ -175,10 +175,10 @@ class VacacionesController extends Controller
                                         $floVrDeducciones += $arCredito->getSaldoTotal();
                                     }
 
-                                    $arContratoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-                                    $arContratoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arContrato->getCodigoContratoPk());                    
-                                    $arContratoActualizar->setFechaUltimoPagoVacaciones($arVacacion->getFechaHastaPeriodo());                
-                                    $em->persist($arContratoActualizar);                                     
+                                    //$arContratoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                                    //$arContratoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arContrato->getCodigoContratoPk());                    
+                                    //$arContratoActualizar->setFechaUltimoPagoVacaciones($arVacacion->getFechaHastaPeriodo());                
+                                    //$em->persist($arContratoActualizar);                                     
                                     $em->flush();
                                     $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->liquidar($arVacacion->getCodigoVacacionPk());
                                     return $this->redirect($this->generateUrl('brs_rhu_vacaciones_lista'));                                                                                               

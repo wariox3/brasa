@@ -158,7 +158,10 @@ class RhuPagoConcepto
      */
     protected $tiposSaludPagoConceptoRel;    
        
-
+    /**
+     * @ORM\OneToMany(targetEntity="RhuCreditoTipo", mappedBy="pagoConceptoRel")
+     */
+    protected $creditosTiposPagoConceptoRel;
 
     /**
      * Constructor
@@ -934,5 +937,39 @@ class RhuPagoConcepto
     public function getTiposPensionesPagoConceptoFondoRel()
     {
         return $this->tiposPensionesPagoConceptoFondoRel;
+    }
+
+    /**
+     * Add creditosTiposPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipo $creditosTiposPagoConceptoRel
+     *
+     * @return RhuPagoConcepto
+     */
+    public function addCreditosTiposPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipo $creditosTiposPagoConceptoRel)
+    {
+        $this->creditosTiposPagoConceptoRel[] = $creditosTiposPagoConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove creditosTiposPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipo $creditosTiposPagoConceptoRel
+     */
+    public function removeCreditosTiposPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipo $creditosTiposPagoConceptoRel)
+    {
+        $this->creditosTiposPagoConceptoRel->removeElement($creditosTiposPagoConceptoRel);
+    }
+
+    /**
+     * Get creditosTiposPagoConceptoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCreditosTiposPagoConceptoRel()
+    {
+        return $this->creditosTiposPagoConceptoRel;
     }
 }

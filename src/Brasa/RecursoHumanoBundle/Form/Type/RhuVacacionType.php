@@ -12,7 +12,8 @@ class RhuVacacionType extends AbstractType
             ->add('diasDisfrutados', 'number', array('required' => true))                 
             ->add('diasPagados', 'number', array('required' => true))                 
             ->add('fechaDesdeDisfrute', 'date')
-            ->add('fechaHastaDisfrute', 'date')                
+            ->add('fechaHastaDisfrute', 'date')
+            ->add('vrPromedioRecargoNocturno', 'number')                
             ->add('comentarios', 'textarea', array('required' => false))    
             ->add('ver', 'submit')
             ->add('guardar', 'submit');

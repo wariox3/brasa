@@ -28,6 +28,17 @@ class RhuCreditoTipo
     private $cupoMaximo;
     
     /**
+     * @ORM\Column(name="codigo_pago_concepto_fk", type="integer", nullable=true)
+     */    
+    private $codigoPagoConceptoFk;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuPagoConcepto", inversedBy="creditosTiposPagoConceptoRel")
+     * @ORM\JoinColumn(name="codigo_pago_concepto_fk", referencedColumnName="codigo_pago_concepto_pk")
+     */
+    protected $pagoConceptoRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuCredito", mappedBy="creditoTipoRel")
      */
     protected $creditosCreditoTipoRel;
@@ -129,5 +140,53 @@ class RhuCreditoTipo
     public function getCupoMaximo()
     {
         return $this->cupoMaximo;
+    }
+
+    /**
+     * Set codigoPagoConceptoFk
+     *
+     * @param integer $codigoPagoConceptoFk
+     *
+     * @return RhuCreditoTipo
+     */
+    public function setCodigoPagoConceptoFk($codigoPagoConceptoFk)
+    {
+        $this->codigoPagoConceptoFk = $codigoPagoConceptoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPagoConceptoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPagoConceptoFk()
+    {
+        return $this->codigoPagoConceptoFk;
+    }
+
+    /**
+     * Set pagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel
+     *
+     * @return RhuCreditoTipo
+     */
+    public function setPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel = null)
+    {
+        $this->pagoConceptoRel = $pagoConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoConceptoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto
+     */
+    public function getPagoConceptoRel()
+    {
+        return $this->pagoConceptoRel;
     }
 }
