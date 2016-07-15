@@ -61,10 +61,10 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 //Nomina
                 if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 1) { 
                     ini_set("memory_limit", -1);
-                    $strSql = "DELETE rhu_pago_detalle, rhu_pago FROM rhu_pago_detalle LEFT JOIN rhu_pago on rhu_pago_detalle.codigo_pago_fk = rhu_pago.codigo_pago_pk WHERE rhu_pago.codigo_programacion_pago_fk = " . $codigoProgramacionPago;                           
+                    $strSql = "DELETE rhu_pago_detalle FROM rhu_pago_detalle LEFT JOIN rhu_pago on rhu_pago_detalle.codigo_pago_fk = rhu_pago.codigo_pago_pk WHERE rhu_pago.codigo_programacion_pago_fk = " . $codigoProgramacionPago;                           
                     $em->getConnection()->executeQuery($strSql); 
-                    //$strSql = "DELETE FROM rhu_pago WHERE rhu_pago.codigo_programacion_pago_fk = " . $codigoProgramacionPago;                           
-                    //$em->getConnection()->executeQuery($strSql);
+                    $strSql = "DELETE FROM rhu_pago WHERE rhu_pago.codigo_programacion_pago_fk = " . $codigoProgramacionPago;                           
+                    $em->getConnection()->executeQuery($strSql);
                     
                     $arProgramacionPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $arProgramacionPagoProcesar->getCodigoProgramacionPagoPk()));
                     foreach ($arProgramacionPagoDetalles as $arProgramacionPagoDetalle) {                        
