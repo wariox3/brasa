@@ -170,5 +170,25 @@ class RhuVacacionRepository extends EntityRepository {
         return $intDiasVacaciones;                     
     }     
     
+    
+    public function periodo($fechaDesde, $fechaHasta, $codigoEmpleado = "", $codigoCentroCosto = "") {
+        $em = $this->getEntityManager();
+        $strFechaDesde = $fechaDesde->format('Y-m-d');
+        $strFechaHasta = $fechaHasta->format('Y-m-d');
+        $dql = "SELECT vacacion FROM BrasaRecursoHumanoBundle:RhuVacacion vacacion "
+                . "WHERE (((vacacion.fechaDesdeDisfrute BETWEEN '$strFechaDesde' AND '$strFechaHasta') OR (vacacion.fechaHastaDisfrute BETWEEN '$strFechaDesde' AND '$strFechaHasta')) "
+                . "OR (vacacion.fechaDesdeDisfrute >= '$strFechaDesde' AND vacacion.fechaDesdeDisfrute <= '$strFechaHasta') "
+                . "OR (vacacion.fechaHastaDisfrute >= '$strFechaHasta' AND vacacion.fechaDesdeDisfrute <= '$strFechaDesde')) ";
+        if($codigoEmpleado != "") {
+            $dql = $dql . "AND vacacion.codigoEmpleadoFk = '" . $codigoEmpleado . "' ";
+        }
+        if($codigoCentroCosto != "") {
+            $dql = $dql . "AND vacacion.codigoCentroCostoFk = " . $codigoCentroCosto . " ";
+        }        
+
+        $objQuery = $em->createQuery($dql);  
+        $arVacaciones = $objQuery->getResult();         
+        return $arVacaciones;
+    }                        
 }
 

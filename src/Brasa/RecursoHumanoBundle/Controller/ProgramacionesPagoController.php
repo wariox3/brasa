@@ -213,7 +213,10 @@ class ProgramacionesPagoController extends Controller
         $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
         $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->periodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), "", $arProgramacionPago->getCodigoCentroCostoFk());                       
         $arLicencias = $paginator->paginate($arLicencias, $request->query->get('page', 1), 200);        
-
+        $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
+        $arVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->periodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), "", $arProgramacionPago->getCodigoCentroCostoFk());                       
+        $arVacaciones = $paginator->paginate($arVacaciones, $request->query->get('page', 1), 200);        
+        
         $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->listaDQL($codigoProgramacionPago));
         $arProgramacionPagoDetalles = $paginator->paginate($query, $request->query->get('page', 1), 500);
         $arProgramacionPagoDetalleSedes = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede();
@@ -237,6 +240,7 @@ class ProgramacionesPagoController extends Controller
                     'arPagosAdicionalesValor' => $arPagosAdicionalesValor,
                     'arIncapacidades' => $arIncapacidades,
                     'arLicencias' => $arLicencias,
+                    'arVacaciones' => $arVacaciones,
                     'arProgramacionPagoDetalles' => $arProgramacionPagoDetalles,
                     'arProgramacionPagoDetalleSedes' => $arProgramacionPagoDetalleSedes,
                     'arProgramacionPago' => $arProgramacionPago,
@@ -598,10 +602,12 @@ class ProgramacionesPagoController extends Controller
 
     private function generarExcelDetalle($codigoProgramacionPago) {
         $em = $this->getDoctrine()->getManager();
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);        
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-        if($arProgramacionPago->getEstadoGenerado() == 1) {
+        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);       
             $objPHPExcel = new \PHPExcel();
             // Set document properties
             $objPHPExcel->getProperties()->setCreator("EMPRESA")
@@ -652,10 +658,10 @@ class ProgramacionesPagoController extends Controller
                         ->setCellValue('K' . $i, $arPago->getVrIngresoBaseCotizacion());
                 $i++;
             }
-
             $objPHPExcel->getActiveSheet()->setTitle('Pagos');
-            $objPHPExcel->setActiveSheetIndex(0);            
-            $objPHPExcel->createSheet(2)->setTitle('PagosDetalle')
+                       
+            
+            $objPHPExcel->createSheet(1)->setTitle('PagosDetalle')
                     ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'EMPLEADO')
                     ->setCellValue('C1', 'CONCEPTO')
@@ -671,7 +677,18 @@ class ProgramacionesPagoController extends Controller
                     ->setCellValue('M1', 'PORCENTAJE')                    
                     ->setCellValue('N1', 'IBC')
                     ->setCellValue('O1', 'IBP');
-
+            
+            $objPHPExcel->setActiveSheetIndex(1); 
+            $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+            $objPHPExcel->getActiveSheet(1)->getStyle('1')->getFont()->setBold(true);     
+            for($col = 'A'; $col !== 'P'; $col++) {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                  
+            }            
+            for($col = 'E'; $col !== 'P'; $col++) { 
+                $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('right');                 
+                $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+            }             
+            
             $i = 2;
             $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
             $arPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->pagosDetallesProgramacionPago($codigoProgramacionPago);            
@@ -693,17 +710,33 @@ class ProgramacionesPagoController extends Controller
                         ->setCellValue('N' . $i, $arPagoDetalle->getVrIngresoBasePrestacion())
                         ->setCellValue('O' . $i, $arPagoDetalle->getVrIngresoBaseCotizacion());
                 $i++;
-            }            
+            }             
+            
+            //Incapacidades
+            $objPHPExcel->createSheet()->setTitle('Incapacidades')
+                    ->setCellValue('A1', 'TIPO')
+                    ->setCellValue('B1', 'DESDE')
+                    ->setCellValue('C1', 'HASTA')
+                    ->setCellValue('D1', 'EMPLEADO')
+                    ->setCellValue('E1', 'DIAS');
+            $objPHPExcel->setActiveSheetIndex(2);             
             $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
-            $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);     
-            for($col = 'A'; $col !== 'P'; $col++) {
-                $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                  
-            }            
-            for($col = 'E'; $col !== 'P'; $col++) {
-                $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true); 
-                $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('right');                 
-                $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
-            }            
+            $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);                  
+            
+            $i = 2;
+            $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
+            $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->periodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), "", $arProgramacionPago->getCodigoCentroCostoFk());                       
+            foreach ($arIncapacidades as $arIncapacidad) {
+                $objPHPExcel->setActiveSheetIndex(2)
+                        ->setCellValue('A' . $i, $arIncapacidad->getIncapacidadTipoRel()->getNombre())
+                        ->setCellValue('B' . $i, $arIncapacidad->getFechaDesde()->format('Y/m/d'))
+                        ->setCellValue('C' . $i, $arIncapacidad->getFechaHasta()->format('Y/m/d'))
+                        ->setCellValue('D' . $i, $arIncapacidad->getEmpleadoRel()->getNombreCorto())
+                        ->setCellValue('E' . $i, $arIncapacidad->getCantidad());
+                $i++;
+            }              
+            
+            $objPHPExcel->setActiveSheetIndex(0);
             // Redirect output to a client’s web browser (Excel2007)
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment;filename="Pagos.xlsx"');
@@ -718,78 +751,7 @@ class ProgramacionesPagoController extends Controller
             $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
             $objWriter->save('php://output');
             exit;
-        } else {
-            $objPHPExcel = new \PHPExcel();
-            // Set document properties
-            $objPHPExcel->getProperties()->setCreator("EMPRESA")
-                ->setLastModifiedBy("EMPRESA")
-                ->setTitle("Office 2007 XLSX Test Document")
-                ->setSubject("Office 2007 XLSX Test Document")
-                ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
-                ->setKeywords("office 2007 openxml php")
-                ->setCategory("Test result file");
-            $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
-            $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-            $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
-            $objPHPExcel->setActiveSheetIndex(0)
-                        ->setCellValue('A1', 'CÓDIGO')
-                        ->setCellValue('B1', 'IDENTIFICACIÓN')
-                        ->setCellValue('C1', 'NOMBRE')
-                        ->setCellValue('D1', 'DESDE')
-                        ->setCellValue('E1', 'HASTA')
-                        ->setCellValue('F1', 'DÍAS')
-                        ->setCellValue('G1', 'SALARIO')
-                        ->setCellValue('H1', 'DEVENGADO')
-                        ->setCellValue('I1', 'DEDUCCIONES')
-                        ->setCellValue('J1', 'NETO');
 
-            $i = 2;
-
-            $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
-            $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
-            foreach ($arProgramacionPagoDetalle as $arProgramacionPagoDetalle) {
-                $objPHPExcel->setActiveSheetIndex(0)
-                        ->setCellValue('A' . $i, $arProgramacionPagoDetalle->getCodigoProgramacionPagoDetallePk())
-                        ->setCellValue('B' . $i, $arProgramacionPagoDetalle->getEmpleadoRel()->getNumeroIdentificacion())
-                        ->setCellValue('C' . $i, $arProgramacionPagoDetalle->getEmpleadoRel()->getNombreCorto())
-                        ->setCellValue('D' . $i, $arProgramacionPagoDetalle->getFechaDesde()->format('Y/m/d'))
-                        ->setCellValue('E' . $i, $arProgramacionPagoDetalle->getFechaHasta()->format('Y/m/d'))
-                        ->setCellValue('F' . $i, $arProgramacionPagoDetalle->getDias())
-                        ->setCellValue('G' . $i, $arProgramacionPagoDetalle->getVrSalario())
-                        ->setCellValue('H' . $i, $arProgramacionPagoDetalle->getVrDevengado())
-                        ->setCellValue('I' . $i, $arProgramacionPagoDetalle->getVrDeducciones())
-                        ->setCellValue('J' . $i, $arProgramacionPagoDetalle->getVrNetoPagar());
-                $i++;
-            }
-
-            $objPHPExcel->getActiveSheet()->setTitle('ProgramacionPagoDetalle');
-            $objPHPExcel->setActiveSheetIndex(0);
-
-            // Redirect output to a client’s web browser (Excel2007)
-            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="ProgramacionPagoDetalle.xlsx"');
-            header('Cache-Control: max-age=0');
-            // If you're serving to IE 9, then the following may be needed
-            header('Cache-Control: max-age=1');
-            // If you're serving to IE over SSL, then the following may be needed
-            header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-            header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-            header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-            header ('Pragma: public'); // HTTP/1.0
-            $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
-            $objWriter->save('php://output');
-            exit;
-        }
     }
 }
 
