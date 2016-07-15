@@ -507,7 +507,12 @@ class ContratosController extends Controller
                 'class' => 'BrasaRecursoHumanoBundle:RhuMotivoTerminacionContrato',
                 'property' => 'motivo',
                 'data' => $arContrato->getTerminacionContratoRel(),
-            ))    
+            ))   
+            ->add('contratoTipoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuContratoTipo',
+                'property' => 'nombre',
+                'data' => $arContrato->getContratoTipoRel(),
+            ))                
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => $arContrato->getFechaHasta()  ,'attr' => array('class' => 'date',)))                                    
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
@@ -517,6 +522,7 @@ class ContratosController extends Controller
             if ($permiso == false){
                 $objMensaje->Mensaje("error", "No tiene permisos para actualizar el contrato", $this);
             } else {
+            $arContrato->setContratoTipoRel($formActualizar->get('contratoTipoRel')->getData());
             $arContrato->setTerminacionContratoRel($formActualizar->get('terminacionContratoRel')->getData());
             $arContrato->setClasificacionRiesgoRel($formActualizar->get('clasificacionRiesgoRel')->getData());
             $arContrato->setFechaHasta($formActualizar->get('fechaHasta')->getData());
