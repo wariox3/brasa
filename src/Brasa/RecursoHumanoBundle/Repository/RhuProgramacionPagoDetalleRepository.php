@@ -58,7 +58,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         if($intDiasVacaciones > 0) {
             $intHorasLaboradas = $intHorasLaboradas - $intHorasVacaciones;
             $intDiasTransporte = $intDiasTransporte - $intDiasVacaciones;                                        
-            $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(31);
+            $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(16);
             $douIngresoBaseCotizacionVacaciones = $intHorasVacaciones * $douVrHora;
             $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
             $arPagoDetalle->setPagoRel($arPago);
