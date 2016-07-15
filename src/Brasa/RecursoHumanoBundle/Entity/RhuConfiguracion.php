@@ -57,6 +57,11 @@ class RhuConfiguracion
     private $codigoHoraDiurnaTrabajada;
 
     /**
+     * @ORM\Column(name="codigo_salario_integral", type="integer")
+     */
+    private $codigoSalarioIntegral;    
+    
+    /**
      * @ORM\Column(name="porcentaje_pension_extra", type="float")
      */
     private $porcentajePensionExtra;
@@ -1145,5 +1150,29 @@ class RhuConfiguracion
     public function getCodigoHoraExtraFestivaNocturna()
     {
         return $this->codigoHoraExtraFestivaNocturna;
+    }
+
+    /**
+     * Set codigoSalarioIntegral
+     *
+     * @param integer $codigoSalarioIntegral
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoSalarioIntegral($codigoSalarioIntegral)
+    {
+        $this->codigoSalarioIntegral = $codigoSalarioIntegral;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSalarioIntegral
+     *
+     * @return integer
+     */
+    public function getCodigoSalarioIntegral()
+    {
+        return $this->codigoSalarioIntegral;
     }
 }

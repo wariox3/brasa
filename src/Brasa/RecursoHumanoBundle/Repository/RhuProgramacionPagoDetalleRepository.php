@@ -320,7 +320,12 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         }
 
         //Liquidar salario
-        $intPagoConceptoSalario = $arConfiguracion->getCodigoHoraDiurnaTrabajada();
+        if($arContrato->getSalarioIntegral() == 1) {
+            $intPagoConceptoSalario = $arConfiguracion->getCodigoSalarioIntegral();
+        } else {
+            $intPagoConceptoSalario = $arConfiguracion->getCodigoHoraDiurnaTrabajada();
+        }
+        
         $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConceptoSalario);
         $douPagoDetalle = $horasDiurnas * $douVrHora;
         $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
