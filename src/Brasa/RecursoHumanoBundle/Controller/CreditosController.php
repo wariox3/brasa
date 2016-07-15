@@ -173,7 +173,9 @@ class CreditosController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        $arrControles = $request->request->All();
+        //$session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        $session->set('filtroIdentificacion', $arrControles['form_TxtIdentificacion']);
         $session->set('filtroDesde', $form->get('fechaDesde')->getData());
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }
