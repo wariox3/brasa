@@ -65,8 +65,7 @@
         <table class="table table-striped table-bordered table-condensed">
             <tr>
                 <th>CÓDIGO</th>
-                <th>CONCEPTO</th>
-                <th>DETALLE</th>
+                <th>CONCEPTO</th>                
                 <th style="text-align: right">%</th>
                 <th style="text-align: right">HORAS</th>
                 <th style="text-align: right">DIAS</th>
@@ -80,8 +79,7 @@
             {% for arPagoDetalles in arPagoDetalles %}
             <tr>
                 <td><input type="hidden" name="LblCodigoGuia[]" value="{{ arPagoDetalles.codigoPagoDetallePk }}">{{ arPagoDetalles.codigoPagoConceptoFk }}</td>
-                <td>{{ arPagoDetalles.pagoConceptoRel.nombre | default('')}}</td>
-                <td>{{ arPagoDetalles.detalle }}</td>
+                <td>{{ arPagoDetalles.pagoConceptoRel.nombre | default('')}}</td>                
                 <td style="text-align: right">{{ arPagoDetalles.porcentajeAplicado | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagoDetalles.numeroHoras | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagoDetalles.numeroDias | number_format(0, '.', ',') }}</td>

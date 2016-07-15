@@ -274,12 +274,11 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         }
 
         //Procesar creditos
-        $arPagoConceptoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-        $arPagoConceptoCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($arConfiguracion->getCodigoCredito());
         $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
         $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findBy(array('codigoEmpleadoFk' => $arProgramacionPagoDetalle->getCodigoEmpleadoFk(), 'codigoCreditoTipoPagoFk' => 1, 'estadoPagado' => 0, 'aprobado' => 1, 'estadoSuspendido' => 0));
         foreach ($arCreditos as $arCredito) {
             if($arCredito->getSaldoTotal() > 0) {
+                $arPagoConceptoCredito = $arCredito->getCreditoTipoRel()->getPagoConceptoRel();
                 $arCreditoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
                 $arCreditoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arCredito->getCodigoCreditoPk());
                 $douCuota = 0;
