@@ -28,7 +28,7 @@ class RhuPagoDetalleRepository extends EntityRepository {
     public function pagosDetallesProgramacionPago($codigoProgramacionPago) {
         $em = $this->getEntityManager();
         $dql   = "SELECT pd FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "
-                . "WHERE p.codigoProgramacionPagoFk = " . $codigoProgramacionPago;
+                . "WHERE p.codigoProgramacionPagoFk = " . $codigoProgramacionPago . " ORDER BY p.codigoEmpleadoFk, pd.codigoPagoConceptoFk";
         $query = $em->createQuery($dql);
         $arPagosDetalles = $query->getResult();                
         return $arPagosDetalles;
