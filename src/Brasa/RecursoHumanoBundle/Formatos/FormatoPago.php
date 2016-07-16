@@ -273,8 +273,8 @@ class FormatoPago extends \FPDF_FPDF {
                         $pdf->Cell(24, 4, $arCredito->getFecha()->format('Y/m/d'), 1, 0, 'L');
                         $pdf->Cell(25, 4, number_format($arCredito->getVrPagar(), 0, '.', ','), 1, 0, 'R');
                         $pdf->Cell(24, 4, $arCredito->getNumeroCuotas(), 1, 0, 'L');
-                        $pdf->Cell(24, 4, $arCreditoPago->getNumeroCuotaActual(), 1, 0, 'L');
-                        $pdf->Cell(24, 4, number_format($arCreditoPago->getSaldo(), 0, '.', ','), 1, 0, 'R');
+                        $pdf->Cell(24, 4, $arCredito->getNumeroCuotaActual(), 1, 0, 'L');
+                        $pdf->Cell(24, 4, number_format($arCredito->getSaldo(), 0, '.', ','), 1, 0, 'R');
                         if ($arCredito->getAprobado() == 1){
                             $pdf->Cell(24, 4, "SI", 1, 0, 'L');
                         }

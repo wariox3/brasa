@@ -21,15 +21,17 @@ class ContratosController extends Controller
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
+                $form = $this->formularioLista();
                 $this->listar();
             }
             if($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
+                $form = $this->formularioLista();
                 $this->listar();
                 $this->generarExcel();
             }
         }
-
+        
         $arContratos = $paginator->paginate($em->createQuery($session->get('dqlContratoLista')), $request->query->get('page', 1), 20);
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:lista.html.twig', array(
             'arContratos' => $arContratos,
@@ -517,6 +519,9 @@ class ContratosController extends Controller
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $formActualizar->handleRequest($request);
+        if ($permiso == false){
+                $objMensaje->Mensaje("error", "No tiene permisos para actualizar el contrato", $this);
+        }
         if ($formActualizar->isValid()) {
             $arUsuario = $this->get('security.context')->getToken()->getUser();
             if ($permiso == false){
@@ -658,9 +663,19 @@ class ContratosController extends Controller
         if($session->get('filtroCodigoCentroCosto')) {
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
         }
+        $strNombreEmpleado = "";
+        if($session->get('filtroIdentificacion')) {
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $session->get('filtroIdentificacion')));
+            if($arEmpleado) {                
+                $strNombreEmpleado = $arEmpleado->getNombreCorto();
+            }  else {
+                $session->set('filtroIdentificacion', null);
+            }          
+        }
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('txtNumeroIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('txtNombreCorto', 'text', array('label'  => 'Nombre','data' => $strNombreEmpleado))
             ->add('fechaDesdeInicia', 'date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHastaInicia', 'date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('estadoActivo', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ACTIVOS', '0' => 'INACTIVOS')))
@@ -682,6 +697,7 @@ class ContratosController extends Controller
             $this->fechaHastaInicia = $controles['fechaHastaInicia'];
         }
         $session->set('filtroIdentificacion', $form->get('txtNumeroIdentificacion')->getData());
+        //$session->set('filtroNombre', $form->get('txtNumeroIdentificacion')->getData());
         //$session->set('filtroIdentificacion', $arrControles['txtNumeroIdentificacion']);
         $session->set('filtroContratoActivo', $form->get('estadoActivo')->getData());
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);

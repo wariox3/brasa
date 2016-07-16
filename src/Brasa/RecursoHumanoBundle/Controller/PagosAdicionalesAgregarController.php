@@ -188,7 +188,7 @@ class PagosAdicionalesAgregarController extends Controller
     }
     
     //editar tiempo suplementario desde movimientos y solo permanente
-    public function tiempoAdicionalEditarAction($tipo, $codigoPagoAdicional) {
+    /*public function tiempoAdicionalEditarAction($tipo, $codigoPagoAdicional) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
@@ -232,7 +232,6 @@ class PagosAdicionalesAgregarController extends Controller
            // $arrControles = $request->request->All();
             $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
             $arPagoConcepto = $form->get('pagoConceptoRel')->getData();
-            //$arPagoAdicional->setEmpleadoRel($arEmpleado);
             $arPagoAdicional->setCantidad($form->get('TxtCantidad')->getData());                    
             $arPagoAdicional->setDetalle($form->get('TxtDetalle')->getData());                    
             $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);                    
@@ -251,7 +250,7 @@ class PagosAdicionalesAgregarController extends Controller
             'form' => $form->createView(),
             'tipo' => $tipo
             ));
-    }
+    }*/
     
     //agregar adicionales al pago desde la programacion de pago
     public function valorAction($codigoProgramacionPago, $tipo) {
@@ -353,28 +352,27 @@ class PagosAdicionalesAgregarController extends Controller
         $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($arPagoAdicional->getCodigoPagoConceptoFk());
         $codigoAdicionalDetalle = $arPagoConcepto->getTipoAdicional();
         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arPagoAdicional->getCodigoEmpleadoFk());
-        $form = $this->createFormBuilder()                           
-            ->add('pagoConceptoRel', 'entity', array(
+        $arrayPropiedadesPagoConcepto = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
-                'query_builder' => function (EntityRepository $er) use($intTipoAdicional,$codigoPagoConcepto,$pagoConcepto) {
+                'query_builder' => function (EntityRepository $er) use ($intTipoAdicional) {
                     return $er->createQueryBuilder('pc')
                     ->where('pc.tipoAdicional = :tipoAdicional')
                     ->setParameter('tipoAdicional', $intTipoAdicional)
                     ->orderBy('pc.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => false,
-                'empty_data' => $codigoPagoConcepto,
-                'empty_value' => $pagoConcepto,
-                ))
-                            
+                'required' => true,
+                'data' => ""
+            ); 
+        if($codigoPagoConcepto) {
+            $arrayPropiedadesPagoConcepto['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $codigoPagoConcepto);
+        }
+        $form = $this->createFormBuilder()                           
+            ->add('pagoConceptoRel', 'entity', $arrayPropiedadesPagoConcepto)                
             ->add('TxtValor', 'number', array('required' => true, 'data' => $arPagoAdicional->getValor()))                             
             ->add('TxtDetalle', 'text', array('required' => false, 'data' => $arPagoAdicional->getDetalle()))                             
             ->add('BtnAgregar', 'submit', array('label'  => 'Agregar',))
             ->getForm();
         $form->handleRequest($request);
-        /*$arrControles = $request->request->All();
-        $identificacion = $arrControles['form_TxtIdentificacion'];
-        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $identificacion));*/
         if ($codigoAdicionalDetalle == 0){
             $objMensaje->Mensaje("error", "El tipo de adicional al pago para el item " . $arPagoConcepto->getNombre() . " en la tabla pago concepto no debe estar en cero (0), 1: bonificación, 2:descuento, 3: comisión, 4: tiempo suplementario!", $this);
         }
@@ -384,8 +382,6 @@ class PagosAdicionalesAgregarController extends Controller
                     $boolError = FALSE;
                     $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
                     $arPagoConcepto = $form->get('pagoConceptoRel')->getData();
-                    //$arEmpleado = $form->get('empleadoRel')->getData();
-                    //$arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arPagoAdicional->getCodigoEmpleadoFk());                             
                     $arrControles = $request->request->All();
                     $identificacion = $arrControles['form_TxtIdentificacion'];
                     $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $identificacion));
@@ -398,16 +394,9 @@ class PagosAdicionalesAgregarController extends Controller
                         $floBonificacionMaxima = $floSalarioEmpleado * ($arConfiguracion->getPorcentajeBonificacionNoPrestacional() / 100);
                         $floBonificacionNoPrestacional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->bonificacionNoPrestacional($arEmpleado->getCodigoEmpleadoPk(), $codigoProgramacionPago);                                
                         $floBonificacion = $form->get('TxtValor')->getData();
-                        $floBonificacionTotal = $floBonificacionNoPrestacional+ $floBonificacion;
-                        /*if($floBonificacionTotal > $floBonificacionMaxima) {
-                            echo "La bonificacion NO PRESTACIONAL no puede superar: " . $floBonificacionMaxima . " ya tiene bonificaciones por:" . $floBonificacionNoPrestacional;
-                            $boolError = TRUE;
-                        } 
-                         * 
-                         */                                                                       
+                        $floBonificacionTotal = $floBonificacionNoPrestacional+ $floBonificacion;                                                                       
                     }
                     if($boolError == FALSE) {
-                        //$arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arPagoAdicional->getCodigoEmpleadoFk());                             
                         $arPagoAdicional->setEmpleadoRel($arEmpleado);
                         $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);                                   
                         $arPagoAdicional->setValor($form->get('TxtValor')->getData());                    
@@ -558,7 +547,6 @@ class PagosAdicionalesAgregarController extends Controller
         $codigoCentroCosto = $arPagoAdicional->getEmpleadoRel()->getCodigoCentroCostoFk();
         $codigoPagoConcepto = $arPagoAdicional->getCodigoPagoConceptoFk();
         $pagoConcepto = $arPagoAdicional->getPagoConceptoRel()->getNombre();
-        //$arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $intTipoAdicional = $tipo;
         $aplicaDiaLaborado = $arPagoAdicional->getAplicaDiaLaborado();
         if ($aplicaDiaLaborado == false ){
@@ -636,13 +624,7 @@ class PagosAdicionalesAgregarController extends Controller
                         $floBonificacionMaxima = $floSalarioEmpleado * ($arConfiguracion->getPorcentajeBonificacionNoPrestacional() / 100);
                         $floBonificacionNoPrestacional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->bonificacionNoPrestacional($arPagoAdicional->getCodigoEmpleadoFk(), 0);                                
                         $floBonificacion = $form->get('TxtValor')->getData();
-                        $floBonificacionTotal = $floBonificacionNoPrestacional+ $floBonificacion;
-                        /*if($floBonificacionTotal > $floBonificacionMaxima) {
-                            echo "La bonificacion NO PRESTACIONAL no puede superar: " . $floBonificacionMaxima . " ya tiene bonificaciones por:" . $floBonificacionNoPrestacional;
-                            $boolError = TRUE;
-                        } 
-                         * 
-                         */                                                                       
+                        $floBonificacionTotal = $floBonificacionNoPrestacional+ $floBonificacion;                                                                       
                     }
                     if($boolError == FALSE) {
                         $arPagoAdicional->setEmpleadoRel($arEmpleado);

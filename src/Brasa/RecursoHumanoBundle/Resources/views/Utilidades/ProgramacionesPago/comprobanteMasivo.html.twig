@@ -19,6 +19,12 @@
                     </div>
                 </div>
                 <div class="form-group form-group-sm">
+                    <label for="form_masivo" class="col-sm-4 control-label">Masivo en un documento:</label>
+                    <div class="col-sm-8">
+                            {{ form_widget(form.masivo) }}
+                    </div>
+                </div>    
+                <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnGenerar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
                     </div>

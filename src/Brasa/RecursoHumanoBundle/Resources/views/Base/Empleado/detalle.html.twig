@@ -187,7 +187,7 @@
                             <td>{{ arContratos.centroCostoRel.nombre  }}</td>
                             <td>{{ arContratos.tipoTiempoRel.nombre  }}</td>
                             <td>{{ arContratos.fechaDesde |date("Y/m/d")  }}</td>
-                            <td>{% if arContratos.codigoContratoTipoFk != 2 %} INDEFINIDO {% else %} {{ arContratos.fechaHasta |date("Y/m/d")  }} {% endif %}</td>
+                            <td>{% if arContratos.estadoActivo == 1 %} INDEFINIDO {% else %} {{ arContratos.fechaHasta |date("Y/m/d")  }} {% endif %}</td>
                             <td style="text-align: right">{% if permisoVerSalario == false %} {% else %} {{ arContratos.vrSalario | number_format(0, '.', ',') }}{% endif %}</td>
                             <td>{{ arContratos.cargoRel.nombre|default('SIN CONTRATO')  }}</td>
                             <td>{{ arContratos.cargoDescripcion  }}</td>
