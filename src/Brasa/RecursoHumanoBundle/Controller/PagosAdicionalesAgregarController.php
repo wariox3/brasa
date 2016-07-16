@@ -566,6 +566,21 @@ class PagosAdicionalesAgregarController extends Controller
         } else {
             $aplicaDiaLaborado = 1;
         }
+        $arrayPropiedadesPagoConcepto = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
+                'query_builder' => function (EntityRepository $er) use ($intTipoAdicional) {
+                    return $er->createQueryBuilder('pc')
+                    ->where('pc.tipoAdicional = :tipoAdicional')
+                    ->setParameter('tipoAdicional', $intTipoAdicional)
+                    ->orderBy('pc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true,
+                'data' => ""
+            ); 
+        if($codigoPagoConcepto) {
+            $arrayPropiedadesPagoConcepto['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $codigoPagoConcepto);
+        }                    
+        
         $form = $this->createFormBuilder() 
             ->add('empleadoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEmpleado',
@@ -576,18 +591,7 @@ class PagosAdicionalesAgregarController extends Controller
                     ->orderBy('e.nombreCorto', 'ASC');},
                 'property' => 'nombreCorto',
                 'required' => true))    
-            ->add('pagoConceptoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
-                'query_builder' => function (EntityRepository $er) use($intTipoAdicional,$codigoPagoConcepto,$pagoConcepto) {
-                    return $er->createQueryBuilder('pc')
-                    ->where('pc.tipoAdicional = :tipoAdicional')
-                    ->setParameter('tipoAdicional', $intTipoAdicional)
-                    ->orderBy('pc.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => false,
-                'empty_data' => $codigoPagoConcepto,
-                'empty_value' => $pagoConcepto,
-                ))
+            ->add('pagoConceptoRel', 'entity', $arrayPropiedadesPagoConcepto)                            
             ->add('TxtValor', 'number', array('required' => true, 'data' => $arPagoAdicional->getValor()))                             
             ->add('TxtDetalle', 'text', array('required' => false, 'data' => $arPagoAdicional->getDetalle()))
             ->add('aplicarDiaLaborado', 'choice', array('choices' => array($aplicaDiaLaborado => $intAplicaDiaLaborado, '0' => 'NO', '1' => 'SI')))                

@@ -589,8 +589,8 @@ class PagoBancoController extends Controller
         $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $strNombreArchivo = "pagoAvvillasOtros" . date('YmdHis') . ".txt";
-        //$strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
-        $strArchivo = "c:/xampp/" . $strNombreArchivo;   
+        $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
+        //$strArchivo = "c:/xampp/" . $strNombreArchivo;   
         ob_clean();
         $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
         ob_clean();
