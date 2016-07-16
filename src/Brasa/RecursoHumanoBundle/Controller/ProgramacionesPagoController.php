@@ -376,8 +376,11 @@ class ProgramacionesPagoController extends Controller
                     $strSql = "DELETE FROM rhu_pago_detalle WHERE codigo_pago_fk = " . $arPago->getCodigoPagoPk();                           
                     $em->getConnection()->executeQuery($strSql);                    
                     $em->remove($arPago);
-                } 
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->actualizarEmpleado($codigoProgramacionPagoDetalle);
+                }
+                if(!$arProgramacionPagoDetalle->getCodigoSoportePagoFk()) {
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->actualizarEmpleado($codigoProgramacionPagoDetalle);                    
+                }                
+                
                 $codigoPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->generarPago($arProgramacionPagoDetalle, $arProgramacionPagoDetalle->getProgramacionPagoRel(), $arProgramacionPagoDetalle->getProgramacionPagoRel()->getCentroCostoRel(), $arConfiguracion, 1);                   
                 if($codigoPago > 0) {
                     $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->liquidar($codigoPago, $arConfiguracion);
