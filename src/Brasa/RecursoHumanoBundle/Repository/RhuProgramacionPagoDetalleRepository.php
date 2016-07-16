@@ -323,16 +323,21 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         } else {
             $intPagoConceptoSalario = $arConfiguracion->getCodigoHoraDiurnaTrabajada();
         }
-        
+        $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+        if($arProgramacionPagoDetalle->getCodigoSoportePagoFk()) {
+            $horasOrdinariasDiurnas = $arProgramacionPagoDetalle->getHorasDiurnas();
+        } else {
+            $horasOrdinariasDiurnas = $horasDiurnas;
+        }
         $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConceptoSalario);
-        $douPagoDetalle = $horasDiurnas * $douVrHora;
+        $douPagoDetalle = $horasOrdinariasDiurnas * $douVrHora;
         $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
         $arPagoDetalle->setPagoRel($arPago);
         $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
         $arPagoDetalle->setVrHora($douVrHora);
         $arPagoDetalle->setVrDia($douVrDia);
         $arPagoDetalle->setPorcentajeAplicado($arPagoConcepto->getPorPorcentaje());
-        $arPagoDetalle->setNumeroHoras($horasDiurnas);
+        $arPagoDetalle->setNumeroHoras($horasOrdinariasDiurnas);
         $arPagoDetalle->setNumeroDias(0);
         $arPagoDetalle->setVrPago($douPagoDetalle);
         $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
