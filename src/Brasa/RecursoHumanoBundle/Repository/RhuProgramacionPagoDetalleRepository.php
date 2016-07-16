@@ -181,8 +181,6 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
             }
         }
 
-        //Esta condicion se debe quitar, se agrega para no permitir un descuento en vacaciones
-        if($intHorasLaboradas > 0) {
             //Procesar los conceptos de pagos adicionales
             $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
             $arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->programacionPago($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getCodigoProgramacionPagoFk());
@@ -269,7 +267,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
 
                 $em->persist($arPagoDetalle);                                
             }
-        }
+        
 
         //Procesar creditos
         $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
