@@ -323,7 +323,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         } else {
             $intPagoConceptoSalario = $arConfiguracion->getCodigoHoraDiurnaTrabajada();
         }
-        $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+        
         if($arProgramacionPagoDetalle->getCodigoSoportePagoFk()) {
             $horasOrdinariasDiurnas = $arProgramacionPagoDetalle->getHorasDiurnas();
         } else {
