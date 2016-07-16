@@ -339,6 +339,7 @@ class PagosAdicionalesAgregarController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
         $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
         $codigoEmpleado = $arPagoAdicional->getCodigoEmpleadoFk();
@@ -348,18 +349,11 @@ class PagosAdicionalesAgregarController extends Controller
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);        
         $codigoCentroCosto = $arProgramacionPago->getCodigoCentroCostoFk();
         $intTipoAdicional = $tipo;
+        $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+        $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($arPagoAdicional->getCodigoPagoConceptoFk());
+        $codigoAdicionalDetalle = $arPagoConcepto->getTipoAdicional();
         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arPagoAdicional->getCodigoEmpleadoFk());
-        $form = $this->createFormBuilder()
-            /*->add('empleadoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuEmpleado',
-                'query_builder' => function (EntityRepository $er) use($codigoEmpleado) {
-                    return $er->createQueryBuilder('e')
-                    ->where('e.codigoEmpleadoPk = :empleado')
-                    ->setParameter('empleado', $codigoEmpleado)
-                    ->orderBy('e.nombreCorto', 'ASC');},
-                'property' => 'nombreCorto',
-                'disabled' => 'disabled',            
-                'required' => true))*/                            
+        $form = $this->createFormBuilder()                           
             ->add('pagoConceptoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
                 'query_builder' => function (EntityRepository $er) use($intTipoAdicional,$codigoPagoConcepto,$pagoConcepto) {
@@ -381,6 +375,9 @@ class PagosAdicionalesAgregarController extends Controller
         /*$arrControles = $request->request->All();
         $identificacion = $arrControles['form_TxtIdentificacion'];
         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $identificacion));*/
+        if ($codigoAdicionalDetalle == 0){
+            $objMensaje->Mensaje("error", "El tipo de adicional al pago para el item " . $arPagoConcepto->getNombre() . " en la tabla pago concepto no debe estar en cero (0), 1: bonificación, 2:descuento, 3: comisión, 4: tiempo suplementario!", $this);
+        }
         if($form->isValid()) {            
             if($form->get('BtnAgregar')->isClicked()) {                
                 if($form->get('TxtValor')->getData() != "" && $form->get('TxtValor')->getData() != 0) {                    

@@ -155,7 +155,7 @@ class CreditosController extends Controller
         $session = $this->getRequest()->getSession();
 
         $form = $this->createFormBuilder()
-            //->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('txtNumeroIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -174,8 +174,8 @@ class CreditosController extends Controller
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $arrControles = $request->request->All();
-        //$session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroIdentificacion', $arrControles['form_TxtIdentificacion']);
+        $session->set('filtroIdentificacion', $form->get('txtNumeroIdentificacion')->getData());
+        //$session->set('filtroIdentificacion', $arrControles['form_TxtIdentificacion']);
         $session->set('filtroDesde', $form->get('fechaDesde')->getData());
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
         

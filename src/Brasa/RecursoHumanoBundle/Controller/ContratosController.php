@@ -660,7 +660,7 @@ class ContratosController extends Controller
         }
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
-            //->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('txtNumeroIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('fechaDesdeInicia', 'date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHastaInicia', 'date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('estadoActivo', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ACTIVOS', '0' => 'INACTIVOS')))
@@ -681,8 +681,8 @@ class ContratosController extends Controller
         if($controles['fechaHastaInicia']) {
             $this->fechaHastaInicia = $controles['fechaHastaInicia'];
         }
-        //$session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroIdentificacion', $arrControles['form_TxtIdentificacion']);
+        $session->set('filtroIdentificacion', $form->get('txtNumeroIdentificacion')->getData());
+        //$session->set('filtroIdentificacion', $arrControles['txtNumeroIdentificacion']);
         $session->set('filtroContratoActivo', $form->get('estadoActivo')->getData());
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
     }
