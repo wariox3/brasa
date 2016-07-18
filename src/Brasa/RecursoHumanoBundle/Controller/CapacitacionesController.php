@@ -184,7 +184,7 @@ class CapacitacionesController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_capacitacion_detalle', array('codigoCapacitacion' => $codigoCapacitacion)));
                 }
             }
-            if($form->get('BtnActualizar')->isClicked()) {
+            /*if($form->get('BtnActualizar')->isClicked()) {
                 if ($arCapacitacion->getEstadoAutorizado() == 0){
                     $arrControles = $request->request->All();
                     $intIndice = 0;
@@ -204,7 +204,7 @@ class CapacitacionesController extends Controller
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_capacitacion_detalle', array('codigoCapacitacion' => $codigoCapacitacion)));
                 }
-            }
+            }*/
             if ($form->get('BtnActualizarDetalle')->isClicked()) {
                 if ($arCapacitacion->getEstadoAutorizado() == 0){
                     $arrControles = $request->request->All();
