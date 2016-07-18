@@ -517,8 +517,8 @@ class PagoBancoController extends Controller
         $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $strNombreArchivo = "pagoAvvillasInterno" . date('YmdHis') . ".txt";
-        //$strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
-        $strArchivo = "c:/xampp/" . $strNombreArchivo;                                    
+        $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
+        //$strArchivo = "c:/xampp/" . $strNombreArchivo;                                    
         ob_clean();
         $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
         $strValorTotal = 0;
@@ -620,7 +620,7 @@ class PagoBancoController extends Controller
         //Inicio cuerpo
         foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
             fputs($ar, "2"); //(1)Tipo registro            
-            fputs($ar, "23"); // codigo transaccion DUDA
+            fputs($ar, "32"); // codigo transaccion DUDA
             fputs($ar, "0040"); // codigo banco des
             fputs($ar, "0002"); // codigo plaza des
             fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getNumeroIdentificacion(), " ", 15)); //(15) Nit del beneficiario           
