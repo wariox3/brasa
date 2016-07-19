@@ -15,6 +15,7 @@ class ConsultasController extends Controller
     var $strSqlAportesLista = "";
     var $strSqlVacacionesPagarLista = "";
     var $strSqlFechaTerminacionLista = "";
+    var $strSqlIngresosContratosLista = "";
     var $strSqlCostosIbcLista = "";
     var $strSqlPagoPendientesBancoLista = "";
     var $strSqlEmpleadosLista = "";
@@ -342,12 +343,39 @@ class ConsultasController extends Controller
                 $this->filtrarFechaTerminacionLista($form);
                 $this->FechaTerminacionListar();
             }
-
         }
         $arFechaTerminacion = $paginator->paginate($em->createQuery($this->strSqlFechaTerminacionLista), $request->query->get('page', 1), 40);
-
         return $this->render('BrasaRecursoHumanoBundle:Consultas/FechaTerminacion:FechaTerminacion.html.twig', array(
             'arFechaTerminacion' => $arFechaTerminacion,
+            'form' => $form->createView()
+            ));
+    }
+    
+    public function FechaIngresoAction() {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $form = $this->formularioIngresosContratosLista();
+        $form->handleRequest($request);
+        $this->contratosIngresosListar();
+        if ($form->isValid())
+        {
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');
+            if($form->get('BtnExcelIngresosContratos')->isClicked()) {
+                $this->filtrarIngresosContratosLista($form);
+                $this->contratosIngresosListar();
+                $this->generarIngresosContratosExcel();
+            }
+            if($form->get('BtnFiltrarIngresosContratos')->isClicked()) {
+                $this->filtrarIngresosContratosLista($form);
+                $this->contratosIngresosListar();
+            }
+
+        }
+        $arIngresosContratos = $paginator->paginate($em->createQuery($this->strSqlIngresosContratosLista), $request->query->get('page', 1), 40);
+
+        return $this->render('BrasaRecursoHumanoBundle:Consultas/IngresosContratos:FechaIngreso.html.twig', array(
+            'arIngresosContratos' => $arIngresosContratos,
             'form' => $form->createView()
             ));
     }
@@ -546,13 +574,13 @@ class ConsultasController extends Controller
                     );
     }
     
-    private function FechaTerminacionListar() {
+    private function contratosIngresosListar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strSqlFechaTerminacionLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->listaContratosFechaTerminacionDQL(
-                    $session->get('filtroCodigoCentroCosto'),
+        $this->strSqlIngresosContratosLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->listaIngresosContratosDQL(
+                    $session->get('filtroCodigoContrato'),
                     $session->get('filtroIdentificacion'),
-                    $session->get('filtroHasta')
+                    $session->get('filtroDesde')
                     );
     }
 
@@ -598,6 +626,16 @@ class ConsultasController extends Controller
                     $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroIdentificacion'),
                     $session->get('filtroDesde'),
+                    $session->get('filtroHasta')
+                    );
+    }
+    
+    private function FechaTerminacionListar() {
+        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $this->strSqlFechaTerminacionLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->listaContratosFechaTerminacionDQL(
+                    $session->get('filtroCodigoCentroCosto'),
+                    $session->get('filtroIdentificacion'),
                     $session->get('filtroHasta')
                     );
     }
@@ -976,7 +1014,6 @@ class ConsultasController extends Controller
         if($session->get('filtroCodigoCentroCosto')) {
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
         }
-
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
@@ -985,7 +1022,36 @@ class ConsultasController extends Controller
             ->add('BtnExcelFechaTerminacion', 'submit', array('label'  => 'Excel',))
             ->getForm();
         return $form;
-    }    
+    }
+
+    private function formularioIngresosContratosLista() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        /*$arrayPropiedades = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoCentroCosto')) {
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
+        }*/
+
+        $form = $this->createFormBuilder()
+            //->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('TxtContrato', 'text', array('label'  => 'Contrato','data' => $session->get('filtroCodigoContrato')))
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('BtnFiltrarIngresosContratos', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnExcelIngresosContratos', 'submit', array('label'  => 'Excel',))
+            ->getForm();
+        return $form;
+    }
 
     private function filtrarPagoPendientesBancoLista($form) {
         $session = $this->getRequest()->getSession();
@@ -1105,6 +1171,15 @@ class ConsultasController extends Controller
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+    }
+    
+    private function filtrarIngresosContratosLista($form) {
+        $session = $this->getRequest()->getSession();
+        $request = $this->getRequest();
+        $controles = $request->request->get('form');
+        $session->set('filtroCodigoContrato', $form->get('TxtContrato')->getData());
+        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
     }
 
     private function generarExcel() {
@@ -2491,7 +2566,6 @@ class ConsultasController extends Controller
         $query = $em->createQuery($this->strSqlFechaTerminacionLista);
         $arFechaTerminaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arFechaTerminaciones = $query->getResult();
-
         foreach ($arFechaTerminaciones as $arFechaTerminacion) {
             
             $objPHPExcel->setActiveSheetIndex(0)
@@ -2509,13 +2583,81 @@ class ConsultasController extends Controller
                     ->setCellValue('L' . $i, $arFechaTerminacion->getVrSalarioPago());
             $i++;
         }
-
         $objPHPExcel->getActiveSheet()->setTitle('ReporteFechaTerminacion');
+        $objPHPExcel->setActiveSheetIndex(0);
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="ReporteFechaTerminacion.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }
+    
+    private function generarIngresosContratosExcel() {
+        ob_clean();
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'CÓDIGO')
+                    ->setCellValue('B1', 'TIPO CONTRATO')
+                    ->setCellValue('C1', 'FECHA')
+                    ->setCellValue('D1', 'NÚMERO')
+                    ->setCellValue('E1', 'IDENTIFICACIÓN')
+                    ->setCellValue('F1', 'EMPLEADO')
+                    ->setCellValue('G1', 'CENTRO COSTO')
+                    ->setCellValue('H1', 'DESDE')
+                    ->setCellValue('I1', 'HASTA')
+                    ->setCellValue('J1', 'FECHA ULTIMO PAGO')
+                    ->setCellValue('K1', 'FECHA ULTIMO VACACIONES')
+                    ->setCellValue('L1', 'SALARIO');
+        $i = 2;
+        $query = $em->createQuery($this->strSqlIngresosContratosLista);
+        $arFechaIngresos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $arFechaIngresos = $query->getResult();
+
+        foreach ($arFechaIngresos as $arFechaIngreso) {
+            
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arFechaIngreso->getCodigoContratoPk())
+                    ->setCellValue('B' . $i, $arFechaIngreso->getContratoTipoRel()->getNombre())
+                    ->setCellValue('C' . $i, $arFechaIngreso->getFecha()->format('Y/m/d'))
+                    ->setCellValue('D' . $i, $arFechaIngreso->getNumero())
+                    ->setCellValue('E' . $i, $arFechaIngreso->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('F' . $i, $arFechaIngreso->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('G' . $i, $arFechaIngreso->getCentroCostoRel()->getNombre())
+                    ->setCellValue('H' . $i, $arFechaIngreso->getFechaDesde()->format('Y/m/d'))
+                    ->setCellValue('I' . $i, $arFechaIngreso->getFechaHasta()->format('Y/m/d'))
+                    ->setCellValue('J' . $i, $arFechaIngreso->getFechaUltimoPago()->format('Y/m/d'))
+                    ->setCellValue('K' . $i, $arFechaIngreso->getFechaUltimoPagoVacaciones()->format('Y/m/d'))
+                    ->setCellValue('L' . $i, $arFechaIngreso->getVrSalarioPago());
+            $i++;
+        }
+
+        $objPHPExcel->getActiveSheet()->setTitle('ReporteFechaIngreso');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="ReporteFechaTerminacion.xlsx"');
+        header('Content-Disposition: attachment;filename="ReporteFechaIngreso.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

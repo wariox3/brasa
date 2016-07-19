@@ -129,6 +129,21 @@ class RhuContratoRepository extends EntityRepository {
         return $dql;
     }
     
+    //lista contratos con las fechas de ingresos
+    public function listaIngresosContratosDQL($strCodigoContrato = "", $strIdentificacion = "", $strDesde = "") {        
+        $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0 AND c.estadoLiquidado = 0";
+        if($strCodigoContrato != "") {
+            $dql .= " AND c.codigoContratoPk = " . $strCodigoContrato;
+        }   
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if($strDesde != "") {
+            $dql .= " AND c.fechaDesde >='" . date_format($strDesde, ('Y-m-d')) . "'";
+        }
+        return $dql;
+    }
+    
     //lista contratos carta laboral
     public function listaContratosCartaLaboralDQL($strCodigoCentroCosto = "", $strIdentificacion = "") {        
         $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0";

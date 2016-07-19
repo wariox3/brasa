@@ -920,7 +920,11 @@ brs_rhu_consultas_contrato_vacaciones_pagar:
     
 brs_rhu_consultas_contrato_fecha_terminacion:    
     path:     /rhu/consultas/contrato/fecha/terminacion
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:FechaTerminacion }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:FechaTerminacion }
+    
+brs_rhu_consultas_contrato_fecha_ingreso:    
+    path:     /rhu/consultas/contrato/fecha/ingreso
+    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:FechaIngreso }    
 
 brs_rhu_utilidades_proyeccion:    
     path:     /rhu/utilidades/proyeccion
