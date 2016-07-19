@@ -54,11 +54,7 @@
                 <th>IDENTIFICACIÓN</th>                
                 <th>EMPLEADO</th>                
                 <th>CENTRO COSTO</th>
-                <th>DESDE</th>
                 <th>HASTA</th>
-                <th>FECHA ULTIMO PAGO</th>
-                <th>FECHA ULTIMO VACACIONES</th>
-                <th>SALARIO</th>
             </tr>
             {% for arFechaTerminacion in arFechaTerminacion %}
             <tr>
@@ -69,11 +65,7 @@
                 <td>{{ arFechaTerminacion.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arFechaTerminacion.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arFechaTerminacion.centroCostoRel.nombre  }}</td>                
-                <td>{{ arFechaTerminacion.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arFechaTerminacion.fechaHasta |date("Y/m/d")  }}</td>
-                <td>{{ arFechaTerminacion.fechaUltimoPago |date("Y/m/d")  }}</td>
-                <td>{{ arFechaTerminacion.fechaUltimoPagoVacaciones |date("Y/m/d")  }}</td>
-                <td style="text-align: right">{{ arFechaTerminacion.vrSalario | number_format(2, '.', ',') }}</td>
             </tr>
             {% endfor %}
         </table>
