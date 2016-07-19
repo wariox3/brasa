@@ -115,8 +115,17 @@ class RhuContratoRepository extends EntityRepository {
     }
     
     //lista contratos con las fecha de vencimiento, no aplica para los contratos a termino indefinido
-    public function listaContratosFechaTerminacionDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
+    public function listaContratosFechaTerminacionDQL($strCodigoEmpleadoTipo = "", $strCodigoZona = "", $strCodigoSubZona = "", $strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
         $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0 AND c.estadoLiquidado = 0 AND c.estadoActivo = 1 AND c.codigoContratoTipoFk <> 3";
+        if($strCodigoEmpleadoTipo != "") {
+            $dql .= " AND e.codigoEmpleadoTipoFk = " . $strCodigoEmpleadoTipo;
+        }
+        if($strCodigoZona != "") {
+            $dql .= " AND e.codigoZonaFk = " . $strCodigoZona;
+        }
+        if($strCodigoSubZona != "") {
+            $dql .= " AND e.codigoSubzonaFk = " . $strCodigoSubZona;
+        }
         if($strCodigoCentroCosto != "") {
             $dql .= " AND c.codigoCentroCostoFk = " . $strCodigoCentroCosto;
         }   
@@ -133,8 +142,17 @@ class RhuContratoRepository extends EntityRepository {
     }
     
     //lista contratos con las fechas de ingresos
-    public function listaIngresosContratosDQL($strCodigoContrato = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
+    public function listaIngresosContratosDQL($strCodigoEmpleadoTipo = "", $strCodigoZona = "", $strCodigoSubZona = "", $strCodigoContrato = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
         $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0 AND c.estadoLiquidado = 0";
+        if($strCodigoEmpleadoTipo != "") {
+            $dql .= " AND e.codigoEmpleadoTipoFk = " . $strCodigoEmpleadoTipo;
+        }
+        if($strCodigoZona != "") {
+            $dql .= " AND e.codigoZonaFk = " . $strCodigoZona;
+        }
+        if($strCodigoSubZona != "") {
+            $dql .= " AND e.codigoSubzonaFk = " . $strCodigoSubZona;
+        }
         if($strCodigoContrato != "") {
             $dql .= " AND c.codigoContratoPk = " . $strCodigoContrato;
         }   

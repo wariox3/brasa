@@ -578,6 +578,9 @@ class ConsultasController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strSqlIngresosContratosLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->listaIngresosContratosDQL(
+            $session->get('filtroCodigoEmpleadoTipo'),
+            $session->get('filtroCodigoZona'),
+            $session->get('filtroCodigoSubzona'),
             $session->get('filtroCodigoContrato'),
             $session->get('filtroIdentificacion'),
             $session->get('filtroDesde'),
@@ -635,6 +638,9 @@ class ConsultasController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strSqlFechaTerminacionLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->listaContratosFechaTerminacionDQL(
+                    $session->get('filtroCodigoEmpleadoTipo'),
+                    $session->get('filtroCodigoZona'),
+                    $session->get('filtroCodigoSubzona'),
                     $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroIdentificacion'),
                     $session->get('filtroDesde'),
@@ -1016,8 +1022,53 @@ class ConsultasController extends Controller
         if($session->get('filtroCodigoCentroCosto')) {
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
         }
+        $arrayPropiedadesTipo = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEmpleadoTipo',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('et')
+                    ->orderBy('et.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoEmpleadoTipo')) {
+            $arrayPropiedadesTipo['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuEmpleadoTipo", $session->get('filtroCodigoEmpleadoTipo'));
+        }
+        $arrayPropiedadesZona = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuZona',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('et')
+                    ->orderBy('et.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoZona')) {
+            $arrayPropiedadesZona['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuZona", $session->get('filtroCodigoZona'));
+        }
+        $arrayPropiedadesSubZona = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuSubzona',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('sz')
+                    ->orderBy('sz.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoSubzona')) {
+            $arrayPropiedadesSubZona['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuSubzona", $session->get('filtroCodigoSubzona'));
+        }
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('empleadoTipoRel', 'entity', $arrayPropiedadesTipo)
+            ->add('zonaRel', 'entity', $arrayPropiedadesZona)
+            ->add('subZonaRel', 'entity', $arrayPropiedadesSubZona)    
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
@@ -1030,23 +1081,52 @@ class ConsultasController extends Controller
     private function formularioIngresosContratosLista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        /*$arrayPropiedades = array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+        $arrayPropiedadesTipo = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEmpleadoTipo',
                 'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cc')
-                    ->orderBy('cc.nombre', 'ASC');},
+                    return $er->createQueryBuilder('et')
+                    ->orderBy('et.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => false,
                 'empty_data' => "",
                 'empty_value' => "TODOS",
                 'data' => ""
             );
-        if($session->get('filtroCodigoCentroCosto')) {
-            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
-        }*/
-
+        if($session->get('filtroCodigoEmpleadoTipo')) {
+            $arrayPropiedadesTipo['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuEmpleadoTipo", $session->get('filtroCodigoEmpleadoTipo'));
+        }
+        $arrayPropiedadesZona = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuZona',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('et')
+                    ->orderBy('et.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoZona')) {
+            $arrayPropiedadesZona['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuZona", $session->get('filtroCodigoZona'));
+        }
+        $arrayPropiedadesSubZona = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuSubzona',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('sz')
+                    ->orderBy('sz.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoSubzona')) {
+            $arrayPropiedadesSubZona['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuSubzona", $session->get('filtroCodigoSubzona'));
+        }
         $form = $this->createFormBuilder()
-            //->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('empleadoTipoRel', 'entity', $arrayPropiedadesTipo)
+            ->add('zonaRel', 'entity', $arrayPropiedadesZona)
+            ->add('subZonaRel', 'entity', $arrayPropiedadesSubZona)    
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('TxtContrato', 'text', array('label'  => 'Contrato','data' => $session->get('filtroCodigoContrato')))
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
@@ -1173,6 +1253,9 @@ class ConsultasController extends Controller
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
+        $session->set('filtroCodigoEmpleadoTipo', $controles['empleadoTipoRel']);
+        $session->set('filtroCodigoZona', $controles['zonaRel']);
+        $session->set('filtroCodigoSubzona', $controles['subZonaRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroDesde', $form->get('fechaDesde')->getData());
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
@@ -1182,6 +1265,9 @@ class ConsultasController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
+        $session->set('filtroCodigoEmpleadoTipo', $controles['empleadoTipoRel']);
+        $session->set('filtroCodigoZona', $controles['zonaRel']);
+        $session->set('filtroCodigoSubzona', $controles['subZonaRel']);
         $session->set('filtroCodigoContrato', $form->get('TxtContrato')->getData());
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroDesde', $form->get('fechaDesde')->getData());
@@ -2563,13 +2649,27 @@ class ConsultasController extends Controller
                     ->setCellValue('E1', 'IDENTIFICACIÓN')
                     ->setCellValue('F1', 'EMPLEADO')
                     ->setCellValue('G1', 'CENTRO COSTO')
-                    ->setCellValue('I1', 'HASTA');
+                    ->setCellValue('I1', 'HASTA')
+                    ->setCellValue('J1', 'EMPLEADO TIPO')
+                    ->setCellValue('K1', 'ZONA')
+                    ->setCellValue('L1', 'SUBZONA');
         $i = 2;
         $query = $em->createQuery($this->strSqlFechaTerminacionLista);
         $arFechaTerminaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arFechaTerminaciones = $query->getResult();
         foreach ($arFechaTerminaciones as $arFechaTerminacion) {
-            
+            $tipo = "";
+            if ($arFechaTerminacion->getEmpleadoRel()->getCodigoEmpleadoTipoFk() != null){
+                $tipo = $arFechaTerminacion->getEmpleadoRel()->getEmpleadoTipoRel()->getNombre();
+            }
+            $zona = "";
+            if ($arFechaTerminacion->getEmpleadoRel()->getCodigoZonaFk() != null){
+                $zona = $arFechaTerminacion->getEmpleadoRel()->getZonaRel()->getNombre();
+            }
+            $subzona = "";
+            if ($arFechaTerminacion->getEmpleadoRel()->getCodigoSubzonaFk() != null){
+                $subzona = $arFechaTerminacion->getEmpleadoRel()->getSubzonaRel()->getNombre();
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arFechaTerminacion->getCodigoContratoPk())
                     ->setCellValue('B' . $i, $arFechaTerminacion->getContratoTipoRel()->getNombre())
@@ -2578,7 +2678,10 @@ class ConsultasController extends Controller
                     ->setCellValue('E' . $i, $arFechaTerminacion->getEmpleadoRel()->getNumeroIdentificacion())
                     ->setCellValue('F' . $i, $arFechaTerminacion->getEmpleadoRel()->getNombreCorto())
                     ->setCellValue('G' . $i, $arFechaTerminacion->getCentroCostoRel()->getNombre())
-                    ->setCellValue('I' . $i, $arFechaTerminacion->getFechaHasta()->format('Y/m/d'));
+                    ->setCellValue('I' . $i, $arFechaTerminacion->getFechaHasta()->format('Y/m/d'))
+                    ->setCellValue('J' . $i, $tipo)
+                    ->setCellValue('K' . $i, $zona)
+                    ->setCellValue('L' . $i, $subzona);
             $i++;
         }
         $objPHPExcel->getActiveSheet()->setTitle('ReporteFechaTerminacion');
@@ -2622,14 +2725,28 @@ class ConsultasController extends Controller
                     ->setCellValue('E1', 'IDENTIFICACIÓN')
                     ->setCellValue('F1', 'EMPLEADO')
                     ->setCellValue('G1', 'CENTRO COSTO')
-                    ->setCellValue('H1', 'DESDE');
+                    ->setCellValue('H1', 'DESDE')
+                    ->setCellValue('I1', 'EMPLEADO TIPO')
+                    ->setCellValue('J1', 'ZONA')
+                    ->setCellValue('K1', 'SUBZONA');
         $i = 2;
         $query = $em->createQuery($this->strSqlIngresosContratosLista);
         $arFechaIngresos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arFechaIngresos = $query->getResult();
 
         foreach ($arFechaIngresos as $arFechaIngreso) {
-            
+            $tipo = "";
+            if ($arFechaIngreso->getEmpleadoRel()->getCodigoEmpleadoTipoFk() != null){
+                $tipo = $arFechaIngreso->getEmpleadoRel()->getEmpleadoTipoRel()->getNombre();
+            }
+            $zona = "";
+            if ($arFechaIngreso->getEmpleadoRel()->getCodigoZonaFk() != null){
+                $zona = $arFechaIngreso->getEmpleadoRel()->getZonaRel()->getNombre();
+            }
+            $subzona = "";
+            if ($arFechaIngreso->getEmpleadoRel()->getCodigoSubzonaFk() != null){
+                $subzona = $arFechaIngreso->getEmpleadoRel()->getSubzonaRel()->getNombre();
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arFechaIngreso->getCodigoContratoPk())
                     ->setCellValue('B' . $i, $arFechaIngreso->getContratoTipoRel()->getNombre())
@@ -2638,7 +2755,10 @@ class ConsultasController extends Controller
                     ->setCellValue('E' . $i, $arFechaIngreso->getEmpleadoRel()->getNumeroIdentificacion())
                     ->setCellValue('F' . $i, $arFechaIngreso->getEmpleadoRel()->getNombreCorto())
                     ->setCellValue('G' . $i, $arFechaIngreso->getCentroCostoRel()->getNombre())
-                    ->setCellValue('H' . $i, $arFechaIngreso->getFechaDesde()->format('Y/m/d'));
+                    ->setCellValue('H' . $i, $arFechaIngreso->getFechaDesde()->format('Y/m/d'))
+                    ->setCellValue('I' . $i, $tipo)
+                    ->setCellValue('J' . $i, $zona)
+                    ->setCellValue('K' . $i, $subzona);
             $i++;
         }
 
