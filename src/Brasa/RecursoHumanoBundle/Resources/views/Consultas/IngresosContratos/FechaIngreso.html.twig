@@ -50,30 +50,20 @@
                 <th>CÓDIGO</th>
                 <th>TIPO</th>
                 <th>FECHA</th>
-                <th>NÚMERO</th>
                 <th>IDENTIFICACIÓN</th>                
                 <th>EMPLEADO</th>                
                 <th>CENTRO COSTO</th>
                 <th>DESDE</th>
-                <th>HASTA</th>
-                <th>FECHA ULTIMO PAGO</th>
-                <th>FECHA ULTIMO VACACIONES</th>
-                <th>SALARIO</th>
             </tr>
             {% for arIngresosContratos in arIngresosContratos %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arIngresosContratos.codigoContratoPk }}">{{ arIngresosContratos.codigoContratoPk }} </td>
                 <td>{{ arIngresosContratos.ContratoTipoRel.nombre  }}</td>
                 <td>{{ arIngresosContratos.fecha |date("Y/m/d")  }}</td>
-                <td>{{ arIngresosContratos.numero  }}</td>
                 <td>{{ arIngresosContratos.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arIngresosContratos.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arIngresosContratos.centroCostoRel.nombre  }}</td>                
                 <td>{{ arIngresosContratos.fechaDesde |date("Y/m/d")  }}</td>
-                <td>{{ arIngresosContratos.fechaHasta |date("Y/m/d")  }}</td>
-                <td>{{ arIngresosContratos.fechaUltimoPago |date("Y/m/d")  }}</td>
-                <td>{{ arIngresosContratos.fechaUltimoPagoVacaciones |date("Y/m/d")  }}</td>
-                <td style="text-align: right">{{ arIngresosContratos.vrSalario | number_format(2, '.', ',') }}</td>
             </tr>
             {% endfor %}
         </table>

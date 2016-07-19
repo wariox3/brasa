@@ -2563,11 +2563,7 @@ class ConsultasController extends Controller
                     ->setCellValue('E1', 'IDENTIFICACIÓN')
                     ->setCellValue('F1', 'EMPLEADO')
                     ->setCellValue('G1', 'CENTRO COSTO')
-                    ->setCellValue('H1', 'DESDE')
-                    ->setCellValue('I1', 'HASTA')
-                    ->setCellValue('J1', 'FECHA ULTIMO PAGO')
-                    ->setCellValue('K1', 'FECHA ULTIMO VACACIONES')
-                    ->setCellValue('L1', 'SALARIO');
+                    ->setCellValue('I1', 'HASTA');
         $i = 2;
         $query = $em->createQuery($this->strSqlFechaTerminacionLista);
         $arFechaTerminaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
@@ -2582,11 +2578,7 @@ class ConsultasController extends Controller
                     ->setCellValue('E' . $i, $arFechaTerminacion->getEmpleadoRel()->getNumeroIdentificacion())
                     ->setCellValue('F' . $i, $arFechaTerminacion->getEmpleadoRel()->getNombreCorto())
                     ->setCellValue('G' . $i, $arFechaTerminacion->getCentroCostoRel()->getNombre())
-                    ->setCellValue('H' . $i, $arFechaTerminacion->getFechaDesde()->format('Y/m/d'))
-                    ->setCellValue('I' . $i, $arFechaTerminacion->getFechaHasta()->format('Y/m/d'))
-                    ->setCellValue('J' . $i, $arFechaTerminacion->getFechaUltimoPago()->format('Y/m/d'))
-                    ->setCellValue('K' . $i, $arFechaTerminacion->getFechaUltimoPagoVacaciones()->format('Y/m/d'))
-                    ->setCellValue('L' . $i, $arFechaTerminacion->getVrSalarioPago());
+                    ->setCellValue('I' . $i, $arFechaTerminacion->getFechaHasta()->format('Y/m/d'));
             $i++;
         }
         $objPHPExcel->getActiveSheet()->setTitle('ReporteFechaTerminacion');
@@ -2630,11 +2622,7 @@ class ConsultasController extends Controller
                     ->setCellValue('E1', 'IDENTIFICACIÓN')
                     ->setCellValue('F1', 'EMPLEADO')
                     ->setCellValue('G1', 'CENTRO COSTO')
-                    ->setCellValue('H1', 'DESDE')
-                    ->setCellValue('I1', 'HASTA')
-                    ->setCellValue('J1', 'FECHA ULTIMO PAGO')
-                    ->setCellValue('K1', 'FECHA ULTIMO VACACIONES')
-                    ->setCellValue('L1', 'SALARIO');
+                    ->setCellValue('H1', 'DESDE');
         $i = 2;
         $query = $em->createQuery($this->strSqlIngresosContratosLista);
         $arFechaIngresos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
@@ -2650,11 +2638,7 @@ class ConsultasController extends Controller
                     ->setCellValue('E' . $i, $arFechaIngreso->getEmpleadoRel()->getNumeroIdentificacion())
                     ->setCellValue('F' . $i, $arFechaIngreso->getEmpleadoRel()->getNombreCorto())
                     ->setCellValue('G' . $i, $arFechaIngreso->getCentroCostoRel()->getNombre())
-                    ->setCellValue('H' . $i, $arFechaIngreso->getFechaDesde()->format('Y/m/d'))
-                    ->setCellValue('I' . $i, $arFechaIngreso->getFechaHasta()->format('Y/m/d'))
-                    ->setCellValue('J' . $i, $arFechaIngreso->getFechaUltimoPago()->format('Y/m/d'))
-                    ->setCellValue('K' . $i, $arFechaIngreso->getFechaUltimoPagoVacaciones()->format('Y/m/d'))
-                    ->setCellValue('L' . $i, $arFechaIngreso->getVrSalarioPago());
+                    ->setCellValue('H' . $i, $arFechaIngreso->getFechaDesde()->format('Y/m/d'));
             $i++;
         }
 
