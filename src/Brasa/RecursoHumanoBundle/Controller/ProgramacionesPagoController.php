@@ -401,9 +401,11 @@ class ProgramacionesPagoController extends Controller
         $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($codigoProgramacionPagoDetalle);
         if($arProgramacionPagoDetalle->getCodigoSoportePagoFk()) {
             $arSoportePago =  $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($arProgramacionPagoDetalle->getCodigoSoportePagoFk());                                
-            $strAnio = $arSoportePago->getFechaDesde()->format('Y');
-            $strMes = $arSoportePago->getFechaDesde()->format('m');        
-            $arProgramacionDetalle =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arSoportePago->getCodigoRecursoFk()));                                    
+            if($arSoportePago) {
+                $strAnio = $arSoportePago->getFechaDesde()->format('Y');
+                $strMes = $arSoportePago->getFechaDesde()->format('m');        
+                $arProgramacionDetalle =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arSoportePago->getCodigoRecursoFk()));                                                    
+            }
         }        
         
         $dql = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->listaDql("", $codigoProgramacionPagoDetalle);                
