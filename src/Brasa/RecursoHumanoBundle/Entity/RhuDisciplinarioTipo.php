@@ -22,6 +22,11 @@ class RhuDisciplinarioTipo
      */    
     private $nombre; 
     
+    /**     
+     * @ORM\Column(name="suspension", type="boolean")
+     */    
+    private $suspension = false;    
+    
     /**
      * @ORM\Column(name="codigo_contenido_formato_fk", type="integer", nullable=true)
      */    
@@ -163,5 +168,29 @@ class RhuDisciplinarioTipo
     public function getContenidoFormatoRel()
     {
         return $this->contenidoFormatoRel;
+    }
+
+    /**
+     * Set suspension
+     *
+     * @param boolean $suspension
+     *
+     * @return RhuDisciplinarioTipo
+     */
+    public function setSuspension($suspension)
+    {
+        $this->suspension = $suspension;
+
+        return $this;
+    }
+
+    /**
+     * Get suspension
+     *
+     * @return boolean
+     */
+    public function getSuspension()
+    {
+        return $this->suspension;
     }
 }

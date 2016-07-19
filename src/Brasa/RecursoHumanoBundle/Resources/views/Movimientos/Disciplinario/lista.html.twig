@@ -72,7 +72,7 @@
                 <th>CENTRO COSTO</th>                                                                                                
                 <th>F.INGRESO</th>
                 <th>USUARIO</th>
-                <th>PROCEDE</th>
+                <th>PRO</th>
                 <th>AUT</th>
                 <th>CER</th>
                 <th style="text-align: center"></th>
@@ -88,7 +88,7 @@
                 <td>{{ arDisciplinarios.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arDisciplinarios.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arDisciplinarios.centroCostoRel.nombre  }}</td>                
-                <td>{{ arDisciplinarios.fechaIngresoTrabajo|default('NO APLICA')  }}</td>
+                <td>{{ arDisciplinarios.fechaIngresoTrabajo |date('Y/m/d')  }}</td>
                 <td>{{ arDisciplinarios.codigoUsuario  }}</td>
                 <td>{% if arDisciplinarios.estadoProcede == 1%}SI{% else %}NO{% endif %}</td>
                 <td>{% if arDisciplinarios.estadoAutorizado == 1%}SI{% else %}NO{% endif %}</td>

@@ -35,23 +35,23 @@
                         <td class="titulo">PROCESO:</td>
                         <td>{{ arDisciplinario.disciplinarioTipoRel.nombre }}</td>
                         <td class="titulo">FECHA DEL INCIDENTE O CASO</td>
-                        <td>{{ arDisciplinario.fechaIncidente|default('NO APLICA') }}</td>
+                        <td>{{ arDisciplinario.fechaIncidente|date('Y/m/d') }}</td>
                     </tr>
                     <tr>
                         <td class="titulo">CAUSAL O MOTIVO</td>
                         <td>{{ arDisciplinario.asunto|default('NO APLICA') }}</td>
-                        <td class="titulo">DESCARGOS:</td>
-                        <td>{{ arDisciplinario.descargos|default('NO APLICA') }}</td>
-                        <td class="titulo">FECHA PROCESO INICIO</td>
-                        <td>{{ arDisciplinario.fechaAplicaProceso|default('NO APLICA') }}</td>
+                        <td class="titulo"></td>
+                        <td></td>
+                        <td class="titulo">FECHA SANCION (DESDE)</td>
+                        <td>{{ arDisciplinario.fechaDesdeSancion | date('Y/m/d')}}</td>
                     </tr>
                     <tr>
                         <td class="titulo">EMPLEADO:</td>
                         <td>{{ arDisciplinario.empleadoRel.nombreCorto }}</td>
                         <td class="titulo">IDENTIFICACIÓN:</td>
                         <td>{{ arDisciplinario.empleadoRel.numeroIdentificacion }}</td>
-                        <td class="titulo">FECHA PROCESO HASTA</td>
-                        <td>{{ arDisciplinario.fechaAplicaHastaProceso| default('NO APLICA') }}</td>
+                        <td class="titulo">FECHA SANCION (HASTA)</td>
+                        <td>{{ arDisciplinario.fechaHastaSancion | date('Y/m/d') }}</td>
                     </tr>
                     <tr>
                         <td class="titulo">CENTRO COSTO:</td>
@@ -59,7 +59,7 @@
                         <td class="titulo">CARGO:</td>
                         <td>{{ arDisciplinario.cargoRel.nombre | default('') }}</td>
                         <td class="titulo">FECHA INGRESO A TRABAJAR</td>
-                        <td>{{ arDisciplinario.fechaIngresoTrabajo | default('NO APLICA') }}</td>
+                        <td>{{ arDisciplinario.fechaIngresoTrabajo | date('Y/m/d') }}</td>
                     </tr>
                     <tr>
                         <td class="titulo">PUESTO:</td>
@@ -91,7 +91,7 @@
                         <td class="titulo"></td>
                         <td></td>
                         <td class="titulo">CERRADO</td>
-                        <td>{% if arDisciplinario.estadoCerrado == 1%}NO {% else %}SI {% endif%}</td>
+                        <td>{% if arDisciplinario.estadoCerrado == 1%}SI {% else %}NO {% endif%}</td>
                     </tr>
                     <tr>
                         <td class="titulo">COMENTARIOS:</td>

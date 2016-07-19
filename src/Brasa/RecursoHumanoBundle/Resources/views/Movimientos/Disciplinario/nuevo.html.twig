@@ -49,19 +49,19 @@
             <div class="form-group form-group-sm">
                 <label for="form_fechaIncidente" class="col-sm-3 control-label">Fecha de incidente:</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.fechaIncidente, { 'attr': {'class': 'form-control', 'placeholder': 'Fecha en la que se presento el caso o incidente Ejemplo: sabado 3 de marzo de 2015'} }) }}
+                            {{ form_widget(form.fechaIncidente) }}
                 </div>
             </div>    
             <div class="form-group form-group-sm">
-                <label for="form_fechaAplicaProceso" class="col-sm-3 control-label">Fecha proceso inicio:</label>
+                <label for="form_fechaAplicaProceso" class="col-sm-3 control-label">Fecha desde(sancion):</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.fechaAplicaProceso, { 'attr': {'class': 'form-control', 'placeholder': 'Fecha en la que se inicia la sancion Ejemplo: sabado 3 de marzo de 2015'} }) }}
+                            {{ form_widget(form.fechaDesdeSancion) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">
-                <label for="form_fechaAplicaHastaProceso" class="col-sm-3 control-label">Fecha proceso hasta:</label>
+                <label for="form_fechaAplicaHastaProceso" class="col-sm-3 control-label">Fecha hasta(sancion):</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.fechaAplicaHastaProceso, { 'attr': {'class': 'form-control', 'placeholder': 'Fecha en la que se termina la sancion Ejemplo: sabado 3 de marzo de 2015'} }) }}
+                            {{ form_widget(form.fechaHastaSancion) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">
@@ -73,7 +73,7 @@
             <div class="form-group form-group-sm">
                 <label for="form_fechaIngresoTrabajo" class="col-sm-3 control-label">Fecha ingreso trabajo:</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.fechaIngresoTrabajo, { 'attr': {'class': 'form-control', 'placeholder': 'Fecha en la que el trabajador empieza laborales despues de la sancion Ejemplo: sabado 3 de marzo de 2015'} }) }}
+                            {{ form_widget(form.fechaIngresoTrabajo) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">

@@ -69,6 +69,10 @@ class DisciplinarioController extends Controller
             $arDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
         } else {
             $arDisciplinario->setFecha(new \DateTime('now'));
+            $arDisciplinario->setFechaDesdeSancion(new \DateTime('now'));
+            $arDisciplinario->setFechaHastaSancion(new \DateTime('now'));
+            $arDisciplinario->setFechaIncidente(new \DateTime('now'));
+            $arDisciplinario->setFechaIngresoTrabajo(new \DateTime('now'));
         }
         $form = $this->createForm(new RhuDisciplinarioType, $arDisciplinario);
         $form->handleRequest($request);
@@ -86,6 +90,9 @@ class DisciplinarioController extends Controller
                         $arDisciplinario->setCargoRel($arEmpleado->getCargoRel());
                         if($codigoDisciplinario == 0) {
                             $arDisciplinario->setCodigoUsuario($arUsuario->getUserName());
+                            $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                            $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
+                            $arDisciplinario->setContratoRel($arContrato);                            
                         }
                         $em->persist($arDisciplinario);
                         $em->flush();
@@ -147,10 +154,28 @@ class DisciplinarioController extends Controller
             if($form->get('BtnCerrar')->isClicked()) {
                 if($arProcesoDisciplinario->getEstadoAutorizado() == 1) {
                     if($arProcesoDisciplinario->getEstadoCerrado() == 0) {
+                        if($arProcesoDisciplinario->getDisciplinarioTipoRel()->getSuspension() == 1) {
+                            if($arProcesoDisciplinario->getEstadoProcede() == 1) {
+                                $arLicenciaTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuLicenciaTipo();
+                                $arLicenciaTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicenciaTipo')->find(6);
+                                $arLicencia = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
+                                $arLicencia->setAfectaTransporte(1);
+                                $arLicencia->setCentroCostoRel($arProcesoDisciplinario->getCentroCostoRel());
+                                $arLicencia->setContratoRel($arProcesoDisciplinario->getContratoRel());
+                                $arLicencia->setEmpleadoRel($arProcesoDisciplinario->getEmpleadoRel());
+                                $arLicencia->setFecha(new \DateTime('now'));
+                                $arLicencia->setFechaDesde($arProcesoDisciplinario->getFechaDesdeSancion());
+                                $arLicencia->setFechaHasta($arProcesoDisciplinario->getFechaHastaSancion());
+                                $arLicencia->setCodigoUsuario($arProcesoDisciplinario->getCodigoUsuario());
+                                $arLicencia->setLicenciaTipoRel($arLicenciaTipo);
+                                $intDias = $arLicencia->getFechaDesde()->diff($arLicencia->getFechaHasta());
+                                $intDias = $intDias->format('%a');
+                                $intDias = $intDias + 1;
+                                $arLicencia->setCantidad($intDias);
+                                $em->persist($arLicencia);                            
+                            }                            
+                        }
                         $arProcesoDisciplinario->setEstadoCerrado(1);
-                        $em->persist($arProcesoDisciplinario);
-                    } else {
-                        $arProcesoDisciplinario->setEstadoCerrado(0);
                         $em->persist($arProcesoDisciplinario);
                     }
                     $em->flush();
@@ -287,7 +312,7 @@ class DisciplinarioController extends Controller
     private function formularioDetalle($ar) {
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
-        $arrBotonCerrar = array('label' => 'Cerrar / abrir', 'disabled' => false);
+        $arrBotonCerrar = array('label' => 'Cerrar', 'disabled' => false);
         $arrBotonProcede = array('label' => 'Procede / no procede', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);               
         $arrBotonEliminarDescargo = array('label' => 'Eliminar descargo', 'disabled' => false);               
@@ -297,6 +322,11 @@ class DisciplinarioController extends Controller
         } else {
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonImprimir['disabled'] = true;
+            $arrBotonCerrar['disabled'] = true;
+            $arrBotonProcede['disabled'] = true;
+        }
+        if($ar->getEstadoCerrado() == 1) {
+            $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonCerrar['disabled'] = true;
             $arrBotonProcede['disabled'] = true;
         }

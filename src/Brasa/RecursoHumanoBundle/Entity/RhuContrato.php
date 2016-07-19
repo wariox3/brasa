@@ -421,7 +421,10 @@ class RhuContrato
      */
     protected $cambiosTiposContratosContratoRel;
     
-    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuDisciplinario", mappedBy="contratoRel")
+     */
+    protected $disciplinariosContratoRel;     
     
     
     /**
@@ -2474,5 +2477,39 @@ class RhuContrato
     public function getCodigoUsuarioTermina()
     {
         return $this->codigoUsuarioTermina;
+    }
+
+    /**
+     * Add disciplinariosContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplinariosContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addDisciplinariosContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplinariosContratoRel)
+    {
+        $this->disciplinariosContratoRel[] = $disciplinariosContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove disciplinariosContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplinariosContratoRel
+     */
+    public function removeDisciplinariosContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario $disciplinariosContratoRel)
+    {
+        $this->disciplinariosContratoRel->removeElement($disciplinariosContratoRel);
+    }
+
+    /**
+     * Get disciplinariosContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDisciplinariosContratoRel()
+    {
+        return $this->disciplinariosContratoRel;
     }
 }

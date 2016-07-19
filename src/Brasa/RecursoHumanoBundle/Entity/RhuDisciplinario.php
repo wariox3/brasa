@@ -38,6 +38,11 @@ class RhuDisciplinario
     private $codigoEmpleadoFk;             
     
     /**
+     * @ORM\Column(name="codigo_contrato_fk", type="integer", nullable=true)
+     */    
+    private $codigoContratoFk;    
+    
+    /**
      * @ORM\Column(name="asunto", type="string", length=500, nullable=true)
      */    
     private $asunto;     
@@ -48,22 +53,22 @@ class RhuDisciplinario
     private $comentarios;
     
     /**
-     * @ORM\Column(name="fecha_incidente", type="string", length=100, nullable=true)
+     * @ORM\Column(name="fecha_incidente", type="date", nullable=true)
      */    
     private $fechaIncidente;
     
     /**
-     * @ORM\Column(name="fecha_aplica_proceso", type="string", length=100, nullable=true)
+     * @ORM\Column(name="fecha_desde_sancion", type="date", nullable=true)
      */    
-    private $fechaAplicaProceso;
+    private $fechaDesdeSancion;
     
     /**
-     * @ORM\Column(name="fecha_aplica_hasta_proceso", type="string", length=100, nullable=true)
+     * @ORM\Column(name="fecha_hasta_sancion", type="date", nullable=true)
      */    
-    private $fechaAplicaHastaProceso;
+    private $fechaHastaSancion;
     
     /**
-     * @ORM\Column(name="fecha_ingreso_trabajo", type="string", length=100, nullable=true)
+     * @ORM\Column(name="fecha_ingreso_trabajo", type="date", nullable=true)
      */    
     private $fechaIngresoTrabajo;
     
@@ -153,12 +158,16 @@ class RhuDisciplinario
     protected $cargoRel;
     
     /**
+     * @ORM\ManyToOne(targetEntity="RhuContrato", inversedBy="disciplinariosContratoRel")
+     * @ORM\JoinColumn(name="codigo_contrato_fk", referencedColumnName="codigo_contrato_pk")
+     */
+    protected $contratoRel;      
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuDisciplinarioDescargo", mappedBy="disciplinarioRel")
      */
     protected $disciplinariosDescargosDisciplinarioRel;     
 
-
-    
     /**
      * Constructor
      */
@@ -274,6 +283,30 @@ class RhuDisciplinario
     }
 
     /**
+     * Set codigoContratoFk
+     *
+     * @param integer $codigoContratoFk
+     *
+     * @return RhuDisciplinario
+     */
+    public function setCodigoContratoFk($codigoContratoFk)
+    {
+        $this->codigoContratoFk = $codigoContratoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoFk
+     *
+     * @return integer
+     */
+    public function getCodigoContratoFk()
+    {
+        return $this->codigoContratoFk;
+    }
+
+    /**
      * Set asunto
      *
      * @param string $asunto
@@ -324,7 +357,7 @@ class RhuDisciplinario
     /**
      * Set fechaIncidente
      *
-     * @param string $fechaIncidente
+     * @param \DateTime $fechaIncidente
      *
      * @return RhuDisciplinario
      */
@@ -338,7 +371,7 @@ class RhuDisciplinario
     /**
      * Get fechaIncidente
      *
-     * @return string
+     * @return \DateTime
      */
     public function getFechaIncidente()
     {
@@ -346,57 +379,57 @@ class RhuDisciplinario
     }
 
     /**
-     * Set fechaAplicaProceso
+     * Set fechaDesdeSancion
      *
-     * @param string $fechaAplicaProceso
+     * @param \DateTime $fechaDesdeSancion
      *
      * @return RhuDisciplinario
      */
-    public function setFechaAplicaProceso($fechaAplicaProceso)
+    public function setFechaDesdeSancion($fechaDesdeSancion)
     {
-        $this->fechaAplicaProceso = $fechaAplicaProceso;
+        $this->fechaDesdeSancion = $fechaDesdeSancion;
 
         return $this;
     }
 
     /**
-     * Get fechaAplicaProceso
+     * Get fechaDesdeSancion
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getFechaAplicaProceso()
+    public function getFechaDesdeSancion()
     {
-        return $this->fechaAplicaProceso;
+        return $this->fechaDesdeSancion;
     }
 
     /**
-     * Set fechaAplicaHastaProceso
+     * Set fechaHastaSancion
      *
-     * @param string $fechaAplicaHastaProceso
+     * @param \DateTime $fechaHastaSancion
      *
      * @return RhuDisciplinario
      */
-    public function setFechaAplicaHastaProceso($fechaAplicaHastaProceso)
+    public function setFechaHastaSancion($fechaHastaSancion)
     {
-        $this->fechaAplicaHastaProceso = $fechaAplicaHastaProceso;
+        $this->fechaHastaSancion = $fechaHastaSancion;
 
         return $this;
     }
 
     /**
-     * Get fechaAplicaHastaProceso
+     * Get fechaHastaSancion
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getFechaAplicaHastaProceso()
+    public function getFechaHastaSancion()
     {
-        return $this->fechaAplicaHastaProceso;
+        return $this->fechaHastaSancion;
     }
 
     /**
      * Set fechaIngresoTrabajo
      *
-     * @param string $fechaIngresoTrabajo
+     * @param \DateTime $fechaIngresoTrabajo
      *
      * @return RhuDisciplinario
      */
@@ -410,7 +443,7 @@ class RhuDisciplinario
     /**
      * Get fechaIngresoTrabajo
      *
-     * @return string
+     * @return \DateTime
      */
     public function getFechaIngresoTrabajo()
     {
@@ -799,6 +832,30 @@ class RhuDisciplinario
     public function getCargoRel()
     {
         return $this->cargoRel;
+    }
+
+    /**
+     * Set contratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel
+     *
+     * @return RhuDisciplinario
+     */
+    public function setContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratoRel = null)
+    {
+        $this->contratoRel = $contratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get contratoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContrato
+     */
+    public function getContratoRel()
+    {
+        return $this->contratoRel;
     }
 
     /**
