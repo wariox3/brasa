@@ -115,13 +115,16 @@ class RhuContratoRepository extends EntityRepository {
     }
     
     //lista contratos con las fecha de vencimiento, no aplica para los contratos a termino indefinido
-    public function listaContratosFechaTerminacionDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strHasta = "") {        
+    public function listaContratosFechaTerminacionDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
         $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0 AND c.estadoLiquidado = 0 AND c.estadoActivo = 1 AND c.codigoContratoTipoFk <> 3";
         if($strCodigoCentroCosto != "") {
             $dql .= " AND c.codigoCentroCostoFk = " . $strCodigoCentroCosto;
         }   
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND c.fechaHasta >='" . date_format($strDesde, ('Y-m-d')) . "'";
         }
         if($strHasta != "") {
             $dql .= " AND c.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
@@ -142,7 +145,7 @@ class RhuContratoRepository extends EntityRepository {
             $dql .= " AND c.fechaDesde >='" . date_format($strDesde, ('Y-m-d')) . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND c.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND c.fechaDesde <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }
         return $dql;
     }

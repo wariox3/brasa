@@ -637,6 +637,7 @@ class ConsultasController extends Controller
         $this->strSqlFechaTerminacionLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->listaContratosFechaTerminacionDQL(
                     $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroIdentificacion'),
+                    $session->get('filtroDesde'),
                     $session->get('filtroHasta')
                     );
     }
@@ -1018,6 +1019,7 @@ class ConsultasController extends Controller
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnFiltrarFechaTerminacion', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcelFechaTerminacion', 'submit', array('label'  => 'Excel',))
@@ -1172,6 +1174,7 @@ class ConsultasController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }
     
