@@ -2652,10 +2652,11 @@ class ConsultasController extends Controller
                     ->setCellValue('D1', 'EMPLEADO')
                     ->setCellValue('E1', 'CENTRO COSTO')
                     ->setCellValue('F1', 'HASTA')
-                    ->setCellValue('G1', 'TIPO')
-                    ->setCellValue('H1', 'ZONA')
-                    ->setCellValue('I1', 'SUBZONA')
-                    ->setCellValue('J1', 'USUARIO');
+                    ->setCellValue('G1', 'HASTA')
+                    ->setCellValue('H1', 'TIPO')
+                    ->setCellValue('I1', 'ZONA')
+                    ->setCellValue('J1', 'SUBZONA')
+                    ->setCellValue('K1', 'USUARIO');
         $i = 2;
         $query = $em->createQuery($this->strSqlFechaTerminacionLista);
         $arFechaTerminaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
@@ -2673,6 +2674,10 @@ class ConsultasController extends Controller
             if ($arFechaTerminacion->getEmpleadoRel()->getCodigoSubzonaFk() != null){
                 $subzona = $arFechaTerminacion->getEmpleadoRel()->getSubzonaRel()->getNombre();
             }
+            $motivo = "";
+            if ($arFechaTerminacion->getCodigoMotivoTerminacionContratoFk() != null){
+                $motivo = $arFechaTerminacion->getTerminacionContratoRel()->getMotivo();
+            }            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arFechaTerminacion->getCodigoContratoPk())
                     ->setCellValue('B' . $i, $arFechaTerminacion->getContratoTipoRel()->getNombreCorto())                    
@@ -2680,10 +2685,11 @@ class ConsultasController extends Controller
                     ->setCellValue('D' . $i, $arFechaTerminacion->getEmpleadoRel()->getNombreCorto())
                     ->setCellValue('E' . $i, $arFechaTerminacion->getCentroCostoRel()->getNombre())
                     ->setCellValue('F' . $i, $arFechaTerminacion->getFechaHasta()->format('Y/m/d'))
-                    ->setCellValue('G' . $i, $tipo)
-                    ->setCellValue('H' . $i, $zona)
-                    ->setCellValue('I' . $i, $subzona)
-                    ->setCellValue('J' . $i, $arFechaTerminacion->getCodigoUsuarioTermina());
+                    ->setCellValue('G' . $i, $motivo)
+                    ->setCellValue('H' . $i, $tipo)
+                    ->setCellValue('I' . $i, $zona)
+                    ->setCellValue('J' . $i, $subzona)
+                    ->setCellValue('K' . $i, $arFechaTerminacion->getCodigoUsuarioTermina());
             $i++;
         }
         $objPHPExcel->getActiveSheet()->setTitle('ReporteFechaTerminacion');

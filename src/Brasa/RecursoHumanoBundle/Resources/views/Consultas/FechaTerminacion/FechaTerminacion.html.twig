@@ -68,6 +68,7 @@
                 <th>EMPLEADO</th>                
                 <th>CENTRO COSTO</th>
                 <th>HASTA</th>
+                <th>MOTIVO</th>
                 <th>TIPO</th>
                 <th>ZONA</th>
                 <th>SUB ZONA</th>
@@ -82,6 +83,7 @@
                 <td>{{ arFechaTerminacion.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arFechaTerminacion.centroCostoRel.nombre  }}</td>                
                 <td>{{ arFechaTerminacion.fechaHasta |date("Y/m/d")  }}</td>
+                <td>{{ arFechaTerminacion.terminacionContratoRel.motivo  |default('')}}</td>
                 <td>{{ arFechaTerminacion.empleadoRel.empleadoTipoRel.nombre  |default('')}}</td>
                 <td>{{ arFechaTerminacion.empleadoRel.zonaRel.nombre  |default('')}}</td>
                 <td>{{ arFechaTerminacion.empleadoRel.subZonaRel.nombre  |default('')}}</td>
