@@ -130,7 +130,7 @@ class RhuContratoRepository extends EntityRepository {
     }
     
     //lista contratos con las fechas de ingresos
-    public function listaIngresosContratosDQL($strCodigoContrato = "", $strIdentificacion = "", $strDesde = "") {        
+    public function listaIngresosContratosDQL($strCodigoContrato = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
         $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0 AND c.estadoLiquidado = 0";
         if($strCodigoContrato != "") {
             $dql .= " AND c.codigoContratoPk = " . $strCodigoContrato;
@@ -140,6 +140,9 @@ class RhuContratoRepository extends EntityRepository {
         }
         if($strDesde != "") {
             $dql .= " AND c.fechaDesde >='" . date_format($strDesde, ('Y-m-d')) . "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND c.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }
         return $dql;
     }

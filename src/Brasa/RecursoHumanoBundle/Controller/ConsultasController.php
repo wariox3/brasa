@@ -578,10 +578,11 @@ class ConsultasController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strSqlIngresosContratosLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->listaIngresosContratosDQL(
-                    $session->get('filtroCodigoContrato'),
-                    $session->get('filtroIdentificacion'),
-                    $session->get('filtroDesde')
-                    );
+            $session->get('filtroCodigoContrato'),
+            $session->get('filtroIdentificacion'),
+            $session->get('filtroDesde'),
+            $session->get('filtroHasta')
+            );
     }
 
     private function IncapacidadesListar() {
@@ -1047,6 +1048,7 @@ class ConsultasController extends Controller
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('TxtContrato', 'text', array('label'  => 'Contrato','data' => $session->get('filtroCodigoContrato')))
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnFiltrarIngresosContratos', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcelIngresosContratos', 'submit', array('label'  => 'Excel',))
             ->getForm();
@@ -1180,6 +1182,7 @@ class ConsultasController extends Controller
         $session->set('filtroCodigoContrato', $form->get('TxtContrato')->getData());
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }
 
     private function generarExcel() {
