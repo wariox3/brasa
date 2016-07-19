@@ -157,6 +157,11 @@ class RhuContrato
      */    
     private $estadoLiquidado = 0; 
     
+    /**     
+     * @ORM\Column(name="estado_terminado", type="boolean")
+     */    
+    private $estadoTerminado = 0;    
+    
     /**
      * @ORM\Column(name="ibp_adicional", type="float", nullable=true)
      */
@@ -209,6 +214,11 @@ class RhuContrato
      */    
     private $codigoUsuario;
 
+    /**
+     * @ORM\Column(name="codigo_usuario_termina", type="string", length=50, nullable=true)
+     */    
+    private $codigoUsuarioTermina;    
+    
      /**
      * @ORM\Column(name="codigo_entidad_caja_fk", type="integer", nullable=true)
      */    
@@ -2416,5 +2426,53 @@ class RhuContrato
     public function getPromedioRecargoNocturnoInicial()
     {
         return $this->promedioRecargoNocturnoInicial;
+    }
+
+    /**
+     * Set estadoTerminado
+     *
+     * @param boolean $estadoTerminado
+     *
+     * @return RhuContrato
+     */
+    public function setEstadoTerminado($estadoTerminado)
+    {
+        $this->estadoTerminado = $estadoTerminado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoTerminado
+     *
+     * @return boolean
+     */
+    public function getEstadoTerminado()
+    {
+        return $this->estadoTerminado;
+    }
+
+    /**
+     * Set codigoUsuarioTermina
+     *
+     * @param string $codigoUsuarioTermina
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoUsuarioTermina($codigoUsuarioTermina)
+    {
+        $this->codigoUsuarioTermina = $codigoUsuarioTermina;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuarioTermina
+     *
+     * @return string
+     */
+    public function getCodigoUsuarioTermina()
+    {
+        return $this->codigoUsuarioTermina;
     }
 }

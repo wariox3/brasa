@@ -63,22 +63,21 @@
             <tr>
                 <th>CÓDIGO</th>
                 <th>TIPO</th>
-                <th>FECHA</th>
-                <th>NÚMERO</th>
-                <th>IDENTIFICACIÓN</th>                
+                <th>FECHA</th>                
+                <th>DOCUMENTO</th>                
                 <th>EMPLEADO</th>                
                 <th>CENTRO COSTO</th>
                 <th>HASTA</th>
                 <th>TIPO</th>
                 <th>ZONA</th>
                 <th>SUB ZONA</th>
+                <th>USUARIO</th>
             </tr>
             {% for arFechaTerminacion in arFechaTerminacion %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arFechaTerminacion.codigoContratoPk }}">{{ arFechaTerminacion.codigoContratoPk }} </td>
-                <td>{{ arFechaTerminacion.ContratoTipoRel.nombre  }}</td>
-                <td>{{ arFechaTerminacion.fecha |date("Y/m/d")  }}</td>
-                <td>{{ arFechaTerminacion.numero  }}</td>
+                <td>{{ arFechaTerminacion.ContratoTipoRel.nombreCorto  }}</td>
+                <td>{{ arFechaTerminacion.fecha |date("Y/m/d")  }}</td>                
                 <td>{{ arFechaTerminacion.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arFechaTerminacion.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arFechaTerminacion.centroCostoRel.nombre  }}</td>                
@@ -86,6 +85,7 @@
                 <td>{{ arFechaTerminacion.empleadoRel.empleadoTipoRel.nombre  |default('')}}</td>
                 <td>{{ arFechaTerminacion.empleadoRel.zonaRel.nombre  |default('')}}</td>
                 <td>{{ arFechaTerminacion.empleadoRel.subZonaRel.nombre  |default('')}}</td>
+                <td>{{ arFechaTerminacion.codigoUsuarioTermina  |default('')}}</td>
             </tr>
             {% endfor %}
         </table>

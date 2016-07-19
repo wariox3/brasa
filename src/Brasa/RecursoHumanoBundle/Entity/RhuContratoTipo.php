@@ -23,6 +23,11 @@ class RhuContratoTipo
     private $nombre; 
     
     /**
+     * @ORM\Column(name="nombre_corto", type="string", length=100, nullable=true)
+     */    
+    private $nombreCorto;     
+    
+    /**
      * @ORM\Column(name="codigo_contenido_formato_fk", type="integer", nullable=true)
      */    
     private $codigoContenidoFormatoFk;
@@ -243,5 +248,29 @@ class RhuContratoTipo
     public function getCambiosTiposContratosNuevosContratoTipoRel()
     {
         return $this->cambiosTiposContratosNuevosContratoTipoRel;
+    }
+
+    /**
+     * Set nombreCorto
+     *
+     * @param string $nombreCorto
+     *
+     * @return RhuContratoTipo
+     */
+    public function setNombreCorto($nombreCorto)
+    {
+        $this->nombreCorto = $nombreCorto;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreCorto
+     *
+     * @return string
+     */
+    public function getNombreCorto()
+    {
+        return $this->nombreCorto;
     }
 }

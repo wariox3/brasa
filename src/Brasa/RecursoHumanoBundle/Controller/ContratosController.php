@@ -364,6 +364,8 @@ class ContratosController extends Controller
                             $arContrato->setIndefinido(0);
                             $arContrato->setEstadoActivo(0);
                             $arContrato->setEstadoLiquidado(1);
+                            $arContrato->setEstadoTerminado(1);
+                            $arContrato->setCodigoUsuarioTermina($arUsuario->getUserName());
                             $arContrato->setTerminacionContratoRel($codigoMotivoContrato);
                             $arContrato->setIbpAdicional($floIbpAdicional);
                             $em->persist($arContrato);

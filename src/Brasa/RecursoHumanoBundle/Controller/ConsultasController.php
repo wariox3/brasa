@@ -2641,18 +2641,21 @@ class ConsultasController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'K'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }         
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'TIPO CONTRATO')
-                    ->setCellValue('C1', 'FECHA')
-                    ->setCellValue('D1', 'NÚMERO')
-                    ->setCellValue('E1', 'IDENTIFICACIÓN')
-                    ->setCellValue('F1', 'EMPLEADO')
-                    ->setCellValue('G1', 'CENTRO COSTO')
-                    ->setCellValue('I1', 'HASTA')
-                    ->setCellValue('J1', 'EMPLEADO TIPO')
-                    ->setCellValue('K1', 'ZONA')
-                    ->setCellValue('L1', 'SUBZONA');
+                    ->setCellValue('C1', 'IDENTIFICACIÓN')
+                    ->setCellValue('D1', 'EMPLEADO')
+                    ->setCellValue('E1', 'CENTRO COSTO')
+                    ->setCellValue('F1', 'HASTA')
+                    ->setCellValue('G1', 'TIPO')
+                    ->setCellValue('H1', 'ZONA')
+                    ->setCellValue('I1', 'SUBZONA')
+                    ->setCellValue('J1', 'USUARIO');
         $i = 2;
         $query = $em->createQuery($this->strSqlFechaTerminacionLista);
         $arFechaTerminaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
@@ -2672,16 +2675,15 @@ class ConsultasController extends Controller
             }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arFechaTerminacion->getCodigoContratoPk())
-                    ->setCellValue('B' . $i, $arFechaTerminacion->getContratoTipoRel()->getNombre())
-                    ->setCellValue('C' . $i, $arFechaTerminacion->getFecha()->format('Y/m/d'))
-                    ->setCellValue('D' . $i, $arFechaTerminacion->getNumero())
-                    ->setCellValue('E' . $i, $arFechaTerminacion->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('F' . $i, $arFechaTerminacion->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('G' . $i, $arFechaTerminacion->getCentroCostoRel()->getNombre())
-                    ->setCellValue('I' . $i, $arFechaTerminacion->getFechaHasta()->format('Y/m/d'))
-                    ->setCellValue('J' . $i, $tipo)
-                    ->setCellValue('K' . $i, $zona)
-                    ->setCellValue('L' . $i, $subzona);
+                    ->setCellValue('B' . $i, $arFechaTerminacion->getContratoTipoRel()->getNombreCorto())                    
+                    ->setCellValue('C' . $i, $arFechaTerminacion->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('D' . $i, $arFechaTerminacion->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('E' . $i, $arFechaTerminacion->getCentroCostoRel()->getNombre())
+                    ->setCellValue('F' . $i, $arFechaTerminacion->getFechaHasta()->format('Y/m/d'))
+                    ->setCellValue('G' . $i, $tipo)
+                    ->setCellValue('H' . $i, $zona)
+                    ->setCellValue('I' . $i, $subzona)
+                    ->setCellValue('J' . $i, $arFechaTerminacion->getCodigoUsuarioTermina());
             $i++;
         }
         $objPHPExcel->getActiveSheet()->setTitle('ReporteFechaTerminacion');
@@ -2719,7 +2721,7 @@ class ConsultasController extends Controller
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
-                    ->setCellValue('B1', 'TIPO CONTRATO')
+                    ->setCellValue('B1', 'CONTRATO')
                     ->setCellValue('C1', 'FECHA')
                     ->setCellValue('D1', 'NÚMERO')
                     ->setCellValue('E1', 'IDENTIFICACIÓN')
@@ -2749,7 +2751,7 @@ class ConsultasController extends Controller
             }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arFechaIngreso->getCodigoContratoPk())
-                    ->setCellValue('B' . $i, $arFechaIngreso->getContratoTipoRel()->getNombre())
+                    ->setCellValue('B' . $i, $arFechaIngreso->getContratoTipoRel()->getNombreCorto())
                     ->setCellValue('C' . $i, $arFechaIngreso->getFecha()->format('Y/m/d'))
                     ->setCellValue('D' . $i, $arFechaIngreso->getNumero())
                     ->setCellValue('E' . $i, $arFechaIngreso->getEmpleadoRel()->getNumeroIdentificacion())

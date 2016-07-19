@@ -75,7 +75,7 @@
             {% for arIngresosContratos in arIngresosContratos %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arIngresosContratos.codigoContratoPk }}">{{ arIngresosContratos.codigoContratoPk }} </td>
-                <td>{{ arIngresosContratos.ContratoTipoRel.nombre  }}</td>
+                <td>{{ arIngresosContratos.ContratoTipoRel.nombreCorto  }}</td>
                 <td>{{ arIngresosContratos.fecha |date("Y/m/d")  }}</td>
                 <td>{{ arIngresosContratos.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arIngresosContratos.empleadoRel.nombreCorto  }}</td>
