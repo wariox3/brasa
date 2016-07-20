@@ -102,6 +102,11 @@ class TurTurno
     private $comentarios;       
 
     /**
+     * @ORM\Column(name="complementario", type="boolean")
+     */    
+    private $complementario = false;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurTurnoDetalle", mappedBy="turnoRel", cascade={"persist", "remove"})
      */
     protected $turnosDetallesTurnoRel;            
@@ -705,5 +710,29 @@ class TurTurno
     public function getLicenciaNoRemunerada()
     {
         return $this->licenciaNoRemunerada;
+    }
+
+    /**
+     * Set complementario
+     *
+     * @param boolean $complementario
+     *
+     * @return TurTurno
+     */
+    public function setComplementario($complementario)
+    {
+        $this->complementario = $complementario;
+
+        return $this;
+    }
+
+    /**
+     * Get complementario
+     *
+     * @return boolean
+     */
+    public function getComplementario()
+    {
+        return $this->complementario;
     }
 }

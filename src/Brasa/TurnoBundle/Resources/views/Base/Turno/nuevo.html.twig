@@ -57,6 +57,12 @@
                 </div>
             </div>
             <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Complementario:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.complementario) }}
+                </div>
+            </div>                
+            <div class="form-group form-group-sm">
                 <label for="form_novedad" class="col-sm-3 control-label">Novedad:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.novedad) }}
@@ -113,7 +119,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <a class="btn btn-default btn-sm" href="{{ path('brs_tur_base_turno_lista') }}">Cancelar</a>
+        <a class="btn btn-default btn-sm" href="{{ path('brs_tur_base_turno') }}">Cancelar</a>
         {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
         {{ form_widget(form.guardarnuevo, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
     </div>

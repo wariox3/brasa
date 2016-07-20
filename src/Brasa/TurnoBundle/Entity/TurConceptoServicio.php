@@ -38,6 +38,11 @@ class TurConceptoServicio
     private $nombreFacturacionAdicional;    
     
     /**
+     * @ORM\Column(name="nombre_servicio", type="string", length=100, nullable=true)
+     */    
+    private $nombreServicio;     
+    
+    /**
      * @ORM\Column(name="horas", type="float")
      */    
     private $horas = 0;    
@@ -639,5 +644,29 @@ class TurConceptoServicio
     public function getNombreFacturacionAdicional()
     {
         return $this->nombreFacturacionAdicional;
+    }
+
+    /**
+     * Set nombreServicio
+     *
+     * @param string $nombreServicio
+     *
+     * @return TurConceptoServicio
+     */
+    public function setNombreServicio($nombreServicio)
+    {
+        $this->nombreServicio = $nombreServicio;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreServicio
+     *
+     * @return string
+     */
+    public function getNombreServicio()
+    {
+        return $this->nombreServicio;
     }
 }

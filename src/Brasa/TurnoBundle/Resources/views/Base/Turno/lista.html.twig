@@ -28,7 +28,8 @@
                 <th>{{ knp_pagination_sortable(arTurnos, 'CÓDIGO', 'p.codigoTurnoPk') }}</th>
                 <th>NOMBRE</th>
                 <th>H. DESDE</th>
-                <th>H. HASTA</th>                
+                <th>H. HASTA</th> 
+                <th>COM</th>
                 <th>NOV</th>                
                 <th>DES</th>
                 <th>ING</th>                
@@ -38,10 +39,9 @@
                 <th>SLN</th>
                 <th>VAC</th>
                 <th>HORAS</th>
-                <th>H. NOMINA</th>
-                <th>H. DIURNAS</th>
-                <th>H. NOCTURNAS</th>                                
-                <th></th>
+                <th>H.NOMINA</th>
+                <th>HD</th>
+                <th>HN</th>                                                
                 <th></th>
                 <th></th>
             </tr>
@@ -51,6 +51,7 @@
                 <td>{{ arTurnos.nombre }}</td>
                 <td>{{ arTurnos.horaDesde |date("H:i") }}</td>
                 <td>{{ arTurnos.horaHasta |date("H:i") }}</td>
+                <td>{% if arTurnos.complementario == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arTurnos.novedad == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arTurnos.descanso == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arTurnos.ingreso == 1 %} SI {% else %} NO {% endif %}</td>
@@ -63,8 +64,7 @@
                 <td style="text-align: right">{{ arTurnos.horasNomina | number_format(0, '.', ',') }}</td>                 
                 <td style="text-align: right">{{ arTurnos.horasDiurnas | number_format(0, '.', ',') }}</td> 
                 <td style="text-align: right">{{ arTurnos.horasNocturnas | number_format(0, '.', ',') }}</td>                 
-                <td style="text-align: center"><a href="{{ path('brs_tur_base_turno_nuevo', {'codigoTurno': arTurnos.codigoTurnoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
-                <td style="text-align: center"><a href="{{ path('brs_tur_base_turno_detalle', { 'codigoTurno': arTurnos.codigoTurnoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                
+                <td style="text-align: center"><a href="{{ path('brs_tur_base_turno_nuevo', {'codigoTurno': arTurnos.codigoTurnoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arTurnos.codigoTurnoPk }}" /></td>
             </tr>
             

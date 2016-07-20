@@ -191,9 +191,10 @@ class ProgramacionInconsistenciaController extends Controller
                         COUNT(dia_$i) AS numero
                         FROM
                         tur_programacion_detalle
-                        LEFT JOIN tur_recurso ON tur_programacion_detalle.codigo_recurso_fk = tur_recurso.codigo_recurso_pk                                
+                        LEFT JOIN tur_recurso ON tur_programacion_detalle.codigo_recurso_fk = tur_recurso.codigo_recurso_pk 
+                        LEFT JOIN tur_turno ON tur_programacion_detalle.dia_$i = tur_turno.codigo_turno_pk 
                         WHERE
-                        dia_$i IS NOT NULL AND anio = $strAnio AND mes = $strMes
+                        dia_$i IS NOT NULL AND anio = $strAnio AND mes = $strMes AND tur_turno.complementario = 0 
                         GROUP BY
                         codigo_recurso_fk"; 
             $connection = $em->getConnection();
