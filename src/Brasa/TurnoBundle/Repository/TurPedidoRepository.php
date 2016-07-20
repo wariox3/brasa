@@ -424,7 +424,8 @@ class TurPedidoRepository extends EntityRepository {
         $dateFechaVence = $objFunciones->sumarDiasFecha($arPedido->getClienteRel()->getPlazoPago(), $arFactura->getFecha());
         $arFactura->setFechaVence($dateFechaVence);            
         $arFactura->setClienteRel($arPedido->getClienteRel());                   
-        $arFactura->setUsuario($usuario);             
+        $arFactura->setUsuario($usuario); 
+        $arFactura->setOperacion($arFacturaTipo->getOperacion());
         $em->persist($arFactura);   
         $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
         $arPedidoDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigoPedido, 'estadoFacturado' => 0));                                    
@@ -443,6 +444,7 @@ class TurPedidoRepository extends EntityRepository {
             $arFacturaDetalle->setFechaProgramacion($arPedido->getFechaProgramacion());
             $arFacturaDetalle->setTipoPedido($arPedido->getPedidoTipoRel()->getTipo());
             $arFacturaDetalle->setDetalle($arPedidoDetalle->getDetalle());
+            $arFacturaDetalle->setOperacion($arFacturaTipo->getOperacion());
             $em->persist($arFacturaDetalle);                                
         }                         
         /*$arPedidoDetalleConceptos = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleConcepto();

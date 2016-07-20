@@ -74,7 +74,10 @@ class TurFacturaRepository extends EntityRepository {
             $baseIvaDetalle = ($subtotalDetalle * $arFacturaDetalle->getPorBaseIva()) / 100;
             $ivaDetalle = ($baseIvaDetalle * $arFacturaDetalle->getPorIva()) / 100;
             $totalDetalle = $subtotalDetalle + $ivaDetalle;                        
+            $arFacturasDetalleAct->setOperacion($arFactura->getOperacion());
             $arFacturasDetalleAct->setSubtotal($subtotalDetalle);
+            $arFacturasDetalleAct->setSubtotalOperado($subtotalDetalle * $arFacturasDetalleAct->getOperacion());
+            
             $arFacturasDetalleAct->setBaseIva($baseIvaDetalle);
             $arFacturasDetalleAct->setIva($ivaDetalle);
             $arFacturasDetalleAct->setTotal($totalDetalle);
@@ -93,6 +96,7 @@ class TurFacturaRepository extends EntityRepository {
         $totalNeto = $total - $retencionFuente;
         $arFactura->setVrBaseAIU($baseIva);
         $arFactura->setVrSubtotal($subtotal);
+        $arFactura->setVrSubtotalOperado($subtotal * $arFactura->getOperacion());
         //$arFactura->setVrSubtotalOtros($floSubTotalConceptos);        
         $arFactura->setVrRetencionFuente($retencionFuente);
         $arFactura->setVrIva($iva);

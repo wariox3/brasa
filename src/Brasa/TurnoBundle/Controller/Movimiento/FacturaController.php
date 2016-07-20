@@ -97,6 +97,7 @@ class FacturaController extends Controller
                     $arFactura->setFechaVence($dateFechaVence); 
                     $arUsuario = $this->getUser();
                     $arFactura->setUsuario($arUsuario->getUserName());
+                    $arFactura->setOperacion($arFactura->getFacturaTipoRel()->getOperacion());
                     $em->persist($arFactura);
                     $em->flush();
 
@@ -222,6 +223,7 @@ class FacturaController extends Controller
             $arFacturaDetalle->setPorIva($arConceptoFactura->getPorIva());
             $arFacturaDetalle->setPorBaseIva($arConceptoFactura->getPorBaseIva());
             $arFacturaDetalle->setFechaProgramacion($arFactura->getFecha());
+            $arFacturaDetalle->setOperacion($arFactura->getOperacion());
             $em->persist($arFacturaDetalle);
             $em->flush();
             $em->getRepository('BrasaTurnoBundle:TurFactura')->liquidar($codigoFactura);
@@ -264,6 +266,7 @@ class FacturaController extends Controller
                         $arFacturaDetalle->setFechaProgramacion($arPedidoDetalle->getPedidoRel()->getFechaProgramacion());
                         $arFacturaDetalle->setTipoPedido($arPedidoDetalle->getPedidoRel()->getPedidoTipoRel()->getTipo());
                         $arFacturaDetalle->setDetalle($arPedidoDetalle->getDetalle());
+                        $arFacturaDetalle->setOperacion($arFactura->getOperacion());
                         $em->persist($arFacturaDetalle);   
                     }
                 }
@@ -319,6 +322,7 @@ class FacturaController extends Controller
                         $arFacturaDetalleNueva->setPorBaseIva($arFacturaDetalle->getConceptoServicioRel()->getPorBaseIva());
                         $arFacturaDetalleNueva->setFechaProgramacion($arFacturaDetalle->getFechaProgramacion());
                         $arFacturaDetalleNueva->setDetalle($arFacturaDetalle->getDetalle());
+                        $arFacturaDetalleNueva->setOperacion($arFactura->getOperacion());
                         $em->persist($arFacturaDetalleNueva);   
                     }
                 }
@@ -394,6 +398,7 @@ class FacturaController extends Controller
                         $arFacturaDetalle->setPorBaseIva($arPedidoDetalleConcepto->getPorBaseIva());                                                
                         $arFacturaDetalle->setVrPrecio($arPedidoDetalleConcepto->getPrecio());                                                                                                
                         $arFacturaDetalle->setFechaProgramacion($arPedidoDetalleConcepto->getPedidoRel()->getFechaProgramacion());
+                        $arFacturaDetalle->setOperacion($arFactura->getOperacion());
                         $em->persist($arFacturaDetalle);
                         $arPedidoDetalleConcepto->setEstadoFacturado(1);
                         $em->persist($arPedidoDetalleConcepto);                        

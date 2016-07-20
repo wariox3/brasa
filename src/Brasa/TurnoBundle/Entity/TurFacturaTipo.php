@@ -28,9 +28,19 @@ class TurFacturaTipo
     private $tipo = 0;      
 
     /**
+     * @ORM\Column(name="operacion", type="integer")
+     */    
+    private $operacion = 0;    
+    
+    /**
      * @ORM\Column(name="consecutivo", type="integer")
      */    
     private $consecutivo = 0; 
+    
+    /**
+     * @ORM\Column(name="documento_cartera", type="integer", nullable=true)
+     */    
+    private $documentoCartera;     
     
     /**
      * @ORM\OneToMany(targetEntity="TurFactura", mappedBy="facturaTipoRel")
@@ -81,6 +91,102 @@ class TurFacturaTipo
     }
 
     /**
+     * Set tipo
+     *
+     * @param integer $tipo
+     *
+     * @return TurFacturaTipo
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return integer
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
+
+    /**
+     * Set operacion
+     *
+     * @param integer $operacion
+     *
+     * @return TurFacturaTipo
+     */
+    public function setOperacion($operacion)
+    {
+        $this->operacion = $operacion;
+
+        return $this;
+    }
+
+    /**
+     * Get operacion
+     *
+     * @return integer
+     */
+    public function getOperacion()
+    {
+        return $this->operacion;
+    }
+
+    /**
+     * Set consecutivo
+     *
+     * @param integer $consecutivo
+     *
+     * @return TurFacturaTipo
+     */
+    public function setConsecutivo($consecutivo)
+    {
+        $this->consecutivo = $consecutivo;
+
+        return $this;
+    }
+
+    /**
+     * Get consecutivo
+     *
+     * @return integer
+     */
+    public function getConsecutivo()
+    {
+        return $this->consecutivo;
+    }
+
+    /**
+     * Set documentoCartera
+     *
+     * @param integer $documentoCartera
+     *
+     * @return TurFacturaTipo
+     */
+    public function setDocumentoCartera($documentoCartera)
+    {
+        $this->documentoCartera = $documentoCartera;
+
+        return $this;
+    }
+
+    /**
+     * Get documentoCartera
+     *
+     * @return integer
+     */
+    public function getDocumentoCartera()
+    {
+        return $this->documentoCartera;
+    }
+
+    /**
      * Add facturasFacturaTipoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurFactura $facturasFacturaTipoRel
@@ -112,53 +218,5 @@ class TurFacturaTipo
     public function getFacturasFacturaTipoRel()
     {
         return $this->facturasFacturaTipoRel;
-    }
-
-    /**
-     * Set tipo
-     *
-     * @param integer $tipo
-     *
-     * @return TurFacturaTipo
-     */
-    public function setTipo($tipo)
-    {
-        $this->tipo = $tipo;
-
-        return $this;
-    }
-
-    /**
-     * Get tipo
-     *
-     * @return integer
-     */
-    public function getTipo()
-    {
-        return $this->tipo;
-    }
-
-    /**
-     * Set consecutivo
-     *
-     * @param integer $consecutivo
-     *
-     * @return TurFacturaTipo
-     */
-    public function setConsecutivo($consecutivo)
-    {
-        $this->consecutivo = $consecutivo;
-
-        return $this;
-    }
-
-    /**
-     * Get consecutivo
-     *
-     * @return integer
-     */
-    public function getConsecutivo()
-    {
-        return $this->consecutivo;
     }
 }

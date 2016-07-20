@@ -118,6 +118,11 @@ class TurFactura
     private $vrSubtotal = 0;     
     
     /**
+     * @ORM\Column(name="vr_subtotal_operado", type="float")
+     */
+    private $vrSubtotalOperado = 0;    
+    
+    /**
      * @ORM\Column(name="vr_total", type="float")
      */
     private $vrTotal = 0;    
@@ -147,6 +152,11 @@ class TurFactura
      */    
     private $comentarios;                  
 
+     /**
+     * @ORM\Column(name="operacion", type="integer")
+     */
+    private $operacion = 0;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="TurFacturaTipo", inversedBy="facturasFacturaTipoRel")
      * @ORM\JoinColumn(name="codigo_factura_tipo_fk", referencedColumnName="codigo_factura_tipo_pk")
@@ -986,5 +996,53 @@ class TurFactura
     public function getDetalleRelacion()
     {
         return $this->detalleRelacion;
+    }
+
+    /**
+     * Set vrSubtotalOperado
+     *
+     * @param float $vrSubtotalOperado
+     *
+     * @return TurFactura
+     */
+    public function setVrSubtotalOperado($vrSubtotalOperado)
+    {
+        $this->vrSubtotalOperado = $vrSubtotalOperado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSubtotalOperado
+     *
+     * @return float
+     */
+    public function getVrSubtotalOperado()
+    {
+        return $this->vrSubtotalOperado;
+    }
+
+    /**
+     * Set operacion
+     *
+     * @param integer $operacion
+     *
+     * @return TurFactura
+     */
+    public function setOperacion($operacion)
+    {
+        $this->operacion = $operacion;
+
+        return $this;
+    }
+
+    /**
+     * Get operacion
+     *
+     * @return integer
+     */
+    public function getOperacion()
+    {
+        return $this->operacion;
     }
 }

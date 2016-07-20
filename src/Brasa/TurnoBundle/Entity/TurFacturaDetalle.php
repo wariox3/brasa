@@ -93,6 +93,11 @@ class TurFacturaDetalle
     private $subtotal = 0; 
 
     /**
+     * @ORM\Column(name="subtotal_operado", type="float")
+     */
+    private $subtotalOperado = 0;    
+    
+    /**
      * @ORM\Column(name="iva", type="float")
      */
     private $iva = 0;    
@@ -106,6 +111,11 @@ class TurFacturaDetalle
      * @ORM\Column(name="detalle", type="string", length=300, nullable=true)
      */
     private $detalle;    
+    
+     /**
+     * @ORM\Column(name="operacion", type="integer")
+     */
+    private $operacion = 0;
     
     /**
      * @ORM\Column(name="tipo_pedido", type="string", length=50, nullable=true)
@@ -864,5 +874,53 @@ class TurFacturaDetalle
     public function getTipoPedido()
     {
         return $this->tipo_pedido;
+    }
+
+    /**
+     * Set subtotalOperado
+     *
+     * @param float $subtotalOperado
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setSubtotalOperado($subtotalOperado)
+    {
+        $this->subtotalOperado = $subtotalOperado;
+
+        return $this;
+    }
+
+    /**
+     * Get subtotalOperado
+     *
+     * @return float
+     */
+    public function getSubtotalOperado()
+    {
+        return $this->subtotalOperado;
+    }
+
+    /**
+     * Set operacion
+     *
+     * @param integer $operacion
+     *
+     * @return TurFacturaDetalle
+     */
+    public function setOperacion($operacion)
+    {
+        $this->operacion = $operacion;
+
+        return $this;
+    }
+
+    /**
+     * Get operacion
+     *
+     * @return integer
+     */
+    public function getOperacion()
+    {
+        return $this->operacion;
     }
 }
