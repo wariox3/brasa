@@ -30,8 +30,7 @@
                       </div>
                       <div class="col-lg-10">
                         <div class="input-group">                                      
-                          <input id="form_txtNombreCorto"  name="form_txtNombreCorto"  type="text" class="form-control" value="{{ arDotacion.empleadoRel.nombreCorto |default('') }}" readOnly="ReadOnly" />
-                          {{ form_widget(form.txtNumeroIdentificacion, { 'attr': {'class': 'form-control'} }) }} 
+                            {{ form_widget(form.txtNombreCorto, { 'attr': {'class': 'form-control', 'readOnly': 'ReadOnly'} }) }}                              
                           <span class="input-group-btn">                                        
                             <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_buscar_empleado') }}', 'buscarEmpleado', 600, 900)">Buscar</a>
                           </span>

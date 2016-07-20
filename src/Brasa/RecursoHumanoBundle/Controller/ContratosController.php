@@ -699,8 +699,6 @@ class ContratosController extends Controller
             $this->fechaHastaInicia = $controles['fechaHastaInicia'];
         }
         $session->set('filtroIdentificacion', $form->get('txtNumeroIdentificacion')->getData());
-        //$session->set('filtroNombre', $form->get('txtNumeroIdentificacion')->getData());
-        //$session->set('filtroIdentificacion', $arrControles['txtNumeroIdentificacion']);
         $session->set('filtroContratoActivo', $form->get('estadoActivo')->getData());
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
     }

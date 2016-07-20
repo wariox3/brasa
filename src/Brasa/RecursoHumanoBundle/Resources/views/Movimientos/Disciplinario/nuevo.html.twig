@@ -3,6 +3,10 @@
 {% block content %}
 <div class="container">
     {{ form_start(form, { 'attr': {'class': 'form-horizontal'} }) }}
+    <script type="text/javascript">
+    $(document).ready(function() {
+            $('.date').datepicker({ dateFormat: 'yy-mm-dd' ,dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Deciembre" ], monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]})  });
+    </script>
     <h3>Nuevo proceso disciplinario</h3>    
     <div class="panel panel-default">
         <div class="panel-heading">Información general</div>
@@ -80,18 +84,6 @@
                 <label for="form_puesto" class="col-sm-3 control-label">Puesto:</label>
                 <div class="col-sm-9">
                             {{ form_widget(form.puesto, { 'attr': {'class': 'form-control', 'placeholder': ''} }) }}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_zona" class="col-sm-3 control-label">Zona:</label>
-                <div class="col-sm-9">
-                            {{ form_widget(form.zona, { 'attr': {'class': 'form-control', 'placeholder': 'Ejemplo: norte, sur'} }) }}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_operacion" class="col-sm-3 control-label">Operación:</label>
-                <div class="col-sm-9">
-                            {{ form_widget(form.operacion, { 'attr': {'class': 'form-control', 'placeholder': 'Ejemplo: Medellin, Bogota entre otros ','style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">

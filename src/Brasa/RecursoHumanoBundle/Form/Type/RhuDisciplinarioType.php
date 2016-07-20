@@ -23,8 +23,6 @@ class RhuDisciplinarioType extends AbstractType
             ->add('diasSuspencion', 'text', array('required' => false)) 
             ->add('reentrenamiento', 'choice', array('choices'   => array('0' => 'NO', '1' => 'SI'))) 
             ->add('puesto', 'text', array('required' => false))
-            ->add('zona', 'text', array('required' => false))
-            ->add('operacion', 'text', array('required' => false))
             ->add('fechaIncidente', 'date', array('format' => 'yyyyMMdd'))    
             ->add('fechaDesdeSancion', 'date', array('format' => 'yyyyMMdd'))
             ->add('fechaHastaSancion', 'date', array('format' => 'yyyyMMdd'))

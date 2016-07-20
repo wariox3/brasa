@@ -35,6 +35,7 @@ class CreditosController extends Controller
                     }
                 }
                 $this->filtrarLista($form);
+                $form = $this->formularioLista();
                 $this->listar();
             }
 
@@ -49,6 +50,7 @@ class CreditosController extends Controller
                     }
                 }
                 $this->filtrarLista($form);
+                $form = $this->formularioLista();
                 $this->listar();
             }
 
@@ -63,6 +65,7 @@ class CreditosController extends Controller
                     }
                 }
                 $this->filtrarLista($form);
+                $form = $this->formularioLista();
                 $this->listar();
             }
 
@@ -81,22 +84,26 @@ class CreditosController extends Controller
                     }
                 }
                 $this->filtrarLista($form);
+                $form = $this->formularioLista();
                 $this->listar();
             }
 
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrarLista($form);
                 $this->listar();
+                $form = $this->formularioLista();
                 $this->generarExcel();
             }
             if($form->get('BtnPdf')->isClicked()) {
                 $this->filtrarLista($form);
+                $form = $this->formularioLista();
                 $this->listar();
                 $objFormatoCredito = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCredito();
                 $objFormatoCredito->Generar($this, $this->strSqlLista);
             }
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form);
+                $form = $this->formularioLista();
                 $this->listar();
             }
         }
@@ -153,10 +160,18 @@ class CreditosController extends Controller
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-
+        $strNombreEmpleado = "";
+        if($session->get('filtroIdentificacion')) {
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $session->get('filtroIdentificacion')));
+            if($arEmpleado) {                
+                $strNombreEmpleado = $arEmpleado->getNombreCorto();
+            }  else {
+                $session->set('filtroIdentificacion', null);
+            }          
+        }
         $form = $this->createFormBuilder()
             ->add('txtNumeroIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
-            
+            ->add('txtNombreCorto', 'text', array('label'  => 'Nombre','data' => $strNombreEmpleado))
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))

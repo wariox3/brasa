@@ -45,14 +45,22 @@
                 </div>    
                 <div class="form-group form-group-sm">
                     <label for="form_fechaDesde" class="col-sm-2 control-label">Desde:</label>
-                    <div class="col-sm-10">
+                    <div class="col-sm-4">
                         {{ form_widget(form.fechaDesde, {'attr': {'maxlength' : 10} }) }} 
+                    </div>
+                    <label for="form_zonaRel" class="col-sm-2 control-label">Zona:</label>
+                    <div class="col-sm-4">
+                        {{ form_widget(form.zonaRel, { 'attr': {'class': 'form-control'} }) }}
                     </div>
                 </div>
                 <div class="form-group form-group-sm">
                     <label for="form_fechaHasta" class="col-sm-2 control-label">Hasta:</label>
-                    <div class="col-sm-10">
+                    <div class="col-sm-4">
                         {{ form_widget(form.fechaHasta, {'attr': {'maxlength' : 10} }) }} 
+                    </div>
+                    <label for="form_operacionRel" class="col-sm-2 control-label">Operacion:</label>
+                    <div class="col-sm-4">
+                        {{ form_widget(form.operacionRel, { 'attr': {'class': 'form-control'} }) }}
                     </div>
                 </div>
                 <div class="form-group form-group-sm">
@@ -71,6 +79,8 @@
                 <th>{{ knp_pagination_sortable(arDisciplinarios, 'NOMBRE', 'd.nombreCorto') }}</th>                
                 <th>CENTRO COSTO</th>                                                                                                
                 <th>F.INGRESO</th>
+                <th>ZONA</th>
+                <th>OPERACION</th>
                 <th>USUARIO</th>
                 <th>PRO</th>
                 <th>AUT</th>
@@ -89,11 +99,17 @@
                 <td>{{ arDisciplinarios.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arDisciplinarios.centroCostoRel.nombre  }}</td>                
                 <td>{{ arDisciplinarios.fechaIngresoTrabajo |date('Y/m/d')  }}</td>
+                <td>{{ arDisciplinarios.empleadoRel.zonaRel.nombre |default('')  }}</td>
+                <td>{{ arDisciplinarios.empleadoRel.subzonaRel.nombre |default('')  }}</td>
                 <td>{{ arDisciplinarios.codigoUsuario  }}</td>
                 <td>{% if arDisciplinarios.estadoProcede == 1%}SI{% else %}NO{% endif %}</td>
                 <td>{% if arDisciplinarios.estadoAutorizado == 1%}SI{% else %}NO{% endif %}</td>
                 <td>{% if arDisciplinarios.estadoCerrado == 1%}SI{% else %}NO{% endif %}</td>
-                <td style="text-align: center"><a href="{{ path('brs_rhu_movimiento_disciplinario_nuevo', {'codigoCentroCosto':  arDisciplinarios.codigoCentroCostoFk, 'codigoEmpleado':  arDisciplinarios.codigoEmpleadoFk, 'codigoDisciplinario': arDisciplinarios.codigoDisciplinarioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                {% if (arDisciplinarios.estadoCerrado == 1) %}
+                    <td></td>
+                {% else %}
+                    <td style="text-align: center"><a href="{{ path('brs_rhu_movimiento_disciplinario_nuevo', {'codigoCentroCosto':  arDisciplinarios.codigoCentroCostoFk, 'codigoEmpleado':  arDisciplinarios.codigoEmpleadoFk, 'codigoDisciplinario': arDisciplinarios.codigoDisciplinarioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                {% endif%}
                 <td style="text-align: center"><a href="{{ path('brs_rhu_movimiento_disciplinario_detalle', { 'codigoDisciplinario': arDisciplinarios.codigoDisciplinarioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDisciplinarios.codigoDisciplinarioPk }}" /></td>
             </tr>

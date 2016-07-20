@@ -15,6 +15,9 @@
         {{ form_errors(form) }}
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
+                {% if arDisciplinario.estadoCerrado == 0%}
+                    <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_movimiento_disciplinario_nuevo', { 'codigoCentroCosto': arDisciplinario.codigoCentroCostoFk, 'codigoEmpleado':  arDisciplinario.codigoEmpleadoFk, 'codigoDisciplinario': arDisciplinario.codigoDisciplinarioPk }) }}" >Editar</a>
+                {% endif %}
                 {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
@@ -65,7 +68,7 @@
                         <td class="titulo">PUESTO:</td>
                         <td>{{ arDisciplinario.puesto }}</td>
                         <td class="titulo">ZONA:</td>
-                        <td>{{ arDisciplinario.zona }}</td>
+                        <td>{{ arDisciplinario.empleadoRel.zonaRel.nombre |default('') }}</td>
                         <td class="titulo">DÍAS SANCIÓN</td>
                         <td>{{ arDisciplinario.diasSuspencion }}</td>
                     </tr>
@@ -75,7 +78,7 @@
                         <td class="titulo">REENTRENAMIENTO:</td>
                         <td>{% if arDisciplinario.reentrenamiento == 1%}SI {% else %}NO {% endif%}</td>
                         <td class="titulo">OPERACIÓN</td>
-                        <td>{{ arDisciplinario.operacion }}</td>
+                        <td>{{ arDisciplinario.empleadoRel.subzonaRel.nombre |default('') }}</td>
                     </tr>
                     <tr>
                         <td class="titulo"></td>

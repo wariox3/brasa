@@ -80,34 +80,43 @@ class DisciplinarioController extends Controller
             $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arrControles = $request->request->All();
             $arDisciplinario = $form->getData();
-            if($arrControles['form_txtNumeroIdentificacion'] != '') {
-                $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));
-                if(count($arEmpleado) > 0) {
-                    $arDisciplinario->setEmpleadoRel($arEmpleado);
-                    if($arEmpleado->getCodigoContratoActivoFk() != '') {
-                        $arDisciplinario->setCentroCostoRel($arEmpleado->getCentroCostoRel());
-                        $arDisciplinario->setCargoRel($arEmpleado->getCargoRel());
-                        if($codigoDisciplinario == 0) {
-                            $arDisciplinario->setCodigoUsuario($arUsuario->getUserName());
-                            $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-                            $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
-                            $arDisciplinario->setContratoRel($arContrato);                            
-                        }
-                        $em->persist($arDisciplinario);
-                        $em->flush();
-                        if($form->get('guardarnuevo')->isClicked()) {
-                            return $this->redirect($this->generateUrl('brs_rhu_movimiento_disciplinario_nuevo', array('codigoDisciplinario' => 0 )));
+            if ($arDisciplinario->getEstadoCerrado() == 0){
+                if($arrControles['form_txtNumeroIdentificacion'] != '') {
+                    $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));
+                    if(count($arEmpleado) > 0) {
+                        $arDisciplinario->setEmpleadoRel($arEmpleado);
+                        if($arEmpleado->getCodigoContratoActivoFk() != '') {
+                            $arDisciplinario->setCentroCostoRel($arEmpleado->getCentroCostoRel());
+                            $arDisciplinario->setCargoRel($arEmpleado->getCargoRel());
+                            if($codigoDisciplinario == 0) {
+                                $arDisciplinario->setCodigoUsuario($arUsuario->getUserName());
+                                $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                                $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
+                                $arDisciplinario->setContratoRel($arContrato);                            
+                            }
+                            $em->persist($arDisciplinario);
+                            $em->flush();
+                            if($form->get('guardarnuevo')->isClicked()) {
+                                return $this->redirect($this->generateUrl('brs_rhu_movimiento_disciplinario_nuevo', array('codigoDisciplinario' => 0 )));
+                            } else {
+                                if ($codigoDisciplinario == 0){
+                                    return $this->redirect($this->generateUrl('brs_rhu_movimiento_disciplinario_detalle', array('codigoDisciplinario' => $arDisciplinario->getCodigoDisciplinarioPk())));
+                                }else {
+                                    return $this->redirect($this->generateUrl('brs_rhu_movimiento_disciplinario'));
+                                }
+
+                            }
                         } else {
-                            return $this->redirect($this->generateUrl('brs_rhu_movimiento_disciplinario'));
+                            $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
                         }
                     } else {
-                        $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
+                        $objMensaje->Mensaje("error", "El empleado no existe", $this);
                     }
-                } else {
-                    $objMensaje->Mensaje("error", "El empleado no existe", $this);
                 }
-            }
+            } else {
+                $objMensaje->Mensaje("error", "El proceso ya ha sido cerrado, no se puede editar", $this);
+            }   
         }
 
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Disciplinario:nuevo.html.twig', array(
@@ -258,6 +267,8 @@ class DisciplinarioController extends Controller
         $this->strListaDql = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->listaDQL(
                 $session->get('filtroIdentificacion'),
                 $session->get('filtroCodigoCentroCosto'),
+                $session->get('filtroCodigoZona'),
+                $session->get('filtroCodigoOperacion'),
                 $session->get('filtroEstadoCerrado'),
                 $session->get('filtroEstadoProcede'),
                 $session->get('filtroDesde'),
@@ -282,9 +293,38 @@ class DisciplinarioController extends Controller
         if($session->get('filtroCodigoCentroCosto')) {
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
         }
-
+        $arrayPropiedadesZona = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuZona',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoZona')) {
+            $arrayPropiedadesZona['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuZona", $session->get('filtroCodigoZona'));
+        }
+        $arrayPropiedadesOperacion = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuSubzona',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoOperacion')) {
+            $arrayPropiedadesOperacion['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuSubzona", $session->get('filtroCodigoOperacion'));
+        }
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('zonaRel', 'entity', $arrayPropiedadesZona)
+            ->add('operacionRel', 'entity', $arrayPropiedadesOperacion)
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('estadoCerrado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'),'data' => $session->get('filtroEstadoCerrado')))                                        
             ->add('estadoProcede', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'),'data' => $session->get('filtroEstadoProcede')))                                        
@@ -302,6 +342,8 @@ class DisciplinarioController extends Controller
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
+        $session->set('filtroCodigoZona', $controles['zonaRel']);
+        $session->set('filtroCodigoOperacion', $controles['operacionRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroEstadoCerrado', $form->get('estadoCerrado')->getData());
         $session->set('filtroEstadoProcede', $form->get('estadoProcede')->getData());
@@ -394,31 +436,7 @@ class DisciplinarioController extends Controller
                 } else {
                     $asunto = $arDisciplinario->getAsunto();
                 }
-                /*if ($arDisciplinario->getDescargos() == Null){
-                    $descargos = "NO APLICA";
-                } else {
-                    $descargos = $arDisciplinario->getDescargos();
-                }*/
-                if ($arDisciplinario->getFechaIncidente() == Null){
-                    $fechaIncidente = "NO APLICA";
-                } else {
-                    $fechaIncidente = $arDisciplinario->getFechaIncidente();
-                }
-                if ($arDisciplinario->getFechaAplicaProceso() == Null){
-                    $fechaProceso = "NO APLICA";
-                } else {
-                    $fechaProceso = $arDisciplinario->getFechaAplicaProceso();
-                }
-                if ($arDisciplinario->getFechaAplicaHastaProceso() == Null){
-                    $fechaProcesoHasta = "NO APLICA";
-                } else {
-                    $fechaProcesoHasta = $arDisciplinario->getFechaAplicaHastaProceso();
-                }
-                if ($arDisciplinario->getFechaIngresoTrabajo() == Null){
-                    $fechaIngresoTrabajo = "NO APLICA";
-                } else {
-                    $fechaIngresoTrabajo = $arDisciplinario->getFechaIngresoTrabajo();
-                }
+                
                 if ($arDisciplinario->getEstadoAutorizado() == 1){
                     $autorizado = "SI";
                 } else {
@@ -439,6 +457,14 @@ class DisciplinarioController extends Controller
                 } else {
                     $estadoProcede = "NO";
                 }
+                $zona = '';
+                if ($arDisciplinario->getEmpleadoRel()->getCodigoZonaFk() != null){
+                    $zona = $arDisciplinario->getEmpleadoRel()->getZonaRel()->getNombre();
+                }
+                $operacion = '';
+                if ($arDisciplinario->getEmpleadoRel()->getCodigoSubzonaFk() != null){
+                    $operacion = $arDisciplinario->getEmpleadoRel()->getSubzonaRel()->getNombre();
+                }
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arDisciplinario->getCodigoDisciplinarioPk())
                             ->setCellValue('B' . $i, $arDisciplinario->getCentroCostoRel()->getNombre())
@@ -446,15 +472,15 @@ class DisciplinarioController extends Controller
                             ->setCellValue('D' . $i, $arDisciplinario->getEmpleadoRel()->getNombreCorto())
                             ->setCellValue('E' . $i, $arDisciplinario->getEmpleadoRel()->getCargoRel()->getNombre())
                             ->setCellValue('F' . $i, $arDisciplinario->getPuesto())
-                            ->setCellValue('G' . $i, $arDisciplinario->getZona())
-                            ->setCellValue('H' . $i, $arDisciplinario->getOperacion())
+                            ->setCellValue('G' . $i, $zona)
+                            ->setCellValue('H' . $i, $operacion)
                             ->setCellValue('I' . $i, $arDisciplinario->getDisciplinarioTipoRel()->getNombre())
                             ->setCellValue('J' . $i, $asunto)
-                            ->setCellValue('K' . $i, $fechaIncidente)
-                            ->setCellValue('L' . $i, $fechaProceso)
-                            ->setCellValue('M' . $i, $fechaProcesoHasta)
+                            ->setCellValue('K' . $i, $arDisciplinario->getFechaIncidente())
+                            ->setCellValue('L' . $i, $arDisciplinario->getFechaDesdeSancion())
+                            ->setCellValue('M' . $i, $arDisciplinario->getFechaHastaSancion())
                             ->setCellValue('N' . $i, $arDisciplinario->getDiasSuspencion())
-                            ->setCellValue('O' . $i, $fechaIngresoTrabajo)
+                            ->setCellValue('O' . $i, $arDisciplinario->getFechaIngresoTrabajo())
                             ->setCellValue('P' . $i, $reentrenamiento)
                             ->setCellValue('Q' . $i, $autorizado)
                             ->setCellValue('R' . $i, $estadoProcede)
