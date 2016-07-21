@@ -269,7 +269,7 @@ class ContratosController extends Controller
                             $arContrato->setFechaUltimoPago($dateFechaUltimoPago);
                             $arContrato->setFechaUltimoPagoCesantias($arContrato->getFechaDesde());
                             $arContrato->setFechaUltimoPagoPrimas($arContrato->getFechaDesde());
-                            $arContrato->setFechaUltimoPagoVacaciones($arContrato->getFechaDesde());
+                            //$arContrato->setFechaUltimoPagoVacaciones($arContrato->getFechaDesde());
                             $arContrato->setFactor($arContrato->getTipoTiempoRel()->getFactor());
                             $arContrato->setFactorHorasDia($arContrato->getTipoTiempoRel()->getFactorHorasDia());
                             if($arContrato->getTipoTiempoRel()->getFactor() > 0) {
