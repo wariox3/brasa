@@ -116,6 +116,11 @@ class RhuDisciplinario
      * @ORM\Column(name="estado_procede", type="boolean")
      */    
     private $estadoProcede = false;
+
+    /**     
+     * @ORM\Column(name="estado_suspencion", type="boolean")
+     */    
+    private $estadoSuspencion = false;
     
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer")
@@ -919,5 +924,29 @@ class RhuDisciplinario
     public function getFechaNotificacion()
     {
         return $this->fechaNotificacion;
+    }
+
+    /**
+     * Set estadoSuspencion
+     *
+     * @param boolean $estadoSuspencion
+     *
+     * @return RhuDisciplinario
+     */
+    public function setEstadoSuspencion($estadoSuspencion)
+    {
+        $this->estadoSuspencion = $estadoSuspencion;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoSuspencion
+     *
+     * @return boolean
+     */
+    public function getEstadoSuspencion()
+    {
+        return $this->estadoSuspencion;
     }
 }

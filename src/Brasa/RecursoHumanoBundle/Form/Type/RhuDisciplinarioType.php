@@ -28,7 +28,7 @@ class RhuDisciplinarioType extends AbstractType
             ->add('fechaDesdeSancion', 'date', array('format' => 'yyyyMMdd'))
             ->add('fechaHastaSancion', 'date', array('format' => 'yyyyMMdd'))
             ->add('fechaIngresoTrabajo', 'date', array('format' => 'yyyyMMdd'))    
-            ->add('estadoCerrado', 'checkbox', array('required'  => false))
+            ->add('estadoSuspencion', 'checkbox', array('required'  => false))
             ->add('estadoProcede', 'checkbox', array('required'  => false))
             ->add('comentarios', 'textarea', array('required' => false))            
             ->add('guardar', 'submit')

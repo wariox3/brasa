@@ -83,7 +83,7 @@
                 <th>OPERACION</th>
                 <th>USUARIO</th>
                 <th>PRO</th>
-                <th>AUT</th>
+                <th>SUS</th>
                 <th>CER</th>
                 <th style="text-align: center"></th>
                 <th></th>
@@ -103,7 +103,7 @@
                 <td>{{ arDisciplinarios.empleadoRel.subzonaRel.nombre |default('')  }}</td>
                 <td>{{ arDisciplinarios.codigoUsuario  }}</td>
                 <td>{% if arDisciplinarios.estadoProcede == 1%}SI{% else %}NO{% endif %}</td>
-                <td>{% if arDisciplinarios.estadoAutorizado == 1%}SI{% else %}NO{% endif %}</td>
+                <td>{% if arDisciplinarios.estadoSuspencion == 1%}SI{% else %}NO{% endif %}</td>
                 <td>{% if arDisciplinarios.estadoCerrado == 1%}SI{% else %}NO{% endif %}</td>
                 {% if (arDisciplinarios.estadoCerrado == 1) %}
                     <td></td>
