@@ -33,6 +33,11 @@ class RhuDisciplinario
     private $fecha;         
     
     /**
+     * @ORM\Column(name="fecha_notificacion", type="date", nullable=true)
+     */    
+    private $fechaNotificacion;    
+    
+    /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer")
      */    
     private $codigoEmpleadoFk;             
@@ -890,5 +895,29 @@ class RhuDisciplinario
     public function getDisciplinariosDescargosDisciplinarioRel()
     {
         return $this->disciplinariosDescargosDisciplinarioRel;
+    }
+
+    /**
+     * Set fechaNotificacion
+     *
+     * @param \DateTime $fechaNotificacion
+     *
+     * @return RhuDisciplinario
+     */
+    public function setFechaNotificacion($fechaNotificacion)
+    {
+        $this->fechaNotificacion = $fechaNotificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaNotificacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaNotificacion()
+    {
+        return $this->fechaNotificacion;
     }
 }
