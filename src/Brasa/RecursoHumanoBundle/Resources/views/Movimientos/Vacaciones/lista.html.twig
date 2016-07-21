@@ -40,8 +40,9 @@
                 <th>D. DESDE</th>
                 <th>D. HASTA</th>                
                 <th>DIAS</th>
-                <th>DIAS D.</th>
-                <th>DIAS P.</th>                
+                <th>DD</th>
+                <th>DDR</th>
+                <th>DP</th>                
                 <th style="text-align: right">TOTAL</th>
                 <th>GEN</th>
                 <th style="text-align: center"></th>
@@ -60,6 +61,7 @@
                 <td>{{ arVacaciones.fechaHastaDisfrute |date("Y/m/d")  }}</td>                
                 <td style="text-align: right">{{ arVacaciones.diasVacaciones  }}</td>
                 <td style="text-align: right">{{ arVacaciones.diasDisfrutados  }}</td>
+                <td style="text-align: right">{{ arVacaciones.diasDisfrutadosReales  }}</td>
                 <td style="text-align: right">{{ arVacaciones.diasPagados  }}</td>
                 <td style="text-align: right">{{ arVacaciones.vrVacacion | number_format(2, '.', ',') }}</td>
                 <td>{% if arVacaciones.estadoPagoGenerado == 1 %} SI {% else %} NO {% endif %}</td>

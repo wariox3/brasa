@@ -64,7 +64,7 @@ class RhuVacacionRepository extends EntityRepository {
             
             $floSalarioPromedio = $arContrato->getVrSalario() + $promedioRecargosNocturnos;
         }        
-        $floTotalVacacionBrutoDisfrute = $floSalarioPromedio / 30 * $arVacacion->getDiasDisfrutados();
+        $floTotalVacacionBrutoDisfrute = $floSalarioPromedio / 30 * $arVacacion->getDiasDisfrutadosReales();
         $floTotalVacacionBrutoPagados = $arContrato->getVrSalario() / 30 * $arVacacion->getDiasPagados();
         $floTotalVacacionBruto = $floTotalVacacionBrutoDisfrute + $floTotalVacacionBrutoPagados;  
         

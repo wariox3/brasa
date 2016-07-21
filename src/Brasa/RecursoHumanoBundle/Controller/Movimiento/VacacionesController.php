@@ -123,6 +123,14 @@ class VacacionesController extends Controller
                                     if($codigoVacacion == 0) {
                                         $arVacacion->setCodigoUsuario($arUsuario->getUserName());
                                     }
+                                    $intDiasDevolver = 0;                                    
+                                    if($arVacacion->getDiasDisfrutados() > 0) {
+                                        $intDias = $arVacacion->getFechaDesdeDisfrute()->diff($arVacacion->getFechaHastaDisfrute());
+                                        $intDias = $intDias->format('%a');
+                                        $intDiasDevolver += $intDias + 1;                                        
+                                    }                                    
+                                    $arVacacion->setDiasDisfrutadosReales($intDiasDevolver);
+                                    
                                     $em->persist($arVacacion);
                                     
                                     //Calcular deducciones credito

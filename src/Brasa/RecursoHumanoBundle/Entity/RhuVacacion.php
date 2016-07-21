@@ -98,6 +98,11 @@ class RhuVacacion
     private $diasPagados = 0;     
     
     /**
+     * @ORM\Column(name="dias_disfrutados_reales", type="integer")
+     */
+    private $diasDisfrutadosReales = 0;    
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;
@@ -955,5 +960,29 @@ class RhuVacacion
     public function getVrBonificacion()
     {
         return $this->vrBonificacion;
+    }
+
+    /**
+     * Set diasDisfrutadosReales
+     *
+     * @param integer $diasDisfrutadosReales
+     *
+     * @return RhuVacacion
+     */
+    public function setDiasDisfrutadosReales($diasDisfrutadosReales)
+    {
+        $this->diasDisfrutadosReales = $diasDisfrutadosReales;
+
+        return $this;
+    }
+
+    /**
+     * Get diasDisfrutadosReales
+     *
+     * @return integer
+     */
+    public function getDiasDisfrutadosReales()
+    {
+        return $this->diasDisfrutadosReales;
     }
 }

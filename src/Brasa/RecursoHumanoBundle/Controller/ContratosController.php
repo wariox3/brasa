@@ -459,7 +459,7 @@ class ContratosController extends Controller
                 'property' => 'nombre',
                 'required' => true        
             ))
-            ->add('VrSalarioNuevo', 'number', array('data' =>$arContrato->getVrSalario() ,'required' => true))          
+            ->add('VrSalarioNuevo', 'number', array('data' =>$arContrato->getVrSalario() ,'required' => true))                      
             ->add('detalle', 'text', array('required' => true))          
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
