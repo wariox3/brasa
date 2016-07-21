@@ -118,9 +118,9 @@ class RhuDisciplinario
     private $estadoProcede = false;
 
     /**     
-     * @ORM\Column(name="estado_suspencion", type="boolean")
+     * @ORM\Column(name="estado_suspension", type="boolean")
      */    
-    private $estadoSuspencion = false;
+    private $estadoSuspension = false;
     
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer")
@@ -177,6 +177,7 @@ class RhuDisciplinario
      * @ORM\OneToMany(targetEntity="RhuDisciplinarioDescargo", mappedBy="disciplinarioRel")
      */
     protected $disciplinariosDescargosDisciplinarioRel;     
+
 
     /**
      * Constructor
@@ -266,6 +267,30 @@ class RhuDisciplinario
     public function getFecha()
     {
         return $this->fecha;
+    }
+
+    /**
+     * Set fechaNotificacion
+     *
+     * @param \DateTime $fechaNotificacion
+     *
+     * @return RhuDisciplinario
+     */
+    public function setFechaNotificacion($fechaNotificacion)
+    {
+        $this->fechaNotificacion = $fechaNotificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaNotificacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaNotificacion()
+    {
+        return $this->fechaNotificacion;
     }
 
     /**
@@ -653,6 +678,30 @@ class RhuDisciplinario
     }
 
     /**
+     * Set estadoSuspension
+     *
+     * @param boolean $estadoSuspension
+     *
+     * @return RhuDisciplinario
+     */
+    public function setEstadoSuspension($estadoSuspension)
+    {
+        $this->estadoSuspension = $estadoSuspension;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoSuspension
+     *
+     * @return boolean
+     */
+    public function getEstadoSuspension()
+    {
+        return $this->estadoSuspension;
+    }
+
+    /**
      * Set codigoCentroCostoFk
      *
      * @param integer $codigoCentroCostoFk
@@ -900,53 +949,5 @@ class RhuDisciplinario
     public function getDisciplinariosDescargosDisciplinarioRel()
     {
         return $this->disciplinariosDescargosDisciplinarioRel;
-    }
-
-    /**
-     * Set fechaNotificacion
-     *
-     * @param \DateTime $fechaNotificacion
-     *
-     * @return RhuDisciplinario
-     */
-    public function setFechaNotificacion($fechaNotificacion)
-    {
-        $this->fechaNotificacion = $fechaNotificacion;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaNotificacion
-     *
-     * @return \DateTime
-     */
-    public function getFechaNotificacion()
-    {
-        return $this->fechaNotificacion;
-    }
-
-    /**
-     * Set estadoSuspencion
-     *
-     * @param boolean $estadoSuspencion
-     *
-     * @return RhuDisciplinario
-     */
-    public function setEstadoSuspencion($estadoSuspencion)
-    {
-        $this->estadoSuspencion = $estadoSuspencion;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoSuspencion
-     *
-     * @return boolean
-     */
-    public function getEstadoSuspencion()
-    {
-        return $this->estadoSuspencion;
     }
 }

@@ -163,7 +163,7 @@ class DisciplinarioController extends Controller
             if($form->get('BtnCerrar')->isClicked()) {
                 if($arProcesoDisciplinario->getEstadoAutorizado() == 1) {
                     if($arProcesoDisciplinario->getEstadoCerrado() == 0) {
-                        if($arProcesoDisciplinario->getDisciplinarioTipoRel()->getSuspension() == 1) {
+                        if($arProcesoDisciplinario->getEstadoSuspension() == 1) {
                             if($arProcesoDisciplinario->getEstadoProcede() == 1) {
                                 $arLicenciaTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuLicenciaTipo();
                                 $arLicenciaTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicenciaTipo')->find(6);
