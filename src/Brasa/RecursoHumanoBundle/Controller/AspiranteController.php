@@ -209,8 +209,10 @@ class AspiranteController extends Controller
                 return $this->redirect($this->generateUrl('brs_rhu_aspitante_detalle', array('codigoAspirante' => $codigoAspirante)));
             }
         }
+        $arRequisicionAplicada = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisicionAspirante')->findBy(array('codigoAspiranteFk' => $codigoAspirante, 'estadoAprobado' => 1));
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Aspirante:detalle.html.twig', array(
                     'arAspirante' => $arAspirante,
+                    'arRequisicionAplicada' => $arRequisicionAplicada,
                     'form' => $form->createView()
                     ));
     }
