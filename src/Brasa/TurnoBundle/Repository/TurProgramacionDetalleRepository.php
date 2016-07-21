@@ -86,10 +86,16 @@ class TurProgramacionDetalleRepository extends EntityRepository {
         return count($arDetalles);
     }
 
-    public function periodo($strFechaDesde, $strFechaHasta, $codigoRecursoGrupo) {
+    public function periodo($strFechaDesde, $strFechaHasta, $codigoRecursoGrupo, $codigoRecurso) {
         $em = $this->getEntityManager();
         $dql   = "SELECT pd FROM BrasaTurnoBundle:TurProgramacionDetalle pd JOIN pd.programacionRel p JOIN pd.recursoRel r "
-                . "WHERE p.fecha >= '" . $strFechaDesde . "' AND p.fecha <='" . $strFechaHasta . "' AND r.codigoRecursoGrupoFk = " . $codigoRecursoGrupo;
+                . "WHERE p.fecha >= '" . $strFechaDesde . "' AND p.fecha <='" . $strFechaHasta . "'";
+        if($codigoRecursoGrupo != "") {
+            $dql .= " AND r.codigoRecursoGrupoFk = " . $codigoRecursoGrupo;
+        }
+        if($codigoRecurso != "") {
+            $dql .= " AND pd.codigoRecursoFk = " . $codigoRecurso;
+        }        
         $query = $em->createQuery($dql);
         $arResultado = $query->getResult();
         return $arResultado;

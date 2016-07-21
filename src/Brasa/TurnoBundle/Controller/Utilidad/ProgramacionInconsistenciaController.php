@@ -24,6 +24,7 @@ class ProgramacionInconsistenciaController extends Controller
         if($form->isValid()) {
             if($form->get('BtnGenerar')->isClicked()) {  
                 set_time_limit(0);
+                ini_set("memory_limit", -1);
                 $strSql = "DELETE FROM tur_programacion_inconsistencia WHERE 1";           
                 $em->getConnection()->executeQuery($strSql);                
                 $dateFecha = $form->get('fecha')->getData();
@@ -87,7 +88,9 @@ class ProgramacionInconsistenciaController extends Controller
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'INCONSISTENCIA')
                     ->setCellValue('C1', 'DETALLE')
-                    ->setCellValue('D1', 'IDENTIFICACION');
+                    ->setCellValue('D1', 'IDENTIFICACION')
+                    ->setCellValue('E1', 'GRUPO')
+                    ->setCellValue('F1', 'DIA');
 
         $i = 2;
         $dql = $em->getRepository('BrasaTurnoBundle:TurProgramacionInconsistencia')->listaDql();
@@ -99,7 +102,9 @@ class ProgramacionInconsistenciaController extends Controller
                     ->setCellValue('A' . $i, $arProgramacionInconsistencia->getCodigoProgramacionInconsistenciaPk())
                     ->setCellValue('B' . $i, $arProgramacionInconsistencia->getInconsistencia())
                     ->setCellValue('C' . $i, $arProgramacionInconsistencia->getDetalle())
-                    ->setCellValue('D' . $i, $arProgramacionInconsistencia->getNumeroIdentificacion());
+                    ->setCellValue('D' . $i, $arProgramacionInconsistencia->getNumeroIdentificacion())
+                    ->setCellValue('E' . $i, $arProgramacionInconsistencia->getCodigoRecursoGrupoFk())
+                    ->setCellValue('F' . $i, $arProgramacionInconsistencia->getDia());
             $i++;
         }
 
@@ -149,6 +154,7 @@ class ProgramacionInconsistenciaController extends Controller
                             codigo_recurso_fk AS codigoRecursoFk, 
                             tur_recurso.nombre_corto AS nombreCorto,
                             tur_recurso.numero_identificacion AS numeroIdentificacion,
+                            tur_recurso.codigo_recurso_grupo_fk AS recursoGrupo,
                             COUNT(dia_$i) AS numero
                             FROM
                             tur_programacion_detalle
@@ -168,8 +174,10 @@ class ProgramacionInconsistenciaController extends Controller
                             $arProgramacionInconsistencia->setInconsistencia('Sin turno asignado');
                             $arProgramacionInconsistencia->setDetalle("Recurso " . $registro['codigoRecursoFk'] . " " .
                             "Identificacion: " . $registro['numeroIdentificacion'] . " " .
-                            $registro['nombreCorto'] . " dia " . $i);
+                            $registro['nombreCorto'] . " dia " . $i);                            
                             $arProgramacionInconsistencia->setNumeroIdentificacion($registro['numeroIdentificacion']);
+                            $arProgramacionInconsistencia->setDia($i);
+                            $arProgramacionInconsistencia->setCodigoRecursoGrupoFk($registro['recursoGrupo']);
                             $em->persist($arProgramacionInconsistencia);                                
                         }
                     }                        

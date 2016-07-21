@@ -33,6 +33,21 @@ class TurProgramacionInconsistencia
     private $numeroIdentificacion;     
 
     /**
+     * @ORM\Column(name="dia", type="integer", nullable=true)
+     */    
+    private $dia = 0;  
+    
+    /**
+     * @ORM\Column(name="codigo_recurso_fk", type="integer", nullable=true)
+     */    
+    private $codigoRecursoFk;    
+
+    /**
+     * @ORM\Column(name="codigo_recurso_grupo_fk", type="integer", nullable=true)
+     */    
+    private $codigoRecursoGrupoFk;    
+    
+    /**
      * Get codigoProgramacionInconsistenciaPk
      *
      * @return integer
@@ -112,5 +127,77 @@ class TurProgramacionInconsistencia
     public function getNumeroIdentificacion()
     {
         return $this->numeroIdentificacion;
+    }
+
+    /**
+     * Set dia
+     *
+     * @param integer $dia
+     *
+     * @return TurProgramacionInconsistencia
+     */
+    public function setDia($dia)
+    {
+        $this->dia = $dia;
+
+        return $this;
+    }
+
+    /**
+     * Get dia
+     *
+     * @return integer
+     */
+    public function getDia()
+    {
+        return $this->dia;
+    }
+
+    /**
+     * Set codigoRecursoFk
+     *
+     * @param integer $codigoRecursoFk
+     *
+     * @return TurProgramacionInconsistencia
+     */
+    public function setCodigoRecursoFk($codigoRecursoFk)
+    {
+        $this->codigoRecursoFk = $codigoRecursoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoRecursoFk
+     *
+     * @return integer
+     */
+    public function getCodigoRecursoFk()
+    {
+        return $this->codigoRecursoFk;
+    }
+
+    /**
+     * Set codigoRecursoGrupoFk
+     *
+     * @param integer $codigoRecursoGrupoFk
+     *
+     * @return TurProgramacionInconsistencia
+     */
+    public function setCodigoRecursoGrupoFk($codigoRecursoGrupoFk)
+    {
+        $this->codigoRecursoGrupoFk = $codigoRecursoGrupoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoRecursoGrupoFk
+     *
+     * @return integer
+     */
+    public function getCodigoRecursoGrupoFk()
+    {
+        return $this->codigoRecursoGrupoFk;
     }
 }

@@ -33,6 +33,9 @@
                 <th>CODIGO</th>
                 <th>INCONSISTENCIA</th>
                 <th>DETALLE</th>
+                <th>DOCUMENTO</th>
+                <th>GRUPO</th>
+                <th>DIA</th>
 
             </tr>
             {% for arProgramacionInconsistencias in arProgramacionInconsistencias %}
@@ -40,6 +43,9 @@
                 <td>{{ arProgramacionInconsistencias.codigoProgramacionInconsistenciaPk  }}</td>  
                 <td>{{ arProgramacionInconsistencias.inconsistencia  }}</td> 
                 <td>{{ arProgramacionInconsistencias.detalle  }}</td> 
+                <td>{{ arProgramacionInconsistencias.numeroIdentificacion  }}</td>
+                <td>{{ arProgramacionInconsistencias.codigoRecursoGrupoFk  }}</td>
+                <td>{{ arProgramacionInconsistencias.dia  }}</td> 
             </tr>
             
             {% endfor %}
