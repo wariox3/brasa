@@ -52,13 +52,13 @@ class TurNovedadRepository extends EntityRepository {
         if($strMes != $strMesHasta) {
             $strDiaHasta = $strUltimoDiaMes = date("d",(mktime(0,0,0,$arNovedad->getFechaDesde()->format('m')+1,1,$arNovedad->getFechaDesde()->format('Y'))-1));
         }
-        $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arNovedad->getCodigoRecursoFk()));
-        foreach ($arProgramacionDetalles as $arProgramacionDetalle) {
+        $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findOneBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arNovedad->getCodigoRecursoFk()), array('horas' => 'DESC'));
+        if($arProgramacionDetalle) {
             $arProgramacionDetalleAct = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
             $arProgramacionDetalleAct = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($arProgramacionDetalle->getCodigoProgramacionDetallePk());
             //Actualizar o crear programacion para el recurso reemplazo
-            if(count($arProgramacionDetalles) <= 1) {
-                if($boorReemplazo = 1) {
+            
+            if($boorReemplazo = 1) {
                 if($arNovedad->getCodigoRecursoReemplazoFk() != '') {
                     $arProgramacionDetalleReemplazo = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                     $arProgramacionDetalleReemplazo = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findOneBy(array('codigoProgramacionFk' => $arProgramacionDetalleAct->getCodigoProgramacionFk(), 'codigoRecursoFk' => $arNovedad->getCodigoRecursoReemplazoFk()));
@@ -265,8 +265,7 @@ class TurNovedadRepository extends EntityRepository {
                     $em->persist($arProgramacionDetalleReemplazoAct);                         
                 }                    
             }                    
-            }
-
+            
 
             //Actualizar recurso original
             for($i = $strDiaDesde; $i <= $strDiaHasta; $i++) {
@@ -366,8 +365,9 @@ class TurNovedadRepository extends EntityRepository {
             }
             $em->persist($arProgramacionDetalleAct);               
             $em->flush();
-            $em->getRepository('BrasaTurnoBundle:TurProgramacion')->liquidar($arProgramacionDetalleAct->getProgramacionRel()->getCodigoProgramacionPk());
-        }
+            $em->getRepository('BrasaTurnoBundle:TurProgramacion')->liquidar($arProgramacionDetalleAct->getProgramacionRel()->getCodigoProgramacionPk());            
+        }       
+        
         $arNovedad->setEstadoAplicada(1);
         $em->persist($arNovedad);
         $em->flush();        
