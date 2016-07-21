@@ -27,8 +27,8 @@ class RhuVacacionRepository extends EntityRepository {
     public function liquidar($codigoVacacion) {        
         $em = $this->getEntityManager();
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);
-        $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();        
-        $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);                 
+        $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();            
+        $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);                         
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = $arVacacion->getContratoRel();
         $intDias = $arVacacion->getDiasVacaciones();
@@ -61,16 +61,20 @@ class RhuVacacionRepository extends EntityRepository {
         if($arContrato->getCodigoSalarioTipoFk() == 1) {
             $floSalarioPromedio = $arContrato->getVrSalario();
         } else {
+            
             $floSalarioPromedio = $arContrato->getVrSalario() + $promedioRecargosNocturnos;
         }        
-        $floTotalVacacionBruto = $floSalarioPromedio / 30 * $intDias;                        
-        $douSalud = ($floTotalVacacionBruto * 4) / 100;
+        $floTotalVacacionBrutoDisfrute = $floSalarioPromedio / 30 * $arVacacion->getDiasDisfrutados();
+        $floTotalVacacionBrutoPagados = $arContrato->getVrSalario() / 30 * $arVacacion->getDiasPagados();
+        $floTotalVacacionBruto = $floTotalVacacionBrutoDisfrute + $floTotalVacacionBrutoPagados;  
+        
+        $douSalud = ($floTotalVacacionBrutoDisfrute * 4) / 100;
         $arVacacion->setVrSalud($douSalud);
         if ($floTotalVacacionBruto >= ($arConfiguracion->getVrSalario() * 4)){
             $douPorcentaje = $arConfiguracion->getPorcentajePensionExtra();
             $douPension = ($floSalario * $douPorcentaje) /100;
         } else {
-            $douPension = ($floTotalVacacionBruto * 4) / 100;
+            $douPension = ($floTotalVacacionBrutoDisfrute * 4) / 100;
         }
         $arVacacion->setVrPension($douPension);                                   
         $floDeducciones = 0;
