@@ -200,6 +200,7 @@ class ProgramacionController extends Controller
     public function detalleEditarAction($codigoPuesto, $codigoProgramacion) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');
         $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
         $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion);
@@ -225,11 +226,13 @@ class ProgramacionController extends Controller
         }        
         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
         if($codigoPuesto == 0) {
-            $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array ('codigoProgramacionFk' => $codigoProgramacion, 'codigoPuestoFk' => null));            
+            $dql = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->listaDql($codigoProgramacion, "");            
+            //$arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array ('codigoProgramacionFk' => $codigoProgramacion, 'codigoPuestoFk' => null));            
         } else {
-            $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array ('codigoProgramacionFk' => $codigoProgramacion, 'codigoPuestoFk' => $codigoPuesto));            
+            $dql = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->listaDql($codigoProgramacion, $codigoPuesto);
+            //$arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array ('codigoProgramacionFk' => $codigoProgramacion, 'codigoPuestoFk' => $codigoPuesto));            
         }
-        
+        $arProgramacionDetalle = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 15);
         return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalleEditar.html.twig', array(
                     'arProgramacion' => $arProgramacion,
                     'arProgramacionDetalle' => $arProgramacionDetalle,

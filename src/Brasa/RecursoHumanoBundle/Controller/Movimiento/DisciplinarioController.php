@@ -73,6 +73,7 @@ class DisciplinarioController extends Controller
             $arDisciplinario->setFechaHastaSancion(new \DateTime('now'));
             $arDisciplinario->setFechaIncidente(new \DateTime('now'));
             $arDisciplinario->setFechaIngresoTrabajo(new \DateTime('now'));
+            $arDisciplinario->setFechaNotificacion(new \DateTime('now'));
         }
         $form = $this->createForm(new RhuDisciplinarioType, $arDisciplinario);
         $form->handleRequest($request);
@@ -193,22 +194,6 @@ class DisciplinarioController extends Controller
                     $objMensaje = "Debe estar autorizado";
                 }    
             }
-            if($form->get('BtnProcede')->isClicked()) {
-                if($arProcesoDisciplinario->getEstadoAutorizado() == 1) {
-                    if($arProcesoDisciplinario->getEstadoProcede() == 0) {
-                        $arProcesoDisciplinario->setEstadoProcede(1);
-                        $em->persist($arProcesoDisciplinario);
-                    } else {
-                        $arProcesoDisciplinario->setEstadoProcede(0);
-                        $em->persist($arProcesoDisciplinario);
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_movimiento_disciplinario_detalle', array('codigoDisciplinario' => $codigoDisciplinario)));                                                
-                } else {
-                    $objMensaje = "Debe estar autorizado";
-                }    
-            }
-
         }
         $arDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
         $arDescargos = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinarioDescargo')->findBy(array('codigoDisciplinarioFk' => $codigoDisciplinario));
@@ -354,8 +339,7 @@ class DisciplinarioController extends Controller
     private function formularioDetalle($ar) {
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
-        $arrBotonCerrar = array('label' => 'Cerrar', 'disabled' => false);
-        $arrBotonProcede = array('label' => 'Procede / no procede', 'disabled' => false);
+        $arrBotonCerrar = array('label' => 'Cerrar', 'disabled' => false);        
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);               
         $arrBotonEliminarDescargo = array('label' => 'Eliminar descargo', 'disabled' => false);               
         if($ar->getEstadoAutorizado() == 1) {            
@@ -364,20 +348,17 @@ class DisciplinarioController extends Controller
         } else {
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonImprimir['disabled'] = true;
-            $arrBotonCerrar['disabled'] = true;
-            $arrBotonProcede['disabled'] = true;
+            $arrBotonCerrar['disabled'] = true;            
         }
         if($ar->getEstadoCerrado() == 1) {
             $arrBotonDesAutorizar['disabled'] = true;
-            $arrBotonCerrar['disabled'] = true;
-            $arrBotonProcede['disabled'] = true;
+            $arrBotonCerrar['disabled'] = true;            
         }
         
         $form = $this->createFormBuilder()    
             ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
             ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)
-            ->add('BtnCerrar', 'submit', $arrBotonCerrar)
-            ->add('BtnProcede', 'submit', $arrBotonProcede)
+            ->add('BtnCerrar', 'submit', $arrBotonCerrar)            
             ->add('BtnImprimir', 'submit', $arrBotonImprimir)                                            
             ->add('BtnEliminarDescargo', 'submit', $arrBotonEliminarDescargo)                                            
             ->getForm();  

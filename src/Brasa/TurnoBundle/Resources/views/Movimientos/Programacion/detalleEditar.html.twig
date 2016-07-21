@@ -141,7 +141,12 @@
                 </tr>
             {% endfor %}
         </table>
-
+        <div class="btn-group" style="float: left">
+                <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arProgramacionDetalle.getTotalItemCount }}</span></div>                        
+        </div>
+        <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
+                {{ knp_pagination_render(arProgramacionDetalle) }}       
+        </div>
 
         <div class="btn-toolbar" style="float: right">
                 <div class="btn-group">                    
