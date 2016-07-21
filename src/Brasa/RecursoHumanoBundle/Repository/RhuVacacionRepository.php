@@ -21,6 +21,7 @@ class RhuVacacionRepository extends EntityRepository {
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
         }
+        $dql .= " ORDER BY v.codigoVacacionPk DESC";
         return $dql;
     }
 
@@ -31,6 +32,13 @@ class RhuVacacionRepository extends EntityRepository {
         $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);                         
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = $arVacacion->getContratoRel();
+        $fechaDesdePeriodo = $arContrato->getFechaUltimoPagoVacaciones();                                
+        $fechaHastaPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestacionesHasta(360, $fechaDesdePeriodo);
+        $intDias = ($arVacacion->getDiasDisfrutados() + $arVacacion->getDiasPagados()) * 24;
+        $fechaDesdePeriodo = $arContrato->getFechaUltimoPagoVacaciones();
+        $fechaHastaPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestacionesHasta($intDias, $fechaDesdePeriodo);
+        $arVacacion->setFechaDesdePeriodo($fechaDesdePeriodo);
+        $arVacacion->setFechaHastaPeriodo($fechaHastaPeriodo);        
         $intDias = $arVacacion->getDiasVacaciones();
         $floSalario = $arVacacion->getEmpleadoRel()->getVrSalario();        
         //Analizar cambios de salario
