@@ -63,9 +63,10 @@
                 <th>FECHA</th>
                 <th>NOMBRE</th>
                 <th>CENTRO COSTO</th>
+                <th>ZONA</th>
                 <th>CARGO</th>
-                <th>CANTIDAD SOLICITADA</th>
-                <th><p data-toggle="tooltip" data-placement="top" title="Abierto">ABIERTO</p></th>
+                <th>CANT</th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Abierto">CER</p></th>
                 <th style="text-align: center"></th>
                 <th></th>
                 <th></th>
@@ -77,9 +78,10 @@
                 <td>{{ arRequisitos.fecha | date("Y/m/d")  }}</td>
                 <td>{{ arRequisitos.nombre  }}</td>                                
                 <td>{{ arRequisitos.centroCostoRel.nombre|default('SIN CENTRO COSTO')  }}</td>
+                <td>{{ arRequisitos.zonaRel.nombre|default('')  }}</td>
                 <td>{{ arRequisitos.cargoRel.nombre|default('SIN CARGO')  }}</td>
                 <td>{{ arRequisitos.cantidadSolicitida  }}</td>
-                <td>{% if arRequisitos.estadoAbierto == 0 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arRequisitos.estadoCerrado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_seleccionrequisito_nuevo', { 'codigoSeleccionRequisito':  arRequisitos.codigoSeleccionRequisitoPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar registro"></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_seleccionrequisito_detalle', { 'codigoSeleccionRequisito': arRequisitos.codigoSeleccionRequisitoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arRequisitos.codigoSeleccionRequisitoPk }}" /></td>

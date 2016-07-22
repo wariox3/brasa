@@ -46,7 +46,14 @@ class RhuSeleccionRequisitoType extends AbstractType
                     return $er->createQueryBuilder('cc')
                     ;},
                 'property' => 'nombre',
-                'required' => true))                            
+                'required' => true))   
+            ->add('zonaRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuZona',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('z')
+                    ->orderBy('z.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                             
             ->add('codigoDisponibilidadFk', 'choice', array('choices'   => array('1' => 'TIEMPO COMPLETO', '2' => 'MEDIO TIEMPO', '3' => 'POR HORAS','4' => 'DESDE CASA', '5' => 'PRACTICAS', '0' => 'NO APLICA')))
             //->add('codigoExperienciaFk', 'choice', array('choices'   => array('1' => '1 AÑO', '2' => '2 AÑOS', '3' => '3-4 AÑOS','4' => '5-10 AÑOS', '5' => 'GRADUADO', '6' => 'SIN EXPERIENCIA')))
             ->add('codigoSexoFk', 'choice', array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO', 'I' => 'INDIFERENTE')))

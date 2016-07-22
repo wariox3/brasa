@@ -131,6 +131,11 @@ class RhuSeleccionRequisito
     private $comentarios;
     
     /**
+     * @ORM\Column(name="codigo_zona_fk", type="integer", nullable=true)
+     */    
+    private $codigoZonaFk;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="seleccionesRequisitosCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
@@ -165,6 +170,12 @@ class RhuSeleccionRequisito
      * @ORM\JoinColumn(name="codigo_estudio_tipo_fk", referencedColumnName="codigo_empleado_estudio_tipo_pk")
      */
     protected $estudioTipoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuZona", inversedBy="seleccionesRequisitosZonaRel")
+     * @ORM\JoinColumn(name="codigo_zona_fk", referencedColumnName="codigo_zona_pk")
+     */
+    protected $zonaRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="RhuSeleccion", mappedBy="seleccionRequisitoRel")
@@ -934,5 +945,53 @@ class RhuSeleccionRequisito
     public function getSeleccionesRequisicionesAspirantesSeleccionRequisitoRel()
     {
         return $this->seleccionesRequisicionesAspirantesSeleccionRequisitoRel;
+    }
+
+    /**
+     * Set codigoZonaFk
+     *
+     * @param integer $codigoZonaFk
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setCodigoZonaFk($codigoZonaFk)
+    {
+        $this->codigoZonaFk = $codigoZonaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoZonaFk
+     *
+     * @return integer
+     */
+    public function getCodigoZonaFk()
+    {
+        return $this->codigoZonaFk;
+    }
+
+    /**
+     * Set zonaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuZona $zonaRel
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setZonaRel(\Brasa\RecursoHumanoBundle\Entity\RhuZona $zonaRel = null)
+    {
+        $this->zonaRel = $zonaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get zonaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuZona
+     */
+    public function getZonaRel()
+    {
+        return $this->zonaRel;
     }
 }

@@ -28,6 +28,16 @@ class RhuZona
     protected $empleadosZonaRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuSeleccionRequisito", mappedBy="zonaRel")
+     */
+    protected $seleccionesRequisitosZonaRel;    
+   
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSeleccion", mappedBy="zonaRel")
+     */
+    protected $seleccionesZonaRel;     
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -101,5 +111,73 @@ class RhuZona
     public function getEmpleadosZonaRel()
     {
         return $this->empleadosZonaRel;
+    }
+
+    /**
+     * Add seleccionesRequisitosZonaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionesRequisitosZonaRel
+     *
+     * @return RhuZona
+     */
+    public function addSeleccionesRequisitosZonaRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionesRequisitosZonaRel)
+    {
+        $this->seleccionesRequisitosZonaRel[] = $seleccionesRequisitosZonaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove seleccionesRequisitosZonaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionesRequisitosZonaRel
+     */
+    public function removeSeleccionesRequisitosZonaRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionesRequisitosZonaRel)
+    {
+        $this->seleccionesRequisitosZonaRel->removeElement($seleccionesRequisitosZonaRel);
+    }
+
+    /**
+     * Get seleccionesRequisitosZonaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeleccionesRequisitosZonaRel()
+    {
+        return $this->seleccionesRequisitosZonaRel;
+    }
+
+    /**
+     * Add seleccionesZonaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesZonaRel
+     *
+     * @return RhuZona
+     */
+    public function addSeleccionesZonaRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesZonaRel)
+    {
+        $this->seleccionesZonaRel[] = $seleccionesZonaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove seleccionesZonaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesZonaRel
+     */
+    public function removeSeleccionesZonaRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesZonaRel)
+    {
+        $this->seleccionesZonaRel->removeElement($seleccionesZonaRel);
+    }
+
+    /**
+     * Get seleccionesZonaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeleccionesZonaRel()
+    {
+        return $this->seleccionesZonaRel;
     }
 }
