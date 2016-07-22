@@ -388,6 +388,39 @@ class ProgramacionesPagoController extends Controller
                 $em->flush();                
                 return $this->redirect($this->generateUrl('brs_rhu_programacion_pago_resumen_turno_ver', array('codigoProgramacionPagoDetalle' => $codigoProgramacionPagoDetalle)));
             } 
+            if($form->get('BtnActualizarHoras')->isClicked()) {  
+                $arrControles = $request->request->All();
+                if($arrControles['TxtHorasDescanso'] != "") {
+                    $arProgramacionPagoDetalle->setHorasDescanso($arrControles['TxtHorasDescanso']);                
+                }
+                if($arrControles['TxtHorasDiurnas'] != "") {
+                    $arProgramacionPagoDetalle->setHorasDiurnas($arrControles['TxtHorasDiurnas']);                
+                }
+                if($arrControles['TxtHorasNocturnas'] != "") {
+                    $arProgramacionPagoDetalle->setHorasNocturnas($arrControles['TxtHorasNocturnas']);                
+                }
+                if($arrControles['TxtHorasFestivasDiurnas'] != "") {
+                    $arProgramacionPagoDetalle->setHorasFestivasDiurnas($arrControles['TxtHorasFestivasDiurnas']);                
+                }
+                if($arrControles['TxtHorasFestivasNocturnas'] != "") {
+                    $arProgramacionPagoDetalle->setHorasFestivasNocturnas($arrControles['TxtHorasFestivasNocturnas']);                
+                }
+                if($arrControles['TxtHorasExtrasOrdinariasDiurnas'] != "") {
+                    $arProgramacionPagoDetalle->setHorasExtrasOrdinariasDiurnas($arrControles['TxtHorasExtrasOrdinariasDiurnas']);                
+                }
+                if($arrControles['TxtHorasExtrasOrdinariasNocturnas'] != "") {
+                    $arProgramacionPagoDetalle->setHorasExtrasOrdinariasNocturnas($arrControles['TxtHorasExtrasOrdinariasNocturnas']);                
+                }
+                if($arrControles['TxtHorasExtrasFestivasDiurnas'] != "") {
+                    $arProgramacionPagoDetalle->setHorasExtrasFestivasDiurnas($arrControles['TxtHorasExtrasFestivasDiurnas']);                
+                }                
+                if($arrControles['TxtHorasExtrasFestivasNocturnas'] != "") {
+                    $arProgramacionPagoDetalle->setHorasExtrasFestivasNocturnas($arrControles['TxtHorasExtrasFestivasNocturnas']);                
+                }                 
+                $em->persist($arProgramacionPagoDetalle);
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_rhu_programacion_pago_resumen_turno_ver', array('codigoProgramacionPagoDetalle' => $codigoProgramacionPagoDetalle)));
+            }             
             
             if($form->get('BtnMarcar')->isClicked()) {
                 $arProgramacionPagoDetalle->setMarca(1);
@@ -495,6 +528,7 @@ class ProgramacionesPagoController extends Controller
     private function formularioVerReusmenTurno() {
         $form = $this->createFormBuilder() 
             ->add('BtnActualizar', 'submit', array('label'  => 'Actualizar',))
+            ->add('BtnActualizarHoras', 'submit', array('label'  => 'Actualizar',))
             ->add('BtnMarcar', 'submit', array('label'  => 'Marcar',))
             ->getForm();
         return $form;

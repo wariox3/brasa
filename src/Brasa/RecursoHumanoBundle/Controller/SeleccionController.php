@@ -375,7 +375,8 @@ class SeleccionController extends Controller
                 $session->get('filtroIdentificacionSeleccion'),
                 $session->get('filtroAbiertoSeleccion'),
                 $session->get('filtroAprobadoSeleccion'),
-                $session->get('filtroCodigoCentroCosto')
+                $session->get('filtroCodigoCentroCosto'),
+                $session->get('filtroCodigoRequisicion')
                 ));
     }
 
@@ -393,11 +394,27 @@ class SeleccionController extends Controller
                 'empty_value' => "TODOS",
                 'data' => ""
             );
+        $arrayPropiedadesRequisicion = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuSeleccionRequisito',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('r')
+                    ->where('r.estadoCerrado = 0')
+                    ->orderBy('r.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );                    
         if($session->get('filtroCodigoCentroCosto')) {
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
         }
+        if($session->get('filtroCodigoRequisicion')) {
+            $arrayPropiedadesRequisicion['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuSeleccionRequisito", $session->get('filtroCodigoRequisicion'));
+        }        
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('requisicionRel', 'entity', $arrayPropiedadesRequisicion)
             ->add('estadoAprobado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAprobadoSeleccion')))
             ->add('estadoCerrado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAbiertoSeleccion')))
             ->add('TxtNombre', 'text', array('label'  => 'Nombre', 'data' => $session->get('filtroNombreSeleccion')))
@@ -457,6 +474,7 @@ class SeleccionController extends Controller
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
+        $session->set('filtroCodigoRequisicion', $controles['requisicionRel']);
         $session->set('filtroNombreSeleccion', $form->get('TxtNombre')->getData());
         $session->set('filtroIdentificacionSeleccion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroAbiertoSeleccion', $form->get('estadoCerrado')->getData());

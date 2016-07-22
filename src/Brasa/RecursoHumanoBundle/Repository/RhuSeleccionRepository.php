@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 
 class RhuSeleccionRepository extends EntityRepository {
     
-    public function listaDQL($strNombre = "", $strIdentificacion = "", $boolCerrado = "", $boolAprobado = "", $codigoCentroCosto = "") {
+    public function listaDQL($strNombre = "", $strIdentificacion = "", $boolCerrado = "", $boolAprobado = "", $codigoCentroCosto = "", $codigoRequisicion = "") {
         $dql   = "SELECT s FROM BrasaRecursoHumanoBundle:RhuSeleccion s WHERE s.codigoSeleccionPk <> 0";
         if($strNombre != "" ) {
             $dql .= " AND s.nombreCorto LIKE '%" . $strNombre . "%'";
@@ -31,6 +31,9 @@ class RhuSeleccionRepository extends EntityRepository {
         if($codigoCentroCosto != "" ) {
             $dql .= " AND s.codigoCentroCostoFk = " . $codigoCentroCosto;
         }
+        if($codigoRequisicion != "" ) {
+            $dql .= " AND s.codigoSeleccionRequisitoFk = " . $codigoRequisicion;
+        }        
         $dql .= " ORDER BY s.fecha";
         return $dql;
     }

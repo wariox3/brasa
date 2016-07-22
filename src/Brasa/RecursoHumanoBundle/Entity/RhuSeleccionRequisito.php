@@ -43,7 +43,12 @@ class RhuSeleccionRequisito
     /**
      * @ORM\Column(name="estado_abierto", type="boolean")
      */
-    private $estadoAbierto = 0;            
+    private $estadoAbierto = false;            
+    
+    /**
+     * @ORM\Column(name="estado_cerrado", type="boolean")
+     */
+    private $estadoCerrado = false;     
     
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
@@ -171,8 +176,7 @@ class RhuSeleccionRequisito
      */
     protected $seleccionesRequisicionesAspirantesSeleccionRequisitoRel;
     
-    
-    
+
     /**
      * Constructor
      */
@@ -310,6 +314,30 @@ class RhuSeleccionRequisito
     public function getEstadoAbierto()
     {
         return $this->estadoAbierto;
+    }
+
+    /**
+     * Set estadoCerrado
+     *
+     * @param boolean $estadoCerrado
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setEstadoCerrado($estadoCerrado)
+    {
+        $this->estadoCerrado = $estadoCerrado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCerrado
+     *
+     * @return boolean
+     */
+    public function getEstadoCerrado()
+    {
+        return $this->estadoCerrado;
     }
 
     /**
