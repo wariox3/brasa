@@ -197,6 +197,11 @@ class RhuAspirante
     private $reintegro = false;
 
     /**
+     * @ORM\Column(name="codigo_zona_fk", type="integer", nullable=true)
+     */    
+    private $codigoZonaFk;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTipoIdentificacion", inversedBy="rhuAspirantesTipoIdentificacionRel")
      * @ORM\JoinColumn(name="codigo_tipo_identificacion_fk", referencedColumnName="codigo_tipo_identificacion_pk")
      */
@@ -230,8 +235,13 @@ class RhuAspirante
      * @ORM\ManyToOne(targetEntity="RhuRh", inversedBy="aspirantesRhRel")
      * @ORM\JoinColumn(name="codigo_rh_fk", referencedColumnName="codigo_rh_pk")
      */
-    protected $rhRel;
-  
+    protected $rhRel; 
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuZona", inversedBy="aspirantesZonaRel")
+     * @ORM\JoinColumn(name="codigo_zona_fk", referencedColumnName="codigo_zona_pk")
+     */
+    protected $zonaRel;     
     
     /**
      * @ORM\OneToMany(targetEntity="RhuSeleccionRequisicionAspirante", mappedBy="aspiranteRel")
@@ -1274,5 +1284,53 @@ class RhuAspirante
     public function getSeleccionesRequisicionesAspirantesAspiranteRel()
     {
         return $this->seleccionesRequisicionesAspirantesAspiranteRel;
+    }
+
+    /**
+     * Set codigoZonaFk
+     *
+     * @param integer $codigoZonaFk
+     *
+     * @return RhuAspirante
+     */
+    public function setCodigoZonaFk($codigoZonaFk)
+    {
+        $this->codigoZonaFk = $codigoZonaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoZonaFk
+     *
+     * @return integer
+     */
+    public function getCodigoZonaFk()
+    {
+        return $this->codigoZonaFk;
+    }
+
+    /**
+     * Set zonaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuZona $zonaRel
+     *
+     * @return RhuAspirante
+     */
+    public function setZonaRel(\Brasa\RecursoHumanoBundle\Entity\RhuZona $zonaRel = null)
+    {
+        $this->zonaRel = $zonaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get zonaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuZona
+     */
+    public function getZonaRel()
+    {
+        return $this->zonaRel;
     }
 }

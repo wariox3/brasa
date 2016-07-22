@@ -37,6 +37,11 @@ class RhuZona
      */
     protected $seleccionesZonaRel;     
     
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuAspirante", mappedBy="zonaRel")
+     */
+    protected $aspirantesZonaRel;     
     /**
      * Constructor
      */
@@ -179,5 +184,39 @@ class RhuZona
     public function getSeleccionesZonaRel()
     {
         return $this->seleccionesZonaRel;
+    }
+
+    /**
+     * Add aspirantesZonaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesZonaRel
+     *
+     * @return RhuZona
+     */
+    public function addAspirantesZonaRel(\Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesZonaRel)
+    {
+        $this->aspirantesZonaRel[] = $aspirantesZonaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove aspirantesZonaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesZonaRel
+     */
+    public function removeAspirantesZonaRel(\Brasa\RecursoHumanoBundle\Entity\RhuAspirante $aspirantesZonaRel)
+    {
+        $this->aspirantesZonaRel->removeElement($aspirantesZonaRel);
+    }
+
+    /**
+     * Get aspirantesZonaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAspirantesZonaRel()
+    {
+        return $this->aspirantesZonaRel;
     }
 }
