@@ -169,6 +169,11 @@ class RhuPagoConcepto
     protected $vacacionesBonificacionesPagoConceptoRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuVacacionCredito", mappedBy="pagoConceptoRel")
+     */
+    protected $vacacionesCreditosPagoConceptoRel;     
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -1010,5 +1015,39 @@ class RhuPagoConcepto
     public function getVacacionesBonificacionesPagoConceptoRel()
     {
         return $this->vacacionesBonificacionesPagoConceptoRel;
+    }
+
+    /**
+     * Add vacacionesCreditosPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosPagoConceptoRel
+     *
+     * @return RhuPagoConcepto
+     */
+    public function addVacacionesCreditosPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosPagoConceptoRel)
+    {
+        $this->vacacionesCreditosPagoConceptoRel[] = $vacacionesCreditosPagoConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove vacacionesCreditosPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosPagoConceptoRel
+     */
+    public function removeVacacionesCreditosPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosPagoConceptoRel)
+    {
+        $this->vacacionesCreditosPagoConceptoRel->removeElement($vacacionesCreditosPagoConceptoRel);
+    }
+
+    /**
+     * Get vacacionesCreditosPagoConceptoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVacacionesCreditosPagoConceptoRel()
+    {
+        return $this->vacacionesCreditosPagoConceptoRel;
     }
 }

@@ -143,6 +143,7 @@ class VacacionesController extends Controller
                                             $arVacacionCredito->setCreditoRel($arCredito);
                                             $arVacacionCredito->setVacacionRel($arVacacion);
                                             $arVacacionCredito->setVrDeduccion($arCredito->getVrCuota());
+                                            $arVacacionCredito->setPagoConceptoRel($arCredito->getCreditoTipoRel()->getPagoConceptoRel());
                                             $em->persist($arVacacionCredito);            
                                             $floVrDeducciones += $arCredito->getVrCuota();
                                         }                                         
@@ -300,16 +301,17 @@ class VacacionesController extends Controller
                 $floVrDeducciones = 0;
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoCredito) {                    
-                        $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
+                        $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+                        $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
                         $valor = 0;
                         if($arrControles['TxtValor'.$codigoCredito] != '') {
                             $valor = $arrControles['TxtValor'.$codigoCredito];                
                         }
                         $arVacacionCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
-                        $arVacacionCredito->setCreditoRel($arCreditos);
+                        $arVacacionCredito->setCreditoRel($arCredito);
                         $arVacacionCredito->setVacacionRel($arVacacion);
                         $arVacacionCredito->setVrDeduccion($valor);
+                        $arVacacionCredito->setPagoConceptoRel($arCredito->getCreditoTipoRel()->getPagoConceptoRel());
                         $em->persist($arVacacionCredito);            
                         $floVrDeducciones += $valor;
                     }                                                       
@@ -326,6 +328,47 @@ class VacacionesController extends Controller
             'form' => $form->createView()));
     }    
         
+    /**
+     * @Route("/rhu/movimiento/vacacion/detalle/descuento/{codigoVacacion}", name="brs_rhu_movimiento_vacacion_detalle_descuento")
+     */     
+    public function detalleDescuentoAction($codigoVacacion) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();        
+        $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
+        $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);
+        $form = $this->createFormBuilder()
+            ->add('pagoConceptoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('pc')
+                    ->where('pc.tipoAdicional = :tipoAdicional')
+                    ->setParameter('tipoAdicional', 2)
+                    ->orderBy('pc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))  
+            ->add('TxtValor', 'number', array('required' => true))                             
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        $form->handleRequest($request); 
+        if ($form->isValid()) { 
+            if ($form->get('BtnGuardar')->isClicked()) {
+                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                $arPagoConcepto = $form->get('pagoConceptoRel')->getData();
+                $arVacacionCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
+                $arVacacionCredito->setVacacionRel($arVacacion); 
+                $arVacacionCredito->setPagoConceptoRel($arPagoConcepto);
+                $arVacacionCredito->setVrDeduccion($form->get('TxtValor')->getData());  
+                $em->persist($arVacacionCredito);
+                $em->flush();                        
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->liquidar($arVacacion->getCodigoVacacionPk());                                                    
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                
+            }                        
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Vacaciones:detalleNuevoDescuento.html.twig', array(
+            'arVacacion' => $arVacacion,
+            'form' => $form->createView()));
+    }      
+    
     /**
      * @Route("/rhu/movimiento/vacacion/detalle/bonificacion/{codigoVacacion}", name="brs_rhu_movimiento_vacacion_detalle_bonificacion")
      */     

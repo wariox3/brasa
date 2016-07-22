@@ -102,7 +102,7 @@
             </div>
         </div>
         <ul class="nav nav-tabs">
-            <li  class="active"><a href="#creditos" data-toggle="tab">Creditos <span class="badge">{{ arVacacionDeducciones.getTotalItemCount }}</span></a></li>            
+            <li  class="active"><a href="#creditos" data-toggle="tab">Descuentos <span class="badge">{{ arVacacionDeducciones.getTotalItemCount }}</span></a></li>            
             <li><a href="#bonificaciones" data-toggle="tab">Bonificaciones <span class="badge">{{ arVacacionBonificaciones.getTotalItemCount }}</span></a></li>
 
         </ul>
@@ -121,7 +121,7 @@
                                 <input type="hidden" name="LblCodigoGuia[]" value="{{ arVacacionDeducciones.codigoVacacionCreditoPk }}">
                                 <span class="badge">{{ arVacacionDeducciones.codigoVacacionCreditoPk }}</span>
                             </td>
-                            <td>{{ arVacacionDeducciones.creditoRel.creditoTipoRel.nombre }}</td>           
+                            <td>{{ arVacacionDeducciones.pagoConceptoRel.nombre | default('') }}</td>           
                             <td style="text-align: right">{{ arVacacionDeducciones.vrDeduccion | number_format(2, '.', ',') }}</td>
                             <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arVacacionDeducciones.codigoVacacionCreditoPk }}" /></td>
                         </tr>
@@ -134,7 +134,8 @@
                 </div>  
                 <div class="btn-toolbar" style="float: right">                           
                     <div class="btn-group">                
-                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_vacacion_detalle_credito', {'codigoVacacion': arVacaciones.codigoVacacionPk}) }}', 'AgregarNuevo', 600, 900)">Nuevo</a>
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_vacacion_detalle_credito', {'codigoVacacion': arVacaciones.codigoVacacionPk}) }}', 'AgregarNuevo', 600, 900)">Nuevo credito</a>
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_vacacion_detalle_descuento', {'codigoVacacion': arVacaciones.codigoVacacionPk}) }}', 'AgregarNuevo', 600, 900)">Nuevo</a>
                     </div>
                     <div class="btn-group">                
                         {{ form_widget(form.BtnEliminarDeduccion, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                

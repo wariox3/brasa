@@ -28,6 +28,11 @@ class RhuVacacionCredito
     private $codigoCreditoFk;
     
     /**
+     * @ORM\Column(name="codigo_pago_concepto_fk", type="integer", nullable=true)
+     */    
+    private $codigoPagoConceptoFk;    
+    
+    /**
      * @ORM\Column(name="vr_deduccion", type="float")
      */
     private $vrDeduccion = 0;         
@@ -49,7 +54,12 @@ class RhuVacacionCredito
      */
     protected $creditoRel;    
     
-    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuPagoConcepto", inversedBy="vacacionesCreditosPagoConceptoRel")
+     * @ORM\JoinColumn(name="codigo_pago_concepto_fk", referencedColumnName="codigo_pago_concepto_pk")
+     */
+    protected $pagoConceptoRel;    
+
 
     /**
      * Get codigoVacacionCreditoPk
@@ -107,6 +117,30 @@ class RhuVacacionCredito
     public function getCodigoCreditoFk()
     {
         return $this->codigoCreditoFk;
+    }
+
+    /**
+     * Set codigoPagoConceptoFk
+     *
+     * @param integer $codigoPagoConceptoFk
+     *
+     * @return RhuVacacionCredito
+     */
+    public function setCodigoPagoConceptoFk($codigoPagoConceptoFk)
+    {
+        $this->codigoPagoConceptoFk = $codigoPagoConceptoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPagoConceptoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPagoConceptoFk()
+    {
+        return $this->codigoPagoConceptoFk;
     }
 
     /**
@@ -203,5 +237,29 @@ class RhuVacacionCredito
     public function getCreditoRel()
     {
         return $this->creditoRel;
+    }
+
+    /**
+     * Set pagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel
+     *
+     * @return RhuVacacionCredito
+     */
+    public function setPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel = null)
+    {
+        $this->pagoConceptoRel = $pagoConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoConceptoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto
+     */
+    public function getPagoConceptoRel()
+    {
+        return $this->pagoConceptoRel;
     }
 }
