@@ -70,6 +70,13 @@ class RhuContratoType extends AbstractType
                     ->orderBy('es.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))
+            ->add('entidadCesantiaRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEntidadCesantia',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('ec')
+                    ->orderBy('ec.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                
             ->add('entidadPensionRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadPension',
                 'query_builder' => function (EntityRepository $er)  {

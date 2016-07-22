@@ -132,12 +132,14 @@
             <tr>
                 <th>CÓDIGO</th>
                 <th>REQUISICIÓN</th>
+                <th>APROBADO</th>
                 <th></th>
             </tr>
             {% for arRequisicionAplicada in arRequisicionAplicada %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arRequisicionAplicada.codigoSeleccionRequisicionAspirantePk }}">{{ arRequisicionAplicada.codigoSeleccionRequisicionAspirantePk }} </td>
                 <td>{{ arRequisicionAplicada.seleccionRequisitoRel.nombre  }}</td>
+                <td>{% if arRequisicionAplicada.estadoAprobado == 1%}SI{% else %}NO{% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_seleccionrequisito_detalle', { 'codigoSeleccionRequisito': arRequisicionAplicada.codigoSeleccionRequisitoFk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" target="_blank" width=22 height=22 title="Detalles del registro"></a></td>
                 
             </tr>

@@ -179,7 +179,12 @@ class RhuEmpleado
     /**
      * @ORM\Column(name="codigo_entidad_pension_fk", type="integer", nullable=true)
      */    
-    private $codigoEntidadPensionFk;    
+    private $codigoEntidadPensionFk;
+
+    /**
+     * @ORM\Column(name="codigo_entidad_cesantia_fk", type="integer", nullable=true)
+     */    
+    private $codigoEntidadCesantiaFk;
     
     /**
      * @ORM\Column(name="codigo_tipo_pension_fk", type="integer", nullable=true)
@@ -399,7 +404,13 @@ class RhuEmpleado
      * @ORM\ManyToOne(targetEntity="RhuEntidadPension", inversedBy="empleadosEntidadPensionRel")
      * @ORM\JoinColumn(name="codigo_entidad_pension_fk", referencedColumnName="codigo_entidad_pension_pk")
      */
-    protected $entidadPensionRel;     
+    protected $entidadPensionRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEntidadCesantia", inversedBy="empleadosEntidadCesantiaRel")
+     * @ORM\JoinColumn(name="codigo_entidad_cesantia_fk", referencedColumnName="codigo_entidad_cesantia_pk")
+     */
+    protected $entidadCesantiaRel;
 
     /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadCaja", inversedBy="empleadosEntidadCajaRel")
@@ -667,7 +678,6 @@ class RhuEmpleado
      * @ORM\OneToMany(targetEntity="RhuCambioTipoContrato", mappedBy="empleadoRel")
      */
     protected $cambiosTiposContratosEmpleadoRel;
-    
     
     
     
@@ -1467,6 +1477,30 @@ class RhuEmpleado
     }
 
     /**
+     * Set codigoEntidadCesantiaFk
+     *
+     * @param integer $codigoEntidadCesantiaFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoEntidadCesantiaFk($codigoEntidadCesantiaFk)
+    {
+        $this->codigoEntidadCesantiaFk = $codigoEntidadCesantiaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadCesantiaFk
+     *
+     * @return integer
+     */
+    public function getCodigoEntidadCesantiaFk()
+    {
+        return $this->codigoEntidadCesantiaFk;
+    }
+
+    /**
      * Set codigoTipoPensionFk
      *
      * @param integer $codigoTipoPensionFk
@@ -2211,6 +2245,78 @@ class RhuEmpleado
     }
 
     /**
+     * Set codigoZonaFk
+     *
+     * @param integer $codigoZonaFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoZonaFk($codigoZonaFk)
+    {
+        $this->codigoZonaFk = $codigoZonaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoZonaFk
+     *
+     * @return integer
+     */
+    public function getCodigoZonaFk()
+    {
+        return $this->codigoZonaFk;
+    }
+
+    /**
+     * Set codigoSubzonaFk
+     *
+     * @param integer $codigoSubzonaFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoSubzonaFk($codigoSubzonaFk)
+    {
+        $this->codigoSubzonaFk = $codigoSubzonaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSubzonaFk
+     *
+     * @return integer
+     */
+    public function getCodigoSubzonaFk()
+    {
+        return $this->codigoSubzonaFk;
+    }
+
+    /**
+     * Set codigoEmpleadoTipoFk
+     *
+     * @param integer $codigoEmpleadoTipoFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoEmpleadoTipoFk($codigoEmpleadoTipoFk)
+    {
+        $this->codigoEmpleadoTipoFk = $codigoEmpleadoTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEmpleadoTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEmpleadoTipoFk()
+    {
+        return $this->codigoEmpleadoTipoFk;
+    }
+
+    /**
      * Set clasificacionRiesgoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo $clasificacionRiesgoRel
@@ -2400,6 +2506,30 @@ class RhuEmpleado
     public function getEntidadPensionRel()
     {
         return $this->entidadPensionRel;
+    }
+
+    /**
+     * Set entidadCesantiaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCesantia $entidadCesantiaRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setEntidadCesantiaRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadCesantia $entidadCesantiaRel = null)
+    {
+        $this->entidadCesantiaRel = $entidadCesantiaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadCesantiaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCesantia
+     */
+    public function getEntidadCesantiaRel()
+    {
+        return $this->entidadCesantiaRel;
     }
 
     /**
@@ -2640,6 +2770,78 @@ class RhuEmpleado
     public function getSsoSubtipoCotizanteRel()
     {
         return $this->ssoSubtipoCotizanteRel;
+    }
+
+    /**
+     * Set zonaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuZona $zonaRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setZonaRel(\Brasa\RecursoHumanoBundle\Entity\RhuZona $zonaRel = null)
+    {
+        $this->zonaRel = $zonaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get zonaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuZona
+     */
+    public function getZonaRel()
+    {
+        return $this->zonaRel;
+    }
+
+    /**
+     * Set subzonaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSubzona $subzonaRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setSubzonaRel(\Brasa\RecursoHumanoBundle\Entity\RhuSubzona $subzonaRel = null)
+    {
+        $this->subzonaRel = $subzonaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get subzonaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSubzona
+     */
+    public function getSubzonaRel()
+    {
+        return $this->subzonaRel;
+    }
+
+    /**
+     * Set empleadoTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoTipo $empleadoTipoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setEmpleadoTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoTipo $empleadoTipoRel = null)
+    {
+        $this->empleadoTipoRel = $empleadoTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoTipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoTipo
+     */
+    public function getEmpleadoTipoRel()
+    {
+        return $this->empleadoTipoRel;
     }
 
     /**
@@ -3868,149 +4070,5 @@ class RhuEmpleado
     public function getCambiosTiposContratosEmpleadoRel()
     {
         return $this->cambiosTiposContratosEmpleadoRel;
-    }
-
-    /**
-     * Set codigoZonaFk
-     *
-     * @param integer $codigoZonaFk
-     *
-     * @return RhuEmpleado
-     */
-    public function setCodigoZonaFk($codigoZonaFk)
-    {
-        $this->codigoZonaFk = $codigoZonaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoZonaFk
-     *
-     * @return integer
-     */
-    public function getCodigoZonaFk()
-    {
-        return $this->codigoZonaFk;
-    }
-
-    /**
-     * Set codigoSubzonaFk
-     *
-     * @param integer $codigoSubzonaFk
-     *
-     * @return RhuEmpleado
-     */
-    public function setCodigoSubzonaFk($codigoSubzonaFk)
-    {
-        $this->codigoSubzonaFk = $codigoSubzonaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoSubzonaFk
-     *
-     * @return integer
-     */
-    public function getCodigoSubzonaFk()
-    {
-        return $this->codigoSubzonaFk;
-    }
-
-    /**
-     * Set codigoEmpleadoTipoFk
-     *
-     * @param integer $codigoEmpleadoTipoFk
-     *
-     * @return RhuEmpleado
-     */
-    public function setCodigoEmpleadoTipoFk($codigoEmpleadoTipoFk)
-    {
-        $this->codigoEmpleadoTipoFk = $codigoEmpleadoTipoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoEmpleadoTipoFk
-     *
-     * @return integer
-     */
-    public function getCodigoEmpleadoTipoFk()
-    {
-        return $this->codigoEmpleadoTipoFk;
-    }
-
-    /**
-     * Set zonaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuZona $zonaRel
-     *
-     * @return RhuEmpleado
-     */
-    public function setZonaRel(\Brasa\RecursoHumanoBundle\Entity\RhuZona $zonaRel = null)
-    {
-        $this->zonaRel = $zonaRel;
-
-        return $this;
-    }
-
-    /**
-     * Get zonaRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuZona
-     */
-    public function getZonaRel()
-    {
-        return $this->zonaRel;
-    }
-
-    /**
-     * Set subzonaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSubzona $subzonaRel
-     *
-     * @return RhuEmpleado
-     */
-    public function setSubzonaRel(\Brasa\RecursoHumanoBundle\Entity\RhuSubzona $subzonaRel = null)
-    {
-        $this->subzonaRel = $subzonaRel;
-
-        return $this;
-    }
-
-    /**
-     * Get subzonaRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSubzona
-     */
-    public function getSubzonaRel()
-    {
-        return $this->subzonaRel;
-    }
-
-    /**
-     * Set empleadoTipoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoTipo $empleadoTipoRel
-     *
-     * @return RhuEmpleado
-     */
-    public function setEmpleadoTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoTipo $empleadoTipoRel = null)
-    {
-        $this->empleadoTipoRel = $empleadoTipoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get empleadoTipoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoTipo
-     */
-    public function getEmpleadoTipoRel()
-    {
-        return $this->empleadoTipoRel;
     }
 }

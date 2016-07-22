@@ -210,6 +210,11 @@ class RhuContrato
     private $codigoEntidadPensionFk;
     
     /**
+     * @ORM\Column(name="codigo_entidad_cesantia_fk", type="integer", nullable=true)
+     */    
+    private $codigoEntidadCesantiaFk;
+    
+    /**
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
      */    
     private $codigoUsuario;
@@ -317,6 +322,12 @@ class RhuContrato
      * @ORM\JoinColumn(name="codigo_entidad_pension_fk", referencedColumnName="codigo_entidad_pension_pk")
      */
     protected $entidadPensionRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEntidadCesantia", inversedBy="contratosEntidadCesantiaRel")
+     * @ORM\JoinColumn(name="codigo_entidad_cesantia_fk", referencedColumnName="codigo_entidad_cesantia_pk")
+     */
+    protected $entidadCesantiaRel;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadCaja", inversedBy="contratosEntidadCajaRel")
@@ -427,6 +438,7 @@ class RhuContrato
     protected $disciplinariosContratoRel;     
     
     
+    
     /**
      * Constructor
      */
@@ -449,6 +461,7 @@ class RhuContrato
         $this->contratosProrrogasContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->soportesPagosHorariosDetallesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cambiosTiposContratosContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->disciplinariosContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1134,6 +1147,30 @@ class RhuContrato
     }
 
     /**
+     * Set estadoTerminado
+     *
+     * @param boolean $estadoTerminado
+     *
+     * @return RhuContrato
+     */
+    public function setEstadoTerminado($estadoTerminado)
+    {
+        $this->estadoTerminado = $estadoTerminado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoTerminado
+     *
+     * @return boolean
+     */
+    public function getEstadoTerminado()
+    {
+        return $this->estadoTerminado;
+    }
+
+    /**
      * Set ibpAdicional
      *
      * @param float $ibpAdicional
@@ -1155,6 +1192,30 @@ class RhuContrato
     public function getIbpAdicional()
     {
         return $this->ibpAdicional;
+    }
+
+    /**
+     * Set promedioRecargoNocturnoInicial
+     *
+     * @param float $promedioRecargoNocturnoInicial
+     *
+     * @return RhuContrato
+     */
+    public function setPromedioRecargoNocturnoInicial($promedioRecargoNocturnoInicial)
+    {
+        $this->promedioRecargoNocturnoInicial = $promedioRecargoNocturnoInicial;
+
+        return $this;
+    }
+
+    /**
+     * Get promedioRecargoNocturnoInicial
+     *
+     * @return float
+     */
+    public function getPromedioRecargoNocturnoInicial()
+    {
+        return $this->promedioRecargoNocturnoInicial;
     }
 
     /**
@@ -1326,6 +1387,30 @@ class RhuContrato
     }
 
     /**
+     * Set codigoEntidadCesantiaFk
+     *
+     * @param integer $codigoEntidadCesantiaFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoEntidadCesantiaFk($codigoEntidadCesantiaFk)
+    {
+        $this->codigoEntidadCesantiaFk = $codigoEntidadCesantiaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadCesantiaFk
+     *
+     * @return integer
+     */
+    public function getCodigoEntidadCesantiaFk()
+    {
+        return $this->codigoEntidadCesantiaFk;
+    }
+
+    /**
      * Set codigoUsuario
      *
      * @param string $codigoUsuario
@@ -1347,6 +1432,30 @@ class RhuContrato
     public function getCodigoUsuario()
     {
         return $this->codigoUsuario;
+    }
+
+    /**
+     * Set codigoUsuarioTermina
+     *
+     * @param string $codigoUsuarioTermina
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoUsuarioTermina($codigoUsuarioTermina)
+    {
+        $this->codigoUsuarioTermina = $codigoUsuarioTermina;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuarioTermina
+     *
+     * @return string
+     */
+    public function getCodigoUsuarioTermina()
+    {
+        return $this->codigoUsuarioTermina;
     }
 
     /**
@@ -1755,6 +1864,30 @@ class RhuContrato
     public function getEntidadPensionRel()
     {
         return $this->entidadPensionRel;
+    }
+
+    /**
+     * Set entidadCesantiaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCesantia $entidadCesantiaRel
+     *
+     * @return RhuContrato
+     */
+    public function setEntidadCesantiaRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadCesantia $entidadCesantiaRel = null)
+    {
+        $this->entidadCesantiaRel = $entidadCesantiaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadCesantiaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCesantia
+     */
+    public function getEntidadCesantiaRel()
+    {
+        return $this->entidadCesantiaRel;
     }
 
     /**
@@ -2405,78 +2538,6 @@ class RhuContrato
     public function getCambiosTiposContratosContratoRel()
     {
         return $this->cambiosTiposContratosContratoRel;
-    }
-
-    /**
-     * Set promedioRecargoNocturnoInicial
-     *
-     * @param float $promedioRecargoNocturnoInicial
-     *
-     * @return RhuContrato
-     */
-    public function setPromedioRecargoNocturnoInicial($promedioRecargoNocturnoInicial)
-    {
-        $this->promedioRecargoNocturnoInicial = $promedioRecargoNocturnoInicial;
-
-        return $this;
-    }
-
-    /**
-     * Get promedioRecargoNocturnoInicial
-     *
-     * @return float
-     */
-    public function getPromedioRecargoNocturnoInicial()
-    {
-        return $this->promedioRecargoNocturnoInicial;
-    }
-
-    /**
-     * Set estadoTerminado
-     *
-     * @param boolean $estadoTerminado
-     *
-     * @return RhuContrato
-     */
-    public function setEstadoTerminado($estadoTerminado)
-    {
-        $this->estadoTerminado = $estadoTerminado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoTerminado
-     *
-     * @return boolean
-     */
-    public function getEstadoTerminado()
-    {
-        return $this->estadoTerminado;
-    }
-
-    /**
-     * Set codigoUsuarioTermina
-     *
-     * @param string $codigoUsuarioTermina
-     *
-     * @return RhuContrato
-     */
-    public function setCodigoUsuarioTermina($codigoUsuarioTermina)
-    {
-        $this->codigoUsuarioTermina = $codigoUsuarioTermina;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoUsuarioTermina
-     *
-     * @return string
-     */
-    public function getCodigoUsuarioTermina()
-    {
-        return $this->codigoUsuarioTermina;
     }
 
     /**

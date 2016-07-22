@@ -364,7 +364,6 @@
                             <th>CARGO</th>
                             <th>PROCESO</th>
                             <th>CAUSAL</th>
-                            <th style="text-align: center"></th>
                         </tr>
                         {% for arDisciplinarios in arDisciplinarios %}
                             <tr>
@@ -376,7 +375,6 @@
                                 <td>{{ arDisciplinarios.empleadoRel.cargoDescripcion  }}</td>
                                 <td>{{ arDisciplinarios.disciplinarioTipoRel.nombre  }}</td>
                                 <td>{{ arDisciplinarios.asunto  }}</td>
-                                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_disciplinario_nuevo', {'codigoCentroCosto':  arDisciplinarios.codigoCentroCostoFk, 'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoDisciplinario': arDisciplinarios.codigoDisciplinarioPk }) }}', 'AgregarIncapacidad', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
                             </tr>
                         {% endfor %}
                     </table>
