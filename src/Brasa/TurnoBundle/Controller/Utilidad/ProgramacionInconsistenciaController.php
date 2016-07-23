@@ -90,7 +90,8 @@ class ProgramacionInconsistenciaController extends Controller
                     ->setCellValue('C1', 'DETALLE')
                     ->setCellValue('D1', 'IDENTIFICACION')
                     ->setCellValue('E1', 'GRUPO')
-                    ->setCellValue('F1', 'DIA');
+                    ->setCellValue('F1', 'ZONA')
+                    ->setCellValue('G1', 'DIA');
 
         $i = 2;
         $dql = $em->getRepository('BrasaTurnoBundle:TurProgramacionInconsistencia')->listaDql();
@@ -104,7 +105,8 @@ class ProgramacionInconsistenciaController extends Controller
                     ->setCellValue('C' . $i, $arProgramacionInconsistencia->getDetalle())
                     ->setCellValue('D' . $i, $arProgramacionInconsistencia->getNumeroIdentificacion())
                     ->setCellValue('E' . $i, $arProgramacionInconsistencia->getCodigoRecursoGrupoFk())
-                    ->setCellValue('F' . $i, $arProgramacionInconsistencia->getDia());
+                    ->setCellValue('F' . $i, $arProgramacionInconsistencia->getZona())
+                    ->setCellValue('G' . $i, $arProgramacionInconsistencia->getDia());
             $i++;
         }
 
@@ -152,6 +154,7 @@ class ProgramacionInconsistenciaController extends Controller
                 $codigoRecurso = $arRecurso->getCodigoRecursoPk();
                 $strSql = "SELECT
                             codigo_recurso_fk AS codigoRecursoFk, 
+                            codigo_empleado_fk as codigoEmpleadoFk,
                             tur_recurso.nombre_corto AS nombreCorto,
                             tur_recurso.numero_identificacion AS numeroIdentificacion,
                             tur_recurso.codigo_recurso_grupo_fk AS recursoGrupo,
@@ -170,6 +173,7 @@ class ProgramacionInconsistenciaController extends Controller
                 if(count($results) > 0) {
                     foreach ($results as $registro) {
                         if($registro['numero'] <= 0) {
+                            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($registro['codigoEmpleadoFk']);
                             $arProgramacionInconsistencia = new \Brasa\TurnoBundle\Entity\TurProgramacionInconsistencia();
                             $arProgramacionInconsistencia->setInconsistencia('Sin turno asignado');
                             $arProgramacionInconsistencia->setDetalle("Recurso " . $registro['codigoRecursoFk'] . " " .
@@ -178,6 +182,9 @@ class ProgramacionInconsistenciaController extends Controller
                             $arProgramacionInconsistencia->setNumeroIdentificacion($registro['numeroIdentificacion']);
                             $arProgramacionInconsistencia->setDia($i);
                             $arProgramacionInconsistencia->setCodigoRecursoGrupoFk($registro['recursoGrupo']);
+                            if($arEmpleado->getCodigoZonaFk()) {
+                                $arProgramacionInconsistencia->setZona($arEmpleado->getZonaRel()->getNombre());
+                            }                            
                             $em->persist($arProgramacionInconsistencia);                                
                         }
                     }                        
@@ -193,7 +200,8 @@ class ProgramacionInconsistenciaController extends Controller
         //Verificar turnos dobles
         for($i = 1; $i <= 31; $i++) {
             $strSql = "SELECT
-                        codigo_recurso_fk as codigoRecursoFk, 
+                        codigo_recurso_fk as codigoRecursoFk,
+                        codigo_empleado_fk as codigoEmpleadoFk,
                         tur_recurso.nombre_corto as nombreCorto,
                         tur_recurso.numero_identificacion as numeroIdentificacion,
                         tur_recurso.codigo_recurso_grupo_fk AS recursoGrupo,
@@ -213,6 +221,8 @@ class ProgramacionInconsistenciaController extends Controller
             if(count($results) > 0) {
                 foreach ($results as $registro) {
                     if($registro['numero'] > 1) {
+                        //$arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($registro['codigoEmpleadoFk']);
                         $arProgramacionInconsistencia = new \Brasa\TurnoBundle\Entity\TurProgramacionInconsistencia();
                         $arProgramacionInconsistencia->setInconsistencia('Asignacion doble de turno');
                         $arProgramacionInconsistencia->setDetalle("Recurso " . $registro['codigoRecursoFk'] . " " . 
@@ -220,6 +230,9 @@ class ProgramacionInconsistenciaController extends Controller
                         $arProgramacionInconsistencia->setDia($i); 
                         $arProgramacionInconsistencia->setCodigoRecursoGrupoFk($registro['recursoGrupo']);
                         $arProgramacionInconsistencia->setNumeroIdentificacion($registro['numeroIdentificacion']);
+                        if($arEmpleado->getCodigoZonaFk()) {
+                            $arProgramacionInconsistencia->setZona($arEmpleado->getZonaRel()->getNombre());
+                        }
                         $em->persist($arProgramacionInconsistencia);                                
                     }
                 }                        

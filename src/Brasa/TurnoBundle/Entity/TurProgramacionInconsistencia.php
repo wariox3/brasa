@@ -48,6 +48,11 @@ class TurProgramacionInconsistencia
     private $codigoRecursoGrupoFk;    
     
     /**
+     * @ORM\Column(name="zona", type="string", length=100, nullable=true)
+     */    
+    private $zona;    
+    
+    /**
      * Get codigoProgramacionInconsistenciaPk
      *
      * @return integer
@@ -199,5 +204,29 @@ class TurProgramacionInconsistencia
     public function getCodigoRecursoGrupoFk()
     {
         return $this->codigoRecursoGrupoFk;
+    }
+
+    /**
+     * Set zona
+     *
+     * @param string $zona
+     *
+     * @return TurProgramacionInconsistencia
+     */
+    public function setZona($zona)
+    {
+        $this->zona = $zona;
+
+        return $this;
+    }
+
+    /**
+     * Get zona
+     *
+     * @return string
+     */
+    public function getZona()
+    {
+        return $this->zona;
     }
 }
