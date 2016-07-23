@@ -52,13 +52,14 @@ class TurNovedadRepository extends EntityRepository {
         if($strMes != $strMesHasta) {
             $strDiaHasta = $strUltimoDiaMes = date("d",(mktime(0,0,0,$arNovedad->getFechaDesde()->format('m')+1,1,$arNovedad->getFechaDesde()->format('Y'))-1));
         }
-        $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findOneBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arNovedad->getCodigoRecursoFk()), array('horas' => 'DESC'));
-        if($arProgramacionDetalle) {
+        $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arNovedad->getCodigoRecursoFk()), array('horas' => 'DESC'));
+        $diaControl = 1;
+        foreach ($arProgramacionDetalles as $arProgramacionDetalle) {
             $arProgramacionDetalleAct = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
             $arProgramacionDetalleAct = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($arProgramacionDetalle->getCodigoProgramacionDetallePk());
-            //Actualizar o crear programacion para el recurso reemplazo
-            
-            if($boorReemplazo = 1) {
+            //Actualizar o crear programacion para el recurso reemplazo 
+            if($diaControl == 1) {
+                if($boorReemplazo = 1) {
                 if($arNovedad->getCodigoRecursoReemplazoFk() != '') {
                     $arProgramacionDetalleReemplazo = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                     $arProgramacionDetalleReemplazo = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findOneBy(array('codigoProgramacionFk' => $arProgramacionDetalleAct->getCodigoProgramacionFk(), 'codigoRecursoFk' => $arNovedad->getCodigoRecursoReemplazoFk()));
@@ -264,11 +265,10 @@ class TurNovedadRepository extends EntityRepository {
                     }
                     $em->persist($arProgramacionDetalleReemplazoAct);                         
                 }                    
-            }                    
+            } 
             
-
-            //Actualizar recurso original
-            for($i = $strDiaDesde; $i <= $strDiaHasta; $i++) {
+                //Actualizar recurso original
+                for($i = $strDiaDesde; $i <= $strDiaHasta; $i++) {
                 if($i == 1) {
                     $arProgramacionDetalleAct->setDia1($arNovedad->getNovedadTipoRel()->getCodigoTurnoFk());
                 }
@@ -362,11 +362,112 @@ class TurNovedadRepository extends EntityRepository {
                 if($i == 31) {
                     $arProgramacionDetalleAct->setDia31($arNovedad->getNovedadTipoRel()->getCodigoTurnoFk());
                 }                       
+            }            
+            } else {
+                //Actualizar recurso original
+                for($i = $strDiaDesde; $i <= $strDiaHasta; $i++) {
+                    if($i == 1) {
+                        $arProgramacionDetalleAct->setDia1(null);
+                    }
+                    if($i == 2) {
+                        $arProgramacionDetalleAct->setDia2(null);
+                    }
+                    if($i == 3) {
+                        $arProgramacionDetalleAct->setDia3(null);
+                    }
+                    if($i == 4) {
+                        $arProgramacionDetalleAct->setDia4(null);
+                    }
+                    if($i == 5) {
+                        $arProgramacionDetalleAct->setDia5(null);
+                    }
+                    if($i == 6) {
+                        $arProgramacionDetalleAct->setDia6(null);
+                    }
+                    if($i == 7) {
+                        $arProgramacionDetalleAct->setDia7(null);
+                    }
+                    if($i == 8) {
+                        $arProgramacionDetalleAct->setDia8(null);
+                    }
+                    if($i == 9) {
+                        $arProgramacionDetalleAct->setDia9(null);
+                    }
+                    if($i == 10) {
+                        $arProgramacionDetalleAct->setDia10(null);
+                    }
+                    if($i == 11) {
+                        $arProgramacionDetalleAct->setDia11(null);
+                    }
+                    if($i == 12) {
+                        $arProgramacionDetalleAct->setDia12(null);
+                    }
+                    if($i == 13) {
+                        $arProgramacionDetalleAct->setDia13(null);
+                    }
+                    if($i == 14) {
+                        $arProgramacionDetalleAct->setDia14(null);
+                    }
+                    if($i == 15) {
+                        $arProgramacionDetalleAct->setDia15(null);
+                    }
+                    if($i == 16) {
+                        $arProgramacionDetalleAct->setDia16(null);
+                    }
+                    if($i == 17) {
+                        $arProgramacionDetalleAct->setDia17(null);
+                    }
+                    if($i == 18) {
+                        $arProgramacionDetalleAct->setDia18(null);
+                    }
+                    if($i == 19) {
+                        $arProgramacionDetalleAct->setDia19(null);
+                    }
+                    if($i == 20) {
+                        $arProgramacionDetalleAct->setDia20(null);
+                    }
+                    if($i == 21) {
+                        $arProgramacionDetalleAct->setDia21(null);
+                    }
+                    if($i == 22) {
+                        $arProgramacionDetalleAct->setDia22(null);
+                    }
+                    if($i == 23) {
+                        $arProgramacionDetalleAct->setDia23(null);
+                    }
+                    if($i == 24) {
+                        $arProgramacionDetalleAct->setDia24(null);
+                    }
+                    if($i == 25) {
+                        $arProgramacionDetalleAct->setDia25(null);
+                    }
+                    if($i == 26) {
+                        $arProgramacionDetalleAct->setDia26(null);
+                    }
+                    if($i == 27) {
+                        $arProgramacionDetalleAct->setDia27(null);
+                    }
+                    if($i == 28) {
+                        $arProgramacionDetalleAct->setDia28(null);
+                    }
+                    if($i == 29) {
+                        $arProgramacionDetalleAct->setDia29(null);
+                    }
+                    if($i == 30) {
+                        $arProgramacionDetalleAct->setDia30(null);
+                    }
+                    if($i == 31) {
+                        $arProgramacionDetalleAct->setDia31(null);
+                    }                       
+                }                
             }
+                                
             $em->persist($arProgramacionDetalleAct);               
             $em->flush();
-            $em->getRepository('BrasaTurnoBundle:TurProgramacion')->liquidar($arProgramacionDetalleAct->getProgramacionRel()->getCodigoProgramacionPk());            
-        }       
+            $em->getRepository('BrasaTurnoBundle:TurProgramacion')->liquidar($arProgramacionDetalleAct->getProgramacionRel()->getCodigoProgramacionPk());                        
+            $diaControl++;
+        }
+               
         
         $arNovedad->setEstadoAplicada(1);
         $em->persist($arNovedad);
