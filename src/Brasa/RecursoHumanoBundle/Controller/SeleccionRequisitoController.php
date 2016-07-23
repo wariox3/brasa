@@ -83,19 +83,23 @@ class SeleccionRequisitoController extends Controller
                 $objSeleccionRequisito->Generar($this, $codigoSeleccionRequisito);
             }
             if($form->get('BtnEliminarDetalle')->isClicked()) {
-                if($arRequisicion->getEstadoAbierto() == 0) {
+                if($arRequisicion->getEstadoCerrado() == 0) {
                     $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisicionAspirante')->eliminarDetallesSeleccionados($arrSeleccionados);
                     return $this->redirect($this->generateUrl('brs_rhu_seleccionrequisito_detalle', array('codigoSeleccionRequisito' => $codigoSeleccionRequisito)));
+                } else {
+                    $objMensaje->Mensaje('error', 'No se puede eliminar, la requisicion esta cerrada', $this);
                 }
             }
             if($form->get('BtnAprobarDetalle')->isClicked()) {
-                if($arRequisicion->getEstadoAbierto() == 0) {
+                if($arRequisicion->getEstadoCerrado() == 0) {
                     $strRespuesta = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisicionAspirante')->aprobarDetallesSeleccionados($arrSeleccionados);
                     if ($strRespuesta == ''){
                         return $this->redirect($this->generateUrl('brs_rhu_seleccionrequisito_detalle', array('codigoSeleccionRequisito' => $codigoSeleccionRequisito)));
                     }else{
                         $objMensaje->Mensaje('error', $strRespuesta, $this);
                     }
+                } else {
+                    $objMensaje->Mensaje('error', 'No se puede aprobar, la requisicion esta cerrada', $this);
                 }
             }
             if($form->get('BtnExcelAspirante')->isClicked()) {
@@ -188,7 +192,7 @@ class SeleccionRequisitoController extends Controller
         $controles = $request->request->get('form');
                 
         $session->set('filtroNombreSeleccionRequisito', $form->get('TxtNombre')->getData());                
-        $session->set('filtroAbiertoSeleccionRequisito', $form->get('estadoAbierto')->getData());
+        $session->set('filtroAbiertoSeleccionRequisito', $form->get('estadoCerrado')->getData());
         $session->set('filtroCodigoCargo', $controles['cargoRel']);
         $session->set('filtroDesde', $form->get('fechaDesde')->getData());
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
@@ -216,7 +220,7 @@ class SeleccionRequisitoController extends Controller
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))        
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombreSeleccionRequisito')))
-            ->add('estadoAbierto', 'choice', array('choices'   => array('2' => 'TODOS', '0' => 'SI', '1' => 'NO'), 'data' => $session->get('filtroAbiertoSeleccionRequisito'))) 
+            ->add('estadoCerrado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAbiertoSeleccionRequisito'))) 
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEstadoAbierto', 'submit', array('label'  => 'Cerrar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))            
@@ -291,7 +295,7 @@ class SeleccionRequisitoController extends Controller
                     ->setCellValue('Q1', 'DISPONIBILIDAD')
                     ->setCellValue('R1', 'LICENCIA CARRO')
                     ->setCellValue('S1', 'LICENCIA MOTO')
-                    ->setCellValue('T1', 'ABIERTO')
+                    ->setCellValue('T1', 'CERRADO')
                     ->setCellValue('U1', 'COMENTARIOS');
                     
 
@@ -307,10 +311,10 @@ class SeleccionRequisitoController extends Controller
             if($arSeleccionRequisito->getCargoRel()) {
                 $strCargo = $arSeleccionRequisito->getCargoRel()->getNombre();
             }
-            if ($arSeleccionRequisito->getEstadoAbierto() == 1){
-                $abierto = "SI";
+            if ($arSeleccionRequisito->getEstadoCerrado() == 1){
+                $cerrado = "SI";
             } else {
-                $abierto = "NO";
+                $cerrado = "NO";
             }
             $strEstadoCivil = "";
             if($arSeleccionRequisito->getEstadoCivilRel()) {
@@ -421,7 +425,7 @@ class SeleccionRequisitoController extends Controller
                     ->setCellValue('Q' . $i, $disponibilidad)
                     ->setCellValue('R' . $i, $licenciaCarro)
                     ->setCellValue('S' . $i, $licenciaMoto)
-                    ->setCellValue('T' . $i, $abierto)
+                    ->setCellValue('T' . $i, $cerrado)
                     ->setCellValue('U' . $i, $arSeleccionRequisito->getComentarios());
             $i++;
         }

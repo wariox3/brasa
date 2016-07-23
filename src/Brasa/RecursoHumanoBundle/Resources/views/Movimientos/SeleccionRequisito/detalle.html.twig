@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-{% block title %}Selección requisito detalle - Soga App{% endblock %}
+{% block title %}Selección requisición detalle - Soga App{% endblock %}
 {% block content %}
 <script>
     $('#myTab a').click(function(e) {
@@ -9,7 +9,7 @@
 </script>
 <div class="container">
     <div class="page-header">
-        <h3>Requisito de selección</h3>
+        <h3>Requisición de selección</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
@@ -23,7 +23,7 @@
     <br /><br />
     <!-- Encabezado Movimiento -->
     <div class="panel panel-default">
-      <div class="panel-heading">Información requisito</div>
+      <div class="panel-heading">Información requisición</div>
       <div class="panel-body">
             <table width="100%" class="table table-condensed table-bordered">
                 <tr>
@@ -31,8 +31,8 @@
                     <td class="td-in-well">{{ arRequisito.codigoSeleccionRequisitoPk }}</td>
                     <td class="titulo">FECHA:</td>
                     <td class="td-in-well">{{ arRequisito.fecha | date('Y/m/d') }}</td>
-                    <td class="titulo">ESTADO ABIERTO:</td>
-                    <td class="td-in-well" {% if arRequisito.estadoAbierto == 1 %}> SI {% else %}<td class="td-in-well">NO {% endif %}</td>
+                    <td class="titulo">CERRADO:</td>
+                    <td class="td-in-well" {% if arRequisito.estadoCerrado == 1 %}> SI {% else %}<td class="td-in-well">NO {% endif %}</td>
                 </tr>
                 <tr>
                     <td class="titulo">NOMBRE:</td>
@@ -180,7 +180,7 @@
                 <th><p data-toggle="tooltip" data-placement="top" title="Pruebas presentadas">P.P</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Aprobado">AP</p></th>                
                 <th><p data-toggle="tooltip" data-placement="top" title="Referencias verificadas">R.V</p></th>
-                <th><p data-toggle="tooltip" data-placement="top" title="Abierto">AB</p></th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Cerrado">CERR</p></th>
                 <th></th>
             </tr>
             {% for arSeleccion in arSeleccion %}

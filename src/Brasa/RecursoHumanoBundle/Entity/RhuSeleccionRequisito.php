@@ -38,12 +38,7 @@ class RhuSeleccionRequisito
      * @ORM\Column(name="fecha_pruebas", type="datetime", nullable=true)
      */ 
     
-    private $fechaPruebas;         
-    
-    /**
-     * @ORM\Column(name="estado_abierto", type="boolean")
-     */
-    private $estadoAbierto = false;            
+    private $fechaPruebas;                     
     
     /**
      * @ORM\Column(name="estado_cerrado", type="boolean")
@@ -188,6 +183,7 @@ class RhuSeleccionRequisito
     protected $seleccionesRequisicionesAspirantesSeleccionRequisitoRel;
     
 
+    
     /**
      * Constructor
      */
@@ -301,30 +297,6 @@ class RhuSeleccionRequisito
     public function getFechaPruebas()
     {
         return $this->fechaPruebas;
-    }
-
-    /**
-     * Set estadoAbierto
-     *
-     * @param boolean $estadoAbierto
-     *
-     * @return RhuSeleccionRequisito
-     */
-    public function setEstadoAbierto($estadoAbierto)
-    {
-        $this->estadoAbierto = $estadoAbierto;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoAbierto
-     *
-     * @return boolean
-     */
-    public function getEstadoAbierto()
-    {
-        return $this->estadoAbierto;
     }
 
     /**
@@ -736,6 +708,30 @@ class RhuSeleccionRequisito
     }
 
     /**
+     * Set codigoZonaFk
+     *
+     * @param integer $codigoZonaFk
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setCodigoZonaFk($codigoZonaFk)
+    {
+        $this->codigoZonaFk = $codigoZonaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoZonaFk
+     *
+     * @return integer
+     */
+    public function getCodigoZonaFk()
+    {
+        return $this->codigoZonaFk;
+    }
+
+    /**
      * Set centroCostoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
@@ -880,6 +876,30 @@ class RhuSeleccionRequisito
     }
 
     /**
+     * Set zonaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuZona $zonaRel
+     *
+     * @return RhuSeleccionRequisito
+     */
+    public function setZonaRel(\Brasa\RecursoHumanoBundle\Entity\RhuZona $zonaRel = null)
+    {
+        $this->zonaRel = $zonaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get zonaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuZona
+     */
+    public function getZonaRel()
+    {
+        return $this->zonaRel;
+    }
+
+    /**
      * Add seleccionesSeleccionRequisitoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion $seleccionesSeleccionRequisitoRel
@@ -945,53 +965,5 @@ class RhuSeleccionRequisito
     public function getSeleccionesRequisicionesAspirantesSeleccionRequisitoRel()
     {
         return $this->seleccionesRequisicionesAspirantesSeleccionRequisitoRel;
-    }
-
-    /**
-     * Set codigoZonaFk
-     *
-     * @param integer $codigoZonaFk
-     *
-     * @return RhuSeleccionRequisito
-     */
-    public function setCodigoZonaFk($codigoZonaFk)
-    {
-        $this->codigoZonaFk = $codigoZonaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoZonaFk
-     *
-     * @return integer
-     */
-    public function getCodigoZonaFk()
-    {
-        return $this->codigoZonaFk;
-    }
-
-    /**
-     * Set zonaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuZona $zonaRel
-     *
-     * @return RhuSeleccionRequisito
-     */
-    public function setZonaRel(\Brasa\RecursoHumanoBundle\Entity\RhuZona $zonaRel = null)
-    {
-        $this->zonaRel = $zonaRel;
-
-        return $this;
-    }
-
-    /**
-     * Get zonaRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuZona
-     */
-    public function getZonaRel()
-    {
-        return $this->zonaRel;
     }
 }

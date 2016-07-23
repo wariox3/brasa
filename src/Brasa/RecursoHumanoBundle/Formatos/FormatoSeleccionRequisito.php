@@ -67,12 +67,12 @@ class FormatoSeleccionRequisito extends \FPDF_FPDF {
         $this->SetFont('Arial','B',7);
         $this->Cell(22, 6, "BRUTO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        if ($arSeleccionRequisito->getEstadoAbierto() == 1){
-           $estadoAbierto = "NO"; 
+        if ($arSeleccionRequisito->getEstadoCerrado() == 1){
+           $estadoCerrado = "SI"; 
         } else {
-           $estadoAbierto = "SI";  
+           $estadoCerrado = "NO";  
         }
-        $this->Cell(50, 6, $estadoAbierto , 1, 0, 'L', 1);
+        $this->Cell(50, 6, $estadoCerrado , 1, 0, 'L', 1);
         //linea 2
         $this->SetXY(10, 45);
         $this->SetFont('Arial','B',7);

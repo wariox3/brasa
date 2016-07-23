@@ -10,29 +10,34 @@ class RhuSeleccionRequisitoRepository extends EntityRepository {
     
     public function eliminarSeleccionRequisitos($arrSeleccionados) {
         $em = $this->getEntityManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         if(count($arrSeleccionados) > 0) {
-            foreach ($arrSeleccionados AS $codigoSeleccionRequisito) {                
+            foreach ($arrSeleccionados AS $codigoSeleccionRequisito) {
                 $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisito')->find($codigoSeleccionRequisito);                     
-                if($em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisito')->devuelveNumeroDetalleRequisito($codigoSeleccionRequisito) <= 0){
-                   $em->remove($arSeleccion);  
-                }                                            
+                if ($arSeleccion->getEstadoCerrado() == 0){
+                    if($em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisito')->devuelveNumeroDetalleRequisito($codigoSeleccionRequisito) <= 0){
+                        $em->remove($arSeleccion);  
+                    }
+                } else {
+                    echo "La requisicion " . $codigoSeleccionRequisito . " esta cerrada, no se puede eliminar <br>";
+                }                                         
             }
             $em->flush();       
         }     
     }     
     
-    public function listaDQL($strNombre = "", $boolAbierto = 2, $strCargo = "", $strDesde = "", $strHasta= "") {                
+    public function listaDQL($strNombre = "", $boolCerrado = 2, $strCargo = "", $strDesde = "", $strHasta= "") {                
         $dql   = "SELECT sq FROM BrasaRecursoHumanoBundle:RhuSeleccionRequisito sq WHERE sq.codigoSeleccionRequisitoPk <> 0";
         if($strNombre != "" ) {
             $dql .= " AND sq.nombre LIKE '%" . $strNombre . "%'";
         }   
-        if($boolAbierto != null) {
-            if($boolAbierto == 1 ) {
-                $dql .= " AND sq.estadoAbierto = 1";
-            } elseif($boolAbierto == 0) {
-                $dql .= " AND sq.estadoAbierto = 0";
-            }            
-        }
+        
+        if($boolCerrado == 1 ) {
+            $dql .= " AND sq.estadoCerrado = 1";
+        } elseif($boolCerrado == 0 || $boolCerrado == '0') {
+            $dql .= " AND sq.estadoCerrado = 0";
+        }            
+        
         if($strCargo != "") {
             $dql .= " AND sq.codigoCargoFk = " . $strCargo;
         }
@@ -46,23 +51,39 @@ class RhuSeleccionRequisitoRepository extends EntityRepository {
         $dql .= " ORDER BY sq.codigoSeleccionRequisitoPk";
         return $dql;
     }   
+    
     // Esta funcion cambiar el estado abierto del requisito (Abierto / Cerrado)
     public function estadoAbiertoSeleccionRequisitos($arrSeleccionados) {
         $em = $this->getEntityManager();
+        $estado = true;
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigoSeleccion) {                
                 $arSeleccionRequisito = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito();
                 $arSeleccionRequisito = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisito')->find($codigoSeleccion);
                 $arSeleccion = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
                 $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->findBy(array('codigoSeleccionRequisitoFk' => $codigoSeleccion));
-                if ($arSeleccionRequisito->getEstadoAbierto() == 0){
-                    $arSeleccionRequisito->setEstadoAbierto(1);
+                if ($arSeleccionRequisito->getEstadoCerrado() == 0){
                     if (count($arSeleccion) > 0){
+                        foreach ($arSeleccion AS $arSeleccion) {
+                            if ($arSeleccion->getEstadoCerrado() == 0){
+                                $estado = false;
+                            }
+                        }
+                        //$em->persist($arSeleccion);
+                    }
+                    if ($estado == true){
+                        $arSeleccionRequisito->setEstadoCerrado(1);
+                    } else {
+                        echo "No se puede cerrar la requisicion " .$codigoSeleccion. ", tiene procesos de selecciones abiertos";
+                    }
+                    
+                    /*if (count($arSeleccion) > 0){
                         foreach ($arSeleccion AS $arSeleccion) {
                             $arSeleccion->setEstadoCerrado(1);
                         }
                         $em->persist($arSeleccion);
-                    }
+                    }*/
+                    
                 } 
                 $em->persist($arSeleccionRequisito);
             }

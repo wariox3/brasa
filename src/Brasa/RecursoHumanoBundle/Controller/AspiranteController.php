@@ -113,10 +113,11 @@ class AspiranteController extends Controller
                 array('class' => 'BrasaRecursoHumanoBundle:RhuSeleccionRequisito',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('sr')
+                    ->where('sr.estadoCerrado = 0')        
                     ->orderBy('sr.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true
-                ))    
+                ))                              
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $form->handleRequest($request);
@@ -128,7 +129,7 @@ class AspiranteController extends Controller
             $arRequisicionDato = $form->get('seleccionRequisicionRel')->getData();
             $arRequisicionAspiranteValidar = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisicionAspirante')->findBy(array('codigoSeleccionRequisitoFk' => $arRequisicionDato, 'codigoAspiranteFk' => $codigoAspirante));
             if ($arAspirante->getInconsistencia() == 0){
-                if ($arRequisicionDato->getEstadoAbierto() == 0){
+                if ($arRequisicionDato->getEstadoCerrado() == 0){
                     if ($arRequisicionAspiranteValidar == null){
                         //Calculo edad
                             $varFechaNacimientoAnio = $arAspirante->getFechaNacimiento()->format('Y');
@@ -149,6 +150,9 @@ class AspiranteController extends Controller
                             } else {
                                 $objMensaje->Mensaje("error", "El aspirante debe tener una edad entre " .$edadMinima. " y " .$edadMaxima . " años para aplicar a la requisicion", $this);
                             }
+                        } else {
+                            $em->flush();
+                            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                     
                         }    
                     } else {
                         $objMensaje->Mensaje("error", "El aspirante ya se encuenta en la requisicion", $this);
