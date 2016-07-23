@@ -155,12 +155,8 @@ class ProgramacionController extends Controller
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
             }
             if($form->get('BtnImprimir')->isClicked()) {
-                if($arProgramacion->getEstadoAutorizado() == 1) {
-                    $objProgramacion = new \Brasa\TurnoBundle\Formatos\FormatoProgramacion();
-                    $objProgramacion->Generar($this, $codigoProgramacion);
-                } else {
-                    $objMensaje->Mensaje("error", "No puede imprimir sin estar autorizada", $this);
-                }
+                $objProgramacion = new \Brasa\TurnoBundle\Formatos\FormatoProgramacion();
+                $objProgramacion->Generar($this, $codigoProgramacion);
             }
             if($form->get('BtnAnular')->isClicked()) {
                 $strResultado = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->anular($codigoProgramacion);
@@ -433,8 +429,7 @@ class ProgramacionController extends Controller
                 $arrBotonAprobar['disabled'] = true;
             }
         } else {
-            $arrBotonDesAutorizar['disabled'] = true;
-            $arrBotonImprimir['disabled'] = true;
+            $arrBotonDesAutorizar['disabled'] = true;            
         }
         if($ar->getEstadoAprobado() == 1) {
             $arrBotonDesAutorizar['disabled'] = true;

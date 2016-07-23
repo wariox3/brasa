@@ -196,6 +196,7 @@ class ProgramacionInconsistenciaController extends Controller
                         codigo_recurso_fk as codigoRecursoFk, 
                         tur_recurso.nombre_corto as nombreCorto,
                         tur_recurso.numero_identificacion as numeroIdentificacion,
+                        tur_recurso.codigo_recurso_grupo_fk AS recursoGrupo,
                         COUNT(dia_$i) AS numero
                         FROM
                         tur_programacion_detalle
@@ -216,6 +217,8 @@ class ProgramacionInconsistenciaController extends Controller
                         $arProgramacionInconsistencia->setInconsistencia('Asignacion doble de turno');
                         $arProgramacionInconsistencia->setDetalle("Recurso " . $registro['codigoRecursoFk'] . " " . 
                                 $registro['nombreCorto'] . " dia " . $i);
+                        $arProgramacionInconsistencia->setDia($i); 
+                        $arProgramacionInconsistencia->setCodigoRecursoGrupoFk($registro['recursoGrupo']);
                         $arProgramacionInconsistencia->setNumeroIdentificacion($registro['numeroIdentificacion']);
                         $em->persist($arProgramacionInconsistencia);                                
                     }

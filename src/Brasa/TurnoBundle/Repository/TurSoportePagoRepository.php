@@ -647,8 +647,9 @@ class TurSoportePagoRepository extends EntityRepository {
         }             
 
         foreach ($arSoportePagos as $arSoportePago) {
-            $diasDescansoSoportePago = $descanso;                    
-            if($arSoportePago->getLicenciaNoRemunerada() > 0) {
+            $diasDescansoSoportePago = $descanso; 
+            $novedadesAfectaDescanso = $arSoportePago->getLicenciaNoRemunerada() + $arSoportePago->getVacacion() + $arSoportePago->getIncapacidad();
+            if($novedadesAfectaDescanso > 0) {
                 $descansoDescontar = 0;
                 foreach ($arrSemanas as $arrSemana) {
                    $numeroLicenciasNoRemuneradas =  $em->getRepository('BrasaTurnoBundle:TurSoportePagoDetalle')->numeroLicenciasNoRemunerada($arSoportePago->getCodigoSoportePagoPk(), $arrSemana['fechaInicial'], $arrSemana['fechaFinal']);

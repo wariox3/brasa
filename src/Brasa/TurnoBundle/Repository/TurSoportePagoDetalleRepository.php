@@ -186,19 +186,31 @@ class TurSoportePagoDetalleRepository extends EntityRepository {
     
     public function numeroLicenciasNoRemunerada($codigoSoportePago, $fechaDesde, $fechaHasta) {                
         $em = $this->getEntityManager();
-        $intRegistros = 0;        
-        $dql   = "SELECT SUM(spd.licenciaNoRemunerada) as numeroRegistros "
+        $intLicenciaNoRemunerada = 0;
+        $intVacaciones = 0;
+        $intIncapacidades = 0;
+        $novedades = 0;
+        $dql   = "SELECT SUM(spd.licenciaNoRemunerada) as licenciaNoRemunerada, SUM(spd.vacacion) as vacaciones, SUM(spd.incapacidad) as incapacidades "
                 . "FROM BrasaTurnoBundle:TurSoportePagoDetalle spd "
                 . "WHERE spd.codigoSoportePagoFk =  " . $codigoSoportePago . " AND (spd.fecha >='" . $fechaDesde . "' AND spd.fecha <= '" . $fechaHasta . "')";
         $query = $em->createQuery($dql);
         $arrayResultado = $query->getResult();         
         if($arrayResultado) {
-            $intRegistros = $arrayResultado[0]['numeroRegistros'];
-            if($intRegistros == null) {
-                $intRegistros = 0;
-            }            
+            $intLicenciaNoRemunerada = $arrayResultado[0]['licenciaNoRemunerada'];
+            if($intLicenciaNoRemunerada == null) {
+                $intLicenciaNoRemunerada = 0;
+            } 
+            $intVacaciones = $arrayResultado[0]['vacaciones'];
+            if($intVacaciones == null) {
+                $intVacaciones = 0;
+            }
+            $intIncapacidades = $arrayResultado[0]['incapacidades'];
+            if($intIncapacidades == null) {
+                $intIncapacidades = 0;
+            }             
         } 
-        return $intRegistros;        
+        $novedades = $intLicenciaNoRemunerada + $intVacaciones + $intIncapacidades;
+        return $novedades;        
     }
     
 }

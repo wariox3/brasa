@@ -168,49 +168,52 @@ class FormatoProgramacion extends \FPDF_FPDF {
                 $codigoPuesto = $arProgramacionDetalle->getCodigoPuestoFk();
                 if($arProgramacionDetalle->getCodigoPuestoFk()) {
                     $pdf->Cell(195, 4, $arProgramacionDetalle->getPuestoRel()->getNombre(), 1, 0, 'L');
+                    $pdf->Ln();            
+                    $pdf->SetAutoPageBreak(true, 15);                    
                 } else {
                     $pdf->Cell(195, 4, "", 1, 0, 'L');
                 } 
-            } else {
-                $pdf->Cell(10, 4, $arProgramacionDetalle->getCodigoProgramacionDetallePk(), 1, 0, 'L');
-                if($arProgramacionDetalle->getCodigoRecursoFk()) {
-                    $pdf->Cell(30, 4, substr($arProgramacionDetalle->getRecursoRel()->getNombreCorto(), 0,17), 1, 0, 'L');
-                } else {
-                    $pdf->Cell(30, 4, "", 1, 0, 'L');
-                }            
-
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia1(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia2(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia3(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia4(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia5(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia6(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia7(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia8(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia9(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia10(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia11(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia12(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia13(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia14(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia15(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia16(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia17(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia18(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia19(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia20(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia21(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia22(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia23(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia24(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia25(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia26(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia27(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia28(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia29(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia30(), 1, 0, 'L');
-                $pdf->Cell(5, 4, $arProgramacionDetalle->getDia31(), 1, 0, 'L');              
             }
+            
+            $pdf->Cell(10, 4, $arProgramacionDetalle->getCodigoProgramacionDetallePk(), 1, 0, 'L');
+            if($arProgramacionDetalle->getCodigoRecursoFk()) {
+                $pdf->Cell(30, 4, substr($arProgramacionDetalle->getRecursoRel()->getNombreCorto(), 0,17), 1, 0, 'L');
+            } else {
+                $pdf->Cell(30, 4, "", 1, 0, 'L');
+            }            
+
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia1(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia2(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia3(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia4(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia5(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia6(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia7(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia8(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia9(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia10(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia11(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia12(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia13(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia14(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia15(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia16(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia17(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia18(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia19(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia20(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia21(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia22(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia23(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia24(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia25(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia26(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia27(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia28(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia29(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia30(), 1, 0, 'L');
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia31(), 1, 0, 'L');              
+            
   
             $pdf->Ln();            
             $pdf->SetAutoPageBreak(true, 15);
@@ -237,8 +240,9 @@ class FormatoProgramacion extends \FPDF_FPDF {
     }
 
     public function Footer() {
-        
         $this->SetFont('Arial','', 8);  
+        $this->Text(10, 180, "C = CURSO SEGURIDAD");
+        $this->Text(10, 185, "602 = CAPACITACION OBLIGATORIA");        
         $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
     }    
     
