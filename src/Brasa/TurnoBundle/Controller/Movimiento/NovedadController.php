@@ -84,6 +84,8 @@ class NovedadController extends Controller
                 if(count($arRecursoReemplazo) > 0) {
                     $arNovedad->setRecursoReemplazoRel($arRecursoReemplazo);
                 }
+            } else {
+                $arNovedad->setRecursoReemplazoRel(null);
             }    
             if($arNovedad->getRecursoRel()) {
                 $arUsuario = $this->getUser();
