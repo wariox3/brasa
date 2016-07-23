@@ -243,6 +243,11 @@ class TurPedidoDetalle
     private $detalle;    
     
     /**
+     * @ORM\Column(name="detalle_puesto", type="string", length=200, nullable=true)
+     */    
+    private $detallePuesto;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurPedido", inversedBy="pedidosDetallesPedidoRel")
      * @ORM\JoinColumn(name="codigo_pedido_fk", referencedColumnName="codigo_pedido_pk")
      */
@@ -1808,5 +1813,29 @@ class TurPedidoDetalle
     public function getVrPrecio()
     {
         return $this->vrPrecio;
+    }
+
+    /**
+     * Set detallePuesto
+     *
+     * @param string $detallePuesto
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setDetallePuesto($detallePuesto)
+    {
+        $this->detallePuesto = $detallePuesto;
+
+        return $this;
+    }
+
+    /**
+     * Get detallePuesto
+     *
+     * @return string
+     */
+    public function getDetallePuesto()
+    {
+        return $this->detallePuesto;
     }
 }

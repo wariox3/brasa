@@ -18,16 +18,7 @@ class TurPedidoDetalleType extends AbstractType
                     ->setParameter('codigoCliente', $options['data']->getPedidoRel()->getCodigoClienteFk())
                     ->orderBy('p.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))    
-            ->add('proyectoRel', 'entity', array(
-                'class' => 'BrasaTurnoBundle:TurProyecto',
-                'query_builder' => function (EntityRepository $er) use ($options) {
-                    return $er->createQueryBuilder('p')
-                    ->where('p.codigoClienteFk = :codigoCliente ')
-                    ->setParameter('codigoCliente', $options['data']->getPedidoRel()->getCodigoClienteFk())
-                    ->orderBy('p.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => false)) 
+                'required' => true))     
             ->add('grupoFacturacionRel', 'entity', array(
                 'class' => 'BrasaTurnoBundle:TurGrupoFacturacion',
                 'query_builder' => function (EntityRepository $er) use ($options) {
@@ -71,7 +62,8 @@ class TurPedidoDetalleType extends AbstractType
             ->add('festivo', 'checkbox', array('required'  => false))                                              
             ->add('dia31', 'checkbox', array('required'  => false))                            
             ->add('liquidarDiasReales', 'checkbox', array('required'  => false))
-            ->add('detalle', 'textarea', array('required' => false))                            
+            ->add('detalle', 'textarea', array('required' => false)) 
+            ->add('detallePuesto', 'text', array('required' => false))                            
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }
