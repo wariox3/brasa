@@ -214,6 +214,9 @@
                 <div class="btn-group">
                     <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_programaciones_pago_lista') }}" style="float:left">Volver</a>
                 </div>
+                <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
+                    {{ knp_pagination_render(arPagosAdicionalesValor) }}       
+                </div>                
             </div>
             <div class="btn-toolbar" style="float: right">
             {% if arProgramacionPago.estadoPagado == 0 %}                        
