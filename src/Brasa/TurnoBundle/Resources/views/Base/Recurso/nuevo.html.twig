@@ -100,7 +100,18 @@
                 </div>
             </div>                 
         </div>
-    </div>                     
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">Nomina</div>
+        <div class="panel-body">                                             
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Turno fijo:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.codigoTurnoFijoNominaFk, { 'attr': {'class': 'form-control', 'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}                        
+                </div>                
+            </div>                             
+        </div>
+    </div>                
     <div class="modal-footer">
         <a class="btn btn-default btn-sm" href="{{ path('brs_tur_base_recurso_lista') }}">Cancelar</a>     
         <a class="btn btn-default btn-sm" href="{{ path('brs_tur_base_recurso_nuevo_enlazar') }}">Enlazar de empleado</a>            

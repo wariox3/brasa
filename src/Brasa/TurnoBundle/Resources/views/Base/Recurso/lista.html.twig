@@ -61,6 +61,7 @@
                 <th>CENTRO COSTO</th>
                 <th>GRUPO</th>
                 <th>APODO</th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Turno fijo">TF</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Activo">ACT</p></th>
                 <th>RETIRO</th>
                 <th></th>
@@ -76,6 +77,7 @@
                 <td>{{ arRecursos.centroCostoRel.nombre | default('') }}</td>   
                 <td>{{ arRecursos.recursoGrupoRel.nombre | default('') }}</td>   
                 <td>{{ arRecursos.apodo }}</td> 
+                <td>{{ arRecursos.codigoTurnoFijoNominaFk }}</td> 
                 <td>{% if arRecursos.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td> 
                 {% if arRecursos.estadoRetiro == 0 %}
                     <td style="text-align: center"><a class="btn btn-default btn-xs" id="{{ path('brs_tur_base_recurso_retiro', { 'codigoRecurso': arRecursos.codigoRecursoPk}) }}" style="float:left">Retiro</a></td>                                

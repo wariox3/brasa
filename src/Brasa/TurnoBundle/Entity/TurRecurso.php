@@ -126,6 +126,11 @@ class TurRecurso
     private $estadoRetiro = false;    
     
     /**
+     * @ORM\Column(name="codigo_turno_fijo_nomina_fk", type="string", length=5, nullable=true)
+     */    
+    private $codigoTurnoFijoNominaFk;              
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleado", inversedBy="turRecursosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -1125,5 +1130,29 @@ class TurRecurso
     public function getSimulacionesDetallesRecursoRel()
     {
         return $this->simulacionesDetallesRecursoRel;
+    }
+
+    /**
+     * Set codigoTurnoFijoNominaFk
+     *
+     * @param string $codigoTurnoFijoNominaFk
+     *
+     * @return TurRecurso
+     */
+    public function setCodigoTurnoFijoNominaFk($codigoTurnoFijoNominaFk)
+    {
+        $this->codigoTurnoFijoNominaFk = $codigoTurnoFijoNominaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTurnoFijoNominaFk
+     *
+     * @return string
+     */
+    public function getCodigoTurnoFijoNominaFk()
+    {
+        return $this->codigoTurnoFijoNominaFk;
     }
 }

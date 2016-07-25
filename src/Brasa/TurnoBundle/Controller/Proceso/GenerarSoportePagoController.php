@@ -433,6 +433,9 @@ class GenerarSoportePagoController extends Controller
         //$arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
         $strTurnoFijoNomina = $arSoportePagoPeriodo->getRecursoGrupoRel()->getCodigoTurnoFijoNominaFk();
         $strTurnoFijoDescanso = $arSoportePagoPeriodo->getRecursoGrupoRel()->getCodigoTurnoFijoDescansoFk();
+        if($arSoportePago->getRecursoRel()->getCodigoTurnoFijoNominaFk()) {
+            $strTurnoFijoNomina = $arSoportePago->getRecursoRel()->getCodigoTurnoFijoNominaFk();
+        }
         $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
         $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($codigoTurno);
         if($arTurno->getDescanso() == 0 && $arTurno->getNovedad() == 0) {                

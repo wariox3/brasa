@@ -79,14 +79,13 @@
             <br />
             <table class="table table-striped table-bordered table-condensed">
             <tr >                
-                <th>ID</th>
+                <th>CODIGO</th>
+                <th>DOC</th>
                 <th>NOMBRE</th>
                 <th>P.DESDE</th>
                 <th>INICIO</th>
                 <th>TERMINA</th>
                 <th>SALARIO</th>
-                <th><p data-toggle="tooltip" data-placement="top" title="Deducciones">DEV</p></th>
-                <th><p data-toggle="tooltip" data-placement="top" title="Deducciones">DED</p></th>
                 <th>NETO</th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Horas periodo">H</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Horas novedad">HN</p></th>                
@@ -106,14 +105,13 @@
             {% for arProgramacionPagoDetalles in arProgramacionPagoDetalles %}
             <tr {% if arProgramacionPagoDetalles.marca == 1 %} class="success" {% endif %}>                
                 <input type="hidden" name="LblCodigoDetalle[]" value="{{ arProgramacionPagoDetalles.codigoProgramacionPagoDetallePk }}">                                    
+                <td>{{ arProgramacionPagoDetalles.codigoEmpleadoFk}}</td>
                 <td>{{ arProgramacionPagoDetalles.empleadoRel.numeroIdentificacion}}</td>
                 <td>{{ arProgramacionPagoDetalles.empleadoRel.nombreCorto }}</td>
                 <td>{{ arProgramacionPagoDetalles.fechaDesdePago |date("Y/m/d")  }}</td>
                 <td>{{ arProgramacionPagoDetalles.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{% if arProgramacionPagoDetalles.indefinido == 1 %} INDEFINIDO {% else %} {{ arProgramacionPagoDetalles.fechaHasta |date("Y/m/d")  }} {% endif %}</td>
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.vrSalario | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrDevengado | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrDeducciones | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.vrNetoPagar | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.horasPeriodo | number_format(0, '.', ',') }}</td>               
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.horasNovedad | number_format(0, '.', ',') }}</td>                               
