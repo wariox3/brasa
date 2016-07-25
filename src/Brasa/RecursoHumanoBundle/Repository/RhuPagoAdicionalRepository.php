@@ -11,12 +11,22 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuPagoAdicionalRepository extends EntityRepository {
     
-    public function listaDql($codigoProgramacionPago) {
+    public function listaDql($codigoProgramacionPago, $codigoEmpleado = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT pa FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa WHERE pa.codigoProgramacionPagoFk =  " . $codigoProgramacionPago . " AND pa.permanente = 0";
-        $dql .= " ORDER BY pa.codigoProgramacionPagoFk DESC";
+        if($codigoEmpleado != "") {
+            $dql .= " AND pa.codigoEmpleadoFk = " . $codigoEmpleado;
+        }        
+        $dql .= " ORDER BY pa.codigoPagoAdicionalPk DESC";
         return $dql;
     } 
+    
+    public function listaEmpleadoDql($codigoEmpleado = "") {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT pa FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa WHERE pa.codigoEmpleadoFk =  " . $codigoEmpleado ;        
+        $dql .= " ORDER BY pa.codigoPagoAdicionalPk DESC";
+        return $dql;
+    }    
     
     public function listaTiempoDql($codigoProgramacionPago) {
         $em = $this->getEntityManager();
