@@ -38,17 +38,21 @@ class RhuProgramacionPagoDetalle
     private $horasPeriodo = 0;     
 
     /**
-     * Para el auxilio de transporte
      * @ORM\Column(name="dias_reales", type="integer")
      */
     private $diasReales = 0;    
     
     /**
-     * Para el auxilio de transporte
      * @ORM\Column(name="dias", type="integer")
      */
     private $dias = 0; 
 
+    /**
+     * Para el auxilio de transporte
+     * @ORM\Column(name="dias_transporte", type="integer")
+     */
+    private $diasTransporte = 0;     
+    
     /**
      * Para el auxilio de transporte
      * @ORM\Column(name="factor_dia", type="integer")
@@ -1433,5 +1437,29 @@ class RhuProgramacionPagoDetalle
     public function getMarca()
     {
         return $this->marca;
+    }
+
+    /**
+     * Set diasTransporte
+     *
+     * @param integer $diasTransporte
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setDiasTransporte($diasTransporte)
+    {
+        $this->diasTransporte = $diasTransporte;
+
+        return $this;
+    }
+
+    /**
+     * Get diasTransporte
+     *
+     * @return integer
+     */
+    public function getDiasTransporte()
+    {
+        return $this->diasTransporte;
     }
 }

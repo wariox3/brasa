@@ -367,6 +367,35 @@ class Funciones {
        return ucfirst($tex);
 
     }         
+ 
+    public static function devuelveDiaSemanaEspaniol ($dateFecha) {
+        $strDia = "";
+        switch ($dateFecha->format('N')) {
+            case 1:
+                $strDia = "l";
+                break;
+            case 2:
+                $strDia = "m";
+                break;
+            case 3:
+                $strDia = "i";
+                break;
+            case 4:
+                $strDia = "j";
+                break;
+            case 5:
+                $strDia = "v";
+                break;
+            case 6:
+                $strDia = "s";
+                break;
+            case 7:
+                $strDia = "d";
+                break;
+        }
+
+        return $strDia;
+    }     
     
 }
 ?>

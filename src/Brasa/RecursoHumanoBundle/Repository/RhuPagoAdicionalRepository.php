@@ -32,7 +32,7 @@ class RhuPagoAdicionalRepository extends EntityRepository {
         return $dql;
     } 
     
-    public function listaAdicionalesDql($strIdentificacion = "", $aplicarDiaLaborado = "", $codigoCentroCosto = "", $codigoPagoConcepto = "") {        
+    public function listaAdicionalesDql($strIdentificacion = "", $aplicarDiaLaborado = "", $codigoCentroCosto = "", $codigoPagoConcepto = "", $estadoInactivo = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT pa,e FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa JOIN pa.empleadoRel e WHERE pa.codigoPagoAdicionalPk <> 0 AND pa.permanente = 1";   
         
@@ -51,6 +51,12 @@ class RhuPagoAdicionalRepository extends EntityRepository {
         if($codigoPagoConcepto != "" || $codigoPagoConcepto != 0 ) {
             $dql .= " AND pa.codigoPagoConceptoFk = " . $codigoPagoConcepto;
         }
+        if($estadoInactivo == 1 ) {
+            $dql .= " AND pa.estadoInactivo = 1";
+        }
+        if($estadoInactivo == 0 ) {
+            $dql .= " AND pa.estadoInactivo = 0";
+        }        
         $dql .= " ORDER BY pa.codigoPagoAdicionalPk DESC";
         return $dql;
     }
@@ -80,7 +86,7 @@ class RhuPagoAdicionalRepository extends EntityRepository {
     public function programacionPago($codigoEmpleado = "", $codigoProgramacionPago = "") {
         $em = $this->getEntityManager();
         $dql = "SELECT pa FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa "
-                . "WHERE (pa.codigoProgramacionPagoFk = $codigoProgramacionPago OR pa.permanente = 1) AND pa.codigoEmpleadoFk = $codigoEmpleado";
+                . "WHERE (pa.codigoProgramacionPagoFk = $codigoProgramacionPago OR pa.permanente = 1) AND pa.estadoInactivo = 0 AND pa.codigoEmpleadoFk = $codigoEmpleado";
         $objQuery = $em->createQuery($dql);  
         $arPagosAdicionales = $objQuery->getResult();         
         return $arPagosAdicionales;

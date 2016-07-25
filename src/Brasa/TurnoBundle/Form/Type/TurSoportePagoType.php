@@ -10,6 +10,7 @@ class TurSoportePagoType extends AbstractType
     {
         $builder                       
             ->add('dias', 'number')
+            ->add('diasTransporte', 'number')                
             ->add('horas', 'number')
             ->add('horasDiurnas', 'number')
             ->add('horasNocturnas', 'number')  

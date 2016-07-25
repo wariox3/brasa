@@ -280,6 +280,11 @@ class RhuPago
     private $codigoUsuario;
     
     /**
+     * @ORM\Column(name="codigo_soporte_pago_fk", type="integer", nullable=true)
+     */    
+    private $codigoSoportePagoFk;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuPagoTipo", inversedBy="pagosPagoTipoRel")
      * @ORM\JoinColumn(name="codigo_pago_tipo_fk", referencedColumnName="codigo_pago_tipo_pk")
      */
@@ -1963,5 +1968,29 @@ class RhuPago
     public function getProgramacionPagoDetalleRel()
     {
         return $this->programacionPagoDetalleRel;
+    }
+
+    /**
+     * Set codigoSoportePagoFk
+     *
+     * @param integer $codigoSoportePagoFk
+     *
+     * @return RhuPago
+     */
+    public function setCodigoSoportePagoFk($codigoSoportePagoFk)
+    {
+        $this->codigoSoportePagoFk = $codigoSoportePagoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSoportePagoFk
+     *
+     * @return integer
+     */
+    public function getCodigoSoportePagoFk()
+    {
+        return $this->codigoSoportePagoFk;
     }
 }

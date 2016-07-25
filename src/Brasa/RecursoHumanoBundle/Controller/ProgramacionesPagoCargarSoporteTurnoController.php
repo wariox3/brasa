@@ -42,8 +42,10 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     $arProgramacionPagoDetalle->setFechaDesdePago($arSoportePago->getFechaDesde());
                     $arProgramacionPagoDetalle->setFechaHastaPago($arSoportePago->getFechaHasta());
                     $intDias = $arSoportePago->getDias();
+                    $intDiasTransporte = $arSoportePago->getDiasTransporte();
                     $arProgramacionPagoDetalle->setDias($intDias);
-                    $arProgramacionPagoDetalle->setDiasReales($intDias);    
+                    $arProgramacionPagoDetalle->setDiasReales($intDias); 
+                    $arProgramacionPagoDetalle->setDiasTransporte($intDiasTransporte); 
                     $arProgramacionPagoDetalle->setFactorDia($arContrato->getFactorHorasDia());
                     $arProgramacionPagoDetalle->setVrDia($floVrDia);
                     $arProgramacionPagoDetalle->setVrHora($floVrHora);
@@ -88,15 +90,15 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     }                    
                     
                     if($intDiasVacaciones != $arSoportePago->getVacacion()) {
-                        $arrInconsistencias[] = array('inconsistencia' => "El empleado " . $arEmpleado->getNombreCorto() . " tiene vacaciones de " . $arSoportePago->getVacacion() . " dias en turnos y de " . $intDiasVacaciones . " en recurso humano");
+                        $arrInconsistencias[] = array('inconsistencia' => "El empleado " . $arEmpleado->getNumeroIdentificacion() . "-" . $arEmpleado->getNombreCorto() . " tiene vacaciones de " . $arSoportePago->getVacacion() . " dias en turnos y de " . $intDiasVacaciones . " en recurso humano");
                     }
-                    
-                    if($intDiasLicencia != ($arSoportePago->getLicencia()+$arSoportePago->getLicenciaNoRemunerada())) {
-                        $arrInconsistencias[] = array('inconsistencia' => "El empleado " . $arEmpleado->getNombreCorto() . " tiene licencias de " . $arSoportePago->getLicencia() . " dias en turnos y de " . $intDiasLicencia . " en recurso humano");
+                    $intDiasLicenciaSoportePago = $arSoportePago->getLicencia()+$arSoportePago->getLicenciaNoRemunerada();
+                    if($intDiasLicencia != $intDiasLicenciaSoportePago) {
+                        $arrInconsistencias[] = array('inconsistencia' => "El empleado " . $arEmpleado->getNumeroIdentificacion() . "-" . $arEmpleado->getNombreCorto() . " tiene licencias de " . $intDiasLicenciaSoportePago . " dias en turnos y de " . $intDiasLicencia . " en recurso humano");
                     }
                     
                     if($intDiasIncapacidad != $arSoportePago->getIncapacidad()) {
-                        $arrInconsistencias[] = array('inconsistencia' => "El empleado " . $arEmpleado->getNombreCorto() . " tiene incapacidades de " . $arSoportePago->getIncapacidad() . " dias en turnos y de " . $intDiasIncapacidad . " en recurso humano");
+                        $arrInconsistencias[] = array('inconsistencia' => "El empleado " . $arEmpleado->getNumeroIdentificacion() . "-" . $arEmpleado->getNombreCorto() . " tiene incapacidades de " . $arSoportePago->getIncapacidad() . " dias en turnos y de " . $intDiasIncapacidad . " en recurso humano");
                     }                    
                     $comentarios = "Diurnas[" . $arSoportePago->getHorasDiurnas() . "] Nocturnas[" . $arSoportePago->getHorasNocturnas() . "], Descanso[" . $arSoportePago->getHorasDescanso() . "]";
                     $arProgramacionPagoDetalle->setComentarios($comentarios);                    

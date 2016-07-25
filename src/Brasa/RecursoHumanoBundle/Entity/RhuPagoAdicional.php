@@ -68,6 +68,11 @@ class RhuPagoAdicional
      */    
     private $prestacional = 0;
 
+    /**     
+     * @ORM\Column(name="estado_inactivo", type="boolean")
+     */    
+    private $estadoInactivo = 0;    
+    
     /**
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
      */    
@@ -436,5 +441,29 @@ class RhuPagoAdicional
     public function getCodigoUsuario()
     {
         return $this->codigoUsuario;
+    }
+
+    /**
+     * Set estadoInactivo
+     *
+     * @param boolean $estadoInactivo
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setEstadoInactivo($estadoInactivo)
+    {
+        $this->estadoInactivo = $estadoInactivo;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoInactivo
+     *
+     * @return boolean
+     */
+    public function getEstadoInactivo()
+    {
+        return $this->estadoInactivo;
     }
 }

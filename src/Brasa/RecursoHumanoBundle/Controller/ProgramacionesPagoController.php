@@ -361,6 +361,7 @@ class ProgramacionesPagoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
         $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($codigoProgramacionPagoDetalle);        
         $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
@@ -390,6 +391,9 @@ class ProgramacionesPagoController extends Controller
             } 
             if($form->get('BtnActualizarHoras')->isClicked()) {  
                 $arrControles = $request->request->All();
+                if($arrControles['TxtDiasTransporte'] != "") {
+                    $arProgramacionPagoDetalle->setDiasTransporte($arrControles['TxtDiasTransporte']);                
+                }                
                 if($arrControles['TxtHorasDescanso'] != "") {
                     $arProgramacionPagoDetalle->setHorasDescanso($arrControles['TxtHorasDescanso']);                
                 }
@@ -440,7 +444,14 @@ class ProgramacionesPagoController extends Controller
                 $arProgramacionDetalle =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arSoportePago->getCodigoRecursoFk()));                                                    
             }
         }        
-        
+        $strAnioMes = $arProgramacionPagoDetalle->getFechaDesde()->format('Y/m');
+        $arrDiaSemana = array();
+        for($i = 1; $i <= 31; $i++) {
+            $strFecha = $strAnioMes . '/' . $i;
+            $dateFecha = date_create($strFecha);
+            $diaSemana = $objFunciones->devuelveDiaSemanaEspaniol($dateFecha);
+            $arrDiaSemana[$i] = array('dia' => $i, 'diaSemana' => $diaSemana);
+        }        
         $dql = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->listaDql("", $codigoProgramacionPagoDetalle);                
         $arPagoDetalles = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 50);        
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:verResumenTurno.html.twig', array(                        
@@ -449,6 +460,7 @@ class ProgramacionesPagoController extends Controller
             'arPagoDetalles' => $arPagoDetalles,
             'arSoportePago' => $arSoportePago,
             'arPago' => $arPago,
+            'arrDiaSemana' => $arrDiaSemana,
             'form' => $form->createView()));
     }
     
@@ -667,8 +679,8 @@ class ProgramacionesPagoController extends Controller
                 $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
             } 
             $objPHPExcel->setActiveSheetIndex(0)
-                        ->setCellValue('A1', 'CÓDIGO')
-                        ->setCellValue('B1', 'IDENTIFICACIÓN')
+                        ->setCellValue('A1', 'CODIGO')
+                        ->setCellValue('B1', 'DOCUMENTO')
                         ->setCellValue('C1', 'NOMBRE')
                         ->setCellValue('D1', 'BANCO')
                         ->setCellValue('E1', 'CUENTA')
@@ -677,28 +689,24 @@ class ProgramacionesPagoController extends Controller
                         ->setCellValue('H1', 'SALARIO')
                         ->setCellValue('I1', 'DEVENGADO')
                         ->setCellValue('J1', 'DEDUCCIONES')
-                        ->setCellValue('K1', 'NETO')
-                        ->setCellValue('L1', 'IBP')
-                        ->setCellValue('M1', 'IBC');
+                        ->setCellValue('K1', 'NETO');
             $i = 2;
 
             $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
             $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
             foreach ($arPagos as $arPago) {
                 $objPHPExcel->setActiveSheetIndex(0)
-                        ->setCellValue('A' . $i, $arPago->getCodigoPagoPk())
+                        ->setCellValue('A' . $i, $arPago->getCodigoEmpleadoFk())
                         ->setCellValue('B' . $i, $arPago->getEmpleadoRel()->getNumeroIdentificacion())
                         ->setCellValue('C' . $i, $arPago->getEmpleadoRel()->getNombreCorto())
                         ->setCellValue('D' . $i, $arPago->getEmpleadoRel()->getBancoRel()->getNombre())
                         ->setCellValue('E' . $i, $arPago->getEmpleadoRel()->getCuenta())
                         ->setCellValue('F' . $i, $arPago->getFechaDesde()->format('Y/m/d'))
                         ->setCellValue('G' . $i, $arPago->getFechaHasta()->format('Y/m/d'))
-                        ->setCellValue('H' . $i, $arPago->getVrSalario())
+                        ->setCellValue('H' . $i, $arPago->getVrSalarioEmpleado())
                         ->setCellValue('I' . $i, $arPago->getVrDevengado())
                         ->setCellValue('J' . $i, $arPago->getVrDeducciones())
-                        ->setCellValue('K' . $i, $arPago->getVrNeto())
-                        ->setCellValue('L' . $i, $arPago->getVrIngresoBasePrestacion())
-                        ->setCellValue('M' . $i, $arPago->getVrIngresoBaseCotizacion());
+                        ->setCellValue('K' . $i, $arPago->getVrNeto());
                 $i++;
             }
             $objPHPExcel->getActiveSheet()->setTitle('Pagos');

@@ -306,6 +306,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
     public function pagar($codigoProgramacionPago) {       
         $em = $this->getEntityManager(); 
         set_time_limit(0);
+        ini_set("memory_limit", -1);
         $arProgramacionPagoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPagoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();

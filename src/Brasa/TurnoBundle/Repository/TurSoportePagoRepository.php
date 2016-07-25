@@ -78,6 +78,7 @@ class TurSoportePagoRepository extends EntityRepository {
                 $arrayResultado[$i]['dias'] = $arSoportePagoPeriodoActualizar->getDiasPeriodo(); 
             }
             $arSoportePago->setDias($arrayResultado[$i]['dias']);
+            $arSoportePago->setDiasTransporte($arrayResultado[$i]['dias']);
             $arSoportePago->setDescanso($arrayResultado[$i]['descanso']);
             $arSoportePago->setNovedad($arrayResultado[$i]['novedad']);
             $arSoportePago->setIncapacidad($arrayResultado[$i]['incapacidad']);
@@ -189,6 +190,7 @@ class TurSoportePagoRepository extends EntityRepository {
                 $arrayResultado[$i]['dias'] = $arSoportePago->getSoportePagoPeriodoRel()->getDiasPeriodo(); 
             }
             $arSoportePago->setDias($arrayResultado[$i]['dias']);
+            $arSoportePago->setDiasTransporte($arrayResultado[$i]['dias']);
             $arSoportePago->setDescanso($arrayResultado[$i]['descanso']);
             $arSoportePago->setNovedad($arrayResultado[$i]['novedad']);
             $arSoportePago->setIncapacidad($arrayResultado[$i]['incapacidad']);
@@ -625,6 +627,7 @@ class TurSoportePagoRepository extends EntityRepository {
         $horasTope = $horasPeriodo - $horasDescanso;
         //Semanas para ausentismo y descontar descansos
         $arrSemanas = array();
+        $arrDomingos = array();
         $dateFechaDesde = $arSoportePagoPeriodo->getFechaDesde();
         $dateFechaHasta = $arSoportePagoPeriodo->getFechaHasta();
         $intDiaInicial = $dateFechaDesde->format('j');
@@ -637,6 +640,7 @@ class TurSoportePagoRepository extends EntityRepository {
             if($diaSemana == 7) {
                 $arrSemanas[] = array('diaInicial' => $diaInicialSemana, 'diaFinal' => $i, 'fechaInicial' => $dateFechaDesde->format('Y/m/') . $diaInicialSemana, 'fechaFinal' => $dateFechaDesde->format('Y/m/') . $i);                            
                 $diaInicialSemana = $i + 1;
+                $arrDomingos[] = array('domingo' => $dateFecha);
             }                    
         }
         $arSoportePagos = new \Brasa\TurnoBundle\Entity\TurSoportePago();  
@@ -648,7 +652,7 @@ class TurSoportePagoRepository extends EntityRepository {
 
         foreach ($arSoportePagos as $arSoportePago) {
             $diasDescansoSoportePago = $descanso; 
-            $novedadesAfectaDescanso = $arSoportePago->getLicenciaNoRemunerada() + $arSoportePago->getVacacion() + $arSoportePago->getIncapacidad();
+            $novedadesAfectaDescanso = $arSoportePago->getLicenciaNoRemunerada();
             if($novedadesAfectaDescanso > 0) {
                 $descansoDescontar = 0;
                 foreach ($arrSemanas as $arrSemana) {
@@ -663,6 +667,15 @@ class TurSoportePagoRepository extends EntityRepository {
                     $diasDescansoSoportePago = 0;
                 }                        
             }
+            if($diasDescansoSoportePago > 0) {
+                $domingosPagados = $this->domingosPagados($arrDomingos, $arSoportePago->getCodigoSoportePagoPk());
+                if($domingosPagados <= $diasDescansoSoportePago) {
+                    $diasDescansoSoportePago = $diasDescansoSoportePago - $domingosPagados;
+                } else {
+                    $diasDescansoSoportePago = 0;
+                }                
+            }
+             
             $horasDescansoSoportePago = $diasDescansoSoportePago * 8;
 
             $horasDia = $arSoportePago->getHorasDiurnasReales();
@@ -722,10 +735,29 @@ class TurSoportePagoRepository extends EntityRepository {
                $horasDescansoRecurso = 0; 
             }
             $arSoportePagoAct->setHorasDescanso($horasDescansoRecurso);
-            $horas = $horasDia + $horasNoche + $horasFestivasDia + $horasFestivasNoche + $horasDescansoRecurso;
+            $horas = $horasDia + $horasNoche + $horasFestivasDia + $horasFestivasNoche + $horasDescansoRecurso;            
             $arSoportePagoAct->setHoras($horas);
             $em->persist($arSoportePagoAct);
         }
         $em->flush();        
+    }
+    
+    private function domingosPagados($arrDomingos, $codigoSoportePago) {
+        $em = $this->getEntityManager();
+        $descansosPagados = 0;
+        foreach ($arrDomingos as $arrDomingo) {
+            $descansoPagado = false;
+            $arSoportePagoDetalles = new \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle();
+            $arSoportePagoDetalles = $em->getRepository('BrasaTurnoBundle:TurSoportePagoDetalle')->findBy(array('codigoSoportePagoFk' => $codigoSoportePago, 'fecha' => $arrDomingo['domingo']));
+            foreach ($arSoportePagoDetalles as $arSoportePagoDetalle) {
+                if($arSoportePagoDetalle->getIncapacidad() || $arSoportePagoDetalle->getVacacion() || $arSoportePagoDetalle->getIngreso() || $arSoportePagoDetalle->getRetiro()) {
+                    $descansoPagado = true;
+                }
+            }
+            if($descansoPagado == true) {
+                $descansosPagados++;
+            }
+        }  
+        return $descansosPagados;
     }
 }

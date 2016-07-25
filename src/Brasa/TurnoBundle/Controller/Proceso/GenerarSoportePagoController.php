@@ -33,7 +33,7 @@ class GenerarSoportePagoController extends Controller
                 $intDiaFinal = $dateFechaHasta->format('j');
                 $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($dateFechaDesde->format('Y-m-').'01', $dateFechaHasta->format('Y-m-').'31');
                 $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
-                $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->periodo($dateFechaDesde->format('Y/m/') . "01",$dateFechaHasta->format('Y/m/') . "31", $arSoportePagoPeriodo->getCodigoRecursoGrupoFk());
+                $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->periodo($dateFechaDesde->format('Y/m/') . "01",$dateFechaHasta->format('Y/m/') . "31", $arSoportePagoPeriodo->getCodigoRecursoGrupoFk(), "");
                 foreach ($arProgramacionDetalles as $arProgramacionDetalle) {                    
                     for($i = $intDiaInicial; $i <= $intDiaFinal; $i++) {
                         $strFecha = $dateFechaDesde->format('Y/m/') . $i;
@@ -233,6 +233,14 @@ class GenerarSoportePagoController extends Controller
         }        
         $strAnio = $arSoportePago->getFechaDesde()->format('Y');
         $strMes = $arSoportePago->getFechaDesde()->format('m');
+        $strAnioMes = $arSoportePago->getFechaDesde()->format('Y/m');
+        $arrDiaSemana = array();
+        for($i = 1; $i <= 31; $i++) {
+            $strFecha = $strAnioMes . '/' . $i;
+            $dateFecha = date_create($strFecha);
+            $diaSemana = $this->devuelveDiaSemanaEspaniol($dateFecha);
+            $arrDiaSemana[$i] = array('dia' => $i, 'diaSemana' => $diaSemana);
+        }        
         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
         $arProgramacionDetalle =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arSoportePago->getCodigoRecursoFk()));                        
         $arSoportesPagoDetalle = $paginator->paginate($em->createQuery($this->strListaDqlDetalle), $request->query->get('page', 1), 200);        
@@ -240,6 +248,7 @@ class GenerarSoportePagoController extends Controller
             'arProgramacionDetalle' => $arProgramacionDetalle,
             'arSoportesPagosDetalles' => $arSoportesPagoDetalle,
             'arSoportePago' => $arSoportePago,
+            'arrDiaSemana' => $arrDiaSemana,
             'form' => $form->createView()));
     }     
     
@@ -1010,5 +1019,33 @@ class GenerarSoportePagoController extends Controller
         $resultado = ((int)($number * $multiplicador)) / $multiplicador;
         return number_format($resultado, $digitos);
 
+    }   
+    private function devuelveDiaSemanaEspaniol ($dateFecha) {
+        $strDia = "";
+        switch ($dateFecha->format('N')) {
+            case 1:
+                $strDia = "l";
+                break;
+            case 2:
+                $strDia = "m";
+                break;
+            case 3:
+                $strDia = "i";
+                break;
+            case 4:
+                $strDia = "j";
+                break;
+            case 5:
+                $strDia = "v";
+                break;
+            case 6:
+                $strDia = "s";
+                break;
+            case 7:
+                $strDia = "d";
+                break;
+        }
+
+        return $strDia;
     }    
 }

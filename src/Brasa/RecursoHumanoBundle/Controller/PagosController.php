@@ -3,6 +3,7 @@
 namespace Brasa\RecursoHumanoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -75,6 +76,48 @@ class PagosController extends Controller
                     'arPagoDetallesSede' => $arPagoDetallesSede,                    
                     'form' => $form->createView()
                     ));
+    }    
+    
+    /**
+     * @Route("/rhu/movimiento/pago/resumen/turno/{codigoPago}", name="brs_rhu_movimiento_pago_resumen_turno")
+     */    
+    public function verResumenTurnosAction($codigoPago) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
+        $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+        $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigoPago);                
+        $form = $this->createFormBuilder()                        
+            ->getForm(); 
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+        }
+       
+        $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+        $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+        if($arPago->getCodigoSoportePagoFk()) {
+            $arSoportePago =  $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($arPago->getCodigoSoportePagoFk());                                
+            if($arSoportePago) {
+                $strAnio = $arSoportePago->getFechaDesde()->format('Y');
+                $strMes = $arSoportePago->getFechaDesde()->format('m');        
+                $arProgramacionDetalle =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arSoportePago->getCodigoRecursoFk()));                                                    
+            }
+        }        
+        $strAnioMes = $arPago->getFechaDesde()->format('Y/m');
+        $arrDiaSemana = array();
+        for($i = 1; $i <= 31; $i++) {
+            $strFecha = $strAnioMes . '/' . $i;
+            $dateFecha = date_create($strFecha);
+            $diaSemana = $objFunciones->devuelveDiaSemanaEspaniol($dateFecha);
+            $arrDiaSemana[$i] = array('dia' => $i, 'diaSemana' => $diaSemana);
+        }        
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Pagos:verResumenTurno.html.twig', array(                                    
+            'arProgramacionDetalle' => $arProgramacionDetalle,  
+            'arSoportePago' => $arSoportePago,
+            'arPago' => $arPago,
+            'arrDiaSemana' => $arrDiaSemana,
+            'form' => $form->createView()));
     }    
     
     private function formularioLista() {

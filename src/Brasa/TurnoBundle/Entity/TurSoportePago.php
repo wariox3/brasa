@@ -113,6 +113,11 @@ class TurSoportePago
     private $dias = 0;    
     
     /**
+     * @ORM\Column(name="dias_trasnporte", type="integer")
+     */    
+    private $diasTransporte = 0;    
+    
+    /**
      * @ORM\Column(name="horas", type="float")
      */    
     private $horas = 0;    
@@ -1399,5 +1404,29 @@ class TurSoportePago
     public function getLicenciaNoRemunerada()
     {
         return $this->licenciaNoRemunerada;
+    }
+
+    /**
+     * Set diasTransporte
+     *
+     * @param integer $diasTransporte
+     *
+     * @return TurSoportePago
+     */
+    public function setDiasTransporte($diasTransporte)
+    {
+        $this->diasTransporte = $diasTransporte;
+
+        return $this;
+    }
+
+    /**
+     * Get diasTransporte
+     *
+     * @return integer
+     */
+    public function getDiasTransporte()
+    {
+        return $this->diasTransporte;
     }
 }

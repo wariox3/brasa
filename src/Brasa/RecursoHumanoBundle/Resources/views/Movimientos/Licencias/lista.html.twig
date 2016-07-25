@@ -38,7 +38,8 @@
                 <th>CENTRO COSTO</th>
                 <th>DESDE</th>
                 <th>HASTA</th>
-                <th>AFECTA AUXILIO</th>
+                <th>AF.A</th>
+                <th>USUARIO</th>
                 <th style="text-align: right">DÍAS</th>
                 <th style="text-align: center"></th>                
                 <th></th>
@@ -53,6 +54,7 @@
                 <td>{{ arLicencias.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arLicencias.fechaHasta |date("Y/m/d")  }}</td>
                 <td>{% if arLicencias.afectaTransporte == 1 %}SI{% else %}NO{% endif %}</td>
+                <td>{{ arLicencias.codigoUsuario  }}</td>
                 <td style="text-align: right">{{ arLicencias.cantidad | number_format(0, '.', ',') }}</td>                                            
                 <td style="text-align: center"><a href="{{ path('brs_rhu_licencias_nuevo', {'codigoLicencia': arLicencias.codigoLicenciaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arLicencias.codigoLicenciaPk }}" /></td>

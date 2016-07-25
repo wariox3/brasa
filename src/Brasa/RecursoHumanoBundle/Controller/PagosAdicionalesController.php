@@ -15,43 +15,6 @@ class PagosAdicionalesController extends Controller
     var $identificacion = "";
     var $aplicarDiaLaborado = 2;
     
-    /*public function listaAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
-        $form = $this->createFormBuilder()
-            //->add('Generar', 'submit')
-            ->getForm();
-        $form->handleRequest($request);
-
-        $arProgramacionPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-        $arProgramacionPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->listaGeneralPagoActivosDQL(0);
-        
-        if ($request->getMethod() == 'POST') {
-            $arrControles = $request->request->All();
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            $objChkFecha = NULL;
-            if (isset($arrControles['ChkFecha']))
-                $objChkFecha = $arrControles['ChkFecha'];
-            switch ($request->request->get('OpSubmit')) {
-                case "OpEliminar";
-                    foreach ($arrSeleccionados AS $codigoGuia) {
-                        $arGuia = new \Brasa\TransporteBundle\Entity\TteGuia();
-                        $arGuia = $em->getRepository('BrasaTransporteBundle:TteGuia')->find($codigoGuia);
-                        if($arGuia->getEstadoImpreso() == 0 && $arGuia->getEstadoDespachada() == 0 && $arGuia->getNumeroGuia() == 0) {
-                            $em->remove($arGuia);
-                            $em->flush();
-                        }
-                    }
-                    break;
-
-            }
-        }
-
-        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:lista.html.twig', array(
-            'arProgramacionPagos' => $arProgramacionPagos,
-            'form' => $form->createView()));
-    }*/
-    
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -74,23 +37,23 @@ class PagosAdicionalesController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista'));
                 }
             }
-            /*if($form->get('BtnConceptoPermanente')->isClicked()) {
+            if($form->get('BtnInactivar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados as $codigoPagoAdicional) {
                         $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
                         $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
-                        if($arPagoAdicional->getPermanente() == 1) {
-                            $arPagoAdicional->setPermanente(0);
+                        if($arPagoAdicional->getEstadoInactivo() == 1) {
+                            $arPagoAdicional->setEstadoInactivo(0);
                         } else {
-                            $arPagoAdicional->setPermanente(1);
+                            $arPagoAdicional->setEstadoInactivo(1);
                         }
                         $em->persist($arPagoAdicional);
                     }
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista'));
                 }
-            }*/
+            }            
             if($form->get('BtnAplicaDiaLaborado')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
@@ -178,8 +141,10 @@ class PagosAdicionalesController extends Controller
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('pagoConceptoRel', 'entity', $arrayPropiedadesConcepto)    
             ->add('BtnRetirarConcepto', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnInactivar', 'submit', array('label'  => 'Inactivar',))
             ->add('BtnAplicaDiaLaborado', 'submit', array('label'  => 'Aplicar a dia laborado',))
             ->add('aplicarDiaLaborado', 'choice', array('choices' => array('2' => 'TODOS', '0' => 'NO', '1' => 'SI'), 'data' => $session->get('filtroAplicarDiaLaborado')))                
+            ->add('estadoInactivo', 'choice', array('choices' => array('2' => 'TODOS', '0' => 'NO', '1' => 'SI'), 'data' => $session->get('filtroPagoAdicionalEstadoInactivo')))                                
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
@@ -193,7 +158,8 @@ class PagosAdicionalesController extends Controller
             $session->get('filtroNumeroIdentificacion'),
             $session->get('filtroAplicarDiaLaborado'),        
             $session->get('filtroCodigoCentroCosto'),
-            $session->get('filtroCodigoPagoConcepto'));
+            $session->get('filtroCodigoPagoConcepto'),
+            $session->get('filtroPagoAdicionalEstadoInactivo'));
     }
 
     private function filtrarLista($form) {
@@ -205,6 +171,7 @@ class PagosAdicionalesController extends Controller
         $session->set('filtroNumeroIdentificacion', $form->get('txtNumeroIdentificacion')->getData());
         $session->set('filtroAplicarDiaLaborado', $form->get('aplicarDiaLaborado')->getData());
         $session->set('filtroCodigoPagoConcepto', $controles['pagoConceptoRel']);
+        $session->set('filtroPagoAdicionalEstadoInactivo', $form->get('estadoInactivo')->getData());
     }
 
     public function detalleAction($codigoProgramacionPago) {
