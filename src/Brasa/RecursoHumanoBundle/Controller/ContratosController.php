@@ -305,6 +305,7 @@ class ContratosController extends Controller
                             $arEmpleado->setEntidadPensionRel($arContrato->getEntidadPensionRel());
                             $arEmpleado->setEntidadSaludRel($arContrato->getEntidadSaludRel());
                             $arEmpleado->setEntidadCajaRel($arContrato->getEntidadCajaRel());
+                            $arEmpleado->setEntidadCesantiaRel($arContrato->getEntidadCesantiaRel());
                             $em->persist($arEmpleado);
                             $em->flush();
                             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
@@ -383,6 +384,7 @@ class ContratosController extends Controller
                             $arEmpleado->setCodigoEntidadSaludFk(NULL);
                             $arEmpleado->setCodigoEntidadPensionFk(NULL);
                             $arEmpleado->setCodigoEntidadCajaFk(NULL);
+                            $arEmpleado->setCodigoEntidadCesantiaFk(NULL);
                             $arEmpleado->setEstadoContratoActivo(0);
                             $arEmpleado->setCodigoContratoActivoFk(NULL);
                             $arEmpleado->setCodigoContratoUltimoFk($codigoContrato);
@@ -742,6 +744,7 @@ class ContratosController extends Controller
         $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'CODIGO EMPLEADO')
@@ -753,29 +756,36 @@ class ContratosController extends Controller
                     ->setCellValue('H1', 'ENTIDAD SALUD')
                     ->setCellValue('I1', 'ENTIDAD PENSIÓN')
                     ->setCellValue('J1', 'CAJA COMPENSACIÓN')
-                    ->setCellValue('K1', 'TIPO DE COTIZANTE')
-                    ->setCellValue('L1', 'SUBTIPO DE COTIZANTE')
-                    ->setCellValue('M1', 'TIEMPO')
-                    ->setCellValue('N1', 'DESDE')
-                    ->setCellValue('O1', 'HASTA')
-                    ->setCellValue('P1', 'SALARIO')
-                    ->setCellValue('Q1', 'TIPO SALARIO')
-                    ->setCellValue('R1', 'CARGO')
-                    ->setCellValue('S1', 'CARGO DESCRIPCION')
-                    ->setCellValue('T1', 'CLA. RIESGO')
-                    ->setCellValue('U1', 'ULT. PAGO')
-                    ->setCellValue('V1', 'ULT. PAGO PRIMAS')
-                    ->setCellValue('W1', 'ULT. PAGO CESANTIAS')
-                    ->setCellValue('X1', 'ULT. PAGO VACACIONES');
+                    ->setCellValue('K1', 'ENTIDAD CESANTIA')
+                    ->setCellValue('L1', 'TIPO DE COTIZANTE')
+                    ->setCellValue('M1', 'SUBTIPO DE COTIZANTE')
+                    ->setCellValue('N1', 'TIEMPO')
+                    ->setCellValue('O1', 'DESDE')
+                    ->setCellValue('P1', 'HASTA')
+                    ->setCellValue('Q1', 'SALARIO')
+                    ->setCellValue('R1', 'TIPO SALARIO')
+                    ->setCellValue('S1', 'CARGO')
+                    ->setCellValue('T1', 'CARGO DESCRIPCION')
+                    ->setCellValue('U1', 'CLA. RIESGO')
+                    ->setCellValue('V1', 'ULT. PAGO')
+                    ->setCellValue('W1', 'ULT. PAGO PRIMAS')
+                    ->setCellValue('X1', 'ULT. PAGO CESANTIAS')
+                    ->setCellValue('Y1', 'ULT. PAGO VACACIONES');
         $i = 2;
         $query = $em->createQuery($session->get('dqlContratoLista'));
-        //$arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContratos = $query->getResult();
         foreach ($arContratos as $arContrato) {
             if ($arContrato->getCodigoSalarioTipoFk() == null){
                 $tipoSalario = "";
             } else {
                 $tipoSalario = $arContrato->getSalarioTipoRel()->getNombre();
+            }
+            
+            if ($arContrato->getCodigoEntidadCesantiaFk() == null){
+                $entidadCesantia = "";
+            } else {
+                $entidadCesantia = $arContrato->getEntidadCesantiaRel()->getNombre();
             }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arContrato->getCodigoContratoPk())
@@ -788,20 +798,21 @@ class ContratosController extends Controller
                     ->setCellValue('H' . $i, $arContrato->getEntidadSaludRel()->getNombre())
                     ->setCellValue('I' . $i, $arContrato->getEntidadPensionRel()->getNombre())
                     ->setCellValue('J' . $i, $arContrato->getEntidadCajaRel()->getNombre())
-                    ->setCellValue('K' . $i, $arContrato->getSsoTipoCotizanteRel()->getNombre())
-                    ->setCellValue('L' . $i, $arContrato->getSsoSubtipoCotizanteRel()->getNombre())
-                    ->setCellValue('M' . $i, $arContrato->getTipoTiempoRel()->getNombre())
-                    ->setCellValue('N' . $i, $arContrato->getFechaDesde()->Format('Y-m-d'))
-                    ->setCellValue('O' . $i, $arContrato->getFechaHasta()->Format('Y-m-d'))
-                    ->setCellValue('P' . $i, $arContrato->getVrSalario())
-                    ->setCellValue('Q' . $i, $tipoSalario)
-                    ->setCellValue('R' . $i, $arContrato->getCargoRel()->getNombre())
-                    ->setCellValue('S' . $i, $arContrato->getCargoDescripcion())
-                    ->setCellValue('T' . $i, $arContrato->getClasificacionRiesgoRel()->getNombre())
-                    ->setCellValue('U' . $i, $arContrato->getFechaUltimoPago()->Format('Y-m-d'))
-                    ->setCellValue('V' . $i, $arContrato->getFechaUltimoPagoPrimas()->Format('Y-m-d'))
-                    ->setCellValue('W' . $i, $arContrato->getFechaUltimoPagoCesantias()->Format('Y-m-d'))
-                    ->setCellValue('X' . $i, $arContrato->getFechaUltimoPagoVacaciones()->Format('Y-m-d'));
+                    ->setCellValue('K' . $i, $entidadCesantia)
+                    ->setCellValue('L' . $i, $arContrato->getSsoTipoCotizanteRel()->getNombre())
+                    ->setCellValue('M' . $i, $arContrato->getSsoSubtipoCotizanteRel()->getNombre())
+                    ->setCellValue('N' . $i, $arContrato->getTipoTiempoRel()->getNombre())
+                    ->setCellValue('O' . $i, $arContrato->getFechaDesde()->Format('Y-m-d'))
+                    ->setCellValue('P' . $i, $arContrato->getFechaHasta()->Format('Y-m-d'))
+                    ->setCellValue('Q' . $i, $arContrato->getVrSalario())
+                    ->setCellValue('R' . $i, $tipoSalario)
+                    ->setCellValue('S' . $i, $arContrato->getCargoRel()->getNombre())
+                    ->setCellValue('T' . $i, $arContrato->getCargoDescripcion())
+                    ->setCellValue('U' . $i, $arContrato->getClasificacionRiesgoRel()->getNombre())
+                    ->setCellValue('V' . $i, $arContrato->getFechaUltimoPago()->Format('Y-m-d'))
+                    ->setCellValue('W' . $i, $arContrato->getFechaUltimoPagoPrimas()->Format('Y-m-d'))
+                    ->setCellValue('X' . $i, $arContrato->getFechaUltimoPagoCesantias()->Format('Y-m-d'))
+                    ->setCellValue('Y' . $i, $arContrato->getFechaUltimoPagoVacaciones()->Format('Y-m-d'));
             $i++;
         }
         $objPHPExcel->getActiveSheet()->setTitle('contratos');

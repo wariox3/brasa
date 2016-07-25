@@ -99,8 +99,8 @@
                     <td>{{ arContrato.fechaUltimoPagoVacaciones|date("Y/m/d") }}</td>
                     <td class="titulo">ENTIDAD CAJA:</td>
                     <td class="td-in-well">{{ arContrato.entidadCajaRel.nombre|default('SIN CONTRATO') }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">ENTIDAD CESANTIA:</td>
+                    <td class="td-in-well">{{ arContrato.entidadCesantiaRel.nombre|default('') }}</td>
                 </tr>                 
                 <tr>
                     <td colspan="8">COMENTARIOS: {{ arContrato.comentarios }}</td>

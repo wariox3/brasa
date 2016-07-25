@@ -54,6 +54,9 @@ class LicenciasController extends Controller
         $arLicencia = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();       
         if($codigoLicencia != 0) {
             $arLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->find($codigoLicencia);
+            if ($arLicencia->getCodigoLicenciaTipoFk() == 3 && $arLicencia->getEmpleadoRel()->getCodigoSexoFk() == "M"){
+                $objMensaje->Mensaje("error", "La licencia no se le puede aplicar a un hombre", $this);
+            }
         } else {
             $arLicencia->setAfectaTransporte(1);
             $arLicencia->setFechaDesde(new \DateTime('now'));
@@ -65,37 +68,49 @@ class LicenciasController extends Controller
             $arUsuario = $this->get('security.context')->getToken()->getUser();            
             $arLicencia = $form->getData(); 
             $arrControles = $request->request->All();
+            
             if($arrControles['form_txtNumeroIdentificacion'] != '') {
                 $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                 $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));                
                 if(count($arEmpleado) > 0) {
+                    //validar que sea maternidad y sea mujer
+                    $validar = true;
+                    $arTipoLicencia = $form->get('licenciaTipoRel')->getData();
+                    if ($arTipoLicencia->getCodigoLicenciaTipoPk() == 3 && $arEmpleado->getCodigoSexoFk() == 'M'){
+                        $validar = false;
+                    }
+                    // fin validacion
                     $arLicencia->setEmpleadoRel($arEmpleado);
                     if($arLicencia->getFechaDesde() <= $arLicencia->getFechaHasta()) {
                         if($em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->validarFecha($arLicencia->getFechaDesde(), $arLicencia->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(),"")) {                    
                             if($em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->validarFecha($arLicencia->getFechaDesde(), $arLicencia->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(), $arLicencia->getCodigoLicenciaPk())) {
                                 if($arEmpleado->getFechaContrato() <= $arLicencia->getFechaDesde()) {
-                                    $arLicencia->setCentroCostoRel($arEmpleado->getCentroCostoRel());
-                                    $intDias = $arLicencia->getFechaDesde()->diff($arLicencia->getFechaHasta());
-                                    $intDias = $intDias->format('%a');
-                                    $intDias = $intDias + 1;
-                                    $arLicencia->setCantidad($intDias);
-                                    if($codigoLicencia == 0) {
-                                        $arLicencia->setCodigoUsuario($arUsuario->getUserName());
-                                        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-                                        if($arEmpleado->getCodigoContratoActivoFk() != '') {
-                                            $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
-                                        } else {
-                                            $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoUltimoFk());
+                                    if ($validar == true){
+                                        $arLicencia->setCentroCostoRel($arEmpleado->getCentroCostoRel());
+                                        $intDias = $arLicencia->getFechaDesde()->diff($arLicencia->getFechaHasta());
+                                        $intDias = $intDias->format('%a');
+                                        $intDias = $intDias + 1;
+                                        $arLicencia->setCantidad($intDias);
+                                        if($codigoLicencia == 0) {
+                                            $arLicencia->setCodigoUsuario($arUsuario->getUserName());
+                                            $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                                            if($arEmpleado->getCodigoContratoActivoFk() != '') {
+                                                $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
+                                            } else {
+                                                $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoUltimoFk());
+                                            }
+                                            $arLicencia->setContratoRel($arContrato);                                        
                                         }
-                                        $arLicencia->setContratoRel($arContrato);                                        
-                                    }
-                                    $em->persist($arLicencia);
-                                    $em->flush();                        
-                                    if($form->get('guardarnuevo')->isClicked()) {
-                                        return $this->redirect($this->generateUrl('brs_rhu_licencias_nuevo', array('codigoLicencia' => 0)));                                        
+                                        $em->persist($arLicencia);
+                                        $em->flush();                        
+                                        if($form->get('guardarnuevo')->isClicked()) {
+                                            return $this->redirect($this->generateUrl('brs_rhu_licencias_nuevo', array('codigoLicencia' => 0)));                                        
+                                        } else {
+                                            return $this->redirect($this->generateUrl('brs_rhu_licencias_lista'));
+                                        }
                                     } else {
-                                        return $this->redirect($this->generateUrl('brs_rhu_licencias_lista'));
-                                    }                            
+                                        $objMensaje->Mensaje("error", "La licencia no se le puede aplicar a un hombre", $this);
+                                    }   
                                 } else {
                                     $objMensaje->Mensaje("error", "La fecha de inicio del contrato es mayor a la licencia", $this); 
                                 }                        

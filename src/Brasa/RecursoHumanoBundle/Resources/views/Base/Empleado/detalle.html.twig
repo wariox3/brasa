@@ -105,18 +105,18 @@
                         <td class="td-in-well">{% if arEmpleado.cabezaHogar == 1 %} SI {% else %} NO{% endif %}</td>
                     </tr>
                     <tr>
-                        <td class="titulo">HORARIO:</td>
-                        <td><a href="{{ path('brs_rhu_base_horario_listar') }}" target="_blanck" >{{ arEmpleado.horarioRel.nombre|default('SIN HORARIO')  }}</a></td>
+                        <td class="titulo">ENTIDAD CENSANTIA:</td>
+                        <td class="td-in-well">{{ arEmpleado.entidadCesantiaRel.nombre|default('') }}</td>
                         <td class="titulo">TIPO CUENTA:</td>
                         <td class="td-in-well">{% if arEmpleado.tipocuenta == "S" %}AHORRO{% else %}{% if arEmpleado.tipoCuenta == "D" %}CORRIENTE{% else %}SIN TIPO CUENTA{% endif%}{% endif %}</td>
                         <td class="titulo">AUXILIO TRANSPORTE:</td>
                         <td class="td-in-well">{% if arEmpleado.auxilioTransporte == 1 %} SI {% else %} NO{% endif %}</td>
                     </tr>
                     <tr>
+                        <td class="titulo">HORARIO:</td>
+                        <td><a href="{{ path('brs_rhu_base_horario_listar') }}" target="_blanck" >{{ arEmpleado.horarioRel.nombre|default('SIN HORARIO')  }}</a></td>
                         <td class="titulo">TIPO SALARIO:</td>
                         <td>{{ arEmpleado.salarioTipoRel.nombre|default('') }}</td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
                     </tr>

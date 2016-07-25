@@ -102,22 +102,55 @@ class FormatoProcesoDisciplinario extends \FPDF_FPDF {
             $cargo = $arProcesoDisciplinario->getCargoRel()->getNombre();
         }
         $sustitucion3 = $cargo;
-        $sustitucion4 = $arProcesoDisciplinario->getFechaAplicaProceso();
+        if ($arProcesoDisciplinario->getFechaDesdeSancion() == null){
+            $sustitucion4 = new \DateTime('now');
+        } else {
+            $sustitucion4 = $arProcesoDisciplinario->getFechaDesdeSancion();
+        }
+        
+        $sustitucion4 = strftime("%d de ". $this->MesesEspañol($sustitucion4->format('m')) ." de %Y", strtotime($sustitucion4->format('Y/m/d')));
         $sustitucion5 = $arConfiguracion->getNombreEmpresa();
         $sustitucion6 = $arProcesoDisciplinario->getAsunto();
         //$sustitucion7 = $arProcesoDisciplinario->getAsunto();
-        $sustitucion8 = $arProcesoDisciplinario->getDescargos();
+        if ($arProcesoDisciplinario->getCodigoDisciplinarioMotivoFk() == null){
+            $descargos = "";
+        } else {
+            $descargos = $arProcesoDisciplinario->getDisciplinarioMotivoRel()->getNombre();
+        }
+        $sustitucion8 = $descargos;
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arProcesoDisciplinario->getEmpleadoRel()->getCodigoContratoActivoFk());
         $sustitucion9 = $arContrato->getContratoTipoRel()->getNombre();
         $sustitucion10 = $arProcesoDisciplinario->getDisciplinarioTipoRel()->getNombre();
-        $sustitucion11 = $arProcesoDisciplinario->getFechaAplicaHastaProceso();
-        $sustitucion12 = $arProcesoDisciplinario->getFechaIngresoTrabajo();
+        if ($arProcesoDisciplinario->getFechaHastaSancion() == null){
+            $sustitucion11 = new \DateTime('now');
+        } else {
+            $sustitucion11 = $arProcesoDisciplinario->getFechaHastaSancion();
+        }
+        
+        $sustitucion11 = strftime("%d de ". $this->MesesEspañol($sustitucion11->format('m')) ." de %Y", strtotime($sustitucion11->format('Y/m/d'))); 
+        if ($arProcesoDisciplinario->getFechaIngresoTrabajo() == null){
+            $sustitucion12 = new \DateTime('now');
+        } else {
+            $sustitucion12 = $arProcesoDisciplinario->getFechaIngresoTrabajo();
+        }
+        $sustitucion12 = strftime("%d de ". $this->MesesEspañol($sustitucion12->format('m')) ." de %Y", strtotime($sustitucion12->format('Y/m/d')));
         $sustitucion13 = $arProcesoDisciplinario->getDiasSuspencion();
         $sustitucion14 = $arProcesoDisciplinario->getPuesto();
         $sustitucion15 = $arProcesoDisciplinario->getZona();
         $sustitucion16 = $arProcesoDisciplinario->getOperacion();
-        $sustitucion17 = $arProcesoDisciplinario->getFechaIncidente();
+        if ($arProcesoDisciplinario->getFechaIncidente() == null){
+            $sustitucion17 = new \DateTime('now');
+        } else {
+            $sustitucion17 = $arProcesoDisciplinario->getFechaIncidente();
+        }
+        $sustitucion17 = strftime("%d de ". $this->MesesEspañol($sustitucion17->format('m')) ." de %Y", strtotime($sustitucion17->format('Y/m/d')));
+        if ($arProcesoDisciplinario->getFechaNotificacion() == null){
+            $sustitucion18 = new \DateTime('now');
+        } else {
+            $sustitucion18 = $arProcesoDisciplinario->getFechaNotificacion();
+        }
+        $sustitucion18 = strftime("%d de ". $this->MesesEspañol($sustitucion18->format('m')) ." de %Y", strtotime($sustitucion18->format('Y/m/d')));
         //$cadena = $arContenidoFormato->getContenido();
         $patron1 = '/#1/';
         $patron2 = '/#2/';
@@ -136,6 +169,7 @@ class FormatoProcesoDisciplinario extends \FPDF_FPDF {
         $patron15 = '/#f/';
         $patron16 = '/#g/';
         $patron17 = '/#h/';
+        $patron18 = '/#i/';
         $cadenaCambiada = preg_replace($patron1, $sustitucion1, $cadena);
         $cadenaCambiada = preg_replace($patron2, $sustitucion2, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron3, $sustitucion3, $cadenaCambiada);
@@ -153,6 +187,7 @@ class FormatoProcesoDisciplinario extends \FPDF_FPDF {
         $cadenaCambiada = preg_replace($patron15, $sustitucion15, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron16, $sustitucion16, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron17, $sustitucion17, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron18, $sustitucion18, $cadenaCambiada);
         
         $pdf->MultiCell(0,5, $cadenaCambiada);
     }
@@ -160,7 +195,49 @@ class FormatoProcesoDisciplinario extends \FPDF_FPDF {
     public function Footer() {
         //$this->Cell(0,10,'Página '.$this->PageNo(),0,0,'C');
         $this->Image('imagenes/logos/piedepagina.jpg' , 65 ,208, 150 , 90,'JPG');
-    }    
+    } 
+    
+    public static function MesesEspañol($mes) {
+        
+        if ($mes == '01'){
+            $mesEspañol = "Enero";
+        }
+        if ($mes == '02'){
+            $mesEspañol = "Febrero";
+        }
+        if ($mes == '03'){
+            $mesEspañol = "Marzo";
+        }
+        if ($mes == '04'){
+            $mesEspañol = "Abril";
+        }
+        if ($mes == '05'){
+            $mesEspañol = "Mayo";
+        }
+        if ($mes == '06'){
+            $mesEspañol = "Junio";
+        }
+        if ($mes == '07'){
+            $mesEspañol = "Julio";
+        }
+        if ($mes == '08'){
+            $mesEspañol = "Agosto";
+        }
+        if ($mes == '09'){
+            $mesEspañol = "Septiembre";
+        }
+        if ($mes == '10'){
+            $mesEspañol = "Octubre";
+        }
+        if ($mes == '11'){
+            $mesEspañol = "Noviembre";
+        }
+        if ($mes == '12'){
+            $mesEspañol = "Diciembre";
+        }
+
+        return $mesEspañol;
+    }
 }
 
 ?>
