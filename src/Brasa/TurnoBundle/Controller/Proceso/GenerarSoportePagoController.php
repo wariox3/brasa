@@ -589,8 +589,8 @@ class GenerarSoportePagoController extends Controller
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(9); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIGO')
-                    ->setCellValue('B1', 'CODIGO RECURSO')
+                    ->setCellValue('A1', 'ID')
+                    ->setCellValue('B1', 'CODIGO')
                     ->setCellValue('C1', 'IDENTIFICACION')
                     ->setCellValue('D1', 'RECURSO')
                     ->setCellValue('E1', 'CONTRATO')
@@ -634,7 +634,7 @@ class GenerarSoportePagoController extends Controller
         foreach ($arSoportesPago as $arSoportePago) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arSoportePago->getCodigoSoportePagoPk())
-                    ->setCellValue('B' . $i, $arSoportePago->getCodigoRecursoFk())
+                    ->setCellValue('B' . $i, $arSoportePago->getRecursoRel()->getCodigoEmpleadoFk())
                     ->setCellValue('C' . $i, $arSoportePago->getRecursoRel()->getNumeroIdentificacion())
                     ->setCellValue('D' . $i, $arSoportePago->getRecursoRel()->getNombreCorto())
                     ->setCellValue('E' . $i, $arSoportePago->getCodigoContratoFk())
