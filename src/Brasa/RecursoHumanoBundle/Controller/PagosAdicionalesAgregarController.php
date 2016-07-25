@@ -508,7 +508,7 @@ class PagosAdicionalesAgregarController extends Controller
                                 if ($strPeriodoPago == "SEMANAL"){
                                     $intDias = 7;
                                 }
-                                $floSalarioEmpleado = $floVrDia * $intDias;
+                                /*$floSalarioEmpleado = $floVrDia * $intDias;
                                 $floBonificacionMaxima = $floSalarioEmpleado * ($arConfiguracion->getPorcentajeBonificacionNoPrestacional() / 100);
                                 $floBonificacionNoPrestacional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->bonificacionNoPrestacional($arEmpleado->getCodigoEmpleadoPk(), 0);                                
                                 $floBonificacion = $form->get('TxtValor')->getData();
@@ -518,7 +518,9 @@ class PagosAdicionalesAgregarController extends Controller
                                     $objMensaje->Mensaje("error", "La bonificacion NO PRESTACIONAL no puede superar: " . $floBonificacionMaxima . " ya tiene bonificaciones por:" . $floBonificacionNoPrestacional, $this);
                                     return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_valoradicional', array('tipo' => $tipo) ));
                                     $boolError = TRUE;
-                                }                                                                        
+                                }  
+                                 * 
+                                 */                                                                      
                             }
                             if($boolError == FALSE) {
                                 $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();                     
