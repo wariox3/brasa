@@ -794,6 +794,10 @@ brs_rhu_seleccion_detalle:
     path:     /rhu/seleccion/detalle/{codigoSeleccion}
     defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:detalle }
     
+brs_rhu_seleccion_cerrar:
+    path:     /rhu/seleccion/cerrar/{codigoSeleccion}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:cerrar }    
+    
 brs_rhu_aspirante_detalle:
     path:     /rhu/aspirante/detalle/{codigoAspirante}
     defaults: { _controller: BrasaRecursoHumanoBundle:Aspirante:detalle }    

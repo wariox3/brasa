@@ -152,10 +152,10 @@ class ContabilizarPagoBancoController extends Controller
         //Banco
         $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro(); 
         $codigoCuenta = $arPagoBancoDetalle->getPagoBancoRel()->getCuentaRel()->getCodigoCuentaFk();
-        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find(1105);                            
+        $arCuentaBanco = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find(1105);                            
         $arRegistro->setComprobanteRel($arComprobanteContable);
         $arRegistro->setCentroCostoRel($arCentroCosto);
-        $arRegistro->setCuentaRel($arCuenta);
+        $arRegistro->setCuentaRel($arCuentaBanco);
         $arRegistro->setTerceroRel($arTercero);
         $arRegistro->setNumero($arPagoBancoDetalle->getCodigoPagoBancoDetallePk());
         $arRegistro->setNumeroReferencia($arPagoBancoDetalle->getPagoRel()->getNumero());                                
@@ -163,6 +163,7 @@ class ContabilizarPagoBancoController extends Controller
         $arRegistro->setCredito($arPagoBancoDetalle->getVrPago());                            
         $arRegistro->setDescripcionContable($arPagoBancoDetalle->getNombreCorto());
         $em->persist($arRegistro);
+        
         $em->flush();
     }        
     

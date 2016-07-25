@@ -148,10 +148,10 @@ class SeleccionController extends Controller
                 }    
             }
 
-            if($form->get('BtnCerrar')->isClicked()){
+            /*if($form->get('BtnCerrar')->isClicked()){
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->cerrarSeleccion($codigoSeleccion);
                 return $this->redirect($this->generateUrl('brs_rhu_seleccion_detalle', array('codigoSeleccion' => $codigoSeleccion)));
-            }
+            }*/
 
             if ($form->get('BtnEliminarReferencia')->isClicked()){
                 if($arSeleccion->getEstadoAutorizado() == 0) {
@@ -367,6 +367,40 @@ class SeleccionController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Seleccion:agregarEntrevista.html.twig', array('form' => $form->createView()));
     }
 
+    public function cerrarAction($codigoSeleccion) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arSeleccion = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
+        $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);
+        $formSeleccion = $this->createFormBuilder()
+            ->setAction($this->generateUrl('brs_rhu_seleccion_cerrar', array('codigoSeleccion' => $codigoSeleccion)))
+            ->add('comentarios', 'textarea', array('data' =>$arSeleccion->getComentarios() ,'required' => true))                      
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        $formSeleccion->handleRequest($request);
+           
+        if ($formSeleccion->isValid()) {
+            if ($arSeleccion->getEstadoAutorizado() == 1){
+                $arUsuario = $this->get('security.context')->getToken()->getUser();
+                $arSeleccion->setComentarios($formSeleccion->get('comentarios')->getData());
+                $arSeleccion->setCodigoUsuario($arUsuario->getUserName());
+                $arSeleccion->setEstadoCerrado(1);
+                $em->persist($arSeleccion);
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_rhu_seleccion_detalle', array('codigoSeleccion' => $codigoSeleccion)));
+            } else {
+                $objMensaje->Mensaje("error", "El proceso de seleccion debe estar autorizado", $this);
+                return $this->redirect($this->generateUrl('brs_rhu_seleccion_detalle', array('codigoSeleccion' => $codigoSeleccion)));
+            }
+            
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Seleccion:cerrarSeleccion.html.twig', array(
+            'arSeleccion' => $arSeleccion,
+            'formSeleccion' => $formSeleccion->createView()
+        ));
+    }
+    
     private function listar() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -435,11 +469,11 @@ class SeleccionController extends Controller
         $arrBotonEliminarEntrevista = array('label' => 'Eliminar Entrevista', 'disabled' => false);
         $arrBotonDetalleVerificarReferencia = array('label' => 'Verificar', 'disabled' => false);
         $arrBotonAprobar = array('label' => 'Aprobar', 'disabled' => false);
-        $arrBotonCerrar = array('label' => 'Cerrar', 'disabled' => false);
+        //$arrBotonCerrar = array('label' => 'Cerrar', 'disabled' => false);
         if($ar->getEstadoAutorizado() == 0) {
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonAprobar['disabled'] = true;
-            $arrBotonCerrar['disabled'] = true;
+            //$arrBotonCerrar['disabled'] = true;
         } else {
             $arrBotonDetalleVerificarReferencia['disabled'] = true;
             $arrBotonAutorizar['disabled'] = true;
@@ -453,11 +487,11 @@ class SeleccionController extends Controller
             $arrBotonAprobar['disabled'] = true;
         }
         if ($ar->getEstadoCerrado() == 1){
-            $arrBotonCerrar['disabled'] = true;
+            //$arrBotonCerrar['disabled'] = true;
         }
         $form = $this->createFormBuilder()
                     ->add('BtnAprobar', 'submit', $arrBotonAprobar)
-                    ->add('BtnCerrar', 'submit', $arrBotonCerrar)
+                    //->add('BtnCerrar', 'submit', $arrBotonCerrar)
                     ->add('BtnDetalleVerificarReferencia', 'submit', $arrBotonDetalleVerificarReferencia)
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)
                     ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)

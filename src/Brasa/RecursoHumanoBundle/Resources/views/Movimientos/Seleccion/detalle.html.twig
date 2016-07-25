@@ -17,7 +17,9 @@
         {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
         {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
         {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-        {{ form_widget(form.BtnCerrar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}        
+        {% if arSeleccion.estadoAutorizado == 1 %}
+        <a class="btn btn-default btn-sm" id="{{ path('brs_rhu_seleccion_cerrar', { 'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}" style="float:left">Cerrar</a>
+        {% endif %}
         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 1,  'numero': arSeleccion.codigoSeleccionPk }) }}', 'Archivos', 500, 700)" >Archivos</a>        
     </div>
     <br /> <br />

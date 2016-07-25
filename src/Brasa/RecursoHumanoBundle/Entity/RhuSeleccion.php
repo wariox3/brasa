@@ -274,7 +274,7 @@ class RhuSeleccion
      * @ORM\ManyToOne(targetEntity="RhuZona", inversedBy="seleccionesZonaRel")
      * @ORM\JoinColumn(name="codigo_zona_fk", referencedColumnName="codigo_zona_pk")
      */
-    protected $zonaRel;    
+    protected $zonaRel;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuSeleccionReferencia", mappedBy="seleccionRel")
@@ -295,7 +295,6 @@ class RhuSeleccion
      * @ORM\OneToMany(targetEntity="RhuSeleccionEntrevista", mappedBy="seleccionRel")
      */
     protected $seleccionesEntrevistasSeleccionRel;
-    
     
     
     /**
@@ -1184,6 +1183,30 @@ class RhuSeleccion
     }
 
     /**
+     * Set codigoZonaFk
+     *
+     * @param integer $codigoZonaFk
+     *
+     * @return RhuSeleccion
+     */
+    public function setCodigoZonaFk($codigoZonaFk)
+    {
+        $this->codigoZonaFk = $codigoZonaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoZonaFk
+     *
+     * @return integer
+     */
+    public function getCodigoZonaFk()
+    {
+        return $this->codigoZonaFk;
+    }
+
+    /**
      * Set seleccionTipoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionTipo $seleccionTipoRel
@@ -1448,6 +1471,30 @@ class RhuSeleccion
     }
 
     /**
+     * Set zonaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuZona $zonaRel
+     *
+     * @return RhuSeleccion
+     */
+    public function setZonaRel(\Brasa\RecursoHumanoBundle\Entity\RhuZona $zonaRel = null)
+    {
+        $this->zonaRel = $zonaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get zonaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuZona
+     */
+    public function getZonaRel()
+    {
+        return $this->zonaRel;
+    }
+
+    /**
      * Add seleccionesReferenciasSeleccionRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionReferencia $seleccionesReferenciasSeleccionRel
@@ -1581,53 +1628,5 @@ class RhuSeleccion
     public function getSeleccionesEntrevistasSeleccionRel()
     {
         return $this->seleccionesEntrevistasSeleccionRel;
-    }
-
-    /**
-     * Set codigoZonaFk
-     *
-     * @param integer $codigoZonaFk
-     *
-     * @return RhuSeleccion
-     */
-    public function setCodigoZonaFk($codigoZonaFk)
-    {
-        $this->codigoZonaFk = $codigoZonaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoZonaFk
-     *
-     * @return integer
-     */
-    public function getCodigoZonaFk()
-    {
-        return $this->codigoZonaFk;
-    }
-
-    /**
-     * Set zonaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuZona $zonaRel
-     *
-     * @return RhuSeleccion
-     */
-    public function setZonaRel(\Brasa\RecursoHumanoBundle\Entity\RhuZona $zonaRel = null)
-    {
-        $this->zonaRel = $zonaRel;
-
-        return $this;
-    }
-
-    /**
-     * Get zonaRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuZona
-     */
-    public function getZonaRel()
-    {
-        return $this->zonaRel;
     }
 }
