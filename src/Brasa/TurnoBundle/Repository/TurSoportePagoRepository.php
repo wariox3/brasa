@@ -707,7 +707,11 @@ class TurSoportePagoRepository extends EntityRepository {
             $horasCompensarNoche = round($porExtraNocturna * $horasPorCompensar);
             $horasCompensarFestivaDia = round($porExtraFestivaDiurna * $horasPorCompensar);
             $horasCompensarFestivaNoche = round($porExtraFestivaNocturna * $horasPorCompensar);                    
-
+            //Para tema de redondeo
+            $horasCompensadas = $horasCompensarDia + $horasCompensarNoche + $horasCompensarFestivaDia + $horasCompensarFestivaNoche;
+            if($horasCompensadas > $horasPorCompensar) {
+                $horasCompensarFestivaNoche -= 1;
+            }
             //$horasCompensarFestivaNoche = $this->truncateFloat($porExtraFestivaNocturna * $horasPorCompensar, 1);                    
 
 
