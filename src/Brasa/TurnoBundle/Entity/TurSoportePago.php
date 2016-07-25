@@ -70,7 +70,7 @@ class TurSoportePago
     /**     
      * @ORM\Column(name="turno_fijo", type="boolean", nullable=true)
      */    
-    private $turno_fijo = false;    
+    private $turnoFijo = false;    
     
     /**
      * @ORM\Column(name="descanso", type="float")
@@ -418,6 +418,78 @@ class TurSoportePago
     }
 
     /**
+     * Set vrPago
+     *
+     * @param float $vrPago
+     *
+     * @return TurSoportePago
+     */
+    public function setVrPago($vrPago)
+    {
+        $this->vrPago = $vrPago;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPago
+     *
+     * @return float
+     */
+    public function getVrPago()
+    {
+        return $this->vrPago;
+    }
+
+    /**
+     * Set vrAuxilioTransporte
+     *
+     * @param float $vrAuxilioTransporte
+     *
+     * @return TurSoportePago
+     */
+    public function setVrAuxilioTransporte($vrAuxilioTransporte)
+    {
+        $this->vrAuxilioTransporte = $vrAuxilioTransporte;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAuxilioTransporte
+     *
+     * @return float
+     */
+    public function getVrAuxilioTransporte()
+    {
+        return $this->vrAuxilioTransporte;
+    }
+
+    /**
+     * Set vrDevengado
+     *
+     * @param float $vrDevengado
+     *
+     * @return TurSoportePago
+     */
+    public function setVrDevengado($vrDevengado)
+    {
+        $this->vrDevengado = $vrDevengado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrDevengado
+     *
+     * @return float
+     */
+    public function getVrDevengado()
+    {
+        return $this->vrDevengado;
+    }
+
+    /**
      * Set estadoCerrado
      *
      * @param boolean $estadoCerrado
@@ -439,6 +511,30 @@ class TurSoportePago
     public function getEstadoCerrado()
     {
         return $this->estadoCerrado;
+    }
+
+    /**
+     * Set turnoFijo
+     *
+     * @param boolean $turnoFijo
+     *
+     * @return TurSoportePago
+     */
+    public function setTurnoFijo($turnoFijo)
+    {
+        $this->turnoFijo = $turnoFijo;
+
+        return $this;
+    }
+
+    /**
+     * Get turnoFijo
+     *
+     * @return boolean
+     */
+    public function getTurnoFijo()
+    {
+        return $this->turnoFijo;
     }
 
     /**
@@ -538,6 +634,30 @@ class TurSoportePago
     }
 
     /**
+     * Set licenciaNoRemunerada
+     *
+     * @param integer $licenciaNoRemunerada
+     *
+     * @return TurSoportePago
+     */
+    public function setLicenciaNoRemunerada($licenciaNoRemunerada)
+    {
+        $this->licenciaNoRemunerada = $licenciaNoRemunerada;
+
+        return $this;
+    }
+
+    /**
+     * Get licenciaNoRemunerada
+     *
+     * @return integer
+     */
+    public function getLicenciaNoRemunerada()
+    {
+        return $this->licenciaNoRemunerada;
+    }
+
+    /**
      * Set vacacion
      *
      * @param integer $vacacion
@@ -562,6 +682,54 @@ class TurSoportePago
     }
 
     /**
+     * Set ingreso
+     *
+     * @param integer $ingreso
+     *
+     * @return TurSoportePago
+     */
+    public function setIngreso($ingreso)
+    {
+        $this->ingreso = $ingreso;
+
+        return $this;
+    }
+
+    /**
+     * Get ingreso
+     *
+     * @return integer
+     */
+    public function getIngreso()
+    {
+        return $this->ingreso;
+    }
+
+    /**
+     * Set retiro
+     *
+     * @param integer $retiro
+     *
+     * @return TurSoportePago
+     */
+    public function setRetiro($retiro)
+    {
+        $this->retiro = $retiro;
+
+        return $this;
+    }
+
+    /**
+     * Get retiro
+     *
+     * @return integer
+     */
+    public function getRetiro()
+    {
+        return $this->retiro;
+    }
+
+    /**
      * Set dias
      *
      * @param float $dias
@@ -583,6 +751,30 @@ class TurSoportePago
     public function getDias()
     {
         return $this->dias;
+    }
+
+    /**
+     * Set diasTransporte
+     *
+     * @param integer $diasTransporte
+     *
+     * @return TurSoportePago
+     */
+    public function setDiasTransporte($diasTransporte)
+    {
+        $this->diasTransporte = $diasTransporte;
+
+        return $this;
+    }
+
+    /**
+     * Get diasTransporte
+     *
+     * @return integer
+     */
+    public function getDiasTransporte()
+    {
+        return $this->diasTransporte;
     }
 
     /**
@@ -874,184 +1066,6 @@ class TurSoportePago
     }
 
     /**
-     * Set usuario
-     *
-     * @param string $usuario
-     *
-     * @return TurSoportePago
-     */
-    public function setUsuario($usuario)
-    {
-        $this->usuario = $usuario;
-
-        return $this;
-    }
-
-    /**
-     * Get usuario
-     *
-     * @return string
-     */
-    public function getUsuario()
-    {
-        return $this->usuario;
-    }
-
-    /**
-     * Set diaFestivo
-     *
-     * @param integer $diaFestivo
-     *
-     * @return TurSoportePago
-     */
-    public function setDiaFestivo($diaFestivo)
-    {
-        $this->diaFestivo = $diaFestivo;
-
-        return $this;
-    }
-
-    /**
-     * Get diaFestivo
-     *
-     * @return integer
-     */
-    public function getDiaFestivo()
-    {
-        return $this->diaFestivo;
-    }
-
-    /**
-     * Set diaDomingo
-     *
-     * @param integer $diaDomingo
-     *
-     * @return TurSoportePago
-     */
-    public function setDiaDomingo($diaDomingo)
-    {
-        $this->diaDomingo = $diaDomingo;
-
-        return $this;
-    }
-
-    /**
-     * Get diaDomingo
-     *
-     * @return integer
-     */
-    public function getDiaDomingo()
-    {
-        return $this->diaDomingo;
-    }
-
-    /**
-     * Set soportePagoPeriodoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportePagoPeriodoRel
-     *
-     * @return TurSoportePago
-     */
-    public function setSoportePagoPeriodoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportePagoPeriodoRel = null)
-    {
-        $this->soportePagoPeriodoRel = $soportePagoPeriodoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get soportePagoPeriodoRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo
-     */
-    public function getSoportePagoPeriodoRel()
-    {
-        return $this->soportePagoPeriodoRel;
-    }
-
-    /**
-     * Set recursoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurRecurso $recursoRel
-     *
-     * @return TurSoportePago
-     */
-    public function setRecursoRel(\Brasa\TurnoBundle\Entity\TurRecurso $recursoRel = null)
-    {
-        $this->recursoRel = $recursoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get recursoRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurRecurso
-     */
-    public function getRecursoRel()
-    {
-        return $this->recursoRel;
-    }
-
-    /**
-     * Add soportesPagosDetallesSoportePagoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoRel
-     *
-     * @return TurSoportePago
-     */
-    public function addSoportesPagosDetallesSoportePagoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoRel)
-    {
-        $this->soportesPagosDetallesSoportePagoRel[] = $soportesPagosDetallesSoportePagoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove soportesPagosDetallesSoportePagoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoRel
-     */
-    public function removeSoportesPagosDetallesSoportePagoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoRel)
-    {
-        $this->soportesPagosDetallesSoportePagoRel->removeElement($soportesPagosDetallesSoportePagoRel);
-    }
-
-    /**
-     * Get soportesPagosDetallesSoportePagoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSoportesPagosDetallesSoportePagoRel()
-    {
-        return $this->soportesPagosDetallesSoportePagoRel;
-    }
-
-    /**
-     * Set vrPago
-     *
-     * @param float $vrPago
-     *
-     * @return TurSoportePago
-     */
-    public function setVrPago($vrPago)
-    {
-        $this->vrPago = $vrPago;
-
-        return $this;
-    }
-
-    /**
-     * Get vrPago
-     *
-     * @return float
-     */
-    public function getVrPago()
-    {
-        return $this->vrPago;
-    }
-
-    /**
      * Set horasDescansoReales
      *
      * @param float $horasDescansoReales
@@ -1292,170 +1306,108 @@ class TurSoportePago
     }
 
     /**
-     * Set vrAuxilioTransporte
+     * Set usuario
      *
-     * @param float $vrAuxilioTransporte
+     * @param string $usuario
      *
      * @return TurSoportePago
      */
-    public function setVrAuxilioTransporte($vrAuxilioTransporte)
+    public function setUsuario($usuario)
     {
-        $this->vrAuxilioTransporte = $vrAuxilioTransporte;
+        $this->usuario = $usuario;
 
         return $this;
     }
 
     /**
-     * Get vrAuxilioTransporte
+     * Get usuario
      *
-     * @return float
+     * @return string
      */
-    public function getVrAuxilioTransporte()
+    public function getUsuario()
     {
-        return $this->vrAuxilioTransporte;
+        return $this->usuario;
     }
 
     /**
-     * Set vrDevengado
+     * Set soportePagoPeriodoRel
      *
-     * @param float $vrDevengado
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportePagoPeriodoRel
      *
      * @return TurSoportePago
      */
-    public function setVrDevengado($vrDevengado)
+    public function setSoportePagoPeriodoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportePagoPeriodoRel = null)
     {
-        $this->vrDevengado = $vrDevengado;
+        $this->soportePagoPeriodoRel = $soportePagoPeriodoRel;
 
         return $this;
     }
 
     /**
-     * Get vrDevengado
+     * Get soportePagoPeriodoRel
      *
-     * @return float
+     * @return \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo
      */
-    public function getVrDevengado()
+    public function getSoportePagoPeriodoRel()
     {
-        return $this->vrDevengado;
+        return $this->soportePagoPeriodoRel;
     }
 
     /**
-     * Set ingreso
+     * Set recursoRel
      *
-     * @param integer $ingreso
+     * @param \Brasa\TurnoBundle\Entity\TurRecurso $recursoRel
      *
      * @return TurSoportePago
      */
-    public function setIngreso($ingreso)
+    public function setRecursoRel(\Brasa\TurnoBundle\Entity\TurRecurso $recursoRel = null)
     {
-        $this->ingreso = $ingreso;
+        $this->recursoRel = $recursoRel;
 
         return $this;
     }
 
     /**
-     * Get ingreso
+     * Get recursoRel
      *
-     * @return integer
+     * @return \Brasa\TurnoBundle\Entity\TurRecurso
      */
-    public function getIngreso()
+    public function getRecursoRel()
     {
-        return $this->ingreso;
+        return $this->recursoRel;
     }
 
     /**
-     * Set retiro
+     * Add soportesPagosDetallesSoportePagoRel
      *
-     * @param integer $retiro
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoRel
      *
      * @return TurSoportePago
      */
-    public function setRetiro($retiro)
+    public function addSoportesPagosDetallesSoportePagoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoRel)
     {
-        $this->retiro = $retiro;
+        $this->soportesPagosDetallesSoportePagoRel[] = $soportesPagosDetallesSoportePagoRel;
 
         return $this;
     }
 
     /**
-     * Get retiro
+     * Remove soportesPagosDetallesSoportePagoRel
      *
-     * @return integer
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoRel
      */
-    public function getRetiro()
+    public function removeSoportesPagosDetallesSoportePagoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoRel)
     {
-        return $this->retiro;
+        $this->soportesPagosDetallesSoportePagoRel->removeElement($soportesPagosDetallesSoportePagoRel);
     }
 
     /**
-     * Set licenciaNoRemunerada
+     * Get soportesPagosDetallesSoportePagoRel
      *
-     * @param integer $licenciaNoRemunerada
-     *
-     * @return TurSoportePago
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setLicenciaNoRemunerada($licenciaNoRemunerada)
+    public function getSoportesPagosDetallesSoportePagoRel()
     {
-        $this->licenciaNoRemunerada = $licenciaNoRemunerada;
-
-        return $this;
-    }
-
-    /**
-     * Get licenciaNoRemunerada
-     *
-     * @return integer
-     */
-    public function getLicenciaNoRemunerada()
-    {
-        return $this->licenciaNoRemunerada;
-    }
-
-    /**
-     * Set diasTransporte
-     *
-     * @param integer $diasTransporte
-     *
-     * @return TurSoportePago
-     */
-    public function setDiasTransporte($diasTransporte)
-    {
-        $this->diasTransporte = $diasTransporte;
-
-        return $this;
-    }
-
-    /**
-     * Get diasTransporte
-     *
-     * @return integer
-     */
-    public function getDiasTransporte()
-    {
-        return $this->diasTransporte;
-    }
-
-    /**
-     * Set turnoFijo
-     *
-     * @param boolean $turnoFijo
-     *
-     * @return TurSoportePago
-     */
-    public function setTurnoFijo($turnoFijo)
-    {
-        $this->turno_fijo = $turnoFijo;
-
-        return $this;
-    }
-
-    /**
-     * Get turnoFijo
-     *
-     * @return boolean
-     */
-    public function getTurnoFijo()
-    {
-        return $this->turno_fijo;
+        return $this->soportesPagosDetallesSoportePagoRel;
     }
 }
