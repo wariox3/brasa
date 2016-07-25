@@ -253,6 +253,53 @@ class GenerarSoportePagoController extends Controller
     }     
     
     /**
+     * @Route("/tur/proceso/generar/soporte/pago/inconsistencia/{codigoSoportePago}", name="brs_tur_proceso_generar_soporte_pago_inconsistencia")
+     */    
+    public function inconsistenciasAction($codigoSoportePago) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+        $arSoportePago =  $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($codigoSoportePago);                                        
+        $form = $this->formularioVer();
+        $form->handleRequest($request);
+        $this->listaDetalle($codigoSoportePago, "");
+        if ($form->isValid()) {
+            if ($form->get('BtnActualizar')->isClicked()) {                
+                set_time_limit(0);
+                ini_set("memory_limit", -1);                
+                $arSoportePago->setHorasDescansoReales(0);
+                $arSoportePago->setHorasDiurnasReales(0);
+                $arSoportePago->setHorasNocturnasReales(0);
+                $arSoportePago->setHorasFestivasDiurnasReales(0);
+                $arSoportePago->setHorasFestivasNocturnasReales(0);
+                $arSoportePago->setHorasExtrasOrdinariasDiurnasReales(0);
+                $arSoportePago->setHorasExtrasOrdinariasNocturnasReales(0);
+                $arSoportePago->setHorasExtrasFestivasDiurnasReales(0);
+                $arSoportePago->setHorasExtrasFestivasNocturnasReales(0); 
+                $strSql = "DELETE FROM tur_soporte_pago_detalle WHERE codigo_soporte_pago_fk = " . $codigoSoportePago;           
+                $em->getConnection()->executeQuery($strSql);
+                
+                $arSoportePagoPeriodo = $arSoportePago->getSoportePagoPeriodoRel();
+                $dateFechaDesde = $arSoportePagoPeriodo->getFechaDesde();
+                $dateFechaHasta = $arSoportePagoPeriodo->getFechaHasta();
+                $intDiaInicial = $dateFechaDesde->format('j');
+                $intDiaFinal = $dateFechaHasta->format('j');
+                $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($dateFechaDesde->format('Y-m-').'01', $dateFechaHasta->format('Y-m-').'31');
+                $em->getRepository('BrasaTurnoBundle:TurSoportePago')->generar($arSoportePago, $arSoportePago->getSoportePagoPeriodoRel(), $intDiaInicial, $intDiaFinal, $arFestivos, $dateFechaDesde, $dateFechaHasta, $arSoportePago->getCodigoRecursoFk());
+                return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago_detalle_ver', array('codigoSoportePago' => $codigoSoportePago)));                                
+            }
+        }        
+        
+        $dql =  $em->getRepository('BrasaTurnoBundle:TurSoportePagoInconsistencia')->listaDql($codigoSoportePago);                        
+        $arSoportePagoInconsistencia = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 200);        
+        return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:inconsistencia.html.twig', array(                        
+            'arSoportePago' => $arSoportePago,
+            'arSoportePagoInconsistencia' => $arSoportePagoInconsistencia,
+            'form' => $form->createView()));
+    }    
+    
+    /**
      * @Route("/tur/proceso/generar/soporte/pago/nuevo/{codigoSoportePagoPeriodo}", name="brs_tur_proceso_generar_soporte_pago_nuevo")
      */    
     public function nuevoAction($codigoSoportePagoPeriodo) {

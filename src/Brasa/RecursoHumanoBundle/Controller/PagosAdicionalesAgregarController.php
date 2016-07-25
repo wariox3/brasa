@@ -484,7 +484,14 @@ class PagosAdicionalesAgregarController extends Controller
                                 $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);        
                                 $floSalario = $arEmpleado->getVrSalario();
                                 $floVrDia = ($floSalario / 30);
-                                $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arEmpleado->getCodigoCentroCostoFk());        
+                                if($arEmpleado->getCodigoContratoActivoFk()) {
+                                    $codigoContrato = $arEmpleado->getCodigoContratoActivoFk();
+                                } else {
+                                    $codigoContrato = $arEmpleado->getCodigoContratoUltimoFk();
+                                }
+                                $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                                $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);                                
+                                $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arContrato->getCodigoCentroCostoFk());        
                                 $strPeriodoPago = $arCentroCosto->getPeriodoPagoRel()->getNombre();
                                 if ($strPeriodoPago == "MENSUAL"){
                                     $intDias = 30;
