@@ -55,13 +55,21 @@ class CtbCuenta
      * @ORM\OneToMany(targetEntity="CtbAsientoDetalle", mappedBy="cuentaRel")
      */
     protected $asientosDetallesCuentaRel;
-
+    
+    /**
+     * @ORM\OneToMany(targetEntity="CtbRegistro", mappedBy="cuentaRel")
+     */
+    protected $registrosCuentasRel;
+    
+    
+    
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->asientosDetallesCuentaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->registrosCuentasRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -264,5 +272,39 @@ class CtbCuenta
     public function getAsientosDetallesCuentaRel()
     {
         return $this->asientosDetallesCuentaRel;
+    }
+
+    /**
+     * Add registrosCuentasRel
+     *
+     * @param \Brasa\ContabilidadBundle\Entity\CtbRegistro $registrosCuentasRel
+     *
+     * @return CtbCuenta
+     */
+    public function addRegistrosCuentasRel(\Brasa\ContabilidadBundle\Entity\CtbRegistro $registrosCuentasRel)
+    {
+        $this->registrosCuentasRel[] = $registrosCuentasRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove registrosCuentasRel
+     *
+     * @param \Brasa\ContabilidadBundle\Entity\CtbRegistro $registrosCuentasRel
+     */
+    public function removeRegistrosCuentasRel(\Brasa\ContabilidadBundle\Entity\CtbRegistro $registrosCuentasRel)
+    {
+        $this->registrosCuentasRel->removeElement($registrosCuentasRel);
+    }
+
+    /**
+     * Get registrosCuentasRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRegistrosCuentasRel()
+    {
+        return $this->registrosCuentasRel;
     }
 }

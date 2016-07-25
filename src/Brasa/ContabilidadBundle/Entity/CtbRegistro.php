@@ -80,7 +80,7 @@ class CtbRegistro
               
     
     /**
-     * @ORM\ManyToOne(targetEntity="CtbCuenta", inversedBy="CtbRegistro")
+     * @ORM\ManyToOne(targetEntity="CtbCuenta", inversedBy="registrosCuentasRel")
      * @ORM\JoinColumn(name="codigo_cuenta_fk", referencedColumnName="codigo_cuenta_pk")
      */
     protected $cuentaRel;       
@@ -105,6 +105,8 @@ class CtbRegistro
 
 
 
+
+    
 
     /**
      * Get codigoRegistroPk

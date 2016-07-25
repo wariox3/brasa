@@ -4234,6 +4234,15 @@ insert into `rhu_academia` (`codigo_academia_pk`, `codigo_ciudad_fk`, `nit`, `no
 insert into `rhu_academia` (`codigo_academia_pk`, `codigo_ciudad_fk`, `nit`, `nombre`, `sede`, `direccion`, `telefono`) values('114',NULL,'8050147166','V.I.P. SECURITY LTDA','Principal','','1');
 insert into `rhu_academia` (`codigo_academia_pk`, `codigo_ciudad_fk`, `nit`, `nombre`, `sede`, `direccion`, `telefono`) values('115',NULL,'9000294652','VIP ACADEMY LTDA.','Principal','','1');
 
+insert into `rhu_zona` (`codigo_zona_pk`, `nombre`) values('1','Zona centro');
+insert into `rhu_zona` (`codigo_zona_pk`, `nombre`) values('2','Zona norte');
+insert into `rhu_zona` (`codigo_zona_pk`, `nombre`) values('3','Zona sur');
+
+insert into `rhu_subzona` (`codigo_subzona_pk`, `nombre`) values('1','MEDELLIN');
+insert into `rhu_subzona` (`codigo_subzona_pk`, `nombre`) values('2','BOGOTA');
+insert into `rhu_subzona` (`codigo_subzona_pk`, `nombre`) values('3','BARRANQUILLA');
+insert into `rhu_subzona` (`codigo_subzona_pk`, `nombre`) values('4','VILLAVICENCIO');
+
 insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('1','ADMINISTRATIVO');
 insert into `rhu_departamento_empresa` (`codigo_departamento_empresa_pk`, `nombre`) values('2','OPERATIVO');
 
@@ -4529,6 +4538,13 @@ INSERT INTO `rhu_entidad_salud` (`codigo_entidad_salud_pk`, `nombre`, `nit`, `di
 INSERT INTO `rhu_entidad_salud` (`codigo_entidad_salud_pk`, `nombre`, `nit`, `direccion`, `telefono`, `codigo_interface`) VALUES('54','UNIVERSIDAD DE CORDOBA                            ','891080031','1','1','RES012');
 INSERT INTO `rhu_entidad_salud` (`codigo_entidad_salud_pk`, `nombre`, `nit`, `direccion`, `telefono`, `codigo_interface`) VALUES('55','UPTC                                    ','891800330','1','1','RES014');
 INSERT INTO `rhu_entidad_salud` (`codigo_entidad_salud_pk`, `nombre`, `nit`, `direccion`, `telefono`, `codigo_interface`) VALUES('56','FOSYGA','900047282','1','1','MIN001');
+
+insert into `rhu_entidad_cesantia` (`codigo_entidad_cesantia_pk`, `nombre`, `nit`, `direccion`, `telefono`, `codigo_interface`) values('1','PROTECCION','1','1','1','1');
+insert into `rhu_entidad_cesantia` (`codigo_entidad_cesantia_pk`, `nombre`, `nit`, `direccion`, `telefono`, `codigo_interface`) values('2','PORVENIR','1','1','1','1');
+insert into `rhu_entidad_cesantia` (`codigo_entidad_cesantia_pk`, `nombre`, `nit`, `direccion`, `telefono`, `codigo_interface`) values('3','SKANDIA','1','1','1','1');
+insert into `rhu_entidad_cesantia` (`codigo_entidad_cesantia_pk`, `nombre`, `nit`, `direccion`, `telefono`, `codigo_interface`) values('4','COLFONDOS','1','1','1','1');
+insert into `rhu_entidad_cesantia` (`codigo_entidad_cesantia_pk`, `nombre`, `nit`, `direccion`, `telefono`, `codigo_interface`) values('5','COLPENSIONES','1','1','1','1');
+insert into `rhu_entidad_cesantia` (`codigo_entidad_cesantia_pk`, `nombre`, `nit`, `direccion`, `telefono`, `codigo_interface`) values('6','SIN FONDO','1','1','1','1');
 
 INSERT INTO `rhu_estado_civil` (`codigo_estado_civil_pk`, `nombre`) VALUES('C','CASADO');
 INSERT INTO `rhu_estado_civil` (`codigo_estado_civil_pk`, `nombre`) VALUES('D','DIVORCIADO');

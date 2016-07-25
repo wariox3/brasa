@@ -39,7 +39,8 @@ class ContabilizarPagoBancoController extends Controller
                         if($arPagoBancoDetalle->getEstadoContabilizado() == 0) {
                             $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arPagoBancoDetalle->getNumeroIdentificacion()));
                             if(count($arTercero) > 0) {                              
-                                $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->contabilizarPagoBanco($codigo,$arComprobanteContable,$arCentroCosto,$arTercero,$arPagoBancoDetalle);  
+                                //$em->getRepository('BrasaContabilidadBundle:CtbRegistro')->contabilizarPagoBanco($codigo,$arComprobanteContable,$arCentroCosto,$arTercero,$arPagoBancoDetalle);  
+                                $this->contabilizarPagoBanco($codigo,$arComprobanteContable,$arCentroCosto,$arTercero,$arPagoBancoDetalle);  
                                 $arPagoBancoDetalle->setEstadoContabilizado(1);
                                 $em->persist($arPagoBancoDetalle);  
                             }else {
@@ -58,7 +59,8 @@ class ContabilizarPagoBancoController extends Controller
                                 $arTercero->setCelular($arPago->getEmpleadoRel()->getCelular());
                                 $arTercero->setEmail($arPago->getEmpleadoRel()->getCorreo());
                                 $em->persist($arTercero); 
-                                $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->contabilizarPagoBanco($codigo,$arComprobanteContable,$arCentroCosto,$arTercero,$arPagoBancoDetalle);  
+                                //$em->getRepository('BrasaContabilidadBundle:CtbRegistro')->contabilizarPagoBanco($codigo,$arComprobanteContable,$arCentroCosto,$arTercero,$arPagoBancoDetalle);  
+                                $this->contabilizarPagoBanco($codigo,$arComprobanteContable,$arCentroCosto,$arTercero,$arPagoBancoDetalle);  
                                 $arPagoBancoDetalle->setEstadoContabilizado(1);
                                 $em->persist($arPagoBancoDetalle); 
                             }                                                   
@@ -123,7 +125,9 @@ class ContabilizarPagoBancoController extends Controller
     private function listar() {
         $em = $this->getDoctrine()->getManager();                
         $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->pendientesContabilizarDql();  
-    } 
+    }
+    
+    
     
     public function contabilizarPagoBanco($codigo,$arComprobanteContable,$arCentroCosto,$arTercero,$arPagoBancoDetalle) {
         $em = $this->getDoctrine()->getManager();
@@ -131,7 +135,9 @@ class ContabilizarPagoBancoController extends Controller
         $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion;
         $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
         $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arConfiguracionNomina->getCuentaPago());                            
+        //$arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arConfiguracionNomina->getCuentaPago());                            
+        $arCuenta = new \Brasa\ContabilidadBundle\Entity\CtbCuenta();
+        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find(1105);                            
         $arRegistro->setComprobanteRel($arComprobanteContable);
         $arRegistro->setCentroCostoRel($arCentroCosto);
         $arRegistro->setCuentaRel($arCuenta);
@@ -146,7 +152,7 @@ class ContabilizarPagoBancoController extends Controller
         //Banco
         $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro(); 
         $codigoCuenta = $arPagoBancoDetalle->getPagoBancoRel()->getCuentaRel()->getCodigoCuentaFk();
-        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($codigoCuenta);                            
+        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find(1105);                            
         $arRegistro->setComprobanteRel($arComprobanteContable);
         $arRegistro->setCentroCostoRel($arCentroCosto);
         $arRegistro->setCuentaRel($arCuenta);
