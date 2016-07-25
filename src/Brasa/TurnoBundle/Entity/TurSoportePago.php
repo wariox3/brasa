@@ -67,6 +67,11 @@ class TurSoportePago
      */    
     private $estadoCerrado = false;    
 
+    /**     
+     * @ORM\Column(name="turno_fijo", type="boolean", nullable=true)
+     */    
+    private $turno_fijo = false;    
+    
     /**
      * @ORM\Column(name="descanso", type="float")
      */    
@@ -1428,5 +1433,29 @@ class TurSoportePago
     public function getDiasTransporte()
     {
         return $this->diasTransporte;
+    }
+
+    /**
+     * Set turnoFijo
+     *
+     * @param boolean $turnoFijo
+     *
+     * @return TurSoportePago
+     */
+    public function setTurnoFijo($turnoFijo)
+    {
+        $this->turno_fijo = $turnoFijo;
+
+        return $this;
+    }
+
+    /**
+     * Get turnoFijo
+     *
+     * @return boolean
+     */
+    public function getTurnoFijo()
+    {
+        return $this->turno_fijo;
     }
 }

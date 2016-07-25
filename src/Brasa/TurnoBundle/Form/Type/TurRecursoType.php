@@ -39,7 +39,8 @@ class TurRecursoType extends AbstractType
             ->add('correo', 'text', array('required' => false))
             ->add('fechaNacimiento','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('comentarios', 'textarea', array('required' => false))
-            ->add('codigoTurnoFijoNominaFk', 'text', array('required' => false))                            
+            ->add('codigoTurnoFijoNominaFk', 'text', array('required' => false))  
+            ->add('codigoTurnoFijoDescansoFk', 'text', array('required' => false))  
             ->add('BtnActualizar', 'submit', array('label'  => 'Actualizar datos desde empleado RH'))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

@@ -436,6 +436,9 @@ class GenerarSoportePagoController extends Controller
         if($arProgramacionDetalle->getRecursoRel()->getCodigoTurnoFijoNominaFk()) {
             $strTurnoFijoNomina = $arProgramacionDetalle->getRecursoRel()->getCodigoTurnoFijoNominaFk();
         }
+        if($arProgramacionDetalle->getRecursoRel()->getCodigoTurnoFijoDescansoFk()) {
+            $strTurnoFijoDescanso = $arProgramacionDetalle->getRecursoRel()->getCodigoTurnoFijoDescansoFk();
+        }        
         $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
         $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($codigoTurno);
         if($arTurno->getDescanso() == 0 && $arTurno->getNovedad() == 0) {                
