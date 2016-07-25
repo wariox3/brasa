@@ -425,6 +425,22 @@ class ProgramacionesPagoController extends Controller
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_rhu_programacion_pago_resumen_turno_ver', array('codigoProgramacionPagoDetalle' => $codigoProgramacionPagoDetalle)));
             }             
+            if($form->get('BtnActualizarPagoAdicional')->isClicked()) {  
+                $arrControles = $request->request->All();
+                $intIndice = 0;
+                if(isset($arrControles['LblCodigoPagoAdicional'])) {
+                    foreach ($arrControles['LblCodigoPagoAdicional'] as $intCodigo) {
+                        $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+                        $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($intCodigo);                                       
+                        if($arrControles['TxtValor'.$intCodigo] != '') {
+                            $arPagoAdicional->setValor($arrControles['TxtValor'.$intCodigo]);                
+                        }                                         
+                        $em->persist($arPagoAdicional);
+                    }
+                    $em->flush();                    
+                }                
+                return $this->redirect($this->generateUrl('brs_rhu_programacion_pago_resumen_turno_ver', array('codigoProgramacionPagoDetalle' => $codigoProgramacionPagoDetalle)));
+            }                         
             
             if($form->get('BtnMarcar')->isClicked()) {
                 $arProgramacionPagoDetalle->setMarca(1);
@@ -451,7 +467,9 @@ class ProgramacionesPagoController extends Controller
             $dateFecha = date_create($strFecha);
             $diaSemana = $objFunciones->devuelveDiaSemanaEspaniol($dateFecha);
             $arrDiaSemana[$i] = array('dia' => $i, 'diaSemana' => $diaSemana);
-        }        
+        }  
+        $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->listaValorDql($arProgramacionPagoDetalle->getCodigoProgramacionPagoFk(), $arProgramacionPagoDetalle->getCodigoEmpleadoFk()));
+        $arPagosAdicionales = $paginator->paginate($query, $request->query->get('page', 1), 20);        
         $dql = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->listaDql("", $codigoProgramacionPagoDetalle);                
         $arPagoDetalles = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 50);        
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:verResumenTurno.html.twig', array(                        
@@ -461,6 +479,7 @@ class ProgramacionesPagoController extends Controller
             'arSoportePago' => $arSoportePago,
             'arPago' => $arPago,
             'arrDiaSemana' => $arrDiaSemana,
+            'arPagosAdicionales' => $arPagosAdicionales,
             'form' => $form->createView()));
     }
     
@@ -541,6 +560,7 @@ class ProgramacionesPagoController extends Controller
         $form = $this->createFormBuilder() 
             ->add('BtnActualizar', 'submit', array('label'  => 'Actualizar',))
             ->add('BtnActualizarHoras', 'submit', array('label'  => 'Actualizar',))
+            ->add('BtnActualizarPagoAdicional', 'submit', array('label'  => 'Actualizar',))
             ->add('BtnMarcar', 'submit', array('label'  => 'Marcar',))
             ->getForm();
         return $form;
