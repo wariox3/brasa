@@ -111,16 +111,16 @@ class GenerarSoportePagoController extends Controller
                 ini_set('memory_limit', '512m');
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));
             }
-            if($request->request->get('OpDeshacer')) {
+            if($request->request->get('OpDeshacer')) {    
                 $codigoSoportePagoPeriodo = $request->request->get('OpDeshacer');
-                $strSql = "DELETE FROM tur_soporte_pago_detalle WHERE codigo_soporte_pago_periodo_fk = " . $codigoSoportePagoPeriodo;           
-                $em->getConnection()->executeQuery($strSql);
-                $strSql = "DELETE FROM tur_soporte_pago WHERE codigo_soporte_pago_periodo_fk = " . $codigoSoportePagoPeriodo;           
-                $em->getConnection()->executeQuery($strSql); 
-                
                 $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
                 $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
                 if($arSoportePagoPeriodo->getEstadoProgramacionPago() == 0) {
+                    
+                    $strSql = "DELETE FROM tur_soporte_pago_detalle WHERE codigo_soporte_pago_periodo_fk = " . $codigoSoportePagoPeriodo;           
+                    $em->getConnection()->executeQuery($strSql);
+                    $strSql = "DELETE FROM tur_soporte_pago WHERE codigo_soporte_pago_periodo_fk = " . $codigoSoportePagoPeriodo;           
+                    $em->getConnection()->executeQuery($strSql);                    
                     $arSoportePagoPeriodo->setEstadoGenerado(0);
                     $arSoportePagoPeriodo->setRecursos(0);
                     $arSoportePagoPeriodo->setVrPago(0);
