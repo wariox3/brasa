@@ -93,6 +93,11 @@ class TurSoportePagoPeriodo
      */    
     private $estadoCerrado = false;    
 
+    /**     
+     * @ORM\Column(name="estado_programacion_pago", type="boolean", nullable=true)
+     */    
+    private $estadoProgramacionPago = false;     
+    
     /**
      * @ORM\Column(name="dia_festivo_real", type="integer")
      */    
@@ -696,5 +701,29 @@ class TurSoportePagoPeriodo
     public function getDiasDescansoFijo()
     {
         return $this->diasDescansoFijo;
+    }
+
+    /**
+     * Set estadoProgramacionPago
+     *
+     * @param boolean $estadoProgramacionPago
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setEstadoProgramacionPago($estadoProgramacionPago)
+    {
+        $this->estadoProgramacionPago = $estadoProgramacionPago;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoProgramacionPago
+     *
+     * @return boolean
+     */
+    public function getEstadoProgramacionPago()
+    {
+        return $this->estadoProgramacionPago;
     }
 }

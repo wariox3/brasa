@@ -46,19 +46,7 @@
                         <td>{% if arSoportePagoPeriodo.descansoFestivoFijo == 1 %}SI{% else %}NO{% endif %}</td>
                         <td class="titulo" >DOMINGOS REALES:</td>
                         <td align="right">{{ arSoportePagoPeriodo.diaDomingoReal}}</td>
-                    </tr>                    
-                    <tr>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
-                        <td class="titulo" >PAGO:</td>
-                        <td align="right">{{ arSoportePagoPeriodo.vrPago | number_format(0, '.', ',')}}</td>                        
-                    </tr>                     
-                    <tr>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
-                        <td class="titulo" >DEVENGADO:</td>
-                        <td align="right">{{ arSoportePagoPeriodo.vrDevengado | number_format(0, '.', ',')}}</td>                        
-                    </tr>                                         
+                    </tr>                                                             
                 </table>
             </div>
         </div>

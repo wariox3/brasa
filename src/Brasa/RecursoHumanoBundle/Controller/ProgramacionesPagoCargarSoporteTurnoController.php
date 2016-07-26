@@ -19,6 +19,8 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
         if($form->isValid()) {
             if($request->request->get('OpCargar')) {
                 $codigoSoportePagoPeriodo = $request->request->get('OpCargar');  
+                $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();                       
+                $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoInconsistencia')->eliminarProgramacionPago($codigoProgramacionPago);
                 $arrInconsistencias = array();                
                 $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();                       
@@ -116,9 +118,9 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     }
                 }
                 $arProgramacionPago->setEmpleadosGenerados(1);
-                $arProgramacionPago->setNumeroEmpleados(count($arSoportesPago));
-                
+                $arProgramacionPago->setNumeroEmpleados(count($arSoportesPago));                
                 $em->persist($arProgramacionPago);
+                $arSoportePagoPeriodo->setEstadoProgramacionPago(1);
                 $em->flush();             
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                
             }                                                                             

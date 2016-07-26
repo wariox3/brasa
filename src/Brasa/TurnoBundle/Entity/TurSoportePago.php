@@ -65,8 +65,8 @@ class TurSoportePago
     /**     
      * @ORM\Column(name="estado_cerrado", type="boolean", nullable=true)
      */    
-    private $estadoCerrado = false;    
-
+    private $estadoCerrado = false;       
+    
     /**     
      * @ORM\Column(name="turno_fijo", type="boolean", nullable=true)
      */    
@@ -253,6 +253,7 @@ class TurSoportePago
      * @ORM\OneToMany(targetEntity="TurSoportePagoDetalle", mappedBy="soportePagoRel", cascade={"persist", "remove"})
      */
     protected $soportesPagosDetallesSoportePagoRel;     
+
 
 
     /**

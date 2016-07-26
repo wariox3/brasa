@@ -99,7 +99,7 @@ class TurProgramacionDetalleRepository extends EntityRepository {
         if($codigoRecurso != "") {
             $dql .= " AND pd.codigoRecursoFk = " . $codigoRecurso;
         }        
-        $query = $em->createQuery($dql);
+        $query = $em->createQuery($dql);                
         $arResultado = $query->getResult();
         return $arResultado;
     }
