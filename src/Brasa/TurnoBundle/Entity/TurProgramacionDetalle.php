@@ -238,6 +238,11 @@ class TurProgramacionDetalle
     private $ajusteProgramacion = false;    
     
     /**
+     * @ORM\Column(name="periodo_bloqueo", type="integer")
+     */    
+    private $periodoBloqueo = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurProgramacion", inversedBy="programacionesDetallesProgramacionRel")
      * @ORM\JoinColumn(name="codigo_programacion_fk", referencedColumnName="codigo_programacion_pk")
      */
@@ -1500,5 +1505,29 @@ class TurProgramacionDetalle
     public function getAjusteProgramacion()
     {
         return $this->ajusteProgramacion;
+    }
+
+    /**
+     * Set periodoBloqueo
+     *
+     * @param integer $periodoBloqueo
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setPeriodoBloqueo($periodoBloqueo)
+    {
+        $this->periodoBloqueo = $periodoBloqueo;
+
+        return $this;
+    }
+
+    /**
+     * Get periodoBloqueo
+     *
+     * @return integer
+     */
+    public function getPeriodoBloqueo()
+    {
+        return $this->periodoBloqueo;
     }
 }

@@ -380,7 +380,28 @@ class ProgramacionesPagoController extends Controller
                 }
                 if(!$arProgramacionPagoDetalle->getCodigoSoportePagoFk()) {
                     $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->actualizarEmpleado($codigoProgramacionPagoDetalle);                    
-                }                
+                } else {
+                    $arContrato = $arProgramacionPagoDetalle->getContratoRel();                            
+                    $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalarioPago());
+                    $arProgramacionPagoDetalle->setIndefinido($arContrato->getIndefinido());
+                    $arProgramacionPagoDetalle->setSalarioIntegral($arContrato->getSalarioIntegral());
+                    if($arContrato->getCodigoContratoTipoFk() == 4 || $arContrato->getCodigoContratoTipoFk() == 5) {
+                        $arProgramacionPagoDetalle->setDescuentoPension(0);
+                        $arProgramacionPagoDetalle->setDescuentoSalud(0);
+                        $arProgramacionPagoDetalle->setPagoAuxilioTransporte(0);
+                    }
+                    if ($arContrato->getCodigoTipoPensionFk() == 5){
+                        $arProgramacionPagoDetalle->setDescuentoPension(0);
+                    }   
+                    $floValorDia = $arContrato->getVrSalarioPago() / 30;       
+                    $floValorHora = $floValorDia / $arContrato->getFactorHorasDia();   
+                    $arProgramacionPagoDetalle->setVrDia($floValorDia);
+                    $arProgramacionPagoDetalle->setVrHora($floValorHora);
+                    $floDevengado = $arProgramacionPagoDetalle->getDias() * $floValorDia;
+                    $arProgramacionPagoDetalle->setVrDevengado($floDevengado);                    
+                    $em->persist($arProgramacionPagoDetalle);
+                    $em->flush();
+                }               
                 
                 $codigoPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->generarPago($arProgramacionPagoDetalle, $arProgramacionPagoDetalle->getProgramacionPagoRel(), $arProgramacionPagoDetalle->getProgramacionPagoRel()->getCentroCostoRel(), $arConfiguracion, 1);                   
                 if($codigoPago > 0) {
