@@ -183,8 +183,14 @@ class AspiranteController extends Controller
         $arRequisicionAplicada = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisicionAspirante')->findBy(array('codigoAspiranteFk' => $codigoAspirante));
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arAspirante->getNumeroIdentificacion()));
+        if ($arEmpleado == null){
+            $codigoEmpleado = 0;
+        } else {
+            $codigoEmpleado = $arEmpleado->getCodigoEmpleadoPk();
+        }
         $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-        $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk()));
+        $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
+        
         $form = $this->createFormBuilder()
             ->getForm();
         $form->handleRequest($request);
