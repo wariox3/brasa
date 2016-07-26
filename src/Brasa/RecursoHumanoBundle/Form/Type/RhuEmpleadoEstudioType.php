@@ -13,15 +13,16 @@ class RhuEmpleadoEstudioType extends AbstractType
             ->add('empleadoEstudioTipoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEmpleadoEstudioTipo',
                 'property' => 'nombre',
+                'required' => false
             ))
-            ->add('institucion', 'text', array('required' => true))
+            ->add('institucion', 'text', array('required' => false))
             ->add('ciudadRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))
+                'required' => false))
             ->add('gradoBachillerRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuGradoBachiller',
                 'query_builder' => function (EntityRepository $er)  {
@@ -55,7 +56,7 @@ class RhuEmpleadoEstudioType extends AbstractType
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.codigoEstudioEstadoPk', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                
+                'required' => false))                
             ->add('fechaInicio','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'required' => false,'attr' => array('class' => 'date',)))
             ->add('fechaTerminacion','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'required' => false,'attr' => array('class' => 'date',)))
             ->add('fechaInicioAcreditacion','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'required' => false,'attr' => array('class' => 'date',)))
@@ -64,7 +65,7 @@ class RhuEmpleadoEstudioType extends AbstractType
             ->add('fechaVencimientoControl','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'required' => false,'attr' => array('class' => 'date',)))
             ->add('fechaVencimientoAcreditacion','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'required' => false,'attr' => array('class' => 'date',)))                             
             ->add('graduado', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))                
-            ->add('titulo', 'text', array('required' => true))
+            ->add('titulo', 'text', array('required' => false))
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('numeroRegistro', 'text', array('required' => false))                
             ->add('numeroAcreditacion', 'text', array('required' => false))                

@@ -376,6 +376,8 @@ class SeleccionController extends Controller
         $formSeleccion = $this->createFormBuilder()
             ->setAction($this->generateUrl('brs_rhu_seleccion_cerrar', array('codigoSeleccion' => $codigoSeleccion)))
             ->add('comentarios', 'textarea', array('data' =>$arSeleccion->getComentarios() ,'required' => true))                      
+            ->add('fechaCierre', 'date', array('label'  => 'Fecha', 'data' => new \DateTime('now')))
+            ->add('bloqueado', 'checkbox', array('required'  => false))
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $formSeleccion->handleRequest($request);

@@ -342,7 +342,6 @@ class ContratosController extends Controller
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $formContrato->handleRequest($request);
-        
         $arDotacionPendiente = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->dotacionDevolucion($arContrato->getCodigoEmpleadoFk());
         $registrosDotacionesPendientes = count($arDotacionPendiente);
         if ($registrosDotacionesPendientes > 0){

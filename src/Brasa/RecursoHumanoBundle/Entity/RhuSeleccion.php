@@ -194,6 +194,11 @@ class RhuSeleccion
     private $estadoAutorizado = 0;
     
     /**
+     * @ORM\Column(name="fechaCierre", type="datetime", nullable=true)
+     */
+    private $fechaCiere;
+    
+    /**
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
      */    
     private $codigoUsuario;
@@ -201,7 +206,12 @@ class RhuSeleccion
     /**
      * @ORM\Column(name="codigo_zona_fk", type="integer", nullable=true)
      */    
-    private $codigoZonaFk;    
+    private $codigoZonaFk;
+
+    /**
+     * @ORM\Column(name="codigo_motivo_descartado_fk", type="integer", nullable=true)
+     */    
+    private $codigoMotivoDescatadoFk;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuSeleccionTipo", inversedBy="seleccionesSeleccionTipoRel")
@@ -295,6 +305,8 @@ class RhuSeleccion
      * @ORM\OneToMany(targetEntity="RhuSeleccionEntrevista", mappedBy="seleccionRel")
      */
     protected $seleccionesEntrevistasSeleccionRel;
+    
+    
     
     
     /**
@@ -1159,6 +1171,30 @@ class RhuSeleccion
     }
 
     /**
+     * Set fechaCiere
+     *
+     * @param \DateTime $fechaCiere
+     *
+     * @return RhuSeleccion
+     */
+    public function setFechaCiere($fechaCiere)
+    {
+        $this->fechaCiere = $fechaCiere;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaCiere
+     *
+     * @return \DateTime
+     */
+    public function getFechaCiere()
+    {
+        return $this->fechaCiere;
+    }
+
+    /**
      * Set codigoUsuario
      *
      * @param string $codigoUsuario
@@ -1204,6 +1240,30 @@ class RhuSeleccion
     public function getCodigoZonaFk()
     {
         return $this->codigoZonaFk;
+    }
+
+    /**
+     * Set codigoMotivoDescatadoFk
+     *
+     * @param integer $codigoMotivoDescatadoFk
+     *
+     * @return RhuSeleccion
+     */
+    public function setCodigoMotivoDescatadoFk($codigoMotivoDescatadoFk)
+    {
+        $this->codigoMotivoDescatadoFk = $codigoMotivoDescatadoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoMotivoDescatadoFk
+     *
+     * @return integer
+     */
+    public function getCodigoMotivoDescatadoFk()
+    {
+        return $this->codigoMotivoDescatadoFk;
     }
 
     /**
