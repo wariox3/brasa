@@ -62,7 +62,9 @@
                 <th>FECHA</th>
                 <th>IDENTIFICACIÓN</th>
                 <th>{{ knp_pagination_sortable(arEstudios, 'NOMBRE', 'e.nombreCorto') }}</th>
+                <th>TIPO EST/CUR</th>
                 <th>ESTUDIO</th>
+                <th>CURSO</th>
                 <th>FECHA INICIO</th>
                 <th>FECHA TERMINACIÓN</th>
                 <th>FECHA VEN CURSO/ESTUDIO</th>
@@ -80,6 +82,8 @@
                 <td>{{ arEstudios.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arEstudios.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arEstudios.empleadoEstudioTipoRel.nombre  }}</td>
+                <td>{{ arEstudios.titulo  }}</td>
+                <td>{{ arEstudios.estudioTipoAcreditacionRel.nombre | default('')  }}</td>
                 <td>{% if arEstudios.fechaInicio != null %}{{ arEstudios.fechaInicio | date('Y/m/d') }}{% else %}{% endif%}</td>
                 <td>{% if arEstudios.fechaTerminacion != null %}{{ arEstudios.fechaTerminacion | date('Y/m/d') }}{% else %}{% endif%}</td>
                 <td>{% if arEstudios.fechaVencimientoControl != null %}{{ arEstudios.fechaVencimientoControl | date('Y/m/d') }}{% else %}{% endif%}</td>

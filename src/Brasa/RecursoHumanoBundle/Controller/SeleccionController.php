@@ -373,24 +373,48 @@ class SeleccionController extends Controller
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arSeleccion = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
         $arSeleccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->find($codigoSeleccion);
+        $dato = "";
+        if ($arSeleccion->getEstadoCerrado() == 1){
+            $dato = "el proceso de seleccion esta cerrado, no se puede realizar el proceso";
+        }
         $formSeleccion = $this->createFormBuilder()
             ->setAction($this->generateUrl('brs_rhu_seleccion_cerrar', array('codigoSeleccion' => $codigoSeleccion)))
             ->add('comentarios', 'textarea', array('data' =>$arSeleccion->getComentarios() ,'required' => true))                      
             ->add('fechaCierre', 'date', array('label'  => 'Fecha', 'data' => new \DateTime('now')))
+            ->add('motivoCierreSeleccionRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuMotivoCierreSeleccion',
+                'property' => 'nombre',
+            ))
             ->add('bloqueado', 'checkbox', array('required'  => false))
+            ->add('comentariosAspirante', 'textarea', array('required'  => false))                      
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $formSeleccion->handleRequest($request);
            
         if ($formSeleccion->isValid()) {
             if ($arSeleccion->getEstadoAutorizado() == 1){
-                $arUsuario = $this->get('security.context')->getToken()->getUser();
-                $arSeleccion->setComentarios($formSeleccion->get('comentarios')->getData());
-                $arSeleccion->setCodigoUsuario($arUsuario->getUserName());
-                $arSeleccion->setEstadoCerrado(1);
-                $em->persist($arSeleccion);
-                $em->flush();
+                if ($arSeleccion->getEstadoCerrado() == 0){
+                    $arUsuario = $this->get('security.context')->getToken()->getUser();
+                    $arSeleccion->setComentarios($formSeleccion->get('comentarios')->getData());
+                    $arSeleccion->setFechaCierre($formSeleccion->get('fechaCierre')->getData());
+                    $arSeleccion->setCodigoUsuario($arUsuario->getUserName());
+                    $arSeleccion->setEstadoCerrado(1);
+                    $arSeleccion->setMotivoCierreSeleccionRel($formSeleccion->get('motivoCierreSeleccionRel')->getData());
+                    if ($arSeleccion->getNumeroIdentificacion()){
+                        if ($formSeleccion->get('bloqueado')->getData() == true){
+                            $arAspirante = $em->getRepository('BrasaRecursoHumanoBundle:RhuAspirante')->findOneBy(array('numeroIdentificacion' => $arSeleccion->getNumeroIdentificacion()));
+                            $arAspirante->setBloqueado(1);
+                            $arAspirante->setComentarios($formSeleccion->get('comentariosAspirante')->getData());
+                            $em->persist($arAspirante);
+                        }
+                    }
+                    $em->persist($arSeleccion);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_seleccion_detalle', array('codigoSeleccion' => $codigoSeleccion)));
+                } else {
+                    $objMensaje->Mensaje("error", "El proceso de seleccion esta cerrado, no se puede realizar el proceso", $this);
                 return $this->redirect($this->generateUrl('brs_rhu_seleccion_detalle', array('codigoSeleccion' => $codigoSeleccion)));
+                }    
             } else {
                 $objMensaje->Mensaje("error", "El proceso de seleccion debe estar autorizado", $this);
                 return $this->redirect($this->generateUrl('brs_rhu_seleccion_detalle', array('codigoSeleccion' => $codigoSeleccion)));
@@ -399,6 +423,7 @@ class SeleccionController extends Controller
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Seleccion:cerrarSeleccion.html.twig', array(
             'arSeleccion' => $arSeleccion,
+            'dato' => $dato,
             'formSeleccion' => $formSeleccion->createView()
         ));
     }
@@ -490,6 +515,8 @@ class SeleccionController extends Controller
         }
         if ($ar->getEstadoCerrado() == 1){
             //$arrBotonCerrar['disabled'] = true;
+            $arrBotonDesAutorizar['disabled'] = true;
+            $arrBotonAprobar['disabled'] = true;
         }
         $form = $this->createFormBuilder()
                     ->add('BtnAprobar', 'submit', $arrBotonAprobar)
@@ -546,6 +573,9 @@ class SeleccionController extends Controller
         $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'TIPO')
@@ -559,7 +589,10 @@ class SeleccionController extends Controller
                     ->setCellValue('J1', 'PRUEBAS_PRESENTADAS')
                     ->setCellValue('K1', 'APROBADO')
                     ->setCellValue('L1', 'REFERENCIAS_VERIFICADAS')
-                    ->setCellValue('M1', 'ABIERTO');
+                    ->setCellValue('M1', 'CERRADO')
+                    ->setCellValue('N1', 'FECHA CIERRE')
+                    ->setCellValue('O1', 'MOTIVO')
+                    ->setCellValue('P1', 'COMENTARIOS');
 
         $i = 2;
         $query = $em->createQuery($session->get('dqlSeleccionLista'));
@@ -574,7 +607,10 @@ class SeleccionController extends Controller
             {
                 $seleccionRequisito = $arSelecciones->getSeleccionRequisitoRel()->getNombre();
             }
-
+            $motivo = "";
+            if ($arSelecciones->getCodigoMotivoCierreSeleccionFk() != null){
+                $motivo = $arSelecciones->getMotivoCierreSeleccionRel()->getNombre();
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arSelecciones->getCodigoSeleccionPk())
                     ->setCellValue('B' . $i, $arSelecciones->getSeleccionTipoRel()->getNombre())
@@ -588,7 +624,10 @@ class SeleccionController extends Controller
                     ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arSelecciones->getPresentaPruebas()))
                     ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arSelecciones->getEstadoAprobado()))
                     ->setCellValue('L' . $i, $objFunciones->devuelveBoolean($arSelecciones->getReferenciasVerificadas()))
-                    ->setCellValue('M' . $i, $objFunciones->devuelveBoolean($arSelecciones->getEstadoCerrado()));
+                    ->setCellValue('M' . $i, $objFunciones->devuelveBoolean($arSelecciones->getEstadoCerrado()))
+                    ->setCellValue('N' . $i, $arSelecciones->getFechaCierre())
+                    ->setCellValue('O' . $i, $motivo)
+                    ->setCellValue('P' . $i, $arSelecciones->getComentarios());
             $i++;
         }
 

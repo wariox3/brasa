@@ -43,15 +43,17 @@
                 <th>{{ knp_pagination_sortable(arAspirantes, 'NOMBRE', 'a.nombreCorto') }}</th>
                 <th>TELEFONO</th>
                 <th>CELULAR</th>
-                <th>INCONSISTENCIA</th>
+                <th>BLOQUEADO</th>
                 <th>ZONA</th>
+                <th>REINTEGRO</th>
                 <th style="text-align: center"></th>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
             </tr>
             {% for arAspirantes in arAspirantes %}
-            {% if arAspirantes.inconsistencia == 1 %}
+            {% if arAspirantes.bloqueado == 1 %}
                     <tr class="danger">
                 {% else %}
                     <tr>
@@ -62,9 +64,11 @@
                 <td>{{ arAspirantes.nombreCorto  }}</td>
                 <td>{{ arAspirantes.telefono }}</td>
                 <td>{{ arAspirantes.celular }}</td>
-                <td>{% if arAspirantes.inconsistencia == 1%} SI {% else %} NO {% endif %}</td>
+                <td>{% if arAspirantes.bloqueado == 1%} SI {% else %} NO {% endif %}</td>
                 <td>{{ arAspirantes.zonaRel.nombre | default('') }}</td>
+                <td>{% if arAspirantes.reintegro == 1%} SI {% else %} NO {% endif %}</td>
                 <td><a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_aspirante_aplicar', {'codigoAspirante': arAspirantes.codigoAspirantePk }) }}', 'Archivos', 500, 700)" >Aplicar</a></td>
+                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_aspirante_historial', {'codigoAspirante': arAspirantes.codigoAspirantePk }) }}', 'Ver Historial', 600, 1000)"><img src="{{ asset('imagenes/bootstrap/glyphicons_090_table.png') }}" width=20 height=20 title="Ver"></a></td>               
                 <td style="text-align: center"><a href="{{ path('brs_rhu_aspirante_nuevo', { 'codigoAspirante':  arAspirantes.codigoAspirantePk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_aspirante_detalle', { 'codigoAspirante': arAspirantes.codigoAspirantePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arAspirantes.codigoAspirantePk }}" /></td>

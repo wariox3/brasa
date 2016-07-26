@@ -196,7 +196,7 @@ class RhuSeleccion
     /**
      * @ORM\Column(name="fechaCierre", type="datetime", nullable=true)
      */
-    private $fechaCiere;
+    private $fechaCierre;
     
     /**
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
@@ -209,9 +209,9 @@ class RhuSeleccion
     private $codigoZonaFk;
 
     /**
-     * @ORM\Column(name="codigo_motivo_descartado_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_motivo_cierre_seleccion_fk", type="integer", nullable=true)
      */    
-    private $codigoMotivoDescatadoFk;
+    private $codigoMotivoCierreSeleccionFk;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuSeleccionTipo", inversedBy="seleccionesSeleccionTipoRel")
@@ -285,6 +285,12 @@ class RhuSeleccion
      * @ORM\JoinColumn(name="codigo_zona_fk", referencedColumnName="codigo_zona_pk")
      */
     protected $zonaRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuMotivoCierreSeleccion", inversedBy="seleccionesMotivoCierreSeleccionRel")
+     * @ORM\JoinColumn(name="codigo_motivo_cierre_seleccion_fk", referencedColumnName="codigo_motivo_cierre_seleccion_pk")
+     */
+    protected $motivoCierreSeleccionRel;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuSeleccionReferencia", mappedBy="seleccionRel")
@@ -1171,27 +1177,27 @@ class RhuSeleccion
     }
 
     /**
-     * Set fechaCiere
+     * Set fechaCierre
      *
-     * @param \DateTime $fechaCiere
+     * @param \DateTime $fechaCierre
      *
      * @return RhuSeleccion
      */
-    public function setFechaCiere($fechaCiere)
+    public function setFechaCierre($fechaCierre)
     {
-        $this->fechaCiere = $fechaCiere;
+        $this->fechaCierre = $fechaCierre;
 
         return $this;
     }
 
     /**
-     * Get fechaCiere
+     * Get fechaCierre
      *
      * @return \DateTime
      */
-    public function getFechaCiere()
+    public function getFechaCierre()
     {
-        return $this->fechaCiere;
+        return $this->fechaCierre;
     }
 
     /**
@@ -1243,27 +1249,27 @@ class RhuSeleccion
     }
 
     /**
-     * Set codigoMotivoDescatadoFk
+     * Set codigoMotivoCierreSeleccionFk
      *
-     * @param integer $codigoMotivoDescatadoFk
+     * @param integer $codigoMotivoCierreSeleccionFk
      *
      * @return RhuSeleccion
      */
-    public function setCodigoMotivoDescatadoFk($codigoMotivoDescatadoFk)
+    public function setCodigoMotivoCierreSeleccionFk($codigoMotivoCierreSeleccionFk)
     {
-        $this->codigoMotivoDescatadoFk = $codigoMotivoDescatadoFk;
+        $this->codigoMotivoCierreSeleccionFk = $codigoMotivoCierreSeleccionFk;
 
         return $this;
     }
 
     /**
-     * Get codigoMotivoDescatadoFk
+     * Get codigoMotivoCierreSeleccionFk
      *
      * @return integer
      */
-    public function getCodigoMotivoDescatadoFk()
+    public function getCodigoMotivoCierreSeleccionFk()
     {
-        return $this->codigoMotivoDescatadoFk;
+        return $this->codigoMotivoCierreSeleccionFk;
     }
 
     /**
@@ -1552,6 +1558,30 @@ class RhuSeleccion
     public function getZonaRel()
     {
         return $this->zonaRel;
+    }
+
+    /**
+     * Set motivoCierreSeleccionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuMotivoCierreSeleccion $motivoCierreSeleccionRel
+     *
+     * @return RhuSeleccion
+     */
+    public function setMotivoCierreSeleccionRel(\Brasa\RecursoHumanoBundle\Entity\RhuMotivoCierreSeleccion $motivoCierreSeleccionRel = null)
+    {
+        $this->motivoCierreSeleccionRel = $motivoCierreSeleccionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get motivoCierreSeleccionRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuMotivoCierreSeleccion
+     */
+    public function getMotivoCierreSeleccionRel()
+    {
+        return $this->motivoCierreSeleccionRel;
     }
 
     /**

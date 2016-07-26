@@ -128,7 +128,7 @@ class AspiranteController extends Controller
             $em->persist($arRequisicionAspirante);
             $arRequisicionDato = $form->get('seleccionRequisicionRel')->getData();
             $arRequisicionAspiranteValidar = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisicionAspirante')->findBy(array('codigoSeleccionRequisitoFk' => $arRequisicionDato, 'codigoAspiranteFk' => $codigoAspirante));
-            if ($arAspirante->getInconsistencia() == 0){
+            if ($arAspirante->getBloqueado() == 0){
                 if ($arRequisicionDato->getEstadoCerrado() == 0){
                     if ($arRequisicionAspiranteValidar == null){
                         //Calculo edad
@@ -161,12 +161,40 @@ class AspiranteController extends Controller
                     $objMensaje->Mensaje('error','La requisicion esta cerrada, no puede aplicar',$this);
                 }
             } else {
-                $objMensaje->Mensaje('error','El aspirante no puede aplicar a la requisión, tiene inconsistencis',$this);
+                $objMensaje->Mensaje('error','El aspirante no puede aplicar a la requisición, tiene inconsistencias',$this);
             }    
         }
 
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Aspirante:aplicar.html.twig', array(
             'arAspirante' => $arAspirante,
+            'form' => $form->createView()));
+    }
+    
+    
+    public function historialAction($codigoAspirante) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arAspirante = new \Brasa\RecursoHumanoBundle\Entity\RhuAspirante();
+        $arAspirante = $em->getRepository('BrasaRecursoHumanoBundle:RhuAspirante')->find($codigoAspirante);
+        $arSelecciones = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccion();
+        $arSelecciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccion')->findBy(array('numeroIdentificacion' => $arAspirante->getNumeroIdentificacion()));
+        $arRequisicionAplicada = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisicionAspirante();
+        $arRequisicionAplicada = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisicionAspirante')->findBy(array('codigoAspiranteFk' => $codigoAspirante));
+        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arAspirante->getNumeroIdentificacion()));
+        $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk()));
+        $form = $this->createFormBuilder()
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {    
+        }
+
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Aspirante:historial.html.twig', array(
+            'arSelecciones' => $arSelecciones,
+            'arRequisicionAplicada' => $arRequisicionAplicada,
+            'arContratos' => $arContratos,
             'form' => $form->createView()));
     }
 
@@ -321,11 +349,11 @@ class AspiranteController extends Controller
                     ->setCellValue('R1', 'SEXO')
                     ->setCellValue('S1', 'CORREO')
                     ->setCellValue('T1', 'DISPONIBILIDAD')
-                    ->setCellValue('U1', 'INCONSISTENCIA')
+                    ->setCellValue('U1', 'BLOQUEADO')
                     ->setCellValue('V1', 'CARGO ASPIRA')
                     ->setCellValue('W1', 'RECOMENDADO')
                     ->setCellValue('X1', 'OPERACION')
-                    ->setCellValue('Y1', 'REINGRESO')
+                    ->setCellValue('Y1', 'REINTEGRO')
                     ->setCellValue('Z1', 'COMENTARIOS');
 
         $i = 2;
@@ -375,7 +403,7 @@ class AspiranteController extends Controller
                 $disponibilidad = "NO APLICA";
             }
             $inconsistencia = "NO";
-            if ($arAspirantes->getInconsistencia() == 1){
+            if ($arAspirantes->getBloqueado() == 1){
                 $inconsistencia = "SI";
             }
             $reingreso = "NO";

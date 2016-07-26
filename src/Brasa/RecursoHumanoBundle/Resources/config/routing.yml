@@ -766,6 +766,10 @@ brs_rhu_aspirante_nuevo:
     path:     /rhu/aspirante/nuevo/{codigoAspirante}
     defaults: { _controller: BrasaRecursoHumanoBundle:Aspirante:nuevo }
     
+brs_rhu_aspirante_historial:    
+    path:     /rhu/aspirante/historial/{codigoAspirante}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Aspirante:historial }    
+    
 brs_rhu_seleccion_lista:
     path:     /rhu/seleccion/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:lista }         

@@ -13,7 +13,7 @@ class RhuEmpleadoEstudioType extends AbstractType
             ->add('empleadoEstudioTipoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEmpleadoEstudioTipo',
                 'property' => 'nombre',
-                'required' => false
+                'required' => true
             ))
             ->add('institucion', 'text', array('required' => false))
             ->add('ciudadRel', 'entity', array(
@@ -22,7 +22,7 @@ class RhuEmpleadoEstudioType extends AbstractType
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => false))
+                'required' => true))
             ->add('gradoBachillerRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuGradoBachiller',
                 'query_builder' => function (EntityRepository $er)  {

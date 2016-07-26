@@ -18,7 +18,7 @@
         {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
         {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
         {% if arSeleccion.estadoAutorizado == 1 %}
-        <a class="btn btn-default btn-sm" id="{{ path('brs_rhu_seleccion_cerrar', { 'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}" style="float:left">Cerrar</a>
+            <a class="btn btn-default btn-sm" id="{{ path('brs_rhu_seleccion_cerrar', { 'codigoSeleccion': arSeleccion.codigoSeleccionPk}) }}" style="float:left">Cerrar</a>
         {% endif %}
         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 1,  'numero': arSeleccion.codigoSeleccionPk }) }}', 'Archivos', 500, 700)" >Archivos</a>        
     </div>
@@ -41,7 +41,7 @@
                     <td class="td-in-well">{{ arSeleccion.nombreCorto }}</td>
                     <td class="titulo">CELULAR:</td>
                     <td class="td-in-well">{{ arSeleccion.celular }}</td>
-                    <td class="titulo">RH</td>
+                    <td class="titulo">RH:</td>
                     <td class="td-in-well">{{ arSeleccion.rhRel.tipo }} </td>
                 </tr>
                 <tr>
@@ -71,16 +71,16 @@
                 <tr>
                     <td class="titulo">CARGO</td>
                     <td class="td-in-well">{{ arSeleccion.cargoRel.nombre }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">FECHA CIERRE:</td>
+                    <td class="td-in-well">{% if arSeleccion.fechaCierre == null %}{% else %}{{ arSeleccion.fechaCierre|date("Y/m/d") }}{% endif %}</td>
                     <td class="titulo">ESTADO APROBADO:</td>
                     <td class="td-in-well">{% if arSeleccion.estadoAprobado == 1%}SI{% else %}NO{% endif %}</td>
                 </tr>
                 <tr>
                     <td class="titulo"></td>
                     <td class="td-in-well"></td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">MOTIVO CIERRE:</td>
+                    <td class="td-in-well">{{ arSeleccion.motivoCierreSeleccionRel.nombre | default('')}}</td>
                     <td class="titulo">ESTADO CERRADO:</td>
                     <td class="td-in-well">{% if arSeleccion.estadoCerrado == 1%}SI{% else %}NO{% endif %}</td>
                 </tr>

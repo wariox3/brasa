@@ -50,7 +50,7 @@
                     <td class="titulo">INSTITUCIÓN:</td>
                     <td>{{ arEstudio.institucion }}</td>
                     <td class="titulo">CIUDAD:</td>
-                    <td>{{ arEstudio.ciudadRel.nombre }}</td>
+                    <td>{{ arEstudio.ciudadRel.nombre | default('')}}</td>
                 </tr>
                 <tr>
                     <td class="titulo">FECHA INICIO:</td>

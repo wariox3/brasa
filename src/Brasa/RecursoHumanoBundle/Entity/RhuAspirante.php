@@ -152,9 +152,9 @@ class RhuAspirante
     private $codigoDisponibilidadFk;
     
     /**
-     * @ORM\Column(name="inconsistencia", type="boolean")
+     * @ORM\Column(name="bloqueado", type="boolean")
      */
-    private $inconsistencia = false;
+    private $bloqueado = false;
     
     /**
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
@@ -247,6 +247,7 @@ class RhuAspirante
      * @ORM\OneToMany(targetEntity="RhuSeleccionRequisicionAspirante", mappedBy="aspiranteRel")
      */
     protected $seleccionesRequisicionesAspirantesAspiranteRel;
+    
     
     
     
@@ -893,27 +894,27 @@ class RhuAspirante
     }
 
     /**
-     * Set inconsistencia
+     * Set bloqueado
      *
-     * @param boolean $inconsistencia
+     * @param boolean $bloqueado
      *
      * @return RhuAspirante
      */
-    public function setInconsistencia($inconsistencia)
+    public function setBloqueado($bloqueado)
     {
-        $this->inconsistencia = $inconsistencia;
+        $this->bloqueado = $bloqueado;
 
         return $this;
     }
 
     /**
-     * Get inconsistencia
+     * Get bloqueado
      *
      * @return boolean
      */
-    public function getInconsistencia()
+    public function getBloqueado()
     {
-        return $this->inconsistencia;
+        return $this->bloqueado;
     }
 
     /**
@@ -1109,6 +1110,30 @@ class RhuAspirante
     }
 
     /**
+     * Set codigoZonaFk
+     *
+     * @param integer $codigoZonaFk
+     *
+     * @return RhuAspirante
+     */
+    public function setCodigoZonaFk($codigoZonaFk)
+    {
+        $this->codigoZonaFk = $codigoZonaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoZonaFk
+     *
+     * @return integer
+     */
+    public function getCodigoZonaFk()
+    {
+        return $this->codigoZonaFk;
+    }
+
+    /**
      * Set tipoIdentificacionRel
      *
      * @param \Brasa\GeneralBundle\Entity\GenTipoIdentificacion $tipoIdentificacionRel
@@ -1253,6 +1278,30 @@ class RhuAspirante
     }
 
     /**
+     * Set zonaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuZona $zonaRel
+     *
+     * @return RhuAspirante
+     */
+    public function setZonaRel(\Brasa\RecursoHumanoBundle\Entity\RhuZona $zonaRel = null)
+    {
+        $this->zonaRel = $zonaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get zonaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuZona
+     */
+    public function getZonaRel()
+    {
+        return $this->zonaRel;
+    }
+
+    /**
      * Add seleccionesRequisicionesAspirantesAspiranteRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisicionAspirante $seleccionesRequisicionesAspirantesAspiranteRel
@@ -1284,53 +1333,5 @@ class RhuAspirante
     public function getSeleccionesRequisicionesAspirantesAspiranteRel()
     {
         return $this->seleccionesRequisicionesAspirantesAspiranteRel;
-    }
-
-    /**
-     * Set codigoZonaFk
-     *
-     * @param integer $codigoZonaFk
-     *
-     * @return RhuAspirante
-     */
-    public function setCodigoZonaFk($codigoZonaFk)
-    {
-        $this->codigoZonaFk = $codigoZonaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoZonaFk
-     *
-     * @return integer
-     */
-    public function getCodigoZonaFk()
-    {
-        return $this->codigoZonaFk;
-    }
-
-    /**
-     * Set zonaRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuZona $zonaRel
-     *
-     * @return RhuAspirante
-     */
-    public function setZonaRel(\Brasa\RecursoHumanoBundle\Entity\RhuZona $zonaRel = null)
-    {
-        $this->zonaRel = $zonaRel;
-
-        return $this;
-    }
-
-    /**
-     * Get zonaRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuZona
-     */
-    public function getZonaRel()
-    {
-        return $this->zonaRel;
     }
 }

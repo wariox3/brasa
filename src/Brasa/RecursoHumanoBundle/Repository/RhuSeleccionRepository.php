@@ -117,17 +117,18 @@ class RhuSeleccionRepository extends EntityRepository {
             $arAspirante = new \Brasa\RecursoHumanoBundle\Entity\RhuAspirante;
             $arAspirante = $em->getRepository('BrasaRecursoHumanoBundle:RhuAspirante')->findOneBy(array('numeroIdentificacion' => $arSeleccion->getNumeroIdentificacion()));
             if ($arAspirante == null){
-                $inconsistencia = 0;
+                $bloqueado = 0;
             }else {
-                $inconsistencia = $arAspirante->getInconsistencia();
+                $bloqueado = $arAspirante->getBloqueado();
             }
-            if ($inconsistencia == 0){
+            if ($bloqueado == 0){
                 $intReferenciasVerificadas = $this->devuelveNumeroReferenciasSinVerificar($codigoSeleccion);
                 if ($intReferenciasVerificadas == 0){
                     $arSeleccion->setReferenciasVerificadas(1);
                     $arSeleccion->setEstadoAprobado(1);
                     $arSeleccion->setPresentaPruebas(1);
                     $arSeleccion->setEstadoCerrado(1);
+                    $arSeleccion->setFechaCierre(new \DateTime('now'));
                     //Se inserta la seleccion aprobada en la entidad examen
                     $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
                     $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
@@ -181,7 +182,7 @@ class RhuSeleccionRepository extends EntityRepository {
                     $strRespuesta = "Todas las referencias deben estar verificadas";
                 }
             } else {
-                $strRespuesta = "El seleccionado tiene una inconsistencia en la hoja de vida(aspirante)";
+                $strRespuesta = "El seleccionado esta bloqueado en la hoja de vida(aspirante)";
             }
         } else {
             $strRespuesta = "El proceso de seleccion debe estar sin aprobar";
