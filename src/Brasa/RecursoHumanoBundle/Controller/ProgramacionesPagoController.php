@@ -409,7 +409,17 @@ class ProgramacionesPagoController extends Controller
                 }                
                 $em->flush();                
                 return $this->redirect($this->generateUrl('brs_rhu_programacion_pago_resumen_turno_ver', array('codigoProgramacionPagoDetalle' => $codigoProgramacionPagoDetalle)));
-            } 
+            }
+            if($form->get('BtnLiquidar')->isClicked()) {
+                $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+                $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findOneBy(array('codigoProgramacionPagoDetalleFk' => $codigoProgramacionPagoDetalle));               
+                if($arPagos) {
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->liquidar($arPagos->getCodigoPagoPk(), $arConfiguracion);                    
+                }                
+                
+                return $this->redirect($this->generateUrl('brs_rhu_programacion_pago_resumen_turno_ver', array('codigoProgramacionPagoDetalle' => $codigoProgramacionPagoDetalle)));
+            }
             if($form->get('BtnActualizarHoras')->isClicked()) {  
                 $arrControles = $request->request->All();
                 if($arrControles['TxtDiasTransporte'] != "") {
@@ -590,6 +600,7 @@ class ProgramacionesPagoController extends Controller
 
     private function formularioVerReusmenTurno() {
         $form = $this->createFormBuilder() 
+            ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar',))
             ->add('BtnActualizar', 'submit', array('label'  => 'Actualizar',))
             ->add('BtnActualizarHoras', 'submit', array('label'  => 'Actualizar',))
             ->add('BtnActualizarPagoAdicional', 'submit', array('label'  => 'Actualizar',))
