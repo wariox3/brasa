@@ -115,8 +115,11 @@ class RhuContratoRepository extends EntityRepository {
     }
     
     //lista contratos con las fecha de vencimiento, no aplica para los contratos a termino indefinido
-    public function listaContratosFechaTerminacionDQL($strCodigoEmpleadoTipo = "", $strCodigoZona = "", $strCodigoSubZona = "", $strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
+    public function listaContratosFechaTerminacionDQL($strCodigoContratoTipo = "",$strCodigoEmpleadoTipo = "", $strCodigoZona = "", $strCodigoSubZona = "", $strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
         $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0 AND c.estadoTerminado = 1";
+        if($strCodigoContratoTipo != "") {
+            $dql .= " AND c.codigoContratoTipoFk = " . $strCodigoContratoTipo;
+        }
         if($strCodigoEmpleadoTipo != "") {
             $dql .= " AND e.codigoEmpleadoTipoFk = " . $strCodigoEmpleadoTipo;
         }
@@ -142,8 +145,11 @@ class RhuContratoRepository extends EntityRepository {
     }
     
     //lista contratos con las fechas de ingresos
-    public function listaIngresosContratosDQL($strCodigoEmpleadoTipo = "", $strCodigoZona = "", $strCodigoSubZona = "", $strCodigoContrato = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
+    public function listaIngresosContratosDQL($strCodigoContratoTipo = "", $strCodigoEmpleadoTipo = "", $strCodigoZona = "", $strCodigoSubZona = "", $strCodigoContrato = "", $strIdentificacion = "", $strDesde = "", $strHasta = "") {        
         $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0 ";
+        if($strCodigoContratoTipo != "") {
+            $dql .= " AND c.codigoContratoTipoFk = " . $strCodigoContratoTipo;
+        }
         if($strCodigoEmpleadoTipo != "") {
             $dql .= " AND e.codigoEmpleadoTipoFk = " . $strCodigoEmpleadoTipo;
         }

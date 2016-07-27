@@ -4287,6 +4287,12 @@ insert into `rhu_motivo_terminacion_contrato` (`codigo_motivo_terminacion_contra
 insert into `rhu_motivo_terminacion_contrato` (`codigo_motivo_terminacion_contrato_pk`, `motivo`) values('7','MUERTE');
 insert into `rhu_motivo_terminacion_contrato` (`codigo_motivo_terminacion_contrato_pk`, `motivo`) values('8','INACTIVO POR EL USUARIO');
 
+insert into `rhu_motivo_cierre_seleccion` (`codigo_motivo_cierre_seleccion_pk`, `nombre`) values('1','REQUISITO');
+insert into `rhu_motivo_cierre_seleccion` (`codigo_motivo_cierre_seleccion_pk`, `nombre`) values('2','PRUEBAS');
+insert into `rhu_motivo_cierre_seleccion` (`codigo_motivo_cierre_seleccion_pk`, `nombre`) values('3','ENTREVISTA');
+insert into `rhu_motivo_cierre_seleccion` (`codigo_motivo_cierre_seleccion_pk`, `nombre`) values('4','REFERENCIA');
+insert into `rhu_motivo_cierre_seleccion` (`codigo_motivo_cierre_seleccion_pk`, `nombre`) values('5','OTROS');
+
 insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('1','2016','1','2016','2','2016-01-01','2016-01-31','1','0','2016-02-01');
 insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('2','2016','2','2016','3','2016-02-01','2016-02-28','0','0','2016-03-01');
 insert into `rhu_sso_periodo` (`codigo_periodo_pk`, `anio`, `mes`, `anio_pago`, `mes_pago`, `fecha_desde`, `fecha_hasta`, `estado_generado`, `estado_cerrado`, `fecha_pago`) values('3','2016','3','2016','4','2016-03-01','2016-03-31','0','0','2016-04-01');

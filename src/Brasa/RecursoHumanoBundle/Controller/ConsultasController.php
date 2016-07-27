@@ -578,6 +578,7 @@ class ConsultasController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strSqlIngresosContratosLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->listaIngresosContratosDQL(
+            $session->get('filtroCodigoContratoTipo'),
             $session->get('filtroCodigoEmpleadoTipo'),
             $session->get('filtroCodigoZona'),
             $session->get('filtroCodigoSubzona'),
@@ -638,6 +639,7 @@ class ConsultasController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strSqlFechaTerminacionLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->listaContratosFechaTerminacionDQL(
+                    $session->get('filtroCodigoContratoTipo'),
                     $session->get('filtroCodigoEmpleadoTipo'),
                     $session->get('filtroCodigoZona'),
                     $session->get('filtroCodigoSubzona'),
@@ -1064,8 +1066,23 @@ class ConsultasController extends Controller
         if($session->get('filtroCodigoSubzona')) {
             $arrayPropiedadesSubZona['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuSubzona", $session->get('filtroCodigoSubzona'));
         }
+        $arrayPropiedadesTipoContrato = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuContratoTipo',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('sz')
+                    ->orderBy('sz.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoContratoTipo')) {
+            $arrayPropiedadesTipoContrato['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuContratoTipo", $session->get('filtroCodigoContratoTipo'));
+        }
         $form = $this->createFormBuilder()
-            ->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('contratoTipoRel', 'entity', $arrayPropiedadesTipoContrato)
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)    
             ->add('empleadoTipoRel', 'entity', $arrayPropiedadesTipo)
             ->add('zonaRel', 'entity', $arrayPropiedadesZona)
             ->add('subZonaRel', 'entity', $arrayPropiedadesSubZona)    
@@ -1123,7 +1140,22 @@ class ConsultasController extends Controller
         if($session->get('filtroCodigoSubzona')) {
             $arrayPropiedadesSubZona['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuSubzona", $session->get('filtroCodigoSubzona'));
         }
+        $arrayPropiedadesTipoContrato = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuContratoTipo',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('sz')
+                    ->orderBy('sz.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoContratoTipo')) {
+            $arrayPropiedadesTipoContrato['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuContratoTipo", $session->get('filtroCodigoContratoTipo'));
+        }
         $form = $this->createFormBuilder()
+            ->add('contratoTipoRel', 'entity', $arrayPropiedadesTipoContrato)    
             ->add('empleadoTipoRel', 'entity', $arrayPropiedadesTipo)
             ->add('zonaRel', 'entity', $arrayPropiedadesZona)
             ->add('subZonaRel', 'entity', $arrayPropiedadesSubZona)    
@@ -1252,6 +1284,7 @@ class ConsultasController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
+        $session->set('filtroCodigoContratoTipo', $controles['contratoTipoRel']);
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroCodigoEmpleadoTipo', $controles['empleadoTipoRel']);
         $session->set('filtroCodigoZona', $controles['zonaRel']);
@@ -1265,6 +1298,7 @@ class ConsultasController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
+        $session->set('filtroCodigoContratoTipo', $controles['contratoTipoRel']);
         $session->set('filtroCodigoEmpleadoTipo', $controles['empleadoTipoRel']);
         $session->set('filtroCodigoZona', $controles['zonaRel']);
         $session->set('filtroCodigoSubzona', $controles['subZonaRel']);
