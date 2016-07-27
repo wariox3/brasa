@@ -59,17 +59,20 @@
             {% set deshabilitarRecurso = '' %}
             {% for arProgramacionDetalle in arProgramacionDetalle %}                 
                 {% if arProgramacionDetalle.periodoBloqueo == '15' %}
-                    {% set deshabilitar15 = 'disabled' %}
-                    {% set deshabilitarRecurso = 'disabled' %}
+                    {% set deshabilitar15 = 'disabled' %} 
                 {% else %}
-                    {% set deshabilitar15 = '' %}
-                    {% set deshabilitarRecurso = '' %}                    
+                    {% set deshabilitar15 = '' %}                    
                 {% endif %} 
                 {% if arProgramacionDetalle.periodoBloqueo == '30' %}
                     {% set deshabilitar30 = 'disabled' %}   
                     {% set deshabilitarRecurso = 'disabled' %}
                 {% else %}
                     {% set deshabilitar30 = '' %}
+                    {% set deshabilitarRecurso = '' %}                    
+                {% endif %}  
+                {% if arProgramacionDetalle.periodoBloqueo > 0 %}  
+                    {% set deshabilitarRecurso = 'disabled' %}
+                {% else %}
                     {% set deshabilitarRecurso = '' %}                    
                 {% endif %}                
                     {% if intRecurso != arProgramacionDetalle.codigoRecursoFk or arProgramacionDetalle.codigoRecursoFk == '' %}
