@@ -261,16 +261,33 @@ class AspiranteController extends Controller
         $session->set('dqlAspiranteLista', $em->getRepository('BrasaRecursoHumanoBundle:RhuAspirante')->listaDQL(
                 $session->get('filtroNombreAspirante'),
                 $session->get('filtroIdentificacionAspirante'),
-                '',
-                '',
-                ''
+                $session->get('filtroBloqueado'),
+                $session->get('filtroReintegro'),
+                $session->get('filtroCodigoZona')
                 ));
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $form = $this->createFormBuilder() 
+        $arrayPropiedades = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuZona',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('z')
+                    ->orderBy('z.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoZona')) {
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuZona", $session->get('filtroCodigoZona'));
+        }            
+        $form = $this->createFormBuilder()
+            ->add('zonaRel', 'entity', $arrayPropiedades)
+            ->add('reintegro', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroReintegro')))
+            ->add('bloqueado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroBloqueado')))    
             ->add('TxtNombre', 'text', array('label'  => 'Nombre', 'data' => $session->get('filtroNombreAspirante')))
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacionAspirante')))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -294,6 +311,9 @@ class AspiranteController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroNombreAspirante', $form->get('TxtNombre')->getData());
         $session->set('filtroIdentificacionAspirante', $form->get('TxtIdentificacion')->getData());
+        $session->set('filtroBloqueado', $form->get('bloqueado')->getData());
+        $session->set('filtroReintegro', $form->get('reintegro')->getData());
+        $session->set('filtroCodigoZona', $controles['zonaRel']);
     }
 
     private function generarExcel() {

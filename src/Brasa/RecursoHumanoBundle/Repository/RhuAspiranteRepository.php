@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 
 class RhuAspiranteRepository extends EntityRepository {
     
-    public function listaDQL($strNombre = "", $strIdentificacion = "", $boolCerrado = "", $boolAprobado = "", $codigoCentroCosto = "") {
+    public function listaDQL($strNombre = "", $strIdentificacion = "", $boolBloqueado = "", $boolReintegro = "", $codigoZona = "") {
         $dql   = "SELECT a FROM BrasaRecursoHumanoBundle:RhuAspirante a WHERE a.codigoAspirantePk <> 0 ";
         if($strNombre != "" ) {
             $dql .= " AND a.nombreCorto LIKE '%" . $strNombre . "%'";
@@ -14,22 +14,20 @@ class RhuAspiranteRepository extends EntityRepository {
         if($strIdentificacion != "" ) {
             $dql .= " AND a.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
         }
-        if($boolCerrado != null) {
-            if($boolCerrado == 1 ) {
-                $dql .= " AND a.estadoCerrado = 1";
-            } elseif($boolCerrado == 0) {
-                $dql .= " AND a.estadoCerrado = 0";
-            }
+        if($boolBloqueado == 1 ) {
+            $dql .= " AND a.bloqueado = 1";
+        } 
+        if($boolBloqueado == '0') {
+            $dql .= " AND a.bloqueado = 0";
         }
-        if($boolAprobado != null) {
-            if($boolAprobado == 1 ) {
-                $dql .= " AND a.estadoAprobado = 1";
-            } elseif($boolAprobado == 0) {
-                $dql .= " AND a.estadoAprobado = 0";
-            }
+        if($boolReintegro == 1 ) {
+            $dql .= " AND a.reintegro = 1";
+        } 
+        if($boolReintegro == '0') {
+            $dql .= " AND a.reintegro = 0";
         }
-        if($codigoCentroCosto != "" ) {
-            $dql .= " AND a.codigoCentroCostoFk = " . $codigoCentroCosto;
+        if($codigoZona != "" ) {
+            $dql .= " AND a.codigoZonaFk = " . $codigoZona;
         }
         $dql .= " ORDER BY a.fecha";
         return $dql;

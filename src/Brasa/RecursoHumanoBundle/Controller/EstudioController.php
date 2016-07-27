@@ -346,14 +346,13 @@ class EstudioController extends Controller
                             ->setCellValue('O1', 'CURSO ACREDITACIÓN')
                             ->setCellValue('P1', 'ACADEMIA')
                             ->setCellValue('Q1', 'FECHA INICIO ACREDITACIÓN')
-                            ->setCellValue('R1', 'FECHA TER ACREDITACIÓN')
-                            ->setCellValue('S1', 'FECHA VEN ACREDITACIÓN')
-                            ->setCellValue('T1', 'NUMERO REGISTRO')
-                            ->setCellValue('U1', 'NUMERO APROBACIÓN')
-                            ->setCellValue('V1', 'VALIDAR')
-                            ->setCellValue('W1', 'ESTADO')
-                            ->setCellValue('X1', 'ESTADO INVALIDO')
-                            ->setCellValue('Y1', 'COMENTARIOS');
+                            ->setCellValue('R1', 'FECHA VEN ACREDITACIÓN')
+                            ->setCellValue('S1', 'NUMERO REGISTRO')
+                            ->setCellValue('T1', 'NUMERO APROBACIÓN')
+                            ->setCellValue('U1', 'VALIDAR')
+                            ->setCellValue('V1', 'ESTADO')
+                            ->setCellValue('W1', 'ESTADO INVALIDO')
+                            ->setCellValue('X1', 'COMENTARIOS');
 
                 $i = 2;
                 $query = $em->createQuery($this->strListaDql);
@@ -364,6 +363,10 @@ class EstudioController extends Controller
                     $fecha = "";
                     if ($arEstudios->getFecha() != null) {
                         $fecha = $arEstudios->getFecha()->format('Y/m/d');
+                    }
+                    $ciudad = "";
+                    if ($arEstudios->getCodigoCiudadFk() != null) {
+                        $ciudad = $arEstudios->getCiudadRel()->getNombre();
                     }
                     $fechaInicio = "";
                     if ($arEstudios->getFechaInicio() != null) {
@@ -376,10 +379,6 @@ class EstudioController extends Controller
                     $fechaInicioAcreditacion = "";
                     if ($arEstudios->getFechaInicioAcreditacion() != null) {
                         $fechaInicioAcreditacion = $arEstudios->getFechaInicioAcreditacion()->format('Y/m/d');
-                    }
-                    $fechaTerminacionAcreditacion = "";
-                    if ($arEstudios->getFechaTerminacionAcreditacion() != null) {
-                        $fechaTerminacionAcreditacion = $arEstudios->getFechaTerminacionAcreditacion()->format('Y/m/d');
                     }
                     $fechaVencimientoControl = "";
                     if ($arEstudios->getFechaVencimientoControl() != null) {
@@ -424,7 +423,7 @@ class EstudioController extends Controller
                             ->setCellValue('F' . $i, $arEstudios->getEmpleadoEstudioTipoRel()->getNombre())
                             ->setCellValue('G' . $i, $arEstudios->getInstitucion())
                             ->setCellValue('H' . $i, $arEstudios->getTitulo())
-                            ->setCellValue('I' . $i, $arEstudios->getCiudadRel()->getNombre())
+                            ->setCellValue('I' . $i, $ciudad)
                             ->setCellValue('J' . $i, $fechaInicio)
                             ->setCellValue('K' . $i, $fechaTerminacion)
                             ->setCellValue('L' . $i, $fechaVencimientoControl)
@@ -433,14 +432,13 @@ class EstudioController extends Controller
                             ->setCellValue('O' . $i, $tipoAcreditacion)
                             ->setCellValue('P' . $i, $academia)
                             ->setCellValue('Q' . $i, $fechaInicioAcreditacion)
-                            ->setCellValue('R' . $i, $fechaTerminacionAcreditacion)
-                            ->setCellValue('S' . $i, $fechaVencimientoAcreditacion)
-                            ->setCellValue('T' . $i, $arEstudios->getNumeroRegistro())
-                            ->setCellValue('U' . $i, $arEstudios->getNumeroAcreditacion())
-                            ->setCellValue('V' . $i, $objFunciones->devuelveBoolean($arEstudios->getValidarVencimiento()))
-                            ->setCellValue('W' . $i, $estado)
-                            ->setCellValue('X' . $i, $estadoInvalidado)
-                            ->setCellValue('Y' . $i, $arEstudios->getComentarios());
+                            ->setCellValue('R' . $i, $fechaVencimientoAcreditacion)
+                            ->setCellValue('S' . $i, $arEstudios->getNumeroRegistro())
+                            ->setCellValue('T' . $i, $arEstudios->getNumeroAcreditacion())
+                            ->setCellValue('U' . $i, $objFunciones->devuelveBoolean($arEstudios->getValidarVencimiento()))
+                            ->setCellValue('V' . $i, $estado)
+                            ->setCellValue('W' . $i, $estadoInvalidado)
+                            ->setCellValue('X' . $i, $arEstudios->getComentarios());
                     $i++;
                 }
 
@@ -548,10 +546,6 @@ class EstudioController extends Controller
                     if ($arEstudios->getFechaInicioAcreditacion() != null) {
                         $fechaInicioAcreditacion = $arEstudios->getFechaInicioAcreditacion()->format('Y/m/d');
                     }
-                    $fechaTerminacionAcreditacion = "";
-                    if ($arEstudios->getFechaTerminacionAcreditacion() != null) {
-                        $fechaTerminacionAcreditacion = $arEstudios->getFechaTerminacionAcreditacion()->format('Y/m/d');
-                    }
                     $tipoAcreditacion = "";
                     if ($arEstudios->getCodigoEstudioTipoAcreditacionFk() != null) {
                         $tipoAcreditacion = $arEstudios->getEstudioTipoAcreditacionRel()->getCodigoEstudioAcreditacion();
@@ -645,9 +639,18 @@ class EstudioController extends Controller
                     } else {
                         $telefono = $arEstudios->getEmpleadoRel()->getCelular();
                     }
-                    $ciudadLabora = $arContrato->getCiudadLaboraRel()->getNombre();
+                    $ciudadLabora = "";
+                    if ($arContrato->getCodigoCiudadLaboraFk() != null){
+                        $ciudadLabora = $arContrato->getCiudadLaboraRel()->getNombre();
+                    }
                     $ciudadLabora = explode(" ", $ciudadLabora);
                     $ciudadLabora = $ciudadLabora[0];
+                    
+                    if ($ciudadLabora == ""){
+                        $departamentoCiudadLabora = "";
+                    } else {
+                        $departamentoCiudadLabora = $arContrato->getCiudadLaboraRel()->getDepartamentoRel()->getNombre();
+                    }
                     
                     $nivelEstudio = "";
                     $gradoBachiller = "Ninguna";
@@ -688,7 +691,7 @@ class EstudioController extends Controller
                             ->setCellValue('Q' . $i, $telefono)
                             ->setCellValue('R' . $i, $arEstudios->getEmpleadoRel()->getDireccion())
                             ->setCellValue('S' . $i, $arEstudios->getEmpleadoRel()->getDireccion())//FALTA LA DIRECCION DEL PUESTO
-                            ->setCellValue('T' . $i, $arContrato->getCiudadLaboraRel()->getDepartamentoRel()->getNombre())
+                            ->setCellValue('T' . $i, $departamentoCiudadLabora)
                             ->setCellValue('U' . $i, $ciudadLabora)
                             ->setCellValue('V' . $i, $gradoBachiller)
                             ->setCellValue('W' . $i, ucfirst($superior))

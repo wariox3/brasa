@@ -87,10 +87,10 @@
                 <tr>
                     <td class="titulo">FECHA INICIO ACREDITACIÓN:</td>
                     <td>{% if arEstudio.fechaInicioAcreditacion != null %}{{ arEstudio.fechaInicio | date('Y/m/d') }}{% else %}{% endif%}</td>
-                    <td class="titulo">FECHA TERMINACIÓN ACREDITACIÓN:</td>
-                    <td>{% if arEstudio.fechaTerminacionAcreditacion != null %}{{ arEstudio.fechaInicio | date('Y/m/d') }}{% else %}{% endif%}</td>
                     <td class="titulo">FECHA VEN ACREDITACIÓN:</td>
-                    <td>{% if arEstudio.fechaVencimientoAcreditacion != null %}{{ arEstudio.fechaVencimientoAcreditacion | date('Y/m/d') }}{% else %}{% endif%}</td>
+                    <td></td>
+                    <td class="titulo">{% if arEstudio.fechaVencimientoAcreditacion != null %}{{ arEstudio.fechaVencimientoAcreditacion | date('Y/m/d') }}{% else %}{% endif%}</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="titulo">COMENTARIOS:</td>

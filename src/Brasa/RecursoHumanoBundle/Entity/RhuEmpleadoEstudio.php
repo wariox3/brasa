@@ -74,12 +74,6 @@ class RhuEmpleadoEstudio
     private $fechaInicioAcreditacion;
     
     /**
-     * @ORM\Column(name="fecha_terminacion_acreditacion", type="date", nullable=true)
-     */     
-    
-    private $fechaTerminacionAcreditacion;
-    
-    /**
      * @ORM\Column(name="fecha_vencimiento_acreditacion", type="date", nullable=true)
      */     
     
@@ -190,6 +184,7 @@ class RhuEmpleadoEstudio
     protected $estudioEstadoInvalidoRel;
     
     
+
 
     /**
      * Get codigoEmpleadoEstudioPk
@@ -439,30 +434,6 @@ class RhuEmpleadoEstudio
     public function getFechaInicioAcreditacion()
     {
         return $this->fechaInicioAcreditacion;
-    }
-
-    /**
-     * Set fechaTerminacionAcreditacion
-     *
-     * @param \DateTime $fechaTerminacionAcreditacion
-     *
-     * @return RhuEmpleadoEstudio
-     */
-    public function setFechaTerminacionAcreditacion($fechaTerminacionAcreditacion)
-    {
-        $this->fechaTerminacionAcreditacion = $fechaTerminacionAcreditacion;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaTerminacionAcreditacion
-     *
-     * @return \DateTime
-     */
-    public function getFechaTerminacionAcreditacion()
-    {
-        return $this->fechaTerminacionAcreditacion;
     }
 
     /**
