@@ -33,6 +33,8 @@ class RhuPagoConceptoType extends AbstractType
             ->add('conceptoPension', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('conceptoSalud', 'choice', array('choices'   => array('1' => 'SI', '0' => 'NO')))
             ->add('tipoAdicional', 'number', array('required' => true))
+            ->add('codigoCuentaComercialFk', 'text', array('required' => true))
+            ->add('tipoCuentaComercial', 'number', array('required' => true))
             ->add('guardar', 'submit', array('label' => 'Guardar'));
     }
 

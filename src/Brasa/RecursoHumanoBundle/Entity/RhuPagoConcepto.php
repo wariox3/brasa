@@ -108,6 +108,16 @@ class RhuPagoConcepto
     private $tipoCuentaOperacion = 1;   
     
     /**
+     * @ORM\Column(name="codigo_cuenta_comercial_fk", type="string", length=20, nullable=true)
+     */     
+    private $codigoCuentaComercialFk;    
+    
+    /**
+     * @ORM\Column(name="tipo_cuenta_comercial", type="bigint", nullable=true)
+     */     
+    private $tipoCuentaComercial = 1;    
+    
+    /**
      * 1=Bonificacion, 2=Descuento, 3=Comision
      * @ORM\Column(name="tipo_adicional", type="smallint")
      */    
@@ -1049,5 +1059,53 @@ class RhuPagoConcepto
     public function getVacacionesCreditosPagoConceptoRel()
     {
         return $this->vacacionesCreditosPagoConceptoRel;
+    }
+
+    /**
+     * Set codigoCuentaComercialFk
+     *
+     * @param string $codigoCuentaComercialFk
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setCodigoCuentaComercialFk($codigoCuentaComercialFk)
+    {
+        $this->codigoCuentaComercialFk = $codigoCuentaComercialFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCuentaComercialFk
+     *
+     * @return string
+     */
+    public function getCodigoCuentaComercialFk()
+    {
+        return $this->codigoCuentaComercialFk;
+    }
+
+    /**
+     * Set tipoCuentaComercial
+     *
+     * @param integer $tipoCuentaComercial
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setTipoCuentaComercial($tipoCuentaComercial)
+    {
+        $this->tipoCuentaComercial = $tipoCuentaComercial;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCuentaComercial
+     *
+     * @return integer
+     */
+    public function getTipoCuentaComercial()
+    {
+        return $this->tipoCuentaComercial;
     }
 }
