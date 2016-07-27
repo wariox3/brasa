@@ -92,7 +92,10 @@ class GenerarSoportePagoController extends Controller
                                    } else {
                                        $strTurno = null;
                                    }                       
-                                }                    
+                                } 
+                                if($i == 31) {
+                                    $strTurno = null;
+                                }                                
                             }                                                                                
                             if($strTurno) {
                                 $em->getRepository('BrasaTurnoBundle:TurSoportePago')->insertarSoportePago($arSoportePago, $arSoportePagoPeriodo, $arProgramacionDetalle, $dateFechaDesde, $dateFechaHasta, $strTurno, $dateFecha, $dateFecha2, $boolFestivo, $boolFestivo2);
@@ -499,6 +502,7 @@ class GenerarSoportePagoController extends Controller
     }    
     
     private function formularioGenerar() {
+        $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $arrayPropiedadesRecursoGrupo = array(
                 'class' => 'BrasaTurnoBundle:TurRecursoGrupo',
