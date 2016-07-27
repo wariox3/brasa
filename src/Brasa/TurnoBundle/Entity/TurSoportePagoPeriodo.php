@@ -98,6 +98,11 @@ class TurSoportePagoPeriodo
      */    
     private $estadoProgramacionPago = false;     
     
+    /**     
+     * @ORM\Column(name="estado_bloquear_programacion", type="boolean", nullable=true)
+     */    
+    private $estadoBloquearProgramacion = false;    
+    
     /**
      * @ORM\Column(name="dia_festivo_real", type="integer")
      */    
@@ -725,5 +730,29 @@ class TurSoportePagoPeriodo
     public function getEstadoProgramacionPago()
     {
         return $this->estadoProgramacionPago;
+    }
+
+    /**
+     * Set estadoBloquearProgramacion
+     *
+     * @param boolean $estadoBloquearProgramacion
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setEstadoBloquearProgramacion($estadoBloquearProgramacion)
+    {
+        $this->estadoBloquearProgramacion = $estadoBloquearProgramacion;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoBloquearProgramacion
+     *
+     * @return boolean
+     */
+    public function getEstadoBloquearProgramacion()
+    {
+        return $this->estadoBloquearProgramacion;
     }
 }

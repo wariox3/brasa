@@ -140,6 +140,50 @@ class GenerarSoportePagoController extends Controller
                 $em->persist($arSoportePagoPeriodo);
                 $em->flush();                                                   
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
+            } 
+            if($request->request->get('OpBloquearProgramacion')) {
+                set_time_limit(0);
+                ini_set("memory_limit", -1);
+                $codigoSoportePagoPeriodo = $request->request->get('OpBloquearProgramacion');
+                $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
+                $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
+                $arSoportePagoPeriodo->setEstadoBloquearProgramacion(1);                
+                $em->persist($arSoportePagoPeriodo);
+                $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+                $arSoportesPago = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));                
+                foreach($arSoportesPago as $arSoportePago) {
+                    $arProgramacionesDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+                    $arProgramacionesDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoRecursoFk' => $arSoportePago->getCodigoRecursoFk(), 'anio' => $arSoportePagoPeriodo->getFechaDesde()->format('Y'), 'mes' => $arSoportePagoPeriodo->getFechaDesde()->format('m')));                                    
+                    foreach($arProgramacionesDetalles as $arProgramacionDetalle) {
+                        $arProgramacionDetalleAct = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+                        $arProgramacionDetalleAct = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($arProgramacionDetalle->getCodigoProgramacionDetallePk());                                    
+                        $arProgramacionDetalleAct->setPeriodoBloqueo($arSoportePagoPeriodo->getFechaHasta()->format('j'));
+                        $em->persist($arProgramacionDetalleAct);
+                    }
+                }
+                $em->flush();                                                   
+                return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
+            }  
+            if($request->request->get('OpDesBloquearProgramacion')) {
+                $codigoSoportePagoPeriodo = $request->request->get('OpDesBloquearProgramacion');
+                $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
+                $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
+                $arSoportePagoPeriodo->setEstadoBloquearProgramacion(0);                
+                $em->persist($arSoportePagoPeriodo);
+                $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+                $arSoportesPago = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));                
+                foreach($arSoportesPago as $arSoportePago) {
+                    $arProgramacionesDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+                    $arProgramacionesDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoRecursoFk' => $arSoportePago->getCodigoRecursoFk(), 'anio' => $arSoportePagoPeriodo->getFechaDesde()->format('Y'), 'mes' => $arSoportePagoPeriodo->getFechaDesde()->format('m')));                                    
+                    foreach($arProgramacionesDetalles as $arProgramacionDetalle) {
+                        $arProgramacionDetalleAct = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+                        $arProgramacionDetalleAct = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($arProgramacionDetalle->getCodigoProgramacionDetallePk());                                    
+                        $arProgramacionDetalleAct->setPeriodoBloqueo(0);
+                        $em->persist($arProgramacionDetalleAct);
+                    }
+                }                
+                $em->flush();                                                   
+                return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
             }            
             if ($form->get('BtnEliminar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
