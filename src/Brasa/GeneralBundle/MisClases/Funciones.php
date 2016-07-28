@@ -396,7 +396,251 @@ class Funciones {
 
         return $strDia;
     }     
+ 
+    public static function festivo($arFestivos, $dateFecha) {
+        $boolFestivo = 0;
+        foreach ($arFestivos as $arFestivo) {
+            if($arFestivo['fecha'] == $dateFecha) {
+                $boolFestivo = 1;
+            }
+        }
+        return $boolFestivo;
+    }    
     
+    public static function devuelveTurnoDia($arProgramacionDetalle, $intDia) {        
+        $strTurno = NULL;
+        if($intDia == 1) {
+            $strTurno = $arProgramacionDetalle->getDia1();
+        }
+        if($intDia == 2) {
+            $strTurno = $arProgramacionDetalle->getDia2();
+        }
+        if($intDia == 3) {
+            $strTurno = $arProgramacionDetalle->getDia3();
+        }
+        if($intDia == 4) {
+            $strTurno = $arProgramacionDetalle->getDia4();
+        }
+        if($intDia == 5) {
+            $strTurno = $arProgramacionDetalle->getDia5();
+        }
+        if($intDia == 6) {
+            $strTurno = $arProgramacionDetalle->getDia6();
+        }
+        if($intDia == 7) {
+            $strTurno = $arProgramacionDetalle->getDia7();
+        }
+        if($intDia == 8) {
+            $strTurno = $arProgramacionDetalle->getDia8();
+        }
+        if($intDia == 9) {
+            $strTurno = $arProgramacionDetalle->getDia9();
+        }
+        if($intDia == 10) {
+            $strTurno = $arProgramacionDetalle->getDia10();
+        }
+        if($intDia == 11) {
+            $strTurno = $arProgramacionDetalle->getDia11();
+        }
+        if($intDia == 12) {
+            $strTurno = $arProgramacionDetalle->getDia12();
+        }
+        if($intDia == 13) {
+            $strTurno = $arProgramacionDetalle->getDia13();
+        }
+        if($intDia == 14) {
+            $strTurno = $arProgramacionDetalle->getDia14();
+        }
+        if($intDia == 15) {
+            $strTurno = $arProgramacionDetalle->getDia15();
+        }
+        if($intDia == 16) {
+            $strTurno = $arProgramacionDetalle->getDia16();
+        }
+        if($intDia == 17) {
+            $strTurno = $arProgramacionDetalle->getDia17();
+        }
+        if($intDia == 18) {
+            $strTurno = $arProgramacionDetalle->getDia18();
+        }
+        if($intDia == 19) {
+            $strTurno = $arProgramacionDetalle->getDia19();
+        }
+        if($intDia == 20) {
+            $strTurno = $arProgramacionDetalle->getDia20();
+        }
+        if($intDia == 21) {
+            $strTurno = $arProgramacionDetalle->getDia21();
+        }
+        if($intDia == 22) {
+            $strTurno = $arProgramacionDetalle->getDia22();
+        }
+        if($intDia == 23) {
+            $strTurno = $arProgramacionDetalle->getDia23();
+        }
+        if($intDia == 24) {
+            $strTurno = $arProgramacionDetalle->getDia24();
+        }
+        if($intDia == 25) {
+            $strTurno = $arProgramacionDetalle->getDia25();
+        }
+        if($intDia == 26) {
+            $strTurno = $arProgramacionDetalle->getDia26();
+        }
+        if($intDia == 27) {
+            $strTurno = $arProgramacionDetalle->getDia27();
+        }
+        if($intDia == 28) {
+            $strTurno = $arProgramacionDetalle->getDia28();
+        }
+        if($intDia == 29) {
+            $strTurno = $arProgramacionDetalle->getDia29();
+        }
+        if($intDia == 30) {
+            $strTurno = $arProgramacionDetalle->getDia30();
+        }        
+        if($intDia == 31) {
+            $strTurno = $arProgramacionDetalle->getDia31();
+        }
+        return $strTurno;
+    }    
+    
+    public static function turnoHoras($intHoraInicio, $intMinutoInicio, $intHoraFinal, $boolFestivo, $intHoras, $boolNovedad = 0, $boolDescanso = 0) {        
+        $objFunciones = new Funciones();
+        if($boolNovedad == 0) {
+            $intHorasNocturnas = $objFunciones->calcularTiempo($intHoraInicio, $intHoraFinal, 0, 6);        
+            $intHorasExtrasNocturnas = 0;
+            $intTotalHoras = $intHorasNocturnas + $intHoras;
+            if($intTotalHoras > 8) {
+                $intHorasJornada = 8 - $intHoras;
+                if($intHorasJornada >= 1) {
+                    $intHorasNocturnasReales = $intHorasNocturnas - $intHorasJornada;
+                    $intHorasNocturnas = $intHorasNocturnas - $intHorasNocturnasReales;
+                    $intHorasExtrasNocturnas = $intHorasNocturnasReales;
+                } else {
+                    $intHorasExtrasNocturnas = $intHorasNocturnas;
+                    $intHorasNocturnas = 0;
+                }
+            }
+
+            $intHorasDiurnas = $objFunciones->calcularTiempo($intHoraInicio, $intHoraFinal, 6, 22);            
+            $intHorasExtrasDiurnas = 0;
+            $intTotalHoras = $intHoras + $intHorasNocturnas + $intHorasExtrasNocturnas + $intHorasDiurnas;
+            if($intTotalHoras > 8) {
+                $intHorasJornada = 8 - ($intHoras + $intHorasNocturnas + $intHorasExtrasNocturnas);                    
+                if($intHorasJornada > 1) {
+                    $intHorasDiurnasReales = $intHorasDiurnas - $intHorasJornada;
+                    $intHorasDiurnas = $intHorasDiurnas - $intHorasDiurnasReales;
+                    $intHorasExtrasDiurnas = $intHorasDiurnasReales;
+                } else {
+                    $intHorasExtrasDiurnas = $intHorasDiurnas;
+                    $intHorasDiurnas = 0;
+                }            
+            }
+
+            $intHorasNocturnasNoche = $objFunciones->calcularTiempo($intHoraInicio, $intHoraFinal, 22, 24); 
+            $intHorasExtrasNocturnasNoche = 0;
+            $intTotalHoras = $intHorasDiurnas + $intHorasExtrasDiurnas + $intHorasNocturnas + $intHorasNocturnasNoche;                                        
+            if($intTotalHoras > 8) {                    
+                $intHorasJornada = 8 - ($intHorasNocturnas + $intHorasDiurnas + $intHorasExtrasDiurnas);                    
+                if($intHorasJornada > 1) {
+                    $intHorasNocturnasNocheReales = $intHorasNocturnasNoche - $intHorasJornada;
+                    $intHorasNocturnasNoche = $intHorasNocturnasNoche - $intHorasNocturnasNocheReales;
+                    $intHorasExtrasNocturnasNoche = $intHorasNocturnasNocheReales;                        
+                } else {
+                    $intHorasExtrasNocturnasNoche = $intHorasNocturnasNoche;
+                    $intHorasNocturnasNoche = 0;
+                }
+            }
+            $intHorasNocturnas += $intHorasNocturnasNoche;        
+            $intHorasExtrasNocturnas += $intHorasExtrasNocturnasNoche;
+
+            $intHorasFestivasDiurnas = 0;
+            $intHorasFestivasNocturnas = 0;
+            $intHorasExtrasFestivasDiurnas = 0;
+            $intHorasExtrasFestivasNocturnas = 0;
+            if($boolFestivo == 1) {
+                $intHorasFestivasDiurnas = $intHorasDiurnas;
+                $intHorasDiurnas = 0;
+                $intHorasFestivasNocturnas = $intHorasNocturnas;
+                $intHorasNocturnas = 0;
+                $intHorasExtrasFestivasDiurnas = $intHorasExtrasDiurnas;
+                $intHorasExtrasDiurnas = 0;
+                $intHorasExtrasFestivasNocturnas = $intHorasExtrasNocturnas;
+                $intHorasExtrasNocturnas = 0;
+            }                
+            $intTotalHoras = $intHorasDiurnas+$intHorasNocturnas+$intHorasExtrasDiurnas+$intHorasExtrasNocturnas+$intHorasFestivasDiurnas+$intHorasFestivasNocturnas+$intHorasExtrasFestivasDiurnas+$intHorasExtrasFestivasNocturnas;            
+            if($boolDescanso == 1) {                
+                $arrHoras = array(
+                    'horasDescanso' => $intTotalHoras,
+                    'horasNovedad' => 0,
+                    'horasDiurnas' => 0, 
+                    'horasNocturnas' => 0, 
+                    'horasExtrasDiurnas' => 0, 
+                    'horasExtrasNocturnas' => 0,
+                    'horasFestivasDiurnas' => 0, 
+                    'horasFestivasNocturnas' => 0, 
+                    'horasExtrasFestivasDiurnas' => 0, 
+                    'horasExtrasFestivasNocturnas' => 0,
+                    'horas' => $intTotalHoras);                
+            } else {
+                $arrHoras = array(
+                    'horasDescanso' => 0,
+                    'horasNovedad' => 0,
+                    'horasDiurnas' => $intHorasDiurnas, 
+                    'horasNocturnas' => $intHorasNocturnas, 
+                    'horasExtrasDiurnas' => $intHorasExtrasDiurnas, 
+                    'horasExtrasNocturnas' => $intHorasExtrasNocturnas,
+                    'horasFestivasDiurnas' => $intHorasFestivasDiurnas, 
+                    'horasFestivasNocturnas' => $intHorasFestivasNocturnas, 
+                    'horasExtrasFestivasDiurnas' => $intHorasExtrasFestivasDiurnas, 
+                    'horasExtrasFestivasNocturnas' => $intHorasExtrasFestivasNocturnas,
+                    'horas' => $intTotalHoras);                
+            }
+            
+        } else {
+            $arrHoras = array(
+                'horasDescanso' => 0,
+                'horasNovedad' => 8,
+                'horasDiurnas' => 0, 
+                'horasNocturnas' => 0, 
+                'horasExtrasDiurnas' => 0, 
+                'horasExtrasNocturnas' => 0,
+                'horasFestivasDiurnas' => 0, 
+                'horasFestivasNocturnas' => 0, 
+                'horasExtrasFestivasDiurnas' => 0, 
+                'horasExtrasFestivasNocturnas' => 0,
+                'horas' => 0);            
+        }  
+        
+        return $arrHoras;
+    }        
+    
+    public static function calcularTiempo($intInicial, $intFinal, $intParametroInicio, $intParametroFinal) {
+        $intHoras = 0;
+        $intHoraIniciaTemporal = 0;
+        $intHoraTerminaTemporal = 0;
+        if($intInicial < $intParametroInicio) {
+            $intHoraIniciaTemporal = $intParametroInicio;
+        } else {
+            $intHoraIniciaTemporal = $intInicial;
+        }
+        if($intFinal > $intParametroFinal) {
+            if($intInicial > $intParametroFinal) {
+                $intHoraTerminaTemporal = $intInicial;
+            } else {
+                $intHoraTerminaTemporal = $intParametroFinal;
+            }
+        } else {
+            if($intFinal > $intParametroInicio) {
+                $intHoraTerminaTemporal = $intFinal;
+            } else {
+                $intHoraTerminaTemporal = $intParametroInicio;
+            }
+        }
+        $intHoras = $intHoraTerminaTemporal - $intHoraIniciaTemporal;
+        return $intHoras;
+    }        
 }
 ?>
 

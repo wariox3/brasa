@@ -32,13 +32,9 @@
             <tr>
                 <th>MES</th>
                 <th>RECURSO</th>
-                    {% for arrDiaSemana in arrDiaSemana %}
-                    <th>{{ arrDiaSemana.dia }}{{ arrDiaSemana.diaSemana }}</th>
-                    {% endfor %}
-                <th>H</th>
-                <th>HD</th>
-                <th>HN</th>
-                <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
+                {% for arrDiaSemana in arrDiaSemana %}
+                <th>{{ arrDiaSemana.dia }}{{ arrDiaSemana.diaSemana }}</th>
+                {% endfor %}                
             </tr>
             {% set intPuesto = '' %}
             {% for arSimulacionDetalle in arSimulacionDetalle %}                            
@@ -86,16 +82,13 @@
                     <td>{{ arSimulacionDetalle.dia29  }}</td>
                     <td>{{ arSimulacionDetalle.dia30  }}</td>
                     <td>{{ arSimulacionDetalle.dia31  }}</td>
-                    <td style="text-align: right">{{ arSimulacionDetalle.horas | number_format(0, '.', ',') }}</td>
-                    <td style="text-align: right">{{ arSimulacionDetalle.horasDiurnas | number_format(0, '.', ',') }}</td>
-                    <td style="text-align: right">{{ arSimulacionDetalle.horasNocturnas | number_format(0, '.', ',') }}</td>
-                    <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSimulacionDetalle.codigoSimulacionDetallePk }}" /></td>
                 </tr>
             {% endfor %}
         </table> 
         <!-- Botones Menu Items -->
         <div class="btn-toolbar">            
             <div class="btn-group" style="float: right">
+                {{ form_widget(form.BtnGenerarSoportePago, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
                 {{ form_widget(form.BtnPdf, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
             </div>                       

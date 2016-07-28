@@ -6,9 +6,8 @@ use Doctrine\ORM\EntityRepository;
 
 class TurSimulacionDetalleRepository extends EntityRepository {
 
-    public function listaDql() {
-        $em = $this->getEntityManager();
-        $dql   = "SELECT sd FROM BrasaTurnoBundle:TurSimulacionDetalle sd WHERE sd.codigoSimulacionDetallePk <> 0";
+    public function listaDql($usuario) {        
+        $dql   = "SELECT sd FROM BrasaTurnoBundle:TurSimulacionDetalle sd WHERE sd.usuario = '" . $usuario . "'";
         $dql .= " ORDER BY sd.codigoSimulacionDetallePk";
         return $dql;
     }
