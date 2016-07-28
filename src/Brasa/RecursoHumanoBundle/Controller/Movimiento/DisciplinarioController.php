@@ -206,7 +206,8 @@ class DisciplinarioController extends Controller
 
     /**
      * @Route("/rhu/movimiento/disciplinario/descargo/nuevo/{codigoDisciplinario}/{codigoDisciplinarioDescargo}", name="brs_rhu_movimiento_disciplinario_descargo_nuevo")
-     */     
+     */ 
+    
     public function nuevoDescargoAction($codigoDisciplinario, $codigoDisciplinarioDescargo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

@@ -627,29 +627,46 @@ class EstudioController extends Controller
                     $codigoContrato = "";
                     if ($arEstudios->getEmpleadoRel()->getCodigoContratoActivoFk() != null){
                         $codigoContrato = $arEstudios->getEmpleadoRel()->getCodigoContratoActivoFk();
+                        
                     } else {
-                        $codigoContrato = $arEstudios->getEmpleadoRel()->getCodigoContratoUltimoFk();
+                        if ($arEstudios->getEmpleadoRel()->getCodigoContratoUltimoFk() != null){
+                            $codigoContrato = $arEstudios->getEmpleadoRel()->getCodigoContratoUltimoFk();
+                        } else {
+                            $codigoContrato = 0;
+                        }
+                        
                     }
+                    
                     $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
                     $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
                     //
+                    
+                    $ciudadLabora = "";
+                    if ($arContrato != null){
+                        if ($arContrato->getCodigoCiudadLaboraFk() != null){
+                            $ciudadLabora = $arContrato->getCiudadLaboraRel()->getNombre();
+                        }
+                        $ciudadLabora = explode(" ", $ciudadLabora);
+                        $ciudadLabora = $ciudadLabora[0];
+
+                        if ($ciudadLabora == ""){
+                            $departamentoCiudadLabora = "";
+                        } else {
+                            $departamentoCiudadLabora = $arContrato->getCiudadLaboraRel()->getDepartamentoRel()->getNombre();
+                        }
+                    $contratoFechaDesde = $arContrato->getFechaDesde()->format('d/m/Y');    
+                    } else {
+                        $ciudadLabora = "";
+                        $departamentoCiudadLabora = "";
+                        $contratoFechaDesde = "";
+                    }
+                        
+                    
                     $telefono = "";
                     if ($arEstudios->getEmpleadoRel()->getTelefono() != null){
                         $telefono = $arEstudios->getEmpleadoRel()->getTelefono();
                     } else {
                         $telefono = $arEstudios->getEmpleadoRel()->getCelular();
-                    }
-                    $ciudadLabora = "";
-                    if ($arContrato->getCodigoCiudadLaboraFk() != null){
-                        $ciudadLabora = $arContrato->getCiudadLaboraRel()->getNombre();
-                    }
-                    $ciudadLabora = explode(" ", $ciudadLabora);
-                    $ciudadLabora = $ciudadLabora[0];
-                    
-                    if ($ciudadLabora == ""){
-                        $departamentoCiudadLabora = "";
-                    } else {
-                        $departamentoCiudadLabora = $arContrato->getCiudadLaboraRel()->getDepartamentoRel()->getNombre();
                     }
                     
                     $nivelEstudio = "";
@@ -683,7 +700,7 @@ class EstudioController extends Controller
                             ->setCellValue('I' . $i, $arEstudios->getEmpleadoRel()->getFechaNacimiento()->format('d/m/Y'))
                             ->setCellValue('J' . $i, $sexo)
                             ->setCellValue('K' . $i, $cargo)
-                            ->setCellValue('L' . $i, $arContrato->getFechaDesde()->format('d/m/Y'))
+                            ->setCellValue('L' . $i, $contratoFechaDesde)
                             ->setCellValue('M' . $i, $tipoAcreditacion)
                             ->setCellValue('N' . $i, $academia)
                             ->setCellValue('O' . $i, $arEstudios->getNumeroAcreditacion())
