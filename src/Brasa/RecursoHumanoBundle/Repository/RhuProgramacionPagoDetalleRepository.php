@@ -564,6 +564,9 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         }
         if($arProgramacionPagoDetalle->getHorasExtrasFestivasNocturnas() > 0) {
             $arrExtra[] = array('concepto' => $arConfiguracion->getCodigoHoraExtraFestivaNocturna(), 'horas' => $arProgramacionPagoDetalle->getHorasExtrasFestivasNocturnas());
+        } 
+        if($arProgramacionPagoDetalle->getHorasRecargoNocturno() > 0) {
+            $arrExtra[] = array('concepto' => $arConfiguracion->getCodigoHoraRecargoNocturno(), 'horas' => $arProgramacionPagoDetalle->getHorasRecargoNocturno());
         }        
         return $arrExtra;
     }    

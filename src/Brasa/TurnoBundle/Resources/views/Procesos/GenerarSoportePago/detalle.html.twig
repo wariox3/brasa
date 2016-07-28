@@ -62,7 +62,7 @@
                 <td colspan="2"></td>                
                 <td colspan="7" style="text-align: center">NOVEDADES</td>
                 <td colspan="6" style="text-align: center">NOMINA</td>                
-                <td colspan="4" style="text-align: center">ADICIONAL</td>
+                <td colspan="5" style="text-align: center">ADICIONAL</td>
             </tr>
             <tr>                
                 <th colspan="3">RECURSO</th>
@@ -85,6 +85,7 @@
                 <th><p data-toggle="tooltip" data-placement="top" title="Horas extras nocturnas">EN</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Horas extras festivas diurnas">EFD</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Horas extras festivas nocturnas">EFN</p></th>                                
+                <th><p data-toggle="tooltip" data-placement="top" title="Recargo nocturno">RN</p></th>                                                
                 <th><p data-toggle="tooltip" data-placement="top" title="Turno fijo">{{ knp_pagination_sortable(arSoportesPagos, 'TF', 'sp.turnoFijo') }}</p></th>                                
                 <th></th>
                 <th></th>
@@ -114,6 +115,7 @@
                 <td style="text-align: right">{{ arSoportesPagos.horasExtrasOrdinariasNocturnas | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horasExtrasFestivasDiurnas | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.horasExtrasFestivasNocturnas | number_format(2, '.', ',') }}</td>                                
+                <td style="text-align: right">{{ arSoportesPagos.horasRecargoNocturno | number_format(2, '.', ',') }}</td>                                                
                 <td style="text-align: right">{{ arSoportesPagos.turnoFijo }}</td>                                                
                 <td><a href="javascript:abrirVentana3('{{ path('brs_tur_proceso_generar_soporte_pago_editar', {'codigoSoportePago': arSoportesPagos.codigoSoportePagoPk }) }}', 'Editar', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Ver"></a></td>
                 <td><a href="javascript:abrirVentana3('{{ path('brs_tur_proceso_generar_soporte_pago_detalle_ver', {'codigoSoportePago': arSoportesPagos.codigoSoportePagoPk }) }}', 'VerDetalleSoportePago', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_090_table.png') }}" width=20 height=20 title="Ver"></a></td>

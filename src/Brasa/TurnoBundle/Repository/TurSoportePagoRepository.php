@@ -39,7 +39,8 @@ class TurSoportePagoRepository extends EntityRepository {
                     . "SUM(spd.horasExtrasOrdinariasDiurnas) as horasExtrasOrdinariasDiurnas, "
                     . "SUM(spd.horasExtrasOrdinariasNocturnas) as horasExtrasOrdinariasNocturnas, "
                     . "SUM(spd.horasExtrasFestivasDiurnas) as horasExtrasFestivasDiurnas, "
-                    . "SUM(spd.horasExtrasFestivasNocturnas) as horasExtrasFestivasNocturnas "
+                    . "SUM(spd.horasExtrasFestivasNocturnas) as horasExtrasFestivasNocturnas, "
+                    . "SUM(spd.horasRecargoNocturno) as horasRecargoNocturno "
                     . "FROM BrasaTurnoBundle:TurSoportePagoDetalle spd "
                     . "WHERE spd.codigoSoportePagoFk =  " . $arSoportePago->getCodigoSoportePagoPk() . " "
                     . "GROUP BY spd.codigoRecursoFk" ;
@@ -85,6 +86,7 @@ class TurSoportePagoRepository extends EntityRepository {
                 $arSoportePagoAct->setHorasExtrasOrdinariasNocturnas($arrayResultado[$i]['horasExtrasOrdinariasNocturnas']);
                 $arSoportePagoAct->setHorasExtrasFestivasDiurnas($arrayResultado[$i]['horasExtrasFestivasDiurnas']);
                 $arSoportePagoAct->setHorasExtrasFestivasNocturnas($arrayResultado[$i]['horasExtrasFestivasNocturnas']);
+                $arSoportePagoAct->setHorasRecargoNocturno($arrayResultado[$i]['horasRecargoNocturno']);
                 $arSoportePagoAct->setHorasDescansoReales($arrayResultado[$i]['horasDescanso']);
                 $arSoportePagoAct->setHorasDiurnasReales($arrayResultado[$i]['horasDiurnas']);
                 $arSoportePagoAct->setHorasNocturnasReales($arrayResultado[$i]['horasNocturnas']);
@@ -94,6 +96,7 @@ class TurSoportePagoRepository extends EntityRepository {
                 $arSoportePagoAct->setHorasExtrasOrdinariasNocturnasReales($arrayResultado[$i]['horasExtrasOrdinariasNocturnas']);
                 $arSoportePagoAct->setHorasExtrasFestivasDiurnasReales($arrayResultado[$i]['horasExtrasFestivasDiurnas']);
                 $arSoportePagoAct->setHorasExtrasFestivasNocturnasReales($arrayResultado[$i]['horasExtrasFestivasNocturnas']);            
+                $arSoportePagoAct->setHorasRecargoNocturnoReales($arrayResultado[$i]['horasRecargoNocturno']);                
                 $em->persist($arSoportePagoAct);   
 
             }
@@ -126,7 +129,8 @@ class TurSoportePagoRepository extends EntityRepository {
                 . "SUM(spd.horasExtrasOrdinariasDiurnas) as horasExtrasOrdinariasDiurnas, "
                 . "SUM(spd.horasExtrasOrdinariasNocturnas) as horasExtrasOrdinariasNocturnas, "
                 . "SUM(spd.horasExtrasFestivasDiurnas) as horasExtrasFestivasDiurnas, "
-                . "SUM(spd.horasExtrasFestivasNocturnas) as horasExtrasFestivasNocturnas "
+                . "SUM(spd.horasExtrasFestivasNocturnas) as horasExtrasFestivasNocturnas, "
+                . "SUM(spd.horasRecargoNocturno) as horasRecargoNocturno "
                 . "FROM BrasaTurnoBundle:TurSoportePagoDetalle spd "
                 . "WHERE spd.codigoSoportePagoFk =  " . $codigoSoportePago . " "
                 . "GROUP BY spd.codigoRecursoFk" ;
@@ -186,6 +190,7 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePago->setHorasExtrasOrdinariasNocturnas($arrayResultado[$i]['horasExtrasOrdinariasNocturnas']);
             $arSoportePago->setHorasExtrasFestivasDiurnas($arrayResultado[$i]['horasExtrasFestivasDiurnas']);
             $arSoportePago->setHorasExtrasFestivasNocturnas($arrayResultado[$i]['horasExtrasFestivasNocturnas']);
+            $arSoportePagoAct->setHorasRecargoNocturno($arrayResultado[$i]['horasRecargoNocturno']);
             $arSoportePago->setHorasDescansoReales($arrayResultado[$i]['horasDescanso']);
             $arSoportePago->setHorasDiurnasReales($arrayResultado[$i]['horasDiurnas']);
             $arSoportePago->setHorasNocturnasReales($arrayResultado[$i]['horasNocturnas']);
@@ -195,6 +200,7 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePago->setHorasExtrasOrdinariasNocturnasReales($arrayResultado[$i]['horasExtrasOrdinariasNocturnas']);
             $arSoportePago->setHorasExtrasFestivasDiurnasReales($arrayResultado[$i]['horasExtrasFestivasDiurnas']);
             $arSoportePago->setHorasExtrasFestivasNocturnasReales($arrayResultado[$i]['horasExtrasFestivasNocturnas']);            
+            $arSoportePagoAct->setHorasRecargoNocturnoReales($arrayResultado[$i]['horasRecargoNocturno']);            
             if($arContrato) {
                 $arSoportePago->setCodigoContratoFk($arContrato->getCodigoContratoPk());
                 $arSoportePago->setVrSalario($arContrato->getVrSalario());
@@ -340,13 +346,14 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePagoDetalle->setHorasNocturnas(0);
             $arSoportePagoDetalle->setHorasFestivasDiurnas(0);
             $arSoportePagoDetalle->setHorasFestivasNocturnas(0);                    
+            $arSoportePagoDetalle->setHorasRecargoNocturno($arrHoras['horasNocturnas']+$arrHoras['horasFestivasNocturnas']);            
         } else {
             $arSoportePagoDetalle->setDias($intDias);        
             $arSoportePagoDetalle->setHoras($arTurno->getHorasNomina());        
             $arSoportePagoDetalle->setHorasDiurnas($arrHoras['horasDiurnas']);
             $arSoportePagoDetalle->setHorasNocturnas($arrHoras['horasNocturnas']);
             $arSoportePagoDetalle->setHorasFestivasDiurnas($arrHoras['horasFestivasDiurnas']);
-            $arSoportePagoDetalle->setHorasFestivasNocturnas($arrHoras['horasFestivasNocturnas']);                    
+            $arSoportePagoDetalle->setHorasFestivasNocturnas($arrHoras['horasFestivasNocturnas']);            
         }
         
         $arSoportePagoDetalle->setHorasExtrasOrdinariasDiurnas($arrHoras['horasExtrasDiurnas']);
@@ -379,6 +386,7 @@ class TurSoportePagoRepository extends EntityRepository {
                 $arSoportePagoDetalle->setHorasNocturnas(0);
                 $arSoportePagoDetalle->setHorasFestivasDiurnas(0);
                 $arSoportePagoDetalle->setHorasFestivasNocturnas(0); 
+                $arSoportePagoDetalle->setHorasRecargoNocturno($arrHoras1['horasNocturnas']+$arrHoras1['horasFestivasNocturnas']);                            
             } else {
                 $arSoportePagoDetalle->setDias(0);
                 $arSoportePagoDetalle->setHoras($arTurno->getHorasNomina());        

@@ -183,6 +183,11 @@ class TurSoportePago
     private $horasExtrasFestivasNocturnas = 0;    
 
     /**
+     * @ORM\Column(name="horas_recargo_nocturno", type="float")
+     */    
+    private $horasRecargoNocturno = 0;    
+    
+    /**
      * @ORM\Column(name="horas_descanso_reales", type="float")
      */    
     private $horasDescansoReales = 0;    
@@ -226,6 +231,11 @@ class TurSoportePago
      * @ORM\Column(name="horas_extras_festivas_nocturnas_reales", type="float")
      */    
     private $horasExtrasFestivasNocturnasReales = 0;    
+
+    /**
+     * @ORM\Column(name="horas_recargo_nocturno_reales", type="float")
+     */    
+    private $horasRecargoNocturnoReales = 0;
     
     /**     
      * @ORM\Column(name="terminacion_turno", type="integer", nullable=true)
@@ -1410,5 +1420,53 @@ class TurSoportePago
     public function getSoportesPagosDetallesSoportePagoRel()
     {
         return $this->soportesPagosDetallesSoportePagoRel;
+    }
+
+    /**
+     * Set horasRecargoNocturno
+     *
+     * @param float $horasRecargoNocturno
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasRecargoNocturno($horasRecargoNocturno)
+    {
+        $this->horasRecargoNocturno = $horasRecargoNocturno;
+
+        return $this;
+    }
+
+    /**
+     * Get horasRecargoNocturno
+     *
+     * @return float
+     */
+    public function getHorasRecargoNocturno()
+    {
+        return $this->horasRecargoNocturno;
+    }
+
+    /**
+     * Set horasRecargoNocturnoReales
+     *
+     * @param float $horasRecargoNocturnoReales
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasRecargoNocturnoReales($horasRecargoNocturnoReales)
+    {
+        $this->horasRecargoNocturnoReales = $horasRecargoNocturnoReales;
+
+        return $this;
+    }
+
+    /**
+     * Get horasRecargoNocturnoReales
+     *
+     * @return float
+     */
+    public function getHorasRecargoNocturnoReales()
+    {
+        return $this->horasRecargoNocturnoReales;
     }
 }

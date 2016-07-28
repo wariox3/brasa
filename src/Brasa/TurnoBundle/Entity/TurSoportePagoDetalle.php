@@ -133,6 +133,11 @@ class TurSoportePagoDetalle
     private $horasExtrasFestivasNocturnas = 0;    
 
     /**
+     * @ORM\Column(name="horas_recargo_nocturno", type="float")
+     */    
+    private $horasRecargoNocturno = 0;    
+    
+    /**
      * @ORM\Column(name="horas_descanso", type="float")
      */    
     private $horasDescanso = 0;     
@@ -1018,5 +1023,29 @@ class TurSoportePagoDetalle
     public function getLicenciaNoRemunerada()
     {
         return $this->licenciaNoRemunerada;
+    }
+
+    /**
+     * Set horasRecargoNocturno
+     *
+     * @param float $horasRecargoNocturno
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setHorasRecargoNocturno($horasRecargoNocturno)
+    {
+        $this->horasRecargoNocturno = $horasRecargoNocturno;
+
+        return $this;
+    }
+
+    /**
+     * Get horasRecargoNocturno
+     *
+     * @return float
+     */
+    public function getHorasRecargoNocturno()
+    {
+        return $this->horasRecargoNocturno;
     }
 }
