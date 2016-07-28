@@ -122,7 +122,7 @@ class FormatoCarta extends \FPDF_FPDF {
         $sustitucion1 = $arContrato->getEmpleadoRel()->getNumeroIdentificacion();
         $sustitucion2 = $arContrato->getEmpleadoRel()->getNombreCorto();
         $sustitucion3 = $arContrato->getCargoRel()->getNombre();
-        if ($arContrato->getFechaProrrogaInicio() == null){
+        /*if ($arContrato->getFechaProrrogaInicio() == null){
             $sustitucion4 = $arContrato->getFechaDesde()->format('Y-m-d');
             $sustitucion7 = $arContrato->getFechaHasta()->format('Y-m-d');
             $feci = $arContrato->getFechaDesde();
@@ -132,7 +132,9 @@ class FormatoCarta extends \FPDF_FPDF {
             $sustitucion7 = $arContrato->getFechaProrrogaFinal()->format('Y-m-d');
             $feci = $arContrato->getFechaProrrogaInicio();
             $fecf = $arContrato->getFechaProrrogaFinal();
-        }
+        }*/
+        $feci = $arContrato->getFechaDesde();
+        $fecf = $arContrato->getFechaHasta();
         $sustitucion4 = strftime("%d de ". $this->MesesEspañol($feci->format('m')) ." de %Y", strtotime($sustitucion4));
         $sustitucion5 = $arConfiguracion->getNombreEmpresa();
         if (self::$fechaOpcional == null ){
@@ -193,40 +195,40 @@ class FormatoCarta extends \FPDF_FPDF {
     
     public static function MesesEspañol($mes) {
         
-        if ($mes == 01){
+        if ($mes == '01'){
             $mesEspañol = "Enero";
         }
-        if ($mes == 02){
+        if ($mes == '02'){
             $mesEspañol = "Febrero";
         }
-        if ($mes == 03){
+        if ($mes == '03'){
             $mesEspañol = "Marzo";
         }
-        if ($mes == 04){
+        if ($mes == '04'){
             $mesEspañol = "Abril";
         }
-        if ($mes == 05){
+        if ($mes == '05'){
             $mesEspañol = "Mayo";
         }
-        if ($mes == 06){
+        if ($mes == '06'){
             $mesEspañol = "Junio";
         }
-        if ($mes == 07){
+        if ($mes == '07'){
             $mesEspañol = "Julio";
         }
-        if ($mes == 08){
+        if ($mes == '08'){
             $mesEspañol = "Agosto";
         }
-        if ($mes == 09){
+        if ($mes == '09'){
             $mesEspañol = "Septiembre";
         }
-        if ($mes == 10){
+        if ($mes == '10'){
             $mesEspañol = "Octubre";
         }
-        if ($mes == 11){
+        if ($mes == '11'){
             $mesEspañol = "Noviembre";
         }
-        if ($mes == 12){
+        if ($mes == '12'){
             $mesEspañol = "Diciembre";
         }
 

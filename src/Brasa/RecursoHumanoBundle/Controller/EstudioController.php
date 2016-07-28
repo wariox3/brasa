@@ -241,6 +241,7 @@ class EstudioController extends Controller
                 $arEstudio->setFechaEstado($form->get('fechaAcreditadoHoy')->getData());
                 $arEstudio->setFechaVencimientoAcreditacion($form->get('fechaVenAcreditacion')->getData());
                 $arEstudio->setCodigoEstudioEstadoInvalidoFk(null);
+                $arEstudio->setNumeroAcreditacion($form->get('TxtNumeroAcreditacion')->getData());
                 $em->persist($arEstudio);
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_rhu_estudio_detalle', array('codigoEstudio' => $codigoEstudio)));                                                
@@ -343,7 +344,8 @@ class EstudioController extends Controller
         $arrBotonValidado = array('label' => 'Validado', 'disabled' => false);
         $arrBotonNoValidado = array('label' => 'No validado', 'disabled' => false);
         $arrBotonAcreditado = array('label' => 'Acreditado', 'disabled' => false);
-        $form = $this->createFormBuilder()    
+        $form = $this->createFormBuilder()
+            ->add('TxtNumeroAcreditacion', 'text', array('label'  => 'Numero aprobacion', 'required' => false ))    
             ->add('BtnValidado', 'submit', array('label'  => 'Validado'))
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar solicitud'))    
             ->add('BtnAcademia', 'submit', array('label'  => 'Por academia'))    

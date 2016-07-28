@@ -116,6 +116,15 @@ class ConfiguracionController extends Controller
         } else {
             $srtControlPago = "NO";
         }
+        $arrayPropiedadesConceptoVacacion = array(
+            'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('cc')
+                ->orderBy('cc.codigoPagoConceptoPk', 'ASC');},
+            'property' => 'nombre',
+            'required' => false);
+        $arrayPropiedadesConceptoVacacion['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $arConfiguracion->getCodigoVacacion());
+        
         $formConfiguracion = $this->createFormBuilder()
             ->add('conceptoAuxilioTransporte', 'entity', $arrayPropiedadesConceptoAuxilioTransporte)
             ->add('vrAuxilioTransporte', 'number', array('data' => $arConfiguracion->getVrAuxilioTransporte(), 'required' => true))
@@ -143,6 +152,7 @@ class ConfiguracionController extends Controller
             ->add('tipoBasePagoVacaciones', 'choice', array('choices' => array('1' => 'SALARIO', '2' => 'SALARIO PRESTACIONAL', '3' => 'SALARIO+RECARGOS NOCTURNOS', '0' => 'SIN ASIGNAR'), 'data' => $arConfiguracion->getTipoBasePagoVacaciones()))                
             ->add('cuentaNominaPagar', 'number', array('data' => $arConfiguracion->getCuentaNominaPagar(), 'required' => true))
             ->add('cuentaPago', 'number', array('data' => $arConfiguracion->getCuentaPago(), 'required' => true))
+            ->add('conceptoVacacion', 'entity', $arrayPropiedadesConceptoVacacion, array('required' => true))
             ->add('guardar', 'submit', array('label' => 'Actualizar'))
             ->getForm();
         $formConfiguracion->handleRequest($request);
@@ -174,6 +184,7 @@ class ConfiguracionController extends Controller
             $aportesPorcentajeCaja = $controles['aportesPorcentajeCaja'];
             $aportesPorcentajeVacaciones = $controles['aportesPorcentajeVacaciones'];
             $tipoBasePagoVacaciones = $controles['tipoBasePagoVacaciones'];
+            $codigoConceptoVacacion = $controles['conceptoVacacion'];
             // guardar la tarea en la base de datos
             $arConfiguracion->setCodigoAuxilioTransporte($codigoConceptoAuxilioTransporte);
             $arConfiguracion->setVrAuxilioTransporte($ValorAuxilioTransporte);
@@ -199,7 +210,7 @@ class ConfiguracionController extends Controller
             $arConfiguracion->setAportesPorcentajeCaja($aportesPorcentajeCaja);
             $arConfiguracion->setAportesPorcentajeVacaciones($aportesPorcentajeVacaciones);
             $arConfiguracion->setTipoBasePagoVacaciones($tipoBasePagoVacaciones);
-            
+            $arConfiguracion->setCodigoVacacion($codigoConceptoVacacion);
             $arrControles = $request->request->All();
             $intIndiceConsecutivo = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {

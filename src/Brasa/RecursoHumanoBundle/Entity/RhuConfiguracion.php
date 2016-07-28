@@ -214,7 +214,12 @@ class RhuConfiguracion
     /**
      * @ORM\Column(name="codigo_hora_recargo_festivo_nocturno", type="integer")
      */
-    private $codigoHoraRecargoFestivoNocturno;    
+    private $codigoHoraRecargoFestivoNocturno;
+
+    /**
+     * @ORM\Column(name="codigo_vacacion", type="integer")
+     */
+    private $codigoVacacion;
     
     /**
      * Tipo de base para la liquidacion de vacaciones 1-salario 2-salario+prestaciones 3-salario+recargos
@@ -229,6 +234,7 @@ class RhuConfiguracion
     protected $entidadRiesgoProfesionalRel;
 
 
+    
     
 
     /**
@@ -445,6 +451,30 @@ class RhuConfiguracion
     public function getCodigoHoraDiurnaTrabajada()
     {
         return $this->codigoHoraDiurnaTrabajada;
+    }
+
+    /**
+     * Set codigoSalarioIntegral
+     *
+     * @param integer $codigoSalarioIntegral
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoSalarioIntegral($codigoSalarioIntegral)
+    {
+        $this->codigoSalarioIntegral = $codigoSalarioIntegral;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSalarioIntegral
+     *
+     * @return integer
+     */
+    public function getCodigoSalarioIntegral()
+    {
+        return $this->codigoSalarioIntegral;
     }
 
     /**
@@ -928,54 +958,6 @@ class RhuConfiguracion
     }
 
     /**
-     * Set tipoBasePagoVacaciones
-     *
-     * @param integer $tipoBasePagoVacaciones
-     *
-     * @return RhuConfiguracion
-     */
-    public function setTipoBasePagoVacaciones($tipoBasePagoVacaciones)
-    {
-        $this->tipoBasePagoVacaciones = $tipoBasePagoVacaciones;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoBasePagoVacaciones
-     *
-     * @return integer
-     */
-    public function getTipoBasePagoVacaciones()
-    {
-        return $this->tipoBasePagoVacaciones;
-    }
-
-    /**
-     * Set entidadRiesgoProfesionalRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel
-     *
-     * @return RhuConfiguracion
-     */
-    public function setEntidadRiesgoProfesionalRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel = null)
-    {
-        $this->entidadRiesgoProfesionalRel = $entidadRiesgoProfesionalRel;
-
-        return $this;
-    }
-
-    /**
-     * Get entidadRiesgoProfesionalRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional
-     */
-    public function getEntidadRiesgoProfesionalRel()
-    {
-        return $this->entidadRiesgoProfesionalRel;
-    }
-
-    /**
      * Set codigoHoraDescanso
      *
      * @param integer $codigoHoraDescanso
@@ -1168,30 +1150,6 @@ class RhuConfiguracion
     }
 
     /**
-     * Set codigoSalarioIntegral
-     *
-     * @param integer $codigoSalarioIntegral
-     *
-     * @return RhuConfiguracion
-     */
-    public function setCodigoSalarioIntegral($codigoSalarioIntegral)
-    {
-        $this->codigoSalarioIntegral = $codigoSalarioIntegral;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoSalarioIntegral
-     *
-     * @return integer
-     */
-    public function getCodigoSalarioIntegral()
-    {
-        return $this->codigoSalarioIntegral;
-    }
-
-    /**
      * Set codigoHoraRecargoNocturno
      *
      * @param integer $codigoHoraRecargoNocturno
@@ -1261,5 +1219,77 @@ class RhuConfiguracion
     public function getCodigoHoraRecargoFestivoNocturno()
     {
         return $this->codigoHoraRecargoFestivoNocturno;
+    }
+
+    /**
+     * Set codigoVacacion
+     *
+     * @param integer $codigoVacacion
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoVacacion($codigoVacacion)
+    {
+        $this->codigoVacacion = $codigoVacacion;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoVacacion
+     *
+     * @return integer
+     */
+    public function getCodigoVacacion()
+    {
+        return $this->codigoVacacion;
+    }
+
+    /**
+     * Set tipoBasePagoVacaciones
+     *
+     * @param integer $tipoBasePagoVacaciones
+     *
+     * @return RhuConfiguracion
+     */
+    public function setTipoBasePagoVacaciones($tipoBasePagoVacaciones)
+    {
+        $this->tipoBasePagoVacaciones = $tipoBasePagoVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoBasePagoVacaciones
+     *
+     * @return integer
+     */
+    public function getTipoBasePagoVacaciones()
+    {
+        return $this->tipoBasePagoVacaciones;
+    }
+
+    /**
+     * Set entidadRiesgoProfesionalRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel
+     *
+     * @return RhuConfiguracion
+     */
+    public function setEntidadRiesgoProfesionalRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel = null)
+    {
+        $this->entidadRiesgoProfesionalRel = $entidadRiesgoProfesionalRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadRiesgoProfesionalRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional
+     */
+    public function getEntidadRiesgoProfesionalRel()
+    {
+        return $this->entidadRiesgoProfesionalRel;
     }
 }
