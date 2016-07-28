@@ -69,6 +69,8 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     $arProgramacionPagoDetalle->setHorasExtrasFestivasDiurnas($arSoportePago->getHorasExtrasFestivasDiurnas());
                     $arProgramacionPagoDetalle->setHorasExtrasFestivasNocturnas($arSoportePago->getHorasExtrasFestivasNocturnas());                    
                     $arProgramacionPagoDetalle->setHorasRecargoNocturno($arSoportePago->getHorasRecargoNocturno());                                        
+                    $arProgramacionPagoDetalle->setHorasRecargoFestivoDiurno($arSoportePago->getHorasRecargoFestivoDiurno());
+                    $arProgramacionPagoDetalle->setHorasRecargoFestivoNocturno($arSoportePago->getHorasRecargoFestivoNocturno());
                     //Pregunta por el tipo de pension, si es pensionado no le retiene pension (PABLO ARANZAZU 27/04/2016)
                     if ($arContrato->getCodigoTipoPensionFk() == 5){
                         $arProgramacionPagoDetalle->setDescuentoPension(0);

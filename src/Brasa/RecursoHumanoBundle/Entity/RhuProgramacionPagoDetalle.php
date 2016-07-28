@@ -215,6 +215,16 @@ class RhuProgramacionPagoDetalle
     private $horasRecargoNocturno = 0;    
     
     /**
+     * @ORM\Column(name="horas_recargo_festivo_diurno", type="float")
+     */    
+    private $horasRecargoFestivoDiurno = 0;    
+    
+    /**
+     * @ORM\Column(name="horas_recargo_festivo_nocturno", type="float")
+     */    
+    private $horasRecargoFestivoNocturno = 0;     
+    
+    /**
      * @ORM\Column(name="horas_descanso", type="float")
      */    
     private $horasDescanso = 0;     
@@ -1490,5 +1500,53 @@ class RhuProgramacionPagoDetalle
     public function getHorasRecargoNocturno()
     {
         return $this->horasRecargoNocturno;
+    }
+
+    /**
+     * Set horasRecargoFestivoDiurno
+     *
+     * @param float $horasRecargoFestivoDiurno
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setHorasRecargoFestivoDiurno($horasRecargoFestivoDiurno)
+    {
+        $this->horasRecargoFestivoDiurno = $horasRecargoFestivoDiurno;
+
+        return $this;
+    }
+
+    /**
+     * Get horasRecargoFestivoDiurno
+     *
+     * @return float
+     */
+    public function getHorasRecargoFestivoDiurno()
+    {
+        return $this->horasRecargoFestivoDiurno;
+    }
+
+    /**
+     * Set horasRecargoFestivoNocturno
+     *
+     * @param float $horasRecargoFestivoNocturno
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setHorasRecargoFestivoNocturno($horasRecargoFestivoNocturno)
+    {
+        $this->horasRecargoFestivoNocturno = $horasRecargoFestivoNocturno;
+
+        return $this;
+    }
+
+    /**
+     * Get horasRecargoFestivoNocturno
+     *
+     * @return float
+     */
+    public function getHorasRecargoFestivoNocturno()
+    {
+        return $this->horasRecargoFestivoNocturno;
     }
 }

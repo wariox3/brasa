@@ -188,6 +188,16 @@ class TurSoportePago
     private $horasRecargoNocturno = 0;    
     
     /**
+     * @ORM\Column(name="horas_recargo_festivo_diurno", type="float")
+     */    
+    private $horasRecargoFestivoDiurno = 0;    
+    
+    /**
+     * @ORM\Column(name="horas_recargo_festivo_nocturno", type="float")
+     */    
+    private $horasRecargoFestivoNocturno = 0;    
+    
+    /**
      * @ORM\Column(name="horas_descanso_reales", type="float")
      */    
     private $horasDescansoReales = 0;    
@@ -231,11 +241,6 @@ class TurSoportePago
      * @ORM\Column(name="horas_extras_festivas_nocturnas_reales", type="float")
      */    
     private $horasExtrasFestivasNocturnasReales = 0;    
-
-    /**
-     * @ORM\Column(name="horas_recargo_nocturno_reales", type="float")
-     */    
-    private $horasRecargoNocturnoReales = 0;
     
     /**     
      * @ORM\Column(name="terminacion_turno", type="integer", nullable=true)
@@ -1468,5 +1473,53 @@ class TurSoportePago
     public function getHorasRecargoNocturnoReales()
     {
         return $this->horasRecargoNocturnoReales;
+    }
+
+    /**
+     * Set horasRecargoFestivoDiurno
+     *
+     * @param float $horasRecargoFestivoDiurno
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasRecargoFestivoDiurno($horasRecargoFestivoDiurno)
+    {
+        $this->horasRecargoFestivoDiurno = $horasRecargoFestivoDiurno;
+
+        return $this;
+    }
+
+    /**
+     * Get horasRecargoFestivoDiurno
+     *
+     * @return float
+     */
+    public function getHorasRecargoFestivoDiurno()
+    {
+        return $this->horasRecargoFestivoDiurno;
+    }
+
+    /**
+     * Set horasRecargoFestivoNocturno
+     *
+     * @param float $horasRecargoFestivoNocturno
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasRecargoFestivoNocturno($horasRecargoFestivoNocturno)
+    {
+        $this->horasRecargoFestivoNocturno = $horasRecargoFestivoNocturno;
+
+        return $this;
+    }
+
+    /**
+     * Get horasRecargoFestivoNocturno
+     *
+     * @return float
+     */
+    public function getHorasRecargoFestivoNocturno()
+    {
+        return $this->horasRecargoFestivoNocturno;
     }
 }

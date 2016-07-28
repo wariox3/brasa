@@ -451,7 +451,13 @@ class ProgramacionesPagoController extends Controller
                 }                
                 if($arrControles['TxtHorasExtrasFestivasNocturnas'] != "") {
                     $arProgramacionPagoDetalle->setHorasExtrasFestivasNocturnas($arrControles['TxtHorasExtrasFestivasNocturnas']);                
-                }                 
+                }   
+                if($arrControles['TxtHorasRecargoFestivoDiurno'] != "") {
+                    $arProgramacionPagoDetalle->setHorasRecargoFestivoDiurno($arrControles['TxtHorasRecargoFestivoDiurno']);                
+                }  
+                if($arrControles['TxtHorasRecargoFestivoNocturno'] != "") {
+                    $arProgramacionPagoDetalle->setHorasRecargoFestivoNocturno($arrControles['TxtHorasRecargoFestivoNocturno']);                
+                }                
                 $em->persist($arProgramacionPagoDetalle);
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_rhu_programacion_pago_resumen_turno_ver', array('codigoProgramacionPagoDetalle' => $codigoProgramacionPagoDetalle)));

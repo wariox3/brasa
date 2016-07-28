@@ -207,6 +207,16 @@ class RhuConfiguracion
     private $codigoHoraRecargoNocturno;    
     
     /**
+     * @ORM\Column(name="codigo_hora_recargo_festivo_diurno", type="integer")
+     */
+    private $codigoHoraRecargoFestivoDiurno;    
+    
+    /**
+     * @ORM\Column(name="codigo_hora_recargo_festivo_nocturno", type="integer")
+     */
+    private $codigoHoraRecargoFestivoNocturno;    
+    
+    /**
      * Tipo de base para la liquidacion de vacaciones 1-salario 2-salario+prestaciones 3-salario+recargos
      * @ORM\Column(name="tipo_base_pago_vacaciones", type="integer")
      */
@@ -1203,5 +1213,53 @@ class RhuConfiguracion
     public function getCodigoHoraRecargoNocturno()
     {
         return $this->codigoHoraRecargoNocturno;
+    }
+
+    /**
+     * Set codigoHoraRecargoFestivoDiurno
+     *
+     * @param integer $codigoHoraRecargoFestivoDiurno
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoHoraRecargoFestivoDiurno($codigoHoraRecargoFestivoDiurno)
+    {
+        $this->codigoHoraRecargoFestivoDiurno = $codigoHoraRecargoFestivoDiurno;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoHoraRecargoFestivoDiurno
+     *
+     * @return integer
+     */
+    public function getCodigoHoraRecargoFestivoDiurno()
+    {
+        return $this->codigoHoraRecargoFestivoDiurno;
+    }
+
+    /**
+     * Set codigoHoraRecargoFestivoNocturno
+     *
+     * @param integer $codigoHoraRecargoFestivoNocturno
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoHoraRecargoFestivoNocturno($codigoHoraRecargoFestivoNocturno)
+    {
+        $this->codigoHoraRecargoFestivoNocturno = $codigoHoraRecargoFestivoNocturno;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoHoraRecargoFestivoNocturno
+     *
+     * @return integer
+     */
+    public function getCodigoHoraRecargoFestivoNocturno()
+    {
+        return $this->codigoHoraRecargoFestivoNocturno;
     }
 }

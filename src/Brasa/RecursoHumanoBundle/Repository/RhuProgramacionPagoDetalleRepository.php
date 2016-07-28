@@ -567,6 +567,12 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         } 
         if($arProgramacionPagoDetalle->getHorasRecargoNocturno() > 0) {
             $arrExtra[] = array('concepto' => $arConfiguracion->getCodigoHoraRecargoNocturno(), 'horas' => $arProgramacionPagoDetalle->getHorasRecargoNocturno());
+        }  
+        if($arProgramacionPagoDetalle->getHorasRecargoFestivoDiurno() > 0) {
+            $arrExtra[] = array('concepto' => $arConfiguracion->getCodigoHoraRecargoFestivoDiurno(), 'horas' => $arProgramacionPagoDetalle->getHorasRecargoFestivoDiurno());
+        }        
+        if($arProgramacionPagoDetalle->getHorasRecargoFestivoNocturno() > 0) {
+            $arrExtra[] = array('concepto' => $arConfiguracion->getCodigoHoraRecargoFestivoNocturno(), 'horas' => $arProgramacionPagoDetalle->getHorasRecargoFestivoNocturno());
         }        
         return $arrExtra;
     }    
