@@ -153,6 +153,7 @@ class ConfiguracionController extends Controller
             ->add('cuentaNominaPagar', 'number', array('data' => $arConfiguracion->getCuentaNominaPagar(), 'required' => true))
             ->add('cuentaPago', 'number', array('data' => $arConfiguracion->getCuentaPago(), 'required' => true))
             ->add('conceptoVacacion', 'entity', $arrayPropiedadesConceptoVacacion, array('required' => true))
+            ->add('afectaVacacionesParafiscales', 'checkbox', array('data' => $arConfiguracion->getAfectaVacacionesParafiscales(), 'required' => false))    
             ->add('guardar', 'submit', array('label' => 'Actualizar'))
             ->getForm();
         $formConfiguracion->handleRequest($request);
@@ -211,6 +212,7 @@ class ConfiguracionController extends Controller
             $arConfiguracion->setAportesPorcentajeVacaciones($aportesPorcentajeVacaciones);
             $arConfiguracion->setTipoBasePagoVacaciones($tipoBasePagoVacaciones);
             $arConfiguracion->setCodigoVacacion($codigoConceptoVacacion);
+            $arConfiguracion->setAfectaVacacionesParafiscales($formConfiguracion->get('afectaVacacionesParafiscales')->getData());
             $arrControles = $request->request->All();
             $intIndiceConsecutivo = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {

@@ -222,6 +222,12 @@ class RhuConfiguracion
     private $codigoVacacion;
     
     /**
+     * @ORM\Column(name="afecta_vacaciones_parafiscales", type="boolean")
+     */
+    private $afectaVacacionesParafiscales = false;
+    
+    
+    /**
      * Tipo de base para la liquidacion de vacaciones 1-salario 2-salario+prestaciones 3-salario+recargos
      * @ORM\Column(name="tipo_base_pago_vacaciones", type="integer")
      */
@@ -234,7 +240,7 @@ class RhuConfiguracion
     protected $entidadRiesgoProfesionalRel;
 
 
-    
+
     
 
     /**
@@ -1243,6 +1249,30 @@ class RhuConfiguracion
     public function getCodigoVacacion()
     {
         return $this->codigoVacacion;
+    }
+
+    /**
+     * Set afectaVacacionesParafiscales
+     *
+     * @param boolean $afectaVacacionesParafiscales
+     *
+     * @return RhuConfiguracion
+     */
+    public function setAfectaVacacionesParafiscales($afectaVacacionesParafiscales)
+    {
+        $this->afectaVacacionesParafiscales = $afectaVacacionesParafiscales;
+
+        return $this;
+    }
+
+    /**
+     * Get afectaVacacionesParafiscales
+     *
+     * @return boolean
+     */
+    public function getAfectaVacacionesParafiscales()
+    {
+        return $this->afectaVacacionesParafiscales;
     }
 
     /**

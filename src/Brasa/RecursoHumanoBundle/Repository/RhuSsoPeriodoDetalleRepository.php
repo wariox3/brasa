@@ -130,8 +130,16 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $intDiasCotizar = $arPeriodoEmpleado->getDias();
                 $intDiasCotizarPension = $intDiasCotizar - $intDiasLicenciaNoRemunerada;
                 $intDiasCotizarSalud = $intDiasCotizar - $intDiasLicenciaNoRemunerada;
-                $intDiasCotizarRiesgos = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasVacaciones;
-                $intDiasCotizarCaja = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad;
+                // vacaciones afecta parafiscales PABLO 28-07-2016
+                if($arConfiguracionNomina->getAfectaVacacionesParafiscales() == true){
+                    $intDiasCotizarRiesgos = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasVacaciones;
+                    $intDiasCotizarCaja = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasVacaciones;
+                } else {
+                    $intDiasCotizarRiesgos = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasVacaciones;
+                    $intDiasCotizarCaja = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad;
+                }
+                
+                // fin
                 if($arAporte->getTipoCotizante() == '19' || $arAporte->getTipoCotizante() == '12' || $arAporte->getTipoCotizante() == '23') {
                     $intDiasCotizarPension = 0;
                     $intDiasCotizarCaja = 0;
