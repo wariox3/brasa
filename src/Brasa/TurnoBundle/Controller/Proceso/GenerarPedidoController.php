@@ -31,8 +31,7 @@ class GenerarPedidoController extends Controller
             $dateFechaHasta = date_create($anio . "/" . $mes . "/" . $strUltimoDiaMes); 
             $dateFechaDesde = $fecha;
             
-            if($request->request->get('OpGenerar')) {
-                
+            if($request->request->get('OpGenerar')) {                
                 $codigoServicio = $request->request->get('OpGenerar');
                 $arServicio = new \Brasa\TurnoBundle\Entity\TurServicio();
                 $arServicio = $em->getRepository('BrasaTurnoBundle:TurServicio')->find($codigoServicio);                
@@ -252,7 +251,12 @@ class GenerarPedidoController extends Controller
                 }
                 set_time_limit(60);
                 //return $this->redirect($this->generateUrl('brs_tur_proceso_generar_pedido_lista'));
-            }                           
+            }  
+            
+            if ($form->get('BtnFiltrar')->isClicked()) {
+                $this->lista($form);
+            } 
+            
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
                 $this->lista($form);
@@ -293,6 +297,7 @@ class GenerarPedidoController extends Controller
                 'data' => $anio,
             ))                
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar seleccionados'))
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->getForm();
         return $form;
