@@ -638,7 +638,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
 
                 $arProgramacionPagoDetalle->setDias($intDiasDevolver);
                 $arProgramacionPagoDetalle->setDiasReales($intDiasDevolver);
-                $arProgramacionPagoDetalle->setDiasTransporte($intDiasDevolver);
+                
                 $floValorDia = $arContrato->getVrSalarioPago() / 30;       
                 $floValorHora = $floValorDia / $arContrato->getFactorHorasDia();   
                 $arProgramacionPagoDetalle->setVrDia($floValorDia);
@@ -672,7 +672,9 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $arProgramacionPagoDetalle->setHorasPeriodo($horasDiurnas);
                 $arProgramacionPagoDetalle->setHorasDiurnas($horasDiurnas);
                 $arProgramacionPagoDetalle->setHorasPeriodoReales($horasDiurnas);
-                $arProgramacionPagoDetalle->setFactorDia($arContrato->getFactorHorasDia());                
+                $arProgramacionPagoDetalle->setFactorDia($arContrato->getFactorHorasDia());  
+                $diasTransporte = $intDiasDevolver - ($intDiasVacaciones+$intDiasLicencia+$intDiasIncapacidad);
+                $arProgramacionPagoDetalle->setDiasTransporte($diasTransporte);
                 $em->persist($arProgramacionPagoDetalle);
                 
                 if($floNeto < 0) {
