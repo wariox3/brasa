@@ -63,8 +63,10 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $arAporte->setSubtipoCotizante($arPeriodoEmpleado->getContratoRel()->getCodigoSubtipoCotizanteFk());
                 $arAporte->setExtranjeroNoObligadoCotizarPension(' ');
                 $arAporte->setColombianoResidenteExterior(' ');
-                $arAporte->setCodigoDepartamentoUbicacionlaboral($arPeriodoEmpleado->getContratoRel()->getCentroCostoRel()->getCiudadRel()->getDepartamentoRel()->getCodigoDane());
-                $arAporte->setCodigoMunicipioUbicacionlaboral($arPeriodoEmpleado->getContratoRel()->getCentroCostoRel()->getCiudadRel()->getCodigoDane());
+                //$arAporte->setCodigoDepartamentoUbicacionlaboral($arPeriodoEmpleado->getContratoRel()->getCentroCostoRel()->getCiudadRel()->getDepartamentoRel()->getCodigoDane());
+                //$arAporte->setCodigoMunicipioUbicacionlaboral($arPeriodoEmpleado->getContratoRel()->getCentroCostoRel()->getCiudadRel()->getCodigoDane());
+                $arAporte->setCodigoDepartamentoUbicacionlaboral($arPeriodoEmpleado->getEmpleadoRel()->getCiudadRel()->getDepartamentoRel()->getCodigoDane());
+                $arAporte->setCodigoMunicipioUbicacionlaboral($arPeriodoEmpleado->getEmpleadoRel()->getCiudadRel()->getCodigoDane());
                 $arAporte->setPrimerNombre($arEmpleado->getNombre1());
                 $arAporte->setSegundoNombre($arEmpleado->getNombre2());
                 $arAporte->setPrimerApellido($arEmpleado->getApellido1());

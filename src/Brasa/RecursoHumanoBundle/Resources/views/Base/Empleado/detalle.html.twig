@@ -490,10 +490,10 @@
                     {% for arEmpleadoFamilia in arEmpleadoFamilia%}
                         <tr>
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arEmpleadoFamilia.codigoEmpleadoFamiliaPk }}">{{ arEmpleadoFamilia.codigoEmpleadoFamiliaPk }} </td>
-                            <td>{{ arEmpleadoFamilia.empleadoFamiliaParentescoRel.nombre  }}</td>
+                            <td>{{ arEmpleadoFamilia.empleadoFamiliaParentescoRel.nombre | default('') }}</td>
                             <td>{{ arEmpleadoFamilia.nombres  }}</td>
-                            <td>{{ arEmpleadoFamilia.entidadSaludRel.nombre  }}</td>
-                            <td>{{ arEmpleadoFamilia.entidadCajaRel.nombre  }}</td>
+                            <td>{{ arEmpleadoFamilia.entidadSaludRel.nombre | default('') }}</td>
+                            <td>{{ arEmpleadoFamilia.entidadCajaRel.nombre | default('') }}</td>
                             <td>{{ arEmpleadoFamilia.fechaNacimiento | date('Y/m/d')  }}</td>
                             <td>{{ arEmpleadoFamilia.ocupacion  }}</td>
                             <td>{{ arEmpleadoFamilia.telefono  }}</td>
