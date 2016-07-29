@@ -638,7 +638,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
 
                 $arProgramacionPagoDetalle->setDias($intDiasDevolver);
                 $arProgramacionPagoDetalle->setDiasReales($intDiasDevolver);
-                
+                $arProgramacionPagoDetalle->setDiasTransporte($intDiasDevolver);
                 $floValorDia = $arContrato->getVrSalarioPago() / 30;       
                 $floValorHora = $floValorDia / $arContrato->getFactorHorasDia();   
                 $arProgramacionPagoDetalle->setVrDia($floValorDia);
