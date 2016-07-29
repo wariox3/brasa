@@ -15,11 +15,44 @@
         {{ form_errors(form) }}
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
-                {{ form_widget(form.BtnGenerar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                {{ form_widget(form.BtnValidado, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                {{ form_widget(form.BtnNoValidado, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                {{ form_widget(form.BtnAcreditado, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 9,  'numero': arEstudio.codigoEmpleadoEstudioPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
+                <div class="btn-group" style="float: right">
+                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                        Acreditado <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li>{{ form_widget(form.BtnAcreditado, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}{{ form_widget(form.fechaAcreditadoHoy, {'attr': {'maxlength' : 10} }) }}F. vencimiento{{ form_widget(form.fechaVenAcreditacion, {'attr': {'maxlength' : 10} }) }}</li>              
+                      <li class="divider"></li>              
+                    </ul>
+                </div>      
+                <div class="btn-group" style="float: right">
+                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                        Validado <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li>{{ form_widget(form.BtnValidado, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}{{ form_widget(form.fechaValidadoHoy, {'attr': {'maxlength' : 10} }) }}</li>              
+                      <li class="divider"></li>              
+                    </ul>
+                </div>
+                <div class="btn-group" style="float: right">
+                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                        No validado <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li>{{ form_widget(form.BtnAcademia, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}</li>              
+                      <li class="divider"></li>
+                      <li>{{ form_widget(form.BtnEmpleador, { 'attr': {'class': 'btn btn-default btn-sm'} }) }} {{ form_widget(form.fechaNoValidadoHoy, {'attr': {'maxlength' : 10} }) }}</li>              
+                    </ul>
+                </div>
+                <div class="btn-group" style="float: right">
+                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                        Generar solicitud <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li>{{ form_widget(form.BtnGenerar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}{{ form_widget(form.fechaGenerarHoy, {'attr': {'maxlength' : 10} }) }}</li>              
+                      <li class="divider"></li>              
+                    </ul>
+                </div>
             </div>
         </div>
         <br /><br />
@@ -58,7 +91,7 @@
                     <td class="titulo">FECHA TERMINACIÓN:</td>
                     <td>{% if arEstudio.fechaTerminacion != null %}{{ arEstudio.fechaInicio | date('Y/m/d') }}{% else %}{% endif%}</td>
                     <td class="titulo">FECHA VEN ESTUDIO/CURSO:</td>
-                    <td>{% if arEstudio.fechaVencimientoControl != null %}{{ arEstudio.fechaVencimientoControl | date('Y/m/d') }}{% else %}{% endif%}</td>
+                    <td>{% if arEstudio.fechaVencimientoCurso != null %}{{ arEstudio.fechaVencimientoCurso | date('Y/m/d') }}{% else %}{% endif%}</td>
                 </tr>
                 <tr>
                     <td class="titulo">GRADO BACHILLER:</td>
@@ -81,16 +114,16 @@
                     <td>{{arEstudio.numeroRegistro}}</td>
                     <td class="titulo">NUMERO ACREDITACIÓN:</td>
                     <td>{{arEstudio.numeroAcreditacion}}</td>
-                    <td class="titulo">ESTADO INVALIDO:</td>
-                    <td>{{ arEstudio.estudioEstadoInvalidoRel.nombre |default('')}}</td>
+                    <td class="titulo">FECHA ESTADO:</td>
+                    <td>{% if arEstudio.fechaEstado != null %}{{ arEstudio.fechaEstado | date('Y/m/d') }}{% else %}{% endif%}</td>
                 </tr>
                 <tr>
                     <td class="titulo">FECHA INICIO ACREDITACIÓN:</td>
                     <td>{% if arEstudio.fechaInicioAcreditacion != null %}{{ arEstudio.fechaInicio | date('Y/m/d') }}{% else %}{% endif%}</td>
                     <td class="titulo">FECHA VEN ACREDITACIÓN:</td>
-                    <td></td>
-                    <td class="titulo">{% if arEstudio.fechaVencimientoAcreditacion != null %}{{ arEstudio.fechaVencimientoAcreditacion | date('Y/m/d') }}{% else %}{% endif%}</td>
-                    <td></td>
+                    <td>{% if arEstudio.fechaVencimientoAcreditacion != null %}{{ arEstudio.fechaVencimientoAcreditacion | date('Y/m/d') }}{% else %}{% endif%}</td>
+                    <td class="titulo">ESTADO INVALIDO:</td>
+                    <td>{{ arEstudio.estudioEstadoInvalidoRel.nombre |default('')}}</td>
                 </tr>
                 <tr>
                     <td class="titulo">COMENTARIOS:</td>

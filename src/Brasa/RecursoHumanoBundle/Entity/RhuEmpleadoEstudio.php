@@ -62,10 +62,10 @@ class RhuEmpleadoEstudio
     private $fechaTerminacion;
     
     /**
-     * @ORM\Column(name="fecha_vencimiento_control", type="date", nullable=true)
+     * @ORM\Column(name="fecha_vencimiento_curso", type="date", nullable=true)
      */     
     
-    private $fechaVencimientoControl;
+    private $fechaVencimientoCurso;
     
     /**
      * @ORM\Column(name="fecha_inicio_acreditacion", type="date", nullable=true)
@@ -135,6 +135,18 @@ class RhuEmpleadoEstudio
     private $codigoUsuario;
     
     /**
+     * @ORM\Column(name="fecha_estado", type="date", nullable=true)
+     */     
+    
+    private $fechaEstado;
+    
+    /**
+     * @ORM\Column(name="fecha_estado_invalido", type="date", nullable=true)
+     */     
+    
+    private $fechaEstadoInvalido;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="empleadosEstudiosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -184,7 +196,9 @@ class RhuEmpleadoEstudio
     protected $estudioEstadoInvalidoRel;
     
     
+    
 
+    
 
     /**
      * Get codigoEmpleadoEstudioPk
@@ -389,27 +403,27 @@ class RhuEmpleadoEstudio
     }
 
     /**
-     * Set fechaVencimientoControl
+     * Set fechaVencimientoCurso
      *
-     * @param \DateTime $fechaVencimientoControl
+     * @param \DateTime $fechaVencimientoCurso
      *
      * @return RhuEmpleadoEstudio
      */
-    public function setFechaVencimientoControl($fechaVencimientoControl)
+    public function setFechaVencimientoCurso($fechaVencimientoCurso)
     {
-        $this->fechaVencimientoControl = $fechaVencimientoControl;
+        $this->fechaVencimientoCurso = $fechaVencimientoCurso;
 
         return $this;
     }
 
     /**
-     * Get fechaVencimientoControl
+     * Get fechaVencimientoCurso
      *
      * @return \DateTime
      */
-    public function getFechaVencimientoControl()
+    public function getFechaVencimientoCurso()
     {
-        return $this->fechaVencimientoControl;
+        return $this->fechaVencimientoCurso;
     }
 
     /**
@@ -722,6 +736,54 @@ class RhuEmpleadoEstudio
     public function getCodigoUsuario()
     {
         return $this->codigoUsuario;
+    }
+
+    /**
+     * Set fechaEstado
+     *
+     * @param \DateTime $fechaEstado
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setFechaEstado($fechaEstado)
+    {
+        $this->fechaEstado = $fechaEstado;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaEstado
+     *
+     * @return \DateTime
+     */
+    public function getFechaEstado()
+    {
+        return $this->fechaEstado;
+    }
+
+    /**
+     * Set fechaEstadoInvalido
+     *
+     * @param \DateTime $fechaEstadoInvalido
+     *
+     * @return RhuEmpleadoEstudio
+     */
+    public function setFechaEstadoInvalido($fechaEstadoInvalido)
+    {
+        $this->fechaEstadoInvalido = $fechaEstadoInvalido;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaEstadoInvalido
+     *
+     * @return \DateTime
+     */
+    public function getFechaEstadoInvalido()
+    {
+        return $this->fechaEstadoInvalido;
     }
 
     /**

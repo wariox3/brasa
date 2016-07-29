@@ -171,8 +171,8 @@ class PeriodoController extends Controller
                 }
                 $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
                 $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-                $strRutaArchivo = $arConfiguracion->getRutaTemporal();
-                //$strRutaArchivo = "c:/xampp/";
+                //$strRutaArchivo = $arConfiguracion->getRutaTemporal();
+                $strRutaArchivo = "c:/xampp/";
                 $strNombreArchivo = "pila" . date('YmdHis') . ".txt";
                 ob_clean();
                 $ar = fopen($strRutaArchivo . $strNombreArchivo, "a") or
@@ -188,7 +188,7 @@ class PeriodoController extends Controller
                 fputs($ar, '          ');
                 fputs($ar, '          '); // Nro 9 del formato
                 fputs($ar, 'S'); // Nro 10 del formato
-                fputs($ar, $this->RellenarNr($arPeriodoDetallePagos->getContratoRel()->getCodigoSucursalFk(), " ", 10, "D"));
+                fputs($ar, $this->RellenarNr($arPeriodoDetallePagos->getPeriodoRel()->getClienteRel()->getCodigoSucursal(), " ", 10, "D"));
                 fputs($ar, $this->RellenarNr('PAGO CONTADO', " ", 40, "D")); //ESTABA $arPeriodo->getClienteRel()->getNombreCorto()
                 //Arp del aportante
                 fputs($ar, '14-18 ');

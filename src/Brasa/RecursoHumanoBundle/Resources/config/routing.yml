@@ -1024,7 +1024,11 @@ brs_rhu_estudio_nuevo:
 
 brs_rhu_estudio_detalle:
     path:     /rhu/estudio/detalle/{codigoEstudio}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Estudio:detalle }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:Estudio:detalle } 
+    
+brs_rhu_estudio_estado_invalido:
+    path:     /rhu/estudio/estado/invalido
+    defaults: { _controller: BrasaRecursoHumanoBundle:Estudio:estadoInvalido }    
     
 brs_rhu_configuracion_nomina:
     path:     /rhu/configuracion/{codigoConfiguracionPk}

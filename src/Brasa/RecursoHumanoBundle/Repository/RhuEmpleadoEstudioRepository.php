@@ -19,7 +19,7 @@ class RhuEmpleadoEstudioRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if ($strFecha != ""){
-            $dql .= " AND ee.fechaVencimientoControl <='" . date_format($strFecha, ('Y-m-d')) . "'";
+            $dql .= " AND ee.fechaVencimientoCurso <='" . date_format($strFecha, ('Y-m-d')) . "'";
         }
         if ($strFechaAcreditacion != ""){
             $dql .= " AND ee.fechaVencimientoAcreditacion <='" . date_format($strFechaAcreditacion, ('Y-m-d')) . "'";
@@ -45,7 +45,7 @@ class RhuEmpleadoEstudioRepository extends EntityRepository {
             $dql .= " AND ee.codigoEstudioEstadoFk = " . $strEstado;
         }       
         if($fechaVencimientoControl != "" ) {
-            $dql .= " AND ee.fechaVencimientoControl <='" . date_format($fechaVencimientoControl, ('Y-m-d')) . "'";
+            $dql .= " AND ee.fechaVencimientoCurso <='" . date_format($fechaVencimientoControl, ('Y-m-d')) . "'";
         }
         
         if($fechaVencimientoAcreditacion != "" ) {

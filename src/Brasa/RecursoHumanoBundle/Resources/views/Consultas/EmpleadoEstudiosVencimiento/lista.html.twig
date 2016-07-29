@@ -64,7 +64,7 @@
                         <td>{{ arEmpleadoEstudios.estudioTipoAcreditacionRel.nombre  }}</td>
                         <td>{% if arEmpleadoEstudios.fechaInicio != null %}{{ arEmpleadoEstudios.fechaInicio | date('Y/m/d') }}{% else %}{% endif%}</td>
                         <td>{% if arEmpleadoEstudios.fechaTerminacion != null %}{{ arEmpleadoEstudios.fechaTerminacion | date('Y/m/d') }}{% else %}{% endif%}</td>
-                        <td>{% if arEmpleadoEstudios.fechaVencimientoControl != null %}{{ arEmpleadoEstudios.fechaVencimientoControl | date('Y/m/d') }}{% else %}{% endif%}</td>
+                        <td>{% if arEmpleadoEstudios.fechaVencimientoCurso != null %}{{ arEmpleadoEstudios.fechaVencimientoCurso | date('Y/m/d') }}{% else %}{% endif%}</td>
                         <td>{% if arEmpleadoEstudios.fechaVencimientoAcreditacion != null %}{{ arEmpleadoEstudios.fechaVencimientoAcreditacion | date('Y/m/d') }}{% else %}{% endif%}</td>
                         <td>{{ arEmpleadoEstudios.estudioEstadoRel.nombre  }}</td>
                     </tr>

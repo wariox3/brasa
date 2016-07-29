@@ -451,7 +451,7 @@
                             <td>{{ arEmpleadoEstudios.ciudadRel.nombre  }}</td>
                             <td>{{ arEmpleadoEstudios.titulo  }}</td>
                             <td>{{ arEmpleadoEstudios.estudioTipoAcreditacionRel.nombre | default('')  }}</td>
-                            <td>{% if arEmpleadoEstudios.fechaVencimientoControl != null %}{{ arEmpleadoEstudios.fechaVencimientoControl |date('Y-m-d')}}{% else %}NO REQUIERE{% endif %}</td>
+                            <td>{% if arEmpleadoEstudios.fechaVencimientoCurso != null %}{{ arEmpleadoEstudios.fechaVencimientoCurso |date('Y-m-d')}}{% else %}NO REQUIERE{% endif %}</td>
                             <td>{% if arEmpleadoEstudios.fechaVencimientoAcreditacion != null %}{{ arEmpleadoEstudios.fechaVencimientoAcreditacion |date('Y-m-d')}}{% else %}NO REQUIERE{% endif %}</td>
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 9,  'numero': arEmpleadoEstudios.codigoEmpleadoEstudioPk}) }}', 'Archivos', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_144_folder_open.png') }}" width=20 height=20></a></td>                            
                             <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_base_empleado_estudio_nuevo', {'codigoEmpleado':  arEmpleado.codigoEmpleadoPk, 'codigoEmpleadoEstudio': arEmpleadoEstudios.codigoEmpleadoEstudioPk }) }}', 'AgregarEstudio', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20></a></td>
