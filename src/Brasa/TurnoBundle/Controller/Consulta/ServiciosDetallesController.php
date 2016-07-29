@@ -155,25 +155,9 @@ class ServiciosDetallesController extends Controller
         $query = $em->createQuery($this->strListaDql);
         $arServiciosDetalles = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
         $arServiciosDetalles = $query->getResult();
-        $codigoCliente = "";
-        $cambio = false;
         foreach ($arServiciosDetalles as $arServicioDetalle) {   
-            if($arServicioDetalle->getServicioRel()->getCodigoClienteFk() != $codigoCliente) {
-                $cliente = $arServicioDetalle->getServicioRel()->getClienteRel()->getNombreCorto();
-                $codigoCliente = $arServicioDetalle->getServicioRel()->getCodigoClienteFk();
-                $cambio=true;
-                if($i == 2) {
-                   $cambio=false; 
-                }
-            } else {
-                $cliente = "";
-                $cambio = false;
-            }
-            if($cambio==true) {
-                $i++;                
-            } 
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $cliente)                                        
+                    ->setCellValue('A' . $i, $arServicioDetalle->getServicioRel()->getClienteRel()->getNombreCorto())                                        
                     ->setCellValue('D' . $i, $arServicioDetalle->getConceptoServicioRel()->getNombreFacturacion())
                     ->setCellValue('E' . $i, $arServicioDetalle->getModalidadServicioRel()->getNombre())                    
                     ->setCellValue('F' . $i, $arServicioDetalle->getFechaDesde()->format('Y/m/d'))                                        
