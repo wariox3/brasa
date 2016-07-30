@@ -226,7 +226,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $arAporte->setCotizacionIcbf($floCotizacionIcbf);
                 $arAporte->setCotizacionSena($floCotizacionSena);
                 $arAporte->setCentroTrabajoCodigoCt($arPeriodoEmpleado->getContratoRel()->getCodigoCentroCostoFk());
-                $totalCotizacion = $floTotalCotizacionFondos + $floCotizacionSalud + $floCotizacionRiesgos + $floCotizacionCaja + $floCotizacionIcbf+$floCotizacionSena;
+                $totalCotizacion = $floTotalCotizacionFondos + $floCotizacionSalud + $floCotizacionRiesgos + $floCotizacionCaja + $floCotizacionIcbf+$floCotizacionSena+$floCotizacionFSPSolidaridad+$floCotizacionFSPSubsistencia;
                 $totalCotizacionGeneral += $totalCotizacion;
                 $arAporte->setTotalCotizacion($totalCotizacion);
                 $em->persist($arAporte);                

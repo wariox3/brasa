@@ -41,6 +41,11 @@ class RhuPagoConcepto
      * @ORM\Column(name="por_porcentaje", type="float")
      */
     private $porPorcentaje = 0;     
+
+    /**
+     * @ORM\Column(name="por_porcentaje_tiempo_extra", type="float")
+     */
+    private $porPorcentajeTiempoExtra = 0;
     
     /**
      * @ORM\Column(name="prestacional", type="boolean")
@@ -1107,5 +1112,29 @@ class RhuPagoConcepto
     public function getTipoCuentaComercial()
     {
         return $this->tipoCuentaComercial;
+    }
+
+    /**
+     * Set porPorcentajeTiempoExtra
+     *
+     * @param float $porPorcentajeTiempoExtra
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setPorPorcentajeTiempoExtra($porPorcentajeTiempoExtra)
+    {
+        $this->porPorcentajeTiempoExtra = $porPorcentajeTiempoExtra;
+
+        return $this;
+    }
+
+    /**
+     * Get porPorcentajeTiempoExtra
+     *
+     * @return float
+     */
+    public function getPorPorcentajeTiempoExtra()
+    {
+        return $this->porPorcentajeTiempoExtra;
     }
 }

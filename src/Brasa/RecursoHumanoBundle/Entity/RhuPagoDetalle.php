@@ -91,6 +91,16 @@ class RhuPagoDetalle
      * @ORM\Column(name="vr_ingreso_base_prestacion", type="float")
      */
     private $vrIngresoBasePrestacion = 0;    
+
+    /**
+     * @ORM\Column(name="vr_ingreso_base_cotizacion_salario", type="float")
+     */
+    private $vrIngresoBaseCotizacionSalario = 0;
+    
+    /**
+     * @ORM\Column(name="vr_ingreso_base_cotizacion_adicional", type="float")
+     */
+    private $vrIngresoBaseCotizacionAdicional = 0;           
     
     /**
      * @ORM\Column(name="codigo_programacion_pago_detalle_fk", type="integer", nullable=true)
@@ -729,5 +739,53 @@ class RhuPagoDetalle
     public function getCotizacion()
     {
         return $this->cotizacion;
+    }
+
+    /**
+     * Set vrIngresoBaseCotizacionAdicional
+     *
+     * @param float $vrIngresoBaseCotizacionAdicional
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setVrIngresoBaseCotizacionAdicional($vrIngresoBaseCotizacionAdicional)
+    {
+        $this->vrIngresoBaseCotizacionAdicional = $vrIngresoBaseCotizacionAdicional;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIngresoBaseCotizacionAdicional
+     *
+     * @return float
+     */
+    public function getVrIngresoBaseCotizacionAdicional()
+    {
+        return $this->vrIngresoBaseCotizacionAdicional;
+    }
+
+    /**
+     * Set vrIngresoBaseCotizacionSalario
+     *
+     * @param float $vrIngresoBaseCotizacionSalario
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setVrIngresoBaseCotizacionSalario($vrIngresoBaseCotizacionSalario)
+    {
+        $this->vrIngresoBaseCotizacionSalario = $vrIngresoBaseCotizacionSalario;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIngresoBaseCotizacionSalario
+     *
+     * @return float
+     */
+    public function getVrIngresoBaseCotizacionSalario()
+    {
+        return $this->vrIngresoBaseCotizacionSalario;
     }
 }

@@ -220,6 +220,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                     if($arPagoAdicional->getPagoConceptoRel()->getGeneraIngresoBaseCotizacion() == 1) {
                         $douIngresoBaseCotizacion += $douPagoDetalle;    
                         $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);
+                        $arPagoDetalle->setVrIngresoBaseCotizacionAdicional($douPagoDetalle);
                         $arPagoDetalle->setCotizacion(1);
                     }
                     if($arPagoAdicional->getPagoConceptoRel()->getGeneraIngresoBasePrestacion() == 1) {
@@ -235,12 +236,12 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
             //Horas extra
             $arrHorasExtras = $this->horasExtra($arProgramacionPagoDetalle, $arConfiguracion);
             foreach($arrHorasExtras as $arrHorasExtra) {
-                //$arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                //$arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();                
                 $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($arrHorasExtra['concepto']);                                
                 $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                 $arPagoDetalle->setPagoRel($arPago);
                 $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
-                $arPagoDetalle->setAdicional(1);                                
+                $arPagoDetalle->setAdicional($arPagoConcepto->getConceptoAdicion());                                
 
                 $douVrHoraAdicional = ($douVrHora * $arPagoConcepto->getPorPorcentaje())/100;
                 $douPagoDetalle = $douVrHoraAdicional * $arrHorasExtra['horas'];
@@ -255,15 +256,22 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                 $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);                            
 
                 if($arPagoConcepto->getPrestacional() == 1) {
+                    if($arPagoConcepto->getGeneraIngresoBasePrestacion() == 1) {
+                        $douIngresoBasePrestacional += $douPagoDetalle;    
+                        $arPagoDetalle->setVrIngresoBasePrestacion($douPagoDetalle);
+                    }                                        
                     if($arPagoConcepto->getGeneraIngresoBaseCotizacion() == 1) {
                         $douIngresoBaseCotizacion += $douPagoDetalle;    
                         $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);
                         $arPagoDetalle->setCotizacion(1);
-                    }
-                    if($arPagoConcepto->getGeneraIngresoBasePrestacion() == 1) {
-                        $douIngresoBasePrestacional += $douPagoDetalle;    
-                        $arPagoDetalle->setVrIngresoBasePrestacion($douPagoDetalle);
-                    }                                                                                                                                                                
+                        $douVrHoraAdicional = ($douVrHora * $arPagoConcepto->getPorPorcentajeTiempoExtra())/100;
+                        $douPagoDetalle = $douVrHoraAdicional * $arrHorasExtra['horas'];                        
+                        $arPagoDetalle->setVrIngresoBaseCotizacionAdicional($douPagoDetalle);                        
+                        if($arPagoConcepto->getComponeSalario() == 1) {
+                            $douPagoDetalle = $douVrHora * $arrHorasExtra['horas'];                        
+                            $arPagoDetalle->setVrIngresoBaseCotizacionSalario($douPagoDetalle);                                                    
+                        }
+                    }                    
                     $arPagoDetalle->setPrestacional(1);
                 }
 
@@ -341,7 +349,10 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
             $arPagoDetalle->setPorcentajeAplicado($arPagoConcepto->getPorPorcentaje());
             $arPagoDetalle->setNumeroHoras($horasOrdinariasDiurnas);
             $arPagoDetalle->setNumeroDias(0);
+            $arPagoDetalle->setCotizacion(1);
+            $arPagoDetalle->setPrestacional(1);
             $arPagoDetalle->setVrPago($douPagoDetalle);
+            $arPagoDetalle->setVrIngresoBaseCotizacionSalario($douPagoDetalle);
             $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
             $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConcepto->getOperacion());
             $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);

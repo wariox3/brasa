@@ -57,13 +57,7 @@ class RhuPagoRepository extends EntityRepository {
                     }                    
                 }                                
             }
-            if($arPagoDetalle->getAdicional() == 1) {
-                if($arPagoDetalle->getOperacion() == 1) {
-                    if($arPagoDetalle->getCotizacion() == 1) {
-                        $douAdicionCotizacion = $douAdicionCotizacion + $arPagoDetalle->getVrPago();
-                    }                    
-                }
-            }
+            
             if($arPagoDetalle->getAdicional() == 1) {
                 if($arPagoDetalle->getPrestacional() == 0) {
                     if($arPagoDetalle->getOperacion() == 1) {
@@ -74,6 +68,7 @@ class RhuPagoRepository extends EntityRepository {
             $douIngresoBaseCotizacion += $arPagoDetalle->getVrIngresoBaseCotizacion();
             $douIngresoBasePrestacion += $arPagoDetalle->getVrIngresoBasePrestacion();
             $intDiasAusentismo += $arPagoDetalle->getDiasAusentismo();
+            $douAdicionCotizacion += $arPagoDetalle->getVrIngresoBaseCotizacionAdicional();
         }
         
         //$arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();                        
@@ -256,7 +251,7 @@ class RhuPagoRepository extends EntityRepository {
         if($strHasta != "") {
             $dql .= " AND p.fechaDesde <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }
-        
+        $dql .= " ORDER BY pd.codigoPagoConceptoFk";
         return $dql;
     }
     
@@ -400,8 +395,7 @@ class RhuPagoRepository extends EntityRepository {
     public function tiempoSuplementario($fechaDesde, $fechaHasta, $codigoContrato) {
         $em = $this->getEntityManager();
         $dql   = "SELECT SUM(p.vrAdicionalCotizacion) as suplementario FROM BrasaRecursoHumanoBundle:RhuPago p "
-                . "WHERE p.estadoPagado = 1 "
-                . "AND p.codigoContratoFk = " . $codigoContrato . " "
+                . "WHERE p.codigoContratoFk = " . $codigoContrato . " "
                 . "AND p.fechaDesdePago >= '" . $fechaDesde . "' AND p.fechaDesdePago <= '" . $fechaHasta . "'";
         $query = $em->createQuery($dql);
         $arrayResultado = $query->getResult();
