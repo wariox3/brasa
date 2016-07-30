@@ -41,6 +41,7 @@ class TurRecursoType extends AbstractType
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('codigoTurnoFijoNominaFk', 'text', array('required' => false))  
             ->add('codigoTurnoFijoDescansoFk', 'text', array('required' => false))  
+            ->add('codigoTurnoFijo31Fk', 'text', array('required' => false))  
             ->add('BtnActualizar', 'submit', array('label'  => 'Actualizar datos desde empleado RH'))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

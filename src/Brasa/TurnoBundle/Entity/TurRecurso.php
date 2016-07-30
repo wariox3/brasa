@@ -136,6 +136,11 @@ class TurRecurso
     private $codigoTurnoFijoDescansoFk;    
     
     /**
+     * @ORM\Column(name="codigo_turno_fijo_31_fk", type="string", length=5, nullable=true)
+     */    
+    private $codigoTurnoFijo31Fk;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleado", inversedBy="turRecursosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -1183,5 +1188,29 @@ class TurRecurso
     public function getCodigoTurnoFijoDescansoFk()
     {
         return $this->codigoTurnoFijoDescansoFk;
+    }
+
+    /**
+     * Set codigoTurnoFijo31Fk
+     *
+     * @param string $codigoTurnoFijo31Fk
+     *
+     * @return TurRecurso
+     */
+    public function setCodigoTurnoFijo31Fk($codigoTurnoFijo31Fk)
+    {
+        $this->codigoTurnoFijo31Fk = $codigoTurnoFijo31Fk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTurnoFijo31Fk
+     *
+     * @return string
+     */
+    public function getCodigoTurnoFijo31Fk()
+    {
+        return $this->codigoTurnoFijo31Fk;
     }
 }
