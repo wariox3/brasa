@@ -27,6 +27,8 @@ class SeguridadSocialPeriodosController extends Controller
         $this->listar();
         if($form->isValid()) {
             if($request->request->get('OpGenerar')) {
+                set_time_limit(0);
+                ini_set("memory_limit", -1);                
                 $codigoPeriodo = $request->request->get('OpGenerar');
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodo')->generar($codigoPeriodo);
             }
@@ -568,14 +570,6 @@ class SeguridadSocialPeriodosController extends Controller
         $form->handleRequest($request);
         $this->listarEmpleados($codigoPeriodoDetalle);
         if($form->isValid()) {
-            /*if($form->get('BtnGenerar')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoPeriodoDetalle) {
-                        $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->generar($codigoPeriodoDetalle);
-                    }
-                }
-            }*/
             if($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
@@ -595,7 +589,7 @@ class SeguridadSocialPeriodosController extends Controller
             if($form->get('BtnActualizarEmpleadoAporte')->isClicked()) {
                $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->actualizar($codigoPeriodoDetalle);
             }
-            if ($form->get('BtnActualizarDetalle')->isClicked()) {
+            if($form->get('BtnActualizarDetalle')->isClicked()) {
                 $arrControles = $request->request->All();
                 $intIndice = 0;
                 foreach ($arrControles['LblCodigo'] as $intCodigo) {                
@@ -615,7 +609,7 @@ class SeguridadSocialPeriodosController extends Controller
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_rhu_ss_periodo_detalle_empleados', array('codigoPeriodoDetalle' => $codigoPeriodoDetalle)));
             }
-            if ($form->get('BtnActualizarSalarioMinimo')->isClicked()) {
+            if($form->get('BtnActualizarSalarioMinimo')->isClicked()) {
                 $arrControles = $request->request->All();
                 $intIndice = 0;
                 foreach ($arrControles['LblCodigo'] as $intCodigo) {                
@@ -632,7 +626,7 @@ class SeguridadSocialPeriodosController extends Controller
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_rhu_ss_periodo_detalle_empleados', array('codigoPeriodoDetalle' => $codigoPeriodoDetalle)));
             }
-            if ($form->get('BtnLimpiarSuplementario')->isClicked()) {
+            if($form->get('BtnLimpiarSuplementario')->isClicked()) {
                 $arrControles = $request->request->All();
                 $intIndice = 0;
                 foreach ($arrControles['LblCodigo'] as $intCodigo) {                
@@ -645,8 +639,11 @@ class SeguridadSocialPeriodosController extends Controller
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_rhu_ss_periodo_detalle_empleados', array('codigoPeriodoDetalle' => $codigoPeriodoDetalle)));
             }
+            if($form->get('BtnExcel')->isClicked()) {
+                $this->generarExcelEmpleados($codigoPeriodoDetalle);
+            }            
         }
-        $arSsoPeriodoEmpleados = $paginator->paginate($em->createQuery($this->strDqlListaEmpleados), $request->query->get('page', 1), 200);
+        $arSsoPeriodoEmpleados = $paginator->paginate($em->createQuery($this->strDqlListaEmpleados), $request->query->get('page', 1), 500);
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/SeguridadSocial/Periodos:empleados.html.twig', array(
             'arPeriodoDetalle' => $arPeriodoDetalle,
             'arPeriodoEmpleados' => $arSsoPeriodoEmpleados,
@@ -807,6 +804,7 @@ class SeguridadSocialPeriodosController extends Controller
         $arrBotonActualizarDetalle = array('label' => 'Actualizar detalle', 'disabled' => false);
         $arrBotonActualizarSalarioMinimo = array('label' => 'Actualizar salario minimo', 'disabled' => false);
         $arrBotonLimpiarSuplementario = array('label' => 'Limpiar tiempo suplementario', 'disabled' => false);
+        $arrBotonExcel = array('label' => 'Excel', 'disabled' => false);
         if($ar->getEstadoGenerado() == 1) {            
             $arrBotonEliminar['disabled'] = true;
             $arrBotonActualizarDatos['disabled'] = true;            
@@ -835,6 +833,7 @@ class SeguridadSocialPeriodosController extends Controller
             ->add('BtnActualizarDetalle', 'submit', $arrBotonActualizarDetalle)
             ->add('BtnActualizarSalarioMinimo', 'submit', $arrBotonActualizarSalarioMinimo)
             ->add('BtnLimpiarSuplementario', 'submit', $arrBotonLimpiarSuplementario)    
+            ->add('BtnExcel', 'submit', $arrBotonExcel)    
             ->add('BtnEliminar', 'submit', $arrBotonEliminar)
             ->getForm();
         return $form;
@@ -1536,6 +1535,72 @@ class SeguridadSocialPeriodosController extends Controller
         $objWriter->save('php://output');
         exit;
     }
-    
+
+    private function generarExcelEmpleados($codigoPeriodoDetalle) {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
+        ob_clean();
+        $em = $this->getDoctrine()->getManager();        
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(9); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'G'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
+        }      
+        for($col = 'F'; $col !== 'G'; $col++) {            
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'ID')
+                    ->setCellValue('B1', 'DOCUMENTO')
+                    ->setCellValue('C1', 'EMPLEADO')
+                    ->setCellValue('D1', 'CENTRO COSTO')
+                    ->setCellValue('E1', 'CONTRATO')
+                    ->setCellValue('F1', 'DIAS');
+
+        $i = 2;
+        $dql = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->listaDql($codigoPeriodoDetalle);        
+        $arPeriodoEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();                       
+        $query = $em->createQuery($dql);        
+        $arPeriodoEmpleados = $query->getResult();
+        
+        foreach ($arPeriodoEmpleados as $arPeriodoEmpleado) {            
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arPeriodoEmpleado->getCodigoPeriodoEmpleadoPk())
+                    ->setCellValue('B' . $i, $arPeriodoEmpleado->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('C' . $i, $arPeriodoEmpleado->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('E' . $i, $arPeriodoEmpleado->getCodigoContratoFk())                    
+                    ->setCellValue('F' . $i, $arPeriodoEmpleado->getDias());                    
+            if($arPeriodoEmpleado->getContratoRel()->getCodigoCentroCostoFk()) {
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('D' . $i, $arPeriodoEmpleado->getContratoRel()->getCentroCostoRel()->getNombre());
+            }            
+            $i++;
+        }
+
+        $objPHPExcel->getActiveSheet()->setTitle('PeriodoEmpleado');
+        $objPHPExcel->setActiveSheetIndex(0);
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="PedidosDetalles.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }          
 
 }

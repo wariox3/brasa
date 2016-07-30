@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
     
-    public function listaDql($codigoPeriodoDetalle, $strCodigoCentroCosto ) {                    
+    public function listaDql($codigoPeriodoDetalle, $strCodigoCentroCosto = "") {                    
             $dql   = "SELECT pe, e FROM BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado pe JOIN pe.empleadoRel e "
                     ."WHERE pe.codigoPeriodoDetalleFk = " . $codigoPeriodoDetalle . " ";
             if($strCodigoCentroCosto != "") {
