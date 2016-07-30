@@ -34,7 +34,7 @@ class FormatoCartaTrasladoSalud extends \FPDF_FPDF {
         $this->SetXY(60, 20);
         $this->SetFillColor(236, 236, 236);
         $this->SetFont('Arial','B',16);
-        $this->Cell(90, 20, utf8_decode("CARTA"), 1, 0, 'C', 1); //cuardo mitad medio
+        $this->Cell(90, 20, utf8_decode("CARTA PRESENTACION"), 1, 0, 'C', 1); //cuardo mitad medio
         $this->SetFillColor(272, 272, 272);
         $this->SetFont('Arial','B',10);
         $this->SetXY(60, 40);
