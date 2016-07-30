@@ -45,6 +45,10 @@ class ContratosController extends Controller
         $mensaje = 0;
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
+        $arTrasladoPension = $em->getRepository('BrasaRecursoHumanoBundle:RhuTrasladoPension')->findBy(array('codigoContratoFk' => $codigoContrato));
+        $arTrasladoPension = $paginator->paginate($arTrasladoPension, $this->get('request')->query->get('page', 1),10);
+        $arTrasladoSalud = $em->getRepository('BrasaRecursoHumanoBundle:RhuTrasladoSalud')->findBy(array('codigoContratoFk' => $codigoContrato));
+        $arTrasladoSalud = $paginator->paginate($arTrasladoSalud, $this->get('request')->query->get('page', 1),10);
         if ($arContrato->getEstadoActivo() == 1 || $arContrato->getIndefinido() == 1){
             $disabled = FALSE;
         } else {
@@ -92,6 +96,21 @@ class ContratosController extends Controller
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_rhu_base_contratos_detalles', array('codigoContrato' => $codigoContrato)));
             }
+            //$arrSeleccionados = $request->request->get('ChkSeleccionar');
+            if($request->request->get('ImprimirTrasladoPension')) {
+                $codigoTrasladoPension = $request->request->get('ImprimirTrasladoPension');
+                $arUsuario = $this->get('security.context')->getToken()->getUser();
+                $objFormatoTrasladoPension = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCartaTrasladoPension();
+                $objFormatoTrasladoPension->Generar($this, $codigoTrasladoPension, $arUsuario);
+                
+            }
+            if($request->request->get('ImprimirTrasladoSalud')) {
+                $codigoTrasladoSalud = $request->request->get('ImprimirTrasladoSalud');
+                $arUsuario = $this->get('security.context')->getToken()->getUser();
+                $objFormatoTrasladoSalud = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCartaTrasladoSalud();
+                $objFormatoTrasladoSalud->Generar($this, $codigoTrasladoSalud, $arUsuario);
+                
+            }
         }
         $arCambiosSalario = new \Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario();
         $arCambiosSalario = $em->getRepository('BrasaRecursoHumanoBundle:RhuCambioSalario')->findBy(array('codigoContratoFk' => $codigoContrato));
@@ -102,10 +121,7 @@ class ContratosController extends Controller
         $arContratoSedes = new \Brasa\RecursoHumanoBundle\Entity\RhuContratoSede();
         $arContratoSedes = $em->getRepository('BrasaRecursoHumanoBundle:RhuContratoSede')->findBy(array('codigoContratoFk' => $codigoContrato));
         $arContratoSedes = $paginator->paginate($arContratoSedes, $this->get('request')->query->get('page', 1),5);
-        $arTrasladoPension = $em->getRepository('BrasaRecursoHumanoBundle:RhuTrasladoPension')->findBy(array('codigoContratoFk' => $codigoContrato));
-        $arTrasladoPension = $paginator->paginate($arTrasladoPension, $this->get('request')->query->get('page', 1),10);
-        $arTrasladoSalud = $em->getRepository('BrasaRecursoHumanoBundle:RhuTrasladoSalud')->findBy(array('codigoContratoFk' => $codigoContrato));
-        $arTrasladoSalud = $paginator->paginate($arTrasladoSalud, $this->get('request')->query->get('page', 1),10);
+        
         $arContratoProrrogas = $em->getRepository('BrasaRecursoHumanoBundle:RhuContratoProrroga')->findBy(array('codigoContratoFk' => $codigoContrato), array('codigoContratoProrrogaPk' => 'DESC'));
         $arContratoProrrogas = $paginator->paginate($arContratoProrrogas, $this->get('request')->query->get('page', 1),10);
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:detalle.html.twig', array(

@@ -30,7 +30,9 @@ class TrasladoPensionController extends Controller
                 'property' => 'nombre',
                 'required' => true))
             ->add('fechaAplicacion', 'date', array('data' => new \DateTime('now')))
+            ->add('fechaFosyga', 'date', array('data' => new \DateTime('now')))                
             ->add('detalle', 'text', array('required' => true))
+            ->add('tipo', 'choice', array('choices' => array('1' => 'TRASLADO', '2' => 'CAMBIO')))                                                
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $form->handleRequest($request);
@@ -47,6 +49,11 @@ class TrasladoPensionController extends Controller
                 $arTrasladoPension->setEntidadPensionNuevaRel($form->get('entidadPensionNuevaRel')->getData());
                 $arTrasladoPension->setEntidadPensionAnteriorRel($arEntidadPension);
                 $arTrasladoPension->setDetalle($form->get('detalle')->getData());
+                $arTrasladoPension->setTipo($form->get('tipo')->getData());
+                $arTrasladoPension->setFechaFosyga($form->get('fechaFosyga')->getData());
+                if ($form->get('tipo')->getData() == 1){
+                    $arTrasladoPension->setEstadoAfiliado(1);
+                }
                 $arContrato->setEntidadPensionRel($form->get('entidadPensionNuevaRel')->getData());
                 $arEmpleadoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                 $arEmpleadoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato->getEmpleadoRel());

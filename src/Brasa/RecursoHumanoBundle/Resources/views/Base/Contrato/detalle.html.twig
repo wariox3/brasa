@@ -226,17 +226,25 @@
                     <tr>
                         <th>CÓDIGO</th>
                         <th>FECHA</th>
+                        <th>FECHA FOSYGA</th>
+                        <th>TIPO</th>
                         <th>ANTERIOR</th>
                         <th>NUEVO</th>
                         <th>DETALLE</th>
+                        <th>AFILIACION</th>
+                        <th></th>
                     </tr>
                     {% for arTrasladoPension in arTrasladoPension %}
                         <tr>
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arTrasladoPension.codigoTrasladoPensionPk }}">{{ arTrasladoPension.codigoTrasladoPensionPk }} </td>
                             <td>{{ arTrasladoPension.fecha|date('Y-m-d') }}</td>
+                            <td>{% if arTrasladoPension.fechaFosyga == null %}{% else %}{{ arTrasladoPension.fechaFosyga|date('Y-m-d') }}{% endif %}</td>
+                            <td>{% if arTrasladoPension.tipo == 1%}TRASLADO{% else %}CAMBIO{% endif %}</td>
                             <td>{{ arTrasladoPension.entidadPensionAnteriorRel.nombre }}</td>
                             <td>{{ arTrasladoPension.entidadPensionNuevaRel.nombre }}</td>
                             <td>{{ arTrasladoPension.detalle }}</td>
+                            <td>{% if arTrasladoPension.estadoAfiliado == 1%}CERRADA{% else %}ABIERTO{% endif %}</td>
+                            <td><button class="btn btn-default btn-xs" type="submit" name="ImprimirTrasladoPension" value="{{ arTrasladoPension.codigoTrasladoPensionPk }}">Imprimir</button></td>                             
                         </tr>
                     {% endfor %}
                 </table>
@@ -256,17 +264,25 @@
                     <tr>
                         <th>CÓDIGO</th>
                         <th>FECHA</th>
+                        <th>FECHA FOSYGA</th>
+                        <th>TIPO</th>
                         <th>ANTERIOR</th>
                         <th>NUEVO</th>
                         <th>DETALLE</th>
+                        <th>AFILIACION</th>
+                        <th></th>
                     </tr>
                     {% for arTrasladoSalud in arTrasladoSalud %}
                         <tr>
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arTrasladoSalud.codigoTrasladoSaludPk }}">{{ arTrasladoSalud.codigoTrasladoSaludPk }} </td>
                             <td>{{ arTrasladoSalud.fecha|date('Y-m-d') }}</td>
+                            <td>{% if arTrasladoSalud.fechaFosyga == null %}{% else %}{{ arTrasladoSalud.fechaFosyga|date('Y-m-d') }}{% endif %}</td>
+                            <td>{% if arTrasladoSalud.tipo == 1%}TRASLADO{% else %}CAMBIO{% endif %}</td>
                             <td>{{ arTrasladoSalud.entidadSaludAnteriorRel.nombre }}</td>
                             <td>{{ arTrasladoSalud.entidadSaludNuevaRel.nombre }}</td>
                             <td>{{ arTrasladoSalud.detalle }}</td>
+                            <td>{% if arTrasladoSalud.estadoAfiliado == 1%}CERRADA{% else %}ABIERTO{% endif %}</td>
+                            <td><button class="btn btn-default btn-xs" type="submit" name="ImprimirTrasladoSalud" value="{{ arTrasladoSalud.codigoTrasladoSaludPk }}">Imprimir</button></td>                             
                         </tr>
                     {% endfor %}
                 </table>

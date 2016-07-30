@@ -30,6 +30,8 @@ class TrasladoSaludController extends Controller
                 'property' => 'nombre',
                 'required' => true))
             ->add('fechaAplicacion', 'date', array('data' => new \DateTime('now')))
+            ->add('fechaFosyga', 'date', array('data' => new \DateTime('now')))                                
+            ->add('tipo', 'choice', array('choices' => array('1' => 'TRASLADO', '2' => 'CAMBIO')))                                
             ->add('detalle', 'text', array('required' => true))
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
@@ -47,6 +49,11 @@ class TrasladoSaludController extends Controller
                 $arTrasladoSalud->setEntidadSaludNuevaRel($form->get('entidadSaludNuevaRel')->getData());
                 $arTrasladoSalud->setEntidadSaludAnteriorRel($arEntidadSalud);
                 $arTrasladoSalud->setDetalle($form->get('detalle')->getData());
+                $arTrasladoSalud->setTipo($form->get('tipo')->getData());
+                $arTrasladoSalud->setFechaFosyga($form->get('fechaFosyga')->getData());
+                if ($form->get('tipo')->getData() == 1){
+                    $arTrasladoSalud->setEstadoAfiliado(1);
+                }
                 $arContrato->setEntidadSaludRel($form->get('entidadSaludNuevaRel')->getData());
                 $arEmpleadoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                 $arEmpleadoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato->getEmpleadoRel());

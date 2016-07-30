@@ -40,12 +40,27 @@ class RhuTrasladoPension
     /**
      * @ORM\Column(name="codigo_entidad_pension_nueva_fk", type="integer")
      */    
-    private $codigoEntidadPensionNuevaFk;            
+    private $codigoEntidadPensionNuevaFk;
+    
+    /**
+     * @ORM\Column(name="tipo", type="integer", nullable=true)
+     */    
+    private $tipo;
+    
+    /**     
+     * @ORM\Column(name="estado_afiliado", type="boolean")
+     */    
+    private $estadoAfiliado = false;
     
     /**
      * @ORM\Column(name="detalle", type="string", length=250, nullable=true)
      */    
-    private $detalle;     
+    private $detalle;
+    
+    /**
+     * @ORM\Column(name="fecha_fosyga", type="date", nullable=true)
+     */    
+    private $fechaFosyga;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="trasladosPensionesEmpleadoRel")
@@ -72,6 +87,9 @@ class RhuTrasladoPension
     protected $entidadPensionNuevaRel;
 
 
+
+
+    
 
     /**
      * Get codigoTrasladoPensionPk
@@ -204,6 +222,54 @@ class RhuTrasladoPension
     }
 
     /**
+     * Set tipo
+     *
+     * @param integer $tipo
+     *
+     * @return RhuTrasladoPension
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return integer
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
+
+    /**
+     * Set estadoAfiliado
+     *
+     * @param boolean $estadoAfiliado
+     *
+     * @return RhuTrasladoPension
+     */
+    public function setEstadoAfiliado($estadoAfiliado)
+    {
+        $this->estadoAfiliado = $estadoAfiliado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAfiliado
+     *
+     * @return boolean
+     */
+    public function getEstadoAfiliado()
+    {
+        return $this->estadoAfiliado;
+    }
+
+    /**
      * Set detalle
      *
      * @param string $detalle
@@ -225,6 +291,30 @@ class RhuTrasladoPension
     public function getDetalle()
     {
         return $this->detalle;
+    }
+
+    /**
+     * Set fechaFosyga
+     *
+     * @param \DateTime $fechaFosyga
+     *
+     * @return RhuTrasladoPension
+     */
+    public function setFechaFosyga($fechaFosyga)
+    {
+        $this->fechaFosyga = $fechaFosyga;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaFosyga
+     *
+     * @return \DateTime
+     */
+    public function getFechaFosyga()
+    {
+        return $this->fechaFosyga;
     }
 
     /**
