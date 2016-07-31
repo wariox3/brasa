@@ -758,15 +758,22 @@ class TurSoportePagoRepository extends EntityRepository {
 
                 $horasCompensarDia = round($porExtraDiurna * $horasPorCompensar);
                 $horasCompensarNoche = round($porExtraNocturna * $horasPorCompensar);
+                $horasCompensadas = $horasCompensarDia + $horasCompensarNoche;
+                if($horasCompensadas > $horasPorCompensar) {
+                    $horasCompensarNoche -= 1;
+                }                                
                 $horasCompensarFestivaDia = round($porExtraFestivaDiurna * $horasPorCompensar);
-                $horasCompensarFestivaNoche = round($porExtraFestivaNocturna * $horasPorCompensar);                    
-                //Para tema de redondeo
-                $horasCompensadas = $horasCompensarDia + $horasCompensarNoche + $horasCompensarFestivaDia + $horasCompensarFestivaNoche;
+                $horasCompensadas = $horasCompensarDia + $horasCompensarNoche+$horasCompensarFestivaDia;
+                if($horasCompensadas > $horasPorCompensar) {
+                    $horasCompensarFestivaDia -= 1;
+                }                
+                $horasCompensarFestivaNoche = round($porExtraFestivaNocturna * $horasPorCompensar); 
+                $horasCompensadas = $horasCompensarDia + $horasCompensarNoche+$horasCompensarFestivaDia+$horasCompensarFestivaNoche;
                 if($horasCompensadas > $horasPorCompensar) {
                     $horasCompensarFestivaNoche -= 1;
-                }
-                //$horasCompensarFestivaNoche = $this->truncateFloat($porExtraFestivaNocturna * $horasPorCompensar, 1);                    
-
+                }                
+                //Para tema de redondeo
+                $horasCompensadas = $horasCompensarDia + $horasCompensarNoche + $horasCompensarFestivaDia + $horasCompensarFestivaNoche;                
 
                 $horasDia += $horasCompensarDia;
                 $horasNoche += $horasCompensarNoche;
