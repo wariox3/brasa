@@ -207,16 +207,21 @@ class TurSoportePagoDetalleRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $intIngresoRetiro = 0;
         $novedades = 0;
-        $dql   = "SELECT SUM(spd.ingreso + spd.ingreso) as novedades "
+        $dql   = "SELECT SUM(spd.ingreso) as ingreso, SUM(spd.retiro) as retiro "
                 . "FROM BrasaTurnoBundle:TurSoportePagoDetalle spd "
                 . "WHERE spd.codigoSoportePagoFk =  " . $codigoSoportePago . " AND (spd.fecha >='" . $fechaDesde . "' AND spd.fecha <= '" . $fechaHasta . "')";
         $query = $em->createQuery($dql);
         $arrayResultado = $query->getResult();         
         if($arrayResultado) {
-            $intIngresoRetiro = $arrayResultado[0]['novedades'];
-            if($intIngresoRetiro == null) {
-                $intIngresoRetiro = 0;
-            }             
+            $intIngreso = $arrayResultado[0]['ingreso'];
+            if($intIngreso == null) {
+                $intIngreso = 0;
+            }     
+            $intRetiro = $arrayResultado[0]['retiro'];
+            if($intRetiro == null) {
+                $intRetiro = 0;
+            }
+            $intIngresoRetiro = $intIngreso + $intRetiro;          
         } 
         $novedades = $intIngresoRetiro;
         return $novedades;        
