@@ -350,9 +350,8 @@ class TurSoportePagoRepository extends EntityRepository {
         $arSoportePagoDetalle->setIncapacidad($arTurno->getIncapacidad());
         $arSoportePagoDetalle->setLicencia($arTurno->getLicencia());
         $arSoportePagoDetalle->setLicenciaNoRemunerada($arTurno->getLicenciaNoRemunerada());
-        $arSoportePagoDetalle->setVacacion($arTurno->getVacacion());
+        $arSoportePagoDetalle->setVacacion($arTurno->getVacacion());                
         $arSoportePagoDetalle->setIngreso($arTurno->getIngreso());
-        $arSoportePagoDetalle->setRetiro($arTurno->getRetiro());
         if($dateFecha->format('d') == 31) {
             $arSoportePagoDetalle->setDias(0);        
             $arSoportePagoDetalle->setHoras(0);        
@@ -363,7 +362,8 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePagoDetalle->setHorasRecargoNocturno($arrHoras['horasNocturnas']); 
             $arSoportePagoDetalle->setHorasRecargoFestivoDiurno($arrHoras['horasFestivasDiurnas']);
             $arSoportePagoDetalle->setHorasRecargoFestivoNocturno($arrHoras['horasFestivasNocturnas']);
-        } else {
+        } else {            
+            $arSoportePagoDetalle->setRetiro($arTurno->getRetiro());
             $arSoportePagoDetalle->setDias($intDias);        
             $arSoportePagoDetalle->setHoras($arTurno->getHorasNomina());        
             $arSoportePagoDetalle->setHorasDiurnas($arrHoras['horasDiurnas']);
@@ -701,10 +701,7 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePagos = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));                                
         }             
 
-        foreach ($arSoportePagos as $arSoportePago) {
-            $horasPeriodo =  ($diasPeriodo - ($arSoportePago->getIngreso()+$arSoportePago->getRetiro())) * 8;
-            $horasDescanso = $descanso * 8;                      
-            $horasTopeSoportePago = $horasPeriodo - $horasDescanso;            
+        foreach ($arSoportePagos as $arSoportePago) {            
             if($arSoportePago->getTurnoFijo() == 0) {
                 $diasDescansoSoportePago = $descanso; 
                 $novedadesAfectaDescanso = $arSoportePago->getLicenciaNoRemunerada();
@@ -729,8 +726,11 @@ class TurSoportePagoRepository extends EntityRepository {
                     } else {
                         $diasDescansoSoportePago = 0;
                     }                
-                }             
+                }       
+                //$horasPeriodo =  ($diasPeriodo - ($arSoportePago->getIngreso()+$arSoportePago->getRetiro())) * 8;                
+                $horasPeriodo =  $diasPeriodo * 8;                
                 $horasDescansoSoportePago = $diasDescansoSoportePago * 8;
+                $horasTopeSoportePago = $horasPeriodo - $horasDescansoSoportePago;                
                 $horasDia = $arSoportePago->getHorasDiurnasReales();
                 $horasNoche = $arSoportePago->getHorasNocturnasReales();
                 $horasFestivasDia = $arSoportePago->getHorasFestivasDiurnasReales();

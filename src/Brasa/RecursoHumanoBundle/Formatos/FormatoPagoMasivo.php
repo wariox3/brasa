@@ -38,7 +38,7 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
         $this->SetXY(53, 14);
         $this->Image('imagenes/logos/logo.jpg', 12, 15, 35, 17);
         //INFORMACIÓN EMPRESA
-        $this->Cell(150, 7, "", 0, 0, 'C', 1);//$this->Cell(150, 7, utf8_decode("COMPROBANTE PAGO ". $arPago->getPagoTipoRel()->getNombre().""), 0, 0, 'C', 1);
+        $this->Cell(150, 7, "COMPROBANTE PAGO NOMINA", 0, 0, 'C', 1);//$this->Cell(150, 7, utf8_decode("COMPROBANTE PAGO ". $arPago->getPagoTipoRel()->getNombre().""), 0, 0, 'C', 1);
         $this->SetXY(53, 22);
         $this->SetFont('Arial','B',9);
         $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);
@@ -52,14 +52,7 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
         $this->SetXY(53, 34);
         $this->Cell(20, 4, utf8_decode("TELÉFONO:"), 0, 0, 'L', 1);
         $this->Cell(100, 4, $arConfiguracion->getTelefonoEmpresa(), 0, 0, 'L', 0);
-        //FORMATO ISO
-        $this->SetXY(168, 18);
-        $this->SetFillColor(255, 255, 255);
-        $this->Cell(35, 6, "CODIGO: ".$arContenidoFormatoA->getCodigoFormatoIso(), 1, 0, 'L', 1);
-        $this->SetXY(168, 24);
-        $this->Cell(35, 6, utf8_decode("VERSIÓN: ".$arContenidoFormatoA->getVersion()), 1, 0, 'L', 1);
-        $this->SetXY(168, 30);
-        $this->Cell(35, 6, utf8_decode("FECHA: ".$arContenidoFormatoA->getFechaVersion()->format('Y-m-d')), 1, 0, 'L', 1);
+        
         
         //$this->SetFillColor(255, 255, 255);
         //$this->Cell(45, 5, "" , 1, 0, 'R', 1);
@@ -68,9 +61,9 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
     }
 
     public function EncabezadoDetalles() {
-        
-        $this->Ln(43);
-        $header = array('CONCEPTO', 'DETALLE', 'HORAS', 'VR. HORA', '%', 'DEVENGADO', 'DEDUCCION');
+        $this->SetXY(10, 73);
+        //$this->Ln(45);
+        $header = array('CODIGO', 'CONCEPTO DE PAGO', 'HORAS', 'VR. HORA', '%', 'DEVENGADO', 'DEDUCCION');
         $this->SetFillColor(200, 200, 200);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -78,7 +71,7 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
         $this->SetFont('', 'B', 6.8);
 
         //creamos la cabecera de la tabla.
-        $w = array(49, 80, 10, 13, 7, 17, 17);
+        $w = array(13,87, 10, 22, 7, 27, 27);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -96,7 +89,8 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
         $pdf->SetFillColor(200, 200, 200);
-        
+        $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+        $arConfiguracion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);        
         $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
         $arPagos = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => self::$codigoProgramacionPago));   
         foreach ($arPagos as $arPago){
@@ -209,32 +203,75 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
             $pdf->SetFillColor(255, 255, 255);
             $pdf->Cell(171, 5, $arPago->getComentarios() , 1, 0, 'L', 1);
             $pdf->SetFont('Arial','B',6.5);
-            $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
-            $arPagoDetalle = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $arPago->getCodigoPagoPk()));
-            $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
-            $arConfiguracion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);
             $pdf->Ln(12);
-            foreach ($arPagoDetalle as $arPagoDetalle) {            
+            $totalExtras = 0;
+            $totalCompensado = 0;
+            $totalHorasCompensado = 0;            
+            $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();        
+            $dql = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->listaDql($arPago->getCodigoPagoPk());                
+            $query = self::$em->createQuery($dql);
+            $arPagoDetalles = $query->getResult();
+
+            foreach ($arPagoDetalles as $arPagoDetalle) { 
+                if($arPagoDetalle->getCodigoPagoConceptoFk() >= 3 && $arPagoDetalle->getCodigoPagoConceptoFk() <= 6) {
+                    $totalExtras += $arPagoDetalle->getNumeroHoras();
+                }
+            }
+            if($totalExtras > ($arPago->getDiasLaborados() * 2)){
+                $tope = $arPago->getDiasLaborados() * 2;
+                $tope = $tope - 8;
+                $porCompensar = $totalExtras - $tope;            
+                foreach ($arPagoDetalles as $arPagoDetalle) { 
+                    if($arPagoDetalle->getCodigoPagoConceptoFk() >= 3 && $arPagoDetalle->getCodigoPagoConceptoFk() <= 6) {
+                        $porcentaje = $arPagoDetalle->getNumeroHoras() / $totalExtras;
+                        $horas = $porcentaje * $porCompensar;                    
+                        $horas = round($horas);                    
+                        $horasCompensadas =  $arPagoDetalle->getNumeroHoras() - $horas;
+                        $valor = $horasCompensadas * $arPagoDetalle->getVrHora();    
+                        $arPagoDetalle->setNumeroHoras($horas);
+                        $arPagoDetalle->setVrPago($valor);
+                        $totalCompensado += $horas * $arPagoDetalle->getVrHora();
+                        $totalHorasCompensado += $horas;
+                    }
+                }
+            }            
+            foreach ($arPagoDetalles as $arPagoDetalle) {            
                 $pdf->SetFont('Arial', '', 5.4);
-                $pdf->Cell(49, 4, utf8_decode($arPagoDetalle->getPagoConceptoRel()->getNombre()), 1, 0, 'L');
-                $pdf->SetFont('Arial', '', 5.5);
-                $pdf->Cell(80, 4, utf8_decode($arPagoDetalle->getDetalle()), 1, 0, 'L');
+                $pdf->Cell(13, 4, $arPagoDetalle->getCodigoPagoConceptoFk(), 1, 0, 'L');
+                $pdf->Cell(87, 4, utf8_decode($arPagoDetalle->getPagoConceptoRel()->getNombre()), 1, 0, 'L');
+                $pdf->SetFont('Arial', '', 5.5);            
                 $pdf->SetFont('Arial', '', 7);
                 $pdf->Cell(10, 4, number_format($arPagoDetalle->getNumeroHoras(), 0, '.', ','), 1, 0, 'R');
-                $pdf->Cell(13, 4, number_format($arPagoDetalle->getVrHora(), 0, '.', ','), 1, 0, 'R');
+                $pdf->Cell(22, 4, number_format($arPagoDetalle->getVrHora(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Cell(7, 4, number_format($arPagoDetalle->getPorcentajeAplicado(), 0, '.', ','), 1, 0, 'R');
                 if($arPagoDetalle->getOperacion() == 1) {
-                    $pdf->Cell(17, 4, number_format($arPagoDetalle->getVrPago(), 0, '.', ','), 1, 0, 'R');    
+                    $pdf->Cell(27, 4, number_format($arPagoDetalle->getVrPago(), 0, '.', ','), 1, 0, 'R');    
                 } else {
-                    $pdf->Cell(17, 4, number_format(0, 0, '.', ','), 1, 0, 'R');    
+                    $pdf->Cell(27, 4, number_format(0, 0, '.', ','), 1, 0, 'R');    
                 }
                 if($arPagoDetalle->getOperacion() == -1) {
-                    $pdf->Cell(17, 4, "-".number_format($arPagoDetalle->getVrPago(), 0, '.', ','), 1, 0, 'R');    
+                    $pdf->Cell(27, 4, "-".number_format($arPagoDetalle->getVrPago(), 0, '.', ','), 1, 0, 'R');    
                 } else {
-                    $pdf->Cell(17, 4, number_format(0, 0, '.', ','), 1, 0, 'R');    
+                    $pdf->Cell(27, 4, number_format(0, 0, '.', ','), 1, 0, 'R');    
                 }
                 $pdf->Ln();
                 $pdf->SetAutoPageBreak(true, 15);
+            }
+            if($totalCompensado > 0) {              
+                $pdf->SetFont('Arial', '', 5.4);
+                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                $arPagoConcepto = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(71);                    
+                $pdf->Cell(13, 4, '71', 1, 0, 'L');
+                $pdf->Cell(87, 4, utf8_decode($arPagoConcepto->getNombre()), 1, 0, 'L');
+                $pdf->SetFont('Arial', '', 5.5);            
+                $pdf->SetFont('Arial', '', 7);
+                $pdf->Cell(10, 4, '', 1, 0, 'R');
+                $pdf->Cell(22, 4, '', 1, 0, 'R');
+                $pdf->Cell(7, 4, '', 1, 0, 'R');
+                $pdf->Cell(27, 4, number_format($totalCompensado, 0, '.', ','), 1, 0, 'R');    
+                $pdf->Cell(27, 4, number_format(0, 0, '.', ','), 1, 0, 'R');    
+                $pdf->Ln();
+                $pdf->SetAutoPageBreak(true, 15);            
             }
             
             //TOTALES
@@ -254,48 +291,6 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
                 $pdf->Cell(20, 4, number_format($arPago->getVrNeto(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Ln(8);
                 
-            // INFORMACION DE CREDITOS
-                $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
-                $arPagoDetalles = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $arPago->getCodigoPagoPk()));
-                $pdf->Cell(193, 4, utf8_decode("INFORMACIÓN DE CREDITOS"), 1, 0, 'L',true);
-                $pdf->Ln(4);
-                $pdf->Cell(24, 4, utf8_decode("CÓDIGO"), 1, 0, 'L',true);
-                $pdf->Cell(24, 4, "FECHA", 1, 0, 'L',true);
-                $pdf->Cell(25, 4, "VALOR CREDITO", 1, 0, 'L',true);
-                $pdf->Cell(24, 4, "CUOTAS", 1, 0, 'L',true);
-                $pdf->Cell(24, 4, "CUOTA ACTUAL", 1, 0, 'L',true);
-                $pdf->Cell(24, 4, "SALDO", 1, 0, 'L',true);
-                $pdf->Cell(24, 4, "APROBADO", 1, 0, 'L',true);
-                $pdf->Cell(24, 4, "SUSPENDIDO", 1, 0, 'L',true);
-                $pdf->Ln();
-                $pdf->SetFont('Arial', '', 8);
-                foreach ($arPagoDetalles as $arPagoDetalles) {
-                    if ($arPagoDetalles->getCodigoCreditoFk() <> "" && $arPagoDetalles->getCodigoPagoConceptoFk() == $arConfiguracion->getCodigoCredito()) { 
-                            $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                            $arCredito = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arPagoDetalles->getCodigoCreditoFk());
-                            $arCreditoPago = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
-                            $arCreditoPago = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoPago')->findOneBy(array('codigoPagoFk' =>$arPagoDetalles->getCodigoPagoFk(), 'codigoCreditoFk' => $arPagoDetalles->getCodigoCreditoFk()));
-                            $pdf->Cell(24, 4, $arCredito->getCodigoCreditoPk(), 1, 0, 'L');
-                            $pdf->Cell(24, 4, $arCredito->getFecha()->format('Y/m/d'), 1, 0, 'L');
-                            $pdf->Cell(25, 4, number_format($arCredito->getVrPagar(), 0, '.', ','), 1, 0, 'R');
-                            $pdf->Cell(24, 4, $arCredito->getNumeroCuotas(), 1, 0, 'L');
-                            $pdf->Cell(24, 4, $arCredito->getNumeroCuotaActual(), 1, 0, 'L');
-                            $pdf->Cell(24, 4, number_format($arCredito->getSaldo(), 0, '.', ','), 1, 0, 'R');
-                            if ($arCredito->getAprobado() == 1){
-                                $pdf->Cell(24, 4, "SI", 1, 0, 'L');
-                            }
-                            else {
-                                $pdf->Cell(24, 4, "NO", 1, 0, 'L');
-                            }
-                            if ($arCredito->getEstadoSuspendido() == 1){
-                                $pdf->Cell(24, 4, "SI", 1, 0, 'L');
-                            }
-                            else {
-                                $pdf->Cell(24, 4, "NO", 1, 0, 'L');
-                            }
-                            $pdf->Ln();
-                        }
-                }
             $pdf->AddPage();
         }
         

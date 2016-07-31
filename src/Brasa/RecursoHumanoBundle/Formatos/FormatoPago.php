@@ -196,6 +196,7 @@ class FormatoPago extends \FPDF_FPDF {
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
         $pdf->SetFillColor(200, 200, 200);
+        
         $totalExtras = 0;
         $totalCompensado = 0;
         $totalHorasCompensado = 0;
