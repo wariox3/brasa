@@ -114,7 +114,13 @@
              <td style="text-align: right">{{ arPeriodoDetalle.totalCotizacion | number_format(0, '.', ',') }}</td>
             
         </table>
-        {{ knp_pagination_render(arSsoAportes) }}
+        <div class="btn-group" style="float: left">
+                <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arSsoAportes.getTotalItemCount }}</span></div>                        
+        </div>
+        <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
+                {{ knp_pagination_render(arSsoAportes) }}       
+        </div>     
+        
 
 
         <!-- Botones Menu Items -->

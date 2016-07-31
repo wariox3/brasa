@@ -206,14 +206,20 @@ class FacturaController extends Controller
                     $arFacturaDetalle->setFechaDesde($arPeriodo->getFechaDesde());
                     $arFacturaDetalle->setFechaHasta($arPeriodo->getFechaHasta());
                     $arFacturaDetalle->setPrecio($arPeriodo->getTotal());
-                    if($arFactura->getCodigoFacturaTipoFk() == 1) {
+                    
+                    /*if($arFactura->getCodigoFacturaTipoFk() == 1) {
                         $arFacturaDetalle->setSubtotal($arPeriodo->getSubtotal());                                        
                         $arFacturaDetalle->setIva($arPeriodo->getIva());
                         $arFacturaDetalle->setTotal($arPeriodo->getTotal());                        
                     } else {
                         $arFacturaDetalle->setSubtotal($arPeriodo->getSubtotal());                                        
                         $arFacturaDetalle->setTotal($arPeriodo->getSubtotal());                        
-                    }
+                    }*/
+                    //pablo 01/08/2016
+                    $arFacturaDetalle->setSubtotal($arPeriodo->getSubtotal());                                        
+                    $arFacturaDetalle->setIva($arPeriodo->getIva());
+                    $arFacturaDetalle->setTotal($arPeriodo->getTotal());
+                    //
                     $arFacturaDetalle->setPension($arPeriodo->getPension());
                     $arFacturaDetalle->setSalud($arPeriodo->getSalud());
                     $arFacturaDetalle->setRiesgos($arPeriodo->getRiesgos());

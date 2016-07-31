@@ -180,6 +180,7 @@ class SeguridadSocialPeriodosController extends Controller
                 $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
                 $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
                 $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+                
                 $arEntidadRiesgos = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
                 $arEntidadRiesgos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($arConfiguracionNomina->getCodigoEntidadRiesgoFk());
                 $condigoInterfaceRiesgos = $arEntidadRiesgos->getCodigoInterface();
@@ -197,7 +198,8 @@ class SeguridadSocialPeriodosController extends Controller
                 fputs($ar, $this->RellenarNr($arConfiguracion->getNombreEmpresa(), " ", 200, "D"));
                 fputs($ar, 'NI');
                 fputs($ar, $this->RellenarNr($arConfiguracion->getNitEmpresa(), " ", 16, "D"));
-                fputs($ar, '3');
+                //fputs($ar, '3');
+                fputs($ar, $arConfiguracion->getDigitoVerificacionEmpresa());
                 fputs($ar, 'E');
                 fputs($ar, '          ');
                 fputs($ar, '          '); // Nro 9 del formato
@@ -215,7 +217,7 @@ class SeguridadSocialPeriodosController extends Controller
                 //Fecha de pago
                 fputs($ar, $arPeriodoDetalle->getSsoPeriodoRel()->getFechaPago()->format('Y-m-d')); //Nro 17
                 //Numero total de empleados
-                fputs($ar, $this->RellenarNr($arPeriodoDetalle->getNumeroRegistros(), "0", 5, "I")); //duda nro 18
+                fputs($ar, $this->RellenarNr($arPeriodoDetalle->getNumeroEmpleados(), "0", 5, "I")); 
                 //Valor total de la nomina
                 //fputs($ar, $this->RellenarNr($arPeriodoDetalle->getTotalCotizacion(), "0", 12, "I")); //duda nro 19
                 fputs($ar, '000000000000'); //Es el anterior

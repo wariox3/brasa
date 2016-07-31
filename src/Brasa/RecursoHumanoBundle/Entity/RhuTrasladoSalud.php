@@ -63,6 +63,11 @@ class RhuTrasladoSalud
     private $fechaFosyga;
     
     /**
+     * @ORM\Column(name="fecha_cambio_afiliacion", type="date", nullable=true)
+     */    
+    private $fechaCambioAfiliacion;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="trasladosSaludEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -315,6 +320,30 @@ class RhuTrasladoSalud
     public function getFechaFosyga()
     {
         return $this->fechaFosyga;
+    }
+
+    /**
+     * Set fechaCambioAfiliacion
+     *
+     * @param \DateTime $fechaCambioAfiliacion
+     *
+     * @return RhuTrasladoSalud
+     */
+    public function setFechaCambioAfiliacion($fechaCambioAfiliacion)
+    {
+        $this->fechaCambioAfiliacion = $fechaCambioAfiliacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaCambioAfiliacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaCambioAfiliacion()
+    {
+        return $this->fechaCambioAfiliacion;
     }
 
     /**

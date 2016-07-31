@@ -63,6 +63,11 @@ class RhuTrasladoPension
     private $fechaFosyga;
     
     /**
+     * @ORM\Column(name="fecha_cambio_afiliacion", type="date", nullable=true)
+     */    
+    private $fechaCambioAfiliacion;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="trasladosPensionesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -89,7 +94,6 @@ class RhuTrasladoPension
 
 
 
-    
 
     /**
      * Get codigoTrasladoPensionPk
@@ -315,6 +319,30 @@ class RhuTrasladoPension
     public function getFechaFosyga()
     {
         return $this->fechaFosyga;
+    }
+
+    /**
+     * Set fechaCambioAfiliacion
+     *
+     * @param \DateTime $fechaCambioAfiliacion
+     *
+     * @return RhuTrasladoPension
+     */
+    public function setFechaCambioAfiliacion($fechaCambioAfiliacion)
+    {
+        $this->fechaCambioAfiliacion = $fechaCambioAfiliacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaCambioAfiliacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaCambioAfiliacion()
+    {
+        return $this->fechaCambioAfiliacion;
     }
 
     /**
