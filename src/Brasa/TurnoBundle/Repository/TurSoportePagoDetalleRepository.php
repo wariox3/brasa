@@ -202,5 +202,24 @@ class TurSoportePagoDetalleRepository extends EntityRepository {
         $novedades = $intLicenciaNoRemunerada;
         return $novedades;        
     }
-       
+  
+    public function numeroIngresoRetiros($codigoSoportePago, $fechaDesde, $fechaHasta) {                
+        $em = $this->getEntityManager();
+        $intIngresoRetiro = 0;
+        $novedades = 0;
+        $dql   = "SELECT SUM(spd.ingreso + spd.ingreso) as novedades "
+                . "FROM BrasaTurnoBundle:TurSoportePagoDetalle spd "
+                . "WHERE spd.codigoSoportePagoFk =  " . $codigoSoportePago . " AND (spd.fecha >='" . $fechaDesde . "' AND spd.fecha <= '" . $fechaHasta . "')";
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();         
+        if($arrayResultado) {
+            $intIngresoRetiro = $arrayResultado[0]['novedades'];
+            if($intIngresoRetiro == null) {
+                $intIngresoRetiro = 0;
+            }             
+        } 
+        $novedades = $intIngresoRetiro;
+        return $novedades;        
+    }    
+    
 }

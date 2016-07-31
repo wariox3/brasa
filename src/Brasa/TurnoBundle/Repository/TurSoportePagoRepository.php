@@ -701,9 +701,28 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePagos = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));                                
         }             
 
-        foreach ($arSoportePagos as $arSoportePago) {            
+        foreach ($arSoportePagos as $arSoportePago) {
+            
             if($arSoportePago->getTurnoFijo() == 0) {
-                $diasDescansoSoportePago = $descanso; 
+                $diasDescansoSoportePago = $descanso;
+                $descansoCompensacion = $descanso;
+                $novedadesIngresoRetiro = $arSoportePago->getIngreso() + $arSoportePago->getRetiro();
+                if($novedadesIngresoRetiro > 0) {
+                    $descansoDescontar = 0;
+                    foreach ($arrSemanas as $arrSemana) {
+                       $numeroIngresoRetiro =  $em->getRepository('BrasaTurnoBundle:TurSoportePagoDetalle')->numeroIngresoRetiros($arSoportePago->getCodigoSoportePagoPk(), $arrSemana['fechaInicial'], $arrSemana['fechaFinal']);
+                       if($numeroIngresoRetiro > 0) {
+                           $descansoDescontar++;
+                       }
+                    } 
+                    if($descansoDescontar <= $descansoCompensacion) {
+                        $descansoCompensacion = $descansoCompensacion - $descansoDescontar;
+                    } else {
+                        $descansoCompensacion = 0;
+                    }                        
+                }               
+                
+                
                 $novedadesAfectaDescanso = $arSoportePago->getLicenciaNoRemunerada();
                 if($novedadesAfectaDescanso > 0) {
                     $descansoDescontar = 0;
@@ -730,7 +749,7 @@ class TurSoportePagoRepository extends EntityRepository {
                 $horasPeriodo =  ($diasPeriodo - ($arSoportePago->getIngreso()+$arSoportePago->getRetiro())) * 8;                
                 //$horasPeriodo =  $diasPeriodo * 8;                
                 $horasDescansoSoportePago = $diasDescansoSoportePago * 8;
-                $horasTopeSoportePago = $horasPeriodo - $horasDescansoSoportePago;                
+                $horasTopeSoportePago = $horasPeriodo - ($descansoCompensacion * 8);                
                 $horasDia = $arSoportePago->getHorasDiurnasReales();
                 $horasNoche = $arSoportePago->getHorasNocturnasReales();
                 $horasFestivasDia = $arSoportePago->getHorasFestivasDiurnasReales();
