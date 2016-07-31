@@ -122,7 +122,7 @@
                 <td style="text-align: right">{{ arSoportesPagos.horasRecargoFestivoNocturno | number_format(2, '.', ',') }}</td>                                                
                 <td style="text-align: right">{{ arSoportesPagos.turnoFijo }}</td>                                                
                 <td><a href="javascript:abrirVentana3('{{ path('brs_tur_proceso_generar_soporte_pago_editar', {'codigoSoportePago': arSoportesPagos.codigoSoportePagoPk }) }}', 'Editar', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Ver"></a></td>
-                <td><a href="javascript:abrirVentana3('{{ path('brs_tur_proceso_generar_soporte_pago_detalle_ver', {'codigoSoportePago': arSoportesPagos.codigoSoportePagoPk }) }}', 'VerDetalleSoportePago', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_090_table.png') }}" width=20 height=20 title="Ver"></a></td>
+                <td><a href="javascript:abrirVentana3('{{ path('brs_tur_proceso_generar_soporte_pago_detalle_ver', {'codigoSoportePago': arSoportesPagos.codigoSoportePagoPk }) }}', 'VerDetalleSoportePago', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_090_table.png') }}" width=20 height=20 title="Ver"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSoportesPagos.codigoSoportePagoPk }}" /></td>
             </tr>
 

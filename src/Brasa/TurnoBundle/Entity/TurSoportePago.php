@@ -248,6 +248,16 @@ class TurSoportePago
     private $terminacionTurno;     
     
     /**
+     * @ORM\Column(name="diasPeriodoCompensar", type="float")
+     */    
+    private $diasPeriodoCompensar = 0; 
+    
+    /**
+     * @ORM\Column(name="diasPeriodoDescansoCompensar", type="float")
+     */    
+    private $diasPeriodoDescansoCompensar = 0;    
+    
+    /**
      * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
      */    
     private $usuario;         
@@ -1521,5 +1531,149 @@ class TurSoportePago
     public function getHorasRecargoFestivoNocturno()
     {
         return $this->horasRecargoFestivoNocturno;
+    }
+
+    /**
+     * Set horasTope
+     *
+     * @param float $horasTope
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasTope($horasTope)
+    {
+        $this->horasTope = $horasTope;
+
+        return $this;
+    }
+
+    /**
+     * Get horasTope
+     *
+     * @return float
+     */
+    public function getHorasTope()
+    {
+        return $this->horasTope;
+    }
+
+    /**
+     * Set horasDescansoCompensar
+     *
+     * @param float $horasDescansoCompensar
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasDescansoCompensar($horasDescansoCompensar)
+    {
+        $this->horasDescansoCompensar = $horasDescansoCompensar;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDescansoCompensar
+     *
+     * @return float
+     */
+    public function getHorasDescansoCompensar()
+    {
+        return $this->horasDescansoCompensar;
+    }
+
+    /**
+     * Set diasPeriodo
+     *
+     * @param float $diasPeriodo
+     *
+     * @return TurSoportePago
+     */
+    public function setDiasPeriodo($diasPeriodo)
+    {
+        $this->diasPeriodo = $diasPeriodo;
+
+        return $this;
+    }
+
+    /**
+     * Get diasPeriodo
+     *
+     * @return float
+     */
+    public function getDiasPeriodo()
+    {
+        return $this->diasPeriodo;
+    }
+
+    /**
+     * Set diasPeriodoDescanso
+     *
+     * @param float $diasPeriodoDescanso
+     *
+     * @return TurSoportePago
+     */
+    public function setDiasPeriodoDescanso($diasPeriodoDescanso)
+    {
+        $this->diasPeriodoDescanso = $diasPeriodoDescanso;
+
+        return $this;
+    }
+
+    /**
+     * Get diasPeriodoDescanso
+     *
+     * @return float
+     */
+    public function getDiasPeriodoDescanso()
+    {
+        return $this->diasPeriodoDescanso;
+    }
+
+    /**
+     * Set diasPeriodoCompensar
+     *
+     * @param float $diasPeriodoCompensar
+     *
+     * @return TurSoportePago
+     */
+    public function setDiasPeriodoCompensar($diasPeriodoCompensar)
+    {
+        $this->diasPeriodoCompensar = $diasPeriodoCompensar;
+
+        return $this;
+    }
+
+    /**
+     * Get diasPeriodoCompensar
+     *
+     * @return float
+     */
+    public function getDiasPeriodoCompensar()
+    {
+        return $this->diasPeriodoCompensar;
+    }
+
+    /**
+     * Set diasPeriodoDescansoCompensar
+     *
+     * @param float $diasPeriodoDescansoCompensar
+     *
+     * @return TurSoportePago
+     */
+    public function setDiasPeriodoDescansoCompensar($diasPeriodoDescansoCompensar)
+    {
+        $this->diasPeriodoDescansoCompensar = $diasPeriodoDescansoCompensar;
+
+        return $this;
+    }
+
+    /**
+     * Get diasPeriodoDescansoCompensar
+     *
+     * @return float
+     */
+    public function getDiasPeriodoDescansoCompensar()
+    {
+        return $this->diasPeriodoDescansoCompensar;
     }
 }

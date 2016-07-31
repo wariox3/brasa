@@ -751,8 +751,9 @@ class TurSoportePagoRepository extends EntityRepository {
                     } else {
                         $diasDescansoSoportePago = 0;
                     }                
-                }       
-                $horasPeriodo =  ($diasPeriodo - ($arSoportePago->getIngreso()+$arSoportePago->getRetiro())) * 8;                
+                }     
+                $diasPeriodoCompensar = $diasPeriodo - ($arSoportePago->getIngreso()+$arSoportePago->getRetiro());
+                $horasPeriodo =  $diasPeriodoCompensar * 8;                
                 //$horasPeriodo =  $diasPeriodo * 8;                
                 $horasDescansoSoportePago = $diasDescansoSoportePago * 8;
                 $horasTopeSoportePago = $horasPeriodo - ($descansoCompensacion * 8);                
@@ -818,7 +819,9 @@ class TurSoportePagoRepository extends EntityRepository {
                 $arSoportePagoAct->setHorasExtrasOrdinariasDiurnas($horasExtraDia);
                 $arSoportePagoAct->setHorasExtrasOrdinariasNocturnas($horasExtraNoche);
                 $arSoportePagoAct->setHorasExtrasFestivasDiurnas($horasExtraFestivasDia);
-                $arSoportePagoAct->setHorasExtrasFestivasNocturnas($horasExtraFestivasNoche);                                        
+                $arSoportePagoAct->setHorasExtrasFestivasNocturnas($horasExtraFestivasNoche);
+                $arSoportePagoAct->setDiasPeriodoCompensar($diasPeriodoCompensar);
+                $arSoportePagoAct->setDiasPeriodoDescansoCompensar($descansoCompensacion);
                 $horasDescansoRecurso = $horasDescansoSoportePago;
                 if($diasPeriodo == $arSoportePago->getNovedad()) {
                    $horasDescansoRecurso = 0; 
