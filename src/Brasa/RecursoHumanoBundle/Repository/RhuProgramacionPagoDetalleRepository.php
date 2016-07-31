@@ -550,7 +550,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
     
     private function horasExtra($arProgramacionPagoDetalle, $arConfiguracion) {
         //$arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
-        //$arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+        //$arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();        
         $arrExtra = array();
         if($arProgramacionPagoDetalle->getHorasDescanso() > 0) {
             $arrExtra[] = array('concepto' => $arConfiguracion->getCodigoHoraDescanso(), 'horas' => $arProgramacionPagoDetalle->getHorasDescanso());
@@ -565,7 +565,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
             $arrExtra[] = array('concepto' => $arConfiguracion->getCodigoHoraFestivaNocturna(), 'horas' => $arProgramacionPagoDetalle->getHorasFestivasNocturnas());
         }        
         if($arProgramacionPagoDetalle->getHorasExtrasOrdinariasDiurnas() > 0) {
-            $arrExtra[] = array('concepto' => $arConfiguracion->getCodigoHoraExtraOrdinariaDiurna(), 'horas' => $arProgramacionPagoDetalle->getHorasExtrasOrdinariasDiurnas());
+            $arrExtra[] = array('concepto' => $arConfiguracion->getCodigoHoraExtraOrdinariaDiurna(), 'horas' => $arProgramacionPagoDetalle->getHorasExtrasOrdinariasDiurnas());            
         }
         if($arProgramacionPagoDetalle->getHorasExtrasOrdinariasNocturnas() > 0) {
             $arrExtra[] = array('concepto' => $arConfiguracion->getCodigoHoraExtraOrdinariaNocturna(), 'horas' => $arProgramacionPagoDetalle->getHorasExtrasOrdinariasNocturnas());
@@ -584,7 +584,8 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         }        
         if($arProgramacionPagoDetalle->getHorasRecargoFestivoNocturno() > 0) {
             $arrExtra[] = array('concepto' => $arConfiguracion->getCodigoHoraRecargoFestivoNocturno(), 'horas' => $arProgramacionPagoDetalle->getHorasRecargoFestivoNocturno());
-        }        
+        }     
+        
         return $arrExtra;
     }    
     
