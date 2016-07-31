@@ -141,7 +141,7 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
             $pdf->Cell(22, 6, "CARGO:" , 1, 0, 'L', 1);                            
             $pdf->SetFont('Arial','',6);
             $pdf->SetFillColor(255, 255, 255);
-            $pdf->Cell(78, 6, $arPago->getEmpleadoRel()->getCargoDescripcion() , 1, 0, 'L', 1);
+            $pdf->Cell(78, 6, $arPago->getEmpleadoRel()->getCargoRel()->getNombre() , 1, 0, 'L', 1);
             $pdf->SetFont('Arial','B',6.5);
             $pdf->SetFillColor(200, 200, 200);
             $pdf->Cell(24, 6, "EPS:" , 1, 0, 'L', 1);
@@ -201,7 +201,7 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
             $pdf->Cell(22, 5, "COMENTARIO:" , 1, 0, 'L', 1);                            
             $pdf->SetFont('Arial','',6.5);
             $pdf->SetFillColor(255, 255, 255);
-            $pdf->Cell(171, 5, $arPago->getComentarios() , 1, 0, 'L', 1);
+            $pdf->Cell(171, 5, '' , 1, 0, 'L', 1);
             $pdf->SetFont('Arial','B',6.5);
             $pdf->Ln(12);
             $totalExtras = 0;
