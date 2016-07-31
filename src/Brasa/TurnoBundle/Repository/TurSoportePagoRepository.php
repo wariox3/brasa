@@ -678,6 +678,7 @@ class TurSoportePagoRepository extends EntityRepository {
         $horasTope = $horasPeriodo - $horasDescanso;
         //Semanas para ausentismo y descontar descansos
         $arrSemanas = array();
+        $arrSemanasCompensacion = array();
         $arrDomingos = array();
         $dateFechaDesde = $arSoportePagoPeriodo->getFechaDesde();
         $dateFechaHasta = $arSoportePagoPeriodo->getFechaHasta();
@@ -694,6 +695,11 @@ class TurSoportePagoRepository extends EntityRepository {
                 $arrDomingos[] = array('domingo' => $dateFecha);
             }                    
         }
+        $arrSemanasCompensacion[] = array('diaInicial' => 1, 'diaFinal' => 7, 'fechaInicial' => $dateFechaDesde->format('Y/m/') . 1, 'fechaFinal' => $dateFechaDesde->format('Y/m/') . 7);                            
+        $arrSemanasCompensacion[] = array('diaInicial' => 8, 'diaFinal' => 15, 'fechaInicial' => $dateFechaDesde->format('Y/m/') . 8, 'fechaFinal' => $dateFechaDesde->format('Y/m/') . 15);                            
+        $arrSemanasCompensacion[] = array('diaInicial' => 16, 'diaFinal' => 22, 'fechaInicial' => $dateFechaDesde->format('Y/m/') . 16, 'fechaFinal' => $dateFechaDesde->format('Y/m/') . 22);                            
+        $arrSemanasCompensacion[] = array('diaInicial' => 23, 'diaFinal' => 30, 'fechaInicial' => $dateFechaDesde->format('Y/m/') . 23, 'fechaFinal' => $dateFechaDesde->format('Y/m/') . 30);                            
+        
         $arSoportePagos = new \Brasa\TurnoBundle\Entity\TurSoportePago();  
         if($codigoSoportePago != "") {
             $arSoportePagos = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPk' => $codigoSoportePago));
@@ -705,11 +711,12 @@ class TurSoportePagoRepository extends EntityRepository {
             
             if($arSoportePago->getTurnoFijo() == 0) {
                 $diasDescansoSoportePago = $descanso;
+                //Descansos de compensacion
                 $descansoCompensacion = $descanso;
                 $novedadesIngresoRetiro = $arSoportePago->getIngreso() + $arSoportePago->getRetiro();
                 if($novedadesIngresoRetiro > 0) {
                     $descansoDescontar = 0;
-                    foreach ($arrSemanas as $arrSemana) {
+                    foreach ($arrSemanasCompensacion as $arrSemana) {
                        $numeroIngresoRetiro =  $em->getRepository('BrasaTurnoBundle:TurSoportePagoDetalle')->numeroIngresoRetiros($arSoportePago->getCodigoSoportePagoPk(), $arrSemana['fechaInicial'], $arrSemana['fechaFinal']);
                        if($numeroIngresoRetiro > 0) {
                            $descansoDescontar++;
@@ -721,8 +728,7 @@ class TurSoportePagoRepository extends EntityRepository {
                         $descansoCompensacion = 0;
                     }                        
                 }               
-                
-                
+                                
                 $novedadesAfectaDescanso = $arSoportePago->getLicenciaNoRemunerada();
                 if($novedadesAfectaDescanso > 0) {
                     $descansoDescontar = 0;
