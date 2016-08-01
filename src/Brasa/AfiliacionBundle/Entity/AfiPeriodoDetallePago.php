@@ -33,12 +33,12 @@ class AfiPeriodoDetallePago
     private $codigoContratoFk; 
     
     /**
-     * @ORM\Column(name="anio", type="integer")
+     * @ORM\Column(name="anio", type="integer", nullable=true)
      */
     private $anio = 0;
     
     /**
-     * @ORM\Column(name="mes", type="integer")
+     * @ORM\Column(name="mes", type="integer", nullable=true)
      */
     private $mes = 0;
     
