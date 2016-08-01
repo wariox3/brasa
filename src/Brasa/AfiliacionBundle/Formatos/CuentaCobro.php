@@ -105,11 +105,11 @@ class CuentaCobro extends \FPDF_FPDF {
         
         $this->SetXY(100,20);
         $this->SetFont('Arial', '', 10);        
-        $this->Cell(30, 3, 'ALTURAS Y SEGURIDAD LABORAL', 0, 0, 'C');        
+        //$this->Cell(30, 3, 'ALTURAS Y SEGURIDAD LABORAL', 0, 0, 'C');        
         $this->SetXY(100,25);
         $this->Cell(30, 3, $arConfiguracion->getNombreEmpresa(), 0, 0, 'C');        
         $this->SetXY(100,30);
-        $this->Cell(30, 3, 'RUT: ' . number_format($arConfiguracion->getNitEmpresa(), 0, '.', '.') . '-' . $arConfiguracion->getDigitoVerificacionEmpresa(), 0, 0, 'C');
+        $this->Cell(30, 3, 'NIT: ' . number_format($arConfiguracion->getNitEmpresa(), 0, '.', '.') . '-' . $arConfiguracion->getDigitoVerificacionEmpresa(), 0, 0, 'C');
         $this->SetXY(100,35);
         //$this->Cell(30, 3, 'REGIMEN SIMPLIFICADO', 0, 0, 'C');
         
@@ -229,12 +229,7 @@ class CuentaCobro extends \FPDF_FPDF {
                 //$pdf->Cell(33, 4, number_format($arPeriodoDetalle->getRiesgos(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Cell(20, 4, utf8_decode($arPeriodoDetalles->getContratoRel()->getClasificacionRiesgoRel()->getNombre()), 1, 0, 'L');
                 //$pdf->Cell(33, 4, number_format($arPeriodoDetalle->getCaja(), 0, '.', ','), 1, 0, 'R');
-                if ($arPeriodoDetalles->getContratoRel()->getCodigoEntidadCajaFk() == null) {
-                    $caja = "NO";
-                } else {
-                    $caja = "SI";
-                }
-              $pdf->Cell(15, 4, $caja, 1, 0, 'L');
+                $pdf->Cell(15, 4, utf8_decode($arPeriodoDetalles->getContratoRel()->getEntidadCajaRel()->getNombre()), 1, 0, 'L');
                 $pdf->SetFont('Arial', '', 7);
                 $pdf->Cell(13, 4, number_format($arPeriodoDetalles->getAdministracion(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Cell(13, 4, number_format($arPeriodoDetalles->getSubtotal(), 0, '.', ','), 1, 0, 'R');
@@ -365,7 +360,7 @@ class CuentaCobro extends \FPDF_FPDF {
         $this->SetFont('Arial', 'B', 6);        
         $this->Ln();
 
-        $this->GetY($this->SetY(170));
+        /*$this->GetY($this->SetY(170));
         $this->SetX(10);
         $this->SetFont('Arial', 'B', 6);
         $this->Text(12, $this->GetY() + 8, 'Atentamente,');
@@ -374,18 +369,18 @@ class CuentaCobro extends \FPDF_FPDF {
         $this->SetFont('Arial', '', 7);
         $this->SetY(-70);
         $this->Ln();
-        $this->line(10, 269, 205, 269);
+        $this->line(10, 269, 205, 269);*/
 
 
 
         $this->Ln(3);
         $this->SetFont('Arial', 'B', 12);
         //$this->Text(10, $this->GetY($this->SetY(160)), utf8_decode($arConfiguracion->getInformacionPagoFactura()));
-        $this->SetY(166);
+        $this->SetY(185);
         $this->MultiCell(261,4, $arConfiguracion->getInformacionPagoFactura(),0);
         
         $this->SetFont('Arial', 'B', 8);
-        $this->Text(60, $this->GetY($this->SetY(205)), utf8_decode($arConfiguracion->getInformacionContactoFactura()));
+        //$this->Text(60, $this->GetY($this->SetY(205)), utf8_decode($arConfiguracion->getInformacionContactoFactura()));
         $this->SetFont('Arial', '', 8);
         //Número de página
         $this->Text(255, 205, 'Pagina ' . $this->PageNo() . ' de {nb}');
