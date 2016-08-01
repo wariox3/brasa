@@ -10,7 +10,7 @@ class PeriodoCobro extends \FPDF_FPDF {
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
         self::$codigoPeriodo = $codigoPeriodo;
-        $pdf = new PeriodoCobro();
+        $pdf = new PeriodoCobro('L');        
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
@@ -42,12 +42,6 @@ class PeriodoCobro extends \FPDF_FPDF {
         $this->SetXY(50, 30);
         $this->Cell(20, 4, utf8_decode("TELÉFONO:"), 0, 0, 'L', 1);
         $this->Cell(100, 4, $arConfiguracion->getTelefonoEmpresa(), 0, 0, 'L', 0);        
-        //FORMATO ISO
-        $this->SetXY(168, 18);
-        $this->SetFillColor(255, 255, 255);
-        $this->Cell(35, 8, "FECHA: 01/09/2015", 1, 0, 'L', 1);
-        $this->SetXY(168, 26);
-        $this->Cell(35, 8, utf8_decode("VERSIÓN: 01"), 1, 0, 'L', 1);
         //
         $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
         $arPeriodo = self::$em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find(self::$codigoPeriodo);
@@ -60,32 +54,32 @@ class PeriodoCobro extends \FPDF_FPDF {
         $this->Cell(30, 6, utf8_decode("CÓDIGO:") , 1, 0, 'L', 1);
         $this->SetFillColor(272, 272, 272); 
         $this->SetFont('Arial','',8);
-        $this->Cell(30, 6, $arPeriodo->getCodigoPeriodoPk(), 1, 0, 'R', 1);
+        $this->Cell(30, 6, $arPeriodo->getCodigoPeriodoPk(), 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->SetFillColor(200, 200, 200);
+        $this->Cell(30, 6, "NIT:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->SetFillColor(272, 272, 272); 
+        $this->Cell(100, 6, $arPeriodo->getClienteRel()->getNit(), 1, 0, 'L', 1);
+        //linea 2
+        $this->SetXY(10, 45);
+        $this->SetFont('Arial','B',8);
+        $this->SetFillColor(200, 200, 200);
+        $this->Cell(30, 5, utf8_decode("FECHA:") , 1, 0, 'L', 1);
+        $this->SetFillColor(272, 272, 272); 
+        $this->SetFont('Arial','',8);
+        $this->Cell(30, 6, $arPeriodo->getFechaDesde()->format('Y/m/d'), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->SetFillColor(200, 200, 200);
         $this->Cell(30, 6, "CLIENTE:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
         $this->SetFillColor(272, 272, 272); 
-        $this->Cell(100, 6, $arPeriodo->getClienteRel()->getNombreCorto(), 1, 0, 'L', 1);
-        //linea 2
-        $this->SetXY(10, 45);
-        $this->SetFont('Arial','B',8);
-        $this->SetFillColor(200, 200, 200);
-        $this->Cell(30, 5, utf8_decode("SOPORTE:") , 1, 0, 'L', 1);
-        $this->SetFillColor(272, 272, 272); 
-        $this->SetFont('Arial','',8);
-        $this->Cell(30, 6, '', 1, 0, 'R', 1);
-        $this->SetFont('Arial','B',8);
-        $this->SetFillColor(200, 200, 200);
-        $this->Cell(30, 6, "" , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',8);
-        $this->SetFillColor(272, 272, 272); 
-        $this->Cell(100, 6, utf8_decode(""), 1, 0, 'L', 1);         
+        $this->Cell(100, 6, utf8_decode($arPeriodo->getClienteRel()->getNombreCorto()), 1, 0, 'L', 1);         
         //linea 3
         $this->SetXY(10, 50);
         $this->SetFont('Arial','B',8);
         $this->SetFillColor(200, 200, 200);
-        $this->Cell(30, 5, utf8_decode("") , 1, 0, 'L', 1);
+        $this->Cell(30, 5, '' , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
         $this->SetFillColor(272, 272, 272);
         $this->Cell(30, 5, '' , 1, 0, 'R', 1);
@@ -103,7 +97,7 @@ class PeriodoCobro extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(12);
-        $header = array(utf8_decode('IDENTIF.'), 'NOMBRE', 'PENSION', 'SALUD', 'RIESGOS', 'CAJA', 'SENA', 'ICBF', 'ADMIN', 'SUBTOTAL', 'IVA', 'TOTAL');
+        $header = array(utf8_decode('IDENTIF.'), 'NOMBRE', 'PENSION', 'SALUD', 'RIESGOS', 'CAJA', 'ADMIN', 'SUBTOTAL', 'IVA', 'TOTAL');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -111,7 +105,7 @@ class PeriodoCobro extends \FPDF_FPDF {
         $this->SetFont('', 'B', 6);
 
         //creamos la cabecera de la tabla.
-        $w = array(20, 44, 13, 13, 13, 13, 8, 8, 13, 13, 13, 19);
+        $w = array(20, 60, 13, 13, 13, 13, 13, 13, 13, 19);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -126,6 +120,8 @@ class PeriodoCobro extends \FPDF_FPDF {
     }
 
     public function Body($pdf) {
+        $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
+        $arPeriodo = self::$em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find(self::$codigoPeriodo);
         $arPeriodoDetalles = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle();
         $arPeriodoDetalles = self::$em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetalle')->findBy(array('codigoPeriodoFk' => self::$codigoPeriodo));
         
@@ -134,13 +130,11 @@ class PeriodoCobro extends \FPDF_FPDF {
         $var = 0;
         foreach ($arPeriodoDetalles as $arPeriodoDetalle) {                        
             $pdf->Cell(20, 4, $arPeriodoDetalle->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
-            $pdf->Cell(44, 4, utf8_decode($arPeriodoDetalle->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');                            
+            $pdf->Cell(60, 4, utf8_decode($arPeriodoDetalle->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');                            
             $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getPension(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getSalud(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getRiesgos(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getCaja(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(8, 4, number_format($arPeriodoDetalle->getSena(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(8, 4, number_format($arPeriodoDetalle->getIcbf(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getAdministracion(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getSubtotal(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getIva(), 0, '.', ','), 1, 0, 'R');
@@ -151,9 +145,14 @@ class PeriodoCobro extends \FPDF_FPDF {
             
         }
             $pdf->SetFont('Arial', 'B', 7);
-            $pdf->Cell(171, 5, "TOTAL: ", 1, 0, 'R');
+            $pdf->Cell(171, 5, "TOTAL: ", 0, 0, 'R');
             $pdf->SetFont('Arial', '', 7);
             $pdf->Cell(19, 5, number_format($var,0, '.', ','), 1, 0, 'R');
+            $pdf->Ln();
+            $pdf->SetFont('Arial', 'B', 7);
+            $pdf->Cell(171, 5, "NUMERO DE EMPLEADOS: ", 0, 0, 'R');
+            $pdf->SetFont('Arial', '', 7);
+            $pdf->Cell(19, 5, number_format($arPeriodo->getNumeroEmpleados(),0, '.', ','), 1, 0, 'R');
         
     }
 

@@ -128,6 +128,11 @@ class AfiPeriodo
     private $total = 0;    
     
     /**
+     * @ORM\Column(name="numero_empleados", type="integer", nullable=true)
+     */    
+    private $numeroEmpleados = 0;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="AfiCliente", inversedBy="periodosClienteRel")
      * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
      */
@@ -154,6 +159,8 @@ class AfiPeriodo
     public function __construct()
     {
         $this->periodosDetallesPeriodoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->periodosDetallesPagosPeriodoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facturasDetallesPeriodoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -215,6 +222,30 @@ class AfiPeriodo
     }
 
     /**
+     * Set fechaPago
+     *
+     * @param \DateTime $fechaPago
+     *
+     * @return AfiPeriodo
+     */
+    public function setFechaPago($fechaPago)
+    {
+        $this->fechaPago = $fechaPago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaPago
+     *
+     * @return \DateTime
+     */
+    public function getFechaPago()
+    {
+        return $this->fechaPago;
+    }
+
+    /**
      * Set codigoClienteFk
      *
      * @param integer $codigoClienteFk
@@ -236,6 +267,126 @@ class AfiPeriodo
     public function getCodigoClienteFk()
     {
         return $this->codigoClienteFk;
+    }
+
+    /**
+     * Set anio
+     *
+     * @param integer $anio
+     *
+     * @return AfiPeriodo
+     */
+    public function setAnio($anio)
+    {
+        $this->anio = $anio;
+
+        return $this;
+    }
+
+    /**
+     * Get anio
+     *
+     * @return integer
+     */
+    public function getAnio()
+    {
+        return $this->anio;
+    }
+
+    /**
+     * Set mes
+     *
+     * @param integer $mes
+     *
+     * @return AfiPeriodo
+     */
+    public function setMes($mes)
+    {
+        $this->mes = $mes;
+
+        return $this;
+    }
+
+    /**
+     * Get mes
+     *
+     * @return integer
+     */
+    public function getMes()
+    {
+        return $this->mes;
+    }
+
+    /**
+     * Set anioPago
+     *
+     * @param integer $anioPago
+     *
+     * @return AfiPeriodo
+     */
+    public function setAnioPago($anioPago)
+    {
+        $this->anioPago = $anioPago;
+
+        return $this;
+    }
+
+    /**
+     * Get anioPago
+     *
+     * @return integer
+     */
+    public function getAnioPago()
+    {
+        return $this->anioPago;
+    }
+
+    /**
+     * Set mesPago
+     *
+     * @param integer $mesPago
+     *
+     * @return AfiPeriodo
+     */
+    public function setMesPago($mesPago)
+    {
+        $this->mesPago = $mesPago;
+
+        return $this;
+    }
+
+    /**
+     * Get mesPago
+     *
+     * @return integer
+     */
+    public function getMesPago()
+    {
+        return $this->mesPago;
+    }
+
+    /**
+     * Set estadoFacturado
+     *
+     * @param boolean $estadoFacturado
+     *
+     * @return AfiPeriodo
+     */
+    public function setEstadoFacturado($estadoFacturado)
+    {
+        $this->estadoFacturado = $estadoFacturado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoFacturado
+     *
+     * @return boolean
+     */
+    public function getEstadoFacturado()
+    {
+        return $this->estadoFacturado;
     }
 
     /**
@@ -263,88 +414,6 @@ class AfiPeriodo
     }
 
     /**
-     * Set estadoCerrado
-     *
-     * @param boolean $estadoCerrado
-     *
-     * @return AfiPeriodo
-     */
-    public function setEstadoCerrado($estadoCerrado)
-    {
-        $this->estadoCerrado = $estadoCerrado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoCerrado
-     *
-     * @return boolean
-     */
-    public function getEstadoCerrado()
-    {
-        return $this->estadoCerrado;
-    }
-
-    /**
-     * Set clienteRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiCliente $clienteRel
-     *
-     * @return AfiPeriodo
-     */
-    public function setClienteRel(\Brasa\AfiliacionBundle\Entity\AfiCliente $clienteRel = null)
-    {
-        $this->clienteRel = $clienteRel;
-
-        return $this;
-    }
-
-    /**
-     * Get clienteRel
-     *
-     * @return \Brasa\AfiliacionBundle\Entity\AfiCliente
-     */
-    public function getClienteRel()
-    {
-        return $this->clienteRel;
-    }
-
-    /**
-     * Add periodosDetallesPeriodoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle $periodosDetallesPeriodoRel
-     *
-     * @return AfiPeriodo
-     */
-    public function addPeriodosDetallesPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle $periodosDetallesPeriodoRel)
-    {
-        $this->periodosDetallesPeriodoRel[] = $periodosDetallesPeriodoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove periodosDetallesPeriodoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle $periodosDetallesPeriodoRel
-     */
-    public function removePeriodosDetallesPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle $periodosDetallesPeriodoRel)
-    {
-        $this->periodosDetallesPeriodoRel->removeElement($periodosDetallesPeriodoRel);
-    }
-
-    /**
-     * Get periodosDetallesPeriodoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPeriodosDetallesPeriodoRel()
-    {
-        return $this->periodosDetallesPeriodoRel;
-    }
-
-    /**
      * Set estadoPagoGenerado
      *
      * @param boolean $estadoPagoGenerado
@@ -369,61 +438,27 @@ class AfiPeriodo
     }
 
     /**
-     * Add periodosDetallesPagosPeriodoRel
+     * Set estadoCerrado
      *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosPeriodoRel
+     * @param boolean $estadoCerrado
      *
      * @return AfiPeriodo
      */
-    public function addPeriodosDetallesPagosPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosPeriodoRel)
+    public function setEstadoCerrado($estadoCerrado)
     {
-        $this->periodosDetallesPagosPeriodoRel[] = $periodosDetallesPagosPeriodoRel;
+        $this->estadoCerrado = $estadoCerrado;
 
         return $this;
     }
 
     /**
-     * Remove periodosDetallesPagosPeriodoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosPeriodoRel
-     */
-    public function removePeriodosDetallesPagosPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosPeriodoRel)
-    {
-        $this->periodosDetallesPagosPeriodoRel->removeElement($periodosDetallesPagosPeriodoRel);
-    }
-
-    /**
-     * Get periodosDetallesPagosPeriodoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPeriodosDetallesPagosPeriodoRel()
-    {
-        return $this->periodosDetallesPagosPeriodoRel;
-    }
-
-    /**
-     * Set estadoFacturado
-     *
-     * @param boolean $estadoFacturado
-     *
-     * @return AfiPeriodo
-     */
-    public function setEstadoFacturado($estadoFacturado)
-    {
-        $this->estadoFacturado = $estadoFacturado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoFacturado
+     * Get estadoCerrado
      *
      * @return boolean
      */
-    public function getEstadoFacturado()
+    public function getEstadoCerrado()
     {
-        return $this->estadoFacturado;
+        return $this->estadoCerrado;
     }
 
     /**
@@ -595,184 +630,6 @@ class AfiPeriodo
     }
 
     /**
-     * Set total
-     *
-     * @param float $total
-     *
-     * @return AfiPeriodo
-     */
-    public function setTotal($total)
-    {
-        $this->total = $total;
-
-        return $this;
-    }
-
-    /**
-     * Get total
-     *
-     * @return float
-     */
-    public function getTotal()
-    {
-        return $this->total;
-    }
-
-    /**
-     * Add facturasDetallesPeriodoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle $facturasDetallesPeriodoRel
-     *
-     * @return AfiPeriodo
-     */
-    public function addFacturasDetallesPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle $facturasDetallesPeriodoRel)
-    {
-        $this->facturasDetallesPeriodoRel[] = $facturasDetallesPeriodoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove facturasDetallesPeriodoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle $facturasDetallesPeriodoRel
-     */
-    public function removeFacturasDetallesPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle $facturasDetallesPeriodoRel)
-    {
-        $this->facturasDetallesPeriodoRel->removeElement($facturasDetallesPeriodoRel);
-    }
-
-    /**
-     * Get facturasDetallesPeriodoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFacturasDetallesPeriodoRel()
-    {
-        return $this->facturasDetallesPeriodoRel;
-    }
-
-    /**
-     * Set anio
-     *
-     * @param integer $anio
-     *
-     * @return AfiPeriodo
-     */
-    public function setAnio($anio)
-    {
-        $this->anio = $anio;
-
-        return $this;
-    }
-
-    /**
-     * Get anio
-     *
-     * @return integer
-     */
-    public function getAnio()
-    {
-        return $this->anio;
-    }
-
-    /**
-     * Set mes
-     *
-     * @param integer $mes
-     *
-     * @return AfiPeriodo
-     */
-    public function setMes($mes)
-    {
-        $this->mes = $mes;
-
-        return $this;
-    }
-
-    /**
-     * Get mes
-     *
-     * @return integer
-     */
-    public function getMes()
-    {
-        return $this->mes;
-    }
-
-    /**
-     * Set anioPago
-     *
-     * @param integer $anioPago
-     *
-     * @return AfiPeriodo
-     */
-    public function setAnioPago($anioPago)
-    {
-        $this->anioPago = $anioPago;
-
-        return $this;
-    }
-
-    /**
-     * Get anioPago
-     *
-     * @return integer
-     */
-    public function getAnioPago()
-    {
-        return $this->anioPago;
-    }
-
-    /**
-     * Set mesPago
-     *
-     * @param integer $mesPago
-     *
-     * @return AfiPeriodo
-     */
-    public function setMesPago($mesPago)
-    {
-        $this->mesPago = $mesPago;
-
-        return $this;
-    }
-
-    /**
-     * Get mesPago
-     *
-     * @return integer
-     */
-    public function getMesPago()
-    {
-        return $this->mesPago;
-    }
-
-    /**
-     * Set fechaPago
-     *
-     * @param \DateTime $fechaPago
-     *
-     * @return AfiPeriodo
-     */
-    public function setFechaPago($fechaPago)
-    {
-        $this->fechaPago = $fechaPago;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaPago
-     *
-     * @return \DateTime
-     */
-    public function getFechaPago()
-    {
-        return $this->fechaPago;
-    }
-
-    /**
      * Set subtotal
      *
      * @param float $subtotal
@@ -818,5 +675,179 @@ class AfiPeriodo
     public function getIva()
     {
         return $this->iva;
+    }
+
+    /**
+     * Set total
+     *
+     * @param float $total
+     *
+     * @return AfiPeriodo
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
+
+        return $this;
+    }
+
+    /**
+     * Get total
+     *
+     * @return float
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
+     * Set numeroEmpleados
+     *
+     * @param integer $numeroEmpleados
+     *
+     * @return AfiPeriodo
+     */
+    public function setNumeroEmpleados($numeroEmpleados)
+    {
+        $this->numeroEmpleados = $numeroEmpleados;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroEmpleados
+     *
+     * @return integer
+     */
+    public function getNumeroEmpleados()
+    {
+        return $this->numeroEmpleados;
+    }
+
+    /**
+     * Set clienteRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCliente $clienteRel
+     *
+     * @return AfiPeriodo
+     */
+    public function setClienteRel(\Brasa\AfiliacionBundle\Entity\AfiCliente $clienteRel = null)
+    {
+        $this->clienteRel = $clienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get clienteRel
+     *
+     * @return \Brasa\AfiliacionBundle\Entity\AfiCliente
+     */
+    public function getClienteRel()
+    {
+        return $this->clienteRel;
+    }
+
+    /**
+     * Add periodosDetallesPeriodoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle $periodosDetallesPeriodoRel
+     *
+     * @return AfiPeriodo
+     */
+    public function addPeriodosDetallesPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle $periodosDetallesPeriodoRel)
+    {
+        $this->periodosDetallesPeriodoRel[] = $periodosDetallesPeriodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove periodosDetallesPeriodoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle $periodosDetallesPeriodoRel
+     */
+    public function removePeriodosDetallesPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle $periodosDetallesPeriodoRel)
+    {
+        $this->periodosDetallesPeriodoRel->removeElement($periodosDetallesPeriodoRel);
+    }
+
+    /**
+     * Get periodosDetallesPeriodoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPeriodosDetallesPeriodoRel()
+    {
+        return $this->periodosDetallesPeriodoRel;
+    }
+
+    /**
+     * Add periodosDetallesPagosPeriodoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosPeriodoRel
+     *
+     * @return AfiPeriodo
+     */
+    public function addPeriodosDetallesPagosPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosPeriodoRel)
+    {
+        $this->periodosDetallesPagosPeriodoRel[] = $periodosDetallesPagosPeriodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove periodosDetallesPagosPeriodoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosPeriodoRel
+     */
+    public function removePeriodosDetallesPagosPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosPeriodoRel)
+    {
+        $this->periodosDetallesPagosPeriodoRel->removeElement($periodosDetallesPagosPeriodoRel);
+    }
+
+    /**
+     * Get periodosDetallesPagosPeriodoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPeriodosDetallesPagosPeriodoRel()
+    {
+        return $this->periodosDetallesPagosPeriodoRel;
+    }
+
+    /**
+     * Add facturasDetallesPeriodoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle $facturasDetallesPeriodoRel
+     *
+     * @return AfiPeriodo
+     */
+    public function addFacturasDetallesPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle $facturasDetallesPeriodoRel)
+    {
+        $this->facturasDetallesPeriodoRel[] = $facturasDetallesPeriodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasDetallesPeriodoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle $facturasDetallesPeriodoRel
+     */
+    public function removeFacturasDetallesPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle $facturasDetallesPeriodoRel)
+    {
+        $this->facturasDetallesPeriodoRel->removeElement($facturasDetallesPeriodoRel);
+    }
+
+    /**
+     * Get facturasDetallesPeriodoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasDetallesPeriodoRel()
+    {
+        return $this->facturasDetallesPeriodoRel;
     }
 }

@@ -53,6 +53,7 @@ class AfiPeriodoRepository extends EntityRepository {
         $ivaGeneral = 0;
         $totalGeneral = 0;
         $arContratos = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->contratosPeriodo($arPeriodo->getFechaDesde()->format('Y/m/d'), $arPeriodo->getFechaHasta()->format('Y/m/d'), $arPeriodo->getCodigoClienteFk());      
+        $numeroContratos = count($arContratos);
         foreach($arContratos as $arContrato) {
             //$arContrato = new \Brasa\AfiliacionBundle\Entity\AfiContrato();            
             $porcentajeIcbf = 3;
@@ -138,6 +139,7 @@ class AfiPeriodoRepository extends EntityRepository {
         $arPeriodo->setSubtotal($subtotalGeneral);
         $arPeriodo->setIva($ivaGeneral);
         $arPeriodo->setTotal($totalGeneral);
+        $arPeriodo->setNumeroEmpleados($numeroContratos);
         $em->persist($arPeriodo);
         $em->flush();        
     }
