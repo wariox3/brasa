@@ -22,7 +22,7 @@ class CuentaCobro extends \FPDF_FPDF {
         $strLetras = \Brasa\GeneralBundle\MisClases\Funciones::devolverNumeroLetras($arFactura->getTotal());
         self::$strLetras = $strLetras;
         ob_clean();
-        $pdf = new CuentaCobro();
+        $pdf = new CuentaCobro('L','mm','letter');
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
@@ -40,7 +40,7 @@ class CuentaCobro extends \FPDF_FPDF {
         $arFactura = new \Brasa\AfiliacionBundle\Entity\AfiFactura();
         $arFactura = self::$em->getRepository('BrasaAfiliacionBundle:AfiFactura')->find(self::$codigoFactura);
         $this->SetXY(10, 10);
-        $this->Cell(195, 268, '', 1, 0, 'L');
+        $this->Cell(195, 268, '', 0, 0, 'L');
 
         //$this->SetFont('Arial', '', 7);
         //$this->SetXY(110, 75);
@@ -83,7 +83,7 @@ class CuentaCobro extends \FPDF_FPDF {
         $List1 = array('Fecha emision:', 'Fecha vencimiento:', 'Forma pago:', 'Plazo:', 'Soporte:');
         $this->SetFont('Arial', 'B', 8);
         foreach ($List1 as $col) {
-            $this->SetX(150);
+            $this->SetX(225);
             $this->Cell(10, 3, $col, 0, 0, 'L');
             $this->Ln();
         }
@@ -98,7 +98,7 @@ class CuentaCobro extends \FPDF_FPDF {
         $this->SetY(47);
         $this->SetFont('Arial', '', 8);        
         foreach ($List1 as $col) {
-            $this->SetX(175);
+            $this->SetX(243);
             $this->Cell(30, 3, $col, 0, 0, 'R');
             $this->Ln();
         }       
@@ -111,7 +111,7 @@ class CuentaCobro extends \FPDF_FPDF {
         $this->SetXY(100,30);
         $this->Cell(30, 3, 'RUT: ' . number_format($arConfiguracion->getNitEmpresa(), 0, '.', '.') . '-' . $arConfiguracion->getDigitoVerificacionEmpresa(), 0, 0, 'C');
         $this->SetXY(100,35);
-        $this->Cell(30, 3, 'REGIMEN SIMPLIFICADO', 0, 0, 'C');
+        //$this->Cell(30, 3, 'REGIMEN SIMPLIFICADO', 0, 0, 'C');
         
         $this->SetXY(150,42);
         $this->SetFont('Arial', '', 14);        
@@ -131,7 +131,7 @@ class CuentaCobro extends \FPDF_FPDF {
 
     public function Body($pdf) {
         //Cursos
-        $arFacturaDetalles = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso();
+        /*$arFacturaDetalles = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso();
         $arFacturaDetalles = self::$em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleCurso')->findBy(array('codigoFacturaFk' => self::$codigoFactura));
         if(count($arFacturaDetalles) > 0) {
             $pdf->SetX(10);
@@ -180,10 +180,81 @@ class CuentaCobro extends \FPDF_FPDF {
                     $pdf->SetAutoPageBreak(true, 15);                    
                 }
             }            
+        }*/
+        $pdf->SetFont('Arial', 'B', 6);
+        $pdf->Ln(10);
+        $header = array(utf8_decode('IDENTIF.'), 'NOMBRE','DIAS', 'SALARIO','FECHA ING','PENSION', 'SALUD', 'RIESGOS', 'C. COMP', 'ADMON', 'SUBTOTAL', 'IVA', 'TOTAL');
+        $pdf->SetFillColor(236, 236, 236);
+        $pdf->SetTextColor(0);
+        $pdf->SetDrawColor(0, 0, 0);
+        $pdf->SetLineWidth(.2);
+        $pdf->SetFont('', 'B', 6);
+
+        //creamos la cabecera de la tabla.
+        $w = array(20, 54,8,15,15,30, 30, 20, 15, 13, 13, 13, 19);
+        for ($i = 0; $i < count($header); $i++)
+            if ($i == 0 || $i == 1)
+                $pdf->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
+            else
+                $pdf->Cell($w[$i], 4, $header[$i], 1, 0, 'C', 1);
+
+        //Restauración de colores y fuentes
+        $pdf->SetFillColor(224, 235, 255);
+        $pdf->SetTextColor(0);
+        $pdf->SetFont('');
+        $pdf->Ln(4);
+        $arFacturaDetalle = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();
+        $arFacturaDetalle = self::$em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->findOneBy(array('codigoFacturaFk' => self::$codigoFactura));
+        $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
+        $arPeriodo = self::$em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($arFacturaDetalle->getCodigoPeriodoFk());
+        $arPeriodoDetalles = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle();
+        $arPeriodoDetalles = self::$em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetalle')->findBy(array('codigoPeriodoFk' => $arPeriodo->getCodigoPeriodoPk()));
+        
+        $pdf->SetX(10);
+        $pdf->SetFont('Arial', '', 7);
+        $var = 0;
+        foreach ($arPeriodoDetalles as $arPeriodoDetalle) {                        
+            $pdf->Cell(20, 4, $arPeriodoDetalle->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
+            $pdf->SetFont('Arial', '', 6);
+            $pdf->Cell(54, 4, utf8_decode($arPeriodoDetalle->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');                            
+            $pdf->Cell(8, 4, $arPeriodoDetalle->getDias(), 1, 0, 'L');
+            $pdf->Cell(15, 4, number_format($arPeriodoDetalle->getSalario(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(15, 4, $arPeriodoDetalle->getContratoRel()->getFechaDesde()->format('Y-m-d'), 1, 0, 'L');
+            //$pdf->Cell(33, 4, number_format($arPeriodoDetalle->getPension(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(30, 4, $arPeriodoDetalle->getContratoRel()->getEntidadPensionRel()->getNombre(), 1, 0, 'L');
+            //$pdf->Cell(33, 4, number_format($arPeriodoDetalle->getSalud(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(30, 4, $arPeriodoDetalle->getContratoRel()->getEntidadSaludRel()->getNombre(), 1, 0, 'L');
+            //$pdf->Cell(33, 4, number_format($arPeriodoDetalle->getRiesgos(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(20, 4, $arPeriodoDetalle->getContratoRel()->getClasificacionRiesgoRel()->getNombre(), 1, 0, 'L');
+            //$pdf->Cell(33, 4, number_format($arPeriodoDetalle->getCaja(), 0, '.', ','), 1, 0, 'R');
+            if ($arPeriodoDetalle->getContratoRel()->getCodigoEntidadCajaFk() == null) {
+                $caja = "NO";
+            } else {
+                $caja = "SI";
+            }
+            $pdf->Cell(15, 4, $caja, 1, 0, 'L');
+            $pdf->SetFont('Arial', '', 7);
+            $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getAdministracion(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getSubtotal(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getIva(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(19, 4, number_format($arPeriodoDetalle->getTotal(), 0, '.', ','), 1, 0, 'R');
+            $var += $arPeriodoDetalle->getTotal();
+            $pdf->Ln();
+            $pdf->SetAutoPageBreak(true, 15);
+            
         }
+            $pdf->SetFont('Arial', 'B', 7);
+            $pdf->Cell(245, 5, "TOTAL: ", 0, 0, 'R');
+            $pdf->SetFont('Arial', '', 7);
+            $pdf->Cell(19, 5, number_format($var,0, '.', ','), 1, 0, 'R');
+            $pdf->Ln();
+            $pdf->SetFont('Arial', 'B', 7);
+            $pdf->Cell(35, 5, "NUMERO DE EMPLEADOS: ", 0, 0, 'R');
+            $pdf->SetFont('Arial', '', 7);
+            $pdf->Cell(19, 5, number_format($arPeriodo->getNumeroEmpleados(),0, '.', ','), 1, 0, 'R');
         
         //Seguridad social
-        $arFacturaDetalles = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();
+        /*$arFacturaDetalles = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();
         $arFacturaDetalles = self::$em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->findBy(array('codigoFacturaFk' => self::$codigoFactura));        
         if(count($arFacturaDetalles) > 0) {
             $pdf->SetX(10);
@@ -226,7 +297,7 @@ class CuentaCobro extends \FPDF_FPDF {
                 $pdf->Ln();
                 $pdf->SetAutoPageBreak(true, 15);
             }            
-        }                
+        }*/                
     }
 
     public function Footer() {
@@ -236,8 +307,8 @@ class CuentaCobro extends \FPDF_FPDF {
         $arConfiguracionGeneral = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $arConfiguracion = new \Brasa\AfiliacionBundle\Entity\AfiConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaAfiliacionBundle:AfiConfiguracion')->find(1);
-        $this->SetY(180);
-        $this->line(10, $this->GetY() + 5, 205, $this->GetY() + 5);
+        $this->SetY(120);
+        /*$this->line(10, $this->GetY() + 10, 205, $this->GetY() + 10);
 
         $this->SetFont('Arial', 'B', 7.5);
         $this->ln(7);
@@ -248,9 +319,9 @@ class CuentaCobro extends \FPDF_FPDF {
 
         $this->line(10, $this->GetY() + 40, 205, $this->GetY() + 40);
 
-        $this->SetMargins(170, 2, 15);
+        $this->SetMargins(130, 2, 15);
         for ($i = 0; $i < count($totales); $i++) {
-            $this->SetX(165);
+            $this->SetX(110);
             $this->Cell(20, 4, $totales[$i], 0, 0, 'R');
             $this->ln();
         }
@@ -261,15 +332,15 @@ class CuentaCobro extends \FPDF_FPDF {
         );
 
         $this->SetFont('Arial', '', 7.5);
-        $this->SetXY(190, $this->GetY() - 24);
-        $this->ln(12);
+        $this->SetXY(130, $this->GetY() - 24);
+        $this->ln(18);
         for ($i = 0; $i < count($totales2); $i++) {
-            $this->SetX(185);
+            $this->SetX(125);
             $this->Cell(20, 4, $totales2[$i], 0, 0, 'R');
             $this->ln();
         }
 
-        $this->SetY($this->GetY() - 10);
+        $this->SetY($this->GetY() - 15);
         $this->SetFont('Arial', 'B', 8);
         $this->SetX(10);
         $this->Cell(20, 5, 'OBSERVACIONES:', 0, 'L');
@@ -277,7 +348,7 @@ class CuentaCobro extends \FPDF_FPDF {
         $this->ln();
         $this->SetX(10);
         $this->SetFont('Arial', '', 8);
-        $this->MultiCell(140, 3, $arFactura->getComentarios(), 0, 'L');
+        $this->MultiCell(110, 3, $arFactura->getComentarios(), 0, 'L');*/
 
         $arrayNumero = explode(".", 0, 2);
         $intCentavos = 0;
@@ -288,7 +359,7 @@ class CuentaCobro extends \FPDF_FPDF {
         $this->SetFont('Arial', 'B', 6);        
         $this->Ln();
 
-        $this->GetY($this->SetY(235));
+        $this->GetY($this->SetY(170));
         $this->SetX(10);
         $this->SetFont('Arial', 'B', 6);
         $this->Text(12, $this->GetY() + 8, 'Atentamente,');
@@ -302,13 +373,16 @@ class CuentaCobro extends \FPDF_FPDF {
 
 
         $this->Ln(3);
+        $this->SetFont('Arial', 'B', 12);
+        //$this->Text(10, $this->GetY($this->SetY(160)), utf8_decode($arConfiguracion->getInformacionPagoFactura()));
+        
+        $this->MultiCell(261,4, $arConfiguracion->getInformacionPagoFactura(),0);
+        
         $this->SetFont('Arial', 'B', 8);
-        $this->Text(20, $this->GetY($this->SetY(230)), $arConfiguracion->getInformacionPagoFactura());
-        $this->SetFont('Arial', 'B', 8);
-        $this->Text(60, $this->GetY($this->SetY(267)), $arConfiguracion->getInformacionContactoFactura());
+        $this->Text(60, $this->GetY($this->SetY(205)), utf8_decode($arConfiguracion->getInformacionContactoFactura()));
         $this->SetFont('Arial', '', 8);
         //Número de página
-        $this->Text(180, 273, 'Pagina ' . $this->PageNo() . ' de {nb}');
+        $this->Text(255, 205, 'Pagina ' . $this->PageNo() . ' de {nb}');
     }
 
     public function GenerarEncabezadoFactura($em) {
@@ -316,7 +390,7 @@ class CuentaCobro extends \FPDF_FPDF {
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
 
         $this->SetFont('Arial', '', 5);
-        $this->Text(188, 13, ' [sogaApp - afiliacion]');
+        $this->Text(255, 13, ' [sogaApp - afiliacion]');
         $this->Image('imagenes/logos/logo.jpg', 15, 15, 35, 17);
         $this->ln(11);
         $this->SetFont('Arial', 'B', 12);
