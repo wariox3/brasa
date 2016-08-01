@@ -203,55 +203,61 @@ class CuentaCobro extends \FPDF_FPDF {
         $pdf->SetTextColor(0);
         $pdf->SetFont('');
         $pdf->Ln(4);
-        $arFacturaDetalle = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();
-        $arFacturaDetalle = self::$em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->findOneBy(array('codigoFacturaFk' => self::$codigoFactura));
-        $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
-        $arPeriodo = self::$em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($arFacturaDetalle->getCodigoPeriodoFk());
+        $arFacturaDetalles = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();
+        $arFacturaDetalles = self::$em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->findBy(array('codigoFacturaFk' => self::$codigoFactura));
+        //$arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
+        //$arPeriodo = self::$em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($arFacturaDetalle->getCodigoPeriodoFk());
+        $var2 = count($arFacturaDetalles);
+        $var = 0;
+        foreach ($arFacturaDetalles as $arFacturaDetalles){
         $arPeriodoDetalles = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle();
-        $arPeriodoDetalles = self::$em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetalle')->findBy(array('codigoPeriodoFk' => $arPeriodo->getCodigoPeriodoPk()));
-        
+        $arPeriodoDetalles = self::$em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetalle')->findBy(array('codigoPeriodoFk' => $arFacturaDetalles->getCodigoPeriodoFk()));
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
-        $var = 0;
-        foreach ($arPeriodoDetalles as $arPeriodoDetalle) {                        
-            $pdf->Cell(20, 4, $arPeriodoDetalle->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
-            $pdf->SetFont('Arial', '', 6);
-            $pdf->Cell(54, 4, utf8_decode($arPeriodoDetalle->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');                            
-            $pdf->Cell(8, 4, $arPeriodoDetalle->getDias(), 1, 0, 'L');
-            $pdf->Cell(15, 4, number_format($arPeriodoDetalle->getSalario(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(15, 4, $arPeriodoDetalle->getContratoRel()->getFechaDesde()->format('Y-m-d'), 1, 0, 'L');
-            //$pdf->Cell(33, 4, number_format($arPeriodoDetalle->getPension(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(30, 4, $arPeriodoDetalle->getContratoRel()->getEntidadPensionRel()->getNombre(), 1, 0, 'L');
-            //$pdf->Cell(33, 4, number_format($arPeriodoDetalle->getSalud(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(30, 4, $arPeriodoDetalle->getContratoRel()->getEntidadSaludRel()->getNombre(), 1, 0, 'L');
-            //$pdf->Cell(33, 4, number_format($arPeriodoDetalle->getRiesgos(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(20, 4, $arPeriodoDetalle->getContratoRel()->getClasificacionRiesgoRel()->getNombre(), 1, 0, 'L');
-            //$pdf->Cell(33, 4, number_format($arPeriodoDetalle->getCaja(), 0, '.', ','), 1, 0, 'R');
-            if ($arPeriodoDetalle->getContratoRel()->getCodigoEntidadCajaFk() == null) {
-                $caja = "NO";
-            } else {
-                $caja = "SI";
+        $var += $arFacturaDetalles->getTotal();
+            foreach ($arPeriodoDetalles as $arPeriodoDetalles) {                        
+                $pdf->Cell(20, 4, $arPeriodoDetalles->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
+                $pdf->SetFont('Arial', '', 6);
+                $pdf->Cell(54, 4, utf8_decode($arPeriodoDetalles->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');                            
+                $pdf->Cell(8, 4, $arPeriodoDetalles->getDias(), 1, 0, 'L');
+                $pdf->Cell(15, 4, number_format($arPeriodoDetalles->getSalario(), 0, '.', ','), 1, 0, 'R');
+                $pdf->Cell(15, 4, $arPeriodoDetalles->getContratoRel()->getFechaDesde()->format('Y-m-d'), 1, 0, 'L');
+                //$pdf->Cell(33, 4, number_format($arPeriodoDetalle->getPension(), 0, '.', ','), 1, 0, 'R');
+                $pdf->Cell(30, 4, utf8_decode($arPeriodoDetalles->getContratoRel()->getEntidadPensionRel()->getNombre()), 1, 0, 'L');
+                //$pdf->Cell(33, 4, number_format($arPeriodoDetalle->getSalud(), 0, '.', ','), 1, 0, 'R');
+                $pdf->Cell(30, 4, utf8_decode($arPeriodoDetalles->getContratoRel()->getEntidadSaludRel()->getNombre()), 1, 0, 'L');
+                //$pdf->Cell(33, 4, number_format($arPeriodoDetalle->getRiesgos(), 0, '.', ','), 1, 0, 'R');
+                $pdf->Cell(20, 4, utf8_decode($arPeriodoDetalles->getContratoRel()->getClasificacionRiesgoRel()->getNombre()), 1, 0, 'L');
+                //$pdf->Cell(33, 4, number_format($arPeriodoDetalle->getCaja(), 0, '.', ','), 1, 0, 'R');
+                if ($arPeriodoDetalles->getContratoRel()->getCodigoEntidadCajaFk() == null) {
+                    $caja = "NO";
+                } else {
+                    $caja = "SI";
+                }
+              $pdf->Cell(15, 4, $caja, 1, 0, 'L');
+                $pdf->SetFont('Arial', '', 7);
+                $pdf->Cell(13, 4, number_format($arPeriodoDetalles->getAdministracion(), 0, '.', ','), 1, 0, 'R');
+                $pdf->Cell(13, 4, number_format($arPeriodoDetalles->getSubtotal(), 0, '.', ','), 1, 0, 'R');
+                $pdf->Cell(13, 4, number_format($arPeriodoDetalles->getIva(), 0, '.', ','), 1, 0, 'R');
+                $pdf->Cell(19, 4, number_format($arPeriodoDetalles->getTotal(), 0, '.', ','), 1, 0, 'R');
+                //$var += $arPeriodoDetalles->getTotal();
+                $pdf->Ln();
+                $pdf->SetAutoPageBreak(true, 15);  
+
             }
-            $pdf->Cell(15, 4, $caja, 1, 0, 'L');
-            $pdf->SetFont('Arial', '', 7);
-            $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getAdministracion(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getSubtotal(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getIva(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(19, 4, number_format($arPeriodoDetalle->getTotal(), 0, '.', ','), 1, 0, 'R');
-            $var += $arPeriodoDetalle->getTotal();
-            $pdf->Ln();
-            $pdf->SetAutoPageBreak(true, 15);
-            
+        
         }
+            
             $pdf->SetFont('Arial', 'B', 7);
-            $pdf->Cell(245, 5, "TOTAL: ", 0, 0, 'R');
+            $pdf->Cell(246, 5, "TOTAL: ", 0, 0, 'R');
             $pdf->SetFont('Arial', '', 7);
             $pdf->Cell(19, 5, number_format($var,0, '.', ','), 1, 0, 'R');
             $pdf->Ln();
             $pdf->SetFont('Arial', 'B', 7);
-            $pdf->Cell(35, 5, "NUMERO DE EMPLEADOS: ", 0, 0, 'R');
+            $pdf->Cell(27, 5, "TOTAL REGISTROS : ", 0, 0, 'R');
             $pdf->SetFont('Arial', '', 7);
-            $pdf->Cell(19, 5, number_format($arPeriodo->getNumeroEmpleados(),0, '.', ','), 1, 0, 'R');
+            //$pdf->Cell(19, 5, number_format($arPeriodoDetalles->getPeriodoRel()->getNumeroEmpleados(),0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(19, 5, number_format($var2,0, '.', ','), 1, 0, 'R');
         
         //Seguridad social
         /*$arFacturaDetalles = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();
@@ -375,7 +381,7 @@ class CuentaCobro extends \FPDF_FPDF {
         $this->Ln(3);
         $this->SetFont('Arial', 'B', 12);
         //$this->Text(10, $this->GetY($this->SetY(160)), utf8_decode($arConfiguracion->getInformacionPagoFactura()));
-        
+        $this->SetY(166);
         $this->MultiCell(261,4, $arConfiguracion->getInformacionPagoFactura(),0);
         
         $this->SetFont('Arial', 'B', 8);
