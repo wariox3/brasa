@@ -570,7 +570,7 @@ class PagoBancoController extends Controller
                 $strSecuencia ++;                
             }
         }
-        fputs($ar, "03" . $this->RellenarNr($strNumeroRegistros, "0", 9) . $strValorTotal . "\n");
+        fputs($ar, "03" . $this->RellenarNr(($strSecuencia-1), "0", 9) . $strValorTotal . "\n");
         fclose($ar);
         $em->flush();
         //Fin cuerpo                        
