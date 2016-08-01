@@ -628,8 +628,8 @@ class ContratosController extends Controller
         $session = $this->getRequest()->getSession();
         $session->set('dqlContratoLista', $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->listaDQL(
                 $session->get('filtroIdentificacion'),
-                $this->fechaDesdeInicia,
-                $this->fechaHastaInicia,
+                $session->get('filtroDesde'),
+                $session->get('filtroHasta'),
                 $session->get('filtroContratoActivo'),
                 $session->get('filtroCodigoCentroCosto')
                 ));

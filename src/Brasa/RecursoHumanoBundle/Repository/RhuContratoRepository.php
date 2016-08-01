@@ -16,12 +16,14 @@ class RhuContratoRepository extends EntityRepository {
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
         }
-        if($fechaDesdeInicia != "" ) {
-            $dql .= " AND c.fechaDesde >= '" . $fechaDesdeInicia . "'";
-        }        
-        if($fechaHastaInicia != "" ) {
-            $dql .= " AND c.fechaDesde <= '" . $fechaHastaInicia . "'";
-        }        
+        if($fechaDesdeInicia != ""){
+            //$strDesde = new \DateTime($strDesde);
+            $dql .= " AND c.fechaDesde >= '" . date_format($fechaDesdeInicia, ('Y-m-d')) . "'";
+        }
+        if($fechaHastaInicia != "") {
+            //$strHasta = new \DateTime($strHasta);
+            $dql .= " AND c.fechaDesde <= '" . date_format($fechaDesdeInicia, ('Y-m-d')) . "'";
+        }
         if($boolMostrarActivos == 1 ) {
             $dql .= " AND c.estadoActivo = 1";
         } 
