@@ -48,6 +48,17 @@ class FormatoProgramacion extends \FPDF_FPDF {
         $this->Cell(20, 4, utf8_decode("TELÉFONO:"), 0, 0, 'L', 1);
         $this->Cell(100, 4, $arConfiguracion->getTelefonoEmpresa(), 0, 0, 'L', 0);        
         
+        //FORMATO ISO
+        $arContenidoFormatoA = new \Brasa\GeneralBundle\Entity\GenContenidoFormatoSecundario();
+        $arContenidoFormatoA = self::$em->getRepository('BrasaGeneralBundle:GenContenidoFormatoSecundario')->find(19);        
+        $this->SetXY(168, 18);
+        $this->SetFillColor(255, 255, 255);
+        $this->Cell(35, 6, "CODIGO: ".$arContenidoFormatoA->getCodigoFormatoIso(), 1, 0, 'L', 1);
+        $this->SetXY(168, 24);
+        $this->Cell(35, 6, utf8_decode("VERSIÓN: ".$arContenidoFormatoA->getVersion()), 1, 0, 'L', 1);
+        $this->SetXY(168, 30);
+        $this->Cell(35, 6, utf8_decode("FECHA: ".$arContenidoFormatoA->getFechaVersion()->format('Y-m-d')), 1, 0, 'L', 1);        
+        
         $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
         $arProgramacion = self::$em->getRepository('BrasaTurnoBundle:TurProgramacion')->find(self::$codigoProgramacion);        
         
@@ -66,7 +77,7 @@ class FormatoProgramacion extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, "FECHA:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(65, 4, $arProgramacion->getFecha()->format('Y/m/d'), 1, 0, 'L', 1);       
+        $this->Cell(68, 4, $arProgramacion->getFecha()->format('Y/m/d'), 1, 0, 'L', 1);       
 
         $this->SetXY(10, $intY + 4);
         $this->SetFont('Arial','B',8);
@@ -76,7 +87,7 @@ class FormatoProgramacion extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, "PERIODO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(65, 4, $arProgramacion->getFecha()->format('Y/m/d'), 1, 0, 'L', 1);               
+        $this->Cell(68, 4, $arProgramacion->getFecha()->format('Y/m/d'), 1, 0, 'L', 1);               
         
         $this->SetXY(10, $intY + 8);
         $this->SetFont('Arial','B',8);
@@ -86,29 +97,9 @@ class FormatoProgramacion extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, 'CONTACTO:' , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(65, 4, $arProgramacion->getClienteRel()->getContacto(), 1, 0, 'L', 1);
-        
+        $this->Cell(68, 4, $arProgramacion->getClienteRel()->getContacto(), 1, 0, 'L', 1);            
+
         $this->SetXY(10, $intY + 12);
-        $this->SetFont('Arial','B',8);
-        $this->Cell(30, 4, "DIRECCION:" , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',8);
-        $this->Cell(65, 4, $arProgramacion->getClienteRel()->getDireccion(), 1, 0, 'L', 1);
-        $this->SetFont('Arial','B',8);
-        $this->Cell(30, 4, 'CARGO:' , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',7);
-        $this->Cell(65, 4, '', 1, 0, 'L', 1);
-
-        $this->SetXY(10, $intY + 16);
-        $this->SetFont('Arial','B',8);
-        $this->Cell(30, 4, "CIUDAD:" , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',8);
-        $this->Cell(65, 4, "", 1, 0, 'L', 1);
-        $this->SetFont('Arial','B',8);
-        $this->Cell(30, 4, 'DEPARTAMENTO:' , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',7);
-        $this->Cell(65, 4, '', 1, 0, 'L', 1);        
-
-        $this->SetXY(10, $intY + 20);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, "TELEFONO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
@@ -116,9 +107,9 @@ class FormatoProgramacion extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, 'CELULAR:' , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(65, 4, $arProgramacion->getClienteRel()->getCelular(), 1, 0, 'L', 1);                
+        $this->Cell(68, 4, $arProgramacion->getClienteRel()->getCelular(), 1, 0, 'L', 1);                
         
-        $this->SetXY(10, $intY + 24);
+        $this->SetXY(10, $intY + 16);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, "EMAIL:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
@@ -126,14 +117,14 @@ class FormatoProgramacion extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 4, '' , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(65, 4, '', 1, 0, 'L', 1);                
+        $this->Cell(68, 4, '', 1, 0, 'L', 1);                
         
         $this->EncabezadoDetalles();
         
     }
 
     public function EncabezadoDetalles() {
-        $this->Ln(14);
+        $this->Ln(10);
         $header = array('COD', 'RECURSO','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
@@ -156,23 +147,51 @@ class FormatoProgramacion extends \FPDF_FPDF {
         $this->Ln(4);
     }
 
-    public function Body($pdf) {
+    public function Body($pdf) {                
+        $dql = self::$em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->listaDql(self::$codigoProgramacion);       
+        $query = self::$em->createQuery($dql);
         $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
-        $arProgramacionDetalles = self::$em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoProgramacionFk' => self::$codigoProgramacion));
+        $arProgramacionDetalles = $query->getResult();
+        
         $arrTurnos = array();
         $pdf->SetX(10);
-        $pdf->SetFont('Arial', '', 7);
+        $pdf->SetFont('Arial', '', 7);   
+        $numero = 0;
         $codigoPuesto = 0;    
-        foreach ($arProgramacionDetalles as $arProgramacionDetalle) {                                       
-            if($codigoPuesto != $arProgramacionDetalle->getCodigoPuestoFk()) {
-                $codigoPuesto = $arProgramacionDetalle->getCodigoPuestoFk();
-                if($arProgramacionDetalle->getCodigoPuestoFk()) {
-                    $pdf->Cell(195, 4, $arProgramacionDetalle->getPuestoRel()->getNombre(), 1, 0, 'L');
+        foreach ($arProgramacionDetalles as $arProgramacionDetalle) {         
+            $numero++;
+            if($codigoPuesto != $arProgramacionDetalle->getCodigoPuestoFk()) {                                
+                if($arProgramacionDetalle->getCodigoPuestoFk()) { 
+                    if($numero != 1) {
+                        $pdf->Ln();
+                        $pdf->Cell(15, 4, "CODIGO", 1, 0, 'L');
+                        $pdf->Cell(30, 4, "NOMBRE", 1, 0, 'L');
+                        $pdf->Cell(15, 4, "H. DESDE", 1, 0, 'L');
+                        $pdf->Cell(15, 4, "H. HASTA", 1, 0, 'L');        
+                        $pdf->Ln();
+                        $arrTurnos = $this->turnos($arProgramacionDetalles);        
+                        foreach ($arrTurnos as $arrTurno) {
+                            $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
+                            $arTurno = self::$em->getRepository('BrasaTurnoBundle:TurTurno')->find($arrTurno['turno']);  
+                            if(count($arTurno) > 0) {
+                                if($arTurno->getNovedad() == 0 && $arTurno->getDescanso() == 0) {
+                                    $pdf->Cell(15, 4, $arrTurno['turno'], 1, 0, 'L');
+                                    $pdf->Cell(30, 4, $arTurno->getNombre(), 1, 0, 'L');
+                                    $pdf->Cell(15, 4, $arTurno->getHoraDesde()->format('H:s'), 1, 0, 'L');
+                                    $pdf->Cell(15, 4, $arTurno->getHoraHasta()->format('H:s'), 1, 0, 'L');
+                                    $pdf->Ln();                     
+                                }               
+                            }
+                        }                        
+                        $pdf->AddPage();
+                    }
+                    $codigoPuesto = $arProgramacionDetalle->getCodigoPuestoFk();                    
+                    $pdf->Cell(195, 4, utf8_decode($arProgramacionDetalle->getPuestoRel()->getNombre()), 1, 0, 'L');
                     $pdf->Ln();            
                     $pdf->SetAutoPageBreak(true, 15);                    
-                } else {
+                } else {                    
                     $pdf->Cell(195, 4, "", 1, 0, 'L');
-                } 
+                }                 
             }
             
             $pdf->Cell(10, 4, $arProgramacionDetalle->getCodigoProgramacionDetallePk(), 1, 0, 'L');
@@ -212,38 +231,18 @@ class FormatoProgramacion extends \FPDF_FPDF {
             $pdf->Cell(5, 4, $arProgramacionDetalle->getDia28(), 1, 0, 'L');
             $pdf->Cell(5, 4, $arProgramacionDetalle->getDia29(), 1, 0, 'L');
             $pdf->Cell(5, 4, $arProgramacionDetalle->getDia30(), 1, 0, 'L');
-            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia31(), 1, 0, 'L');              
-            
-  
+            $pdf->Cell(5, 4, $arProgramacionDetalle->getDia31(), 1, 0, 'L');                          
             $pdf->Ln();            
             $pdf->SetAutoPageBreak(true, 15);
         }
-        $pdf->Ln();
-        $pdf->Cell(15, 4, "CODIGO", 1, 0, 'L');
-        $pdf->Cell(30, 4, "NOMBRE", 1, 0, 'L');
-        $pdf->Cell(15, 4, "H. DESDE", 1, 0, 'L');
-        $pdf->Cell(15, 4, "H. HASTA", 1, 0, 'L');
-        
-        $pdf->Ln();
-        $arrTurnos = $this->turnos($arProgramacionDetalles);        
-        foreach ($arrTurnos as $arrTurno) {
-            $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
-            $arTurno = self::$em->getRepository('BrasaTurnoBundle:TurTurno')->find($arrTurno['turno']);  
-            if(count($arTurno) > 0) {
-                $pdf->Cell(15, 4, $arrTurno['turno'], 1, 0, 'L');
-                $pdf->Cell(30, 4, $arTurno->getNombre(), 1, 0, 'L');
-                $pdf->Cell(15, 4, $arTurno->getHoraDesde()->format('H:s'), 1, 0, 'L');
-                $pdf->Cell(15, 4, $arTurno->getHoraHasta()->format('H:s'), 1, 0, 'L');
-                $pdf->Ln();                
-            }
-        }
+               
     }
 
     public function Footer() {
         $this->SetFont('Arial','', 8);  
-        $this->Text(10, 180, "C = CURSO SEGURIDAD");
-        $this->Text(10, 185, "602 = CAPACITACION OBLIGATORIA");        
-        $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
+        $this->Text(10, 195, "C = CURSO SEGURIDAD");
+        $this->Text(10, 200, "602 = CAPACITACION OBLIGATORIA");        
+        $this->Text(170, 200, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
     }    
     
     private function turnos($arProgramacionDetalles) {
