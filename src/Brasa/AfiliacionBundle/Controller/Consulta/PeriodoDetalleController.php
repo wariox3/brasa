@@ -29,7 +29,7 @@ class PeriodoDetalleController extends Controller
             }
         }
         
-        $arPeriodoDetalles = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
+        $arPeriodoDetalles = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 60);
         return $this->render('BrasaAfiliacionBundle:Consulta/Periodo:detalle.html.twig', array(
             'arPeriodoDetalles' => $arPeriodoDetalles, 
             'form' => $form->createView()));

@@ -104,7 +104,7 @@ class CuentaCobro extends \FPDF_FPDF {
         }       
         
         $this->SetXY(100,20);
-        $this->SetFont('Arial', '', 10);        
+        $this->SetFont('Arial', 'b', 10);        
         //$this->Cell(30, 3, 'ALTURAS Y SEGURIDAD LABORAL', 0, 0, 'C');        
         $this->SetXY(100,25);
         $this->Cell(30, 3, $arConfiguracion->getNombreEmpresa(), 0, 0, 'C');        
@@ -246,7 +246,7 @@ class CuentaCobro extends \FPDF_FPDF {
             
             $pdf->SetFont('Arial', 'B', 7);
             $pdf->Cell(246, 5, "TOTAL: ", 0, 0, 'R');
-            $pdf->SetFont('Arial', '', 7);
+            $pdf->SetFont('Arial', 'b', 7);
             $pdf->Cell(19, 5, number_format($var,0, '.', ','), 1, 0, 'R');
             $pdf->Ln();
             $pdf->SetFont('Arial', 'B', 7);
