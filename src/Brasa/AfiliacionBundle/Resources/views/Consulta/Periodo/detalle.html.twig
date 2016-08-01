@@ -73,7 +73,6 @@
                 <th>{{ knp_pagination_sortable(arPeriodoDetalles, 'CÓDIGO', 'p.codigoPeriodoDetallePk') }}</th>
                 <th>DESDE</th>
                 <th>HASTA</th>
-                <th>CLIENTE</th>
                 <th>EMPLEADO</th>
                 <th>ING</th>
                 <th>DIAS</th>
@@ -82,41 +81,51 @@
                 <th>SALUD</th>                
                 <th>CAJA</th>
                 <th>RIESGOS</th>
-                <th>SENA</th>
-                <th>ICBF</th>
-                <th>ADMIN</th>
+                <th>ADMON</th>
                 <th>TOTAL</th>                
                 <th>FAC</th>                
             </tr>
+            {% set cliente = '' %}
             {% set douTotal = 0  %}
+            {% set douTotalGeneral = 0  %}
             {% for arPeriodoDetalles in arPeriodoDetalles %}
+                {% if cliente != arPeriodoDetalles.periodoRel.codigoClienteFk %}
+                    <tr> 
+                        <th id="suptipo" colspan="4">{{ arPeriodoDetalles.periodoRel.clienteRel.nombreCorto }}</th>
+                        <th id="suptipo" colspan="1">{{ arPeriodoDetalles.periodoRel.clienteRel.telefono }}</th>
+                        <th id="suptipo" colspan="2">{{ arPeriodoDetalles.periodoRel.clienteRel.email }}</th>
+                        <th id="suptipo" colspan="7"></th>    
+                    </tr>
+                
+                {% endif %}    
             <tr>
                 <td>{{ arPeriodoDetalles.codigoPeriodoDetallePk  }}</td>
                 <td>{{ arPeriodoDetalles.fechaDesde |date('Y/m/d') }}</td>
                 <td>{{ arPeriodoDetalles.fechaHasta |date('Y/m/d') }}</td>
-                <td>{{ arPeriodoDetalles.periodoRel.clienteRel.nombreCorto }}</td>
                 <td>{{ arPeriodoDetalles.empleadoRel.nombreCorto }}</td>
                 <td>{% if arPeriodoDetalles.ingreso == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: right">{{ arPeriodoDetalles.dias | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPeriodoDetalles.salario | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPeriodoDetalles.pension | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPeriodoDetalles.salud | number_format(0, '.', ',') }}</td>                
-                <td style="text-align: right">{{ arPeriodoDetalles.caja | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPeriodoDetalles.riesgos | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPeriodoDetalles.sena | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPeriodoDetalles.icbf | number_format(0, '.', ',') }}</td>
+                <td>{{ arPeriodoDetalles.contratoRel.entidadPensionRel.nombre }}</td>
+                <td>{{ arPeriodoDetalles.contratoRel.entidadSaludRel.nombre }}</td>
+                <td>{{ arPeriodoDetalles.contratoRel.entidadCajaRel.nombre }}</td>
+                <td>{{ arPeriodoDetalles.contratoRel.clasificacionRiesgoRel.nombre }}</td>
                 <td style="text-align: right">{{ arPeriodoDetalles.administracion | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPeriodoDetalles.total | number_format(0, '.', ',') }}</td>  
                 <td>{% if arPeriodoDetalles.periodoRel.estadoFacturado == 1 %} SI {% else %} NO {% endif %}</td>
-                {% set douTotal = douTotal + arPeriodoDetalles.total %}
-            </tr>
-
+                {% set douTotalGeneral = douTotalGeneral + arPeriodoDetalles.total %}
+               
+            {% set cliente = arPeriodoDetalles.periodoRel.codigoClienteFk %}
+             
             {% endfor %}
-            <td></td>
+            
+            <tr>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>                
                 <td></td>
+                
                 <td style="text-align: right"></td>
                 <td style="text-align: right"></td>
                 <td style="text-align: right"></td>
@@ -124,11 +133,9 @@
                 <td style="text-align: right"></td>
                 <td style="text-align: right"></td>
                 <td style="text-align: right"></td>
+                <td style="text-align: right">{{ douTotalGeneral | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right"></td>
-                <td style="text-align: right"></td>
-                <td style="text-align: right"></td>
-                <td style="text-align: right">{{ douTotal | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right"></td>
+            </tr>    
         </table>
 
         <!-- Botones Menu Items -->

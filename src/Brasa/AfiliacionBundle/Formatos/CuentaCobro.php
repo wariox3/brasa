@@ -375,10 +375,10 @@ class CuentaCobro extends \FPDF_FPDF {
 
 
         $this->Ln(3);
-        $this->SetFont('Arial', 'B', 12);
+        $this->SetFont('Arial', 'B', 11);
         //$this->Text(10, $this->GetY($this->SetY(160)), utf8_decode($arConfiguracion->getInformacionPagoFactura()));
-        $this->SetY(185);
-        $this->MultiCell(261,4, $arConfiguracion->getInformacionPagoFactura(),0);
+        $this->SetY(187);
+        $this->MultiCell(261,5, $arConfiguracion->getInformacionPagoFactura(),0);
         
         $this->SetFont('Arial', 'B', 8);
         //$this->Text(60, $this->GetY($this->SetY(205)), utf8_decode($arConfiguracion->getInformacionContactoFactura()));
