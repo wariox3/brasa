@@ -41,7 +41,9 @@ class PeriodoDetalleController extends Controller
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetalle')->listaConsultaDql(
                 $session->get('filtroCursoNumero'),
                 $session->get('filtroCodigoCliente'),
-                $session->get('filtroPeriodoEstadoFacturado')
+                $session->get('filtroPeriodoEstadoFacturado'),
+                $session->get('filtroDesde'),
+                $session->get('filtroHasta')
                 ); 
     }       
 
@@ -49,7 +51,9 @@ class PeriodoDetalleController extends Controller
         $session = $this->getRequest()->getSession();                        
         $session->set('filtroPeriodoNumero', $form->get('TxtNumero')->getData());
         $session->set('filtroPeriodoEstadoFacturado', $form->get('estadoFacturado')->getData());                  
-        $session->set('filtroNit', $form->get('TxtNit')->getData());                                 
+        $session->set('filtroNit', $form->get('TxtNit')->getData()); 
+        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
         $this->lista();
     }
     
@@ -74,6 +78,8 @@ class PeriodoDetalleController extends Controller
             ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))
             ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCursoNumero')))
             ->add('estadoFacturado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'FACTURADO', '0' => 'SIN FACTURAR'), 'data' => $session->get('filtroPeriodoEstadoFacturado')))                
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
