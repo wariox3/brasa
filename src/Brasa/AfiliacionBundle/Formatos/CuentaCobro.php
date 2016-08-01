@@ -207,7 +207,7 @@ class CuentaCobro extends \FPDF_FPDF {
         $arFacturaDetalles = self::$em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->findBy(array('codigoFacturaFk' => self::$codigoFactura));
         //$arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
         //$arPeriodo = self::$em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($arFacturaDetalle->getCodigoPeriodoFk());
-        $var2 = count($arFacturaDetalles);
+        
         $var = 0;
         foreach ($arFacturaDetalles as $arFacturaDetalles){
         $arPeriodoDetalles = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle();
@@ -215,6 +215,7 @@ class CuentaCobro extends \FPDF_FPDF {
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
         $var += $arFacturaDetalles->getTotal();
+        $var2 = count($arPeriodoDetalles);
             foreach ($arPeriodoDetalles as $arPeriodoDetalles) {                        
                 $pdf->Cell(20, 4, $arPeriodoDetalles->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
                 $pdf->SetFont('Arial', '', 6);
