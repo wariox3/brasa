@@ -321,7 +321,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                         $arPagoDetalle->setOperacion($arPagoConceptoCredito->getOperacion());
                         $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConceptoCredito->getOperacion());
                         $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
-                        $arPagoDetalle->setCreditoRel($arCredito);
+                        //$arPagoDetalle->setCreditoRel($arCredito);
                         $em->persist($arPagoDetalle);
                     }
                 }

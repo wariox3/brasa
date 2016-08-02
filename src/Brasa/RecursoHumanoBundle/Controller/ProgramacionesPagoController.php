@@ -171,9 +171,8 @@ class ProgramacionesPagoController extends Controller
 
             //prueba
             if($request->request->get('Prueba')) {
-                
-                //return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
-                
+                set_time_limit(0);
+                ini_set("memory_limit", -1);
                 $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
                 $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
                 foreach ($arPagos as $arPago) {
@@ -186,7 +185,7 @@ class ProgramacionesPagoController extends Controller
                             $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
                             $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arPagoDetalle->getCodigoCreditoFk());
 
-                            /*//Crear credito pago se guarda el pago en la tabla rhu_pago_credito
+                            //Crear credito pago se guarda el pago en la tabla rhu_pago_credito
                             $arPagoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
                             $arPagoCredito->setCreditoRel($arCredito);
                             $arPagoCredito->setPagoRel($arPagoDetalle->getPagoRel());
@@ -203,10 +202,11 @@ class ProgramacionesPagoController extends Controller
                             $arPagoCredito->setSaldo($arCredito->getSaldo());
                             $arPagoCredito->setNumeroCuotaActual($arCredito->getNumeroCuotaActual());
                             $em->persist($arPagoCredito);
-                            $em->persist($arCredito);*/
+                            $em->persist($arCredito);
                         }                    
                     }
                 }
+                $em->flush();
                 //return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
                 $objMensaje->Mensaje("error", "Recorrdio todo", $this);
             }
