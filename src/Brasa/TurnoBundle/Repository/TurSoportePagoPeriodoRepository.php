@@ -96,10 +96,10 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
         $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
         $arSoportePagoPeriodo->setInconsistencias(0);
         $arrInconsistencias = array();
-        $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
-        $arSoportesPago = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));        
-        foreach ($arSoportesPago as $arSoportePago) {
-            if($arSoportePago->getCodigoRecursoFk()) {
+        $arSoportesPagoProcesar = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+        $arSoportesPagoProcesar = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));        
+        foreach ($arSoportesPagoProcesar as $arSoportePago) {
+            if($arSoportePago->getRecursoRel()) {
                 if($arSoportePago->getCodigoContratoFk()) {
                     $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arSoportePago->getRecursoRel()->getCodigoEmpleadoFk(), $arSoportePago->getCodigoContratoFk(), $arSoportePagoPeriodo->getFechaDesde(), $arSoportePagoPeriodo->getFechaHasta());                            
                     $intDiasLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicenciaPeriodo($arSoportePagoPeriodo->getFechaDesde(), $arSoportePagoPeriodo->getFechaHasta(), $arSoportePago->getRecursoRel()->getCodigoEmpleadoFk());                            
