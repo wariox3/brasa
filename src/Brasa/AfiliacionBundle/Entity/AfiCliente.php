@@ -171,7 +171,12 @@ class AfiCliente
     /**     
      * @ORM\Column(name="redondear_cobro", type="boolean")
      */    
-    private $redondearCobro = true;    
+    private $redondearCobro = true;
+
+    /**     
+     * @ORM\Column(name="independiente", type="boolean")
+     */    
+    private $independiente = false;
     
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenAsesor", inversedBy="afiClientesAsesorRel")
@@ -1262,5 +1267,29 @@ class AfiCliente
     public function getRedondearCobro()
     {
         return $this->redondearCobro;
+    }
+
+    /**
+     * Set independiente
+     *
+     * @param boolean $independiente
+     *
+     * @return AfiCliente
+     */
+    public function setIndependiente($independiente)
+    {
+        $this->independiente = $independiente;
+
+        return $this;
+    }
+
+    /**
+     * Get independiente
+     *
+     * @return boolean
+     */
+    public function getIndependiente()
+    {
+        return $this->independiente;
     }
 }

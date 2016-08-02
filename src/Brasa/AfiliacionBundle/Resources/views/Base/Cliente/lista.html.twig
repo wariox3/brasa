@@ -37,6 +37,7 @@
                 <th>ASESOR</th>
                 <th>TELEFONO</th>
                 <th>CONTACTO</th>                
+                <th>INDEPENDIENTE</th>
                 <th></th>
                 <th></th>
                 <th></th>                
@@ -49,6 +50,7 @@
                 <td>{{ arClientes.asesorRel.nombre | default('') }}</td>
                 <td>{{ arClientes.telefono }}</td>
                 <td>{{ arClientes.contacto }}</td>
+                <td>{% if arClientes.independiente == 1%} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_afi_base_cliente_nuevo', {'codigoCliente': arClientes.codigoClientePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>  
                 <td style="text-align: center"><a href="{{ path('brs_afi_base_cliente_detalle', { 'codigoCliente': arClientes.codigoClientePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                
                               

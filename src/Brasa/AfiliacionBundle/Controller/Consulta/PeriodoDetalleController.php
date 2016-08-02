@@ -29,7 +29,7 @@ class PeriodoDetalleController extends Controller
             }
         }
         
-        $arPeriodoDetalles = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 60);
+        $arPeriodoDetalles = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 70);
         return $this->render('BrasaAfiliacionBundle:Consulta/Periodo:detalle.html.twig', array(
             'arPeriodoDetalles' => $arPeriodoDetalles, 
             'form' => $form->createView()));
@@ -133,7 +133,29 @@ class PeriodoDetalleController extends Controller
         $arPeriodoDetalles = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle();
         $arPeriodoDetalles = $query->getResult();
                 
-        foreach ($arPeriodoDetalles as $arPeriodoDetalle) {            
+        foreach ($arPeriodoDetalles as $arPeriodoDetalle) {
+            $cliente = '';
+            $cliente2 = '';
+            $douTotal = 0;
+            $douTotalGeneral = 0;
+            $contador = 0;
+            if ($contador == 0){
+               $cliente = $arPeriodoDetalle->getPeriodoRel()->getCodigoClienteFk();  
+               $cliente2 = $arPeriodoDetalle->getPeriodoRel()->getCodigoClienteFk();
+            }
+            if ($cliente2 !=  $arPeriodoDetalle->getPeriodoRel()->getCodigoClienteFk()){
+                $douTotal = $douTotal;
+            
+            $cliente2 =  $arPeriodoDetalle->getPeriodoRel()->getCodigoClienteFk();
+            $douTotal = 0;
+            }
+            if ($cliente != $arPeriodoDetalle->getPeriodoRel()->getCodigoClienteFk() || $contador == 0 ){
+                $nomCliente = $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getNombreCorto();
+                $telCliente = $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getTelefono();
+                $emailCliente = $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getEmail();
+                $cliente = $arPeriodoDetalle->getPeriodoRel()->getCodigoClienteFk();
+            }
+                     
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arPeriodoDetalle->getCodigoPeriodoDetallePk())
                     ->setCellValue('B' . $i, $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getNombreCorto())
@@ -151,7 +173,8 @@ class PeriodoDetalleController extends Controller
                     ->setCellValue('N' . $i, $arPeriodoDetalle->getContratoRel()->getEntidadCajaRel()->getNombre())
                     ->setCellValue('O' . $i, $arPeriodoDetalle->getContratoRel()->getClasificacionRiesgoRel()->getNombre())
                     ->setCellValue('P' . $i, $arPeriodoDetalle->getAdministracion())
-                    ->setCellValue('Q' . $i, $arPeriodoDetalle->getTotal());                                   
+                    ->setCellValue('Q' . $i, $arPeriodoDetalle->getTotal());
+            $contador++;
             $i++;
         }
         

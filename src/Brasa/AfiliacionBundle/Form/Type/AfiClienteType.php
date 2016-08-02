@@ -58,7 +58,8 @@ class AfiClienteType extends AbstractType
             ->add('porcentajeCaja', 'number', array('required' => true))  
             ->add('redondearCobro', 'checkbox', array('required'  => false))                            
             ->add('comentarios', 'textarea', array('required' => false))
-            ->add('codigoSucursal', 'text', array('required' => false))                
+            ->add('codigoSucursal', 'text', array('required' => false))
+            ->add('independiente', 'checkbox', array('required'  => false))                
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

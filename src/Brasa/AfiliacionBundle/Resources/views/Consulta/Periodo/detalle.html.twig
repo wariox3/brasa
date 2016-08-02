@@ -86,16 +86,44 @@
                 <th>FAC</th>                
             </tr>
             {% set cliente = '' %}
+            {% set cliente2 = '' %}
             {% set douTotal = 0  %}
             {% set douTotalGeneral = 0  %}
+            {% set contador = 0  %}
             {% for arPeriodoDetalles in arPeriodoDetalles %}
-                {% if cliente != arPeriodoDetalles.periodoRel.codigoClienteFk %}
+                {% if contador == 0 %}                    
+                    {% set cliente = arPeriodoDetalles.periodoRel.codigoClienteFk %}  
+                    {% set cliente2 = arPeriodoDetalles.periodoRel.codigoClienteFk %} 
+                {% endif %}    
+                {% if cliente2 !=  arPeriodoDetalles.periodoRel.codigoClienteFk %}
                     <tr> 
-                        <th id="suptipo" colspan="4">{{ arPeriodoDetalles.periodoRel.clienteRel.nombreCorto }}</th>
-                        <th id="suptipo" colspan="1">{{ arPeriodoDetalles.periodoRel.clienteRel.telefono }}</th>
-                        <th id="suptipo" colspan="2">{{ arPeriodoDetalles.periodoRel.clienteRel.email }}</th>
-                        <th id="suptipo" colspan="7"></th>    
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>                
+                        <td></td>
+                        <td style="text-align: right"></td>
+                        <td style="text-align: right"></td>
+                        <td style="text-align: right"></td>
+                        <td style="text-align: right"></td>
+                        <td style="text-align: right"></td>
+                        <td style="text-align: right"></td>
+                        <td style="text-align: right"></td>
+                        <td style="text-align: right">{{ douTotal | number_format(2, '.', ',') }}</td>
+                        <td style="text-align: right"></td>
                     </tr>
+                    {% set cliente2 =  arPeriodoDetalles.periodoRel.codigoClienteFk %}
+                    {% set douTotal = 0 %}
+                {% endif %}                 
+                
+                {% if cliente != arPeriodoDetalles.periodoRel.codigoClienteFk or contador == 0 %}
+                    <tr> 
+                        <td id="suptipo" colspan="4">{{ arPeriodoDetalles.periodoRel.clienteRel.nombreCorto }}</td>
+                        <td id="suptipo" colspan="1">{{ arPeriodoDetalles.periodoRel.clienteRel.telefono }}</td>
+                        <td id="suptipo" colspan="2">{{ arPeriodoDetalles.periodoRel.clienteRel.email }}</td>
+                        <td id="suptipo" colspan="7"></th>    
+                    </tr>
+                {% set cliente = arPeriodoDetalles.periodoRel.codigoClienteFk %}
                 
                 {% endif %}    
             <tr>
@@ -114,9 +142,10 @@
                 <td style="text-align: right">{{ arPeriodoDetalles.total | number_format(0, '.', ',') }}</td>  
                 <td>{% if arPeriodoDetalles.periodoRel.estadoFacturado == 1 %} SI {% else %} NO {% endif %}</td>
                 {% set douTotalGeneral = douTotalGeneral + arPeriodoDetalles.total %}
-               
-            {% set cliente = arPeriodoDetalles.periodoRel.codigoClienteFk %}
-             
+                {% set douTotal = douTotal + arPeriodoDetalles.total %}
+            </tr>
+
+              {% set contador = contador + 1 %}
             {% endfor %}
             
             <tr>
@@ -125,7 +154,6 @@
                 <td></td>
                 <td></td>                
                 <td></td>
-                
                 <td style="text-align: right"></td>
                 <td style="text-align: right"></td>
                 <td style="text-align: right"></td>
@@ -137,7 +165,6 @@
                 <td style="text-align: right"></td>
             </tr>    
         </table>
-
         <!-- Botones Menu Items -->
         <div class="btn-group" style="float: left">
                 <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arPeriodoDetalles.getTotalItemCount }}</span></div>

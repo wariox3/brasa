@@ -75,9 +75,11 @@ class ClienteController extends Controller
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioDetalle();
         $form->handleRequest($request);        
-        if ($form->isValid()) {                                       
+        if ($form->isValid()) {
+            
             if ($form->get('BtnImprimir')->isClicked()) {
-               $objMensaje->Mensaje('error', "Opcion en desarrollo", $this);
+               $objFormatoCliente = new \Brasa\AfiliacionBundle\Formatos\Cliente();
+               $objFormatoCliente->Generar($this, $codigoCliente);
             }
         }
         $arCliente = new \Brasa\AfiliacionBundle\Entity\AfiCliente();
