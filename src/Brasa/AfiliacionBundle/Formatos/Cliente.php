@@ -226,7 +226,7 @@ class Cliente extends \FPDF_FPDF {
         if ($arCliente->getRedondearCobro() == 1){
             $redondedo = "SI";
         } else {
-            $redondedo = "NO";
+            $redondedo = "NO"; 
         }
         $this->Cell(47, 5, $redondedo, 1, 0, 'L', 1);
         $this->SetFont('Arial','B',7);

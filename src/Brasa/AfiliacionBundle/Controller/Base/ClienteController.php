@@ -80,7 +80,6 @@ class ClienteController extends Controller
             if ($form->get('BtnImprimir')->isClicked()) {
                $objFormatoCliente = new \Brasa\AfiliacionBundle\Formatos\Cliente();
                $objFormatoCliente->Generar($this, $codigoCliente);
-               
             }
         }
         $arCliente = new \Brasa\AfiliacionBundle\Entity\AfiCliente();
