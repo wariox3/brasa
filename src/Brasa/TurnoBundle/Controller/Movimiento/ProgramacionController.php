@@ -103,6 +103,7 @@ class ProgramacionController extends Controller
         $paginator  = $this->get('knp_paginator');
         $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();        
         $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
         $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion);
         $form = $this->formularioDetalle($arProgramacion);
@@ -166,18 +167,7 @@ class ProgramacionController extends Controller
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
             }
         }
-        $strAnioMes = $arProgramacion->getFecha()->format('Y/m');
-        $arrDiaSemana = array();
-        for($i = 1; $i <= 31; $i++) {
-            $strFecha = $strAnioMes . '/' . $i;
-            $dateFecha = date_create($strFecha);
-            $diaSemana = $this->devuelveDiaSemanaEspaniol($dateFecha);
-            $boolFestivo = 0;
-            if($diaSemana == 'd') {
-                $boolFestivo = 1;
-            }
-            $arrDiaSemana[$i] = array('dia' => $i, 'diaSemana' => $diaSemana, 'festivo' => $boolFestivo);
-        }
+        $arrDiaSemana = $objFunciones->diasMes($arProgramacion->getFecha(), $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arProgramacion->getFecha()->format('Y-m-').'01', $arProgramacion->getFecha()->format('Y-m-').'31'));
         $formDetalle = $this->createFormBuilder()->getForm(); 
         $dql = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->listaDql($codigoProgramacion);       
         $arProgramacionDetalle = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 1000);
@@ -521,36 +511,7 @@ class ProgramacionController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }    
-
-    private function devuelveDiaSemanaEspaniol ($dateFecha) {
-        $strDia = "";
-        switch ($dateFecha->format('N')) {
-            case 1:
-                $strDia = "l";
-                break;
-            case 2:
-                $strDia = "m";
-                break;
-            case 3:
-                $strDia = "i";
-                break;
-            case 4:
-                $strDia = "j";
-                break;
-            case 5:
-                $strDia = "v";
-                break;
-            case 6:
-                $strDia = "s";
-                break;
-            case 7:
-                $strDia = "d";
-                break;
-        }
-
-        return $strDia;
-    }
+    }       
 
     private function actualizarDetalle ($arrControles, $codigoProgramacion) {
         $em = $this->getDoctrine()->getManager();

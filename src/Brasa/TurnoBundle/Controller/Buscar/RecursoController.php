@@ -62,18 +62,23 @@ class RecursoController extends Controller
             ));
     }            
     
-    private function lista() {        
+    private function lista() {  
+        $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurRecurso')->listaDQL(
                 $this->strNombre,                
-                $this->strCodigo   
+                $this->strCodigo,
+                "",
+                $session->get('filtroTurnoNumeroIdentificacion')
                 ); 
     }       
     
-    private function formularioLista() {                
+    private function formularioLista() { 
+        $session = $this->getRequest()->getSession();        
         $form = $this->createFormBuilder()                                                
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->strNombre))
             ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->strCodigo))            
+            ->add('TxtNumeroIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroTurnoNumeroIdentificacion')))            
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();        
         return $form;
@@ -84,6 +89,8 @@ class RecursoController extends Controller
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $this->strNombre = $form->get('TxtNombre')->getData();
+        $this->strCodigo = $form->get('TxtCodigo')->getData();
+        $session->set('filtroTurnoNumeroIdentificacion', $form->get('TxtNumeroIdentificacion')->getData());        
     }    
           
 }

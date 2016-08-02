@@ -508,14 +508,8 @@ class ProgramacionesPagoController extends Controller
                 $arProgramacionDetalle =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arSoportePago->getCodigoRecursoFk()));                                                    
             }
         }        
-        $strAnioMes = $arProgramacionPagoDetalle->getFechaDesde()->format('Y/m');
-        $arrDiaSemana = array();
-        for($i = 1; $i <= 31; $i++) {
-            $strFecha = $strAnioMes . '/' . $i;
-            $dateFecha = date_create($strFecha);
-            $diaSemana = $objFunciones->devuelveDiaSemanaEspaniol($dateFecha);
-            $arrDiaSemana[$i] = array('dia' => $i, 'diaSemana' => $diaSemana);
-        }  
+ 
+        $arrDiaSemana = $objFunciones->diasMes($arProgramacionPagoDetalle->getFechaDesde(), $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arProgramacionPagoDetalle->getFechaDesde()->format('Y-m-').'01', $arProgramacionPagoDetalle->getFechaDesde()->format('Y-m-').'31'));        
         $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->listaEmpleadoDql($arProgramacionPagoDetalle->getCodigoEmpleadoFk()));
         $arPagosAdicionales = $paginator->paginate($query, $request->query->get('page', 1), 20);        
         $dql = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->listaDql("", $codigoProgramacionPagoDetalle);                
