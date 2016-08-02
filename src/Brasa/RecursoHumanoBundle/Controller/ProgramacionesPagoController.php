@@ -161,48 +161,13 @@ class ProgramacionesPagoController extends Controller
                 } else {
                     $objMensaje->Mensaje("error", "No puede eliminar empleados cuando la programacion esta generada", $this);
                 }
-            }
-            if($form->get('BtnRetirarConceptoValor')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarValor');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados as $codigoPagoAdicional) {
-                        $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                        $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
-                        $em->remove($arPagoAdicional);
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
-                }
-            }
-            if($form->get('BtnAplicaDiaLaborado')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados as $codigoPagoAdicional) {
-                        $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                        $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
-                        if($arPagoAdicional->getAplicaDiaLaborado() == 1) {
-                            $arPagoAdicional->setAplicaDiaLaborado(0);
-                        } else {
-                            $arPagoAdicional->setAplicaDiaLaborado(1);
-                        }
-                        $em->persist($arPagoAdicional);
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
-                }
-            }
+            }            
             if($form->get('BtnEliminarTodoEmpleados')->isClicked()) {
                 if ($arProgramacionPago->getEstadoGenerado() == 0 ){
                     $resultado = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->eliminarTodoEmpleados($codigoProgramacionPago);
                 }
                 return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
-            }
-            if($form->get('BtnEliminarTodoAdicionalesValor')->isClicked()) {
-                if ($arProgramacionPago->getEstadoGenerado() == 0 ){
-                    $resultado = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->eliminarTodoAdicionalesValor($codigoProgramacionPago);
-                }
-               return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
-            }
+            }            
         }
         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arProgramacionPago->getCodigoCentroCostoFk());
@@ -221,23 +186,13 @@ class ProgramacionesPagoController extends Controller
         $arProgramacionPagoDetalles = $paginator->paginate($query, $request->query->get('page', 1), 500);
         $arProgramacionPagoDetalleSedes = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede();
         $arProgramacionPagoDetalleSedes = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalleSede')->findAll();
-        //adicionales al pago en tiempo
-        //$query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->listaTiempoDql($codigoProgramacionPago));
-        //$arPagosAdicionalesTiempo = $paginator->paginate($query, $request->query->get('page', 1), 200);
-        //adicionales al pago en valor
-        $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->listaValorDql($codigoProgramacionPago));
-        $arPagosAdicionalesValor = $paginator->paginate($query, $request->query->get('page', 1), 200);
-        
-        //$arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-        //$arPagosAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago, 'permanente' => 0));        
         if ($request->getMethod() == 'POST') {
             $arrControles = $request->request->All();
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
         }
 
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:detalle.html.twig', array(
-                    'arCentroCosto' => $arCentroCosto,                    
-                    'arPagosAdicionalesValor' => $arPagosAdicionalesValor,
+                    'arCentroCosto' => $arCentroCosto,                                        
                     'arIncapacidades' => $arIncapacidades,
                     'arLicencias' => $arLicencias,
                     'arVacaciones' => $arVacaciones,
@@ -510,7 +465,7 @@ class ProgramacionesPagoController extends Controller
         }        
  
         $arrDiaSemana = $objFunciones->diasMes($arProgramacionPagoDetalle->getFechaDesde(), $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arProgramacionPagoDetalle->getFechaDesde()->format('Y-m-').'01', $arProgramacionPagoDetalle->getFechaDesde()->format('Y-m-').'31'));        
-        $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->listaEmpleadoDql($arProgramacionPagoDetalle->getCodigoEmpleadoFk()));
+        $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->programacionPagoDql($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesde()->format('Y/m/d'), $arProgramacionPagoDetalle->getFechaHasta()->format('Y/m/d')));
         $arPagosAdicionales = $paginator->paginate($query, $request->query->get('page', 1), 20);        
         $dql = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->listaDql("", $codigoProgramacionPagoDetalle);                
         $arPagoDetalles = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 50);        
@@ -570,30 +525,19 @@ class ProgramacionesPagoController extends Controller
     }
 
     private function formularioDetalle($arProgramacionPago) {
-        $arrBotonAplicarDiaLaborado = array('label' => 'Aplicar dia laborado', 'disabled' => false);        
-        $arrBotonRetirarConceptoValor = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonGenerarEmpleados = array('label' => 'Cargar contratos', 'disabled' => false);
         $arrBotonEliminarEmpleados = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonEliminarTodoEmpleados = array('label' => 'Eliminar todo', 'disabled' => false);
-        $arrBotonEliminarTodoAdicionalesValor = array('label' => 'Eliminar todo', 'disabled' => false);
         if($arProgramacionPago->getEstadoGenerado() == 1) {            
             $arrBotonGenerarEmpleados['disabled'] = true;         
             $arrBotonEliminarEmpleados['disabled'] = true;                                    
             $arrBotonEliminarTodoEmpleados['disabled'] = true;            
             
         }
-        if($arProgramacionPago->getEstadoPagado() == 1) {            
-            $arrBotonRetirarConceptoValor['disabled'] = true;
-            $arrBotonAplicarDiaLaborado['disabled'] = true;
-            $arrBotonEliminarTodoAdicionalesValor['disabled'] = true;
-        }
         $form = $this->createFormBuilder()    
                     ->add('BtnGenerarEmpleados', 'submit', $arrBotonGenerarEmpleados)                        
                     ->add('BtnEliminarEmpleados', 'submit', $arrBotonEliminarEmpleados)
-                    ->add('BtnRetirarConceptoValor', 'submit', $arrBotonRetirarConceptoValor)
-                    ->add('BtnAplicaDiaLaborado', 'submit', $arrBotonAplicarDiaLaborado)
                     ->add('BtnEliminarTodoEmpleados', 'submit', $arrBotonEliminarTodoEmpleados)                    
-                    ->add('BtnEliminarTodoAdicionalesValor', 'submit', $arrBotonEliminarTodoAdicionalesValor)
                     ->getForm();  
         return $form;
     }    

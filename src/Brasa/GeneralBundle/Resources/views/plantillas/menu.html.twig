@@ -638,8 +638,8 @@
                                         <li><a href="{{ path('brs_rhu_pago_banco_lista') }}">Pago banco</a></li>
                                         <li><a href="{{ path('brs_rhu_liquidaciones_lista') }}">Liquidacion</a></li>
                                         <li role="separator" class="divider"></li>
-                                        <li><a href="{{ path('brs_rhu_pagos_adicionales_lista') }}">Adicional al pago</a></li>
-                                        <li><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_lista') }}">Adicional al pago (Masivo)</a></li>
+                                        <li><a href="{{ path('brs_rhu_pagos_adicionales_lista', { 'modalidad': 1, 'periodo': 0 }) }}">Adicional al pago (Permanente)</a></li>
+                                        <li><a href="{{ path('brs_rhu_pagos_adicionales_lista_fecha', { 'modalidad': 2 }) }}">Adicional al pago (Fecha)</a></li>                                        
                                         <li role="separator" class="divider"></li>
                                         <li><a href="{{ path('brs_rhu_licencias_lista') }}">Licencia</a></li>
                                         <li><a href="{{ path('brs_rhu_movimiento_incapacidad') }}">Incapacidad</a></li>

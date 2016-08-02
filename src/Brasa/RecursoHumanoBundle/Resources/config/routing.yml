@@ -139,8 +139,12 @@ brs_rhu_utilidades_control_acceso_visitante:
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesRegistroVisitas:registro }    
     
 brs_rhu_pagos_adicionales_lista:
-    path:     /rhu/pagos/adicionales/lista
+    path:     /rhu/pagos/adicionales/lista/{modalidad}/{periodo}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:lista }     
+
+brs_rhu_pagos_adicionales_lista_fecha:
+    path:     /rhu/pagos/adicionales/fecha/lista/{modalidad}
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:listaFecha }     
     
 brs_rhu_pagos_adicionales_detalle:
     path:     /rhu/pagos/adicionales/detalle/{codigoProgramacionPago}
@@ -153,38 +157,14 @@ brs_rhu_pagos_adicionales_generarmasivo_lista:
 brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle:
     path:     /rhu/pagos/adicionales/generarmasivo/suplementario/detalle/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionales:generarMasivoSuplementarioDetalle }
-
-brs_rhu_pagos_adicionales_agregar_tiempo:
-    path:     /rhu/pagos/adicionales/agregar/tiempo/{codigoProgramacionPago}
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:tiempo }
-    
-brs_rhu_pagos_adicionales_agregar_tiempoeditar:
-    path:     /rhu/pagos/adicionales/agregar/tiempoeditar/{codigoProgramacionPago}/{tipo}/{codigoPagoAdicional}
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:tiempoEditar }    
-
-brs_rhu_pagos_adicionales_agregar_valor:
-    path:     /rhu/pagos/adicionales/agregar/valor/{codigoProgramacionPago}/{tipo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:valor}
-    
-brs_rhu_pagos_adicionales_agregar_valoreditar:
-    path:     /rhu/pagos/adicionales/agregar/valoreditar/{codigoProgramacionPago}/{tipo}/{codigoPagoAdicional}
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:valorEditar} 
     
 brs_rhu_pagos_adicionales_agregar_valoradicionaleditar:
-    path:     /rhu/pagos/adicionales/agregar/valoradicionaleditar/{tipo}/{codigoPagoAdicional}
+    path:     /rhu/pagos/adicionales/agregar/valoradicionaleditar/{tipo}/{codigoPagoAdicional}/{modalidad}/{periodo}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:valorAdicionalEditar}    
     
 brs_rhu_pagos_adicionales_agregar_valoradicional:
-    path:     /rhu/pagos/adicionales/agregar/valoradicional/{tipo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:valorAdicional }
-    
-brs_rhu_pagos_adicionales_agregar_tiempoadicional:
-    path:     /rhu/pagos/adicionales/agregar/tiempoadicional/
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:tiempoAdicional } 
-    
-brs_rhu_pagos_adicionales_agregar_tiempoadicionaleditar:
-    path:     /rhu/pagos/adicionales/agregar/tiempoadicionaleditar/{tipo}/{codigoPagoAdicional}
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:tiempoAdicionalEditar }    
+    path:     /rhu/pagos/adicionales/agregar/valoradicional/{tipo}/{modalidad}/{periodo}
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:valorAdicional }       
 
 brs_rhu_liquidaciones_lista:
     path:     /rhu/liquidaciones/lista
@@ -399,7 +379,7 @@ brs_rhu_programaciones_pago_cargar_soporte_horario:
     defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPagoCargarSoporteHorario:cargar }
 
 brs_rhu_programaciones_pago_cargar_adicionales_pago:
-    path:     /rhu/programaciones/pago/cargar/adicionales/pago/{codigoProgramacionPago}
+    path:     /rhu/programaciones/pago/cargar/adicionales/pago/{periodo}
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCargarAdicionalesPago:cargar }
     
 brs_rhu_utilidades_medios_magneticos_informe:

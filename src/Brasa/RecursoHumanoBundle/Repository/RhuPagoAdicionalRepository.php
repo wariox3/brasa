@@ -45,10 +45,15 @@ class RhuPagoAdicionalRepository extends EntityRepository {
         return $dql;
     } 
     
-    public function listaAdicionalesDql($strIdentificacion = "", $aplicarDiaLaborado = "", $codigoCentroCosto = "", $codigoPagoConcepto = "", $estadoInactivo = "") {        
+    public function listaAdicionalesDql($strIdentificacion = "", $aplicarDiaLaborado = "", $codigoCentroCosto = "", $codigoPagoConcepto = "", $estadoInactivo = "", $modalidad = "", $periodo = "") {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT pa,e FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa JOIN pa.empleadoRel e WHERE pa.codigoPagoAdicionalPk <> 0 AND pa.permanente = 1";   
-        
+        $dql   = "SELECT pa,e FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa JOIN pa.empleadoRel e WHERE pa.codigoPagoAdicionalPk <> 0 ";   
+        if($periodo != "" && $periodo != 0) {
+            $dql .= " AND pa.codigoPeriodoFk = " . $periodo;
+        } 
+        if($modalidad != "" ) {
+            $dql .= " AND pa.modalidad = " . $modalidad;
+        }        
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
         }
@@ -96,15 +101,21 @@ class RhuPagoAdicionalRepository extends EntityRepository {
         return $dql;
     }
     
-    public function programacionPago($codigoEmpleado = "", $codigoProgramacionPago = "") {
+    public function programacionPago($codigoEmpleado = "", $fechaDesde, $fechaHasta) {
         $em = $this->getEntityManager();
         $dql = "SELECT pa FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa "
-                . "WHERE (pa.codigoProgramacionPagoFk = $codigoProgramacionPago OR pa.permanente = 1) AND pa.estadoInactivo = 0 AND pa.codigoEmpleadoFk = $codigoEmpleado";
+                . "WHERE (((pa.fecha >= '$fechaDesde' AND pa.fecha <= '$fechaHasta') AND pa.modalidad = 2) OR pa.modalidad = 1) AND pa.estadoInactivo = 0 AND pa.codigoEmpleadoFk = $codigoEmpleado";
         $objQuery = $em->createQuery($dql);  
         $arPagosAdicionales = $objQuery->getResult();         
         return $arPagosAdicionales;
     } 
- 
+    public function programacionPagoDql($codigoEmpleado = "", $fechaDesde, $fechaHasta) {
+        $em = $this->getEntityManager();
+        $dql = "SELECT pa FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa "
+                . "WHERE (((pa.fecha >= '$fechaDesde' AND pa.fecha <= '$fechaHasta') AND pa.modalidad = 2) OR pa.modalidad = 1) AND pa.estadoInactivo = 0 AND pa.codigoEmpleadoFk = $codigoEmpleado";        
+        return $dql;
+    }
+    
     public function bonificacionNoPrestacional($codigoEmpleado, $codigoProgramacionPago) {
         $em = $this->getEntityManager();
         $dql   = "SELECT SUM(pa.valor) as valor FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa "

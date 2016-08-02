@@ -33,6 +33,21 @@ class RhuPagoAdicional
     private $tipoAdicional;    
     
     /**
+     * @ORM\Column(name="modalidad", type="integer", nullable=true)
+     */    
+    private $modalidad = 0;    
+
+    /**
+     * @ORM\Column(name="codigo_periodo_fk", type="integer", nullable=true)
+     */    
+    private $codigoPeriodoFk;
+    
+    /**
+     * @ORM\Column(name="fecha", type="date", nullable=true)
+     */    
+    private $fecha;     
+    
+    /**
      * @ORM\Column(name="cantidad", type="float")
      */
     private $cantidad = 0; 
@@ -465,5 +480,77 @@ class RhuPagoAdicional
     public function getEstadoInactivo()
     {
         return $this->estadoInactivo;
+    }
+
+    /**
+     * Set modalidad
+     *
+     * @param integer $modalidad
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setModalidad($modalidad)
+    {
+        $this->modalidad = $modalidad;
+
+        return $this;
+    }
+
+    /**
+     * Get modalidad
+     *
+     * @return integer
+     */
+    public function getModalidad()
+    {
+        return $this->modalidad;
+    }
+
+    /**
+     * Set fecha
+     *
+     * @param \DateTime $fecha
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setFecha($fecha)
+    {
+        $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    /**
+     * Get fecha
+     *
+     * @return \DateTime
+     */
+    public function getFecha()
+    {
+        return $this->fecha;
+    }
+
+    /**
+     * Set codigoPeriodoFk
+     *
+     * @param integer $codigoPeriodoFk
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setCodigoPeriodoFk($codigoPeriodoFk)
+    {
+        $this->codigoPeriodoFk = $codigoPeriodoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPeriodoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPeriodoFk()
+    {
+        return $this->codigoPeriodoFk;
     }
 }

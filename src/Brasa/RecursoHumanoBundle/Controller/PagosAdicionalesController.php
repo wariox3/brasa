@@ -15,14 +15,14 @@ class PagosAdicionalesController extends Controller
     var $identificacion = "";
     var $aplicarDiaLaborado = 2;
     
-    public function listaAction() {
+    public function listaAction($modalidad, $periodo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');
         $form = $this->formularioLista();
         $form->handleRequest($request);
-        $this->listar($form);
+        $this->listar($form, $modalidad, $periodo);
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         if($form->isValid()) {
             if($form->get('BtnRetirarConcepto')->isClicked()) {
@@ -34,7 +34,7 @@ class PagosAdicionalesController extends Controller
                         $em->remove($arPagoAdicional);
                     }
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista'));
+                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista', array('modalidad' => $modalidad, 'periodo' => $periodo)));
                 }
             }
             if($form->get('BtnInactivar')->isClicked()) {
@@ -51,7 +51,7 @@ class PagosAdicionalesController extends Controller
                         $em->persist($arPagoAdicional);
                     }
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista'));
+                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista', array('modalidad' => $modalidad, 'periodo' => $periodo)));
                 }
             }            
             if($form->get('BtnAplicaDiaLaborado')->isClicked()) {
@@ -68,28 +68,122 @@ class PagosAdicionalesController extends Controller
                         $em->persist($arPagoAdicional);
                     }
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista'));
+                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista', array('modalidad' => $modalidad, 'periodo' => $periodo)));
                 }
             }
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form);
                 $form = $this->formularioLista();
-                $this->listar($form);
+                $this->listar($form, $modalidad, $periodo);
             }
             if($form->get('BtnExcel')->isClicked()) {
                 $this->filtrarLista($form);
                 $form = $this->formularioLista();
-                $this->listar($form);
+                $this->listar($form, $modalidad, $periodo);
                 $this->generarExcel();
             }
         }
         //$this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->listaDql("");        
+        $nombreModalidad = "";
+        if($modalidad == 1) {
+            $nombreModalidad = "PERMANENTES";
+        }
+        if($modalidad == 2) {
+            $nombreModalidad = "FECHA";
+        }        
         $arPagosAdicionales = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:lista.html.twig', array(
                     'arPagosAdicionales' => $arPagosAdicionales,
+                    'modalidad' => $modalidad,
+                    'nombreModalidad' => $nombreModalidad,
+                    'periodo' => $periodo,
                     'form' => $form->createView()
                     ));
     }
+    
+    public function listaFechaAction($modalidad) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $objMensaje = $this->get('mensajes_brasa');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $form = $this->formularioPeriodo();
+        $form->handleRequest($request);                
+        if($form->isValid()) {
+            if($form->get('BtnRetirarConcepto')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados as $codigoPagoAdicional) {
+                        $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+                        $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
+                        $em->remove($arPagoAdicional);
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista', array('modalidad' => $modalidad, 'periodo' => $periodo)));
+                }
+            }
+            if($form->get('BtnInactivar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados as $codigoPagoAdicional) {
+                        $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+                        $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
+                        if($arPagoAdicional->getEstadoInactivo() == 1) {
+                            $arPagoAdicional->setEstadoInactivo(0);
+                        } else {
+                            $arPagoAdicional->setEstadoInactivo(1);
+                        }
+                        $em->persist($arPagoAdicional);
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista', array('modalidad' => $modalidad, 'periodo' => $periodo)));
+                }
+            }            
+            if($form->get('BtnAplicaDiaLaborado')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados as $codigoPagoAdicional) {
+                        $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+                        $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
+                        if($arPagoAdicional->getAplicaDiaLaborado() == 1) {
+                            $arPagoAdicional->setAplicaDiaLaborado(0);
+                        } else {
+                            $arPagoAdicional->setAplicaDiaLaborado(1);
+                        }
+                        $em->persist($arPagoAdicional);
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista', array('modalidad' => $modalidad, 'periodo' => $periodo)));
+                }
+            }
+            if($form->get('BtnFiltrar')->isClicked()) {
+                $this->filtrarLista($form);
+                $form = $this->formularioLista();
+                $this->listar($form, $modalidad);
+            }
+            if($form->get('BtnExcel')->isClicked()) {
+                $this->filtrarLista($form);
+                $form = $this->formularioLista();
+                $this->listar($form, $modalidad);
+                $this->generarExcel();
+            }
+        }
+        $nombreModalidad = "";
+        if($modalidad == 1) {
+            $nombreModalidad = "PERMANENTES";
+        }
+        if($modalidad == 2) {
+            $nombreModalidad = "FECHA";
+        }        
+        $dql = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalPeriodo')->listaDql();
+        $arPagosAdicionalesPeriodos = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 50);
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:periodo.html.twig', array(
+                    'arPagosAdicionalesPeriodos' => $arPagosAdicionalesPeriodos,
+                    'modalidad' => $modalidad,
+                    'nombreModalidad' => $nombreModalidad,
+                    'form' => $form->createView()
+                    ));
+    }    
     
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
@@ -151,7 +245,16 @@ class PagosAdicionalesController extends Controller
         return $form;
     }
     
-    private function listar($form) {
+    private function formularioPeriodo() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();                 
+        $form = $this->createFormBuilder()
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->getForm();
+        return $form;
+    }
+    
+    private function listar($form, $modalidad, $periodo) {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->listaAdicionalesDql(                    
@@ -159,7 +262,10 @@ class PagosAdicionalesController extends Controller
             $session->get('filtroAplicarDiaLaborado'),        
             $session->get('filtroCodigoCentroCosto'),
             $session->get('filtroCodigoPagoConcepto'),
-            $session->get('filtroPagoAdicionalEstadoInactivo'));
+            $session->get('filtroPagoAdicionalEstadoInactivo'),
+            $modalidad,
+            $periodo
+            );
     }
 
     private function filtrarLista($form) {

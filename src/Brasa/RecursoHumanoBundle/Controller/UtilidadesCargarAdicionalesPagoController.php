@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class UtilidadesCargarAdicionalesPagoController extends Controller
 {
-    public function cargarAction($codigoProgramacionPago) {
+    public function cargarAction($periodo) {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $request = $this->getRequest();
@@ -17,12 +17,17 @@ class UtilidadesCargarAdicionalesPagoController extends Controller
             ->add('BtnCargar', 'submit', array('label'  => 'Cargar'))
             ->getForm();
         $form->handleRequest($request);
-        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-        $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);                                                                        
         if($form->isValid()) {
             if($form->get('BtnCargar')->isClicked()) {
                 set_time_limit(0);
                 ini_set("memory_limit", -1);
+                $fecha = new \DateTime('now');
+                if($periodo != 0 && $periodo != "") {
+                    $arPagoAdicionalPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalPeriodo();                                    
+                    $arPagoAdicionalPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalPeriodo')->find($periodo);            
+                    $fecha = $arPagoAdicionalPeriodo->getFecha();                    
+                }
+                
                 $form['attachment']->getData()->move($rutaTemporal->getRutaTemporal(), "archivo.xls");                
                 $ruta = $rutaTemporal->getRutaTemporal(). "archivo.xls";                
                 $arrCarga = array();
@@ -64,14 +69,20 @@ class UtilidadesCargarAdicionalesPagoController extends Controller
                     }                    
                     if($arPagoConcepto) {
                         if($arEmpleado) {
-                            $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                            $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
+                            $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();                            
                             $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
                             $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                            $arPagoAdicional->setPermanente(0);
+                            $arPagoAdicional->setPermanente(1);
                             $arPagoAdicional->setValor($carga['valor']);
                             $arPagoAdicional->setTipoAdicional($carga['tipo']);
                             $arPagoAdicional->setDetalle($carga['detalle']);
+                            $arPagoAdicional->setModalidad(1);
+                            if($periodo != 0 && $periodo != "") {
+                                $arPagoAdicional->setPermanente(0);
+                                $arPagoAdicional->setModalidad(2);
+                                $arPagoAdicional->setCodigoPeriodoFk($periodo);
+                                $arPagoAdicional->setFecha($fecha);
+                            }
                             $em->persist($arPagoAdicional);                             
                         } else {
                             $error .= "Empleado" . $carga['identificacion'] . " no existe ";

@@ -35,7 +35,7 @@
                     <div class="col-sm-9">
                             {{ form_widget(form.pagoConceptoRel, { 'attr': {'class': 'form-control'} }) }}
                     </div>
-                </div>                        
+                </div>                     
                 <div class="form-group form-group-sm">
                     <label for="TxtValor" class="col-sm-3 control-label">Valor:</label>
                     <div class="col-sm-9">
@@ -58,7 +58,7 @@
             </div>
 
             <div class="modal-footer">                
-                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_pagos_adicionales_lista') }}">Cancelar</a>
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_pagos_adicionales_lista', {'modalidad': modalidad, 'periodo': periodo}) }}">Cancelar</a>
                 {{ form_widget(form.BtnGuardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
                 {{ form_widget(form.BtnGuardaryNuevo, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
             </div>
