@@ -188,6 +188,7 @@ class ProgramacionController extends Controller
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
         $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion);
         $form = $this->formularioDetalleEditar();
@@ -203,13 +204,7 @@ class ProgramacionController extends Controller
             }
         }
         $strAnioMes = $arProgramacion->getFecha()->format('Y/m');
-        $arrDiaSemana = array();
-        for($i = 1; $i <= 31; $i++) {
-            $strFecha = $strAnioMes . '/' . $i;
-            $dateFecha = date_create($strFecha);
-            $diaSemana = $this->devuelveDiaSemanaEspaniol($dateFecha);
-            $arrDiaSemana[$i] = array('dia' => $i, 'diaSemana' => $diaSemana);
-        }        
+        $arrDiaSemana = $objFunciones->diasMes($arProgramacion->getFecha(), $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arProgramacion->getFecha()->format('Y-m-').'01', $arProgramacion->getFecha()->format('Y-m-').'31'));       
         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
         if($codigoPuesto == 0) {
             $dql = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->listaDql($codigoProgramacion, "");            
