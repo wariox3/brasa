@@ -118,6 +118,11 @@ class TurSoportePagoPeriodo
      */    
     private $diaDescanso = 0;    
     
+    /**     
+     * @ORM\Column(name="inconsistencias", type="boolean")
+     */    
+    private $inconsistencias = false;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="TurCentroCosto", inversedBy="soportesPagosPeriodosCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
@@ -134,6 +139,11 @@ class TurSoportePagoPeriodo
      * @ORM\OneToMany(targetEntity="TurSoportePago", mappedBy="soportePagoPeriodoRel")
      */
     protected $soportesPagosSoportePagoPeriodoRel;    
+    
+   /**
+     * @ORM\OneToMany(targetEntity="TurSoportePagoInconsistencia", mappedBy="soportePagoPeriodoRel")
+     */
+    protected $soportesPagosInconsistenciasSoportePagoPeriodoRel;    
     
    /**
      * @ORM\OneToMany(targetEntity="TurSoportePagoDetalle", mappedBy="soportePagoPeriodoRel")
@@ -754,5 +764,63 @@ class TurSoportePagoPeriodo
     public function getEstadoBloquearProgramacion()
     {
         return $this->estadoBloquearProgramacion;
+    }
+
+    /**
+     * Set inconsistencias
+     *
+     * @param boolean $inconsistencias
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setInconsistencias($inconsistencias)
+    {
+        $this->inconsistencias = $inconsistencias;
+
+        return $this;
+    }
+
+    /**
+     * Get inconsistencias
+     *
+     * @return boolean
+     */
+    public function getInconsistencias()
+    {
+        return $this->inconsistencias;
+    }
+
+    /**
+     * Add soportesPagosInconsistenciasSoportePagoPeriodoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoInconsistencia $soportesPagosInconsistenciasSoportePagoPeriodoRel
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function addSoportesPagosInconsistenciasSoportePagoPeriodoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoInconsistencia $soportesPagosInconsistenciasSoportePagoPeriodoRel)
+    {
+        $this->soportesPagosInconsistenciasSoportePagoPeriodoRel[] = $soportesPagosInconsistenciasSoportePagoPeriodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove soportesPagosInconsistenciasSoportePagoPeriodoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoInconsistencia $soportesPagosInconsistenciasSoportePagoPeriodoRel
+     */
+    public function removeSoportesPagosInconsistenciasSoportePagoPeriodoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoInconsistencia $soportesPagosInconsistenciasSoportePagoPeriodoRel)
+    {
+        $this->soportesPagosInconsistenciasSoportePagoPeriodoRel->removeElement($soportesPagosInconsistenciasSoportePagoPeriodoRel);
+    }
+
+    /**
+     * Get soportesPagosInconsistenciasSoportePagoPeriodoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSoportesPagosInconsistenciasSoportePagoPeriodoRel()
+    {
+        return $this->soportesPagosInconsistenciasSoportePagoPeriodoRel;
     }
 }

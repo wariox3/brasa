@@ -89,4 +89,48 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
         }
     }     
 
+    public function analizarInconsistencias($codigoSoportePagoPeriodo) {
+        $em = $this->getEntityManager();
+        $em->getRepository('BrasaTurnoBundle:TurSoportePagoInconsistencia')->limpiar($codigoSoportePagoPeriodo);        
+        $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
+        $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
+        $arSoportePagoPeriodo->setInconsistencias(0);
+        $arrInconsistencias = array();
+        $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+        $arSoportesPago = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));        
+        foreach ($arSoportesPago as $arSoportePago) {
+            if($arSoportePago->getCodigoRecursoFk()) {
+                if($arSoportePago->getCodigoContratoFk()) {
+                    $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arSoportePago->getRecursoRel()->getCodigoEmpleadoFk(), $arSoportePago->getCodigoContratoFk(), $arSoportePagoPeriodo->getFechaDesde(), $arSoportePagoPeriodo->getFechaHasta());                            
+                    $intDiasLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicenciaPeriodo($arSoportePagoPeriodo->getFechaDesde(), $arSoportePagoPeriodo->getFechaHasta(), $arSoportePago->getRecursoRel()->getCodigoEmpleadoFk());                            
+                    $intDiasIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->diasIncapacidadPeriodo($arSoportePagoPeriodo->getFechaDesde(), $arSoportePagoPeriodo->getFechaHasta(), $arSoportePago->getRecursoRel()->getCodigoEmpleadoFk());                
+
+                    if($intDiasVacaciones != $arSoportePago->getVacacion()) {
+                        $arrInconsistencias[] = array('inconsistencia' => "Vacaciones de " . $arSoportePago->getVacacion() . " dias en turnos y de " . $intDiasVacaciones . " en recurso humano", 'recurso' => $arSoportePago->getRecursoRel()->getNombreCorto(), 'numeroIdentificacion' => $arSoportePago->getRecursoRel()->getNumeroIdentificacion(), 'codigo'=> $arSoportePago->getRecursoRel()->getCodigoEmpleadoFk());
+                    }
+                    $intDiasLicenciaSoportePago = $arSoportePago->getLicencia()+$arSoportePago->getLicenciaNoRemunerada();
+                    if($intDiasLicencia != $intDiasLicenciaSoportePago) {
+                        $arrInconsistencias[] = array('inconsistencia' => "Licencias de " . $intDiasLicenciaSoportePago . " dias en turnos y de " . $intDiasLicencia . " en recurso humano", 'recurso' => $arSoportePago->getRecursoRel()->getNombreCorto(), 'numeroIdentificacion' => $arSoportePago->getRecursoRel()->getNumeroIdentificacion(), 'codigo'=> $arSoportePago->getRecursoRel()->getCodigoEmpleadoFk());
+                    }
+                    if($intDiasIncapacidad != $arSoportePago->getIncapacidad()) {
+                        $arrInconsistencias[] = array('inconsistencia' => "Incapacidades de " . $arSoportePago->getIncapacidad() . " dias en turnos y de " . $intDiasIncapacidad . " en recurso humano", 'recurso' => $arSoportePago->getRecursoRel()->getNombreCorto(), 'numeroIdentificacion' => $arSoportePago->getRecursoRel()->getNumeroIdentificacion(), 'codigo'=> $arSoportePago->getRecursoRel()->getCodigoEmpleadoFk());
+                    }                    
+                }                
+            }
+        }
+        if(count($arrInconsistencias) > 0) {  
+            $arSoportePagoPeriodo->setInconsistencias(1);
+            foreach ($arrInconsistencias as $arrInconsistencia) {
+                $arSoportePagoInconsistencia = new \Brasa\TurnoBundle\Entity\TurSoportePagoInconsistencia;
+                $arSoportePagoInconsistencia->setSoportePagoPeriodoRel($arSoportePagoPeriodo);
+                $arSoportePagoInconsistencia->setRecurso($arrInconsistencia['recurso']);
+                $arSoportePagoInconsistencia->setNumeroIdentificacion($arrInconsistencia['numeroIdentificacion']);
+                $arSoportePagoInconsistencia->setCodigoRecurso($arrInconsistencia['codigo']);
+                $arSoportePagoInconsistencia->setDetalle($arrInconsistencia['inconsistencia']);
+                $em->persist($arSoportePagoInconsistencia);                        
+            }            
+        }
+        $em->persist($arSoportePagoPeriodo);
+        $em->flush();                
+    }    
 }

@@ -246,6 +246,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
      * @param integer	Codigo de la programacion de pago
      */
     public function deshacer($codigoProgramacionPago) {
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getEntityManager();
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);

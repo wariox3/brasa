@@ -42,7 +42,7 @@
                 <th><p data-toggle="tooltip" data-placement="top" title="Dias periodo">D.P</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Dias festivos">D.F</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Dias adicionales">D.A</p></th>
-                <th>NOMINA</th>
+                <th>BLOQUEO</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -63,7 +63,8 @@
                 <td>{% if arSoportePagoPeriodos.estadoProgramacionPago == 1 %} SI {% else %} NO {% endif %}</td>                
                 {% if arSoportePagoPeriodos.estadoGenerado == 0 %}
                     <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }}">Generar</button></td>
-                    <td></td>                    
+                    <td></td>
+                    <td></td>                                        
                     <td style="text-align: center"><a href="{{ path('brs_tur_proceso_generar_soporte_pago_nuevo', {'codigoSoportePagoPeriodo': arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
                     <td style="text-align: center"><a href="{{ path('brs_tur_proceso_generar_soporte_pago_detalle', { 'codigoSoportePagoPeriodo': arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                            
                 {% else %}

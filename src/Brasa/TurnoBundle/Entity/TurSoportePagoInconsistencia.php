@@ -18,6 +18,11 @@ class TurSoportePagoInconsistencia
     private $codigoSoportePagoInconsistenciaPk;         
     
     /**
+     * @ORM\Column(name="codigo_soporte_pago_periodo_fk", type="integer", nullable=true)
+     */    
+    private $codigoSoportePagoPeriodoFk;    
+    
+    /**
      * @ORM\Column(name="detalle", type="string", length=200, nullable=true)
      */    
     private $detalle;                    
@@ -31,6 +36,17 @@ class TurSoportePagoInconsistencia
      * @ORM\Column(name="codigo_recurso", type="integer", nullable=true)
      */    
     private $codigoRecurso;  
+    
+    /**
+     * @ORM\Column(name="recurso", type="string", length=120, nullable=true)
+     */    
+    private $recurso;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurSoportePagoPeriodo", inversedBy="soportesPagosInconsistenciasSoportePagoPeriodoRel")
+     * @ORM\JoinColumn(name="codigo_soporte_pago_periodo_fk", referencedColumnName="codigo_soporte_pago_periodo_pk")
+     */
+    protected $soportePagoPeriodoRel;    
     
 
     /**
@@ -113,5 +129,77 @@ class TurSoportePagoInconsistencia
     public function getCodigoRecurso()
     {
         return $this->codigoRecurso;
+    }
+
+    /**
+     * Set codigoSoportePagoPeriodoFk
+     *
+     * @param integer $codigoSoportePagoPeriodoFk
+     *
+     * @return TurSoportePagoInconsistencia
+     */
+    public function setCodigoSoportePagoPeriodoFk($codigoSoportePagoPeriodoFk)
+    {
+        $this->codigoSoportePagoPeriodoFk = $codigoSoportePagoPeriodoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSoportePagoPeriodoFk
+     *
+     * @return integer
+     */
+    public function getCodigoSoportePagoPeriodoFk()
+    {
+        return $this->codigoSoportePagoPeriodoFk;
+    }
+
+    /**
+     * Set soportePagoPeriodoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportePagoPeriodoRel
+     *
+     * @return TurSoportePagoInconsistencia
+     */
+    public function setSoportePagoPeriodoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportePagoPeriodoRel = null)
+    {
+        $this->soportePagoPeriodoRel = $soportePagoPeriodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get soportePagoPeriodoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo
+     */
+    public function getSoportePagoPeriodoRel()
+    {
+        return $this->soportePagoPeriodoRel;
+    }
+
+    /**
+     * Set recurso
+     *
+     * @param string $recurso
+     *
+     * @return TurSoportePagoInconsistencia
+     */
+    public function setRecurso($recurso)
+    {
+        $this->recurso = $recurso;
+
+        return $this;
+    }
+
+    /**
+     * Get recurso
+     *
+     * @return string
+     */
+    public function getRecurso()
+    {
+        return $this->recurso;
     }
 }
