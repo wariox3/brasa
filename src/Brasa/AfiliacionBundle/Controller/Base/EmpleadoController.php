@@ -86,6 +86,10 @@ class EmpleadoController extends Controller
                 $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->eliminar($arrSeleccionados);
                 //return $this->redirect($this->generateUrl('brs_tur_base_empleado_concepto'));
             }
+            if ($form->get('BtnImprimir')->isClicked()) {
+               $objFormatoEmpleado = new \Brasa\AfiliacionBundle\Formatos\Empleado();
+               $objFormatoEmpleado->Generar($this, $codigoEmpleado);
+            }
 
         }
         $arEmpleado = new \Brasa\AfiliacionBundle\Entity\AfiEmpleado();
