@@ -628,8 +628,8 @@ class ContratosController extends Controller
         $session = $this->getRequest()->getSession();
         $session->set('dqlContratoLista', $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->listaDQL(
                 $session->get('filtroIdentificacion'),
-                $session->get('filtroDesde'),
-                $session->get('filtroHasta'),
+                $session->get('filtroDesdeInicia'),
+                $session->get('filtroHastaInicia'),
                 $session->get('filtroContratoActivo'),
                 $session->get('filtroCodigoCentroCosto')
                 ));
@@ -709,12 +709,8 @@ class ContratosController extends Controller
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $arrControles = $request->request->All();
-        if($controles['fechaDesdeInicia']) {
-            $this->fechaDesdeInicia = $controles['fechaDesdeInicia'];
-        }
-        if($controles['fechaHastaInicia']) {
-            $this->fechaHastaInicia = $controles['fechaHastaInicia'];
-        }
+        $session->set('filtroDesdeInicia', $form->get('fechaDesdeInicia')->getData());
+        $session->set('filtroHastaInicia', $form->get('fechaHastaInicia')->getData());
         $session->set('filtroIdentificacion', $form->get('txtNumeroIdentificacion')->getData());
         $session->set('filtroContratoActivo', $form->get('estadoActivo')->getData());
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);

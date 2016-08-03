@@ -12,7 +12,8 @@ class PeriodoDetalleController extends Controller
      * @Route("/afi/consulta/periodo/detalle", name="brs_afi_consulta_periodo_detalle")
      */    
     public function listaAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();        
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();        
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
@@ -20,12 +21,14 @@ class PeriodoDetalleController extends Controller
         if ($form->isValid()) {                      
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
-                $form = $this->formularioFiltro();
+                $this->formularioFiltro();
                 $this->lista();
             }
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
+                $this->lista();
                 $this->generarExcel();
+                
             }
         }
         
@@ -110,73 +113,110 @@ class PeriodoDetalleController extends Controller
         } 
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'COD')
-                    ->setCellValue('B1', 'CLIENTE')
-                    ->setCellValue('C1', 'TELEFONO')
-                    ->setCellValue('D1', 'EMAIL')
-                    ->setCellValue('E1', 'DESDE')
-                    ->setCellValue('F1', 'HASTA')
-                    ->setCellValue('G1', 'IDENTIFICACION')
-                    ->setCellValue('H1', 'NOMBRE')
-                    ->setCellValue('I1', 'ING')
-                    ->setCellValue('J1', 'DIAS')
-                    ->setCellValue('K1', 'SALARIO')
-                    ->setCellValue('L1', 'PENSION')
-                    ->setCellValue('M1', 'SALUD')
-                    ->setCellValue('N1', 'CAJA')
-                    ->setCellValue('O1', 'RIESGO')
-                    ->setCellValue('P1', 'ADMON')
-                    ->setCellValue('Q1', 'TOTAL');
+                    ->setCellValue('B1', 'DESDE')
+                    ->setCellValue('C1', 'HASTA')
+                    ->setCellValue('D1', 'IDENTIFICACION')
+                    ->setCellValue('E1', 'NOMBRE')
+                    ->setCellValue('F1', 'ING')
+                    ->setCellValue('G1', 'DIAS')
+                    ->setCellValue('H1', 'SALARIO')
+                    ->setCellValue('I1', 'PENSION')
+                    ->setCellValue('J1', 'SALUD')
+                    ->setCellValue('K1', 'CAJA')
+                    ->setCellValue('L1', 'RIESGO')
+                    ->setCellValue('M1', 'ADMON')
+                    ->setCellValue('N1', 'TOTAL');
 
         $i = 2;
         
         $query = $em->createQuery($this->strDqlLista);
-        $arPeriodoDetalles = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle();
+                 
+        //$arPeriodoDetalles = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle();
         $arPeriodoDetalles = $query->getResult();
-                
+        
+        $cliente = '';
+        $cliente2 = '';
+        $douTotal = 0;
+        $douTotalGeneral = 0;
+        $contador = 0; 
+        $contador2 = 0; 
         foreach ($arPeriodoDetalles as $arPeriodoDetalle) {
-            $cliente = '';
-            $cliente2 = '';
-            $douTotal = 0;
-            $douTotalGeneral = 0;
-            $contador = 0;
+            $contador2 = $contador2 + 1;
             if ($contador == 0){
                $cliente = $arPeriodoDetalle->getPeriodoRel()->getCodigoClienteFk();  
                $cliente2 = $arPeriodoDetalle->getPeriodoRel()->getCodigoClienteFk();
             }
             if ($cliente2 !=  $arPeriodoDetalle->getPeriodoRel()->getCodigoClienteFk()){
-                $douTotal = $douTotal;
-            
-            $cliente2 =  $arPeriodoDetalle->getPeriodoRel()->getCodigoClienteFk();
-            $douTotal = 0;
+                $objPHPExcel->getActiveSheet()->getStyle($i)->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle($i)->getAlignment()->setHorizontal('right');
+                $objPHPExcel->getActiveSheet()->getStyle($i)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('M'. $i, 'TOTAL:')
+                ->setCellValue('N'. $i, $douTotal);
+                $i = $i+1;
+                $cliente2 =  $arPeriodoDetalle->getPeriodoRel()->getCodigoClienteFk();
+                $douTotal = 0;
+                //$contador2 = $contador2 + 1;
             }
             if ($cliente != $arPeriodoDetalle->getPeriodoRel()->getCodigoClienteFk() || $contador == 0 ){
-                $nomCliente = $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getNombreCorto();
-                $telCliente = $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getTelefono();
-                $emailCliente = $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getEmail();
+                $objPHPExcel->getActiveSheet()->getStyle($i)->getFont()->setBold(true);
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getNombreCorto())
+                    ->setCellValue('B' . $i, $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getTelefono())
+                    ->setCellValue('C' . $i, $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getEmail());
+                $i = $i+1;
                 $cliente = $arPeriodoDetalle->getPeriodoRel()->getCodigoClienteFk();
+                //$contador2 = $contador2 + 1;
+                
             }
                      
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arPeriodoDetalle->getCodigoPeriodoDetallePk())
-                    ->setCellValue('B' . $i, $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getNombreCorto())
-                    ->setCellValue('C' . $i, $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getTelefono())
-                    ->setCellValue('D' . $i, $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getEmail())
-                    ->setCellValue('E' . $i, $arPeriodoDetalle->getFechaDesde()->format('Y/m/d'))
-                    ->setCellValue('F' . $i, $arPeriodoDetalle->getFechaHasta()->format('Y/m/d'))
-                    ->setCellValue('G' . $i, $arPeriodoDetalle->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('H' . $i, $arPeriodoDetalle->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arPeriodoDetalle->getIngreso()))
-                    ->setCellValue('J' . $i, $arPeriodoDetalle->getDias())
-                    ->setCellValue('K' . $i, $arPeriodoDetalle->getSalario())
-                    ->setCellValue('L' . $i, $arPeriodoDetalle->getContratoRel()->getEntidadPensionRel()->getNombre())
-                    ->setCellValue('M' . $i, $arPeriodoDetalle->getContratoRel()->getEntidadSaludRel()->getNombre())
-                    ->setCellValue('N' . $i, $arPeriodoDetalle->getContratoRel()->getEntidadCajaRel()->getNombre())
-                    ->setCellValue('O' . $i, $arPeriodoDetalle->getContratoRel()->getClasificacionRiesgoRel()->getNombre())
-                    ->setCellValue('P' . $i, $arPeriodoDetalle->getAdministracion())
-                    ->setCellValue('Q' . $i, $arPeriodoDetalle->getTotal());
+                    ->setCellValue('B' . $i, $arPeriodoDetalle->getFechaDesde()->format('Y/m/d'))
+                    ->setCellValue('C' . $i, $arPeriodoDetalle->getFechaHasta()->format('Y/m/d'))
+                    ->setCellValue('D' . $i, $arPeriodoDetalle->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('E' . $i, $arPeriodoDetalle->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('F' . $i, $objFunciones->devuelveBoolean($arPeriodoDetalle->getIngreso()))
+                    ->setCellValue('G' . $i, $arPeriodoDetalle->getDias())
+                    ->setCellValue('H' . $i, $arPeriodoDetalle->getSalario())
+                    ->setCellValue('I' . $i, $arPeriodoDetalle->getContratoRel()->getEntidadPensionRel()->getNombre())
+                    ->setCellValue('J' . $i, $arPeriodoDetalle->getContratoRel()->getEntidadSaludRel()->getNombre())
+                    ->setCellValue('K' . $i, $arPeriodoDetalle->getContratoRel()->getEntidadCajaRel()->getNombre())
+                    ->setCellValue('L' . $i, $arPeriodoDetalle->getContratoRel()->getClasificacionRiesgoRel()->getNombre())
+                    ->setCellValue('M' . $i, $arPeriodoDetalle->getAdministracion())
+                    ->setCellValue('N' . $i, $arPeriodoDetalle->getTotal());
+            $douTotalGeneral = $douTotalGeneral + $arPeriodoDetalle->getTotal();
+            $douTotal = $douTotal + $arPeriodoDetalle->getTotal();
             $contador++;
+            $contador2++;
             $i++;
         }
+        
+        if ($i == ($contador + 3)){
+                $objPHPExcel->getActiveSheet()->getStyle($i)->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle($i)->getAlignment()->setHorizontal('right');
+                $objPHPExcel->getActiveSheet()->getStyle($i)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('M'. $i, 'TOTAL:')
+                ->setCellValue('N'. $i, $douTotal);
+                
+        }
+        if ($contador2 == ($contador * 2)){
+                $objPHPExcel->getActiveSheet()->getStyle($i)->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle($i)->getAlignment()->setHorizontal('right');
+                $objPHPExcel->getActiveSheet()->getStyle($i)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('M'. $i, 'TOTAL:')
+                ->setCellValue('N'. $i, $douTotal);
+                
+        }
+        $i = $i + 1;
+        $objPHPExcel->getActiveSheet()->getStyle($i)->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle($i)->getAlignment()->setHorizontal('right');
+        $objPHPExcel->getActiveSheet()->getStyle($i)->getNumberFormat()->setFormatCode('#,##0');
+        $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('M'. $i, 'TOTAL GENERAL:')
+                ->setCellValue('N'. $i, $douTotalGeneral);
         
         $objPHPExcel->getActiveSheet()->setTitle('Periodo');
         $objPHPExcel->setActiveSheetIndex(0);

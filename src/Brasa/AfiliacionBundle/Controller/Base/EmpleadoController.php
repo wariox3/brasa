@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Brasa\AfiliacionBundle\Form\Type\AfiEmpleadoType;
 use Brasa\AfiliacionBundle\Form\Type\AfiContratoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+
 class EmpleadoController extends Controller
 {
     var $strDqlLista = "";
@@ -16,6 +17,7 @@ class EmpleadoController extends Controller
     public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();        
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->lista();
@@ -23,8 +25,12 @@ class EmpleadoController extends Controller
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_afi_base_empleado'));
+                try{
+                    $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->eliminar($arrSeleccionados);
+                    return $this->redirect($this->generateUrl('brs_afi_base_empleado'));
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el empleado, tiene registros asociados', $this);
+                  }
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
@@ -33,6 +39,7 @@ class EmpleadoController extends Controller
             }
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
+                $this->lista();
                 $this->generarExcel();
             }
         }
@@ -60,6 +67,10 @@ class EmpleadoController extends Controller
         if ($form->isValid()) {
             $arEmpleado = $form->getData(); 
             $arEmpleado->setNombreCorto($arEmpleado->getNombre1() . " " . $arEmpleado->getNombre2() . " " .$arEmpleado->getApellido1() . " " . $arEmpleado->getApellido2());
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
+            if($codigoEmpleado == 0) {
+                $arEmpleado->setCodigoUsuario($arUsuario->getUserName());
+            }
             $em->persist($arEmpleado);
             $em->flush();            
             if($form->get('guardarnuevo')->isClicked()) {
@@ -88,7 +99,7 @@ class EmpleadoController extends Controller
                 try{
                     $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->eliminar($arrSeleccionados,$codigoEmpleado);
                 } catch (ForeignKeyConstraintViolationException $e) { 
-                    $objMensaje->Mensaje('error', 'No se puede eliminar el registro porque esta siendo utilizado', $this);
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el contrato, tiene registros asociados', $this);
                   }
                 //return $this->redirect($this->generateUrl('brs_tur_base_empleado_concepto'));
             }
@@ -228,20 +239,147 @@ class EmpleadoController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'R'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
+        }      
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'NOMBRE');
-
+                    ->setCellValue('B1', 'IDENTIFICACION')
+                    ->setCellValue('C1', 'TIPO ID')
+                    ->setCellValue('D1', 'EMPLEADO')
+                    ->setCellValue('E1', 'CIUDAD')
+                    ->setCellValue('F1', 'DIRECCION')
+                    ->setCellValue('G1', 'BARRIO')
+                    ->setCellValue('H1', 'TELEFONO')
+                    ->setCellValue('I1', 'CELULAR')
+                    ->setCellValue('J1', 'EMAIL')
+                    ->setCellValue('K1', 'RH')
+                    ->setCellValue('L1', 'ESTADO CIVIL')
+                    ->setCellValue('M1', 'FECHA NAC')
+                    ->setCellValue('N1', 'SEXO')
+                    ->setCellValue('O1', 'CARGO')
+                    ->setCellValue('P1', 'FECHA DESDE')
+                    ->setCellValue('Q1', 'FECHA HASTA')
+                    ->setCellValue('R1', 'TIPO CONTIZANTE')
+                    ->setCellValue('S1', 'SUCURSAL')
+                    ->setCellValue('T1', 'PENSION')
+                    ->setCellValue('U1', 'SALUD')
+                    ->setCellValue('V1', 'ARL')
+                    ->setCellValue('W1', 'CAJA')
+                    ->setCellValue('X1', 'CLIENTE')
+                    ->setCellValue('Y1', 'INDEFINIDO')
+                    ->setCellValue('Z1', 'ACTIVO');
         $i = 2;
         
         $query = $em->createQuery($this->strDqlLista);
         $arEmpleados = new \Brasa\AfiliacionBundle\Entity\AfiEmpleado();
         $arEmpleados = $query->getResult();
                 
-        foreach ($arEmpleados as $arEmpleado) {            
+        foreach ($arEmpleados as $arEmpleado) {
+        $ciudad = '';
+        if ($arEmpleado->getCodigoCiudadFk() != null){
+            $ciudad = $arEmpleado->getCiudadRel()->getNombre();
+        }
+        $rh = '';
+        if ($arEmpleado->getCodigoRhPk() != null){
+            $rh = $arEmpleado->getRhRel()->getTipo();
+        }
+        $estadoCivil = '';
+        if ($arEmpleado->getCodigoEstadoCivilFk() != null){
+            $estadoCivil = $arEmpleado->getEstadoCivilRel()->getNombre();
+        }
+        if ($arEmpleado->getCodigoSexoFk() == 'M'){
+            $sexo = 'MASCULINO';
+        } else {
+            $sexo = 'FEMENINO';
+        }
+        if ($arEmpleado->getCodigoContratoActivo() == null){
+            $codigoContratoActivo = 0;
+        } else {
+            $codigoContratoActivo = $arEmpleado->getCodigoContratoActivo();
+        }
+        $arContrato = new \Brasa\AfiliacionBundle\Entity\AfiContrato();
+        $arContrato = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->find($codigoContratoActivo);
+        
+        $cargo = '';
+        $fechaDesde = '';
+        $fechaHasta = '';
+        $tipoCotizante = '';
+        $sucursal = '';
+        $pension = '';
+        $salud = '';
+        $arl = '';
+        $caja = '';
+        if ($arContrato != null){
+            
+            if ($arContrato->getCodigoCargoFk() != null){
+                $cargo = $arContrato->getCargoRel()->getNombre();
+            }
+            if ($arContrato->getFechaDesde() != null){
+                $fechaDesde = $arContrato->getFechaDesde()->format('Y-m-d');
+            }
+            if ($arContrato->getFechaHasta() != null){
+                $fechaHasta = $arContrato->getFechaHasta()->format('Y-m-d');
+            }
+            if ($arContrato->getCodigoTipoCotizanteFk() != null){
+                $tipoCotizante = $arContrato->getSsoTipoCotizanteRel()->getNombre();
+            }
+            if ($arContrato->getCodigoSucursalFk() != null){
+                $sucursal = $arContrato->getSucursalRel()->getNombre();
+            }
+            if ($arContrato->getCodigoEntidadPensionFk() != null){
+                $pension = $arContrato->getEntidadPensionRel()->getNombre();
+            }if ($arContrato->getCodigoEntidadSaludFk() != null){
+                $salud = $arContrato->getEntidadSaludRel()->getNombre();
+            }
+            if ($arContrato->getCodigoClasificacionRiesgoFk() != null){
+                $arl = $arContrato->getClasificacionRiesgoRel()->getNombre();
+            }
+            if ($arContrato->getCodigoEntidadCajaFk() != null){
+                $caja = $arContrato->getEntidadCajaRel()->getNombre();
+            }
+        }
+        $cliente = '';
+        if ($arEmpleado->getCodigoClienteFk() != null){
+            $cliente = $arEmpleado->getClienteRel()->getNombreCorto();
+        }
+        if ($arEmpleado->getClienteRel()->getIndependiente() == 1){
+            $independiente = 'SI';
+        } else {
+            $independiente = 'NO';
+        }
+        if ($arEmpleado->getEstadoActivo() == 1){
+            $activo = 'SI';
+        } else {
+            $activo = 'NO';
+        }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arEmpleado->getCodigoEmpleadoPk())
-                    ->setCellValue('B' . $i, $arEmpleado->getNombre());                                    
+                    ->setCellValue('B' . $i, $arEmpleado->getNumeroIdentificacion())
+                    ->setCellValue('C' . $i, $arEmpleado->getTipoIdentificacionRel()->getNombre())
+                    ->setCellValue('D' . $i, $arEmpleado->getNombreCorto())
+                    ->setCellValue('E' . $i, $ciudad)
+                    ->setCellValue('F' . $i, $arEmpleado->getDireccion())
+                    ->setCellValue('G' . $i, $arEmpleado->getBarrio())
+                    ->setCellValue('H' . $i, $arEmpleado->getTelefono())
+                    ->setCellValue('I' . $i, $arEmpleado->getCelular())
+                    ->setCellValue('J' . $i, $arEmpleado->getCorreo())
+                    ->setCellValue('K' . $i, $rh)
+                    ->setCellValue('L' . $i, $estadoCivil)
+                    ->setCellValue('M' . $i, $arEmpleado->getFechaNacimiento()->format('Y-m-d'))
+                    ->setCellValue('N' . $i, $sexo)
+                    ->setCellValue('O' . $i, $cargo)
+                    ->setCellValue('P' . $i, $fechaDesde)
+                    ->setCellValue('Q' . $i, $fechaHasta)
+                    ->setCellValue('R' . $i, $tipoCotizante)
+                    ->setCellValue('S' . $i, $sucursal)
+                    ->setCellValue('T' . $i, $pension)
+                    ->setCellValue('U' . $i, $salud)
+                    ->setCellValue('V' . $i, $arl)
+                    ->setCellValue('W' . $i, $caja)
+                    ->setCellValue('X' . $i, $cliente)
+                    ->setCellValue('Y' . $i, $independiente)
+                    ->setCellValue('Z' . $i, $activo);                                    
             $i++;
         }
         
