@@ -19,12 +19,15 @@ class AfiContratoRepository extends EntityRepository {
         return $dql;
     }                
     
-    public function eliminar($arrSeleccionados) {
+    public function eliminar($arrSeleccionados,$codigoEmpleado) {
         $em = $this->getEntityManager();
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigo) {
                 $ar = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->find($codigo);
                 $em->remove($ar);
+                $arEmpleado = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->find($codigoEmpleado);
+                $arEmpleado->setCodigoContratoActivo(null);
+                $em->persist($arEmpleado);
             }
             $em->flush();
         }

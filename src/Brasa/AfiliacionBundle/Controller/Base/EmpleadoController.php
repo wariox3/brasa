@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\AfiliacionBundle\Form\Type\AfiEmpleadoType;
 use Brasa\AfiliacionBundle\Form\Type\AfiContratoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 class EmpleadoController extends Controller
 {
     var $strDqlLista = "";
@@ -78,12 +79,17 @@ class EmpleadoController extends Controller
     public function detalleAction(Request $request, $codigoEmpleado = '') {
         $em = $this->getDoctrine()->getManager();        
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioDetalle();
         $form->handleRequest($request);        
         if ($form->isValid()) {                            
             if ($form->get('BtnEliminarContrato')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarContrato');
-                $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->eliminar($arrSeleccionados);
+                try{
+                    $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->eliminar($arrSeleccionados,$codigoEmpleado);
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el registro porque esta siendo utilizado', $this);
+                  }
                 //return $this->redirect($this->generateUrl('brs_tur_base_empleado_concepto'));
             }
             if ($form->get('BtnImprimir')->isClicked()) {
