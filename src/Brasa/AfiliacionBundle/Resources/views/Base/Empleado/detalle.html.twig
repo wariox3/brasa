@@ -32,21 +32,43 @@
                     <tr>
                         <td class="titulo">CODIGO:</td>
                         <td class="td-in-well">{{ arEmpleado.codigoEmpleadoPk }}</td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
-                    </tr>
-                    <tr>
                         <td class="titulo">IDENTIFICACION:</td>
                         <td class="td-in-well">{{ arEmpleado.numeroIdentificacion }}</td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
-                    </tr>                    
+                        <td class="titulo">TIPO IDENTIFICACION:</td>
+                        <td class="td-in-well">{{ arEmpleado.tipoIdentificacionRel.nombre | default('') }}</td>
+                    </tr>
                     <tr>
                         <td class="titulo">NOMBRE:</td>
                         <td class="td-in-well">{{ arEmpleado.nombreCorto }}</td>
+                        <td class="titulo">CIUDAD:</td>
+                        <td class="td-in-well">{{ arEmpleado.ciudadRel.nombre | default('') }}</td>
+                        <td class="titulo">DIRECCION:</td>
+                        <td class="td-in-well">{{ arEmpleado.direccion }}</td>
+                    </tr>                    
+                    <tr>
+                        <td class="titulo">BARRIO:</td>
+                        <td class="td-in-well">{{ arEmpleado.barrio }}</td>
+                        <td class="titulo">TELEFONO:</td>
+                        <td class="td-in-well">{{ arEmpleado.telefono }}</td>
+                        <td class="titulo">CELULAR:</td>
+                        <td class="td-in-well">{{ arEmpleado.celular }}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">EMAIL:</td>
+                        <td class="td-in-well">{{ arEmpleado.correo }}</td>
+                        <td class="titulo">RH:</td>
+                        <td class="td-in-well">{{ arEmpleado.rhRel.tipo | default('') }}</td>
+                        <td class="titulo">ESTADO CIVIL:</td>
+                        <td class="td-in-well">{{ arEmpleado.estadoCivilRel.nombre | default('') }}</td>
+                    </tr>
+                    <tr>
+                        <td class="titulo">FECHA NACIMIENTO:</td>
+                        <td class="td-in-well">{{ arEmpleado.fechaNacimiento | date('Y-m-d') }}</td>
+                        <td class="titulo">SEXO:</td>
+                        <td class="td-in-well">{% if arEmpleado.codigoSexoFk == "M" %}MASCULINO{% else %}FEMENINO{% endif %}</td>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
-                    </tr>                    
+                    </tr>
                 </table>
             </div>
         </div>
