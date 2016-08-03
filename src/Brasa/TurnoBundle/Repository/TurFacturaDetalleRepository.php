@@ -16,11 +16,14 @@ class TurFacturaDetalleRepository extends EntityRepository {
         return $dql;
     }     
     
-    public function listaCliente($codigoCliente, $codigoFactura = "") {
-        $dql   = "SELECT fd FROM BrasaTurnoBundle:TurFacturaDetalle fd JOIN fd.facturaRel f WHERE f.codigoClienteFk =  " . $codigoCliente . " ";
+    public function listaCliente($codigoCliente, $codigoFactura = "", $tipo = "") {
+        $dql   = "SELECT fd FROM BrasaTurnoBundle:TurFacturaDetalle fd JOIN fd.facturaRel f JOIN f.facturaTipoRel ft WHERE f.codigoClienteFk =  " . $codigoCliente . " ";
         
         if($codigoFactura != '') {
             $dql .= "AND fd.codigoFacturaFk = " . $codigoFactura . " ";  
+        }    
+        if($tipo != '') {
+            $dql .= "AND ft.tipo = " . $tipo . " ";  
         }        
         $dql .= " ORDER BY fd.codigoFacturaDetallePk DESC";
         return $dql;

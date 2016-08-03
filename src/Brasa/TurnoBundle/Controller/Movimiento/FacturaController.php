@@ -288,9 +288,9 @@ class FacturaController extends Controller
     }
 
     /**
-     * @Route("/tur/movimiento/factura/detalle/factura/nuevo/{codigoFactura}", name="brs_tur_movimiento_factura_detalle_factura_nuevo")
+     * @Route("/tur/movimiento/factura/detalle/factura/nuevo/{codigoFactura}/{tipoCruce}", name="brs_tur_movimiento_factura_detalle_factura_nuevo")
      */
-    public function detalleFacturaNuevoAction($codigoFactura) {
+    public function detalleFacturaNuevoAction($codigoFactura, $tipoCruce) {
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $em = $this->getDoctrine()->getManager();
@@ -335,7 +335,7 @@ class FacturaController extends Controller
             }
         }
         
-        $dql = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->listaCliente($arFactura->getCodigoClienteFk());
+        $dql = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->listaCliente($arFactura->getCodigoClienteFk(), "", $tipoCruce);
         $arFacturaDetalles = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 500);        
         return $this->render('BrasaTurnoBundle:Movimientos/Factura:detalleNuevoFactura.html.twig', array(
             'arFactura' => $arFactura,
