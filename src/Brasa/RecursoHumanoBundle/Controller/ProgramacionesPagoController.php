@@ -169,48 +169,6 @@ class ProgramacionesPagoController extends Controller
                 return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
             }
 
-            //prueba
-            if($request->request->get('Prueba')) {
-                set_time_limit(0);
-                ini_set("memory_limit", -1);
-                $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-                $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
-                foreach ($arPagos as $arPago) {
-                    $arPagoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-                    $arPagoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($arPago->getCodigoPagoPk());                        
-                    $arPagosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
-                    $arPagosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $arPago->getCodigoPagoPk()));
-                    foreach ($arPagosDetalles AS $arPagoDetalle) {
-                        if($arPagoDetalle->getCodigoCreditoFk() != "") {
-                            $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                            $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arPagoDetalle->getCodigoCreditoFk());
-
-                            //Crear credito pago se guarda el pago en la tabla rhu_pago_credito
-                            $arPagoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
-                            $arPagoCredito->setCreditoRel($arCredito);
-                            $arPagoCredito->setPagoRel($arPagoDetalle->getPagoRel());
-                            $arPagoCredito->setfechaPago(new \ DateTime("now"));
-                            $arPagoCredito->setCreditoTipoPagoRel($arCredito->getCreditoTipoPagoRel());
-                            $arPagoCredito->setVrCuota($arPagoDetalle->getVrPago());
-                            //Actualizar el saldo del credito
-                            $arCredito->setNumeroCuotaActual($arCredito->getNumeroCuotaActual() + 1);
-                            $arCredito->setSaldo($arCredito->getSaldo() - $arPagoDetalle->getVrPago());                        
-                            $arCredito->setSaldoTotal($arCredito->getSaldo() - $arPagoDetalle->getVrPago());
-                            if($arCredito->getSaldo() <= 0) {
-                               $arCredito->setEstadoPagado(1);
-                            }
-                            $arPagoCredito->setSaldo($arCredito->getSaldo());
-                            $arPagoCredito->setNumeroCuotaActual($arCredito->getNumeroCuotaActual());
-                            $em->persist($arPagoCredito);
-                            $em->persist($arCredito);
-                        }                    
-                    }
-                }
-                $em->flush();
-                //return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
-                $objMensaje->Mensaje("error", "Recorrdio todo", $this);
-            }
-            //fin prueba
         }
         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arProgramacionPago->getCodigoCentroCostoFk());
