@@ -713,7 +713,7 @@ class FacturaController extends Controller
         foreach ($arFacturas as $arFactura) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, 'FAC')
-                    ->setCellValue('B' . $i, 'F1')
+                    ->setCellValue('B' . $i, $arFactura->getFacturaTipoRel()->getAbreviatura())
                     ->setCellValue('C' . $i, $arFactura->getNumero())
                     ->setCellValue('D' . $i, $arFactura->getFecha()->format('d/m/Y'))
                     ->setCellValue('E' . $i, $arFactura->getFechaVence()->format('d/m/Y'))

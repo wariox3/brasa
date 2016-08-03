@@ -52,7 +52,10 @@ class GenTipoIdentificacion
      */
     protected $rhuAspirantesTipoIdentificacionRel;
     
-    
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurCliente", mappedBy="tipoIdentificacionRel")
+     */
+    protected $turClientesTipoIdentificacionRel;    
     
     /**
      * Constructor
@@ -292,5 +295,39 @@ class GenTipoIdentificacion
     public function getRhuAspirantesTipoIdentificacionRel()
     {
         return $this->rhuAspirantesTipoIdentificacionRel;
+    }
+
+    /**
+     * Add turClientesTipoIdentificacionRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCliente $turClientesTipoIdentificacionRel
+     *
+     * @return GenTipoIdentificacion
+     */
+    public function addTurClientesTipoIdentificacionRel(\Brasa\TurnoBundle\Entity\TurCliente $turClientesTipoIdentificacionRel)
+    {
+        $this->turClientesTipoIdentificacionRel[] = $turClientesTipoIdentificacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove turClientesTipoIdentificacionRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCliente $turClientesTipoIdentificacionRel
+     */
+    public function removeTurClientesTipoIdentificacionRel(\Brasa\TurnoBundle\Entity\TurCliente $turClientesTipoIdentificacionRel)
+    {
+        $this->turClientesTipoIdentificacionRel->removeElement($turClientesTipoIdentificacionRel);
+    }
+
+    /**
+     * Get turClientesTipoIdentificacionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTurClientesTipoIdentificacionRel()
+    {
+        return $this->turClientesTipoIdentificacionRel;
     }
 }

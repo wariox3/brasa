@@ -43,6 +43,11 @@ class TurFacturaTipo
     private $documentoCartera;     
     
     /**
+     * @ORM\Column(name="abreviatura", type="string", length=10)
+     */
+    private $abreviatura;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurFactura", mappedBy="facturaTipoRel")
      */
     protected $facturasFacturaTipoRel; 
@@ -218,5 +223,29 @@ class TurFacturaTipo
     public function getFacturasFacturaTipoRel()
     {
         return $this->facturasFacturaTipoRel;
+    }
+
+    /**
+     * Set abreviatura
+     *
+     * @param string $abreviatura
+     *
+     * @return TurFacturaTipo
+     */
+    public function setAbreviatura($abreviatura)
+    {
+        $this->abreviatura = $abreviatura;
+
+        return $this;
+    }
+
+    /**
+     * Get abreviatura
+     *
+     * @return string
+     */
+    public function getAbreviatura()
+    {
+        return $this->abreviatura;
     }
 }

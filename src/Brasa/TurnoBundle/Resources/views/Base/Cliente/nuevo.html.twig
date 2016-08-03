@@ -6,9 +6,15 @@
     <h3>Nuevo cliente</h3>
     <div class="panel panel-default">
         <div class="panel-heading">Informacion general</div>
-        <div class="panel-body">                                       
+        <div class="panel-body">  
             <div class="form-group form-group-sm">
-                <label for="form_nit" class="col-sm-3 control-label">Nit:</label>
+                <label for="form_tipoIdentificacionRel" class="col-sm-3 control-label">Tipo:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.tipoIdentificacionRel, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>            
+            <div class="form-group form-group-sm">
+                <label for="form_nit" class="col-sm-3 control-label">Numero:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.nit, { 'attr': {'class': 'form-control'} }) }}                        
                 </div>                
@@ -30,7 +36,34 @@
                 <div class="col-sm-9">
                     {{ form_widget(form.nombreCompleto, { 'attr': {'class': 'form-control', 'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}                        
                 </div>                
+            </div> 
+            <div class="form-group form-group-sm">
+                <label for="form_nombre1" class="col-sm-3 control-label">Nombre 1:</label>
+                <div class="col-sm-9">
+                        
+                    {{ form_widget(form.nombre1, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                    
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_nombre2" class="col-sm-3 control-label">Nombre 2:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.nombre2, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_apellido1" class="col-sm-3 control-label">Apellido 1:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.apellido1, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_apellido2" class="col-sm-3 control-label">Apellido 2:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.apellido2, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                </div>
             </div>                
+                
             <div class="form-group form-group-sm">
                 <label for="form_asesorRel" class="col-sm-3 control-label">Asesor:</label>
                 <div class="col-sm-9">

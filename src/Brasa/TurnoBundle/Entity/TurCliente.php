@@ -18,6 +18,11 @@ class TurCliente
     private $codigoClientePk;    
     
     /**
+     * @ORM\Column(name="codigo_tipo_identificacion_fk", type="integer")
+     */    
+    private $codigoTipoIdentificacionFk;    
+    
+    /**
      * @ORM\Column(name="nit", type="string", length=15, nullable=false)
      */
     private $nit;        
@@ -36,6 +41,26 @@ class TurCliente
      * @ORM\Column(name="nombre_completo", type="string", length=200, nullable=true)
      */
     private $nombreCompleto;    
+    
+    /**
+     * @ORM\Column(name="nombre1", type="string", length=30, nullable=true)
+     */    
+    private $nombre1;        
+    
+    /**
+     * @ORM\Column(name="nombre2", type="string", length=30, nullable=true)
+     */    
+    private $nombre2;    
+    
+    /**
+     * @ORM\Column(name="apellido1", type="string", length=30, nullable=true)
+     */    
+    private $apellido1;    
+
+    /**
+     * @ORM\Column(name="apellido2", type="string", length=30, nullable=true)
+     */    
+    private $apellido2;    
     
     /**
      * @ORM\Column(name="codigo_sector_fk", type="integer")
@@ -186,6 +211,12 @@ class TurCliente
      * @ORM\JoinColumn(name="codigo_sector_comercial_fk", referencedColumnName="codigo_sector_comercial_pk")
      */
     protected $sectorComercialRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTipoIdentificacion", inversedBy="turClientesTipoIdentificacionRel")
+     * @ORM\JoinColumn(name="codigo_tipo_identificacion_fk", referencedColumnName="codigo_tipo_identificacion_pk")
+     */
+    protected $tipoIdentificacionRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="TurCotizacion", mappedBy="clienteRel")
@@ -1514,5 +1545,149 @@ class TurCliente
     public function getSectorComercialRel()
     {
         return $this->sectorComercialRel;
+    }
+
+    /**
+     * Set codigoTipoIdentificacionFk
+     *
+     * @param integer $codigoTipoIdentificacionFk
+     *
+     * @return TurCliente
+     */
+    public function setCodigoTipoIdentificacionFk($codigoTipoIdentificacionFk)
+    {
+        $this->codigoTipoIdentificacionFk = $codigoTipoIdentificacionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTipoIdentificacionFk
+     *
+     * @return integer
+     */
+    public function getCodigoTipoIdentificacionFk()
+    {
+        return $this->codigoTipoIdentificacionFk;
+    }
+
+    /**
+     * Set nombre1
+     *
+     * @param string $nombre1
+     *
+     * @return TurCliente
+     */
+    public function setNombre1($nombre1)
+    {
+        $this->nombre1 = $nombre1;
+
+        return $this;
+    }
+
+    /**
+     * Get nombre1
+     *
+     * @return string
+     */
+    public function getNombre1()
+    {
+        return $this->nombre1;
+    }
+
+    /**
+     * Set nombre2
+     *
+     * @param string $nombre2
+     *
+     * @return TurCliente
+     */
+    public function setNombre2($nombre2)
+    {
+        $this->nombre2 = $nombre2;
+
+        return $this;
+    }
+
+    /**
+     * Get nombre2
+     *
+     * @return string
+     */
+    public function getNombre2()
+    {
+        return $this->nombre2;
+    }
+
+    /**
+     * Set apellido1
+     *
+     * @param string $apellido1
+     *
+     * @return TurCliente
+     */
+    public function setApellido1($apellido1)
+    {
+        $this->apellido1 = $apellido1;
+
+        return $this;
+    }
+
+    /**
+     * Get apellido1
+     *
+     * @return string
+     */
+    public function getApellido1()
+    {
+        return $this->apellido1;
+    }
+
+    /**
+     * Set apellido2
+     *
+     * @param string $apellido2
+     *
+     * @return TurCliente
+     */
+    public function setApellido2($apellido2)
+    {
+        $this->apellido2 = $apellido2;
+
+        return $this;
+    }
+
+    /**
+     * Get apellido2
+     *
+     * @return string
+     */
+    public function getApellido2()
+    {
+        return $this->apellido2;
+    }
+
+    /**
+     * Set tipoIdentificacionRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenTipoIdentificacion $tipoIdentificacionRel
+     *
+     * @return TurCliente
+     */
+    public function setTipoIdentificacionRel(\Brasa\GeneralBundle\Entity\GenTipoIdentificacion $tipoIdentificacionRel = null)
+    {
+        $this->tipoIdentificacionRel = $tipoIdentificacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoIdentificacionRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenTipoIdentificacion
+     */
+    public function getTipoIdentificacionRel()
+    {
+        return $this->tipoIdentificacionRel;
     }
 }

@@ -9,7 +9,14 @@ class TurClienteType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder    
+        $builder   
+            ->add('tipoIdentificacionRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenTipoIdentificacion',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('ti')
+                    ->orderBy('ti.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                
             ->add('ciudadRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {
@@ -49,6 +56,10 @@ class TurClienteType extends AbstractType
             ->add('digitoVerificacion', 'text', array('required' => false))  
             ->add('nombreCorto', 'text', array('required' => true)) 
             ->add('nombreCompleto', 'text', array('required' => true))
+            ->add('nombre1', 'text', array('required' => true))
+            ->add('nombre2', 'text', array('required' => false))
+            ->add('apellido1', 'text', array('required' => true))
+            ->add('apellido2', 'text', array('required' => false))                            
             ->add('estrato', 'text', array('required' => false))  
             ->add('plazoPago', 'number', array('required' => false)) 
             ->add('direccion', 'text', array('required' => false))  
