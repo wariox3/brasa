@@ -31,10 +31,8 @@ class TurNovedadRepository extends EntityRepository {
         $em = $this->getEntityManager();
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigo) {
-                $arNovedad = $em->getRepository('BrasaTurnoBundle:TurNovedad')->find($codigo);
-                if($arNovedad->getEstadoAplicada() == 0) {
-                    $em->remove($arNovedad);
-                }                    
+                $arNovedad = $em->getRepository('BrasaTurnoBundle:TurNovedad')->find($codigo);                
+                $em->remove($arNovedad);                    
             }
             $em->flush();
         }
