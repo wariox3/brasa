@@ -195,6 +195,39 @@ class RhuIncapacidadRepository extends EntityRepository {
         return $intDiasIncapacidad;                     
     }                        
     
+    /*
+     * Tiene en cuena el dia 31
+     */        
+    public function diasIncapacidadPeriodo31($fechaDesde, $fechaHasta, $codigoEmpleado) {
+        $em = $this->getEntityManager();
+        $strFechaDesde = $fechaDesde->format('Y-m-d');
+        $strFechaHasta = $fechaHasta->format('Y-m-d');
+        $dql = "SELECT incapacidad FROM BrasaRecursoHumanoBundle:RhuIncapacidad incapacidad "
+                . "WHERE (((incapacidad.fechaDesde BETWEEN '$strFechaDesde' AND '$strFechaHasta') OR (incapacidad.fechaHasta BETWEEN '$strFechaDesde' AND '$strFechaHasta')) "
+                . "OR (incapacidad.fechaDesde >= '$strFechaDesde' AND incapacidad.fechaDesde <= '$strFechaHasta') "
+                . "OR (incapacidad.fechaHasta >= '$strFechaHasta' AND incapacidad.fechaDesde <= '$strFechaDesde')) "
+                . "AND incapacidad.codigoEmpleadoFk = '" . $codigoEmpleado . "' ";
+        $objQuery = $em->createQuery($dql);  
+        $arIncapacidades = $objQuery->getResult();         
+        $intDiasIncapacidad = 0;
+        foreach ($arIncapacidades as $arIncapacidad) {
+            $intDiaInicio = 1;            
+            $intDiaFin = 30;
+            if($arIncapacidad->getFechaDesde() <  $fechaDesde) {
+                $intDiaInicio = $fechaDesde->format('j');                
+            } else {
+                $intDiaInicio = $arIncapacidad->getFechaDesde()->format('j');
+            }
+            if($arIncapacidad->getFechaHasta() > $fechaHasta) {
+                $intDiaFin = $fechaHasta->format('j');                
+            } else {
+                $intDiaFin = $arIncapacidad->getFechaHasta()->format('j');
+            }                       
+            $intDiasIncapacidad += (($intDiaFin - $intDiaInicio)+1);
+        }
+        return $intDiasIncapacidad;                     
+    }    
+    
     public function validarFecha($fechaDesde, $fechaHasta, $codigoEmpleado, $codigoIncapacidad = "") {
         $em = $this->getEntityManager();
         $strFechaDesde = $fechaDesde->format('Y-m-d');
