@@ -215,17 +215,17 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                 $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoAdicional->getPagoConceptoRel()->getOperacion());
                 $arPagoDetalle->setDetalle($arPagoAdicional->getDetalle());
                 $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);                            
-
+                $douPagoDetalleOperado = $douPagoDetalle * $arPagoAdicional->getPagoConceptoRel()->getOperacion();
                 if($arPagoAdicional->getPagoConceptoRel()->getPrestacional() == 1) {
                     if($arPagoAdicional->getPagoConceptoRel()->getGeneraIngresoBaseCotizacion() == 1) {
-                        $douIngresoBaseCotizacion += $douPagoDetalle;    
-                        $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);
-                        $arPagoDetalle->setVrIngresoBaseCotizacionAdicional($douPagoDetalle);
+                        $douIngresoBaseCotizacion += $douPagoDetalleOperado;    
+                        $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalleOperado);
+                        $arPagoDetalle->setVrIngresoBaseCotizacionAdicional($douPagoDetalleOperado);
                         $arPagoDetalle->setCotizacion(1);
                     }
                     if($arPagoAdicional->getPagoConceptoRel()->getGeneraIngresoBasePrestacion() == 1) {
-                        $douIngresoBasePrestacional += $douPagoDetalle;    
-                        $arPagoDetalle->setVrIngresoBasePrestacion($douPagoDetalle);
+                        $douIngresoBasePrestacional += $douPagoDetalleOperado;    
+                        $arPagoDetalle->setVrIngresoBasePrestacion($douPagoDetalleOperado);
                     }                                                                                                                                                                
                     $arPagoDetalle->setPrestacional(1);
                 }
