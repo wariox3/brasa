@@ -106,15 +106,29 @@ class Empleado extends \FPDF_FPDF {
         if ($arEmpleado->getClienteRel()->getCodigoFormaPagoFk() != null){
             $formaPago = $arEmpleado->getClienteRel()->getFormaPagoRel()->getNombre();
         }
-        $this->Cell(45, 5, $formaPago, 1, 0, 'L', 1);        
+        $this->Cell(45, 5, $formaPago, 1, 0, 'L', 1);
+        //linea 4
+        $this->SetXY(10, $intY+20);
+        $this->SetFont('Arial','B',7);
+        $this->Cell(20, 5, "" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(49, 5, '', 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',7);
+        $this->Cell(19, 5, '', 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(47, 5, '', 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',7);
+        $this->Cell(17, 5, "AFILIACION:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(45, 5, number_format($arEmpleado->getClienteRel()->getAfiliacion(), 2, '.', ','), 1, 0, 'R', 1);
         //linea empleado
         $this->SetFillColor(272, 272, 272); 
-        $this->SetXY(10, $intY+20);
+        $this->SetXY(10, $intY+25);
         $this->SetFont('Arial','B',8);
         $this->Cell(197, 5, utf8_decode("EMPLEADO:") , 1, 0, 'L', 1);
-        //linea 4
+        //linea 5
         $this->SetFillColor(272, 272, 272); 
-        $this->SetXY(10, $intY+25);
+        $this->SetXY(10, $intY+30);
         $this->SetFont('Arial','B',7);
         $this->Cell(20, 5, utf8_decode("CODIGO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
@@ -138,8 +152,8 @@ class Empleado extends \FPDF_FPDF {
             $tipoIdentificacion = $arEmpleado->getTipoIdentificacionRel()->getNombre();
         }
         $this->Cell(45, 5, utf8_decode($tipoIdentificacion), 1, 0, 'L', 1);
-        //linea 5
-        $this->SetXY(10, $intY+30);
+        //linea 6
+        $this->SetXY(10, $intY+35);
         $this->SetFont('Arial','B',7);
         $this->Cell(20, 5, utf8_decode("EMPLEADO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',6.7);
@@ -156,8 +170,8 @@ class Empleado extends \FPDF_FPDF {
         $this->Cell(17, 5, utf8_decode("DIRECCION:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
         $this->Cell(45, 5, $arEmpleado->getDireccion(), 1, 0, 'L', 1);
-        //linea 6
-        $this->SetXY(10, $intY+35);
+        //linea 7
+        $this->SetXY(10, $intY+40);
         $this->SetFont('Arial','B',7);
         $this->Cell(20, 5, utf8_decode("BARRRIO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
@@ -169,8 +183,8 @@ class Empleado extends \FPDF_FPDF {
         $this->Cell(17, 5, utf8_decode("CELULAR") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
         $this->Cell(45, 5, $arEmpleado->getCelular(), 1, 0, 'L', 1);
-        //linea 7
-        $this->SetXY(10, $intY+40);
+        //linea 8
+        $this->SetXY(10, $intY+45);
         $this->SetFont('Arial','B',7);
         $this->Cell(20, 5, utf8_decode("EMAIL:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
@@ -191,8 +205,8 @@ class Empleado extends \FPDF_FPDF {
             $estadoCivil = $arEmpleado->getEstadoCivilRel()->getNombre();
         }
         $this->Cell(45, 5, $estadoCivil, 1, 0, 'L', 1);
-        //linea 8
-        $this->SetXY(10, $intY+45);
+        //linea 9
+        $this->SetXY(10, $intY+50);
         $this->SetFont('Arial','B',7);
         $this->Cell(20, 5, utf8_decode("FECHA. NAC:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
@@ -216,11 +230,11 @@ class Empleado extends \FPDF_FPDF {
         $this->Cell(45, 5, "", 1, 0, 'L', 1);
         //linea contrato
         $this->SetFillColor(272, 272, 272); 
-        $this->SetXY(10, $intY+50);
+        $this->SetXY(10, $intY+55);
         $this->SetFont('Arial','B',8);
         $this->Cell(197, 5, utf8_decode("CONTRATO:") , 1, 0, 'L', 1);
-        //linea 9
-        $this->SetXY(10, $intY+55);
+        //linea 10
+        $this->SetXY(10, $intY+60);
         $this->SetFont('Arial','B',7);
         $this->Cell(20, 5, utf8_decode("CARGO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',6);
@@ -237,8 +251,8 @@ class Empleado extends \FPDF_FPDF {
         $this->Cell(17, 5, "F. HASTA:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
         $this->Cell(45, 5, $arContrato->getFechaHasta()->format('Y-m-d'), 1, 0, 'L', 1);
-        //linea 10
-        $this->SetXY(10, $intY+60);
+        //linea 11
+        $this->SetXY(10, $intY+65);
         $this->SetFont('Arial','B',7);
         $this->Cell(20, 5, "INDEFINIDO" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
@@ -261,8 +275,8 @@ class Empleado extends \FPDF_FPDF {
         $this->Cell(17, 5, "SALARIO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
         $this->Cell(45, 5, number_format($arContrato->getVrSalario(), 2, '.', ','), 1, 0, 'R', 1);
-        //linea 11
-        $this->SetXY(10, $intY+65);
+        //linea 12
+        $this->SetXY(10, $intY+70);
         $this->SetFont('Arial','B',7);
         $this->Cell(20, 5, utf8_decode("T. COTIZANTE:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
@@ -283,8 +297,8 @@ class Empleado extends \FPDF_FPDF {
         $this->Cell(17, 5, '' , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
         $this->Cell(45, 5, '', 1, 0, 'L', 1);
-        //linea 12
-        $this->SetXY(10, $intY+70);
+        //linea 13
+        $this->SetXY(10, $intY+75);
         $this->SetFont('Arial','B',7);
         $this->Cell(20, 5, utf8_decode("PENSION:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
@@ -309,8 +323,8 @@ class Empleado extends \FPDF_FPDF {
             $arl = $arContrato->getClasificacionRiesgoRel()->getNombre();
         }
         $this->Cell(45, 5, $arl, 1, 0, 'L', 1);
-        //linea 13
-        $this->SetXY(10, $intY+75);
+        //linea 14
+        $this->SetXY(10, $intY+80);
         $this->SetFont('Arial','B',7);
         $this->Cell(20, 5, utf8_decode("CAJA:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
@@ -328,8 +342,8 @@ class Empleado extends \FPDF_FPDF {
         $this->Cell(17, 5, '' , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
         $this->Cell(45, 5, "", 1, 0, 'L', 1);
-        //linea 14
-        $this->SetXY(10, $intY+80);
+        //linea 15
+        $this->SetXY(10, $intY+85);
         $this->SetFont('Arial','B',8);
         $this->Cell(197, 5, utf8_decode("COMENTARIOS:").' '.$arEmpleado->getComentarios() , 1, 0, 'L', 1);        
         $this->EncabezadoDetalles();
