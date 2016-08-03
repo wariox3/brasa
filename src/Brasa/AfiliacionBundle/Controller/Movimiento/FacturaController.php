@@ -367,7 +367,7 @@ class FacturaController extends Controller
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'NOMBRE');
+                    ->setCellValue('B1', 'NUMERO');
 
         $i = 2;
         
@@ -378,7 +378,7 @@ class FacturaController extends Controller
         foreach ($arFacturas as $arFactura) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arFactura->getCodigoFacturaPk())
-                    ->setCellValue('B' . $i, $arFactura->getNombre());                                    
+                    ->setCellValue('B' . $i, $arFactura->getNumero());                                    
             $i++;
         }
         
