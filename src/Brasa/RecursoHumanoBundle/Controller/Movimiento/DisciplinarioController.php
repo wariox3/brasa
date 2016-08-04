@@ -452,7 +452,7 @@ class DisciplinarioController extends Controller
                             ->setCellValue('B' . $i, $arDisciplinario->getCentroCostoRel()->getNombre())
                             ->setCellValue('C' . $i, $arDisciplinario->getEmpleadoRel()->getNumeroIdentificacion())
                             ->setCellValue('D' . $i, $arDisciplinario->getEmpleadoRel()->getNombreCorto())
-                            ->setCellValue('E' . $i, $arDisciplinario->getEmpleadoRel()->getCargoRel()->getNombre())
+                            ->setCellValue('E' . $i, $arDisciplinario->getCargoRel()->getNombre())
                             ->setCellValue('F' . $i, $arDisciplinario->getPuesto())
                             ->setCellValue('G' . $i, $zona)
                             ->setCellValue('H' . $i, $operacion)

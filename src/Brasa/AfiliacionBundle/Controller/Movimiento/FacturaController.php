@@ -146,6 +146,7 @@ class FacturaController extends Controller
                         $objFactura = new \Brasa\AfiliacionBundle\Formatos\Factura();
                         $objFactura->Generar($this, $codigoFactura);                                            
                     } else {
+                        
                         $objCuentaCobro = new \Brasa\AfiliacionBundle\Formatos\CuentaCobro();
                         $objCuentaCobro->Generar($this, $codigoFactura);                                            
                     }
