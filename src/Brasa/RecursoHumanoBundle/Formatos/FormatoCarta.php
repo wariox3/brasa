@@ -133,6 +133,8 @@ class FormatoCarta extends \FPDF_FPDF {
             $feci = $arContrato->getFechaProrrogaInicio();
             $fecf = $arContrato->getFechaProrrogaFinal();
         }*/
+        $sustitucion4 = $arContrato->getFechaDesde()->format('Y-m-d');
+        $sustitucion7 = $arContrato->getFechaHasta()->format('Y-m-d');
         $feci = $arContrato->getFechaDesde();
         $fecf = $arContrato->getFechaHasta();
         $sustitucion4 = strftime("%d de ". $this->MesesEspañol($feci->format('m')) ." de %Y", strtotime($sustitucion4));
@@ -190,7 +192,7 @@ class FormatoCarta extends \FPDF_FPDF {
 
     public function Footer() {
         //$this->Cell(0,10,'Página '.$this->PageNo(),0,0,'C');
-        $this->Image('imagenes/logos/piedepagina.jpg' , 65 ,208, 150 , 90,'JPG');
+        $this->Image('imagenes/logos/piedepagina.jpg' , 10 ,260, 190 , 40,'JPG'); //x,y,largo,ancho
     }  
     
     public static function MesesEspañol($mes) {
