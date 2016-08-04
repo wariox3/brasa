@@ -222,27 +222,36 @@ class TurSoportePagoRepository extends EntityRepository {
         return true;        
     }    
     
-    public function generar($arSoportePago = "", $arSoportePagoPeriodo, $intDiaInicial, $intDiaFinal, $arFestivos, $dateFechaDesde, $dateFechaHasta, $codigoRecurso) {
+    public function generar($arSoportePago = "", $intDiaInicial, $intDiaFinal, $arFestivos, $dateFechaDesde, $dateFechaHasta) {
         $em = $this->getEntityManager();
-        $turnoFijo = 0;        
-        $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();        
-        $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigoRecurso);        
+        $turnoFijo = 0;                
+        $arRecurso = $arSoportePago->getRecursoRel();        
         if($arRecurso->getCodigoTurnoFijoNominaFk()) {
             $turnoFijo = 1;
         }   
-        $arrTurnoFijo[] = null;
+        $arrTurnoFijo[] = null;       
         $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
-        $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->periodo($dateFechaDesde->format('Y/m/') . "01",$dateFechaHasta->format('Y/m/') . "31", "", $codigoRecurso);
-        foreach ($arProgramacionDetalles as $arProgramacionDetalle) { 
-            for($i = $intDiaInicial; $i <= $intDiaFinal; $i++) {
-                $strFecha = $dateFechaDesde->format('Y/m/') . $i;
-                $dateFecha = date_create($strFecha);
-                $nuevafecha = strtotime ( '+1 day' , strtotime ( $strFecha ) ) ;
-                $dateFecha2 = date ( 'Y/m/j' , $nuevafecha );
-                $dateFecha2 = date_create($dateFecha2);
-                $boolFestivo = $this->festivo($arFestivos, $dateFecha);
-                $boolFestivo2 = $this->festivo($arFestivos, $dateFecha2);
-                $strTurno = $this->devuelveTurnoDia($arProgramacionDetalle, $i);                                                                 
+        $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->periodoDias($dateFechaDesde->format('Y'), $dateFechaDesde->format('m'), $arRecurso->getCodigoRecursoPk());       
+        for($i = $intDiaInicial; $i <= $intDiaFinal; $i++) {    
+            $strFecha = $dateFechaDesde->format('Y/m/') . $i;
+            $dateFecha = date_create($strFecha);
+            $nuevafecha = strtotime ( '+1 day' , strtotime ( $strFecha ) ) ;
+            $dateFecha2 = date ( 'Y/m/j' , $nuevafecha );
+            $dateFecha2 = date_create($dateFecha2);
+            $boolFestivo = $this->festivo($arFestivos, $dateFecha);
+            $boolFestivo2 = $this->festivo($arFestivos, $dateFecha2);             
+            $arrTurnos = array();
+            foreach ($arProgramacionDetalles as $arProgramacionDetalle) {             
+                if($arProgramacionDetalle['dia'.$i] != "") {                    
+                    $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle['dia'.$i]);
+                    if($arTurno) {
+                        $arrTurnos[] = array('horaDesde' => $arTurno->getHoraDesde(), 'turno' => $arTurno->getCodigoTurnoPk());
+                    }
+                }
+            }
+            asort($arrTurnos);                        
+            foreach ($arrTurnos as $arrTurno) {             
+                $strTurno = $arrTurno['turno'];                                                                 
                 if($turnoFijo == 1) {
                     if(!isset($arrTurnoFijo[$i])) {
                         $arrTurnoFijo[$i] = $strTurno;    
@@ -256,17 +265,12 @@ class TurSoportePagoRepository extends EntityRepository {
                     if($i == 31) {
                         $strTurno = null;
                     }
-                }       
-                
+                }  
                 if($strTurno) {
-                    $this->insertarSoportePago($arSoportePago, $arSoportePagoPeriodo, $arProgramacionDetalle, $dateFechaDesde, $dateFechaHasta, $strTurno, $dateFecha, $dateFecha2, $boolFestivo, $boolFestivo2);
+                    $this->insertarSoportePago($arSoportePago, $strTurno, $dateFecha, $dateFecha2, $boolFestivo, $boolFestivo2);
                 }                                   
             }                        
-        }        
-        $em->flush();
-        $em->getRepository('BrasaTurnoBundle:TurSoportePago')->resumenSoportePago($dateFechaDesde, $dateFechaHasta, $arSoportePago->getCodigoSoportePagoPk());                
-        $em->getRepository('BrasaTurnoBundle:TurSoportePago')->compensar($arSoportePago->getCodigoSoportePagoPk(), $arSoportePagoPeriodo->getCodigoSoportePagoPeriodoPk());        
-        //$em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->liquidar($codigoSoportePagoPeriodo);                                                
+        }          
         return true;
     }
     
@@ -281,9 +285,9 @@ class TurSoportePagoRepository extends EntityRepository {
         }
     }     
 
-    public function insertarSoportePago ($arSoportePago, $arSoportePagoPeriodo, $arProgramacionDetalle, $dateFechaDesde, $dateFechaHasta, $codigoTurno, $dateFecha, $dateFecha2, $boolFestivo, $boolFestivo2) {        
-        $em = $this->getEntityManager();      
-        //$arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
+    public function insertarSoportePago ($arSoportePago, $codigoTurno, $dateFecha, $dateFecha2, $boolFestivo, $boolFestivo2) {        
+        $em = $this->getEntityManager();        
+        $arSoportePagoPeriodo = $arSoportePago->getSoportePagoPeriodoRel();
         $strTurnoFijoNomina = $arSoportePagoPeriodo->getRecursoGrupoRel()->getCodigoTurnoFijoNominaFk();
         $strTurnoFijoDescanso = $arSoportePagoPeriodo->getRecursoGrupoRel()->getCodigoTurnoFijoDescansoFk();
 
@@ -339,10 +343,8 @@ class TurSoportePagoRepository extends EntityRepository {
         }
         $arSoportePagoDetalle = new \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle();
         $arSoportePagoDetalle->setSoportePagoPeriodoRel($arSoportePagoPeriodo);
-        $arSoportePagoDetalle->setSoportePagoRel($arSoportePago);
-        $arSoportePagoDetalle->setRecursoRel($arProgramacionDetalle->getRecursoRel());
-        $arSoportePagoDetalle->setProgramacionDetalleRel($arProgramacionDetalle);
-        $arSoportePagoDetalle->setPedidoDetalleRel($arProgramacionDetalle->getPedidoDetalleRel());            
+        $arSoportePagoDetalle->setSoportePagoRel($arSoportePago);  
+        $arSoportePagoDetalle->setRecursoRel($arSoportePago->getRecursoRel());  
         $arSoportePagoDetalle->setFecha($dateFecha);
         $arSoportePagoDetalle->setTurnoRel($arTurno);
         $arSoportePagoDetalle->setDescanso($arTurno->getDescanso());
@@ -388,9 +390,7 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePagoDetalle = new \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle();
             $arSoportePagoDetalle->setSoportePagoPeriodoRel($arSoportePagoPeriodo);
             $arSoportePagoDetalle->setSoportePagoRel($arSoportePago);
-            $arSoportePagoDetalle->setRecursoRel($arProgramacionDetalle->getRecursoRel());
-            $arSoportePagoDetalle->setProgramacionDetalleRel($arProgramacionDetalle);
-            $arSoportePagoDetalle->setPedidoDetalleRel($arProgramacionDetalle->getPedidoDetalleRel());
+            $arSoportePagoDetalle->setRecursoRel($arSoportePago->getRecursoRel());  
             $arSoportePagoDetalle->setFecha($dateFecha2);
             $arSoportePagoDetalle->setTurnoRel($arTurno);
             $arSoportePagoDetalle->setDescanso($arTurno->getDescanso());
@@ -422,105 +422,7 @@ class TurSoportePagoRepository extends EntityRepository {
             $em->persist($arSoportePagoDetalle);            
         }                    
     }    
-    
-    private function devuelveTurnoDia($arProgramacionDetalle, $intDia) {        
-        $strTurno = NULL;
-        if($intDia == 1) {
-            $strTurno = $arProgramacionDetalle->getDia1();
-        }
-        if($intDia == 2) {
-            $strTurno = $arProgramacionDetalle->getDia2();
-        }
-        if($intDia == 3) {
-            $strTurno = $arProgramacionDetalle->getDia3();
-        }
-        if($intDia == 4) {
-            $strTurno = $arProgramacionDetalle->getDia4();
-        }
-        if($intDia == 5) {
-            $strTurno = $arProgramacionDetalle->getDia5();
-        }
-        if($intDia == 6) {
-            $strTurno = $arProgramacionDetalle->getDia6();
-        }
-        if($intDia == 7) {
-            $strTurno = $arProgramacionDetalle->getDia7();
-        }
-        if($intDia == 8) {
-            $strTurno = $arProgramacionDetalle->getDia8();
-        }
-        if($intDia == 9) {
-            $strTurno = $arProgramacionDetalle->getDia9();
-        }
-        if($intDia == 10) {
-            $strTurno = $arProgramacionDetalle->getDia10();
-        }
-        if($intDia == 11) {
-            $strTurno = $arProgramacionDetalle->getDia11();
-        }
-        if($intDia == 12) {
-            $strTurno = $arProgramacionDetalle->getDia12();
-        }
-        if($intDia == 13) {
-            $strTurno = $arProgramacionDetalle->getDia13();
-        }
-        if($intDia == 14) {
-            $strTurno = $arProgramacionDetalle->getDia14();
-        }
-        if($intDia == 15) {
-            $strTurno = $arProgramacionDetalle->getDia15();
-        }
-        if($intDia == 16) {
-            $strTurno = $arProgramacionDetalle->getDia16();
-        }
-        if($intDia == 17) {
-            $strTurno = $arProgramacionDetalle->getDia17();
-        }
-        if($intDia == 18) {
-            $strTurno = $arProgramacionDetalle->getDia18();
-        }
-        if($intDia == 19) {
-            $strTurno = $arProgramacionDetalle->getDia19();
-        }
-        if($intDia == 20) {
-            $strTurno = $arProgramacionDetalle->getDia20();
-        }
-        if($intDia == 21) {
-            $strTurno = $arProgramacionDetalle->getDia21();
-        }
-        if($intDia == 22) {
-            $strTurno = $arProgramacionDetalle->getDia22();
-        }
-        if($intDia == 23) {
-            $strTurno = $arProgramacionDetalle->getDia23();
-        }
-        if($intDia == 24) {
-            $strTurno = $arProgramacionDetalle->getDia24();
-        }
-        if($intDia == 25) {
-            $strTurno = $arProgramacionDetalle->getDia25();
-        }
-        if($intDia == 26) {
-            $strTurno = $arProgramacionDetalle->getDia26();
-        }
-        if($intDia == 27) {
-            $strTurno = $arProgramacionDetalle->getDia27();
-        }
-        if($intDia == 28) {
-            $strTurno = $arProgramacionDetalle->getDia28();
-        }
-        if($intDia == 29) {
-            $strTurno = $arProgramacionDetalle->getDia29();
-        }
-        if($intDia == 30) {
-            $strTurno = $arProgramacionDetalle->getDia30();
-        }        
-        if($intDia == 31) {
-            $strTurno = $arProgramacionDetalle->getDia31();
-        }
-        return $strTurno;
-    }    
-
+        
     private function turnoHoras($intHoraInicio, $intMinutoInicio, $intHoraFinal, $boolFestivo, $intHoras, $boolNovedad = 0, $boolDescanso = 0) {        
         if($boolNovedad == 0) {
             $intHorasNocturnas = $this->calcularTiempo($intHoraInicio, $intHoraFinal, 0, 6);        

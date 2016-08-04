@@ -163,12 +163,12 @@ class TurSoportePagoDetalle
     private $codigoTurnoFk;    
 
     /**
-     * @ORM\Column(name="codigo_programacion_detalle_fk", type="integer")
+     * @ORM\Column(name="codigo_programacion_detalle_fk", type="integer", nullable=true)
      */    
     private $codigoProgramacionDetalleFk;   
     
     /**
-     * @ORM\Column(name="codigo_pedido_detalle_fk", type="integer")
+     * @ORM\Column(name="codigo_pedido_detalle_fk", type="integer", nullable=true)
      */    
     private $codigoPedidoDetalleFk;       
     
