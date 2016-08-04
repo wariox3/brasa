@@ -85,6 +85,7 @@
                             <th>NUMERO</th>
                             <th>IDENTIFICACION</th>
                             <th>EMPLEADO</th>
+                            <th>BANCO</th>
                             <th>CUENTA</th>
                             <th style="text-align: right">VR. PAGO</th>                
                             <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
@@ -97,6 +98,7 @@
                                 <td>{{ arPagoBancoDetalle.pagoRel.numero  }}</td>
                                 <td>{{ arPagoBancoDetalle.numeroIdentificacion  }}</td>
                                 <td>{{ arPagoBancoDetalle.nombreCorto  }}</td>
+                                <td>{{ arPagoBancoDetalle.pagoRel.empleadoRel.bancoRel.nombre  }}</td>
                                 <td>{{ arPagoBancoDetalle.cuenta  }}</td>
                                 <td class="td-in-well" align="right">{{ arPagoBancoDetalle.vrPago | number_format(2, '.', ',') }}</td>
                                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagoBancoDetalle.codigoPagoBancoDetallePk }}" /></td>

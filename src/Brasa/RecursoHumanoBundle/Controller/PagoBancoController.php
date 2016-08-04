@@ -165,6 +165,7 @@ class PagoBancoController extends Controller
         }        
         $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
         $arPagoBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->findBy(array ('codigoPagoBancoFk' => $codigoPagoBanco));
+        
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagoBanco:detalle.html.twig', array(
                     'arPagoBanco' => $arPagoBanco,        
                     'arPagoBancoDetalle' => $arPagoBancoDetalle,
