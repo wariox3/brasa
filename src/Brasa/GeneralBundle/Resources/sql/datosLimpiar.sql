@@ -113,6 +113,8 @@ DELETE FROM rhu_disciplinario;
 DELETE FROM rhu_empleado_familia;
 DELETE FROM rhu_accidente_trabajo;
 DELETE FROM rhu_empleado;
+DELETE FROM rhu_examen_restriccion_medica_detalle;
+DELETE FROM rhu_examen_restriccion_medica;
 DELETE FROM rhu_examen_detalle;
 DELETE FROM rhu_examen;
 DELETE FROM rhu_sede;
