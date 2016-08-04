@@ -1,15 +1,16 @@
 <?php
 namespace Brasa\RecursoHumanoBundle\Formatos;
 class FormatoPagoMasivo extends \FPDF_FPDF {
-    public static $em;
-    
+    public static $em;    
     public static $codigoProgramacionPago;
+    public static $codigoPago;
     
-    public function Generar($miThis, $codigoProgramacionPago, $strRuta = "") {        
+    public function Generar($miThis, $codigoProgramacionPago = "", $strRuta = "", $codigoPago = "") {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
         self::$codigoProgramacionPago = $codigoProgramacionPago;
+        self::$codigoPago = $codigoPago;
         $pdf = new FormatoPagoMasivo();
         $pdf->AliasNbPages();
         $pdf->AddPage();
@@ -17,9 +18,9 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
         $pdf->SetFillColor(200, 200, 200);
         $this->Body($pdf);
         if($strRuta == "") {
-            $pdf->Output("PagoMasivo$codigoProgramacionPago.pdf", 'D');        
+            $pdf->Output("Pago$codigoProgramacionPago$codigoPago.pdf", 'D');        
         } else {
-            $pdf->Output($strRuta."PagoMasivo$codigoProgramacionPago.pdf", 'F');        
+            $pdf->Output($strRuta."Pago$codigoProgramacionPago$codigoPago.pdf", 'F');        
         }
         
         
@@ -35,33 +36,26 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
         $this->SetFillColor(200, 200, 200);        
         $this->SetFont('Arial','B',10);
         //Logo
-        $this->SetXY(53, 14);
-        $this->Image('imagenes/logos/logo.jpg', 12, 15, 35, 17);
+        $this->SetXY(53, 3);
+        $this->Image('imagenes/logos/logo.jpg', 12, 5, 35, 17);
         //INFORMACIÓN EMPRESA
         $this->Cell(150, 7, "COMPROBANTE PAGO NOMINA", 0, 0, 'C', 1);//$this->Cell(150, 7, utf8_decode("COMPROBANTE PAGO ". $arPago->getPagoTipoRel()->getNombre().""), 0, 0, 'C', 1);
-        $this->SetXY(53, 22);
+        $this->SetXY(53, 11);
         $this->SetFont('Arial','B',9);
         $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);
-        $this->Cell(100, 4, $arConfiguracion->getNombreEmpresa(), 0, 0, 'L', 0);
-        $this->SetXY(53, 26);
-        $this->Cell(20, 4, "NIT:", 0, 0, 'L', 1);
-        $this->Cell(100, 4, $arConfiguracion->getNitEmpresa()." - ". $arConfiguracion->getDigitoVerificacionEmpresa(), 0, 0, 'L', 0);
-        $this->SetXY(53, 30);
+        $this->Cell(100, 4, $arConfiguracion->getNombreEmpresa() . " NIT:" . $arConfiguracion->getNitEmpresa()." - ". $arConfiguracion->getDigitoVerificacionEmpresa(), 0, 0, 'L', 0);
+        $this->SetXY(53, 15);
         $this->Cell(20, 4, utf8_decode("DIRECCIÓN:"), 0, 0, 'L', 1);
         $this->Cell(100, 4, $arConfiguracion->getDireccionEmpresa(), 0, 0, 'L', 0);
-        $this->SetXY(53, 34);
+        $this->SetXY(53, 19);
         $this->Cell(20, 4, utf8_decode("TELÉFONO:"), 0, 0, 'L', 1);
         $this->Cell(100, 4, $arConfiguracion->getTelefonoEmpresa(), 0, 0, 'L', 0);
-        
-        
-        //$this->SetFillColor(255, 255, 255);
-        //$this->Cell(45, 5, "" , 1, 0, 'R', 1);
         $this->EncabezadoDetalles();
         
     }
 
     public function EncabezadoDetalles() {
-        $this->SetXY(10, 73);
+        $this->SetXY(10, 53);
         //$this->Ln(45);
         $header = array('CODIGO', 'CONCEPTO DE PAGO', 'HORAS', 'VR. HORA', '%', 'DEVENGADO', 'DEDUCCION');
         $this->SetFillColor(200, 200, 200);
@@ -91,11 +85,18 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
         $pdf->SetFillColor(200, 200, 200);
         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);        
-        $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-        $arPagos = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => self::$codigoProgramacionPago));   
+        if(self::$codigoPago != "") {
+            $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();        
+            $arPagos = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoPagoPk' => self::$codigoPago));               
+        }
+        if(self::$codigoProgramacionPago != "") {
+            $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();        
+            $arPagos = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => self::$codigoProgramacionPago));               
+        }
         foreach ($arPagos as $arPago){
+            $y = 25;
             //FILA 1
-            $pdf->SetXY(10, 40);
+            $pdf->SetXY(10, $y);
             $pdf->SetFillColor(200, 200, 200);
             $pdf->SetFont('Arial','B',6.5);
             $pdf->Cell(22, 6, "NUMERO:" , 1, 0, 'L', 1);
@@ -115,7 +116,7 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
             $pdf->SetFillColor(255, 255, 255);
             $pdf->Cell(21, 6, $arPago->getEmpleadoRel()->getCuenta() , 1, 0, 'L', 1);
             //FILA 2
-            $pdf->SetXY(10, 45);
+            $pdf->SetXY(10, $y+5);
             $pdf->SetFont('Arial','B',7);
             $pdf->SetFillColor(200, 200, 200);
             $pdf->Cell(22, 6, "EMPLEADO:" , 1, 0, 'L', 1);                            
@@ -127,7 +128,7 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
             $pdf->Cell(24, 6, "IDENTIFICACION:" , 1, 0, 'L', 1);
             $pdf->SetFont('Arial','',7);
             $pdf->SetFillColor(255, 255, 255);
-            $pdf->Cell(24, 6, $arPago->getEmpleadoRel()->getNumeroIdentificacion() , 1, 0, 'L', 1);
+            $pdf->Cell(24, 6, $arPago->getEmpleadoRel()->getNumeroIdentificacion() . " (" .  $arPago->getCodigoEmpleadoFk() . ")" , 1, 0, 'L', 1);
             $pdf->SetFont('Arial','B',6.5);
             $pdf->SetFillColor(200, 200, 200);
             $pdf->Cell(24, 6, "BANCO:" , 1, 0, 'L', 1);
@@ -135,19 +136,23 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
             $pdf->SetFillColor(255, 255, 255);
             $pdf->Cell(21, 6, utf8_decode($arPago->getEmpleadoRel()->getBancoRel()->getNombre()), 1, 0, 'L', 1);
             //FILA 3
-            $pdf->SetXY(10, 50);
+            $pdf->SetXY(10, $y+10);
             $pdf->SetFont('Arial','B',6.5);
             $pdf->SetFillColor(200, 200, 200);
             $pdf->Cell(22, 6, "CARGO:" , 1, 0, 'L', 1);                            
             $pdf->SetFont('Arial','',6);
             $pdf->SetFillColor(255, 255, 255);
-            $pdf->Cell(78, 6, $arPago->getEmpleadoRel()->getCargoRel()->getNombre() , 1, 0, 'L', 1);
+            $cargo = "";
+            if($arPago->getEmpleadoRel()->getCodigoCargoFk()) {
+                $cargo = $arPago->getEmpleadoRel()->getCargoRel()->getNombre();
+            }
+            $pdf->Cell(78, 6, $cargo , 1, 0, 'L', 1);
             $pdf->SetFont('Arial','B',6.5);
             $pdf->SetFillColor(200, 200, 200);
-            $pdf->Cell(24, 6, "EPS:" , 1, 0, 'L', 1);
+            $pdf->Cell(24, 6, "PERIODO PAGO:" , 1, 0, 'L', 1);
             $pdf->SetFont('Arial','',6);
             $pdf->SetFillColor(255, 255, 255);
-            $pdf->Cell(24, 6, utf8_decode($arPago->getContratoRel()->getEntidadSaludRel()->getNombre()) , 1, 0, 'L', 1);
+            $pdf->Cell(24, 6, $arPago->getCentroCostoRel()->getPeriodoPagoRel()->getNombre() , 1, 0, 'L', 1);
             $pdf->SetFont('Arial','B',6.5);
             $pdf->SetFillColor(200, 200, 200);
             $pdf->Cell(24, 6, utf8_decode("PENSIÓN :") , 1, 0, 'L', 1);
@@ -155,33 +160,41 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
             $pdf->SetFillColor(255, 255, 255);
             $pdf->Cell(21, 6, utf8_decode($arPago->getContratoRel()->getEntidadPensionRel()->getNombre()) , 1, 0, 'L', 1);
             //FILA 4
-            $pdf->SetXY(10, 55);
+            $pdf->SetXY(10, $y+15);
             $pdf->SetFont('Arial','B',6.5);
             $pdf->SetFillColor(200, 200, 200);
             $pdf->Cell(22, 6, "CENTRO COSTOS:" , 1, 0, 'L', 1);                            
             $pdf->SetFont('Arial','',6);
             $pdf->SetFillColor(255, 255, 255);
-            $pdf->Cell(78, 6, $arPago->getCentroCostoRel()->getNombre() , 1, 0, 'L', 1);
+            $pdf->Cell(78, 5, $arPago->getCentroCostoRel()->getNombre() , 1, 0, 'L', 1);
             $pdf->SetFont('Arial','B',6.5);
             $pdf->SetFillColor(200, 200, 200);
-            $pdf->Cell(24, 6, "DESDE:" , 1, 0, 'L', 1);
+            $pdf->Cell(24, 5, "DESDE:" , 1, 0, 'L', 1);
             $pdf->SetFont('Arial','',7);
             $pdf->SetFillColor(255, 255, 255);
-            $pdf->Cell(24, 6, $arPago->getFechaDesde()->format('Y/m/d') , 1, 0, 'L', 1);
+            $pdf->Cell(24, 5, $arPago->getFechaDesde()->format('Y/m/d') , 1, 0, 'L', 1);
             $pdf->SetFont('Arial','B',6.5);
             $pdf->SetFillColor(200, 200, 200);
-            $pdf->Cell(24, 6, "SALARIO:" , 1, 0, 'L', 1);
+            $pdf->Cell(24, 5, "SALUD:" , 1, 0, 'L', 1);
             $pdf->SetFont('Arial','',7);
             $pdf->SetFillColor(255, 255, 255);
-            $pdf->Cell(21, 6, number_format($arPago->getEmpleadoRel()->getVrSalario(), 0, '.', ',') , 1, 0, 'R', 1);
+            $pdf->Cell(21, 5, substr(utf8_decode($arPago->getContratoRel()->getEntidadSaludRel()->getNombre()), 0, 10) , 1, 0, 'L', 1);
             //FILA 5
-            $pdf->SetXY(10, 60);
+            $pdf->SetXY(10, $y+20);
             $pdf->SetFont('Arial','B',6.5);
             $pdf->SetFillColor(200, 200, 200);
-            $pdf->Cell(22, 5, "PERIODO PAGO:" , 1, 0, 'L', 1);                            
+            $pdf->Cell(22, 5, "ZONA:" , 1, 0, 'L', 1);                            
             $pdf->SetFont('Arial','',6.5);
             $pdf->SetFillColor(255, 255, 255);
-            $pdf->Cell(78, 5, $arPago->getCentroCostoRel()->getPeriodoPagoRel()->getNombre() , 1, 0, 'L', 1);
+            $zona = "";
+            if($arPago->getEmpleadoRel()->getCodigoZonaFk()) {
+                $zona = $arPago->getEmpleadoRel()->getZonaRel()->getNombre();
+            }            
+            $subZona = "";
+            if($arPago->getEmpleadoRel()->getCodigoSubzonaFk()) {
+                $subZona = $arPago->getEmpleadoRel()->getSubzonaRel()->getNombre();
+            }
+            $pdf->Cell(78, 5, $zona . "-" .$subZona , 1, 0, 'L', 1);
             $pdf->SetFont('Arial','B',6.5);
             $pdf->SetFillColor(200, 200, 200);
             $pdf->Cell(24, 5, "HASTA" , 1, 0, 'L', 1);
@@ -190,19 +203,10 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
             $pdf->Cell(24, 5, $arPago->getFechaHasta()->format('Y/m/d') , 1, 0, 'L', 1);
             $pdf->SetFont('Arial','B',6.5);
             $pdf->SetFillColor(200, 200, 200);
-            $pdf->Cell(24, 6, "" , 1, 0, 'L', 1);
+            $pdf->Cell(24, 5, "SALARIO" , 1, 0, 'L', 1);
             $pdf->SetFont('Arial','',7);
             $pdf->SetFillColor(255, 255, 255);
-            $pdf->Cell(21, 6, '' , 1, 0, 'R', 1);        
-            //FILA 6
-            $pdf->SetXY(10, 65);
-            $pdf->SetFont('Arial','B',6.5);
-            $pdf->SetFillColor(200, 200, 200);
-            $pdf->Cell(22, 5, "COMENTARIO:" , 1, 0, 'L', 1);                            
-            $pdf->SetFont('Arial','',6.5);
-            $pdf->SetFillColor(255, 255, 255);
-            $pdf->Cell(171, 5, '' , 1, 0, 'L', 1);
-            $pdf->SetFont('Arial','B',6.5);
+            $pdf->Cell(21, 5, number_format($arPago->getEmpleadoRel()->getVrSalario(), 0, '.', ',') , 1, 0, 'R', 1);                    
             $pdf->Ln(12);
             $totalExtras = 0;
             $totalCompensado = 0;
@@ -217,9 +221,8 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
                     $totalExtras += $arPagoDetalle->getNumeroHoras();
                 }
             }
-            if($totalExtras > ($arPago->getDiasLaborados() * 2)){
-                $tope = $arPago->getDiasLaborados() * 2;
-                $tope = $tope - 8;
+            $tope = ($arPago->getDiasLaborados() * 2) - 4;
+            if($totalExtras > $tope){
                 $porCompensar = $totalExtras - $tope;            
                 foreach ($arPagoDetalles as $arPagoDetalle) { 
                     if($arPagoDetalle->getCodigoPagoConceptoFk() >= 3 && $arPagoDetalle->getCodigoPagoConceptoFk() <= 6) {
@@ -275,7 +278,7 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
             }
             
             //TOTALES
-                $pdf->Ln(4);
+                $pdf->Ln(2);
                 $pdf->Cell(143, 4, "", 0, 0, 'R');
                 $pdf->SetFont('Arial', 'B', 7);
                 $pdf->SetFillColor(200, 200, 200);
@@ -289,7 +292,69 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
                 $pdf->Cell(143, 4, "", 0, 0, 'R');
                 $pdf->Cell(30, 4, "NETO PAGAR", 1, 0, 'R',true);
                 $pdf->Cell(20, 4, number_format($arPago->getVrNeto(), 0, '.', ','), 1, 0, 'R');
-                $pdf->Ln(8);
+                $pdf->Ln(6);
+                
+                if($arPago->getCodigoSoportePagoFk()) {
+                    $arSoportePago =  self::$em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($arPago->getCodigoSoportePagoFk());                                
+                    if($arSoportePago) {                        
+                    //$this->SetXY(10, 53);
+                    //$this->Ln(45);
+                    $header = array('D1','D2','D3','D4','D5','D6','D7','D8','D9','D10','D11','D12','D13','D14','D15','D16','D17','D18','D19','D20','D21','D22','D23','D24','D25','D26','D27','D28','D29','D30','D31');
+                    $pdf->SetFillColor(200, 200, 200);
+                    $pdf->SetTextColor(0);
+                    $pdf->SetDrawColor(0, 0, 0);
+                    $pdf->SetLineWidth(.2);
+                    $pdf->SetFont('', 'B', 6.8);
+
+                    //creamos la cabecera de la tabla.
+                    $w = array(6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2,6.2);
+                    for ($i = 0; $i < count($header); $i++)
+                        if ($i == 0 || $i == 1)
+                            $pdf->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
+                        else
+                            $pdf->Cell($w[$i], 4, $header[$i], 1, 0, 'C', 1);                        
+                        $pdf->Ln();
+                        $strAnio = $arSoportePago->getFechaDesde()->format('Y');
+                        $strMes = $arSoportePago->getFechaDesde()->format('m');        
+                        $arProgramacionesDetalle =  self::$em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arSoportePago->getCodigoRecursoFk()), null, 2);                                                                            
+                        foreach ($arProgramacionesDetalle as $arProgramacionDetalle) {            
+                            $pdf->SetFont('Arial', '', 5);
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia1(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia2(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia3(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia4(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia5(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia6(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia7(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia8(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia9(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia10(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia11(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia12(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia13(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia14(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia15(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia16(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia17(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia18(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia19(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia20(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia21(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia22(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia23(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia24(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia25(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia26(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia27(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia28(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia29(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia30(), 1, 0, 'L');
+                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia31(), 1, 0, 'L');
+                            $pdf->Ln();
+                            $pdf->SetAutoPageBreak(true, 15);
+                        }                        
+                    }
+                }
                 
             $pdf->AddPage();
         }

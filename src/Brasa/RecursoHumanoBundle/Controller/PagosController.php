@@ -67,8 +67,8 @@ class PagosController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnImprimir')->isClicked()) {
-                $objFormatoPago = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPago();
-                $objFormatoPago->Generar($this, $codigoPago);
+                $objFormatoPago = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPagoMasivo();
+                $objFormatoPago->Generar($this, "", "", $codigoPago);
             }
         }        
         
