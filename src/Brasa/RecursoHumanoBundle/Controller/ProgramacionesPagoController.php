@@ -252,19 +252,26 @@ class ProgramacionesPagoController extends Controller
             $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
             $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
             $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findBy(array('numeroIdentificacion' => $form->getData('numeroIdentificacion')));
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $form->getData('numeroIdentificacion')));
             if(count($arEmpleado) > 0) {
-                $intCodigoContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->ultimoContrato($arProgramacionPago->getCodigoCentroCostoFk(), $arEmpleado[0]->getCodigoEmpleadoPk());
+                if($arEmpleado->getCodigoContratoActivoFk()) {
+                    $intCodigoContrato = $arEmpleado->getCodigoContratoActivoFk();
+                } else {
+                    $intCodigoContrato = $arEmpleado->getCodigoContratoUltimoFk();
+                }
                 $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
                 $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($intCodigoContrato);
                 if(count($arContrato) > 0) {
                     $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
-                    $arProgramacionPagoDetalle->setEmpleadoRel($arEmpleado[0]);
+                    $arProgramacionPagoDetalle->setEmpleadoRel($arEmpleado);
                     $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
-                    $arProgramacionPagoDetalle->setFechaDesde($arContrato->getFechaDesde());
-                    $arProgramacionPagoDetalle->setFechaHasta($arContrato->getFechaHasta());
+                    $arProgramacionPagoDetalle->setFechaDesde($arProgramacionPago->getFechaDesde());
+                    $arProgramacionPagoDetalle->setFechaHasta($arProgramacionPago->getFechaHasta());
+                    $arProgramacionPagoDetalle->setFechaDesdePago($arProgramacionPago->getFechaDesde());
+                    $arProgramacionPagoDetalle->setFechaHastaPago($arProgramacionPago->getFechaHasta());                    
                     $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalario());
                     $arProgramacionPagoDetalle->setIndefinido($arContrato->getIndefinido());
+                    $arProgramacionPagoDetalle->setContratoRel($arContrato);
                     if($arContrato->getCodigoTipoTiempoFk() == 2) {
                         $arProgramacionPagoDetalle->setFactorDia(4);
                     } else {
@@ -530,11 +537,16 @@ class ProgramacionesPagoController extends Controller
         $arrBotonEliminarEmpleados = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonEliminarTodoEmpleados = array('label' => 'Eliminar todo', 'disabled' => false);
         if($arProgramacionPago->getEstadoGenerado() == 1) {            
+            $arrBotonGenerarEmpleados['disabled'] = true;                                            
+            $arrBotonEliminarTodoEmpleados['disabled'] = true;            
+            
+        }
+        if($arProgramacionPago->getEstadoPagado() == 1) {            
             $arrBotonGenerarEmpleados['disabled'] = true;         
             $arrBotonEliminarEmpleados['disabled'] = true;                                    
             $arrBotonEliminarTodoEmpleados['disabled'] = true;            
             
-        }
+        }        
         $form = $this->createFormBuilder()    
                     ->add('BtnGenerarEmpleados', 'submit', $arrBotonGenerarEmpleados)                        
                     ->add('BtnEliminarEmpleados', 'submit', $arrBotonEliminarEmpleados)

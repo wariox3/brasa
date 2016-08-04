@@ -165,8 +165,10 @@
                     <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_cargar_soporte_turno', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar turnos</a>                    
                     <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_cargar_soporte_horario', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar horarios</a>                                        
                     <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_cargar_tiempo_sede', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'CargarTiempo', 600, 900)" >Cargar sedes</a>
-                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_agregar_empleado', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'AgregarEmpleado', 600, 900)" >Agregar</a>                
-                {% endif %}
+                {% endif %}                    
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_agregar_empleado', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}', 'AgregarEmpleado', 600, 900)" >Agregar</a>                
+                                    
+                
             </div>
             <div class="btn-group">
                 {{ form_widget(form.BtnEliminarTodoEmpleados, { 'attr': {'class': 'btn btn-danger btn-sm', 'onclick': 'return confirm("Esta seguro de eliminar los registros?")'} }) }}
