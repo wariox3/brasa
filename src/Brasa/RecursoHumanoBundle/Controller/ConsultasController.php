@@ -16,6 +16,7 @@ class ConsultasController extends Controller
     var $strSqlVacacionesPagarLista = "";
     var $strSqlFechaTerminacionLista = "";
     var $strSqlIngresosContratosLista = "";
+    var $strSqlContratosPeriodoLista = "";
     var $strSqlCostosIbcLista = "";
     var $strSqlPagoPendientesBancoLista = "";
     var $strSqlEmpleadosLista = "";
@@ -379,6 +380,34 @@ class ConsultasController extends Controller
             'form' => $form->createView()
             ));
     }
+    
+    public function ContratoPeriodoAction() {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $form = $this->formularioContratoPeriodo();
+        $form->handleRequest($request);
+        $this->contratosPeriodoListar();
+        if ($form->isValid())
+        {
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');
+            if($form->get('BtnExcelContratosPeriodo')->isClicked()) {
+                $this->filtrarContratosPeriodoLista($form);
+                $this->contratosPeriodoListar();
+                $this->generarContratosPeriodoExcel();
+            }
+            if($form->get('BtnFiltrarContratosPeriodo')->isClicked()) {
+                $this->filtrarContratosPeriodoLista($form);
+                $this->contratosPeriodoListar();
+            }
+
+        }
+        $arContratos = $paginator->paginate($em->createQuery($this->strSqlContratosPeriodoLista), $request->query->get('page', 1), 2000);
+        return $this->render('BrasaRecursoHumanoBundle:Consultas/Contrato:periodo.html.twig', array(
+            'arContrato' => $arContratos,
+            'form' => $form->createView()
+            ));
+    }    
 
     public function EmpleadoAction() {
         $em = $this->getDoctrine()->getManager();
@@ -589,6 +618,16 @@ class ConsultasController extends Controller
             );
     }
 
+    private function contratosPeriodoListar() {
+        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $this->strSqlContratosPeriodoLista  = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
+                    . "WHERE c.codigoCentroCostoFk = " . $session->get('filtroCodigoCentroCosto')                    
+                    . " AND c.fechaDesde <= '" .$session->get('filtroHasta') . "' "
+                    . " AND (c.fechaHasta >= '" . $session->get('filtroDesde') . "' "
+                    . " OR c.indefinido = 1)";                        
+    }    
+    
     private function IncapacidadesListar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
@@ -1169,6 +1208,95 @@ class ConsultasController extends Controller
         return $form;
     }
 
+    private function formularioContratoPeriodo() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        
+        $arrayPropiedades = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoCentroCosto')) {
+            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
+        }        
+        $arrayPropiedadesTipo = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEmpleadoTipo',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('et')
+                    ->orderBy('et.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoEmpleadoTipo')) {
+            $arrayPropiedadesTipo['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuEmpleadoTipo", $session->get('filtroCodigoEmpleadoTipo'));
+        }
+        $arrayPropiedadesZona = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuZona',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('et')
+                    ->orderBy('et.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoZona')) {
+            $arrayPropiedadesZona['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuZona", $session->get('filtroCodigoZona'));
+        }
+        $arrayPropiedadesSubZona = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuSubzona',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('sz')
+                    ->orderBy('sz.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoSubzona')) {
+            $arrayPropiedadesSubZona['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuSubzona", $session->get('filtroCodigoSubzona'));
+        }
+        $arrayPropiedadesTipoContrato = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuContratoTipo',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('sz')
+                    ->orderBy('sz.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoContratoTipo')) {
+            $arrayPropiedadesTipoContrato['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuContratoTipo", $session->get('filtroCodigoContratoTipo'));
+        }
+        $form = $this->createFormBuilder()
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)    
+            ->add('contratoTipoRel', 'entity', $arrayPropiedadesTipoContrato)    
+            ->add('empleadoTipoRel', 'entity', $arrayPropiedadesTipo)
+            ->add('zonaRel', 'entity', $arrayPropiedadesZona)
+            ->add('subZonaRel', 'entity', $arrayPropiedadesSubZona)    
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))            
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('BtnFiltrarContratosPeriodo', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnExcelContratosPeriodo', 'submit', array('label'  => 'Excel',))
+            ->getForm();
+        return $form;
+    }    
+    
     private function filtrarPagoPendientesBancoLista($form) {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
@@ -1308,6 +1436,28 @@ class ConsultasController extends Controller
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }
 
+    private function filtrarContratosPeriodoLista($form) {
+        $session = $this->getRequest()->getSession();
+        $request = $this->getRequest();
+        $controles = $request->request->get('form');    
+        $fechaDesde = $form->get('fechaDesde')->getData();
+        $fechaHasta = $form->get('fechaHasta')->getData();
+        if(!$fechaDesde) {
+            $fechaDesde = new \DateTime('now');
+        }
+        if(!$fechaHasta) {
+            $fechaHasta = new \DateTime('now');
+        }        
+        $session->set('filtroCodigoContratoTipo', $controles['contratoTipoRel']);
+        $session->set('filtroCodigoEmpleadoTipo', $controles['empleadoTipoRel']);
+        $session->set('filtroCodigoZona', $controles['zonaRel']);
+        $session->set('filtroCodigoSubzona', $controles['subZonaRel']);        
+        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        $session->set('filtroDesde', $fechaDesde->format('Y/m/d'));
+        $session->set('filtroHasta', $fechaHasta->format('Y/m/d'));
+        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
+    }    
+    
     private function generarExcel() {
         ob_clean();
         $em = $this->getDoctrine()->getManager();
@@ -2822,4 +2972,88 @@ class ConsultasController extends Controller
         $objWriter->save('php://output');
         exit;
     }
+    
+    private function generarContratosPeriodoExcel() {
+        ob_clean();
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'K'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }         
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'CÓDIGO')
+                    ->setCellValue('B1', 'TIPO CONTRATO')
+                    ->setCellValue('C1', 'IDENTIFICACIÓN')
+                    ->setCellValue('D1', 'EMPLEADO')
+                    ->setCellValue('E1', 'CENTRO COSTO')
+                    ->setCellValue('F1', 'DESDE')
+                    ->setCellValue('G1', 'HASTA')                
+                    ->setCellValue('H1', 'TIPO')
+                    ->setCellValue('I1', 'ZONA')
+                    ->setCellValue('J1', 'SUBZONA')
+                    ->setCellValue('K1', 'USUARIO');
+        $i = 2;
+        $query = $em->createQuery($this->strSqlContratosPeriodoLista);
+        $arFechaTerminaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $arFechaTerminaciones = $query->getResult();
+        foreach ($arFechaTerminaciones as $arFechaTerminacion) {
+            $tipo = "";
+            if ($arFechaTerminacion->getEmpleadoRel()->getCodigoEmpleadoTipoFk() != null){
+                $tipo = $arFechaTerminacion->getEmpleadoRel()->getEmpleadoTipoRel()->getNombre();
+            }
+            $zona = "";
+            if ($arFechaTerminacion->getEmpleadoRel()->getCodigoZonaFk() != null){
+                $zona = $arFechaTerminacion->getEmpleadoRel()->getZonaRel()->getNombre();
+            }
+            $subzona = "";
+            if ($arFechaTerminacion->getEmpleadoRel()->getCodigoSubzonaFk() != null){
+                $subzona = $arFechaTerminacion->getEmpleadoRel()->getSubzonaRel()->getNombre();
+            }
+            $motivo = "";
+            if ($arFechaTerminacion->getCodigoMotivoTerminacionContratoFk() != null){
+                $motivo = $arFechaTerminacion->getTerminacionContratoRel()->getMotivo();
+            }            
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arFechaTerminacion->getCodigoContratoPk())
+                    ->setCellValue('B' . $i, $arFechaTerminacion->getContratoTipoRel()->getNombreCorto())                    
+                    ->setCellValue('C' . $i, $arFechaTerminacion->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('D' . $i, $arFechaTerminacion->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('E' . $i, $arFechaTerminacion->getCentroCostoRel()->getNombre())
+                    ->setCellValue('F' . $i, $arFechaTerminacion->getFechaDesde()->format('Y/m/d'))
+                    ->setCellValue('G' . $i, $arFechaTerminacion->getFechaHasta()->format('Y/m/d'))
+                    ->setCellValue('H' . $i, $tipo)
+                    ->setCellValue('I' . $i, $zona)
+                    ->setCellValue('J' . $i, $subzona)
+                    ->setCellValue('K' . $i, $arFechaTerminacion->getCodigoUsuarioTermina());
+            $i++;
+        }
+        $objPHPExcel->getActiveSheet()->setTitle('ContratosPeriodo');
+        $objPHPExcel->setActiveSheetIndex(0);
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="ReporteFechaTerminacion.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }    
 }
