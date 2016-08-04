@@ -158,7 +158,7 @@ class PagoBancoController extends Controller
                 if($arPagoBanco->getEstadoAutorizado() == 1) {
                     $this->generarArchivoAvvillasOtros($arPagoBanco);
                 } else {
-                    $objMensaje->Mensaje('error', 'El pago al banco debe estar autorizado', $this);
+                    $objMensaje->Mensaje('error', 'El pago al banco debe estar autorizado ', $this);
                 }
             }
             
