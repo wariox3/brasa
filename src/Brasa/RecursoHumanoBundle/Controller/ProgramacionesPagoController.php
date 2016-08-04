@@ -272,6 +272,7 @@ class ProgramacionesPagoController extends Controller
                     $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalario());
                     $arProgramacionPagoDetalle->setIndefinido($arContrato->getIndefinido());
                     $arProgramacionPagoDetalle->setContratoRel($arContrato);
+                    $arProgramacionPagoDetalle->setCodigoSoportePagoFk(1);
                     if($arContrato->getCodigoTipoTiempoFk() == 2) {
                         $arProgramacionPagoDetalle->setFactorDia(4);
                     } else {

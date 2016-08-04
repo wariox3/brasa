@@ -105,9 +105,7 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     
                     if($intDiasIncapacidad != $arSoportePago->getIncapacidad()) {
                         $arrInconsistencias[] = array('inconsistencia' => "El empleado " . $arEmpleado->getNumeroIdentificacion() . "-" . $arEmpleado->getNombreCorto() . " tiene incapacidades de " . $arSoportePago->getIncapacidad() . " dias en turnos y de " . $intDiasIncapacidad . " en recurso humano");
-                    }                    
-                    $comentarios = "Diurnas[" . $arSoportePago->getHorasDiurnas() . "] Nocturnas[" . $arSoportePago->getHorasNocturnas() . "], Descanso[" . $arSoportePago->getHorasDescanso() . "]";
-                    $arProgramacionPagoDetalle->setComentarios($comentarios);                    
+                    }                                        
                     $em->persist($arProgramacionPagoDetalle);                
                 }                
                 $arProgramacionPago->setInconsistencias(0);
