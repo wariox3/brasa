@@ -249,7 +249,8 @@ class TurSoportePagoRepository extends EntityRepository {
                     }
                 }
             }
-            asort($arrTurnos);                        
+            asort($arrTurnos);  
+            $horasIniciales = 0;
             foreach ($arrTurnos as $arrTurno) {             
                 $strTurno = $arrTurno['turno'];                                                                 
                 if($turnoFijo == 1) {
@@ -267,7 +268,7 @@ class TurSoportePagoRepository extends EntityRepository {
                     }
                 }  
                 if($strTurno) {
-                    $this->insertarSoportePago($arSoportePago, $strTurno, $dateFecha, $dateFecha2, $boolFestivo, $boolFestivo2);
+                    $horasIniciales = $this->insertarSoportePago($arSoportePago, $strTurno, $dateFecha, $dateFecha2, $boolFestivo, $boolFestivo2, $horasIniciales);
                 }                                   
             }                        
         }          
@@ -285,7 +286,7 @@ class TurSoportePagoRepository extends EntityRepository {
         }
     }     
 
-    public function insertarSoportePago ($arSoportePago, $codigoTurno, $dateFecha, $dateFecha2, $boolFestivo, $boolFestivo2) {        
+    public function insertarSoportePago ($arSoportePago, $codigoTurno, $dateFecha, $dateFecha2, $boolFestivo, $boolFestivo2, $horasIniciales) {        
         $em = $this->getEntityManager();        
         $arSoportePagoPeriodo = $arSoportePago->getSoportePagoPeriodoRel();
         $strTurnoFijoNomina = $arSoportePagoPeriodo->getRecursoGrupoRel()->getCodigoTurnoFijoNominaFk();
@@ -336,10 +337,12 @@ class TurSoportePagoRepository extends EntityRepository {
         }        
         $arrHoras1 = null;
         if(($intHoraInicio + $intMinutoInicio) <= $intHoraFinal){  
-            $arrHoras = $this->turnoHoras($intHoraInicio, $intMinutoInicio, $intHoraFinal, $boolFestivo, 0, $arTurno->getNovedad(), $arTurno->getDescanso());
+            $arrHoras = $this->turnoHoras($intHoraInicio, $intMinutoInicio, $intHoraFinal, $boolFestivo, $horasIniciales, $arTurno->getNovedad(), $arTurno->getDescanso());
+            $horasTotales = $arrHoras['horas']+$arrHoras1['horas'];           
         } else {
-            $arrHoras = $this->turnoHoras($intHoraInicio, $intMinutoInicio, 24, $boolFestivo, 0, $arTurno->getNovedad(), $arTurno->getDescanso());
+            $arrHoras = $this->turnoHoras($intHoraInicio, $intMinutoInicio, 24, $boolFestivo, $horasIniciales, $arTurno->getNovedad(), $arTurno->getDescanso());
             $arrHoras1 = $this->turnoHoras(0, 0, $intHoraFinal, $boolFestivo2, $arrHoras['horas'], $arTurno->getNovedad(), $arTurno->getDescanso());                 
+            $horasTotales = $arrHoras1['horas'];
         }
         $arSoportePagoDetalle = new \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle();
         $arSoportePagoDetalle->setSoportePagoPeriodoRel($arSoportePagoPeriodo);
@@ -420,7 +423,9 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePagoDetalle->setHorasDescanso($arrHoras1['horasDescanso']);
             $arSoportePagoDetalle->setHorasNovedad($arrHoras1['horasNovedad']);
             $em->persist($arSoportePagoDetalle);            
-        }                    
+        }       
+        
+        return $horasTotales;
     }    
         
     private function turnoHoras($intHoraInicio, $intMinutoInicio, $intHoraFinal, $boolFestivo, $intHoras, $boolNovedad = 0, $boolDescanso = 0) {        
@@ -780,5 +785,5 @@ class TurSoportePagoRepository extends EntityRepository {
             }
         }  
         return $descansosPagados;
-    }
+    }    
 }
