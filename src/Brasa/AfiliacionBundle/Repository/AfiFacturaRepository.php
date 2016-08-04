@@ -117,11 +117,20 @@ class AfiFacturaRepository extends EntityRepository {
         $arFactura = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->find($codigoFactura);            
         $strResultado = "";        
         if($arFactura->getEstadoAutorizado() == 0) {            
-            if($strResultado == "") {
-                $arFactura->setEstadoAutorizado(1);
-                $em->persist($arFactura);
-                $em->flush();                              
-            }                          
+            $facturaDetalles = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura)); 
+            $facturaDetallesCursos = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleCurso')->findBy(array('codigoFacturaFk' => $codigoFactura)); 
+            if ($facturaDetalles != null && $facturaDetallesCursos != null){
+                $strResultado = 'No pueden haber detalles de seguridad social y cursos';
+            }
+            if ($facturaDetalles == null && $facturaDetallesCursos == null){
+               $strResultado = 'La factura no tiene detalles' ;
+            } else {
+                if($strResultado == '') {
+                    $arFactura->setEstadoAutorizado(1);
+                    $em->persist($arFactura);
+                    $em->flush();                              
+                }
+            }    
         } else {
             $strResultado = "Ya esta autorizado";
         }        
@@ -137,7 +146,7 @@ class AfiFacturaRepository extends EntityRepository {
             $em->persist($arFactura);
             $em->flush();                                                        
         } else {
-            $strResultado = "El factura debe estas autorizado y no puede estar anulada o impresa";
+            $strResultado = "El factura debe estar autorizado y no puede estar anulada o impresa";
         }        
         return $strResultado;
     }    

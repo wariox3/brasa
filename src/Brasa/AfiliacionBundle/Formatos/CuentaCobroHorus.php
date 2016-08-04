@@ -2,7 +2,7 @@
 
 namespace Brasa\AfiliacionBundle\Formatos;
 
-class CuentaCobro extends \FPDF_FPDF {
+class CuentaCobroHorus extends \FPDF_FPDF {
 
     public static $em;
     public static $codigoFactura;
@@ -22,7 +22,7 @@ class CuentaCobro extends \FPDF_FPDF {
         $strLetras = \Brasa\GeneralBundle\MisClases\Funciones::devolverNumeroLetras($arFactura->getTotal());
         self::$strLetras = $strLetras;
         ob_clean();
-        $pdf = new CuentaCobro();
+        $pdf = new CuentaCobroHorus();
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);

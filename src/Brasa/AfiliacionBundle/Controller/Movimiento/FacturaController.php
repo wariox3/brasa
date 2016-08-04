@@ -111,6 +111,7 @@ class FacturaController extends Controller
         $paginator  = $this->get('knp_paginator');
         $arFactura = new \Brasa\AfiliacionBundle\Entity\AfiFactura();
         $arFactura = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->find($codigoFactura);
+        $validar = '';
         $form = $this->formularioDetalle($arFactura);
         $form->handleRequest($request);        
         if ($form->isValid()) {
@@ -118,7 +119,7 @@ class FacturaController extends Controller
                 $arrControles = $request->request->All();
                 $this->actualizarDetalle($arrControles, $codigoFactura);
                 $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->autorizar($codigoFactura);
-                if($strResultado != "") {
+                if($strResultado != '') {
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 }
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));
@@ -146,9 +147,17 @@ class FacturaController extends Controller
                         $objFactura = new \Brasa\AfiliacionBundle\Formatos\Factura();
                         $objFactura->Generar($this, $codigoFactura);                                            
                     } else {
+                        $facturaDetalles = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura)); 
+                        $facturaDetallesCursos = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleCurso')->findBy(array('codigoFacturaFk' => $codigoFactura)); 
+                        if ($facturaDetalles != null && $facturaDetallesCursos == null){
+                            $objCuentaCobro = new \Brasa\AfiliacionBundle\Formatos\CuentaCobroHorus2();
+                            $objCuentaCobro->Generar($this, $codigoFactura);                                            
+                        }
+                        if ($facturaDetallesCursos != null && $facturaDetalles == null){
+                            $objCuentaCobro = new \Brasa\AfiliacionBundle\Formatos\CuentaCobroHorus();
+                            $objCuentaCobro->Generar($this, $codigoFactura);                                            
+                        }
                         
-                        $objCuentaCobro = new \Brasa\AfiliacionBundle\Formatos\CuentaCobro();
-                        $objCuentaCobro->Generar($this, $codigoFactura);                                            
                     }
 
                 }
