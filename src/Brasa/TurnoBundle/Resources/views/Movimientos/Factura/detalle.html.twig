@@ -85,13 +85,13 @@
                         <td class="titulo">ANEXO:</td>
                         <td class="td-in-well">{% if arFactura.imprimirRelacion == 1 %}SI{% else %}NO{% endif %}</td>
                         <td class="titulo" >TOTAL BRUTO:</td>
-                        <td align="right">{{ arFactura.vrTotalNeto | number_format(0, '.', ',')}}</td>
+                        <td align="right">{{ arFactura.vrTotal | number_format(0, '.', ',')}}</td>
                     </tr>
                     <tr>
                         <td class="titulo">AGRUPADA:</td>
                         <td class="td-in-well">{% if arFactura.imprimirAgrupada == 1 %}SI{% else %}NO{% endif %}</td>
                         <td class="titulo" >TOTAL NETO:</td>
-                        <td align="right">{{ arFactura.vrTotal | number_format(0, '.', ',')}}</td>
+                        <td align="right">{{ arFactura.vrTotalNeto | number_format(0, '.', ',')}}</td>
                     </tr>                    
                     <tr>
                         <td class="titulo">USUARIO:</td>

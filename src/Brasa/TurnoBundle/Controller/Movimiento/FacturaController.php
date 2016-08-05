@@ -22,7 +22,28 @@ class FacturaController extends Controller
         $form->handleRequest($request);
         $this->lista();
         if ($form->isValid()) {            
-            if ($form->get('BtnContabilizar')->isClicked()) {                
+            if ($form->get('BtnContabilizar')->isClicked()) {   
+                /*set_time_limit(0);
+                ini_set("memory_limit", -1);
+                $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+                $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+                $arFacturas = new \Brasa\TurnoBundle\Entity\TurFactura();
+                $arFacturas = $em->getRepository('BrasaTurnoBundle:TurFactura')->findAll();
+                foreach ($arFacturas as $arFactura) {                    
+                    $arFacturaAct = new \Brasa\TurnoBundle\Entity\TurFactura();        
+                    $arFacturaAct = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($arFactura->getCodigoFacturaPk());                     
+                    $retencionFuente = 0;
+                    if($arFacturaAct->getVrBaseAIU() >= $arConfiguracion->getBaseRetencionFuente()) {
+                        $retencionFuente = ($arFacturaAct->getVrBaseAIU() * 2 ) / 100;
+                    }                
+
+                    $totalNeto = $arFacturaAct->getVrSubtotal() + $arFacturaAct->getVrIva() - $retencionFuente;                    
+                    $arFacturaAct->setVrTotalNeto($totalNeto);
+                    $em->persist($arFacturaAct);                                                                                                        
+                }
+                $em->flush();
+                 * 
+                 */
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurFactura')->contabilizar($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_factura'));                                 
@@ -724,7 +745,7 @@ class FacturaController extends Controller
                     ->setCellValue('E' . $i, $arFactura->getFechaVence()->format('d/m/Y'))
                     ->setCellValue('F' . $i, $arFactura->getClienteRel()->getNit())
                     ->setCellValue('G' . $i, 0)
-                    ->setCellValue('H' . $i, $arFactura->getVrTotalNeto())
+                    ->setCellValue('H' . $i, ($arFactura->getVrTotalNeto() * $arFactura->getOperacion()))
                     ->setCellValue('I' . $i, 0);
             $i++;
         }
