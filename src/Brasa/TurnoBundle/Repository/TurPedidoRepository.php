@@ -246,7 +246,7 @@ class TurPedidoRepository extends EntityRepository {
             $arPedidoDetalleActualizar->setVrBaseAiu($baseAiuDetalle);
             $arPedidoDetalleActualizar->setVrIva($ivaDetalle);
             $arPedidoDetalleActualizar->setVrTotalDetalle($totalDetalle); 
-            $arPedidoDetalleActualizar->setVrTotalDetallePendiente($floVrServicio);
+            //$arPedidoDetalleActualizar->setVrTotalDetallePendiente($floVrServicio);
             $arPedidoDetalleActualizar->setVrPrecioMinimo($floVrMinimoServicio);
             $arPedidoDetalleActualizar->setVrPrecio($precio);
             $arPedidoDetalleActualizar->setVrCosto($douCostoCalculado);
