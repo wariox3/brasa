@@ -862,8 +862,7 @@ class PedidoController extends Controller
         } 
         if($ar->getEstadoProgramado() == 1 && $ar->getEstadoAnulado() == 0) {
             $arrBotonDesprogramar['disabled'] = false;
-            $arrBotonProgramar['disabled'] = true;
-            $arrBotonDesAutorizar['disabled'] = true; 
+            $arrBotonProgramar['disabled'] = true; 
         } 
         $form = $this->createFormBuilder()
                     ->add('BtnFacturar', 'submit', $arrBotonFacturar)                
