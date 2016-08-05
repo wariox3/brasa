@@ -63,6 +63,16 @@ class TurPedidoDetalle
     private $codigoPlantillaFk;    
     
     /**
+     * @ORM\Column(name="anio", type="integer")
+     */    
+    private $anio = 0;    
+    
+    /**
+     * @ORM\Column(name="mes", type="integer")
+     */    
+    private $mes = 0;     
+    
+    /**
      * @ORM\Column(name="dia_desde", type="integer")
      */    
     private $diaDesde = 1;     
@@ -1866,5 +1876,53 @@ class TurPedidoDetalle
     public function getVrTotalDetalleAfectado()
     {
         return $this->vrTotalDetalleAfectado;
+    }
+
+    /**
+     * Set anio
+     *
+     * @param integer $anio
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setAnio($anio)
+    {
+        $this->anio = $anio;
+
+        return $this;
+    }
+
+    /**
+     * Get anio
+     *
+     * @return integer
+     */
+    public function getAnio()
+    {
+        return $this->anio;
+    }
+
+    /**
+     * Set mes
+     *
+     * @param integer $mes
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setMes($mes)
+    {
+        $this->mes = $mes;
+
+        return $this;
+    }
+
+    /**
+     * Get mes
+     *
+     * @return integer
+     */
+    public function getMes()
+    {
+        return $this->mes;
     }
 }

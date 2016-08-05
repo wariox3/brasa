@@ -260,7 +260,7 @@ class ProgramacionController extends Controller
             }
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
-        $arPedidosDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->listaCliente($arProgramacion->getCodigoClienteFk(), "", $codigoPuesto, '');
+        $arPedidosDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->listaClienteFecha($arProgramacion->getCodigoClienteFk(), $codigoPuesto, '', $arProgramacion->getFecha()->format('Y'), $arProgramacion->getFecha()->format('m'));
         return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalleNuevo.html.twig', array(
             'arProgramacion' => $arProgramacion,
             'arPedidosDetalle' => $arPedidosDetalle,
@@ -531,7 +531,20 @@ class ProgramacionController extends Controller
                 if($arPuesto) {
                     $arProgramacionDetalle->setPuestoRel($arPuesto);
                 }
-            } 
+            }             
+            if($arrControles['TxtCodigoPedidoDetalle'.$intCodigo] != '') {
+                if($arrControles['TxtCodigoPedidoDetalle'.$intCodigo] != $arProgramacionDetalle->getCodigoPedidoDetalleFk()) {
+                    $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                    $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($arrControles['TxtCodigoPedidoDetalle'.$intCodigo]);
+                    if($arPedidoDetalle) {
+                        if($arPedidoDetalle->getAnio() == $arProgramacionDetalle->getAnio()) {
+                            if($arPedidoDetalle->getMes() == $arProgramacionDetalle->getMes()) {
+                                $arProgramacionDetalle->setPedidoDetalleRel($arPedidoDetalle);
+                            }
+                        }                        
+                    }                    
+                }
+            }            
             if($arProgramacionDetalle->getPeriodoBloqueo() < 15) {
                 if($arrControles['TxtDia01D'.$intCodigo] != '') {
                     $strTurno = $this->validarTurno($arrControles['TxtDia01D'.$intCodigo]);
