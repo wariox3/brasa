@@ -444,7 +444,7 @@ class SeguridadSocialPeriodosController extends Controller
                     }
                     $licenciaMaternidad = "";
                     if ($arSsoAporte->getLicenciaMaternidad() == "X"){
-                       $licenciaMaternidad = $arSsoAporte->getgetLicenciaMaternidad()." ". $arSsoAporte->getDiasLicenciaMaternidad(); 
+                       $licenciaMaternidad = $arSsoAporte->getLicenciaMaternidad()." ". $arSsoAporte->getDiasLicenciaMaternidad(); 
                     }
                     $vacaciones = "";
                     if ($arSsoAporte->getVacaciones() == "X"){
