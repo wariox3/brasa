@@ -741,10 +741,10 @@ class FacturaController extends Controller
                     ->setCellValue('A' . $i, 'FAC')
                     ->setCellValue('B' . $i, $arFactura->getFacturaTipoRel()->getAbreviatura())
                     ->setCellValue('C' . $i, $arFactura->getNumero())
-                    ->setCellValue('D' . $i, $arFactura->getFecha()->format('d/m/Y'))
-                    ->setCellValue('E' . $i, $arFactura->getFechaVence()->format('d/m/Y'))
+                    ->setCellValue('D' . $i, $arFactura->getFecha()->format('Y/m/d'))
+                    ->setCellValue('E' . $i, $arFactura->getFechaVence()->format('Y/m/d'))
                     ->setCellValue('F' . $i, $arFactura->getClienteRel()->getNit())
-                    ->setCellValue('G' . $i, 0)
+                    ->setCellValue('G' . $i, "13050501")
                     ->setCellValue('H' . $i, ($arFactura->getVrTotalNeto() * $arFactura->getOperacion()))
                     ->setCellValue('I' . $i, 0);
             $i++;
