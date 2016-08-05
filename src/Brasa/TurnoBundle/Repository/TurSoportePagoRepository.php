@@ -707,8 +707,12 @@ class TurSoportePagoRepository extends EntityRepository {
                     }                
                     //Para tema de redondeo
                     $horasCompensadas = $horasCompensarDia + $horasCompensarNoche + $horasCompensarFestivaDia + $horasCompensarFestivaNoche;                
-                    if($horasCompensadas < $horasPorCompensar) {                        
-                        $horasCompensarFestivaNoche += 1;
+                    if($horasCompensadas < $horasPorCompensar) {                                                
+                        if($horasExtraFestivasNoche > 0) {
+                            $horasCompensarFestivaNoche += 1;
+                        } else {
+                            $horasCompensarFestivaDia += 1;
+                        }                        
                     }
                     $horasDia += $horasCompensarDia;
                     $horasNoche += $horasCompensarNoche;
@@ -753,8 +757,8 @@ class TurSoportePagoRepository extends EntityRepository {
                     }                
                     //Para tema de redondeo
                     $horasCompensadas = $horasCompensarDia + $horasCompensarNoche + $horasCompensarFestivaDia + $horasCompensarFestivaNoche;                
-                    if($horasCompensadas < $horasPorCompensar) {                        
-                        $horasCompensarFestivaNoche += 1;
+                    if($horasCompensadas < $horasPorCompensar) {  
+                        $horasCompensarFestivaNoche += 1;                        
                     }
                     $horasExtraDia += $horasCompensarDia;
                     $horasExtraNoche += $horasCompensarNoche;
