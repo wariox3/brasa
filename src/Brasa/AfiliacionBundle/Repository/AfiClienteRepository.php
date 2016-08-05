@@ -5,7 +5,7 @@ namespace Brasa\AfiliacionBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 class AfiClienteRepository extends EntityRepository {    
-    public function ListaDql($strNombre = "", $strCodigo = "") {
+    public function ListaDql($strNombre = "", $strCodigo = "", $strIndependiente = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT c FROM BrasaAfiliacionBundle:AfiCliente c WHERE c.codigoClientePk <> 0";
         if($strNombre != "" ) {
@@ -13,6 +13,12 @@ class AfiClienteRepository extends EntityRepository {
         }
         if($strCodigo != "" ) {
             $dql .= " AND c.codigoClientePk LIKE '%" . $strCodigo . "%'";
+        }
+        if($strIndependiente == 1 ) {
+            $dql .= " AND c.independiente = 1";
+        }
+        if($strIndependiente == "0" ) {
+            $dql .= " AND c.independiente = 0";
         }
         $dql .= " ORDER BY c.nombreCorto";
         return $dql;

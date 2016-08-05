@@ -111,20 +111,8 @@ class SucursalController extends Controller
         }            
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'NIT')
-                    ->setCellValue('C1', 'NOMBRE')
-                    ->setCellValue('D1', 'FORMAPAGO')
-                    ->setCellValue('E1', 'PLAZO')
-                    ->setCellValue('F1', 'DIRECCION')
-                    ->setCellValue('G1', 'BARRIO')
-                    ->setCellValue('H1', 'CIUDAD')
-                    ->setCellValue('I1', 'TELEFONO')
-                    ->setCellValue('J1', 'CELULAR')
-                    ->setCellValue('K1', 'FAX')
-                    ->setCellValue('L1', 'EMAIL')
-                    ->setCellValue('M1', 'CONTACTO')
-                    ->setCellValue('N1', 'CELCONTACTO')
-                    ->setCellValue('O1', 'TELCONTACTO');
+                    ->setCellValue('B1', 'NOMBRE')
+                    ->setCellValue('C1', 'CODIGO INTERFACE');
 
         $i = 2;
         
@@ -135,20 +123,8 @@ class SucursalController extends Controller
         foreach ($arSucursales as $arSucursal) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arSucursal->getCodigoSucursalPk())
-                    ->setCellValue('B' . $i, $arSucursal->getNit())
-                    ->setCellValue('C' . $i, $arSucursal->getNombreCorto())
-                    ->setCellValue('D' . $i, $arSucursal->getFormaPagoRel()->getNombre())
-                    ->setCellValue('E' . $i, $arSucursal->getPlazoPago())
-                    ->setCellValue('F' . $i, $arSucursal->getDireccion())
-                    ->setCellValue('G' . $i, $arSucursal->getBarrio())
-                    ->setCellValue('H' . $i, $arSucursal->getCiudadRel()->getNombre())
-                    ->setCellValue('I' . $i, $arSucursal->getTelefono())
-                    ->setCellValue('J' . $i, $arSucursal->getCelular())
-                    ->setCellValue('K' . $i, $arSucursal->getFax())
-                    ->setCellValue('L' . $i, $arSucursal->getEmail())
-                    ->setCellValue('M' . $i, $arSucursal->getContacto())
-                    ->setCellValue('N' . $i, $arSucursal->getCelularContacto())
-                    ->setCellValue('O' . $i, $arSucursal->getTelefonoContacto());                                    
+                    ->setCellValue('B' . $i, $arSucursal->getNombre())
+                    ->setCellValue('C' . $i, $arSucursal->getCodigoInterface());                                    
             $i++;
         }
         

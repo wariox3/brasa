@@ -914,6 +914,10 @@ brs_rhu_consultas_contrato_fecha_ingreso:
     path:     /rhu/consultas/contrato/fecha/ingreso
     defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:FechaIngreso }    
 
+brs_rhu_consultas_contrato_periodo:    
+    path:     /rhu/consultas/contrato/periodo
+    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:ContratoPeriodo } 
+
 brs_rhu_utilidades_proyeccion:    
     path:     /rhu/utilidades/proyeccion
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesProyeccion:lista }

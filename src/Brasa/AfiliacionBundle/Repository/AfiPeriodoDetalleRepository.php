@@ -17,7 +17,7 @@ class AfiPeriodoDetalleRepository extends EntityRepository {
     }            
     
     public function listaConsultaDql($codigo = '', $codigoCliente = '', $estadoFacturado = '',$strDesde = "", $strHasta = "") {
-        $em = $this->getEntityManager();
+        //$em = $this->getEntityManager();
         $dql   = "SELECT pd FROM BrasaAfiliacionBundle:AfiPeriodoDetalle pd JOIN pd.periodoRel p WHERE pd.codigoPeriodoDetallePk <> 0";
         if($codigoCliente != '') {
             $dql .= " AND p.codigoClienteFk = " . $codigoCliente;

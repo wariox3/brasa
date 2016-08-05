@@ -22,7 +22,7 @@ class RhuContratoRepository extends EntityRepository {
         }
         if($fechaHastaInicia != "") {
             //$strHasta = new \DateTime($strHasta);
-            $dql .= " AND c.fechaDesde <= '" . date_format($fechaDesdeInicia, ('Y-m-d')) . "'";
+            $dql .= " AND c.fechaDesde <= '" . date_format($fechaHastaInicia, ('Y-m-d')) . "'";
         }
         if($boolMostrarActivos == 1 ) {
             $dql .= " AND c.estadoActivo = 1";

@@ -251,6 +251,8 @@ class TurPedidoRepository extends EntityRepository {
             $arPedidoDetalleActualizar->setVrPrecio($precio);
             $arPedidoDetalleActualizar->setVrCosto($douCostoCalculado);
             
+            $intHorasRealesDiurnas = $intHorasRealesDiurnas * $arPedidoDetalle->getCantidad(); 
+            $intHorasRealesNocturnas = $intHorasRealesNocturnas * $arPedidoDetalle->getCantidad(); 
             $arPedidoDetalleActualizar->setHoras($douHoras);
             $arPedidoDetalleActualizar->setHorasDiurnas($intHorasRealesDiurnas);
             $arPedidoDetalleActualizar->setHorasNocturnas($intHorasRealesNocturnas);
@@ -482,6 +484,16 @@ class TurPedidoRepository extends EntityRepository {
         }
          $em->flush();               
     }
+    
+    public function actualizarPendienteFacturar ($codigoPedido) {
+        $em = $this->getEntityManager();
+        $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+        $arPedidoDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigoPedido));
+        foreach($arPedidoDetalles as $arPedidoDetalle) {
+            $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->actualizarPendienteFacturar($arPedidoDetalle->getCodigoPedidoDetallePk());
+        }
+         $em->flush();               
+    }    
     
     public function actualizarEstadoProgramado ($codigoPedido) {
         $em = $this->getEntityManager();        

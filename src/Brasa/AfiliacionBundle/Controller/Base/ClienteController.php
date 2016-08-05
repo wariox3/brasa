@@ -96,13 +96,16 @@ class ClienteController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->listaDQL(
-                $session->get('filtroClienteNombre')   
+                $session->get('filtroClienteNombre'),
+                '',
+                $session->get('filtroIndependiente')
                 ); 
     }
 
     private function filtrar ($form) {        
         $session = $this->getRequest()->getSession();        
         $session->set('filtroClienteNombre', $form->get('TxtNombre')->getData());
+        $session->set('filtroIndependiente', $form->get('independiente')->getData());
         $this->lista();
     }
     
@@ -110,6 +113,7 @@ class ClienteController extends Controller
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()            
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroClienteNombre')))
+            ->add('independiente', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'),'data' => $session->get('filtroIndependiente')))                                            
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))

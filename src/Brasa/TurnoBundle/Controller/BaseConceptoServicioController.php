@@ -112,9 +112,10 @@ class BaseConceptoServicioController extends Controller
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);        
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'IDENTIFICACION')
-                    ->setCellValue('C1', 'NOMBRE')
-                    ->setCellValue('D1', 'TIPO');
+                    ->setCellValue('B1', 'NOMBRE')
+                    ->setCellValue('C1', 'H')
+                    ->setCellValue('D1', 'HD')
+                    ->setCellValue('E1', 'HN');
 
         $i = 2;
         
@@ -125,9 +126,10 @@ class BaseConceptoServicioController extends Controller
         foreach ($arConceptoServicios as $arConceptoServicio) {            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arConceptoServicio->getCodigoConceptoServicioPk())
-                    ->setCellValue('B' . $i, $arConceptoServicio->getNumeroIdentificacion())
-                    ->setCellValue('C' . $i, $arConceptoServicio->getNombreCorto())
-                    ->setCellValue('D' . $i, $arConceptoServicio->getConceptoServicioTipoRel()->getNombre());
+                    ->setCellValue('B' . $i, $arConceptoServicio->getNombre())
+                    ->setCellValue('C' . $i, $arConceptoServicio->getHoras())
+                    ->setCellValue('D' . $i, $arConceptoServicio->getHorasDiurnas())
+                    ->setCellValue('E' . $i, $arConceptoServicio->getHorasNocturnas());
                         
             $i++;
         }

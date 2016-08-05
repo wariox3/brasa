@@ -34,7 +34,19 @@ class MantenimientoPedidoController extends Controller
                 foreach ($arPedidos as $arPedido) {
                     $em->getRepository('BrasaTurnoBundle:TurPedido')->actualizarHorasProgramadas($arPedido->getCodigoPedidoPk());
                 }
-            }                           
+            } 
+            
+            if ($form->get('BtnActualizarPendienteFacturar')->isClicked()) { 
+                set_time_limit(0);
+                ini_set("memory_limit", -1);                
+                $dql = $em->getRepository('BrasaTurnoBundle:TurPedido')->listaDql('','','','','',0,$dateFechaDesde->format('Y/m/d'),$dateFechaHasta->format('Y/m/d'));
+                $query = $em->createQuery($dql);
+                $arPedidos = $query->getResult();
+                foreach ($arPedidos as $arPedido) {
+                    $em->getRepository('BrasaTurnoBundle:TurPedido')->actualizarPendienteFacturar($arPedido->getCodigoPedidoPk());
+                }
+            }            
+            
             if ($form->get('BtnActualizarEstadoProgramado')->isClicked()) {                 
                 $dql = $em->getRepository('BrasaTurnoBundle:TurPedido')->listaDql('','','','','',0,$dateFechaDesde->format('Y/m/d'),$dateFechaHasta->format('Y/m/d'));
                 $query = $em->createQuery($dql);
@@ -67,6 +79,7 @@ class MantenimientoPedidoController extends Controller
                 ),
                 'data' => $anio,
             ))                
+            ->add('BtnActualizarPendienteFacturar', 'submit', array('label'  => 'Actualizar pendiente facturar'))            
             ->add('BtnActualizarHorasProgramadas', 'submit', array('label'  => 'Actualizar horas programadas'))            
             ->add('BtnActualizarEstadoProgramado', 'submit', array('label'  => 'Actualizar estado programado'))            
             ->getForm();

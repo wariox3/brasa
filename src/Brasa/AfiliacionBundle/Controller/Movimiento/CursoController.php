@@ -736,7 +736,11 @@ class CursoController extends Controller
         $arCursosDetalles = new \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle();
         $arCursosDetalles = $query->getResult();
                 
-        foreach ($arCursosDetalles as $arCursoDetalle) {            
+        foreach ($arCursosDetalles as $arCursoDetalle) {  
+            $proveedor = '';
+            if ($arCursoDetalle->getCodigoProveedorFk() != null){
+                $proveedor = $arCursoDetalle->getProveedorRel()->getNombreCorto();
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arCursoDetalle->getCursoRel()->getCodigoCursoPk())
                     ->setCellValue('B' . $i, $arCursoDetalle->getCursoRel()->getNumero())
@@ -752,7 +756,7 @@ class CursoController extends Controller
                     ->setCellValue('N' . $i, $objFunciones->devuelveBoolean($arCursoDetalle->getCursoRel()->getCertificado()))
                     ->setCellValue('O' . $i, $objFunciones->devuelveBoolean($arCursoDetalle->getCursoRel()->getEstadoAnulado()))
                     ->setCellValue('P' . $i, $arCursoDetalle->getCursoTipoRel()->getNombre())
-                    ->setCellValue('Q' . $i, $arCursoDetalle->getProveedorRel()->getNombreCorto())
+                    ->setCellValue('Q' . $i, $proveedor)
                     ->setCellValue('R' . $i, $arCursoDetalle->getCursoRel()->getClienteRel()->getAsesorRel()->getNombre())
                     ->setCellValue('S' . $i, $arCursoDetalle->getCursoRel()->getCosto())
                     ->setCellValue('T' . $i, $arCursoDetalle->getCursoRel()->getTotal())

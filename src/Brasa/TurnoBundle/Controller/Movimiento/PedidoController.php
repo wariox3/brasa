@@ -370,6 +370,8 @@ class PedidoController extends Controller
             if($arPeriodo->getCodigoPeriodoPk() == 1) {
                 $intAnio = $arPedido->getFechaProgramacion()->format('Y');                
                 $intMes = $arPedido->getFechaProgramacion()->format('m');
+                $arPedidoDetalle->setAnio($intAnio);
+                $arPedidoDetalle->setMes($intMes);
                 $intDiaFinalMes = date("d",(mktime(0,0,0,$intMes+1,1,$intAnio)-1));
                 $arPedidoDetalle->setDiaDesde(1);
                 $arPedidoDetalle->setDiaHasta($intDiaFinalMes);
@@ -429,7 +431,8 @@ class PedidoController extends Controller
                             $arPedidoDetalle->setCantidad($arCotizacionDetalle->getCantidad());
                             $arPedidoDetalle->setVrPrecioAjustado($arCotizacionDetalle->getVrPrecioAjustado());
                             $arPedidoDetalle->setLiquidarDiasReales($arCotizacionDetalle->getLiquidarDiasReales());
-                    
+                            $arPedidoDetalle->setAnio($arPedido->getFechaProgramacion()->format('Y'));
+                            $arPedidoDetalle->setMes($arPedido->getFechaProgramacion()->format('m'));
                             $strAnioMes = $arPedido->getFechaProgramacion()->format('Y/m/');
                             $dateFechaDesde = date_create($strAnioMes . "1");
                             $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFechaDesde->format('m')+1,1,$dateFechaDesde->format('Y'))-1));
@@ -534,7 +537,8 @@ class PedidoController extends Controller
                         $arPedidoDetalle->setFechaIniciaPlantilla($arServicioDetalle->getFechaIniciaPlantilla());
                         $arPedidoDetalle->setAjusteProgramacion($arServicioDetalle->getAjusteProgramacion());
                         $arPedidoDetalle->setLiquidarDiasReales($arServicioDetalle->getLiquidarDiasReales());
-                        
+                        $arPedidoDetalle->setAnio($arPedido->getFechaProgramacion()->format('Y'));
+                        $arPedidoDetalle->setMes($arPedido->getFechaProgramacion()->format('m'));                        
                         $strAnioMes = $arPedido->getFechaProgramacion()->format('Y/m/');
                         $dateFechaDesde = date_create($strAnioMes . "1");
                         $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFechaDesde->format('m')+1,1,$dateFechaDesde->format('Y'))-1));
