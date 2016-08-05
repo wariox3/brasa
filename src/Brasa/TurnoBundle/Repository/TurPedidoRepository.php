@@ -251,6 +251,8 @@ class TurPedidoRepository extends EntityRepository {
             $arPedidoDetalleActualizar->setVrPrecio($precio);
             $arPedidoDetalleActualizar->setVrCosto($douCostoCalculado);
             
+            $intHorasRealesDiurnas = $intHorasRealesDiurnas * $arPedidoDetalle->getCantidad(); 
+            $intHorasRealesNocturnas = $intHorasRealesNocturnas * $arPedidoDetalle->getCantidad(); 
             $arPedidoDetalleActualizar->setHoras($douHoras);
             $arPedidoDetalleActualizar->setHorasDiurnas($intHorasRealesDiurnas);
             $arPedidoDetalleActualizar->setHorasNocturnas($intHorasRealesNocturnas);

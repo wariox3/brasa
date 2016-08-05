@@ -161,6 +161,11 @@ class TurPedidoDetalle
      * @ORM\Column(name="vr_total_detalle", type="float")
      */
     private $vrTotalDetalle = 0; 
+
+    /**
+     * @ORM\Column(name="vr_total_detalle_afectado", type="float")
+     */
+    private $vrTotalDetalleAfectado = 0; 
     
     /**
      * @ORM\Column(name="vr_total_detalle_pendiente", type="float")
@@ -1837,5 +1842,29 @@ class TurPedidoDetalle
     public function getDetallePuesto()
     {
         return $this->detallePuesto;
+    }
+
+    /**
+     * Set vrTotalDetalleAfectado
+     *
+     * @param float $vrTotalDetalleAfectado
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setVrTotalDetalleAfectado($vrTotalDetalleAfectado)
+    {
+        $this->vrTotalDetalleAfectado = $vrTotalDetalleAfectado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalDetalleAfectado
+     *
+     * @return float
+     */
+    public function getVrTotalDetalleAfectado()
+    {
+        return $this->vrTotalDetalleAfectado;
     }
 }
