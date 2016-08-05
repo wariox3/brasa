@@ -28,6 +28,11 @@ class RhuLiquidacionAdicionales
     private $codigoCreditoFk;
     
     /**
+     * @ORM\Column(name="codigo_pago_concepto_fk", type="integer", nullable=true)
+     */    
+    private $codigoPagoConceptoFk;    
+    
+    /**
      * @ORM\Column(name="codigo_liquidacion_adicional_concepto_fk", type="integer", nullable=true)
      */    
     private $codigoLiquidacionAdicionalConceptoFk;    
@@ -70,7 +75,11 @@ class RhuLiquidacionAdicionales
      */
     protected $liquidacionAdicionalConceptoRel;    
 
-
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuPagoConcepto", inversedBy="liquidacionesAdicionalesPagoConceptoRel")
+     * @ORM\JoinColumn(name="codigo_pago_concepto_fk", referencedColumnName="codigo_pago_concepto_pk")
+     */
+    protected $pagoConceptoRel; 
 
     /**
      * Get codigoLiquidacionAdicionalPk
@@ -320,5 +329,53 @@ class RhuLiquidacionAdicionales
     public function getCodigoUsuario()
     {
         return $this->codigoUsuario;
+    }
+
+    /**
+     * Set codigoPagoConceptoFk
+     *
+     * @param integer $codigoPagoConceptoFk
+     *
+     * @return RhuLiquidacionAdicionales
+     */
+    public function setCodigoPagoConceptoFk($codigoPagoConceptoFk)
+    {
+        $this->codigoPagoConceptoFk = $codigoPagoConceptoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPagoConceptoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPagoConceptoFk()
+    {
+        return $this->codigoPagoConceptoFk;
+    }
+
+    /**
+     * Set pagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel
+     *
+     * @return RhuLiquidacionAdicionales
+     */
+    public function setPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel = null)
+    {
+        $this->pagoConceptoRel = $pagoConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoConceptoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto
+     */
+    public function getPagoConceptoRel()
+    {
+        return $this->pagoConceptoRel;
     }
 }

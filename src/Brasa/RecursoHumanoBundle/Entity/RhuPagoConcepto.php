@@ -189,6 +189,11 @@ class RhuPagoConcepto
     protected $vacacionesCreditosPagoConceptoRel;     
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuLiquidacionAdicionales", mappedBy="pagoConceptoRel")
+     */
+    protected $liquidacionesAdicionalesPagoConceptoRel;    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -1136,5 +1141,39 @@ class RhuPagoConcepto
     public function getPorPorcentajeTiempoExtra()
     {
         return $this->porPorcentajeTiempoExtra;
+    }
+
+    /**
+     * Add liquidacionesAdicionalesPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales $liquidacionesAdicionalesPagoConceptoRel
+     *
+     * @return RhuPagoConcepto
+     */
+    public function addLiquidacionesAdicionalesPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales $liquidacionesAdicionalesPagoConceptoRel)
+    {
+        $this->liquidacionesAdicionalesPagoConceptoRel[] = $liquidacionesAdicionalesPagoConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove liquidacionesAdicionalesPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales $liquidacionesAdicionalesPagoConceptoRel
+     */
+    public function removeLiquidacionesAdicionalesPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales $liquidacionesAdicionalesPagoConceptoRel)
+    {
+        $this->liquidacionesAdicionalesPagoConceptoRel->removeElement($liquidacionesAdicionalesPagoConceptoRel);
+    }
+
+    /**
+     * Get liquidacionesAdicionalesPagoConceptoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLiquidacionesAdicionalesPagoConceptoRel()
+    {
+        return $this->liquidacionesAdicionalesPagoConceptoRel;
     }
 }
