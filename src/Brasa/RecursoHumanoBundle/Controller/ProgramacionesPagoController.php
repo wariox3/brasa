@@ -454,6 +454,23 @@ class ProgramacionesPagoController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_programacion_pago_resumen_turno_ver', array('codigoProgramacionPagoDetalle' => $codigoProgramacionPagoDetalle)));
                 }
             }            
+            if($form->get('BtnInactivarPagoAdicional')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarValor');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados as $codigoPagoAdicional) {
+                        $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+                        $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
+                        if($arPagoAdicional->getEstadoInactivo() == 1) {
+                            $arPagoAdicional->setEstadoInactivo(0);
+                        } else {
+                            $arPagoAdicional->setEstadoInactivo(1);
+                        }
+                        $em->persist($arPagoAdicional);
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_programacion_pago_resumen_turno_ver', array('codigoProgramacionPagoDetalle' => $codigoProgramacionPagoDetalle)));
+                }
+            }
             if($form->get('BtnMarcar')->isClicked()) {
                 $arProgramacionPagoDetalle->setMarca(1);
                 $em->persist($arProgramacionPagoDetalle);
@@ -474,7 +491,7 @@ class ProgramacionesPagoController extends Controller
         }        
  
         $arrDiaSemana = $objFunciones->diasMes($arProgramacionPagoDetalle->getFechaDesde(), $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arProgramacionPagoDetalle->getFechaDesde()->format('Y-m-').'01', $arProgramacionPagoDetalle->getFechaDesde()->format('Y-m-').'31'));        
-        $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->programacionPagoDql($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesde()->format('Y/m/d'), $arProgramacionPagoDetalle->getFechaHasta()->format('Y/m/d')));
+        $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->programacionPagoGeneralDql($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesde()->format('Y/m/d'), $arProgramacionPagoDetalle->getFechaHasta()->format('Y/m/d')));
         $arPagosAdicionales = $paginator->paginate($query, $request->query->get('page', 1), 20);        
         $dql = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->listaDql("", $codigoProgramacionPagoDetalle);                
         $arPagoDetalles = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 50);        
@@ -563,6 +580,7 @@ class ProgramacionesPagoController extends Controller
             ->add('BtnActualizarHoras', 'submit', array('label'  => 'Actualizar',))
             ->add('BtnActualizarPagoAdicional', 'submit', array('label'  => 'Actualizar',))
             ->add('BtnEliminarPagoAdicional', 'submit', array('label'  => 'Eliminar',))
+                ->add('BtnInactivarPagoAdicional', 'submit', array('label'  => 'Inactivar',))
             ->add('BtnMarcar', 'submit', array('label'  => 'Marcar',))
             ->getForm();
         return $form;

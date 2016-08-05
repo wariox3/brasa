@@ -116,6 +116,13 @@ class RhuPagoAdicionalRepository extends EntityRepository {
         return $dql;
     }
     
+    public function programacionPagoGeneralDql($codigoEmpleado = "", $fechaDesde, $fechaHasta) {
+        $em = $this->getEntityManager();
+        $dql = "SELECT pa FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa "
+                . "WHERE (((pa.fecha >= '$fechaDesde' AND pa.fecha <= '$fechaHasta') AND pa.modalidad = 2) OR pa.modalidad = 1) AND pa.codigoEmpleadoFk = $codigoEmpleado";        
+        return $dql;
+    }    
+    
     public function bonificacionNoPrestacional($codigoEmpleado, $codigoProgramacionPago) {
         $em = $this->getEntityManager();
         $dql   = "SELECT SUM(pa.valor) as valor FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa "

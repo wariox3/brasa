@@ -170,6 +170,7 @@
                 <th>VALOR</th>
                 <th>ADL</th>
                 <th>PER</th>
+                <th>ACT</th>
                 <th>USUARIO</th>                  
                 <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodosTabla(this, 'ChkSeleccionarValor[]');"/></th>
             </tr>
@@ -182,6 +183,7 @@
                 <td><input class="input-grid" type="text" name="TxtValor{{ arPagosAdicionales.codigoPagoAdicionalPk }}" value="{{ arPagosAdicionales.valor  }}" size="10" style="text-align: right; width:80px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                
                 <td>{% if arPagosAdicionales.aplicaDiaLaborado == 1 %} SI {% else %} NO {% endif %}</td>                    
                 <td>{% if arPagosAdicionales.permanente == 1 %} SI {% else %} NO {% endif %}</td>
+                <td>{% if arPagosAdicionales.estadoInactivo == 0 %} SI {% else %} NO {% endif %}</td>
                 <td>{{ arPagosAdicionales.codigoUsuario }}</td>                                                          
                 <td style="text-align: center"><input type="checkbox" name="ChkSeleccionarValor[]" value="{{ arPagosAdicionales.codigoPagoAdicionalPk }}" /></td>
                 </tr>
@@ -190,6 +192,7 @@
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">              
                 {{ form_widget(form.BtnActualizarPagoAdicional, { 'attr': {'class': 'btn btn-default btn-xs'} }) }}
+                {{ form_widget(form.BtnInactivarPagoAdicional, { 'attr': {'class': 'btn btn-default btn-xs'} }) }}
                 {{ form_widget(form.BtnEliminarPagoAdicional, { 'attr': {'class': 'btn btn-danger btn-xs'} }) }}
             </div>
         </div>        
