@@ -425,6 +425,29 @@ class ProgramacionesPagoController extends Controller
                 $em->persist($arProgramacionPagoDetalle);
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_rhu_programacion_pago_resumen_turno_ver', array('codigoProgramacionPagoDetalle' => $codigoProgramacionPagoDetalle)));
+            } 
+            if($form->get('BtnActualizarHorasSoportePago')->isClicked()) {
+                if($arProgramacionPagoDetalle->getCodigoSoportePagoFk()) {
+                    $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+                    $arSoportePago =  $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($arProgramacionPagoDetalle->getCodigoSoportePagoFk());                                
+                    if($arSoportePago) {                        
+                        $arProgramacionPagoDetalle->setDiasTransporte($arSoportePago->getDiasTransporte());                                                                                
+                        $arProgramacionPagoDetalle->setHorasDescanso($arSoportePago->getHorasDescanso());                                                                
+                        $arProgramacionPagoDetalle->setHorasDiurnas($arSoportePago->getHorasDiurnas());                                                                
+                        $arProgramacionPagoDetalle->setHorasNocturnas($arSoportePago->getHorasNocturnas());                                       
+                        $arProgramacionPagoDetalle->setHorasFestivasDiurnas($arSoportePago->getHorasFestivasDiurnas());                                                                
+                        $arProgramacionPagoDetalle->setHorasFestivasNocturnas($arSoportePago->getHorasFestivasNocturnas());                                                                
+                        $arProgramacionPagoDetalle->setHorasExtrasOrdinariasDiurnas($arSoportePago->getHorasExtrasOrdinariasDiurnas());                                                                
+                        $arProgramacionPagoDetalle->setHorasExtrasOrdinariasNocturnas($arSoportePago->getHorasExtrasOrdinariasNocturnas());                                                                
+                        $arProgramacionPagoDetalle->setHorasExtrasFestivasDiurnas($arSoportePago->getHorasExtrasFestivasDiurnas());                                                                                
+                        $arProgramacionPagoDetalle->setHorasExtrasFestivasNocturnas($arSoportePago->getHorasExtrasFestivasNocturnas());                                                                 
+                        $arProgramacionPagoDetalle->setHorasRecargoFestivoDiurno($arSoportePago->getHorasRecargoFestivoDiurno());                                                                  
+                        $arProgramacionPagoDetalle->setHorasRecargoFestivoNocturno($arSoportePago->getHorasRecargoFestivoNocturno());                                                        
+                        $em->persist($arProgramacionPagoDetalle);
+                        $em->flush();
+                    }                    
+                }
+                return $this->redirect($this->generateUrl('brs_rhu_programacion_pago_resumen_turno_ver', array('codigoProgramacionPagoDetalle' => $codigoProgramacionPagoDetalle)));
             }             
             if($form->get('BtnActualizarPagoAdicional')->isClicked()) {  
                 $arrControles = $request->request->All();
@@ -578,6 +601,7 @@ class ProgramacionesPagoController extends Controller
             ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar',))
             ->add('BtnActualizar', 'submit', array('label'  => 'Actualizar',))
             ->add('BtnActualizarHoras', 'submit', array('label'  => 'Actualizar',))
+            ->add('BtnActualizarHorasSoportePago', 'submit', array('label'  => 'Actualizar del soporte pago',))
             ->add('BtnActualizarPagoAdicional', 'submit', array('label'  => 'Actualizar',))
             ->add('BtnEliminarPagoAdicional', 'submit', array('label'  => 'Eliminar',))
                 ->add('BtnInactivarPagoAdicional', 'submit', array('label'  => 'Inactivar',))
