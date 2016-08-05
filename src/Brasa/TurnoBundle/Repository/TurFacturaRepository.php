@@ -142,7 +142,7 @@ class TurFacturaRepository extends EntityRepository {
             if($arFactura->getFacturaTipoRel()->getTipo() == 1) {
                 
                 // Validar valor pendiente
-                $dql   = "SELECT fd.codigoPedidoDetalleFk, SUM(fd.vrPrecio) as vrPrecio FROM BrasaTurnoBundle:TurFacturaDetalle fd "
+                $dql   = "SELECT fd.codigoPedidoDetalleFk, SUM(fd.subtotalOperado) as vrPrecio FROM BrasaTurnoBundle:TurFacturaDetalle fd "
                         . "WHERE fd.codigoFacturaFk = " . $codigoFactura . " "
                         . "GROUP BY fd.codigoPedidoDetalleFk";
                 $query = $em->createQuery($dql);
@@ -166,8 +166,10 @@ class TurFacturaRepository extends EntityRepository {
                     foreach ($arFacturaDetalles as $arFacturaDetalle) {
                         if($arFacturaDetalle->getCodigoPedidoDetalleFk()) {
                             $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($arFacturaDetalle->getCodigoPedidoDetalleFk());                
-                            $floValorTotalPendiente = $arPedidoDetalle->getVrTotalDetallePendiente() - $arFacturaDetalle->getVrPrecio();
+                            $floValorTotalPendiente = $arPedidoDetalle->getVrTotalDetallePendiente() - $arFacturaDetalle->getSubtotalOperado();
                             $arPedidoDetalle->setVrTotalDetallePendiente($floValorTotalPendiente);
+                            $floValorTotalAfectado = $arPedidoDetalle->getVrTotalDetalleAfectado() + $arFacturaDetalle->getSubtotalOperado();
+                            $arPedidoDetalle->setVrTotalDetalleAfectado($floValorTotalAfectado);
                             if($floValorTotalPendiente <= 0) {
                                 $arPedidoDetalle->setEstadoFacturado(1);
                             }
@@ -194,9 +196,11 @@ class TurFacturaRepository extends EntityRepository {
             $arFacturaDetalles = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura));                
             foreach ($arFacturaDetalles as $arFacturaDetalle) {
                 if($arFacturaDetalle->getCodigoPedidoDetalleFk()) {
-                    $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($arFacturaDetalle->getCodigoPedidoDetalleFk());                
-                    $floValorTotalPendiente = $arPedidoDetalle->getVrTotalDetallePendiente() + $arFacturaDetalle->getVrPrecio();
-                    $arPedidoDetalle->setVrTotalDetallePendiente($floValorTotalPendiente);                
+                    $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($arFacturaDetalle->getCodigoPedidoDetalleFk());                                    
+                    $floValorTotalPendiente = $arPedidoDetalle->getVrTotalDetallePendiente() + $arFacturaDetalle->getSubtotalOperado();
+                    $arPedidoDetalle->setVrTotalDetallePendiente($floValorTotalPendiente);
+                    $floValorTotalAfectado = $arPedidoDetalle->getVrTotalDetalleAfectado() - $arFacturaDetalle->getSubtotalOperado();
+                    $arPedidoDetalle->setVrTotalDetalleAfectado($floValorTotalAfectado);                    
                     $arPedidoDetalle->setEstadoFacturado(0);                
                     $em->persist($arPedidoDetalle);                    
                 }

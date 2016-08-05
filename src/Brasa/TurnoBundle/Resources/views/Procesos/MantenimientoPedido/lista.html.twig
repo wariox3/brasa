@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-{% block title %}Actualizar horas programadas - Soga App{% endblock %}
+{% block title %}Actualizar pedidos - Soga App{% endblock %}
 {% block content %}
 <script>
     $(function () {
@@ -8,7 +8,7 @@
 </script>    
 <div class="container">
     <div class="page-header">
-        <h3>Actualizar las horas programadas de los pedidos</h3>
+        <h3>Actualizar pedidos</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
@@ -25,7 +25,10 @@
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnActualizarEstadoProgramado, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
+                        <br/><br/>
                         {{ form_widget(form.BtnActualizarHorasProgramadas, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
+                        <br/><br/>
+                        {{ form_widget(form.BtnActualizarPendienteFacturar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}                        
                     </div>
                 </div>
             </div>

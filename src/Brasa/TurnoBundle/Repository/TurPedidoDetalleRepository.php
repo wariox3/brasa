@@ -172,6 +172,26 @@ class TurPedidoDetalleRepository extends EntityRepository {
         return $intNumeroRegistros;
     }     
  
+    public function actualizarPendienteFacturar($codigoPedidoDetalle) {        
+        $em = $this->getEntityManager();
+        $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);
+        $dql   = "SELECT SUM(fd.subtotalOperado) as valor FROM BrasaTurnoBundle:TurFacturaDetalle fd JOIN fd.facturaRel f "
+                . "WHERE fd.codigoPedidoDetalleFk = " . $codigoPedidoDetalle . " AND f.estadoAutorizado = 1";
+        $query = $em->createQuery($dql);
+        $arrFacturaDetalle = $query->getSingleResult(); 
+        if($arrFacturaDetalle) {
+            $totalAfectado = 0;
+            if($arrFacturaDetalle['valor']) {
+                $totalAfectado = $arrFacturaDetalle['valor'];
+            }
+            $arPedidoDetalle->setVrTotalDetalleAfectado($totalAfectado);
+            $pendiente = $arPedidoDetalle->getVrSubtotal() - $totalAfectado;
+            $arPedidoDetalle->setVrTotalDetallePendiente($pendiente);
+            $em->persist($arPedidoDetalle);
+        }       
+    }  
+    
     public function actualizarHorasProgramadas($codigoPedidoDetalle) {        
         $em = $this->getEntityManager();
         $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
@@ -198,7 +218,7 @@ class TurPedidoDetalleRepository extends EntityRepository {
             $arPedidoDetalle->setHorasNocturnasProgramadas($horasNocturnas);
             $em->persist($arPedidoDetalle);
         }       
-    }  
+    }     
     
     public function marcarSeleccionados($arrSeleccionados) {        
         if(count($arrSeleccionados) > 0) {

@@ -485,6 +485,16 @@ class TurPedidoRepository extends EntityRepository {
          $em->flush();               
     }
     
+    public function actualizarPendienteFacturar ($codigoPedido) {
+        $em = $this->getEntityManager();
+        $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+        $arPedidoDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $codigoPedido));
+        foreach($arPedidoDetalles as $arPedidoDetalle) {
+            $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->actualizarPendienteFacturar($arPedidoDetalle->getCodigoPedidoDetallePk());
+        }
+         $em->flush();               
+    }    
+    
     public function actualizarEstadoProgramado ($codigoPedido) {
         $em = $this->getEntityManager();        
         $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);
