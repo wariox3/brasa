@@ -3,6 +3,7 @@
 namespace Brasa\RecursoHumanoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -93,12 +94,11 @@ class LiquidacionesController extends Controller
                     $arrSeleccionados = $request->request->get('ChkSeleccionar');
                     if(count($arrSeleccionados) > 0) {
                         foreach ($arrSeleccionados AS $codigoLiquidacionAdicional) {
-                            $arLiquidacionAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicional();
-                            $arLiquidacionAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicional')->find($codigoLiquidacionAdicional);
+                            $arLiquidacionAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
+                            $arLiquidacionAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionales')->find($codigoLiquidacionAdicional);
                             $em->remove($arLiquidacionAdicional);
                         }
-                        $em->flush();
-                        $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidarDeducciones($codigoLiquidacion);
+                        $em->flush();                        
                     }
                     $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($codigoLiquidacion);
                     return $this->redirect($this->generateUrl('brs_rhu_liquidaciones_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));
@@ -112,63 +112,141 @@ class LiquidacionesController extends Controller
                     'arLiquidacionAdicionales' => $arLiquidacionAdicionales,
                     'form' => $form->createView()
                     ));
-    }
+    }    
 
-    public function detalleNuevoConceptoAction($codigoLiquidacion, $codigoConcepto) {
+    /**
+     * @Route("/rhu/movimiento/liquidacion/detalle/descuento/{codigoLiquidacion}", name="brs_rhu_movimiento_liquidacion_detalle_descuento")
+     */     
+    public function detalleDescuentoAction($codigoLiquidacion) {
         $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();        
+        $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
         $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion);
         $form = $this->createFormBuilder()
-            ->add('BtnAgregar', 'submit', array('label'  => 'Agregar',))
+            ->add('pagoConceptoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('pc')
+                    ->where('pc.tipoAdicional = :tipoAdicional')
+                    ->setParameter('tipoAdicional', 2)
+                    ->orderBy('pc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))  
+            ->add('TxtValor', 'number', array('required' => true))                             
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->getForm();
-        $form->handleRequest($request);
-        if($form->isValid()) {
-            $arUsuario = $this->get('security.context')->getToken()->getUser();
-            if ($arLiquidacion->getEstadoAutorizado() == 0){
-                if($form->get('BtnAgregar')->isClicked()) {
-                    $arrControles = $request->request->All();
-                    if (isset($arrControles['TxtValor'])) {
-                        $intIndice = 0;
-                        foreach ($arrControles['LblCodigo'] as $intCodigo) {
-                            if($arrControles['TxtValor'][$intIndice] != "" && $arrControles['TxtValor'][$intIndice] != 0) {
-                                $arLiquidacionAdicionalConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionalesConcepto();
-                                $arLiquidacionAdicionalConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionalesConcepto')->find( $intCodigo);
-                                $arLiquidacionAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
-                                $arLiquidacionAdicional->setLiquidacionAdicionalConceptoRel($arLiquidacionAdicionalConcepto);
-                                $arLiquidacionAdicional->setLiquidacionRel($arLiquidacion);
-                                if ($codigoConcepto == 1){
-                                    $floValor = $arrControles['TxtValor'][$intIndice];
-                                    $arLiquidacionAdicional->setVrDeduccion($floValor);
-                                    $arLiquidacionAdicional->setDetalle($arrControles['TxtDetalle'][$intIndice]);
-                                    $arLiquidacionAdicional->setCodigoUsuario($arUsuario->getUserName());
-                                }else {
-                                    $floValor = $arrControles['TxtValor'][$intIndice];
-                                    $arLiquidacionAdicional->setVrBonificacion($floValor);
-                                    $arLiquidacionAdicional->setDetalle($arrControles['TxtDetalle'][$intIndice]);
-                                    $arLiquidacionAdicional->setCodigoUsuario($arUsuario->getUserName());
-                                }
-
-                                $em->persist($arLiquidacionAdicional);
-                            }
-                            $intIndice++;
-                        }
-                        $em->flush();
-                        $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidarAdicionales($codigoLiquidacion);
-                    }
-                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-                }
-            } else {
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-            }   
+        $form->handleRequest($request); 
+        if ($form->isValid()) { 
+            if ($form->get('BtnGuardar')->isClicked()) {
+                    $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                    $arPagoConcepto = $form->get('pagoConceptoRel')->getData();
+                    $arLiquidacionAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
+                    $arLiquidacionAdicional->setLiquidacionRel($arLiquidacion); 
+                    $arLiquidacionAdicional->setPagoConceptoRel($arPagoConcepto);
+                    $arLiquidacionAdicional->setVrDeduccion($form->get('TxtValor')->getData());  
+                    $em->persist($arLiquidacionAdicional);                
+                    $em->flush();                        
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($codigoLiquidacion);                    
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                
+            }                        
         }
-        $arLiquidacionAdicionalesConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionalesConcepto();
-        $arLiquidacionAdicionalesConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionalesConcepto')->findBy(array('tipo' => $codigoConcepto));
-        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Liquidaciones:detalleNuevoConcepto.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Liquidaciones:detalleDescuentoNuevo.html.twig', array(
             'arLiquidacion' => $arLiquidacion,
-            'arLiquidacionAdicionalesConceptos' => $arLiquidacionAdicionalesConceptos,
             'form' => $form->createView()));
-    }
-
+    }      
+    
+    /**
+     * @Route("/rhu/movimiento/liquidacion/detalle/bonificacion/{codigoLiquidacion}", name="brs_rhu_movimiento_liquidacion_detalle_bonificacion")
+     */     
+    public function detalleBonificacionAction($codigoLiquidacion) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();        
+        $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
+        $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion);
+        $arPagoConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+        $arPagoConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->findBy(array('tipoAdicional' => 1));
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        $form->handleRequest($request); 
+        if ($form->isValid()) { 
+            if ($form->get('BtnGuardar')->isClicked()) {
+                $arrControles = $request->request->All();
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigo) {                    
+                        $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                        $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($codigo);
+                        $valor = 0;
+                        if($arrControles['TxtValor'.$codigo] != '') {
+                            $valor = $arrControles['TxtValor'.$codigo];                
+                        }
+                        $arLiquidacionAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
+                        $arLiquidacionAdicional->setLiquidacionRel($arLiquidacion);
+                        $arLiquidacionAdicional->setVrBonificacion($valor);
+                        $arLiquidacionAdicional->setPagoConceptoRel($arPagoConcepto);                                               
+                        $em->persist($arLiquidacionAdicional);            
+                    }                                                       
+                    $em->flush();                        
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($codigoLiquidacion);                    
+                }                
+            }            
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Liquidaciones:detalleBonificacionNuevo.html.twig', array(
+            'arPagoConceptos' => $arPagoConceptos,
+            'arLiquidacion' => $arLiquidacion,
+            'form' => $form->createView()));
+    }    
+    
+    /**
+     * @Route("/rhu/movimiento/liquidacion/detalle/credito/{codigoLiquidacion}", name="brs_rhu_movimiento_liquidacion_detalle_credito")
+     */     
+    public function detalleCreditoAction($codigoLiquidacion) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();        
+        $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
+        $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion);
+        $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arLiquidacion->getCodigoEmpleadoFk());
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        $form->handleRequest($request); 
+        if ($form->isValid()) { 
+            if ($form->get('BtnGuardar')->isClicked()) {
+                $arrControles = $request->request->All();
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $floVrDeducciones = 0;
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoCredito) {                    
+                        $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+                        $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
+                        $valor = 0;
+                        if($arrControles['TxtValor'.$codigoCredito] != '') {
+                            $valor = $arrControles['TxtValor'.$codigoCredito];                
+                        }
+                        $arLiquidacionAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
+                        $arLiquidacionAdicional->setLiquidacionRel($arLiquidacion);
+                        $arLiquidacionAdicional->setVrDeduccion($valor);
+                        $arLiquidacionAdicional->setPagoConceptoRel($arCredito->getCreditoTipoRel()->getPagoConceptoRel());                                               
+                        $arLiquidacionAdicional->setCreditoRel($arCredito);
+                        $em->persist($arLiquidacionAdicional);                                                 
+                        $floVrDeducciones += $valor;
+                    }                                                       
+                    $em->flush();                        
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($arLiquidacion->getCodigoLiquidacionPk());                    
+                }
+                
+            }            
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Liquidaciones:detalleCreditoNuevo.html.twig', array(
+            'arCreditos' => $arCreditos,
+            'arLiquidacion' => $arLiquidacion,
+            'form' => $form->createView()));
+    }     
+    
     private function listar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
