@@ -687,7 +687,7 @@ class SeguridadSocialPeriodosController extends Controller
                 $this->listarDetalleAportes($codigoPeriodoDetalle);
             }
         }
-        $arSsoAportes = $paginator->paginate($em->createQuery($this->strDqlListaDetalleAportes), $request->query->get('page', 1), 500);
+        $arSsoAportes = $paginator->paginate($em->createQuery($this->strDqlListaDetalleAportes), $request->query->get('page', 1), 2000);
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/SeguridadSocial/Periodos:detalleAportes.html.twig', array(
             'arPeriodoDetalle' => $arPeriodoDetalle,
             'arSsoAportes' => $arSsoAportes,
