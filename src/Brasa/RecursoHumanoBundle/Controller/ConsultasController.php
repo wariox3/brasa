@@ -621,11 +621,23 @@ class ConsultasController extends Controller
     private function contratosPeriodoListar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
+        if($session->get('filtroDesde') == "") {
+            $fecha = new \DateTime('now');
+            $session->set('filtroDesde', $fecha->format('Y/m/d'));                    
+        }        
+        if($session->get('filtroHasta') == "") {
+            $fecha = new \DateTime('now');
+            $session->set('filtroHasta', $fecha->format('Y/m/d'));
+        }  
+        if($session->get('filtroCodigoCentroCosto') == "") {
+            $session->set('filtroCodigoCentroCosto', "0");
+        }        
         $this->strSqlContratosPeriodoLista  = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
                     . "WHERE c.codigoCentroCostoFk = " . $session->get('filtroCodigoCentroCosto')                    
                     . " AND c.fechaDesde <= '" .$session->get('filtroHasta') . "' "
                     . " AND (c.fechaHasta >= '" . $session->get('filtroDesde') . "' "
                     . " OR c.indefinido = 1)";                        
+        
     }    
     
     private function IncapacidadesListar() {

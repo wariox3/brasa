@@ -634,7 +634,7 @@ class TurSoportePagoRepository extends EntityRepository {
                         $descansoCompensacion = 0;
                     }                        
                 }               
-                                
+                //Descanso por sln      
                 $novedadesAfectaDescanso = $arSoportePago->getLicenciaNoRemunerada();
                 if($novedadesAfectaDescanso > 0) {
                     $descansoDescontar = 0;
@@ -657,11 +657,13 @@ class TurSoportePagoRepository extends EntityRepository {
                     } else {
                         $diasDescansoSoportePago = 0;
                     }                
-                }     
-                $diasPeriodoCompensar = $diasPeriodo - ($arSoportePago->getIngreso()+$arSoportePago->getRetiro());
+                }                 
+                //$diasPeriodoCompensar = $diasPeriodo - ($arSoportePago->getIngreso()+$arSoportePago->getRetiro());
+                $diasPeriodoCompensar = $diasPeriodo;
                 $horasPeriodo =  $diasPeriodoCompensar * 8;                
                 //$horasPeriodo =  $diasPeriodo * 8;                
-                $horasDescansoSoportePago = $diasDescansoSoportePago * 8;
+                $horasDescansoSoportePago = $horasDescanso;
+                //$horasTopeSoportePago = $horasPeriodo - ($descansoCompensacion * 8);                
                 $horasTopeSoportePago = $horasPeriodo - ($descansoCompensacion * 8);                
                 $horasDia = $arSoportePago->getHorasDiurnasReales();
                 $horasNoche = $arSoportePago->getHorasNocturnasReales();
