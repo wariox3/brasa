@@ -184,7 +184,7 @@ class ProgramacionesPagoController extends Controller
         $arVacaciones = $paginator->paginate($arVacaciones, $request->query->get('page', 1), 200);        
         
         $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->listaDQL($codigoProgramacionPago));
-        $arProgramacionPagoDetalles = $paginator->paginate($query, $request->query->get('page', 1), 2000);
+        $arProgramacionPagoDetalles = $paginator->paginate($query, $request->query->get('page', 1), 1000);
         $arProgramacionPagoDetalleSedes = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede();
         $arProgramacionPagoDetalleSedes = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalleSede')->findAll();
         if ($request->getMethod() == 'POST') {
