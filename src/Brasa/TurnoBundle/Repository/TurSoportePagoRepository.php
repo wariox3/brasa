@@ -664,7 +664,7 @@ class TurSoportePagoRepository extends EntityRepository {
                 //$horasPeriodo =  $diasPeriodo * 8;                
                 $horasDescansoSoportePago = $horasDescanso;
                 //$horasTopeSoportePago = $horasPeriodo - ($descansoCompensacion * 8);                
-                $horasTopeSoportePago = $horasPeriodo - ($descansoCompensacion * 8);                
+                $horasTopeSoportePago = $horasPeriodo - ($descanso * 8);                
                 $horasDia = $arSoportePago->getHorasDiurnasReales();
                 $horasNoche = $arSoportePago->getHorasNocturnasReales();
                 $horasFestivasDia = $arSoportePago->getHorasFestivasDiurnasReales();
