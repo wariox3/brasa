@@ -17,7 +17,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         if($codigoProgramacionPago != "" ) {
             $dql .= " AND pd.codigoProgramacionPagoFk = " . $codigoProgramacionPago;
         }             
-
+        $dql .= " ORDER BY pd.codigoEmpleadoFk";
         return $dql;
     }      
     
