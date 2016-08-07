@@ -98,7 +98,7 @@ class RhuContratoType extends AbstractType
             ->add('horarioTrabajo', 'text', array('required' => false)) 
             ->add('vrSalario', 'number', array('required' => true))  
             //->add('numero', 'text', array('required' => true))                                           
-            ->add('cargoDescripcion', 'text', array('required' => true))                                                                       
+            ->add('cargoDescripcion', 'text', array('required' => false))                                                                       
             ->add('comentarios', 'textarea', array('required' => false))            
             ->add('salarioIntegral', 'checkbox', array('required'  => false))                            
             ->add('ciudadContratoRel', 'entity', array(
