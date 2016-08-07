@@ -46,10 +46,11 @@ class TurProgramacionRepository extends EntityRepository {
         $arProgramacionesDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();        
         $arProgramacionesDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoProgramacionFk' => $codigoProgramacion));         
         foreach ($arProgramacionesDetalle as $arProgramacionDetalle) {
-            $douHorasDetalle = 0;
-            $douHorasDiurnas = 0;
-            $douHorasNocturnas = 0;
-            $arProgramacionesDetalleActualizar = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();        
+            $douTotalHorasDiurnas += $arProgramacionDetalle->getHorasDiurnas();
+            $douTotalHorasNocturnas += $arProgramacionDetalle->getHorasNocturnas();
+            $douTotalHoras += $arProgramacionDetalle->getHoras();
+
+            /*$arProgramacionesDetalleActualizar = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();        
             $arProgramacionesDetalleActualizar = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($arProgramacionDetalle->getCodigoProgramacionDetallePk());                                     
             if($arProgramacionDetalle->getDia1() != '') {
                 $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
@@ -305,7 +306,8 @@ class TurProgramacionRepository extends EntityRepository {
             $arProgramacionesDetalleActualizar->setHoras($douHorasDetalle);
             $arProgramacionesDetalleActualizar->setHorasDiurnas($douHorasDiurnas);
             $arProgramacionesDetalleActualizar->setHorasNocturnas($douHorasNocturnas);
-            $em->persist($arProgramacionesDetalleActualizar);            
+            $em->persist($arProgramacionesDetalleActualizar);  
+            */
         }
         $arProgramacion->setHoras($douTotalHoras);
         $arProgramacion->setHorasDiurnas($douTotalHorasDiurnas);
@@ -379,7 +381,7 @@ class TurProgramacionRepository extends EntityRepository {
         $em = $this->getEntityManager();                
         $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion);            
         $strResultado = "";        
-        $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();        
+        /*$arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();        
         $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoProgramacionFk' => $codigoProgramacion));            
         foreach ($arProgramacionDetalles as $arProgramacionDetalle) {
             if($arProgramacionDetalle->getCodigoPedidoDetalleFk()) {
@@ -393,7 +395,7 @@ class TurProgramacionRepository extends EntityRepository {
                 $arPedidoDetalle->setHorasNocturnasProgramadas($horasNocturnasProgramadas);
                 $em->persist($arPedidoDetalle);
             }
-        }
+        }*/
         $arProgramacion->setEstadoAutorizado(1);
         $em->persist($arProgramacion);
         $em->flush();                                         
@@ -404,7 +406,7 @@ class TurProgramacionRepository extends EntityRepository {
         $em = $this->getEntityManager();                
         $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion);            
         $strResultado = "";        
-        $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();        
+        /*$arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();        
         $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoProgramacionFk' => $codigoProgramacion));            
         foreach ($arProgramacionDetalles as $arProgramacionDetalle) {
             if($arProgramacionDetalle->getCodigoPedidoDetalleFk()) {
@@ -419,6 +421,8 @@ class TurProgramacionRepository extends EntityRepository {
                 $em->persist($arPedidoDetalle);
             }
         }
+         * 
+         */
         $arProgramacion->setEstadoAutorizado(0);
         $em->persist($arProgramacion);
         $em->flush();                                         

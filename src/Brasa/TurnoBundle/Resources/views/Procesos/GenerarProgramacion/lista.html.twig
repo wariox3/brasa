@@ -28,8 +28,7 @@
                 <th>NUMERO</th>
                 <th>FECHA</th>
                 <th>CLIENTE</th>
-                <th>SECTOR</th>
-                <th>PROGRAMACION</th>                
+                <th>SECTOR</th>                
                 <th>H</th>
                 <th>H.D</th>
                 <th>H.N</th>
@@ -43,10 +42,9 @@
             <tr>                
                 <td>{{ arPedidos.codigoPedidoPk  }}</td>  
                 <td>{{ arPedidos.numero  }}</td>  
-                <td>{{ arPedidos.fecha |date("Y/m/d")  }}</td>                
+                <td>{{ arPedidos.fechaProgramacion |date("Y/m")  }}</td>                
                 <td>{{ arPedidos.clienteRel.nombreCorto  }}</td>  
-                <td>{{ arPedidos.sectorRel.nombre |default('')  }}</td>
-                <td>{{ arPedidos.fechaProgramacion |date("Y/m/d")  }}</td>
+                <td>{{ arPedidos.sectorRel.nombre |default('')  }}</td>                
                 <td style="text-align: right">{{ arPedidos.horas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidos.horasDiurnas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPedidos.horasNocturnas | number_format(0, '.', ',') }}</td>

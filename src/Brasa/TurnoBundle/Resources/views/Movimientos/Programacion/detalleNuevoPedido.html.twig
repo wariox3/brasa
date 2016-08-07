@@ -23,9 +23,9 @@
             <th>DOM</th>
             <th>FES</th>
             <th>CANT</th>
-            <th>HORAS</th>            
-            <th>DIURNAS</th>            
-            <th>NOCTURNAS</th>            
+            <th>H(P)</th>            
+            <th>HD(P)</th>            
+            <th>HN(P)</th>            
             <th style="text-align: right">TOTAL</th>
             <th></th>
             <th></th>
@@ -57,9 +57,9 @@
                 <td>{% if arPedidosDetalle.domingo == 1%} SI {% else %} NO {% endif %}</td>                
                 <td>{% if arPedidosDetalle.festivo == 1%} SI {% else %} NO {% endif %}</td> 
                 <td style="text-align: right">{{ arPedidosDetalle.cantidad | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPedidosDetalle.horas | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPedidosDetalle.horasDiurnas | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPedidosDetalle.horasNocturnas | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPedidosDetalle.horas | number_format(0, '.', ',') }}({{ arPedidosDetalle.horasProgramadas | number_format(0, '.', ',') }})</td>
+                <td style="text-align: right">{{ arPedidosDetalle.horasDiurnas | number_format(0, '.', ',') }}({{ arPedidosDetalle.horasDiurnasProgramadas | number_format(0, '.', ',') }})</td>
+                <td style="text-align: right">{{ arPedidosDetalle.horasNocturnas | number_format(0, '.', ',') }}({{ arPedidosDetalle.horasNocturnasProgramadas | number_format(0, '.', ',') }})</td>
                 <td style="text-align: right">{{ arPedidosDetalle.vrTotalDetalle | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arPedidosDetalle.codigoPedidoDetallePk }}" value="1" size="10" style="width:25px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidosDetalle.codigoPedidoDetallePk }}" /></td>
