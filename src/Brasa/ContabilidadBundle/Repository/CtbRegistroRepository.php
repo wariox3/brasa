@@ -33,6 +33,26 @@ class CtbRegistroRepository extends EntityRepository
         return $dql;
     }           
     
+    public function listaPendienteExportarDql($comprobante = "",$numero = "", $numeroReferencia = "", $fechaDesde = "", $fechaHasta = "") {        
+        $dql   = "SELECT r FROM BrasaContabilidadBundle:CtbRegistro r WHERE r.exportado = 0";
+        if($comprobante != "") {
+            $dql .= " AND r.codigoComprobanteFk = " . $comprobante;
+        }
+        if($numero != "") {
+            $dql .= " AND r.numero = " . $numero;
+        }                
+        if($numeroReferencia != "") {
+            $dql .= " AND r.numeroReferencia = " . $numeroReferencia;
+        }
+        if($fechaDesde != "" || $fechaDesde != 0){
+            $dql .= " AND r.fecha >='" . date_format($fechaDesde, ('Y-m-d')) . "'";
+        }
+        if($fechaHasta != "" || $fechaHasta != 0) {
+            $dql .= " AND r.fecha <='" . date_format($fechaHasta, ('Y-m-d')) . "'";
+        }
+        return $dql;
+    }    
+    
     public function listaEliminarRegistrosMasivosDql($intNumero = 0, $comprobante = "", $strDesde = "", $strHasta = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT r FROM BrasaContabilidadBundle:CtbRegistro r WHERE r.codigoRegistroPk <> 0";

@@ -14,7 +14,7 @@ class CtbRegistroExportarRepository extends EntityRepository
 {
 
     public function listaDql($boolExportado = "") {        
-        $dql   = "SELECT r FROM BrasaContabilidadBundle:CtbRegistro r WHERE r.codigoRegistroPk <> 0";
+        $dql   = "SELECT r FROM BrasaContabilidadBundle:CtbRegistroExportar r WHERE r.codigoRegistroExportarPk <> 0";
         if($boolExportado == "0") {
             $dql .= " AND r.exportado = 0";
         }

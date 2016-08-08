@@ -30,10 +30,16 @@ class IntercambioDatosController extends Controller
                         $arRegistroExportar->setFecha($arRegistro->getFecha());
                         $arRegistroExportar->setComprobante($arRegistro->getCodigoComprobanteFk());
                         $arRegistroExportar->setNumero($arRegistro->getNumero());
+                        $arRegistroExportar->setNumeroReferencia($arRegistro->getNumeroReferencia());
                         $arRegistroExportar->setCuenta($arRegistro->getCodigoCuentaFk());
                         $arRegistroExportar->setDebito($arRegistro->getDebito());
                         $arRegistroExportar->setCredito($arRegistro->getCredito());
                         $arRegistroExportar->setNit($arRegistro->getTerceroRel()->getNumeroIdentificacion());
+                        $arRegistroExportar->setDigitoVerificacion($arRegistro->getTerceroRel()->getDigitoVerificacion());
+                        if($arRegistro->getCodigoCentroCostoFk()) {
+                            $arRegistroExportar->setCentroCosto($arRegistro->getCentroCostoRel()->getNombre());
+                        }
+                        
                         if($arRegistro->getDebito() > 0) {
                             $arRegistroExportar->setTipo(1);
                         } else {
@@ -95,9 +101,13 @@ class IntercambioDatosController extends Controller
                 readfile($strArchivo);                 
                 exit;                
             }
+            
+            if($form->get('BtnGenerarOfimatica')->isClicked()) {
+                $this->generarExcelInterfaceOfimatica();
+            }            
         }
         $arRegistros = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 40);
-        return $this->render('BrasaContabilidadBundle:Utilidades/IntercambioDatos:exportar.html.twig', array(
+        return $this->render('BrasaContabilidadBundle:Utilidad/IntercambioDatos:exportar.html.twig', array(
             'arRegistros' => $arRegistros,
             'form' => $form->createView()
             ));
@@ -105,7 +115,7 @@ class IntercambioDatosController extends Controller
     
     private function listar() {        
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->listaDql(0);
+        $this->strDqlLista = $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->listaPendienteExportarDql();
     }                 
     
     private function formulario() {
@@ -117,7 +127,8 @@ class IntercambioDatosController extends Controller
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExportar', 'submit', array('label'  => 'Exportar',))
-            ->add('BtnGenerarPlano', 'submit', array('label'  => 'Generar plano (ilimitada)',))
+            ->add('BtnGenerarOfimatica', 'submit', array('label'  => 'Ofimatica',))    
+            ->add('BtnGenerarPlano', 'submit', array('label'  => 'ilimitada',))
             ->getForm();
         return $form;
     }    
@@ -229,6 +240,74 @@ class IntercambioDatosController extends Controller
         $objWriter->save('php://output');
         exit;
     }  
+    
+    private function generarExcelInterfaceOfimatica() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'BASE')
+                    ->setCellValue('B1', 'CHEQUE')
+                    ->setCellValue('C1', 'CODCC')
+                    ->setCellValue('D1', 'CODCOMPROB')
+                    ->setCellValue('E1', 'CODIGOCTA')
+                    ->setCellValue('F1', 'CREDITO')
+                    ->setCellValue('G1', 'DCTO')
+                    ->setCellValue('H1', 'DEBITO')
+                    ->setCellValue('I1', 'DESCRIPCIO')
+                    ->setCellValue('J1', 'DETALLE')
+                    ->setCellValue('K1', 'FECHAMVTO')
+                    ->setCellValue('L1', 'NIT');
+        $i = 2;
+        $dql = $em->getRepository('BrasaContabilidadBundle:CtbRegistroExportar')->listaDql();
+        $query = $em->createQuery($dql);
+        $arRegistrosExportar = new \Brasa\ContabilidadBundle\Entity\CtbRegistroExportar();
+        $arRegistrosExportar = $query->getResult();
+        foreach ($arRegistrosExportar as $arRegistroExportar) {
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arRegistroExportar->getBase())
+                    ->setCellValue('B' . $i, $arRegistroExportar->getNumeroReferencia())
+                    ->setCellValue('C' . $i, $arRegistroExportar->getCentroCosto())
+                    ->setCellValue('D' . $i, $arRegistroExportar->getComprobante())
+                    ->setCellValue('E' . $i, $arRegistroExportar->getCuenta())
+                    ->setCellValue('F' . $i, $arRegistroExportar->getCredito())
+                    ->setCellValue('G' . $i, $arRegistroExportar->getNumero())
+                    ->setCellValue('H' . $i, $arRegistroExportar->getDebito())
+                    ->setCellValue('I' . $i, $arRegistroExportar->getDescripcionContable())
+                    ->setCellValue('J' . $i, $arRegistroExportar->getDescripcionContable())
+                    ->setCellValue('K' . $i, $arRegistroExportar->getFecha()->format('Y/m/d'))
+                    ->setCellValue('L' . $i, $arRegistroExportar->getNit()."-".$arRegistroExportar->getDigitoVerificacion());
+            $i++;
+        }
+
+        $objPHPExcel->getActiveSheet()->setTitle('registros');
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="MovimientoContable.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }      
     
     public static function RellenarNr($Nro, $Str, $NroCr) {
         $Longitud = strlen($Nro);

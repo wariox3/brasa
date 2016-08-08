@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-{% block title %}Factura lista - Soga App{% endblock %}
+{% block title %}Contabilizar facturacion - Soga App{% endblock %}
 {% block content %}
 <script>
     $(function () {
@@ -8,7 +8,7 @@
 </script>    
 <div class="container">
     <div class="page-header">
-        <h3>Lista factura</h3>
+        <h3>Contabilizar facturacion</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
@@ -95,8 +95,6 @@
                 <th>CON</th>
                 <th>ANU</th>
                 <th></th>
-                <th></th>
-                <th></th>
             </tr>
             {% for arFacturas in arFacturas %}
             <tr>                                             
@@ -110,8 +108,6 @@
                 <td>{% if arFacturas.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td>{% if arFacturas.estadoContabilizado == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td>{% if arFacturas.estadoAnulado == 1 %} SI {% else %} NO {% endif %}</td>                
-                <td style="text-align: center"><a href="{{ path('brs_tur_movimiento_factura_nuevo', {'codigoFactura': arFacturas.codigoFacturaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
-                <td style="text-align: center"><a href="{{ path('brs_tur_movimiento_factura_detalle', { 'codigoFactura': arFacturas.codigoFacturaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturas.codigoFacturaPk }}" /></td>
             </tr>
             
@@ -126,15 +122,8 @@
                 {{ knp_pagination_render(arFacturas) }}       
         </div>
         <div class="btn-toolbar" style="float: right">
-            <div class="btn-group">      
-                {{ form_widget(form.BtnInterfaz, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            </div>
-            <div class="btn-group">                                
-                <a class="btn btn-default btn-sm" href="{{ path('brs_tur_movimiento_factura_nuevo', {'codigoFactura': 0}) }}">Nuevo</a>                                                
-            </div>
-            <div class="btn-group">                                
-                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+            <div class="btn-group">                
+                {{ form_widget(form.BtnContabilizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
             </div>
         </div>
         <!-- Fin Botones Menu Items -->

@@ -22,7 +22,7 @@ class FacturaController extends Controller
         $form->handleRequest($request);
         $this->lista();
         if ($form->isValid()) {            
-            if ($form->get('BtnContabilizar')->isClicked()) {   
+            //if ($form->get('BtnContabilizar')->isClicked()) {   
                 /*set_time_limit(0);
                 ini_set("memory_limit", -1);
                 $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
@@ -44,10 +44,8 @@ class FacturaController extends Controller
                 $em->flush();
                  * 
                  */
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaTurnoBundle:TurFactura')->contabilizar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_movimiento_factura'));                                 
-            }            
+                //return $this->redirect($this->generateUrl('brs_tur_movimiento_factura'));                                 
+            //}            
             if ($form->get('BtnEliminar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurFactura')->eliminar($arrSeleccionados);
@@ -547,8 +545,7 @@ class FacturaController extends Controller
             ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
             ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                
             ->add('filtrarFecha', 'checkbox', array('required'  => false, 'data' => $session->get('filtroFacturaFiltrarFecha')))                 
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnContabilizar', 'submit', array('label'  => 'Contabilizar',))
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
             ->add('BtnInterfaz', 'submit', array('label'  => 'Interfaz',))                
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))

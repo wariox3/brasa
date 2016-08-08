@@ -35,6 +35,11 @@ class CtbRegistroExportar
     private $numero;
     
     /**
+     * @ORM\Column(name="numero_referencia", type="string", length=20, nullable=true)
+     */     
+    private $numeroReferencia;    
+    
+    /**
      * @ORM\Column(name="cuenta", type="string", length=20, nullable=true)
      */     
     private $cuenta;      
@@ -44,6 +49,11 @@ class CtbRegistroExportar
      */     
     private $nit;
 
+    /**
+     * @ORM\Column(name="digito_verificacion", type="string", length=3, nullable=true)
+     */     
+    private $digitoVerificacion;    
+    
     /**
      * @ORM\Column(name="centro_costo", type="string", length=20, nullable=true)
      */     
@@ -348,5 +358,53 @@ class CtbRegistroExportar
     public function getDescripcionContable()
     {
         return $this->descripcionContable;
+    }
+
+    /**
+     * Set numeroReferencia
+     *
+     * @param string $numeroReferencia
+     *
+     * @return CtbRegistroExportar
+     */
+    public function setNumeroReferencia($numeroReferencia)
+    {
+        $this->numeroReferencia = $numeroReferencia;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroReferencia
+     *
+     * @return string
+     */
+    public function getNumeroReferencia()
+    {
+        return $this->numeroReferencia;
+    }
+
+    /**
+     * Set digitoVerificacion
+     *
+     * @param string $digitoVerificacion
+     *
+     * @return CtbRegistroExportar
+     */
+    public function setDigitoVerificacion($digitoVerificacion)
+    {
+        $this->digitoVerificacion = $digitoVerificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get digitoVerificacion
+     *
+     * @return string
+     */
+    public function getDigitoVerificacion()
+    {
+        return $this->digitoVerificacion;
     }
 }
