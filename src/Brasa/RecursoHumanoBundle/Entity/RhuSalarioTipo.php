@@ -25,14 +25,15 @@ class RhuSalarioTipo
     /**
      * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="salarioTipoRel")
      */
-    protected $contratosSalarioRel;    
+    protected $contratosSalarioTipoRel;    
     
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->contratosSalarioRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contratosSalarioTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -70,36 +71,36 @@ class RhuSalarioTipo
     }
 
     /**
-     * Add contratosSalarioRel
+     * Add contratosSalarioTipoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosSalarioRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosSalarioTipoRel
      *
      * @return RhuSalarioTipo
      */
-    public function addContratosSalarioRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosSalarioRel)
+    public function addContratosSalarioTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosSalarioTipoRel)
     {
-        $this->contratosSalarioRel[] = $contratosSalarioRel;
+        $this->contratosSalarioTipoRel[] = $contratosSalarioTipoRel;
 
         return $this;
     }
 
     /**
-     * Remove contratosSalarioRel
+     * Remove contratosSalarioTipoRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosSalarioRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosSalarioTipoRel
      */
-    public function removeContratosSalarioRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosSalarioRel)
+    public function removeContratosSalarioTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContrato $contratosSalarioTipoRel)
     {
-        $this->contratosSalarioRel->removeElement($contratosSalarioRel);
+        $this->contratosSalarioTipoRel->removeElement($contratosSalarioTipoRel);
     }
 
     /**
-     * Get contratosSalarioRel
+     * Get contratosSalarioTipoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getContratosSalarioRel()
+    public function getContratosSalarioTipoRel()
     {
-        return $this->contratosSalarioRel;
+        return $this->contratosSalarioTipoRel;
     }
 }

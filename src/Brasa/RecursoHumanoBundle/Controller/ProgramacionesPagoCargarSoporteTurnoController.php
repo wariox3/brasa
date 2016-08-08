@@ -84,13 +84,13 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     //    echo "hola";
                     //}
                     //dias licencia
-                    $intDiasLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicenciaPeriodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), $arContrato->getCodigoEmpleadoFk());                
+                    $intDiasLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicenciaPeriodo31($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), $arContrato->getCodigoEmpleadoFk());                
                     if($intDiasLicencia > 0) {                                        
                         $arProgramacionPagoDetalle->setDiasLicencia($intDiasLicencia);
                     }     
 
                     //dias incapacidad
-                    $intDiasIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->diasIncapacidadPeriodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), $arContrato->getCodigoEmpleadoFk());                
+                    $intDiasIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->diasIncapacidadPeriodo31($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), $arContrato->getCodigoEmpleadoFk());                
                     if($intDiasIncapacidad > 0) {                                        
                         $arProgramacionPagoDetalle->setDiasIncapacidad($intDiasIncapacidad);
                     }                    

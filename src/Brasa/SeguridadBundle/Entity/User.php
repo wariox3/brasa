@@ -79,6 +79,11 @@ class User implements UserInterface, \Serializable
      */
     protected $usuariosRolesUsuarioRel;    
     
+    /**
+     * @ORM\OneToMany(targetEntity="SegPermisoDocumento", mappedBy="usuarioRel")
+     */
+    protected $permisosDocumentosUsuarioRel;    
+    
     public function __construct()
     {
         $this->isActive = true;
@@ -421,5 +426,39 @@ class User implements UserInterface, \Serializable
     public function getUsuariosRolesUsuarioRel()
     {
         return $this->usuariosRolesUsuarioRel;
+    }
+
+    /**
+     * Add permisosDocumentosUsuarioRel
+     *
+     * @param \Brasa\SeguridadBundle\Entity\SegPermisoDocumento $permisosDocumentosUsuarioRel
+     *
+     * @return User
+     */
+    public function addPermisosDocumentosUsuarioRel(\Brasa\SeguridadBundle\Entity\SegPermisoDocumento $permisosDocumentosUsuarioRel)
+    {
+        $this->permisosDocumentosUsuarioRel[] = $permisosDocumentosUsuarioRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove permisosDocumentosUsuarioRel
+     *
+     * @param \Brasa\SeguridadBundle\Entity\SegPermisoDocumento $permisosDocumentosUsuarioRel
+     */
+    public function removePermisosDocumentosUsuarioRel(\Brasa\SeguridadBundle\Entity\SegPermisoDocumento $permisosDocumentosUsuarioRel)
+    {
+        $this->permisosDocumentosUsuarioRel->removeElement($permisosDocumentosUsuarioRel);
+    }
+
+    /**
+     * Get permisosDocumentosUsuarioRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPermisosDocumentosUsuarioRel()
+    {
+        return $this->permisosDocumentosUsuarioRel;
     }
 }
