@@ -18,6 +18,8 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             if($request->request->get('OpCargar')) {
+                set_time_limit(0);
+                ini_set("memory_limit", -1);
                 $codigoSoportePagoPeriodo = $request->request->get('OpCargar');  
                 $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();                       
                 $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
@@ -76,21 +78,21 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                         $arProgramacionPagoDetalle->setDescuentoPension(0);
                     }   
                     //dias vacaciones
-                    $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                
+                    $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHastaReal());                
                     if($intDiasVacaciones > 0) {                                        
                         $arProgramacionPagoDetalle->setDiasVacaciones($intDiasVacaciones);
                     }           
-                    //if($arSoportePago->getCodigoSoportePagoPk() == 3125) {
-                    //    echo "hola";
-                    //}
-                    //dias licencia
-                    $intDiasLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicenciaPeriodo31($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), $arContrato->getCodigoEmpleadoFk());                
+                    /*if($arSoportePago->getCodigoSoportePagoPk() == 40012) {
+                        echo "hola";
+                    }*/
+                    //dias licencia                    
+                    $intDiasLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicenciaPeriodo31($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHastaReal(), $arContrato->getCodigoEmpleadoFk());                
                     if($intDiasLicencia > 0) {                                        
                         $arProgramacionPagoDetalle->setDiasLicencia($intDiasLicencia);
                     }     
 
                     //dias incapacidad
-                    $intDiasIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->diasIncapacidadPeriodo31($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), $arContrato->getCodigoEmpleadoFk());                
+                    $intDiasIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->diasIncapacidadPeriodo31($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHastaReal(), $arContrato->getCodigoEmpleadoFk());                
                     if($intDiasIncapacidad > 0) {                                        
                         $arProgramacionPagoDetalle->setDiasIncapacidad($intDiasIncapacidad);
                     }                    
