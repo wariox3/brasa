@@ -41,14 +41,6 @@ class GenerarSoportePagoController extends Controller
                 foreach($arRecursosResumen as $arRecursoResumen) {
                     $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
                     $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($arRecursoResumen['codigoRecursoFk']);                    
-                    $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();                    
-                    $arSoportePago->setRecursoRel($arRecurso);
-                    $arSoportePago->setSoportePagoPeriodoRel($arSoportePagoPeriodo);
-                    $arSoportePago->setFechaDesde($arSoportePagoPeriodo->getFechaDesde());
-                    $arSoportePago->setFechaHasta($arSoportePagoPeriodo->getFechaHasta());
-                    if($arRecurso->getCodigoTurnoFijoNominaFk()) {
-                        $arSoportePago->setTurnoFijo(1);
-                    }  
                     $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
                     $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                     $arEmpleado = $arRecurso->getEmpleadoRel();
@@ -59,11 +51,23 @@ class GenerarSoportePagoController extends Controller
                             $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoUltimoFk());       
                         }
                     }       
-                    if($arContrato) {
-                        $arSoportePago->setCodigoContratoFk($arContrato->getCodigoContratoPk());
-                        $arSoportePago->setVrSalario($arContrato->getVrSalario());
+                    if($arContrato) {                        
+                        if($arContrato->getEstadoTerminado() == 0 || $arContrato->getFechaHasta() >= $arSoportePagoPeriodo->getFechaDesde()) {
+                            if($arContrato->getFechaDesde() <= $arSoportePagoPeriodo->getFechaHasta()) {
+                                $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();                                                
+                                $arSoportePago->setCodigoContratoFk($arContrato->getCodigoContratoPk());
+                                $arSoportePago->setVrSalario($arContrato->getVrSalario());                            
+                                $arSoportePago->setRecursoRel($arRecurso);
+                                $arSoportePago->setSoportePagoPeriodoRel($arSoportePagoPeriodo);
+                                $arSoportePago->setFechaDesde($arSoportePagoPeriodo->getFechaDesde());
+                                $arSoportePago->setFechaHasta($arSoportePagoPeriodo->getFechaHasta());
+                                if($arRecurso->getCodigoTurnoFijoNominaFk()) {
+                                    $arSoportePago->setTurnoFijo(1);
+                                }                      
+                                $em->persist($arSoportePago);                                                    
+                            }
+                        }                        
                     }                    
-                    $em->persist($arSoportePago);
                 }                
                 $em->flush();
                 $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
