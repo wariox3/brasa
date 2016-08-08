@@ -249,7 +249,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         set_time_limit(0);
         ini_set("memory_limit", -1);
         $em = $this->getEntityManager();
-        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+        $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();        
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
 
         //Eliminar pagos
@@ -265,6 +265,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         }
         $arProgramacionPago->setNoGeneraPeriodo(1);
         $arProgramacionPago->setVrNeto(0);
+        $arProgramacionPago->setNumeroEmpleados(0);
         $arProgramacionPago->setEstadoGenerado(0);
         $em->persist($arProgramacionPago);
         $em->flush();
