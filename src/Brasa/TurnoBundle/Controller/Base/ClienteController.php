@@ -14,6 +14,7 @@ class ClienteController extends Controller
     var $strDqlLista = "";
     var $strCodigo = "";
     var $strNombre = "";
+    var $strNit = "";
 
     /**
      * @Route("/tur/base/cliente/", name="brs_tur_base_cliente")
@@ -263,12 +264,14 @@ class ClienteController extends Controller
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurCliente')->listaDQL(
                 $this->strNombre,                
-                $this->strCodigo   
+                $this->strCodigo,
+                $this->strNit
                 ); 
     }
 
     private function filtrar ($form) {
         $this->strCodigo = $form->get('TxtCodigo')->getData();
+        $this->strNit = $form->get('TxtNit')->getData();
         $this->strNombre = $form->get('TxtNombre')->getData();
         $this->lista();
     }
@@ -277,6 +280,7 @@ class ClienteController extends Controller
         $form = $this->createFormBuilder()            
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->strNombre))
             ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->strCodigo))                            
+            ->add('TxtNit', 'text', array('label'  => 'Codigo','data' => $this->strNit))                                            
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnInterfaz', 'submit', array('label'  => 'Interfaz',))
