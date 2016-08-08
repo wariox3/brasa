@@ -68,13 +68,14 @@ class TurSoportePagoRepository extends EntityRepository {
                     $arrayResultado[$i]['dias'] = $arSoportePagoPeriodoActualizar->getDiasPeriodo(); 
                 }
                 $arSoportePagoAct->setDias($arrayResultado[$i]['dias']);
-                $arSoportePagoAct->setDiasTransporte($arrayResultado[$i]['dias']);
+                $arSoportePagoAct->setDiasTransporte($arrayResultado[$i]['dias']+$arrayResultado[$i]['induccion']);
                 $arSoportePagoAct->setDescanso($arrayResultado[$i]['descanso']);
                 $arSoportePagoAct->setNovedad($arrayResultado[$i]['novedad']);
                 $arSoportePagoAct->setIncapacidad($arrayResultado[$i]['incapacidad']);
                 $arSoportePagoAct->setLicencia($arrayResultado[$i]['licencia']);
                 $arSoportePagoAct->setLicenciaNoRemunerada($arrayResultado[$i]['licenciaNoRemunerada']);
                 $arSoportePagoAct->setVacacion($arrayResultado[$i]['vacacion']);
+                $arSoportePagoAct->setInduccion($arrayResultado[$i]['induccion']);
                 $arSoportePagoAct->setIngreso($arrayResultado[$i]['ingreso']);
                 $arSoportePagoAct->setRetiro($arrayResultado[$i]['retiro']);
                 $arSoportePagoAct->setHorasPago($intHorasPago);
@@ -177,7 +178,7 @@ class TurSoportePagoRepository extends EntityRepository {
                 $arrayResultado[$i]['dias'] = $arSoportePago->getSoportePagoPeriodoRel()->getDiasPeriodo(); 
             }
             $arSoportePago->setDias($arrayResultado[$i]['dias']);            
-            $arSoportePago->setDiasTransporte($arrayResultado[$i]['dias']);
+            $arSoportePago->setDiasTransporte($arrayResultado[$i]['dias']+$arrayResultado[$i]['induccion']);
             $arSoportePago->setDescanso($arrayResultado[$i]['descanso']);
             $arSoportePago->setNovedad($arrayResultado[$i]['novedad']);
             $arSoportePago->setIncapacidad($arrayResultado[$i]['incapacidad']);
@@ -186,6 +187,7 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePago->setVacacion($arrayResultado[$i]['vacacion']);
             $arSoportePago->setIngreso($arrayResultado[$i]['ingreso']);
             $arSoportePago->setRetiro($arrayResultado[$i]['retiro']);
+            $arSoportePago->setInduccion($arrayResultado[$i]['induccion']);
             $arSoportePago->setHorasPago($intHorasPago);
             $arSoportePago->setHoras($intHoras);
             $arSoportePago->setHorasDescanso($arrayResultado[$i]['horasDescanso']);
