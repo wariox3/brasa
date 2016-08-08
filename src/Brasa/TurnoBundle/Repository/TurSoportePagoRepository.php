@@ -29,6 +29,7 @@ class TurSoportePagoRepository extends EntityRepository {
                     . "SUM(spd.vacacion) as vacacion, "
                     . "SUM(spd.ingreso) as ingreso, "
                     . "SUM(spd.retiro) as retiro, "
+                    . "SUM(spd.induccion) as induccion, "
                     . "SUM(spd.dias) as dias, "
                     . "SUM(spd.horasDescanso) as horasDescanso, "
                     . "SUM(spd.horasNovedad) as horasNovedad, "
@@ -123,6 +124,7 @@ class TurSoportePagoRepository extends EntityRepository {
                 . "SUM(spd.vacacion) as vacacion, "
                 . "SUM(spd.ingreso) as ingreso, "
                 . "SUM(spd.retiro) as retiro, "
+                . "SUM(spd.induccion) as induccion, "
                 . "SUM(spd.dias) as dias, "
                 . "SUM(spd.horasDescanso) as horasDescanso, "
                 . "SUM(spd.horasNovedad) as horasNovedad, "
@@ -357,6 +359,7 @@ class TurSoportePagoRepository extends EntityRepository {
         $arSoportePagoDetalle->setLicenciaNoRemunerada($arTurno->getLicenciaNoRemunerada());
         $arSoportePagoDetalle->setVacacion($arTurno->getVacacion());                
         $arSoportePagoDetalle->setIngreso($arTurno->getIngreso());
+        $arSoportePagoDetalle->setInduccion($arTurno->getInduccion());
         if($dateFecha->format('d') == 31) {
             $arSoportePagoDetalle->setDias(0);        
             $arSoportePagoDetalle->setHoras(0);        
@@ -649,7 +652,7 @@ class TurSoportePagoRepository extends EntityRepository {
                     } else {
                         $diasDescansoSoportePago = 0;
                     }                        
-                }
+                }               
                 if($diasDescansoSoportePago > 0) {
                     $domingosPagados = $this->domingosPagados($arrDomingos, $arSoportePago->getCodigoSoportePagoPk());
                     if($domingosPagados <= $diasDescansoSoportePago) {
@@ -662,7 +665,7 @@ class TurSoportePagoRepository extends EntityRepository {
                 $diasPeriodoCompensar = $diasPeriodo;
                 $horasPeriodo =  $diasPeriodoCompensar * 8;                
                 //$horasPeriodo =  $diasPeriodo * 8;                
-                $horasDescansoSoportePago = $horasDescanso;
+                $horasDescansoSoportePago = $diasDescansoSoportePago * 8;
                 //$horasTopeSoportePago = $horasPeriodo - ($descansoCompensacion * 8);                
                 $horasTopeSoportePago = $horasPeriodo - ($descanso * 8);                
                 $horasDia = $arSoportePago->getHorasDiurnasReales();

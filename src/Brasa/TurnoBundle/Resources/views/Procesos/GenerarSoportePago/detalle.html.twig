@@ -70,6 +70,7 @@
                 <th><p data-toggle="tooltip" data-placement="top" title="Dias">{{ knp_pagination_sortable(arSoportesPagos, 'D', 'sp.dias') }}</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Dias subsidio transporte">{{ knp_pagination_sortable(arSoportesPagos, 'DT', 'sp.diasTransporte') }}</p></th>
                 <th>{{ knp_pagination_sortable(arSoportesPagos, 'NOV', 'sp.novedad') }}</th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Induccion">{{ knp_pagination_sortable(arSoportesPagos, 'ID', 'sp.induccion') }}</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Ingreso">{{ knp_pagination_sortable(arSoportesPagos, 'IN', 'sp.ingreso') }}</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Retiro">{{ knp_pagination_sortable(arSoportesPagos, 'RE', 'sp.retiro') }}</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Incapacidad">{{ knp_pagination_sortable(arSoportesPagos, 'IG', 'sp.incapacidad') }}</p></th>
@@ -102,6 +103,7 @@
                 <td style="text-align: right">{{ arSoportesPagos.dias | number_format(0, '.', ',') }}</td>                
                 <td style="text-align: right">{{ arSoportesPagos.diasTransporte | number_format(0, '.', ',') }}</td>                
                 <td style="text-align: right" {% if arSoportesPagos.novedad > 0 %} class="danger" {% endif %}>{{ arSoportesPagos.novedad | number_format(0, '.', ',') }}</td>                
+                <td style="text-align: right">{{ arSoportesPagos.induccion | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.ingreso | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.retiro | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagos.incapacidad | number_format(0, '.', ',') }}</td>

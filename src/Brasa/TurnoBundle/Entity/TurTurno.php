@@ -92,6 +92,11 @@ class TurTurno
     private $retiro = false;    
     
     /**
+     * @ORM\Column(name="induccion", type="boolean")
+     */    
+    private $induccion = false;    
+    
+    /**
      * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
      */    
     private $usuario;     
@@ -734,5 +739,29 @@ class TurTurno
     public function getComplementario()
     {
         return $this->complementario;
+    }
+
+    /**
+     * Set induccion
+     *
+     * @param boolean $induccion
+     *
+     * @return TurTurno
+     */
+    public function setInduccion($induccion)
+    {
+        $this->induccion = $induccion;
+
+        return $this;
+    }
+
+    /**
+     * Get induccion
+     *
+     * @return boolean
+     */
+    public function getInduccion()
+    {
+        return $this->induccion;
     }
 }

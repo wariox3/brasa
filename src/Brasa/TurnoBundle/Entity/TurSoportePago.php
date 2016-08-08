@@ -111,6 +111,11 @@ class TurSoportePago
      * @ORM\Column(name="retiro", type="integer")
      */    
     private $retiro = 0;    
+
+    /**
+     * @ORM\Column(name="induccion", type="integer")
+     */    
+    private $induccion = 0;
     
     /**
      * @ORM\Column(name="dias", type="float")
@@ -1675,5 +1680,29 @@ class TurSoportePago
     public function getDiasPeriodoDescansoCompensar()
     {
         return $this->diasPeriodoDescansoCompensar;
+    }
+
+    /**
+     * Set induccion
+     *
+     * @param integer $induccion
+     *
+     * @return TurSoportePago
+     */
+    public function setInduccion($induccion)
+    {
+        $this->induccion = $induccion;
+
+        return $this;
+    }
+
+    /**
+     * Get induccion
+     *
+     * @return integer
+     */
+    public function getInduccion()
+    {
+        return $this->induccion;
     }
 }

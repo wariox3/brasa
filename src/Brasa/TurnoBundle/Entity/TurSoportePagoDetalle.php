@@ -83,6 +83,11 @@ class TurSoportePagoDetalle
     private $retiro = false;     
     
     /**
+     * @ORM\Column(name="induccion", type="integer")
+     */    
+    private $induccion = 0;    
+    
+    /**
      * @ORM\Column(name="dias", type="float")
      */    
     private $dias = 0;     
@@ -1105,5 +1110,29 @@ class TurSoportePagoDetalle
     public function getHorasRecargoFestivoNocturno()
     {
         return $this->horasRecargoFestivoNocturno;
+    }
+
+    /**
+     * Set induccion
+     *
+     * @param integer $induccion
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setInduccion($induccion)
+    {
+        $this->induccion = $induccion;
+
+        return $this;
+    }
+
+    /**
+     * Get induccion
+     *
+     * @return integer
+     */
+    public function getInduccion()
+    {
+        return $this->induccion;
     }
 }
