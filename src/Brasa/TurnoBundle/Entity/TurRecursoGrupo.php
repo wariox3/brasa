@@ -36,6 +36,11 @@ class TurRecursoGrupo
      * @ORM\Column(name="dias_descanso_fijo", type="integer", nullable=true)
      */    
     private $diasDescansoFijo = 0;    
+  
+    /**
+     * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCentroCostoFk = 0;        
     
     /**
      * @ORM\OneToMany(targetEntity="TurRecurso", mappedBy="recursoGrupoRel")
@@ -229,5 +234,29 @@ class TurRecursoGrupo
     public function getSoportesPagosPeriodosRecursoGrupoRel()
     {
         return $this->soportesPagosPeriodosRecursoGrupoRel;
+    }
+
+    /**
+     * Set codigoCentroCostoFk
+     *
+     * @param integer $codigoCentroCostoFk
+     *
+     * @return TurRecursoGrupo
+     */
+    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
+    {
+        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCentroCostoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCentroCostoFk()
+    {
+        return $this->codigoCentroCostoFk;
     }
 }

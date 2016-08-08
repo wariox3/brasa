@@ -92,7 +92,7 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
     public function analizarInconsistencias($codigoSoportePagoPeriodo) {
         $em = $this->getEntityManager();
         $em->getRepository('BrasaTurnoBundle:TurSoportePagoInconsistencia')->limpiar($codigoSoportePagoPeriodo);        
-        $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
+        $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();        
         $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
         $arSoportePagoPeriodo->setInconsistencias(0);
         $arrInconsistencias = array();
@@ -120,6 +120,30 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
                 }                
             }
         }
+        if($arSoportePagoPeriodo->getRecursoGrupoRel()->getCodigoCentroCostoFk()){
+            $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arSoportePagoPeriodo->getRecursoGrupoRel()->getCodigoCentroCostoFk());
+            if($arCentroCosto) {
+                $dql  = "SELECT c.codigoEmpleadoFk, e.numeroIdentificacion, e.nombreCorto FROM BrasaRecursoHumanoBundle:RhuContrato c JOIN c.empleadoRel e "
+                            . "WHERE c.codigoCentroCostoFk = " . $arSoportePagoPeriodo->getRecursoGrupoRel()->getCodigoCentroCostoFk()                    
+                            . " AND c.fechaDesde <= '" .$arSoportePagoPeriodo->getFechaHasta()->format('Y-m-d') . "' "
+                            . " AND (c.fechaHasta >= '" . $arSoportePagoPeriodo->getFechaDesde()->format('Y-m-d') . "' "
+                            . " OR c.indefinido = 1)";                
+                $query = $em->createQuery($dql);
+                $arContratos = $query->getResult();                
+                foreach ($arContratos as $arContrato) {                    
+                    $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findOneBy(array('codigoEmpleadoFk' => $arContrato['codigoEmpleadoFk']));
+                    if($arRecurso) {
+                        $arSoportePago = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findOneBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo, 'codigoRecursoFk' => $arRecurso->getCodigoRecursoPk()));
+                        if(!$arSoportePago) {
+                            $arrInconsistencias[] = array('inconsistencia' => "El recurso esta en el centro de costo con contrato activo y no registra turnos en programacion", 'recurso' => $arRecurso->getNombreCorto(), 'numeroIdentificacion' => $arRecurso->getNumeroIdentificacion(), 'codigo'=> $arRecurso->getCodigoEmpleadoFk());
+                        }                        
+                    } else {
+                        $arrInconsistencias[] = array('inconsistencia' => "El empleado esta en un centro de costos pagado por turnos y no esta en programado en turnos", 'recurso' => $arContrato['nombreCorto'], 'numeroIdentificacion' => $arContrato['numeroIdentificacion'], 'codigo'=> $arContrato['codigoEmpleadoFk']);
+                    }
+                }
+            }
+        }
+        
         if(count($arrInconsistencias) > 0) {  
             $arSoportePagoPeriodo->setInconsistencias(1);
             foreach ($arrInconsistencias as $arrInconsistencia) {
