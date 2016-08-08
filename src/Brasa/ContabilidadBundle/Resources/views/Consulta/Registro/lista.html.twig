@@ -59,6 +59,7 @@
                 <th>FECHA</th>                
                 <th>COMPROBANTE</th>
                 <th>CUENTA</th>
+                <th>C.COSTO</th>
                 <th>TERCERO</th>                
                 <th>DEBITO</th>
                 <th>CREDITO</th>
@@ -75,7 +76,8 @@
                 <td>{{ arRegistros.fecha |date("Y/m/d")  }}</td>
                 <td>{{ arRegistros.codigoComprobanteFk  }}</td>
                 <td>{{ arRegistros.codigoCuentaFk  }}</td>
-                <td>{{ arRegistros.terceroRel.nombreCorto  }}</td>
+                <td>{{ arRegistros.centroCostoRel.nombre |default('') }}</td>
+                <td>{{ arRegistros.terceroRel.nombreCorto |default('') }}</td>                
                 <td style="text-align: right">{{ arRegistros.debito | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arRegistros.credito | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arRegistros.base | number_format(0, '.', ',') }}</td>
@@ -84,7 +86,7 @@
                 {% set floCredito = floCredito + arRegistros.credito %}
             </tr>
             {% endfor %}  
-                <td colspan="7"></td>
+                <td colspan="8"></td>
                 <td style="text-align: right">{{ floDebito | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ floCredito | number_format(0, '.', ',') }}</td>
                 <td colspan="2"></td>            
