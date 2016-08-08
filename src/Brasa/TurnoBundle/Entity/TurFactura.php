@@ -21,6 +21,11 @@ class TurFactura
      * @ORM\Column(name="codigo_factura_tipo_fk", type="integer", nullable=true)
      */    
     private $codigoFacturaTipoFk;      
+
+    /**
+     * @ORM\Column(name="codigo_factura_servicio_fk", type="integer", nullable=true)
+     */    
+    private $codigoFacturaServicioFk; 
     
     /**
      * @ORM\Column(name="numero", type="integer")
@@ -98,6 +103,11 @@ class TurFactura
     private $VrBaseAIU = 0;    
     
     /**
+     * @ORM\Column(name="vr_base_retencion_fuente", type="float")
+     */
+    private $VrBaseRetencionFuente = 0;     
+    
+    /**
      * @ORM\Column(name="vr_iva", type="float")
      */
     private $VrIva = 0; 
@@ -162,6 +172,12 @@ class TurFactura
      * @ORM\JoinColumn(name="codigo_factura_tipo_fk", referencedColumnName="codigo_factura_tipo_pk")
      */
     protected $facturaTipoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurFacturaServicio", inversedBy="facturasFacturaServicioRel")
+     * @ORM\JoinColumn(name="codigo_factura_servicio_fk", referencedColumnName="codigo_factura_servicio_pk")
+     */
+    protected $facturaServicioRel;    
     
     /**
      * @ORM\ManyToOne(targetEntity="TurCliente", inversedBy="facturasClienteRel")
@@ -1044,5 +1060,77 @@ class TurFactura
     public function getOperacion()
     {
         return $this->operacion;
+    }
+
+    /**
+     * Set codigoFacturaServicioFk
+     *
+     * @param integer $codigoFacturaServicioFk
+     *
+     * @return TurFactura
+     */
+    public function setCodigoFacturaServicioFk($codigoFacturaServicioFk)
+    {
+        $this->codigoFacturaServicioFk = $codigoFacturaServicioFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFacturaServicioFk
+     *
+     * @return integer
+     */
+    public function getCodigoFacturaServicioFk()
+    {
+        return $this->codigoFacturaServicioFk;
+    }
+
+    /**
+     * Set facturaServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaServicio $facturaServicioRel
+     *
+     * @return TurFactura
+     */
+    public function setFacturaServicioRel(\Brasa\TurnoBundle\Entity\TurFacturaServicio $facturaServicioRel = null)
+    {
+        $this->facturaServicioRel = $facturaServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Get facturaServicioRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurFacturaServicio
+     */
+    public function getFacturaServicioRel()
+    {
+        return $this->facturaServicioRel;
+    }
+
+    /**
+     * Set vrBaseRetencionFuente
+     *
+     * @param float $vrBaseRetencionFuente
+     *
+     * @return TurFactura
+     */
+    public function setVrBaseRetencionFuente($vrBaseRetencionFuente)
+    {
+        $this->VrBaseRetencionFuente = $vrBaseRetencionFuente;
+
+        return $this;
+    }
+
+    /**
+     * Get vrBaseRetencionFuente
+     *
+     * @return float
+     */
+    public function getVrBaseRetencionFuente()
+    {
+        return $this->VrBaseRetencionFuente;
     }
 }

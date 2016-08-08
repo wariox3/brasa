@@ -17,7 +17,14 @@ class TurFacturaType extends AbstractType
                     return $er->createQueryBuilder('ft')
                     ->orderBy('ft.codigoFacturaTipoPk', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                  
+                'required' => true))    
+            ->add('facturaServicioRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurFacturaServicio',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('ft')
+                    ->orderBy('ft.codigoFacturaServicioPk', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                             
             ->add('imprimirRelacion', 'checkbox', array('required'  => false))  
             ->add('imprimirAgrupada', 'checkbox', array('required'  => false))
             ->add('soporte', 'text', array('required' => false))

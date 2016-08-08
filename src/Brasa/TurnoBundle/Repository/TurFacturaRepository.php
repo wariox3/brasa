@@ -94,7 +94,8 @@ class TurFacturaRepository extends EntityRepository {
         $iva = 0;
         $baseIva = 0;
         $total = 0;
-
+        $retencionFuente = 0;
+        
         $arFacturasDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
         $arFacturasDetalle = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura));
         foreach ($arFacturasDetalle as $arFacturaDetalle) {
@@ -118,13 +119,18 @@ class TurFacturaRepository extends EntityRepository {
             $baseIva += $baseIvaDetalle;
             $total += $totalDetalle;
         }
-        $retencionFuente = 0;
-        if(($baseIva) >= $arConfiguracion->getBaseRetencionFuente()) {
-            $retencionFuente = (($baseIva) * 2 ) / 100;
+        
+        $porRetencionFuente = $arFactura->getFacturaServicioRel()->getPorRetencionFuente();
+        $porBaseRetencionFuente = $arFactura->getFacturaServicioRel()->getPorBaseRetencionFuente();
+        $baseRetencionFuente = ($subtotal * $porBaseRetencionFuente) / 100;
+        
+        if($baseRetencionFuente >= $arConfiguracion->getBaseRetencionFuente()) {
+            $retencionFuente = ($baseRetencionFuente * $porRetencionFuente ) / 100;
         }
 
-        $totalNeto = $total - $retencionFuente;
+        $totalNeto = $total + $iva - $retencionFuente;
         $arFactura->setVrBaseAIU($baseIva);
+        $arFactura->setVrBaseRetencionFuente($baseRetencionFuente);
         $arFactura->setVrSubtotal($subtotal);
         $arFactura->setVrSubtotalOperado($subtotal * $arFactura->getOperacion());
         //$arFactura->setVrSubtotalOtros($floSubTotalConceptos);
@@ -388,7 +394,7 @@ class TurFacturaRepository extends EntityRepository {
                     }
                     
                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                    
-                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaTipoRel()->getCodigoCuentaCarteraFk());                                        
+                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaServicioRel()->getCodigoCuentaCarteraFk());                                        
                     $arRegistro->setComprobanteRel($arComprobanteContable);
                     $arRegistro->setCentroCostoRel($arCentroCosto);
                     $arRegistro->setCuentaRel($arCuenta);
@@ -400,36 +406,40 @@ class TurFacturaRepository extends EntityRepository {
                     $em->persist($arRegistro);
 
                     //Retencion en la fuente
-                    $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro(); 
-                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaTipoRel()->getCodigoCuentaRetencionFuenteFk());                                        
-                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                    $arRegistro->setCentroCostoRel($arCentroCosto);
-                    $arRegistro->setCuentaRel($arCuenta);
-                    $arRegistro->setTerceroRel($arTercero);
-                    $arRegistro->setNumero($arFactura->getNumero());
-                    $arRegistro->setNumeroReferencia($arFactura->getNumero());
-                    $arRegistro->setFecha($arFactura->getFecha());                    
-                    $arRegistro->setBase($arFactura->getVrBaseAIU());
-                    $arRegistro->setDebito($arFactura->getVrRetencionFuente());
-                    $em->persist($arRegistro);                    
+                    if($arFactura->getVrRetencionFuente() > 0) {
+                        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro(); 
+                        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaServicioRel()->getCodigoCuentaRetencionFuenteFk());                                        
+                        $arRegistro->setComprobanteRel($arComprobanteContable);
+                        $arRegistro->setCentroCostoRel($arCentroCosto);
+                        $arRegistro->setCuentaRel($arCuenta);
+                        $arRegistro->setTerceroRel($arTercero);
+                        $arRegistro->setNumero($arFactura->getNumero());
+                        $arRegistro->setNumeroReferencia($arFactura->getNumero());
+                        $arRegistro->setFecha($arFactura->getFecha());                    
+                        $arRegistro->setBase($arFactura->getVrBaseRetencionFuente());
+                        $arRegistro->setDebito($arFactura->getVrRetencionFuente());
+                        $em->persist($arRegistro);                         
+                    }                   
 
                     //Iva
-                    $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro(); 
-                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaTipoRel()->getCodigoCuentaIvaFk());                                        
-                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                    $arRegistro->setCentroCostoRel($arCentroCosto);
-                    $arRegistro->setCuentaRel($arCuenta);
-                    $arRegistro->setTerceroRel($arTercero);
-                    $arRegistro->setNumero($arFactura->getNumero());
-                    $arRegistro->setNumeroReferencia($arFactura->getNumero());
-                    $arRegistro->setFecha($arFactura->getFecha());
-                    $arRegistro->setBase($arFactura->getVrBaseAIU());                    
-                    $arRegistro->setCredito($arFactura->getVrIva());
-                    $em->persist($arRegistro);
+                    if($arFactura->getVrIva() > 0) {
+                        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro(); 
+                        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaServicioRel()->getCodigoCuentaIvaFk());                                        
+                        $arRegistro->setComprobanteRel($arComprobanteContable);
+                        $arRegistro->setCentroCostoRel($arCentroCosto);
+                        $arRegistro->setCuentaRel($arCuenta);
+                        $arRegistro->setTerceroRel($arTercero);
+                        $arRegistro->setNumero($arFactura->getNumero());
+                        $arRegistro->setNumeroReferencia($arFactura->getNumero());
+                        $arRegistro->setFecha($arFactura->getFecha());
+                        $arRegistro->setBase($arFactura->getVrBaseAIU());                    
+                        $arRegistro->setCredito($arFactura->getVrIva());
+                        $em->persist($arRegistro);                        
+                    }
 
                     //Ingreso
                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro(); 
-                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaTipoRel()->getCodigoCuentaIngresoFk());                                        
+                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaServicioRel()->getCodigoCuentaIngresoFk());                                        
                     $arRegistro->setComprobanteRel($arComprobanteContable);
                     $arRegistro->setCentroCostoRel($arCentroCosto);
                     $arRegistro->setCuentaRel($arCuenta);
@@ -440,7 +450,7 @@ class TurFacturaRepository extends EntityRepository {
                     $arRegistro->setCredito($arFactura->getVrSubtotal());
                     $em->persist($arRegistro);
                     
-                    //$arFactura->setEstadoContabilizado(1);
+                    $arFactura->setEstadoContabilizado(1);
                     $em->persist($arFactura);                                            
                 }
             }

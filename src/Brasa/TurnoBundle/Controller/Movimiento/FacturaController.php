@@ -21,8 +21,12 @@ class FacturaController extends Controller
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->lista();
-        if ($form->isValid()) {            
-            //if ($form->get('BtnContabilizar')->isClicked()) {   
+        if ($form->isValid()) {                        
+            if ($form->get('BtnEliminar')->isClicked()) {                
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurFactura')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_factura'));  
+
                 /*set_time_limit(0);
                 ini_set("memory_limit", -1);
                 $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
@@ -32,24 +36,24 @@ class FacturaController extends Controller
                 foreach ($arFacturas as $arFactura) {                    
                     $arFacturaAct = new \Brasa\TurnoBundle\Entity\TurFactura();        
                     $arFacturaAct = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($arFactura->getCodigoFacturaPk());                     
+                    
+                    $porRetencionFuente = $arFactura->getFacturaServicioRel()->getPorRetencionFuente();
+                    $porBaseRetencionFuente = $arFactura->getFacturaServicioRel()->getPorBaseRetencionFuente();
+                    $baseRetencionFuente = ($arFacturaAct->getVrSubtotal() * $porBaseRetencionFuente) / 100;
                     $retencionFuente = 0;
-                    if($arFacturaAct->getVrBaseAIU() >= $arConfiguracion->getBaseRetencionFuente()) {
-                        $retencionFuente = ($arFacturaAct->getVrBaseAIU() * 2 ) / 100;
-                    }                
+                    if($baseRetencionFuente >= $arConfiguracion->getBaseRetencionFuente()) {
+                        $retencionFuente = ($baseRetencionFuente * $porRetencionFuente ) / 100;
+                    }               
 
                     $totalNeto = $arFacturaAct->getVrSubtotal() + $arFacturaAct->getVrIva() - $retencionFuente;                    
+                    $arFacturaAct->setVrBaseRetencionFuente($baseRetencionFuente);
+                    $arFacturaAct->setVrRetencionFuente($retencionFuente);
                     $arFacturaAct->setVrTotalNeto($totalNeto);
                     $em->persist($arFacturaAct);                                                                                                        
                 }
-                $em->flush();
-                 * 
-                 */
-                //return $this->redirect($this->generateUrl('brs_tur_movimiento_factura'));                                 
-            //}            
-            if ($form->get('BtnEliminar')->isClicked()) {                
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaTurnoBundle:TurFactura')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_movimiento_factura'));                                 
+                $em->flush();                                  
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_factura'));                  
+                */
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
