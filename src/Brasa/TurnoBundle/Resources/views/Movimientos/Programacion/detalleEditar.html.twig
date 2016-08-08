@@ -75,7 +75,7 @@
                 {% else %}
                     {% set deshabilitarRecurso = '' %}                    
                 {% endif %}                
-                    {% if intRecurso != arProgramacionDetalle.codigoRecursoFk or arProgramacionDetalle.codigoRecursoFk == '' %}
+                    
                          <tr>
                             <td id="suptipo" colspan="4">
                                 <input class="input-grid" type="text" name="TxtRecurso{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" id="TxtRecurso{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.codigoRecursoFk }}" size="10" style="width:60px" onkeyup="javascript:this.value = this.value.toUpperCase();" onclick="this.select()" {{ deshabilitarRecurso }}/>
@@ -88,8 +88,8 @@
                                 {{ arProgramacionDetalle.puestoRel.nombre | default('') }}                                 
                             </td>
                          </tr>                         
-                         {% set intRecurso = arProgramacionDetalle.codigoRecursoFk %}
-                    {% endif %}                
+                         
+                                   
                     <tr>
                     <input type="hidden" name="LblCodigo[]" value="{{ arProgramacionDetalle.codigoProgramacionDetallePk }}">                                                                   
                     
