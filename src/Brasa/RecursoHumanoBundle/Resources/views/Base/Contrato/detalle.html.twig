@@ -235,6 +235,7 @@
                         <th>AFILIACION</th>
                         <th></th>
                         <th></th>
+                        <th></th>
                     </tr>
                     {% for arTrasladoPension in arTrasladoPension %}
                         <tr>
@@ -246,9 +247,12 @@
                             <td>{{ arTrasladoPension.entidadPensionAnteriorRel.nombre }}</td>
                             <td>{{ arTrasladoPension.entidadPensionNuevaRel.nombre }}</td>
                             <td>{{ arTrasladoPension.detalle }}</td>
-                            <td>{% if arTrasladoPension.estadoAfiliado == 1%}CERRADA{% else %}ABIERTO{% endif %}</td>
-                            {#<td style="text-align: center"><a class="btn btn-default btn-xs" id="{{ path('brs_rhu_traslado_pension_editar', { 'codigoTrasladoPension': arTrasladoPension.codigoTrasladoPensionPk}) }}" style="float:left">Cambio contrato</a></td>                                #}
-                            <td></td>
+                            <td>{% if arTrasladoPension.estadoAfiliado == 1 %}CERRADA{% else %}ABIERTO{% endif %}</td>
+                            {% if arTrasladoPension.estadoAfiliado == 0 %}
+                            <td style="text-align: center"><a class="btn btn-default btn-xs" id="{{ path('brs_rhu_traslado_pension_editar', {'codigoContrato': arContrato.codigoContratoPk, 'codigoTrasladoPension': arTrasladoPension.codigoTrasladoPensionPk}) }}" style="float:left">Cerrar afiliacion</a></td>
+                            {% else %}
+                                 <td></td>
+                            {% endif %}
                             {% if arTrasladoPension.tipo == 2 %}
                                 <td><button class="btn btn-default btn-xs" type="submit" name="ImprimirTrasladoPension" value="{{ arTrasladoPension.codigoTrasladoPensionPk }}">Imprimir</button></td>                             
                             {% else %}
@@ -275,11 +279,13 @@
                         <th>CÓDIGO</th>
                         <th>FECHA</th>
                         <th>FECHA FOSYGA</th>
+                        <th>FECHA CAMBIO AF.</th>
                         <th>TIPO</th>
                         <th>ANTERIOR</th>
                         <th>NUEVO</th>
                         <th>DETALLE</th>
                         <th>AFILIACION</th>
+                        <th></th>
                         <th></th>
                     </tr>
                     {% for arTrasladoSalud in arTrasladoSalud %}
@@ -287,12 +293,22 @@
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arTrasladoSalud.codigoTrasladoSaludPk }}">{{ arTrasladoSalud.codigoTrasladoSaludPk }} </td>
                             <td>{{ arTrasladoSalud.fecha|date('Y-m-d') }}</td>
                             <td>{% if arTrasladoSalud.fechaFosyga == null %}{% else %}{{ arTrasladoSalud.fechaFosyga|date('Y-m-d') }}{% endif %}</td>
+                            <td>{% if arTrasladoSalud.fechaCambioAfiliacion == null %}{% else %}{{ arTrasladoSalud.fechaCambioAfiliacion |date('Y-m-d') }}{% endif %}</td>
                             <td>{% if arTrasladoSalud.tipo == 1%}TRASLADO{% else %}CAMBIO{% endif %}</td>
                             <td>{{ arTrasladoSalud.entidadSaludAnteriorRel.nombre }}</td>
                             <td>{{ arTrasladoSalud.entidadSaludNuevaRel.nombre }}</td>
                             <td>{{ arTrasladoSalud.detalle }}</td>
                             <td>{% if arTrasladoSalud.estadoAfiliado == 1%}CERRADA{% else %}ABIERTO{% endif %}</td>
-                            <td><button class="btn btn-default btn-xs" type="submit" name="ImprimirTrasladoSalud" value="{{ arTrasladoSalud.codigoTrasladoSaludPk }}">Imprimir</button></td>                             
+                            {% if arTrasladoSalud.estadoAfiliado == 0 %}
+                            <td style="text-align: center"><a class="btn btn-default btn-xs" id="{{ path('brs_rhu_traslado_salud_editar', {'codigoContrato': arContrato.codigoContratoPk, 'codigoTrasladoSalud': arTrasladoSalud.codigoTrasladoSaludPk}) }}" style="float:left">Cerrar afiliacion</a></td>
+                            {% else %}
+                                 <td></td>
+                            {% endif %}
+                            {% if arTrasladoSalud.tipo == 2 %}
+                                <td><button class="btn btn-default btn-xs" type="submit" name="ImprimirTrasladoSalud" value="{{ arTrasladoSalud.codigoTrasladoSaludPk }}">Imprimir</button></td>                             
+                            {% else %}
+                                <td></td>
+                            {% endif %}
                         </tr>
                     {% endfor %}
                 </table>

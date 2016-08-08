@@ -65,6 +65,9 @@ class RhuVacacionRepository extends EntityRepository {
          */
         $recargosNocturnos = $arContrato->getPromedioRecargoNocturnoInicial();
         $promedioRecargosNocturnos = $recargosNocturnos;
+        if ($promedioRecargosNocturnos == null){
+            $promedioRecargosNocturnos = 0;
+        }
         $arVacacion->setVrPromedioRecargoNocturno($promedioRecargosNocturnos);
         if($arContrato->getCodigoSalarioTipoFk() == 1) {
             $floSalarioPromedio = $arContrato->getVrSalario();
@@ -104,6 +107,7 @@ class RhuVacacionRepository extends EntityRepository {
         $arVacacion->setVrVacacion($floTotalVacacion);        
         $arVacacion->setVrSalarioActual($floSalario);
         $arVacacion->setVrSalarioPromedio($floSalarioPromedio);
+        $em->persist($arVacacion);
         $em->flush();
         
         return true;

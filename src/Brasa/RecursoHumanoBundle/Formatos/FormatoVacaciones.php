@@ -227,12 +227,12 @@ class FormatoVacaciones extends \FPDF_FPDF {
         //DEDUCCIONES CREDITOS TIPO VACACIÓN
         if ($duoRegistrosCreditos > 0){
             $intX = 10;
-            $this->SetXY($intX, 103);
+            $this->SetXY($intX, 150);
             $this->SetFillColor(217, 217, 217);
             $this->SetFont('Arial', 'B', 9);
             $this->Cell(185, 5, utf8_decode("CRÉDITOS TIPO VACACIÓN:"), 1, 0, 'C', 1);
 
-            $intY = 103 + 5;
+            $intY = 150 + 5;
             $this->SetXY($intX, $intY);
 
             $this->SetFont('Arial', 'B', 8);
@@ -267,11 +267,11 @@ class FormatoVacaciones extends \FPDF_FPDF {
     public function Footer() {
         
         $this->SetFont('Arial', 'B', 9);
-        $this->Text(10, 160, "FIRMA: _____________________________________________");
-        $this->Text(105, 160, "EMPRESA: __________________________________________");
-        $this->Text(10, 167, "C.C.:     ______________________ de ____________________");
+        $this->Text(10, 230, "FIRMA: _____________________________________________");
+        $this->Text(105, 230, "EMPRESA: __________________________________________");
+        $this->Text(10, 237, "C.C.:     ______________________ de ____________________");
         $this->SetFont('Arial', '', 8);
-        $this->Text(170, 190, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
+        $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
     }    
 }
 

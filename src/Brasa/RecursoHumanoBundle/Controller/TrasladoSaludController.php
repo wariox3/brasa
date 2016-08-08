@@ -72,5 +72,47 @@ class TrasladoSaludController extends Controller
             'arContrato' => $arContrato,
         ));
     }
+    
+    public function editarAction($codigoContrato, $codigoTrasladoSalud = 0) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
+        $arTrasladoSalud = new \Brasa\RecursoHumanoBundle\Entity\RhuTrasladoSalud();
+        $arTrasladoSalud = $em->getRepository('BrasaRecursoHumanoBundle:RhuTrasladoSalud')->find($codigoTrasladoSalud);
+        $estadoAfiliado = $arTrasladoSalud->getEstadoAfiliado(); 
+        if ($estadoAfiliado == 1){
+            $nombreEstadoAfiliado = "CERRADO";
+        } else {
+            $nombreEstadoAfiliado = "ABIERTO";
+        }
+        $form = $this->createFormBuilder()    
+            ->setAction($this->generateUrl('brs_rhu_traslado_salud_editar', array('codigoContrato' => $codigoContrato, 'codigoTrasladoSalud' => $codigoTrasladoSalud)))
+            ->add('fechaCambioAfiliacion', 'date', array('data' => new \DateTime('now')))
+            ->add('estadoAfiliado', 'choice', array('choices' => array($estadoAfiliado => $nombreEstadoAfiliado, '1' => 'CERRADO', '0' => 'ABIERTO')))                                                
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid())
+        {
+            if ($arContrato->getEstadoActivo()== 0){
+                $objMensaje->Mensaje("error", "No tiene contrato activo", $this);
+            }else{
+                
+                $arTrasladoSalud->setFechaCambioAfiliacion($form->get('fechaCambioAfiliacion')->getData());
+                $arTrasladoSalud->setEstadoAfiliado($form->get('estadoAfiliado')->getData());
+                $em->persist($arTrasladoSalud);
+                $em->flush();
+                //echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                 
+                return $this->redirect($this->generateUrl('brs_rhu_base_contratos_detalles', array('codigoContrato' => $codigoContrato)));
+            }
+            
+        }
+        return $this->render('BrasaRecursoHumanoBundle:TrasladoSalud:editar.html.twig', array(
+            'form' => $form->createView(),
+            'arContrato' => $arContrato,
+        ));
+    }
 
 }
