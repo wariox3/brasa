@@ -135,10 +135,10 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 // vacaciones afecta parafiscales PABLO 28-07-2016
                 if($arConfiguracionNomina->getAfectaVacacionesParafiscales() == true){
                     $intDiasCotizarRiesgos = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasVacaciones;
-                    $intDiasCotizarCaja = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasVacaciones;
+                    $intDiasCotizarCaja = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad;
                 } else {
                     $intDiasCotizarRiesgos = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasVacaciones;
-                    $intDiasCotizarCaja = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad;
+                    $intDiasCotizarCaja = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasVacaciones;                    
                 }
                 
                 // fin
