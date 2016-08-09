@@ -616,8 +616,7 @@ class SeguridadSocialPeriodosController extends Controller
                 }
                 $em->flush();
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->actualizar($codigoPeriodoDetalle);
-            }            
-            
+            }                        
             if($form->get('BtnActualizarDetalle')->isClicked()) {
                 $arrControles = $request->request->All();
                 $intIndice = 0;
@@ -1574,9 +1573,9 @@ class SeguridadSocialPeriodosController extends Controller
 
     private function generarExcelEmpleados($codigoPeriodoDetalle) {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
-        ob_clean();
         set_time_limit(0);
-        ini_set("memory_limit", -1);
+        ini_set("memory_limit", -1);        
+        ob_clean();
         $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
         // Set document properties
