@@ -223,6 +223,11 @@ class RhuLiquidacionRepository extends EntityRepository {
             $douInteresesCesantias = $arLiquidacion->getVrInteresesCesantias();   
             $douPrima = $arLiquidacion->getVrPrima();
             $douVacaciones = $arLiquidacion->getVrVacaciones();
+            
+            $arLiquidacion->setFechaUltimoPago($arContrato->getFechaUltimoPago());
+            $arLiquidacion->setFechaUltimoPagoCesantias($arContrato->getFechaUltimoPagoCesantias());
+            $arLiquidacion->setFechaUltimoPagoPrimas($arContrato->getFechaUltimoPagoPrimas());
+            $arLiquidacion->setFechaUltimoPagoVacaciones($arContrato->getFechaUltimoPagoVacaciones());
         }
         
         $floAdicionales = 0;

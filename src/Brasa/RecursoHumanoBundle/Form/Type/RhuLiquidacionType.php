@@ -16,7 +16,7 @@ class RhuLiquidacionType extends AbstractType
             ->add('vrVacaciones', 'number', array('required' => true))
             ->add('diasCesantias', 'number', array('required' => true))
             ->add('diasVacaciones', 'number', array('required' => true))
-            ->add('diasPrima', 'number', array('required' => true))                
+            ->add('diasPrimas', 'number', array('required' => true))                
             ->add('guardar', 'submit');
     }
 
