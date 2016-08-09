@@ -592,7 +592,9 @@ class SeguridadSocialPeriodosController extends Controller
                 $this->listarEmpleados($codigoPeriodoDetalle);
             }
             if($form->get('BtnActualizarEmpleadoAporte')->isClicked()) {
-               $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->actualizar($codigoPeriodoDetalle);
+                set_time_limit(0);
+                ini_set("memory_limit", -1);
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->actualizar($codigoPeriodoDetalle);
             }
             if($form->get('BtnActualizarEmpleados')->isClicked()) {                
                 $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
