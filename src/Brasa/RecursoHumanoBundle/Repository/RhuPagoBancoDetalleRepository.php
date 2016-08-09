@@ -11,6 +11,20 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuPagoBancoDetalleRepository extends EntityRepository {        
     
+    public function listaDetalleDql($codigoPagoBanco) {                
+        $dql   = "SELECT pbd FROM BrasaRecursoHumanoBundle:RhuPagoBancoDetalle pbd WHERE pbd.codigoPagoBancoFk = " . $codigoPagoBanco . " ";           
+        $dql .= " ORDER BY pbd.codigoBancoFk DESC";
+        return $dql;
+    }     
+    public function listaDQL($strFecha = "") {                
+        $dql   = "SELECT pbd FROM BrasaRecursoHumanoBundle:RhuPagoBancoDetalle pbd WHERE pbd.codigoPagoBancoPk <> 0";
+        if($strFecha != "") {
+            $dql .= " AND pb.fechaAplicacion = '" .$strFecha. "'";
+        }    
+        
+        $dql .= " ORDER BY pb.codigoPagoBancoPk";
+        return $dql;
+    }     
     public function pendientesContabilizarDql() {        
         $dql   = "SELECT pbd FROM BrasaRecursoHumanoBundle:RhuPagoBancoDetalle pbd WHERE pbd.estadoContabilizado = 0";       
         $dql .= " ORDER BY pbd.codigoPagoBancoDetallePk DESC";

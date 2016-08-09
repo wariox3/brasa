@@ -6,7 +6,7 @@
         <h3>Lista empleados sucursal</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
-        {{ form_errors(form) }}
+        {{ form_errors(form) }}        
         <div class="panel panel-default">
             <div class="panel-heading">Filtros de busqueda</div>
             <div class="panel-body">
@@ -37,7 +37,7 @@
             </tr>
             {% for arPeriodoEmpleados in arPeriodoEmpleados %}
             <tr>
-                <td><input type="hidden" name="LblCodigo[]" value="{{ arPeriodoEmpleados.codigoPeriodoEmpleadoPk }}">{{ arPeriodoEmpleados.codigoPeriodoEmpleadoPk }} </td>
+                <td>{{ arPeriodoEmpleados.codigoPeriodoEmpleadoPk }} </td>
                 <td>{{ arPeriodoEmpleados.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arPeriodoEmpleados.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arPeriodoEmpleados.empleadoRel.centroCostoRel.nombre |default('') }}</td>
@@ -64,6 +64,15 @@
         </div>
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">    
+                {{ form_widget(form.BtnActualizarEmpleados, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}                
+            </div>           
+            <div class="btn-group">
+                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm' } }) }}                
+            </div>
+        </div>
+            <br/><br/><br/><br/><br/>
+        <div class="btn-toolbar" style="float: right">
+            <div class="btn-group">    
                 {{ form_widget(form.BtnLimpiarSuplementario, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
             </div>
             <div class="btn-group">    
@@ -86,9 +95,6 @@
             <div class="btn-group">
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm' } }) }}                
             </div>            
-            <div class="btn-group">
-                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm' } }) }}                
-            </div>
         </div>
         <!-- Fin Botones Menu Items -->
         {{ form_rest(form) }}

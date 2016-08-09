@@ -74,6 +74,7 @@ class PagoBancoController extends Controller
     public function detalleAction($codigoPagoBanco) {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $paginator  = $this->get('knp_paginator');
         $request = $this->getRequest();            
         $arPagoBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco();
         $arPagoBanco = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBanco')->find($codigoPagoBanco);                
@@ -163,9 +164,8 @@ class PagoBancoController extends Controller
             }
             
         }        
-        $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
-        $arPagoBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->findBy(array ('codigoPagoBancoFk' => $codigoPagoBanco));
-        
+        $dql = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->listaDetalleDql($codigoPagoBanco);
+        $arPagoBancoDetalle = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 700);                
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagoBanco:detalle.html.twig', array(
                     'arPagoBanco' => $arPagoBanco,        
                     'arPagoBancoDetalle' => $arPagoBancoDetalle,
@@ -208,6 +208,7 @@ class PagoBancoController extends Controller
                                         $arPagoBancoDetalle->setNombreCorto($arPago->getEmpleadoRel()->getNombreCorto());
                                         $arPagoBancoDetalle->setCuenta($arPago->getEmpleadoRel()->getCuenta());
                                         $arPagoBancoDetalle->setVrPago($arPago->getVrNeto());                        
+                                        $arPagoBancoDetalle->setCodigoBancoFk($arPago->getEmpleadoRel()->getCodigoBancoFk());
                                         $em->persist($arPagoBancoDetalle); 
                                         $arPago->setEstadoPagadoBanco(1);
                                         $em->persist($arPago);                            
@@ -231,8 +232,9 @@ class PagoBancoController extends Controller
                                 $arPagoBancoDetalle->setPagoRel($arPago);
                                 $arPagoBancoDetalle->setNumeroIdentificacion($arPago->getEmpleadoRel()->getNumeroIdentificacion());
                                 $arPagoBancoDetalle->setNombreCorto($arPago->getEmpleadoRel()->getNombreCorto());
+                                $arPagoBancoDetalle->setCodigoBancoFk($arPago->getEmpleadoRel()->getCodigoBancoFk());
                                 $arPagoBancoDetalle->setCuenta($arPago->getEmpleadoRel()->getCuenta());
-                                $arPagoBancoDetalle->setVrPago($arPago->getVrNeto());                        
+                                $arPagoBancoDetalle->setVrPago($arPago->getVrNeto());                                                        
                                 $em->persist($arPagoBancoDetalle); 
                                 $arPago->setEstadoPagadoBanco(1);
                                 $em->persist($arPago);                            

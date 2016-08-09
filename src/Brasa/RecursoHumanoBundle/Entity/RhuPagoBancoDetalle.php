@@ -38,6 +38,11 @@ class RhuPagoBancoDetalle
     private $nombreCorto;    
     
     /**
+     * @ORM\Column(name="codigo_banco_fk", type="integer", nullable=true)
+     */    
+    private $codigoBancoFk;      
+    
+    /**
      * @ORM\Column(name="cuenta", type="string", length=20, nullable=true)
      */    
     private $cuenta;
@@ -290,5 +295,29 @@ class RhuPagoBancoDetalle
     public function getPagoRel()
     {
         return $this->pagoRel;
+    }
+
+    /**
+     * Set codigoBancoFk
+     *
+     * @param integer $codigoBancoFk
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setCodigoBancoFk($codigoBancoFk)
+    {
+        $this->codigoBancoFk = $codigoBancoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoBancoFk
+     *
+     * @return integer
+     */
+    public function getCodigoBancoFk()
+    {
+        return $this->codigoBancoFk;
     }
 }

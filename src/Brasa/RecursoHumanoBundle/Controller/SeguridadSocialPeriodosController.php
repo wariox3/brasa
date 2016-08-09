@@ -570,7 +570,7 @@ class SeguridadSocialPeriodosController extends Controller
         $arPeriodoDetalle =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);
         $form = $this->formularioDetalleEmpleado($arPeriodoDetalle);
         $form->handleRequest($request);
-        $this->listarEmpleados($codigoPeriodoDetalle);
+        $this->listarEmpleados($codigoPeriodoDetalle);        
         if($form->isValid()) {
             if($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -579,8 +579,9 @@ class SeguridadSocialPeriodosController extends Controller
                         $arPeriodoDetalleEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
                         $arPeriodoDetalleEmpleado =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->find($codigoPeriodoDetalleEmpleadoPk);
                         $em->remove($arPeriodoDetalleEmpleado);
-                        $em->flush();
+                        
                     }
+                    $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_ss_periodo_detalle_empleados', array('codigoPeriodoDetalle' => $codigoPeriodoDetalle)));
                 }
             }
@@ -591,6 +592,27 @@ class SeguridadSocialPeriodosController extends Controller
             if($form->get('BtnActualizarEmpleadoAporte')->isClicked()) {
                $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->actualizar($codigoPeriodoDetalle);
             }
+            if($form->get('BtnActualizarEmpleados')->isClicked()) {                
+                $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->contratosPeriodo($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde()->format('Y-m-d'), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta()->format('Y-m-d'));
+                foreach ($arContratos as $arContrato) {
+                    if($arContrato->getCentroCostoRel()->getCodigoSucursalFk() == $arPeriodoDetalle->getCodigoSucursalFk()) {
+                        $arPeriodoEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
+                        $arPeriodoEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->findOneBy(array('codigoEmpleadoFk' => $arContrato->getCodigoEmpleadoFk()));                
+                        if(!$arPeriodoEmpleado) {
+                            $arPeriodoEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
+                            $arPeriodoEmpleado->setEmpleadoRel($arContrato->getEmpleadoRel());
+                            $arPeriodoEmpleado->setSsoPeriodoRel($arPeriodoDetalle->getSsoPeriodoRel());
+                            $arPeriodoEmpleado->setSsoSucursalRel($arPeriodoDetalle->getSsoSucursalRel());
+                            $arPeriodoEmpleado->setContratoRel($arContrato);               
+                            $arPeriodoEmpleado->setSsoPeriodoDetalleRel($arPeriodoDetalle);
+                            $em->persist($arPeriodoEmpleado);
+                        }
+                    }
+                }
+                $em->flush();
+            }            
+            
             if($form->get('BtnActualizarDetalle')->isClicked()) {
                 $arrControles = $request->request->All();
                 $intIndice = 0;
@@ -802,6 +824,7 @@ class SeguridadSocialPeriodosController extends Controller
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $arrBotonEliminar = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonActualizarEmpleados = array('label' => 'Actualizar empleados', 'disabled' => false);        
         $arrBotonActualizarDatos = array('label' => 'Actualizar datos', 'disabled' => false);        
         $arrBotonActualizarDetalle = array('label' => 'Actualizar detalle', 'disabled' => false);
         $arrBotonActualizarSalarioMinimo = array('label' => 'Actualizar salario minimo', 'disabled' => false);
@@ -813,6 +836,7 @@ class SeguridadSocialPeriodosController extends Controller
             $arrBotonActualizarDetalle['disabled'] = true;
             $arrBotonActualizarSalarioMinimo['disabled'] = true;
             $arrBotonLimpiarSuplementario['disabled'] = true;
+            $arrBotonActualizarEmpleados['disabled'] = true;
         } 
         $arrayPropiedades = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
@@ -832,6 +856,7 @@ class SeguridadSocialPeriodosController extends Controller
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnActualizarEmpleadoAporte', 'submit', $arrBotonActualizarDatos)    
+            ->add('BtnActualizarEmpleados', 'submit', $arrBotonActualizarEmpleados)                    
             ->add('BtnActualizarDetalle', 'submit', $arrBotonActualizarDetalle)
             ->add('BtnActualizarSalarioMinimo', 'submit', $arrBotonActualizarSalarioMinimo)
             ->add('BtnLimpiarSuplementario', 'submit', $arrBotonLimpiarSuplementario)    
