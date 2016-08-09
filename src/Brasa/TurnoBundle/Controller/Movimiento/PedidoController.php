@@ -373,6 +373,8 @@ class PedidoController extends Controller
                 $arPedidoDetalle->setAnio($intAnio);
                 $arPedidoDetalle->setMes($intMes);
                 $intDiaFinalMes = date("d",(mktime(0,0,0,$intMes+1,1,$intAnio)-1));
+                $arPedidoDetalle->setAnio($arPedido->getFechaProgramacion()->format('Y'));
+                $arPedidoDetalle->setMes($arPedido->getFechaProgramacion()->format('m'));
                 $arPedidoDetalle->setDiaDesde(1);
                 $arPedidoDetalle->setDiaHasta($intDiaFinalMes);
             }
