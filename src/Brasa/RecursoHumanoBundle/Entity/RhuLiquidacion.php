@@ -237,6 +237,11 @@ class RhuLiquidacion
      */    
     private $codigoUsuario;
     
+    /**     
+     * @ORM\Column(name="liquidar_manual", type="boolean")
+     */    
+    private $liquidarManual = 0;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="liquidacionesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
@@ -1468,5 +1473,29 @@ class RhuLiquidacion
     public function getCodigoUsuario()
     {
         return $this->codigoUsuario;
+    }
+
+    /**
+     * Set liquidarManual
+     *
+     * @param boolean $liquidarManual
+     *
+     * @return RhuLiquidacion
+     */
+    public function setLiquidarManual($liquidarManual)
+    {
+        $this->liquidarManual = $liquidarManual;
+
+        return $this;
+    }
+
+    /**
+     * Get liquidarManual
+     *
+     * @return boolean
+     */
+    public function getLiquidarManual()
+    {
+        return $this->liquidarManual;
     }
 }

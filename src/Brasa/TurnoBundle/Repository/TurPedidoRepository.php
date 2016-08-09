@@ -57,10 +57,10 @@ class TurPedidoRepository extends EntityRepository {
         $dql   = "SELECT p FROM BrasaTurnoBundle:TurPedido p WHERE p.estadoProgramado = 0 AND p.estadoAutorizado = 1 AND p.estadoAnulado = 0 ";
 
         if($strFechaDesde != '') {
-            $dql .= " AND p.fecha >= '" . $strFechaDesde . "'";  
+            $dql .= " AND p.fechaProgramacion >= '" . $strFechaDesde . "'";  
         }
         if($strFechaHasta != '') {
-            $dql .= " AND p.fecha <= '" . $strFechaHasta . "'";  
+            $dql .= " AND p.fechaProgramacion <= '" . $strFechaHasta . "'";  
         }        
         return $dql;
     }        
