@@ -147,6 +147,8 @@ class SeguridadSocialPeriodosController extends Controller
                 }
             }
             if($request->request->get('OpGenerar')) {
+                set_time_limit(0);
+                ini_set("memory_limit", -1);
                 $codigoPeriodoDetalle = $request->request->get('OpGenerar');
                 $arSsoAportes = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte();
                 $arSsoAportes = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoAporte')->findBy(array('codigoPeriodoDetalleFk' => $codigoPeriodoDetalle));
@@ -1077,6 +1079,8 @@ class SeguridadSocialPeriodosController extends Controller
     
     private function generarPagosPeriodoExcel($codigoPeriodo) {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         ob_clean();
         $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
@@ -1329,6 +1333,8 @@ class SeguridadSocialPeriodosController extends Controller
     
     private function generarAportesPeriodoExcel($codigoPeriodo) {
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -1566,6 +1572,8 @@ class SeguridadSocialPeriodosController extends Controller
     private function generarExcelEmpleados($codigoPeriodoDetalle) {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
         // Set document properties
