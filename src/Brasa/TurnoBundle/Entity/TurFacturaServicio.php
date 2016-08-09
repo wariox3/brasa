@@ -51,6 +51,16 @@ class TurFacturaServicio
      * @ORM\Column(name="codigo_cuenta_ingreso_fk", type="string", length=20, nullable=true)
      */     
     private $codigoCuentaIngresoFk;        
+
+    /**
+     * @ORM\Column(name="codigo_cuenta_iva_devolucion_fk", type="string", length=20, nullable=true)
+     */     
+    private $codigoCuentaIvaDevolucionFk;    
+    
+    /**
+     * @ORM\Column(name="codigo_cuenta_ingreso_devolucion_fk", type="string", length=20, nullable=true)
+     */     
+    private $codigoCuentaIngresoDevolucionFk;        
     
     /**
      * @ORM\OneToMany(targetEntity="TurFactura", mappedBy="facturaServicioRel")
@@ -275,5 +285,53 @@ class TurFacturaServicio
     public function getFacturasFacturaServicioRel()
     {
         return $this->facturasFacturaServicioRel;
+    }
+
+    /**
+     * Set codigoCuentaIvaDevolucionFk
+     *
+     * @param string $codigoCuentaIvaDevolucionFk
+     *
+     * @return TurFacturaServicio
+     */
+    public function setCodigoCuentaIvaDevolucionFk($codigoCuentaIvaDevolucionFk)
+    {
+        $this->codigoCuentaIvaDevolucionFk = $codigoCuentaIvaDevolucionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCuentaIvaDevolucionFk
+     *
+     * @return string
+     */
+    public function getCodigoCuentaIvaDevolucionFk()
+    {
+        return $this->codigoCuentaIvaDevolucionFk;
+    }
+
+    /**
+     * Set codigoCuentaIngresoDevolucionFk
+     *
+     * @param string $codigoCuentaIngresoDevolucionFk
+     *
+     * @return TurFacturaServicio
+     */
+    public function setCodigoCuentaIngresoDevolucionFk($codigoCuentaIngresoDevolucionFk)
+    {
+        $this->codigoCuentaIngresoDevolucionFk = $codigoCuentaIngresoDevolucionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCuentaIngresoDevolucionFk
+     *
+     * @return string
+     */
+    public function getCodigoCuentaIngresoDevolucionFk()
+    {
+        return $this->codigoCuentaIngresoDevolucionFk;
     }
 }

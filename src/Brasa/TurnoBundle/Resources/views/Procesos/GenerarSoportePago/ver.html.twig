@@ -13,7 +13,8 @@
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}        
         <table width="100%" class="table table-condensed table-bordered">
-            <tr>                                
+            <tr>           
+                <th>ID</th>
                 {% for arrDiaSemana in arrDiaSemana %}
                 <th>{{ arrDiaSemana.dia }}{{ arrDiaSemana.diaSemana }}</th>
                 {% endfor %}
@@ -34,7 +35,8 @@
                     </tr>                    
                     {% set intCodigoPuesto = arProgramacionDetalle.codigoPuestoFk %}
                 {% endif %}                
-                <tr>                    
+                <tr>
+                    <td>{{ arProgramacionDetalle.codigoProgramacionDetallePk  }}</td>                      
                     <td>{{ arProgramacionDetalle.dia1  }}</td>
                     <td>{{ arProgramacionDetalle.dia2  }}</td>
                     <td>{{ arProgramacionDetalle.dia3  }}</td>
