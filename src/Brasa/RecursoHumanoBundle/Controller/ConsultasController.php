@@ -633,10 +633,13 @@ class ConsultasController extends Controller
             $session->set('filtroCodigoCentroCosto', "0");
         }        
         $this->strSqlContratosPeriodoLista  = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
-                    . "WHERE c.codigoCentroCostoFk = " . $session->get('filtroCodigoCentroCosto')                    
-                    . " AND c.fechaDesde <= '" .$session->get('filtroHasta') . "' "
+                    . "WHERE "
+                    . "c.fechaDesde <= '" .$session->get('filtroHasta') . "' "
                     . " AND (c.fechaHasta >= '" . $session->get('filtroDesde') . "' "
-                    . " OR c.indefinido = 1)";                        
+                    . " OR c.indefinido = 1) ";
+        if($session->get('filtroCodigoCentroCosto')) {
+            $this->strSqlContratosPeriodoLista .= " AND c.codigoCentroCostoFk = " . $session->get('filtroCodigoCentroCosto');
+        }
         
     }    
     
