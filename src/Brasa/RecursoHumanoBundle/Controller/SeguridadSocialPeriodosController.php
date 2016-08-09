@@ -613,6 +613,7 @@ class SeguridadSocialPeriodosController extends Controller
                     }
                 }
                 $em->flush();
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->actualizar($codigoPeriodoDetalle);
             }            
             
             if($form->get('BtnActualizarDetalle')->isClicked()) {
