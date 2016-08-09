@@ -106,7 +106,7 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
             if($arContrato->getFechaDesde() >= $arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde()) {
                 $strNovedadIngreso = "X";
             }
-            if($arContrato->getIndefinido() == 0 && $fechaTerminaCotrato <= $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta()) {                    
+            if($arContrato->getIndefinido() == 0 && $arContrato->getFechaHasta() <= $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta()) {                    
                 $strNovedadRetiro = "X";                    
             }
             $floSalario = $arContrato->getVrSalario();
