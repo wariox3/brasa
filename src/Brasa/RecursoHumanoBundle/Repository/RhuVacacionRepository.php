@@ -139,8 +139,7 @@ class RhuVacacionRepository extends EntityRepository {
         $intDiasDevolver = 0;
         foreach ($arVacaciones as $arVacacion) {
             $dateFechaDesde =  "";
-            $dateFechaHasta =  "";
-            
+            $dateFechaHasta =  "";                            
             if($arVacacion->getFechaDesdeDisfrute() <  $fechaDesde == true) {
                 $dateFechaDesde = $fechaDesde;
             } else {
@@ -156,7 +155,7 @@ class RhuVacacionRepository extends EntityRepository {
                 $intDias = $dateFechaDesde->diff($dateFechaHasta);
                 $intDias = $intDias->format('%a');
                 $intDiasDevolver += $intDias + 1;
-            }
+            }                            
         }
         return $intDiasDevolver;
     }    
@@ -191,6 +190,9 @@ class RhuVacacionRepository extends EntityRepository {
         }
         if($intDiasVacaciones > 30) {
             $intDiasVacaciones = 30;
+        }
+        if($intDiasVacaciones == 1) {
+            $intDiasVacaciones = 0;
         }
         return $intDiasVacaciones;                     
     }     
