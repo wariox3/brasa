@@ -1079,9 +1079,9 @@ class SeguridadSocialPeriodosController extends Controller
     
     private function generarPagosPeriodoExcel($codigoPeriodo) {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
+        ob_clean();
         set_time_limit(0);
         ini_set("memory_limit", -1);
-        ob_clean();
         $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
         // Set document properties
