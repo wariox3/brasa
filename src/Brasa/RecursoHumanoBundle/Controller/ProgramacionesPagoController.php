@@ -137,8 +137,7 @@ class ProgramacionesPagoController extends Controller
                     $objMensaje->Mensaje("error", "No puede generar empleados cuando la programacion esta generada", $this);
                 }
             }
-            if($form->get('BtnEliminarEmpleados')->isClicked()) {
-                if($arProgramacionPago->getEstadoGenerado() == 0) {
+            if($form->get('BtnEliminarEmpleados')->isClicked()) {               
                     $arrSeleccionados = $request->request->get('ChkSeleccionarSede');
                     if(count($arrSeleccionados) > 0) {
                         foreach ($arrSeleccionados AS $codigoProgramacionPagoSede) {
@@ -151,6 +150,12 @@ class ProgramacionesPagoController extends Controller
                     $arrSeleccionados = $request->request->get('ChkSeleccionarDetalle');
                     if(count($arrSeleccionados) > 0) {
                         foreach ($arrSeleccionados AS $codigo) {
+                            $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoDetalleFk' => $codigo));
+                            foreach ($arPagos as $arPago) {
+                                $strSql = "DELETE FROM rhu_pago_detalle WHERE codigo_pago_fk = " . $arPago->getCodigoPagoPk();                           
+                                $em->getConnection()->executeQuery($strSql);                    
+                                $em->remove($arPago);
+                            }                                                        
                             $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                             $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($codigo);
                             $em->remove($arProgramacionPagoDetalle);
@@ -158,9 +163,7 @@ class ProgramacionesPagoController extends Controller
                     }
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
-                } else {
-                    $objMensaje->Mensaje("error", "No puede eliminar empleados cuando la programacion esta generada", $this);
-                }
+
             }            
             if($form->get('BtnEliminarTodoEmpleados')->isClicked()) {
                 if ($arProgramacionPago->getEstadoGenerado() == 0 ){
