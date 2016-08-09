@@ -40,27 +40,28 @@ class TurFacturaServicio
     /**
      * @ORM\Column(name="codigo_cuenta_retencion_fuente_fk", type="string", length=20, nullable=true)
      */     
-    private $codigoCuentaRetencionFuenteFk;
+    private $codigoCuentaRetencionFuenteFk;  
     
     /**
      * @ORM\Column(name="codigo_cuenta_iva_fk", type="string", length=20, nullable=true)
      */     
-    private $codigoCuentaIvaFk;    
+    private $codigoCuentaIvaFk;            
     
     /**
      * @ORM\Column(name="codigo_cuenta_ingreso_fk", type="string", length=20, nullable=true)
      */     
-    private $codigoCuentaIngresoFk;        
-
+    private $codigoCuentaIngresoFk;           
+    
     /**
      * @ORM\Column(name="codigo_cuenta_iva_devolucion_fk", type="string", length=20, nullable=true)
      */     
-    private $codigoCuentaIvaDevolucionFk;    
+    private $codigoCuentaIvaDevolucionFk;          
     
     /**
      * @ORM\Column(name="codigo_cuenta_ingreso_devolucion_fk", type="string", length=20, nullable=true)
      */     
     private $codigoCuentaIngresoDevolucionFk;        
+        
     
     /**
      * @ORM\OneToMany(targetEntity="TurFactura", mappedBy="facturaServicioRel")
@@ -254,40 +255,6 @@ class TurFacturaServicio
     }
 
     /**
-     * Add facturasFacturaServicioRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurFactura $facturasFacturaServicioRel
-     *
-     * @return TurFacturaServicio
-     */
-    public function addFacturasFacturaServicioRel(\Brasa\TurnoBundle\Entity\TurFactura $facturasFacturaServicioRel)
-    {
-        $this->facturasFacturaServicioRel[] = $facturasFacturaServicioRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove facturasFacturaServicioRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurFactura $facturasFacturaServicioRel
-     */
-    public function removeFacturasFacturaServicioRel(\Brasa\TurnoBundle\Entity\TurFactura $facturasFacturaServicioRel)
-    {
-        $this->facturasFacturaServicioRel->removeElement($facturasFacturaServicioRel);
-    }
-
-    /**
-     * Get facturasFacturaServicioRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFacturasFacturaServicioRel()
-    {
-        return $this->facturasFacturaServicioRel;
-    }
-
-    /**
      * Set codigoCuentaIvaDevolucionFk
      *
      * @param string $codigoCuentaIvaDevolucionFk
@@ -333,5 +300,39 @@ class TurFacturaServicio
     public function getCodigoCuentaIngresoDevolucionFk()
     {
         return $this->codigoCuentaIngresoDevolucionFk;
+    }
+
+    /**
+     * Add facturasFacturaServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFactura $facturasFacturaServicioRel
+     *
+     * @return TurFacturaServicio
+     */
+    public function addFacturasFacturaServicioRel(\Brasa\TurnoBundle\Entity\TurFactura $facturasFacturaServicioRel)
+    {
+        $this->facturasFacturaServicioRel[] = $facturasFacturaServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasFacturaServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFactura $facturasFacturaServicioRel
+     */
+    public function removeFacturasFacturaServicioRel(\Brasa\TurnoBundle\Entity\TurFactura $facturasFacturaServicioRel)
+    {
+        $this->facturasFacturaServicioRel->removeElement($facturasFacturaServicioRel);
+    }
+
+    /**
+     * Get facturasFacturaServicioRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasFacturaServicioRel()
+    {
+        return $this->facturasFacturaServicioRel;
     }
 }

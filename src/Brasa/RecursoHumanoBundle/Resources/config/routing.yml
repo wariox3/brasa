@@ -165,18 +165,6 @@ brs_rhu_pagos_adicionales_agregar_valoradicionaleditar:
 brs_rhu_pagos_adicionales_agregar_valoradicional:
     path:     /rhu/pagos/adicionales/agregar/valoradicional/{tipo}/{modalidad}/{periodo}
     defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:valorAdicional }       
-
-brs_rhu_liquidaciones_lista:
-    path:     /rhu/liquidaciones/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:Liquidaciones:lista }
-
-brs_rhu_liquidaciones_detalle:
-    path:     /rhu/liquidaciones/detalle/{codigoLiquidacion}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Liquidaciones:detalle } 
-
-brs_rhu_liquidaciones_detalle_nuevo_concepto:
-    path:     /rhu/liquidaciones/detalle/nuevo/concepto/{codigoLiquidacion}/{codigoConcepto}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Liquidaciones:detalleNuevoConcepto } 
     
 brs_rhu_base_empleado_estudio_tipo_lista:
     path:     /rhu/empleado/estudio/tipo/lista
@@ -208,15 +196,7 @@ brs_rhu_base_capacitacion_tipo_lista:
 
 brs_rhu_base_capacitacion_tipo_nuevo:
     path:     /rhu/capacitacion/tipo/nuevo/{codigoTipoCapacitacion}
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCapacitacionTipo:nuevo }    
-    
-brs_rhu_liquidacion_adicional_concepto_lista:
-    path:     /rhu/liquidacion/adicional/concepto/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:LiquidacionAdicionalesConcepto:lista }    
-
-brs_rhu_liquidacion_adicional_concepto_nuevo:
-    path:     /rhu/liquidacion/adicional/concepto/nuevo/{codigoAdicionalConcepto}
-    defaults: { _controller: BrasaRecursoHumanoBundle:LiquidacionAdicionalesConcepto:nuevo } 
+    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCapacitacionTipo:nuevo }           
     
 brs_rhu_pago_concepto_lista:
     path:     /rhu/pago/concepto/lista

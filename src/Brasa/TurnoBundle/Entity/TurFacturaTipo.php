@@ -45,35 +45,43 @@ class TurFacturaTipo
     /**
      * @ORM\Column(name="abreviatura", type="string", length=10)
      */
-    private $abreviatura;     
+    private $abreviatura;            
     
     /**
-     * @ORM\Column(name="codigo_cuenta_cartera_fk", type="string", length=20, nullable=true)
-     */     
-    private $codigoCuentaCarteraFk;    
+     * @ORM\Column(name="codigo_centro_costo_contabilidad", type="integer", nullable=true)
+     */    
+    private $codigoCentroCostoContabilidad;    
     
     /**
-     * @ORM\Column(name="codigo_cuenta_retencion_fuente_fk", type="string", length=20, nullable=true)
-     */     
-    private $codigoCuentaRetencionFuenteFk;
+     * @ORM\Column(name="codigo_comprobante", type="integer", nullable=true)
+     */    
+    private $codigoComprobante;     
     
     /**
-     * @ORM\Column(name="codigo_cuenta_iva_fk", type="string", length=20, nullable=true)
+     * @ORM\Column(name="tipo_cuenta_cartera", type="bigint")
      */     
-    private $codigoCuentaIvaFk;    
-    
+    private $tipoCuentaCartera = 1;
+
     /**
-     * @ORM\Column(name="codigo_cuenta_ingreso_fk", type="string", length=20, nullable=true)
+     * @ORM\Column(name="tipo_cuenta_retencion_fuente", type="bigint")
      */     
-    private $codigoCuentaIngresoFk;    
+    private $tipoCuentaRetencionFuente = 1;
+
+    /**
+     * @ORM\Column(name="tipo_cuenta_iva", type="bigint")
+     */     
+    private $tipoCuentaIva = 1; 
+
+    /**
+     * @ORM\Column(name="tipo_cuenta_ingreso", type="bigint")
+     */     
+    private $tipoCuentaIngreso = 1;    
     
     /**
      * @ORM\OneToMany(targetEntity="TurFactura", mappedBy="facturaTipoRel")
      */
     protected $facturasFacturaTipoRel; 
     
-    
-
     /**
      * Constructor
      */
@@ -237,99 +245,51 @@ class TurFacturaTipo
     }
 
     /**
-     * Set codigoCuentaCarteraFk
+     * Set codigoCentroCostoContabilidad
      *
-     * @param string $codigoCuentaCarteraFk
+     * @param integer $codigoCentroCostoContabilidad
      *
      * @return TurFacturaTipo
      */
-    public function setCodigoCuentaCarteraFk($codigoCuentaCarteraFk)
+    public function setCodigoCentroCostoContabilidad($codigoCentroCostoContabilidad)
     {
-        $this->codigoCuentaCarteraFk = $codigoCuentaCarteraFk;
+        $this->codigoCentroCostoContabilidad = $codigoCentroCostoContabilidad;
 
         return $this;
     }
 
     /**
-     * Get codigoCuentaCarteraFk
+     * Get codigoCentroCostoContabilidad
      *
-     * @return string
+     * @return integer
      */
-    public function getCodigoCuentaCarteraFk()
+    public function getCodigoCentroCostoContabilidad()
     {
-        return $this->codigoCuentaCarteraFk;
+        return $this->codigoCentroCostoContabilidad;
     }
 
     /**
-     * Set codigoCuentaRetencionFuenteFk
+     * Set codigoComprobante
      *
-     * @param string $codigoCuentaRetencionFuenteFk
+     * @param integer $codigoComprobante
      *
      * @return TurFacturaTipo
      */
-    public function setCodigoCuentaRetencionFuenteFk($codigoCuentaRetencionFuenteFk)
+    public function setCodigoComprobante($codigoComprobante)
     {
-        $this->codigoCuentaRetencionFuenteFk = $codigoCuentaRetencionFuenteFk;
+        $this->codigoComprobante = $codigoComprobante;
 
         return $this;
     }
 
     /**
-     * Get codigoCuentaRetencionFuenteFk
+     * Get codigoComprobante
      *
-     * @return string
+     * @return integer
      */
-    public function getCodigoCuentaRetencionFuenteFk()
+    public function getCodigoComprobante()
     {
-        return $this->codigoCuentaRetencionFuenteFk;
-    }
-
-    /**
-     * Set codigoCuentaIvaFk
-     *
-     * @param string $codigoCuentaIvaFk
-     *
-     * @return TurFacturaTipo
-     */
-    public function setCodigoCuentaIvaFk($codigoCuentaIvaFk)
-    {
-        $this->codigoCuentaIvaFk = $codigoCuentaIvaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCuentaIvaFk
-     *
-     * @return string
-     */
-    public function getCodigoCuentaIvaFk()
-    {
-        return $this->codigoCuentaIvaFk;
-    }
-
-    /**
-     * Set codigoCuentaIngresoFk
-     *
-     * @param string $codigoCuentaIngresoFk
-     *
-     * @return TurFacturaTipo
-     */
-    public function setCodigoCuentaIngresoFk($codigoCuentaIngresoFk)
-    {
-        $this->codigoCuentaIngresoFk = $codigoCuentaIngresoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCuentaIngresoFk
-     *
-     * @return string
-     */
-    public function getCodigoCuentaIngresoFk()
-    {
-        return $this->codigoCuentaIngresoFk;
+        return $this->codigoComprobante;
     }
 
     /**
@@ -364,5 +324,101 @@ class TurFacturaTipo
     public function getFacturasFacturaTipoRel()
     {
         return $this->facturasFacturaTipoRel;
+    }
+
+    /**
+     * Set tipoCuentaCartera
+     *
+     * @param integer $tipoCuentaCartera
+     *
+     * @return TurFacturaTipo
+     */
+    public function setTipoCuentaCartera($tipoCuentaCartera)
+    {
+        $this->tipoCuentaCartera = $tipoCuentaCartera;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCuentaCartera
+     *
+     * @return integer
+     */
+    public function getTipoCuentaCartera()
+    {
+        return $this->tipoCuentaCartera;
+    }
+
+    /**
+     * Set tipoCuentaRetencionFuente
+     *
+     * @param integer $tipoCuentaRetencionFuente
+     *
+     * @return TurFacturaTipo
+     */
+    public function setTipoCuentaRetencionFuente($tipoCuentaRetencionFuente)
+    {
+        $this->tipoCuentaRetencionFuente = $tipoCuentaRetencionFuente;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCuentaRetencionFuente
+     *
+     * @return integer
+     */
+    public function getTipoCuentaRetencionFuente()
+    {
+        return $this->tipoCuentaRetencionFuente;
+    }
+
+    /**
+     * Set tipoCuentaIva
+     *
+     * @param integer $tipoCuentaIva
+     *
+     * @return TurFacturaTipo
+     */
+    public function setTipoCuentaIva($tipoCuentaIva)
+    {
+        $this->tipoCuentaIva = $tipoCuentaIva;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCuentaIva
+     *
+     * @return integer
+     */
+    public function getTipoCuentaIva()
+    {
+        return $this->tipoCuentaIva;
+    }
+
+    /**
+     * Set tipoCuentaIngreso
+     *
+     * @param integer $tipoCuentaIngreso
+     *
+     * @return TurFacturaTipo
+     */
+    public function setTipoCuentaIngreso($tipoCuentaIngreso)
+    {
+        $this->tipoCuentaIngreso = $tipoCuentaIngreso;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCuentaIngreso
+     *
+     * @return integer
+     */
+    public function getTipoCuentaIngreso()
+    {
+        return $this->tipoCuentaIngreso;
     }
 }

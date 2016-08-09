@@ -367,9 +367,7 @@ class TurFacturaRepository extends EntityRepository {
 
     public function contabilizar($arrSeleccionados) {
         $em = $this->getEntityManager();
-        if(count($arrSeleccionados) > 0) {
-            $arComprobanteContable = $em->getRepository('BrasaContabilidadBundle:CtbComprobante')->find(3);
-            $arCentroCosto =$em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find(1);                           
+        if(count($arrSeleccionados) > 0) {            
             foreach ($arrSeleccionados AS $codigo) {
                 $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
                 $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigo);
@@ -392,17 +390,21 @@ class TurFacturaRepository extends EntityRepository {
                         $arTercero->setEmail($arFactura->getClienteRel()->getEmail());
                         $em->persist($arTercero);                        
                     }
-                    
+                    $arComprobanteContable = $em->getRepository('BrasaContabilidadBundle:CtbComprobante')->find($arFactura->getFacturaTipoRel()->getCodigoComprobante());            
                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                    
                     $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaServicioRel()->getCodigoCuentaCarteraFk());                                        
                     $arRegistro->setComprobanteRel($arComprobanteContable);
-                    $arRegistro->setCentroCostoRel($arCentroCosto);
                     $arRegistro->setCuentaRel($arCuenta);
                     $arRegistro->setTerceroRel($arTercero);
                     $arRegistro->setNumero($arFactura->getNumero());
                     $arRegistro->setNumeroReferencia($arFactura->getNumero());
-                    $arRegistro->setFecha($arFactura->getFecha());                      
-                    $arRegistro->setDebito($arFactura->getVrTotalNeto());
+                    $arRegistro->setFecha($arFactura->getFecha());   
+                    if($arFactura->getFacturaTipoRel()->getTipoCuentaCartera() == 1) {
+                        $arRegistro->setDebito($arFactura->getVrTotalNeto());
+                    } else {
+                        $arRegistro->setCredito($arFactura->getVrTotalNeto());
+                    }
+                    
                     $em->persist($arRegistro);
 
                     //Retencion en la fuente
@@ -410,56 +412,66 @@ class TurFacturaRepository extends EntityRepository {
                         $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro(); 
                         $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaServicioRel()->getCodigoCuentaRetencionFuenteFk());                                        
                         $arRegistro->setComprobanteRel($arComprobanteContable);
-                        $arRegistro->setCentroCostoRel($arCentroCosto);
                         $arRegistro->setCuentaRel($arCuenta);
                         $arRegistro->setTerceroRel($arTercero);
                         $arRegistro->setNumero($arFactura->getNumero());
                         $arRegistro->setNumeroReferencia($arFactura->getNumero());
                         $arRegistro->setFecha($arFactura->getFecha());                    
                         $arRegistro->setBase($arFactura->getVrBaseRetencionFuente());
-                        $arRegistro->setDebito($arFactura->getVrRetencionFuente());
+                        if($arFactura->getFacturaTipoRel()->getTipoCuentaRetencionFuente() == 1) {
+                             $arRegistro->setDebito($arFactura->getVrRetencionFuente());
+                        } else {
+                             $arRegistro->setCredito($arFactura->getVrRetencionFuente());
+                        }                                                                       
                         $em->persist($arRegistro);                         
                     }                   
 
                     //Iva
                     if($arFactura->getVrIva() > 0) {
                         $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro(); 
-                        if($arFactura->getFacturaTipoRel()->getTipo() == 2) {
-                            $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaServicioRel()->getCodigoCuentaIvaDevolucionFk());                                                                    
+                        if($arFactura->getFacturaTipoRel()->getTipo() == 2 || $arFactura->getFacturaTipoRel()->getTipo() == 3) {
+                            $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaServicioRel()->getCodigoCuentaIvaDevolucionFk());                                                                                                  
                         } else {
-                            $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaServicioRel()->getCodigoCuentaIvaFk());                                                                    
+                            $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaServicioRel()->getCodigoCuentaIvaFk());                                                                                               
                         }
-                        
+                        if($arFactura->getFacturaTipoRel()->getTipoCuentaIva() == 1) {
+                            $arRegistro->setDebito($arFactura->getVrIva());
+                        } else {
+                            $arRegistro->setCredito($arFactura->getVrIva());
+                        }
                         $arRegistro->setComprobanteRel($arComprobanteContable);
-                        $arRegistro->setCentroCostoRel($arCentroCosto);
                         $arRegistro->setCuentaRel($arCuenta);
                         $arRegistro->setTerceroRel($arTercero);
                         $arRegistro->setNumero($arFactura->getNumero());
                         $arRegistro->setNumeroReferencia($arFactura->getNumero());
                         $arRegistro->setFecha($arFactura->getFecha());
-                        $arRegistro->setBase($arFactura->getVrBaseAIU());                    
-                        $arRegistro->setCredito($arFactura->getVrIva());
+                        $arRegistro->setBase($arFactura->getVrBaseAIU());                                                                    
                         $em->persist($arRegistro);                        
                     }
 
                     //Ingreso
+                    $arCentroCosto =$em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find($arFactura->getFacturaTipoRel()->getCodigoCentroCostoContabilidad());                           
                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro(); 
-                    if($arFactura->getFacturaTipoRel()->getTipo() == 2) {
-                        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaServicioRel()->getCodigoCuentaIngresoDevolucionFk());                                        
+                    if($arFactura->getFacturaTipoRel()->getTipo() == 2 || $arFactura->getFacturaTipoRel()->getTipo() == 3) {
+                        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaServicioRel()->getCodigoCuentaIngresoDevolucionFk());                                                                
                     } else {
-                        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaServicioRel()->getCodigoCuentaIngresoFk());                                        
-                    }                    
+                        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaServicioRel()->getCodigoCuentaIngresoFk());                                                                 
+                    }      
+                    if($arFactura->getFacturaTipoRel()->getTipoCuentaIngreso() == 1) {
+                        $arRegistro->setDebito($arFactura->getVrSubtotal());
+                    } else {
+                        $arRegistro->setCredito($arFactura->getVrSubtotal());
+                    }
                     $arRegistro->setComprobanteRel($arComprobanteContable);
                     $arRegistro->setCentroCostoRel($arCentroCosto);
                     $arRegistro->setCuentaRel($arCuenta);
                     $arRegistro->setTerceroRel($arTercero);
                     $arRegistro->setNumero($arFactura->getNumero());
                     $arRegistro->setNumeroReferencia($arFactura->getNumero());
-                    $arRegistro->setFecha($arFactura->getFecha());                    
-                    $arRegistro->setCredito($arFactura->getVrSubtotal());
+                    $arRegistro->setFecha($arFactura->getFecha());                                                            
                     $em->persist($arRegistro);
                     
-                    $arFactura->setEstadoContabilizado(1);
+                    //$arFactura->setEstadoContabilizado(1);
                     $em->persist($arFactura);                                            
                 }
             }
