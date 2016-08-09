@@ -335,6 +335,8 @@ class SeguridadSocialPeriodosController extends Controller
             
             if($request->request->get('OpGenerarExcel')) {
                 ob_clean();
+                set_time_limit(0);
+                ini_set("memory_limit", -1);                 
                 $codigoPeriodoDetalle = $request->request->get('OpGenerarExcel');
                 $em = $this->getDoctrine()->getManager();        
                 $objPHPExcel = new \PHPExcel();
