@@ -45,8 +45,10 @@ class EmpleadoController extends Controller
         }
         
         $arEmpleados = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
+        $arContratos = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->findAll();
         return $this->render('BrasaAfiliacionBundle:Base/Empleado:lista.html.twig', array(
-            'arEmpleados' => $arEmpleados, 
+            'arEmpleados' => $arEmpleados,
+            'arContratos' => $arContratos,
             'form' => $form->createView()));
     }
 
@@ -153,7 +155,11 @@ class EmpleadoController extends Controller
         }        
         $form = $this->createForm(new AfiContratoType, $arContrato);
         $form->handleRequest($request);
-        if ($form->isValid()) {      
+        if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
+            if($codigoContrato == 0) {
+                $arContrato->setCodigoUsuario($arUsuario->getUserName());
+            }
             $em->persist($arContrato);
             $em->flush();
             if($codigoContrato == 0 || $codigoContrato == '') {

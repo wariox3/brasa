@@ -165,7 +165,8 @@ class AfiEmpleado
      * @ORM\ManyToOne(targetEntity="AfiCliente", inversedBy="empleadosClienteRel")
      * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
      */
-    protected $clienteRel;    
+    protected $clienteRel;
+
     
     /**
      * @ORM\OneToMany(targetEntity="AfiContrato", mappedBy="empleadoRel")
@@ -192,6 +193,9 @@ class AfiEmpleado
      */
     protected $novedadesEmpleadoRel;
     
+    
+    
+
     /**
      * Constructor
      */
@@ -199,7 +203,9 @@ class AfiEmpleado
     {
         $this->contratosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->periodosDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->periodosDetallesPagosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cursosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->novedadesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -693,6 +699,30 @@ class AfiEmpleado
     }
 
     /**
+     * Set codigoContratoActivo
+     *
+     * @param integer $codigoContratoActivo
+     *
+     * @return AfiEmpleado
+     */
+    public function setCodigoContratoActivo($codigoContratoActivo)
+    {
+        $this->codigoContratoActivo = $codigoContratoActivo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoActivo
+     *
+     * @return integer
+     */
+    public function getCodigoContratoActivo()
+    {
+        return $this->codigoContratoActivo;
+    }
+
+    /**
      * Set codigoUsuario
      *
      * @param string $codigoUsuario
@@ -714,6 +744,30 @@ class AfiEmpleado
     public function getCodigoUsuario()
     {
         return $this->codigoUsuario;
+    }
+
+    /**
+     * Set codigoClienteFk
+     *
+     * @param integer $codigoClienteFk
+     *
+     * @return AfiEmpleado
+     */
+    public function setCodigoClienteFk($codigoClienteFk)
+    {
+        $this->codigoClienteFk = $codigoClienteFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoClienteFk
+     *
+     * @return integer
+     */
+    public function getCodigoClienteFk()
+    {
+        return $this->codigoClienteFk;
     }
 
     /**
@@ -813,6 +867,30 @@ class AfiEmpleado
     }
 
     /**
+     * Set clienteRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCliente $clienteRel
+     *
+     * @return AfiEmpleado
+     */
+    public function setClienteRel(\Brasa\AfiliacionBundle\Entity\AfiCliente $clienteRel = null)
+    {
+        $this->clienteRel = $clienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get clienteRel
+     *
+     * @return \Brasa\AfiliacionBundle\Entity\AfiCliente
+     */
+    public function getClienteRel()
+    {
+        return $this->clienteRel;
+    }
+
+    /**
      * Add contratosEmpleadoRel
      *
      * @param \Brasa\AfiliacionBundle\Entity\AfiContrato $contratosEmpleadoRel
@@ -881,88 +959,6 @@ class AfiEmpleado
     }
 
     /**
-     * Add cursosEmpleadoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiCurso $cursosEmpleadoRel
-     *
-     * @return AfiEmpleado
-     */
-    public function addCursosEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiCurso $cursosEmpleadoRel)
-    {
-        $this->cursosEmpleadoRel[] = $cursosEmpleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove cursosEmpleadoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiCurso $cursosEmpleadoRel
-     */
-    public function removeCursosEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiCurso $cursosEmpleadoRel)
-    {
-        $this->cursosEmpleadoRel->removeElement($cursosEmpleadoRel);
-    }
-
-    /**
-     * Get cursosEmpleadoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCursosEmpleadoRel()
-    {
-        return $this->cursosEmpleadoRel;
-    }
-
-    /**
-     * Set codigoClienteFk
-     *
-     * @param integer $codigoClienteFk
-     *
-     * @return AfiEmpleado
-     */
-    public function setCodigoClienteFk($codigoClienteFk)
-    {
-        $this->codigoClienteFk = $codigoClienteFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoClienteFk
-     *
-     * @return integer
-     */
-    public function getCodigoClienteFk()
-    {
-        return $this->codigoClienteFk;
-    }
-
-    /**
-     * Set clienteRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiCliente $clienteRel
-     *
-     * @return AfiEmpleado
-     */
-    public function setClienteRel(\Brasa\AfiliacionBundle\Entity\AfiCliente $clienteRel = null)
-    {
-        $this->clienteRel = $clienteRel;
-
-        return $this;
-    }
-
-    /**
-     * Get clienteRel
-     *
-     * @return \Brasa\AfiliacionBundle\Entity\AfiCliente
-     */
-    public function getClienteRel()
-    {
-        return $this->clienteRel;
-    }
-
-    /**
      * Add periodosDetallesPagosEmpleadoRel
      *
      * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosEmpleadoRel
@@ -997,6 +993,40 @@ class AfiEmpleado
     }
 
     /**
+     * Add cursosEmpleadoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCurso $cursosEmpleadoRel
+     *
+     * @return AfiEmpleado
+     */
+    public function addCursosEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiCurso $cursosEmpleadoRel)
+    {
+        $this->cursosEmpleadoRel[] = $cursosEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove cursosEmpleadoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCurso $cursosEmpleadoRel
+     */
+    public function removeCursosEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiCurso $cursosEmpleadoRel)
+    {
+        $this->cursosEmpleadoRel->removeElement($cursosEmpleadoRel);
+    }
+
+    /**
+     * Get cursosEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCursosEmpleadoRel()
+    {
+        return $this->cursosEmpleadoRel;
+    }
+
+    /**
      * Add novedadesEmpleadoRel
      *
      * @param \Brasa\AfiliacionBundle\Entity\AfiNovedad $novedadesEmpleadoRel
@@ -1028,29 +1058,5 @@ class AfiEmpleado
     public function getNovedadesEmpleadoRel()
     {
         return $this->novedadesEmpleadoRel;
-    }
-
-    /**
-     * Set codigoContratoActivo
-     *
-     * @param integer $codigoContratoActivo
-     *
-     * @return AfiEmpleado
-     */
-    public function setCodigoContratoActivo($codigoContratoActivo)
-    {
-        $this->codigoContratoActivo = $codigoContratoActivo;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoContratoActivo
-     *
-     * @return integer
-     */
-    public function getCodigoContratoActivo()
-    {
-        return $this->codigoContratoActivo;
     }
 }

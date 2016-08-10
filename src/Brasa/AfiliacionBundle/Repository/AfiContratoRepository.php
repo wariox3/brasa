@@ -11,7 +11,30 @@ class AfiContratoRepository extends EntityRepository {
         $dql   = "SELECT c FROM BrasaAfiliacionBundle:AfiContrato c WHERE c.codigoContratoPk <> 0";
         $dql .= " ORDER BY c.codigoContratoPk";
         return $dql;
-    }            
+    }
+    
+    public function listaConsultaDql($strEmpleado = '', $codigoCliente = '', $strIdentificacion = '',$strDesde = "", $strHasta = "") {
+        //$em = $this->getEntityManager();
+        $dql   = "SELECT c,e FROM BrasaAfiliacionBundle:AfiContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0";
+        if($strEmpleado != '') {
+            $dql .= " AND e.nombreCorto LIKE '%" . $strEmpleado . "%'";
+        }
+        if($codigoCliente != '') {
+            $dql .= " AND e.codigoClienteFk = " . $codigoCliente;
+        } 
+        if($strIdentificacion != '') {
+            $dql .= " AND e.numeroIdentificacion = " . $strIdentificacion;
+        } 
+        if($strDesde != "") {
+            $dql .= " AND c.fechaDesde >='" . date_format($strDesde, ('Y-m-d')) . "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND c.fechaDesde <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        
+        //$dql .= " ORDER BY pd.codigoPeriodoDetallePk";
+        return $dql;
+    }
     
     public function listaDetalleDql($codigoEmpleado) {
         $em = $this->getEntityManager();

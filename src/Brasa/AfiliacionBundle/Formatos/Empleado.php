@@ -358,7 +358,12 @@ class Empleado extends \FPDF_FPDF {
             //linea 15
             $this->SetXY(10, $intY+85);
             $this->SetFont('Arial','B',8);
-            $this->Cell(197, 5, utf8_decode("COMENTARIOS:").' '.$arEmpleado->getComentarios() , 1, 0, 'L', 1);        
+            $this->Cell(197, 5, utf8_decode("COMENTARIOS:").' '.$arEmpleado->getComentarios() , 1, 0, 'L', 1); 
+            //linea usuario
+            $this->SetXY(10, $intY+90);
+            $this->SetFont('Arial','B',8);
+            $this->Cell(197, 5, utf8_decode("Usuario sistema: ").' '.$arEmpleado->getCodigoUsuario() , 0, 0, 'L', 1); 
+            
             $this->EncabezadoDetalles();
         }
     }
@@ -404,9 +409,9 @@ class Empleado extends \FPDF_FPDF {
     public function Footer() {
         $this->SetFont('Arial', 'B', 9);
         
-        $this->Text(10, 240, "FIRMA: _____________________________________________");
+        /*/*$this->Text(10, 240, "FIRMA: _____________________________________________");
         $this->SetFont('Arial','', 8);  
-        $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
+        $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');*/
     }    
 }
 

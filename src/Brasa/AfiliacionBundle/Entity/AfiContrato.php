@@ -236,9 +236,10 @@ class AfiContrato
     /**
      * @ORM\OneToMany(targetEntity="AfiNovedad", mappedBy="contratoRel")
      */
-    protected $novedadesContratoRel;    
+    protected $novedadesContratoRel; 
     
-
+    
+    
     /**
      * Constructor
      */
