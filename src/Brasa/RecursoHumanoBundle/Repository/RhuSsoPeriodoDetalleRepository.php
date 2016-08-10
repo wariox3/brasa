@@ -158,12 +158,16 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                     $floSuplementario = 0;
                 }
                 //Ibc
-                $floIbcBrutoPension = $ibc;
-                $floIbcBrutoSalud = $ibc;                    
-                //$floIbcBrutoRiesgos = $intDiasCotizarRiesgos * $ibcDiaSalario;
+                $floIbcBrutoPension = (($intDiasCotizarPension - $intDiasIncapacidades) * ($floSalario / 30)) + $floIbcIncapacidades + $floSuplementario;
+                $floIbcBrutoSalud = (($intDiasCotizarSalud - $intDiasIncapacidades) * ($floSalario / 30)) + $floIbcIncapacidades + $floSuplementario;                    
                 $floIbcBrutoRiesgos = ($intDiasCotizarRiesgos * ($floSalario / 30)) + $floSuplementario;
-                //$floIbcBrutoCaja = ($intDiasCotizarCaja * $ibcDiaSalario) + $vacaciones;
                 $floIbcBrutoCaja = ($intDiasCotizarCaja * ($floSalario / 30)) + $floSuplementario + $vacaciones;
+                //$floIbcBrutoPension = $ibc;
+                //$floIbcBrutoSalud = $ibc;                    
+                //$floIbcBrutoRiesgos = $intDiasCotizarRiesgos * $ibcDiaSalario;
+                //$floIbcBrutoRiesgos = ($intDiasCotizarRiesgos * ($floSalario / 30)) + $floSuplementario;
+                //$floIbcBrutoCaja = ($intDiasCotizarCaja * $ibcDiaSalario) + $vacaciones;
+                //$floIbcBrutoCaja = ($intDiasCotizarCaja * ($floSalario / 30)) + $floSuplementario + $vacaciones;
                 
                 $floIbcPension = $this->redondearIbc($intDiasCotizarPension, $floIbcBrutoPension);
                 $floIbcSalud = $this->redondearIbc($intDiasCotizarSalud, $floIbcBrutoSalud);
