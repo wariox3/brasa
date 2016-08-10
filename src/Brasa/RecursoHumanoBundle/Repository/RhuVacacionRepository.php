@@ -171,9 +171,10 @@ class RhuVacacionRepository extends EntityRepository {
                 . "OR (v.fechaHastaDisfrute >= '$strFechaHasta' AND v.fechaDesdeDisfrute <= '$strFechaDesde')) "
                 . "AND v.codigoEmpleadoFk = " . $codigoEmpleado . " AND v.codigoContratoFk = " . $codigoContrato;
         $objQuery = $em->createQuery($dql);  
-        $arVacacionesDisfrute = $objQuery->getResult();         
+        $arVacacionesDisfrute = $objQuery->getResult();        
         $intDiasVacaciones = 0;
-        foreach ($arVacacionesDisfrute as $arVacacionDisfrute) {
+        $vrAporteParafiscales = 0;
+        foreach ($arVacacionesDisfrute as $arVacacionDisfrute) {            
             $intDiaInicio = 1;            
             $intDiaFin = 30;
             if($arVacacionDisfrute->getFechaDesdeDisfrute() <  $fechaDesde) {
@@ -187,6 +188,14 @@ class RhuVacacionRepository extends EntityRepository {
                 $intDiaFin = $arVacacionDisfrute->getFechaHastaDisfrute()->format('j');
             }            
             $intDiasVacaciones += (($intDiaFin - $intDiaInicio)+1);
+            //$arVacacionDisfrute = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
+            if($arVacacionDisfrute->getDiasDisfrutados() > 1) {
+                $vrDiaDisfrute = ($arVacacionDisfrute->getVrVacacionBruto() / $arVacacionDisfrute->getDiasDisfrutados());    
+                $vrAporteParafiscales += $intDiasVacaciones * $vrDiaDisfrute;
+            } else {
+                $vrAporteParafiscales += $arVacacionDisfrute->getVrVacacionBruto();
+            }            
+            
         }
         if($intDiasVacaciones > 30) {
             $intDiasVacaciones = 30;
@@ -194,7 +203,8 @@ class RhuVacacionRepository extends EntityRepository {
         if($intDiasVacaciones == 1) {
             $intDiasVacaciones = 0;
         }
-        return $intDiasVacaciones;                     
+        $arrVacaciones = array('dias' => $intDiasVacaciones, 'aporte' => $vrAporteParafiscales);
+        return $arrVacaciones;                     
     }     
     
     
