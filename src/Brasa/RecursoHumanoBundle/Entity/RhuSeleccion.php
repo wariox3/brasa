@@ -78,7 +78,7 @@ class RhuSeleccion
     private $celular;
 
     /**
-     * @ORM\Column(name="direccion", type="string", length=30, nullable=true)
+     * @ORM\Column(name="direccion", type="string", length=150, nullable=true)
      */
     private $direccion;
 
@@ -313,8 +313,7 @@ class RhuSeleccion
     protected $seleccionesEntrevistasSeleccionRel;
     
     
-    
-    
+
     /**
      * Constructor
      */
