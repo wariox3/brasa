@@ -183,7 +183,7 @@ class CuentaCobroHorus2 extends \FPDF_FPDF {
         }*/
         $pdf->SetFont('Arial', 'B', 6);
         $pdf->Ln(10);
-        $header = array(utf8_decode('IDENTIF.'), 'NOMBRE','DIAS', 'SALARIO','FECHA ING','PENSION', 'SALUD', 'RIESGOS', 'C. COMP', 'ADMON', 'SUBTOTAL', 'IVA', 'TOTAL');
+        $header = array(utf8_decode('IDENTIF.'), 'NOMBRE','DIAS', 'SALARIO','FECHA ING','PENSION', 'SALUD', 'RIESGOS', 'C. COMP', 'ADMON', 'SUBTOTAL', 'IVA', 'TOTAL','RET');
         $pdf->SetFillColor(236, 236, 236);
         $pdf->SetTextColor(0);
         $pdf->SetDrawColor(0, 0, 0);
@@ -191,7 +191,7 @@ class CuentaCobroHorus2 extends \FPDF_FPDF {
         $pdf->SetFont('', 'B', 6);
 
         //creamos la cabecera de la tabla.
-        $w = array(20, 54,8,15,15,30, 30, 20, 15, 13, 13, 13, 19);
+        $w = array(20, 54,8,15,15,30, 30, 20, 15, 13, 13, 10, 15,7);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $pdf->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -234,8 +234,14 @@ class CuentaCobroHorus2 extends \FPDF_FPDF {
                 $pdf->SetFont('Arial', '', 7);
                 $pdf->Cell(13, 4, number_format($arPeriodoDetalles->getAdministracion(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Cell(13, 4, number_format($arPeriodoDetalles->getSubtotal(), 0, '.', ','), 1, 0, 'R');
-                $pdf->Cell(13, 4, number_format($arPeriodoDetalles->getIva(), 0, '.', ','), 1, 0, 'R');
-                $pdf->Cell(19, 4, number_format($arPeriodoDetalles->getTotal(), 0, '.', ','), 1, 0, 'R');
+                $pdf->Cell(10, 4, number_format($arPeriodoDetalles->getIva(), 0, '.', ','), 1, 0, 'R');
+                $pdf->Cell(15, 4, number_format($arPeriodoDetalles->getTotal(), 0, '.', ','), 1, 0, 'R');
+                if ($arPeriodoDetalles->getContratoRel()->getIndefinido() == 1){
+                    $retiro = 'NO';
+                } else {
+                    $retiro = 'SI';
+                }
+                $pdf->Cell(7, 4, $retiro, 1, 0, 'L');
                 //$var += $arPeriodoDetalles->getTotal();
                 $pdf->Ln();
                 $pdf->SetAutoPageBreak(true, 15);  
@@ -245,9 +251,9 @@ class CuentaCobroHorus2 extends \FPDF_FPDF {
         }
             
             $pdf->SetFont('Arial', 'B', 7);
-            $pdf->Cell(246, 5, "TOTAL: ", 0, 0, 'R');
+            $pdf->Cell(243, 5, "TOTAL: ", 0, 0, 'R');
             $pdf->SetFont('Arial', 'b', 7);
-            $pdf->Cell(19, 5, number_format($var,0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(15, 5, number_format($var,0, '.', ','), 1, 0, 'R');
             $pdf->Ln();
             $pdf->SetFont('Arial', 'B', 7);
             $pdf->Cell(27, 5, "TOTAL REGISTROS : ", 0, 0, 'R');
