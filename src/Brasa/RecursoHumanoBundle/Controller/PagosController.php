@@ -25,6 +25,11 @@ class PagosController extends Controller
                 $this->filtrarLista($form, $request);
                 $this->listar();
                 $this->generarExcel();
+            }
+            if($form->get('BtnExcelDetalle')->isClicked()) {
+                $this->filtrarLista($form, $request);
+                $this->listar();
+                $this->generarExcelDetalle();
             } 
             if($form->get('BtnExcelResumen')->isClicked()) {
                 $this->filtrarLista($form, $request);
@@ -163,6 +168,7 @@ class PagosController extends Controller
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                                            
             ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('BtnExcelDetalle', 'submit', array('label'  => 'Excel detalle',))
             ->add('BtnExcelResumen', 'submit', array('label'  => 'Excel resumen',))
             ->getForm();        
         return $form;
@@ -360,5 +366,106 @@ class PagosController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }     
+    } 
+
+    private function generarExcelDetalle() {
+        ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
+        $em = $this->getDoctrine()->getManager(); 
+        $session = $this->get('session');
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+        for($col = 'A'; $col !== 'O'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
+                } 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'CÓDIGO DETALLE')
+                    ->setCellValue('B1', 'CÓDIGO PAGO')
+                    ->setCellValue('C1', 'CONCEPTO PAGO')
+                    ->setCellValue('D1', 'DETALLE')
+                    ->setCellValue('E1', 'IDENTIFICACIÓN')
+                    ->setCellValue('F1', 'EMPLEADO')
+                    ->setCellValue('G1', 'CENTRO COSTO')
+                    ->setCellValue('H1', 'FECHA PAGO DESDE')
+                    ->setCellValue('I1', 'FECHA PAGO HASTA')
+                    ->setCellValue('J1', 'VR PAGO')
+                    ->setCellValue('J1', 'VR HORA')
+                    ->setCellValue('L1', 'VR DÍA')
+                    ->setCellValue('M1', 'NÚMERO HORAS')
+                    ->setCellValue('N1', 'NÚMERO DÍAS')
+                    ->setCellValue('O1', 'PORCENTAJE APLICADO')
+                    ->setCellValue('P1', 'VR INGRESO BASE COTIZACIÓN')    
+                    ->setCellValue('Q1', 'CÓDIGO PROGRAMACION PAGO DETALLE')
+                    ->setCellValue('R1', 'CÓDIGO CRÉDITO')
+                    ->setCellValue('S1', 'VR INGRESO BASE PRESTACIONAL')
+                    ->setCellValue('T1', 'DÍAS AUSENTIMO');
+
+        $i = 2;
+        /*$query = $em->createQuery($this->strDqlLista);
+        $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+        $arPagos = $query->getResult();*/
+        $arPagosDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+        $arPagosDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->listaDetalleDql(
+                    $this->intNumero,
+                    $session->get('filtroCodigoCentroCosto'),
+                    $session->get('filtroIdentificacion'),
+                    $session->get('filtroCodigoPagoTipo'),
+                    $session->get('filtroDesde'),
+                    $session->get('filtroHasta')    
+                );
+        
+        $arPagosDetalle = $em->createQuery($arPagosDetalle);
+        $arPagosDetalle = $arPagosDetalle->getResult();
+        foreach ($arPagosDetalle as $arPagoDetalle) {            
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arPagoDetalle->getCodigoPagoDetallePk())
+                    ->setCellValue('B' . $i, $arPagoDetalle->getCodigoPagoFk())
+                    ->setCellValue('C' . $i, $arPagoDetalle->getPagoConceptoRel()->getNombre())
+                    ->setCellValue('D' . $i, $arPagoDetalle->getDetalle())
+                    ->setCellValue('E' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('F' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('G' . $i, $arPagoDetalle->getPagoRel()->getCentroCostoRel()->getNombre())
+                    ->setCellValue('H' . $i, $arPagoDetalle->getPagoRel()->getFechaDesdePago())
+                    ->setCellValue('I' . $i, $arPagoDetalle->getPagoRel()->getFechaHastaPago())
+                    ->setCellValue('J' . $i, round($arPagoDetalle->getVrPago()))
+                    ->setCellValue('K' . $i, round($arPagoDetalle->getVrHora()))
+                    ->setCellValue('L' . $i, round($arPagoDetalle->getVrDia()))
+                    ->setCellValue('M' . $i, $arPagoDetalle->getNumeroHoras())
+                    ->setCellValue('N' . $i, $arPagoDetalle->getNumeroDias())
+                    ->setCellValue('O' . $i, $arPagoDetalle->getPorcentajeAplicado())
+                    ->setCellValue('P' . $i, round($arPagoDetalle->getVrIngresoBaseCotizacion()))
+                    ->setCellValue('Q' . $i, $arPagoDetalle->getCodigoProgramacionPagoDetalleFk())
+                    ->setCellValue('R' . $i, $arPagoDetalle->getCodigoCreditoFk())
+                    ->setCellValue('S' . $i, round($arPagoDetalle->getVrIngresoBasePrestacion()))
+                    ->setCellValue('T' . $i, $arPagoDetalle->getDiasAusentismo());
+            $i++;
+        }
+
+        $objPHPExcel->getActiveSheet()->setTitle('pagosDetalle');
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="Pagos.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }
 }

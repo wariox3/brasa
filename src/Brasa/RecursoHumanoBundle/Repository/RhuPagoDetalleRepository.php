@@ -25,6 +25,31 @@ class RhuPagoDetalleRepository extends EntityRepository {
         return $dql;
     }                            
     
+    public function listaDetalleDql($intNumero = 0, $strCodigoCentroCosto = "", $strIdentificacion = "", $intTipo = "", $strDesde = "", $strHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT pd, p, e FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p JOIN p.empleadoRel e WHERE p.codigoPagoPk <> 0";
+        if($intNumero != "" && $intNumero != 0) {
+            $dql .= " AND p.numero = " . $intNumero;
+        }
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND p.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }   
+        if($intTipo != "" && $intTipo != 0) {
+            $dql .= " AND p.codigoPagoTipoFk =" . $intTipo;
+        }        
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if($strDesde != "" || $strDesde != 0){
+            $dql .= " AND p.fechaDesde >='" . date_format($strDesde, ('Y-m-d')) . "'";
+        }
+        if($strHasta != "" || $strHasta != 0) {
+            $dql .= " AND p.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        $dql .= " ORDER BY p.codigoPagoPk DESC";
+        return $dql;
+    }      
+    
     public function pagosDetallesProgramacionPago($codigoProgramacionPago) {
         $em = $this->getEntityManager();
         $dql   = "SELECT pd FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "

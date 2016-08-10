@@ -270,7 +270,7 @@ class RhuPagoRepository extends EntityRepository {
         if($strHasta != "") {
             $dql .= " AND p.fechaDesde <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }
-        $dql .= " ORDER BY pd.codigoPagoConceptoFk";
+        $dql .= " ORDER BY e.numeroIdentificacion";
         return $dql;
     }
     
