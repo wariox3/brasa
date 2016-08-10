@@ -284,6 +284,11 @@ class RhuSsoAporte
     private $salarioMesAnterior = 0;    
     
     /**
+     * @ORM\Column(name="vr_vacaciones", type="float")
+     */
+    private $vrVacaciones = 0;    
+    
+    /**
      * @ORM\Column(name="salario_integral", type="string", length=1)
      */
     private $salarioIntegral = ' ';    
@@ -2906,5 +2911,29 @@ class RhuSsoAporte
     public function getTotalCotizacionFondos()
     {
         return $this->totalCotizacionFondos;
+    }
+
+    /**
+     * Set vrVacaciones
+     *
+     * @param float $vrVacaciones
+     *
+     * @return RhuSsoAporte
+     */
+    public function setVrVacaciones($vrVacaciones)
+    {
+        $this->vrVacaciones = $vrVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get vrVacaciones
+     *
+     * @return float
+     */
+    public function getVrVacaciones()
+    {
+        return $this->vrVacaciones;
     }
 }

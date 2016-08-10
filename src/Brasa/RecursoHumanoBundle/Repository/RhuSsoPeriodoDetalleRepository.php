@@ -74,8 +74,14 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $arAporte->setIngreso($arPeriodoEmpleado->getIngreso());
                 $arAporte->setRetiro($arPeriodoEmpleado->getRetiro());            
                 $arAporte->setCargoRel($arContrato->getCargoRel());
+                
                 //Parametros generales
+                $intDiasCotizar = $arPeriodoEmpleado->getDias();
                 $floSalario = $arPeriodoEmpleado->getVrSalario();
+                $ibc = $arPeriodoEmpleado->getIbc();
+                $ibcDia = $ibc / $intDiasCotizar;
+                $vacaciones = $arPeriodoEmpleado->getVrVacaciones();
+                $arAporte->setVrVacaciones($vacaciones);
                 $floSalarioIntegral = $arPeriodoEmpleado->getVrSalario();
                 if($arPeriodoEmpleado->getSalarioIntegral() == 'X') {
                     $arAporte->setSalarioIntegral($arPeriodoEmpleado->getSalarioIntegral());                
@@ -128,18 +134,11 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $intDiasIncapacidades = $arPeriodoEmpleado->getDiasIncapacidadGeneral() + $arPeriodoEmpleado->getDiasIncapacidadLaboral();
                 $intDiasLicenciaMaternidad = $arPeriodoEmpleado->getDiasLicenciaMaternidad();
                 $intDiasVacaciones = $arPeriodoEmpleado->getDiasVacaciones();
-
-                $intDiasCotizar = $arPeriodoEmpleado->getDias();
+                
                 $intDiasCotizarPension = $intDiasCotizar - $intDiasLicenciaNoRemunerada;
                 $intDiasCotizarSalud = $intDiasCotizar - $intDiasLicenciaNoRemunerada;
-                // vacaciones afecta parafiscales PABLO 28-07-2016
-                //if($arConfiguracionNomina->getAfectaVacacionesParafiscales() == true){
-                //    $intDiasCotizarRiesgos = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasVacaciones;
-                //    $intDiasCotizarCaja = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad;
-                //} else {
-                    $intDiasCotizarRiesgos = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasVacaciones;
-                    $intDiasCotizarCaja = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasVacaciones;                    
-                //}
+                $intDiasCotizarRiesgos = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasVacaciones;
+                $intDiasCotizarCaja = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasVacaciones;                    
                 
                 // fin
                 if($arAporte->getTipoCotizante() == '19' || $arAporte->getTipoCotizante() == '12' || $arAporte->getTipoCotizante() == '23') {
@@ -158,10 +157,10 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                     $floSuplementario = 0;
                 }
                 //Ibc
-                $floIbcBrutoPension = (($intDiasCotizarPension - $intDiasIncapacidades) * ($floSalario / 30)) + $floIbcIncapacidades + $floSuplementario;
-                $floIbcBrutoSalud = (($intDiasCotizarSalud - $intDiasIncapacidades) * ($floSalario / 30)) + $floIbcIncapacidades + $floSuplementario;                    
-                $floIbcBrutoRiesgos = ($intDiasCotizarRiesgos * ($floSalario / 30)) + $floSuplementario;
-                $floIbcBrutoCaja = ($intDiasCotizarCaja * ($floSalario / 30)) + $floSuplementario;
+                $floIbcBrutoPension = $ibc;
+                $floIbcBrutoSalud = $ibc;                    
+                $floIbcBrutoRiesgos = $intDiasCotizarRiesgos * $ibcDia;
+                $floIbcBrutoCaja = ($intDiasCotizarCaja * $ibcDia) + $vacaciones;
 
                 $floIbcPension = $this->redondearIbc($intDiasCotizarPension, $floIbcBrutoPension);
                 $floIbcSalud = $this->redondearIbc($intDiasCotizarSalud, $floIbcBrutoSalud);
@@ -185,9 +184,8 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 if($arPeriodoEmpleado->getContratoRel()->getCodigoTipoCotizanteFk() == 19 || $arPeriodoEmpleado->getContratoRel()->getCodigoTipoCotizanteFk() == 12) {
                     $floTarifaSalud = 12.5;
                 }
-                $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
-                $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
-                if((($floSalario + $floSuplementario) > (10 * $arConfiguracionNomina->getVrSalario()))) {
+
+                if((($ibc) > (10 * $arConfiguracionNomina->getVrSalario()))) {
                     $floTarifaSalud = 12.5;  
                     $floTarifaIcbf = 3;
                     $floTarifaSena = 2;                
@@ -323,17 +321,18 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                     $arAporte->setDiasCotizadosPension($intDiasCotizarPension);
                     $arAporte->setDiasCotizadosSalud($intDiasCotizarSalud);
                     $arAporte->setDiasCotizadosRiesgosProfesionales($intDiasCotizarRiesgos);
-                    $arAporte->setDiasCotizadosCajaCompensacion($intDiasCotizarCaja);                        
-
+                    $arAporte->setDiasCotizadosCajaCompensacion($intDiasCotizarCaja);                                            
+                    
                     //Ibc
-                    $floIbcBrutoPension = (($intDiasCotizarPension) * ($floSalario / 30));
-                    $floIbcBrutoSalud = (($intDiasCotizarSalud) * ($floSalario / 30));                    
+                    $floIbcBrutoPension = ($intDiasCotizarPension * ($floSalario / 30));
+                    $floIbcBrutoSalud = ($intDiasCotizarSalud * ($floSalario / 30));                    
                     $floIbcBrutoRiesgos = ($intDiasCotizarRiesgos * ($floSalario / 30));
                     $floIbcBrutoCaja = ($intDiasCotizarCaja * ($floSalario / 30));
                     $floIbcPension = $this->redondearIbc($intDiasCotizarPension, $floIbcBrutoPension);
                     $floIbcSalud = $this->redondearIbc($intDiasCotizarSalud, $floIbcBrutoSalud);
                     $floIbcRiesgos = $this->redondearIbc($intDiasCotizarRiesgos, $floIbcBrutoRiesgos);
                     $floIbcCaja = $this->redondearIbc($intDiasCotizarCaja, $floIbcBrutoCaja);
+                    
                     if($intDiasCotizarRiesgos <= 0) {
                         $floIbcRiesgos = 0;
                     }

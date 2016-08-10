@@ -58,6 +58,16 @@ class RhuSsoPeriodoEmpleado
     private $vrSuplementario = 0;    
     
     /**
+     * @ORM\Column(name="ibc", type="float")
+     */    
+    private $Ibc = 0;    
+    
+    /**
+     * @ORM\Column(name="vrVacaciones", type="float")
+     */    
+    private $vrVacaciones = 0;    
+    
+    /**
      * @ORM\Column(name="ingreso", type="string", length=1)
      */
     private $ingreso = ' ';    
@@ -787,5 +797,53 @@ class RhuSsoPeriodoEmpleado
     public function getContratoRel()
     {
         return $this->contratoRel;
+    }
+
+    /**
+     * Set ibc
+     *
+     * @param float $ibc
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setIbc($ibc)
+    {
+        $this->Ibc = $ibc;
+
+        return $this;
+    }
+
+    /**
+     * Get ibc
+     *
+     * @return float
+     */
+    public function getIbc()
+    {
+        return $this->Ibc;
+    }
+
+    /**
+     * Set vrVacaciones
+     *
+     * @param float $vrVacaciones
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setVrVacaciones($vrVacaciones)
+    {
+        $this->vrVacaciones = $vrVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get vrVacaciones
+     *
+     * @return float
+     */
+    public function getVrVacaciones()
+    {
+        return $this->vrVacaciones;
     }
 }

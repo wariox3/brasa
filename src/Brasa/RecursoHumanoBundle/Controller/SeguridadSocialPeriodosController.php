@@ -331,8 +331,7 @@ class SeguridadSocialPeriodosController extends Controller
                 readfile($strArchivo);
                 $em->flush();
                 exit;
-            }
-            
+            }            
             if($request->request->get('OpGenerarExcel')) {
                 ob_clean();
                 set_time_limit(0);
@@ -402,7 +401,7 @@ class SeguridadSocialPeriodosController extends Controller
                     ->setCellValue('K1', 'VAC')    
                     ->setCellValue('L1', 'IRP')
                     ->setCellValue('M1', 'SALARIO')
-                    ->setCellValue('N1', 'SUPLE')
+                    ->setCellValue('N1', 'VR.VAC')
                     ->setCellValue('O1', 'SI')
                     ->setCellValue('P1', 'D.P')
                     ->setCellValue('Q1', 'D.S')
@@ -476,7 +475,7 @@ class SeguridadSocialPeriodosController extends Controller
                     ->setCellValue('K' . $i, $vacaciones)
                     ->setCellValue('L' . $i, $riesgosProfesionales)
                     ->setCellValue('M' . $i, $arSsoAporte->getSalarioBasico())
-                    ->setCellValue('N' . $i, number_format($arSsoAporte->getSuplementario(),0,',','.'))
+                    ->setCellValue('N' . $i, $arSsoAporte->getVrVacaciones())
                     ->setCellValue('O' . $i, $salarioIntegral)        
                     ->setCellValue('P' . $i, $arSsoAporte->getDiasCotizadosPension())
                     ->setCellValue('Q' . $i, $arSsoAporte->getDiasCotizadosSalud())
@@ -617,7 +616,7 @@ class SeguridadSocialPeriodosController extends Controller
                     }
                 }
                 $em->flush();
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->actualizar($codigoPeriodoDetalle);
+                //$em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->actualizar($codigoPeriodoDetalle);
             }                        
             if($form->get('BtnActualizarDetalle')->isClicked()) {
                 $arrControles = $request->request->All();
