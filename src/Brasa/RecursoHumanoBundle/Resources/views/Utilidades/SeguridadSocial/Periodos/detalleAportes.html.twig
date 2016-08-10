@@ -40,6 +40,7 @@
                 <th>IRP</th>
                 <th>INT</th>
                 <th style="text-align: right">SALARIO</th>
+                <th style="text-align: right">ADICIONAL</th>
                 <th>S.I</th>
                 <th>D.P</th>
                 <th>D.S</th>
@@ -82,6 +83,7 @@
                 <td>{% if arSsoAportes.incapacidadAccidenteTrabajoEnfermedadProfesional > 0 %}{{ arSsoAportes.incapacidadAccidenteTrabajoEnfermedadProfesional }} {% endif %}</td>
                 <td>{{ arSsoAportes.salarioIntegral }}</td>
                 <td style="text-align: right">{{ arSsoAportes.salarioBasico | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSsoAportes.suplementario | number_format(0, '.', ',') }}</td>
                 <td>{% if arSsoAportes.salarioIntegral == 'X' %}{{ arSsoAportes.salarioIntegral }} {% endif %}</td>
                 <td>{{ arSsoAportes.diasCotizadosPension  }}</td>
                 <td>{{ arSsoAportes.diasCotizadosSalud  }}</td>

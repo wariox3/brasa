@@ -80,6 +80,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $floSalario = $arPeriodoEmpleado->getVrSalario();
                 $ibc = $arPeriodoEmpleado->getIbc();
                 $ibcDia = $ibc / $intDiasCotizar;
+                $ibcDiaSalario = $floSalario / 30;
                 $vacaciones = $arPeriodoEmpleado->getVrVacaciones();
                 $arAporte->setVrVacaciones($vacaciones);
                 $floSalarioIntegral = $arPeriodoEmpleado->getVrSalario();
@@ -159,9 +160,11 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 //Ibc
                 $floIbcBrutoPension = $ibc;
                 $floIbcBrutoSalud = $ibc;                    
-                $floIbcBrutoRiesgos = $intDiasCotizarRiesgos * $ibcDia;
-                $floIbcBrutoCaja = ($intDiasCotizarCaja * $ibcDia) + $vacaciones;
-
+                //$floIbcBrutoRiesgos = $intDiasCotizarRiesgos * $ibcDiaSalario;
+                $floIbcBrutoRiesgos = ($intDiasCotizarRiesgos * ($floSalario / 30)) + $floSuplementario;
+                //$floIbcBrutoCaja = ($intDiasCotizarCaja * $ibcDiaSalario) + $vacaciones;
+                $floIbcBrutoCaja = ($intDiasCotizarCaja * ($floSalario / 30)) + $floSuplementario + $vacaciones;
+                
                 $floIbcPension = $this->redondearIbc($intDiasCotizarPension, $floIbcBrutoPension);
                 $floIbcSalud = $this->redondearIbc($intDiasCotizarSalud, $floIbcBrutoSalud);
                 $floIbcRiesgos = $this->redondearIbc($intDiasCotizarRiesgos, $floIbcBrutoRiesgos);

@@ -188,6 +188,9 @@ class RhuVacacionRepository extends EntityRepository {
                 $intDiaFin = $arVacacionDisfrute->getFechaHastaDisfrute()->format('j');
             }            
             $intDiasVacaciones += (($intDiaFin - $intDiaInicio)+1);
+            if($intDiasVacaciones == 1) {
+                $intDiasVacaciones = 0;
+            }            
             //$arVacacionDisfrute = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
             if($arVacacionDisfrute->getDiasDisfrutados() > 1) {
                 $vrDiaDisfrute = ($arVacacionDisfrute->getVrVacacionBruto() / $arVacacionDisfrute->getDiasDisfrutados());    
@@ -199,9 +202,6 @@ class RhuVacacionRepository extends EntityRepository {
         }
         if($intDiasVacaciones > 30) {
             $intDiasVacaciones = 30;
-        }
-        if($intDiasVacaciones == 1) {
-            $intDiasVacaciones = 0;
         }
         $arrVacaciones = array('dias' => $intDiasVacaciones, 'aporte' => $vrAporteParafiscales);
         return $arrVacaciones;                     

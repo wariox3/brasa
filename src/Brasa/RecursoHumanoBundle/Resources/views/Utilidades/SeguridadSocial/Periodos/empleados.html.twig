@@ -32,6 +32,7 @@
                 <th>CONTRATO</th>
                 <th>DÍAS</th>
                 <th>SALARIO</th>
+                <th>SUPLEMENTARIO</th>
                 <th>IBC</th>
                 <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
             </tr>
@@ -44,6 +45,7 @@
                 <td>{{ arPeriodoEmpleados.codigoContratoFk  }}</td>
                 <td style="text-align: right">{{ arPeriodoEmpleados.dias | number_format(0, '.', ',') }}</td>    
                 <td style="text-align: right">{{ arPeriodoEmpleados.vrSalario | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPeriodoEmpleados.vrSuplementario | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPeriodoEmpleados.ibc | number_format(0, '.', ',') }}</td>
                 <td style="text-align: center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPeriodoEmpleados.codigoPeriodoEmpleadoPk }}" /></td>
             </tr>

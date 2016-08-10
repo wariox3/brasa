@@ -122,8 +122,9 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
             $arPeriodoEmpleadoActualizar->setRetiro($strNovedadRetiro);
             $ibc = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->ibc($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde()->format('Y-m-d'), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta()->format('Y-m-d'), $arContrato->getCodigoContratoPk());                        
             $ibcDia = $ibc / $intDiasCotizar;
-            if($ibcDia < $ibcMinimoDia) {
-                $ibc = $ibcMinimoDia * $intDiasCotizar;
+            $ibcDiaMinimoContrato = $floSalario / 30;
+            if($ibcDia < $ibcDiaMinimoContrato) {
+                $ibc = $ibcDiaMinimoContrato * $intDiasCotizar;
             }
             $arPeriodoEmpleadoActualizar->setIbc($ibc);
             $floSuplementario = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->tiempoSuplementario($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde()->format('Y-m-d'), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta()->format('Y-m-d'), $arContrato->getCodigoContratoPk());            
