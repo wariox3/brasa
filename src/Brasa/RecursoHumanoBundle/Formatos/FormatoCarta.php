@@ -80,6 +80,7 @@ class FormatoCarta extends \FPDF_FPDF {
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);        
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find(self::$codigoContrato);        
+        $pdf->Image('imagenes/logos/firma.jpg' , 10 ,175, 50 , 30,'JPG');
         //Inicio promedio mensual
         $intPeriodo = 0;
         $strPeriodo = $arContrato->getCentroCostoRel()->getPeriodoPagoRel()->getNombre();
