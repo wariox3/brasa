@@ -138,7 +138,7 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
             $arPeriodoEmpleadoActualizar->setDiasIncapacidadLaboral($intDiasIncapacidadLaboral);                        
             $arrVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->diasVacacionesDisfrute($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde(), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta(), $arPeriodoEmpleado->getCodigoEmpleadoFk(), $arPeriodoEmpleado->getCodigoContratoFk());
             if($strNovedadRetiro == 'X') {
-                $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->findOneBy(array('codigoContratoFk' => $arContrato->getCodigoContratoPk()));
+                $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->findOneBy(array('codigoContratoFk' => $arContrato->getCodigoContratoPk(), 'estadoAutorizado' => 1));
                 if($arLiquidacion) {
                     $arrVacaciones['aporte'] += $arLiquidacion->getVrVacaciones();
                 }
