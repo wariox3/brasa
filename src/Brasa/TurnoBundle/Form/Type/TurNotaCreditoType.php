@@ -6,7 +6,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TurFacturaType extends AbstractType
+class TurNotaCreditoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -15,11 +15,18 @@ class TurFacturaType extends AbstractType
                 'class' => 'BrasaTurnoBundle:TurFacturaTipo',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('ft')
-                    ->where('ft.tipo <> :tipo')
-                    ->setParameter('tipo', 2)                            
+                    ->where('ft.tipo = :tipo')
+                    ->setParameter('tipo', 2)
                     ->orderBy('ft.codigoFacturaTipoPk', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))    
+                'required' => true))  
+            ->add('facturaSubtipoRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurFacturaSubtipo',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('fs')
+                    ->orderBy('fs.codigoFacturaSubtipoPk', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                             
             ->add('facturaServicioRel', 'entity', array(
                 'class' => 'BrasaTurnoBundle:TurFacturaServicio',
                 'query_builder' => function (EntityRepository $er)  {

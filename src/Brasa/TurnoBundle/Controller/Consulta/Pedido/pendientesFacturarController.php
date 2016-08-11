@@ -1,15 +1,15 @@
 <?php
-namespace Brasa\TurnoBundle\Controller\Consulta;
+namespace Brasa\TurnoBundle\Controller\Consulta\Pedido;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-class PedidosDetallesController extends Controller
+class pendientesFacturarController extends Controller
 {
     var $strListaDql = "";
     
     /**
-     * @Route("/tur/consulta/pedidos/detalles", name="brs_tur_consulta_pedidos_detalles")
+     * @Route("/tur/consulta/pedidos/pendiente/facturar", name="brs_tur_consulta_pedidos_pendientes_facturar")
      */    
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -34,7 +34,7 @@ class PedidosDetallesController extends Controller
         }
         
         $arPedidosDetalles = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 200);
-        return $this->render('BrasaTurnoBundle:Consultas/Pedido:detalle.html.twig', array(
+        return $this->render('BrasaTurnoBundle:Consultas/Pedido:pendienteFacturar.html.twig', array(
             'arPedidosDetalles' => $arPedidosDetalles,
             'form' => $form->createView()));
     }
@@ -49,7 +49,7 @@ class PedidosDetallesController extends Controller
             $strFechaDesde = $session->get('filtroPedidoFechaDesde');
             $strFechaHasta = $session->get('filtroPedidoFechaHasta');                    
         }
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->listaConsultaDql(
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->listaConsultaPendienteFacturarDql(
                 $session->get('filtroPedidoNumero'), 
                 $session->get('filtroCodigoCliente'), 
                 $session->get('filtroPedidoEstadoAutorizado'), 

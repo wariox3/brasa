@@ -41,69 +41,64 @@
                     <tr>
                         <td class="titulo">NUMERO:</td>
                         <td class="td-in-well">{{ arFactura.numero }}</td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">FECHA:</td>
+                        <td class="td-in-well">{{ arFactura.fecha |date("Y/m/d") }}</td>
+                        <td class="titulo" >SUBTOTAL:</td>
+                        <td align="right">{{ arFactura.vrSubtotal | number_format(0, '.', ',')}}</td>
                     </tr>
                     <tr>
                         <td class="titulo">TIPO:</td>
                         <td class="td-in-well">{{ arFactura.facturaTipoRel.nombre }}</td>
-                        <td class="titulo" >SUBTOTAL:</td>
-                        <td align="right">{{ arFactura.vrSubtotal | number_format(0, '.', ',')}}</td>
-                    </tr>
-
-                    <tr>
-                        <td class="titulo">CLIENTE:</td>
-                        <td class="td-in-well">{{ arFactura.clienteRel.nombreCorto }}</td>
-                        <td class="titulo" ></td>
-                        <td align="right"></td>
-                    </tr>
-                    <tr>
-                        <td class="titulo">FECHA:</td>
-                        <td class="td-in-well">{{ arFactura.fecha |date("Y/m/d") }}</td>
+                        <td class="titulo">VENCE:</td>
+                        <td class="td-in-well">{{ arFactura.fechaVence |date("Y/m/d") }}</td>                       
                         <td class="titulo" >BASE AIU:</td>
                         <td align="right">{{ arFactura.vrBaseAIU | number_format(0, '.', ',')}}</td>
                     </tr>
+
                     <tr>
-                        <td class="titulo">VENCE:</td>
-                        <td class="td-in-well">{{ arFactura.fechaVence |date("Y/m/d") }}</td>
+                        <td class="titulo">SUBTIPO:</td>
+                        <td class="td-in-well">{{ arFactura.facturaSubtipoRel.nombre | default('') }}</td>
+                        <td class="titulo">SOPORTE:</td>
+                        <td class="td-in-well">{{ arFactura.soporte }}</td>                       
                         <td class="titulo" >IVA:</td>
                         <td align="right">{{ arFactura.vrIva | number_format(0, '.', ',')}}</td>
                     </tr>
                     <tr>
-                        <td class="titulo">SOPORTE:</td>
-                        <td class="td-in-well">{{ arFactura.soporte }}</td>
+                        <td class="titulo">CLIENTE:</td>
+                        <td class="td-in-well">{{ arFactura.clienteRel.nombreCorto }}</td>
+                        <td class="titulo">USUARIO:</td>
+                        <td class="td-in-well">{{ arFactura.usuario }}</td> 
                         <td class="titulo" >RETENCION IVA:</td>
-                        <td align="right">{{ arFactura.vrRetencionIva | number_format(0, '.', ',')}}</td>
+                        <td align="right">{{ arFactura.vrRetencionIva | number_format(0, '.', ',')}}</td>                        
+
                     </tr>
                     <tr>
                         <td class="titulo">DESCRIPCION:</td>
                         <td class="td-in-well">{{ arFactura.descripcion }}</td>
+                        <td class="titulo">TIPO IMPRESION:</td>
+                        <td class="td-in-well">{% if arFactura.imprimirRelacion == 1 %}ANEXO{% endif %} {% if arFactura.imprimirAgrupada == 1 %}AGRUPADA{% endif %}</td> 
                         <td class="titulo" >RETENCION FUENTE:</td>
-                        <td align="right">{{ arFactura.vrRetencionFuente | number_format(0, '.', ',')}}</td>
+                        <td align="right">{{ arFactura.vrRetencionFuente | number_format(0, '.', ',')}}</td>                        
                     </tr>
                     <tr>
-                        <td class="titulo">ANEXO:</td>
-                        <td class="td-in-well">{% if arFactura.imprimirRelacion == 1 %}SI{% else %}NO{% endif %}</td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>                        
                         <td class="titulo" >TOTAL BRUTO:</td>
                         <td align="right">{{ arFactura.vrTotal | number_format(0, '.', ',')}}</td>
                     </tr>
                     <tr>
-                        <td class="titulo">AGRUPADA:</td>
-                        <td class="td-in-well">{% if arFactura.imprimirAgrupada == 1 %}SI{% else %}NO{% endif %}</td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td> 
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>                        
                         <td class="titulo" >TOTAL NETO:</td>
                         <td align="right">{{ arFactura.vrTotalNeto | number_format(0, '.', ',')}}</td>
-                    </tr>                    
+                    </tr>  
                     <tr>
-                        <td class="titulo">USUARIO:</td>
-                        <td class="td-in-well">{{ arFactura.usuario }}</td>
-                        <td class="titulo"></td>
-                        <td align="right"></td>
-                    </tr>   
-                    <tr>
-                        <td class="titulo">COMENTARIO:</td>
-                        <td class="td-in-well">{{ arFactura.comentarios }}</td>
-                        <td class="titulo"></td>
-                        <td align="right"></td>
+                        <td class="titulo" >COMENTARIO: </td>
+                        <td class="td-in-well" colspan="5">{{ arFactura.comentarios }}</td>                        
                     </tr>                    
                 </table>
             </div>

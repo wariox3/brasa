@@ -56,11 +56,26 @@
             <h4>El pedido no proviene de un servicio permanente</h4>
         {% endif %}                    
         <br />
+        <div class="panel panel-default">
+            <div class="panel-heading">Información pedido</div>
+            <div class="panel-body">
+                <table width="100%" class="table table-condensed table-bordered">
+                    <tr>
+                        <td class="titulo">CODIGO DETALLE:</td>
+                        <td class="td-in-well">{{ arPedidoDetalle.codigoPedidoDetallePk }}</td>
+                        <td class="titulo" >PENDIENTE FACTURAR:</td>
+                        <td align="right">{{ arPedidoDetalle.vrTotalDetallePendiente | number_format(0, '.', ',')}}</td>
+                    </tr>                 
+                </table>
+            </div>
+        </div>        
+        
         <h4>Facturas</h4>
         <table class="table table-striped table-bordered table-condensed">
             <tr>
                 <th>NUMERO</th>
                 <th>TIPO</th>
+                <th>SUBTIPO</th>
                 <th>SERVICIO</th>
                 <th>CANT</th>
                 <th>VALOR</th>
@@ -69,6 +84,7 @@
                 <tr>
                     <td>{{ arFacturaDetalles.facturaRel.numero  }}</td>
                     <td>{{ arFacturaDetalles.facturaRel.facturaTipoRel.nombre  }}</td>
+                    <td>{{ arFacturaDetalles.facturaRel.facturaSubtipoRel.nombre |default('')  }}</td>
                     <td>{{ arFacturaDetalles.conceptoServicioRel.nombre | default('') }}</td>
                     <td style="text-align: right">{{ arFacturaDetalles.cantidad | number_format(0, '.', ',') }}</td>
                     <td style="text-align: right">{{ arFacturaDetalles.subtotalOperado | number_format(0, '.', ',') }}</td>

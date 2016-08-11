@@ -5,6 +5,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurFacturaType;
+use Brasa\TurnoBundle\Form\Type\TurNotaCreditoType;
 use Brasa\TurnoBundle\Form\Type\TurFacturaDetalleType;
 use Brasa\TurnoBundle\Form\Type\TurFacturaDetalleNuevoType;
 class FacturaController extends Controller
@@ -139,6 +140,70 @@ class FacturaController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/movimiento/nota/credito/nuevo/{codigoFactura}", name="brs_tur_movimiento_nota_credito_nuevo")
+     */
+    public function nuevoNotaCreditoAction($codigoFactura) {
+        $request = $this->getRequest();
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $em = $this->getDoctrine()->getManager();
+        $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
+        if($codigoFactura != 0) {
+            $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);
+        }else{
+            $arFactura->setFecha(new \DateTime('now'));
+            $arFactura->setFechaVence(new \DateTime('now'));
+        }
+        $form = $this->createForm(new TurNotaCreditoType, $arFactura);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arFactura = $form->getData();            
+            $arrControles = $request->request->All();
+            if($arrControles['txtNit'] != '') {
+                $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
+                $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));                
+                if(count($arCliente) > 0) {
+                    $arFactura->setClienteRel($arCliente);
+                    $arClienteDireccion = new \Brasa\TurnoBundle\Entity\TurClienteDireccion();
+                    if($arrControles['txtCodigoDireccion'] != '') {                        
+                        $arClienteDireccion = $em->getRepository('BrasaTurnoBundle:TurClienteDireccion')->find($arrControles['txtCodigoDireccion']);                
+                        if(count($arClienteDireccion) > 0) {
+                            if($arClienteDireccion->getCodigoClienteFk() == $arCliente->getCodigoClientePk()) {
+                                $arFactura->setClienteDireccionRel($arClienteDireccion);                                
+                            } else {
+                                $objMensaje->Mensaje("error", "La direccion no pertenece al cliente", $this);
+                            }                            
+                        }                        
+                    }
+                    if($codigoFactura == 0) {
+                        $arFactura->setImprimirAgrupada($arFactura->getClienteRel()->getFacturaAgrupada());
+                    }
+                    $dateFechaVence = $objFunciones->sumarDiasFecha($arCliente->getPlazoPago(), $arFactura->getFecha());
+                    $arFactura->setFechaVence($dateFechaVence); 
+                    $arUsuario = $this->getUser();
+                    $arFactura->setUsuario($arUsuario->getUserName());
+                    $arFactura->setOperacion($arFactura->getFacturaTipoRel()->getOperacion());
+                    $arFacturaSubtipo = $form->get('facturaSubtipoRel')->getData();
+                    $arFactura->setAfectaValorPedido($arFacturaSubtipo->getAfectaValorPedido());
+                    $em->persist($arFactura);
+                    $em->flush();
+
+                    if($form->get('guardarnuevo')->isClicked()) {
+                        return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_nuevo', array('codigoFactura' => 0 )));
+                    } else {
+                        return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_detalle', array('codigoFactura' => $arFactura->getCodigoFacturaPk())));
+                    }                    
+                } else {
+                    $objMensaje->Mensaje("error", "El tercero no existe", $this);
+                }                             
+            }            
+        }
+        return $this->render('BrasaTurnoBundle:Movimientos/Factura:nuevoNotaCredito.html.twig', array(
+            'arFactura' => $arFactura,
+            'form' => $form->createView()));
+    }    
+    
     /**
      * @Route("/tur/movimiento/factura/detalle/{codigoFactura}", name="brs_tur_movimiento_factura_detalle")
      */
@@ -478,8 +543,10 @@ class FacturaController extends Controller
                 $session->get('filtroCodigoCliente'),
                 $session->get('filtroFacturaEstadoAutorizado'),
                 $strFechaDesde,
-                $strFechaHasta,
-                $session->get('filtroFacturaEstadoAnulado'));
+                $strFechaHasta,                
+                $session->get('filtroFacturaEstadoAnulado'),
+                $session->get('filtroTurnosCodigoFacturaTipo')
+                );
     }   
     
     private function listaDetalleNuevo($codigoCliente) {
@@ -493,8 +560,14 @@ class FacturaController extends Controller
         return $strDql;
     }
 
-    private function filtrar ($form) {                
-        $session = $this->getRequest()->getSession();        
+    private function filtrar ($form) { 
+        $session = $this->getRequest()->getSession();   
+        $arFacturaTipo = $form->get('facturaTipoRel')->getData();
+        if($arFacturaTipo) {
+            $session->set('filtroTurnosCodigoFacturaTipo', $arFacturaTipo->getCodigoFacturaTipoPk());
+        } else {
+            $session->set('filtroTurnosCodigoFacturaTipo', null);
+        }             
         $session->set('filtroFacturaNumero', $form->get('TxtNumero')->getData());
         $session->set('filtroFacturaEstadoAutorizado', $form->get('estadoAutorizado')->getData());          
         $session->set('filtroFacturaEstadoAnulado', $form->get('estadoAnulado')->getData());          
@@ -540,7 +613,24 @@ class FacturaController extends Controller
         }    
         $dateFechaDesde = date_create($strFechaDesde);
         $dateFechaHasta = date_create($strFechaHasta);
+        
+        $arrayPropiedadesFacturaTipo = array(
+                'class' => 'BrasaTurnoBundle:TurFacturaTipo',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('ft')
+                    ->orderBy('ft.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroTurnosCodigoFacturaTipo')) {
+            $arrayPropiedadesFacturaTipo['data'] = $em->getReference("BrasaTurnoBundle:TurFacturaTipo", $session->get('filtroTurnosCodigoFacturaTipo'));
+        }        
+        
         $form = $this->createFormBuilder()
+            ->add('facturaTipoRel', 'entity', $arrayPropiedadesFacturaTipo)
             ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
             ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                
             ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroFacturaNumero')))

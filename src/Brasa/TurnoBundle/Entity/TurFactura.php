@@ -23,6 +23,11 @@ class TurFactura
     private $codigoFacturaTipoFk;      
 
     /**
+     * @ORM\Column(name="codigo_factura_subtipo_fk", type="integer", nullable=true)
+     */    
+    private $codigoFacturaSubtipoFk;     
+    
+    /**
      * @ORM\Column(name="codigo_factura_servicio_fk", type="integer", nullable=true)
      */    
     private $codigoFacturaServicioFk; 
@@ -167,11 +172,22 @@ class TurFactura
      */
     private $operacion = 0;    
     
+    /**     
+     * @ORM\Column(name="afecta_valor_pedido", type="boolean")
+     */    
+    private $afectaValorPedido = true;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="TurFacturaTipo", inversedBy="facturasFacturaTipoRel")
      * @ORM\JoinColumn(name="codigo_factura_tipo_fk", referencedColumnName="codigo_factura_tipo_pk")
      */
     protected $facturaTipoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurFacturaSubtipo", inversedBy="facturasFacturaSubtipoRel")
+     * @ORM\JoinColumn(name="codigo_factura_subtipo_fk", referencedColumnName="codigo_factura_subtipo_pk")
+     */
+    protected $facturaSubtipoRel;    
     
     /**
      * @ORM\ManyToOne(targetEntity="TurFacturaServicio", inversedBy="facturasFacturaServicioRel")
@@ -248,6 +264,54 @@ class TurFactura
     public function getCodigoFacturaTipoFk()
     {
         return $this->codigoFacturaTipoFk;
+    }
+
+    /**
+     * Set codigoFacturaSubtipoFk
+     *
+     * @param integer $codigoFacturaSubtipoFk
+     *
+     * @return TurFactura
+     */
+    public function setCodigoFacturaSubtipoFk($codigoFacturaSubtipoFk)
+    {
+        $this->codigoFacturaSubtipoFk = $codigoFacturaSubtipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFacturaSubtipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoFacturaSubtipoFk()
+    {
+        return $this->codigoFacturaSubtipoFk;
+    }
+
+    /**
+     * Set codigoFacturaServicioFk
+     *
+     * @param integer $codigoFacturaServicioFk
+     *
+     * @return TurFactura
+     */
+    public function setCodigoFacturaServicioFk($codigoFacturaServicioFk)
+    {
+        $this->codigoFacturaServicioFk = $codigoFacturaServicioFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFacturaServicioFk
+     *
+     * @return integer
+     */
+    public function getCodigoFacturaServicioFk()
+    {
+        return $this->codigoFacturaServicioFk;
     }
 
     /**
@@ -344,6 +408,78 @@ class TurFactura
     public function getSoporte()
     {
         return $this->soporte;
+    }
+
+    /**
+     * Set descripcion
+     *
+     * @param string $descripcion
+     *
+     * @return TurFactura
+     */
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get descripcion
+     *
+     * @return string
+     */
+    public function getDescripcion()
+    {
+        return $this->descripcion;
+    }
+
+    /**
+     * Set tituloRelacion
+     *
+     * @param string $tituloRelacion
+     *
+     * @return TurFactura
+     */
+    public function setTituloRelacion($tituloRelacion)
+    {
+        $this->tituloRelacion = $tituloRelacion;
+
+        return $this;
+    }
+
+    /**
+     * Get tituloRelacion
+     *
+     * @return string
+     */
+    public function getTituloRelacion()
+    {
+        return $this->tituloRelacion;
+    }
+
+    /**
+     * Set detalleRelacion
+     *
+     * @param string $detalleRelacion
+     *
+     * @return TurFactura
+     */
+    public function setDetalleRelacion($detalleRelacion)
+    {
+        $this->detalleRelacion = $detalleRelacion;
+
+        return $this;
+    }
+
+    /**
+     * Get detalleRelacion
+     *
+     * @return string
+     */
+    public function getDetalleRelacion()
+    {
+        return $this->detalleRelacion;
     }
 
     /**
@@ -539,6 +675,30 @@ class TurFactura
     }
 
     /**
+     * Set vrBaseRetencionFuente
+     *
+     * @param float $vrBaseRetencionFuente
+     *
+     * @return TurFactura
+     */
+    public function setVrBaseRetencionFuente($vrBaseRetencionFuente)
+    {
+        $this->VrBaseRetencionFuente = $vrBaseRetencionFuente;
+
+        return $this;
+    }
+
+    /**
+     * Get vrBaseRetencionFuente
+     *
+     * @return float
+     */
+    public function getVrBaseRetencionFuente()
+    {
+        return $this->VrBaseRetencionFuente;
+    }
+
+    /**
      * Set vrIva
      *
      * @param float $vrIva
@@ -635,6 +795,30 @@ class TurFactura
     }
 
     /**
+     * Set vrSubtotalOperado
+     *
+     * @param float $vrSubtotalOperado
+     *
+     * @return TurFactura
+     */
+    public function setVrSubtotalOperado($vrSubtotalOperado)
+    {
+        $this->vrSubtotalOperado = $vrSubtotalOperado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSubtotalOperado
+     *
+     * @return float
+     */
+    public function getVrSubtotalOperado()
+    {
+        return $this->vrSubtotalOperado;
+    }
+
+    /**
      * Set vrTotal
      *
      * @param float $vrTotal
@@ -656,6 +840,78 @@ class TurFactura
     public function getVrTotal()
     {
         return $this->vrTotal;
+    }
+
+    /**
+     * Set vrTotalNeto
+     *
+     * @param float $vrTotalNeto
+     *
+     * @return TurFactura
+     */
+    public function setVrTotalNeto($vrTotalNeto)
+    {
+        $this->vrTotalNeto = $vrTotalNeto;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalNeto
+     *
+     * @return float
+     */
+    public function getVrTotalNeto()
+    {
+        return $this->vrTotalNeto;
+    }
+
+    /**
+     * Set imprimirRelacion
+     *
+     * @param boolean $imprimirRelacion
+     *
+     * @return TurFactura
+     */
+    public function setImprimirRelacion($imprimirRelacion)
+    {
+        $this->imprimirRelacion = $imprimirRelacion;
+
+        return $this;
+    }
+
+    /**
+     * Get imprimirRelacion
+     *
+     * @return boolean
+     */
+    public function getImprimirRelacion()
+    {
+        return $this->imprimirRelacion;
+    }
+
+    /**
+     * Set imprimirAgrupada
+     *
+     * @param boolean $imprimirAgrupada
+     *
+     * @return TurFactura
+     */
+    public function setImprimirAgrupada($imprimirAgrupada)
+    {
+        $this->imprimirAgrupada = $imprimirAgrupada;
+
+        return $this;
+    }
+
+    /**
+     * Get imprimirAgrupada
+     *
+     * @return boolean
+     */
+    public function getImprimirAgrupada()
+    {
+        return $this->imprimirAgrupada;
     }
 
     /**
@@ -707,6 +963,54 @@ class TurFactura
     }
 
     /**
+     * Set operacion
+     *
+     * @param integer $operacion
+     *
+     * @return TurFactura
+     */
+    public function setOperacion($operacion)
+    {
+        $this->operacion = $operacion;
+
+        return $this;
+    }
+
+    /**
+     * Get operacion
+     *
+     * @return integer
+     */
+    public function getOperacion()
+    {
+        return $this->operacion;
+    }
+
+    /**
+     * Set afectaValorPedido
+     *
+     * @param boolean $afectaValorPedido
+     *
+     * @return TurFactura
+     */
+    public function setAfectaValorPedido($afectaValorPedido)
+    {
+        $this->afectaValorPedido = $afectaValorPedido;
+
+        return $this;
+    }
+
+    /**
+     * Get afectaValorPedido
+     *
+     * @return boolean
+     */
+    public function getAfectaValorPedido()
+    {
+        return $this->afectaValorPedido;
+    }
+
+    /**
      * Set facturaTipoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurFacturaTipo $facturaTipoRel
@@ -728,6 +1032,54 @@ class TurFactura
     public function getFacturaTipoRel()
     {
         return $this->facturaTipoRel;
+    }
+
+    /**
+     * Set facturaSubtipoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaSubtipo $facturaSubtipoRel
+     *
+     * @return TurFactura
+     */
+    public function setFacturaSubtipoRel(\Brasa\TurnoBundle\Entity\TurFacturaSubtipo $facturaSubtipoRel = null)
+    {
+        $this->facturaSubtipoRel = $facturaSubtipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get facturaSubtipoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurFacturaSubtipo
+     */
+    public function getFacturaSubtipoRel()
+    {
+        return $this->facturaSubtipoRel;
+    }
+
+    /**
+     * Set facturaServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurFacturaServicio $facturaServicioRel
+     *
+     * @return TurFactura
+     */
+    public function setFacturaServicioRel(\Brasa\TurnoBundle\Entity\TurFacturaServicio $facturaServicioRel = null)
+    {
+        $this->facturaServicioRel = $facturaServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Get facturaServicioRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurFacturaServicio
+     */
+    public function getFacturaServicioRel()
+    {
+        return $this->facturaServicioRel;
     }
 
     /**
@@ -868,269 +1220,5 @@ class TurFactura
     public function getFacturasDetallesConceptosFacturaRel()
     {
         return $this->facturasDetallesConceptosFacturaRel;
-    }
-
-    /**
-     * Set vrTotalNeto
-     *
-     * @param float $vrTotalNeto
-     *
-     * @return TurFactura
-     */
-    public function setVrTotalNeto($vrTotalNeto)
-    {
-        $this->vrTotalNeto = $vrTotalNeto;
-
-        return $this;
-    }
-
-    /**
-     * Get vrTotalNeto
-     *
-     * @return float
-     */
-    public function getVrTotalNeto()
-    {
-        return $this->vrTotalNeto;
-    }
-
-    /**
-     * Set imprimirRelacion
-     *
-     * @param boolean $imprimirRelacion
-     *
-     * @return TurFactura
-     */
-    public function setImprimirRelacion($imprimirRelacion)
-    {
-        $this->imprimirRelacion = $imprimirRelacion;
-
-        return $this;
-    }
-
-    /**
-     * Get imprimirRelacion
-     *
-     * @return boolean
-     */
-    public function getImprimirRelacion()
-    {
-        return $this->imprimirRelacion;
-    }
-
-    /**
-     * Set descripcion
-     *
-     * @param string $descripcion
-     *
-     * @return TurFactura
-     */
-    public function setDescripcion($descripcion)
-    {
-        $this->descripcion = $descripcion;
-
-        return $this;
-    }
-
-    /**
-     * Get descripcion
-     *
-     * @return string
-     */
-    public function getDescripcion()
-    {
-        return $this->descripcion;
-    }
-
-    /**
-     * Set imprimirAgrupada
-     *
-     * @param boolean $imprimirAgrupada
-     *
-     * @return TurFactura
-     */
-    public function setImprimirAgrupada($imprimirAgrupada)
-    {
-        $this->imprimirAgrupada = $imprimirAgrupada;
-
-        return $this;
-    }
-
-    /**
-     * Get imprimirAgrupada
-     *
-     * @return boolean
-     */
-    public function getImprimirAgrupada()
-    {
-        return $this->imprimirAgrupada;
-    }
-
-    /**
-     * Set tituloRelacion
-     *
-     * @param string $tituloRelacion
-     *
-     * @return TurFactura
-     */
-    public function setTituloRelacion($tituloRelacion)
-    {
-        $this->tituloRelacion = $tituloRelacion;
-
-        return $this;
-    }
-
-    /**
-     * Get tituloRelacion
-     *
-     * @return string
-     */
-    public function getTituloRelacion()
-    {
-        return $this->tituloRelacion;
-    }
-
-    /**
-     * Set detalleRelacion
-     *
-     * @param string $detalleRelacion
-     *
-     * @return TurFactura
-     */
-    public function setDetalleRelacion($detalleRelacion)
-    {
-        $this->detalleRelacion = $detalleRelacion;
-
-        return $this;
-    }
-
-    /**
-     * Get detalleRelacion
-     *
-     * @return string
-     */
-    public function getDetalleRelacion()
-    {
-        return $this->detalleRelacion;
-    }
-
-    /**
-     * Set vrSubtotalOperado
-     *
-     * @param float $vrSubtotalOperado
-     *
-     * @return TurFactura
-     */
-    public function setVrSubtotalOperado($vrSubtotalOperado)
-    {
-        $this->vrSubtotalOperado = $vrSubtotalOperado;
-
-        return $this;
-    }
-
-    /**
-     * Get vrSubtotalOperado
-     *
-     * @return float
-     */
-    public function getVrSubtotalOperado()
-    {
-        return $this->vrSubtotalOperado;
-    }
-
-    /**
-     * Set operacion
-     *
-     * @param integer $operacion
-     *
-     * @return TurFactura
-     */
-    public function setOperacion($operacion)
-    {
-        $this->operacion = $operacion;
-
-        return $this;
-    }
-
-    /**
-     * Get operacion
-     *
-     * @return integer
-     */
-    public function getOperacion()
-    {
-        return $this->operacion;
-    }
-
-    /**
-     * Set codigoFacturaServicioFk
-     *
-     * @param integer $codigoFacturaServicioFk
-     *
-     * @return TurFactura
-     */
-    public function setCodigoFacturaServicioFk($codigoFacturaServicioFk)
-    {
-        $this->codigoFacturaServicioFk = $codigoFacturaServicioFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoFacturaServicioFk
-     *
-     * @return integer
-     */
-    public function getCodigoFacturaServicioFk()
-    {
-        return $this->codigoFacturaServicioFk;
-    }
-
-    /**
-     * Set facturaServicioRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurFacturaServicio $facturaServicioRel
-     *
-     * @return TurFactura
-     */
-    public function setFacturaServicioRel(\Brasa\TurnoBundle\Entity\TurFacturaServicio $facturaServicioRel = null)
-    {
-        $this->facturaServicioRel = $facturaServicioRel;
-
-        return $this;
-    }
-
-    /**
-     * Get facturaServicioRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurFacturaServicio
-     */
-    public function getFacturaServicioRel()
-    {
-        return $this->facturaServicioRel;
-    }
-
-    /**
-     * Set vrBaseRetencionFuente
-     *
-     * @param float $vrBaseRetencionFuente
-     *
-     * @return TurFactura
-     */
-    public function setVrBaseRetencionFuente($vrBaseRetencionFuente)
-    {
-        $this->VrBaseRetencionFuente = $vrBaseRetencionFuente;
-
-        return $this;
-    }
-
-    /**
-     * Get vrBaseRetencionFuente
-     *
-     * @return float
-     */
-    public function getVrBaseRetencionFuente()
-    {
-        return $this->VrBaseRetencionFuente;
     }
 }

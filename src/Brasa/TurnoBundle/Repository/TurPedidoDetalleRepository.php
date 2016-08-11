@@ -58,6 +58,48 @@ class TurPedidoDetalleRepository extends EntityRepository {
         return $dql;
     }     
     
+    public function listaConsultaPendienteFacturarDql($numeroPedido = "", $codigoCliente = "", $boolEstadoAutorizado = "", $boolEstadoProgramado = "", $boolEstadoFacturado = "", $boolEstadoAnulado = "", $strFechaDesde = "", $strFechaHasta = "") {
+        $dql   = "SELECT pd FROM BrasaTurnoBundle:TurPedidoDetalle pd JOIN pd.pedidoRel p WHERE pd.vrTotalDetallePendiente > 0 ";
+        if($numeroPedido != "") {
+            $dql .= " AND p.numero = " . $numeroPedido;  
+        }
+        if($codigoCliente != "") {
+            $dql .= " AND p.codigoClienteFk = " . $codigoCliente;  
+        } 
+        if($boolEstadoProgramado == 1 ) {
+            $dql .= " AND pd.estadoProgramado = 1";
+        }
+        if($boolEstadoProgramado == "0") {
+            $dql .= " AND pd.estadoProgramado = 0";
+        }  
+        if($boolEstadoAutorizado == 1 ) {
+            $dql .= " AND p.estadoAutorizado = 1";
+        }
+        if($boolEstadoAutorizado == "0") {
+            $dql .= " AND p.estadoAutorizado = 0";
+        }         
+        if($boolEstadoFacturado == 1 ) {
+            $dql .= " AND pd.estadoFacturado = 1";
+        }
+        if($boolEstadoFacturado == "0") {
+            $dql .= " AND pd.estadoFacturado = 0";
+        }        
+        if($boolEstadoAnulado == 1 ) {
+            $dql .= " AND p.estadoAnulado = 1";
+        }
+        if($boolEstadoAnulado == "0") {
+            $dql .= " AND p.estadoAnulado = 0";
+        }
+        if($strFechaDesde != "") {
+            $dql .= " AND p.fechaProgramacion >= '" . $strFechaDesde . "'";
+        }        
+        if($strFechaHasta != "") {
+            $dql .= " AND p.fechaProgramacion <= '" . $strFechaHasta . "'";
+        }      
+        $dql .= " ORDER BY p.codigoClienteFk, pd.codigoGrupoFacturacionFk, pd.codigoPuestoFk";        
+        return $dql;
+    }         
+    
     public function pendientesCliente($codigoCliente) {
         $em = $this->getEntityManager();
         $dql   = "SELECT pd FROM BrasaTurnoBundle:TurPedidoDetalle pd JOIN pd.pedidoRel p "
@@ -177,7 +219,7 @@ class TurPedidoDetalleRepository extends EntityRepository {
         $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
         $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);
         $dql   = "SELECT SUM(fd.subtotalOperado) as valor FROM BrasaTurnoBundle:TurFacturaDetalle fd JOIN fd.facturaRel f "
-                . "WHERE fd.codigoPedidoDetalleFk = " . $codigoPedidoDetalle . " AND f.estadoAutorizado = 1";
+                . "WHERE fd.codigoPedidoDetalleFk = " . $codigoPedidoDetalle . " AND f.estadoAutorizado = 1 AND f.afectaValorPedido = 1";
         $query = $em->createQuery($dql);
         $arrFacturaDetalle = $query->getSingleResult(); 
         if($arrFacturaDetalle) {
