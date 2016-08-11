@@ -85,14 +85,9 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
         $pdf->SetFillColor(200, 200, 200);
         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);        
-        if(self::$codigoPago != "") {
-            $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();        
-            $arPagos = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoPagoPk' => self::$codigoPago));               
-        }
-        if(self::$codigoProgramacionPago != "") {
-            $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();        
-            $arPagos = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => self::$codigoProgramacionPago));               
-        }
+        $dql = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaImpresionDql(self::$codigoPago, self::$codigoProgramacionPago);        
+        $query = self::$em->createQuery($dql);
+        $arPagos = $query->getResult();
         foreach ($arPagos as $arPago){
             $y = 25;
             //FILA 1

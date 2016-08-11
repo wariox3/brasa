@@ -215,6 +215,23 @@ class RhuPagoRepository extends EntityRepository {
         return $dql;
     }                        
     
+    public function listaImpresionDql($codigoPago = "", $codigoProgramacionPago = "", $strCodigoCentroCosto = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT p, e FROM BrasaRecursoHumanoBundle:RhuPago p JOIN p.empleadoRel e WHERE p.codigoPagoPk <> 0";
+        if($codigoPago != "") {
+            $dql .= " AND p.codigoPagoPk = " . $codigoPago;
+        }
+        if($codigoProgramacionPago != "") {
+            $dql .= " AND p.codigoProgramacionPagoFk = " . $codigoProgramacionPago;
+        }                
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND p.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }   
+
+        $dql .= " ORDER BY p.codigoPagoPk DESC";
+        return $dql;
+    }                            
+    
     public function listaConsultaPagosDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strDesde = "", $strHasta = "", $strPago = "",$strProgramacionPago = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT p, e FROM BrasaRecursoHumanoBundle:RhuPago p JOIN p.empleadoRel e WHERE p.codigoPagoPk <> 0";

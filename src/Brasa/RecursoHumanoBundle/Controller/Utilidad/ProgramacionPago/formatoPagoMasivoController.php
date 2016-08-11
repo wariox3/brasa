@@ -1,16 +1,20 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Utilidad\ProgramacionPago;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use ZipArchive;
 use Symfony\Component\HttpFoundation\Response;
 
-class UtilidadesProgramacionpagoComprobanteMasivoController extends Controller
+class formatoPagoMasivoController extends Controller
 {
     var $strDqlLista = "";
     
+    /**
+     * @Route("/rhu/utilidades/programacion/pago/comprobante/masivo/{codigoProgramacionPago}", name="brs_rhu_utilidades_programacion_pago_comprobante_masivo")
+     */         
     public function listaAction($codigoProgramacionPago = "") {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();  
