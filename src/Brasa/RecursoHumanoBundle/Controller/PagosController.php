@@ -398,7 +398,7 @@ class PagosController extends Controller
                     ->setCellValue('H1', 'FECHA PAGO DESDE')
                     ->setCellValue('I1', 'FECHA PAGO HASTA')
                     ->setCellValue('J1', 'VR PAGO')
-                    ->setCellValue('J1', 'VR HORA')
+                    ->setCellValue('K1', 'VR HORA')
                     ->setCellValue('L1', 'VR DÍA')
                     ->setCellValue('M1', 'NÚMERO HORAS')
                     ->setCellValue('N1', 'NÚMERO DÍAS')
@@ -420,7 +420,8 @@ class PagosController extends Controller
                     $session->get('filtroIdentificacion'),
                     $session->get('filtroCodigoPagoTipo'),
                     $session->get('filtroDesde'),
-                    $session->get('filtroHasta')    
+                    $session->get('filtroHasta'),
+                    ""
                 );
         
         $arPagosDetalle = $em->createQuery($arPagosDetalle);
