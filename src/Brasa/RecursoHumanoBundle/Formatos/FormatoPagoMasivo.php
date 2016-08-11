@@ -4,13 +4,17 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
     public static $em;    
     public static $codigoProgramacionPago;
     public static $codigoPago;
+    public static $codigoZona;
+    public static $codigoSubzona;
     
-    public function Generar($miThis, $codigoProgramacionPago = "", $strRuta = "", $codigoPago = "") {        
+    public function Generar($miThis, $codigoProgramacionPago = "", $strRuta = "", $codigoPago = "", $codigoZona = "", $codigoSubzona = "") {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
         self::$codigoProgramacionPago = $codigoProgramacionPago;
         self::$codigoPago = $codigoPago;
+        self::$codigoZona = $codigoZona;
+        self::$codigoSubzona = $codigoSubzona;
         $pdf = new FormatoPagoMasivo();
         $pdf->AliasNbPages();
         $pdf->AddPage();
@@ -85,7 +89,7 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
         $pdf->SetFillColor(200, 200, 200);
         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);        
-        $dql = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaImpresionDql(self::$codigoPago, self::$codigoProgramacionPago);        
+        $dql = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaImpresionDql(self::$codigoPago, self::$codigoProgramacionPago, self::$codigoZona, self::$codigoSubzona);        
         $query = self::$em->createQuery($dql);
         $arPagos = $query->getResult();
         foreach ($arPagos as $arPago){

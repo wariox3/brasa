@@ -24,8 +24,20 @@ class formatoPagoMasivoController extends Controller
         if($form->isValid()) {
             if($form->get('BtnGenerar')->isClicked()) {
                 if ($form->get('masivo')->getData() == true){
+                    $arZona = $form->get('zonaRel')->getData();
+                    if($arZona) {
+                        $codigoZona = $arZona->getCodigoZonaPk();
+                    } else {
+                        $codigoZona = "";
+                    }
+                    $arSubzona = $form->get('subzonaRel')->getData();
+                    if($arSubzona) {
+                        $codigoSubzona = $arSubzona->getCodigoSubzonaPk();
+                    } else {
+                        $codigoSubzona = "";
+                    }                    
                     $objFormatoPagoMasivo = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPagoMasivo();
-                    $objFormatoPagoMasivo->Generar($this, $form->get('numero')->getData());
+                    $objFormatoPagoMasivo->Generar($this, $form->get('numero')->getData(), "", "", $codigoZona, $codigoSubzona);
                 } else {
                     $codigoProgramacionPago = $form->get('numero')->getData();
                     $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
@@ -79,9 +91,40 @@ class formatoPagoMasivoController extends Controller
             'form' => $form->createView()));
     }              
     
-    private function formularioLista($codigoProgramacionPago = "") {                
-
-        $form = $this->createFormBuilder()                        
+    private function formularioLista($codigoProgramacionPago = "") {  
+        $em = $this->getDoctrine()->getManager();  
+        $session = $this->get('session');
+        $arrayPropiedadesZona = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuZona',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('z')
+                    ->orderBy('z.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroRhuCodigoZona')) {
+            $arrayPropiedadesZona['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuZona", $session->get('filtroRhuCodigoZona'));
+        }
+        $arrayPropiedadesSubzona = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuSubzona',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('sz')
+                    ->orderBy('sz.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroRhuCodigoSubzona')) {
+            $arrayPropiedadesSubzona['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuSubzona", $session->get('filtroRhuCodigoSubzona'));
+        }        
+        $form = $this->createFormBuilder()  
+            ->add('zonaRel', 'entity', $arrayPropiedadesZona)                
+            ->add('subzonaRel', 'entity', $arrayPropiedadesSubzona)                
             ->add('numero','text', array('required'  => true, 'data' => $codigoProgramacionPago))
             ->add('masivo', 'checkbox', array('required'  => false))
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))    

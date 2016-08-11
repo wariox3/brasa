@@ -19,6 +19,18 @@
                     </div>
                 </div>
                 <div class="form-group form-group-sm">
+                    <label class="col-sm-4 control-label">Zona:</label>
+                    <div class="col-sm-8">
+                            {{ form_widget(form.zonaRel, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>   
+                <div class="form-group form-group-sm">
+                    <label class="col-sm-4 control-label">Sub zona:</label>
+                    <div class="col-sm-8">
+                            {{ form_widget(form.subzonaRel, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>                     
+                <div class="form-group form-group-sm">
                     <label for="form_masivo" class="col-sm-4 control-label">Masivo en un documento:</label>
                     <div class="col-sm-8">
                             {{ form_widget(form.masivo) }}
