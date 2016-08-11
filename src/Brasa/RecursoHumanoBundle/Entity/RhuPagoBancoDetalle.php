@@ -69,7 +69,11 @@ class RhuPagoBancoDetalle
      */
     protected $pagoRel;        
 
-
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuBanco", inversedBy="pagosBancosDetallesBancoRel")
+     * @ORM\JoinColumn(name="codigo_banco_fk", referencedColumnName="codigo_banco_pk")
+     */
+    protected $bancoRel; 
 
     /**
      * Get codigoPagoBancoDetallePk
@@ -319,5 +323,29 @@ class RhuPagoBancoDetalle
     public function getCodigoBancoFk()
     {
         return $this->codigoBancoFk;
+    }
+
+    /**
+     * Set bancoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuBanco $bancoRel
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setBancoRel(\Brasa\RecursoHumanoBundle\Entity\RhuBanco $bancoRel = null)
+    {
+        $this->bancoRel = $bancoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get bancoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuBanco
+     */
+    public function getBancoRel()
+    {
+        return $this->bancoRel;
     }
 }

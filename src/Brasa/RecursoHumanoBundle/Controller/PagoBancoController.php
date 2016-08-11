@@ -207,8 +207,9 @@ class PagoBancoController extends Controller
                                         $arPagoBancoDetalle->setNumeroIdentificacion($arPago->getEmpleadoRel()->getNumeroIdentificacion());
                                         $arPagoBancoDetalle->setNombreCorto($arPago->getEmpleadoRel()->getNombreCorto());
                                         $arPagoBancoDetalle->setCuenta($arPago->getEmpleadoRel()->getCuenta());
-                                        $arPagoBancoDetalle->setVrPago($arPago->getVrNeto());                        
-                                        $arPagoBancoDetalle->setCodigoBancoFk($arPago->getEmpleadoRel()->getCodigoBancoFk());
+                                        $valorPagar = round($arPago->getVrNeto());
+                                        $arPagoBancoDetalle->setVrPago($valorPagar);
+                                        $arPagoBancoDetalle->setBancoRel($arPago->getEmpleadoRel()->getBancoRel());                                        
                                         $em->persist($arPagoBancoDetalle); 
                                         $arPago->setEstadoPagadoBanco(1);
                                         $em->persist($arPago);                            
@@ -234,7 +235,9 @@ class PagoBancoController extends Controller
                                 $arPagoBancoDetalle->setNombreCorto($arPago->getEmpleadoRel()->getNombreCorto());
                                 $arPagoBancoDetalle->setCodigoBancoFk($arPago->getEmpleadoRel()->getCodigoBancoFk());
                                 $arPagoBancoDetalle->setCuenta($arPago->getEmpleadoRel()->getCuenta());
-                                $arPagoBancoDetalle->setVrPago($arPago->getVrNeto());                                                        
+                                $valorPagar = round($arPago->getVrNeto());
+                                $arPagoBancoDetalle->setVrPago($valorPagar); 
+                                $arPagoBancoDetalle->setBancoRel($arPago->getEmpleadoRel()->getBancoRel());                                        
                                 $em->persist($arPagoBancoDetalle); 
                                 $arPago->setEstadoPagadoBanco(1);
                                 $em->persist($arPago);                            
