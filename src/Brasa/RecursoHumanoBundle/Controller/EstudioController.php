@@ -361,8 +361,10 @@ class EstudioController extends Controller
     }
 
     private function generarExcel() {
-        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         $em = $this->getDoctrine()->getManager();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
@@ -497,12 +499,16 @@ class EstudioController extends Controller
                     if ($arEstudios->getFechaEstadoInvalido() != null) {
                         $fechaEstadoInvalido = $arEstudios->getFechaEstadoInvalido()->format('Y/m/d');
                     }
+                    $cargo = '';
+                    if ($arEstudios->getEmpleadoRel()->getCodigoCargoFk() != null){
+                        $cargo = $arEstudios->getEmpleadoRel()->getCargoRel()->getNombre();
+                    }
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arEstudios->getCodigoEmpleadoEstudioPk())
                             ->setCellValue('B' . $i, $fecha)
                             ->setCellValue('C' . $i, $arEstudios->getEmpleadoRel()->getNumeroIdentificacion())
                             ->setCellValue('D' . $i, $arEstudios->getEmpleadoRel()->getNombreCorto())
-                            ->setCellValue('E' . $i, $arEstudios->getEmpleadoRel()->getCargoRel()->getNombre())
+                            ->setCellValue('E' . $i, $cargo)
                             ->setCellValue('F' . $i, $arEstudios->getEmpleadoEstudioTipoRel()->getNombre())
                             ->setCellValue('G' . $i, $arEstudios->getInstitucion())
                             ->setCellValue('H' . $i, $arEstudios->getTitulo())
