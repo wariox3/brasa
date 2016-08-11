@@ -477,7 +477,7 @@ class TurFacturaRepository extends EntityRepository {
                     $arRegistro->setFecha($arFactura->getFecha());                                                            
                     $em->persist($arRegistro);
                     
-                    //$arFactura->setEstadoContabilizado(1);
+                    $arFactura->setEstadoContabilizado(1);
                     $em->persist($arFactura);                                            
                 }
             }
