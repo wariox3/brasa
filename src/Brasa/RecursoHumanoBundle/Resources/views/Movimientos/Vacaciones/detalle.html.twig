@@ -110,7 +110,8 @@
             <div class="tab-pane active" id="creditos">
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
-                        <th>CÓDIGO</td>
+                        <th>CÓDIGO</th>
+                        <th>CREDITO</th>
                         <th>TIPO</td>
                         <th>VALOR</td>
                         <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(tdis);"/></td>
@@ -121,9 +122,10 @@
                                 <input type="hidden" name="LblCodigoGuia[]" value="{{ arVacacionDeducciones.codigoVacacionCreditoPk }}">
                                 <span class="badge">{{ arVacacionDeducciones.codigoVacacionCreditoPk }}</span>
                             </td>
+                            <td>{{ arVacacionDeducciones.codigoCreditoFk | default('') }}</td>
                             <td>{{ arVacacionDeducciones.pagoConceptoRel.nombre | default('') }}</td>           
                             <td style="text-align: right">{{ arVacacionDeducciones.vrDeduccion | number_format(2, '.', ',') }}</td>
-                            <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arVacacionDeducciones.codigoVacacionCreditoPk }}" /></td>
+                            <td align="center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arVacacionDeducciones.codigoVacacionCreditoPk }}" /></td>
                         </tr>
                     {% endfor %}
                 </table>
@@ -131,16 +133,19 @@
                     <div class="btn-group">
                         <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_movimiento_vacacion') }}" style="float:left">Volver</a>
                     </div>
-                </div>  
-                <div class="btn-toolbar" style="float: right">                           
+                </div>
+                    
+                <div class="btn-toolbar" style="float: right">
+                    {% if arVacaciones.estadoAutorizado == 0 %}
                     <div class="btn-group">                
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_vacacion_detalle_credito', {'codigoVacacion': arVacaciones.codigoVacacionPk}) }}', 'AgregarNuevo', 600, 900)">Nuevo credito</a>
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_vacacion_detalle_descuento', {'codigoVacacion': arVacaciones.codigoVacacionPk}) }}', 'AgregarNuevo', 600, 900)">Nuevo</a>
                     </div>
+                    {% endif %}
                     <div class="btn-group">                
                         {{ form_widget(form.BtnEliminarDeduccion, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                
                     </div>
-                </div>         
+                </div>  
             </div>    
             <div class="tab-pane" id="bonificaciones">
                 <table class="table table-striped table-bordered table-condensed">
@@ -168,10 +173,12 @@
                             <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_movimiento_vacacion') }}" style="float:left">Volver</a>
                         </div>
                     </div>  
-                    <div class="btn-toolbar" style="float: right">                           
+                    <div class="btn-toolbar" style="float: right">
+                        {% if arVacaciones.estadoAutorizado == 0 %}
                         <div class="btn-group">                
                             <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_vacacion_detalle_bonificacion', {'codigoVacacion': arVacaciones.codigoVacacionPk}) }}', 'AgregarNuevo', 600, 900)">Nuevo</a>
                         </div>
+                        {% endif %}
                         <div class="btn-group">                
                             {{ form_widget(form.BtnEliminarBonificacion, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                
                         </div>

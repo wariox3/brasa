@@ -111,7 +111,37 @@ class RhuVacacionRepository extends EntityRepository {
         $em->flush();
         
         return true;
-    }    
+    } 
+    
+    public function pagar($codigoVacacion) {        
+        $em = $this->getEntityManager();
+        $validar = '';
+        //$arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);
+        //$arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();            
+        //$arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);                         
+        //$arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        //$arContrato = $arVacacion->getContratoRel();
+        $arVacacionCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
+        $arVacacionCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionCredito')->findBy(array('codigoVacacionFk' => $codigoVacacion));                                 
+        $deduccion = 0;
+        foreach ($arVacacionCreditos as $arVacacionCredito){
+            $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arVacacionCredito->getCodigoCreditoFk());
+            $deduccion = $arVacacionCredito->getVrDeduccion();
+            $saldo = $arCredito->getSaldo();
+            if ($saldo <= $deduccion ){
+                $validar = 1;
+            } else {
+                $arCredito->setSaldo($saldo - $deduccion);
+                $arCredito->setSaldoTotal($arCredito->saldoTotal() - $deduccion );
+            }
+        }
+        if ($validar == ''){
+            $em->persist($arCredito);
+            $em->flush($arCredito);
+        }
+        return $validar;
+        
+    }
     
     public function devuelveVacacionesFecha($codigoEmpleado, $fechaDesde, $fechaHasta) {
         $em = $this->getEntityManager();

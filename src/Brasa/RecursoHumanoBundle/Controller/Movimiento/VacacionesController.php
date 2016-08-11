@@ -196,6 +196,7 @@ class VacacionesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
         $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);        
         $form = $this->formularioDetalle($arVacacion);        
@@ -230,12 +231,20 @@ class VacacionesController extends Controller
                 if($arVacacion->getEstadoAutorizado() == 1) {
                     $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
                     $arContrato =  $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arVacacion->getCodigoContratoFk());
-                    $arContrato->setFechaUltimoPagoVacaciones($arVacacion->getFechaHastaPeriodo());
-                    $arVacacion->setEstadoPagoGenerado(1);
-                    $em->persist($arContrato);
-                    $em->persist($arVacacion);
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_movimiento_vacacion_detalle', array('codigoVacacion' => $codigoVacacion)));                                                
+                    $validar = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->pagar($codigoVacacion);
+                    if ($validar == ''){
+                        $arContrato->setFechaUltimoPagoVacaciones($arVacacion->getFechaHastaPeriodo());
+                        $arVacacion->setEstadoPagoGenerado(1);
+                        $em->persist($arContrato);
+                        $em->persist($arVacacion);
+                        $em->flush();
+                        return $this->redirect($this->generateUrl('brs_rhu_movimiento_vacacion_detalle', array('codigoVacacion' => $codigoVacacion)));                                                
+                    } else {
+                        $objMensaje->Mensaje("error", "Hay saldos en creditos que son inferiores a la deducciones", $this);
+                        return $this->redirect($this->generateUrl('brs_rhu_movimiento_vacacion_detalle', array('codigoVacacion' => $codigoVacacion)));                                                
+                    }                    
+                } else {
+                    $objMensaje->Mensaje("error", "No esta autorizado, no se puede generar pago", $this);
                 }
             }            
             
@@ -466,16 +475,24 @@ class VacacionesController extends Controller
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonGenerarPago = array('label' => 'Generar pago', 'disabled' => false);
         $arrBotonLiquidar = array('label' => 'Liquidar', 'disabled' => false);
+        $arrBotonEliminarDeduccion = array('label'  => 'Eliminar deduccion', 'disabled' => false);
+        $arrBotonEliminarBonificacion = array('label'  => 'Eliminar bonificacion', 'disabled' => false);
         if($arVacacion->getEstadoAutorizado() == 1) {            
             $arrBotonLiquidar['disabled'] = true;
-            $arrBotonAutorizar['disabled'] = true;            
+            $arrBotonAutorizar['disabled'] = true;
+            $arrBotonEliminarDeduccion['disabled'] = true;
+            $arrBotonEliminarBonificacion['disabled'] = true;            
         } else {
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonGenerarPago['disabled'] = true;
+            $arrBotonImprimir['disabled'] = true;
         }
         if($arVacacion->getEstadoPagoGenerado() == 1) {
+            $arrBotonAutorizar['disabled'] = true;
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonGenerarPago['disabled'] = true;
+            $arrBotonImprimir['disabled'] = true;
+            $arrBotonLiquidar['disabled'] = true;
         }
         $form = $this->createFormBuilder()    
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
@@ -483,8 +500,8 @@ class VacacionesController extends Controller
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir) 
                     ->add('BtnGenerarPago', 'submit', $arrBotonGenerarPago)
                     ->add('BtnLiquidar', 'submit', $arrBotonLiquidar)
-                    ->add('BtnEliminarDeduccion', 'submit', array('label'  => 'Eliminar deduccion',))
-                    ->add('BtnEliminarBonificacion', 'submit', array('label'  => 'Eliminar bonificacion',))
+                    ->add('BtnEliminarDeduccion', 'submit', $arrBotonEliminarDeduccion)
+                    ->add('BtnEliminarBonificacion', 'submit', $arrBotonEliminarBonificacion)
                     ->getForm();  
         return $form;
     } 
