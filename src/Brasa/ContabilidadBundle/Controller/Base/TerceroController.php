@@ -20,6 +20,7 @@ class TerceroController extends Controller
         $paginator  = $this->get('knp_paginator');
         $form = $this->createFormBuilder() //
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
+            ->add('BtnCorregirDigitosVerificacion', 'submit', array('label'  => 'Corregir digitos verificacion'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
@@ -36,6 +37,21 @@ class TerceroController extends Controller
             }
             if($form->get('BtnExcel')->isClicked()) {
                 $this->generarExcel();
+            }
+            if($form->get('BtnCorregirDigitosVerificacion')->isClicked()) {            
+                $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
+                $arTercerosVerificar = new \Brasa\ContabilidadBundle\Entity\CtbTercero();
+                $arTercerosVerificar = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findAll();
+                foreach ($arTercerosVerificar as $arTercero) {
+                    $digito = $objFunciones->devuelveDigitoVerificacion($arTercero->getNumeroIdentificacion());
+                    if($digito != $arTercero->getDigitoVerificacion()) {
+                        $arTerceroActualizar = new \Brasa\ContabilidadBundle\Entity\CtbTercero();
+                        $arTerceroActualizar = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->find($arTercero->getCodigoTerceroPk());
+                        $arTerceroActualizar->setDigitoVerificacion($digito);
+                        $em->persist($arTerceroActualizar);                        
+                    }
+                }
+                $em->flush();                                
             }
         }
         $arTerceros = new \Brasa\ContabilidadBundle\Entity\CtbTercero();

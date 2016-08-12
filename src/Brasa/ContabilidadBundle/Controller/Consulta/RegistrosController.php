@@ -39,7 +39,7 @@ class RegistrosController extends Controller
             }
 
         }
-        $arRegistros = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 40);
+        $arRegistros = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 100);
         return $this->render('BrasaContabilidadBundle:Consulta/Registro:lista.html.twig', array(
             'arRegistros' => $arRegistros,
             'form' => $form->createView()

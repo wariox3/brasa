@@ -26,7 +26,7 @@
             </tr>
             {% for arPagos in arPagos %}
             <tr>
-                <td><input type="hidden" name="LblCodigo[]" value="{{ arPagos.codigoPagoPk }}">{{ arPagos.codigoPagoPk }} </td>
+                <td>{{ arPagos.codigoPagoPk }} </td>
                 <td>{{ arPagos.numero  }}</td>
                 <td>{{ arPagos.pagoTipoRel.nombre  }}</td>
                 <td>{{ arPagos.empleadoRel.numeroIdentificacion  }}</td>

@@ -11,9 +11,9 @@
         <tr>
             
             <th>CÓDIGO</th>
-            <th>TIPO DE IDENTIFICACIÓN</th>
+            <th>TIPO</th>
             <th>IDENTIFICACIÓN</th>
-            <th>DIGITO VERIFICACIÓN</th>
+            <th>DV</th>
             <th>{{ knp_pagination_sortable(arTerceros, 'NOMBRE', 'codigo') }}</th> 
             <th>RAZÓN SOCIAL</th>
             <th>CIUDAD</th>
@@ -45,6 +45,7 @@
     <div class="btn-toolbar" style="float: right">              
         <div class="btn-group">                
             {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+            {{ form_widget(form.BtnCorregirDigitosVerificacion, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
         </div>
         <div class="btn-group">
             <a class="btn btn-default btn-sm" href="{{ path('brs_ctb_base_terceros_nuevo', {'codigoTercero': 0}) }}">Nuevo</a>

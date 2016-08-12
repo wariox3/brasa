@@ -22,6 +22,8 @@ class IntercambioDatosController extends Controller
         if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if($form->get('BtnExportar')->isClicked()) {
+                set_time_limit(0);
+                ini_set("memory_limit", -1);
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados as $codigoRegistro) {                        
                         $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();
@@ -243,6 +245,8 @@ class IntercambioDatosController extends Controller
     
     private function generarExcelInterfaceOfimatica() {
         $em = $this->getDoctrine()->getManager();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);        
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
         // Set document properties

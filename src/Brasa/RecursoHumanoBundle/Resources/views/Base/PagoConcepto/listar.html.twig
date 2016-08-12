@@ -21,8 +21,9 @@
             <th></th>
             <th>ADICIÓN</th>            
             <th>A.TTE</th>
-            <th>CUENTA</th>
-            <th>CUENTA2</th>            
+            <th>C.ADM</th>
+            <th>C.OPE</th>            
+            <th>C.COM</th>            
             <th>PENSIÓN</th>
             <th>SALUD</th>
             <th>T.ADIC</th>
@@ -46,6 +47,7 @@
                 <td>{% if arPagoConceptos.conceptoAuxilioTransporte == 1%} SI {% else %}NO{% endif%}</td>
                 <td>{{arPagoConceptos.codigoCuentaFK}}{% if arPagoConceptos.TipoCuenta == 1%}D{% else %}C{% endif%}</td>                
                 <td>{{arPagoConceptos.codigoCuentaOperacionFK}}{% if arPagoConceptos.TipoCuentaOperacion == 1%}D{% else %}C{% endif%}</td>                
+                <td>{{arPagoConceptos.codigoCuentaComercialFK}}{% if arPagoConceptos.TipoCuentaComercial == 1%}D{% else %}C{% endif%}</td>                                
                 <td>{% if arPagoConceptos.conceptoPension == 1%} SI {% else %}NO{% endif%}</td>
                 <td>{% if arPagoConceptos.conceptoSalud == 1%} SI {% else %}NO{% endif%}</td>
                 <td>{{arPagoConceptos.TipoAdicional}}</td>

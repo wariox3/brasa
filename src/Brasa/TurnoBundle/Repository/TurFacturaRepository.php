@@ -410,7 +410,7 @@ class TurFacturaRepository extends EntityRepository {
                     } else {
                         $arRegistro->setCredito($arFactura->getVrTotalNeto());
                     }
-                    
+                    $arRegistro->setDescripcionContable('FACTURACION ' . $this->MesesEspañol($arFactura->getFecha()->format('m')));
                     $em->persist($arRegistro);
 
                     //Retencion en la fuente
@@ -428,7 +428,8 @@ class TurFacturaRepository extends EntityRepository {
                              $arRegistro->setDebito($arFactura->getVrRetencionFuente());
                         } else {
                              $arRegistro->setCredito($arFactura->getVrRetencionFuente());
-                        }                                                                       
+                        }   
+                        $arRegistro->setDescripcionContable('FACTURACION ' . $this->MesesEspañol($arFactura->getFecha()->format('m')));
                         $em->persist($arRegistro);                         
                     }                   
 
@@ -451,7 +452,8 @@ class TurFacturaRepository extends EntityRepository {
                         $arRegistro->setNumero($arFactura->getNumero());
                         $arRegistro->setNumeroReferencia($arFactura->getNumero());
                         $arRegistro->setFecha($arFactura->getFecha());
-                        $arRegistro->setBase($arFactura->getVrBaseAIU());                                                                    
+                        $arRegistro->setBase($arFactura->getVrBaseAIU()); 
+                        $arRegistro->setDescripcionContable('FACTURACION ' . $this->MesesEspañol($arFactura->getFecha()->format('m')));                        
                         $em->persist($arRegistro);                        
                     }
 
@@ -474,7 +476,8 @@ class TurFacturaRepository extends EntityRepository {
                     $arRegistro->setTerceroRel($arTercero);
                     $arRegistro->setNumero($arFactura->getNumero());
                     $arRegistro->setNumeroReferencia($arFactura->getNumero());
-                    $arRegistro->setFecha($arFactura->getFecha());                                                            
+                    $arRegistro->setFecha($arFactura->getFecha()); 
+                    $arRegistro->setDescripcionContable('FACTURACION ' . $this->MesesEspañol($arFactura->getFecha()->format('m')));                    
                     $em->persist($arRegistro);
                     
                     $arFactura->setEstadoContabilizado(1);
@@ -484,4 +487,46 @@ class TurFacturaRepository extends EntityRepository {
             $em->flush();
         }
     }
+    
+    public static function MesesEspañol($mes) {
+        
+        if ($mes == '01'){
+            $mesEspañol = "ENERO";
+        }
+        if ($mes == '02'){
+            $mesEspañol = "FEBRERO";
+        }
+        if ($mes == '03'){
+            $mesEspañol = "MARZO";
+        }
+        if ($mes == '04'){
+            $mesEspañol = "ABRIL";
+        }
+        if ($mes == '05'){
+            $mesEspañol = "MAYO";
+        }
+        if ($mes == '06'){
+            $mesEspañol = "JUNIO";
+        }
+        if ($mes == '07'){
+            $mesEspañol = "JULIO";
+        }
+        if ($mes == '08'){
+            $mesEspañol = "AGOSTO";
+        }
+        if ($mes == '09'){
+            $mesEspañol = "SEPTIEMBRE";
+        }
+        if ($mes == '10'){
+            $mesEspañol = "OCTUBRE";
+        }
+        if ($mes == '11'){
+            $mesEspañol = "NOVIEMBRE";
+        }
+        if ($mes == '12'){
+            $mesEspañol = "DICIEMBRE";
+        }
+
+        return $mesEspañol;
+    }    
 }
