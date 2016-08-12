@@ -19,26 +19,28 @@ class formatoPagoMasivoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();  
         $paginator  = $this->get('knp_paginator');        
-        $form = $this->formularioLista($codigoProgramacionPago);
+        $form = $this->formularioLista();
         $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnGenerar')->isClicked()) {
-                if ($form->get('masivo')->getData() == true){
-                    $arZona = $form->get('zonaRel')->getData();
-                    if($arZona) {
-                        $codigoZona = $arZona->getCodigoZonaPk();
-                    } else {
-                        $codigoZona = "";
-                    }
-                    $arSubzona = $form->get('subzonaRel')->getData();
-                    if($arSubzona) {
-                        $codigoSubzona = $arSubzona->getCodigoSubzonaPk();
-                    } else {
-                        $codigoSubzona = "";
-                    }                    
-                    $objFormatoPagoMasivo = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPagoMasivo();
-                    $objFormatoPagoMasivo->Generar($this, $form->get('numero')->getData(), "", "", $codigoZona, $codigoSubzona);
+                //if ($form->get('masivo')->getData() == true){
+                $fechaDesde = $form->get('fechaDesde')->getData();
+                $fechaHasta = $form->get('fechaHasta')->getData();
+                $arZona = $form->get('zonaRel')->getData();
+                if($arZona) {
+                    $codigoZona = $arZona->getCodigoZonaPk();
                 } else {
+                    $codigoZona = "";
+                }
+                $arSubzona = $form->get('subzonaRel')->getData();
+                if($arSubzona) {
+                    $codigoSubzona = $arSubzona->getCodigoSubzonaPk();
+                } else {
+                    $codigoSubzona = "";
+                }                    
+                $objFormatoPagoMasivo = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPagoMasivo();
+                $objFormatoPagoMasivo->Generar($this, $form->get('numero')->getData(), "", "", $codigoZona, $codigoSubzona, $form->get('porFecha')->getData(), $fechaDesde->format('Y-m-d'), $fechaHasta->format('Y-m-d'));
+                /* else {
                     $codigoProgramacionPago = $form->get('numero')->getData();
                     $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
                     $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);                
@@ -85,13 +87,14 @@ class formatoPagoMasivoController extends Controller
                         }                     
                     }
                 } 
+                */
             }            
         }                    
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/ProgramacionesPago:comprobanteMasivo.html.twig', array(            
             'form' => $form->createView()));
     }              
     
-    private function formularioLista($codigoProgramacionPago = "") {  
+    private function formularioLista() {  
         $em = $this->getDoctrine()->getManager();  
         $session = $this->get('session');
         $arrayPropiedadesZona = array(
@@ -122,11 +125,25 @@ class formatoPagoMasivoController extends Controller
         if($session->get('filtroRhuCodigoSubzona')) {
             $arrayPropiedadesSubzona['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuSubzona", $session->get('filtroRhuCodigoSubzona'));
         }        
+        $dateFecha = new \DateTime('now');
+        $strFechaDesde = $dateFecha->format('Y/m/')."01";
+        $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
+        $strFechaHasta = $dateFecha->format('Y/m/').$intUltimoDia;
+        if($session->get('filtroFormatoMasivoFechaDesde') != "") {
+            $strFechaDesde = $session->get('filtroFormatoMasivoFechaHasta');
+        }
+        if($session->get('filtroFormatoMasivoFechaHasta') != "") {
+            $strFechaHasta = $session->get('filtroFormatoMasivoFechaHasta');
+        }    
+        $dateFechaDesde = date_create($strFechaDesde);
+        $dateFechaHasta = date_create($strFechaHasta);        
         $form = $this->createFormBuilder()  
             ->add('zonaRel', 'entity', $arrayPropiedadesZona)                
             ->add('subzonaRel', 'entity', $arrayPropiedadesSubzona)                
-            ->add('numero','text', array('required'  => true, 'data' => $codigoProgramacionPago))
-            ->add('masivo', 'checkbox', array('required'  => false))
+            ->add('numero','text', array('required'  => false, 'data' => ""))
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                                
+            ->add('porFecha', 'checkbox', array('required'  => false))
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))    
             ->getForm();        
         return $form;

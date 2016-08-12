@@ -6,8 +6,11 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
     public static $codigoPago;
     public static $codigoZona;
     public static $codigoSubzona;
+    public static $porFecha;
+    public static $fechaDesde;
+    public static $fechaHasta;
     
-    public function Generar($miThis, $codigoProgramacionPago = "", $strRuta = "", $codigoPago = "", $codigoZona = "", $codigoSubzona = "") {        
+    public function Generar($miThis, $codigoProgramacionPago = "", $strRuta = "", $codigoPago = "", $codigoZona = "", $codigoSubzona = "", $porFecha = false, $fechaDesde = "", $fechaHasta = "") {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
@@ -15,6 +18,9 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
         self::$codigoPago = $codigoPago;
         self::$codigoZona = $codigoZona;
         self::$codigoSubzona = $codigoSubzona;
+        self::$porFecha = $porFecha;
+        self::$fechaDesde = $fechaDesde;
+        self::$fechaHasta = $fechaHasta;
         $pdf = new FormatoPagoMasivo();
         $pdf->AliasNbPages();
         $pdf->AddPage();
@@ -31,8 +37,6 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
     } 
     
     public function Header() {
-        $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-        $arPago = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find(self::$codigoProgramacionPago);
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $arContenidoFormatoA = new \Brasa\GeneralBundle\Entity\GenContenidoFormatoSecundario();
@@ -89,7 +93,7 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
         $pdf->SetFillColor(200, 200, 200);
         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);        
-        $dql = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaImpresionDql(self::$codigoPago, self::$codigoProgramacionPago, self::$codigoZona, self::$codigoSubzona);        
+        $dql = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaImpresionDql(self::$codigoPago, self::$codigoProgramacionPago, self::$codigoZona, self::$codigoSubzona, self::$porFecha, self::$fechaDesde, self::$fechaHasta);        
         $query = self::$em->createQuery($dql);
         $arPagos = $query->getResult();
         foreach ($arPagos as $arPago){
@@ -223,6 +227,7 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
             $tope = ($arPago->getDiasLaborados() * 2) - 4;
             if($totalExtras > $tope){
                 $porCompensar = $totalExtras - $tope;            
+                $porCompensar = $totalExtras - $porCompensar;
                 foreach ($arPagoDetalles as $arPagoDetalle) { 
                     if($arPagoDetalle->getCodigoPagoConceptoFk() >= 3 && $arPagoDetalle->getCodigoPagoConceptoFk() <= 6) {
                         $porcentaje = $arPagoDetalle->getNumeroHoras() / $totalExtras;
