@@ -176,13 +176,17 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
 
                 if($intDiasCotizarRiesgos <= 0) {
                     $floIbcRiesgos = 0;
+                }                                                   
+                $floTarifaPension = $arPeriodoEmpleado->getTarifaPension() + 4;   
+                if($arPeriodoEmpleado->getContratoRel()->getCodigoSubtipoCotizanteFk() == 1) {
+                    $floTarifaPension = 0;
+                    $floIbcPension = 0;
                 }
                 $arAporte->setIbcPension($floIbcPension);
                 $arAporte->setIbcSalud($floIbcSalud);
                 $arAporte->setIbcRiesgosProfesionales($floIbcRiesgos);
-                $arAporte->setIbcCaja($floIbcCaja);                                    
-
-                $floTarifaPension = $arPeriodoEmpleado->getTarifaPension() + 4;            
+                $arAporte->setIbcCaja($floIbcCaja);                 
+                
                 $floTarifaSalud = 4;
                 $floTarifaRiesgos = $arPeriodoEmpleado->getTarifaRiesgos();
                 $floTarifaCaja = 4;
@@ -209,8 +213,12 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $floCotizacionFSPSubsistencia = 0;            
                 $floAporteVoluntarioFondoPensionesObligatorias = 0;
                 $floCotizacionVoluntariaFondoPensionesObligatorias = 0;
-
-                $floCotizacionPension = $this->redondearAporte($floSalario + $floSuplementario, $floIbcPension, $floTarifaPension, $intDiasCotizarPension);            
+                if($arPeriodoEmpleado->getContratoRel()->getCodigoSubtipoCotizanteFk() == 1) {
+                    $floCotizacionPension = 0;
+                } else {
+                    $floCotizacionPension = $this->redondearAporte($floSalario + $floSuplementario, $floIbcPension, $floTarifaPension, $intDiasCotizarPension);                                                    
+                }
+                
                 
                 if($floIbcPension >= ($arConfiguracionNomina->getVrSalario() * 4)) {
                     $floCotizacionFSPSolidaridad = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);

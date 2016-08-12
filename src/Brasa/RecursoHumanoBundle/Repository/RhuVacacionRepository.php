@@ -172,9 +172,10 @@ class RhuVacacionRepository extends EntityRepository {
                 . "AND v.codigoEmpleadoFk = " . $codigoEmpleado . " AND v.codigoContratoFk = " . $codigoContrato;
         $objQuery = $em->createQuery($dql);  
         $arVacacionesDisfrute = $objQuery->getResult();        
-        $intDiasVacaciones = 0;
+        $intDiasVacacionesTotal = 0;
         $vrAporteParafiscales = 0;
         foreach ($arVacacionesDisfrute as $arVacacionDisfrute) {            
+            $intDiasVacaciones = 0;
             $intDiaInicio = 1;            
             $intDiaFin = 30;
             if($arVacacionDisfrute->getFechaDesdeDisfrute() <  $fechaDesde) {
@@ -187,10 +188,11 @@ class RhuVacacionRepository extends EntityRepository {
             } else {
                 $intDiaFin = $arVacacionDisfrute->getFechaHastaDisfrute()->format('j');
             }            
-            $intDiasVacaciones += (($intDiaFin - $intDiaInicio)+1);
+            $intDiasVacaciones = (($intDiaFin - $intDiaInicio)+1);
             if($intDiasVacaciones == 1) {
                 $intDiasVacaciones = 0;
-            }            
+            }     
+            $intDiasVacacionesTotal += $intDiasVacaciones;
             //$arVacacionDisfrute = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
             if($arVacacionDisfrute->getDiasDisfrutados() > 1) {
                 $vrDiaDisfrute = ($arVacacionDisfrute->getVrVacacionBruto() / $arVacacionDisfrute->getDiasDisfrutados());    
@@ -200,10 +202,10 @@ class RhuVacacionRepository extends EntityRepository {
             }            
             
         }
-        if($intDiasVacaciones > 30) {
-            $intDiasVacaciones = 30;
+        if($intDiasVacacionesTotal > 30) {
+            $intDiasVacacionesTotal = 30;
         }
-        $arrVacaciones = array('dias' => $intDiasVacaciones, 'aporte' => $vrAporteParafiscales);
+        $arrVacaciones = array('dias' => $intDiasVacacionesTotal, 'aporte' => $vrAporteParafiscales);
         return $arrVacaciones;                     
     }     
     
