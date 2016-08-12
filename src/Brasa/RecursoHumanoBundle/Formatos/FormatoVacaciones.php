@@ -230,25 +230,27 @@ class FormatoVacaciones extends \FPDF_FPDF {
             $this->SetXY($intX, 150);
             $this->SetFillColor(217, 217, 217);
             $this->SetFont('Arial', 'B', 9);
-            $this->Cell(185, 5, utf8_decode("CRÉDITOS TIPO VACACIÓN:"), 1, 0, 'C', 1);
+            $this->Cell(185, 5, utf8_decode("DEDUCCIONES VACACIÓN:"), 1, 0, 'C', 1);
 
             $intY = 150 + 5;
             $this->SetXY($intX, $intY);
 
             $this->SetFont('Arial', 'B', 8);
-            $this->Cell(30, 4, utf8_decode("CÓDIGO"), 1, 0, 'C', 1);
+            $this->Cell(20, 4, utf8_decode("CÓDIGO"), 1, 0, 'C', 1);
+            $this->Cell(20, 4, utf8_decode("CREDITO"), 1, 0, 'C', 1);
             $this->Cell(110, 4, utf8_decode("TIPO"), 1, 0, 'L', 1);
-            $this->Cell(45, 4, utf8_decode("VALOR"), 1, 0, 'R', 1);
+            $this->Cell(35, 4, utf8_decode("VALOR"), 1, 0, 'R', 1);
             $incremento = 4;
             foreach ($arCreditos as $arCreditos) {
                 $intY = $intY + $incremento;
                 $this->SetXY($intX, $intY);
                 $this->SetFillColor(255, 255, 255);
                 $this->SetFont('Arial', '', 8);
-                $this->Cell(30, 4, $arCreditos->getCodigoCreditoFk(), 1, 0, 'L', 1);
-                $this->Cell(110, 4, utf8_decode($arCreditos->getCreditoRel()->getCreditoTipoRel()->getNombre()), 1, 0, 'L', 1);
-                $this->Cell(45, 4, number_format($arCreditos->getVrDeduccion(), 2, '.', ','), 1, 0, 'R', 1);
-                $incremento = $incremento + 4;
+                $this->Cell(20, 4, $arCreditos->getCodigoVacacionCreditoPk(), 1, 0, 'L', 1);
+                $this->Cell(20, 4, $arCreditos->getCodigoCreditoFk(), 1, 0, 'L', 1);
+                $this->Cell(110, 4, utf8_decode($arCreditos->getPagoConceptoRel()->getNombre()), 1, 0, 'L', 1);
+                $this->Cell(35, 4, number_format($arCreditos->getVrDeduccion(), 2, '.', ','), 1, 0, 'R', 1);
+                //$incremento = $incremento + 4;
             }
         }
         

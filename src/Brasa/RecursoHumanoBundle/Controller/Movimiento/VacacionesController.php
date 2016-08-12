@@ -491,7 +491,6 @@ class VacacionesController extends Controller
             $arrBotonAutorizar['disabled'] = true;
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonGenerarPago['disabled'] = true;
-            $arrBotonImprimir['disabled'] = true;
             $arrBotonLiquidar['disabled'] = true;
         }
         $form = $this->createFormBuilder()    

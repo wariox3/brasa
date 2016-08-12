@@ -112,9 +112,9 @@
                     <tr>
                         <th>CÓDIGO</th>
                         <th>CREDITO</th>
-                        <th>TIPO</td>
-                        <th>VALOR</td>
-                        <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(tdis);"/></td>
+                        <th>TIPO</th>
+                        <th>VALOR</th>
+                        <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodosTabla(this,'ChkSeleccionar[]');"/></th>    
                     </tr>
                     {% for arVacacionDeducciones in arVacacionDeducciones %}
                         <tr>
@@ -150,10 +150,10 @@
             <div class="tab-pane" id="bonificaciones">
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
-                        <th>CÓDIGO</td>
-                        <th>CONCEPTO</td>
-                        <th>VALOR</td>
-                        <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(tdis);"/></td>
+                        <th>CÓDIGO</th>
+                        <th>CONCEPTO</th>
+                        <th>VALOR</th>
+                        <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodosTabla(this,'ChkSeleccionarBonificacion[]');"/></th>
                     </tr>
                     {% for arVacacionBonificaciones in arVacacionBonificaciones %}
                         <tr>
@@ -163,7 +163,7 @@
                             </td>
                             <td>{{ arVacacionBonificaciones.pagoConceptoRel.nombre }}</td>           
                             <td style="text-align: right">{{ arVacacionBonificaciones.vrBonificacion | number_format(2, '.', ',') }}</td>
-                            <td><input type="checkbox" name="ChkSeleccionarBonificacion[]" value="{{ arVacacionBonificaciones.codigoVacacionBonificacionPk }}" /></td>
+                            <td align="center"><input type="checkbox" name="ChkSeleccionarBonificacion[]" value="{{ arVacacionBonificaciones.codigoVacacionBonificacionPk }}" /></td>
                         </tr>
                     {% endfor %}
                 </table>
