@@ -23,6 +23,8 @@ class ContabilizarFacturaController extends Controller
         $this->lista();
         if ($form->isValid()) {            
             if ($form->get('BtnContabilizar')->isClicked()) {   
+                set_time_limit(0);
+                ini_set("memory_limit", -1);
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');                
                 $em->getRepository('BrasaTurnoBundle:TurFactura')->contabilizar($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_tur_proceso_contabilizar_factura'));                                 
