@@ -56,6 +56,39 @@ class IntercambioDatosController extends Controller
                 }
             } 
             
+            if($form->get('BtnExportarTodo')->isClicked()) {
+                set_time_limit(0);
+                ini_set("memory_limit", -1);
+                $query = $em->createQuery($this->strDqlLista)->setMaxResults(5000);
+                $arRegistros = $query->getResult();
+                foreach ($arRegistros as $arRegistro) {
+                    $arRegistroExportar = new \Brasa\ContabilidadBundle\Entity\CtbRegistroExportar();
+                    $arRegistroExportar->setFecha($arRegistro->getFecha());
+                    $arRegistroExportar->setComprobante($arRegistro->getCodigoComprobanteFk());
+                    $arRegistroExportar->setNumero($arRegistro->getNumero());
+                    $arRegistroExportar->setNumeroReferencia($arRegistro->getNumeroReferencia());
+                    $arRegistroExportar->setCuenta($arRegistro->getCodigoCuentaFk());
+                    $arRegistroExportar->setDebito($arRegistro->getDebito());
+                    $arRegistroExportar->setCredito($arRegistro->getCredito());
+                    $arRegistroExportar->setNit($arRegistro->getTerceroRel()->getNumeroIdentificacion());
+                    $arRegistroExportar->setDigitoVerificacion($arRegistro->getTerceroRel()->getDigitoVerificacion());
+                    if($arRegistro->getCodigoCentroCostoFk()) {
+                        $arRegistroExportar->setCentroCosto($arRegistro->getCentroCostoRel()->getNombre());
+                    }
+
+                    if($arRegistro->getDebito() > 0) {
+                        $arRegistroExportar->setTipo(1);
+                    } else {
+                        $arRegistroExportar->setTipo(2);
+                    }
+                    $arRegistroExportar->setBase($arRegistro->getBase());
+                    $arRegistroExportar->setDescripcionContable($arRegistro->getDescripcionContable());
+                    $em->persist($arRegistroExportar);
+                    $arRegistro->setExportado(1);                    
+                }
+                $em->flush();
+            }
+            
             if($form->get('BtnGenerarPlano')->isClicked()) {
                 
                 $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);                                    
@@ -129,21 +162,13 @@ class IntercambioDatosController extends Controller
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExportar', 'submit', array('label'  => 'Exportar',))
+            ->add('BtnExportarTodo', 'submit', array('label'  => 'Exportar todo (max 5000)',))
             ->add('BtnGenerarOfimatica', 'submit', array('label'  => 'Ofimatica',))    
             ->add('BtnGenerarPlano', 'submit', array('label'  => 'ilimitada',))
             ->getForm();
         return $form;
     }    
-
-    private function filtrarLista($form) {
-        $session = $this->getRequest()->getSession();
-        $request = $this->getRequest();
-        $controles = $request->request->get('form');
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
-    }   
+  
 
     private function generarExcel() {
         $em = $this->getDoctrine()->getManager();

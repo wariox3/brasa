@@ -61,7 +61,7 @@
             </tr>
             {% for arRegistros in arRegistros %}
             <tr>
-                <td><input type="hidden" name="LblCodigo[]" value="{{ arRegistros.codigoRegistroPk }}">{{ arRegistros.codigoRegistroPk }} </td>
+                <td>{{ arRegistros.codigoRegistroPk }} </td>
                 <td>{{ arRegistros.numero }}</td>
                 <td>{{ arRegistros.fecha |date("Y/m/d")  }}</td>
                 <td>{{ arRegistros.codigoComprobanteFk  }}</td>
@@ -86,6 +86,9 @@
                 {{ form_widget(form.BtnGenerarOfimatica, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                                
                 {{ form_widget(form.BtnGenerarPlano, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                                
             </div>
+            <div class="btn-group">
+                {{ form_widget(form.BtnExportarTodo, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+            </div>            
             <div class="btn-group">
                 {{ form_widget(form.BtnExportar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
             </div>

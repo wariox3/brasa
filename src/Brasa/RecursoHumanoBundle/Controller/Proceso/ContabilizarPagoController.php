@@ -64,7 +64,7 @@ class ContabilizarPagoController extends Controller
             }            
         }       
                 
-        $arPagos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 500);                               
+        $arPagos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 300);                               
         return $this->render('BrasaRecursoHumanoBundle:Procesos/Contabilizar:pago.html.twig', array(
             'arPagos' => $arPagos,
             'form' => $form->createView()));
@@ -134,8 +134,7 @@ class ContabilizarPagoController extends Controller
                     $em->persist($arRegistro);
                 }            
             }            
-        }
-        $em->flush();
+        }        
     }    
  
     /**

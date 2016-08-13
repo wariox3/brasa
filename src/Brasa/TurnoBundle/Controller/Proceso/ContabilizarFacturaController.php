@@ -35,7 +35,7 @@ class ContabilizarFacturaController extends Controller
             }            
         }
 
-        $arFacturas = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
+        $arFacturas = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 100);
         return $this->render('BrasaTurnoBundle:Procesos/Contabilizar:factura.html.twig', array(
             'arFacturas' => $arFacturas,
             'form' => $form->createView()));
