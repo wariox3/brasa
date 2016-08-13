@@ -46,12 +46,6 @@ class FormatoVacaciones extends \FPDF_FPDF {
         $this->Cell(100, 4, $arConfiguracion->getTelefonoEmpresa(), 0, 0, 'L', 0); 
         //FORMATO ISO
         $this->SetXY(168, 18);
-        $this->SetFillColor(255, 255, 255);
-        $this->Cell(35, 6, "CODIGO: ".$arContenidoFormatoA->getCodigoFormatoIso(), 1, 0, 'L', 1);
-        $this->SetXY(168, 24);
-        $this->Cell(35, 6, utf8_decode("VERSIÓN: ".$arContenidoFormatoA->getVersion()), 1, 0, 'L', 1);
-        $this->SetXY(168, 30);
-        $this->Cell(35, 6, utf8_decode("FECHA: ".$arContenidoFormatoA->getFechaVersion()->format('Y-m-d')), 1, 0, 'L', 1);
         $this->Ln(1);
         $this->EncabezadoDetalles(); 
         
@@ -130,11 +124,11 @@ class FormatoVacaciones extends \FPDF_FPDF {
         $this->SetFillColor(255, 255, 255);
         $this->Cell(63, 6, $arVacaciones->getFechaDesdeDisfrute()->format('Y/m/d'), 1, 0, 'L', 1);
         $this->SetFont('Arial', 'B', 7);
-        $this->SetFillColor(217, 217, 217);
-        $this->Cell(26, 6, utf8_decode("SALARIO:"), 1, 0, 'L', 1);         
+        $this->SetFillColor(217, 217, 217);        
+        $this->Cell(26, 6, "DIAS DISFRUTADOS", 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(65, 6, number_format($arVacaciones->getVrSalarioActual(), 0, '.', ','), 1, 0, 'R', 1);        
+        $this->Cell(65, 6, $arVacaciones->getDiasDisfrutados(), 1, 0, 'R', 1);       
 
         //FILA 6
         $this->SetFont('Arial', 'B', 7);
@@ -145,41 +139,41 @@ class FormatoVacaciones extends \FPDF_FPDF {
         $this->SetFillColor(255, 255, 255);
         $this->Cell(63, 6, $arVacaciones->getFechaHastaDisfrute()->format('Y/m/d'), 1, 0, 'L', 1);
         $this->SetFont('Arial', 'B', 7);
-        $this->SetFillColor(217, 217, 217);
-        $this->Cell(26, 6, utf8_decode("SALARIO BASE:"), 1, 0, 'L', 1);         
+        $this->SetFillColor(217, 217, 217);        
+        $this->Cell(26, 6, "DIAS PAGADOS", 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(65, 6, number_format($arVacaciones->getVrSalarioPromedio(), 0, '.', ','), 1, 0, 'R', 1);                
+        $this->Cell(65, 6, $arVacaciones->getDiasPagados(), 1, 0, 'R', 1);                
 
         //FILA 7
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
         $this->SetXY(10, $intY + 36);        
-        $this->Cell(31, 6, "DIAS DISFRUTADOS", 1, 0, 'L', 1);
+        $this->Cell(31, 6, "BANCO", 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(63, 6, $arVacaciones->getDiasDisfrutados(), 1, 0, 'L', 1);
+        $this->Cell(63, 6, $arVacaciones->getEmpleadoRel()->getBancoRel()->getNombre(), 1, 0, 'L', 1);
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
-        $this->Cell(26, 6, utf8_decode(""), 1, 0, 'L', 1);         
+        $this->Cell(26, 6, utf8_decode("SALARIO:"), 1, 0, 'L', 1);         
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(65, 6, "", 1, 0, 'R', 1);                
+        $this->Cell(65, 6, number_format($arVacaciones->getVrSalarioActual(), 0, '.', ','), 1, 0, 'R', 1);              
 
         //FILA 8
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
         $this->SetXY(10, $intY + 42);        
-        $this->Cell(31, 6, "DIAS PAGADOS:", 1, 0, 'L', 1);
+        $this->Cell(31, 6, "CUENTA:", 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(63, 6, $arVacaciones->getDiasPagados(), 1, 0, 'L', 1);
+        $this->Cell(63, 6, $arVacaciones->getEmpleadoRel()->getCuenta(), 1, 0, 'L', 1);
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
-        $this->Cell(26, 6, utf8_decode(""), 1, 0, 'L', 1);         
+        $this->Cell(26, 6, utf8_decode("SALARIO BASE:"), 1, 0, 'L', 1);         
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(65, 6, "", 1, 0, 'R', 1);                
+        $this->Cell(65, 6, number_format($arVacaciones->getVrSalarioPromedio(), 0, '.', ','), 1, 0, 'R', 1);               
         
         //FILA 9
         $this->SetFont('Arial', 'B', 7);
@@ -272,6 +266,8 @@ class FormatoVacaciones extends \FPDF_FPDF {
         $this->Text(10, 230, "FIRMA: _____________________________________________");
         $this->Text(105, 230, "EMPRESA: __________________________________________");
         $this->Text(10, 237, "C.C.:     ______________________ de ____________________");
+        $this->Text(10, 260, "ELABORADO POR: __________________________________ ");
+        $this->Text(105, 260, "REVISADO POR: ___________________________________ ");
         $this->SetFont('Arial', '', 8);
         $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
     }    
