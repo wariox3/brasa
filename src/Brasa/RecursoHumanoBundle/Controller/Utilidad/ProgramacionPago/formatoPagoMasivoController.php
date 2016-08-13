@@ -143,7 +143,7 @@ class formatoPagoMasivoController extends Controller
             ->add('numero','text', array('required'  => false, 'data' => ""))
             ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
             ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                                
-            ->add('porFecha', 'checkbox', array('required'  => false))
+            ->add('porFecha', 'checkbox', array('required'  => false, 'data' => true))
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))    
             ->getForm();        
         return $form;
