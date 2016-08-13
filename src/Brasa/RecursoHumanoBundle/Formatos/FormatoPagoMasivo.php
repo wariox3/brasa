@@ -96,6 +96,8 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
         $dql = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaImpresionDql(self::$codigoPago, self::$codigoProgramacionPago, self::$codigoZona, self::$codigoSubzona, self::$porFecha, self::$fechaDesde, self::$fechaHasta);        
         $query = self::$em->createQuery($dql);
         $arPagos = $query->getResult();
+        $numeroPagos = count($arPagos);
+        $contador = 1;
         foreach ($arPagos as $arPago){
             $y = 25;
             //FILA 1
@@ -404,9 +406,11 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
                             $pdf->SetAutoPageBreak(true, 15);
                         } */                       
                     }
-                }
-                
-            $pdf->AddPage();
+                }    
+            if($contador < $numeroPagos) {
+                $pdf->AddPage();
+            }                
+            $contador++;
         }
         
         
