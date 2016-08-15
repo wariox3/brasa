@@ -171,7 +171,7 @@ class PagoDetalleController extends Controller
                     ->setCellValue('F1', 'CENTRO COSTO')
                     ->setCellValue('G1', 'DESDE')
                     ->setCellValue('H1', 'HASTA')
-                    ->setCellValue('I1', 'VR PAGO')
+                    ->setCellValue('I1', 'VR PAGO OPERADO')
                     ->setCellValue('J1', 'HORAS')
                     ->setCellValue('K1', 'DÍAS')
                     ->setCellValue('L1', '%')
