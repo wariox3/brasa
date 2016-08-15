@@ -268,9 +268,9 @@ class PagoDetalleController extends Controller
                     $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroIdentificacion'),
                     $session->get('filtroCodigoPagoTipo'),
-                    $session->get('filtroDesde'),
-                    $session->get('filtroHasta'),
-                    ""
+                    $strFechaDesde = $session->get('filtroDesde'),
+                    $strFechaHasta = $session->get('filtroHasta'),
+                    $session->get('filtroCodigoPagoConcepto')
                 );
         
         //$arPagosDetalle = $em->createQuery($arPagosDetalle);
