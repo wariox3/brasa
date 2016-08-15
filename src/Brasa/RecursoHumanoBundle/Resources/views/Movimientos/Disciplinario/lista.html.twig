@@ -72,6 +72,7 @@
         </div>
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>                                
+                <th>CODIGO</th>
                 <th>FECHA</th>                
                 <th>PROCESO</th>
                 <th>MOTIVO</th>
@@ -92,6 +93,7 @@
             {% for arDisciplinarios in arDisciplinarios %}
             <tr>
                 <input type="hidden" name="LblCodigo[]" value="{{ arDisciplinarios.codigoDisciplinarioPk }}">
+                <td>{{ arDisciplinarios.codigoDisciplinarioPk }}</td>
                 <td>{{ arDisciplinarios.fecha |date('Y/m/d')  }}</td>
                 <td>{{ arDisciplinarios.disciplinarioTipoRel.nombre  }}</td>
                 <td>{{ arDisciplinarios.disciplinarioMotivoRel.nombre |default('')  }}</td>                

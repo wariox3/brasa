@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuDisciplinarioType;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuDisciplinarioDescargoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 class DisciplinarioController extends Controller
 {
@@ -27,17 +28,22 @@ class DisciplinarioController extends Controller
             $arrSelecionados = $request->request->get('ChkSeleccionar');
             if($form->get('BtnEliminar')->isClicked()){
                 if(count($arrSelecionados) > 0) {
-                    foreach ($arrSelecionados AS $codigoDisciplinario) {
-                        $arDisciplinario = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
-                        $arDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
-                        if ($arDisciplinario->getEstadoAutorizado() == 0){
-                            $em->remove($arDisciplinario);
-                        }else{
-                            $objMensaje->Mensaje("error", "El proceso número ".$codigoDisciplinario. ", no se puede eliminar, se encuentra autorizado", $this);
-                        }   
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_movimiento_disciplinario'));
+                    try{
+                        foreach ($arrSelecionados AS $codigoDisciplinario) {
+                            $arDisciplinario = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
+                            $arDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
+                            if ($arDisciplinario->getEstadoAutorizado() == 0){
+                                $em->remove($arDisciplinario);
+                            }else{
+                                $objMensaje->Mensaje("error", "El proceso número ".$codigoDisciplinario. ", no se puede eliminar, se encuentra autorizado", $this);
+                            }   
+                        }
+                        $em->flush();
+                        return $this->redirect($this->generateUrl('brs_rhu_movimiento_disciplinario'));
+                    } catch (ForeignKeyConstraintViolationException $e) {
+                        $objMensaje->Mensaje('error', 'No se puede eliminar el proceso disciplinario, tiene detalles relacionados', $this);
+                    }    
+                    
                 }
             }
 
