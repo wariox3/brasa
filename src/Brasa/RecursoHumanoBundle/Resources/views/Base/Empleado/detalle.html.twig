@@ -117,8 +117,8 @@
                         <td><a href="{{ path('brs_rhu_base_horario_listar') }}" target="_blanck" >{{ arEmpleado.horarioRel.nombre|default('SIN HORARIO')  }}</a></td>
                         <td class="titulo">TIPO SALARIO:</td>
                         <td>{{ arEmpleado.salarioTipoRel.nombre|default('') }}</td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">DV</td>
+                        <td class="td-in-well">{{ arEmpleado.digitoVerificacion }}</td>
                     </tr>
                     <tr>
                         <td class="titulo">TIPO EMPLEADO:</td>

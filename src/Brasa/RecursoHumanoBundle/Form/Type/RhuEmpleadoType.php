@@ -111,7 +111,8 @@ class RhuEmpleadoType extends AbstractType
             ->add('departamentoEmpresaRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuDepartamentoEmpresa',
                 'property' => 'nombre',
-            ))                 
+            ))
+            ->add('digitoVerificacion', 'text', array('required' => true))                
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

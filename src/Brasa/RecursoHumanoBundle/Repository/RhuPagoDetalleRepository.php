@@ -44,13 +44,44 @@ class RhuPagoDetalleRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if($strDesde != "") {
-            $dql .= " AND p.fechaDesde >= '" . $strDesde . " 00:00:00'";
+            $dql .= " AND p.fechaDesde >= '" . $strDesde . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND p.fechaDesde <= '" . $strHasta . " 23:59:59'";
+            $dql .= " AND p.fechaDesde <= '" . $strHasta . "'";
         } 
         $dql .= " ORDER BY p.codigoPagoPk DESC";
         return $dql;
+    }      
+    
+    public function listaDetalleResumenDql($intNumero = 0, $strCodigoCentroCosto = "", $strIdentificacion = "", $intTipo = "", $strDesde = "", $strHasta = "", $strCodigoPagoConcepto = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT e.numeroIdentificacion as codigoEmpleado,e.numeroIdentificacion as Identificacion,e.nombreCorto as Empleado,pd.codigoPagoConceptoFk as codigoConcepto, pc.nombre as Concepto, SUM(pd.vrPagoOperado) as Valor FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p JOIN p.empleadoRel e JOIN pd.pagoConceptoRel pc WHERE p.codigoPagoPk <> 0";
+        if($intNumero != "" && $intNumero != 0) {
+            $dql .= " AND p.numero = " . $intNumero;
+        }
+        if($strCodigoPagoConcepto != "") {
+            $dql .= " AND pd.codigoPagoConceptoFk = " . $strCodigoPagoConcepto;
+        }
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND p.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }
+        if($intTipo != "" && $intTipo != 0) {
+            $dql .= " AND p.codigoPagoTipoFk =" . $intTipo;
+        }        
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if($strDesde != "") {
+            $dql .= " AND p.fechaDesde >= '" . $strDesde . "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND p.fechaDesde <= '" . $strHasta . "'";
+        } 
+        $dql .= " GROUP BY e.numeroIdentificacion, pd.codigoPagoConceptoFk";
+        //return $dql;
+         $query = $em->createQuery($dql);
+        $douRetencion = $query->getResult();
+        return $douRetencion;
     }      
     
     public function pagosDetallesProgramacionPago($codigoProgramacionPago) {

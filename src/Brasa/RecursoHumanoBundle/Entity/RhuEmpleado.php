@@ -362,7 +362,12 @@ class RhuEmpleado
      * Este campo es para meter cualquie informacion del empleado
      * @ORM\Column(name="dato", type="string", length=30, nullable=true)
      */    
-    private $dato;     
+    private $dato;
+    
+    /**
+     * @ORM\Column(name="digito_verificacion", type="string", length=2, nullable=true)
+     */    
+    private $digitoVerificacion;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuClasificacionRiesgo", inversedBy="empleadosClasificacionRiesgoRel")
@@ -684,6 +689,7 @@ class RhuEmpleado
      * @ORM\OneToMany(targetEntity="RhuCambioTipoContrato", mappedBy="empleadoRel")
      */
     protected $cambiosTiposContratosEmpleadoRel;
+    
     
     
     
@@ -2320,6 +2326,54 @@ class RhuEmpleado
     public function getCodigoEmpleadoTipoFk()
     {
         return $this->codigoEmpleadoTipoFk;
+    }
+
+    /**
+     * Set dato
+     *
+     * @param string $dato
+     *
+     * @return RhuEmpleado
+     */
+    public function setDato($dato)
+    {
+        $this->dato = $dato;
+
+        return $this;
+    }
+
+    /**
+     * Get dato
+     *
+     * @return string
+     */
+    public function getDato()
+    {
+        return $this->dato;
+    }
+
+    /**
+     * Set digitoVerificacion
+     *
+     * @param string $digitoVerificacion
+     *
+     * @return RhuEmpleado
+     */
+    public function setDigitoVerificacion($digitoVerificacion)
+    {
+        $this->digitoVerificacion = $digitoVerificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get digitoVerificacion
+     *
+     * @return string
+     */
+    public function getDigitoVerificacion()
+    {
+        return $this->digitoVerificacion;
     }
 
     /**
@@ -4076,29 +4130,5 @@ class RhuEmpleado
     public function getCambiosTiposContratosEmpleadoRel()
     {
         return $this->cambiosTiposContratosEmpleadoRel;
-    }
-
-    /**
-     * Set dato
-     *
-     * @param string $dato
-     *
-     * @return RhuEmpleado
-     */
-    public function setDato($dato)
-    {
-        $this->dato = $dato;
-
-        return $this;
-    }
-
-    /**
-     * Get dato
-     *
-     * @return string
-     */
-    public function getDato()
-    {
-        return $this->dato;
     }
 }
