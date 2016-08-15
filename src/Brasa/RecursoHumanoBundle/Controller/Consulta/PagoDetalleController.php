@@ -163,21 +163,22 @@ class PagoDetalleController extends Controller
                 } 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIGO EMPLEADO')
-                    ->setCellValue('B1', 'IDENTIFICACIÓN')
-                    ->setCellValue('C1', 'EMPLEADO')
-                    ->setCellValue('D1', 'CODIGO')
-                    ->setCellValue('E1', 'CONCEPTO')
-                    ->setCellValue('F1', 'CENTRO COSTO')
-                    ->setCellValue('G1', 'DESDE')
-                    ->setCellValue('H1', 'HASTA')
-                    ->setCellValue('I1', 'VR PAGO OPERADO')
-                    ->setCellValue('J1', 'HORAS')
-                    ->setCellValue('K1', 'DÍAS')
-                    ->setCellValue('L1', '%')
-                    ->setCellValue('M1', 'VR IBC')    
-                    ->setCellValue('N1', 'VR IBP')
-                    ->setCellValue('O1', 'N. CRED');
+                    ->setCellValue('A1', 'NUMERO')
+                    ->setCellValue('B1', 'CODIGO')
+                    ->setCellValue('C1', 'IDENTIFICACIÓN')
+                    ->setCellValue('D1', 'EMPLEADO')
+                    ->setCellValue('E1', 'CODIGO')
+                    ->setCellValue('F1', 'CONCEPTO')
+                    ->setCellValue('G1', 'CENTRO COSTO')
+                    ->setCellValue('H1', 'DESDE')
+                    ->setCellValue('I1', 'HASTA')
+                    ->setCellValue('J1', 'VR PAGO')
+                    ->setCellValue('K1', 'HORAS')
+                    ->setCellValue('L1', 'DÍAS')
+                    ->setCellValue('M1', '%')
+                    ->setCellValue('N1', 'VR IBC')    
+                    ->setCellValue('O1', 'VR IBP')
+                    ->setCellValue('P1', 'N. CRED');
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
@@ -186,21 +187,22 @@ class PagoDetalleController extends Controller
         
         foreach ($arPagosDetalle as $arPagoDetalle) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getCodigoEmpleadoPk())
-                    ->setCellValue('B' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('C' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('D' . $i, $arPagoDetalle->getCodigoPagoConceptoFk())
-                    ->setCellValue('E' . $i, $arPagoDetalle->getPagoConceptoRel()->getNombre())
-                    ->setCellValue('F' . $i, $arPagoDetalle->getPagoRel()->getCentroCostoRel()->getNombre())
-                    ->setCellValue('G' . $i, $arPagoDetalle->getPagoRel()->getFechaDesdePago()->format('Y-m-d'))
-                    ->setCellValue('H' . $i, $arPagoDetalle->getPagoRel()->getFechaHastaPago()->format('Y-m-d'))
-                    ->setCellValue('I' . $i, round($arPagoDetalle->getVrPago()))
-                    ->setCellValue('J' . $i, $arPagoDetalle->getNumeroHoras())
-                    ->setCellValue('K' . $i, $arPagoDetalle->getNumeroDias())
-                    ->setCellValue('L' . $i, $arPagoDetalle->getPorcentajeAplicado())
-                    ->setCellValue('M' . $i, round($arPagoDetalle->getVrIngresoBaseCotizacion()))
-                    ->setCellValue('N' . $i, round($arPagoDetalle->getVrIngresoBasePrestacion()))
-                    ->setCellValue('O' . $i, $arPagoDetalle->getCodigoCreditoFk());
+                    ->setCellValue('A' . $i, $arPagoDetalle->getPagoRel()->getNumero())
+                    ->setCellValue('B' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getCodigoEmpleadoPk())
+                    ->setCellValue('C' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('D' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('E' . $i, $arPagoDetalle->getCodigoPagoConceptoFk())
+                    ->setCellValue('F' . $i, $arPagoDetalle->getPagoConceptoRel()->getNombre())
+                    ->setCellValue('G' . $i, $arPagoDetalle->getPagoRel()->getCentroCostoRel()->getNombre())
+                    ->setCellValue('H' . $i, $arPagoDetalle->getPagoRel()->getFechaDesdePago()->format('Y-m-d'))
+                    ->setCellValue('I' . $i, $arPagoDetalle->getPagoRel()->getFechaHastaPago()->format('Y-m-d'))
+                    ->setCellValue('J' . $i, round($arPagoDetalle->getVrPagoOperado()))
+                    ->setCellValue('K' . $i, $arPagoDetalle->getNumeroHoras())
+                    ->setCellValue('L' . $i, $arPagoDetalle->getNumeroDias())
+                    ->setCellValue('M' . $i, $arPagoDetalle->getPorcentajeAplicado())
+                    ->setCellValue('N' . $i, round($arPagoDetalle->getVrIngresoBaseCotizacion()))
+                    ->setCellValue('O' . $i, round($arPagoDetalle->getVrIngresoBasePrestacion()))
+                    ->setCellValue('P' . $i, $arPagoDetalle->getCodigoCreditoFk());
             $i++;
         }
 
