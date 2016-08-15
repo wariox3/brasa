@@ -50,8 +50,8 @@ class PagoDetalleController extends Controller
                     $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroIdentificacion'),
                     $session->get('filtroCodigoPagoTipo'),
-                    $session->get('filtroDesde'),
-                    $session->get('filtroHasta'),
+                    $strFechaDesde = $session->get('filtroDesde'),
+                    $strFechaHasta = $session->get('filtroHasta'),
                     $session->get('filtroCodigoPagoConcepto')
                     );
     }  
@@ -101,12 +101,26 @@ class PagoDetalleController extends Controller
         if($session->get('filtroCodigoPagoTipo')) {
             $arrayPropiedadesTipo['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoTipo", $session->get('filtroCodigoPagoTipo'));
         }
+        $dateFecha = new \DateTime('now');
+        $strFechaDesde = $dateFecha->format('Y/m/')."01";
+        $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
+        $strFechaHasta = $dateFecha->format('Y/m/').$intUltimoDia;
+        if($session->get('filtroDesde') != "") {
+            $strFechaDesde = $session->get('filtroDesde');
+        }
+        if($session->get('filtroHasta') != "") {
+            $strFechaHasta = $session->get('filtroHasta');
+        }    
+        $dateFechaDesde = date_create($strFechaDesde);
+        $dateFechaHasta = date_create($strFechaHasta);
         $form = $this->createFormBuilder()                        
             ->add('centroCostoRel', 'entity', $arrayPropiedadesCentroCosto)
             ->add('pagoConceptoRel', 'entity', $arrayPropiedadesPagoConcepto)
             ->add('pagoTipoRel', 'entity', $arrayPropiedadesTipo)
-            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))    
+            //->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))    
+            //->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))    
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))                            
             ->add('TxtNumero', 'text', array('label'  => 'Numero','data' => $session->get('filtroPagoNumero')))                                                   
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                                            
@@ -122,8 +136,10 @@ class PagoDetalleController extends Controller
         $session->set('filtroCodigoPagoTipo', $controles['pagoTipoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $this->intNumero = $form->get('TxtNumero')->getData();
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        $session->set('filtroDesde', $dateFechaDesde->format('Y/m/d'));
+        $session->set('filtroHasta', $dateFechaHasta->format('Y/m/d'));
         $session->set('filtroCodigoPagoConcepto', $controles['pagoConceptoRel']);
     }
 
@@ -147,26 +163,22 @@ class PagoDetalleController extends Controller
                 } 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CÓDIGO DETALLE')
-                    ->setCellValue('B1', 'CÓDIGO PAGO')
+                    ->setCellValue('A1', 'IDENTIFICACIÓN')
+                    ->setCellValue('B1', 'EMPLEADO')
                     ->setCellValue('C1', 'CONCEPTO PAGO')
-                    ->setCellValue('D1', 'DETALLE')
-                    ->setCellValue('E1', 'IDENTIFICACIÓN')
-                    ->setCellValue('F1', 'EMPLEADO')
-                    ->setCellValue('G1', 'CENTRO COSTO')
-                    ->setCellValue('H1', 'FECHA PAGO DESDE')
-                    ->setCellValue('I1', 'FECHA PAGO HASTA')
-                    ->setCellValue('J1', 'VR PAGO')
-                    ->setCellValue('K1', 'VR HORA')
-                    ->setCellValue('L1', 'VR DÍA')
-                    ->setCellValue('M1', 'NÚMERO HORAS')
-                    ->setCellValue('N1', 'NÚMERO DÍAS')
-                    ->setCellValue('O1', 'PORCENTAJE APLICADO')
-                    ->setCellValue('P1', 'VR INGRESO BASE COTIZACIÓN')    
-                    ->setCellValue('Q1', 'CÓDIGO PROGRAMACION PAGO DETALLE')
-                    ->setCellValue('R1', 'CÓDIGO CRÉDITO')
-                    ->setCellValue('S1', 'VR INGRESO BASE PRESTACIONAL')
-                    ->setCellValue('T1', 'DÍAS AUSENTIMO');
+                    ->setCellValue('D1', 'CENTRO COSTO')
+                    ->setCellValue('E1', 'FECHA DESDE')
+                    ->setCellValue('F1', 'FECHA HASTA')
+                    ->setCellValue('G1', 'VR PAGO')
+                    ->setCellValue('H1', 'VR HORA')
+                    ->setCellValue('I1', 'VR DÍA')
+                    ->setCellValue('J1', 'HORAS')
+                    ->setCellValue('K1', 'DÍAS')
+                    ->setCellValue('L1', '% APLICADO')
+                    ->setCellValue('M1', 'VR IBC')    
+                    ->setCellValue('N1', 'VR IBP')
+                    ->setCellValue('O1', 'CÓDIGO PROGRAMACION')
+                    ->setCellValue('P1', 'CÓDIGO CRÉDITO');
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
@@ -175,26 +187,22 @@ class PagoDetalleController extends Controller
         
         foreach ($arPagosDetalle as $arPagoDetalle) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPagoDetalle->getCodigoPagoDetallePk())
-                    ->setCellValue('B' . $i, $arPagoDetalle->getCodigoPagoFk())
+                    ->setCellValue('A' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('B' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getNombreCorto())
                     ->setCellValue('C' . $i, $arPagoDetalle->getPagoConceptoRel()->getNombre())
-                    ->setCellValue('D' . $i, $arPagoDetalle->getDetalle())
-                    ->setCellValue('E' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('F' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('G' . $i, $arPagoDetalle->getPagoRel()->getCentroCostoRel()->getNombre())
-                    ->setCellValue('H' . $i, $arPagoDetalle->getPagoRel()->getFechaDesdePago())
-                    ->setCellValue('I' . $i, $arPagoDetalle->getPagoRel()->getFechaHastaPago())
-                    ->setCellValue('J' . $i, round($arPagoDetalle->getVrPago()))
-                    ->setCellValue('K' . $i, round($arPagoDetalle->getVrHora()))
-                    ->setCellValue('L' . $i, round($arPagoDetalle->getVrDia()))
-                    ->setCellValue('M' . $i, $arPagoDetalle->getNumeroHoras())
-                    ->setCellValue('N' . $i, $arPagoDetalle->getNumeroDias())
-                    ->setCellValue('O' . $i, $arPagoDetalle->getPorcentajeAplicado())
-                    ->setCellValue('P' . $i, round($arPagoDetalle->getVrIngresoBaseCotizacion()))
-                    ->setCellValue('Q' . $i, $arPagoDetalle->getCodigoProgramacionPagoDetalleFk())
-                    ->setCellValue('R' . $i, $arPagoDetalle->getCodigoCreditoFk())
-                    ->setCellValue('S' . $i, round($arPagoDetalle->getVrIngresoBasePrestacion()))
-                    ->setCellValue('T' . $i, $arPagoDetalle->getDiasAusentismo());
+                    ->setCellValue('D' . $i, $arPagoDetalle->getPagoRel()->getCentroCostoRel()->getNombre())
+                    ->setCellValue('E' . $i, $arPagoDetalle->getPagoRel()->getFechaDesdePago()->format('Y-m-d'))
+                    ->setCellValue('F' . $i, $arPagoDetalle->getPagoRel()->getFechaHastaPago()->format('Y-m-d'))
+                    ->setCellValue('G' . $i, round($arPagoDetalle->getVrPago()))
+                    ->setCellValue('H' . $i, round($arPagoDetalle->getVrHora()))
+                    ->setCellValue('I' . $i, round($arPagoDetalle->getVrDia()))
+                    ->setCellValue('J' . $i, $arPagoDetalle->getNumeroHoras())
+                    ->setCellValue('K' . $i, $arPagoDetalle->getNumeroDias())
+                    ->setCellValue('L' . $i, $arPagoDetalle->getPorcentajeAplicado())
+                    ->setCellValue('M' . $i, round($arPagoDetalle->getVrIngresoBaseCotizacion()))
+                    ->setCellValue('N' . $i, round($arPagoDetalle->getVrIngresoBasePrestacion()))
+                    ->setCellValue('O' . $i, $arPagoDetalle->getCodigoProgramacionPagoDetalleFk())
+                    ->setCellValue('P' . $i, $arPagoDetalle->getCodigoCreditoFk());
             $i++;
         }
 

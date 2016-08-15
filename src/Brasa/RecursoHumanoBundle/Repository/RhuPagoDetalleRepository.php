@@ -43,12 +43,12 @@ class RhuPagoDetalleRepository extends EntityRepository {
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
-        if($strDesde != "" || $strDesde != 0){
-            $dql .= " AND p.fechaDesde >='" . date_format($strDesde, ('Y-m-d')) . "'";
+        if($strDesde != "") {
+            $dql .= " AND p.fechaDesde >= '" . $strDesde . " 00:00:00'";
         }
-        if($strHasta != "" || $strHasta != 0) {
-            $dql .= " AND p.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
-        }
+        if($strHasta != "") {
+            $dql .= " AND p.fechaDesde <= '" . $strHasta . " 23:59:59'";
+        } 
         $dql .= " ORDER BY p.codigoPagoPk DESC";
         return $dql;
     }      
