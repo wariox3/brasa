@@ -830,6 +830,12 @@
                                 </ul>
                             </li>
                         {% endif %}
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">Seguridad</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ path('brs_seg_usuario_detalle_ver', { 'codigoUsuario': app.user.id }) }}">Usuario</a></li>
+                            </ul>
+                        </li>                        
                         <li><a href="#">Parametrizacion</a></li>
                         <li class="divider"></li>
                         <li><a href="{{ path('logout') }}">Salir</a></li>

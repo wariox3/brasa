@@ -189,38 +189,173 @@ class SegUsuariosController extends Controller
                     ));
     }
     
+    
+    /**
+     * @Route("/seg/usuario/detalle/ver/{codigoUsuario}/", name="brs_seg_usuario_detalle_ver")
+     */      
+    public function detalleVerAction($codigoUsuario) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $form = $this->createFormBuilder()
+            ->getForm();
+        $form->handleRequest($request);
+        
+        $arUsuario = new \Brasa\SeguridadBundle\Entity\User();
+        $arUsuario = $em->getRepository('BrasaSeguridadBundle:User')->find($codigoUsuario);
+        if($form->isValid()) {
+            if($form->get('BtnEliminarEspecial')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarPermisoEspecial');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoUsuarioPermisoEspecialPk) {
+                        $arUsuarioPermisoEspecial = new \Brasa\SeguridadBundle\Entity\SegUsuarioPermisoEspecial();
+                        $arUsuarioPermisoEspecial = $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->find($codigoUsuarioPermisoEspecialPk);
+                        $em->remove($arUsuarioPermisoEspecial);
+                        $em->flush();
+                    }
+                }
+                return $this->redirect($this->generateUrl('brs_seg_admin_usuario_detalle', array('codigoUsuario' => $codigoUsuario)));
+            }
+            if($form->get('BtnEliminarDocumento')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarPermisoDocumento');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoPermisoDocumentoPk) {
+                        $arPermisoDocumento = new \Brasa\SeguridadBundle\Entity\SegPermisoDocumento();
+                        $arPermisoDocumento = $em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->find($codigoPermisoDocumentoPk);
+                        $em->remove($arPermisoDocumento);
+                        $em->flush();
+                    }
+                }
+                return $this->redirect($this->generateUrl('brs_seg_admin_usuario_detalle', array('codigoUsuario' => $codigoUsuario)));
+            }
+            if($form->get('BtnEliminarRol')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarUsuarioRol');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoUsuarioRol) {
+                        $arUsuarioRol = new \Brasa\SeguridadBundle\Entity\SegUsuarioRol();
+                        $arUsuarioRol = $em->getRepository('BrasaSeguridadBundle:SegUsuarioRol')->find($codigoUsuarioRol);
+                        $em->remove($arUsuarioRol);                        
+                    }
+                    $em->flush();
+                }
+                return $this->redirect($this->generateUrl('brs_seg_admin_usuario_detalle', array('codigoUsuario' => $codigoUsuario)));
+            }            
+            if($form->get('BtnActualizar')->isClicked()) {
+                $arrControles = $request->request->All();
+                $intIndice = 0;
+                if (isset($arrControles['LblCodigoGuiaDocumento'])){
+                    foreach ($arrControles['LblCodigoGuiaDocumento'] as $intCodigo) {
+                        $arPermisoDocumento = new \Brasa\SeguridadBundle\Entity\SegPermisoDocumento();
+                        $arPermisoDocumento = $em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->find($intCodigo);
+                        if(isset($arrControles['ChkSeleccionarIngreso'.$intCodigo])) {
+                            $arPermisoDocumento->setIngreso(1);
+                        } else {
+                            $arPermisoDocumento->setIngreso(0);
+                        }
+                        if(isset($arrControles['ChkSeleccionarNuevo'.$intCodigo])) {
+                            $arPermisoDocumento->setNuevo(1);
+                        } else {
+                            $arPermisoDocumento->setNuevo(0);
+                        }
+                        if(isset($arrControles['ChkSeleccionarEditar'.$intCodigo])) {
+                            $arPermisoDocumento->setEditar(1);
+                        } else {
+                            $arPermisoDocumento->setEditar(0);
+                        }
+                        if(isset($arrControles['ChkSeleccionarEliminar'.$intCodigo])) {
+                            $arPermisoDocumento->setEliminar(1);
+                        } else {
+                            $arPermisoDocumento->setEliminar(0);
+                        }
+                        if(isset($arrControles['ChkSeleccionarAutorizar'.$intCodigo])) {
+                            $arPermisoDocumento->setAutorizar(1);
+                        } else {
+                            $arPermisoDocumento->setAutorizar(0);
+                        }
+                        if(isset($arrControles['ChkSeleccionarDesautorizar'.$intCodigo])) {
+                            $arPermisoDocumento->setDesautorizar(1);
+                        } else {
+                            $arPermisoDocumento->setDesautorizar(0);
+                        }
+                        if(isset($arrControles['ChkSeleccionarAprobar'.$intCodigo])) {
+                            $arPermisoDocumento->setAprobar(1);
+                        } else {
+                            $arPermisoDocumento->setAprobar(0);
+                        }
+                        if(isset($arrControles['ChkSeleccionarDesaprobar'.$intCodigo])) {
+                            $arPermisoDocumento->setDesaprobar(1);
+                        } else {
+                            $arPermisoDocumento->setDesaprobar(0);
+                        }
+                        if(isset($arrControles['ChkSeleccionarAnular'.$intCodigo])) {
+                            $arPermisoDocumento->setAnular(1);
+                        } else {
+                            $arPermisoDocumento->setAnular(0);
+                        }
+                        if(isset($arrControles['ChkSeleccionarDesanular'.$intCodigo])) {
+                            $arPermisoDocumento->setDesanular(1);
+                        } else {
+                            $arPermisoDocumento->setDesanular(0);
+                        }
+                        if(isset($arrControles['ChkSeleccionarImprimir'.$intCodigo])) {
+                            $arPermisoDocumento->setImprimir(1);
+                        } else {
+                            $arPermisoDocumento->setImprimir(0);
+                        }
+                        $em->persist($arPermisoDocumento);     
+                    }
+                }
+                $em->flush();
+            }
+        }
+        $arPermisosDocumentos = new \Brasa\SeguridadBundle\Entity\SegPermisoDocumento();
+        $arPermisosDocumentos = $em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->findBy(array('codigoUsuarioFk' => $codigoUsuario));
+        $arPermisosEspeciales = new \Brasa\SeguridadBundle\Entity\SegUsuarioPermisoEspecial();
+        $arPermisosEspeciales = $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->findBy(array('codigoUsuarioFk' => $codigoUsuario));
+        $arUsuarioRoles = new \Brasa\SeguridadBundle\Entity\SegUsuarioRol();
+        $arUsuarioRoles = $em->getRepository('BrasaSeguridadBundle:SegUsuarioRol')->findBy(array('codigoUsuarioFk' => $codigoUsuario));        
+        return $this->render('BrasaSeguridadBundle:Usuarios:detalleVer.html.twig', array(
+                    'arPermisosDocumentos' => $arPermisosDocumentos,
+                    'arPermisosEspeciales' => $arPermisosEspeciales,
+                    'arUsuarioRoles' => $arUsuarioRoles,
+                    'arUsuario' => $arUsuario,
+                    'form' => $form->createView()
+                    ));
+    }    
+    
     public function detalleNuevoPermisoEspecialAction($codigoUsuario) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder()
-            ->add('permisoEspecialRel', 'entity', array(
-                'class' => 'BrasaSeguridadBundle:SegPermisoEspecial',
-                'property' => 'nombre',
-                'data' => "",
-                'required' => true,
-            ))
             ->add('guardar', 'submit', array('label' => 'Guardar'))
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arUsuario = $em->getRepository('BrasaSeguridadBundle:User')->find($codigoUsuario);
-            $arPermisoEspecial = $form->get('permisoEspecialRel')->getData();
-            $registros = $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->findOneBy(array('codigoUsuarioFk' => $codigoUsuario, 'codigoPermisoEspecialFk' => $arPermisoEspecial->getCodigoPermisoEspecialPk()));
-            if ($registros == null){
-                $arUsuarioPermisoEspecial = new \Brasa\SeguridadBundle\Entity\SegUsuarioPermisoEspecial();
-                $arUsuarioPermisoEspecial->setPermisoEspecialRel($form->get('permisoEspecialRel')->getData());
-                $arUsuarioPermisoEspecial->setUsuarioRel($arUsuario);
-                $arUsuarioPermisoEspecial->setPermitir(1);
-                $em->persist($arUsuarioPermisoEspecial);
-                $em->flush();
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-            } else {
-                    $objMensaje->Mensaje("error", "Ya existe el permiso para este usuario", $this);
-            }
-            
+            if ($form->get('guardar')->isClicked()) {
+                $arUsuario = $em->getRepository('BrasaSeguridadBundle:User')->find($codigoUsuario);
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');    
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoPermisoEspecial) {
+                        $arUsuarioPermisoEspecialValidar = new \Brasa\SeguridadBundle\Entity\SegUsuarioPermisoEspecial();
+                        $arUsuarioPermisoEspecialValidar = $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->findBy(array('codigoUsuarioFk' => $codigoUsuario, 'codigoPermisoEspecialFk' => $codigoPermisoEspecial));                        
+                        if(!$arUsuarioPermisoEspecialValidar) {
+                            $arPermisoEspecial = new \Brasa\SeguridadBundle\Entity\SegPermisoEspecial();
+                            $arPermisoEspecial = $em->getRepository('BrasaSeguridadBundle:SegPermisoEspecial')->find($codigoPermisoEspecial);                            
+                            $arUsuarioPermisoEspecial = new \Brasa\SeguridadBundle\Entity\SegUsuarioPermisoEspecial();
+                            $arUsuarioPermisoEspecial->setPermisoEspecialRel($arPermisoEspecial);
+                            $arUsuarioPermisoEspecial->setUsuarioRel($arUsuario);
+                            $arUsuarioPermisoEspecial->setPermitir(1);
+                            $em->persist($arUsuarioPermisoEspecial);
+                            $em->flush();
+                            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                            
+                        }
+                    }                                        
+                }
+            }                                                                                              
         }
+        $arPermisosEspeciales = $em->getRepository('BrasaSeguridadBundle:SegPermisoEspecial')->findBy(array(), array('modulo' => 'ASC'));
         return $this->render('BrasaSeguridadBundle:Usuarios:detalleNuevoPermisoEspecial.html.twig', array(
+            'arPermisosEspeciales' => $arPermisosEspeciales,
             'form' => $form->createView()));
     }
     
@@ -359,14 +494,43 @@ class SegUsuariosController extends Controller
             $password = $encoder->encodePassword($formUsuario->get('password')->getData(), $arUsuario->getSalt());
             $arUsuario->setPassword($password);   
             $em->persist($arUsuario);
-            $em->flush();                        
+            $em->flush();                                    
             return $this->redirect($this->generateUrl('brs_seg_admin_usuario_lista'));
         }
         return $this->render('BrasaSeguridadBundle:Usuarios:cambiarClave.html.twig', array(
             'arUsuario' => $arUsuario,
             'formUsuario' => $formUsuario->createView()
         ));
-    }       
+    }   
+    /**
+     * @Route("/user/usuario/cambiar/calve/usuario/{codigoUsuario}/", name="brs_seg_user_usuario_cambiar_clave")
+     */     
+    public function cambiarClaveUsuarioAction($codigoUsuario) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $formUsuario = $this->createFormBuilder()
+            ->setAction($this->generateUrl('brs_seg_user_usuario_cambiar_clave', array('codigoUsuario' => $codigoUsuario)))
+            ->add('password', 'password')                            
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        $formUsuario->handleRequest($request);        
+        $arUsuario = new \Brasa\SeguridadBundle\Entity\User();
+        $arUsuario = $em->getRepository('BrasaSeguridadBundle:User')->find($codigoUsuario);        
+        
+        if ($formUsuario->isValid()) {            
+            $factory = $this->get('security.encoder_factory');
+            $encoder = $factory->getEncoder($arUsuario);
+            $password = $encoder->encodePassword($formUsuario->get('password')->getData(), $arUsuario->getSalt());
+            $arUsuario->setPassword($password);   
+            $em->persist($arUsuario);
+            $em->flush();                                    
+            return $this->redirect($this->generateUrl('brs_seg_usuario_detalle_ver', array('codigoUsuario' => $codigoUsuario)));
+        }
+        return $this->render('BrasaSeguridadBundle:Usuarios:cambiarClave.html.twig', array(
+            'arUsuario' => $arUsuario,
+            'formUsuario' => $formUsuario->createView()
+        ));
+    }     
     
     private function listar() {
         $em = $this->getDoctrine()->getManager();
