@@ -116,16 +116,16 @@
                     <tr>
                         <td class="titulo"></td>
                         <td align="right"></td>
-                        <td class="titulo"></td>
-                        <td align="right"></td>
+                        <td class="titulo">GENERADO:</td>
+                        <td align="right">{% if arLiquidacion.estadoGenerado == 1 %}SI{% else %}NO{% endif %}</td>
                         <td class="titulo">DEDUCCIONES:</td>
                         <td align="right">$ {{ arLiquidacion.vrDeducciones | number_format(0, '.', ',') }}</td>
                     </tr>
                     <tr>
                         <td class="titulo"></td>
                         <td align="right"></td>
-                        <td class="titulo"></td>
-                        <td align="right"></td>
+                        <td class="titulo">PAGADO:</td>
+                        <td align="right">{% if arLiquidacion.estadoPagoGenerado == 1 %}SI{% else %}NO{% endif %}</td>
                         <td class="titulo">DEDUCCION PRIMA:</td>
                         <td align="right">$ {{ arLiquidacion.vrDeduccionPrima | number_format(0, '.', ',') }}</td>
                     </tr>

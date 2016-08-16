@@ -428,7 +428,8 @@ class VacacionesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->listaVacacionesDQL(
                     $session->get('filtroCodigoCentroCosto'),
-                    $session->get('filtroIdentificacion')
+                    $session->get('filtroIdentificacion'),
+                    $session->get('filtroPagado')
                     );
     }
     
@@ -455,7 +456,7 @@ class VacacionesController extends Controller
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            //->add('BtnPdf', 'submit', array('label'  => 'PDF',))
+            ->add('estadoPagado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'),'data' => $session->get('filtroPagado')))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))    
             ->getForm();
         return $form;
@@ -466,6 +467,7 @@ class VacacionesController extends Controller
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
+        $session->set('filtroPagado', $controles['estadoPagado']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
     }    
     
