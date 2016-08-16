@@ -126,7 +126,7 @@ class RhuVacacionRepository extends EntityRepository {
                     $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arVacacionCredito->getCodigoCreditoFk());
                     $deduccion = $arVacacionCredito->getVrDeduccion();
                     $saldo = $arCredito->getSaldo();
-                    if ($saldo <= $deduccion ){
+                    if ($saldo < $deduccion ){
                         $validar = 1;
                     } else {
                         $arCredito->setSaldo($saldo - $deduccion);
@@ -135,6 +135,10 @@ class RhuVacacionRepository extends EntityRepository {
                 }    
             }
             if ($validar == '' && $deduccion != 0){
+                if ($arCredito->getSaldo() <= 0){
+                    $arCredito->setEstadoPagado(1);        
+                    $em->persist($arCredito);
+                }
                 $em->persist($arCredito);
                 $em->flush($arCredito);
             }

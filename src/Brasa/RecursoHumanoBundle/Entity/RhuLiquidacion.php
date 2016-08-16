@@ -240,7 +240,12 @@ class RhuLiquidacion
     /**     
      * @ORM\Column(name="liquidar_manual", type="boolean")
      */    
-    private $liquidarManual = 0;    
+    private $liquidarManual = 0;
+
+    /**
+     * @ORM\Column(name="estado_pago_generado", type="boolean")
+     */
+    private $estadoPagoGenerado = 0;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="liquidacionesEmpleadoRel")
@@ -271,6 +276,8 @@ class RhuLiquidacion
      */
     protected $liquidacionesAdicionalesLiquidacionRel;  
 
+    
+    
     /**
      * Constructor
      */
@@ -650,6 +657,30 @@ class RhuLiquidacion
     }
 
     /**
+     * Set diasCesantiasDescontar
+     *
+     * @param integer $diasCesantiasDescontar
+     *
+     * @return RhuLiquidacion
+     */
+    public function setDiasCesantiasDescontar($diasCesantiasDescontar)
+    {
+        $this->diasCesantiasDescontar = $diasCesantiasDescontar;
+
+        return $this;
+    }
+
+    /**
+     * Get diasCesantiasDescontar
+     *
+     * @return integer
+     */
+    public function getDiasCesantiasDescontar()
+    {
+        return $this->diasCesantiasDescontar;
+    }
+
+    /**
      * Set diasVacaciones
      *
      * @param integer $diasVacaciones
@@ -674,6 +705,30 @@ class RhuLiquidacion
     }
 
     /**
+     * Set diasVacacionesDescontar
+     *
+     * @param integer $diasVacacionesDescontar
+     *
+     * @return RhuLiquidacion
+     */
+    public function setDiasVacacionesDescontar($diasVacacionesDescontar)
+    {
+        $this->diasVacacionesDescontar = $diasVacacionesDescontar;
+
+        return $this;
+    }
+
+    /**
+     * Get diasVacacionesDescontar
+     *
+     * @return integer
+     */
+    public function getDiasVacacionesDescontar()
+    {
+        return $this->diasVacacionesDescontar;
+    }
+
+    /**
      * Set diasPrimas
      *
      * @param integer $diasPrimas
@@ -695,6 +750,30 @@ class RhuLiquidacion
     public function getDiasPrimas()
     {
         return $this->diasPrimas;
+    }
+
+    /**
+     * Set diasPrimasDescontar
+     *
+     * @param integer $diasPrimasDescontar
+     *
+     * @return RhuLiquidacion
+     */
+    public function setDiasPrimasDescontar($diasPrimasDescontar)
+    {
+        $this->diasPrimasDescontar = $diasPrimasDescontar;
+
+        return $this;
+    }
+
+    /**
+     * Get diasPrimasDescontar
+     *
+     * @return integer
+     */
+    public function getDiasPrimasDescontar()
+    {
+        return $this->diasPrimasDescontar;
     }
 
     /**
@@ -1250,6 +1329,78 @@ class RhuLiquidacion
     }
 
     /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuLiquidacion
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
+    }
+
+    /**
+     * Set liquidarManual
+     *
+     * @param boolean $liquidarManual
+     *
+     * @return RhuLiquidacion
+     */
+    public function setLiquidarManual($liquidarManual)
+    {
+        $this->liquidarManual = $liquidarManual;
+
+        return $this;
+    }
+
+    /**
+     * Get liquidarManual
+     *
+     * @return boolean
+     */
+    public function getLiquidarManual()
+    {
+        return $this->liquidarManual;
+    }
+
+    /**
+     * Set estadoPagoGenerado
+     *
+     * @param boolean $estadoPagoGenerado
+     *
+     * @return RhuLiquidacion
+     */
+    public function setEstadoPagoGenerado($estadoPagoGenerado)
+    {
+        $this->estadoPagoGenerado = $estadoPagoGenerado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagoGenerado
+     *
+     * @return boolean
+     */
+    public function getEstadoPagoGenerado()
+    {
+        return $this->estadoPagoGenerado;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -1377,125 +1528,5 @@ class RhuLiquidacion
     public function getLiquidacionesAdicionalesLiquidacionRel()
     {
         return $this->liquidacionesAdicionalesLiquidacionRel;
-    }
-
-    /**
-     * Set diasCesantiasDescontar
-     *
-     * @param integer $diasCesantiasDescontar
-     *
-     * @return RhuLiquidacion
-     */
-    public function setDiasCesantiasDescontar($diasCesantiasDescontar)
-    {
-        $this->diasCesantiasDescontar = $diasCesantiasDescontar;
-
-        return $this;
-    }
-
-    /**
-     * Get diasCesantiasDescontar
-     *
-     * @return integer
-     */
-    public function getDiasCesantiasDescontar()
-    {
-        return $this->diasCesantiasDescontar;
-    }
-
-    /**
-     * Set diasVacacionesDescontar
-     *
-     * @param integer $diasVacacionesDescontar
-     *
-     * @return RhuLiquidacion
-     */
-    public function setDiasVacacionesDescontar($diasVacacionesDescontar)
-    {
-        $this->diasVacacionesDescontar = $diasVacacionesDescontar;
-
-        return $this;
-    }
-
-    /**
-     * Get diasVacacionesDescontar
-     *
-     * @return integer
-     */
-    public function getDiasVacacionesDescontar()
-    {
-        return $this->diasVacacionesDescontar;
-    }
-
-    /**
-     * Set diasPrimasDescontar
-     *
-     * @param integer $diasPrimasDescontar
-     *
-     * @return RhuLiquidacion
-     */
-    public function setDiasPrimasDescontar($diasPrimasDescontar)
-    {
-        $this->diasPrimasDescontar = $diasPrimasDescontar;
-
-        return $this;
-    }
-
-    /**
-     * Get diasPrimasDescontar
-     *
-     * @return integer
-     */
-    public function getDiasPrimasDescontar()
-    {
-        return $this->diasPrimasDescontar;
-    }
-
-    /**
-     * Set codigoUsuario
-     *
-     * @param string $codigoUsuario
-     *
-     * @return RhuLiquidacion
-     */
-    public function setCodigoUsuario($codigoUsuario)
-    {
-        $this->codigoUsuario = $codigoUsuario;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoUsuario
-     *
-     * @return string
-     */
-    public function getCodigoUsuario()
-    {
-        return $this->codigoUsuario;
-    }
-
-    /**
-     * Set liquidarManual
-     *
-     * @param boolean $liquidarManual
-     *
-     * @return RhuLiquidacion
-     */
-    public function setLiquidarManual($liquidarManual)
-    {
-        $this->liquidarManual = $liquidarManual;
-
-        return $this;
-    }
-
-    /**
-     * Get liquidarManual
-     *
-     * @return boolean
-     */
-    public function getLiquidarManual()
-    {
-        return $this->liquidarManual;
     }
 }

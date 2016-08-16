@@ -248,7 +248,7 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         $header = array(utf8_decode('CÓDIGO'), 'CONCEPTO', 'BONIFICACION', 'DEDUCCION','OBSERVACIONES');
 
         //creamos la cabecera de la tabla.
-        $w = array(12, 83, 17, 17,56);
+        $w = array(12, 81, 19, 17,56);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -269,9 +269,13 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
         foreach ($arLiquidacionAdicionales as $arLiquidacionAdicional) {
-            $pdf->Cell(12, 4, $arLiquidacionAdicional->getCodigoPagoConceptoFk(), 1, 0, 'L');            
-            $pdf->Cell(83, 4, $arLiquidacionAdicional->getPagoConceptoRel()->getNombre(), 1, 0, 'L');              
-            $pdf->Cell(17, 4, number_format($arLiquidacionAdicional->getVrBonificacion(), 0,'.',','), 1, 0, 'R');
+            $pdf->Cell(12, 4, $arLiquidacionAdicional->getCodigoPagoConceptoFk(), 1, 0, 'L');
+            $concepto = '';
+            if ($arLiquidacionAdicional->getCodigoPagoConceptoFk() != null){
+                $concepto = $arLiquidacionAdicional->getPagoConceptoRel()->getNombre();
+            }
+            $pdf->Cell(81, 4, $concepto, 1, 0, 'L');              
+            $pdf->Cell(19, 4, number_format($arLiquidacionAdicional->getVrBonificacion(), 0,'.',','), 1, 0, 'R');
             $pdf->Cell(17, 4, number_format($arLiquidacionAdicional->getVrDeduccion(), 0,'.',','), 1, 0, 'R');            
             
             $pdf->SetFont('Arial', '', 6.5);

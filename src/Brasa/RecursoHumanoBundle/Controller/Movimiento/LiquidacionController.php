@@ -125,6 +125,25 @@ class LiquidacionController extends Controller
                 }
 
             }
+            
+            if($form->get('BtnGenerarPago')->isClicked()) {            
+                if($arLiquidacion->getEstadoAutorizado() == 1) {
+                    
+                    $validar = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->pagar($codigoLiquidacion);
+                    if ($validar == ''){
+                        $arLiquidacion->setEstadoPagoGenerado(1);
+                        $em->persist($arLiquidacion);
+                        $em->flush();
+                        return $this->redirect($this->generateUrl('brs_rhu_movimiento_liquidacion_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));
+                    } else {
+                        $objMensaje->Mensaje("error", "Hay saldos en creditos que son inferiores a la deducciones", $this);
+                        return $this->redirect($this->generateUrl('brs_rhu_movimiento_liquidacion_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));
+                    }                    
+                } else {
+                    $objMensaje->Mensaje("error", "No esta autorizado, no se puede generar pago", $this);
+                }
+            }
+            
             if($form->get('BtnEliminarAdicional')->isClicked()) {
                 if ($arLiquidacion->getEstadoAutorizado() == 0){
                     $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -323,16 +342,23 @@ class LiquidacionController extends Controller
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
         $arrBotonEliminarAdicional = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
-        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => true);        
+        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);        
         $arrBotonLiquidar = array('label' => 'Liquidar', 'disabled' => false);
-        
+        $arrBotonGenerarPago = array('label' => 'Generar pago', 'disabled' => false);
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;
             $arrBotonEliminarAdicional['disabled'] = true;
             $arrBotonLiquidar['disabled'] = true;
-            $arrBotonImprimir['disabled'] = false;
         } else {            
             $arrBotonDesAutorizar['disabled'] = true;
+            $arrBotonGenerarPago['disabled'] = true;
+            $arrBotonImprimir['disabled'] = true;
+        }
+        if($ar->getEstadoPagoGenerado() == 1) {
+            $arrBotonAutorizar['disabled'] = true;
+            $arrBotonDesAutorizar['disabled'] = true;
+            $arrBotonGenerarPago['disabled'] = true;
+            $arrBotonLiquidar['disabled'] = true;
         }
         $form = $this->createFormBuilder()    
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
@@ -340,6 +366,7 @@ class LiquidacionController extends Controller
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir)
                     ->add('BtnLiquidar', 'submit', $arrBotonLiquidar)
                     ->add('BtnEliminarAdicional', 'submit', $arrBotonEliminarAdicional)
+                    ->add('BtnGenerarPago', 'submit', $arrBotonGenerarPago)
                     ->getForm();  
         return $form;
     }        

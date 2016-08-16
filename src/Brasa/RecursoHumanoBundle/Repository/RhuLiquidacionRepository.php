@@ -251,7 +251,41 @@ class RhuLiquidacionRepository extends EntityRepository {
         $arLiquidacion->setFechaInicioContrato($arLiquidacion->getContratoRel()->getFechaDesde());
         $em->flush();
         return true;
-    }    
+    }  
+    
+    public function pagar($codigoLiquidacion) {        
+        $em = $this->getEntityManager();
+        $validar = '';
+        
+        $arLiquidacionCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
+        $arLiquidacionCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionales')->findBy(array('codigoLiquidacionFk' => $codigoLiquidacion));                                 
+        $deduccion = 0;
+        if ($arLiquidacionCreditos != null){
+            foreach ($arLiquidacionCreditos as $arLiquidacionCredito){
+                if ($arLiquidacionCredito->getCodigoCreditoFk() != null){
+                    $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arLiquidacionCredito->getCodigoCreditoFk());
+                    $deduccion = $arLiquidacionCredito->getVrDeduccion();
+                    $saldo = $arCredito->getSaldo();
+                    if ($saldo < $deduccion ){
+                        $validar = 1;
+                    } else {
+                        $arCredito->setSaldo($saldo - $deduccion);
+                        $arCredito->setSaldoTotal($arCredito->getSaldoTotal() - $deduccion );
+                    }
+                }    
+            }
+            if ($validar == '' && $deduccion != 0){
+                $em->persist($arCredito);
+                if ($arCredito->getSaldo() <= 0){
+                    $arCredito->setEstadoPagado(1);        
+                    $em->persist($arCredito);
+                }        
+                $em->flush($arCredito);
+            }
+        }    
+        return $validar;
+        
+    }
     
     public function liquidarAdicionales($codigoLiquidacion) {        
         $em = $this->getEntityManager();        
