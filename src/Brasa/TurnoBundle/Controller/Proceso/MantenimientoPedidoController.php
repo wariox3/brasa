@@ -14,7 +14,10 @@ class MantenimientoPedidoController extends Controller
      */     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();                                        
-        $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 10)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }        
+        $request = $this->getRequest();        
         $paginator  = $this->get('knp_paginator');
         $mensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioLista();

@@ -14,7 +14,10 @@ class GenerarFacturaController extends Controller
      * @Route("/tur/proceso/generar/factura", name="brs_tur_proceso_generar_factura")
      */      
     public function listaAction() {
-        $em = $this->getDoctrine()->getManager();                                         
+        $em = $this->getDoctrine()->getManager();  
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 6)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }        
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioLista();

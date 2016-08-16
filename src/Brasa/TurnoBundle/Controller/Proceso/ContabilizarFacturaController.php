@@ -16,7 +16,10 @@ class ContabilizarFacturaController extends Controller
      * @Route("/tur/proceso/contabilizar/factura", name="brs_tur_proceso_contabilizar_factura")
      */    
     public function listaAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();        
+        $em = $this->getDoctrine()->getManager(); 
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 9)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }        
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
