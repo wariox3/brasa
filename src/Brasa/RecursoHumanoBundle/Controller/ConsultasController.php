@@ -1475,6 +1475,8 @@ class ConsultasController extends Controller
     
     private function generarExcel() {
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -1573,6 +1575,8 @@ class ConsultasController extends Controller
 
     private function generarPagoPendientesBancoExcel() {
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -1671,6 +1675,8 @@ class ConsultasController extends Controller
 
     private function generarCostosIbcExcel() {
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -1729,6 +1735,8 @@ class ConsultasController extends Controller
 
     private function generarCreditoExcel() {
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -1988,6 +1996,8 @@ class ConsultasController extends Controller
 
     private function generarIncapacidadesExcel() {
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -2304,6 +2314,8 @@ class ConsultasController extends Controller
 
     private function generarEmpleadoExcel() {
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
@@ -2510,7 +2522,11 @@ class ConsultasController extends Controller
                 $fechaFinalizacionContrato = "";
             } else {
                 $fechaFinalizacionContrato = $arEmpleado->getFechaFinalizaContrato()->format('Y-m-d');
-            }       
+            }
+            $empleadoEstudio = "";
+            if ($arEmpleado->getCodigoEmpleadoEstudioTipoFk() != null){
+                $empleadoEstudio = $arEmpleado->getEmpleadoEstudioTipoRel()->getNombre();
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arEmpleado->getCodigoEmpleadoPk())
                     ->setCellValue('B' . $i, $arEmpleado->getTipoIdentificacionRel()->getNombre())
@@ -2533,7 +2549,7 @@ class ConsultasController extends Controller
                     ->setCellValue('S' . $i, $arEmpleado->getEstadoCivilRel()->getNombre())
                     ->setCellValue('T' . $i, $padreFamilia)
                     ->setCellValue('U' . $i, $cabezaHogar)
-                    ->setCellValue('V' . $i, $arEmpleado->getEmpleadoEstudioTipoRel()->getNombre())
+                    ->setCellValue('V' . $i, $empleadoEstudio)
                     ->setCellValue('W' . $i, $entidadSalud)
                     ->setCellValue('X' . $i, $entidadPension)
                     ->setCellValue('Y' . $i, $entidadCaja)
@@ -2578,6 +2594,8 @@ class ConsultasController extends Controller
 
     private function generarAportesExcel() {
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -2754,6 +2772,8 @@ class ConsultasController extends Controller
 
     private function generarVacacionesPagarExcel() {
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -2827,6 +2847,8 @@ class ConsultasController extends Controller
     
     private function generarFechaTerminacionExcel() {
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -2919,6 +2941,8 @@ class ConsultasController extends Controller
     
     private function generarIngresosContratosExcel() {
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -2998,6 +3022,8 @@ class ConsultasController extends Controller
     
     private function generarContratosPeriodoExcel() {
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
