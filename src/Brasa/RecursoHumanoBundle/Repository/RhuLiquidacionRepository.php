@@ -277,6 +277,15 @@ class RhuLiquidacionRepository extends EntityRepository {
                     } else {
                         $arCredito->setSaldo($saldo - $deduccion);
                         $arCredito->setSaldoTotal($arCredito->getSaldoTotal() - $deduccion );
+                        $arCredito->setNumeroCuotaActual($arCredito->getNumeroCuotaActual() + 1);
+                        $arPagoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
+                        $arPagoCredito->setCreditoRel($arCredito);                        
+                        $arPagoCredito->setfechaPago(new \ DateTime("now"));
+                        $arCreditoTipoPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoTipoPago')->find(4);
+                        $arPagoCredito->setCreditoTipoPagoRel($arCreditoTipoPago);
+                        $arPagoCredito->setVrCuota($deduccion);
+                        $arPagoCredito->setSaldo($arCredito->getSaldo());
+                        $arPagoCredito->setNumeroCuotaActual($arCredito->getNumeroCuotaActual());
                     }
                 }    
             }
@@ -287,6 +296,7 @@ class RhuLiquidacionRepository extends EntityRepository {
                     $em->persist($arCredito);
                 }        
                 $em->flush($arCredito);
+                $em->persist($arPagoCredito);
             }
         }    
         return $validar;

@@ -4333,6 +4333,7 @@ insert into `rhu_credito_tipo` (`codigo_credito_tipo_pk`, `nombre`, `cupo_maximo
 INSERT INTO `rhu_credito_tipo_pago` (`codigo_credito_tipo_pago_pk`, `nombre`) VALUES('1','DESCUENTO POR NOMINA');
 INSERT INTO `rhu_credito_tipo_pago` (`codigo_credito_tipo_pago_pk`, `nombre`) VALUES('2','PRESTAMO');
 INSERT INTO `rhu_credito_tipo_pago` (`codigo_credito_tipo_pago_pk`, `nombre`) VALUES('3','VACACIONES');
+INSERT INTO `rhu_credito_tipo_pago` (`codigo_credito_tipo_pago_pk`, `nombre`) VALUES('4','PRESTACIONES');
 
 INSERT INTO `rhu_desempeno_concepto_tipo` (`codigo_desempeno_concepto_tipo_pk`, `nombre`) VALUES('1','AREA PROFESIONAL');
 INSERT INTO `rhu_desempeno_concepto_tipo` (`codigo_desempeno_concepto_tipo_pk`, `nombre`) VALUES('2','COMPROMISO');
