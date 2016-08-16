@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuLiquidacionRepository extends EntityRepository {
     
-    public function listaDql($strIdentificacion = "", $boolEstadoGenerado = "", $strCodigoCentroCosto = "") {        
+    public function listaDql($strIdentificacion = "", $boolEstadoGenerado = "", $strCodigoCentroCosto = "",$boolEstadoPagado = "") {        
         $dql   = "SELECT l, e FROM BrasaRecursoHumanoBundle:RhuLiquidacion l JOIN l.empleadoRel e WHERE l.codigoLiquidacionPk <> 0";
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
@@ -21,6 +21,12 @@ class RhuLiquidacionRepository extends EntityRepository {
         } 
         if($boolEstadoGenerado == '0') {
             $dql .= " AND l.estadoGenerado = 0";
+        }
+        if($boolEstadoPagado == 1 ) {
+            $dql .= " AND l.estadoPagoGenerado = 1";
+        } 
+        if($boolEstadoPagado == '0') {
+            $dql .= " AND l.estadoPagoGenerado = 0";
         }
         if($strCodigoCentroCosto != "") {
             $dql .= " AND l.codigoCentroCostoFk = " . $strCodigoCentroCosto;

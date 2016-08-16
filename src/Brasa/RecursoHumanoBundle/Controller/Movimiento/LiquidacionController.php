@@ -308,7 +308,8 @@ class LiquidacionController extends Controller
         $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->listaDql(
                $session->get('filtroIdentificacion'),
                $session->get('filtroGenerado'),
-               $session->get('filtroCodigoCentroCosto'));
+               $session->get('filtroCodigoCentroCosto'),
+               $session->get('filtroPagado'));
     }
 
     private function formularioLista() {
@@ -332,6 +333,7 @@ class LiquidacionController extends Controller
             ->add('centroCostoRel', 'entity', $arrayPropiedadesCentroCosto)    
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('estadoGenerado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'),'data' => $session->get('filtroGenerado')))
+            ->add('estadoPagado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'),'data' => $session->get('filtroPagado')))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->getForm();
@@ -352,7 +354,6 @@ class LiquidacionController extends Controller
         } else {            
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonGenerarPago['disabled'] = true;
-            $arrBotonImprimir['disabled'] = true;
         }
         if($ar->getEstadoPagoGenerado() == 1) {
             $arrBotonAutorizar['disabled'] = true;
@@ -377,6 +378,7 @@ class LiquidacionController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroGenerado', $controles['estadoGenerado']);
+        $session->set('filtroPagado', $controles['estadoPagado']);
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
     }
 
