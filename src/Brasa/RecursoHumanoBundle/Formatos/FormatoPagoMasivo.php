@@ -9,8 +9,9 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
     public static $porFecha;
     public static $fechaDesde;
     public static $fechaHasta;
+    public static $dato;
     
-    public function Generar($miThis, $codigoProgramacionPago = "", $strRuta = "", $codigoPago = "", $codigoZona = "", $codigoSubzona = "", $porFecha = false, $fechaDesde = "", $fechaHasta = "") {        
+    public function Generar($miThis, $codigoProgramacionPago = "", $strRuta = "", $codigoPago = "", $codigoZona = "", $codigoSubzona = "", $porFecha = false, $fechaDesde = "", $fechaHasta = "", $dato = "") {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
@@ -21,6 +22,7 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
         self::$porFecha = $porFecha;
         self::$fechaDesde = $fechaDesde;
         self::$fechaHasta = $fechaHasta;
+        self::$dato = $dato;
         $pdf = new FormatoPagoMasivo();
         $pdf->AliasNbPages();
         $pdf->AddPage();
@@ -93,7 +95,7 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
         $pdf->SetFillColor(200, 200, 200);
         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);        
-        $dql = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaImpresionDql(self::$codigoPago, self::$codigoProgramacionPago, self::$codigoZona, self::$codigoSubzona, self::$porFecha, self::$fechaDesde, self::$fechaHasta);        
+        $dql = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaImpresionDql(self::$codigoPago, self::$codigoProgramacionPago, self::$codigoZona, self::$codigoSubzona, self::$porFecha, self::$fechaDesde, self::$fechaHasta, self::$dato);        
         $query = self::$em->createQuery($dql);
         $arPagos = $query->getResult();
         $numeroPagos = count($arPagos);

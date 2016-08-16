@@ -359,6 +359,12 @@ class RhuEmpleado
     private $codigoEmpleadoTipoFk;    
     
     /**
+     * Este campo es para meter cualquie informacion del empleado
+     * @ORM\Column(name="dato", type="string", length=30, nullable=true)
+     */    
+    private $dato;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuClasificacionRiesgo", inversedBy="empleadosClasificacionRiesgoRel")
      * @ORM\JoinColumn(name="codigo_clasificacion_riesgo_fk", referencedColumnName="codigo_clasificacion_riesgo_pk")
      */
@@ -4070,5 +4076,29 @@ class RhuEmpleado
     public function getCambiosTiposContratosEmpleadoRel()
     {
         return $this->cambiosTiposContratosEmpleadoRel;
+    }
+
+    /**
+     * Set dato
+     *
+     * @param string $dato
+     *
+     * @return RhuEmpleado
+     */
+    public function setDato($dato)
+    {
+        $this->dato = $dato;
+
+        return $this;
+    }
+
+    /**
+     * Get dato
+     *
+     * @return string
+     */
+    public function getDato()
+    {
+        return $this->dato;
     }
 }

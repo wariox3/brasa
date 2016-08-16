@@ -39,7 +39,7 @@ class formatoPagoMasivoController extends Controller
                     $codigoSubzona = "";
                 }                    
                 $objFormatoPagoMasivo = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPagoMasivo();
-                $objFormatoPagoMasivo->Generar($this, $form->get('numero')->getData(), "", "", $codigoZona, $codigoSubzona, $form->get('porFecha')->getData(), $fechaDesde->format('Y-m-d'), $fechaHasta->format('Y-m-d'));
+                $objFormatoPagoMasivo->Generar($this, $form->get('numero')->getData(), "", "", $codigoZona, $codigoSubzona, $form->get('porFecha')->getData(), $fechaDesde->format('Y-m-d'), $fechaHasta->format('Y-m-d'), $form->get('dato')->getData());
                 /* else {
                     $codigoProgramacionPago = $form->get('numero')->getData();
                     $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
@@ -141,6 +141,7 @@ class formatoPagoMasivoController extends Controller
             ->add('zonaRel', 'entity', $arrayPropiedadesZona)                
             ->add('subzonaRel', 'entity', $arrayPropiedadesSubzona)                
             ->add('numero','text', array('required'  => false, 'data' => ""))
+            ->add('dato','text', array('required'  => false, 'data' => ""))
             ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
             ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                                
             ->add('porFecha', 'checkbox', array('required'  => false, 'data' => true))
