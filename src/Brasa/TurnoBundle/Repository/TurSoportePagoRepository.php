@@ -249,7 +249,7 @@ class TurSoportePagoRepository extends EntityRepository {
                 if($arProgramacionDetalle['dia'.$i] != "") {                    
                     $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle['dia'.$i]);
                     if($arTurno) {
-                        $arrTurnos[] = array('horaDesde' => $arTurno->getHoraDesde(), 'turno' => $arTurno->getCodigoTurnoPk());
+                        $arrTurnos[] = array('horaDesde' => $arTurno->getHoraDesde(), 'turno' => $arTurno->getCodigoTurnoPk(), 'codigoProgramacionDetallePk' => $arProgramacionDetalle['codigoProgramacionDetallePk']);
                     }
                 }
             }
@@ -272,7 +272,7 @@ class TurSoportePagoRepository extends EntityRepository {
                     }
                 }  
                 if($strTurno) {
-                    $horasIniciales = $this->insertarSoportePago($arSoportePago, $strTurno, $dateFecha, $dateFecha2, $boolFestivo, $boolFestivo2, $horasIniciales);
+                    $horasIniciales = $this->insertarSoportePago($arSoportePago, $strTurno, $dateFecha, $dateFecha2, $boolFestivo, $boolFestivo2, $horasIniciales, $arrTurno['codigoProgramacionDetallePk']);
                 }                                   
             }                        
         }          
@@ -290,8 +290,9 @@ class TurSoportePagoRepository extends EntityRepository {
         }
     }     
 
-    public function insertarSoportePago ($arSoportePago, $codigoTurno, $dateFecha, $dateFecha2, $boolFestivo, $boolFestivo2, $horasIniciales) {        
-        $em = $this->getEntityManager();        
+    public function insertarSoportePago ($arSoportePago, $codigoTurno, $dateFecha, $dateFecha2, $boolFestivo, $boolFestivo2, $horasIniciales, $codigoProgramacionDetalle = "") {        
+        $em = $this->getEntityManager();  
+        $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($codigoProgramacionDetalle);
         $arSoportePagoPeriodo = $arSoportePago->getSoportePagoPeriodoRel();
         $strTurnoFijoNomina = $arSoportePagoPeriodo->getRecursoGrupoRel()->getCodigoTurnoFijoNominaFk();
         $strTurnoFijoDescanso = $arSoportePagoPeriodo->getRecursoGrupoRel()->getCodigoTurnoFijoDescansoFk();
@@ -392,6 +393,7 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePagoDetalle->setHorasDiurnas($arrHoras['horasDiurnas'] + $arrHoras['horasFestivasDiurnas']);
             $arSoportePagoDetalle->setHorasFestivasDiurnas(0);
         }
+        $arSoportePagoDetalle->setProgramacionDetalleRel($arProgramacionDetalle);
         $em->persist($arSoportePagoDetalle);
 
         if($arrHoras1) {
@@ -427,6 +429,7 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePagoDetalle->setHorasExtrasFestivasNocturnas($arrHoras1['horasExtrasFestivasNocturnas']);
             $arSoportePagoDetalle->setHorasDescanso($arrHoras1['horasDescanso']);
             $arSoportePagoDetalle->setHorasNovedad($arrHoras1['horasNovedad']);
+            $arSoportePagoDetalle->setProgramacionDetalleRel($arProgramacionDetalle);
             $em->persist($arSoportePagoDetalle);            
         }       
         

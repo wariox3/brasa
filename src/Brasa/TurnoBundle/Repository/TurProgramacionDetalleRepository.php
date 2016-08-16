@@ -116,7 +116,7 @@ class TurProgramacionDetalleRepository extends EntityRepository {
 
     public function periodoDias($anio, $mes, $codigoRecurso = "") {
         $em = $this->getEntityManager();
-        $dql   = "SELECT pd.dia1, pd.dia2, pd.dia3, pd.dia4, pd.dia5, pd.dia6, pd.dia7, pd.dia8, pd.dia9, pd.dia10, "
+        $dql   = "SELECT pd.codigoProgramacionDetallePk, pd.dia1, pd.dia2, pd.dia3, pd.dia4, pd.dia5, pd.dia6, pd.dia7, pd.dia8, pd.dia9, pd.dia10, "
                 . "pd.dia11, pd.dia12, pd.dia13, pd.dia14, pd.dia15, pd.dia16, pd.dia17, pd.dia18, pd.dia19, pd.dia20, "
                 . "pd.dia21, pd.dia22, pd.dia23, pd.dia24, pd.dia25, pd.dia26, pd.dia27, pd.dia28, pd.dia29, pd.dia30, pd.dia31 "
                 . "FROM BrasaTurnoBundle:TurProgramacionDetalle pd "
