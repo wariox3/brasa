@@ -524,6 +524,21 @@ class ContratosController extends Controller
                 'property' => 'nombre',
                 'data' => $arContrato->getClasificacionRiesgoRel(),
             ))
+            ->add('pensionRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEntidadPension',
+                'property' => 'nombre',
+                'data' => $arContrato->getEntidadPensionRel(),
+            ))
+            ->add('saludRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEntidadSalud',
+                'property' => 'nombre',
+                'data' => $arContrato->getEntidadSaludRel(),
+            ))
+            ->add('cajaRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEntidadCaja',
+                'property' => 'nombre',
+                'data' => $arContrato->getCargoRel(),
+            ))    
             ->add('terminacionContratoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuMotivoTerminacionContrato',
                 'property' => 'motivo',
@@ -549,6 +564,9 @@ class ContratosController extends Controller
             $arContrato->setContratoTipoRel($formActualizar->get('contratoTipoRel')->getData());
             $arContrato->setTerminacionContratoRel($formActualizar->get('terminacionContratoRel')->getData());
             $arContrato->setClasificacionRiesgoRel($formActualizar->get('clasificacionRiesgoRel')->getData());
+            $arContrato->setEntidadPensionRel($formActualizar->get('pensionRel')->getData());
+            $arContrato->setEntidadSaludRel($formActualizar->get('saludRel')->getData());
+            $arContrato->setEntidadCajaRel($formActualizar->get('cajaRel')->getData());
             $arContrato->setFechaHasta($formActualizar->get('fechaHasta')->getData());
             $em->persist($arContrato);
             $em->flush();

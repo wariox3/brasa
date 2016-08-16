@@ -27,7 +27,7 @@
                 </ul>
             <a class="btn btn-default btn-sm" id="{{ path('brs_rhu_contratos_ibp_adicional', { 'codigoContrato': arContrato.codigoContratoPk}) }}" style="float:left">Base prestacional anterior</a>
             {% if arContrato.indefinido == 0 %}
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_actualizar_terminado', { 'codigoContrato': arContrato.codigoContratoPk}) }}', 'Archivos', 550, 700)" >Actualizar contrato terminado</a>
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_actualizar_terminado', { 'codigoContrato': arContrato.codigoContratoPk}) }}', 'Archivos', 700, 700)" >Actualizar contrato terminado</a>
             {% endif %}
         </div>  
         <br /> <br />

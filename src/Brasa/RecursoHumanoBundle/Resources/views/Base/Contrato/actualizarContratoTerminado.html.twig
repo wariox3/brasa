@@ -19,6 +19,24 @@
                 </div>
             </div>
             <div class="form-group form-group-sm">
+                <label for="form_pensionRel" class="col-sm-3 control-label">Pension:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(formActualizar.pensionRel, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_saludRel" class="col-sm-3 control-label">Salud:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(formActualizar.saludRel, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_cajaRel" class="col-sm-3 control-label">Caja:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(formActualizar.cajaRel, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                </div>
+            </div>    
+            <div class="form-group form-group-sm">
                 <label for="form_terminacionContratoRel" class="col-sm-3 control-label">Motivo terminación contrato:</label>
                 <div class="col-sm-9">
                         {{ form_widget(formActualizar.terminacionContratoRel, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
