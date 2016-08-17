@@ -17,14 +17,14 @@ class RhuSeleccionRepository extends EntityRepository {
         
         if($boolCerrado == 1 ) {
             $dql .= " AND s.estadoCerrado = 1";
-        } elseif($boolCerrado == 0 ) {
+        } elseif($boolCerrado == '0' ) {
             $dql .= " AND s.estadoCerrado = 0";
         }
         
         
         if($boolAprobado == 1 ) {
             $dql .= " AND s.estadoAprobado = 1";
-        } elseif($boolAprobado == 0) {
+        } elseif($boolAprobado == '0') {
             $dql .= " AND s.estadoAprobado = 0";
         }
         
