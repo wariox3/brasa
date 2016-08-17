@@ -427,7 +427,7 @@ class ClienteController extends Controller
         $fecha = new \DateTime('now');        
         foreach ($arClientes as $arCliente) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arCliente->getNit())
+                    ->setCellValue('A' . $i, $arCliente->getNit()."-".$arCliente->getDigitoVerificacion())
                     ->setCellValue('B' . $i, $arCliente->getCodigoTipoIdentificacionFk())
                     ->setCellValue('C' . $i, $arCliente->getNombreCorto())
                     ->setCellValue('D' . $i, $arCliente->getNombre1())
@@ -439,8 +439,8 @@ class ClienteController extends Controller
                     ->setCellValue('J' . $i, $arCliente->getTelefono())
                     ->setCellValue('K' . $i, $arCliente->getCelular())
                     ->setCellValue('L' . $i, $fecha->format('d/m/Y'))
-                    ->setCellValue('M' . $i, $arCliente->getCiudadRel()->getCodigoDane())
-                    ->setCellValue('N' . $i, $arCliente->getCiudadRel()->getCodigoDane())
+                    ->setCellValue('M' . $i, $arCliente->getCiudadRel()->getCodigoInterface())
+                    ->setCellValue('N' . $i, $arCliente->getCiudadRel()->getCodigoInterface())
                     ->setCellValue('O' . $i, '0')
                     ->setCellValue('P' . $i, '')
                     ->setCellValue('Q' . $i, 'S')
