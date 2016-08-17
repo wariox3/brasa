@@ -5788,6 +5788,12 @@ insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) 
 insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('28','PROGRAMACION',NULL,'TURNOS');
 insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('29','FACTURA',NULL,'TURNOS');
 insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('30','NOVEDAD',NULL,'TURNOS');
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('31','CENTRO COSTO',NULL,'RECURSO HUMANO');
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('32','EMPLEADO',NULL,'RECURSO HUMANO');
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('33','CONTRATO',NULL,'RECURSO HUMANO');
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('34','ADICIONAL PAGO FECHA',NULL,'RECURSO HUMANO');
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('35','ASPIRANTE',NULL,'RECURSO HUMANO');
+insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) values('36','ESTUDIO/CONTROL',NULL,'RECURSO HUMANO');
 
 insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('1','Crear contratos despues de pagado el periodo','PROCESO','RECURSO HUMANO');
 insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('2','Ver salario en empleados','VER','RECURSO HUMANO');

@@ -14,6 +14,9 @@ class PermisoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 24, 1)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
         $paginator  = $this->get('knp_paginator');
         $session = $this->getRequest()->getSession();
         $form = $this->formularioFiltro();

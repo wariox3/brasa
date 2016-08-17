@@ -12,7 +12,10 @@ class FacturasController extends Controller
     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();    
+        $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 16, 1)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
         $paginator  = $this->get('knp_paginator');
         $strSqlLista = $this->getRequest()->getSession(); 
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();

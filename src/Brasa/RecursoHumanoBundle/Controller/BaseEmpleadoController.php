@@ -449,7 +449,7 @@ class BaseEmpleadoController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'AV'; $col++) {
+        for($col = 'A'; $col !== 'AZ'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
         }        
@@ -503,7 +503,8 @@ class BaseEmpleadoController extends Controller
                     ->setCellValue('AT1', 'DISCAPACIDAD')
                     ->setCellValue('AU1', 'ZONA')
                     ->setCellValue('AV1', 'SUBZONA')
-                    ->setCellValue('AW1', 'TIPO');
+                    ->setCellValue('AW1', 'TIPO')
+                    ->setCellValue('AX1', 'C. CONTABILIDAD');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
@@ -653,7 +654,8 @@ class BaseEmpleadoController extends Controller
                     ->setCellValue('AQ' . $i, $arEmpleado->getCalzado())
                     ->setCellValue('AR' . $i, $departamentoEmpresa)
                     ->setCellValue('AS' . $i, $horario)
-                    ->setCellValue('AT' . $i, $discapacidad);
+                    ->setCellValue('AT' . $i, $discapacidad)
+                    ->setCellValue('AX' . $i, $arEmpleado->getCodigoInterface());
             if($arEmpleado->getCodigoZonaFk()) {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AU' . $i, $arEmpleado->getZonaRel()->getNombre()); 
             }

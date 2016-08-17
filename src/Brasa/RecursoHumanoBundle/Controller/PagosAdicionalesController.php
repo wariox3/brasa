@@ -18,6 +18,9 @@ class PagosAdicionalesController extends Controller
     public function listaAction($modalidad, $periodo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 10, 1)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
         $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');
         $form = $this->formularioLista();
@@ -104,6 +107,9 @@ class PagosAdicionalesController extends Controller
     public function listaFechaAction($modalidad) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 34, 1)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
         $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();

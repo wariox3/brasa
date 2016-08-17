@@ -415,7 +415,7 @@ class SegUsuariosController extends Controller
                 }
             }                                    
         }
-        $arDocumentos = $em->getRepository('BrasaSeguridadBundle:SegDocumento')->findAll();
+        $arDocumentos = $em->getRepository('BrasaSeguridadBundle:SegDocumento')->findBy(array(), array('modulo' => 'ASC','nombre' => 'ASC'));
         return $this->render('BrasaSeguridadBundle:Usuarios:detalleNuevoPermisoDocumento.html.twig', array(
             'arDocumentos' => $arDocumentos,
             'form' => $form->createView()
