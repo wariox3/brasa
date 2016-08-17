@@ -5,7 +5,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurPuestoType;
-use Brasa\TurnoBundle\Form\Type\TurPuestoPuestoType;
 use Brasa\TurnoBundle\Form\Type\TurPuestoDireccionType;
 class PuestoController extends Controller
 {
@@ -60,22 +59,9 @@ class PuestoController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arPuesto = $form->getData();
-            $arPuestoValidar = new \Brasa\TurnoBundle\Entity\TurPuesto();
-            $arPuestoValidar = $em->getRepository('BrasaTurnoBundle:TurPuesto')->findBy(array('nit' => $arPuesto->getNit()));
-            if(($codigoPuesto == 0 || $codigoPuesto == '') && count($arPuestoValidar) > 0) {
-                $objMensaje->Mensaje("error", "El puesto con ese nit ya existe", $this);
-            } else {
-                $arUsuario = $this->getUser();
-                $arPuesto->setUsuario($arUsuario->getUserName());
-                $em->persist($arPuesto);
-                $em->flush();            
-                if($form->get('guardarnuevo')->isClicked()) {
-                    return $this->redirect($this->generateUrl('brs_tur_base_puesto_nuevo', array('codigoPuesto' => 0 )));
-                } else {
-                    return $this->redirect($this->generateUrl('brs_tur_base_puesto'));
-                }                                   
-            }                                                                            
-
+            $em->persist($arPuesto);
+            $em->flush();            
+            return $this->redirect($this->generateUrl('brs_tur_base_puesto'));
         }
         return $this->render('BrasaTurnoBundle:Base/Puesto:nuevo.html.twig', array(
             'arPuesto' => $arPuesto,
@@ -221,7 +207,7 @@ class PuestoController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(9); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'J'; $col++) {
+        for($col = 'A'; $col !== 'M'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
         }      
         for($col = 'I'; $col !== 'J'; $col++) {            
@@ -237,7 +223,9 @@ class PuestoController extends Controller
                     ->setCellValue('G1', 'CELULAR')
                     ->setCellValue('H1', 'DIRECCION')
                     ->setCellValue('I1', 'COSTO')
-                    ->setCellValue('J1', 'INTERFACE');
+                    ->setCellValue('J1', 'INTERFACE')
+                    ->setCellValue('K1', 'OPERACION')
+                    ->setCellValue('L1', 'C.COSTO');
 
         $i = 2;
         
@@ -257,7 +245,15 @@ class PuestoController extends Controller
                     ->setCellValue('H' . $i, $arPuesto->getDireccion())
                     ->setCellValue('I' . $i, $arPuesto->getCostoDotacion())
                     ->setCellValue('J' . $i, $arPuesto->getCodigoInterface());                                    
+                        
+            if($arPuesto->getCodigoOperacionFk()) {
+                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K' . $i, $arPuesto->getOperacionRel()->getNombre());
+            }
+            if($arPuesto->getCodigoCentroCostoContabilidadFk()) {
+                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L' . $i, $arPuesto->getCentroCostoContabilidadRel()->getNombre());
+            }                  
             $i++;
+            
         }
         
         $objPHPExcel->getActiveSheet()->setTitle('Puesto');
