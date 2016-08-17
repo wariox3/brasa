@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuVacacionRepository extends EntityRepository {        
     
-    public function listaVacacionesDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $boolEstadoPagado = "") {        
+    public function listaVacacionesDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $boolEstadoPagado = "", $boolEstadoAutorizado = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT v, e FROM BrasaRecursoHumanoBundle:RhuVacacion v JOIN v.empleadoRel e WHERE v.codigoVacacionPk <> 0";
         
@@ -26,6 +26,12 @@ class RhuVacacionRepository extends EntityRepository {
         } 
         if($boolEstadoPagado == '0') {
             $dql .= " AND v.estadoPagoGenerado = 0";
+        }
+        if($boolEstadoAutorizado == 1 ) {
+            $dql .= " AND v.estadoAutorizado = 1";
+        } 
+        if($boolEstadoAutorizado == '0') {
+            $dql .= " AND v.estadoAutorizado = 0";
         }
         $dql .= " ORDER BY v.codigoVacacionPk DESC";
         return $dql;

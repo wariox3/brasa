@@ -73,16 +73,16 @@
                     <tr>
                         <td class="titulo">CENTRO COSTO</td>
                         <td class="td-in-well">{{ arVacaciones.centroCostoRel.nombre }}</td>
-                        <td class="titulo">PAGADO:</td>
-                        <td> {% if arVacaciones.estadoPagado == 1 %}SI{% else %} NO {% endif %}</td>
+                        <td class="titulo">AUTORIZADO:</td>
+                        <td> {% if arVacaciones.estadoAutorizado == 1 %}SI{% else %} NO {% endif %}</td>
                         <td class="titulo">OTRAS DEDUCCIONES:</td>
                         <td class="td-in-well" align="right">{{ arVacaciones.vrDeduccion | number_format(0, '.', ',')}}</td>                                               
                     </tr> 
                     <tr>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
-                        <td class="titulo"></td>
-                        <td></td>
+                        <td class="titulo">PAGADO:</td>
+                        <td> {% if arVacaciones.estadoPagoGenerado == 1 %}SI{% else %} NO {% endif %}</td>
                         <td class="titulo">BONIFICACIONES:</td>
                         <td class="td-in-well" align="right">{{ arVacaciones.vrBonificacion | number_format(0, '.', ',')}}</td>                                                
                     </tr>  

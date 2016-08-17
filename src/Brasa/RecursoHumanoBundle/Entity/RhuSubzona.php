@@ -27,6 +27,8 @@ class RhuSubzona
      */
     protected $empleadosSubzonaRel;    
     
+    
+    
     /**
      * Constructor
      */

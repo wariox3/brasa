@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuVacacionType;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 class VacacionesController extends Controller
 {    
@@ -27,17 +28,26 @@ class VacacionesController extends Controller
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if ($form->get('BtnEliminar')->isClicked()) {    
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoVacacion) {
-                        $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
-                        $arVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);
-                        if ($arVacaciones->getEstadoPagado() == 1 ) {
-                            $objMensaje->Mensaje("error", "No se puede Eliminar el registro, por que ya fue pagada!", $this);
+                    try{
+                        foreach ($arrSeleccionados AS $codigoVacacion) {
+                            $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
+                            $arVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);
+                            if ($arVacaciones->getEstadoAutorizado() == 1 ) {
+                                $objMensaje->Mensaje("error", "No se puede eliminar el registro, esta autorizado!", $this);
+                            }
+                            else { 
+                                if ($arVacaciones->getEstadoPagoGenerado() == 1 ) {
+                                    $objMensaje->Mensaje("error", "No se puede eliminar el registro, ya fue pagada!", $this);
+                                } else {
+                                    $em->remove($arVacaciones);
+                                    $em->flush();
+                                }
+                                
+                            }
                         }
-                        else {    
-                            $em->remove($arVacaciones);
-                            $em->flush();
-                        }
-                    }
+                    } catch (ForeignKeyConstraintViolationException $e) { 
+                        $objMensaje->Mensaje('error', 'No se puede eliminar el registro, tiene detalles relacionados', $this);
+                      }     
                 }
                 $this->filtrarLista($form);
                 $this->listar();
@@ -429,7 +439,8 @@ class VacacionesController extends Controller
         $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->listaVacacionesDQL(
                     $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroIdentificacion'),
-                    $session->get('filtroPagado')
+                    $session->get('filtroPagado'),
+                    $session->get('filtroAutorizado')
                     );
     }
     
@@ -457,6 +468,7 @@ class VacacionesController extends Controller
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('estadoPagado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'),'data' => $session->get('filtroPagado')))
+            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'),'data' => $session->get('filtroAutorizado')))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))    
             ->getForm();
         return $form;
@@ -468,6 +480,7 @@ class VacacionesController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroPagado', $controles['estadoPagado']);
+        $session->set('filtroAutorizado', $controles['estadoAutorizado']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
     }    
     
