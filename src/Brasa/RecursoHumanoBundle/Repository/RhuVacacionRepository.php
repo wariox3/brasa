@@ -69,8 +69,29 @@ class RhuVacacionRepository extends EntityRepository {
         }         
          * 
          */
-        $recargosNocturnos = $arContrato->getPromedioRecargoNocturnoInicial();
-        $promedioRecargosNocturnos = $recargosNocturnos;
+        $fechaDesdeRecargos = $arVacacion->getFecha()->format('Y-m-d');
+        $nuevafecha = strtotime ( '-365 day' , strtotime ( $fechaDesdeRecargos ) ) ;
+        $nuevafecha = date ( 'Y-m-d' , $nuevafecha );        
+        $fechaDesde = date_create($nuevafecha);
+        if($fechaDesde > $arContrato->getFechaDesde()) {            
+            $fechaDesdeRecargos = $nuevafecha;
+            $fechaHastaRecargos = $arVacacion->getFecha()->format('Y-m-d');
+            $recargosNocturnos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->recargosNocturnos($fechaDesdeRecargos, $fechaHastaRecargos, $arVacacion->getCodigoContratoFk());        
+            $recargosNocturnos = $recargosNocturnos / 12;            
+        } else {
+            $fechaDesdeRecargos = $arContrato->getFechaDesde()->format('Y-m-d');
+            $fechaHastaRecargos = $arVacacion->getFecha()->format('Y-m-d');
+            $interval = date_diff($arContrato->getFechaDesde(), $arVacacion->getFecha()); 
+            $meses = $interval->format('%m');
+            if($meses <= 0) {
+                $meses = 1;
+            }
+            $recargosNocturnos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->recargosNocturnos($fechaDesdeRecargos, $fechaHastaRecargos, $arVacacion->getCodigoContratoFk());        
+            $recargosNocturnos = $recargosNocturnos / $meses;                         
+        }
+
+        $recargosNocturnosInicial = $arContrato->getPromedioRecargoNocturnoInicial();
+        $promedioRecargosNocturnos = $recargosNocturnosInicial + $recargosNocturnos;
         if ($promedioRecargosNocturnos == null){
             $promedioRecargosNocturnos = 0;
         }

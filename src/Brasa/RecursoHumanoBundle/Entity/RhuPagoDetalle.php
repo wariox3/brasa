@@ -103,6 +103,11 @@ class RhuPagoDetalle
     private $vrIngresoBaseCotizacionAdicional = 0;           
     
     /**
+     * @ORM\Column(name="vr_extra", type="float")
+     */
+    private $vrExtra= 0;     
+    
+    /**
      * @ORM\Column(name="codigo_programacion_pago_detalle_fk", type="integer", nullable=true)
      */    
     private $codigoProgramacionPagoDetalleFk;     
@@ -787,5 +792,29 @@ class RhuPagoDetalle
     public function getVrIngresoBaseCotizacionSalario()
     {
         return $this->vrIngresoBaseCotizacionSalario;
+    }
+
+    /**
+     * Set vrExtra
+     *
+     * @param float $vrExtra
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setVrExtra($vrExtra)
+    {
+        $this->vrExtra = $vrExtra;
+
+        return $this;
+    }
+
+    /**
+     * Get vrExtra
+     *
+     * @return float
+     */
+    public function getVrExtra()
+    {
+        return $this->vrExtra;
     }
 }

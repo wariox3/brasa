@@ -269,7 +269,8 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                         $arPagoDetalle->setCotizacion(1);
                         $douVrHoraAdicional = ($douVrHora * $arPagoConcepto->getPorPorcentajeTiempoExtra())/100;
                         $douPagoDetalle = $douVrHoraAdicional * $arrHorasExtra['horas'];                        
-                        $arPagoDetalle->setVrIngresoBaseCotizacionAdicional($douPagoDetalle);                        
+                        $arPagoDetalle->setVrIngresoBaseCotizacionAdicional($douPagoDetalle); 
+                        $arPagoDetalle->setVrExtra($douPagoDetalle);
                         if($arPagoConcepto->getComponeSalario() == 1) {
                             $douPagoDetalle = $douVrHora * $arrHorasExtra['horas'];                        
                             $arPagoDetalle->setVrIngresoBaseCotizacionSalario($douPagoDetalle);                                                    

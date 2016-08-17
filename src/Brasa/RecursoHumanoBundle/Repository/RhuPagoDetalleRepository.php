@@ -130,4 +130,18 @@ class RhuPagoDetalleRepository extends EntityRepository {
         $arPagosDetalles = $query->getResult();                
         return $arPagosDetalles;
     }
+    
+    public function recargosNocturnos($fechaDesde, $fechaHasta, $codigoContrato) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT SUM(pd.vrIngresoBaseCotizacionAdicional) as recagosNocturnos FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p JOIN pd.pagoConceptoRel pc "
+                . "WHERE pc.recargoNocturno = 1 AND p.codigoContratoFk = " . $codigoContrato . " "
+                . "AND p.fechaDesdePago >= '" . $fechaDesde . "' AND p.fechaDesdePago <= '" . $fechaHasta . "'";
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();
+        $recargosNocturnos = $arrayResultado[0]['recagosNocturnos'];
+        if($recargosNocturnos == null) {
+            $recargosNocturnos = 0;
+        }
+        return $recargosNocturnos;
+    }    
 }

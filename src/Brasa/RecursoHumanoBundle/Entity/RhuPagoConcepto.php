@@ -134,6 +134,11 @@ class RhuPagoConcepto
     private $codigoInterface;    
     
     /**
+     * @ORM\Column(name="recargo_nocturno", type="boolean")
+     */    
+    private $recargoNocturno = false;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuPagoDetalle", mappedBy="pagoConceptoRel")
      */
     protected $pagosDetallesPagoConceptoRel;     
@@ -1175,5 +1180,29 @@ class RhuPagoConcepto
     public function getLiquidacionesAdicionalesPagoConceptoRel()
     {
         return $this->liquidacionesAdicionalesPagoConceptoRel;
+    }
+
+    /**
+     * Set recargoNocturno
+     *
+     * @param boolean $recargoNocturno
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setRecargoNocturno($recargoNocturno)
+    {
+        $this->recargoNocturno = $recargoNocturno;
+
+        return $this;
+    }
+
+    /**
+     * Get recargoNocturno
+     *
+     * @return boolean
+     */
+    public function getRecargoNocturno()
+    {
+        return $this->recargoNocturno;
     }
 }
