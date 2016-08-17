@@ -82,7 +82,7 @@
                         <tr>
                             <th>CÓDIGO</th>
                             <th>PAGO</th>
-                            <th>NUMERO</th>
+                            <th>VACACION</th>
                             <th>IDENTIFICACION</th>
                             <th>EMPLEADO</th>
                             <th>BANCO</th>
@@ -95,12 +95,12 @@
                             <tr class="{{ class }}">
                                 <td>{{ arPagoBancoDetalle.codigoPagoBancoDetallePk  }}</td>
                                 <td>{{ arPagoBancoDetalle.codigoPagoFk  }}</td>
-                                <td>{{ arPagoBancoDetalle.pagoRel.numero  }}</td>
+                                <td>{{ arPagoBancoDetalle.codigoVacacionFk  }}</td>
                                 <td>{{ arPagoBancoDetalle.numeroIdentificacion  }}</td>
                                 <td>{{ arPagoBancoDetalle.nombreCorto  }}</td>
-                                <td>{{ arPagoBancoDetalle.pagoRel.empleadoRel.bancoRel.nombre  }}</td>
+                                <td>{{ arPagoBancoDetalle.bancoRel.nombre |default('') }}</td>
                                 <td>{{ arPagoBancoDetalle.cuenta  }}</td>
-                                <td class="td-in-well" align="right">{{ arPagoBancoDetalle.vrPago | number_format(2, '.', ',') }}</td>
+                                <td class="td-in-well" align="right">{{ arPagoBancoDetalle.vrPago | number_format(0, '.', ',') }}</td>
                                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagoBancoDetalle.codigoPagoBancoDetallePk }}" /></td>
                             </tr>
                         {% endfor %}
@@ -114,10 +114,11 @@
                     {{ knp_pagination_render(arPagoBancoDetalle) }}       
             </div>                    
             <div class="btn-toolbar" style="float: right">              
-                {%if arPagoBanco.estadoAutorizado == 0 %}
-                <div class="btn-group">
-                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_pago_banco_detalle_nuevo', {'codigoPagoBanco': arPagoBanco.codigoPagoBancoPK}) }}', 'AgregarPagoBancoDetalle', 600, 900)">Nuevo</a>
-                </div>
+                {%if arPagoBanco.estadoAutorizado == 0 %}                    
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_pago_banco_detalle_vacacion_nuevo', {'codigoPagoBanco': arPagoBanco.codigoPagoBancoPK}) }}', 'AgregarPagoBancoDetalle', 600, 900)">Nuevo vacaciones</a>
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_pago_banco_detalle_nuevo', {'codigoPagoBanco': arPagoBanco.codigoPagoBancoPK}) }}', 'AgregarPagoBancoDetalle', 600, 900)">Nuevo nomina</a>
+                    </div>                        
                 {% endif %}
                 <div class="btn-group">
                     {{ form_widget(form.BtnEliminarDetalle, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}               
@@ -128,6 +129,6 @@
 
         {{ form_rest(form) }}
         {{ form_end(form) }}
-        <a  class="btn btn-default btn-sm" href="{{ path('brs_rhu_pago_banco_lista') }}">Volver</a>
+        <a  class="btn btn-default btn-sm" href="{{ path('brs_rhu_movimiento_pago_banco') }}">Volver</a>
     </div>
 {% endblock %}

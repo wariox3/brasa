@@ -1,6 +1,8 @@
 <?php
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuPagoBancoType;
 
@@ -8,6 +10,10 @@ class PagoBancoController extends Controller
 {
     var $strSqlLista = "";
     var $strFecha = "";
+    
+    /**
+     * @Route("/rhu/movimiento/pago/banco/", name="brs_rhu_movimiento_pago_banco")
+     */    
     public function listaAction() {        
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();    
@@ -26,7 +32,7 @@ class PagoBancoController extends Controller
                     }
                     $em->flush();
                 }                
-                return $this->redirect($this->generateUrl('brs_rhu_pago_banco_lista'));
+                return $this->redirect($this->generateUrl('brs_rhu_movimiento_pago_banco'));
             }
             if ($form->get('BtnFiltrar')->isClicked()) {    
                 $this->filtrar($form);
@@ -41,7 +47,10 @@ class PagoBancoController extends Controller
         $arPagoBancos = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);                
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagoBanco/:lista.html.twig', array('arPagoBancos' => $arPagoBancos, 'form' => $form->createView()));
     } 
-    
+        
+    /**
+     * @Route("/rhu/movimiento/pago/banco/nuevo/{codigoPagoBanco}", name="brs_rhu_movimiento_pago_banco_nuevo")
+     */    
     public function nuevoAction($codigoPagoBanco) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -61,7 +70,7 @@ class PagoBancoController extends Controller
             $em->persist($arPagoBanco);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_pago_banco_nuevo', array('codigoPagoBanco' => 0)));
+                return $this->redirect($this->generateUrl('brs_rhu_movimiento_pago_banco_nuevo', array('codigoPagoBanco' => 0)));
             } else {
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
             }
@@ -71,6 +80,9 @@ class PagoBancoController extends Controller
             'form' => $form->createView()));
     }
     
+    /**
+     * @Route("/rhu/movimiento/pago/banco/detalle/{codigoPagoBanco}", name="brs_rhu_movimiento_pago_banco_detalle")
+     */      
     public function detalleAction($codigoPagoBanco) {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
@@ -88,7 +100,7 @@ class PagoBancoController extends Controller
                         $arPagoBanco->setEstadoAutorizado(1);
                         $em->persist($arPagoBanco);
                         $em->flush();
-                        return $this->redirect($this->generateUrl('brs_rhu_pago_banco_detalle', array('codigoPagoBanco' => $codigoPagoBanco)));           
+                        return $this->redirect($this->generateUrl('brs_rhu_movimiento_pago_banco_detalle', array('codigoPagoBanco' => $codigoPagoBanco)));           
                     } else {
                         $objMensaje->Mensaje("error", "No hay detalles para los pagos al banco, no se puede autorizar", $this);
                     }    
@@ -99,7 +111,7 @@ class PagoBancoController extends Controller
                     $arPagoBanco->setEstadoAutorizado(0);
                     $em->persist($arPagoBanco);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_pago_banco_detalle', array('codigoPagoBanco' => $codigoPagoBanco)));           
+                    return $this->redirect($this->generateUrl('brs_rhu_movimiento_pago_banco_detalle', array('codigoPagoBanco' => $codigoPagoBanco)));           
                 } else {
                     $objMensaje->Mensaje("error", "La pago banco debe estar autorizado y no puede estar impreso", $this);
                 }    
@@ -122,16 +134,24 @@ class PagoBancoController extends Controller
                         foreach ($arrSeleccionados as $codigoPagoBancoDetalle) {
                             $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
                             $arPagoBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->find($codigoPagoBancoDetalle);
-                            $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-                            $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($arPagoBancoDetalle->getCodigoPagoFk());
-                            $arPago->setEstadoPagadoBanco(0);
-                            $em->persist($arPago);
+                            if($arPagoBancoDetalle->getCodigoPagoFk()) {
+                                $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+                                $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($arPagoBancoDetalle->getCodigoPagoFk());
+                                $arPago->setEstadoPagadoBanco(0);
+                                $em->persist($arPago);                                
+                            }
+                            if($arPagoBancoDetalle->getCodigoVacacionFk()) {
+                                $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
+                                $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($arPagoBancoDetalle->getCodigoVacacionFk());
+                                $arVacacion->setEstadoPagoBanco(0);
+                                $em->persist($arVacacion);                                
+                            }                            
                             $em->remove($arPagoBancoDetalle);
                         }
                         $em->flush();
                         $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBanco')->liquidar($codigoPagoBanco);
                     } 
-                    return $this->redirect($this->generateUrl('brs_rhu_pago_banco_detalle', array('codigoPagoBanco' => $codigoPagoBanco)));           
+                    return $this->redirect($this->generateUrl('brs_rhu_movimiento_pago_banco_detalle', array('codigoPagoBanco' => $codigoPagoBanco)));           
                 }    
             }
             if($form->get('BtnArchivoBancolombiaPab')->isClicked()) {
@@ -173,6 +193,9 @@ class PagoBancoController extends Controller
                     ));
     }
     
+    /**
+     * @Route("/rhu/movimiento/pago/banco/detalle/nuevo/{codigoPagoBanco}", name="brs_rhu_movimiento_pago_banco_detalle_nuevo")
+     */    
     public function detalleNuevoAction($codigoPagoBanco) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -269,7 +292,7 @@ class PagoBancoController extends Controller
                                 $arProgramacionPago->setEstadoPagadoBanco(1);
                                 $em->persist($arProgramacionPago);
                                 $em->flush();
-                                return $this->redirect($this->generateUrl('brs_rhu_pago_banco_detalle_nuevo', array('codigoPagoBanco' => $codigoPagoBanco)));
+                                return $this->redirect($this->generateUrl('brs_rhu_movimiento_pago_banco_detalle_nuevo', array('codigoPagoBanco' => $codigoPagoBanco)));
                             } else {
                                 $objMensaje->Mensaje("error", "No se puede Eliminar la programacion ".$codigoProgramacionPago." Tiene registros sin pagar", $this);
                             }
@@ -282,6 +305,57 @@ class PagoBancoController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagoBanco:detalleNuevo.html.twig', array(
             'arPagos' => $arPagos,
             'arProgramacionesPago' => $arProgramacionesPago,
+            'form' => $form->createView()));
+    }    
+    
+    /**
+     * @Route("/rhu/movimiento/pago/banco/detalle/vacacion/nuevo/{codigoPagoBanco}", name="brs_rhu_movimiento_pago_banco_detalle_vacacion_nuevo")
+     */    
+    public function detalleVacacionNuevoAction($codigoPagoBanco) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arPagoBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco();
+        $arPagoBanco = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBanco')->find($codigoPagoBanco);
+        $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
+        $arVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->findBy(array('estadoPagoGenerado' => 1, 'estadoPagoBanco' => 0));
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))            
+            ->getForm();
+        $form->handleRequest($request); 
+        if ($form->isValid()) {
+            if ($arPagoBanco->getEstadoAutorizado() == 0){
+                if ($form->get('BtnGuardar')->isClicked()) {                              
+                    $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados AS $codigo) {   
+                            $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
+                            $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigo);
+                            if($arVacacion->getEstadoPagoBanco() == 0) {
+                                $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
+                                $arPagoBancoDetalle->setPagoBancoRel($arPagoBanco);
+                                $arPagoBancoDetalle->setVacacionRel($arVacacion);
+                                $arPagoBancoDetalle->setNumeroIdentificacion($arVacacion->getEmpleadoRel()->getNumeroIdentificacion());
+                                $arPagoBancoDetalle->setNombreCorto($arVacacion->getEmpleadoRel()->getNombreCorto());
+                                $arPagoBancoDetalle->setCodigoBancoFk($arVacacion->getEmpleadoRel()->getCodigoBancoFk());
+                                $arPagoBancoDetalle->setCuenta($arVacacion->getEmpleadoRel()->getCuenta());
+                                $valorPagar = round($arVacacion->getVrVacacion());
+                                $arPagoBancoDetalle->setVrPago($valorPagar); 
+                                $arPagoBancoDetalle->setBancoRel($arVacacion->getEmpleadoRel()->getBancoRel());                                        
+                                $em->persist($arPagoBancoDetalle); 
+                                $arVacacion->setEstadoPagoBanco(1);
+                                $em->persist($arVacacion);                            
+                            }
+                        }
+                        $em->flush();
+                    }
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBanco')->liquidar($codigoPagoBanco);
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+                }
+            }                    
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagoBanco:detalleVacacionNuevo.html.twig', array(
+            'arVacaciones' => $arVacaciones,
             'form' => $form->createView()));
     }    
     

@@ -143,6 +143,11 @@ class RhuVacacion
     private $estadoPagoGenerado = 0;          
     
     /**
+     * @ORM\Column(name="estado_pago_banco", type="boolean")
+     */
+    private $estadoPagoBanco = 0;    
+    
+    /**
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
      */    
     private $codigoUsuario;
@@ -180,6 +185,11 @@ class RhuVacacion
      */
     protected $vacacionesBonificacionesVacacionRel;    
 
+    /**
+     * @ORM\OneToMany(targetEntity="RhuPagoBancoDetalle", mappedBy="vacacionRel")
+     */
+    protected $pagosBancosDetallesVacacionRel;    
+    
     /**
      * Constructor
      */
@@ -984,5 +994,63 @@ class RhuVacacion
     public function getDiasDisfrutadosReales()
     {
         return $this->diasDisfrutadosReales;
+    }
+
+    /**
+     * Set estadoPagoBanco
+     *
+     * @param boolean $estadoPagoBanco
+     *
+     * @return RhuVacacion
+     */
+    public function setEstadoPagoBanco($estadoPagoBanco)
+    {
+        $this->estadoPagoBanco = $estadoPagoBanco;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagoBanco
+     *
+     * @return boolean
+     */
+    public function getEstadoPagoBanco()
+    {
+        return $this->estadoPagoBanco;
+    }
+
+    /**
+     * Add pagosBancosDetallesVacacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesVacacionRel
+     *
+     * @return RhuVacacion
+     */
+    public function addPagosBancosDetallesVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesVacacionRel)
+    {
+        $this->pagosBancosDetallesVacacionRel[] = $pagosBancosDetallesVacacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosBancosDetallesVacacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesVacacionRel
+     */
+    public function removePagosBancosDetallesVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesVacacionRel)
+    {
+        $this->pagosBancosDetallesVacacionRel->removeElement($pagosBancosDetallesVacacionRel);
+    }
+
+    /**
+     * Get pagosBancosDetallesVacacionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosBancosDetallesVacacionRel()
+    {
+        return $this->pagosBancosDetallesVacacionRel;
     }
 }

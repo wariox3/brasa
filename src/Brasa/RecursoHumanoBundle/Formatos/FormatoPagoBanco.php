@@ -43,14 +43,6 @@ class FormatoPagoBanco extends \FPDF_FPDF {
         $this->SetXY(50, 30);
         $this->Cell(20, 4, utf8_decode("TELÉFONO:"), 0, 0, 'L', 1);
         $this->Cell(100, 4, $arConfiguracion->getTelefonoEmpresa(), 0, 0, 'L', 0);        
-        //FORMATO ISO
-        $this->SetXY(168, 18);
-        $this->SetFillColor(255, 255, 255);
-        $this->Cell(35, 6, "CODIGO: ".$arContenidoFormatoA->getCodigoFormatoIso(), 1, 0, 'L', 1);
-        $this->SetXY(168, 24);
-        $this->Cell(35, 6, utf8_decode("VERSIÓN: ".$arContenidoFormatoA->getVersion()), 1, 0, 'L', 1);
-        $this->SetXY(168, 30);
-        $this->Cell(35, 6, utf8_decode("FECHA: ".$arContenidoFormatoA->getFechaVersion()->format('Y-m-d')), 1, 0, 'L', 1);
         //
         $arPagoBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco();
         $arPagoBanco = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBanco')->find(self::$codigoPagoBanco);
@@ -74,10 +66,10 @@ class FormatoPagoBanco extends \FPDF_FPDF {
         $this->SetXY(10, 45);
         $this->SetFont('Arial','B',8);
         $this->SetFillColor(200, 200, 200);
-        $this->Cell(30, 5, utf8_decode("NÚMERO SOPORTE:") , 1, 0, 'L', 1);
+        $this->Cell(30, 5, utf8_decode("TIPO") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
         $this->SetFillColor(272, 272, 272);
-        $this->Cell(30, 5, '' , 1, 0, 'R', 1);
+        $this->Cell(30, 5, $arPagoBanco->getPagoBancoTipoRel()->getNombre() , 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->SetFillColor(200, 200, 200);
         $this->Cell(30, 5, "TOTAL:" , 1, 0, 'R', 1);
@@ -122,7 +114,7 @@ class FormatoPagoBanco extends \FPDF_FPDF {
         $var = 0;
         foreach ($arPagoBancoDetalles as $arPagoBancoDetalle) {            
             $pdf->Cell(20, 4, $arPagoBancoDetalle->getCodigoPagoBancoDetallePk(), 1, 0, 'L');
-            $pdf->Cell(25, 4, $arPagoBancoDetalle->getPagoRel()->getProgramacionPagoRel()->getPagoTipoRel()->getNombre(), 1, 0, 'L');
+            $pdf->Cell(25, 4, $arPagoBancoDetalle->getPagoBancoRel()->getPagoBancoTipoRel()->getNombre(), 1, 0, 'L');
             $pdf->Cell(25, 4, $arPagoBancoDetalle->getNumeroIdentificacion(), 1, 0, 'L');
             $pdf->Cell(105, 4, utf8_decode($arPagoBancoDetalle->getNombreCorto()), 1, 0, 'L');
             $pdf->Cell(15, 4, number_format($arPagoBancoDetalle->getVrPago(), 0, '.', ','), 1, 0, 'R');

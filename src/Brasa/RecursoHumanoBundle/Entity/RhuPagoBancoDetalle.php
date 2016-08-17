@@ -28,6 +28,11 @@ class RhuPagoBancoDetalle
     private $codigoPagoFk;    
     
     /**
+     * @ORM\Column(name="codigo_vacacion_fk", type="integer", nullable=true)
+     */    
+    private $codigoVacacionFk;    
+    
+    /**
      * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false)
      */         
     private $numeroIdentificacion;    
@@ -69,6 +74,12 @@ class RhuPagoBancoDetalle
      */
     protected $pagoRel;        
 
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuVacacion", inversedBy="pagosBancosDetallesVacacionRel")
+     * @ORM\JoinColumn(name="codigo_vacacion_fk", referencedColumnName="codigo_vacacion_pk")
+     */
+    protected $vacacionRel;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuBanco", inversedBy="pagosBancosDetallesBancoRel")
      * @ORM\JoinColumn(name="codigo_banco_fk", referencedColumnName="codigo_banco_pk")
@@ -347,5 +358,53 @@ class RhuPagoBancoDetalle
     public function getBancoRel()
     {
         return $this->bancoRel;
+    }
+
+    /**
+     * Set codigoVacacionFk
+     *
+     * @param integer $codigoVacacionFk
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setCodigoVacacionFk($codigoVacacionFk)
+    {
+        $this->codigoVacacionFk = $codigoVacacionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoVacacionFk
+     *
+     * @return integer
+     */
+    public function getCodigoVacacionFk()
+    {
+        return $this->codigoVacacionFk;
+    }
+
+    /**
+     * Set vacacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionRel
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionRel = null)
+    {
+        $this->vacacionRel = $vacacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get vacacionRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuVacacion
+     */
+    public function getVacacionRel()
+    {
+        return $this->vacacionRel;
     }
 }

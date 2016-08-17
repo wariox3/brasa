@@ -18,6 +18,11 @@ class RhuPagoBanco
     private $codigoPagoBancoPk;         
     
     /**
+     * @ORM\Column(name="codigo_pago_banco_tipo_fk", type="integer", nullable=true)
+     */    
+    private $codigoPagoBancoTipoFk;    
+    
+    /**
      * @ORM\Column(name="fecha_trasmision", type="date", nullable=true)
      */    
     private $fechaTrasmision;    
@@ -69,12 +74,18 @@ class RhuPagoBanco
     protected $cuentaRel;     
 
     /**
+     * @ORM\ManyToOne(targetEntity="RhuPagoBancoTipo", inversedBy="pagosBancosPagoBancoTipoRel")
+     * @ORM\JoinColumn(name="codigo_pago_banco_tipo_fk", referencedColumnName="codigo_pago_banco_tipo_pk")
+     */
+    protected $pagoBancoTipoRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuPagoBancoDetalle", mappedBy="pagoBancoRel")
      */
     protected $pagosBancosDetallesPagoBancoRel;     
     
 
-    
+
     /**
      * Constructor
      */
@@ -91,6 +102,30 @@ class RhuPagoBanco
     public function getCodigoPagoBancoPk()
     {
         return $this->codigoPagoBancoPk;
+    }
+
+    /**
+     * Set codigoPagoBancoTipoFk
+     *
+     * @param integer $codigoPagoBancoTipoFk
+     *
+     * @return RhuPagoBanco
+     */
+    public function setCodigoPagoBancoTipoFk($codigoPagoBancoTipoFk)
+    {
+        $this->codigoPagoBancoTipoFk = $codigoPagoBancoTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPagoBancoTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPagoBancoTipoFk()
+    {
+        return $this->codigoPagoBancoTipoFk;
     }
 
     /**
@@ -331,6 +366,30 @@ class RhuPagoBanco
     public function getCuentaRel()
     {
         return $this->cuentaRel;
+    }
+
+    /**
+     * Set pagoBancoTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoTipo $pagoBancoTipoRel
+     *
+     * @return RhuPagoBanco
+     */
+    public function setPagoBancoTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoTipo $pagoBancoTipoRel = null)
+    {
+        $this->pagoBancoTipoRel = $pagoBancoTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pagoBancoTipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoTipo
+     */
+    public function getPagoBancoTipoRel()
+    {
+        return $this->pagoBancoTipoRel;
     }
 
     /**
