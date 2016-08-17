@@ -44,7 +44,7 @@ class TerceroController extends Controller
                 $arTercerosVerificar = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findAll();
                 foreach ($arTercerosVerificar as $arTercero) {
                     $digito = $objFunciones->devuelveDigitoVerificacion($arTercero->getNumeroIdentificacion());
-                    if($digito != $arTercero->getDigitoVerificacion()) {
+                    if($digito != $arTercero->getDigitoVerificacion() || $arTercero->getDigitoVerificacion() == null) {
                         $arTerceroActualizar = new \Brasa\ContabilidadBundle\Entity\CtbTercero();
                         $arTerceroActualizar = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->find($arTercero->getCodigoTerceroPk());
                         $arTerceroActualizar->setDigitoVerificacion($digito);
