@@ -834,7 +834,7 @@ class FacturaController extends Controller
                     ->setCellValue('C' . $i, $arFactura->getNumero())
                     ->setCellValue('D' . $i, $arFactura->getFecha()->format('Y/m/d'))
                     ->setCellValue('E' . $i, $arFactura->getFechaVence()->format('Y/m/d'))
-                    ->setCellValue('F' . $i, $arFactura->getClienteRel()->getNit())
+                    ->setCellValue('F' . $i, $arFactura->getClienteRel()->getNit()."-".$arFactura->getClienteRel()->getDigitoVerificacion())
                     ->setCellValue('G' . $i, "13050501")
                     ->setCellValue('H' . $i, ($arFactura->getVrTotalNeto() * $arFactura->getOperacion()))
                     ->setCellValue('I' . $i, 0);
