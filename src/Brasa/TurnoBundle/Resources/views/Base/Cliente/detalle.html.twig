@@ -39,7 +39,7 @@
                         <td class="titulo">NOMBRE COMPLETO:</td>
                         <td class="td-in-well">{{ arCliente.nombreCompleto }}</td>
                         <td class="titulo">SECTOR COMERCIAL:</td>
-                        <td>{{ arCliente.sectorComercialRel.nombre }}</td>
+                        <td>{{ arCliente.sectorComercialRel.nombre | default('')}}</td>
                     </tr>                    
                     <tr>
                         <td class="titulo">DIRECCION:</td>

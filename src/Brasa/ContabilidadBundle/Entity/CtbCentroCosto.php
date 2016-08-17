@@ -24,6 +24,11 @@ class CtbCentroCosto
     private $nombre;      
     
     /**
+     * @ORM\Column(name="codigo_interface", type="string", length=30, nullable=true)
+     */
+    private $codigoInterface;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="CtbAsientoDetalle", mappedBy="centroCostoRel")
      */
     protected $asientosDetallesCentroCostoRel;
@@ -180,5 +185,29 @@ class CtbCentroCosto
     public function getTurPuestosCentroCostoRel()
     {
         return $this->turPuestosCentroCostoRel;
+    }
+
+    /**
+     * Set codigoInterface
+     *
+     * @param string $codigoInterface
+     *
+     * @return CtbCentroCosto
+     */
+    public function setCodigoInterface($codigoInterface)
+    {
+        $this->codigoInterface = $codigoInterface;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoInterface
+     *
+     * @return string
+     */
+    public function getCodigoInterface()
+    {
+        return $this->codigoInterface;
     }
 }
