@@ -38,7 +38,7 @@ class TurnoController extends Controller
             }
         }
         
-        $arTurnos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
+        $arTurnos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 200);
         return $this->render('BrasaTurnoBundle:Base/Turno:lista.html.twig', array(
             'arTurnos' => $arTurnos, 
             'form' => $form->createView()));

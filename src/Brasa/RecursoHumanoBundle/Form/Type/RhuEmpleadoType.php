@@ -10,6 +10,13 @@ class RhuEmpleadoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('centroCostoContabilidadRel', 'entity', array(
+                'class' => 'BrasaContabilidadBundle:CtbCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                
             ->add('tipoIdentificacionRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenTipoIdentificacion',
                 'query_builder' => function (EntityRepository $er) {
@@ -111,8 +118,7 @@ class RhuEmpleadoType extends AbstractType
             ->add('departamentoEmpresaRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuDepartamentoEmpresa',
                 'property' => 'nombre',
-            ))
-            ->add('digitoVerificacion', 'text', array('required' => true))                
+            ))            
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

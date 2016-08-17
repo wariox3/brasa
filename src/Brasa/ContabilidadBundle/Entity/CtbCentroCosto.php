@@ -28,7 +28,15 @@ class CtbCentroCosto
      */
     protected $asientosDetallesCentroCostoRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleado", mappedBy="centroCostoContabilidadRel")
+     */
+    protected $rhuEmpleadosCentroCostoRel;    
     
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurPuesto", mappedBy="centroCostoContabilidadRel")
+     */
+    protected $turPuestosCentroCostoRel;     
     
     /**
      * Constructor
@@ -104,5 +112,73 @@ class CtbCentroCosto
     public function getAsientosDetallesCentroCostoRel()
     {
         return $this->asientosDetallesCentroCostoRel;
+    }
+
+    /**
+     * Add rhuEmpleadosCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCentroCostoRel
+     *
+     * @return CtbCentroCosto
+     */
+    public function addRhuEmpleadosCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCentroCostoRel)
+    {
+        $this->rhuEmpleadosCentroCostoRel[] = $rhuEmpleadosCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuEmpleadosCentroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCentroCostoRel
+     */
+    public function removeRhuEmpleadosCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosCentroCostoRel)
+    {
+        $this->rhuEmpleadosCentroCostoRel->removeElement($rhuEmpleadosCentroCostoRel);
+    }
+
+    /**
+     * Get rhuEmpleadosCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuEmpleadosCentroCostoRel()
+    {
+        return $this->rhuEmpleadosCentroCostoRel;
+    }
+
+    /**
+     * Add turPuestosCentroCostoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPuesto $turPuestosCentroCostoRel
+     *
+     * @return CtbCentroCosto
+     */
+    public function addTurPuestosCentroCostoRel(\Brasa\TurnoBundle\Entity\TurPuesto $turPuestosCentroCostoRel)
+    {
+        $this->turPuestosCentroCostoRel[] = $turPuestosCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove turPuestosCentroCostoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPuesto $turPuestosCentroCostoRel
+     */
+    public function removeTurPuestosCentroCostoRel(\Brasa\TurnoBundle\Entity\TurPuesto $turPuestosCentroCostoRel)
+    {
+        $this->turPuestosCentroCostoRel->removeElement($turPuestosCentroCostoRel);
+    }
+
+    /**
+     * Get turPuestosCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTurPuestosCentroCostoRel()
+    {
+        return $this->turPuestosCentroCostoRel;
     }
 }

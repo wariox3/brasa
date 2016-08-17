@@ -33,7 +33,7 @@ class BaseConceptoServicioController extends Controller
             }
         }
         
-        $arConceptoServicios = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
+        $arConceptoServicios = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 200);
         return $this->render('BrasaTurnoBundle:Base/ConceptoServicio:lista.html.twig', array(
             'arConceptoServicios' => $arConceptoServicios, 
             'form' => $form->createView()));

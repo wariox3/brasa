@@ -11,13 +11,7 @@
                 <div class="col-sm-9">
                     {{ form_widget(form.programadorRel, { 'attr': {'class': 'form-control'} }) }}                        
                 </div>                
-            </div> 
-            <div class="form-group form-group-sm">
-                <label class="col-sm-3 control-label">Zona:</label>
-                <div class="col-sm-9">
-                    {{ form_widget(form.zonaRel, { 'attr': {'class': 'form-control'} }) }}                        
-                </div>                
-            </div>                
+            </div>                 
             <div class="form-group form-group-sm">
                 <label for="form_nombre" class="col-sm-3 control-label">Nombre:</label>
                 <div class="col-sm-9">
@@ -67,7 +61,35 @@
                 </div>                
             </div>                
         </div>
-    </div>                                    
+    </div> 
+    <div class="panel panel-default">
+        <div class="panel-heading">Información control</div>       
+            <div class="panel-body">   
+                <div class="form-group form-group-sm">
+                    <label class="col-sm-3 control-label">Zona:</label>
+                    <div class="col-sm-9">
+                        {{ form_widget(form.zonaRel, { 'attr': {'class': 'form-control'} }) }}                        
+                    </div>                
+                </div>                 
+                <div class="form-group form-group-sm">
+                    <label class="col-sm-3 control-label">Operacion:</label>
+                    <div class="col-sm-9">
+                            {{ form_widget(form.operacionRel, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>                           
+            </div>
+    </div>                 
+    <div class="panel panel-default">
+        <div class="panel-heading">Información contabilidad</div>
+        <div class="panel-body">               
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Centro costo:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.centroCostoContabilidadRel, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                           
+        </div>
+    </div>                 
     <div class="modal-footer">        
         {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
         {{ form_widget(form.guardarnuevo, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}

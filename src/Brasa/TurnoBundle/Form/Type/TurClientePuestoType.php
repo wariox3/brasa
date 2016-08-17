@@ -10,6 +10,13 @@ class TurClientePuestoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('centroCostoContabilidadRel', 'entity', array(
+                'class' => 'BrasaContabilidadBundle:CtbCentroCosto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                 
             ->add('ciudadRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {
@@ -30,7 +37,14 @@ class TurClientePuestoType extends AbstractType
                     return $er->createQueryBuilder('z')
                     ->orderBy('z.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                            
+                'required' => true))  
+            ->add('operacionRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurOperacion',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('o')
+                    ->orderBy('o.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                             
             ->add('nombre', 'text', array('required'  => true))
             ->add('direccion', 'text', array('required'  => false))
             ->add('telefono', 'text', array('required'  => false))

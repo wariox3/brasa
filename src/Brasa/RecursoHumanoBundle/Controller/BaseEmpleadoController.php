@@ -212,6 +212,7 @@ class BaseEmpleadoController extends Controller
     public function nuevoAction($codigoEmpleado, $codigoSeleccion = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion;
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
@@ -284,7 +285,9 @@ class BaseEmpleadoController extends Controller
                 if ($varEdad < $intEdadEmpleado){
                     $objMensaje->Mensaje("error", "El empleado debe ser mayor de " .$intEdadEmpleado. " años!", $this);
                 }else{
-                    $em->persist($arEmpleado);
+                    $digito = $objFunciones->devuelveDigitoVerificacion($arEmpleado->getNumeroIdentificacion());
+                    $arEmpleado->setDigitoVerificacion($digito);
+                    $em->persist($arEmpleado);                    
                     $em->flush();
                     if($form->get('guardarnuevo')->isClicked()) {
                         return $this->redirect($this->generateUrl('brs_rhu_base_empleados_nuevo', array('codigoEmpleado' => 0, 'codigoSeleccion' => 0)));
