@@ -273,14 +273,24 @@ class IncapacidadController extends Controller
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);        
         $arIncapacidades = $query->getResult();
-        foreach ($arIncapacidades as $arIncapacidad) {            
+        foreach ($arIncapacidades as $arIncapacidad) {
+        $centroCosto = "";
+        if ($arIncapacidad->getCodigoCentroCostoFk() != null){
+            $centroCosto = $arIncapacidad->getCentroCostoRel()->getNombre();
+
+        }
+        $salud = "";
+        if ($arIncapacidad->getCodigoEntidadSaludFk() != null){
+            $salud = $arIncapacidad->getEntidadSaludRel()->getNombre();
+
+        }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arIncapacidad->getCodigoIncapacidadPk())
                     ->setCellValue('B' . $i, $arIncapacidad->getNumeroEps())
-                    ->setCellValue('C' . $i, $arIncapacidad->getEntidadSaludRel()->getNombre())
+                    ->setCellValue('C' . $i, $salud)
                     ->setCellValue('D' . $i, $arIncapacidad->getEmpleadoRel()->getnumeroIdentificacion())
                     ->setCellValue('E' . $i, $arIncapacidad->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('F' . $i, $arIncapacidad->getCentroCostoRel()->getNombre())
+                    ->setCellValue('F' . $i, $centroCosto)
                     ->setCellValue('G' . $i, $arIncapacidad->getFechaDesde()->format('Y-m-d'))
                     ->setCellValue('H' . $i, $arIncapacidad->getFechaHasta()->format('Y-m-d'))
                     ->setCellValue('I' . $i, $arIncapacidad->getCantidad());
