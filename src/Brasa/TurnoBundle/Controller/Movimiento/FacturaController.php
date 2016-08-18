@@ -748,7 +748,7 @@ class FacturaController extends Controller
                     ->setCellValue('L1', 'IVA')
                     ->setCellValue('M1', 'RTEIVA')
                     ->setCellValue('N1', 'RTEFTE')
-                    ->setCellValue('O1', 'TOTAL');
+                    ->setCellValue('O1', 'TOTAL BRUTO');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -811,9 +811,9 @@ class FacturaController extends Controller
         for($col = 'A'; $col !== 'O'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
         }      
-        /*for($col = 'I'; $col !== 'O'; $col++) {            
-            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
-        } */       
+        for($col = 'D'; $col !== 'D'; $col++) {            
+            $objPHPExcel->getActiveSheet()->getStyle($col)->setFormatCode('Fecha');
+        }       
         $objPHPExcel->setActiveSheetIndex(0)                
                     ->setCellValue('A1', 'ORIGEN')
                     ->setCellValue('B1', 'TIPODCTO')
@@ -842,7 +842,7 @@ class FacturaController extends Controller
                     ->setCellValue('I' . $i, 0);
             $i++;
         }
-
+        //Aunque la columna diga bruto EXPORTAR el valor neto.
         $objPHPExcel->getActiveSheet()->setTitle('Facturas');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
