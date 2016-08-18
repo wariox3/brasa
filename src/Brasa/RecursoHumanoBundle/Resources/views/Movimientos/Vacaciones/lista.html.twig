@@ -76,7 +76,7 @@
                 <td style="text-align: right">{{ arVacaciones.diasDisfrutados  }}</td>
                 <td style="text-align: right">{{ arVacaciones.diasDisfrutadosReales  }}</td>
                 <td style="text-align: right">{{ arVacaciones.diasPagados  }}</td>
-                <td style="text-align: right">{{ arVacaciones.vrVacacion | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arVacaciones.vrVacacion | number_format(0, '.', ',') }}</td>
                 <td>{% if arVacaciones.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arVacaciones.estadoPagoGenerado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_movimiento_vacacion_nuevo', {'codigoContrato': arVacaciones.codigoContratoFk, 'codigoVacacion': arVacaciones.codigoVacacionPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                            

@@ -131,6 +131,40 @@ class RhuPagoDetalleRepository extends EntityRepository {
         return $arPagosDetalles;
     }
     
+    public function recargosNocturnosFecha($fechaDesde, $fechaHasta, $codigoContrato) {
+        $em = $this->getEntityManager();
+        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
+        
+        $fechaDesdeAnio = $fechaHasta->format('Y-m-d');
+        $nuevafecha = strtotime ( '-365 day' , strtotime ( $fechaDesdeAnio ) ) ;
+        $nuevafecha = date ( 'Y-m-d' , $nuevafecha );        
+        $fechaDesdeAnio = date_create($nuevafecha);                    
+        if($fechaDesde < $fechaDesdeAnio) {
+            $fechaDesde = $fechaDesdeAnio;
+            $meses = 12;
+        } else {
+            $interval = date_diff($fechaDesde, $fechaHasta); 
+            $meses = $interval->format('%m');  
+            if($meses == 0) {
+                $meses = 1;
+            }
+        }
+        
+        $dql   = "SELECT SUM(pd.vrIngresoBaseCotizacionAdicional) as recagosNocturnos FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p JOIN pd.pagoConceptoRel pc "
+                . "WHERE pc.recargoNocturno = 1 AND p.codigoContratoFk = " . $codigoContrato . " "
+                . "AND p.fechaDesdePago >= '" . $fechaDesde->format('Y/m/d') . "' AND p.fechaDesdePago <= '" . $fechaHasta->format('Y/m/d') . "'";
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();
+        $recargosNocturnos = $arrayResultado[0]['recagosNocturnos'];
+        if($recargosNocturnos == null) {
+            $recargosNocturnos = 0;
+        }
+        $recargosNocturnos = $recargosNocturnos / $meses;
+        $recargosNocturnos =  $recargosNocturnos + $arContrato->getPromedioRecargoNocturnoInicial();
+        return $recargosNocturnos;
+    }   
+    
     public function recargosNocturnos($fechaDesde, $fechaHasta, $codigoContrato) {
         $em = $this->getEntityManager();
         $dql   = "SELECT SUM(pd.vrIngresoBaseCotizacionAdicional) as recagosNocturnos FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p JOIN pd.pagoConceptoRel pc "
@@ -143,7 +177,7 @@ class RhuPagoDetalleRepository extends EntityRepository {
             $recargosNocturnos = 0;
         }
         return $recargosNocturnos;
-    }   
+    }     
     
     public function ibp($fechaDesde, $fechaHasta, $codigoContrato) {
         $em = $this->getEntityManager();

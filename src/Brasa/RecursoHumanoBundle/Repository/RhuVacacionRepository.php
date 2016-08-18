@@ -59,22 +59,6 @@ class RhuVacacionRepository extends EntityRepository {
         $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
         $fechaDesdeCambioSalario = date_create_from_format('Y-m-d H:i', $nuevafecha . " 00:00");        
         $floSalarioPromedio = 0;        
-        /*$arCambiosSalario = new \Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario();
-        $arCambiosSalario = $em->getRepository('BrasaRecursoHumanoBundle:RhuCambioSalario')->cambiosSalario($arVacacion->getContratoRel()->getCodigoContratoPk(), $fechaDesdeCambioSalario->format('Y-m-d'), $arVacacion->getFecha()->format('Y-m-d'));                 
-        if(count($arCambiosSalario) > 0) {
-            $floPrimerSalario = $arCambiosSalario[0]->getVrSalarioAnterior();
-            $intNumeroRegistros = count($arCambiosSalario) + 1;
-            $floSumaSalarios = 0;
-            foreach ($arCambiosSalario as $arCambioSalario) {
-                $floSumaSalarios += $arCambioSalario->getVrSalarioNuevo();
-            }
-            $floSalarioPromedio = round((($floSumaSalarios + $floPrimerSalario) / $intNumeroRegistros));
-            
-        } else {
-            $floSalarioPromedio = $floSalario;
-        }         
-         * 
-         */
         $fechaDesdeRecargos = $arVacacion->getFecha()->format('Y-m-d');
         $nuevafecha = strtotime ( '-365 day' , strtotime ( $fechaDesdeRecargos ) ) ;
         $nuevafecha = date ( 'Y-m-d' , $nuevafecha );        

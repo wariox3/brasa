@@ -48,6 +48,7 @@
                         <th>CENTRO COSTO</th>
                         <th>DESDE</th>
                         <th>HASTA</th>                                                                        
+                        <th>TOTAL</th>
                         <th>GEN</th>
                         <th>PAG</th>
                         <th></th>
@@ -63,6 +64,7 @@
                             <td>{{ arLiquidaciones.centroCostoRel.nombre ('SIN CENTRO COSTO')  }}</td>                            
                             <td>{{ arLiquidaciones.fechaDesde |date("Y/m/d")  }}</td>
                             <td>{{ arLiquidaciones.fechaHasta |date("Y/m/d")  }}</td>
+                            <td style="text-align: right">{{ arLiquidaciones.vrTotal | number_format(0, '.', ',') }}</td>                            
                             <td>{%if arLiquidaciones.estadoGenerado == 1%} SI {%else%} NO {%endif%}</td>
                             <td>{%if arLiquidaciones.estadoPagoGenerado == 1%} SI {%else%} NO {%endif%}</td>
                             <td style="text-align: center"><a href="{{ path('brs_rhu_movimiento_liquidacion_nuevo', {'codigoLiquidacion': arLiquidaciones.codigoLiquidacionPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                            

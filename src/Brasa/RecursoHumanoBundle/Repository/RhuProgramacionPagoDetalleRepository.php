@@ -450,6 +450,10 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                         $arPagoDetalle->setVrHora($douVrDiaTransporte / 8);
                         $arPagoDetalle->setVrDia($douVrDiaTransporte);
                         $arPagoDetalle->setVrPago($douPagoDetalle);
+                        if($arPagoConcepto->getGeneraIngresoBasePrestacion() == 1) {
+                            $douIngresoBasePrestacional += $douPagoDetalle;    
+                            $arPagoDetalle->setVrIngresoBasePrestacion($douPagoDetalle);
+                        }                        
                         $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
                         $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConcepto->getOperacion());
                         $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);

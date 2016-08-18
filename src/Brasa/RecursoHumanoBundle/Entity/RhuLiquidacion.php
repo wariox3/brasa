@@ -95,12 +95,7 @@ class RhuLiquidacion
     /**
      * @ORM\Column(name="dias_vacaciones", type="integer")
      */    
-    private $diasVacaciones = 0;        
-    
-    /**
-     * @ORM\Column(name="dias_vacaciones_descontar", type="integer")
-     */    
-    private $diasVacacionesDescontar = 0;     
+    private $diasVacaciones = 0;                
     
     /**
      * @ORM\Column(name="dias_primas", type="integer")
@@ -115,22 +110,12 @@ class RhuLiquidacion
     /**
      * @ORM\Column(name="fecha_ultimo_pago", type="date", nullable=true)
      */    
-    private $fechaUltimoPago;    
-
-    /**
-     * @ORM\Column(name="vr_ingreso_base_prestacion", type="float")
-     */
-    private $VrIngresoBasePrestacion = 0;     
+    private $fechaUltimoPago;        
     
     /**
      * @ORM\Column(name="vr_ingreso_base_prestacion_adicional", type="float")
      */
-    private $VrIngresoBasePrestacionAdicional = 0;    
-
-    /**
-     * @ORM\Column(name="vr_ingreso_base_prestacion_total", type="float")
-     */
-    private $VrIngresoBasePrestacionTotal = 0;     
+    private $VrIngresoBasePrestacionAdicional = 0;        
     
     /**
      * @ORM\Column(name="vr_ingreso_base_prestacion_cesantias", type="float")
@@ -285,8 +270,7 @@ class RhuLiquidacion
      * @ORM\OneToMany(targetEntity="RhuLiquidacionAdicionales", mappedBy="liquidacionRel")
      */
     protected $liquidacionesAdicionalesLiquidacionRel;  
-
-    
+   
 
     /**
      * Constructor
@@ -691,30 +675,6 @@ class RhuLiquidacion
     }
 
     /**
-     * Set diasVacacionesDescontar
-     *
-     * @param integer $diasVacacionesDescontar
-     *
-     * @return RhuLiquidacion
-     */
-    public function setDiasVacacionesDescontar($diasVacacionesDescontar)
-    {
-        $this->diasVacacionesDescontar = $diasVacacionesDescontar;
-
-        return $this;
-    }
-
-    /**
-     * Get diasVacacionesDescontar
-     *
-     * @return integer
-     */
-    public function getDiasVacacionesDescontar()
-    {
-        return $this->diasVacacionesDescontar;
-    }
-
-    /**
      * Set diasPrimas
      *
      * @param integer $diasPrimas
@@ -787,30 +747,6 @@ class RhuLiquidacion
     }
 
     /**
-     * Set vrIngresoBasePrestacion
-     *
-     * @param float $vrIngresoBasePrestacion
-     *
-     * @return RhuLiquidacion
-     */
-    public function setVrIngresoBasePrestacion($vrIngresoBasePrestacion)
-    {
-        $this->VrIngresoBasePrestacion = $vrIngresoBasePrestacion;
-
-        return $this;
-    }
-
-    /**
-     * Get vrIngresoBasePrestacion
-     *
-     * @return float
-     */
-    public function getVrIngresoBasePrestacion()
-    {
-        return $this->VrIngresoBasePrestacion;
-    }
-
-    /**
      * Set vrIngresoBasePrestacionAdicional
      *
      * @param float $vrIngresoBasePrestacionAdicional
@@ -835,30 +771,6 @@ class RhuLiquidacion
     }
 
     /**
-     * Set vrIngresoBasePrestacionTotal
-     *
-     * @param float $vrIngresoBasePrestacionTotal
-     *
-     * @return RhuLiquidacion
-     */
-    public function setVrIngresoBasePrestacionTotal($vrIngresoBasePrestacionTotal)
-    {
-        $this->VrIngresoBasePrestacionTotal = $vrIngresoBasePrestacionTotal;
-
-        return $this;
-    }
-
-    /**
-     * Get vrIngresoBasePrestacionTotal
-     *
-     * @return float
-     */
-    public function getVrIngresoBasePrestacionTotal()
-    {
-        return $this->VrIngresoBasePrestacionTotal;
-    }
-
-    /**
      * Set vrIngresoBasePrestacionCesantias
      *
      * @param float $vrIngresoBasePrestacionCesantias
@@ -880,6 +792,78 @@ class RhuLiquidacion
     public function getVrIngresoBasePrestacionCesantias()
     {
         return $this->VrIngresoBasePrestacionCesantias;
+    }
+
+    /**
+     * Set vrIngresoBasePrestacionPrimas
+     *
+     * @param float $vrIngresoBasePrestacionPrimas
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrIngresoBasePrestacionPrimas($vrIngresoBasePrestacionPrimas)
+    {
+        $this->VrIngresoBasePrestacionPrimas = $vrIngresoBasePrestacionPrimas;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIngresoBasePrestacionPrimas
+     *
+     * @return float
+     */
+    public function getVrIngresoBasePrestacionPrimas()
+    {
+        return $this->VrIngresoBasePrestacionPrimas;
+    }
+
+    /**
+     * Set vrIngresoBasePrestacionCesantiasInicial
+     *
+     * @param float $vrIngresoBasePrestacionCesantiasInicial
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrIngresoBasePrestacionCesantiasInicial($vrIngresoBasePrestacionCesantiasInicial)
+    {
+        $this->VrIngresoBasePrestacionCesantiasInicial = $vrIngresoBasePrestacionCesantiasInicial;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIngresoBasePrestacionCesantiasInicial
+     *
+     * @return float
+     */
+    public function getVrIngresoBasePrestacionCesantiasInicial()
+    {
+        return $this->VrIngresoBasePrestacionCesantiasInicial;
+    }
+
+    /**
+     * Set vrIngresoBasePrestacionPrimasInicial
+     *
+     * @param float $vrIngresoBasePrestacionPrimasInicial
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrIngresoBasePrestacionPrimasInicial($vrIngresoBasePrestacionPrimasInicial)
+    {
+        $this->VrIngresoBasePrestacionPrimasInicial = $vrIngresoBasePrestacionPrimasInicial;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIngresoBasePrestacionPrimasInicial
+     *
+     * @return float
+     */
+    public function getVrIngresoBasePrestacionPrimasInicial()
+    {
+        return $this->VrIngresoBasePrestacionPrimasInicial;
     }
 
     /**
@@ -1514,77 +1498,5 @@ class RhuLiquidacion
     public function getLiquidacionesAdicionalesLiquidacionRel()
     {
         return $this->liquidacionesAdicionalesLiquidacionRel;
-    }
-
-    /**
-     * Set vrIngresoBasePrestacionPrimas
-     *
-     * @param float $vrIngresoBasePrestacionPrimas
-     *
-     * @return RhuLiquidacion
-     */
-    public function setVrIngresoBasePrestacionPrimas($vrIngresoBasePrestacionPrimas)
-    {
-        $this->VrIngresoBasePrestacionPrimas = $vrIngresoBasePrestacionPrimas;
-
-        return $this;
-    }
-
-    /**
-     * Get vrIngresoBasePrestacionPrimas
-     *
-     * @return float
-     */
-    public function getVrIngresoBasePrestacionPrimas()
-    {
-        return $this->VrIngresoBasePrestacionPrimas;
-    }
-
-    /**
-     * Set vrIngresoBasePrestacionCesantiasInicial
-     *
-     * @param float $vrIngresoBasePrestacionCesantiasInicial
-     *
-     * @return RhuLiquidacion
-     */
-    public function setVrIngresoBasePrestacionCesantiasInicial($vrIngresoBasePrestacionCesantiasInicial)
-    {
-        $this->VrIngresoBasePrestacionCesantiasInicial = $vrIngresoBasePrestacionCesantiasInicial;
-
-        return $this;
-    }
-
-    /**
-     * Get vrIngresoBasePrestacionCesantiasInicial
-     *
-     * @return float
-     */
-    public function getVrIngresoBasePrestacionCesantiasInicial()
-    {
-        return $this->VrIngresoBasePrestacionCesantiasInicial;
-    }
-
-    /**
-     * Set vrIngresoBasePrestacionPrimasInicial
-     *
-     * @param float $vrIngresoBasePrestacionPrimasInicial
-     *
-     * @return RhuLiquidacion
-     */
-    public function setVrIngresoBasePrestacionPrimasInicial($vrIngresoBasePrestacionPrimasInicial)
-    {
-        $this->VrIngresoBasePrestacionPrimasInicial = $vrIngresoBasePrestacionPrimasInicial;
-
-        return $this;
-    }
-
-    /**
-     * Get vrIngresoBasePrestacionPrimasInicial
-     *
-     * @return float
-     */
-    public function getVrIngresoBasePrestacionPrimasInicial()
-    {
-        return $this->VrIngresoBasePrestacionPrimasInicial;
     }
 }
