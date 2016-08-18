@@ -72,7 +72,12 @@ class GenCuenta
     /**
      * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiPagoCurso", mappedBy="cuentaRel")
      */
-    protected $afiPagosCursosCuentaRel;     
+    protected $afiPagosCursosCuentaRel;  
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\CarteraBundle\Entity\CarAnticipo", mappedBy="cuentaRel")
+     */
+    protected $carAnticiposCuentaRel;
     
     
     /**
@@ -84,6 +89,8 @@ class GenCuenta
         $this->carRecibosCuentaRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->carNotasDebitosCuentaRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->carNotasCreditosCuentaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->afiPagosCursosCuentaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->carAnticiposCuentaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -408,5 +415,39 @@ class GenCuenta
     public function getAfiPagosCursosCuentaRel()
     {
         return $this->afiPagosCursosCuentaRel;
+    }
+
+    /**
+     * Add carAnticiposCuentaRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarAnticipo $carAnticiposCuentaRel
+     *
+     * @return GenCuenta
+     */
+    public function addCarAnticiposCuentaRel(\Brasa\CarteraBundle\Entity\CarAnticipo $carAnticiposCuentaRel)
+    {
+        $this->carAnticiposCuentaRel[] = $carAnticiposCuentaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove carAnticiposCuentaRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarAnticipo $carAnticiposCuentaRel
+     */
+    public function removeCarAnticiposCuentaRel(\Brasa\CarteraBundle\Entity\CarAnticipo $carAnticiposCuentaRel)
+    {
+        $this->carAnticiposCuentaRel->removeElement($carAnticiposCuentaRel);
+    }
+
+    /**
+     * Get carAnticiposCuentaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCarAnticiposCuentaRel()
+    {
+        return $this->carAnticiposCuentaRel;
     }
 }

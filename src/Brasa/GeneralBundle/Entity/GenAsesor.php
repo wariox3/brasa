@@ -75,9 +75,15 @@ class GenAsesor
     /**
      * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurCliente", mappedBy="asesorRel")
      */
-    protected $turClientesAsesorRel;    
+    protected $turClientesAsesorRel; 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\CarteraBundle\Entity\CarAnticipo", mappedBy="asesorRel")
+     */
+    protected $carAnticiposAsesorRel;
     
 
+    
     /**
      * Constructor
      */
@@ -89,6 +95,7 @@ class GenAsesor
         $this->carRecibosAsesorRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->afiClientesAsesorRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->turClientesAsesorRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->carAnticiposAsesorRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -447,5 +454,39 @@ class GenAsesor
     public function getTurClientesAsesorRel()
     {
         return $this->turClientesAsesorRel;
+    }
+
+    /**
+     * Add carAnticiposAsesorRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarAnticipo $carAnticiposAsesorRel
+     *
+     * @return GenAsesor
+     */
+    public function addCarAnticiposAsesorRel(\Brasa\CarteraBundle\Entity\CarAnticipo $carAnticiposAsesorRel)
+    {
+        $this->carAnticiposAsesorRel[] = $carAnticiposAsesorRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove carAnticiposAsesorRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarAnticipo $carAnticiposAsesorRel
+     */
+    public function removeCarAnticiposAsesorRel(\Brasa\CarteraBundle\Entity\CarAnticipo $carAnticiposAsesorRel)
+    {
+        $this->carAnticiposAsesorRel->removeElement($carAnticiposAsesorRel);
+    }
+
+    /**
+     * Get carAnticiposAsesorRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCarAnticiposAsesorRel()
+    {
+        return $this->carAnticiposAsesorRel;
     }
 }

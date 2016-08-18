@@ -121,6 +121,12 @@ class CarCliente
      */
     protected $notasCreditosClienteRel;
     
+    /**
+     * @ORM\OneToMany(targetEntity="CarAnticipo", mappedBy="clienteRel")
+     */
+    protected $anticiposClienteRel;
+    
+    
     
     /**
      * Constructor
@@ -131,6 +137,7 @@ class CarCliente
         $this->recibosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->notasDebitosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->notasCreditosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->anticiposClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -216,27 +223,27 @@ class CarCliente
     }
 
     /**
-     * Set plazoPago
+     * Set codigoAsesorFk
      *
-     * @param integer $plazoPago
+     * @param integer $codigoAsesorFk
      *
      * @return CarCliente
      */
-    public function setPlazoPago($plazoPago)
+    public function setCodigoAsesorFk($codigoAsesorFk)
     {
-        $this->plazoPago = $plazoPago;
+        $this->codigoAsesorFk = $codigoAsesorFk;
 
         return $this;
     }
 
     /**
-     * Get plazoPago
+     * Get codigoAsesorFk
      *
      * @return integer
      */
-    public function getPlazoPago()
+    public function getCodigoAsesorFk()
     {
-        return $this->plazoPago;
+        return $this->codigoAsesorFk;
     }
 
     /**
@@ -261,6 +268,30 @@ class CarCliente
     public function getCodigoFormaPagoFk()
     {
         return $this->codigoFormaPagoFk;
+    }
+
+    /**
+     * Set plazoPago
+     *
+     * @param integer $plazoPago
+     *
+     * @return CarCliente
+     */
+    public function setPlazoPago($plazoPago)
+    {
+        $this->plazoPago = $plazoPago;
+
+        return $this;
+    }
+
+    /**
+     * Get plazoPago
+     *
+     * @return integer
+     */
+    public function getPlazoPago()
+    {
+        return $this->plazoPago;
     }
 
     /**
@@ -429,6 +460,30 @@ class CarCliente
     public function getUsuario()
     {
         return $this->usuario;
+    }
+
+    /**
+     * Set asesorRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenAsesor $asesorRel
+     *
+     * @return CarCliente
+     */
+    public function setAsesorRel(\Brasa\GeneralBundle\Entity\GenAsesor $asesorRel = null)
+    {
+        $this->asesorRel = $asesorRel;
+
+        return $this;
+    }
+
+    /**
+     * Get asesorRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenAsesor
+     */
+    public function getAsesorRel()
+    {
+        return $this->asesorRel;
     }
 
     /**
@@ -616,50 +671,36 @@ class CarCliente
     }
 
     /**
-     * Set codigoAsesorFk
+     * Add anticiposClienteRel
      *
-     * @param integer $codigoAsesorFk
+     * @param \Brasa\CarteraBundle\Entity\CarAnticipo $anticiposClienteRel
      *
      * @return CarCliente
      */
-    public function setCodigoAsesorFk($codigoAsesorFk)
+    public function addAnticiposClienteRel(\Brasa\CarteraBundle\Entity\CarAnticipo $anticiposClienteRel)
     {
-        $this->codigoAsesorFk = $codigoAsesorFk;
+        $this->anticiposClienteRel[] = $anticiposClienteRel;
 
         return $this;
     }
 
     /**
-     * Get codigoAsesorFk
+     * Remove anticiposClienteRel
      *
-     * @return integer
+     * @param \Brasa\CarteraBundle\Entity\CarAnticipo $anticiposClienteRel
      */
-    public function getCodigoAsesorFk()
+    public function removeAnticiposClienteRel(\Brasa\CarteraBundle\Entity\CarAnticipo $anticiposClienteRel)
     {
-        return $this->codigoAsesorFk;
+        $this->anticiposClienteRel->removeElement($anticiposClienteRel);
     }
 
     /**
-     * Set asesorRel
+     * Get anticiposClienteRel
      *
-     * @param \Brasa\GeneralBundle\Entity\GenAsesor $asesorRel
-     *
-     * @return CarCliente
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setAsesorRel(\Brasa\GeneralBundle\Entity\GenAsesor $asesorRel = null)
+    public function getAnticiposClienteRel()
     {
-        $this->asesorRel = $asesorRel;
-
-        return $this;
-    }
-
-    /**
-     * Get asesorRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenAsesor
-     */
-    public function getAsesorRel()
-    {
-        return $this->asesorRel;
+        return $this->anticiposClienteRel;
     }
 }

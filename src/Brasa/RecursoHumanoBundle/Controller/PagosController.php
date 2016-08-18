@@ -194,8 +194,12 @@ class PagosController extends Controller
         $session->set('filtroCodigoPagoTipo', $controles['pagoTipoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $this->intNumero = $form->get('TxtNumero')->getData();
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
+        $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d'));
+        //$session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        //$session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }         
     
     private function generarExcel() {
