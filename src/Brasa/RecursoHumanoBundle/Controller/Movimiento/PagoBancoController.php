@@ -5,6 +5,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuPagoBancoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 class PagoBancoController extends Controller
 {
@@ -17,6 +18,7 @@ class PagoBancoController extends Controller
     public function listaAction() {        
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 8, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
@@ -29,11 +31,15 @@ class PagoBancoController extends Controller
             $arrSeleccionados = $request->request->get('ChkSeleccionar');                                                   
             if ($form->get('BtnEliminar')->isClicked()) {  
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados as $codigoPagoBanco) {
-                        $arPagoBanco = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBanco')->find($codigoPagoBanco);
-                        $em->remove($arPagoBanco);                        
-                    }
-                    $em->flush();
+                    try{
+                        foreach ($arrSeleccionados as $codigoPagoBanco) {
+                            $arPagoBanco = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBanco')->find($codigoPagoBanco);
+                            $em->remove($arPagoBanco);                        
+                        }
+                        $em->flush();
+                    } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el registro, tiene detalles asociados', $this);
+                  }    
                 }                
                 return $this->redirect($this->generateUrl('brs_rhu_movimiento_pago_banco'));
             }
