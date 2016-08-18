@@ -131,7 +131,7 @@ class TurFacturaRepository extends EntityRepository {
             $retencionFuente = ($baseRetencionFuente * $porRetencionFuente ) / 100;
         }
 
-        $totalNeto = $total + $iva - $retencionFuente;
+        $totalNeto = $subtotal + $iva - $retencionFuente;
         $arFactura->setVrBaseAIU($baseIva);
         $arFactura->setVrBaseRetencionFuente($baseRetencionFuente);
         $arFactura->setVrSubtotal($subtotal);
