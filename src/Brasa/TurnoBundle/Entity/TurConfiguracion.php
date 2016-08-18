@@ -91,6 +91,11 @@ class TurConfiguracion
      */    
     private $fechaUltimaSimulacion;    
     
+    /**     
+     * @ORM\Column(name="validar_horas_programacion", type="boolean")
+     */    
+    private $validarHorasProgramacion = false;    
+    
     /**
      * Set codigoConfiguracionPk
      *
@@ -497,5 +502,29 @@ class TurConfiguracion
     public function getFechaUltimaSimulacion()
     {
         return $this->fechaUltimaSimulacion;
+    }
+
+    /**
+     * Set validarHorasProgramacion
+     *
+     * @param boolean $validarHorasProgramacion
+     *
+     * @return TurConfiguracion
+     */
+    public function setValidarHorasProgramacion($validarHorasProgramacion)
+    {
+        $this->validarHorasProgramacion = $validarHorasProgramacion;
+
+        return $this;
+    }
+
+    /**
+     * Get validarHorasProgramacion
+     *
+     * @return boolean
+     */
+    public function getValidarHorasProgramacion()
+    {
+        return $this->validarHorasProgramacion;
     }
 }
