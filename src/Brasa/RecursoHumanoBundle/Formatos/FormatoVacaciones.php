@@ -170,10 +170,15 @@ class FormatoVacaciones extends \FPDF_FPDF {
         $this->Cell(63, 6, $arVacaciones->getEmpleadoRel()->getCuenta(), 1, 0, 'L', 1);
         $this->SetFont('Arial', 'B', 7);
         $this->SetFillColor(217, 217, 217);
-        $this->Cell(26, 6, utf8_decode("SALARIO BASE:"), 1, 0, 'L', 1);         
+        $this->Cell(26, 6, utf8_decode("SALARIO VACACIONES:"), 1, 0, 'L', 1);         
         $this->SetFont('Arial', '', 8);
         $this->SetFillColor(255, 255, 255);
-        $this->Cell(65, 6, number_format($arVacaciones->getVrSalarioPromedio(), 0, '.', ','), 1, 0, 'R', 1);               
+        if($arVacaciones->getDiasDisfrutados() > 1) {
+            $this->Cell(65, 6, number_format($arVacaciones->getVrSalarioPromedio(), 0, '.', ','), 1, 0, 'R', 1);               
+        } else {
+            $this->Cell(65, 6, number_format($arVacaciones->getVrSalarioActual(), 0, '.', ','), 1, 0, 'R', 1);               
+        }
+        
         
         //FILA 9
         $this->SetFont('Arial', 'B', 7);
@@ -263,8 +268,7 @@ class FormatoVacaciones extends \FPDF_FPDF {
     public function Footer() {
         
         $this->SetFont('Arial', 'B', 9);
-        $this->Text(10, 230, "FIRMA: _____________________________________________");
-        $this->Text(105, 230, "EMPRESA: __________________________________________");
+        $this->Text(10, 230, "FIRMA: _____________________________________________");        
         $this->Text(10, 237, "C.C.:     ______________________ de ____________________");
         $this->Text(10, 260, "ELABORADO POR: __________________________________ ");
         $this->Text(105, 260, "REVISADO POR: ___________________________________ ");

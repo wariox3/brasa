@@ -143,5 +143,19 @@ class RhuPagoDetalleRepository extends EntityRepository {
             $recargosNocturnos = 0;
         }
         return $recargosNocturnos;
-    }    
+    }   
+    
+    public function ibp($fechaDesde, $fechaHasta, $codigoContrato) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT SUM(pd.vrIngresoBasePrestacion) as ibp FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "
+                . "WHERE p.codigoContratoFk = " . $codigoContrato . " "
+                . "AND p.fechaDesdePago >= '" . $fechaDesde . "' AND p.fechaDesdePago <= '" . $fechaHasta . "'";
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();
+        $ibp = $arrayResultado[0]['ibp'];
+        if($ibp == null) {
+            $ibp = 0;
+        }
+        return $ibp;
+    }     
 }
