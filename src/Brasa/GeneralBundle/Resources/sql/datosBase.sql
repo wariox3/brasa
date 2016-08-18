@@ -5475,6 +5475,13 @@ INSERT INTO `rhu_incapacidad_diagnostico` (`codigo_incapacidad_diagnostico_pk`, 
 INSERT INTO `rhu_incapacidad_diagnostico` (`codigo_incapacidad_diagnostico_pk`, `nombre`, `codigo`) VALUES('13322','VISION SUBNORMAL DE AMBOS OJOS','H542');
 INSERT INTO `rhu_incapacidad_diagnostico` (`codigo_incapacidad_diagnostico_pk`, `nombre`, `codigo`) VALUES('13323','VOMITOS DEL EMBARAZO, NO ESPECIFICADO','O219');
 
+insert into `rhu_pago_banco_tipo` (`codigo_pago_banco_tipo_pk`, `nombre`) values('1','NOMINA');
+insert into `rhu_pago_banco_tipo` (`codigo_pago_banco_tipo_pk`, `nombre`) values('2','VACACIONES');
+insert into `rhu_pago_banco_tipo` (`codigo_pago_banco_tipo_pk`, `nombre`) values('3','LIQUIDACIONES');
+insert into `rhu_pago_banco_tipo` (`codigo_pago_banco_tipo_pk`, `nombre`) values('4','SEGURIDAD SOCIAL');
+insert into `rhu_pago_banco_tipo` (`codigo_pago_banco_tipo_pk`, `nombre`) values('5','PRIMA');
+insert into `rhu_pago_banco_tipo` (`codigo_pago_banco_tipo_pk`, `nombre`) values('6','CESANTIAS E INTERESES');
+
 insert into `rhu_pago_concepto` (`codigo_pago_concepto_pk`, `nombre`, `compone_salario`, `compone_porcentaje`, `compone_valor`, `por_porcentaje`, `prestacional`, `operacion`, `concepto_adicion`, `concepto_auxilio_transporte`, `concepto_incapacidad`, `concepto_pension`, `concepto_salud`, `codigo_cuenta_fk`, `tipo_cuenta`, `tipo_adicional`, `genera_ingreso_base_prestacion`, `genera_ingreso_base_cotizacion`) values('1','HORAS DIURNAS TRABAJADAS','1','0','0','0','1','1','0','0','0','0','0','720506','1','0','1','1');
 insert into `rhu_pago_concepto` (`codigo_pago_concepto_pk`, `nombre`, `compone_salario`, `compone_porcentaje`, `compone_valor`, `por_porcentaje`, `prestacional`, `operacion`, `concepto_adicion`, `concepto_auxilio_transporte`, `concepto_incapacidad`, `concepto_pension`, `concepto_salud`, `codigo_cuenta_fk`, `tipo_cuenta`, `tipo_adicional`, `genera_ingreso_base_prestacion`, `genera_ingreso_base_cotizacion`) values('3','APORTE A SALUD','0','1','0','4','0','-1','0','0','0','0','1','237005','2','0','0','0');
 insert into `rhu_pago_concepto` (`codigo_pago_concepto_pk`, `nombre`, `compone_salario`, `compone_porcentaje`, `compone_valor`, `por_porcentaje`, `prestacional`, `operacion`, `concepto_adicion`, `concepto_auxilio_transporte`, `concepto_incapacidad`, `concepto_pension`, `concepto_salud`, `codigo_cuenta_fk`, `tipo_cuenta`, `tipo_adicional`, `genera_ingreso_base_prestacion`, `genera_ingreso_base_cotizacion`) values('4','APORTE A PENSION ','0','1','0','4','0','-1','0','0','0','1','0','237045','2','0','0','0');
