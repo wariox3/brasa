@@ -216,12 +216,17 @@ class LicenciasController extends Controller
         $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
         $query = $em->createQuery($this->strSqlLista);        
         $arLicencias = $query->getResult();
-        foreach ($arLicencias as $arLicencia) {            
+        foreach ($arLicencias as $arLicencia) {
+            $centroCosto = "";
+            if ($arLicencia->getCodigoCentroCostoFk() != null){
+                $centroCosto = $arLicencia->getCentroCostoRel()->getNombre();
+                
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arLicencia->getCodigoLicenciaPk())
                     ->setCellValue('B' . $i, $arLicencia->getEmpleadoRel()->getnumeroIdentificacion())
                     ->setCellValue('C' . $i, $arLicencia->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('D' . $i, $arLicencia->getCentroCostoRel()->getNombre())
+                    ->setCellValue('D' . $i, $centroCosto)
                     ->setCellValue('E' . $i, $arLicencia->getFechaDesde()->format('Y-m-d'))
                     ->setCellValue('F' . $i, $arLicencia->getFechaHasta()->format('Y-m-d'))
                     ->setCellValue('G' . $i, $arLicencia->getCantidad());
