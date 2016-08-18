@@ -38,7 +38,7 @@ class FacturaController extends Controller
                     $arFacturaAct = new \Brasa\TurnoBundle\Entity\TurFactura();        
                     $arFacturaAct = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($arFactura->getCodigoFacturaPk());                     
                     
-                    $porRetencionFuente = $arFactura->getFacturaServicioRel()->getPorRetencionFuente();
+                    /*$porRetencionFuente = $arFactura->getFacturaServicioRel()->getPorRetencionFuente();
                     $porBaseRetencionFuente = $arFactura->getFacturaServicioRel()->getPorBaseRetencionFuente();
                     $baseRetencionFuente = ($arFacturaAct->getVrSubtotal() * $porBaseRetencionFuente) / 100;
                     $retencionFuente = 0;
@@ -46,15 +46,17 @@ class FacturaController extends Controller
                         $retencionFuente = ($baseRetencionFuente * $porRetencionFuente ) / 100;
                     }               
 
-                    $totalNeto = $arFacturaAct->getVrSubtotal() + $arFacturaAct->getVrIva() - $retencionFuente;                    
-                    $arFacturaAct->setVrBaseRetencionFuente($baseRetencionFuente);
-                    $arFacturaAct->setVrRetencionFuente($retencionFuente);
+                    $totalNeto = $arFacturaAct->getVrSubtotal() + $arFacturaAct->getVrIva() - $arFacturaAct->getVrRetencionFuente();                    
+                    //$arFacturaAct->setVrBaseRetencionFuente($baseRetencionFuente);
+                    //$arFacturaAct->setVrRetencionFuente($retencionFuente);
                     $arFacturaAct->setVrTotalNeto($totalNeto);
-                    $em->persist($arFacturaAct);                                                                                                        
+                    $em->persist($arFacturaAct);    
+                    //echo "hola";
                 }
                 $em->flush();                                  
-                return $this->redirect($this->generateUrl('brs_tur_movimiento_factura'));                  
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_factura'));  
                 */
+                
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
