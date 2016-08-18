@@ -31,11 +31,11 @@ class PagosController extends Controller
                 $this->listar();
                 $this->generarExcelDetalle();
             } 
-            if($form->get('BtnExcelResumen')->isClicked()) {
+            /*if($form->get('BtnExcelResumen')->isClicked()) {
                 $this->filtrarLista($form, $request);
                 $this->listar();
                 $this->generarExcelResumen();
-            }            
+            } */           
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form, $request);
                 $this->listar();
@@ -158,11 +158,15 @@ class PagosController extends Controller
         if($session->get('filtroCodigoPagoTipo')) {
             $arrayPropiedadesTipo['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoTipo", $session->get('filtroCodigoPagoTipo'));
         }
+        
+        
         $form = $this->createFormBuilder()                        
             ->add('centroCostoRel', 'entity', $arrayPropiedadesCentroCosto)
             ->add('pagoTipoRel', 'entity', $arrayPropiedadesTipo)
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            //->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $strFechaDesde))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))    
+            //->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $strFechaHasta))                
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))                            
             ->add('TxtNumero', 'text', array('label'  => 'Numero','data' => $session->get('filtroPagoNumero')))                                                   
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                                            
@@ -182,8 +186,8 @@ class PagosController extends Controller
                     $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroIdentificacion'),
                     $session->get('filtroCodigoPagoTipo'),
-                    $session->get('filtroDesde'),
-                    $session->get('filtroHasta')
+                    $strFechaDesde = $session->get('filtroDesde'),
+                    $strFechaHasta = $session->get('filtroHasta')
                     );  
     }         
     
@@ -196,8 +200,14 @@ class PagosController extends Controller
         $this->intNumero = $form->get('TxtNumero')->getData();
         $dateFechaDesde = $form->get('fechaDesde')->getData();
         $dateFechaHasta = $form->get('fechaHasta')->getData();
-        $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
-        $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d'));
+        if ($form->get('fechaHasta')->getData() == null){
+            $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        } else {
+            $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
+            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
+        }
+        
         //$session->set('filtroDesde', $form->get('fechaDesde')->getData());
         //$session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }         
