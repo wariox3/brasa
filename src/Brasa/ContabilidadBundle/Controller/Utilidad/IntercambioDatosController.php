@@ -307,7 +307,7 @@ class IntercambioDatosController extends Controller
                     ->setCellValue('A' . $i, $arRegistroExportar->getBase())
                     ->setCellValue('B' . $i, $arRegistroExportar->getNumeroReferencia())
                     ->setCellValue('C' . $i, $arRegistroExportar->getCentroCosto())
-                    ->setCellValue('D' . $i, $arRegistroExportar->getComprobante())
+                    ->setCellValue('D' . $i, $this->RellenarNr($arRegistroExportar->getComprobante(), "0", 2))
                     ->setCellValue('E' . $i, $arRegistroExportar->getCuenta())
                     ->setCellValue('F' . $i, $arRegistroExportar->getCredito())
                     ->setCellValue('G' . $i, $arRegistroExportar->getNumero())
