@@ -17,7 +17,7 @@ class RhuPagoBancoRepository extends EntityRepository {
             $dql .= " AND pb.fechaAplicacion = '" .$strFecha. "'";
         }    
         
-        $dql .= " ORDER BY pb.codigoPagoBancoPk";
+        $dql .= " ORDER BY pb.codigoPagoBancoPk DESC";
         return $dql;
     }                            
     
