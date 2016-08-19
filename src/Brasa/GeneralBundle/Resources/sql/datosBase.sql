@@ -5800,6 +5800,11 @@ insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tip
 insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('3','Generar pedidos automaticos','PROCESO','TURNOS');
 insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('4','Generar programaciones automaticas','PROCESO','TURNOS');
 insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('5','Modificar contrato despues de terminado','PROCESO','RECURSO HUMANO');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('6','Generar facturas automaticas','PROCESO','TURNOS');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('7','Generar soporte pago turnos','PROCESO','TURNOS');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('8','Generar cierre de mes','PROCESO','TURNOS');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('9','Contabilizar facturas','PROCESO','TURNOS');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('10','Mantenimiento pedidos','PROCESO','TURNOS');
 
 INSERT INTO `seg_roles` (`codigo_rol_pk`, `nombre`) VALUES('ROLE_ADMIN','ADMINISTRADOR');
 INSERT INTO `seg_roles` (`codigo_rol_pk`, `nombre`) VALUES('ROLE_USER','USUARIO');
