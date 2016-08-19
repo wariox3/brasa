@@ -5,7 +5,7 @@ use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\CarteraBundle\Form\Type\CarAnticipoType;
-//use Brasa\CarteraBundle\Form\Type\CarAnticipoDetalleType;
+use Brasa\CarteraBundle\Form\Type\CarAnticipoDetalleType;
 
 class MovimientoAnticipoController extends Controller
 {
@@ -74,7 +74,7 @@ class MovimientoAnticipoController extends Controller
                     $arAnticipo->setAsesorRel($arCliente->getAsesorRel());
                 }
             }
-            /*if ($codigoAnticipo != 0 && $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->numeroRegistros($codigoAnticipo) > 0) {
+            if ($codigoAnticipo != 0 && $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->numeroRegistros($codigoAnticipo) > 0) {
                 if ($arAnticipo->getCodigoClienteFk() == $arCliente->getCodigoClientePk()) {
                     $arUsuario = $this->getUser();
                     $arAnticipo->setUsuario($arUsuario->getUserName());            
@@ -93,7 +93,7 @@ class MovimientoAnticipoController extends Controller
                 } else {
                     $objMensaje->Mensaje("error", "Para modificar el cliente debe eliminar los detalles asociados a este registro", $this);
                 }
-            } else {*/
+            } else {
                 $arUsuario = $this->getUser();
                 $arAnticipo->setUsuario($arUsuario->getUserName());            
                 $em->persist($arAnticipo);
@@ -101,20 +101,204 @@ class MovimientoAnticipoController extends Controller
                 if($form->get('guardarnuevo')->isClicked()) {
                     return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_nuevo', array('codigoAnticipo' => 0 )));
                 } else {
-                    /*if ($codigoAnticipo != 0){
+                    if ($codigoAnticipo != 0){
                         return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_listar'));
                     } else {
                         return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_detalle', array('codigoAnticipo' => $arAnticipo->getCodigoAnticipoPk())));
-                    }*/
+                    }
                     return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_listar'));
                 }
-            //}
+            }
         }
         return $this->render('BrasaCarteraBundle:Movimientos/Anticipo:nuevo.html.twig', array(
             'arAnticipo' => $arAnticipo,
             'form' => $form->createView()));
     }
   
+    /**
+     * @Route("/cartera/movimiento/anticipo/detalle/{codigoAnticipo}", name="brs_cartera_movimiento_anticipo_detalle")
+     */
+    public function detalleAction($codigoAnticipo) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $objMensaje = $this->get('mensajes_brasa');
+        $arAnticipo = new \Brasa\CarteraBundle\Entity\CarAnticipo();
+        $arAnticipo = $em->getRepository('BrasaCarteraBundle:CarAnticipo')->find($codigoAnticipo);
+        $form = $this->formularioDetalle($arAnticipo);
+        $form->handleRequest($request);
+        if($form->isValid()) {
+            if($form->get('BtnAutorizar')->isClicked()) {  
+                $arrControles = $request->request->All();
+                if ($arAnticipo->getEstadoAutorizado() == 0){
+                    $this->actualizarDetalle($arrControles, $codigoAnticipo);
+                    $arInconsistencias = $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->findBy(array('codigoAnticipoFk' =>$codigoAnticipo,'estadoInconsistencia' => 1));
+                    if ($arInconsistencias == null){
+                        if($arAnticipo->getEstadoAutorizado() == 0) {
+                            if($em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->numeroRegistros($codigoAnticipo) > 0) {
+                                $arAnticipo->setEstadoAutorizado(1);
+                                $arDetallesAnticipo = $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->findBy(array('codigoAnticipoFk' => $codigoAnticipo));
+                                foreach ($arDetallesAnticipo AS $arDetalleAnticipo) {
+                                    $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
+                                    $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleAnticipo->getCodigoCuentaCobrarFk()); 
+                                    $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() - $arDetalleAnticipo->getVrPagoDetalle());
+                                    $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() + $arDetalleAnticipo->getVrPagoDetalle());
+                                    $em->persist($arCuentaCobrar);
+                                }
+                                $em->persist($arAnticipo);
+                                $em->flush();                        
+                            } else {
+                                $objMensaje->Mensaje('error', 'Debe adicionar detalles al anticipo de caja', $this);
+                            }                    
+                        }
+                    } else {
+                        $objMensaje->Mensaje('error', 'No se puede autorizar, hay inconsistencias', $this);
+                    }
+                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_detalle', array('codigoAnticipo' => $codigoAnticipo)));                
+                } else {
+                   $objMensaje->Mensaje('error', 'No se puede autorizar, ya esta autorizado', $this); 
+                }
+                
+            }
+            if($form->get('BtnDesAutorizar')->isClicked()) {            
+                if($arAnticipo->getEstadoAutorizado() == 1 && $arAnticipo->getEstadoImpreso() == 0) {
+                    $arAnticipo->setEstadoAutorizado(0);
+                    $arDetallesAnticipo = $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->findBy(array('codigoAnticipoFk' => $codigoAnticipo));
+                    foreach ($arDetallesAnticipo AS $arDetalleAnticipo) {
+                        $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
+                        $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleAnticipo->getCodigoCuentaCobrarFk());
+                        $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleAnticipo->getVrPagoDetalle());
+                        $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleAnticipo->getVrPagoDetalle());
+                        $em->persist($arCuentaCobrar);
+                    }
+                    $em->persist($arAnticipo);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_detalle', array('codigoAnticipo' => $codigoAnticipo)));                
+                } else {
+                    $objMensaje->Mensaje('error', "El anticipo debe estar autorizado y no puede estar impreso", $this);
+                }
+            }
+            if($form->get('BtnAnular')->isClicked()) {            
+                if($arAnticipo->getEstadoImpreso() == 1) {
+                    $arAnticipo->setEstadoAnulado(1);
+                    $arAnticipo->setVrTotalAjustePeso(0);
+                    $arAnticipo->setVrTotalDescuento(0);
+                    $arAnticipo->setVrTotalReteIca(0);
+                    $arAnticipo->setVrTotalReteIva(0);
+                    $arAnticipo->setVrTotalReteFuente(0);
+                    $arAnticipo->setVrTotal(0);
+                    $arDetallesAnticipo = $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->findBy(array('codigoAnticipoFk' => $codigoAnticipo));
+                    foreach ($arDetallesAnticipo AS $arDetalleAnticipo) {
+                        $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
+                        $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleAnticipo->getCodigoCuentaCobrarFk());
+                        $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleAnticipo->getVrPagoDetalle());
+                        $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleAnticipo->getVrPagoDetalle());
+                        $arDetalleAnticipoAnulado = new \Brasa\CarteraBundle\Entity\CarAnticipoDetalle();
+                        $arDetalleAnticipoAnulado = $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->find($arDetalleAnticipo->getCodigoAnticipoDetallePk());
+                        $arDetalleAnticipoAnulado->setVrDescuento(0);
+                        $arDetalleAnticipoAnulado->setVrAjustePeso(0);
+                        $arDetalleAnticipoAnulado->setVrReteIca(0);
+                        $arDetalleAnticipoAnulado->setVrReteIva(0);
+                        $arDetalleAnticipoAnulado->setVrReteFuente(0);
+                        $arDetalleAnticipoAnulado->setValor(0);
+                        $em->persist($arCuentaCobrar);
+                        $em->persist($arDetalleAnticipoAnulado);
+                    }
+                    $em->persist($arAnticipo);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_detalle', array('codigoAnticipo' => $codigoAnticipo)));                
+                }
+            }
+            if($form->get('BtnDetalleActualizar')->isClicked()) {
+                if($arAnticipo->getEstadoAutorizado() == 0 ) {
+                    $arrControles = $request->request->All();
+                    $this->actualizarDetalle($arrControles, $codigoAnticipo);                
+                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_detalle', array('codigoAnticipo' => $codigoAnticipo)));
+                } else {
+                    $objMensaje->Mensaje("error", "No se puede actualizar el registro, esta autorizado", $this);
+                }    
+            }
+            if($form->get('BtnDetalleEliminar')->isClicked()) {  
+                if($arAnticipo->getEstadoAutorizado() == 0 ) {
+                    $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                    $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->eliminarSeleccionados($arrSeleccionados);
+                    $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->liquidar($codigoAnticipo);                 
+                } else {
+                    $objMensaje->Mensaje("error", "No se puede eliminar el registro, esta autorizado", $this);
+                }
+                return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_detalle', array('codigoAnticipo' => $codigoAnticipo)));                    
+            }    
+            if($form->get('BtnImprimir')->isClicked()) {
+                if($arAnticipo->getEstadoAutorizado() == 1 ) {
+                    $strResultado = $em->getRepository('BrasaCarteraBundle:CarAnticipo')->imprimir($codigoAnticipo);
+                    if($strResultado != "") {
+                        $objMensaje->Mensaje("error", $strResultado, $this);
+                    } else {
+                        $objAnticipo = new \Brasa\CarteraBundle\Formatos\FormatoAnticipo();
+                        $objAnticipo->Generar($this, $codigoAnticipo);
+                    }
+                } else {
+                    $objMensaje->Mensaje("error", "No se puede imprimir el registro, no esta autorizado", $this);
+                }
+                return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_detalle', array('codigoAnticipo' => $codigoAnticipo)));                        
+            }                        
+        }
+        $arAnticipoDetalle = new \Brasa\CarteraBundle\Entity\CarAnticipoDetalle();
+        $arAnticipoDetalle = $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->findBy(array ('codigoAnticipoFk' => $codigoAnticipo));
+        return $this->render('BrasaCarteraBundle:Movimientos/Anticipo:detalle.html.twig', array(
+                    'arAnticipo' => $arAnticipo,
+                    'arAnticipoDetalle' => $arAnticipoDetalle,
+                    'form' => $form->createView()
+                    ));
+    }
+    
+    /**
+     * @Route("/cartera/movimiento/anticipo/detalle/nuevo/{codigoAnticipo}/{codigoAnticipoDetalle}", name="brs_cartera_movimiento_anticipo_detalle_nuevo")
+     */
+    public function detalleNuevoAction($codigoAnticipo, $codigoAnticipoDetalle = 0) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $paginator  = $this->get('knp_paginator');
+        $arAnticipo = new \Brasa\CarteraBundle\Entity\CarAnticipo();
+        $arAnticipo = $em->getRepository('BrasaCarteraBundle:CarAnticipo')->find($codigoAnticipo);
+        $arCuentasCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
+        $arCuentasCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->cuentasCobrar($arAnticipo->getCodigoClienteFk());
+        $arCuentasCobrar = $paginator->paginate($arCuentasCobrar, $request->query->get('page', 1), 50);
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        $form->handleRequest($request); 
+        if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
+            if ($form->get('BtnGuardar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $arrControles = $request->request->All();
+                $intIndice = 0;
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoCuentaCobrar) {
+                        if($em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->validarCuenta($codigoCuentaCobrar,$codigoAnticipo)) {
+                            $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($codigoCuentaCobrar);
+                            $arAnticipoDetalle = new \Brasa\CarteraBundle\Entity\CarAnticipoDetalle();
+                            $arAnticipoDetalle->setAnticipoRel($arAnticipo);
+                            $arAnticipoDetalle->setCuentaCobrarRel($arCuentaCobrar);
+                            $arAnticipoDetalle->setValor($arrControles['TxtSaldo'.$codigoCuentaCobrar]);
+                            $arAnticipoDetalle->setUsuario($arUsuario->getUserName());
+                            $arAnticipoDetalle->setNumeroFactura($arCuentaCobrar->getNumeroDocumento());
+                            $arAnticipoDetalle->setCuentaCobrarTipoRel($arCuentaCobrar->getCuentaCobrarTipoRel());
+                            $em->persist($arAnticipoDetalle);                            
+                        } 
+                    }
+                    $em->flush();
+                } 
+                $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->liquidar($codigoAnticipo);
+            }            
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+        }
+        return $this->render('BrasaCarteraBundle:Movimientos/Anticipo:detalleNuevo.html.twig', array(
+            'arCuentasCobrar' => $arCuentasCobrar,
+            'arAnticipo' => $arAnticipo,
+            'form' => $form->createView()));
+    } 
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
@@ -158,6 +342,41 @@ class MovimientoAnticipoController extends Controller
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
+        return $form;
+    }
+    
+    private function formularioDetalle($ar) {        
+        $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);        
+        $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
+        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
+        $arrBotonAnular = array('label' => 'Anular', 'disabled' => false);
+        $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
+        if($ar->getEstadoAutorizado() == 1) {            
+            $arrBotonAutorizar['disabled'] = true;                        
+            $arrBotonDetalleEliminar['disabled'] = true;
+            $arrBotonDetalleActualizar['disabled'] = true;
+            $arrBotonAnular['disabled'] = true;
+        } else {
+            $arrBotonDesAutorizar['disabled'] = true;            
+            $arrBotonImprimir['disabled'] = true;
+            $arrBotonAnular['disabled'] = true;
+        }
+        if($ar->getEstadoImpreso() == 1) {
+            $arrBotonDesAutorizar['disabled'] = true;
+            $arrBotonAnular['disabled'] = false;
+        }
+        if($ar->getEstadoAnulado() == 1) {
+            $arrBotonAnular['disabled'] = true;
+        }
+        $form = $this->createFormBuilder()
+                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
+                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                 
+                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)
+                    ->add('BtnAnular', 'submit', $arrBotonAnular)
+                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
+                    ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
+                    ->getForm();
         return $form;
     }
 
@@ -237,6 +456,35 @@ class MovimientoAnticipoController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
+    }
+    
+    private function actualizarDetalle($arrControles, $codigoActicipo) {
+        $em = $this->getDoctrine()->getManager();
+        $intIndice = 0;
+        $floTotal = 0;
+        if(isset($arrControles['LblCodigo'])) {
+            foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                $arAnticipoDetalle = new \Brasa\CarteraBundle\Entity\CarAnticipoDetalle();
+                $arAnticipoDetalle = $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->find($intCodigo);
+                $floSaldo = $arAnticipoDetalle->getCuentaCobrarRel()->getSaldo();
+                $floSaldoAfectar = $arrControles['TxtValor'.$intCodigo] + ($arrControles['TxtVrReteIca'.$intCodigo] + $arrControles['TxtVrReteIva'.$intCodigo] + $arrControles['TxtVrReteFuente'.$intCodigo] - $arrControles['TxtVrDescuento'.$intCodigo] - $arrControles['TxtVrAjustePeso'.$intCodigo]);
+                if($floSaldo < $floSaldoAfectar) {
+                    $arAnticipoDetalle->setEstadoInconsistencia(1);
+                }else {
+                    $arAnticipoDetalle->setEstadoInconsistencia(0);
+                }
+                $arAnticipoDetalle->setVrDescuento($arrControles['TxtVrDescuento'.$intCodigo]);
+                $arAnticipoDetalle->setVrAjustePeso($arrControles['TxtVrAjustePeso'.$intCodigo]);
+                $arAnticipoDetalle->setVrReteIca($arrControles['TxtVrReteIca'.$intCodigo]);
+                $arAnticipoDetalle->setVrReteIva($arrControles['TxtVrReteIva'.$intCodigo]);
+                $arAnticipoDetalle->setVrReteFuente($arrControles['TxtVrReteFuente'.$intCodigo]);
+                $arAnticipoDetalle->setValor($arrControles['TxtValor'.$intCodigo]);
+                $arAnticipoDetalle->setVrPagoDetalle($floSaldoAfectar);
+                $em->persist($arAnticipoDetalle);
+            }
+            $em->flush();
+            $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->liquidar($codigoAnticipo);                   
+        }
     }
 
     

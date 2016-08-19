@@ -120,6 +120,11 @@ class CarCuentaCobrar
      * @ORM\OneToMany(targetEntity="CarReciboDetalle", mappedBy="cuentaCobrarRel")
      */
     protected $recibosDetallesCuentaCobrarRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="CarAnticipoDetalle", mappedBy="cuentaCobrarRel")
+     */
+    protected $anticipoDetallesCuentaCobrarRel;
 
    
     
@@ -132,6 +137,7 @@ class CarCuentaCobrar
         $this->notasCreditosDetallesCuentaCobrarRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->notasDebitosDetallesCuentaCobrarRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->recibosDetallesCuentaCobrarRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->anticipoDetallesCuentaCobrarRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -166,6 +172,30 @@ class CarCuentaCobrar
     public function getCodigoCuentaCobrarTipoFk()
     {
         return $this->codigoCuentaCobrarTipoFk;
+    }
+
+    /**
+     * Set codigoFactura
+     *
+     * @param integer $codigoFactura
+     *
+     * @return CarCuentaCobrar
+     */
+    public function setCodigoFactura($codigoFactura)
+    {
+        $this->codigoFactura = $codigoFactura;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFactura
+     *
+     * @return integer
+     */
+    public function getCodigoFactura()
+    {
+        return $this->codigoFactura;
     }
 
     /**
@@ -241,6 +271,30 @@ class CarCuentaCobrar
     }
 
     /**
+     * Set soporte
+     *
+     * @param string $soporte
+     *
+     * @return CarCuentaCobrar
+     */
+    public function setSoporte($soporte)
+    {
+        $this->soporte = $soporte;
+
+        return $this;
+    }
+
+    /**
+     * Get soporte
+     *
+     * @return string
+     */
+    public function getSoporte()
+    {
+        return $this->soporte;
+    }
+
+    /**
      * Set plazo
      *
      * @param string $plazo
@@ -286,6 +340,30 @@ class CarCuentaCobrar
     public function getCodigoClienteFk()
     {
         return $this->codigoClienteFk;
+    }
+
+    /**
+     * Set codigoAsesorFk
+     *
+     * @param integer $codigoAsesorFk
+     *
+     * @return CarCuentaCobrar
+     */
+    public function setCodigoAsesorFk($codigoAsesorFk)
+    {
+        $this->codigoAsesorFk = $codigoAsesorFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoAsesorFk
+     *
+     * @return integer
+     */
+    public function getCodigoAsesorFk()
+    {
+        return $this->codigoAsesorFk;
     }
 
     /**
@@ -361,6 +439,54 @@ class CarCuentaCobrar
     }
 
     /**
+     * Set grupo
+     *
+     * @param string $grupo
+     *
+     * @return CarCuentaCobrar
+     */
+    public function setGrupo($grupo)
+    {
+        $this->grupo = $grupo;
+
+        return $this;
+    }
+
+    /**
+     * Get grupo
+     *
+     * @return string
+     */
+    public function getGrupo()
+    {
+        return $this->grupo;
+    }
+
+    /**
+     * Set subgrupo
+     *
+     * @param string $subgrupo
+     *
+     * @return CarCuentaCobrar
+     */
+    public function setSubgrupo($subgrupo)
+    {
+        $this->subgrupo = $subgrupo;
+
+        return $this;
+    }
+
+    /**
+     * Get subgrupo
+     *
+     * @return string
+     */
+    public function getSubgrupo()
+    {
+        return $this->subgrupo;
+    }
+
+    /**
      * Set clienteRel
      *
      * @param \Brasa\CarteraBundle\Entity\CarCliente $clienteRel
@@ -382,6 +508,30 @@ class CarCuentaCobrar
     public function getClienteRel()
     {
         return $this->clienteRel;
+    }
+
+    /**
+     * Set asesorRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenAsesor $asesorRel
+     *
+     * @return CarCuentaCobrar
+     */
+    public function setAsesorRel(\Brasa\GeneralBundle\Entity\GenAsesor $asesorRel = null)
+    {
+        $this->asesorRel = $asesorRel;
+
+        return $this;
+    }
+
+    /**
+     * Get asesorRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenAsesor
+     */
+    public function getAsesorRel()
+    {
+        return $this->asesorRel;
     }
 
     /**
@@ -511,146 +661,36 @@ class CarCuentaCobrar
     }
 
     /**
-     * Set codigoAsesorFk
+     * Add anticipoDetallesCuentaCobrarRel
      *
-     * @param integer $codigoAsesorFk
+     * @param \Brasa\CarteraBundle\Entity\CarAnticipoDetalle $anticipoDetallesCuentaCobrarRel
      *
      * @return CarCuentaCobrar
      */
-    public function setCodigoAsesorFk($codigoAsesorFk)
+    public function addAnticipoDetallesCuentaCobrarRel(\Brasa\CarteraBundle\Entity\CarAnticipoDetalle $anticipoDetallesCuentaCobrarRel)
     {
-        $this->codigoAsesorFk = $codigoAsesorFk;
+        $this->anticipoDetallesCuentaCobrarRel[] = $anticipoDetallesCuentaCobrarRel;
 
         return $this;
     }
 
     /**
-     * Get codigoAsesorFk
+     * Remove anticipoDetallesCuentaCobrarRel
      *
-     * @return integer
+     * @param \Brasa\CarteraBundle\Entity\CarAnticipoDetalle $anticipoDetallesCuentaCobrarRel
      */
-    public function getCodigoAsesorFk()
+    public function removeAnticipoDetallesCuentaCobrarRel(\Brasa\CarteraBundle\Entity\CarAnticipoDetalle $anticipoDetallesCuentaCobrarRel)
     {
-        return $this->codigoAsesorFk;
+        $this->anticipoDetallesCuentaCobrarRel->removeElement($anticipoDetallesCuentaCobrarRel);
     }
 
     /**
-     * Set asesorRel
+     * Get anticipoDetallesCuentaCobrarRel
      *
-     * @param \Brasa\GeneralBundle\Entity\GenAsesor $asesorRel
-     *
-     * @return CarCuentaCobrar
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setAsesorRel(\Brasa\GeneralBundle\Entity\GenAsesor $asesorRel = null)
+    public function getAnticipoDetallesCuentaCobrarRel()
     {
-        $this->asesorRel = $asesorRel;
-
-        return $this;
-    }
-
-    /**
-     * Get asesorRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenAsesor
-     */
-    public function getAsesorRel()
-    {
-        return $this->asesorRel;
-    }
-
-    /**
-     * Set codigoFactura
-     *
-     * @param integer $codigoFactura
-     *
-     * @return CarCuentaCobrar
-     */
-    public function setCodigoFactura($codigoFactura)
-    {
-        $this->codigoFactura = $codigoFactura;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoFactura
-     *
-     * @return integer
-     */
-    public function getCodigoFactura()
-    {
-        return $this->codigoFactura;
-    }
-
-    /**
-     * Set soporte
-     *
-     * @param string $soporte
-     *
-     * @return CarCuentaCobrar
-     */
-    public function setSoporte($soporte)
-    {
-        $this->soporte = $soporte;
-
-        return $this;
-    }
-
-    /**
-     * Get soporte
-     *
-     * @return string
-     */
-    public function getSoporte()
-    {
-        return $this->soporte;
-    }
-
-    /**
-     * Set grupo
-     *
-     * @param string $grupo
-     *
-     * @return CarCuentaCobrar
-     */
-    public function setGrupo($grupo)
-    {
-        $this->grupo = $grupo;
-
-        return $this;
-    }
-
-    /**
-     * Get grupo
-     *
-     * @return string
-     */
-    public function getGrupo()
-    {
-        return $this->grupo;
-    }
-
-    /**
-     * Set subgrupo
-     *
-     * @param string $subgrupo
-     *
-     * @return CarCuentaCobrar
-     */
-    public function setSubgrupo($subgrupo)
-    {
-        $this->subgrupo = $subgrupo;
-
-        return $this;
-    }
-
-    /**
-     * Get subgrupo
-     *
-     * @return string
-     */
-    public function getSubgrupo()
-    {
-        return $this->subgrupo;
+        return $this->anticipoDetallesCuentaCobrarRel;
     }
 }

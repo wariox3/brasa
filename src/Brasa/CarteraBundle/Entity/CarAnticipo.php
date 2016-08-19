@@ -136,9 +136,22 @@ class CarAnticipo
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenAsesor", inversedBy="carAnticiposAsesorRel")
      * @ORM\JoinColumn(name="codigo_asesor_fk", referencedColumnName="codigo_asesor_pk")
      */
-    protected $asesorRel;    
+    protected $asesorRel;
+
+    /**
+     * @ORM\OneToMany(targetEntity="CarAnticipoDetalle", mappedBy="anticipoRel")
+     */
+    protected $anticiposDetallesAnticiposRel;
     
    
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->anticiposDetallesAnticiposRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoAnticipoPk
@@ -700,5 +713,39 @@ class CarAnticipo
     public function getAsesorRel()
     {
         return $this->asesorRel;
+    }
+
+    /**
+     * Add anticiposDetallesAnticiposRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarAnticipoDetalle $anticiposDetallesAnticiposRel
+     *
+     * @return CarAnticipo
+     */
+    public function addAnticiposDetallesAnticiposRel(\Brasa\CarteraBundle\Entity\CarAnticipoDetalle $anticiposDetallesAnticiposRel)
+    {
+        $this->anticiposDetallesAnticiposRel[] = $anticiposDetallesAnticiposRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove anticiposDetallesAnticiposRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarAnticipoDetalle $anticiposDetallesAnticiposRel
+     */
+    public function removeAnticiposDetallesAnticiposRel(\Brasa\CarteraBundle\Entity\CarAnticipoDetalle $anticiposDetallesAnticiposRel)
+    {
+        $this->anticiposDetallesAnticiposRel->removeElement($anticiposDetallesAnticiposRel);
+    }
+
+    /**
+     * Get anticiposDetallesAnticiposRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAnticiposDetallesAnticiposRel()
+    {
+        return $this->anticiposDetallesAnticiposRel;
     }
 }

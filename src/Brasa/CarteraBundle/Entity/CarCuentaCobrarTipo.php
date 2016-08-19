@@ -34,6 +34,11 @@ class CarCuentaCobrarTipo
     protected $cuentasCobrarTiposReciboDetalleRel;
     
     /**
+     * @ORM\OneToMany(targetEntity="CarAnticipoDetalle", mappedBy="cuentaCobrarTipoRel")
+     */
+    protected $cuentasCobrarTiposAnticipoDetalleRel;
+    
+    /**
      * @ORM\OneToMany(targetEntity="CarNotaDebitoDetalle", mappedBy="cuentaCobrarTipoRel")
      */
     protected $cuentasCobrarTiposNotaDebitoDetalleRel;
@@ -44,6 +49,7 @@ class CarCuentaCobrarTipo
     protected $cuentasCobrarTiposNotaCreditoDetalleRel;
     
     
+    
     /**
      * Constructor
      */
@@ -51,6 +57,7 @@ class CarCuentaCobrarTipo
     {
         $this->cuentasCobrarTiposCuentaCobrarRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cuentasCobrarTiposReciboDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cuentasCobrarTiposAnticipoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cuentasCobrarTiposNotaDebitoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cuentasCobrarTiposNotaCreditoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -155,6 +162,40 @@ class CarCuentaCobrarTipo
     public function getCuentasCobrarTiposReciboDetalleRel()
     {
         return $this->cuentasCobrarTiposReciboDetalleRel;
+    }
+
+    /**
+     * Add cuentasCobrarTiposAnticipoDetalleRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarAnticipoDetalle $cuentasCobrarTiposAnticipoDetalleRel
+     *
+     * @return CarCuentaCobrarTipo
+     */
+    public function addCuentasCobrarTiposAnticipoDetalleRel(\Brasa\CarteraBundle\Entity\CarAnticipoDetalle $cuentasCobrarTiposAnticipoDetalleRel)
+    {
+        $this->cuentasCobrarTiposAnticipoDetalleRel[] = $cuentasCobrarTiposAnticipoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove cuentasCobrarTiposAnticipoDetalleRel
+     *
+     * @param \Brasa\CarteraBundle\Entity\CarAnticipoDetalle $cuentasCobrarTiposAnticipoDetalleRel
+     */
+    public function removeCuentasCobrarTiposAnticipoDetalleRel(\Brasa\CarteraBundle\Entity\CarAnticipoDetalle $cuentasCobrarTiposAnticipoDetalleRel)
+    {
+        $this->cuentasCobrarTiposAnticipoDetalleRel->removeElement($cuentasCobrarTiposAnticipoDetalleRel);
+    }
+
+    /**
+     * Get cuentasCobrarTiposAnticipoDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCuentasCobrarTiposAnticipoDetalleRel()
+    {
+        return $this->cuentasCobrarTiposAnticipoDetalleRel;
     }
 
     /**
