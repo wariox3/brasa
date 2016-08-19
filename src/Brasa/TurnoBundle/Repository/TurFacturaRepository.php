@@ -320,8 +320,9 @@ class TurFacturaRepository extends EntityRepository {
 
     public function anular($codigoFactura) {
         $em = $this->getEntityManager();
-        $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
+        $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();        
         $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);
+        
         $strResultado = "";
         if($arFactura->getEstadoAutorizado() == 1 && $arFactura->getEstadoAnulado() == 0 && $arFactura->getNumero() != 0 && $arFactura->getEstadoContabilizado() == 0) {
             $boolAnular = TRUE;
@@ -342,6 +343,11 @@ class TurFacturaRepository extends EntityRepository {
                 $arFacturaDetalleAct = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->find($arFacturaDetalle->getCodigoFacturaDetallePk());
                 $arFacturaDetalle->setVrPrecio(0);
                 $arFacturaDetalle->setCantidad(0);
+                $arFacturaDetalle->setSubtotal(0);
+                $arFacturaDetalle->setSubtotalOperado(0);
+                $arFacturaDetalle->setBaseIva(0);
+                $arFacturaDetalle->setIva(0);
+                $arFacturaDetalle->setTotal(0);
                 $em->persist($arFacturaDetalle);
             }
             $arFactura->setVrSubtotal(0);
@@ -349,6 +355,7 @@ class TurFacturaRepository extends EntityRepository {
             $arFactura->setVrBaseAIU(0);
             $arFactura->setVrIva(0);
             $arFactura->setVrTotal(0);
+            $arFactura->setVrTotalNeto(0);
             $arFactura->setEstadoAnulado(1);
             $em->persist($arFactura);
 
