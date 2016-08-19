@@ -422,16 +422,18 @@ class ContratosController extends Controller
                                 $arLiquidacion->setLiquidarCesantias(1);
                                 $arLiquidacion->setLiquidarPrima(1);
                                 $arLiquidacion->setLiquidarVacaciones(1);
-                                $arLiquidacion->setCodigoUsuario($arUsuario->getUserName());
-                                $intDiasLaborados = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($arContrato->getFechaDesde(), $arContrato->getFechaHasta());                                
-                                if($intDiasLaborados < 30) {
-                                    $arLiquidacion->setLiquidarSalario(1);
-                                } else {
-                                    if($intDiasLaborados <= 120) {
-                                        $arLiquidacion->setPorcentajeIbp(95);
+                                $arLiquidacion->setCodigoUsuario($arUsuario->getUserName());                                
+                                if($arContrato->getCodigoSalarioTipoFk() == 2) {
+                                    $intDiasLaborados = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($arContrato->getFechaDesde(), $arContrato->getFechaHasta());                                
+                                    if($intDiasLaborados < 30) {
+                                        $arLiquidacion->setLiquidarSalario(1);
                                     } else {
-                                        $arLiquidacion->setPorcentajeIbp(90);
-                                    }
+                                        if($intDiasLaborados <= 120) {
+                                            $arLiquidacion->setPorcentajeIbp(95);
+                                        } else {
+                                            $arLiquidacion->setPorcentajeIbp(90);
+                                        }
+                                    }                                    
                                 }
                                 $em->persist($arLiquidacion);
                                 //Verificar creditos
