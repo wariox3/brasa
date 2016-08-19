@@ -81,7 +81,11 @@ class RhuLiquidacionRepository extends EntityRepository {
                 $ibpCesantias += $ibpCesantiasInicial+$douIBPAdicional;                  
                 //$intDiasAusentismo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->diasAusentismo($dateFechaDesde->format('Y-m-d'), $dateFechaHasta->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());                            
                 $intDiasCesantias = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta);  
-                $salarioPromedioCesantias = ($ibpCesantias / $intDiasCesantias) * 30;                
+                if($arContrato->getCodigoSalarioTipoFk() == 2) {
+                    $salarioPromedioCesantias = ($ibpCesantias / $intDiasCesantias) * 30;                                    
+                } else {
+                    $salarioPromedioCesantias = $douSalario;
+                }
                 if($arLiquidacion->getPorcentajeIbp() > 0) {
                     $salarioPromedioCesantias = ($salarioPromedioCesantias * $arLiquidacion->getPorcentajeIbp())/100;
                 }
@@ -113,8 +117,12 @@ class RhuLiquidacionRepository extends EntityRepository {
                     }
                     $ibpPrimasInicial = $arContrato->getIbpPrimasInicial();                    
                     $ibpPrimas = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibp($dateFechaDesde->format('Y-m-d'), $dateFechaHasta->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());                
-                    $ibpPrimas += $ibpPrimasInicial + $douIBPAdicional;                        
-                    $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrimaLiquidar) * 30; 
+                    $ibpPrimas += $ibpPrimasInicial + $douIBPAdicional;                                            
+                    if($arContrato->getCodigoSalarioTipoFk() == 2) {
+                         $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrimaLiquidar) * 30;                                    
+                    } else {
+                        $salarioPromedioPrimas = $douSalario;
+                    }                    
                     if($arLiquidacion->getPorcentajeIbp() > 0) {
                         $salarioPromedioPrimas = ($salarioPromedioPrimas * $arLiquidacion->getPorcentajeIbp())/100;
                     }
