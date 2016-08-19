@@ -38,10 +38,9 @@ class RhuLiquidacionRepository extends EntityRepository {
     public function liquidar($codigoLiquidacion) {        
         $em = $this->getEntityManager();
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);
-        $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();        
+        $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();                
         $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion); 
         $douSalario = 0;
-        $douBasePrestacionesTotalPrimas = 0;
         $douCesantias = 0;
         $douInteresesCesantias = 0;
         $douPrima = 0;
@@ -51,6 +50,7 @@ class RhuLiquidacionRepository extends EntityRepository {
         $ibpCesantias = 0;        
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();           
         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arLiquidacion->getCodigoContratoFk());         
+        $arLiquidacion->setFechaHasta($arContrato->getFechaHasta());
         if($arLiquidacion->getLiquidarManual() == 0) {            
             $douIBPAdicional = 0;
             $dateFechaUltimoPago = $arLiquidacion->getContratoRel()->getFechaUltimoPago();                        
@@ -64,7 +64,10 @@ class RhuLiquidacionRepository extends EntityRepository {
                     $douIBPAdicional = ($arLiquidacion->getContratoRel()->getVrSalarioPago()/30) * $diasAdicionales;
                     $arLiquidacion->setVrIngresoBasePrestacionAdicional($douIBPAdicional);                
                     $arLiquidacion->setDiasAdicionalesIBP($diasAdicionales);
-                }
+                } else {
+                    $arLiquidacion->setVrIngresoBasePrestacionAdicional(0);                
+                    $arLiquidacion->setDiasAdicionalesIBP(0);                    
+                }                
             }                   
             
             $intDiasLaborados = $this->diasPrestaciones($arLiquidacion->getContratoRel()->getFechaDesde(), $arLiquidacion->getContratoRel()->getFechaHasta());
