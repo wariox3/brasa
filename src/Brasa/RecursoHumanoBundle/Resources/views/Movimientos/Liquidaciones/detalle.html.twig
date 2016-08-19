@@ -127,7 +127,7 @@
                     </tr>
                     <tr>
                         <td class="titulo">GENERADO:</td>
-                        <td align="right">{% if arLiquidacion.estadoGenerado == 1 %}SI{% else %}NO{% endif %}</td>                        
+                        <td>{% if arLiquidacion.estadoGenerado == 1 %}SI{% else %}NO{% endif %}</td>                        
                         <td class="titulo"></td>
                         <td align="right"></td>
                         <td class="titulo">SALARIO VACACIONES:</td>
@@ -137,7 +137,7 @@
                     </tr>
                     <tr>
                         <td class="titulo">PAGADO:</td>
-                        <td align="right">{% if arLiquidacion.estadoPagoGenerado == 1 %}SI{% else %}NO{% endif %}</td>
+                        <td>{% if arLiquidacion.estadoPagoGenerado == 1 %}SI{% else %}NO{% endif %}</td>
                         <td class="titulo">VACACIONES (DESDE):</td>
                         <td align="right">{{ arLiquidacion.fechaUltimoPagoVacaciones|date("Y/m/d") }}</td>                        
                         <td class="titulo">VACACIONES:</td>
@@ -156,8 +156,8 @@
                         <td align="right"></td>                        
                     </tr>
                     <tr>
-                        <td class="titulo"></td>
-                        <td align="right"></td>
+                        <td class="titulo">LIQUIDAR SALARIO:</td>
+                        <td>{% if arLiquidacion.liquidarSalario == 1 %}SI{% else %}NO{% endif %}</td>                        
                         <td class="titulo"></td>
                         <td align="right"></td>
                         <td class="titulo">DEDUCCION PRIMA:</td>
@@ -166,8 +166,8 @@
                         <td align="right"></td>                        
                     </tr>
                     <tr>
-                        <td class="titulo"></td>
-                        <td align="right"></td>
+                        <td class="titulo">PORCENTAJE</td>
+                        <td>{{ arLiquidacion.porcentajeIbp }}</td>
                         <td class="titulo"></td>
                         <td align="right"></td>
                         <td class="titulo">BONIFICACIONES:</td>

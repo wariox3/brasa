@@ -305,6 +305,38 @@ class LiquidacionController extends Controller
             'form' => $form->createView()));
     }     
     
+    /**
+     * @Route("/rhu/movimiento/liquidacion/parametros/{codigoLiquidacion}", name="brs_rhu_movimiento_liquidacion_parametros")
+     */    
+    public function parametrosAction($codigoLiquidacion) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
+        $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion);
+        $form = $this->createFormBuilder()
+            ->setAction($this->generateUrl('brs_rhu_movimiento_liquidacion_parametros', array('codigoLiquidacion' => $codigoLiquidacion)))            
+            ->add('porcentajeIbp', 'number', array('data' =>$arLiquidacion->getPorcentajeIbp() ,'required' => false))      
+            ->add('liquidarSalario', 'checkbox', array('required'  => false))
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();            
+            $porcentajeIbp = $form->get('porcentajeIbp')->getData();
+            $liquidarSalario = $form->get('liquidarSalario')->getData();
+            $arLiquidacion->setPorcentajeIbp($porcentajeIbp);
+            $arLiquidacion->setLiquidarSalario($liquidarSalario);
+            $em->persist($arLiquidacion);
+            $em->flush();
+            return $this->redirect($this->generateUrl('brs_rhu_movimiento_liquidacion'));
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Liquidaciones:parametros.html.twig', array(
+            'arLiquidacion' => $arLiquidacion,
+            'form' => $form->createView()           
+        ));
+    }    
+    
     private function listar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();

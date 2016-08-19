@@ -252,6 +252,16 @@ class RhuLiquidacion
      */
     private $estadoPagoGenerado = 0;
     
+    /**     
+     * @ORM\Column(name="liquidar_salario", type="boolean")
+     */    
+    private $liquidarSalario = 0;    
+    
+    /**
+     * @ORM\Column(name="porcentaje_ibp", type="float")
+     */
+    private $porcentajeIbp = 100;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="liquidacionesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
@@ -1556,5 +1566,53 @@ class RhuLiquidacion
     public function getVrSalarioPromedioPrimas()
     {
         return $this->VrSalarioPromedioPrimas;
+    }
+
+    /**
+     * Set liquidarSalario
+     *
+     * @param boolean $liquidarSalario
+     *
+     * @return RhuLiquidacion
+     */
+    public function setLiquidarSalario($liquidarSalario)
+    {
+        $this->liquidarSalario = $liquidarSalario;
+
+        return $this;
+    }
+
+    /**
+     * Get liquidarSalario
+     *
+     * @return boolean
+     */
+    public function getLiquidarSalario()
+    {
+        return $this->liquidarSalario;
+    }
+
+    /**
+     * Set porcentajeIbp
+     *
+     * @param float $porcentajeIbp
+     *
+     * @return RhuLiquidacion
+     */
+    public function setPorcentajeIbp($porcentajeIbp)
+    {
+        $this->porcentajeIbp = $porcentajeIbp;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeIbp
+     *
+     * @return float
+     */
+    public function getPorcentajeIbp()
+    {
+        return $this->porcentajeIbp;
     }
 }
