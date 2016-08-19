@@ -30,38 +30,38 @@
                         <td class="td-in-well">{{ arLiquidacion.codigoLiquidacionPk }}</td>
                         <td class="titulo">FECHA:</td>
                         <td align="right">{{ arLiquidacion.fecha|date("Y/m/d") }}</td>
-                        <td class="titulo"></td>
-                        <td align="right"></td>
-                        <td class="titulo"></td>
-                        <td align="right"></td>                        
+                        <td class="titulo">IBP DÍAS ADICIONALES:</td>
+                        <td align="right">{{ arLiquidacion.VrIngresoBasePrestacionAdicional | number_format(0, '.', ',') }}</td>
+                        <td class="titulo">DIAS</td>
+                        <td align="right">{{ arLiquidacion.diasAdicionalesIBP }}</td>                                                
                     </tr>
                     <tr>
                         <td class="titulo">FECHA INICIO:</td>
                         <td class="td-in-well">{{ arLiquidacion.fechaDesde|date("Y/m/d") }}</td>
                         <td class="titulo"></td>
                         <td align="right"></td>
-                        <td class="titulo">IBP DÍAS ADICIONALES:</td>
-                        <td align="right">{{ arLiquidacion.VrIngresoBasePrestacionAdicional | number_format(0, '.', ',') }}</td>
-                        <td class="titulo">DIAS</td>
-                        <td align="right">{{ arLiquidacion.diasAdicionalesIBP }}</td>                        
+                        <td class="titulo">IBP CESANTIAS (INICIAL):</td>
+                        <td align="right">$ {{ arLiquidacion.vrIngresoBasePrestacionCesantiasInicial | number_format(0, '.', ',') }}</td>
+                        <td class="titulo"></td>
+                        <td align="right"></td>                       
                     </tr>
                     <tr>
                         <td class="titulo">FECHA FIN:</td>
                         <td class="td-in-well">{{ arLiquidacion.fechaHasta|date("Y/m/d") }}</td>
                         <td class="titulo"></td>
                         <td align="right"></td>
-                        <td class="titulo">IBP CESANTIAS (INICIAL):</td>
-                        <td align="right">$ {{ arLiquidacion.vrIngresoBasePrestacionCesantiasInicial | number_format(0, '.', ',') }}</td>
+                        <td class="titulo">IBP CESANTIAS:</td>
+                        <td align="right">$ {{ arLiquidacion.vrIngresoBasePrestacionCesantias | number_format(0, '.', ',') }}</td>
                         <td class="titulo"></td>
-                        <td align="right"></td>                        
+                        <td align="right"></td>                         
                     </tr>
                     <tr>
                         <td class="titulo">FECHA ÚLTIMO PAGO:</td>
                         <td class="td-in-well">{{ arLiquidacion.fechaUltimoPago|date("Y/m/d") }}</td>
                         <td class="titulo"></td>
                         <td align="right"></td>
-                        <td class="titulo">IBP CESANTIAS:</td>
-                        <td align="right">$ {{ arLiquidacion.vrIngresoBasePrestacionCesantias | number_format(0, '.', ',') }}</td>
+                        <td class="titulo">SALARIO PROMEDIO CESANTIAS:</td>
+                        <td align="right">$ {{ arLiquidacion.vrSalarioPromedioCesantias | number_format(0, '.', ',') }}</td>
                         <td class="titulo"></td>
                         <td align="right"></td>                        
                     </tr>
@@ -108,6 +108,16 @@
                     <tr>
                         <td class="titulo">INICIO CONTRATO:</td>
                         <td>{{ arLiquidacion.fechaInicioContrato|date("Y/m/d") }}</td>
+                        <td class="titulo"></td>
+                        <td align="right"></td>                        
+                        <td class="titulo">SALARIO PROMEDIO PRIMAS:</td>
+                        <td align="right">$ {{ arLiquidacion.vrSalarioPromedioPrimas | number_format(0, '.', ',') }}</td>
+                        <td class="titulo"></td>
+                        <td align="right"></td>                        
+                    </tr>
+                    <tr>
+                        <td class="titulo">CENTRO COSTOS:</td>
+                        <td>{{ arLiquidacion.contratoRel.centroCostoRel.nombre}}</td>
                         <td class="titulo">PRIMAS (DESDE):</td>
                         <td align="right">{{ arLiquidacion.fechaUltimoPagoPrimas|date("Y/m/d") }}</td>
                         <td class="titulo">PRIMA:</td>
@@ -116,29 +126,28 @@
                         <td align="right">{{ arLiquidacion.diasPrimas }}</td>                        
                     </tr>
                     <tr>
-                        <td class="titulo">CENTRO COSTOS:</td>
-                        <td>{{ arLiquidacion.contratoRel.centroCostoRel.nombre}}</td>
+                        <td class="titulo">GENERADO:</td>
+                        <td align="right">{% if arLiquidacion.estadoGenerado == 1 %}SI{% else %}NO{% endif %}</td>                        
                         <td class="titulo"></td>
                         <td align="right"></td>
                         <td class="titulo">SALARIO VACACIONES:</td>
                         <td align="right">$ {{ arLiquidacion.vrSalarioVacaciones | number_format(0, '.', ',') }}</td>
                         <td class="titulo"></td>
-                        <td align="right"></td>                        
+                        <td align="right"></td>                       
                     </tr>
                     <tr>
-                        <td class="titulo">GENERADO:</td>
-                        <td align="right">{% if arLiquidacion.estadoGenerado == 1 %}SI{% else %}NO{% endif %}</td>                        
-
+                        <td class="titulo">PAGADO:</td>
+                        <td align="right">{% if arLiquidacion.estadoPagoGenerado == 1 %}SI{% else %}NO{% endif %}</td>
                         <td class="titulo">VACACIONES (DESDE):</td>
-                        <td align="right">{{ arLiquidacion.fechaUltimoPagoVacaciones|date("Y/m/d") }}</td>
+                        <td align="right">{{ arLiquidacion.fechaUltimoPagoVacaciones|date("Y/m/d") }}</td>                        
                         <td class="titulo">VACACIONES:</td>
                         <td align="right">$ {{ arLiquidacion.vrVacaciones | number_format(0, '.', ',') }}</td>
                         <td class="titulo">DIAS:</td>
                         <td align="right">{{ arLiquidacion.diasVacaciones }}</td>                        
                     </tr>
                     <tr>
-                        <td class="titulo">PAGADO:</td>
-                        <td align="right">{% if arLiquidacion.estadoPagoGenerado == 1 %}SI{% else %}NO{% endif %}</td>
+                        <td class="titulo">NUMERO CUENTA:</td>
+                        <td>{{ arLiquidacion.empleadoRel.cuenta}}</td>
                         <td class="titulo"></td>
                         <td align="right"></td>
                         <td class="titulo">DEDUCCIONES:</td>
@@ -147,8 +156,8 @@
                         <td align="right"></td>                        
                     </tr>
                     <tr>
-                        <td class="titulo">NUMERO CUENTA:</td>
-                        <td align="right">{{ arLiquidacion.empleadoRel.cuenta}}</td>
+                        <td class="titulo"></td>
+                        <td align="right"></td>
                         <td class="titulo"></td>
                         <td align="right"></td>
                         <td class="titulo">DEDUCCION PRIMA:</td>
@@ -164,7 +173,7 @@
                         <td class="titulo">BONIFICACIONES:</td>
                         <td align="right">$ {{ arLiquidacion.vrBonificaciones | number_format(0, '.', ',') }}</td>
                         <td class="titulo"></td>
-                        <td align="right"></td>                        
+                        <td align="right"></td>                       
                     </tr>
                     <tr>
                         <td class="titulo"></td>
@@ -175,7 +184,7 @@
                         <td align="right">$ {{ arLiquidacion.vrTotal | number_format(0, '.', ',') }}</td>
                         <td class="titulo"></td>
                         <td align="right"></td>                        
-                    </tr>
+                    </tr>                       
                     <tr>
                         <td colspan="8">MOTIVO RETIRO: {{ arLiquidacion.motivoTerminacionRel.motivo | default('') }}</td>
                     </tr>

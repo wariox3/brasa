@@ -160,12 +160,17 @@ class RhuContrato
     /**     
      * @ORM\Column(name="estado_terminado", type="boolean")
      */    
-    private $estadoTerminado = 0;    
-    
+    private $estadoTerminado = 0;        
+
     /**
-     * @ORM\Column(name="ibp_adicional", type="float", nullable=true)
+     * @ORM\Column(name="ibp_cesantias_inicial", type="float", nullable=true)
      */
-    private $ibpAdicional = 0;
+    private $ibpCesantiasInicial = 0;
+
+    /**
+     * @ORM\Column(name="ibp_primas_inicial", type="float", nullable=true)
+     */
+    private $ibpPrimasInicial = 0;
     
     /**
      * Se utiliza para liquidar vacaciones cuando no se tiene historia de los recargos nocturnos
@@ -437,8 +442,7 @@ class RhuContrato
      */
     protected $disciplinariosContratoRel;     
     
-    
-    
+
     /**
      * Constructor
      */
@@ -1171,27 +1175,51 @@ class RhuContrato
     }
 
     /**
-     * Set ibpAdicional
+     * Set ibpCesantiasInicial
      *
-     * @param float $ibpAdicional
+     * @param float $ibpCesantiasInicial
      *
      * @return RhuContrato
      */
-    public function setIbpAdicional($ibpAdicional)
+    public function setIbpCesantiasInicial($ibpCesantiasInicial)
     {
-        $this->ibpAdicional = $ibpAdicional;
+        $this->ibpCesantiasInicial = $ibpCesantiasInicial;
 
         return $this;
     }
 
     /**
-     * Get ibpAdicional
+     * Get ibpCesantiasInicial
      *
      * @return float
      */
-    public function getIbpAdicional()
+    public function getIbpCesantiasInicial()
     {
-        return $this->ibpAdicional;
+        return $this->ibpCesantiasInicial;
+    }
+
+    /**
+     * Set ibpPrimasInicial
+     *
+     * @param float $ibpPrimasInicial
+     *
+     * @return RhuContrato
+     */
+    public function setIbpPrimasInicial($ibpPrimasInicial)
+    {
+        $this->ibpPrimasInicial = $ibpPrimasInicial;
+
+        return $this;
+    }
+
+    /**
+     * Get ibpPrimasInicial
+     *
+     * @return float
+     */
+    public function getIbpPrimasInicial()
+    {
+        return $this->ibpPrimasInicial;
     }
 
     /**

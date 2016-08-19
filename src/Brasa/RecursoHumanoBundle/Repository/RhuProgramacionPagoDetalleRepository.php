@@ -453,7 +453,8 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                         if($arPagoConcepto->getGeneraIngresoBasePrestacion() == 1) {
                             $douIngresoBasePrestacional += $douPagoDetalle;    
                             $arPagoDetalle->setVrIngresoBasePrestacion($douPagoDetalle);
-                        }                        
+                        }    
+                        $arPagoDetalle->setPrestacional($arPagoConcepto->getPrestacional());
                         $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
                         $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConcepto->getOperacion());
                         $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);

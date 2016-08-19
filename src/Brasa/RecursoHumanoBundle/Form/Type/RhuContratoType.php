@@ -115,9 +115,6 @@ class RhuContratoType extends AbstractType
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                
-            ->add('ibpAdicional', 'number', array('required' => false)) 
-            ->add('promedioRecargoNocturnoInicial', 'number', array('required' => false)) 
-            ->add('fechaUltimoPagoVacaciones','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                
             ->add('guardar', 'submit');        
     }
  

@@ -163,6 +163,16 @@ class RhuLiquidacion
     private $VrSalario = 0;     
 
     /**
+     * @ORM\Column(name="vr_salario_promedio_cesantias", type="float")
+     */
+    private $VrSalarioPromedioCesantias = 0;    
+
+    /**
+     * @ORM\Column(name="vr_salario_promedio_primas", type="float")
+     */
+    private $VrSalarioPromedioPrimas = 0;
+    
+    /**
      * @ORM\Column(name="vr_salario_vacaciones", type="float")
      */
     private $VrSalarioVacaciones = 0;     
@@ -1498,5 +1508,53 @@ class RhuLiquidacion
     public function getLiquidacionesAdicionalesLiquidacionRel()
     {
         return $this->liquidacionesAdicionalesLiquidacionRel;
+    }
+
+    /**
+     * Set vrSalarioPromedioCesantias
+     *
+     * @param float $vrSalarioPromedioCesantias
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrSalarioPromedioCesantias($vrSalarioPromedioCesantias)
+    {
+        $this->VrSalarioPromedioCesantias = $vrSalarioPromedioCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioPromedioCesantias
+     *
+     * @return float
+     */
+    public function getVrSalarioPromedioCesantias()
+    {
+        return $this->VrSalarioPromedioCesantias;
+    }
+
+    /**
+     * Set vrSalarioPromedioPrimas
+     *
+     * @param float $vrSalarioPromedioPrimas
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrSalarioPromedioPrimas($vrSalarioPromedioPrimas)
+    {
+        $this->VrSalarioPromedioPrimas = $vrSalarioPromedioPrimas;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioPromedioPrimas
+     *
+     * @return float
+     */
+    public function getVrSalarioPromedioPrimas()
+    {
+        return $this->VrSalarioPromedioPrimas;
     }
 }

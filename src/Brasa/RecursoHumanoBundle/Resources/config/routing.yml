@@ -466,9 +466,9 @@ brs_rhu_contratos_cambiotipocontrato:
     path:     /rhu/contratos/cambiotipocontrato/{codigoContrato}
     defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:cambioContrato }    
     
-brs_rhu_contratos_ibp_adicional:
-    path:     /rhu/contratos/ibp/adicional/{codigoContrato}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:ibpAdicional }
+brs_rhu_contratos_informacion_inicial:
+    path:     /rhu/contratos/informacion/inicial/{codigoContrato}
+    defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:informacionInicial }
     
 brs_rhu_contratos_actualizar_terminado:
     path:     /rhu/contratos/actualizar/terminado/{codigoContrato}
