@@ -47,13 +47,6 @@
                     {{ form_widget(formContrato.terminacionContratoRel, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
             </div>
         </div>
-        <div class="form-group form-group-sm">
-            <label for="form_ibpAdicional" class="col-sm-4 control-label">Base prestacional anterior:</label>
-            <div class="col-sm-8">
-                    {{ form_widget(formContrato.ibpAdicional, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
-                    <p style="font-size: 0.8em;">* Base prestacional del contrato antes de iniciar operaciones en soga</p>
-            </div>
-        </div> 
         <br />
         <blockquote>
           <p>Recuerde que no puede terminar un contrato antes de la fecha del ultimo pago.</p>

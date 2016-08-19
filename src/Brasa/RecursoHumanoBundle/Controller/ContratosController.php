@@ -356,8 +356,7 @@ class ContratosController extends Controller
             ->add('terminacionContratoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuMotivoTerminacionContrato',
                         'property' => 'motivo',
-            ))
-            ->add('ibpAdicional', 'number', array('data' =>$arContrato->getIbpAdicional() ,'required' => false))      
+            ))      
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $formContrato->handleRequest($request);
@@ -373,8 +372,7 @@ class ContratosController extends Controller
             $dateFechaHasta = $formContrato->get('fechaTerminacion')->getData();
             $arMotivoTerminacion = new \Brasa\RecursoHumanoBundle\Entity\RhuMotivoTerminacionContrato();
             $codigoMotivoContrato = $formContrato->get('terminacionContratoRel')->getData();
-            $arMotivoTerminacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuMotivoTerminacionContrato')->find($codigoMotivoContrato);
-            $floIbpAdicional = $formContrato->get('ibpAdicional')->getData();
+            $arMotivoTerminacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuMotivoTerminacionContrato')->find($codigoMotivoContrato);           
             if($dateFechaHasta >= $arContrato->getFechaUltimoPago()) {
                 if($em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->validarCierreContrato($dateFechaHasta, $arContrato->getCodigoEmpleadoFk())) {
                     if($em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->validarCierreContrato($dateFechaHasta, $arContrato->getCodigoEmpleadoFk())) {
@@ -386,7 +384,6 @@ class ContratosController extends Controller
                             $arContrato->setEstadoTerminado(1);
                             $arContrato->setCodigoUsuarioTermina($arUsuario->getUserName());
                             $arContrato->setTerminacionContratoRel($codigoMotivoContrato);
-                            $arContrato->setIbpAdicional($floIbpAdicional);
                             $em->persist($arContrato);
                             $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato->getCodigoEmpleadoFk());
@@ -426,17 +423,25 @@ class ContratosController extends Controller
                                 $arLiquidacion->setLiquidarPrima(1);
                                 $arLiquidacion->setLiquidarVacaciones(1);
                                 $arLiquidacion->setCodigoUsuario($arUsuario->getUserName());
+                                $intDiasLaborados = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($arContrato->getFechaDesde(), $arContrato->getFechaHasta());                                
+                                if($intDiasLaborados < 30) {
+                                    $arLiquidacion->setLiquidarSalario(1);
+                                } else {
+                                    if($intDiasLaborados <= 120) {
+                                        $arLiquidacion->setPorcentajeIbp(95);
+                                    } else {
+                                        $arLiquidacion->setPorcentajeIbp(90);
+                                    }
+                                }
                                 $em->persist($arLiquidacion);
                                 //Verificar creditos
                                 $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
                                 $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arContrato->getCodigoEmpleadoFk());
                                 foreach ($arCreditos as $arCredito) {
                                     $arLiquidacionAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
-                                    $arLiquidacionAdicionalConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionalesConcepto();
-                                    $arLiquidacionAdicionalConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionalesConcepto')->find(1);
                                     $arLiquidacionAdicionales->setCreditoRel($arCredito);
+                                    $arLiquidacionAdicionales->setPagoConceptoRel($arCredito->getCreditoTipoRel()->getPagoConceptoRel());
                                     $arLiquidacionAdicionales->setLiquidacionRel($arLiquidacion);
-                                    $arLiquidacionAdicionales->setLiquidacionAdicionalConceptoRel($arLiquidacionAdicionalConcepto);
                                     $arLiquidacionAdicionales->setVrDeduccion($arCredito->getSaldoTotal());
                                     $em->persist($arLiquidacionAdicionales);
                                 }

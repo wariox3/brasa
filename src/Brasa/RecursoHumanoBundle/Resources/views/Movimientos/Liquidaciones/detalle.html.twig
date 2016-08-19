@@ -15,10 +15,14 @@
         {{ form_errors(form) }}
         <div class="btn-group">
             {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}            
             {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             {{ form_widget(form.BtnLiquidar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             {{ form_widget(form.BtnGenerarPago, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            {% if arLiquidacion.estadoPagoGenerado == 0 %}
+                <a class="btn btn-default btn-sm" id="{{ path('brs_rhu_movimiento_liquidacion_parametros', { 'codigoLiquidacion': arLiquidacion.codigoLiquidacionPk}) }}" style="float:left">Parametros</a>                        
+            {% endif %}                
+            
         </div>
         <br /> <br />
         <div class="panel panel-default">
@@ -68,7 +72,7 @@
                     <tr>
                         <td class="titulo">EMPLEADO:</td>
                         <td class="td-in-well">{{ arLiquidacion.empleadoRel.nombreCorto|default('SIN EMPLEADO') }}</td>
-                        <td class="titulo">CESANTIAS (DESDE):</td>
+                        <td class="titulo">ULTIMO PAGO CESANTIAS:</td>
                         <td align="right">{{ arLiquidacion.fechaUltimoPagoCesantias|date("Y/m/d") }}</td>
                         <td class="titulo">CESANTIAS:</td>
                         <td align="right">$ {{ arLiquidacion.vrCesantias | number_format(0, '.', ',') }}</td>
@@ -118,7 +122,7 @@
                     <tr>
                         <td class="titulo">CENTRO COSTOS:</td>
                         <td>{{ arLiquidacion.contratoRel.centroCostoRel.nombre}}</td>
-                        <td class="titulo">PRIMAS (DESDE):</td>
+                        <td class="titulo">ULITMO PAGO PRIMAS:</td>
                         <td align="right">{{ arLiquidacion.fechaUltimoPagoPrimas|date("Y/m/d") }}</td>
                         <td class="titulo">PRIMA:</td>
                         <td align="right">$ {{ arLiquidacion.vrPrima | number_format(0, '.', ',') }}</td>
@@ -138,7 +142,7 @@
                     <tr>
                         <td class="titulo">PAGADO:</td>
                         <td>{% if arLiquidacion.estadoPagoGenerado == 1 %}SI{% else %}NO{% endif %}</td>
-                        <td class="titulo">VACACIONES (DESDE):</td>
+                        <td class="titulo">ULTIMO PAGO VACACIONES:</td>
                         <td align="right">{{ arLiquidacion.fechaUltimoPagoVacaciones|date("Y/m/d") }}</td>                        
                         <td class="titulo">VACACIONES:</td>
                         <td align="right">$ {{ arLiquidacion.vrVacaciones | number_format(0, '.', ',') }}</td>

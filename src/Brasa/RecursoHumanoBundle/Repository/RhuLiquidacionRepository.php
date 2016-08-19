@@ -49,8 +49,7 @@ class RhuLiquidacionRepository extends EntityRepository {
         $intDiasLaborados = 0;
         $ibpCesantias = 0;        
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();           
-        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arLiquidacion->getCodigoContratoFk());         
-        $arLiquidacion->setFechaHasta($arContrato->getFechaHasta());
+        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arLiquidacion->getCodigoContratoFk());                 
         if($arLiquidacion->getLiquidarManual() == 0) {            
             $douIBPAdicional = 0;
             $dateFechaUltimoPago = $arLiquidacion->getContratoRel()->getFechaUltimoPago();                        
@@ -167,7 +166,6 @@ class RhuLiquidacionRepository extends EntityRepository {
             }                   
             
         } else {
-            //$arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion(); 
             $douCesantias = $arLiquidacion->getVrCesantias();
             $douInteresesCesantias = $arLiquidacion->getVrInteresesCesantias();   
             $douPrima = $arLiquidacion->getVrPrima();
@@ -195,7 +193,10 @@ class RhuLiquidacionRepository extends EntityRepository {
         $arLiquidacion->setVrBonificaciones($floAdicionales);
         $arLiquidacion->setNumeroDias($intDiasLaborados);
         $arLiquidacion->setEstadoGenerado(1);
-        $arLiquidacion->setFechaInicioContrato($arLiquidacion->getContratoRel()->getFechaDesde());
+        $arLiquidacion->setFechaInicioContrato($arContrato->getFechaDesde());
+        $arLiquidacion->setFechaDesde($arContrato->getFechaDesde());
+        $arLiquidacion->setFechaHasta($arContrato->getFechaHasta());        
+        $em->persist($arLiquidacion);
         $em->flush();
         return true;
     }  

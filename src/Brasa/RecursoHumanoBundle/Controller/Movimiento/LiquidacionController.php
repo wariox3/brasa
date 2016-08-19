@@ -329,7 +329,7 @@ class LiquidacionController extends Controller
             $arLiquidacion->setLiquidarSalario($liquidarSalario);
             $em->persist($arLiquidacion);
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_movimiento_liquidacion'));
+            return $this->redirect($this->generateUrl('brs_rhu_movimiento_liquidacion_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Liquidaciones:parametros.html.twig', array(
             'arLiquidacion' => $arLiquidacion,
