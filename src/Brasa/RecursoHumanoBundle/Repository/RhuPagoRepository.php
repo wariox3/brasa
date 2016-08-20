@@ -78,7 +78,6 @@ class RhuPagoRepository extends EntityRepository {
         $arPago->setVrDevengado($douDevengado);
         $arPago->setVrDeducciones($douDeducciones);
         $douNeto = $douDevengado - $douDeducciones;
-        $douNeto = round($douNeto);
         $arPago->setVrNeto($douNeto);
         $arPago->setVrSalario($douSalario);        
         $arPago->setVrAuxilioTransporte($douAuxilioTransporte);        
