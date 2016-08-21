@@ -161,7 +161,12 @@ class AfiContrato
     /**     
      * @ORM\Column(name="genera_icbf", type="boolean")
      */    
-    private $genera_icbf = false;        
+    private $genera_icbf = false;   
+    
+    /**     
+     * @ORM\Column(name="estado_generado_cta_cobrar", type="boolean")
+     */    
+    private $estadoGeneradoCtaCobrar = true;
     
     /**
      * @ORM\ManyToOne(targetEntity="AfiEmpleado", inversedBy="contratosEmpleadoRel")
@@ -238,6 +243,11 @@ class AfiContrato
      */
     protected $novedadesContratoRel; 
     
+    /**
+     * @ORM\OneToMany(targetEntity="AfiFacturaDetalleAfiliacion", mappedBy="contratoRel")
+     */
+    protected $facturasDetallesAfiliacionesContratosRel; 
+    
     
     
     /**
@@ -248,6 +258,7 @@ class AfiContrato
         $this->periodosDetallesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->periodosDetallesPagosContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->novedadesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facturasDetallesAfiliacionesContratosRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -957,6 +968,30 @@ class AfiContrato
     }
 
     /**
+     * Set estadoGeneradoCtaCobrar
+     *
+     * @param boolean $estadoGeneradoCtaCobrar
+     *
+     * @return AfiContrato
+     */
+    public function setEstadoGeneradoCtaCobrar($estadoGeneradoCtaCobrar)
+    {
+        $this->estadoGeneradoCtaCobrar = $estadoGeneradoCtaCobrar;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoGeneradoCtaCobrar
+     *
+     * @return boolean
+     */
+    public function getEstadoGeneradoCtaCobrar()
+    {
+        return $this->estadoGeneradoCtaCobrar;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\AfiliacionBundle\Entity\AfiEmpleado $empleadoRel
@@ -1296,5 +1331,39 @@ class AfiContrato
     public function getNovedadesContratoRel()
     {
         return $this->novedadesContratoRel;
+    }
+
+    /**
+     * Add facturasDetallesAfiliacionesContratosRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion $facturasDetallesAfiliacionesContratosRel
+     *
+     * @return AfiContrato
+     */
+    public function addFacturasDetallesAfiliacionesContratosRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion $facturasDetallesAfiliacionesContratosRel)
+    {
+        $this->facturasDetallesAfiliacionesContratosRel[] = $facturasDetallesAfiliacionesContratosRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasDetallesAfiliacionesContratosRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion $facturasDetallesAfiliacionesContratosRel
+     */
+    public function removeFacturasDetallesAfiliacionesContratosRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion $facturasDetallesAfiliacionesContratosRel)
+    {
+        $this->facturasDetallesAfiliacionesContratosRel->removeElement($facturasDetallesAfiliacionesContratosRel);
+    }
+
+    /**
+     * Get facturasDetallesAfiliacionesContratosRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasDetallesAfiliacionesContratosRel()
+    {
+        return $this->facturasDetallesAfiliacionesContratosRel;
     }
 }

@@ -85,7 +85,12 @@ class AfiFactura
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
-    private $comentarios;     
+    private $comentarios;  
+    
+    /**     
+     * @ORM\Column(name="afiliacion", type="boolean")
+     */    
+    private $afiliacion = false;
     
     /**
      * @ORM\ManyToOne(targetEntity="AfiCliente", inversedBy="facturasClienteRel")
@@ -107,8 +112,15 @@ class AfiFactura
     /**
      * @ORM\OneToMany(targetEntity="AfiFacturaDetalleCurso", mappedBy="facturaRel")
      */
-    protected $facturasDetallesCursosFacturaRel;    
+    protected $facturasDetallesCursosFacturaRel;
 
+    /**
+     * @ORM\OneToMany(targetEntity="AfiFacturaDetalleAfiliacion", mappedBy="facturaRel")
+     */
+    protected $facturasDetallesContratosFacturaRel;
+
+    
+    
     
     /**
      * Constructor
@@ -117,6 +129,7 @@ class AfiFactura
     {
         $this->facturasDetallesFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->facturasDetallesCursosFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facturasDetallesContratosFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -199,6 +212,54 @@ class AfiFactura
     public function getFecha()
     {
         return $this->fecha;
+    }
+
+    /**
+     * Set fechaVence
+     *
+     * @param \DateTime $fechaVence
+     *
+     * @return AfiFactura
+     */
+    public function setFechaVence($fechaVence)
+    {
+        $this->fechaVence = $fechaVence;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVence
+     *
+     * @return \DateTime
+     */
+    public function getFechaVence()
+    {
+        return $this->fechaVence;
+    }
+
+    /**
+     * Set soporte
+     *
+     * @param string $soporte
+     *
+     * @return AfiFactura
+     */
+    public function setSoporte($soporte)
+    {
+        $this->soporte = $soporte;
+
+        return $this;
+    }
+
+    /**
+     * Get soporte
+     *
+     * @return string
+     */
+    public function getSoporte()
+    {
+        return $this->soporte;
     }
 
     /**
@@ -370,6 +431,78 @@ class AfiFactura
     }
 
     /**
+     * Set usuario
+     *
+     * @param string $usuario
+     *
+     * @return AfiFactura
+     */
+    public function setUsuario($usuario)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return string
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return AfiFactura
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
+    }
+
+    /**
+     * Set afiliacion
+     *
+     * @param boolean $afiliacion
+     *
+     * @return AfiFactura
+     */
+    public function setAfiliacion($afiliacion)
+    {
+        $this->afiliacion = $afiliacion;
+
+        return $this;
+    }
+
+    /**
+     * Get afiliacion
+     *
+     * @return boolean
+     */
+    public function getAfiliacion()
+    {
+        return $this->afiliacion;
+    }
+
+    /**
      * Set clienteRel
      *
      * @param \Brasa\AfiliacionBundle\Entity\AfiCliente $clienteRel
@@ -486,98 +619,36 @@ class AfiFactura
     }
 
     /**
-     * Set fechaVence
+     * Add facturasDetallesContratosFacturaRel
      *
-     * @param \DateTime $fechaVence
+     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion $facturasDetallesContratosFacturaRel
      *
      * @return AfiFactura
      */
-    public function setFechaVence($fechaVence)
+    public function addFacturasDetallesContratosFacturaRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion $facturasDetallesContratosFacturaRel)
     {
-        $this->fechaVence = $fechaVence;
+        $this->facturasDetallesContratosFacturaRel[] = $facturasDetallesContratosFacturaRel;
 
         return $this;
     }
 
     /**
-     * Get fechaVence
+     * Remove facturasDetallesContratosFacturaRel
      *
-     * @return \DateTime
+     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion $facturasDetallesContratosFacturaRel
      */
-    public function getFechaVence()
+    public function removeFacturasDetallesContratosFacturaRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion $facturasDetallesContratosFacturaRel)
     {
-        return $this->fechaVence;
+        $this->facturasDetallesContratosFacturaRel->removeElement($facturasDetallesContratosFacturaRel);
     }
 
     /**
-     * Set soporte
+     * Get facturasDetallesContratosFacturaRel
      *
-     * @param string $soporte
-     *
-     * @return AfiFactura
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setSoporte($soporte)
+    public function getFacturasDetallesContratosFacturaRel()
     {
-        $this->soporte = $soporte;
-
-        return $this;
-    }
-
-    /**
-     * Get soporte
-     *
-     * @return string
-     */
-    public function getSoporte()
-    {
-        return $this->soporte;
-    }
-
-    /**
-     * Set usuario
-     *
-     * @param string $usuario
-     *
-     * @return AfiFactura
-     */
-    public function setUsuario($usuario)
-    {
-        $this->usuario = $usuario;
-
-        return $this;
-    }
-
-    /**
-     * Get usuario
-     *
-     * @return string
-     */
-    public function getUsuario()
-    {
-        return $this->usuario;
-    }
-
-    /**
-     * Set comentarios
-     *
-     * @param string $comentarios
-     *
-     * @return AfiFactura
-     */
-    public function setComentarios($comentarios)
-    {
-        $this->comentarios = $comentarios;
-
-        return $this;
-    }
-
-    /**
-     * Get comentarios
-     *
-     * @return string
-     */
-    public function getComentarios()
-    {
-        return $this->comentarios;
+        return $this->facturasDetallesContratosFacturaRel;
     }
 }

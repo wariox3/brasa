@@ -51,10 +51,10 @@ class CarAnticipoDetalleRepository extends EntityRepository {
         return $intNumeroRegistros;
     }  
 
-    /*public function liquidar($codigoRecibo) {        
+    public function liquidar($codigoAnticipo) {        
         $em = $this->getEntityManager();        
-        $arRecibo = new \Brasa\CarteraBundle\Entity\CarRecibo();        
-        $arRecibo = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigoRecibo); 
+        $arAnticipo = new \Brasa\CarteraBundle\Entity\CarAnticipo();        
+        $arAnticipo = $em->getRepository('BrasaCarteraBundle:CarAnticipo')->find($codigoAnticipo); 
         $intCantidad = 0;
         $floValor = 0;
         $floValorPago = 0;
@@ -63,44 +63,44 @@ class CarAnticipoDetalleRepository extends EntityRepository {
         $floReteIca = 0;
         $floReteIva = 0;
         $floReteFuente = 0;
-        $arRecibo = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigoRecibo);         
-        $arRecibosDetalle = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();        
-        $arRecibosDetalle = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->findBy(array('codigoReciboFk' => $codigoRecibo));         
-        foreach ($arRecibosDetalle as $arReciboDetalle) {         
-            $floDescuento += $arReciboDetalle->getVrDescuento();
-            $floAjustePeso += $arReciboDetalle->getVrAjustePeso();
-            $floReteIca += $arReciboDetalle->getVrReteIca();
-            $floReteIva += $arReciboDetalle->getVrReteIva();
-            $floReteFuente += $arReciboDetalle->getVrReteFuente();
-            $floValor += $arReciboDetalle->getValor();
-            $floValorPago += $arReciboDetalle->getVrPagoDetalle();
+        $arAnticipo = $em->getRepository('BrasaCarteraBundle:CarAnticipo')->find($codigoAnticipo);         
+        $arAnticiposDetalle = new \Brasa\CarteraBundle\Entity\CarAnticipoDetalle();        
+        $arAnticiposDetalle = $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->findBy(array('codigoAnticipoFk' => $codigoAnticipo));         
+        foreach ($arAnticiposDetalle as $arAnticiposDetalle) {         
+            $floDescuento += $arAnticiposDetalle->getVrDescuento();
+            $floAjustePeso += $arAnticiposDetalle->getVrAjustePeso();
+            $floReteIca += $arAnticiposDetalle->getVrReteIca();
+            $floReteIva += $arAnticiposDetalle->getVrReteIva();
+            $floReteFuente += $arAnticiposDetalle->getVrReteFuente();
+            $floValor += $arAnticiposDetalle->getValor();
+            $floValorPago += $arAnticiposDetalle->getVrPagoDetalle();
         }                 
-        $arRecibo->setVrTotal($floValor);
-        $arRecibo->setVrTotalPago($floValorPago);
-        $arRecibo->setVrTotalDescuento($floDescuento);
-        $arRecibo->setVrTotalAjustePeso($floAjustePeso);
-        $arRecibo->setVrTotalReteIca($floReteIca);
-        $arRecibo->setVrTotalReteIva($floReteIva);
-        $arRecibo->setVrTotalReteFuente($floReteFuente);
-        $em->persist($arRecibo);
+        $arAnticipo->setVrTotal($floValor);
+        $arAnticipo->setVrTotalPago($floValorPago);
+        $arAnticipo->setVrTotalDescuento($floDescuento);
+        $arAnticipo->setVrTotalAjustePeso($floAjustePeso);
+        $arAnticipo->setVrTotalReteIca($floReteIca);
+        $arAnticipo->setVrTotalReteIva($floReteIva);
+        $arAnticipo->setVrTotalReteFuente($floReteFuente);
+        $em->persist($arAnticipo);
         $em->flush();
         return true;
     }
     
-    public function validarCuenta($codigoCuenta, $codigoRecibo) {        
+    public function validarCuenta($codigoCuenta, $codigoAnticipo) {        
         $em = $this->getEntityManager();
         $boolValidar = TRUE;        
-        $dql   = "SELECT COUNT(rd.codigoReciboDetallePk) as numeroRegistros FROM BrasaCarteraBundle:CarReciboDetalle rd "
-                . "WHERE rd.codigoCuentaCobrarFk = " . $codigoCuenta . " AND rd.codigoReciboFk = " . $codigoRecibo;
+        $dql   = "SELECT COUNT(ad.codigoAnticipoDetallePk) as numeroRegistros FROM BrasaCarteraBundle:CarAnticipoDetalle ad "
+                . "WHERE ad.codigoCuentaCobrarFk = " . $codigoCuenta . " AND ad.codigoAnticipoFk = " . $codigoAnticipo;
         $query = $em->createQuery($dql);
-        $arrReciboDetalles = $query->getSingleResult(); 
-        if($arrReciboDetalles) {
-            $intNumeroRegistros = $arrReciboDetalles['numeroRegistros'];
+        $arrAnticipoDetalles = $query->getSingleResult(); 
+        if($arrAnticipoDetalles) {
+            $intNumeroRegistros = $arrAnticipoDetalles['numeroRegistros'];
             if($intNumeroRegistros > 0) {
                 $boolValidar = FALSE;
             }
         }
         return $boolValidar;
-    }*/
+    }
 
 }

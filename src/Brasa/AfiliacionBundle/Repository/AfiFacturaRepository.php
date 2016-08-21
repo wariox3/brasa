@@ -54,6 +54,38 @@ class AfiFacturaRepository extends EntityRepository {
         $em->flush();
         return true;
     }
+    
+    public function liquidarAfiliacion($codigoFactura) {        
+        $em = $this->getEntityManager();        
+        $arFactura = new \Brasa\AfiliacionBundle\Entity\AfiFactura();        
+        $arFactura = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->find($codigoFactura);                                 
+        $subtotal = 0;        
+        $iva = 0;        
+        $total = 0;
+        $floAfiliacion = 0;        
+        $arFacturasDetalleAfiliacion = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion();        
+        $arFacturasDetalleAfiliacion = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleAfiliacion')->findBy(array('codigoFacturaFk' => $codigoFactura));                 
+        foreach ($arFacturasDetalleAfiliacion as $arFacturaDetalle) {
+            //$subtotal +=  $arFacturaDetalle->getSubtotal();
+            //$iva += $arFacturaDetalle->getIva();
+            $total +=  $arFacturaDetalle->getPrecio();
+        }                           
+        
+        /*$arFacturasDetalleCursos = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso();        
+        $arFacturasDetalleCursos = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleCurso')->findBy(array('codigoFacturaFk' => $codigoFactura));                 
+        foreach ($arFacturasDetalleCursos as $arFacturasDetalleCurso) {
+            $total +=  $arFacturasDetalleCurso->getPrecio();
+            $floCurso +=  $arFacturasDetalleCurso->getPrecio();
+        }*/        
+        //$arFactura->setCurso($floCurso);
+        //$arFactura->setSubTotal($subtotal);
+        //$arFactura->setIva($iva);
+        $arFactura->setSubtotal($total);
+        $arFactura->setTotal($total);
+        $em->persist($arFactura);
+        $em->flush();
+        return true;
+    }
 
     public function anular($codigoFactura) {        
         $em = $this->getEntityManager();        
@@ -88,7 +120,17 @@ class AfiFacturaRepository extends EntityRepository {
             $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($arFacturasDetalleCurso->getCodigoCursoFk());                             
             $arCurso->setEstadoFacturado(0);
             $em->persist($arCurso);
-        }        
+        }
+        
+        $arFacturasDetalleAfiliaciones = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion();        
+        $arFacturasDetalleAfiliaciones = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleAfiliacion')->findBy(array('codigoFacturaFk' => $codigoFactura));                 
+        foreach ($arFacturasDetalleAfiliaciones as $arFacturasDetalleAfiliacion) {
+            $arContrato = new \Brasa\AfiliacionBundle\Entity\AfiContrato();        
+            $arContrato = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->find($arFacturasDetalleAfiliacion->getCodigoContratoFk());                             
+            $arContrato->setEstadoGeneradoCtaCobrar(0);
+            $em->persist($arContrato);
+        }
+        
         $arFactura->setEstadoAnulado(1);
         $arFactura->setCurso(0);
         $arFactura->setSubTotal(0);
@@ -119,10 +161,11 @@ class AfiFacturaRepository extends EntityRepository {
         if($arFactura->getEstadoAutorizado() == 0) {            
             $facturaDetalles = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura)); 
             $facturaDetallesCursos = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleCurso')->findBy(array('codigoFacturaFk' => $codigoFactura)); 
-            if ($facturaDetalles != null && $facturaDetallesCursos != null){
-                $strResultado = 'No pueden haber detalles de seguridad social y cursos';
+            $facturaDetallesAfiliaciones = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleAfiliacion')->findBy(array('codigoFacturaFk' => $codigoFactura)); 
+            if ($facturaDetalles != null && $facturaDetallesCursos != null && $facturaDetallesAfiliaciones != null){
+                $strResultado = 'No pueden haber detalles de seguridad social, cursos y afiliaciones';
             }
-            if ($facturaDetalles == null && $facturaDetallesCursos == null){
+            if ($facturaDetalles == null && $facturaDetallesCursos == null && $facturaDetallesAfiliaciones == null){
                $strResultado = 'La factura no tiene detalles' ;
             } else {
                 if($strResultado == '') {

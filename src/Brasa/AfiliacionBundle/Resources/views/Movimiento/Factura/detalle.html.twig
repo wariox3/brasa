@@ -20,7 +20,7 @@
                 {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                {{ form_widget(form.BtnAnular, { 'attr': {'class': 'btn btn-default btn-sm', 'onclick': 'return confirm("Esta seguro de anular el curso?")'} }) }}
+                {{ form_widget(form.BtnAnular, { 'attr': {'class': 'btn btn-default btn-sm', 'onclick': 'return confirm("Esta seguro de anular el registro?")'} }) }}
             </div>
         </div>        
         <div style="float:right">
@@ -69,6 +69,7 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#detalle" data-toggle="tab">Seguridad social</a></li>
             <li><a href="#cursos" data-toggle="tab">Cursos</a></li>
+            <li><a href="#afiliaciones" data-toggle="tab">Afiliaciones</a></li>
         </ul>    
         <div class="tab-content">
             <div class="tab-pane active" id="detalle">
@@ -185,6 +186,55 @@
                     </div>
                 </div>
             </div>
+            <div class="tab-pane" id="afiliaciones">
+                <div id="cursos" style="width: 100%"><br>
+
+                    <table  class="table table-striped table-bordered table-condensed table-hover">
+                        <tr>
+                            <th>CODIGO</th>
+                            <th>IDENTIFICACION</th>  
+                            <th>EMPLEADO</th>
+                            <th>DESDE</th>
+                            <th>HASTA</th>
+                            <th>PRECIO</th>
+                            <th></th>
+                        </tr>
+                        {% for arFacturaDetalleAfiliaciones in arFacturaDetalleAfiliaciones %}
+                            <tr>
+                                <td>{{ arFacturaDetalleAfiliaciones.codigoFacturaDetalleAfiliacionPk  }}</td>
+                                <td>{{ arFacturaDetalleAfiliaciones.contratoRel.empleadoRel.numeroIdentificacion | default('') }}</td>
+                                <td>{{ arFacturaDetalleAfiliaciones.contratoRel.empleadoRel.nombreCorto | default('') }}</td>                                                                                                
+                                <td>{{ arFacturaDetalleAfiliaciones.contratoRel.fechaDesde | date('Y/m/d')  }}</td>
+                                <td>{{ arFacturaDetalleAfiliaciones.contratoRel.fechaHasta | date('Y/m/d')  }}</td>
+                                <td style="text-align: right">{{ arFacturaDetalleAfiliaciones.precio | number_format(0, '.', ',') }}</td>                
+                                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturaDetalleAfiliaciones.codigoFacturaDetalleAfiliacionPk }}" /></td>
+                            </tr>
+
+                        {% endfor %}
+                    </table>                    
+
+                    <div class="btn-toolbar" style="float: left">
+                        <!-- Botones Menu Items -->
+                        <div class="btn-group">
+                            <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arFacturaDetalleAfiliaciones.getTotalItemCount }}</span></div>
+                        </div>
+                    </div>
+
+                    <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
+                        {{ knp_pagination_render(arFacturaDetalleAfiliaciones) }}
+                    </div>                    
+                    <div class="btn-toolbar" style="float: right">
+                        {% if arFactura.estadoAutorizado == 0 %}
+                            <div class="btn-group">
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_afi_movimiento_factura_detalle_afiliacion_nuevo', {'codigoFactura': arFactura.codigoFacturaPk }) }}', 'AgregarDetalleFacturaNuevo', 600, 1200)">Nuevo</a>                                                        
+                            </div>
+                        {% endif %}           
+                        <div class="btn-group">
+                            {{ form_widget(form.BtnDetalleAfiliacionEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>            
         </div>                    
         <a  class="btn btn-default btn-sm" href="{{ path('brs_afi_movimiento_factura') }}">Volver</a>
         <!-- Fin Botones Menu Items -->

@@ -19,6 +19,7 @@ class CarAnticipoType extends AbstractType
                 'property' => 'nombre',
                 'required' => true)) 
             ->add('comentarios', 'textarea', array('required' => false))
+            ->add('vrAnticipo', 'text', array('required' => true))                
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

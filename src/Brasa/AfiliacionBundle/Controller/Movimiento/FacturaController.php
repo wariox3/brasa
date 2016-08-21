@@ -149,12 +149,17 @@ class FacturaController extends Controller
                     } else {
                         $facturaDetalles = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura)); 
                         $facturaDetallesCursos = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleCurso')->findBy(array('codigoFacturaFk' => $codigoFactura)); 
-                        if ($facturaDetalles != null && $facturaDetallesCursos == null){
+                        $facturaDetallesAfiliaciones = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleAfiliacion')->findBy(array('codigoFacturaFk' => $codigoFactura)); 
+                        if ($facturaDetalles != null && $facturaDetallesCursos == null && $facturaDetallesAfiliaciones == null){
                             $objCuentaCobro = new \Brasa\AfiliacionBundle\Formatos\CuentaCobroHorus2();
                             $objCuentaCobro->Generar($this, $codigoFactura);                                            
                         }
-                        if ($facturaDetallesCursos != null && $facturaDetalles == null){
+                        if ($facturaDetallesCursos != null && $facturaDetalles == null && $facturaDetallesAfiliaciones == null){
                             $objCuentaCobro = new \Brasa\AfiliacionBundle\Formatos\CuentaCobroHorus();
+                            $objCuentaCobro->Generar($this, $codigoFactura);                                            
+                        }
+                        if ($facturaDetallesAfiliaciones != null && $facturaDetalles == null && $facturaDetallesCursos == null){
+                            $objCuentaCobro = new \Brasa\AfiliacionBundle\Formatos\CuentaCobroAfiliacion();
                             $objCuentaCobro->Generar($this, $codigoFactura);                                            
                         }
                         
@@ -173,7 +178,13 @@ class FacturaController extends Controller
                 $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->eliminar($arrSeleccionados);
                 $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->liquidar($codigoFactura);
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));
-            }            
+            }
+            if ($form->get('BtnDetalleAfiliacionEliminar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleAfiliacion')->eliminar($arrSeleccionados);
+                $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->liquidarAfiliacion($codigoFactura);
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));
+            }
             if ($form->get('BtnDetalleCursoEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleCurso')->eliminar($arrSeleccionados);
@@ -186,10 +197,13 @@ class FacturaController extends Controller
         $arFacturaDetalles = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 20);
         $dql = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleCurso')->listaDQL($codigoFactura); 
         $arFacturaDetalleCursos = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 20);
+        $dql = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleAfiliacion')->listaDQL($codigoFactura); 
+        $arFacturaDetalleAfiliaciones = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 20);
         return $this->render('BrasaAfiliacionBundle:Movimiento/Factura:detalle.html.twig', array(
             'arFactura' => $arFactura,
             'arFacturaDetalles' => $arFacturaDetalles, 
             'arFacturaDetalleCursos' => $arFacturaDetalleCursos,
+            'arFacturaDetalleAfiliaciones' => $arFacturaDetalleAfiliaciones,
             'form' => $form->createView()));
     }    
     
@@ -290,7 +304,46 @@ class FacturaController extends Controller
             'arFactura' => $arFactura, 
             'arCursos' => $arCursos, 
             'form' => $form->createView()));
-    }    
+    } 
+    
+    /**
+     * @Route("/afi/movimiento/factura/detalle/afiliacion/nuevo/{codigoFactura}", name="brs_afi_movimiento_factura_detalle_afiliacion_nuevo")
+     */    
+    public function detalleAfiliacionNuevoAction(Request $request, $codigoFactura = '') {
+        $em = $this->getDoctrine()->getManager();        
+        $paginator  = $this->get('knp_paginator');
+        $arFactura = new \Brasa\AfiliacionBundle\Entity\AfiFactura();
+        $arFactura = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->find($codigoFactura);
+        $form = $this->formularioDetalleNuevo();
+        $form->handleRequest($request);        
+        if ($form->isValid()) {
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');                                      
+            if ($form->get('BtnGuardar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                foreach ($arrSeleccionados as $codigoContrato) {
+                    $arContrato = new \Brasa\AfiliacionBundle\Entity\AfiContrato();
+                    $arContrato = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->find($codigoContrato);
+                    $arFacturaDetalleAfiliacion = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion();
+                    $arFacturaDetalleAfiliacion->setFacturaRel($arFactura);          
+                    $arFacturaDetalleAfiliacion->setContratoRel($arContrato);
+                    $arFacturaDetalleAfiliacion->setPrecio($arFactura->getClienteRel()->getAfiliacion());
+                    $arFacturaDetalleAfiliacion->setTotal($arFactura->getClienteRel()->getAfiliacion());
+                    $em->persist($arFacturaDetalleAfiliacion);   
+                    $arContrato->setEstadoGeneradoCtaCobrar(1);
+                    $em->persist($arContrato);
+                }
+                $em->flush();
+                $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->liquidarAfiliacion($codigoFactura);
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }
+        }
+        $dqlAfiliacionesPendientes = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->pendienteAfiliacionDql($arFactura->getCodigoClienteFk());
+        $arContratos = $paginator->paginate($em->createQuery($dqlAfiliacionesPendientes), $request->query->get('page', 1), 30);
+        return $this->render('BrasaAfiliacionBundle:Movimiento/Factura:detalleAfiliacionNuevo.html.twig', array(
+            'arFactura' => $arFactura, 
+            'arContratos' => $arContratos, 
+            'form' => $form->createView()));
+    }
     
     private function lista() {    
         $session = $this->getRequest()->getSession();
@@ -324,14 +377,16 @@ class FacturaController extends Controller
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
-        $arrBotonDetalleCursoEliminar = array('label' => 'Eliminar', 'disabled' => false);        
+        $arrBotonDetalleCursoEliminar = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonDetalleAfiliacionEliminar = array('label' => 'Eliminar', 'disabled' => false);
         
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;                        
             $arrBotonDetalleEliminar['disabled'] = true;            
             $arrBotonDetalleActualizar['disabled'] = true;
-
             $arrBotonAnular['disabled'] = false; 
+            $arrBotonDetalleCursoEliminar['disabled'] = true;            
+            $arrBotonDetalleAfiliacionEliminar['disabled'] = true;            
             if($ar->getEstadoAnulado() == 1) {
                 $arrBotonDesAutorizar['disabled'] = true;
                 $arrBotonAnular['disabled'] = true;
@@ -348,7 +403,8 @@ class FacturaController extends Controller
                     ->add('BtnAnular', 'submit', $arrBotonAnular)                
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)                    
-                    ->add('BtnDetalleCursoEliminar', 'submit', $arrBotonDetalleEliminar)                
+                    ->add('BtnDetalleCursoEliminar', 'submit', $arrBotonDetalleEliminar)
+                    ->add('BtnDetalleAfiliacionEliminar', 'submit', $arrBotonDetalleAfiliacionEliminar)                
                     ->getForm();
         return $form;
     }        

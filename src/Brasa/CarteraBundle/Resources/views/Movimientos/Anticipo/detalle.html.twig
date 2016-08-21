@@ -77,6 +77,14 @@
                         <td align="right">{{ arAnticipo.vrTotalReteFuente | number_format(2, '.', ',')}}</td>
                     </tr>
                     <tr>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo"></td>
+                        <td class="td-in-well"></td>
+                        <td class="titulo" align="right">VALOR ANTICIPO:</td>
+                        <td align="right">{{ arAnticipo.vrAnticipo | number_format(2, '.', ',')}}</td>
+                    </tr>
+                    <tr>
                         <td class="titulo">ANULADO:</td>
                         <td class="td-in-well">{% if arAnticipo.estadoAnulado == 1 %}SI{% else %}NO{% endif %}</td>
                         <td class="titulo">IMPRESO:</td>
