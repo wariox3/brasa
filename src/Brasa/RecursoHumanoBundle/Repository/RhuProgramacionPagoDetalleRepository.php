@@ -63,6 +63,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                 $intDiasTransporte = $intDiasTransporte - $intDiasVacaciones;
                 $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($arConfiguracion->getCodigoVacacion());
                 $douIngresoBaseCotizacionVacaciones = $intHorasVacaciones * $douVrHora;
+                $douIngresoBaseCotizacionVacaciones = round($douIngresoBaseCotizacionVacaciones);
                 $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                 $arPagoDetalle->setPagoRel($arPago);
                 $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);                                        
@@ -120,6 +121,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                             $douPagoDetalle = ($douPagoDetalle * $arIncapacidad->getPorcentajePago())/100;
                             $douIngresoBaseCotizacionIncapacidad = $intHorasProcesarIncapacidad * $douVrHora;
                         }
+                        $douPagoDetalle = round($douPagoDetalle);
                         $arPagoDetalle->setNumeroHoras($intHorasProcesarIncapacidad);
                         $arPagoDetalle->setNumeroDias($intDias);
                         $arPagoDetalle->setVrHora($douVrHora);
@@ -171,7 +173,8 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                     }
                     if($arLicencia->getLicenciaTipoRel()->getPagoConceptoRel()->getOperacion() == 0) {
                         $douPagoDetalle = 0;
-                    }                                
+                    }                 
+                    $douPagoDetalle = round($douPagoDetalle);
                     $arPagoDetalle->setVrPago($douPagoDetalle);
                     $arPagoDetalle->setOperacion($arLicencia->getLicenciaTipoRel()->getPagoConceptoRel()->getOperacion());
                     $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arLicencia->getLicenciaTipoRel()->getPagoConceptoRel()->getOperacion());                               
@@ -212,6 +215,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                     }
                     $arPagoDetalle->setVrDia($douVrDia);
                 }
+                $douPagoDetalle = round($douPagoDetalle);
                 $arPagoDetalle->setDetalle($arPagoAdicional->getDetalle());
                 $arPagoDetalle->setVrPago($douPagoDetalle);
                 $arPagoDetalle->setOperacion($arPagoAdicional->getPagoConceptoRel()->getOperacion());
@@ -252,7 +256,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                 $arPagoDetalle->setVrHora($douVrHoraAdicional);
                 $arPagoDetalle->setVrDia(0);
                 $arPagoDetalle->setNumeroHoras($arrHorasExtra['horas']);
-
+                $douPagoDetalle = round($douPagoDetalle);
                 $arPagoDetalle->setVrPago($douPagoDetalle);
                 $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
                 $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConcepto->getOperacion());                                
@@ -304,6 +308,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                         $arPagoDetalle->setPagoRel($arPago);
                         $arPagoDetalle->setPagoConceptoRel($arPagoConceptoCredito);
                         $douPagoDetalle = $douCuota; //Falta afectar credito
+                        $douPagoDetalle = round($douPagoDetalle);
                         $arPagoDetalle->setDetalle($arCredito->getCreditoTipoRel()->getNombre());
                         $arPagoDetalle->setVrPago($douPagoDetalle);
                         $arPagoDetalle->setOperacion($arPagoConceptoCredito->getOperacion());
@@ -347,6 +352,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
             }
             $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($intPagoConceptoSalario);
             $douPagoDetalle = $horasOrdinariasDiurnas * $douVrHora;
+            $douPagoDetalle = round($douPagoDetalle);
             $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
             $arPagoDetalle->setPagoRel($arPago);
             $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
@@ -380,7 +386,8 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                 $floPorcentaje = $arContrato->getTipoSaludRel()->getPorcentajeEmpleado();
                 $intOperacion = -1;
                 if($floPorcentaje > 0) {
-                    $douPagoDetalle = ($douIngresoBaseCotizacion * $floPorcentaje)/100;                                                                                            
+                    $douPagoDetalle = ($douIngresoBaseCotizacion * $floPorcentaje)/100;     
+                    $douPagoDetalle = round($douPagoDetalle);
                     $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                     $arPagoDetalle->setPagoRel($arPago);
                     $arPagoDetalle->setPagoConceptoRel($arContrato->getTipoSaludRel()->getPagoConceptoRel());
@@ -399,7 +406,8 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                 $douPorcentaje = $arContrato->getTipoPensionRel()->getPorcentajeEmpleado();
                 $intOperacion = -1;
                 if($douPorcentaje > 0) {
-                    $douPagoDetalle = ($douIngresoBaseCotizacion * $douPorcentaje)/100;                                
+                    $douPagoDetalle = ($douIngresoBaseCotizacion * $douPorcentaje)/100; 
+                    $douPagoDetalle = round($douPagoDetalle);
                     $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                     $arPagoDetalle->setPagoRel($arPago);
                     $arPagoDetalle->setPagoConceptoRel($arContrato->getTipoPensionRel()->getPagoConceptoRel());
@@ -416,7 +424,8 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                         $douValorHoraMinimo = ($douVrSalarioMinimo / 240) * 4;
                         if($douVrHora > $douValorHoraMinimo) {
                             $douPorcentaje = 1;
-                            $douPagoDetalle = ($douIngresoBaseCotizacion * $douPorcentaje)/100;                                        
+                            $douPagoDetalle = ($douIngresoBaseCotizacion * $douPorcentaje)/100; 
+                            $douPagoDetalle = round($douPagoDetalle);
                             $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                             $arPagoDetalle->setPagoRel($arPago);
                             $arPagoDetalle->setPagoConceptoRel($arContrato->getTipoPensionRel()->getPagoConceptoFondoRel());
@@ -442,6 +451,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                         $duoVrAuxilioTransporte = $arConfiguracion->getVrAuxilioTransporte();
                         $douVrDiaTransporte = $duoVrAuxilioTransporte / 30;
                         $douPagoDetalle = $douVrDiaTransporte * $arProgramacionPagoDetalle->getDiasTransporte();
+                        $douPagoDetalle = round($douPagoDetalle);
                         $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                         $arPagoDetalle->setPagoRel($arPago);
                         $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);

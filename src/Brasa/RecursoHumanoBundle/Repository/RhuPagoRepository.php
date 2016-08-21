@@ -185,8 +185,7 @@ class RhuPagoRepository extends EntityRepository {
         $arPago->setVrPrestaciones($douPrestaciones);
         
         $arPago->setVrCosto(0);                       
-        $em->persist($arPago);
-        $em->flush();
+        $em->persist($arPago);        
         return $douNeto;
     }    
     
