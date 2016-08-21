@@ -539,15 +539,15 @@ class VacacionesController extends Controller
                 $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
                 $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);    
                 $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Código')
-                            ->setCellValue('B1', 'Centro Costo')
-                            ->setCellValue('C1', 'Desde')
-                            ->setCellValue('D1', 'Hasta')
-                            ->setCellValue('E1', 'Identificación')
-                            ->setCellValue('F1', 'Empleado')
-                            ->setCellValue('G1', 'Dias')
-                            ->setCellValue('H1', 'Vr Vacaciones')
-                            ->setCellValue('I1', 'Pagado');
+                            ->setCellValue('A1', 'CODIGO')
+                            ->setCellValue('B1', 'C. COSTO')
+                            ->setCellValue('C1', 'DESDE')
+                            ->setCellValue('D1', 'HASTA')
+                            ->setCellValue('E1', 'IDENTIFICACION')
+                            ->setCellValue('F1', 'EMPLEADO')
+                            ->setCellValue('G1', 'DIAS')
+                            ->setCellValue('H1', 'VR VACACIONES')
+                            ->setCellValue('I1', 'PAGADO');
 
                 $i = 2;
                 $query = $em->createQuery($this->strSqlLista);
