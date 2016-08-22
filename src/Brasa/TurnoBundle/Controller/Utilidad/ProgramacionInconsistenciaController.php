@@ -222,18 +222,21 @@ class ProgramacionInconsistenciaController extends Controller
                 foreach ($results as $registro) {
                     if($registro['numero'] > 1) {
                         //$arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($registro['codigoEmpleadoFk']);
-                        $arProgramacionInconsistencia = new \Brasa\TurnoBundle\Entity\TurProgramacionInconsistencia();
-                        $arProgramacionInconsistencia->setInconsistencia('Asignacion doble de turno');
-                        $arProgramacionInconsistencia->setDetalle("Recurso " . $registro['codigoRecursoFk'] . " " . 
-                                $registro['nombreCorto'] . " dia " . $i);
-                        $arProgramacionInconsistencia->setDia($i); 
-                        $arProgramacionInconsistencia->setCodigoRecursoGrupoFk($registro['recursoGrupo']);
-                        $arProgramacionInconsistencia->setNumeroIdentificacion($registro['numeroIdentificacion']);
-                        if($arEmpleado->getCodigoZonaFk()) {
-                            $arProgramacionInconsistencia->setZona($arEmpleado->getZonaRel()->getNombre());
+                        if($registro['codigoEmpleadoFk'] != "") {
+                            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($registro['codigoEmpleadoFk']);
+                            $arProgramacionInconsistencia = new \Brasa\TurnoBundle\Entity\TurProgramacionInconsistencia();
+                            $arProgramacionInconsistencia->setInconsistencia('Asignacion doble de turno');
+                            $arProgramacionInconsistencia->setDetalle("Recurso " . $registro['codigoRecursoFk'] . " " . 
+                                    $registro['nombreCorto'] . " dia " . $i);
+                            $arProgramacionInconsistencia->setDia($i); 
+                            $arProgramacionInconsistencia->setCodigoRecursoGrupoFk($registro['recursoGrupo']);
+                            $arProgramacionInconsistencia->setNumeroIdentificacion($registro['numeroIdentificacion']);
+                            if($arEmpleado->getCodigoZonaFk()) {
+                                $arProgramacionInconsistencia->setZona($arEmpleado->getZonaRel()->getNombre());
+                            }
+                            $em->persist($arProgramacionInconsistencia);                              
                         }
-                        $em->persist($arProgramacionInconsistencia);                                
+                              
                     }
                 }                        
             }                        
