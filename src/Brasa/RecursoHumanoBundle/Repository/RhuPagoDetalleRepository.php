@@ -192,4 +192,19 @@ class RhuPagoDetalleRepository extends EntityRepository {
         }
         return $ibp;
     }     
+    
+    //Este no incluye concepto de auxilio transporte
+    public function ibpVacaciones($fechaDesde, $fechaHasta, $codigoContrato) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT SUM(pd.vrIngresoBasePrestacion) as ibp FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p JOIN pd.pagoConceptoRel pc "
+                . "WHERE pc.conceptoAuxilioTransporte = 0 AND p.codigoContratoFk = " . $codigoContrato . " "
+                . "AND p.fechaDesdePago >= '" . $fechaDesde . "' AND p.fechaDesdePago <= '" . $fechaHasta . "'";
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();
+        $ibp = $arrayResultado[0]['ibp'];
+        if($ibp == null) {
+            $ibp = 0;
+        }
+        return $ibp;
+    }         
 }
