@@ -79,7 +79,7 @@ class GenerarSoportePagoController extends Controller
                     }                    
                 }                
                 $em->flush();
-                /*$arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+                $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
                 $arSoportesPago = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));
                 foreach ($arSoportesPago as $arSoportePago) {
                     $em->getRepository('BrasaTurnoBundle:TurSoportePago')->generar($arSoportePago, $intDiaInicial, $intDiaFinal, $arFestivos, $dateFechaDesde, $dateFechaHasta);
@@ -90,8 +90,6 @@ class GenerarSoportePagoController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurSoportePago')->resumen($arSoportePagoPeriodo);                
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->analizarInconsistencias($codigoSoportePagoPeriodo);                                                                                                    
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->liquidar($codigoSoportePagoPeriodo);                                                                    
-                 * 
-                 */
                 set_time_limit(60);
                 ini_set('memory_limit', '512m');
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));
