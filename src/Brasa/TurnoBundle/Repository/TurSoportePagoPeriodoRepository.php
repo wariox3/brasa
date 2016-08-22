@@ -101,9 +101,9 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
         foreach ($arSoportesPagoProcesar as $arSoportePago) {
             if($arSoportePago->getRecursoRel()) {
                 if($arSoportePago->getCodigoContratoFk()) {
-                    if($arSoportePago->getRecursoRel()->getCodigoEmpleadoFk() == 4695) {
+                    /*if($arSoportePago->getRecursoRel()->getCodigoEmpleadoFk() == 4695) {
                         echo "hola";
-                    }                    
+                    } */                   
                     $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arSoportePago->getRecursoRel()->getCodigoEmpleadoFk(), $arSoportePago->getCodigoContratoFk(), $arSoportePagoPeriodo->getFechaDesde(), $arSoportePagoPeriodo->getFechaHasta());                            
                     $intDiasLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicenciaPeriodo31($arSoportePagoPeriodo->getFechaDesde(), $arSoportePagoPeriodo->getFechaHasta(), $arSoportePago->getRecursoRel()->getCodigoEmpleadoFk());                                                
                     $intDiasIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->diasIncapacidadPeriodo31($arSoportePagoPeriodo->getFechaDesde(), $arSoportePagoPeriodo->getFechaHasta(), $arSoportePago->getRecursoRel()->getCodigoEmpleadoFk());                

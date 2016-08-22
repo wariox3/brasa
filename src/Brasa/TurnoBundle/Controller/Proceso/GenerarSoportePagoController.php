@@ -42,13 +42,19 @@ class GenerarSoportePagoController extends Controller
                 $query = $em->createQuery($dql);                
                 $arRecursosResumen = $query->getResult();
                 foreach($arRecursosResumen as $arRecursoResumen) {
+                    if($arRecursoResumen['codigoRecursoFk'] == 1361) {
+                        echo "hola mundo";
+                    }
                     $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
                     $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($arRecursoResumen['codigoRecursoFk']);                    
                     $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
                     $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                     $arEmpleado = $arRecurso->getEmpleadoRel();
-                    if($arEmpleado->getEstadoContratoActivo()) {                        
+                    if($arEmpleado->getCodigoContratoActivoFk()) {                        
                         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
+                        if($arContrato->getFechaDesde() >= $arSoportePagoPeriodo->getFechaHasta()) {
+                            $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoUltimoFk());       
+                        }
                     } else {
                         if($arEmpleado->getCodigoContratoUltimoFk()) {
                             $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoUltimoFk());       
@@ -73,7 +79,7 @@ class GenerarSoportePagoController extends Controller
                     }                    
                 }                
                 $em->flush();
-                $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+                /*$arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
                 $arSoportesPago = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));
                 foreach ($arSoportesPago as $arSoportePago) {
                     $em->getRepository('BrasaTurnoBundle:TurSoportePago')->generar($arSoportePago, $intDiaInicial, $intDiaFinal, $arFestivos, $dateFechaDesde, $dateFechaHasta);
@@ -84,6 +90,8 @@ class GenerarSoportePagoController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurSoportePago')->resumen($arSoportePagoPeriodo);                
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->analizarInconsistencias($codigoSoportePagoPeriodo);                                                                                                    
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->liquidar($codigoSoportePagoPeriodo);                                                                    
+                 * 
+                 */
                 set_time_limit(60);
                 ini_set('memory_limit', '512m');
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));
