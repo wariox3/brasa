@@ -148,6 +148,11 @@ class RhuVacacion
     private $estadoPagoBanco = 0;    
     
     /**
+     * @ORM\Column(name="estado_contabilizado", type="boolean")
+     */
+    private $estadoContabilizado = 0;     
+    
+    /**
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
      */    
     private $codigoUsuario;
@@ -1052,5 +1057,29 @@ class RhuVacacion
     public function getPagosBancosDetallesVacacionRel()
     {
         return $this->pagosBancosDetallesVacacionRel;
+    }
+
+    /**
+     * Set estadoContabilizado
+     *
+     * @param boolean $estadoContabilizado
+     *
+     * @return RhuVacacion
+     */
+    public function setEstadoContabilizado($estadoContabilizado)
+    {
+        $this->estadoContabilizado = $estadoContabilizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoContabilizado
+     *
+     * @return boolean
+     */
+    public function getEstadoContabilizado()
+    {
+        return $this->estadoContabilizado;
     }
 }

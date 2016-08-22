@@ -107,6 +107,11 @@ class RhuConfiguracion
     private $codigoComprobantePagoNomina;
 
     /**
+     * @ORM\Column(name="codigo_comprobante_liquidacion", type="integer")
+     */
+    private $codigoComprobanteLiquidacion;    
+    
+    /**
      * @ORM\Column(name="codigo_comprobante_pago_banco", type="integer")
      */
     private $codigoComprobantePagoBanco;
@@ -1321,5 +1326,29 @@ class RhuConfiguracion
     public function getEntidadRiesgoProfesionalRel()
     {
         return $this->entidadRiesgoProfesionalRel;
+    }
+
+    /**
+     * Set codigoComprobanteLiquidacion
+     *
+     * @param integer $codigoComprobanteLiquidacion
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoComprobanteLiquidacion($codigoComprobanteLiquidacion)
+    {
+        $this->codigoComprobanteLiquidacion = $codigoComprobanteLiquidacion;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoComprobanteLiquidacion
+     *
+     * @return integer
+     */
+    public function getCodigoComprobanteLiquidacion()
+    {
+        return $this->codigoComprobanteLiquidacion;
     }
 }

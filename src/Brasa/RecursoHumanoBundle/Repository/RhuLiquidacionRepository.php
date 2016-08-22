@@ -410,4 +410,10 @@ class RhuLiquidacionRepository extends EntityRepository {
         $arrayResultado = $query->getResult();
         return $arrayResultado;
     }
+    
+    public function pendientesContabilizarDql() {        
+        $dql   = "SELECT l FROM BrasaRecursoHumanoBundle:RhuLiquidacion l WHERE l.estadoContabilizado = 0 AND l.estadoPagoGenerado = 1 AND l.VrTotal > 0 ";       
+        $dql .= " ORDER BY l.codigoLiquidacionPk DESC";
+        return $dql;
+    }     
 }

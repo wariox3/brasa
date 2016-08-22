@@ -262,6 +262,11 @@ class RhuLiquidacion
      */
     private $porcentajeIbp = 100;    
     
+    /**     
+     * @ORM\Column(name="estado_contabilizado", type="boolean")
+     */    
+    private $estadoContabilizado = 0;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="liquidacionesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
@@ -1614,5 +1619,29 @@ class RhuLiquidacion
     public function getPorcentajeIbp()
     {
         return $this->porcentajeIbp;
+    }
+
+    /**
+     * Set estadoContabilizado
+     *
+     * @param boolean $estadoContabilizado
+     *
+     * @return RhuLiquidacion
+     */
+    public function setEstadoContabilizado($estadoContabilizado)
+    {
+        $this->estadoContabilizado = $estadoContabilizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoContabilizado
+     *
+     * @return boolean
+     */
+    public function getEstadoContabilizado()
+    {
+        return $this->estadoContabilizado;
     }
 }
