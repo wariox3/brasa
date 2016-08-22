@@ -42,9 +42,9 @@ class GenerarSoportePagoController extends Controller
                 $query = $em->createQuery($dql);                
                 $arRecursosResumen = $query->getResult();
                 foreach($arRecursosResumen as $arRecursoResumen) {
-                    if($arRecursoResumen['codigoRecursoFk'] == 1361) {
+                    /*if($arRecursoResumen['codigoRecursoFk'] == 1361) {
                         echo "hola mundo";
-                    }
+                    }*/
                     $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
                     $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($arRecursoResumen['codigoRecursoFk']);                    
                     $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
@@ -90,6 +90,7 @@ class GenerarSoportePagoController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurSoportePago')->resumen($arSoportePagoPeriodo);                
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->analizarInconsistencias($codigoSoportePagoPeriodo);                                                                                                    
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->liquidar($codigoSoportePagoPeriodo);                                                                    
+
                 set_time_limit(60);
                 ini_set('memory_limit', '512m');
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));
