@@ -226,12 +226,39 @@ class ContratosController extends Controller
                                             $arContrato->setVrSalarioPago($arContrato->getVrSalario());
                                         }                                    
                                         $arContrato->setCodigoUsuario($arUsuario->getUserName());
-                                        $em->persist($arContrato);
+                                        $em->persist($arContrato);                                        
+                                        
+                                        //Insertar el recurso en recursos
+                                        if($codigoContrato == 0) {
+                                            if($arEmpleado->getCodigoEmpleadoTipoFk() == 3) {
+                                                $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
+                                                $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findOneBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk()));
+                                                if($arRecurso) {                                                
+                                                    $arRecurso->setEstadoRetiro(0);
+                                                    $arRecurso->setEstadoActivo(1);
+                                                    $em->persist($arRecurso);
+                                                } else {
+                                                    $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
+                                                    $arRecurso->setEmpleadoRel($arEmpleado);
+                                                    $arRecurso->setNumeroIdentificacion($arEmpleado->getNumeroIdentificacion());
+                                                    $arRecurso->setNombreCorto($arEmpleado->getNombreCorto());
+                                                    $arRecurso->setTelefono($arEmpleado->getTelefono());
+                                                    $arRecurso->setCelular($arEmpleado->getCelular());
+                                                    $arRecurso->setDireccion($arEmpleado->getDireccion());
+                                                    $arRecurso->setCorreo($arEmpleado->getCorreo());
+                                                    $arRecurso->setFechaNacimiento($arEmpleado->getFechaNacimiento());
+                                                    $arRecursoGrupo = new \Brasa\TurnoBundle\Entity\TurRecursoGrupo();
+                                                    $arRecursoGrupo = $em->getRepository('BrasaTurnoBundle:TurRecursoGrupo')->find($arContrato->getCentroCostoRel()->getCodigoRecursoGrupoFk());                                                    
+                                                    if($arRecursoGrupo) {
+                                                        $arRecurso->setRecursoGrupoRel($arRecursoGrupo);
+                                                    }
+                                                    $em->persist($arRecurso);
+                                                }                                                 
+                                            }                                           
+                                        }
+                                        
                                         $em->flush();
-
-                                        //$arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
-                                        //$douSalarioMinimo = $arConfiguracion->getVrSalario();
-                                        //$douSalarioMinimo = 644350;
+                                        
                                         if($codigoContrato == 0 && $arContrato->getVrSalario() <= $douSalarioMinimo * 2) {
                                             $arEmpleado->setAuxilioTransporte(1);
                                         } else {
@@ -448,6 +475,17 @@ class ContratosController extends Controller
                                     $em->persist($arLiquidacionAdicionales);
                                 }
                             }
+                            
+                            //Terminar un recurso programacion
+                            $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
+                            $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findOneBy(array('codigoEmpleadoFk' => $arContrato->getCodigoEmpleadoFk()));
+                            if($arRecurso) {
+                                $arRecurso->setFechaRetiro($dateFechaHasta);
+                                $arRecurso->setEstadoRetiro(1);
+                                $arRecurso->setEstadoActivo(0);
+                                $em->persist($arRecurso);
+                            }
+                            
                             $em->flush();
                             //$em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($arLiquidacion->getCodigoLiquidacionPk());
                         } else {

@@ -129,6 +129,11 @@ class RhuCentroCosto
     private $codigoUsuario;       
     
     /**
+     * @ORM\Column(name="codigo_recurso_grupo_fk", type="integer", nullable=true)
+     */    
+    private $codigoRecursoGrupoFk = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuCliente", inversedBy="centrosCostosClienteRel")
      * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
      */
@@ -1633,5 +1638,29 @@ class RhuCentroCosto
     public function getSoportesPagosHorariosCentroCostoRel()
     {
         return $this->soportesPagosHorariosCentroCostoRel;
+    }
+
+    /**
+     * Set codigoRecursoGrupoFk
+     *
+     * @param integer $codigoRecursoGrupoFk
+     *
+     * @return RhuCentroCosto
+     */
+    public function setCodigoRecursoGrupoFk($codigoRecursoGrupoFk)
+    {
+        $this->codigoRecursoGrupoFk = $codigoRecursoGrupoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoRecursoGrupoFk
+     *
+     * @return integer
+     */
+    public function getCodigoRecursoGrupoFk()
+    {
+        return $this->codigoRecursoGrupoFk;
     }
 }
