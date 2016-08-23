@@ -272,6 +272,9 @@ class AfiFacturaRepository extends EntityRepository {
                 $arCuentaCobrar->setSaldo($arFactura->getTotal());
                 $arCuentaCobrar->setPlazo($arClienteAfiliacion->getPlazoPago());                
                 $arCuentaCobrar->setAbono(0);
+                if ($arFactura->getAfiliacion() == 1){
+                    $arCuentaCobrar->setAfiliacion(1);
+                }
                 $em->persist($arCuentaCobrar);                
             }              
             $em->persist($arFactura);

@@ -86,7 +86,12 @@ class CarCuentaCobrar
     /**
      * @ORM\Column(name="subgrupo", type="string", length=120, nullable=true)
      */
-    private $subgrupo;     
+    private $subgrupo; 
+
+    /**     
+     * @ORM\Column(name="afiliacion", type="boolean")
+     */    
+    private $afiliacion = false;
     
     /**
      * @ORM\ManyToOne(targetEntity="CarCliente", inversedBy="cuentaCobrarClientesRel")
@@ -129,6 +134,7 @@ class CarCuentaCobrar
    
     
    
+    
     /**
      * Constructor
      */
@@ -484,6 +490,30 @@ class CarCuentaCobrar
     public function getSubgrupo()
     {
         return $this->subgrupo;
+    }
+
+    /**
+     * Set afiliacion
+     *
+     * @param boolean $afiliacion
+     *
+     * @return CarCuentaCobrar
+     */
+    public function setAfiliacion($afiliacion)
+    {
+        $this->afiliacion = $afiliacion;
+
+        return $this;
+    }
+
+    /**
+     * Get afiliacion
+     *
+     * @return boolean
+     */
+    public function getAfiliacion()
+    {
+        return $this->afiliacion;
     }
 
     /**
