@@ -263,6 +263,11 @@ class RhuPago
      * @ORM\Column(name="estado_contabilizado", type="boolean")
      */    
     private $estadoContabilizado = 0;
+
+    /**
+     * @ORM\Column(name="estado_contabilizado_provision", type="boolean")
+     */    
+    private $estadoContabilizadoProvision = 0;
     
     /**
      * @ORM\Column(name="archivo_exportado_banco", type="boolean")
@@ -1992,5 +1997,29 @@ class RhuPago
     public function getCodigoSoportePagoFk()
     {
         return $this->codigoSoportePagoFk;
+    }
+
+    /**
+     * Set estadoContabilizadoProvision
+     *
+     * @param boolean $estadoContabilizadoProvision
+     *
+     * @return RhuPago
+     */
+    public function setEstadoContabilizadoProvision($estadoContabilizadoProvision)
+    {
+        $this->estadoContabilizadoProvision = $estadoContabilizadoProvision;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoContabilizadoProvision
+     *
+     * @return boolean
+     */
+    public function getEstadoContabilizadoProvision()
+    {
+        return $this->estadoContabilizadoProvision;
     }
 }

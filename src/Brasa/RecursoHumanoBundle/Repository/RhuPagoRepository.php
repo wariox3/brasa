@@ -95,6 +95,9 @@ class RhuPagoRepository extends EntityRepository {
         if($douIngresoBaseCotizacion < $douIngresoBaseCotizacionMinimo) {
             $douIngresoBaseCotizacion = $douIngresoBaseCotizacionMinimo;
         }
+        
+        /*
+        //Provision
         $floAuxilioTransporteCotizacion = $arPago->getVrAuxilioTransporteCotizacion();
         $intTipoBaseVacaciones = $arConfiguracion->getTipoBasePagoVacaciones();
         $floPorcentajeRiesgos = $arContrato->getClasificacionRiesgoRel()->getPorcentaje();
@@ -183,6 +186,8 @@ class RhuPagoRepository extends EntityRepository {
         $arPago->setVrVacaciones($douVacaciones);        
         $arPago->setVrPrimas($douPrimas);        
         $arPago->setVrPrestaciones($douPrestaciones);
+        */
+        
         
         $arPago->setVrCosto(0);                       
         $em->persist($arPago);        
@@ -304,6 +309,12 @@ class RhuPagoRepository extends EntityRepository {
     public function pendientesContabilizarDql() {        
         $dql   = "SELECT p FROM BrasaRecursoHumanoBundle:RhuPago p WHERE p.estadoContabilizado = 0 AND p.estadoPagado = 1 AND p.vrNeto > 0";       
         $dql .= " ORDER BY p.codigoPagoPk DESC";
+        return $dql;
+    } 
+    
+    public function pendientesContabilizarProvisionDql() {        
+        $dql   = "SELECT p FROM BrasaRecursoHumanoBundle:RhuPago p WHERE p.estadoContabilizadoProvision = 0 AND p.estadoPagado = 1 AND p.vrNeto > 0";       
+        $dql .= " ORDER BY p.codigoPagoPk ASC";
         return $dql;
     } 
 

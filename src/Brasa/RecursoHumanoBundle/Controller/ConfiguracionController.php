@@ -204,15 +204,6 @@ class ConfiguracionController extends Controller
             $arConfiguracion->setCodigoComprobantePagoNomina($comprobantePagoNomina);
             $arConfiguracion->setCodigoComprobantepagoBanco($comprobantePagoBanco);
             $arConfiguracion->setControlPago($controlPago);
-            $arConfiguracion->setPrestacionesPorcentajeCesantias($prestacionesPorcentajeCesantias);
-            $arConfiguracion->setPrestacionesPorcentajeInteresesCesantias($prestacionesPorcentajeInteresesCesantias);
-            $arConfiguracion->setPrestacionesPorcentajeVacaciones($prestacionesPorcentajeVacaciones);
-            $arConfiguracion->setPrestacionesPorcentajePrimas($prestacionesPorcentajePrimas);
-            $arConfiguracion->setAportesPorcentajeCaja($aportesPorcentajeCaja);
-            $arConfiguracion->setAportesPorcentajeVacaciones($aportesPorcentajeVacaciones);
-            $arConfiguracion->setTipoBasePagoVacaciones($tipoBasePagoVacaciones);
-            $arConfiguracion->setCodigoVacacion($codigoConceptoVacacion);
-            $arConfiguracion->setAfectaVacacionesParafiscales($formConfiguracion->get('afectaVacacionesParafiscales')->getData());
             $arrControles = $request->request->All();
             $intIndiceConsecutivo = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {
