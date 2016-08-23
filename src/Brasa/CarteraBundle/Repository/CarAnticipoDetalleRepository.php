@@ -24,19 +24,19 @@ class CarAnticipoDetalleRepository extends EntityRepository {
             $dql .= " AND r.fecha <='" . $strFechaHasta . "'";
         }        
         return $dql;
-    } 
+    }*/ 
     
     public function eliminarSeleccionados($arrSeleccionados) {        
         if(count($arrSeleccionados) > 0) {
             $em = $this->getEntityManager();
             foreach ($arrSeleccionados AS $codigo) {                
-                $arReciboDetalle = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->find($codigo);                
-                $em->remove($arReciboDetalle);                  
+                $arAnticipoDetalle = $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->find($codigo);                
+                $em->remove($arAnticipoDetalle);                  
             }                                         
             $em->flush();       
         }
         
-    }*/        
+    }        
     
     public function numeroRegistros($codigo) {        
         $em = $this->getEntityManager();

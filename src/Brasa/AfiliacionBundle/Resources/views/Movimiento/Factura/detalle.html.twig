@@ -107,7 +107,7 @@
                                 <td style="text-align: right">{{ arFacturaDetalles.subtotal | number_format(0, '.', ',') }}</td>                                
                                 <td style="text-align: right">{{ arFacturaDetalles.iva | number_format(0, '.', ',') }}</td>                                
                                 <td style="text-align: right">{{ arFacturaDetalles.total | number_format(0, '.', ',') }}</td>                                
-                                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturaDetalles.codigoFacturaDetallePk }}" /></td>
+                                <td align="center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturaDetalles.codigoFacturaDetallePk }}" /></td>
                             </tr>
 
                         {% endfor %}
@@ -158,7 +158,7 @@
                                 <td>{{ arFacturaDetalleCursos.cursoRel.empleadoRel.numeroIdentificacion | default('') }}</td>
                                 <td>{{ arFacturaDetalleCursos.cursoRel.empleadoRel.nombreCorto | default('') }}</td>                                                                                                
                                 <td style="text-align: right">{{ arFacturaDetalleCursos.precio | number_format(0, '.', ',') }}</td>                
-                                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturaDetalleCursos.codigoFacturaDetalleCursoPk }}" /></td>
+                                <td align="center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturaDetalleCursos.codigoFacturaDetalleCursoPk }}" /></td>
                             </tr>
 
                         {% endfor %}
@@ -207,7 +207,7 @@
                                 <td>{{ arFacturaDetalleAfiliaciones.contratoRel.fechaDesde | date('Y/m/d')  }}</td>
                                 <td>{{ arFacturaDetalleAfiliaciones.contratoRel.fechaHasta | date('Y/m/d')  }}</td>
                                 <td style="text-align: right">{{ arFacturaDetalleAfiliaciones.precio | number_format(0, '.', ',') }}</td>                
-                                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturaDetalleAfiliaciones.codigoFacturaDetalleAfiliacionPk }}" /></td>
+                                <td align="center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturaDetalleAfiliaciones.codigoFacturaDetalleAfiliacionPk }}" /></td>
                             </tr>
 
                         {% endfor %}

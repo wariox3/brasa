@@ -186,8 +186,8 @@ class PagosController extends Controller
                     $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroIdentificacion'),
                     $session->get('filtroCodigoPagoTipo'),
-                    $strFechaDesde = $session->get('filtroDesde'),
-                    $strFechaHasta = $session->get('filtroHasta')
+                    $session->get('filtroDesde'),
+                    $session->get('filtroHasta')
                     );  
     }         
     

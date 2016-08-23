@@ -18,10 +18,10 @@
             {% for arContratos in arContratos %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arContratos.codigoContratoPk }}">{{ arContratos.codigoContratoPk }}</td>                                
-                <td>{{ arContratos.empleadoRel.numeroIdentificacion | default('') }}</td>
-                <td>{{ arContratos.empleadoRel.nombreCorto | default('') }}</td>
                 <td>{{ arContratos.fechaDesde | date('Y-m-d') }}</td>
                 <td>{{ arContratos.fechaHasta | date('Y-m-d') }}</td>
+                <td>{{ arContratos.empleadoRel.numeroIdentificacion | default('') }}</td>
+                <td>{{ arContratos.empleadoRel.nombreCorto | default('') }}</td>
                 <td style="text-align: right">{{ arContratos.clienteRel.afiliacion | number_format(0, '.', ',') }}</td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arContratos.codigoContratoPk }}" /></td>
             </tr>

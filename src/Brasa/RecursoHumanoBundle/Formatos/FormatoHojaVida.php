@@ -298,7 +298,11 @@ class FormatoHojaVida extends \FPDF_FPDF {
             $this->Cell(30, 6, utf8_decode($arEmpleadoFamiliares->getEntidadSaludRel()->getNombre()), 1, 0, 'L', 1);
             $this->Cell(32, 6, utf8_decode($arEmpleadoFamiliares->getEntidadCajaRel()->getNombre()), 1, 0, 'L', 1);
             $this->SetFont('Arial','',8);
-            $this->Cell(18, 6, $arEmpleadoFamiliares->getFechaNacimiento()->format('Y/m/d'), 1, 0, 'L', 1);
+            $fechaNacimientoFamiliar = "";
+            if ($arEmpleadoFamiliares->getFechaNacimiento() != null){
+                $fechaNacimientoFamiliar = $arEmpleadoFamiliares->getFechaNacimiento()->format('Y/m/d');
+            }
+            $this->Cell(18, 6, $fechaNacimientoFamiliar, 1, 0, 'L', 1);
             $this->SetFont('Arial','',6);
             $this->Cell(34, 6, utf8_decode($arEmpleadoFamiliares->getOcupacion()), 1, 0, 'L', 1);
             $this->SetFont('Arial','',8);

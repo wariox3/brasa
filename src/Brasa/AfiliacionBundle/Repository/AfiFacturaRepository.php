@@ -6,12 +6,42 @@ use Doctrine\ORM\EntityRepository;
 
 class AfiFacturaRepository extends EntityRepository {  
     
-    public function ListaDql() {
+    public function listaDql($codigoCliente = "", $boolEstadoAutorizado = "", $boolEstadoAnulado = "", $boolEstadoAfiliacion = "", $strFechaDesde = "", $strFechaHasta = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT f FROM BrasaAfiliacionBundle:AfiFactura f WHERE f.codigoFacturaPk <> 0";
-        $dql .= " ORDER BY f.codigoFacturaPk";
+        /*if($numero != "") {
+            $dql .= " AND c.numero = " . $numero;  
+        }*/        
+        if($codigoCliente != "") {
+            $dql .= " AND f.codigoClienteFk = " . $codigoCliente;  
+        }          
+        if($boolEstadoAutorizado == 1 ) {
+            $dql .= " AND f.estadoAutorizado = 1";
+        }
+        if($boolEstadoAutorizado == "0") {
+            $dql .= " AND f.estadoAutorizado = 0";
+        }
+        if($boolEstadoAnulado == 1 ) {
+            $dql .= " AND f.estadoAnulado = 1";
+        }
+        if($boolEstadoAnulado == "0") {
+            $dql .= " AND f.estadoAnulado = 0";
+        }
+        if($boolEstadoAfiliacion == 1 ) {
+            $dql .= " AND f.afiliacion = 1";
+        }
+        if($boolEstadoAfiliacion == "0") {
+            $dql .= " AND f.afiliacion = 0";
+        }           
+        if($strFechaDesde != "") {
+            $dql .= " AND f.fecha >= '" . $strFechaDesde . "'";
+        }        
+        if($strFechaHasta != "") {
+            $dql .= " AND f.fecha <= '" . $strFechaHasta . "'";
+        }        
+        $dql .= " ORDER BY f.fecha DESC";
         return $dql;
-    }            
+    }                        
     
     public function eliminar($arrSeleccionados) {
         $em = $this->getEntityManager();

@@ -11,14 +11,26 @@ use Doctrine\ORM\EntityRepository;
  */
 class CarAnticipoRepository extends EntityRepository
 {
-   public function listaDql($numero, $codigoCliente = "", $boolEstadoImpreso = "") {
+   public function listaDql($numero, $codigoCliente = "", $boolEstadoAutorizado = "", $boolEstadoAnulado = "", $boolEstadoImpreso = "") {
         $dql   = "SELECT a FROM BrasaCarteraBundle:CarAnticipo a WHERE a.codigoAnticipoPk <> 0";
         if($numero != "") {
             $dql .= " AND a.numero = " . $numero;  
         }        
         if($codigoCliente != "") {
-            $dql .= " AND s.codigoClienteFk = " . $codigoCliente;  
+            $dql .= " AND a.codigoClienteFk = " . $codigoCliente;  
         }    
+        if($boolEstadoAutorizado == 1 ) {
+            $dql .= " AND a.estadoAutorizado = 1";
+        }
+        if($boolEstadoAutorizado == "0") {
+            $dql .= " AND a.estadoAutorizado = 0";
+        }
+        if($boolEstadoAnulado == 1 ) {
+            $dql .= " AND a.estadoAnulado = 1";
+        }
+        if($boolEstadoAnulado == "0") {
+            $dql .= " AND a.estadoAnulado = 0";
+        }
         if($boolEstadoImpreso == 1 ) {
             $dql .= " AND a.estadoImpreso = 1";
         }
@@ -47,20 +59,20 @@ class CarAnticipoRepository extends EntityRepository
             $dql .= " AND r.fecha <='" . $strFechaHasta . "'";
         }        
         return $dql;
-    } 
+    }*/ 
     
    public function imprimir($codigo) {
         $em = $this->getEntityManager();  
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         $strResultado = "";
-        $arRecibo = new \Brasa\CarteraBundle\Entity\CarRecibo();        
-        $arRecibo = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigo);        
-        if($arRecibo->getEstadoAutorizado() == 1) {
-           if($arRecibo->getNumero() == 0) {            
+        $arAnticipo = new \Brasa\CarteraBundle\Entity\CarAnticipo();        
+        $arAnticipo = $em->getRepository('BrasaCarteraBundle:CarAnticipo')->find($codigo);        
+        if($arAnticipo->getEstadoAutorizado() == 1) {
+           if($arAnticipo->getNumero() == 0) {            
                 $intNumero = $em->getRepository('BrasaCarteraBundle:CarConsecutivo')->consecutivo(1);
-                $arRecibo->setNumero($intNumero);
-                $arRecibo->setEstadoImpreso(1);
-                $em->persist($arRecibo);
+                $arAnticipo->setNumero($intNumero);
+                $arAnticipo->setEstadoImpreso(1);
+                $em->persist($arAnticipo);
                 $em->flush();
             } 
         } else {
@@ -73,14 +85,15 @@ class CarAnticipoRepository extends EntityRepository
         $em = $this->getEntityManager();
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigo) {                
-                if($em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->numeroRegistros($codigo) <= 0) {
-                    $arRecibo = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigo);                    
-                    if($arRecibo->getEstadoAutorizado() == 0) {
-                        $em->remove($arRecibo);                    
-                    }                     
+                if($em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->numeroRegistros($codigo) <= 0) {
+                    $arAnticipo = $em->getRepository('BrasaCarteraBundle:CarAnticipo')->find($codigo);                    
+                    if($arAnticipo->getEstadoAutorizado() == 0) {
+                        $em->remove($arAnticipo);                    
+                    }                    
                 }               
             }
             $em->flush();
         }
-    }*/ 
+    }
+    
 }

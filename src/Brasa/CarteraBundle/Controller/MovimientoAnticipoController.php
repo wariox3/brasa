@@ -306,13 +306,17 @@ class MovimientoAnticipoController extends Controller
         $this->strListaDql =  $em->getRepository('BrasaCarteraBundle:CarAnticipo')->listaDQL(
                 $session->get('filtroAnticipoNumero'), 
                 $session->get('filtroCodigoCliente'),
+                $session->get('filtroAnticipoEstadoAutorizado'),
+                $session->get('filtroAnticipoEstadoAnulado'),
                 $session->get('filtroAnticipoEstadoImpreso'));
     }
 
     private function filtrar ($form) {       
         $session = $this->getRequest()->getSession();        
         $session->set('filtroAnticipoNumero', $form->get('TxtNumero')->getData());
-        $session->set('filtroAnticipoEstadoImpreso', $form->get('estadoImpreso')->getData());          
+        $session->set('filtroAnticipoEstadoAutorizado', $form->get('estadoAutorizado')->getData());
+        $session->set('filtroAnticipoEstadoAnulado', $form->get('estadoAnulado')->getData());
+        $session->set('filtroAnticipoEstadoImpreso', $form->get('estadoImpreso')->getData());
         $session->set('filtroNit', $form->get('TxtNit')->getData());   
     }
 
@@ -337,7 +341,9 @@ class MovimientoAnticipoController extends Controller
             ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCotizacionNumero')))
             ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
             ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))
-            ->add('estadoImpreso', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'IMPRESO', '0' => 'SIN IMPRIMIR'), 'data' => $session->get('filtroAnticipoEstadoImpreso')))                
+            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAnticipoEstadoAutorizado')))                
+            ->add('estadoAnulado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAnticipoEstadoAnulado')))                    
+            ->add('estadoImpreso', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAnticipoEstadoImpreso')))                
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -483,7 +489,7 @@ class MovimientoAnticipoController extends Controller
                 $em->persist($arAnticipoDetalle);
             }
             $em->flush();
-            $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->liquidar($codigoAnticipo);                   
+            $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->liquidar($codigoActicipo);                   
         }
     }
 
