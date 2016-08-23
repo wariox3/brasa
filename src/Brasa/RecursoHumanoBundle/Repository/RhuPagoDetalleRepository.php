@@ -182,7 +182,7 @@ class RhuPagoDetalleRepository extends EntityRepository {
     public function ibp($fechaDesde, $fechaHasta, $codigoContrato) {
         $em = $this->getEntityManager();
         $dql   = "SELECT SUM(pd.vrIngresoBasePrestacion) as ibp FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "
-                . "WHERE p.codigoContratoFk = " . $codigoContrato . " "
+                . "WHERE p.estadoPagado = 1 AND p.codigoContratoFk = " . $codigoContrato . " "
                 . "AND p.fechaDesdePago >= '" . $fechaDesde . "' AND p.fechaDesdePago <= '" . $fechaHasta . "'";
         $query = $em->createQuery($dql);
         $arrayResultado = $query->getResult();
@@ -197,7 +197,7 @@ class RhuPagoDetalleRepository extends EntityRepository {
     public function ibpVacaciones($fechaDesde, $fechaHasta, $codigoContrato) {
         $em = $this->getEntityManager();
         $dql   = "SELECT SUM(pd.vrIngresoBasePrestacion) as ibp FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p JOIN pd.pagoConceptoRel pc "
-                . "WHERE pc.conceptoAuxilioTransporte = 0 AND p.codigoContratoFk = " . $codigoContrato . " "
+                . "WHERE p.estadoPagado = 1 AND pc.conceptoAuxilioTransporte = 0 AND p.codigoContratoFk = " . $codigoContrato . " "
                 . "AND p.fechaDesdePago >= '" . $fechaDesde . "' AND p.fechaDesdePago <= '" . $fechaHasta . "'";
         $query = $em->createQuery($dql);
         $arrayResultado = $query->getResult();
