@@ -83,6 +83,11 @@ class RhuLiquidacion
     private $VrVacaciones = 0;    
     
     /**
+     * @ORM\Column(name="vr_indemnizacion", type="float")
+     */
+    private $VrIndemnizacion = 0;     
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;        
@@ -91,11 +96,21 @@ class RhuLiquidacion
      * @ORM\Column(name="dias_cesantias", type="integer")
      */    
     private $diasCesantias = 0;     
+
+    /**
+     * @ORM\Column(name="dias_cesantiasAusentismo", type="integer")
+     */    
+    private $diasCesantiasAusentismo = 0;
     
     /**
      * @ORM\Column(name="dias_vacaciones", type="integer")
      */    
     private $diasVacaciones = 0;                
+
+    /**
+     * @ORM\Column(name="dias_vacaciones_ausentismo", type="integer")
+     */    
+    private $diasVacacionesAusentismo = 0; 
     
     /**
      * @ORM\Column(name="dias_primas", type="integer")
@@ -1643,5 +1658,77 @@ class RhuLiquidacion
     public function getEstadoContabilizado()
     {
         return $this->estadoContabilizado;
+    }
+
+    /**
+     * Set vrIndemnizacion
+     *
+     * @param float $vrIndemnizacion
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrIndemnizacion($vrIndemnizacion)
+    {
+        $this->VrIndemnizacion = $vrIndemnizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIndemnizacion
+     *
+     * @return float
+     */
+    public function getVrIndemnizacion()
+    {
+        return $this->VrIndemnizacion;
+    }
+
+    /**
+     * Set diasCesantiasAusentismo
+     *
+     * @param integer $diasCesantiasAusentismo
+     *
+     * @return RhuLiquidacion
+     */
+    public function setDiasCesantiasAusentismo($diasCesantiasAusentismo)
+    {
+        $this->diasCesantiasAusentismo = $diasCesantiasAusentismo;
+
+        return $this;
+    }
+
+    /**
+     * Get diasCesantiasAusentismo
+     *
+     * @return integer
+     */
+    public function getDiasCesantiasAusentismo()
+    {
+        return $this->diasCesantiasAusentismo;
+    }
+
+    /**
+     * Set diasVacacionesAusentismo
+     *
+     * @param integer $diasVacacionesAusentismo
+     *
+     * @return RhuLiquidacion
+     */
+    public function setDiasVacacionesAusentismo($diasVacacionesAusentismo)
+    {
+        $this->diasVacacionesAusentismo = $diasVacacionesAusentismo;
+
+        return $this;
+    }
+
+    /**
+     * Get diasVacacionesAusentismo
+     *
+     * @return integer
+     */
+    public function getDiasVacacionesAusentismo()
+    {
+        return $this->diasVacacionesAusentismo;
     }
 }

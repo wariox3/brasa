@@ -597,6 +597,11 @@ class ContratosController extends Controller
                 'property' => 'nombre',
                 'data' => $arContrato->getContratoTipoRel(),
             ))                
+            ->add('salarioTipoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuSalarioTipo',
+                'property' => 'nombre',
+                'data' => $arContrato->getSalarioTipoRel(),
+            ))                
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => $arContrato->getFechaHasta()  ,'attr' => array('class' => 'date',)))                                    
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
@@ -610,6 +615,7 @@ class ContratosController extends Controller
                 $objMensaje->Mensaje("error", "No tiene permisos para actualizar el contrato", $this);
             } else {
             $arContrato->setContratoTipoRel($formActualizar->get('contratoTipoRel')->getData());
+            $arContrato->setSalarioTipoRel($formActualizar->get('salarioTipoRel')->getData());
             $arContrato->setTerminacionContratoRel($formActualizar->get('terminacionContratoRel')->getData());
             $arContrato->setClasificacionRiesgoRel($formActualizar->get('clasificacionRiesgoRel')->getData());
             $arContrato->setEntidadPensionRel($formActualizar->get('pensionRel')->getData());

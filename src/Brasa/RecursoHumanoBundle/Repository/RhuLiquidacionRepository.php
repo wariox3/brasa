@@ -48,6 +48,7 @@ class RhuLiquidacionRepository extends EntityRepository {
         $douVacaciones = 0;    
         $intDiasLaborados = 0;
         $ibpCesantias = 0;        
+        $salarioPromedioCesantias = 0;
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();           
         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arLiquidacion->getCodigoContratoFk());                 
         if($arLiquidacion->getLiquidarManual() == 0) {            
@@ -158,18 +159,8 @@ class RhuLiquidacionRepository extends EntityRepository {
                     $dateFechaDesde = $arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones();
                     $dateFechaHasta = $arLiquidacion->getContratoRel()->getFechaHasta();
                     $recargosNocturnos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->recargosNocturnosFecha($dateFechaDesde, $dateFechaHasta, $arLiquidacion->getContratoRel()->getCodigoContratoPk());
-                    if($arLiquidacion->getCodigoMotivoTerminacionContratoFk() == 5) {
-                        //$salarioVacaciones = $douSalario + $recargosNocturnos;
-                        $dateFechaDesdeCesantias = $arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias();            
-                        $dateFechaHastaCesantias = $arLiquidacion->getContratoRel()->getFechaHasta();
-                        $ibpVacacionesInicial = $arContrato->getIbpCesantiasInicial();                            
-                        $ibpVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibpVacaciones($dateFechaDesdeCesantias->format('Y-m-d'), $dateFechaHastaCesantias->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());                
-                        $ibpVacaciones += $ibpVacacionesInicial+$douIBPAdicional;                                          
-                        $intDiasCesantias = $this->diasPrestaciones($dateFechaDesdeCesantias, $dateFechaHastaCesantias);      
-                        $salarioVacaciones = ($ibpVacaciones / $intDiasCesantias) * 30;      
-                        if($arLiquidacion->getPorcentajeIbp() > 0) {
-                            $salarioVacaciones = ($salarioVacaciones * $arLiquidacion->getPorcentajeIbp())/100;
-                        }                       
+                    if($arLiquidacion->getCodigoMotivoTerminacionContratoFk() == 5 || $arLiquidacion->getCodigoMotivoTerminacionContratoFk() == 4) {                        
+                        $salarioVacaciones = $salarioPromedioCesantias - 77700;           
                     } else {
                         $salarioVacaciones = $douSalario;
                     }                                        
@@ -203,7 +194,7 @@ class RhuLiquidacionRepository extends EntityRepository {
             $floDeducciones += $arLiquidacionAdicional->getVrDeduccion();
             $floAdicionales += $arLiquidacionAdicional->getVrBonificacion();
         }
-        $douTotal = $douCesantias + $douInteresesCesantias + $douPrima + $douVacaciones;
+        $douTotal = $douCesantias + $douInteresesCesantias + $douPrima + $douVacaciones + $arLiquidacion->getVrIndemnizacion();
         $douTotal = $douTotal + $floAdicionales - $douAdicionalesPrima - $floDeducciones;
         $arLiquidacion->setVrTotal($douTotal);
         $arLiquidacion->setVrSalario($douSalario);
