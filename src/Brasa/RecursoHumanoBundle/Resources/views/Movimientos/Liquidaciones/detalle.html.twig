@@ -76,8 +76,8 @@
                         <td align="right">{{ arLiquidacion.fechaUltimoPagoCesantias|date("Y/m/d") }}</td>
                         <td class="titulo">CESANTIAS:</td>
                         <td align="right">$ {{ arLiquidacion.vrCesantias | number_format(0, '.', ',') }}</td>
-                        <td class="titulo">DIAS:</td>
-                        <td align="right">{{ arLiquidacion.diasCesantias }}</td>                        
+                        <td class="titulo">DIAS(AUS):</td>
+                        <td align="right">{{ arLiquidacion.diasCesantias }}({{ arLiquidacion.diasCesantiasAusentismo }})</td>                        
                     </tr>
                     <tr>
                         <td class="titulo">IDENTIFICACIÓN:</td>
@@ -146,8 +146,8 @@
                         <td align="right">{{ arLiquidacion.fechaUltimoPagoVacaciones|date("Y/m/d") }}</td>                        
                         <td class="titulo">VACACIONES:</td>
                         <td align="right">$ {{ arLiquidacion.vrVacaciones | number_format(0, '.', ',') }}</td>
-                        <td class="titulo">DIAS:</td>
-                        <td align="right">{{ arLiquidacion.diasVacaciones }}</td>                        
+                        <td class="titulo">DIAS(AUS):</td>
+                        <td align="right">{{ arLiquidacion.diasVacaciones }}({{ arLiquidacion.diasVacacionesAusentismo }})</td>                        
                     </tr>
                     <tr>
                         <td class="titulo">PAGADO:</td>
