@@ -179,7 +179,7 @@ class RhuLiquidacionRepository extends EntityRepository {
                     $intDiasVacacionesLiquidar = $intDiasVacaciones-$intDiasAusentismo;
                     $douVacaciones = ($salarioVacaciones * $intDiasVacacionesLiquidar) / 720;                                
                     $arLiquidacion->setVrSalarioVacaciones($salarioVacaciones);
-                    $arLiquidacion->setDiasVacaciones($intDiasVacaciones);
+                    $arLiquidacion->setDiasVacaciones($intDiasVacacionesLiquidar);
                     $arLiquidacion->setDiasVacacionesAusentismo($intDiasAusentismo);
                     $arLiquidacion->setVrVacaciones($douVacaciones);
                     $arLiquidacion->setFechaUltimoPagoVacaciones($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones());
