@@ -360,7 +360,7 @@ class TurFacturaRepository extends EntityRepository {
             $em->persist($arFactura);
 
             //Anular cuenta por cobrar
-            $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
+            /*$arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
             $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->findOneBy(array('codigoCuentaCobrarTipoFk' => 2, 'numeroDocumento' => $arFactura->getNumero()));
             if($arCuentaCobrar) {
                 if($arCuentaCobrar->getValorOriginal() == $arCuentaCobrar->getSaldo()) {
@@ -369,7 +369,7 @@ class TurFacturaRepository extends EntityRepository {
                     $arCuentaCobrar->setAbono(0);
                     $em->persist($arCuentaCobrar);
                 }
-            }
+            }*/
             $em->flush();
 
         } else {
