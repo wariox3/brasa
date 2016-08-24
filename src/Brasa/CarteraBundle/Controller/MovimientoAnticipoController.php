@@ -237,7 +237,9 @@ class MovimientoAnticipoController extends Controller
                         $objAnticipo->Generar($this, $codigoAnticipo);
                     }
                 } else {
-                    $objMensaje->Mensaje("error", "No se puede imprimir el registro, no esta autorizado", $this);
+                    //$objMensaje->Mensaje("error", "No se puede imprimir el registro, no esta autorizado", $this);
+                        $objAnticipo = new \Brasa\CarteraBundle\Formatos\FormatoAnticipo();
+                        $objAnticipo->Generar($this, $codigoAnticipo);
                 }
                 return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_detalle', array('codigoAnticipo' => $codigoAnticipo)));                        
             }                        
@@ -360,12 +362,12 @@ class MovimientoAnticipoController extends Controller
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;                        
-            $arrBotonDetalleEliminar['disabled'] = true;
+            //$arrBotonDetalleEliminar['disabled'] = true;
             $arrBotonDetalleActualizar['disabled'] = true;
             $arrBotonAnular['disabled'] = true;
         } else {
             $arrBotonDesAutorizar['disabled'] = true;            
-            $arrBotonImprimir['disabled'] = true;
+            //$arrBotonImprimir['disabled'] = true;
             $arrBotonAnular['disabled'] = true;
         }
         if($ar->getEstadoImpreso() == 1) {
@@ -404,7 +406,7 @@ class MovimientoAnticipoController extends Controller
         for($col = 'A'; $col !== 'N'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
         }     
-        for($col = 'H'; $col !== 'N'; $col++) {
+        for($col = 'G'; $col !== 'N'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }        
@@ -415,10 +417,11 @@ class MovimientoAnticipoController extends Controller
                     ->setCellValue('D1', 'CLIENTE')
                     ->setCellValue('E1', 'CUENTA')
                     ->setCellValue('F1', 'FECHA PAGO')
-                    ->setCellValue('G1', 'TOTAL')
-                    ->setCellValue('H1', 'ANULADO')
-                    ->setCellValue('I1', 'AUTORIZADO')
-                    ->setCellValue('J1', 'IMPRESO');
+                    ->setCellValue('G1', 'ANTICIPO')
+                    ->setCellValue('H1', 'TOTAL')
+                    ->setCellValue('I1', 'ANULADO')
+                    ->setCellValue('J1', 'AUTORIZADO')
+                    ->setCellValue('K1', 'IMPRESO');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -431,10 +434,11 @@ class MovimientoAnticipoController extends Controller
                     ->setCellValue('B' . $i, $arAnticipo->getNumero())
                     ->setCellValue('E' . $i, $arAnticipo->getCuentaRel()->getNombre())
                     ->setCellValue('F' . $i, $arAnticipo->getFechaPago()->format('Y-m-d'))
-                    ->setCellValue('G' . $i, $arAnticipo->getVrTotal())
-                    ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arAnticipo->getEstadoAnulado()))
-                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arAnticipo->getEstadoAutorizado()))
-                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arAnticipo->getEstadoImpreso()));
+                    ->setCellValue('G' . $i, $arAnticipo->getVrAnticipo())
+                    ->setCellValue('H' . $i, $arAnticipo->getVrTotal())
+                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arAnticipo->getEstadoAnulado()))
+                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arAnticipo->getEstadoAutorizado()))
+                    ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arAnticipo->getEstadoImpreso()));
             if($arAnticipo->getClienteRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('C' . $i, $arAnticipo->getClienteRel()->getNit());

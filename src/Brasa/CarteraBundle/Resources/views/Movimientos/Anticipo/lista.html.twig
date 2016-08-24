@@ -75,6 +75,7 @@
                 <th>CLIENTE</th>
                 <th>ASESOR</th>
                 <th>CUENTA</th>                                
+                <th>ANTICIPO</th>
                 <th>TOTAL</th>
                 <th>ANU</th>
                 <th>AUT</th>
@@ -93,6 +94,7 @@
                 <td>{{ arAnticipos.clienteRel.nombreCorto |default('')  }}</td>
                 <td>{{ arAnticipos.asesorRel.nombre |default('')  }}</td>
                 <td>{{ arAnticipos.cuentaRel.nombre |default('')  }}</td>                
+                <td style="text-align: right">{{ arAnticipos.VrAnticipo | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arAnticipos.vrTotal | number_format(0, '.', ',') }}</td>
                 <td>{% if arAnticipos.estadoAnulado == 1 %}SI{% else %}NO{% endif %}</td>
                 <td>{% if arAnticipos.estadoAutorizado == 1 %}SI{% else %}NO{% endif %}</td>
