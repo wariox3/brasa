@@ -22,7 +22,7 @@ class PagosController extends Controller
         $this->listar();
         if($form->isValid()) {
             if($form->get('BtnExcel')->isClicked()) {
-                $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+                /*$arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
                 $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findAll();
                 foreach ($arPagos as $arPago) {
                     $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
@@ -38,9 +38,11 @@ class PagosController extends Controller
                 }
                 $em->flush();
                 echo "hola";
-                //$this->filtrarLista($form, $request);
-                //$this->listar();
-                //$this->generarExcel();
+                 * 
+                 */
+                $this->filtrarLista($form, $request);
+                $this->listar();
+                $this->generarExcel();
             }
             if($form->get('BtnExcelDetalle')->isClicked()) {
                 $this->filtrarLista($form, $request);
