@@ -330,12 +330,14 @@ class TurFacturaRepository extends EntityRepository {
             $arFacturaDetalles = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura));
             //Devolver saldo a los pedidos
             foreach ($arFacturaDetalles as $arFacturaDetalle) {
-                $arPedidoDetalleAct = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
-                $arPedidoDetalleAct = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($arFacturaDetalle->getCodigoPedidoDetalleFk());
-                $floValorTotalPendiente = $arPedidoDetalleAct->getVrTotalDetallePendiente() + $arFacturaDetalle->getVrPrecio();
-                $arPedidoDetalleAct->setVrTotalDetallePendiente($floValorTotalPendiente);
-                $arPedidoDetalleAct->setEstadoFacturado(0);
-                $em->persist($arPedidoDetalleAct);
+                if($arFacturaDetalle->getCodigoPedidoDetalleFk()) {
+                    $arPedidoDetalleAct = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                    $arPedidoDetalleAct = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($arFacturaDetalle->getCodigoPedidoDetalleFk());
+                    $floValorTotalPendiente = $arPedidoDetalleAct->getVrTotalDetallePendiente() + $arFacturaDetalle->getVrPrecio();
+                    $arPedidoDetalleAct->setVrTotalDetallePendiente($floValorTotalPendiente);
+                    $arPedidoDetalleAct->setEstadoFacturado(0);
+                    $em->persist($arPedidoDetalleAct);                    
+                }
             }
             //Actualizar los detalles de la factura a cero
             foreach ($arFacturaDetalles as $arFacturaDetalle) {
