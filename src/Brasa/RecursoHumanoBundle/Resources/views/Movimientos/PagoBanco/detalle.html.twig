@@ -81,8 +81,9 @@
                     <table class="table table-striped table-bordered table-condensed">
                         <tr>
                             <th>CÓDIGO</th>
-                            <th>PAGO</th>
-                            <th>VACACION</th>
+                            <th>PAG</th>
+                            <th>VAC</th>
+                            <th>LIQ</th>
                             <th>IDENTIFICACION</th>
                             <th>EMPLEADO</th>
                             <th>BANCO</th>
@@ -96,6 +97,7 @@
                                 <td>{{ arPagoBancoDetalle.codigoPagoBancoDetallePk  }}</td>
                                 <td>{{ arPagoBancoDetalle.codigoPagoFk  }}</td>
                                 <td>{{ arPagoBancoDetalle.codigoVacacionFk  }}</td>
+                                <td>{{ arPagoBancoDetalle.codigoLiquidacionFk  }}</td>
                                 <td>{{ arPagoBancoDetalle.numeroIdentificacion  }}</td>
                                 <td>{{ arPagoBancoDetalle.nombreCorto  }}</td>
                                 <td>{{ arPagoBancoDetalle.bancoRel.nombre |default('') }}</td>
@@ -116,6 +118,7 @@
             <div class="btn-toolbar" style="float: right">              
                 {%if arPagoBanco.estadoAutorizado == 0 %}                    
                     <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_pago_banco_detalle_liquidacion_nuevo', {'codigoPagoBanco': arPagoBanco.codigoPagoBancoPK}) }}', 'AgregarPagoBancoDetalle', 600, 900)">Nuevo liquidacion</a>
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_pago_banco_detalle_vacacion_nuevo', {'codigoPagoBanco': arPagoBanco.codigoPagoBancoPK}) }}', 'AgregarPagoBancoDetalle', 600, 900)">Nuevo vacaciones</a>
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_pago_banco_detalle_nuevo', {'codigoPagoBanco': arPagoBanco.codigoPagoBancoPK}) }}', 'AgregarPagoBancoDetalle', 600, 900)">Nuevo nomina</a>
                     </div>                        

@@ -34,24 +34,13 @@ class RhuConfiguracionProvision
     /**
      * @ORM\Column(name="codigo_cuenta_operacion_fk", type="string", length=20, nullable=true)
      */     
-    private $codigoCuentaOperacionFk;    
-    
-    /**
-     * @ORM\Column(name="tipo_cuenta_operacion", type="bigint", nullable=true)
-     */     
-    private $tipoCuentaOperacion = 1;   
+    private $codigoCuentaOperacionFk;          
     
     /**
      * @ORM\Column(name="codigo_cuenta_comercial_fk", type="string", length=20, nullable=true)
      */     
     private $codigoCuentaComercialFk;    
     
-    /**
-     * @ORM\Column(name="tipo_cuenta_comercial", type="bigint", nullable=true)
-     */     
-    private $tipoCuentaComercial = 1;  
-    
-
 
     /**
      * Set codigoConfiguracionProvisionPk
@@ -174,30 +163,6 @@ class RhuConfiguracionProvision
     }
 
     /**
-     * Set tipoCuentaOperacion
-     *
-     * @param integer $tipoCuentaOperacion
-     *
-     * @return RhuConfiguracionProvision
-     */
-    public function setTipoCuentaOperacion($tipoCuentaOperacion)
-    {
-        $this->tipoCuentaOperacion = $tipoCuentaOperacion;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoCuentaOperacion
-     *
-     * @return integer
-     */
-    public function getTipoCuentaOperacion()
-    {
-        return $this->tipoCuentaOperacion;
-    }
-
-    /**
      * Set codigoCuentaComercialFk
      *
      * @param string $codigoCuentaComercialFk
@@ -219,29 +184,5 @@ class RhuConfiguracionProvision
     public function getCodigoCuentaComercialFk()
     {
         return $this->codigoCuentaComercialFk;
-    }
-
-    /**
-     * Set tipoCuentaComercial
-     *
-     * @param integer $tipoCuentaComercial
-     *
-     * @return RhuConfiguracionProvision
-     */
-    public function setTipoCuentaComercial($tipoCuentaComercial)
-    {
-        $this->tipoCuentaComercial = $tipoCuentaComercial;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoCuentaComercial
-     *
-     * @return integer
-     */
-    public function getTipoCuentaComercial()
-    {
-        return $this->tipoCuentaComercial;
     }
 }

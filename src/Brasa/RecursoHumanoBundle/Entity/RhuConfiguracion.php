@@ -107,6 +107,11 @@ class RhuConfiguracion
     private $codigoComprobantePagoNomina;
 
     /**
+     * @ORM\Column(name="codigo_comprobante_provision", type="integer")
+     */
+    private $codigoComprobanteProvision;    
+    
+    /**
      * @ORM\Column(name="codigo_comprobante_liquidacion", type="integer")
      */
     private $codigoComprobanteLiquidacion;    
@@ -1350,5 +1355,29 @@ class RhuConfiguracion
     public function getCodigoComprobanteLiquidacion()
     {
         return $this->codigoComprobanteLiquidacion;
+    }
+
+    /**
+     * Set codigoComprobanteProvision
+     *
+     * @param integer $codigoComprobanteProvision
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoComprobanteProvision($codigoComprobanteProvision)
+    {
+        $this->codigoComprobanteProvision = $codigoComprobanteProvision;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoComprobanteProvision
+     *
+     * @return integer
+     */
+    public function getCodigoComprobanteProvision()
+    {
+        return $this->codigoComprobanteProvision;
     }
 }

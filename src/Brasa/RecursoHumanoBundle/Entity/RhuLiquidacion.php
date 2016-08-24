@@ -267,6 +267,11 @@ class RhuLiquidacion
      */
     private $estadoPagoGenerado = 0;
     
+    /**
+     * @ORM\Column(name="estado_pago_banco", type="boolean")
+     */
+    private $estadoPagoBanco = 0;    
+    
     /**     
      * @ORM\Column(name="liquidar_salario", type="boolean")
      */    
@@ -311,6 +316,11 @@ class RhuLiquidacion
      */
     protected $liquidacionesAdicionalesLiquidacionRel;  
    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuPagoBancoDetalle", mappedBy="liquidacionRel")
+     */
+    protected $pagosBancosDetallesLiquidacionRel;     
+    
 
     /**
      * Constructor
@@ -1730,5 +1740,63 @@ class RhuLiquidacion
     public function getDiasVacacionesAusentismo()
     {
         return $this->diasVacacionesAusentismo;
+    }
+
+    /**
+     * Set estadoPagoBanco
+     *
+     * @param boolean $estadoPagoBanco
+     *
+     * @return RhuLiquidacion
+     */
+    public function setEstadoPagoBanco($estadoPagoBanco)
+    {
+        $this->estadoPagoBanco = $estadoPagoBanco;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagoBanco
+     *
+     * @return boolean
+     */
+    public function getEstadoPagoBanco()
+    {
+        return $this->estadoPagoBanco;
+    }
+
+    /**
+     * Add pagosBancosDetallesLiquidacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesLiquidacionRel
+     *
+     * @return RhuLiquidacion
+     */
+    public function addPagosBancosDetallesLiquidacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesLiquidacionRel)
+    {
+        $this->pagosBancosDetallesLiquidacionRel[] = $pagosBancosDetallesLiquidacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosBancosDetallesLiquidacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesLiquidacionRel
+     */
+    public function removePagosBancosDetallesLiquidacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesLiquidacionRel)
+    {
+        $this->pagosBancosDetallesLiquidacionRel->removeElement($pagosBancosDetallesLiquidacionRel);
+    }
+
+    /**
+     * Get pagosBancosDetallesLiquidacionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosBancosDetallesLiquidacionRel()
+    {
+        return $this->pagosBancosDetallesLiquidacionRel;
     }
 }

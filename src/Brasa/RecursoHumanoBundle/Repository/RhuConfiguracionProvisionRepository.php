@@ -11,4 +11,5 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuConfiguracionProvisionRepository extends EntityRepository {    
     
+   
 }

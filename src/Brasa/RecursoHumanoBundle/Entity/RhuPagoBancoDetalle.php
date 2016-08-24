@@ -33,6 +33,11 @@ class RhuPagoBancoDetalle
     private $codigoVacacionFk;    
     
     /**
+     * @ORM\Column(name="codigo_liquidacion_fk", type="integer", nullable=true)
+     */    
+    private $codigoLiquidacionFk;    
+    
+    /**
      * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false)
      */         
     private $numeroIdentificacion;    
@@ -79,6 +84,12 @@ class RhuPagoBancoDetalle
      * @ORM\JoinColumn(name="codigo_vacacion_fk", referencedColumnName="codigo_vacacion_pk")
      */
     protected $vacacionRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuLiquidacion", inversedBy="pagosBancosDetallesLiquidacionRel")
+     * @ORM\JoinColumn(name="codigo_liquidacion_fk", referencedColumnName="codigo_liquidacion_pk")
+     */
+    protected $liquidacionRel;     
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuBanco", inversedBy="pagosBancosDetallesBancoRel")
@@ -406,5 +417,53 @@ class RhuPagoBancoDetalle
     public function getVacacionRel()
     {
         return $this->vacacionRel;
+    }
+
+    /**
+     * Set codigoLiquidacionFk
+     *
+     * @param integer $codigoLiquidacionFk
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setCodigoLiquidacionFk($codigoLiquidacionFk)
+    {
+        $this->codigoLiquidacionFk = $codigoLiquidacionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoLiquidacionFk
+     *
+     * @return integer
+     */
+    public function getCodigoLiquidacionFk()
+    {
+        return $this->codigoLiquidacionFk;
+    }
+
+    /**
+     * Set liquidacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionRel
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setLiquidacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionRel = null)
+    {
+        $this->liquidacionRel = $liquidacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get liquidacionRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion
+     */
+    public function getLiquidacionRel()
+    {
+        return $this->liquidacionRel;
     }
 }
