@@ -4,14 +4,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-class CuentaCobrarController extends Controller
+class CuentaCobrarPilaController extends Controller
 {
     var $strListaDql = "";
     var $strFechaDesde = "";
     var $strFechaHasta = "";
 
     /**
-     * @Route("/cartera/consulta/cuentacobrar/lista", name="brs_cartera_consulta_cuentacobrar_lista")
+     * @Route("/cartera/consulta/cuentacobrarpila/lista", name="brs_cartera_consulta_cuentacobrarpila_lista")
      */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -38,14 +38,14 @@ class CuentaCobrarController extends Controller
         }
         $connection = $em->getConnection();
         $strSql = "SELECT  
-                            sql_car_cartera_edades.*
+                            sql_car_cartera_edades_pila.*
                     FROM
-                            sql_car_cartera_edades                       
+                            sql_car_cartera_edades_pila                       
                     WHERE 1 " . $strWhere;                    
         $statement = $connection->prepare($strSql);        
         $statement->execute();
         $resultados = $statement->fetchAll();        
-        return $this->render('BrasaCarteraBundle:Consultas/CuentasCobrar:lista.html.twig', array(            
+        return $this->render('BrasaCarteraBundle:Consultas/CuentasCobrar:listaPila.html.twig', array(            
             'arCuentasCobrar' => $resultados,
             'form' => $form->createView()));
     }

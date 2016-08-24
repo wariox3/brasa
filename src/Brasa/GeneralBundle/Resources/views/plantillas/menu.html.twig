@@ -350,6 +350,14 @@
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Anticipo</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_cartera_consulta_anticipo_resumen') }}">Resumen</a></li>
+                                        <li><a href="{{ path('brs_cartera_consulta_anticipo_lista') }}">Lista</a></li>
+                                        <li><a href="{{ path('brs_cartera_consulta_anticipo_detalle') }}">Detalle</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">Recibo</a>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_cartera_consulta_recibo_resumen') }}">Resumen</a></li>
@@ -386,6 +394,19 @@
                                     <a tabindex="-1" href="#">Contratos</a>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ path('brs_afi_consulta_contrato_ingreso') }}">Ingresos</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Cuentas por cobrar</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_cartera_consulta_cuentacobrarafiliacion_lista') }}">Afiliacion</a></li>
+                                        <li><a href="{{ path('brs_cartera_consulta_cuentacobrarpila_lista') }}">Pila</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Afiliaciones pendientes</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('brs_afi_consulta_contrato_afiliacionpagopendiente') }}">Lista</a></li>
                                     </ul>
                                 </li>
                             </ul>

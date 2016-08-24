@@ -4,14 +4,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-class CuentaCobrarController extends Controller
+class CuentaCobrarAfiliacionController extends Controller
 {
     var $strListaDql = "";
     var $strFechaDesde = "";
     var $strFechaHasta = "";
 
     /**
-     * @Route("/cartera/consulta/cuentacobrar/lista", name="brs_cartera_consulta_cuentacobrar_lista")
+     * @Route("/cartera/consulta/cuentacobrarafiliacion/lista", name="brs_cartera_consulta_cuentacobrarafiliacion_lista")
      */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -32,20 +32,20 @@ class CuentaCobrarController extends Controller
             }
             if ($form->get('BtnPdf')->isClicked()) {
                 $strWhere .= $this->devFiltro($form);
-                $objEstadoCuenta = new \Brasa\CarteraBundle\Formatos\EstadoCuenta();
+                $objEstadoCuenta = new \Brasa\CarteraBundle\Formatos\EstadoCuentaAfiliacion();
                 $objEstadoCuenta->Generar($this, $strWhere);
             }            
         }
         $connection = $em->getConnection();
         $strSql = "SELECT  
-                            sql_car_cartera_edades.*
+                            sql_car_cartera_edades_afiliacion.*
                     FROM
-                            sql_car_cartera_edades                       
+                            sql_car_cartera_edades_afiliacion                       
                     WHERE 1 " . $strWhere;                    
         $statement = $connection->prepare($strSql);        
         $statement->execute();
         $resultados = $statement->fetchAll();        
-        return $this->render('BrasaCarteraBundle:Consultas/CuentasCobrar:lista.html.twig', array(            
+        return $this->render('BrasaCarteraBundle:Consultas/CuentasCobrar:listaAfiliacion.html.twig', array(            
             'arCuentasCobrar' => $resultados,
             'form' => $form->createView()));
     }
