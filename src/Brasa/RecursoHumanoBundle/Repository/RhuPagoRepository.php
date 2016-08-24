@@ -527,8 +527,7 @@ class RhuPagoRepository extends EntityRepository {
     public function diasAusentismo($fechaDesde, $fechaHasta, $codigoContrato) {
         $em = $this->getEntityManager();
         $dql   = "SELECT SUM(p.diasAusentismo) as diasAusentismo FROM BrasaRecursoHumanoBundle:RhuPago p "
-                . "WHERE p.estadoPagado = 1 "
-                . "AND p.codigoContratoFk = " . $codigoContrato . " "
+                . "WHERE p.codigoContratoFk = " . $codigoContrato . " "
                 . "AND p.fechaDesdePago >= '" . $fechaDesde . "' AND p.fechaHastaPago <= '" . $fechaHasta . "'";
         $query = $em->createQuery($dql);
         $arrayResultado = $query->getResult();
