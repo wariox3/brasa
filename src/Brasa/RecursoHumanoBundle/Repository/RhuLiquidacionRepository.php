@@ -37,9 +37,12 @@ class RhuLiquidacionRepository extends EntityRepository {
     
     public function liquidar($codigoLiquidacion) {        
         $em = $this->getEntityManager();
+        $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);
         $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();                
         $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion); 
+        $salarioMinimo = $arConfiguracion->getVrSalario();
+        $auxilioTransporte = $arConfiguracion->getVrAuxilioTransporte();        
         $douSalario = 0;
         $douCesantias = 0;
         $douInteresesCesantias = 0;
@@ -91,8 +94,13 @@ class RhuLiquidacionRepository extends EntityRepository {
                     $salarioPromedioCesantias = ($salarioPromedioCesantias * $arLiquidacion->getPorcentajeIbp())/100;
                 }
                 if($arLiquidacion->getLiquidarSalario() == true) {
-                    $salarioPromedioCesantias = $douSalario;
+                    $salarioPromedioCesantias = $douSalario + $auxilioTransporte;
                 }
+                /*if($salarioPromedioCesantias <= ($salarioMinimo + $auxilioTransporte)) {
+                    $salarioPromedioCesantias = $salarioMinimo + $auxilioTransporte;
+                }
+                 * 
+                 */
                 $douCesantias = ($salarioPromedioCesantias * $intDiasCesantias) / 360;          
                 $floPorcentajeIntereses = (($intDiasCesantias * 12) / 360)/100;
                 $douInteresesCesantias = $douCesantias * $floPorcentajeIntereses;
@@ -128,7 +136,7 @@ class RhuLiquidacionRepository extends EntityRepository {
                         $salarioPromedioPrimas = ($salarioPromedioPrimas * $arLiquidacion->getPorcentajeIbp())/100;
                     }
                     if($arLiquidacion->getLiquidarSalario() == true) {
-                        $salarioPromedioPrimas = $douSalario;
+                        $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
                     }                    
                     $douPrima = ($salarioPromedioPrimas * $intDiasPrimaLiquidar) / 360;                
                     $arLiquidacion->setDiasPrimas($intDiasPrimaLiquidar);                    
@@ -160,7 +168,7 @@ class RhuLiquidacionRepository extends EntityRepository {
                     $dateFechaHasta = $arLiquidacion->getContratoRel()->getFechaHasta();
                     $recargosNocturnos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->recargosNocturnosFecha($dateFechaDesde, $dateFechaHasta, $arLiquidacion->getContratoRel()->getCodigoContratoPk());
                     if($arLiquidacion->getCodigoMotivoTerminacionContratoFk() == 5 || $arLiquidacion->getCodigoMotivoTerminacionContratoFk() == 4) {                        
-                        $salarioVacaciones = $salarioPromedioCesantias - 77700;           
+                        $salarioVacaciones = $salarioPromedioCesantias - $auxilioTransporte;           
                     } else {
                         $salarioVacaciones = $douSalario;
                     }                                        
