@@ -33,8 +33,7 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
                     $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arSoportePago->getCodigoContratoFk());
                     $floVrDia = $arContrato->getVrSalario() / 30;
-                    $floVrHora = $floVrDia / 8;
-                    
+                    $floVrHora = $floVrDia / 8;                    
                     $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                     $arProgramacionPagoDetalle->setEmpleadoRel($arEmpleado);
                     $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
@@ -44,8 +43,12 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     $arProgramacionPagoDetalle->setCodigoSoportePagoFk($arSoportePago->getCodigoSoportePagoPk());
                     $arProgramacionPagoDetalle->setFechaDesde($arSoportePago->getFechaDesde());
                     $arProgramacionPagoDetalle->setFechaHasta($arSoportePago->getFechaHasta());
-                    $arProgramacionPagoDetalle->setFechaDesdePago($arSoportePago->getFechaDesde());
-                    $arProgramacionPagoDetalle->setFechaHastaPago($arSoportePago->getFechaHasta());
+                    if($arContrato->getFechaDesde() < $arProgramacionPago->getFechaDesde()) {
+                        $arProgramacionPagoDetalle->setFechaDesdePago($arSoportePago->getFechaDesde());    
+                    } else {
+                        $arProgramacionPagoDetalle->setFechaDesdePago($arContrato->getFechaDesde());
+                    }                    
+                    $arProgramacionPagoDetalle->setFechaHastaPago($arSoportePago->getFechaHasta());                    
                     $intDias = $arSoportePago->getDias();
                     $intDiasTransporte = $arSoportePago->getDiasTransporte();
                     $arProgramacionPagoDetalle->setDias($intDias);
