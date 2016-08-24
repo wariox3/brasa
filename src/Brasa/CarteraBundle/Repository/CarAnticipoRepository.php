@@ -41,25 +41,25 @@ class CarAnticipoRepository extends EntityRepository
         return $dql;
     }
     
-   /*public function listaConsultaDql($numero = "", $codigoCliente = "", $codigoReciboTipo = "", $strFechaDesde = "", $strFechaHasta = "") {
-        $dql   = "SELECT r FROM BrasaCarteraBundle:CarRecibo r WHERE r.codigoReciboPk <> 0 ";
+   public function listaConsultaDql($numero = "", $codigoCliente = "", $codigoAnticipoTipo = "", $strFechaDesde = "", $strFechaHasta = "") {
+        $dql   = "SELECT a FROM BrasaCarteraBundle:CarAnticipo a WHERE a.codigoAnticipoPk <> 0 ";
         if($numero != "") {
-            $dql .= " AND r.numero = " . $numero;  
+            $dql .= " AND a.numero = " . $numero;  
         }
         if($codigoCliente != "") {
-            $dql .= " AND r.codigoClienteFk = " . $codigoCliente;  
+            $dql .= " AND a.codigoClienteFk = " . $codigoCliente;  
         }
-        if($codigoReciboTipo != "") {
-            $dql .= " AND r.codigoReciboTipoFk = " . $codigoReciboTipo;  
+        if($codigoAnticipoTipo != "") {
+            $dql .= " AND a.codigoAnticipoTipoFk = " . $codigoAnticipoTipo;  
         }
         if ($strFechaDesde != ""){
-            $dql .= " AND r.fecha >='" . $strFechaDesde . "'";
+            $dql .= " AND a.fecha >='" . $strFechaDesde . "'";
         }
         if($strFechaHasta != "") {
-            $dql .= " AND r.fecha <='" . $strFechaHasta . "'";
+            $dql .= " AND a.fecha <='" . $strFechaHasta . "'";
         }        
         return $dql;
-    }*/ 
+    }
     
    public function imprimir($codigo) {
         $em = $this->getEntityManager();  

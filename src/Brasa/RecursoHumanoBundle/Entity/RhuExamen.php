@@ -63,9 +63,9 @@ class RhuExamen
     private $nombreCorto;        
     
     /**
-     * @ORM\Column(name="identificacion", type="integer")
+     * @ORM\Column(name="identificacion", type="string", length=20, nullable=false)
      */
-    private $identificacion;  
+    private $identificacion; 
     
     /**
      * @ORM\Column(name="codigo_sexo_fk", type="string", length=1, nullable=true)
@@ -185,6 +185,7 @@ class RhuExamen
      * @ORM\OneToMany(targetEntity="RhuExamenRestriccionMedica", mappedBy="examenRel")
      */
     protected $examenesExamenRestriccionMedicaRel;
+    
     
     
     /**
@@ -426,7 +427,7 @@ class RhuExamen
     /**
      * Set identificacion
      *
-     * @param integer $identificacion
+     * @param string $identificacion
      *
      * @return RhuExamen
      */
@@ -440,7 +441,7 @@ class RhuExamen
     /**
      * Get identificacion
      *
-     * @return integer
+     * @return string
      */
     public function getIdentificacion()
     {

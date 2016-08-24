@@ -6,25 +6,25 @@ use Doctrine\ORM\EntityRepository;
 
 class CarAnticipoDetalleRepository extends EntityRepository {
     
-    /*public function detalleConsultaDql($numero = "", $codigoCliente = "", $codigoCuentaCobrarTipo = "", $strFechaDesde = "", $strFechaHasta = "") {
-        $dql   = "SELECT rd FROM BrasaCarteraBundle:CarReciboDetalle rd JOIN rd.reciboRel r  WHERE rd.codigoReciboDetallePk <> 0 ";
+    public function detalleConsultaDql($numero = "", $codigoCliente = "", $codigoCuentaCobrarTipo = "", $strFechaDesde = "", $strFechaHasta = "") {
+        $dql   = "SELECT ad FROM BrasaCarteraBundle:CarAnticipoDetalle ad JOIN ad.anticipoRel a WHERE ad.codigoAnticipoDetallePk <> 0 ";
         if($numero != "") {
-            $dql .= " AND rd.numeroFactura = " . $numero;  
+            $dql .= " AND ad.numeroFactura = " . $numero;  
         }
         if($codigoCliente != "") {
-            $dql .= " AND r.codigoClienteFk = " . $codigoCliente;  
+            $dql .= " AND a.codigoClienteFk = " . $codigoCliente;  
         }
         if($codigoCuentaCobrarTipo != "") {
-            $dql .= " AND rd.codigoCuentaCobrarTipoFk = " . $codigoCuentaCobrarTipo;  
+            $dql .= " AND ad.codigoCuentaCobrarTipoFk = " . $codigoCuentaCobrarTipo;  
         }
         if ($strFechaDesde != ""){
-            $dql .= " AND r.fecha >='" . $strFechaDesde. "'";
+            $dql .= " AND a.fecha >='" . $strFechaDesde. "'";
         }
         if($strFechaHasta != "") {
-            $dql .= " AND r.fecha <='" . $strFechaHasta . "'";
+            $dql .= " AND a.fecha <='" . $strFechaHasta . "'";
         }        
         return $dql;
-    }*/ 
+    }
     
     public function eliminarSeleccionados($arrSeleccionados) {        
         if(count($arrSeleccionados) > 0) {
