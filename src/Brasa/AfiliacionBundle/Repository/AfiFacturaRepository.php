@@ -268,6 +268,7 @@ class AfiFacturaRepository extends EntityRepository {
                 $arCuentaCobrar->setFecha($arFactura->getFecha());
                 $arCuentaCobrar->setFechaVence($arFactura->getFechaVence());
                 $arCuentaCobrar->setNumeroDocumento($arFactura->getNumero());
+                $arCuentaCobrar->setCodigoFactura($arFactura->getCodigoFacturaPk());
                 $arCuentaCobrar->setValorOriginal($arFactura->getTotal());
                 $arCuentaCobrar->setSaldo($arFactura->getTotal());
                 $arCuentaCobrar->setPlazo($arClienteAfiliacion->getPlazoPago());                
