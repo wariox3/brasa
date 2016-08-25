@@ -87,8 +87,12 @@ class RhuLiquidacionRepository extends EntityRepository {
                 $intDiasCesantias = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta);                  
                 if($arContrato->getCodigoSalarioTipoFk() == 2) {
                     $salarioPromedioCesantias = ($ibpCesantias / $intDiasCesantias) * 30;                                    
-                } else {
-                    $salarioPromedioCesantias = $douSalario;
+                } else {                                        
+                    if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
+                        $salarioPromedioCesantias = $douSalario + $auxilioTransporte;
+                    } else {
+                        $salarioPromedioCesantias = $douSalario;
+                    }                                            
                 }
                 if($arLiquidacion->getPorcentajeIbp() > 0) {
                     $salarioPromedioCesantias = ($salarioPromedioCesantias * $arLiquidacion->getPorcentajeIbp())/100;

@@ -195,6 +195,11 @@ class RhuPago
     private $vrPrimas = 0;     
     
     /**
+     * @ORM\Column(name="vr_indemnizacion", type="float")
+     */
+    private $vrIndemnizacion = 0;    
+    
+    /**
      * @ORM\Column(name="vr_prestaciones", type="float")
      */
     private $vrPrestaciones = 0;         
@@ -2021,5 +2026,29 @@ class RhuPago
     public function getEstadoContabilizadoProvision()
     {
         return $this->estadoContabilizadoProvision;
+    }
+
+    /**
+     * Set vrIndemnizacion
+     *
+     * @param float $vrIndemnizacion
+     *
+     * @return RhuPago
+     */
+    public function setVrIndemnizacion($vrIndemnizacion)
+    {
+        $this->vrIndemnizacion = $vrIndemnizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIndemnizacion
+     *
+     * @return float
+     */
+    public function getVrIndemnizacion()
+    {
+        return $this->vrIndemnizacion;
     }
 }

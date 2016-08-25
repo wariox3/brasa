@@ -46,27 +46,40 @@ class RegistroController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->listaDQL(
-                    $session->get('filtroRegistroNumero'),
-                    $session->get('filtroCodigoComprobante'),
-                    $session->get('filtroDesde'),
-                    $session->get('filtroHasta')
+                    $session->get('filtroCtbCodigoComprobante'),    
+                    $session->get('filtroCtbNumero'),
+                    $session->get('filtroCtbNumeroReferencia'),
+                    $session->get('filtroCtbDesde'),
+                    $session->get('filtroCtbHasta')
                     );
     }        
     
     private function filtrar ($form, Request $request) {
         $session = $this->get('session');        
         $controles = $request->request->get('form');
-        $session->set('filtroRegistroNumero', $controles['TxtNumeroRegistro']);                
-        $session->set('filtroCodigoComprobante', $controles['comprobanteRel']);
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        $session->set('filtroCtbNumero', $controles['TxtNumero']);                
+        $session->set('filtroCtbNumeroReferencia', $controles['TxtNumeroReferencia']);                
+        $session->set('filtroCtbCodigoComprobante', $controles['comprobanteRel']);
+        $fecha = $form->get('fechaDesde')->getData();
+        if($fecha) {
+            $session->set('filtroCtbDesde', $fecha->format('Y-m-d'));    
+        } else {
+            $session->set('filtroCtbDesde', "");    
+        }
+        $fecha = $form->get('fechaHasta')->getData();
+        if($fecha) {
+            $session->set('filtroCtbHasta', $fecha->format('Y-m-d'));    
+        } else {
+            $session->set('filtroCtbHasta', "");    
+        }        
     }
     
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-            ->add('TxtNumeroRegistro', 'text', array('label'  => 'Codigo'))
+            ->add('TxtNumero', 'text', array('label'  => 'Codigo'))
+            ->add('TxtNumeroReferencia', 'text', array('label'  => 'Codigo'))
             ->add('comprobanteRel', 'entity', array(
                 'class' => 'BrasaContabilidadBundle:CtbComprobante',
                 'query_builder' => function (EntityRepository $er) {

@@ -21,8 +21,9 @@
                 <th style="text-align: right">IBC</th>
                 <th style="text-align: right">CESANTIAS</th>
                 <th style="text-align: right">INTERESES</th>
-                <th style="text-align: right">VACACIONES</th>
                 <th style="text-align: right">PRIMAS</th>
+                <th style="text-align: right">VACACIONES</th>
+                <th style="text-align: right">INDEMNIZACION</th>                
                 <th style="text-align: right">PENSION</th>
                 <th style="text-align: right">SALUD</th>
                 <th style="text-align: right">CAJA</th>
@@ -45,8 +46,9 @@
                 <td style="text-align: right">{{ arPagos.vrIngresoBaseCotizacion | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagos.vrCesantias | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagos.vrInteresesCesantias | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPagos.vrVacaciones | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagos.vrPrimas | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagos.vrVacaciones | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagos.vrIndemnizacion | number_format(0, '.', ',') }}</td>                
                 <td style="text-align: right">{{ arPagos.vrPensionEmpleador | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagos.vrEpsEmpleador | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagos.vrCaja | number_format(0, '.', ',') }}</td>
@@ -67,6 +69,7 @@
         </div>                
         <div class="btn-toolbar" style="float: right">                 
             <div class="btn-group">
+                {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                               
                 {{ form_widget(form.BtnActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                               
             </div>
             <div class="btn-group">

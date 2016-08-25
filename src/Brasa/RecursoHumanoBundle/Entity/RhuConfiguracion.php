@@ -150,6 +150,11 @@ class RhuConfiguracion
      * @ORM\Column(name="prestaciones_porcentaje_aporte_vacaciones", type="float")
      */
     private $prestacionesPorcentajeAporteVacaciones = 0;    
+
+    /**
+     * @ORM\Column(name="prestaciones_porcentaje_indemnizacion", type="float")
+     */
+    private $prestacionesPorcentajeIndemnizacion = 0; 
     
     /**
      * @ORM\Column(name="aportes_porcentaje_caja", type="float")
@@ -1379,5 +1384,29 @@ class RhuConfiguracion
     public function getCodigoComprobanteProvision()
     {
         return $this->codigoComprobanteProvision;
+    }
+
+    /**
+     * Set prestacionesPorcentajeIndemnizacion
+     *
+     * @param float $prestacionesPorcentajeIndemnizacion
+     *
+     * @return RhuConfiguracion
+     */
+    public function setPrestacionesPorcentajeIndemnizacion($prestacionesPorcentajeIndemnizacion)
+    {
+        $this->prestacionesPorcentajeIndemnizacion = $prestacionesPorcentajeIndemnizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get prestacionesPorcentajeIndemnizacion
+     *
+     * @return float
+     */
+    public function getPrestacionesPorcentajeIndemnizacion()
+    {
+        return $this->prestacionesPorcentajeIndemnizacion;
     }
 }
