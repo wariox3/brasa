@@ -15,7 +15,8 @@ class ContabilizarPagoProvisionController extends Controller
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();  
-        $paginator  = $this->get('knp_paginator');        
+        $paginator  = $this->get('knp_paginator');  
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioLista();
         $form->handleRequest($request);
         $this->listar();
@@ -59,7 +60,8 @@ class ContabilizarPagoProvisionController extends Controller
                     $arProvisionIcbf2 = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionProvision')->find(20);                                                            
                     $arProvisionSena = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionProvision')->find(21);
                     $arProvisionSena2 = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionProvision')->find(22);                                                            
-                    foreach ($arrSeleccionados AS $codigo) {                                     
+                    $errorDatos = false;
+                    foreach ($arrSeleccionados AS $codigo) {                          
                         $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
                         $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigo);
                         $tipoEmpleado = $arPago->getEmpleadoRel()->getEmpleadoTipoRel()->getTipo();
@@ -253,157 +255,160 @@ class ContabilizarPagoProvisionController extends Controller
                             
                             //Pension
                             if($arPago->getVrPensionEmpleador() > 0) {   
-                                $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arPago->getContratoRel()->getEntidadPensionRel()->getNit()));
-                                if(count($arTercero) <= 0) {
-                                    $arTercero = new \Brasa\ContabilidadBundle\Entity\CtbTercero();
-                                    $arTercero->setCiudadRel($arPago->getEmpleadoRel()->getCiudadRel());
-                                    $arTercero->setTipoIdentificacionRel($arPago->getEmpleadoRel()->getTipoIdentificacionRel());
-                                    $arTercero->setNumeroIdentificacion($arPago->getEmpleadoRel()->getNumeroIdentificacion());
-                                    $arTercero->setNombreCorto($arPago->getEmpleadoRel()->getNombreCorto());
-                                    $arTercero->setNombre1($arPago->getEmpleadoRel()->getNombre1());
-                                    $arTercero->setNombre2($arPago->getEmpleadoRel()->getNombre2());
-                                    $arTercero->setApellido1($arPago->getEmpleadoRel()->getApellido1());
-                                    $arTercero->setApellido2($arPago->getEmpleadoRel()->getApellido2());
-                                    $arTercero->setDireccion($arPago->getEmpleadoRel()->getDireccion());
-                                    $arTercero->setTelefono($arPago->getEmpleadoRel()->getTelefono());
-                                    $arTercero->setCelular($arPago->getEmpleadoRel()->getCelular());
-                                    $arTercero->setEmail($arPago->getEmpleadoRel()->getCorreo());
-                                    $em->persist($arTercero);                                 
-                                }
-
-                                $cuenta = $this->cuenta($arProvisionPension, $tipoEmpleado);                                
-                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
-                                if($arCuenta) {
-                                    $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    $arRegistro->setCentroCostoRel($arCentroCosto);
-                                    $arRegistro->setCuentaRel($arCuenta);
-                                    $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setDebito($arPago->getVrPensionEmpleador());                            
-                                    $arRegistro->setDescripcionContable('PROVISION PENSION');
-                                    $em->persist($arRegistro);
-                                }  
-                                $cuenta = $this->cuenta($arProvisionPension2, $tipoEmpleado);                                
-                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
-                                if($arCuenta) {
-                                    $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    $arRegistro->setCentroCostoRel($arCentroCosto);
-                                    $arRegistro->setCuentaRel($arCuenta);
-                                    $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setCredito($arPago->getVrPensionEmpleador());                            
-                                    $arRegistro->setDescripcionContable('PROVISION PENSION');
-                                    $em->persist($arRegistro);
-                                }                                    
-                                                                
+                                $arTerceroPension = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arPago->getContratoRel()->getEntidadPensionRel()->getNit()));
+                                if($arTerceroPension) {
+                                    $cuenta = $this->cuenta($arProvisionPension, $tipoEmpleado);                                
+                                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
+                                    if($arCuenta) {
+                                        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+                                        $arRegistro->setComprobanteRel($arComprobanteContable);                                        
+                                        $arRegistro->setCuentaRel($arCuenta);
+                                        $arRegistro->setTerceroRel($arTerceroPension);
+                                        $arRegistro->setNumero($arPago->getNumero());
+                                        $arRegistro->setNumeroReferencia($arPago->getNumero());
+                                        $arRegistro->setFecha($arPago->getFechaHasta());
+                                        $arRegistro->setDebito($arPago->getVrPensionEmpleador());                            
+                                        $arRegistro->setDescripcionContable('PROVISION PENSION');
+                                        $em->persist($arRegistro);
+                                    }  
+                                    $cuenta = $this->cuenta($arProvisionPension2, $tipoEmpleado);                                
+                                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
+                                    if($arCuenta) {
+                                        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+                                        $arRegistro->setComprobanteRel($arComprobanteContable);                                        
+                                        $arRegistro->setCuentaRel($arCuenta);
+                                        $arRegistro->setTerceroRel($arTerceroPension);
+                                        $arRegistro->setNumero($arPago->getNumero());
+                                        $arRegistro->setNumeroReferencia($arPago->getNumero());
+                                        $arRegistro->setFecha($arPago->getFechaHasta());
+                                        $arRegistro->setCredito($arPago->getVrPensionEmpleador());                            
+                                        $arRegistro->setDescripcionContable('PROVISION PENSION');
+                                        $em->persist($arRegistro);
+                                    }                                 
+                                } else {
+                                    $errorDatos = true;
+                                    $objMensaje->Mensaje("error", "Pago numero: " . $arPago->getNumero() . ", en terceros de contabilidad no existe la entidad de pension " . $arPago->getContratoRel()->getEntidadPensionRel()->getNombre() . " Nit: " . $arPago->getContratoRel()->getEntidadPensionRel()->getNit(), $this);
+                                    break 1;
+                                }                                                                 
                             }                             
                             
                             //Salud
                             if($arPago->getVrEpsEmpleador() > 0) {   
-                                $cuenta = $this->cuenta($arProvisionSalud, $tipoEmpleado);                                
-                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
-                                if($arCuenta) {
-                                    $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    $arRegistro->setCentroCostoRel($arCentroCosto);
-                                    $arRegistro->setCuentaRel($arCuenta);
-                                    $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setDebito($arPago->getVrEpsEmpleador());                            
-                                    $arRegistro->setDescripcionContable('PROVISION SALUD');
-                                    $em->persist($arRegistro);
-                                }  
-                                $cuenta = $this->cuenta($arProvisionSalud2, $tipoEmpleado);                                
-                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
-                                if($arCuenta) {
-                                    $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    $arRegistro->setCentroCostoRel($arCentroCosto);
-                                    $arRegistro->setCuentaRel($arCuenta);
-                                    $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setCredito($arPago->getVrEpsEmpleador());                            
-                                    $arRegistro->setDescripcionContable('PROVISION SALUD');
-                                    $em->persist($arRegistro);
-                                }                                
+                                $arTerceroSalud = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arPago->getContratoRel()->getEntidadSaludRel()->getNit()));
+                                if($arTerceroSalud) {
+                                    $cuenta = $this->cuenta($arProvisionSalud, $tipoEmpleado);                                
+                                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
+                                    if($arCuenta) {
+                                        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+                                        $arRegistro->setComprobanteRel($arComprobanteContable);                                        
+                                        $arRegistro->setCuentaRel($arCuenta);
+                                        $arRegistro->setTerceroRel($arTerceroSalud);
+                                        $arRegistro->setNumero($arPago->getNumero());
+                                        $arRegistro->setNumeroReferencia($arPago->getNumero());
+                                        $arRegistro->setFecha($arPago->getFechaHasta());
+                                        $arRegistro->setDebito($arPago->getVrEpsEmpleador());                            
+                                        $arRegistro->setDescripcionContable('PROVISION SALUD');
+                                        $em->persist($arRegistro);
+                                    }  
+                                    $cuenta = $this->cuenta($arProvisionSalud2, $tipoEmpleado);                                
+                                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
+                                    if($arCuenta) {
+                                        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+                                        $arRegistro->setComprobanteRel($arComprobanteContable);                                        
+                                        $arRegistro->setCuentaRel($arCuenta);
+                                        $arRegistro->setTerceroRel($arTerceroSalud);
+                                        $arRegistro->setNumero($arPago->getNumero());
+                                        $arRegistro->setNumeroReferencia($arPago->getNumero());
+                                        $arRegistro->setFecha($arPago->getFechaHasta());
+                                        $arRegistro->setCredito($arPago->getVrEpsEmpleador());                            
+                                        $arRegistro->setDescripcionContable('PROVISION SALUD');
+                                        $em->persist($arRegistro);
+                                    }                                     
+                                }  else {
+                                    $errorDatos = true;
+                                    $objMensaje->Mensaje("error", "Pago numero: " . $arPago->getNumero() . ", en terceros de contabilidad no existe la entidad de salud " . $arPago->getContratoRel()->getEntidadSaludRel()->getNombre() . " Nit: " . $arPago->getContratoRel()->getEntidadSaludRel()->getNit(), $this);
+                                    break 1;
+                                }                                                               
                             }                             
                             
                             //Riesgos
-                            if($arPago->getVrArp() > 0) {   
-                                $cuenta = $this->cuenta($arProvisionRiesgos, $tipoEmpleado);                                
-                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
-                                if($arCuenta) {
-                                    $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    $arRegistro->setCentroCostoRel($arCentroCosto);
-                                    $arRegistro->setCuentaRel($arCuenta);
-                                    $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setDebito($arPago->getVrArp());                            
-                                    $arRegistro->setDescripcionContable('PROVISION RIESGOS');
-                                    $em->persist($arRegistro);
-                                }  
-                                $cuenta = $this->cuenta($arProvisionRiesgos2, $tipoEmpleado);                                
-                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
-                                if($arCuenta) {
-                                    $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    $arRegistro->setCentroCostoRel($arCentroCosto);
-                                    $arRegistro->setCuentaRel($arCuenta);
-                                    $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setCredito($arPago->getVrArp());                            
-                                    $arRegistro->setDescripcionContable('PROVISION RIESGOS');
-                                    $em->persist($arRegistro);
-                                }                                
+                            if($arPago->getVrArp() > 0) {  
+                                $arEntidadRiesgos = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
+                                $arEntidadRiesgos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($arConfiguracion->getCodigoEntidadRiesgoFk());
+                                $arTerceroRiesgos = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arEntidadRiesgos->getNit()));
+                                if($arTerceroRiesgos) {
+                                    $cuenta = $this->cuenta($arProvisionRiesgos, $tipoEmpleado);                                
+                                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
+                                    if($arCuenta) {
+                                        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+                                        $arRegistro->setComprobanteRel($arComprobanteContable);                                        
+                                        $arRegistro->setCuentaRel($arCuenta);
+                                        $arRegistro->setTerceroRel($arTerceroRiesgos);
+                                        $arRegistro->setNumero($arPago->getNumero());
+                                        $arRegistro->setNumeroReferencia($arPago->getNumero());
+                                        $arRegistro->setFecha($arPago->getFechaHasta());
+                                        $arRegistro->setDebito($arPago->getVrArp());                            
+                                        $arRegistro->setDescripcionContable('PROVISION RIESGOS');
+                                        $em->persist($arRegistro);
+                                    }  
+                                    $cuenta = $this->cuenta($arProvisionRiesgos2, $tipoEmpleado);                                
+                                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
+                                    if($arCuenta) {
+                                        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+                                        $arRegistro->setComprobanteRel($arComprobanteContable);                                        
+                                        $arRegistro->setCuentaRel($arCuenta);
+                                        $arRegistro->setTerceroRel($arTerceroRiesgos);
+                                        $arRegistro->setNumero($arPago->getNumero());
+                                        $arRegistro->setNumeroReferencia($arPago->getNumero());
+                                        $arRegistro->setFecha($arPago->getFechaHasta());
+                                        $arRegistro->setCredito($arPago->getVrArp());                            
+                                        $arRegistro->setDescripcionContable('PROVISION RIESGOS');
+                                        $em->persist($arRegistro);
+                                    }                                     
+                                } else {
+                                    $errorDatos = true;
+                                    $objMensaje->Mensaje("error", "Pago numero: " . $arPago->getNumero() . ", en terceros de contabilidad no existe la entidad de riesgos " . $arEntidadRiesgos->getNombre() . " Nit: " . $arEntidadRiesgos->getNit(), $this);
+                                    break 1;
+                                }                                              
                             }                             
                             
                             //Caja
-                            if($arPago->getVrCaja() > 0) {   
-                                $cuenta = $this->cuenta($arProvisionCaja, $tipoEmpleado);                                
-                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
-                                if($arCuenta) {
-                                    $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    $arRegistro->setCentroCostoRel($arCentroCosto);
-                                    $arRegistro->setCuentaRel($arCuenta);
-                                    $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setDebito($arPago->getVrCaja());                            
-                                    $arRegistro->setDescripcionContable('PROVISION CAJA');
-                                    $em->persist($arRegistro);
-                                }  
-                                $cuenta = $this->cuenta($arProvisionCaja2, $tipoEmpleado);                                
-                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
-                                if($arCuenta) {
-                                    $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    $arRegistro->setCentroCostoRel($arCentroCosto);
-                                    $arRegistro->setCuentaRel($arCuenta);
-                                    $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setCredito($arPago->getVrCaja());                            
-                                    $arRegistro->setDescripcionContable('PROVISION CAJA');
-                                    $em->persist($arRegistro);
-                                }                                
+                            if($arPago->getVrCaja() > 0) {
+                                $arTerceroCaja = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arPago->getContratoRel()->getEntidadCajaRel()->getNit()));
+                                if($arTerceroCaja) {
+                                    $cuenta = $this->cuenta($arProvisionCaja, $tipoEmpleado);                                
+                                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
+                                    if($arCuenta) {
+                                        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+                                        $arRegistro->setComprobanteRel($arComprobanteContable);                                        
+                                        $arRegistro->setCuentaRel($arCuenta);
+                                        $arRegistro->setTerceroRel($arTerceroCaja);
+                                        $arRegistro->setNumero($arPago->getNumero());
+                                        $arRegistro->setNumeroReferencia($arPago->getNumero());
+                                        $arRegistro->setFecha($arPago->getFechaHasta());
+                                        $arRegistro->setDebito($arPago->getVrCaja());                            
+                                        $arRegistro->setDescripcionContable('PROVISION CAJA');
+                                        $em->persist($arRegistro);
+                                    }  
+                                    $cuenta = $this->cuenta($arProvisionCaja2, $tipoEmpleado);                                
+                                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
+                                    if($arCuenta) {
+                                        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+                                        $arRegistro->setComprobanteRel($arComprobanteContable);                                        
+                                        $arRegistro->setCuentaRel($arCuenta);
+                                        $arRegistro->setTerceroRel($arTerceroCaja);
+                                        $arRegistro->setNumero($arPago->getNumero());
+                                        $arRegistro->setNumeroReferencia($arPago->getNumero());
+                                        $arRegistro->setFecha($arPago->getFechaHasta());
+                                        $arRegistro->setCredito($arPago->getVrCaja());                            
+                                        $arRegistro->setDescripcionContable('PROVISION CAJA');
+                                        $em->persist($arRegistro);
+                                    }                                     
+                                }  else {
+                                    $errorDatos = true;
+                                    $objMensaje->Mensaje("error", "Pago numero: " . $arPago->getNumero() . ", en terceros de contabilidad no existe la entidad de caja " . $arPago->getContratoRel()->getEntidadCajaRel()->getNombre() . " Nit: " . $arPago->getContratoRel()->getEntidadCajaRel()->getNit(), $this);
+                                    break 1;
+                                }                                                             
                             }                             
 
                             //Sena
@@ -412,8 +417,7 @@ class ContabilizarPagoProvisionController extends Controller
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
                                 if($arCuenta) {
                                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    $arRegistro->setCentroCostoRel($arCentroCosto);
+                                    $arRegistro->setComprobanteRel($arComprobanteContable);                                    
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
                                     $arRegistro->setNumero($arPago->getNumero());
@@ -427,8 +431,7 @@ class ContabilizarPagoProvisionController extends Controller
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
                                 if($arCuenta) {
                                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    $arRegistro->setCentroCostoRel($arCentroCosto);
+                                    $arRegistro->setComprobanteRel($arComprobanteContable);                                    
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
                                     $arRegistro->setNumero($arPago->getNumero());
@@ -446,8 +449,7 @@ class ContabilizarPagoProvisionController extends Controller
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
                                 if($arCuenta) {
                                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    $arRegistro->setCentroCostoRel($arCentroCosto);
+                                    $arRegistro->setComprobanteRel($arComprobanteContable);                                    
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
                                     $arRegistro->setNumero($arPago->getNumero());
@@ -474,11 +476,16 @@ class ContabilizarPagoProvisionController extends Controller
                                 }                                
                             }                             
                             
-                            //$arPago->setEstadoContabilizadoProvision(1);                                
-                            $em->persist($arPago);                            
+                            $arPago->setEstadoContabilizadoProvision(1);                                
+                            if($errorDatos == false) {
+                                $em->persist($arPago);                                                            
+                            }                            
                         }
                     }
-                    $em->flush();
+                    if($errorDatos == false) {
+                        $em->flush();                        
+                    }
+                    
                 }
                 return $this->redirect($this->generateUrl('brs_rhu_proceso_contabilizar_pago_provision'));
             }   
@@ -496,21 +503,39 @@ class ContabilizarPagoProvisionController extends Controller
                 $porcentajeIndemnizacion = $arConfiguracion->getPrestacionesPorcentajeIndemnizacion();            
                 $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();            
                 $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('estadoContabilizadoProvision' => 0));            
-                foreach ($arPagos as $arPago) {
+                foreach ($arPagos as $arPago) {                    
+                    $ingresoBaseIndemnizacion = 0;
+                    $ingresoBaseVacacion = 0;
+                    $arPagosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                    $arPagosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $arPago->getCodigoPagoPk()));            
+                    foreach ($arPagosDetalles as $arPagoDetalle) {                        
+                        if($arPagoDetalle->getPagoConceptoRel()->getProvisionIndemnizacion() == 1) {
+                            $ingresoBaseIndemnizacion +=  $arPagoDetalle->getVrIngresoBasePrestacion();
+                        }
+                        if($arPagoDetalle->getPagoConceptoRel()->getProvisionVacacion() == 1) {
+                            $ingresoBaseVacacion +=  $arPagoDetalle->getVrIngresoBasePrestacion();
+                        }                        
+                    }
                     $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
                     $arContrato = $arPago->getContratoRel();
                     $auxilioTransporteCotizacion = $arPago->getVrAuxilioTransporteCotizacion();                                
+                    $ingresoBasePrestacion = $arPago->getVrIngresoBasePrestacion();                                    
                     $porcentajeRiesgos = $arContrato->getClasificacionRiesgoRel()->getPorcentaje();
                     $porcentajePension = $arContrato->getTipoPensionRel()->getPorcentajeEmpleador();                
                     $porcentajeSalud = $arContrato->getTipoSaludRel()->getPorcentajeEmpleador();                        
 
                     //Prestaciones
-                    $ingresoBasePrestacion = $arPago->getVrIngresoBasePrestacion();                
-                    $cesantias = (($ingresoBasePrestacion + $auxilioTransporteCotizacion) * $porcentajeCesantias) / 100; // Porcentaje 8.33                
-                    $interesesCesantias = ($cesantias * $porcentajeInteresesCesantias) / 100; // Porcentaje 1 sobre las cesantias                        
-                    $primas = (($ingresoBasePrestacion + $auxilioTransporteCotizacion) * $porcentajePrimas) / 100; // 8.33       
-                    $vacaciones = ($ingresoBasePrestacion * $porcentajeVacaciones) / 100; // 4.17                                                
-                    $indemnizacion = ($ingresoBasePrestacion * $porcentajeIndemnizacion) / 100; // 4.17                                                
+                    if($arContrato->getSalarioIntegral() == 0) {
+                        $cesantias = (($ingresoBasePrestacion + $auxilioTransporteCotizacion) * $porcentajeCesantias) / 100; // Porcentaje 8.33                
+                        $interesesCesantias = ($cesantias * $porcentajeInteresesCesantias) / 100; // Porcentaje 1 sobre las cesantias                        
+                        $primas = (($ingresoBasePrestacion + $auxilioTransporteCotizacion) * $porcentajePrimas) / 100; // 8.33                               
+                    } else {
+                        $cesantias = 0;
+                        $interesesCesantias = 0;
+                        $primas = 0;
+                    }                    
+                    $vacaciones = ($ingresoBaseVacacion * $porcentajeVacaciones) / 100; // 4.17                                                
+                    $indemnizacion = ($ingresoBaseIndemnizacion * $porcentajeIndemnizacion) / 100; // 4.17                                                
 
                     //Aportes
                     $ingresoBaseCotizacion = $arPago->getVrIngresoBaseCotizacion();                

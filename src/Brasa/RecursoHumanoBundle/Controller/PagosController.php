@@ -22,27 +22,29 @@ class PagosController extends Controller
         $this->listar();
         if($form->isValid()) {
             if($form->get('BtnExcel')->isClicked()) {
-                /*$arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+                set_time_limit(0);
+                ini_set("memory_limit", -1);                
+                $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
                 $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findAll();
                 foreach ($arPagos as $arPago) {
-                    $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-                    $arContrato = $arPago->getContratoRel();
-                    if($arContrato->getFechaDesde() > $arPago->getFechaDesdePago()) {
-                        $arPagoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-                        $arPagoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($arPago->getCodigoPagoPk());
-                        $fecha = $arContrato->getFechaDesde();
-                        $arPagoActualizar->setFechaDesdePago($fecha);
-                        $em->persist($arPagoActualizar);
-                        echo $arPago->getNumero() . "<br />";
-                    }                    
+                    $ingresoBasePrestacion = 0;
+                    $arPagosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                    $arPagosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $arPago->getCodigoPagoPk()));            
+                    foreach ($arPagosDetalles as $arPagoDetalle) {                        
+                        $ingresoBasePrestacion +=  $arPagoDetalle->getVrIngresoBasePrestacion();                     
+                    }     
+                    $arPagoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+                    $arPagoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($arPago->getCodigoPagoPk());
+                    
+                    $arPagoActualizar->setVrIngresoBasePrestacion($ingresoBasePrestacion);
+                    $em->persist($arPagoActualizar);
                 }
                 $em->flush();
                 echo "hola";
-                 * 
-                 */
-                $this->filtrarLista($form, $request);
-                $this->listar();
-                $this->generarExcel();
+
+                //$this->filtrarLista($form, $request);
+                //$this->listar();
+                //$this->generarExcel();
             }
             if($form->get('BtnExcelDetalle')->isClicked()) {
                 $this->filtrarLista($form, $request);

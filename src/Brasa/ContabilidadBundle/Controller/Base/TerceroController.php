@@ -82,7 +82,7 @@ class TerceroController extends Controller
         {
             // guardar la tarea en la base de datos
             $arTercero = $form->getData();
-            $arTercero->setNombreCorto($arTercero->getNombre1() . " " . $arTercero->getNombre2() . " " .$arTercero->getApellido1() . " " . $arTercero->getApellido2());
+            $arTercero->setNombreCorto($arTercero->getRazonSocial());
             $em->persist($arTercero);
             $em->flush();
             return $this->redirect($this->generateUrl('brs_ctb_base_terceros_lista'));

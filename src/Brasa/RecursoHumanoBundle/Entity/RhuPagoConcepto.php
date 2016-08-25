@@ -123,6 +123,16 @@ class RhuPagoConcepto
     private $tipoCuentaComercial = 1;    
     
     /**
+     * @ORM\Column(name="provision_indemnizacion", type="boolean")
+     */    
+    private $provisionIndemnizacion = false;     
+    
+    /**
+     * @ORM\Column(name="provision_vacacion", type="boolean")
+     */    
+    private $provisionVacacion = false;    
+    
+    /**
      * 1=Bonificacion, 2=Descuento, 3=Comision
      * @ORM\Column(name="tipo_adicional", type="smallint")
      */    
@@ -198,6 +208,7 @@ class RhuPagoConcepto
      */
     protected $liquidacionesAdicionalesPagoConceptoRel;    
     
+
     /**
      * Constructor
      */
@@ -209,7 +220,12 @@ class RhuPagoConcepto
         $this->licenciasTiposPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->incapacidadesTiposPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tiposPensionesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tiposPensionesPagoConceptoFondoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tiposSaludPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->creditosTiposPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vacacionesBonificacionesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vacacionesCreditosPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->liquidacionesAdicionalesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -340,6 +356,30 @@ class RhuPagoConcepto
     public function getPorPorcentaje()
     {
         return $this->porPorcentaje;
+    }
+
+    /**
+     * Set porPorcentajeTiempoExtra
+     *
+     * @param float $porPorcentajeTiempoExtra
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setPorPorcentajeTiempoExtra($porPorcentajeTiempoExtra)
+    {
+        $this->porPorcentajeTiempoExtra = $porPorcentajeTiempoExtra;
+
+        return $this;
+    }
+
+    /**
+     * Get porPorcentajeTiempoExtra
+     *
+     * @return float
+     */
+    public function getPorPorcentajeTiempoExtra()
+    {
+        return $this->porPorcentajeTiempoExtra;
     }
 
     /**
@@ -655,6 +695,102 @@ class RhuPagoConcepto
     }
 
     /**
+     * Set codigoCuentaComercialFk
+     *
+     * @param string $codigoCuentaComercialFk
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setCodigoCuentaComercialFk($codigoCuentaComercialFk)
+    {
+        $this->codigoCuentaComercialFk = $codigoCuentaComercialFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCuentaComercialFk
+     *
+     * @return string
+     */
+    public function getCodigoCuentaComercialFk()
+    {
+        return $this->codigoCuentaComercialFk;
+    }
+
+    /**
+     * Set tipoCuentaComercial
+     *
+     * @param integer $tipoCuentaComercial
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setTipoCuentaComercial($tipoCuentaComercial)
+    {
+        $this->tipoCuentaComercial = $tipoCuentaComercial;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCuentaComercial
+     *
+     * @return integer
+     */
+    public function getTipoCuentaComercial()
+    {
+        return $this->tipoCuentaComercial;
+    }
+
+    /**
+     * Set provisionIndemnizacion
+     *
+     * @param boolean $provisionIndemnizacion
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setProvisionIndemnizacion($provisionIndemnizacion)
+    {
+        $this->provisionIndemnizacion = $provisionIndemnizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get provisionIndemnizacion
+     *
+     * @return boolean
+     */
+    public function getProvisionIndemnizacion()
+    {
+        return $this->provisionIndemnizacion;
+    }
+
+    /**
+     * Set provisionVacacion
+     *
+     * @param boolean $provisionVacacion
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setProvisionVacacion($provisionVacacion)
+    {
+        $this->provisionVacacion = $provisionVacacion;
+
+        return $this;
+    }
+
+    /**
+     * Get provisionVacacion
+     *
+     * @return boolean
+     */
+    public function getProvisionVacacion()
+    {
+        return $this->provisionVacacion;
+    }
+
+    /**
      * Set tipoAdicional
      *
      * @param integer $tipoAdicional
@@ -676,6 +812,54 @@ class RhuPagoConcepto
     public function getTipoAdicional()
     {
         return $this->tipoAdicional;
+    }
+
+    /**
+     * Set codigoInterface
+     *
+     * @param string $codigoInterface
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setCodigoInterface($codigoInterface)
+    {
+        $this->codigoInterface = $codigoInterface;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoInterface
+     *
+     * @return string
+     */
+    public function getCodigoInterface()
+    {
+        return $this->codigoInterface;
+    }
+
+    /**
+     * Set recargoNocturno
+     *
+     * @param boolean $recargoNocturno
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setRecargoNocturno($recargoNocturno)
+    {
+        $this->recargoNocturno = $recargoNocturno;
+
+        return $this;
+    }
+
+    /**
+     * Get recargoNocturno
+     *
+     * @return boolean
+     */
+    public function getRecargoNocturno()
+    {
+        return $this->recargoNocturno;
     }
 
     /**
@@ -883,64 +1067,6 @@ class RhuPagoConcepto
     }
 
     /**
-     * Add tiposSaludPagoConceptoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud $tiposSaludPagoConceptoRel
-     *
-     * @return RhuPagoConcepto
-     */
-    public function addTiposSaludPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud $tiposSaludPagoConceptoRel)
-    {
-        $this->tiposSaludPagoConceptoRel[] = $tiposSaludPagoConceptoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove tiposSaludPagoConceptoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud $tiposSaludPagoConceptoRel
-     */
-    public function removeTiposSaludPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud $tiposSaludPagoConceptoRel)
-    {
-        $this->tiposSaludPagoConceptoRel->removeElement($tiposSaludPagoConceptoRel);
-    }
-
-    /**
-     * Get tiposSaludPagoConceptoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTiposSaludPagoConceptoRel()
-    {
-        return $this->tiposSaludPagoConceptoRel;
-    }
-
-    /**
-     * Set codigoInterface
-     *
-     * @param string $codigoInterface
-     *
-     * @return RhuPagoConcepto
-     */
-    public function setCodigoInterface($codigoInterface)
-    {
-        $this->codigoInterface = $codigoInterface;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoInterface
-     *
-     * @return string
-     */
-    public function getCodigoInterface()
-    {
-        return $this->codigoInterface;
-    }
-
-    /**
      * Add tiposPensionesPagoConceptoFondoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoPension $tiposPensionesPagoConceptoFondoRel
@@ -972,6 +1098,40 @@ class RhuPagoConcepto
     public function getTiposPensionesPagoConceptoFondoRel()
     {
         return $this->tiposPensionesPagoConceptoFondoRel;
+    }
+
+    /**
+     * Add tiposSaludPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud $tiposSaludPagoConceptoRel
+     *
+     * @return RhuPagoConcepto
+     */
+    public function addTiposSaludPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud $tiposSaludPagoConceptoRel)
+    {
+        $this->tiposSaludPagoConceptoRel[] = $tiposSaludPagoConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove tiposSaludPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud $tiposSaludPagoConceptoRel
+     */
+    public function removeTiposSaludPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud $tiposSaludPagoConceptoRel)
+    {
+        $this->tiposSaludPagoConceptoRel->removeElement($tiposSaludPagoConceptoRel);
+    }
+
+    /**
+     * Get tiposSaludPagoConceptoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTiposSaludPagoConceptoRel()
+    {
+        return $this->tiposSaludPagoConceptoRel;
     }
 
     /**
@@ -1077,78 +1237,6 @@ class RhuPagoConcepto
     }
 
     /**
-     * Set codigoCuentaComercialFk
-     *
-     * @param string $codigoCuentaComercialFk
-     *
-     * @return RhuPagoConcepto
-     */
-    public function setCodigoCuentaComercialFk($codigoCuentaComercialFk)
-    {
-        $this->codigoCuentaComercialFk = $codigoCuentaComercialFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCuentaComercialFk
-     *
-     * @return string
-     */
-    public function getCodigoCuentaComercialFk()
-    {
-        return $this->codigoCuentaComercialFk;
-    }
-
-    /**
-     * Set tipoCuentaComercial
-     *
-     * @param integer $tipoCuentaComercial
-     *
-     * @return RhuPagoConcepto
-     */
-    public function setTipoCuentaComercial($tipoCuentaComercial)
-    {
-        $this->tipoCuentaComercial = $tipoCuentaComercial;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoCuentaComercial
-     *
-     * @return integer
-     */
-    public function getTipoCuentaComercial()
-    {
-        return $this->tipoCuentaComercial;
-    }
-
-    /**
-     * Set porPorcentajeTiempoExtra
-     *
-     * @param float $porPorcentajeTiempoExtra
-     *
-     * @return RhuPagoConcepto
-     */
-    public function setPorPorcentajeTiempoExtra($porPorcentajeTiempoExtra)
-    {
-        $this->porPorcentajeTiempoExtra = $porPorcentajeTiempoExtra;
-
-        return $this;
-    }
-
-    /**
-     * Get porPorcentajeTiempoExtra
-     *
-     * @return float
-     */
-    public function getPorPorcentajeTiempoExtra()
-    {
-        return $this->porPorcentajeTiempoExtra;
-    }
-
-    /**
      * Add liquidacionesAdicionalesPagoConceptoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales $liquidacionesAdicionalesPagoConceptoRel
@@ -1180,29 +1268,5 @@ class RhuPagoConcepto
     public function getLiquidacionesAdicionalesPagoConceptoRel()
     {
         return $this->liquidacionesAdicionalesPagoConceptoRel;
-    }
-
-    /**
-     * Set recargoNocturno
-     *
-     * @param boolean $recargoNocturno
-     *
-     * @return RhuPagoConcepto
-     */
-    public function setRecargoNocturno($recargoNocturno)
-    {
-        $this->recargoNocturno = $recargoNocturno;
-
-        return $this;
-    }
-
-    /**
-     * Get recargoNocturno
-     *
-     * @return boolean
-     */
-    public function getRecargoNocturno()
-    {
-        return $this->recargoNocturno;
     }
 }
