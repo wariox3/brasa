@@ -34,7 +34,7 @@ class CtbTercero
     private $digitoVerificacion;     
     
     /**
-     * @ORM\Column(name="nombre_corto", type="string", length=50)
+     * @ORM\Column(name="nombre_corto", type="string", length=120)
      */
     private $nombreCorto;   
     
@@ -110,9 +110,7 @@ class CtbTercero
      * @ORM\OneToMany(targetEntity="CtbAsientoDetalle", mappedBy="terceroRel")
      */
     protected $asientosDetallesTerceroRel;
-    
-    
-    
+           
     /**
      * Constructor
      */
