@@ -1,9 +1,11 @@
 <?php
 namespace Brasa\CarteraBundle\Controller\Consulta;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+
 class AnticipoController extends Controller
 {
     var $strListaDql = "";
@@ -25,12 +27,10 @@ class AnticipoController extends Controller
         if ($form->isValid()) {            
             if ($form->get('BtnFiltrarLista')->isClicked()) {
                 $this->filtrarLista($form, $request);
-                $form = $this->formularioFiltroLista();
                 $this->lista();
             }
             if ($form->get('BtnExcelLista')->isClicked()) {
                 $this->filtrarLista($form, $request);
-                $form = $this->formularioFiltroLista();
                 $this->lista();
                 $this->generarListaExcel();
             }
@@ -55,12 +55,10 @@ class AnticipoController extends Controller
         if ($form->isValid()) {            
             if ($form->get('BtnFiltrarDetalle')->isClicked()) {
                 $this->filtrarDetalle($form);
-                $form = $this->formularioFiltroDetalle();
                 $this->detalle();
             }
             if ($form->get('BtnExcelDetalle')->isClicked()) {
                 $this->filtrarDetalle($form);
-                $form = $this->formularioFiltroDetalle();
                 $this->detalle();
                 $this->generarDetalleExcel();
             }
@@ -93,7 +91,7 @@ class AnticipoController extends Controller
         $this->strDetalleDql =  $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->detalleConsultaDql(
                 $session->get('filtroNumero'), 
                 $session->get('filtroCodigoCliente'), 
-                $session->get('filtroCuentaCobrarTipo'),
+                '',//$session->get('filtroCuentaCobrarTipo'),
                 $session->get('filtroDesde'),
                 $session->get('filtroHasta'));
     }

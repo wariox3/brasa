@@ -79,15 +79,15 @@
                     <tr>
                         <td class="titulo"></td>
                         <td class="td-in-well"></td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">IMPRESO ANTICIPO:</td>
+                        <td class="td-in-well">{% if arAnticipo.estadoImpresoAnticipado == 1 %}SI{% else %}NO{% endif %}</td>
                         <td class="titulo" align="right">VALOR ANTICIPO:</td>
                         <td align="right">{{ arAnticipo.vrAnticipo | number_format(2, '.', ',')}}</td>
                     </tr>
                     <tr>
                         <td class="titulo">ANULADO:</td>
                         <td class="td-in-well">{% if arAnticipo.estadoAnulado == 1 %}SI{% else %}NO{% endif %}</td>
-                        <td class="titulo">IMPRESO:</td>
+                        <td class="titulo">IMPRESO FINAL:</td>
                         <td class="td-in-well">{% if arAnticipo.estadoImpreso == 1 %}SI{% else %}NO{% endif %}</td>
                         <td class="titulo" align="right">VALOR:</td>
                         <td align="right">{{ arAnticipo.vrTotal | number_format(2, '.', ',')}}</td>
@@ -145,7 +145,11 @@
                         <td style="text-align: right">{{ arAnticipoDetalle.valor | number_format(0, '.', ',') }}</td> 
                         <td style="text-align: right">{{ arAnticipoDetalle.vrPagoDetalle | number_format(0, '.', ',') }}</td> 
                     {% endif %}
-                    <td style="text-align: center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arAnticipoDetalle.codigoAnticipoDetallePk }}" /></td>
+                    {% if arAnticipo.estadoAutorizado == 0 %} 
+                        <td style="text-align: center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arAnticipoDetalle.codigoAnticipoDetallePk }}" /></td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </table>

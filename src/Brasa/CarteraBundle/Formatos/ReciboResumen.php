@@ -77,7 +77,7 @@ class ReciboResumen extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(14);
-        $header = array('TIPO', 'CUENTA', 'NUM', 'TOTAL');
+        $header = array('TIPO', 'CUENTA', 'NUMERO', 'TOTAL');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -85,7 +85,7 @@ class ReciboResumen extends \FPDF_FPDF {
         $this->SetFont('', 'B', 7.5);
 
         //creamos la cabecera de la tabla.
-        $w = array(30, 40, 15, 30);
+        $w = array(50, 50, 20, 30);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -118,22 +118,22 @@ class ReciboResumen extends \FPDF_FPDF {
         $pdf->SetFont('Arial', '', 7); 
         $total = 0;
         foreach ($arRecibosResumen as $registro) {
-            $pdf->Cell(30, 4, $registro['tipo'], 1, 0, 'L');
-            $pdf->Cell(40, 4, $registro['cuenta'], 1, 0, 'L');
-            $pdf->Cell(15, 4, $registro['numeroRecibos'], 1, 0, 'L');
+            $pdf->Cell(50, 4, $registro['tipo'], 1, 0, 'L');
+            $pdf->Cell(50, 4, $registro['cuenta'], 1, 0, 'L');
+            $pdf->Cell(20, 4, $registro['numeroRecibos'], 1, 0, 'L');
             $pdf->Cell(30, 4, number_format($registro['vrTotal'], 2, '.', ','), 1, 0, 'R');
             $total += $registro['vrTotal'];
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }
-        $pdf->Cell(30, 4, '', 0, 0, 'L');
-        $pdf->Cell(40, 4, '', 0, 0, 'L');
-        $pdf->Cell(15, 4, '', 0, 0, 'L');
+        $pdf->Cell(50, 4, '', 0, 0, 'L');
+        $pdf->Cell(50, 4, '', 0, 0, 'L');
+        $pdf->Cell(20, 4, '', 0, 0, 'L');
         $pdf->Cell(30, 4, number_format($total, 2, '.', ','), 1, 0, 'R'); 
         $pdf->Ln();
         $pdf->Ln();
 
-        $header = array('TIPO', 'NUMERO', 'FECHA', 'CUENTA', 'CLIENTE', 'DCTO', 'AJUSTE', 'RTEICA', 'RTEIVA', 'RTEFTE', 'TOTAL');
+        $header = array('TIPO', 'NRO', 'FECHA', 'CUENTA', 'CLIENTE', 'DCTO', 'AJUSTE', 'RTEICA', 'RTEIVA', 'RTEFTE', 'TOTAL');
         $pdf->SetFillColor(236, 236, 236);
         $pdf->SetTextColor(0);
         $pdf->SetDrawColor(0, 0, 0);
@@ -141,7 +141,7 @@ class ReciboResumen extends \FPDF_FPDF {
         $pdf->SetFont('', 'B', 6);
 
         //creamos la cabecera de la tabla.
-        $w = array(20, 13, 15, 25, 40, 13, 13, 13, 13, 13, 13);
+        $w = array(30, 8, 12, 35, 45, 11, 11, 11, 11, 11, 13);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $pdf->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -157,16 +157,16 @@ class ReciboResumen extends \FPDF_FPDF {
         $query = self::$em->createQuery($dql);
         $arRecibos = $query->getResult();
         foreach ($arRecibos as $arRecibo) {
-            $pdf->Cell(20, 4, $arRecibo->getReciboTipoRel()->getNombre(), 1, 0, 'L');                        
-            $pdf->Cell(13, 4, $arRecibo->getNumero(), 1, 0, 'L');                        
-            $pdf->Cell(15, 4, $arRecibo->getFecha()->format('Y/m/d'), 1, 0, 'L');                        
-            $pdf->Cell(25, 4, $arRecibo->getCuentaRel()->getNombre(), 1, 0, 'L');                        
-            $pdf->Cell(40, 4, $arRecibo->getClienteRel()->getNombreCorto(), 1, 0, 'L');                        
-            $pdf->Cell(13, 4, number_format($arRecibo->getVrTotalDescuento(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(13, 4, number_format($arRecibo->getVrTotalAjustePeso(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(13, 4, number_format($arRecibo->getVrTotalReteIca(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(13, 4, number_format($arRecibo->getVrTotalReteIva(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(13, 4, number_format($arRecibo->getVrTotalReteFuente(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(30, 4, $arRecibo->getReciboTipoRel()->getNombre(), 1, 0, 'L');                        
+            $pdf->Cell(8, 4, $arRecibo->getNumero(), 1, 0, 'L');                        
+            $pdf->Cell(12, 4, $arRecibo->getFecha()->format('Y/m/d'), 1, 0, 'L');                        
+            $pdf->Cell(35, 4, $arRecibo->getCuentaRel()->getNombre(), 1, 0, 'L');                        
+            $pdf->Cell(45, 4, $arRecibo->getClienteRel()->getNombreCorto(), 1, 0, 'L');                        
+            $pdf->Cell(11, 4, number_format($arRecibo->getVrTotalDescuento(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(11, 4, number_format($arRecibo->getVrTotalAjustePeso(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(11, 4, number_format($arRecibo->getVrTotalReteIca(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(11, 4, number_format($arRecibo->getVrTotalReteIva(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(11, 4, number_format($arRecibo->getVrTotalReteFuente(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(13, 4, number_format($arRecibo->getVrTotalPago(), 0, '.', ','), 1, 0, 'R');
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);

@@ -95,19 +95,25 @@ class MovimientoAnticipoController extends Controller
                 }
             } else {
                 $arUsuario = $this->getUser();
-                $arAnticipo->setUsuario($arUsuario->getUserName());            
-                $em->persist($arAnticipo);
-                $em->flush();
-                if($form->get('guardarnuevo')->isClicked()) {
-                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_nuevo', array('codigoAnticipo' => 0 )));
-                } else {
-                    if ($codigoAnticipo != 0){
-                        return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_listar'));
+                $arAnticipo->setUsuario($arUsuario->getUserName());
+                $valorAnticipo = $form->get('vrAnticipo')->getData();
+                if ($valorAnticipo > 0){
+                    $em->persist($arAnticipo);
+                    $em->flush();
+                    if($form->get('guardarnuevo')->isClicked()) {
+                        return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_nuevo', array('codigoAnticipo' => 0 )));
                     } else {
-                        return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_detalle', array('codigoAnticipo' => $arAnticipo->getCodigoAnticipoPk())));
+                        if ($codigoAnticipo != 0){
+                            return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_listar'));
+                        } else {
+                            return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_detalle', array('codigoAnticipo' => $arAnticipo->getCodigoAnticipoPk())));
+                        }
+                        return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_listar'));
                     }
-                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_listar'));
+                } else {
+                    $objMensaje->Mensaje("error", "El valor del anticipo debe ser mayor a cero", $this);
                 }
+                    
             }
         }
         return $this->render('BrasaCarteraBundle:Movimientos/Anticipo:nuevo.html.twig', array(
@@ -238,8 +244,13 @@ class MovimientoAnticipoController extends Controller
                     }
                 } else {
                     //$objMensaje->Mensaje("error", "No se puede imprimir el registro, no esta autorizado", $this);
-                        $objAnticipo = new \Brasa\CarteraBundle\Formatos\FormatoAnticipo();
-                        $objAnticipo->Generar($this, $codigoAnticipo);
+                    $objAnticipo = new \Brasa\CarteraBundle\Formatos\FormatoAnticipo();
+                    $objAnticipo->Generar($this, $codigoAnticipo);
+                    $arAnticipo->setEstadoImpresoAnticipado(1);
+                    $em->persist($arAnticipo);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_detalle', array('codigoAnticipo' => $codigoAnticipo)));                        
+                        
                 }
                 return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_detalle', array('codigoAnticipo' => $codigoAnticipo)));                        
             }                        
@@ -276,6 +287,7 @@ class MovimientoAnticipoController extends Controller
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $arrControles = $request->request->All();
                 $intIndice = 0;
+                $totalAnticipoDetalle = 0;
                 if(count($arrSeleccionados) > 0) {
                     foreach ($arrSeleccionados AS $codigoCuentaCobrar) {
                         if($em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->validarCuenta($codigoCuentaCobrar,$codigoAnticipo)) {
@@ -287,14 +299,22 @@ class MovimientoAnticipoController extends Controller
                             $arAnticipoDetalle->setUsuario($arUsuario->getUserName());
                             $arAnticipoDetalle->setNumeroFactura($arCuentaCobrar->getNumeroDocumento());
                             $arAnticipoDetalle->setCuentaCobrarTipoRel($arCuentaCobrar->getCuentaCobrarTipoRel());
-                            $em->persist($arAnticipoDetalle);                            
+                            $em->persist($arAnticipoDetalle);
+                            $totalAnticipoDetalle = $totalAnticipoDetalle + $arrControles['TxtSaldo'.$codigoCuentaCobrar];
                         } 
                     }
+                }
+                if ($totalAnticipoDetalle > $arAnticipo->getVrAnticipo()){
+                    $objMensaje->Mensaje("error", 'El valor a pagar no puede ser mayor al anticipo', $this);
+                    
+                } else {
                     $em->flush();
-                } 
-                $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->liquidar($codigoAnticipo);
-            }            
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+                    $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->liquidar($codigoAnticipo);
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+                }
+            }
+            
+            
         }
         return $this->render('BrasaCarteraBundle:Movimientos/Anticipo:detalleNuevo.html.twig', array(
             'arCuentasCobrar' => $arCuentasCobrar,
@@ -362,7 +382,7 @@ class MovimientoAnticipoController extends Controller
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;                        
-            //$arrBotonDetalleEliminar['disabled'] = true;
+            $arrBotonDetalleEliminar['disabled'] = true;
             $arrBotonDetalleActualizar['disabled'] = true;
             $arrBotonAnular['disabled'] = true;
         } else {
@@ -470,8 +490,12 @@ class MovimientoAnticipoController extends Controller
     
     private function actualizarDetalle($arrControles, $codigoActicipo) {
         $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arAnticipo = new \Brasa\CarteraBundle\Entity\CarAnticipo();
+        $arAnticipo = $em->getRepository('BrasaCarteraBundle:CarAnticipo')->find($codigoActicipo);
         $intIndice = 0;
         $floTotal = 0;
+        $totalAnticipoDetalle = 0;
         if(isset($arrControles['LblCodigo'])) {
             foreach ($arrControles['LblCodigo'] as $intCodigo) {
                 $arAnticipoDetalle = new \Brasa\CarteraBundle\Entity\CarAnticipoDetalle();
@@ -491,9 +515,15 @@ class MovimientoAnticipoController extends Controller
                 $arAnticipoDetalle->setValor($arrControles['TxtValor'.$intCodigo]);
                 $arAnticipoDetalle->setVrPagoDetalle($floSaldoAfectar);
                 $em->persist($arAnticipoDetalle);
+                $totalAnticipoDetalle = $totalAnticipoDetalle + $arrControles['TxtValor'.$intCodigo];
             }
-            $em->flush();
-            $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->liquidar($codigoActicipo);                   
+            $Anticipo = $arAnticipo->getVrAnticipo();
+            if ($totalAnticipoDetalle > $Anticipo){
+                $objMensaje->Mensaje("error", 'El valor a pagar no puede ser mayor al anticipo', $this);
+            } else {
+                $em->flush();
+                $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->liquidar($codigoActicipo);
+            }                    
         }
     }
 

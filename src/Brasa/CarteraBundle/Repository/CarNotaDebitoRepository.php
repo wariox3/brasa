@@ -42,10 +42,10 @@ class CarNotaDebitoRepository extends EntityRepository {
             $dql .= " AND nd.codigoNotaDebitoConceptoFk = " . $codigoNotaDebitoConcepto;  
         }
         if ($strFechaDesde != ""){
-            $dql .= " AND nd.fecha >='" . date_format($strFechaDesde, ('Y-m-d')). "'";
+            $dql .= " AND nd.fecha >='" . $strFechaDesde . "'";
         }
         if($strFechaHasta != "") {
-            $dql .= " AND nd.fecha <='" . date_format($strFechaHasta, ('Y-m-d')) . "'";
+            $dql .= " AND nd.fecha <='" . $strFechaHasta . "'";
         }        
         return $dql;
     }  

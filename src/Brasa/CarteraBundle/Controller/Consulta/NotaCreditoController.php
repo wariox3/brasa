@@ -108,10 +108,16 @@ class NotaCreditoController extends Controller
         }
         $session->set('filtroNumero', $form->get('TxtNumero')->getData());           
         $session->set('filtroNotaCreditoConcepto', $codigo);
-        $session->set('filtroNit', $form->get('TxtNit')->getData());                         
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
-        
+        $session->set('filtroNit', $form->get('TxtNit')->getData());
+        $fechaDesde =  $form->get('fechaDesde')->getData();
+        $fechaHasta =  $form->get('fechaHasta')->getData();
+        if ($fechaDesde == null || $fechaHasta == null){
+            $session->set('filtroDesde', $fechaDesde);
+            $session->set('filtroHasta', $fechaHasta);
+        } else {
+            $session->set('filtroDesde', $fechaDesde->format('Y/m/d'));
+            $session->set('filtroHasta', $fechaHasta->format('Y/m/d'));  
+        }
     }
     
     private function filtrarDetalle ($form) {

@@ -68,10 +68,10 @@ class EstadoCuentaAfiliacion extends \FPDF_FPDF {
         $pdf->SetTextColor(0);
         $pdf->SetDrawColor(0, 0, 0);
         $pdf->SetLineWidth(.2);
-        $pdf->SetFont('', 'B', 6);
+        $pdf->SetFont('Arial', 'B', 6);
 
         //creamos la cabecera de la tabla.
-        $w = array(23, 13, 15, 15, 40, 13, 13, 13, 13, 13, 13);
+        $w = array(23, 13, 15, 15, 45, 13, 13, 13, 13, 13, 13);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $pdf->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -98,7 +98,7 @@ class EstadoCuentaAfiliacion extends \FPDF_FPDF {
             $pdf->Cell(13, 4, $resultado['numeroDocumento'], 1, 0, 'L');                        
             $pdf->Cell(15, 4,$resultado['fecha'], 1, 0, 'L');                        
             $pdf->Cell(15, 4, $resultado['fechaVence'], 1, 0, 'L');                        
-            $pdf->Cell(40, 4, $resultado['nombreAsesor'], 1, 0, 'L');                        
+            $pdf->Cell(45, 4, $resultado['nombreAsesor'], 1, 0, 'L');                        
             $pdf->Cell(13, 4, $resultado['plazo'], 1, 0, 'R');
             $pdf->Cell(13, 4, $resultado['diasVencida'], 1, 0, 'R');
             $pdf->Cell(13, 4, $resultado['rango'], 1, 0, 'L');

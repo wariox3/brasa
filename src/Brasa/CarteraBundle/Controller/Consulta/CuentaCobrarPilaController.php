@@ -191,9 +191,9 @@ class CuentaCobrarPilaController extends Controller
         $i = 2;        
         $connection = $em->getConnection();
         $strSql = "SELECT  
-                            sql_car_cartera_edades.*
+                            sql_car_cartera_edades_pila.*
                     FROM
-                            sql_car_cartera_edades                       
+                            sql_car_cartera_edades_pila                       
                     WHERE 1 " . $strWhere;                    
         $statement = $connection->prepare($strSql);        
         $statement->execute();

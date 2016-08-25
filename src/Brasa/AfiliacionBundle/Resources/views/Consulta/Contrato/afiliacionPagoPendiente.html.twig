@@ -76,6 +76,7 @@
                 <th>IDENTIFICACION</th>
                 <th>NOMBRE</th>
                 <th>FECHA INGRESO</th>
+                <th>AFILIACION</th>
             </tr>
             	
             {% set fechaDesde = '' %}
@@ -86,6 +87,7 @@
                 <td>{{ arPagoPendientes.empleadoRel.numeroIdentificacion }}</td>
                 <td>{{ arPagoPendientes.empleadoRel.nombreCorto }}</td>
                 <td>{{ arPagoPendientes.fechaDesde | date('Y-m-d') }}</td>
+                <td style="text-align: right">{{ arPagoPendientes.clienteRel.afiliacion | number_format(0, '.', ',') }}</td>
             </tr>
 
             {% endfor %}

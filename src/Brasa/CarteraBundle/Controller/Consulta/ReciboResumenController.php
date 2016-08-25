@@ -25,7 +25,7 @@ class ReciboResumenController extends Controller
         if ($form->isValid()) {            
             if ($form->get('BtnFiltrarLista')->isClicked()) {
                 $this->filtrarLista($form);
-                $form = $this->formularioFiltroLista();
+                //$form = $this->formularioFiltroLista();
                 $this->lista();
             }
             if ($form->get('BtnImprimir')->isClicked()) {

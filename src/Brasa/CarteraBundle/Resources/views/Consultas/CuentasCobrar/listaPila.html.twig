@@ -25,51 +25,51 @@
                         <div class="row">
                           <div class="col-lg-2">
                             <div class="input-group">
-                              {{ form_widget(form.TxtNit, { 'attr': {'class': 'form-control'} }) }}                              
+                              {{ form_widget(form.TxtNit, { 'attr': {'class': 'form-control'} }) }}
                             </div>
                           </div>
                           <div class="col-lg-10">
-                            <div class="input-group">     
-                              {{ form_widget(form.TxtNombreCliente, { 'attr': {'class': 'form-control', 'readOnly': 'ReadOnly'} }) }}                              
-                              <span class="input-group-btn">                                        
+                            <div class="input-group">
+                              {{ form_widget(form.TxtNombreCliente, { 'attr': {'class': 'form-control', 'readOnly': 'ReadOnly'} }) }}
+                              <span class="input-group-btn">
                                 <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_cartera_buscar_cliente', { 'campoCodigo': 'form_TxtNit', 'campoNombre': 'form_TxtNombreCliente' }) }}', 'buscarCliente', 600, 900)">Buscar</a>
                               </span>
                             </div>
                           </div>
                         </div>
                     </div>
-                </div>                
-                    
-                <div class="form-group form-group-sm">  
+                </div>
+
+                <div class="form-group form-group-sm">
                     <label for="form_TxtNumero" class="col-sm-2 control-label">Numero:</label>
                     <div class="col-sm-4">
                         {{ form_widget(form.TxtNumero, { 'attr': {'class': 'form-control'} }) }}
                     </div>
                     <label for="form_cuentaCobrarTipoRel" class="col-sm-2 control-label">Tipo cuenta cobrar:</label>
-                    <div class="col-sm-4">                  
+                    <div class="col-sm-4">
                         {{ form_widget(form.cuentaCobrarTipoRel, { 'attr': {'class': 'form-control'} }) }}
-                    </div>                    
+                    </div>
                 </div>
-                <div class="form-group form-group-sm">  
+                <div class="form-group form-group-sm">
                     <label for="form_fechaDesde" class="col-sm-2 control-label">Desde:</label>
-                    <div class="col-sm-4">                  
+                    <div class="col-sm-4">
                         {{ form_widget(form.fechaDesde, {'attr': {'maxlength' : 10} }) }}
                     </div>
                     <label for="form_asesorRel" class="col-sm-2 control-label">Asesor:</label>
-                    <div class="col-sm-4">                  
+                    <div class="col-sm-4">
                         {{ form_widget(form.asesorRel, { 'attr': {'class': 'form-control'} }) }}
-                    </div>                      
-                </div>                     
-                <div class="form-group form-group-sm">  
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
                     <label for="form_fechaHasta" class="col-sm-2 control-label">Hasta:</label>
-                    <div class="col-sm-4">                  
+                    <div class="col-sm-4">
                         {{ form_widget(form.fechaHasta, {'attr': {'maxlength' : 10} }) }}
                     </div>
                     <label class="col-sm-2 control-label">Rango:</label>
-                    <div class="col-sm-4">                  
+                    <div class="col-sm-4">
                         {{ form_widget(form.rango, { 'attr': {'class': 'form-control'} }) }}
-                    </div>                     
-                </div>    
+                    </div>
+                </div>
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
@@ -87,7 +87,7 @@
                 <th>SOPORTE</th>
                 <th>NIT</th>
                 <th>CLIENTE</th>
-                <th>ASESOR</th>                                
+                <th>ASESOR</th>
                 <th>PLAZO</th>
                 <th>VALOR</th>
                 <th>ABONO</th>
@@ -107,7 +107,7 @@
                 <td>{{ arCuentasCobrar.soporte }}</td>
                 <td>{{ arCuentasCobrar.nitCliente  }}</td>
                 <td>{{ arCuentasCobrar.nombreCliente |default('')  }}</td>
-                <td>{{ arCuentasCobrar.nombreAsesor |default('')  }}</td>                
+                <td>{{ arCuentasCobrar.nombreAsesor |default('')  }}</td>
                 <td>{{ arCuentasCobrar.plazo }}</td>
                 <td style="text-align: right">{{ arCuentasCobrar.valorOriginal | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arCuentasCobrar.abono  }}</td>
@@ -115,11 +115,11 @@
                 <td>{{ arCuentasCobrar.tipoVencimiento }}</td>
                 <td>{{ arCuentasCobrar.diasVencida }}</td>
                 <td>{{ arCuentasCobrar.rango }}</td>
-                <td style="text-align: center"><a href="" target="_blanck"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                                        
+                <td style="text-align: center"><a href="{{ path('brs_afi_movimiento_factura_detalle', { 'codigoFactura': arCuentasCobrar.codigoFactura }) }}" target="_blanck"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
             </tr>
             {% endfor %}
         </table>
-        
+
         <!-- Botones Menu Items -->
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">

@@ -119,6 +119,11 @@ class CarAnticipo
      */    
     private $usuario;
     
+    /**     
+     * @ORM\Column(name="estado_impreso_anticipado", type="boolean")
+     */    
+    private $estadoImpresoAnticipado = false;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="CarCliente", inversedBy="anticiposClienteRel")
      * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
@@ -144,6 +149,7 @@ class CarAnticipo
     protected $anticiposDetallesAnticiposRel;
     
    
+    
     
     /**
      * Constructor
@@ -641,6 +647,30 @@ class CarAnticipo
     public function getUsuario()
     {
         return $this->usuario;
+    }
+
+    /**
+     * Set estadoImpresoAnticipado
+     *
+     * @param boolean $estadoImpresoAnticipado
+     *
+     * @return CarAnticipo
+     */
+    public function setEstadoImpresoAnticipado($estadoImpresoAnticipado)
+    {
+        $this->estadoImpresoAnticipado = $estadoImpresoAnticipado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoImpresoAnticipado
+     *
+     * @return boolean
+     */
+    public function getEstadoImpresoAnticipado()
+    {
+        return $this->estadoImpresoAnticipado;
     }
 
     /**

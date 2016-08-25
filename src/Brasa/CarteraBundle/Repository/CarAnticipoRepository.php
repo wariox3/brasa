@@ -84,10 +84,11 @@ class CarAnticipoRepository extends EntityRepository
    public function eliminar($arrSeleccionados) {
         $em = $this->getEntityManager();
         if(count($arrSeleccionados) > 0) {
-            foreach ($arrSeleccionados AS $codigo) {                
+            foreach ($arrSeleccionados AS $codigo) {
+                
                 if($em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->numeroRegistros($codigo) <= 0) {
                     $arAnticipo = $em->getRepository('BrasaCarteraBundle:CarAnticipo')->find($codigo);                    
-                    if($arAnticipo->getEstadoAutorizado() == 0) {
+                    if($arAnticipo->getEstadoAutorizado() == 0 && $arAnticipo->getEstadoImpresoAnticipado() == 0) {
                         $em->remove($arAnticipo);                    
                     }                    
                 }               

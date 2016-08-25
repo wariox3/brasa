@@ -77,7 +77,7 @@ class AnticipoResumen extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(14);
-        $header = array('TIPO', 'CUENTA', 'NUM', 'TOTAL');
+        $header = array('CUENTA', 'NUMERO', 'TOTAL');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -85,7 +85,7 @@ class AnticipoResumen extends \FPDF_FPDF {
         $this->SetFont('', 'B', 7.5);
 
         //creamos la cabecera de la tabla.
-        $w = array(30, 40, 15, 30);
+        $w = array(60, 25, 30);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -119,8 +119,8 @@ class AnticipoResumen extends \FPDF_FPDF {
         $total = 0;
         foreach ($arAnticiposResumen as $registro) {
             //$pdf->Cell(30, 4, $registro['tipo'], 1, 0, 'L');
-            $pdf->Cell(40, 4, $registro['cuenta'], 1, 0, 'L');
-            $pdf->Cell(15, 4, $registro['numeroAnticipos'], 1, 0, 'L');
+            $pdf->Cell(60, 4, $registro['cuenta'], 1, 0, 'L');
+            $pdf->Cell(25, 4, $registro['numeroAnticipos'], 1, 0, 'L');
             $pdf->Cell(30, 4, number_format($registro['vrTotal'], 2, '.', ','), 1, 0, 'R');
             $total += $registro['vrTotal'];
             $pdf->Ln();

@@ -25,12 +25,12 @@ class ReciboController extends Controller
         if ($form->isValid()) {            
             if ($form->get('BtnFiltrarLista')->isClicked()) {
                 $this->filtrarLista($form);
-                $form = $this->formularioFiltroLista();
+                //$form = $this->formularioFiltroLista();
                 $this->lista();
             }
             if ($form->get('BtnExcelLista')->isClicked()) {
                 $this->filtrarLista($form);
-                $form = $this->formularioFiltroLista();
+                //$form = $this->formularioFiltroLista();
                 $this->lista();
                 $this->generarListaExcel();
             }
@@ -55,12 +55,12 @@ class ReciboController extends Controller
         if ($form->isValid()) {            
             if ($form->get('BtnFiltrarDetalle')->isClicked()) {
                 $this->filtrarDetalle($form);
-                $form = $this->formularioFiltroDetalle();
+                //$form = $this->formularioFiltroDetalle();
                 $this->detalle();
             }
             if ($form->get('BtnExcelDetalle')->isClicked()) {
                 $this->filtrarDetalle($form);
-                $form = $this->formularioFiltroDetalle();
+                //$form = $this->formularioFiltroDetalle();
                 $this->detalle();
                 $this->generarDetalleExcel();
             }
