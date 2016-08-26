@@ -104,8 +104,7 @@ class ContabilizarPagoProvisionController extends Controller
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
                                 if($arCuenta) {
                                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    $arRegistro->setCentroCostoRel($arCentroCosto);
+                                    $arRegistro->setComprobanteRel($arComprobanteContable);                                    
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
                                     $arRegistro->setNumero($arPago->getNumero());
@@ -139,7 +138,6 @@ class ContabilizarPagoProvisionController extends Controller
                                 if($arCuenta) {
                                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
                                     $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    $arRegistro->setCentroCostoRel($arCentroCosto);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
                                     $arRegistro->setNumero($arPago->getNumero());
@@ -173,7 +171,6 @@ class ContabilizarPagoProvisionController extends Controller
                                 if($arCuenta) {
                                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
                                     $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    $arRegistro->setCentroCostoRel($arCentroCosto);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
                                     $arRegistro->setNumero($arPago->getNumero());
@@ -207,7 +204,6 @@ class ContabilizarPagoProvisionController extends Controller
                                 if($arCuenta) {
                                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
                                     $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    $arRegistro->setCentroCostoRel($arCentroCosto);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
                                     $arRegistro->setNumero($arPago->getNumero());
@@ -241,7 +237,6 @@ class ContabilizarPagoProvisionController extends Controller
                                 if($arCuenta) {
                                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
                                     $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    $arRegistro->setCentroCostoRel($arCentroCosto);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
                                     $arRegistro->setNumero($arPago->getNumero());
@@ -495,6 +490,7 @@ class ContabilizarPagoProvisionController extends Controller
                 ini_set("memory_limit", -1);            
                 $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();            
                 $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+                $salarioMinimo = $arConfiguracion->getVrSalario();
                 $porcentajeCaja = $arConfiguracion->getAportesPorcentajeCaja();
                 $porcentajeCesantias = $arConfiguracion->getPrestacionesPorcentajeCesantias();        
                 $porcentajeInteresesCesantias = $arConfiguracion->getPrestacionesPorcentajeInteresesCesantias();
@@ -526,9 +522,9 @@ class ContabilizarPagoProvisionController extends Controller
 
                     //Prestaciones
                     if($arContrato->getSalarioIntegral() == 0) {
-                        $cesantias = (($ingresoBasePrestacion + $auxilioTransporteCotizacion) * $porcentajeCesantias) / 100; // Porcentaje 8.33                
+                        $cesantias = ($ingresoBasePrestacion * $porcentajeCesantias) / 100; // Porcentaje 8.33                
                         $interesesCesantias = ($cesantias * $porcentajeInteresesCesantias) / 100; // Porcentaje 1 sobre las cesantias                        
-                        $primas = (($ingresoBasePrestacion + $auxilioTransporteCotizacion) * $porcentajePrimas) / 100; // 8.33                               
+                        $primas = ($ingresoBasePrestacion * $porcentajePrimas) / 100; // 8.33                               
                     } else {
                         $cesantias = 0;
                         $interesesCesantias = 0;
@@ -536,19 +532,32 @@ class ContabilizarPagoProvisionController extends Controller
                     }                    
                     $vacaciones = ($ingresoBaseVacacion * $porcentajeVacaciones) / 100; // 4.17                                                
                     $indemnizacion = ($ingresoBaseIndemnizacion * $porcentajeIndemnizacion) / 100; // 4.17                                                
-
+                    if($arPago->getNumero() == 8) {
+                        echo "hola";
+                    }
                     //Aportes
                     $ingresoBaseCotizacion = $arPago->getVrIngresoBaseCotizacion();                
                     $riesgos = ($ingresoBaseCotizacion * $porcentajeRiesgos)/100;        
                     $pension = ($ingresoBaseCotizacion * $porcentajePension) / 100; 
-                    $salud = ($ingresoBaseCotizacion * $porcentajeSalud) / 100;         
+                    $salud = 0;         
                     $caja = ($ingresoBaseCotizacion * $porcentajeCaja) / 100; //Porcentaje 4        
                     $sena = 0;
                     $icbf = 0;                                
-
+                    $salarioAporte = 0;
+                    if($arContrato->getSalarioIntegral() == 1) {
+                        $salarioAporte = ($ingresoBasePrestacion * 70) / 100;
+                    } else {
+                        $salarioAporte = $ingresoBasePrestacion;
+                    }
+                    
+                    if($salarioAporte > $salarioMinimo * 10) {
+                        $salud = ($ingresoBaseCotizacion * $porcentajeSalud) / 100;
+                        $sena = ($ingresoBaseCotizacion * 2) / 100;
+                        $icbf = ($ingresoBaseCotizacion * 3) / 100;
+                    }
                     //12 aprendiz y 19 practicante        
                     if($arContrato->getCodigoTipoCotizanteFk() == '19' || $arContrato->getCodigoTipoCotizanteFk() == '12') {            
-                        $salud = ($ingresoBasePrestacion * $porcentajeSalud) / 100;
+                        $salud = ($ingresoBaseCotizacion * $porcentajeSalud) / 100;
                         $pension = 0;            
                         $caja = 0;
                         $cesantias = 0;
@@ -627,10 +636,10 @@ class ContabilizarPagoProvisionController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(9); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'U'; $col++) {
+        for($col = 'A'; $col !== 'X'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
         }      
-        for($col = 'I'; $col !== 'U'; $col++) {            
+        for($col = 'I'; $col !== 'X'; $col++) {            
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }         
         $objPHPExcel->setActiveSheetIndex(0)
@@ -643,17 +652,19 @@ class ContabilizarPagoProvisionController extends Controller
                     ->setCellValue('G1', 'DESDE')
                     ->setCellValue('H1', 'HASTA')
                     ->setCellValue('I1', 'SALARIO')
-                    ->setCellValue('J1', 'CESANTIAS')
-                    ->setCellValue('K1', 'INTERESES')
-                    ->setCellValue('L1', 'PRIMAS')
-                    ->setCellValue('M1', 'VACACIONES')
-                    ->setCellValue('N1', 'INDEMNIZACIONES')
-                    ->setCellValue('O1', 'PENSION')
-                    ->setCellValue('P1', 'SALUD')
-                    ->setCellValue('Q1', 'CAJA')
-                    ->setCellValue('R1', 'RIESGOS')
-                    ->setCellValue('S1', 'SENA')
-                    ->setCellValue('T1', 'ICBF');
+                    ->setCellValue('J1', 'IBP')
+                    ->setCellValue('K1', 'IBC')
+                    ->setCellValue('L1', 'CESANTIAS')
+                    ->setCellValue('M1', 'INTERESES')
+                    ->setCellValue('N1', 'PRIMAS')
+                    ->setCellValue('O1', 'VACACIONES')
+                    ->setCellValue('P1', 'INDEMNIZACIONES')
+                    ->setCellValue('Q1', 'PENSION')
+                    ->setCellValue('R1', 'SALUD')
+                    ->setCellValue('S1', 'CAJA')
+                    ->setCellValue('T1', 'RIESGOS')
+                    ->setCellValue('U1', 'SENA')
+                    ->setCellValue('V1', 'ICBF');
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
@@ -670,17 +681,19 @@ class ContabilizarPagoProvisionController extends Controller
                     ->setCellValue('G' . $i, $arPago->getFechaDesdePago()->format('Y-m-d'))
                     ->setCellValue('H' . $i, $arPago->getFechaHastaPago()->format('Y-m-d'))
                     ->setCellValue('I' . $i, $arPago->getVrSalarioEmpleado())
-                    ->setCellValue('J' . $i, $arPago->getVrCesantias())
-                    ->setCellValue('K' . $i, $arPago->getVrInteresesCesantias())
-                    ->setCellValue('L' . $i, $arPago->getVrPrimas())
-                    ->setCellValue('M' . $i, $arPago->getVrVacaciones())
-                    ->setCellValue('N' . $i, $arPago->getVrIndemnizacion())
-                    ->setCellValue('O' . $i, $arPago->getVrPensionEmpleador())
-                    ->setCellValue('P' . $i, $arPago->getVrEpsEmpleador())
-                    ->setCellValue('Q' . $i, $arPago->getVrCaja())
-                    ->setCellValue('R' . $i, $arPago->getVrArp())
-                    ->setCellValue('S' . $i, $arPago->getVrSena())
-                    ->setCellValue('T' . $i, $arPago->getVrIcbf());
+                    ->setCellValue('J' . $i, $arPago->getVrIngresoBasePrestacion())
+                    ->setCellValue('K' . $i, $arPago->getVrIngresoBaseCotizacion())
+                    ->setCellValue('L' . $i, $arPago->getVrCesantias())
+                    ->setCellValue('M' . $i, $arPago->getVrInteresesCesantias())
+                    ->setCellValue('N' . $i, $arPago->getVrPrimas())
+                    ->setCellValue('O' . $i, $arPago->getVrVacaciones())
+                    ->setCellValue('P' . $i, $arPago->getVrIndemnizacion())
+                    ->setCellValue('Q' . $i, $arPago->getVrPensionEmpleador())
+                    ->setCellValue('R' . $i, $arPago->getVrEpsEmpleador())
+                    ->setCellValue('S' . $i, $arPago->getVrCaja())
+                    ->setCellValue('T' . $i, $arPago->getVrArp())
+                    ->setCellValue('U' . $i, $arPago->getVrSena())
+                    ->setCellValue('V' . $i, $arPago->getVrIcbf());
             $i++;
         }
 
