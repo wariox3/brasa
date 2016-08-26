@@ -367,6 +367,11 @@ class RhuContrato
      */
     protected $pagosContratoRel;      
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuProvision", mappedBy="contratoRel")
+     */
+    protected $provisionesContratoRel;    
+    
      /**
      * @ORM\OneToMany(targetEntity="RhuSsoPeriodoEmpleado", mappedBy="contratoRel")
      */
@@ -2600,5 +2605,39 @@ class RhuContrato
     public function getDisciplinariosContratoRel()
     {
         return $this->disciplinariosContratoRel;
+    }
+
+    /**
+     * Add provisionesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addProvisionesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesContratoRel)
+    {
+        $this->provisionesContratoRel[] = $provisionesContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove provisionesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesContratoRel
+     */
+    public function removeProvisionesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesContratoRel)
+    {
+        $this->provisionesContratoRel->removeElement($provisionesContratoRel);
+    }
+
+    /**
+     * Get provisionesContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProvisionesContratoRel()
+    {
+        return $this->provisionesContratoRel;
     }
 }

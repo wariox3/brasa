@@ -252,21 +252,19 @@ class PagosController extends Controller
                     ->setCellValue('C1', 'TIPO')
                     ->setCellValue('D1', 'IDENTIFICACIÓN')
                     ->setCellValue('E1', 'EMPLEADO')
-                    ->setCellValue('F1', 'CENTRO COSTO')
+                    ->setCellValue('F1', 'C.COSTO')
                     ->setCellValue('G1', 'PERIODO PAGO')
-                    ->setCellValue('H1', 'FECHA PAGO DESDE')
-                    ->setCellValue('I1', 'FECHA PAGO HASTA')
+                    ->setCellValue('H1', 'DESDE')
+                    ->setCellValue('I1', 'HASTA')
                     ->setCellValue('J1', 'DÍAS PERIODO')
                     ->setCellValue('K1', 'VR SALARIO EMPLEADO')
                     ->setCellValue('L1', 'VR SALARIO PERIODO')
                     ->setCellValue('M1', 'VR AUX TRANSPORTE')
-                    ->setCellValue('N1', 'VR EPS')
-                    ->setCellValue('O1', 'VR PENSIÓN')
-                    ->setCellValue('P1', 'VR DEDUCCIONES')    
-                    ->setCellValue('Q1', 'VR DEVENGADO')
-                    ->setCellValue('R1', 'VR INGRESO BASE COTIZACIÓN')
-                    ->setCellValue('S1', 'VR INGRESO BASE PRESTACIONAL')
-                    ->setCellValue('T1', 'VE NETO PAGAR');
+                    ->setCellValue('N1', 'VR DEDUCCIONES')    
+                    ->setCellValue('O1', 'VR DEVENGADO')
+                    ->setCellValue('P1', 'VR INGRESO BASE COTIZACIÓN')
+                    ->setCellValue('Q1', 'VR INGRESO BASE PRESTACIONAL')
+                    ->setCellValue('R1', 'VE NETO PAGAR');
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
@@ -287,13 +285,11 @@ class PagosController extends Controller
                     ->setCellValue('K' . $i, $arPago->getVrSalarioEmpleado())
                     ->setCellValue('L' . $i, $arPago->getVrSalarioPeriodo())
                     ->setCellValue('M' . $i, $arPago->getVrAuxilioTransporte())
-                    ->setCellValue('N' . $i, $arPago->getVrEps())
-                    ->setCellValue('O' . $i, $arPago->getVrPension())
-                    ->setCellValue('P' . $i, $arPago->getVrDeducciones())
-                    ->setCellValue('Q' . $i, $arPago->getVrDevengado())
-                    ->setCellValue('R' . $i, $arPago->getVrIngresoBaseCotizacion())
-                    ->setCellValue('S' . $i, $arPago->getVrIngresoBasePrestacion())
-                    ->setCellValue('T' . $i, $arPago->getVrNeto());
+                    ->setCellValue('N' . $i, $arPago->getVrDeducciones())
+                    ->setCellValue('O' . $i, $arPago->getVrDevengado())
+                    ->setCellValue('P' . $i, $arPago->getVrIngresoBaseCotizacion())
+                    ->setCellValue('Q' . $i, $arPago->getVrIngresoBasePrestacion())
+                    ->setCellValue('R' . $i, $arPago->getVrNeto());
             $i++;
         }
 

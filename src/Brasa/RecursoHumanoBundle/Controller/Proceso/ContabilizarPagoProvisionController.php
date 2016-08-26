@@ -10,7 +10,7 @@ class ContabilizarPagoProvisionController extends Controller
     var $strDqlLista = "";
     
     /**
-     * @Route("/rhu/proceso/contabilizar/pago/provision", name="brs_rhu_proceso_contabilizar_pago_provision")
+     * @Route("/rhu/proceso/contabilizar/provision", name="brs_rhu_proceso_contabilizar_provision")
      */     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -20,13 +20,7 @@ class ContabilizarPagoProvisionController extends Controller
         $form = $this->formularioLista();
         $form->handleRequest($request);
         $this->listar();
-        if($form->isValid()) {            
-            if($form->get('BtnExcel')->isClicked()) {
-                set_time_limit(0);
-                ini_set("memory_limit", -1);                 
-                $this->generarExcel();
-            }            
-            
+        if($form->isValid()) {                                   
             if ($form->get('BtnContabilizar')->isClicked()) { 
                 set_time_limit(0);
                 ini_set("memory_limit", -1);                
@@ -62,29 +56,29 @@ class ContabilizarPagoProvisionController extends Controller
                     $arProvisionSena2 = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionProvision')->find(22);                                                            
                     $errorDatos = false;
                     foreach ($arrSeleccionados AS $codigo) {                          
-                        $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-                        $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigo);
-                        $tipoEmpleado = $arPago->getEmpleadoRel()->getEmpleadoTipoRel()->getTipo();
-                        if($arPago->getEstadoContabilizadoProvision() == 0) {
-                            $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arPago->getEmpleadoRel()->getNumeroIdentificacion()));
+                        $arProvision = new \Brasa\RecursoHumanoBundle\Entity\RhuProvision();
+                        $arProvision = $em->getRepository('BrasaRecursoHumanoBundle:RhuProvision')->find($codigo);
+                        $tipoEmpleado = $arProvision->getEmpleadoRel()->getEmpleadoTipoRel()->getTipo();
+                        if($arProvision->getEstadoContabilizado() == 0) {
+                            $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arProvision->getEmpleadoRel()->getNumeroIdentificacion()));
                             if(count($arTercero) <= 0) {
                                 $arTercero = new \Brasa\ContabilidadBundle\Entity\CtbTercero();
-                                $arTercero->setCiudadRel($arPago->getEmpleadoRel()->getCiudadRel());
-                                $arTercero->setTipoIdentificacionRel($arPago->getEmpleadoRel()->getTipoIdentificacionRel());
-                                $arTercero->setNumeroIdentificacion($arPago->getEmpleadoRel()->getNumeroIdentificacion());
-                                $arTercero->setNombreCorto($arPago->getEmpleadoRel()->getNombreCorto());
-                                $arTercero->setNombre1($arPago->getEmpleadoRel()->getNombre1());
-                                $arTercero->setNombre2($arPago->getEmpleadoRel()->getNombre2());
-                                $arTercero->setApellido1($arPago->getEmpleadoRel()->getApellido1());
-                                $arTercero->setApellido2($arPago->getEmpleadoRel()->getApellido2());
-                                $arTercero->setDireccion($arPago->getEmpleadoRel()->getDireccion());
-                                $arTercero->setTelefono($arPago->getEmpleadoRel()->getTelefono());
-                                $arTercero->setCelular($arPago->getEmpleadoRel()->getCelular());
-                                $arTercero->setEmail($arPago->getEmpleadoRel()->getCorreo());
+                                $arTercero->setCiudadRel($arProvision->getEmpleadoRel()->getCiudadRel());
+                                $arTercero->setTipoIdentificacionRel($arProvision->getEmpleadoRel()->getTipoIdentificacionRel());
+                                $arTercero->setNumeroIdentificacion($arProvision->getEmpleadoRel()->getNumeroIdentificacion());
+                                $arTercero->setNombreCorto($arProvision->getEmpleadoRel()->getNombreCorto());
+                                $arTercero->setNombre1($arProvision->getEmpleadoRel()->getNombre1());
+                                $arTercero->setNombre2($arProvision->getEmpleadoRel()->getNombre2());
+                                $arTercero->setApellido1($arProvision->getEmpleadoRel()->getApellido1());
+                                $arTercero->setApellido2($arProvision->getEmpleadoRel()->getApellido2());
+                                $arTercero->setDireccion($arProvision->getEmpleadoRel()->getDireccion());
+                                $arTercero->setTelefono($arProvision->getEmpleadoRel()->getTelefono());
+                                $arTercero->setCelular($arProvision->getEmpleadoRel()->getCelular());
+                                $arTercero->setEmail($arProvision->getEmpleadoRel()->getCorreo());
                                 $em->persist($arTercero);                                 
                             }  
                             //Cesantias
-                            if($arPago->getVrCesantias() > 0) {   
+                            if($arProvision->getVrCesantias() > 0) {   
                                 $cuenta = $this->cuenta($arProvisionCesantias, $tipoEmpleado);                                
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
                                 if($arCuenta) {
@@ -93,10 +87,10 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setCentroCostoRel($arCentroCosto);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setDebito($arPago->getVrCesantias());                            
+                                    $arRegistro->setNumero(0);
+                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                    $arRegistro->setDebito($arProvision->getVrCesantias());                            
                                     $arRegistro->setDescripcionContable('PROVISION CESANTIAS');
                                     $em->persist($arRegistro);
                                 }  
@@ -107,17 +101,17 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setComprobanteRel($arComprobanteContable);                                    
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setCredito($arPago->getVrCesantias());                            
+                                    $arRegistro->setNumero(0);
+                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                    $arRegistro->setCredito($arProvision->getVrCesantias());                            
                                     $arRegistro->setDescripcionContable('PROVISION CESANTIAS');
                                     $em->persist($arRegistro);
                                 }                                
                             }        
                             
                             //Cesantias Intereses
-                            if($arPago->getVrInteresesCesantias() > 0) {   
+                            if($arProvision->getVrInteresesCesantias() > 0) {   
                                 $cuenta = $this->cuenta($arProvisionInteresesCesantias, $tipoEmpleado);                                
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
                                 if($arCuenta) {
@@ -126,10 +120,10 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setCentroCostoRel($arCentroCosto);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setDebito($arPago->getVrInteresesCesantias());                            
+                                    $arRegistro->setNumero(0);
+                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                    $arRegistro->setDebito($arProvision->getVrInteresesCesantias());                            
                                     $arRegistro->setDescripcionContable('PROVISION INTERESES CESANTIAS');
                                     $em->persist($arRegistro);
                                 }  
@@ -140,17 +134,17 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setComprobanteRel($arComprobanteContable);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setCredito($arPago->getVrInteresesCesantias());                            
+                                    $arRegistro->setNumero(0);
+                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                    $arRegistro->setCredito($arProvision->getVrInteresesCesantias());                            
                                     $arRegistro->setDescripcionContable('PROVISION INTERESES CESANTIAS');
                                     $em->persist($arRegistro);
                                 }                                
                             }         
                             
                             //Prima
-                            if($arPago->getVrPrimas() > 0) {   
+                            if($arProvision->getVrPrimas() > 0) {   
                                 $cuenta = $this->cuenta($arProvisionPrima, $tipoEmpleado);                                
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
                                 if($arCuenta) {
@@ -159,10 +153,10 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setCentroCostoRel($arCentroCosto);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setDebito($arPago->getVrPrimas());                            
+                                    $arRegistro->setNumero(0);
+                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                    $arRegistro->setDebito($arProvision->getVrPrimas());                            
                                     $arRegistro->setDescripcionContable('PROVISION PRIMAS');
                                     $em->persist($arRegistro);
                                 }  
@@ -173,17 +167,17 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setComprobanteRel($arComprobanteContable);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setCredito($arPago->getVrPrimas());                            
+                                    $arRegistro->setNumero(0);
+                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                    $arRegistro->setCredito($arProvision->getVrPrimas());                            
                                     $arRegistro->setDescripcionContable('PROVISION PRIMAS');
                                     $em->persist($arRegistro);
                                 }                                
                             } 
 
                             //Vacaciones
-                            if($arPago->getVrVacaciones() > 0) {   
+                            if($arProvision->getVrVacaciones() > 0) {   
                                 $cuenta = $this->cuenta($arProvisionVacaciones, $tipoEmpleado);                                
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
                                 if($arCuenta) {
@@ -192,10 +186,10 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setCentroCostoRel($arCentroCosto);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setDebito($arPago->getVrVacaciones());                            
+                                    $arRegistro->setNumero(0);
+                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                    $arRegistro->setDebito($arProvision->getVrVacaciones());                            
                                     $arRegistro->setDescripcionContable('PROVISION VACACIONES');
                                     $em->persist($arRegistro);
                                 }  
@@ -206,17 +200,17 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setComprobanteRel($arComprobanteContable);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setCredito($arPago->getVrVacaciones());                            
+                                    $arRegistro->setNumero(0);
+                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                    $arRegistro->setCredito($arProvision->getVrVacaciones());                            
                                     $arRegistro->setDescripcionContable('PROVISION VACACIONES');
                                     $em->persist($arRegistro);
                                 }                                
                             }    
                             
                             //Indemnizaciones
-                            if($arPago->getVrIndemnizacion() > 0) {   
+                            if($arProvision->getVrIndemnizacion() > 0) {   
                                 $cuenta = $this->cuenta($arProvisionIndemnizaciones, $tipoEmpleado);                                
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
                                 if($arCuenta) {
@@ -225,10 +219,10 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setCentroCostoRel($arCentroCosto);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setDebito($arPago->getVrIndemnizacion());                            
+                                    $arRegistro->setNumero(0);
+                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                    $arRegistro->setDebito($arProvision->getVrIndemnizacion());                            
                                     $arRegistro->setDescripcionContable('PROVISION INDEMNIZACION');
                                     $em->persist($arRegistro);
                                 }  
@@ -239,18 +233,18 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setComprobanteRel($arComprobanteContable);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setCredito($arPago->getVrIndemnizacion());                            
+                                    $arRegistro->setNumero(0);
+                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                    $arRegistro->setCredito($arProvision->getVrIndemnizacion());                            
                                     $arRegistro->setDescripcionContable('PROVISION INDEMNIZACION');
                                     $em->persist($arRegistro);
                                 }                                
                             } 
                             
                             //Pension
-                            if($arPago->getVrPensionEmpleador() > 0) {   
-                                $arTerceroPension = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arPago->getContratoRel()->getEntidadPensionRel()->getNit()));
+                            if($arProvision->getVrPension() > 0) {   
+                                $arTerceroPension = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arProvision->getContratoRel()->getEntidadPensionRel()->getNit()));
                                 if($arTerceroPension) {
                                     $cuenta = $this->cuenta($arProvisionPension, $tipoEmpleado);                                
                                     $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
@@ -259,10 +253,10 @@ class ContabilizarPagoProvisionController extends Controller
                                         $arRegistro->setComprobanteRel($arComprobanteContable);                                        
                                         $arRegistro->setCuentaRel($arCuenta);
                                         $arRegistro->setTerceroRel($arTerceroPension);
-                                        $arRegistro->setNumero($arPago->getNumero());
-                                        $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                        $arRegistro->setFecha($arPago->getFechaHasta());
-                                        $arRegistro->setDebito($arPago->getVrPensionEmpleador());                            
+                                        $arRegistro->setNumero(0);
+                                        $arRegistro->setNumeroReferencia(0);
+                                        $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                        $arRegistro->setDebito($arProvision->getVrPension());                            
                                         $arRegistro->setDescripcionContable('PROVISION PENSION');
                                         $em->persist($arRegistro);
                                     }  
@@ -273,23 +267,23 @@ class ContabilizarPagoProvisionController extends Controller
                                         $arRegistro->setComprobanteRel($arComprobanteContable);                                        
                                         $arRegistro->setCuentaRel($arCuenta);
                                         $arRegistro->setTerceroRel($arTerceroPension);
-                                        $arRegistro->setNumero($arPago->getNumero());
-                                        $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                        $arRegistro->setFecha($arPago->getFechaHasta());
-                                        $arRegistro->setCredito($arPago->getVrPensionEmpleador());                            
+                                        $arRegistro->setNumero(0);
+                                        $arRegistro->setNumeroReferencia(0);
+                                        $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                        $arRegistro->setCredito($arProvision->getVrPension());                            
                                         $arRegistro->setDescripcionContable('PROVISION PENSION');
                                         $em->persist($arRegistro);
                                     }                                 
                                 } else {
                                     $errorDatos = true;
-                                    $objMensaje->Mensaje("error", "Pago numero: " . $arPago->getNumero() . ", en terceros de contabilidad no existe la entidad de pension " . $arPago->getContratoRel()->getEntidadPensionRel()->getNombre() . " Nit: " . $arPago->getContratoRel()->getEntidadPensionRel()->getNit(), $this);
+                                    $objMensaje->Mensaje("error", "El empleado (" . $arProvision->getEmpleadoRel()->getNombreCorto() . ") con identificacion: " . $arProvision->getEmpleadoRel()->getNumeroIdentificacion() . ", en terceros de contabilidad no existe la entidad de pension " . $arProvision->getContratoRel()->getEntidadPensionRel()->getNombre() . " Nit: " . $arProvision->getContratoRel()->getEntidadPensionRel()->getNit(), $this);
                                     break 1;
                                 }                                                                 
                             }                             
                             
                             //Salud
-                            if($arPago->getVrEpsEmpleador() > 0) {   
-                                $arTerceroSalud = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arPago->getContratoRel()->getEntidadSaludRel()->getNit()));
+                            if($arProvision->getVrSalud() > 0) {   
+                                $arTerceroSalud = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arProvision->getContratoRel()->getEntidadSaludRel()->getNit()));
                                 if($arTerceroSalud) {
                                     $cuenta = $this->cuenta($arProvisionSalud, $tipoEmpleado);                                
                                     $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
@@ -298,10 +292,10 @@ class ContabilizarPagoProvisionController extends Controller
                                         $arRegistro->setComprobanteRel($arComprobanteContable);                                        
                                         $arRegistro->setCuentaRel($arCuenta);
                                         $arRegistro->setTerceroRel($arTerceroSalud);
-                                        $arRegistro->setNumero($arPago->getNumero());
-                                        $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                        $arRegistro->setFecha($arPago->getFechaHasta());
-                                        $arRegistro->setDebito($arPago->getVrEpsEmpleador());                            
+                                        $arRegistro->setNumero(0);
+                                        $arRegistro->setNumeroReferencia(0);
+                                        $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                        $arRegistro->setDebito($arProvision->getVrSalud());                            
                                         $arRegistro->setDescripcionContable('PROVISION SALUD');
                                         $em->persist($arRegistro);
                                     }  
@@ -312,22 +306,22 @@ class ContabilizarPagoProvisionController extends Controller
                                         $arRegistro->setComprobanteRel($arComprobanteContable);                                        
                                         $arRegistro->setCuentaRel($arCuenta);
                                         $arRegistro->setTerceroRel($arTerceroSalud);
-                                        $arRegistro->setNumero($arPago->getNumero());
-                                        $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                        $arRegistro->setFecha($arPago->getFechaHasta());
-                                        $arRegistro->setCredito($arPago->getVrEpsEmpleador());                            
+                                        $arRegistro->setNumero(0);
+                                        $arRegistro->setNumeroReferencia(0);
+                                        $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                        $arRegistro->setCredito($arProvision->getVrSalud());                            
                                         $arRegistro->setDescripcionContable('PROVISION SALUD');
                                         $em->persist($arRegistro);
                                     }                                     
                                 }  else {
                                     $errorDatos = true;
-                                    $objMensaje->Mensaje("error", "Pago numero: " . $arPago->getNumero() . ", en terceros de contabilidad no existe la entidad de salud " . $arPago->getContratoRel()->getEntidadSaludRel()->getNombre() . " Nit: " . $arPago->getContratoRel()->getEntidadSaludRel()->getNit(), $this);
+                                    $objMensaje->Mensaje("error", "El empleado (" . $arProvision->getEmpleadoRel()->getNombreCorto() . ") con identificacion: " . $arProvision->getEmpleadoRel()->getNumeroIdentificacion() . ", en terceros de contabilidad no existe la entidad de salud " . $arProvision->getContratoRel()->getEntidadSaludRel()->getNombre() . " Nit: " . $arProvision->getContratoRel()->getEntidadSaludRel()->getNit(), $this);
                                     break 1;
                                 }                                                               
                             }                             
                             
                             //Riesgos
-                            if($arPago->getVrArp() > 0) {  
+                            if($arProvision->getVrRiesgos() > 0) {  
                                 $arEntidadRiesgos = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
                                 $arEntidadRiesgos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($arConfiguracion->getCodigoEntidadRiesgoFk());
                                 $arTerceroRiesgos = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arEntidadRiesgos->getNit()));
@@ -339,10 +333,10 @@ class ContabilizarPagoProvisionController extends Controller
                                         $arRegistro->setComprobanteRel($arComprobanteContable);                                        
                                         $arRegistro->setCuentaRel($arCuenta);
                                         $arRegistro->setTerceroRel($arTerceroRiesgos);
-                                        $arRegistro->setNumero($arPago->getNumero());
-                                        $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                        $arRegistro->setFecha($arPago->getFechaHasta());
-                                        $arRegistro->setDebito($arPago->getVrArp());                            
+                                        $arRegistro->setNumero(0);
+                                        $arRegistro->setNumeroReferencia(0);
+                                        $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                        $arRegistro->setDebito($arProvision->getVrRiesgos());                            
                                         $arRegistro->setDescripcionContable('PROVISION RIESGOS');
                                         $em->persist($arRegistro);
                                     }  
@@ -353,23 +347,23 @@ class ContabilizarPagoProvisionController extends Controller
                                         $arRegistro->setComprobanteRel($arComprobanteContable);                                        
                                         $arRegistro->setCuentaRel($arCuenta);
                                         $arRegistro->setTerceroRel($arTerceroRiesgos);
-                                        $arRegistro->setNumero($arPago->getNumero());
-                                        $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                        $arRegistro->setFecha($arPago->getFechaHasta());
-                                        $arRegistro->setCredito($arPago->getVrArp());                            
+                                        $arRegistro->setNumero(0);
+                                        $arRegistro->setNumeroReferencia(0);
+                                        $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                        $arRegistro->setCredito($arProvision->getVrRiesgos());                            
                                         $arRegistro->setDescripcionContable('PROVISION RIESGOS');
                                         $em->persist($arRegistro);
                                     }                                     
                                 } else {
                                     $errorDatos = true;
-                                    $objMensaje->Mensaje("error", "Pago numero: " . $arPago->getNumero() . ", en terceros de contabilidad no existe la entidad de riesgos " . $arEntidadRiesgos->getNombre() . " Nit: " . $arEntidadRiesgos->getNit(), $this);
+                                    $objMensaje->Mensaje("error", "El empleado (" . $arProvision->getEmpleadoRel()->getNombreCorto() . ") con identificacion: " . $arProvision->getEmpleadoRel()->getNumeroIdentificacion() . ", en terceros de contabilidad no existe la entidad de riesgos " . $arEntidadRiesgos->getNombre() . " Nit: " . $arEntidadRiesgos->getNit(), $this);
                                     break 1;
                                 }                                              
                             }                             
                             
                             //Caja
-                            if($arPago->getVrCaja() > 0) {
-                                $arTerceroCaja = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arPago->getContratoRel()->getEntidadCajaRel()->getNit()));
+                            if($arProvision->getVrCaja() > 0) {
+                                $arTerceroCaja = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arProvision->getContratoRel()->getEntidadCajaRel()->getNit()));
                                 if($arTerceroCaja) {
                                     $cuenta = $this->cuenta($arProvisionCaja, $tipoEmpleado);                                
                                     $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
@@ -378,10 +372,10 @@ class ContabilizarPagoProvisionController extends Controller
                                         $arRegistro->setComprobanteRel($arComprobanteContable);                                        
                                         $arRegistro->setCuentaRel($arCuenta);
                                         $arRegistro->setTerceroRel($arTerceroCaja);
-                                        $arRegistro->setNumero($arPago->getNumero());
-                                        $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                        $arRegistro->setFecha($arPago->getFechaHasta());
-                                        $arRegistro->setDebito($arPago->getVrCaja());                            
+                                        $arRegistro->setNumero(0);
+                                        $arRegistro->setNumeroReferencia(0);
+                                        $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                        $arRegistro->setDebito($arProvision->getVrCaja());                            
                                         $arRegistro->setDescripcionContable('PROVISION CAJA');
                                         $em->persist($arRegistro);
                                     }  
@@ -392,22 +386,22 @@ class ContabilizarPagoProvisionController extends Controller
                                         $arRegistro->setComprobanteRel($arComprobanteContable);                                        
                                         $arRegistro->setCuentaRel($arCuenta);
                                         $arRegistro->setTerceroRel($arTerceroCaja);
-                                        $arRegistro->setNumero($arPago->getNumero());
-                                        $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                        $arRegistro->setFecha($arPago->getFechaHasta());
-                                        $arRegistro->setCredito($arPago->getVrCaja());                            
+                                        $arRegistro->setNumero(0);
+                                        $arRegistro->setNumeroReferencia(0);
+                                        $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                        $arRegistro->setCredito($arProvision->getVrCaja());                            
                                         $arRegistro->setDescripcionContable('PROVISION CAJA');
                                         $em->persist($arRegistro);
                                     }                                     
                                 }  else {
                                     $errorDatos = true;
-                                    $objMensaje->Mensaje("error", "Pago numero: " . $arPago->getNumero() . ", en terceros de contabilidad no existe la entidad de caja " . $arPago->getContratoRel()->getEntidadCajaRel()->getNombre() . " Nit: " . $arPago->getContratoRel()->getEntidadCajaRel()->getNit(), $this);
+                                    $objMensaje->Mensaje("error", "El empleado (" . $arProvision->getEmpleadoRel()->getNombreCorto() . ") con identificacion: " . $arProvision->getEmpleadoRel()->getNumeroIdentificacion() . ", en terceros de contabilidad no existe la entidad de caja " . $arProvision->getContratoRel()->getEntidadCajaRel()->getNombre() . " Nit: " . $arProvision->getContratoRel()->getEntidadCajaRel()->getNit(), $this);
                                     break 1;
                                 }                                                             
                             }                             
 
                             //Sena
-                            if($arPago->getVrSena() > 0) {   
+                            if($arProvision->getVrSena() > 0) {   
                                 $cuenta = $this->cuenta($arProvisionSena, $tipoEmpleado);                                
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
                                 if($arCuenta) {
@@ -415,10 +409,10 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setComprobanteRel($arComprobanteContable);                                    
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setDebito($arPago->getVrSena());                            
+                                    $arRegistro->setNumero(0);
+                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                    $arRegistro->setDebito($arProvision->getVrSena());                            
                                     $arRegistro->setDescripcionContable('PROVISION SENA');
                                     $em->persist($arRegistro);
                                 }  
@@ -429,17 +423,17 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setComprobanteRel($arComprobanteContable);                                    
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setCredito($arPago->getVrSena());                            
+                                    $arRegistro->setNumero(0);
+                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                    $arRegistro->setCredito($arProvision->getVrSena());                            
                                     $arRegistro->setDescripcionContable('PROVISION SENA');
                                     $em->persist($arRegistro);
                                 }                                
                             }                             
                             
                             //Icbf
-                            if($arPago->getVrIcbf() > 0) {   
+                            if($arProvision->getVrIcbf() > 0) {   
                                 $cuenta = $this->cuenta($arProvisionIcbf, $tipoEmpleado);                                
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
                                 if($arCuenta) {
@@ -447,10 +441,10 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setComprobanteRel($arComprobanteContable);                                    
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setDebito($arPago->getVrIcbf());                            
+                                    $arRegistro->setNumero(0);
+                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                    $arRegistro->setDebito($arProvision->getVrIcbf());                            
                                     $arRegistro->setDescripcionContable('PROVISION ICBF');
                                     $em->persist($arRegistro);
                                 }  
@@ -462,18 +456,18 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setCentroCostoRel($arCentroCosto);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPago->getNumero());
-                                    $arRegistro->setNumeroReferencia($arPago->getNumero());
-                                    $arRegistro->setFecha($arPago->getFechaHasta());
-                                    $arRegistro->setCredito($arPago->getVrIcbf());                            
+                                    $arRegistro->setNumero(0);
+                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                    $arRegistro->setCredito($arProvision->getVrIcbf());                            
                                     $arRegistro->setDescripcionContable('PROVISION ICBF');
                                     $em->persist($arRegistro);
                                 }                                
                             }                             
                             
-                            $arPago->setEstadoContabilizadoProvision(1);                                
+                            $arProvision->setEstadoContabilizado(1);                                
                             if($errorDatos == false) {
-                                $em->persist($arPago);                                                            
+                                $em->persist($arProvision);                                                            
                             }                            
                         }
                     }
@@ -482,130 +476,26 @@ class ContabilizarPagoProvisionController extends Controller
                     }
                     
                 }
-                return $this->redirect($this->generateUrl('brs_rhu_proceso_contabilizar_pago_provision'));
+                return $this->redirect($this->generateUrl('brs_rhu_proceso_contabilizar_provision'));
             }   
-            
-            if ($form->get('BtnActualizar')->isClicked()) { 
-                set_time_limit(0);
-                ini_set("memory_limit", -1);            
-                $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();            
-                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
-                $salarioMinimo = $arConfiguracion->getVrSalario();
-                $porcentajeCaja = $arConfiguracion->getAportesPorcentajeCaja();
-                $porcentajeCesantias = $arConfiguracion->getPrestacionesPorcentajeCesantias();        
-                $porcentajeInteresesCesantias = $arConfiguracion->getPrestacionesPorcentajeInteresesCesantias();
-                $porcentajeVacaciones = $arConfiguracion->getPrestacionesPorcentajeVacaciones();
-                $porcentajePrimas = $arConfiguracion->getPrestacionesPorcentajePrimas();            
-                $porcentajeIndemnizacion = $arConfiguracion->getPrestacionesPorcentajeIndemnizacion();            
-                $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();            
-                $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('estadoContabilizadoProvision' => 0));            
-                foreach ($arPagos as $arPago) {                    
-                    $ingresoBaseIndemnizacion = 0;
-                    $ingresoBaseVacacion = 0;
-                    $arPagosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
-                    $arPagosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $arPago->getCodigoPagoPk()));            
-                    foreach ($arPagosDetalles as $arPagoDetalle) {                        
-                        if($arPagoDetalle->getPagoConceptoRel()->getProvisionIndemnizacion() == 1) {
-                            $ingresoBaseIndemnizacion +=  $arPagoDetalle->getVrIngresoBasePrestacion();
-                        }
-                        if($arPagoDetalle->getPagoConceptoRel()->getProvisionVacacion() == 1) {
-                            $ingresoBaseVacacion +=  $arPagoDetalle->getVrIngresoBasePrestacion();
-                        }                        
-                    }
-                    $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-                    $arContrato = $arPago->getContratoRel();
-                    $auxilioTransporteCotizacion = $arPago->getVrAuxilioTransporteCotizacion();                                
-                    $ingresoBasePrestacion = $arPago->getVrIngresoBasePrestacion();                                    
-                    $porcentajeRiesgos = $arContrato->getClasificacionRiesgoRel()->getPorcentaje();
-                    $porcentajePension = $arContrato->getTipoPensionRel()->getPorcentajeEmpleador();                
-                    $porcentajeSalud = $arContrato->getTipoSaludRel()->getPorcentajeEmpleador();                        
-
-                    //Prestaciones
-                    if($arContrato->getSalarioIntegral() == 0) {
-                        $cesantias = ($ingresoBasePrestacion * $porcentajeCesantias) / 100; // Porcentaje 8.33                
-                        $interesesCesantias = ($cesantias * $porcentajeInteresesCesantias) / 100; // Porcentaje 1 sobre las cesantias                        
-                        $primas = ($ingresoBasePrestacion * $porcentajePrimas) / 100; // 8.33                               
-                    } else {
-                        $cesantias = 0;
-                        $interesesCesantias = 0;
-                        $primas = 0;
-                    }                    
-                    $vacaciones = ($ingresoBaseVacacion * $porcentajeVacaciones) / 100; // 4.17                                                
-                    $indemnizacion = ($ingresoBaseIndemnizacion * $porcentajeIndemnizacion) / 100; // 4.17                                                
-                    if($arPago->getNumero() == 8) {
-                        echo "hola";
-                    }
-                    //Aportes
-                    $ingresoBaseCotizacion = $arPago->getVrIngresoBaseCotizacion();                
-                    $riesgos = ($ingresoBaseCotizacion * $porcentajeRiesgos)/100;        
-                    $pension = ($ingresoBaseCotizacion * $porcentajePension) / 100; 
-                    $salud = 0;         
-                    $caja = ($ingresoBaseCotizacion * $porcentajeCaja) / 100; //Porcentaje 4        
-                    $sena = 0;
-                    $icbf = 0;                                
-                    $salarioAporte = 0;
-                    if($arContrato->getSalarioIntegral() == 1) {
-                        $salarioAporte = ($ingresoBasePrestacion * 70) / 100;
-                    } else {
-                        $salarioAporte = $ingresoBasePrestacion;
-                    }
-                    
-                    if($salarioAporte > $salarioMinimo * 10) {
-                        $salud = ($ingresoBaseCotizacion * $porcentajeSalud) / 100;
-                        $sena = ($ingresoBaseCotizacion * 2) / 100;
-                        $icbf = ($ingresoBaseCotizacion * 3) / 100;
-                    }
-                    //12 aprendiz y 19 practicante        
-                    if($arContrato->getCodigoTipoCotizanteFk() == '19' || $arContrato->getCodigoTipoCotizanteFk() == '12') {            
-                        $salud = ($ingresoBaseCotizacion * $porcentajeSalud) / 100;
-                        $pension = 0;            
-                        $caja = 0;
-                        $cesantias = 0;
-                        $interesesCesantias = 0; 
-                        $primas = 0;
-                        $vacaciones = 0;                    
-                    }
-                    if($arContrato->getCodigoTipoCotizanteFk() == '12') {
-                        $riesgos = 0;
-                    }                 
-
-                    $arPagoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();            
-                    $arPagoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($arPago->getCodigoPagoPk());                            
-                    $arPagoActualizar->setVrCesantias(round($cesantias));
-                    $arPagoActualizar->setVrInteresesCesantias(round($interesesCesantias));
-                    $arPagoActualizar->setVrPrimas($primas);
-                    $arPagoActualizar->setVrVacaciones($vacaciones); 
-                    $arPagoActualizar->setVrIndemnizacion($indemnizacion);
-                    $arPagoActualizar->setVrPensionEmpleador($pension);
-                    $arPagoActualizar->setVrEpsEmpleador($salud);
-                    $arPagoActualizar->setVrArp($riesgos);
-                    $arPagoActualizar->setVrCaja($caja);
-                    $arPagoActualizar->setVrSena($sena);
-                    $arPagoActualizar->setVrIcbf($icbf);                                                 
-                    $em->persist($arPagoActualizar);
-                }
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_proceso_contabilizar_pago_provision'));
-            }                    
+                        
         }             
-        $arPagos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 300);                               
-        return $this->render('BrasaRecursoHumanoBundle:Procesos/Contabilizar:pagoProvision.html.twig', array(
-            'arPagos' => $arPagos,
+        $arProvisiones = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 300);                               
+        return $this->render('BrasaRecursoHumanoBundle:Procesos/Contabilizar:provision.html.twig', array(
+            'arProvisiones' => $arProvisiones,
             'form' => $form->createView()));
     }          
     
     private function formularioLista() {
         $form = $this->createFormBuilder()                        
-            ->add('BtnContabilizar', 'submit', array('label'  => 'Contabilizar',))
-            ->add('BtnActualizar', 'submit', array('label'  => 'Actualizar',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('BtnContabilizar', 'submit', array('label'  => 'Contabilizar',))                        
             ->getForm();        
         return $form;
     }      
     
     private function listar() {
         $em = $this->getDoctrine()->getManager();                
-        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->pendientesContabilizarProvisionDql();  
+        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuProvision')->pendientesContabilizarDql();  
     }         
    
     private function cuenta($arConfiguracion, $tipoEmpleado) {
@@ -621,98 +511,5 @@ class ContabilizarPagoProvisionController extends Controller
         }                
         return $cuenta;
     }        
-    
-    private function generarExcel() {
-        ob_clean();
-        $em = $this->getDoctrine()->getManager();        
-        $objPHPExcel = new \PHPExcel();
-        // Set document properties
-        $objPHPExcel->getProperties()->setCreator("EMPRESA")
-            ->setLastModifiedBy("EMPRESA")
-            ->setTitle("Office 2007 XLSX Test Document")
-            ->setSubject("Office 2007 XLSX Test Document")
-            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
-            ->setKeywords("office 2007 openxml php")
-            ->setCategory("Test result file");
-        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(9); 
-        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'X'; $col++) {
-            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
-        }      
-        for($col = 'I'; $col !== 'X'; $col++) {            
-            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
-        }         
-        $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CÓDIGO')
-                    ->setCellValue('B1', 'NÚMERO')
-                    ->setCellValue('C1', 'TIPO')
-                    ->setCellValue('D1', 'DOCUMENTO')
-                    ->setCellValue('E1', 'EMPLEADO')
-                    ->setCellValue('F1', 'C.COSTO')                    
-                    ->setCellValue('G1', 'DESDE')
-                    ->setCellValue('H1', 'HASTA')
-                    ->setCellValue('I1', 'SALARIO')
-                    ->setCellValue('J1', 'IBP')
-                    ->setCellValue('K1', 'IBC')
-                    ->setCellValue('L1', 'CESANTIAS')
-                    ->setCellValue('M1', 'INTERESES')
-                    ->setCellValue('N1', 'PRIMAS')
-                    ->setCellValue('O1', 'VACACIONES')
-                    ->setCellValue('P1', 'INDEMNIZACIONES')
-                    ->setCellValue('Q1', 'PENSION')
-                    ->setCellValue('R1', 'SALUD')
-                    ->setCellValue('S1', 'CAJA')
-                    ->setCellValue('T1', 'RIESGOS')
-                    ->setCellValue('U1', 'SENA')
-                    ->setCellValue('V1', 'ICBF');
-
-        $i = 2;
-        $query = $em->createQuery($this->strDqlLista);
-        $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-        $arPagos = $query->getResult();
-        foreach ($arPagos as $arPago) {            
-            $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPago->getCodigoPagoPk())
-                    ->setCellValue('B' . $i, $arPago->getNumero())
-                    ->setCellValue('C' . $i, $arPago->getPagoTipoRel()->getNombre())
-                    ->setCellValue('D' . $i, $arPago->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('E' . $i, $arPago->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('F' . $i, $arPago->getCentroCostoRel()->getNombre())                    
-                    ->setCellValue('G' . $i, $arPago->getFechaDesdePago()->format('Y-m-d'))
-                    ->setCellValue('H' . $i, $arPago->getFechaHastaPago()->format('Y-m-d'))
-                    ->setCellValue('I' . $i, $arPago->getVrSalarioEmpleado())
-                    ->setCellValue('J' . $i, $arPago->getVrIngresoBasePrestacion())
-                    ->setCellValue('K' . $i, $arPago->getVrIngresoBaseCotizacion())
-                    ->setCellValue('L' . $i, $arPago->getVrCesantias())
-                    ->setCellValue('M' . $i, $arPago->getVrInteresesCesantias())
-                    ->setCellValue('N' . $i, $arPago->getVrPrimas())
-                    ->setCellValue('O' . $i, $arPago->getVrVacaciones())
-                    ->setCellValue('P' . $i, $arPago->getVrIndemnizacion())
-                    ->setCellValue('Q' . $i, $arPago->getVrPensionEmpleador())
-                    ->setCellValue('R' . $i, $arPago->getVrEpsEmpleador())
-                    ->setCellValue('S' . $i, $arPago->getVrCaja())
-                    ->setCellValue('T' . $i, $arPago->getVrArp())
-                    ->setCellValue('U' . $i, $arPago->getVrSena())
-                    ->setCellValue('V' . $i, $arPago->getVrIcbf());
-            $i++;
-        }
-
-        $objPHPExcel->getActiveSheet()->setTitle('pagosProvisiones');
-        $objPHPExcel->setActiveSheetIndex(0);
-
-        // Redirect output to a client’s web browser (Excel2007)
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Pagos.xlsx"');
-        header('Cache-Control: max-age=0');
-        // If you're serving to IE 9, then the following may be needed
-        header('Cache-Control: max-age=1');
-        // If you're serving to IE over SSL, then the following may be needed
-        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-        header ('Pragma: public'); // HTTP/1.0
-        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
-        $objWriter->save('php://output');
-        exit;
-    }      
+      
 }

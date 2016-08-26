@@ -518,6 +518,11 @@ class RhuEmpleado
     protected $pagosEmpleadoRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="RhuProvision", mappedBy="empleadoRel")
+     */
+    protected $provisionesEmpleadoRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuServicioCobrar", mappedBy="empleadoRel")
      */
     protected $serviciosCobrarEmpleadoRel;    
@@ -4189,5 +4194,39 @@ class RhuEmpleado
     public function getCentroCostoContabilidadRel()
     {
         return $this->centroCostoContabilidadRel;
+    }
+
+    /**
+     * Add provisionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addProvisionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesEmpleadoRel)
+    {
+        $this->provisionesEmpleadoRel[] = $provisionesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove provisionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesEmpleadoRel
+     */
+    public function removeProvisionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesEmpleadoRel)
+    {
+        $this->provisionesEmpleadoRel->removeElement($provisionesEmpleadoRel);
+    }
+
+    /**
+     * Get provisionesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProvisionesEmpleadoRel()
+    {
+        return $this->provisionesEmpleadoRel;
     }
 }
