@@ -197,8 +197,17 @@ class SeleccionRequisitoController extends Controller
         $session->set('filtroNombreSeleccionRequisito', $form->get('TxtNombre')->getData());                
         $session->set('filtroAbiertoSeleccionRequisito', $form->get('estadoCerrado')->getData());
         $session->set('filtroCodigoCargo', $controles['cargoRel']);
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        
+        
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
+            $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        } else {
+            $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
+            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
+        }
     }
     
     private function formularioFiltro() {

@@ -38,10 +38,10 @@ class RhuDisciplinarioRepository extends EntityRepository {
             $dql .= " AND d.estadoProcede = 0";
         }
         if ($strDesde != ""){
-            $dql .= " AND d.fecha >='" . date_format($strDesde, ('Y-m-d')) . "'";
+            $dql .= " AND d.fecha >='" . $strDesde . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND d.fecha <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND d.fecha <='" .  $strHasta . "'";
         }
         $dql .= " ORDER BY d.fecha";
         return $dql;
@@ -65,10 +65,10 @@ class RhuDisciplinarioRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if ($strDesde != ""){
-            $dql .= " AND pd.fecha >='" . date_format($strDesde, ('Y-m-d')). "'";
+            $dql .= " AND pd.fecha >='" . $strDesde . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND pd.fecha <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND pd.fecha <='" .  $strHasta . "'";
         }
         return $dql;
     }

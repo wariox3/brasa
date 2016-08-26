@@ -26,10 +26,10 @@ class RhuSsoAporteRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if ($strDesde != ""){
-            $dql .= " AND ssoap.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
+            $dql .= " AND ssoap.fechaDesde >='" . $strDesde . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND ssoap.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND ssoap.fechaHasta <='" . $strHasta . "'";
         }
         return $dql;
     }

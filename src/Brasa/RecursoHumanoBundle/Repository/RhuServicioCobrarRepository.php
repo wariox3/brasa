@@ -22,10 +22,10 @@ class RhuServicioCobrarRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if ($strDesde != ""){
-            $dql .= " AND s.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
+            $dql .= " AND s.fechaDesde >='" . $strDesde . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND s.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND s.fechaHasta <='" . $strHasta . "'";
         }
         
         return $dql;

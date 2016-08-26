@@ -45,10 +45,10 @@ class RhuRegistroVisitaRepository extends EntityRepository {
             $dql .= " AND rv.nombre LIKE '%". $strNombre . "%'";
         }
         if ($strDesde != ""){
-            $dql .= " AND rv.fechaEntrada >= '". date_format($strDesde, 'Y-m-d') . " 00:00:00'";
+            $dql .= " AND rv.fechaEntrada >= '". $strDesde . " 00:00:00'";
         }
         if($strHasta != "") {
-            $dql .= " AND rv.fechaEntrada <= '". date_format($strHasta, 'Y-m-d') . " 23:59:59'";
+            $dql .= " AND rv.fechaEntrada <= '". $strHasta . " 23:59:59'";
         }
         $dql .= " ORDER BY rv.fechaEntrada";
         return $dql;

@@ -57,15 +57,12 @@
                 <th>DESDE</th>
                 <th>HASTA</th>                
                 <th>IBC</th>
+                <th>IBP</th>
                 <th>NOMINA</th>
-                <th>PRESTACIONES</th>
-                <th>APORTES</th>
                 <th></th>
             </tr>
             {% set douTotalIBC = 0  %}            
-            {% set douTotalSalud = 0  %}            
-            {% set douTotalPension = 0  %}            
-            {% set douTotalCesantias = 0  %}
+            {% set douTotalIBP = 0  %}
             {% for arPagos in arPagos %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arPagos.codigoPagoPk }}">{{ arPagos.codigoPagoPk }} </td>
@@ -78,22 +75,18 @@
                 <td>{{ arPagos.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arPagos.fechaHasta |date("Y/m/d")  }}</td>
                 <td style="text-align: right">{{ arPagos.vrIngresoBaseCotizacion | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagos.vrIngresoBasePrestacion | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagos.vrNeto | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPagos.vrPrestaciones | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPagos.vrAportes | number_format(0, '.', ',') }}</td>
                 <td style="text-align: center"><a class="btn btn-default btn-xs" id="{{ path('brs_rhu_consulta_costo_detalle', { 'codigoPago': arPagos.codigoPagoPk}) }}" style="float:left">Detalle</a></td>                                
                 {% set douTotalIBC = douTotalIBC + arPagos.vrIngresoBaseCotizacion %}                
-                {% set douTotalPension = douTotalPension + arPagos.vrPension %}                
-                {% set douTotalSalud = douTotalSalud + arPagos.vrEps %}                
-                {% set douTotalCesantias = douTotalCesantias + arPagos.vrCesantias %}
+                {% set douTotalIBP = douTotalIBP + arPagos.vrIngresoBasePrestacion%}                
+                
             </tr>
             {% endfor %}
                 <!-- <td colspan="9"></td>
                 <td style="text-align: right">{{ douTotalIBC | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right"></td>
-                <td style="text-align: right">{{ douTotalCesantias | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ douTotalPension | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ douTotalSalud | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ douTotalIBP | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right"></td>            
                 -->
         </table>

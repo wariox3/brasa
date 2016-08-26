@@ -57,17 +57,15 @@
                 <th>DESDE</th>
                 <th>HASTA</th>
                 <th style="text-align: right">IBC</th>
+                <th style="text-align: right">IBP</th>
                 <th style="text-align: right">AUX. TRANS</th>
-                <th style="text-align: right">PENSIÓN</th>
-                <th style="text-align: right">SALUD</th>
                 <th style="text-align: right">DEVENGADO</th>
                 <th style="text-align: right">DEDUCCIONES</th>
                 <th style="text-align: right">NO PRESTACIONAL</th>
             </tr>
             {% set douTotalIBC = 0  %}  
-            {% set douTotalAuxTransporte = 0  %}            
-            {% set douTotalPension = 0  %}            
-            {% set douTotalSalud = 0  %}
+            {% set douTotalIBP = 0  %}
+            {% set douTotalAuxTransporte = 0  %}                        
             {% set douTotalDevengado = 0  %}
             {% set douTotalDeducciones = 0  %}
             {% set douTotalNoPrestacional = 0  %}
@@ -83,17 +81,16 @@
                 <td>{{ arPagosDeduccionesEmpleados.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arPagosDeduccionesEmpleados.fechaHasta |date("Y/m/d")  }}</td>
                 <td style="text-align: right">{{ arPagosDeduccionesEmpleados.vrIngresoBaseCotizacion | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagosDeduccionesEmpleados.vrIngresoBasePrestacion | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagosDeduccionesEmpleados.vrAuxilioTransporte | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPagosDeduccionesEmpleados.vrPension | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPagosDeduccionesEmpleados.vrEps | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagosDeduccionesEmpleados.vrDevengado | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagosDeduccionesEmpleados.vrDeducciones | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagosDeduccionesEmpleados.vrAdicionalValorNoPrestasional | number_format(0, '.', ',') }}</td>
                 
                 {% set douTotalIBC = douTotalIBC + arPagosDeduccionesEmpleados.vrIngresoBaseCotizacion %}
+                {% set douTotalIBP = douTotalIBP + arPagosDeduccionesEmpleados.vrIngresoBasePrestacion %}
                 {% set douTotalAuxTransporte = douTotalAuxTransporte + arPagosDeduccionesEmpleados.vrAuxilioTransporte %}
-                {% set douTotalPension = douTotalPension + arPagosDeduccionesEmpleados.vrPension %}                
-                {% set douTotalSalud = douTotalSalud + arPagosDeduccionesEmpleados.vrEps %}                
+                                
                 {% set douTotalDevengado = douTotalDevengado + arPagosDeduccionesEmpleados.vrDevengado %}
                 {% set douTotalDeducciones = douTotalDeducciones + arPagosDeduccionesEmpleados.vrDeducciones %}
                 {% set douTotalNoPrestacional = douTotalNoPrestacional + arPagosDeduccionesEmpleados.vrAdicionalValorNoPrestasional %}
@@ -101,9 +98,8 @@
             {% endfor %}
                 <td colspan="9"></td>
                 <td style="text-align: right">{{ douTotalIBC | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ douTotalIBP | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ douTotalAuxTransporte | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ douTotalPension | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ douTotalSalud | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ douTotalDevengado | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ douTotalDeducciones | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ douTotalNoPrestacional | number_format(0, '.', ',') }}</td>

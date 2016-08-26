@@ -31,10 +31,10 @@ class RhuCapacitacionRepository extends EntityRepository {
             $dql .= " AND c.estado = 0";
         }
         if($strDesde != "" || $strDesde != 0){
-            $dql .= " AND c.fechaCapacitacion >='" . date_format($strDesde, ('Y-m-d')) . "'";
+            $dql .= " AND c.fechaCapacitacion >='" . $strDesde . "'";
         }
         if($strHasta != "" || $strHasta != 0) {
-            $dql .= " AND c.fechaCapacitacion <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND c.fechaCapacitacion <='" .  $strHasta. "'";
         }
         $dql .= " ORDER BY c.fechaCapacitacion DESC";
         return $dql;

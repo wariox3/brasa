@@ -45,10 +45,10 @@ class RhuDotacionRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if ($strDesde != ""){
-            $dql .= " AND d.fecha >='" . date_format($strDesde, ('Y-m-d')). "'";
+            $dql .= " AND d.fecha >='" . $strDesde . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND d.fecha <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND d.fecha <='" . $strHasta . "'";
         }
         return $dql;
     }

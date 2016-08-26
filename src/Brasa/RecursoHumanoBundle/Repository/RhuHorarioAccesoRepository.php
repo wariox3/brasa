@@ -71,10 +71,10 @@ class RhuHorarioAccesoRepository extends EntityRepository {
             $dql .= " AND e.nombreCorto LIKE '%". $strNombre . "%'";
         }
         if ($strDesde != ""){
-            $dql .= " AND ha.fechaEntrada >= '". date_format($strDesde, 'Y-m-d') . " 00:00:00'";
+            $dql .= " AND ha.fechaEntrada >= '".  $strDesde . " 00:00:00'";
         }
         if($strHasta != "") {
-            $dql .= " AND ha.fechaEntrada <= '". date_format($strHasta, 'Y-m-d') . " 23:59:59'";
+            $dql .= " AND ha.fechaEntrada <= '".  $strHasta . " 23:59:59'";
         }
         $dql .= " ORDER BY ha.fechaEntrada";
         return $dql;

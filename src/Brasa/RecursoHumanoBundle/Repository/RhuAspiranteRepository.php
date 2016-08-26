@@ -34,7 +34,7 @@ class RhuAspiranteRepository extends EntityRepository {
     }
     
     public function aspirantesInconsistenciaDQL($strNombre = "", $strIdentificacion = "") {
-        $dql   = "SELECT a FROM BrasaRecursoHumanoBundle:RhuAspirante a WHERE a.codigoAspirantePk <> 0 and a.inconsistencia = 1";
+        $dql   = "SELECT a FROM BrasaRecursoHumanoBundle:RhuAspirante a WHERE a.codigoAspirantePk <> 0 and a.bloqueado = 1";
         if($strNombre != "" ) {
             $dql .= " AND a.nombreCorto LIKE '%" . $strNombre . "%'";
         }

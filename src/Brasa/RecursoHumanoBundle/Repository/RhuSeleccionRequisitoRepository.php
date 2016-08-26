@@ -42,10 +42,10 @@ class RhuSeleccionRequisitoRepository extends EntityRepository {
             $dql .= " AND sq.codigoCargoFk = " . $strCargo;
         }
         if($strDesde != "" || $strDesde != 0){
-            $dql .= " AND sq.fecha >='" . date_format($strDesde, ('Y-m-d')) . "'";
+            $dql .= " AND sq.fecha >='" . $strDesde . "'";
         }
         if($strHasta != "" || $strHasta != 0) {
-            $dql .= " AND sq.fecha <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND sq.fecha <='" . $strHasta . "'";
         }
          
         $dql .= " ORDER BY sq.codigoSeleccionRequisitoPk";

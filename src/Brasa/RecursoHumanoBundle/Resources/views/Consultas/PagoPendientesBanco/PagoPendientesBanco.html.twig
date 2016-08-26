@@ -58,14 +58,8 @@
                 <th>HASTA</th>
                 <th style="text-align: right">VR. NETO</th>
                 <th style="text-align: right">AUX. TRANS</th>
-                <th style="text-align: right">CESANTIAS</th>
-                <th style="text-align: right">PENSION</th>
-                <th style="text-align: right">SALUD</th>
             </tr>
-            {% set douTotalIBC = 0  %}            
-            {% set douTotalSalud = 0  %}            
-            {% set douTotalPension = 0  %}            
-            {% set douTotalCesantias = 0  %}
+            {% set douTotal = 0  %}            
             {% for arPagos in arPagos %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arPagos.codigoPagoPk }}">{{ arPagos.codigoPagoPk }} </td>
@@ -79,21 +73,14 @@
                 <td>{{ arPagos.fechaHasta |date("Y/m/d")  }}</td>
                 <td style="text-align: right">{{ arPagos.vrNeto | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagos.vrAuxilioTransporte | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPagos.vrCesantias | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPagos.vrPension | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPagos.vrEps | number_format(0, '.', ',') }}</td>
-                {% set douTotalIBC = douTotalIBC + arPagos.vrIngresoBaseCotizacion %}                
-                {% set douTotalPension = douTotalPension + arPagos.vrPension %}                
-                {% set douTotalSalud = douTotalSalud + arPagos.vrEps %}                
-                {% set douTotalCesantias = douTotalCesantias + arPagos.vrCesantias %}
+                
+                {% set douTotal = douTotal + arPagos.vrNeto %}                
+                
             </tr>
             {% endfor %}
                 <td colspan="9"></td>
-                <td style="text-align: right">{{ douTotalIBC | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right"></td>
-                <td style="text-align: right">{{ douTotalCesantias | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ douTotalPension | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ douTotalSalud | number_format(0, '.', ',') }}</td>            
+                <td style="text-align: right">{{ douTotal | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right"></td>            
         </table>
         <div class="btn-toolbar" style="float: left">
             <div class="btn-group">

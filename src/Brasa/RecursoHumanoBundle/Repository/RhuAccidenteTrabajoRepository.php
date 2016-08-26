@@ -22,10 +22,10 @@ class RhuAccidenteTrabajoRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
         }
         if ($strDesde != ""){
-            $dql .= " AND at.fechaAccidente >='" . date_format($strDesde, ('Y-m-d')). "'";
+            $dql .= " AND at.fechaAccidente >='" . $strDesde . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND at.fechaAccidente <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND at.fechaAccidente <='" . $strHasta . "'";
         }
         return $dql;
     }    

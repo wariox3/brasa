@@ -131,14 +131,17 @@ class ConsultasAdicionalesPagoController extends Controller
         $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
         $arPagoAdicional = $query->getResult();
         foreach ($arPagoAdicional as $arPagoAdicional) {
-            
+            $centroCosto = "";
+            if ($arPagoAdicional->getEmpleadoRel()->getCodigoCentroCostoFk() != null){
+                $centroCosto = $arPagoAdicional->getEmpleadoRel()->getCentroCostoRel()->getNombre();
+            }    
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A' . $i, $arPagoAdicional->getCodigoPagoAdicionalPk())    
                 ->setCellValue('B' . $i, $arPagoAdicional->getPagoConceptoRel()->getNombre())
                 ->setCellValue('C' . $i, $arPagoAdicional->getDetalle())
                 ->setCellValue('D' . $i, $arPagoAdicional->getEmpleadoRel()->getNumeroIdentificacion())                        
                 ->setCellValue('E' . $i, $arPagoAdicional->getEmpleadoRel()->getNombreCorto()) 
-                ->setCellValue('F' . $i, $arPagoAdicional->getEmpleadoRel()->getCentroCostoRel()->getNombre()) 
+                ->setCellValue('F' . $i, $centroCosto) 
                 ->setCellValue('G' . $i, $arPagoAdicional->getCantidad())                    
                 ->setCellValue('H' . $i, $arPagoAdicional->getValor())
                 ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arPagoAdicional->getPermanente()))

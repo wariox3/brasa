@@ -47,10 +47,10 @@ class RhuIncapacidadRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if ($strDesde != ""){
-            $dql .= " AND i.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
+            $dql .= " AND i.fechaDesde >='" . $strDesde. "'";
         }
         if($strHasta != "") {
-            $dql .= " AND i.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND i.fechaHasta <='" . $strHasta . "'";
         }
         if($strCodigoEntidadSalud != "") {
             $dql .= " AND i.codigoEntidadSaludFk = " . $strCodigoEntidadSalud;
@@ -69,10 +69,10 @@ class RhuIncapacidadRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if ($strDesde != ""){
-            $dql .= " AND i.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
+            $dql .= " AND i.fechaDesde >='" .  $strDesde . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND i.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND i.fechaHasta <='" .  $strHasta . "'";
         }
         if($strCodigoEntidadSalud != "") {
             $dql .= " AND i.codigoEntidadSaludFk = " . $strCodigoEntidadSalud;

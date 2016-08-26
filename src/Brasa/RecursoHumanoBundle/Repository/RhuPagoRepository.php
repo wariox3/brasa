@@ -235,11 +235,11 @@ class RhuPagoRepository extends EntityRepository {
         }
         if ($strDesde != ""){
            // $strDesde = new \DateTime($strDesde);
-            $dql .= " AND p.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
+            $dql .= " AND p.fechaDesde >='" . $strDesde . "'";
         }
         if($strHasta != "") {
             //$strHasta = new \DateTime($strHasta);
-            $dql .= " AND p.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND p.fechaHasta <='" . $strHasta . "'";
         }
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
         return $dql;
@@ -256,11 +256,11 @@ class RhuPagoRepository extends EntityRepository {
         }
         if ($strDesde != ""){
             //$strDesde = new \DateTime($strDesde);
-            $dql .= " AND p.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
+            $dql .= " AND p.fechaDesde >='" . $strDesde . "'";
         }
         if($strHasta != "") {
             //$strHasta = new \DateTime($strHasta);
-            $dql .= " AND p.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND p.fechaHasta <='" .  $strHasta . "'";
         }
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
         return $dql;
@@ -421,10 +421,10 @@ class RhuPagoRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if ($strDesde != ""){
-            $dql .= " AND p.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
+            $dql .= " AND p.fechaDesde >='" . $strDesde . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND p.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND p.fechaHasta <='" . $strHasta . "'";
         }
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
         return $dql;

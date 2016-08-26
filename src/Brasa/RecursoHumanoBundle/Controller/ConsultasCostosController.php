@@ -102,8 +102,18 @@ class ConsultasCostosController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        //$session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        //$session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
+            $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        } else {
+            $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
+            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
+        }
     }
 
     private function generarExcel() {
@@ -133,23 +143,16 @@ class ConsultasCostosController extends Controller
                     ->setCellValue('H1', 'TIEMPO EXTRA')
                     ->setCellValue('I1', 'VALORES ADICIONALES')
                     ->setCellValue('J1', 'AUX. TRANSPORTE')
-                    ->setCellValue('K1', 'ARP')
-                    ->setCellValue('L1', 'EPS')
-                    ->setCellValue('M1', 'PENSION')
-                    ->setCellValue('N1', 'CAJA')
-                    ->setCellValue('O1', 'ICBF')
-                    ->setCellValue('P1', 'SENA')
-                    ->setCellValue('Q1', 'CESANTIAS')
-                    ->setCellValue('R1', 'VACACIONES')
-                    ->setCellValue('S1', 'ADMON')
-                    ->setCellValue('T1', 'COSTO')
-                    ->setCellValue('U1', 'TOTAL')
-                    ->setCellValue('W1', 'NETO')
-                    ->setCellValue('X1', 'IBC')
-                    ->setCellValue('Y1', 'AUX. TRANSPORTE COTIZACION')
-                    ->setCellValue('Z1', 'DIAS PERIODO')
-                    ->setCellValue('AA1', 'SALARIO PERIODO')
-                    ->setCellValue('AB1', 'SALARIO EMPLEADO');
+                    ->setCellValue('K1', 'ADMON')
+                    ->setCellValue('L1', 'COSTO')
+                    ->setCellValue('M1', 'TOTAL')
+                    ->setCellValue('N1', 'NETO')
+                    ->setCellValue('O1', 'IBC')
+                    ->setCellValue('P1', 'IBP')
+                    ->setCellValue('Q1', 'AUX. TRANSPORTE COTIZACION')
+                    ->setCellValue('R1', 'DIAS PERIODO')
+                    ->setCellValue('S1', 'SALARIO PERIODO')
+                    ->setCellValue('T1', 'SALARIO EMPLEADO');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
@@ -167,23 +170,16 @@ class ConsultasCostosController extends Controller
                     ->setCellValue('H' . $i, $arPago->getVrAdicionalTiempo())
                     ->setCellValue('I' . $i, $arPago->getVrAdicionalValor())
                     ->setCellValue('J' . $i, $arPago->getVrAuxilioTransporte())
-                    ->setCellValue('K' . $i, $arPago->getVrArp())
-                    ->setCellValue('L' . $i, $arPago->getVrEps())
-                    ->setCellValue('M' . $i, $arPago->getVrPension())
-                    ->setCellValue('N' . $i, $arPago->getVrCaja())
-                    ->setCellValue('O' . $i, $arPago->getVrIcbf())
-                    ->setCellValue('P' . $i, $arPago->getVrSena())
-                    ->setCellValue('Q' . $i, $arPago->getVrCesantias())
-                    ->setCellValue('R' . $i, $arPago->getVrVacaciones())
-                    ->setCellValue('S' . $i, 0)
-                    ->setCellValue('T' . $i, $arPago->getVrCosto())
-                    ->setCellValue('U' . $i, 0)
-                    ->setCellValue('W' . $i, $arPago->getVrNeto())
-                    ->setCellValue('X' . $i, $arPago->getVrIngresoBaseCotizacion())
-                    ->setCellValue('Y' . $i, $arPago->getVrAuxilioTransporteCotizacion())
-                    ->setCellValue('Z' . $i, $arPago->getDiasPeriodo())
-                    ->setCellValue('AA' . $i, $arPago->getVrSalarioPeriodo())
-                    ->setCellValue('AB' . $i, $arPago->getVrSalarioEmpleado());
+                    ->setCellValue('K' . $i, 0)
+                    ->setCellValue('L' . $i, $arPago->getVrCosto())
+                    ->setCellValue('M' . $i, 0)
+                    ->setCellValue('N' . $i, $arPago->getVrNeto())
+                    ->setCellValue('O' . $i, $arPago->getVrIngresoBaseCotizacion())
+                    ->setCellValue('P' . $i, $arPago->getVrIngresoBasePrestacion())
+                    ->setCellValue('Q' . $i, $arPago->getVrAuxilioTransporteCotizacion())
+                    ->setCellValue('R' . $i, $arPago->getDiasPeriodo())
+                    ->setCellValue('S' . $i, $arPago->getVrSalarioPeriodo())
+                    ->setCellValue('T' . $i, $arPago->getVrSalarioEmpleado());
             $i++;
         }
 

@@ -111,7 +111,7 @@ class RhuContratoRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND c.fechaUltimoPagoVacaciones <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND c.fechaUltimoPagoVacaciones <='" . $strHasta . "'";
         }
         return $dql;
     }
@@ -138,10 +138,10 @@ class RhuContratoRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND c.fechaHasta >='" . date_format($strDesde, ('Y-m-d')) . "'";
+            $dql .= " AND c.fechaHasta >='" .  $strDesde . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND c.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND c.fechaHasta <='" .  $strHasta . "'";
         }
         return $dql;
     }
@@ -168,10 +168,10 @@ class RhuContratoRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if($strDesde != "") {
-            $dql .= " AND c.fechaDesde >='" . date_format($strDesde, ('Y-m-d')) . "'";
+            $dql .= " AND c.fechaDesde >='" . $strDesde . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND c.fechaDesde <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND c.fechaDesde <='" . $strHasta . "'";
         }
         return $dql;
     }

@@ -24,10 +24,10 @@ class RhuFacturaRepository extends EntityRepository {
             $dql .= " AND f.numero = '" . $strNumero . "'";
         }
         if ($strDesde != ""){
-            $dql .= " AND f.fecha >='" . date_format($strDesde, ('Y-m-d')) . "'";
+            $dql .= " AND f.fecha >='" . $strDesde . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND f.fecha <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND f.fecha <='" . $strHasta . "'";
         }
         $dql .= " ORDER BY f.codigoFacturaPk DESC";
         return $dql;

@@ -93,8 +93,16 @@ class ControlAccesoEmpleadoController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroIdentificacion', $form->get('TxtNumeroIdentificacion')->getData());
         $session->set('filtroNombre', $form->get('TxtNombre')->getData());
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+                
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
+            $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        } else {
+            $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
+            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
+        }
     }
 
     public function nuevoAction($codigoHorarioAcceso) {

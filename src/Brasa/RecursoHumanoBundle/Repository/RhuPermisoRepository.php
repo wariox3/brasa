@@ -20,10 +20,10 @@ class RhuPermisoRepository extends EntityRepository {
             $dql .= " AND e.codigoCentroCostoFk = " . $codigoCentroCosto;
         }
         if ($strDesde != ""){
-            $dql .= " AND p.fechaPermiso >='" . date_format($strDesde, ('Y-m-d')) . "'";
+            $dql .= " AND p.fechaPermiso >='" . $strDesde . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND p.fechaPermiso <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND p.fechaPermiso <='" . $strHasta . "'";
         }
         $dql .= " ORDER BY p.fechaPermiso";
         return $dql;
@@ -53,10 +53,10 @@ class RhuPermisoRepository extends EntityRepository {
             $dql .= " AND p.afectaHorario = 0";
         }
         if ($strDesde != ""){
-            $dql .= " AND p.fechaPermiso >='" . date_format($strDesde, ('Y-m-d')) . "'";
+            $dql .= " AND p.fechaPermiso >='" . $strDesde . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND p.fechaPermiso <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND p.fechaPermiso <='" . $strHasta . "'";
         }
         $dql .= " ORDER BY p.fechaPermiso";
         return $dql;

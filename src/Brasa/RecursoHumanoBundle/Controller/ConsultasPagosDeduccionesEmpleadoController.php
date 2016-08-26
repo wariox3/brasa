@@ -82,8 +82,18 @@ class ConsultasPagosDeduccionesEmpleadoController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        //$session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        //$session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
+            $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        } else {
+            $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
+            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
+        }
     }   
     
     private function generarExcel() {
@@ -101,6 +111,23 @@ class ConsultasPagosDeduccionesEmpleadoController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CODIGO')
                     ->setCellValue('B1', 'DESDE')
@@ -112,23 +139,13 @@ class ConsultasPagosDeduccionesEmpleadoController extends Controller
                     ->setCellValue('H1', 'TIEMPO EXTRA')
                     ->setCellValue('I1', 'VALORES ADICIONALES')
                     ->setCellValue('J1', 'AUX. TRANSPORTE')
-                    ->setCellValue('K1', 'ARP')
-                    ->setCellValue('L1', 'EPS')
-                    ->setCellValue('M1', 'PENSION')
-                    ->setCellValue('N1', 'CAJA')
-                    ->setCellValue('O1', 'ICBF')
-                    ->setCellValue('P1', 'SENA')
-                    ->setCellValue('Q1', 'CESANTIAS')
-                    ->setCellValue('R1', 'VACACIONES')
-                    ->setCellValue('S1', 'ADMON')
-                    ->setCellValue('T1', 'COSTO')
-                    ->setCellValue('U1', 'TOTAL')
-                    ->setCellValue('W1', 'NETO')
-                    ->setCellValue('X1', 'IBC')
-                    ->setCellValue('Y1', 'AUX. TRANSPORTE COTIZACION')
-                    ->setCellValue('Z1', 'DIAS PERIODO')
-                    ->setCellValue('AA1', 'SALARIO PERIODO')
-                    ->setCellValue('AB1', 'SALARIO EMPLEADO');
+                    ->setCellValue('K1', 'COSTO')
+                    ->setCellValue('L1', 'NETO')
+                    ->setCellValue('M1', 'IBC')
+                    ->setCellValue('N1', 'AUX. TRANSPORTE COTIZACION')
+                    ->setCellValue('O1', 'DIAS PERIODO')
+                    ->setCellValue('P1', 'SALARIO PERIODO')
+                    ->setCellValue('Q1', 'SALARIO EMPLEADO');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
@@ -146,23 +163,13 @@ class ConsultasPagosDeduccionesEmpleadoController extends Controller
                     ->setCellValue('H' . $i, $arPagosDeduccionesEmpleado->getVrAdicionalTiempo())
                     ->setCellValue('I' . $i, $arPagosDeduccionesEmpleado->getVrAdicionalValor())
                     ->setCellValue('J' . $i, $arPagosDeduccionesEmpleado->getVrAuxilioTransporte())
-                    ->setCellValue('K' . $i, $arPagosDeduccionesEmpleado->getVrArp())
-                    ->setCellValue('L' . $i, $arPagosDeduccionesEmpleado->getVrEps())
-                    ->setCellValue('M' . $i, $arPagosDeduccionesEmpleado->getVrPension())
-                    ->setCellValue('N' . $i, $arPagosDeduccionesEmpleado->getVrCaja())
-                    ->setCellValue('O' . $i, $arPagosDeduccionesEmpleado->getVrIcbf())
-                    ->setCellValue('P' . $i, $arPagosDeduccionesEmpleado->getVrSena())
-                    ->setCellValue('Q' . $i, $arPagosDeduccionesEmpleado->getVrCesantias())
-                    ->setCellValue('R' . $i, $arPagosDeduccionesEmpleado->getVrVacaciones())
-                    ->setCellValue('S' . $i, $arPagosDeduccionesEmpleado->getVrAdministracion())
-                    ->setCellValue('T' . $i, $arPagosDeduccionesEmpleado->getVrCosto())
-                    ->setCellValue('U' . $i, $arPagosDeduccionesEmpleado->getVrTotalCobrar())
-                    ->setCellValue('W' . $i, $arPagosDeduccionesEmpleado->getVrNeto())
-                    ->setCellValue('X' . $i, $arPagosDeduccionesEmpleado->getVrIngresoBaseCotizacion())
-                    ->setCellValue('Y' . $i, $arPagosDeduccionesEmpleado->getVrAuxilioTransporteCotizacion())
-                    ->setCellValue('Z' . $i, $arPagosDeduccionesEmpleado->getDiasPeriodo())
-                    ->setCellValue('AA' . $i, $arPagosDeduccionesEmpleado->getVrSalarioPeriodo())
-                    ->setCellValue('AB' . $i, $arPagosDeduccionesEmpleado->getVrSalarioEmpleado());
+                    ->setCellValue('K' . $i, $arPagosDeduccionesEmpleado->getVrCosto())
+                    ->setCellValue('L' . $i, $arPagosDeduccionesEmpleado->getVrNeto())
+                    ->setCellValue('M' . $i, $arPagosDeduccionesEmpleado->getVrIngresoBaseCotizacion())
+                    ->setCellValue('N' . $i, $arPagosDeduccionesEmpleado->getVrAuxilioTransporteCotizacion())
+                    ->setCellValue('O' . $i, $arPagosDeduccionesEmpleado->getDiasPeriodo())
+                    ->setCellValue('P' . $i, $arPagosDeduccionesEmpleado->getVrSalarioPeriodo())
+                    ->setCellValue('Q' . $i, $arPagosDeduccionesEmpleado->getVrSalarioEmpleado());
             $i++;
         }
 

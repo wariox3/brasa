@@ -17,13 +17,13 @@ class RhuCreditoRepository extends EntityRepository {
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
-        if($strDesde != "" || $strDesde != 0){
+        if($strDesde != "" || $strDesde != '0'){
             //$strDesde = new \DateTime($strDesde);
-            $dql .= " AND c.fechaInicio >='" . date_format($strDesde, ('Y-m-d')) . "'";
+            $dql .= " AND c.fechaInicio >='" . $strDesde . "'";
         }
-        if($strHasta != "" || $strHasta != 0) {
+        if($strHasta != "" || $strHasta != '0') {
             //$strHasta = new \DateTime($strHasta);
-            $dql .= " AND c.fechaInicio <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND c.fechaInicio <='" . $strHasta . "'";
         }
         
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
@@ -38,10 +38,10 @@ class RhuCreditoRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if ($strDesde != "" ){
-            $dql .= " AND c.fechaInicio >='" . date_format($strDesde, ('Y-m-d')). "'";
+            $dql .= " AND c.fechaInicio >='" . $strDesde . "'";
         }
         if($strHasta != "" ) {
-            $dql .= " AND c.fechaInicio <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND c.fechaInicio <='" . $strHasta . "'";
         }
         
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";

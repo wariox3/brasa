@@ -55,11 +55,11 @@ class RhuIngresoBaseRepository extends EntityRepository {
         }
         if ($strDesde != ""){
             //$strDesde = new \DateTime($strDesde);
-            $dql .= " AND ib.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
+            $dql .= " AND ib.fechaDesde >='" . $strDesde . "'";
         }
         if($strHasta != "") {
             //$strHasta = new \DateTime($strHasta);
-            $dql .= " AND ib.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND ib.fechaHasta <='" .  $strHasta . "'";
         }
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
         return $dql;

@@ -1320,8 +1320,16 @@ class ConsultasController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+                
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
+            $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        } else {
+            $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
+            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
+        }
     }
 
     private function filtrarCreditoLista($form) {
@@ -1329,8 +1337,18 @@ class ConsultasController extends Controller
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        //$session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        //$session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
+            $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        } else {
+            $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
+            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
+        }
     }
 
     private function filtrarProgramacionesPagoLista($form) {
@@ -1371,9 +1389,19 @@ class ConsultasController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        //$session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        //$session->set('filtroHasta', $form->get('fechaHasta')->getData());
         $session->set('filtroCodigoEntidadSalud', $controles['entidadSaludRel']);
+        
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
+            $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        } else {
+            $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
+            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
+        }
     }
 
     private function filtrarIncapacidadesCobrarLista($form) {
@@ -1382,9 +1410,19 @@ class ConsultasController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        //$session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        //$session->set('filtroHasta', $form->get('fechaHasta')->getData());
         $session->set('filtroCodigoEntidadSalud', $controles['entidadSaludRel']);
+        
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
+            $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        } else {
+            $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
+            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
+        }
     }
 
     private function filtrarProcesosDisciplinariosLista($form) {
@@ -1393,8 +1431,16 @@ class ConsultasController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+                
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
+            $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        } else {
+            $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
+            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
+        }
     }
     
     private function filtrarDotacionesPendientesLista($form) {
@@ -1403,8 +1449,16 @@ class ConsultasController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+                
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
+            $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        } else {
+            $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
+            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
+        }
     }
 
     private function filtrarAportesLista($form) {
@@ -1413,8 +1467,18 @@ class ConsultasController extends Controller
         $controles = $request->request->get('form');
 
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        //$session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        //$session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
+            $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        } else {
+            $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
+            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
+        }
     }
 
     private function filtrarServiciosPorCobrarLista($form) {
@@ -1423,8 +1487,18 @@ class ConsultasController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        //$session->set('filtroDesde', $form->get('fechaDesde')->getData());
+        //$session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
+            $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        } else {
+            $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
+            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
+        }
     }
 
     private function filtrarVacacionesPagarLista($form) {
@@ -1433,7 +1507,14 @@ class ConsultasController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        //$session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        if ($form->get('fechaHasta')->getData() == null){
+            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        } else {
+            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
+        }
     }
     
     private function filtrarFechaTerminacionLista($form) {
@@ -1446,8 +1527,16 @@ class ConsultasController extends Controller
         $session->set('filtroCodigoZona', $controles['zonaRel']);
         $session->set('filtroCodigoSubzona', $controles['subZonaRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+                
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
+            $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        } else {
+            $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
+            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
+        }
     }
     
     private function filtrarIngresosContratosLista($form) {
@@ -1460,8 +1549,15 @@ class ConsultasController extends Controller
         $session->set('filtroCodigoSubzona', $controles['subZonaRel']);
         $session->set('filtroCodigoContrato', $form->get('TxtContrato')->getData());
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
+            $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        } else {
+            $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
+            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
+        }
     }
 
     private function filtrarContratosPeriodoLista($form) {
@@ -1613,28 +1709,29 @@ class ConsultasController extends Controller
                     ->setCellValue('H1', 'TIEMPO EXTRA')
                     ->setCellValue('I1', 'VALORES ADICIONALES')
                     ->setCellValue('J1', 'AUX. TRANSPORTE')
-                    ->setCellValue('K1', 'ARP')
-                    ->setCellValue('L1', 'EPS')
-                    ->setCellValue('M1', 'PENSION')
-                    ->setCellValue('N1', 'CAJA')
-                    ->setCellValue('O1', 'ICBF')
-                    ->setCellValue('P1', 'SENA')
-                    ->setCellValue('Q1', 'CESANTIAS')
-                    ->setCellValue('R1', 'VACACIONES')
-                    ->setCellValue('S1', 'ADMON')
-                    ->setCellValue('T1', 'COSTO')
-                    ->setCellValue('U1', 'TOTAL')
-                    ->setCellValue('W1', 'NETO')
-                    ->setCellValue('X1', 'IBC')
-                    ->setCellValue('Y1', 'AUX. TRANSPORTE COTIZACION')
-                    ->setCellValue('Z1', 'DIAS PERIODO')
-                    ->setCellValue('AA1', 'SALARIO PERIODO')
-                    ->setCellValue('AB1', 'SALARIO EMPLEADO');
+                    ->setCellValue('K1', 'COSTO')
+                    ->setCellValue('L1', 'NETO')
+                    ->setCellValue('M1', 'IBC')
+                    ->setCellValue('N1', 'AUX. TRANSPORTE COTIZACION')
+                    ->setCellValue('O1', 'DIAS PERIODO')
+                    ->setCellValue('P1', 'SALARIO PERIODO')
+                    ->setCellValue('Q1', 'SALARIO EMPLEADO');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlPagoPendientesBancoLista);
         $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
         $arPagos = $query->getResult();
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'Z'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }     
+        for($col = 'G'; $col !== 'Q'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('right');
+        }
         foreach ($arPagos as $arPago) {
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arPago->getCodigoPagoPk())
@@ -1647,23 +1744,13 @@ class ConsultasController extends Controller
                     ->setCellValue('H' . $i, $arPago->getVrAdicionalTiempo())
                     ->setCellValue('I' . $i, $arPago->getVrAdicionalValor())
                     ->setCellValue('J' . $i, $arPago->getVrAuxilioTransporte())
-                    ->setCellValue('K' . $i, $arPago->getVrArp())
-                    ->setCellValue('L' . $i, $arPago->getVrEps())
-                    ->setCellValue('M' . $i, $arPago->getVrPension())
-                    ->setCellValue('N' . $i, $arPago->getVrCaja())
-                    ->setCellValue('O' . $i, $arPago->getVrIcbf())
-                    ->setCellValue('P' . $i, $arPago->getVrSena())
-                    ->setCellValue('Q' . $i, $arPago->getVrCesantias())
-                    ->setCellValue('R' . $i, $arPago->getVrVacaciones())
-                    ->setCellValue('S' . $i, $arPago->getVrAdministracion())
-                    ->setCellValue('T' . $i, $arPago->getVrCosto())
-                    ->setCellValue('U' . $i, $arPago->getVrTotalCobrar())
-                    ->setCellValue('W' . $i, $arPago->getVrNeto())
-                    ->setCellValue('X' . $i, $arPago->getVrIngresoBaseCotizacion())
-                    ->setCellValue('Y' . $i, $arPago->getVrAuxilioTransporteCotizacion())
-                    ->setCellValue('Z' . $i, $arPago->getDiasPeriodo())
-                    ->setCellValue('AA' . $i, $arPago->getVrSalarioPeriodo())
-                    ->setCellValue('AB' . $i, $arPago->getVrSalarioEmpleado());
+                    ->setCellValue('K' . $i, $arPago->getVrCosto())
+                    ->setCellValue('L' . $i, $arPago->getVrNeto())
+                    ->setCellValue('M' . $i, $arPago->getVrIngresoBaseCotizacion())
+                    ->setCellValue('N' . $i, $arPago->getVrAuxilioTransporteCotizacion())
+                    ->setCellValue('O' . $i, $arPago->getDiasPeriodo())
+                    ->setCellValue('P' . $i, $arPago->getVrSalarioPeriodo())
+                    ->setCellValue('Q' . $i, $arPago->getVrSalarioEmpleado());
             $i++;
         }
 
@@ -2288,6 +2375,12 @@ class ConsultasController extends Controller
         $query = $em->createQuery($this->strSqlDotacionesPendientesLista);
         $arDotacionesPendientes = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionDetalle();
         $arDotacionesPendientes = $query->getResult();
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'Z'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }     
         foreach ($arDotacionesPendientes as $arDotacionPendiente) {
             
             $objPHPExcel->setActiveSheetIndex(0)
