@@ -105,6 +105,7 @@
                             <th>SENA</th>
                             <th>ICBF</th>
                             <th></th>
+                            <th></th>
                             <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                         </tr>
                         {% for arContratos in arContratos %}
@@ -129,6 +130,7 @@
                                 <td>{% if arContratos.generaSena == 1 %}SI{% else %}NO{% endif %}</td>
                                 <td>{% if arContratos.generaIcbf == 1 %}SI{% else %}NO{% endif %}</td>
                                 <td><a href="javascript:abrirVentana3('{{ path('brs_afi_base_empleado_contrato_nuevo', {'codigoEmpleado': arEmpleado.codigoEmpleadoPk, 'codigoContrato': arContratos.codigoContratoPk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                                <td><button class="btn btn-default btn-xs" type="submit" name="OpImprimir" value="{{ arContratos.codigoContratoPk }}">Imprimir</button></td>
                                 <td><input type="checkbox" name="ChkSeleccionarContrato[]" value="{{ arContratos.codigoContratoPk }}" /></td>
                             </tr>
                         {% endfor %}

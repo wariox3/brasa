@@ -109,6 +109,11 @@ class EmpleadoController extends Controller
                $objFormatoEmpleado = new \Brasa\AfiliacionBundle\Formatos\Empleado();
                $objFormatoEmpleado->Generar($this, $codigoEmpleado);
             }
+            if($request->request->get('OpImprimir')) {
+                $codigoContrato = $request->request->get('OpImprimir');
+                $objFormatoEmpleado = new \Brasa\AfiliacionBundle\Formatos\EmpleadoContrato();
+                $objFormatoEmpleado->Generar($this, $codigoContrato);
+            }
 
         }
         $arEmpleado = new \Brasa\AfiliacionBundle\Entity\AfiEmpleado();

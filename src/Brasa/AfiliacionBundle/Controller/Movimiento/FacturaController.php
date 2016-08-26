@@ -344,7 +344,7 @@ class FacturaController extends Controller
             }
         }
         $dqlAfiliacionesPendientes = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->pendienteAfiliacionDql($arFactura->getCodigoClienteFk());
-        $arContratos = $paginator->paginate($em->createQuery($dqlAfiliacionesPendientes), $request->query->get('page', 1), 30);
+        $arContratos = $paginator->paginate($em->createQuery($dqlAfiliacionesPendientes), $request->query->get('page', 1), 300);
         return $this->render('BrasaAfiliacionBundle:Movimiento/Factura:detalleAfiliacionNuevo.html.twig', array(
             'arFactura' => $arFactura,
             'arContratos' => $arContratos,

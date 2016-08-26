@@ -13,14 +13,15 @@
         {{ form_errors(form) }}
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
-                <a  class="btn btn-default btn-sm" href="{{ path('brs_afi_movimiento_curso_nuevo', {'codigoFactura': 0 }) }}">Nuevo</a>
+                <a  class="btn btn-default btn-sm" href="{{ path('brs_afi_movimiento_factura_nuevo', {'codigoFactura': 0 }) }}">Nuevo</a>
                 {% if arFactura.estadoAutorizado == 0 %}
-                    <a  class="btn btn-default btn-sm" href="{{ path('brs_afi_movimiento_curso_nuevo', {'codigoFactura': arFactura.codigoFacturaPk }) }}">Editar</a>
+                    <a  class="btn btn-default btn-sm" href="{{ path('brs_afi_movimiento_factura_nuevo', {'codigoFactura': arFactura.codigoFacturaPk }) }}">Editar</a>
                 {% endif %}
                 {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnAnular, { 'attr': {'class': 'btn btn-default btn-sm', 'onclick': 'return confirm("Esta seguro de anular el registro?")'} }) }}
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 23,  'numero': arEmpleado.codigoEmpleadoPk }) }}', 'Archivos', 500, 700)" >Archivos</a>                
             </div>
         </div>        
         <div style="float:right">

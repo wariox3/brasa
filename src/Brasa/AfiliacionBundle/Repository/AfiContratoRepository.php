@@ -66,7 +66,7 @@ class AfiContratoRepository extends EntityRepository {
             $dql .= " AND e.nombreCorto LIKE '%" . $strEmpleado . "%'";
         }*/
         if($codigoCliente != '') {
-            $dql .= " AND e.codigoClienteFk = " . $codigoCliente;
+            $dql .= " AND c.codigoClienteFk = " . $codigoCliente;
         } 
         /*if($strIdentificacion != '') {
             $dql .= " AND e.numeroIdentificacion = " . $strIdentificacion;

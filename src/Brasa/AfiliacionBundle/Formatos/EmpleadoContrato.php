@@ -1,22 +1,22 @@
 <?php
 namespace Brasa\AfiliacionBundle\Formatos;
-class Empleado extends \FPDF_FPDF {
+class EmpleadoContrato extends \FPDF_FPDF {
     public static $em;
     
-    public static $codigoEmpleado;
+    public static $codigoContrato;
     
-    public function Generar($miThis, $codigoEmpleado) {        
+    public function Generar($miThis,$codigoContrato) {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
-        self::$codigoEmpleado = $codigoEmpleado;
-        $pdf = new Empleado();
+        self::$codigoContrato = $codigoContrato;
+        $pdf = new EmpleadoContrato();
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
         $this->Body($pdf);
 
-        $pdf->Output("Empleado$codigoEmpleado.pdf", 'D');        
+        $pdf->Output("EmpleadoFicha.pdf", 'D');        
         
     } 
     
@@ -44,16 +44,18 @@ class Empleado extends \FPDF_FPDF {
         $this->SetXY(53, 30);
         $this->Cell(20, 4, utf8_decode("TELÉFONO:"), 0, 0, 'L', 1);
         $this->Cell(100, 4, $arConfiguracion->getTelefonoEmpresa(), 0, 0, 'L', 0);        
+        $arContratoEmpleado = new \Brasa\AfiliacionBundle\Entity\AfiContrato();
+        $arContratoEmpleado = self::$em->getRepository('BrasaAfiliacionBundle:AfiContrato')->find(self::$codigoContrato);
         
         $arEmpleado = new \Brasa\AfiliacionBundle\Entity\AfiEmpleado();
-        $arEmpleado = self::$em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->find(self::$codigoEmpleado);        
+        $arEmpleado = self::$em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->find($arContratoEmpleado->getCodigoEmpleadoFk());        
         if ($arEmpleado->getCodigoContratoActivo() == null){
             $codigoContratoActivo = 0;
         } else {
             $codigoContratoActivo = $arEmpleado->getCodigoContratoActivo();
         }
         $arContrato = new \Brasa\AfiliacionBundle\Entity\AfiContrato();
-        $arContrato = self::$em->getRepository('BrasaAfiliacionBundle:AfiContrato')->findOneBy(array('codigoContratoPk' => $codigoContratoActivo, 'indefinido' => 1));        
+        $arContrato = self::$em->getRepository('BrasaAfiliacionBundle:AfiContrato')->find(self::$codigoContrato);        
         if ($arContrato == null) {
             $mensaje = "EL EMPLEADO NO TIENE CONTRATO";
             $this->SetXY(10, 40);
