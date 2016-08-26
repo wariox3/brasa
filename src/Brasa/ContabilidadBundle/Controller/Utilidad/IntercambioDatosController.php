@@ -169,7 +169,6 @@ class IntercambioDatosController extends Controller
         return $form;
     }    
   
-
     private function generarExcel() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();

@@ -87,8 +87,8 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setCentroCostoRel($arCentroCosto);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero(0);
-                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                    $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                     $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                     $arRegistro->setDebito($arProvision->getVrCesantias());                            
                                     $arRegistro->setDescripcionContable('PROVISION CESANTIAS');
@@ -101,8 +101,8 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setComprobanteRel($arComprobanteContable);                                    
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero(0);
-                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                    $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                     $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                     $arRegistro->setCredito($arProvision->getVrCesantias());                            
                                     $arRegistro->setDescripcionContable('PROVISION CESANTIAS');
@@ -120,8 +120,8 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setCentroCostoRel($arCentroCosto);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero(0);
-                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                    $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                     $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                     $arRegistro->setDebito($arProvision->getVrInteresesCesantias());                            
                                     $arRegistro->setDescripcionContable('PROVISION INTERESES CESANTIAS');
@@ -134,8 +134,8 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setComprobanteRel($arComprobanteContable);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero(0);
-                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                    $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                     $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                     $arRegistro->setCredito($arProvision->getVrInteresesCesantias());                            
                                     $arRegistro->setDescripcionContable('PROVISION INTERESES CESANTIAS');
@@ -153,8 +153,8 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setCentroCostoRel($arCentroCosto);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero(0);
-                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                    $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                     $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                     $arRegistro->setDebito($arProvision->getVrPrimas());                            
                                     $arRegistro->setDescripcionContable('PROVISION PRIMAS');
@@ -167,8 +167,8 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setComprobanteRel($arComprobanteContable);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero(0);
-                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                    $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                     $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                     $arRegistro->setCredito($arProvision->getVrPrimas());                            
                                     $arRegistro->setDescripcionContable('PROVISION PRIMAS');
@@ -186,8 +186,8 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setCentroCostoRel($arCentroCosto);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero(0);
-                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                    $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                     $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                     $arRegistro->setDebito($arProvision->getVrVacaciones());                            
                                     $arRegistro->setDescripcionContable('PROVISION VACACIONES');
@@ -200,8 +200,8 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setComprobanteRel($arComprobanteContable);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero(0);
-                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                    $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                     $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                     $arRegistro->setCredito($arProvision->getVrVacaciones());                            
                                     $arRegistro->setDescripcionContable('PROVISION VACACIONES');
@@ -219,8 +219,8 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setCentroCostoRel($arCentroCosto);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero(0);
-                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                    $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                     $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                     $arRegistro->setDebito($arProvision->getVrIndemnizacion());                            
                                     $arRegistro->setDescripcionContable('PROVISION INDEMNIZACION');
@@ -233,8 +233,8 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setComprobanteRel($arComprobanteContable);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero(0);
-                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                    $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                     $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                     $arRegistro->setCredito($arProvision->getVrIndemnizacion());                            
                                     $arRegistro->setDescripcionContable('PROVISION INDEMNIZACION');
@@ -250,11 +250,12 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
                                     if($arCuenta) {
                                         $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                        $arRegistro->setComprobanteRel($arComprobanteContable);                                        
+                                        $arRegistro->setComprobanteRel($arComprobanteContable); 
+                                        $arRegistro->setCentroCostoRel($arCentroCosto);
                                         $arRegistro->setCuentaRel($arCuenta);
                                         $arRegistro->setTerceroRel($arTerceroPension);
-                                        $arRegistro->setNumero(0);
-                                        $arRegistro->setNumeroReferencia(0);
+                                        $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                        $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                         $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                         $arRegistro->setDebito($arProvision->getVrPension());                            
                                         $arRegistro->setDescripcionContable('PROVISION PENSION');
@@ -267,8 +268,8 @@ class ContabilizarPagoProvisionController extends Controller
                                         $arRegistro->setComprobanteRel($arComprobanteContable);                                        
                                         $arRegistro->setCuentaRel($arCuenta);
                                         $arRegistro->setTerceroRel($arTerceroPension);
-                                        $arRegistro->setNumero(0);
-                                        $arRegistro->setNumeroReferencia(0);
+                                        $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                        $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                         $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                         $arRegistro->setCredito($arProvision->getVrPension());                            
                                         $arRegistro->setDescripcionContable('PROVISION PENSION');
@@ -289,11 +290,12 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
                                     if($arCuenta) {
                                         $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                        $arRegistro->setComprobanteRel($arComprobanteContable);                                        
+                                        $arRegistro->setComprobanteRel($arComprobanteContable);     
+                                        $arRegistro->setCentroCostoRel($arCentroCosto);
                                         $arRegistro->setCuentaRel($arCuenta);
                                         $arRegistro->setTerceroRel($arTerceroSalud);
-                                        $arRegistro->setNumero(0);
-                                        $arRegistro->setNumeroReferencia(0);
+                                        $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                        $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                         $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                         $arRegistro->setDebito($arProvision->getVrSalud());                            
                                         $arRegistro->setDescripcionContable('PROVISION SALUD');
@@ -306,8 +308,8 @@ class ContabilizarPagoProvisionController extends Controller
                                         $arRegistro->setComprobanteRel($arComprobanteContable);                                        
                                         $arRegistro->setCuentaRel($arCuenta);
                                         $arRegistro->setTerceroRel($arTerceroSalud);
-                                        $arRegistro->setNumero(0);
-                                        $arRegistro->setNumeroReferencia(0);
+                                        $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                        $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                         $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                         $arRegistro->setCredito($arProvision->getVrSalud());                            
                                         $arRegistro->setDescripcionContable('PROVISION SALUD');
@@ -330,11 +332,12 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
                                     if($arCuenta) {
                                         $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                        $arRegistro->setComprobanteRel($arComprobanteContable);                                        
+                                        $arRegistro->setComprobanteRel($arComprobanteContable);   
+                                        $arRegistro->setCentroCostoRel($arCentroCosto);
                                         $arRegistro->setCuentaRel($arCuenta);
                                         $arRegistro->setTerceroRel($arTerceroRiesgos);
-                                        $arRegistro->setNumero(0);
-                                        $arRegistro->setNumeroReferencia(0);
+                                        $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                        $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                         $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                         $arRegistro->setDebito($arProvision->getVrRiesgos());                            
                                         $arRegistro->setDescripcionContable('PROVISION RIESGOS');
@@ -347,8 +350,8 @@ class ContabilizarPagoProvisionController extends Controller
                                         $arRegistro->setComprobanteRel($arComprobanteContable);                                        
                                         $arRegistro->setCuentaRel($arCuenta);
                                         $arRegistro->setTerceroRel($arTerceroRiesgos);
-                                        $arRegistro->setNumero(0);
-                                        $arRegistro->setNumeroReferencia(0);
+                                        $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                        $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                         $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                         $arRegistro->setCredito($arProvision->getVrRiesgos());                            
                                         $arRegistro->setDescripcionContable('PROVISION RIESGOS');
@@ -369,11 +372,12 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
                                     if($arCuenta) {
                                         $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                        $arRegistro->setComprobanteRel($arComprobanteContable);                                        
+                                        $arRegistro->setComprobanteRel($arComprobanteContable);  
+                                        $arRegistro->setCentroCostoRel($arCentroCosto);
                                         $arRegistro->setCuentaRel($arCuenta);
                                         $arRegistro->setTerceroRel($arTerceroCaja);
-                                        $arRegistro->setNumero(0);
-                                        $arRegistro->setNumeroReferencia(0);
+                                        $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                        $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                         $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                         $arRegistro->setDebito($arProvision->getVrCaja());                            
                                         $arRegistro->setDescripcionContable('PROVISION CAJA');
@@ -386,8 +390,8 @@ class ContabilizarPagoProvisionController extends Controller
                                         $arRegistro->setComprobanteRel($arComprobanteContable);                                        
                                         $arRegistro->setCuentaRel($arCuenta);
                                         $arRegistro->setTerceroRel($arTerceroCaja);
-                                        $arRegistro->setNumero(0);
-                                        $arRegistro->setNumeroReferencia(0);
+                                        $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                        $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                         $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                         $arRegistro->setCredito($arProvision->getVrCaja());                            
                                         $arRegistro->setDescripcionContable('PROVISION CAJA');
@@ -406,11 +410,12 @@ class ContabilizarPagoProvisionController extends Controller
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
                                 if($arCuenta) {
                                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);                                    
+                                    $arRegistro->setComprobanteRel($arComprobanteContable); 
+                                    $arRegistro->setCentroCostoRel($arCentroCosto);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero(0);
-                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                    $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                     $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                     $arRegistro->setDebito($arProvision->getVrSena());                            
                                     $arRegistro->setDescripcionContable('PROVISION SENA');
@@ -423,8 +428,8 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setComprobanteRel($arComprobanteContable);                                    
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero(0);
-                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                    $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                     $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                     $arRegistro->setCredito($arProvision->getVrSena());                            
                                     $arRegistro->setDescripcionContable('PROVISION SENA');
@@ -438,11 +443,12 @@ class ContabilizarPagoProvisionController extends Controller
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
                                 if($arCuenta) {
                                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);                                    
+                                    $arRegistro->setComprobanteRel($arComprobanteContable); 
+                                    $arRegistro->setCentroCostoRel($arCentroCosto);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero(0);
-                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                    $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                     $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                     $arRegistro->setDebito($arProvision->getVrIcbf());                            
                                     $arRegistro->setDescripcionContable('PROVISION ICBF');
@@ -456,8 +462,8 @@ class ContabilizarPagoProvisionController extends Controller
                                     $arRegistro->setCentroCostoRel($arCentroCosto);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero(0);
-                                    $arRegistro->setNumeroReferencia(0);
+                                    $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                    $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
                                     $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
                                     $arRegistro->setCredito($arProvision->getVrIcbf());                            
                                     $arRegistro->setDescripcionContable('PROVISION ICBF');
