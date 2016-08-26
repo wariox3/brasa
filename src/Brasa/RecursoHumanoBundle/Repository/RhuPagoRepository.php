@@ -163,10 +163,10 @@ class RhuPagoRepository extends EntityRepository {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
         if ($strDesde != ""){
-            $dql .= " AND p.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
+            $dql .= " AND p.fechaDesde >='" . $strDesde . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND p.fechaDesde <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND p.fechaDesde <='" . $strHasta . "'";
         }
         if($strPago != "") {
             $dql .= " AND p.codigoPagoPk ='" . $strPago . "'";
