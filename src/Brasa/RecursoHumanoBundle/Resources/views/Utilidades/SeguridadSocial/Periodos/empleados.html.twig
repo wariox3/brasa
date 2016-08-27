@@ -31,8 +31,7 @@
                 <th>CENTRO COSTO</th>
                 <th>CONTRATO</th>
                 <th>DÍAS</th>
-                <th>SALARIO</th>
-                <th>SUPLEMENTARIO</th>
+                <th>SALARIO</th>                
                 <th>IBC</th>
                 <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
             </tr>
@@ -44,8 +43,7 @@
                 <td>{{ arPeriodoEmpleados.empleadoRel.centroCostoRel.nombre |default('') }}</td>
                 <td>{{ arPeriodoEmpleados.codigoContratoFk  }}</td>
                 <td style="text-align: right">{{ arPeriodoEmpleados.dias | number_format(0, '.', ',') }}</td>    
-                <td style="text-align: right">{{ arPeriodoEmpleados.vrSalario | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPeriodoEmpleados.vrSuplementario | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPeriodoEmpleados.vrSalario | number_format(0, '.', ',') }}</td>                
                 <td style="text-align: right">{{ arPeriodoEmpleados.ibc | number_format(0, '.', ',') }}</td>
                 <td style="text-align: center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPeriodoEmpleados.codigoPeriodoEmpleadoPk }}" /></td>
             </tr>
@@ -75,23 +73,17 @@
             <br/><br/><br/><br/><br/>
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">    
-                {{ form_widget(form.BtnLimpiarSuplementario, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
-            </div>
-            <div class="btn-group">    
                 {{ form_widget(form.BtnActualizarSalarioMinimo, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
-            </div>
-            <div class="btn-group">    
-                {{ form_widget(form.BtnActualizarDetalle, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
             </div>
             <div class="btn-group">
                 {{ form_widget(form.BtnActualizarEmpleadoAporte, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                    
             </div>
             {% if  arPeriodoDetalle.estadoGenerado == 0 %}    
                 <div class="btn-group">
-                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_ss_periodo_detalle_empleados_copiar', { 'codigoPeriodoDetalle': arPeriodoDetalle.codigoPeriodoDetallePk}) }}', 'Traslado', 600, 900)" style="float:left">Copiar desde otra sucursal</a>
+                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_ss_periodo_detalle_empleados_copiar', { 'codigoPeriodoDetalle': arPeriodoDetalle.codigoPeriodoDetallePk}) }}', 'Traslado', 600, 900)" style="float:left">Copiar</a>
                 </div>
                 <div class="btn-group">
-                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_ss_periodo_detalle_empleados_trasladar', { 'codigoPeriodoDetalle': arPeriodoDetalle.codigoPeriodoDetallePk}) }}', 'Traslado', 600, 900)" style="float:left">Trasladar desde otra sucursal</a>
+                    <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_ss_periodo_detalle_empleados_trasladar', { 'codigoPeriodoDetalle': arPeriodoDetalle.codigoPeriodoDetallePk}) }}', 'Traslado', 600, 900)" style="float:left">Trasladar</a>
                 </div>    
             {% endif %}
             <div class="btn-group">

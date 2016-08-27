@@ -618,26 +618,6 @@ class SeguridadSocialPeriodosController extends Controller
                 $em->flush();
                 //$em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->actualizar($codigoPeriodoDetalle);
             }                        
-            if($form->get('BtnActualizarDetalle')->isClicked()) {
-                $arrControles = $request->request->All();
-                $intIndice = 0;
-                foreach ($arrControles['LblCodigo'] as $intCodigo) {                
-                    if($arrControles['TxtSalario'.$intCodigo] != "" && $arrControles['TxtSalario'.$intCodigo] != 0) {
-                        $arPeriodoEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
-                        $arPeriodoEmpleado =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->find($intCodigo);
-                        $floSalario = $arrControles['TxtSalario'.$intCodigo];
-                        $arPeriodoEmpleado->setVrSalario($floSalario);
-                        $em->persist($arPeriodoEmpleado);
-                    }
-                    if($arrControles['TxtSuplementario'.$intCodigo] != 0) {
-                        $floSuplementario = $arrControles['TxtSuplementario'.$intCodigo];
-                        $arPeriodoEmpleado->setVrSuplementario($floSuplementario);
-                        $em->persist($arPeriodoEmpleado);
-                    }
-                }
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_ss_periodo_detalle_empleados', array('codigoPeriodoDetalle' => $codigoPeriodoDetalle)));
-            }
             if($form->get('BtnActualizarSalarioMinimo')->isClicked()) {
                 $arrControles = $request->request->All();
                 $intIndice = 0;
@@ -651,19 +631,6 @@ class SeguridadSocialPeriodosController extends Controller
                         $arPeriodoEmpleado->setVrSalario($floSalario);
                         $em->persist($arPeriodoEmpleado);                        
                     }
-                }
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_ss_periodo_detalle_empleados', array('codigoPeriodoDetalle' => $codigoPeriodoDetalle)));
-            }
-            if($form->get('BtnLimpiarSuplementario')->isClicked()) {
-                $arrControles = $request->request->All();
-                $intIndice = 0;
-                foreach ($arrControles['LblCodigo'] as $intCodigo) {                
-                    $arPeriodoEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
-                    $arPeriodoEmpleado =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->find($intCodigo);
-                    $arPeriodoEmpleado->setVrSuplementario(0);
-                    $em->persist($arPeriodoEmpleado);                        
-                    
                 }
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_rhu_ss_periodo_detalle_empleados', array('codigoPeriodoDetalle' => $codigoPeriodoDetalle)));
@@ -825,22 +792,38 @@ class SeguridadSocialPeriodosController extends Controller
             'form' => $form->createView()));
     }
     
+    public function resumenPagosAction($codigoPeriodoDetalle, $codigoEmpleado) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $session = $this->getRequest()->getSession();
+        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+        $arEmpleado =  $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);        
+        $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
+        $arPeriodoDetalle =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);
+
+        $arPagos = $paginator->paginate($em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaConsultaPagosDQL("", $arEmpleado->getNumeroIdentificacion(), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde()->format('Y/m/d'), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta()->format('Y/m/d'), "","")), $request->query->get('page', 1), 50);
+        $arPagosDetalles = $paginator->paginate($em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaConsultaPagosDetallesDQL($arEmpleado->getNumeroIdentificacion(), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde(), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta())), $request->query->get('page', 1), 50);
+        return $this->render('BrasaRecursoHumanoBundle:Utilidades/SeguridadSocial/Periodos:resumenPagos.html.twig', array(
+            'arPeriodoDetalle' => $arPeriodoDetalle,
+            'arPagos' => $arPagos,
+            'arPagosDetalles' => $arPagosDetalles,
+            ));
+    }    
+    
     private function formularioDetalleEmpleado($ar) {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $arrBotonEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonActualizarEmpleados = array('label' => 'Actualizar empleados', 'disabled' => false);        
         $arrBotonActualizarDatos = array('label' => 'Actualizar datos', 'disabled' => false);        
-        $arrBotonActualizarDetalle = array('label' => 'Actualizar detalle', 'disabled' => false);
         $arrBotonActualizarSalarioMinimo = array('label' => 'Actualizar salario minimo', 'disabled' => false);
-        $arrBotonLimpiarSuplementario = array('label' => 'Limpiar tiempo suplementario', 'disabled' => false);
+
         $arrBotonExcel = array('label' => 'Excel', 'disabled' => false);
         if($ar->getEstadoGenerado() == 1) {            
             $arrBotonEliminar['disabled'] = true;
             $arrBotonActualizarDatos['disabled'] = true;            
-            $arrBotonActualizarDetalle['disabled'] = true;
             $arrBotonActualizarSalarioMinimo['disabled'] = true;
-            $arrBotonLimpiarSuplementario['disabled'] = true;
             $arrBotonActualizarEmpleados['disabled'] = true;
         } 
         $arrayPropiedades = array(
@@ -861,10 +844,8 @@ class SeguridadSocialPeriodosController extends Controller
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnActualizarEmpleadoAporte', 'submit', $arrBotonActualizarDatos)    
-            ->add('BtnActualizarEmpleados', 'submit', $arrBotonActualizarEmpleados)                    
-            ->add('BtnActualizarDetalle', 'submit', $arrBotonActualizarDetalle)
-            ->add('BtnActualizarSalarioMinimo', 'submit', $arrBotonActualizarSalarioMinimo)
-            ->add('BtnLimpiarSuplementario', 'submit', $arrBotonLimpiarSuplementario)    
+            ->add('BtnActualizarEmpleados', 'submit', $arrBotonActualizarEmpleados)                                
+            ->add('BtnActualizarSalarioMinimo', 'submit', $arrBotonActualizarSalarioMinimo)  
             ->add('BtnExcel', 'submit', $arrBotonExcel)    
             ->add('BtnEliminar', 'submit', $arrBotonEliminar)
             ->getForm();
@@ -1009,25 +990,6 @@ class SeguridadSocialPeriodosController extends Controller
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
-    }
-
-    public function resumenPagosAction($codigoPeriodoDetalle, $codigoEmpleado) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
-        $paginator  = $this->get('knp_paginator');
-        $session = $this->getRequest()->getSession();
-        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-        $arEmpleado =  $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);        
-        $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
-        $arPeriodoDetalle =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);
-
-        $arPagos = $paginator->paginate($em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaConsultaPagosDQL("", $arEmpleado->getNumeroIdentificacion(), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde(), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta(), "","")), $request->query->get('page', 1), 50);
-        $arPagosDetalles = $paginator->paginate($em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaConsultaPagosDetallesDQL($arEmpleado->getNumeroIdentificacion(), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde(), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta())), $request->query->get('page', 1), 50);
-        return $this->render('BrasaRecursoHumanoBundle:Utilidades/SeguridadSocial/Periodos:resumenPagos.html.twig', array(
-            'arPeriodoDetalle' => $arPeriodoDetalle,
-            'arPagos' => $arPagos,
-            'arPagosDetalles' => $arPagosDetalles,
-            ));
     }
     
     private function listar() {

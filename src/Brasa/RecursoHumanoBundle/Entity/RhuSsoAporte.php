@@ -297,6 +297,11 @@ class RhuSsoAporte
      * @ORM\Column(name="suplementario", type="float")
      */
     private $suplementario = 0;     
+
+    /**
+     * @ORM\Column(name="vr_ingreso_base_cotizacion", type="float")
+     */
+    private $vrIngresoBaseCotizacion = 0; 
     
     /**
      * @ORM\Column(name="ibc_pension", type="float")
@@ -524,7 +529,6 @@ class RhuSsoAporte
      */
     protected $cargoRel;     
     
-
 
 
     /**
@@ -1810,6 +1814,30 @@ class RhuSsoAporte
     }
 
     /**
+     * Set vrVacaciones
+     *
+     * @param float $vrVacaciones
+     *
+     * @return RhuSsoAporte
+     */
+    public function setVrVacaciones($vrVacaciones)
+    {
+        $this->vrVacaciones = $vrVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get vrVacaciones
+     *
+     * @return float
+     */
+    public function getVrVacaciones()
+    {
+        return $this->vrVacaciones;
+    }
+
+    /**
      * Set salarioIntegral
      *
      * @param string $salarioIntegral
@@ -1855,6 +1883,30 @@ class RhuSsoAporte
     public function getSuplementario()
     {
         return $this->suplementario;
+    }
+
+    /**
+     * Set vrIngresoBaseCotizacion
+     *
+     * @param float $vrIngresoBaseCotizacion
+     *
+     * @return RhuSsoAporte
+     */
+    public function setVrIngresoBaseCotizacion($vrIngresoBaseCotizacion)
+    {
+        $this->vrIngresoBaseCotizacion = $vrIngresoBaseCotizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIngresoBaseCotizacion
+     *
+     * @return float
+     */
+    public function getVrIngresoBaseCotizacion()
+    {
+        return $this->vrIngresoBaseCotizacion;
     }
 
     /**
@@ -2290,27 +2342,27 @@ class RhuSsoAporte
     }
 
     /**
-     * Set totalCotizacion
+     * Set totalCotizacionFondos
      *
-     * @param float $totalCotizacion
+     * @param float $totalCotizacionFondos
      *
      * @return RhuSsoAporte
      */
-    public function setTotalCotizacion($totalCotizacion)
+    public function setTotalCotizacionFondos($totalCotizacionFondos)
     {
-        $this->totalCotizacion = $totalCotizacion;
+        $this->totalCotizacionFondos = $totalCotizacionFondos;
 
         return $this;
     }
 
     /**
-     * Get totalCotizacion
+     * Get totalCotizacionFondos
      *
      * @return float
      */
-    public function getTotalCotizacion()
+    public function getTotalCotizacionFondos()
     {
-        return $this->totalCotizacion;
+        return $this->totalCotizacionFondos;
     }
 
     /**
@@ -2746,6 +2798,30 @@ class RhuSsoAporte
     }
 
     /**
+     * Set totalCotizacion
+     *
+     * @param float $totalCotizacion
+     *
+     * @return RhuSsoAporte
+     */
+    public function setTotalCotizacion($totalCotizacion)
+    {
+        $this->totalCotizacion = $totalCotizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get totalCotizacion
+     *
+     * @return float
+     */
+    public function getTotalCotizacion()
+    {
+        return $this->totalCotizacion;
+    }
+
+    /**
      * Set ssoPeriodoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo $ssoPeriodoRel
@@ -2887,53 +2963,5 @@ class RhuSsoAporte
     public function getCargoRel()
     {
         return $this->cargoRel;
-    }
-
-    /**
-     * Set totalCotizacionFondos
-     *
-     * @param float $totalCotizacionFondos
-     *
-     * @return RhuSsoAporte
-     */
-    public function setTotalCotizacionFondos($totalCotizacionFondos)
-    {
-        $this->totalCotizacionFondos = $totalCotizacionFondos;
-
-        return $this;
-    }
-
-    /**
-     * Get totalCotizacionFondos
-     *
-     * @return float
-     */
-    public function getTotalCotizacionFondos()
-    {
-        return $this->totalCotizacionFondos;
-    }
-
-    /**
-     * Set vrVacaciones
-     *
-     * @param float $vrVacaciones
-     *
-     * @return RhuSsoAporte
-     */
-    public function setVrVacaciones($vrVacaciones)
-    {
-        $this->vrVacaciones = $vrVacaciones;
-
-        return $this;
-    }
-
-    /**
-     * Get vrVacaciones
-     *
-     * @return float
-     */
-    public function getVrVacaciones()
-    {
-        return $this->vrVacaciones;
     }
 }

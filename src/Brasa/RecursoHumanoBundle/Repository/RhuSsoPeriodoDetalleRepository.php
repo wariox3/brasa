@@ -81,8 +81,9 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $ibc = $arPeriodoEmpleado->getIbc();
                 $ibcDia = $ibc / $intDiasCotizar;
                 $ibcDiaSalario = $floSalario / 30;
-                $vacaciones = $arPeriodoEmpleado->getVrVacaciones();
+                $vacaciones = $arPeriodoEmpleado->getVrVacaciones();                
                 $arAporte->setVrVacaciones($vacaciones);
+                $arAporte->setVrIngresoBaseCotizacion($ibc);
                 $floSalarioIntegral = $arPeriodoEmpleado->getVrSalario();
                 if($arPeriodoEmpleado->getSalarioIntegral() == 'X') {
                     $arAporte->setSalarioIntegral($arPeriodoEmpleado->getSalarioIntegral());                
@@ -158,16 +159,14 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                     $floSuplementario = 0;
                 }
                 //Ibc
-                $floIbcBrutoPension = (($intDiasCotizarPension - $intDiasIncapacidades) * ($floSalario / 30)) + $floIbcIncapacidades + $floSuplementario;
-                $floIbcBrutoSalud = (($intDiasCotizarSalud - $intDiasIncapacidades) * ($floSalario / 30)) + $floIbcIncapacidades + $floSuplementario;                    
-                $floIbcBrutoRiesgos = ($intDiasCotizarRiesgos * ($floSalario / 30)) + $floSuplementario;
-                $floIbcBrutoCaja = ($intDiasCotizarCaja * ($floSalario / 30)) + $floSuplementario + $vacaciones;
-                //$floIbcBrutoPension = $ibc;
-                //$floIbcBrutoSalud = $ibc;                    
-                //$floIbcBrutoRiesgos = $intDiasCotizarRiesgos * $ibcDiaSalario;
+                //$floIbcBrutoPension = (($intDiasCotizarPension - $intDiasIncapacidades) * ($floSalario / 30)) + $floIbcIncapacidades + $floSuplementario;
+                //$floIbcBrutoSalud = (($intDiasCotizarSalud - $intDiasIncapacidades) * ($floSalario / 30)) + $floIbcIncapacidades + $floSuplementario;                    
                 //$floIbcBrutoRiesgos = ($intDiasCotizarRiesgos * ($floSalario / 30)) + $floSuplementario;
-                //$floIbcBrutoCaja = ($intDiasCotizarCaja * $ibcDiaSalario) + $vacaciones;
                 //$floIbcBrutoCaja = ($intDiasCotizarCaja * ($floSalario / 30)) + $floSuplementario + $vacaciones;
+                $floIbcBrutoPension = $ibc;
+                $floIbcBrutoSalud = $ibc;                    
+                $floIbcBrutoRiesgos = $intDiasCotizarRiesgos * ($ibc/$intDiasCotizarPension);                
+                $floIbcBrutoCaja = ($intDiasCotizarCaja * ($ibc/$intDiasCotizarPension)) + $vacaciones;                
                 
                 $floIbcPension = $this->redondearIbc($intDiasCotizarPension, $floIbcBrutoPension);
                 $floIbcSalud = $this->redondearIbc($intDiasCotizarSalud, $floIbcBrutoSalud);
@@ -334,27 +333,24 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                         $intDiasCotizarRiesgos = 0;
                     }                
                     $arAporte->setDiasCotizadosPension($intDiasCotizarPension);
-                    $arAporte->setDiasCotizadosSalud($intDiasCotizarSalud);
-                    $arAporte->setDiasCotizadosRiesgosProfesionales($intDiasCotizarRiesgos);
-                    $arAporte->setDiasCotizadosCajaCompensacion($intDiasCotizarCaja);                                            
+                    $arAporte->setDiasCotizadosSalud(0);
+                    $arAporte->setDiasCotizadosRiesgosProfesionales(0);
+                    $arAporte->setDiasCotizadosCajaCompensacion(0);                                            
                     
                     //Ibc
                     $floIbcBrutoPension = ($intDiasCotizarPension * ($floSalario / 30));
-                    $floIbcBrutoSalud = ($intDiasCotizarSalud * ($floSalario / 30));                    
-                    $floIbcBrutoRiesgos = ($intDiasCotizarRiesgos * ($floSalario / 30));
-                    $floIbcBrutoCaja = ($intDiasCotizarCaja * ($floSalario / 30));
+                    $floIbcBrutoSalud = 0;                    
+                    $floIbcBrutoRiesgos = 0;
+                    $floIbcBrutoCaja = 0;
                     $floIbcPension = $this->redondearIbc($intDiasCotizarPension, $floIbcBrutoPension);
-                    $floIbcSalud = $this->redondearIbc($intDiasCotizarSalud, $floIbcBrutoSalud);
-                    $floIbcRiesgos = $this->redondearIbc($intDiasCotizarRiesgos, $floIbcBrutoRiesgos);
-                    $floIbcCaja = $this->redondearIbc($intDiasCotizarCaja, $floIbcBrutoCaja);
+                    $floIbcSalud = 0;
+                    $floIbcRiesgos = 0;
+                    $floIbcCaja = 0;
                     
-                    if($intDiasCotizarRiesgos <= 0) {
-                        $floIbcRiesgos = 0;
-                    }
                     $arAporte->setIbcPension($floIbcPension);
-                    $arAporte->setIbcSalud($floIbcSalud);
-                    $arAporte->setIbcRiesgosProfesionales($floIbcRiesgos);
-                    $arAporte->setIbcCaja($floIbcCaja);                                    
+                    $arAporte->setIbcSalud(0);
+                    $arAporte->setIbcRiesgosProfesionales(0);
+                    $arAporte->setIbcCaja(0);                                    
 
                     $floTarifaPension = $arPeriodoEmpleado->getTarifaPension();   // se quito un porcentaje de 4% (+ 4)         
                     $floTarifaSalud = 0;

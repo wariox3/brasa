@@ -13,15 +13,9 @@
                 <th>DESDE</th>
                 <th>HASTA</th>
                 <th>DIAS</th>
-                <th>IBP</th>
                 <th>IBC</th>
-                <th>PENSION</th>
-                <th>SALUD</th>
-            </tr>
-            {% set douTotalIBP = 0  %}  
+            </tr>  
             {% set douTotalIBC = 0  %}              
-            {% set douTotalPension = 0  %}            
-            {% set douTotalSalud = 0  %}            
             {% for arPagos in arPagos %}
             <tr>                
                 <td>{{ arPagos.numero  }}</td>
@@ -30,21 +24,12 @@
                 <td>{{ arPagos.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arPagos.fechaHasta |date("Y/m/d")  }}</td>
                 <td style="text-align: right">{{ arPagos.diasPeriodo | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPagos.vrIngresoBasePrestacion | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagos.vrIngresoBaseCotizacion | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPagos.vrPension | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arPagos.vrEps | number_format(0, '.', ',') }}</td>
-            </tr>
-            {% set douTotalIBP = douTotalIBP + arPagos.vrIngresoBasePrestacion %}    
-            {% set douTotalIBC = douTotalIBC + arPagos.vrIngresoBaseCotizacion %}            
-            {% set douTotalPension = douTotalPension + arPagos.vrPension %}                
-            {% set douTotalSalud = douTotalSalud + arPagos.vrEps %}                            
+            </tr>                
+            {% set douTotalIBC = douTotalIBC + arPagos.vrIngresoBaseCotizacion %}                                       
             {% endfor %}
-            <td colspan="6"></td>
-            <td style="text-align: right">{{ douTotalIBP | number_format(0, '.', ',') }}</td>
+            <td colspan="6"></td>            
             <td style="text-align: right">{{ douTotalIBC | number_format(0, '.', ',') }}</td>
-            <td style="text-align: right">{{ douTotalPension | number_format(0, '.', ',') }}</td>
-            <td style="text-align: right">{{ douTotalSalud | number_format(0, '.', ',') }}</td>
         </table>
         <div class="page-header">
         <h3>Detalles pagos</h3>
@@ -63,7 +48,7 @@
                 <th>IBCA</th>
                 <th>IBCS</th>
             </tr>
-            {% set douTotalIBPP = 0  %}             
+            {% set douTotalIBC = 0  %}                           
             {% for arPagosDetalles in arPagosDetalles %}
             <tr>                
                 <td>{{ arPagosDetalles.codigoPagoDetallePk  }}</td>
@@ -78,9 +63,10 @@
                 <td style="text-align: right">{{ arPagosDetalles.vrIngresoBaseCotizacionAdicional | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagosDetalles.vrIngresoBaseCotizacionSalario | number_format(0, '.', ',') }}</td>
             </tr>
-                           
-            
+            {% set douTotalIBC = douTotalIBC + arPagosDetalles.vrIngresoBaseCotizacion %}                                       
             {% endfor %}
+            <td colspan="7"></td>            
+            <td style="text-align: right">{{ douTotalIBC | number_format(0, '.', ',') }}</td>            
         </table>
         
 </div>
