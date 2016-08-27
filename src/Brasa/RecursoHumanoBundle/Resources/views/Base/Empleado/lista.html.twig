@@ -75,7 +75,7 @@
                 <td>{{ arEmpleados.codigoContratoActivoFk  }}</td>
                 <td>{{ arEmpleados.telefono }}</td>                
                 <td>{% if arEmpleados.fechaContrato != "" %} {{ arEmpleados.fechaContrato|date('Y/m/d')  }} {% else %} SIN DEFINIR {% endif %}</td>
-                <td>{{ arEmpleados.codigoInterface }}</td>
+                <td>{{ arEmpleados.centroCostoContabilidadRel.codigoInterface | default('')}}</td>
                 <td>{% if arEmpleados.auxilioTransporte == 1 %} SI {% else %} NO {% endif %}</td>                                
                 <td>{% if arEmpleados.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>                                
                 <td>
