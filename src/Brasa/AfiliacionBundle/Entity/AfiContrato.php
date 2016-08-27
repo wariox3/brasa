@@ -166,7 +166,7 @@ class AfiContrato
     /**     
      * @ORM\Column(name="estado_generado_cta_cobrar", type="boolean")
      */    
-    private $estadoGeneradoCtaCobrar = true;
+    private $estadoGeneradoCtaCobrar = false;
     
     /**
      * @ORM\ManyToOne(targetEntity="AfiEmpleado", inversedBy="contratosEmpleadoRel")
@@ -247,6 +247,7 @@ class AfiContrato
      * @ORM\OneToMany(targetEntity="AfiFacturaDetalleAfiliacion", mappedBy="contratoRel")
      */
     protected $facturasDetallesAfiliacionesContratosRel; 
+    
     
     
     
