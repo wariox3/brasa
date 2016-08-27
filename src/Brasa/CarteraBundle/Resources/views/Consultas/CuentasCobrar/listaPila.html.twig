@@ -97,6 +97,7 @@
                 <th>RANGO</th>
                 <th></th>
             </tr>
+            {% set douTotal = 0  %}
             {% for arCuentasCobrar in arCuentasCobrar %}
             <tr>
                 <td>{{ arCuentasCobrar.codigoCuentaCobrarPk  }}</td>
@@ -116,8 +117,12 @@
                 <td>{{ arCuentasCobrar.diasVencida }}</td>
                 <td>{{ arCuentasCobrar.rango }}</td>
                 <td style="text-align: center"><a href="{{ path('brs_afi_movimiento_factura_detalle', { 'codigoFactura': arCuentasCobrar.codigoFactura }) }}" target="_blanck"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
+                {% set douTotal = douTotal + arCuentasCobrar.saldo %}
             </tr>
             {% endfor %}
+            <td colspan="12"></td>
+            <td style="text-align: right">{{ douTotal | number_format(0, '.', ',') }}</td>
+            <td colspan="4"></td> 
         </table>
 
         <!-- Botones Menu Items -->

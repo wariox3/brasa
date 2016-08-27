@@ -31,7 +31,7 @@ class ReciboResumen extends \FPDF_FPDF {
         $this->SetXY(53, 10);
         $this->Image('imagenes/logos/logo.jpg', 12, 7, 35, 17);
         //INFORMACIÓN EMPRESA
-        $this->Cell(150, 7, utf8_decode("RESUMEN RECIBOS"), 0, 0, 'C', 1);
+        $this->Cell(150, 7, utf8_decode("RESUMEN RECIBOS PILA"), 0, 0, 'C', 1);
         $this->SetXY(53, 18);
         $this->SetFont('Arial','B',9);
         $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);
@@ -104,7 +104,7 @@ class ReciboResumen extends \FPDF_FPDF {
             car_recibo_tipo.nombre AS tipo, 
             gen_cuenta.nombre AS cuenta, 
             COUNT(car_recibo.codigo_recibo_pk) AS numeroRecibos, 
-            SUM(car_recibo.vr_total) AS vrTotal
+            SUM(car_recibo.vr_total_pago) AS vrTotalPago
             FROM car_recibo  
             LEFT JOIN car_recibo_tipo ON car_recibo.codigo_recibo_tipo_fk = car_recibo_tipo.codigo_recibo_tipo_pk 
             LEFT JOIN gen_cuenta ON car_recibo.codigo_cuenta_fk = gen_cuenta.codigo_cuenta_pk 
@@ -121,8 +121,8 @@ class ReciboResumen extends \FPDF_FPDF {
             $pdf->Cell(50, 4, $registro['tipo'], 1, 0, 'L');
             $pdf->Cell(50, 4, $registro['cuenta'], 1, 0, 'L');
             $pdf->Cell(20, 4, $registro['numeroRecibos'], 1, 0, 'L');
-            $pdf->Cell(30, 4, number_format($registro['vrTotal'], 2, '.', ','), 1, 0, 'R');
-            $total += $registro['vrTotal'];
+            $pdf->Cell(30, 4, number_format($registro['vrTotalPago'], 2, '.', ','), 1, 0, 'R');
+            $total += $registro['vrTotalPago'];
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }

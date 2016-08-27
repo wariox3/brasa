@@ -32,7 +32,7 @@ class CuentaCobrarPilaController extends Controller
             }
             if ($form->get('BtnPdf')->isClicked()) {
                 $strWhere .= $this->devFiltro($form);
-                $objEstadoCuenta = new \Brasa\CarteraBundle\Formatos\EstadoCuenta();
+                $objEstadoCuenta = new \Brasa\CarteraBundle\Formatos\EstadoCuentaPila();
                 $objEstadoCuenta->Generar($this, $strWhere);
             }            
         }
@@ -164,7 +164,7 @@ class CuentaCobrarPilaController extends Controller
         for($col = 'A'; $col !== 'S'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
         }
-        for($col = 'J'; $col !== 'M'; $col++) {
+        for($col = 'J'; $col !== 'L'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }
@@ -198,6 +198,7 @@ class CuentaCobrarPilaController extends Controller
         $statement = $connection->prepare($strSql);        
         $statement->execute();
         $arCuentasCobrar = $statement->fetchAll();
+        $douTotal = 0;
         foreach ($arCuentasCobrar as $arCuentasCobrar) {
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arCuentasCobrar['codigoCuentaCobrarPk'])
@@ -218,9 +219,14 @@ class CuentaCobrarPilaController extends Controller
                     ->setCellValue('P' . $i, $arCuentasCobrar['rango'])
                     ->setCellValue('Q' . $i, $arCuentasCobrar['grupo'])
                     ->setCellValue('R' . $i, $arCuentasCobrar['subgrupo']);
+            $douTotal = $douTotal + $arCuentasCobrar['saldo'];
             $i++;
         }
-
+        $objPHPExcel->getActiveSheet()->getStyle($i)->getFont()->setBold(true);
+        $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('J'. $i, 'TOTAL')
+                ->setCellValue('K'. $i, round($douTotal));
+        
         $objPHPExcel->getActiveSheet()->setTitle('CuentasCobrar');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)

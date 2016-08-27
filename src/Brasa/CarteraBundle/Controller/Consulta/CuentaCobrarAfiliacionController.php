@@ -198,6 +198,7 @@ class CuentaCobrarAfiliacionController extends Controller
         $statement = $connection->prepare($strSql);        
         $statement->execute();
         $arCuentasCobrar = $statement->fetchAll();
+        $douTotal = 0;
         foreach ($arCuentasCobrar as $arCuentasCobrar) {
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arCuentasCobrar['codigoCuentaCobrarPk'])
@@ -218,9 +219,14 @@ class CuentaCobrarAfiliacionController extends Controller
                     ->setCellValue('P' . $i, $arCuentasCobrar['rango'])
                     ->setCellValue('Q' . $i, $arCuentasCobrar['grupo'])
                     ->setCellValue('R' . $i, $arCuentasCobrar['subgrupo']);
+            $douTotal = $douTotal + $arCuentasCobrar['saldo'];
             $i++;
         }
-
+        $objPHPExcel->getActiveSheet()->getStyle($i)->getFont()->setBold(true);
+        $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('J'. $i, 'TOTAL')
+                ->setCellValue('K'. $i, round($douTotal));
+        
         $objPHPExcel->getActiveSheet()->setTitle('CuentasCobrar');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)

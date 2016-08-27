@@ -1,6 +1,6 @@
 <?php
 namespace Brasa\CarteraBundle\Formatos;
-class EstadoCuentaAfiliacion extends \FPDF_FPDF {
+class EstadoCuentaPila extends \FPDF_FPDF {
     public static $em;   
     public static $strWhere;
     
@@ -9,13 +9,13 @@ class EstadoCuentaAfiliacion extends \FPDF_FPDF {
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
         self::$strWhere = $strWhere;
-        $pdf = new EstadoCuentaAfiliacion();
+        $pdf = new EstadoCuentaPila();
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
         $this->Body($pdf);
 
-        $pdf->Output("EstadoCuentaAfiliacion.pdf", 'D');        
+        $pdf->Output("EstadoCuentaPila.pdf", 'D');        
         
     } 
     
@@ -28,7 +28,7 @@ class EstadoCuentaAfiliacion extends \FPDF_FPDF {
         $this->SetXY(53, 10);
         $this->Image('imagenes/logos/logo.jpg', 12, 7, 35, 17);
         //INFORMACIÓN EMPRESA
-        $this->Cell(150, 7, utf8_decode("ESTADO CUENTA AFILIACION"), 0, 0, 'C', 1);
+        $this->Cell(150, 7, utf8_decode("ESTADO CUENTA PILA"), 0, 0, 'C', 1);
         $this->SetXY(53, 18);
         $this->SetFont('Arial','B',9);
         $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);
@@ -85,9 +85,9 @@ class EstadoCuentaAfiliacion extends \FPDF_FPDF {
         $pdf->Ln(4);
         $connection = self::$em->getConnection();
         $strSql = "SELECT  
-                            sql_car_cartera_edades_afiliacion.*
+                            sql_car_cartera_edades_pila.*
                     FROM
-                            sql_car_cartera_edades_afiliacion                       
+                            sql_car_cartera_edades_pila                       
                     WHERE 1 " . self::$strWhere;                    
         $statement = $connection->prepare($strSql);        
         $statement->execute();

@@ -104,7 +104,7 @@ class AnticipoResumen extends \FPDF_FPDF {
             
             gen_cuenta.nombre AS cuenta, 
             COUNT(car_anticipo.codigo_anticipo_pk) AS numeroAnticipos, 
-            SUM(car_anticipo.vr_total) AS vrTotal
+            SUM(car_anticipo.vr_total_pago) AS vrTotalPago
             FROM car_anticipo  
             
             LEFT JOIN gen_cuenta ON car_anticipo.codigo_cuenta_fk = gen_cuenta.codigo_cuenta_pk 
@@ -121,8 +121,8 @@ class AnticipoResumen extends \FPDF_FPDF {
             //$pdf->Cell(30, 4, $registro['tipo'], 1, 0, 'L');
             $pdf->Cell(60, 4, $registro['cuenta'], 1, 0, 'L');
             $pdf->Cell(25, 4, $registro['numeroAnticipos'], 1, 0, 'L');
-            $pdf->Cell(30, 4, number_format($registro['vrTotal'], 2, '.', ','), 1, 0, 'R');
-            $total += $registro['vrTotal'];
+            $pdf->Cell(30, 4, number_format($registro['vrTotalPago'], 2, '.', ','), 1, 0, 'R');
+            $total += $registro['vrTotalPago'];
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }
@@ -133,7 +133,7 @@ class AnticipoResumen extends \FPDF_FPDF {
         $pdf->Ln();
         $pdf->Ln();
 
-        $header = array('NUMERO', 'FECHA', 'CUENTA', 'CLIENTE', 'DCTO', 'AJUSTE', 'RTEICA', 'RTEIVA', 'RTEFTE', 'TOTAL');
+        $header = array('NUMERO', 'FECHA', 'CUENTA', 'CLIENTE', 'DCTO', 'AJUSTE', 'RTEICA', 'RTEIVA', 'RTEFTE', 'TOTAL', 'T. PAGO');
         $pdf->SetFillColor(236, 236, 236);
         $pdf->SetTextColor(0);
         $pdf->SetDrawColor(0, 0, 0);
@@ -141,7 +141,7 @@ class AnticipoResumen extends \FPDF_FPDF {
         $pdf->SetFont('', 'B', 6);
 
         //creamos la cabecera de la tabla.
-        $w = array(13, 15, 30, 40, 13, 13, 13, 13, 13, 13);
+        $w = array(13, 15, 30, 40, 13, 13, 13, 13, 13, 13, 13);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $pdf->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -167,6 +167,7 @@ class AnticipoResumen extends \FPDF_FPDF {
             $pdf->Cell(13, 4, number_format($arAnticipo->getVrTotalReteIca(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(13, 4, number_format($arAnticipo->getVrTotalReteIva(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(13, 4, number_format($arAnticipo->getVrTotalReteFuente(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(13, 4, number_format($arAnticipo->getVrTotal(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(13, 4, number_format($arAnticipo->getVrTotalPago(), 0, '.', ','), 1, 0, 'R');
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);

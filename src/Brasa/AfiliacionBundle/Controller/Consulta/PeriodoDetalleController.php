@@ -55,8 +55,15 @@ class PeriodoDetalleController extends Controller
         $session->set('filtroPeriodoNumero', $form->get('TxtNumero')->getData());
         $session->set('filtroPeriodoEstadoFacturado', $form->get('estadoFacturado')->getData());                  
         $session->set('filtroNit', $form->get('TxtNit')->getData()); 
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
+            $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        } else {
+            $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
+            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
+        }
         $this->lista();
     }
     

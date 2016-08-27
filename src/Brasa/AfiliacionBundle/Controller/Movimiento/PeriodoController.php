@@ -323,7 +323,39 @@ class PeriodoController extends Controller
             'arPeriodoDetalles' => $arPeriodoDetalles, 
             'arPeriodoDetallesPagos' => $arPeriodoDetallesPagos, 
             'form' => $form->createView()));
-    }    
+    }
+
+    /**
+     * @Route("/afi/movimiento/periodo/interesmora/{codigoPeriodo}", name="brs_afi_movimiento_periodo_interesmora")
+     */    
+    public function interesmoraAction(Request $request, $codigoPeriodo = '') {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
+        $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
+        
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        
+        $form = $this->createFormBuilder()
+            ->setAction($this->generateUrl('brs_afi_movimiento_periodo_interesmora', array('codigoPeriodo' => $codigoPeriodo)))
+            ->add('interesMora', 'number', array('data' =>$arPeriodo->getInteresMora() ,'required' => true))                                
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        $form->handleRequest($request);
+           
+        if ($form->isValid()) {
+            $arPeriodo->setInteresMora($form->get('interesMora')->getData());
+            $arPeriodo->setTotal($arPeriodo->getTotal() + $form->get('interesMora')->getData());
+            $em->persist($arPeriodo);
+            $em->flush();
+            return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo_detalle', array('codigoPeriodo' => $codigoPeriodo)));
+        }
+        return $this->render('BrasaAfiliacionBundle:Movimiento/Periodo:interesMora.html.twig', array(
+            'arPeriodo' => $arPeriodo,
+            'form' => $form->createView()
+        ));
+    }
     
     private function lista() {    
         $session = $this->getRequest()->getSession();

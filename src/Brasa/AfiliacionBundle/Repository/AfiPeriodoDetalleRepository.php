@@ -29,10 +29,10 @@ class AfiPeriodoDetalleRepository extends EntityRepository {
             $dql .= " AND p.estadoFacturado = 0";
         } 
         if($strDesde != "") {
-            $dql .= " AND p.fechaDesde >='" . date_format($strDesde, ('Y-m-d')) . "'";
+            $dql .= " AND p.fechaDesde >='" . $strDesde . "'";
         }
         if($strHasta != "") {
-            $dql .= " AND p.fechaDesde <='" . date_format($strHasta, ('Y-m-d')) . "'";
+            $dql .= " AND p.fechaDesde <='" . $strHasta . "'";
         }
         
         $dql .= " ORDER BY pd.codigoPeriodoDetallePk";

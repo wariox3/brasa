@@ -61,6 +61,7 @@ class AfiFacturaRepository extends EntityRepository {
         $subtotal = 0;        
         $iva = 0;        
         $total = 0;
+        $interesMora = 0;
         $floCurso = 0;        
         $arFacturasDetalle = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();        
         $arFacturasDetalle = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura));                 
@@ -68,6 +69,7 @@ class AfiFacturaRepository extends EntityRepository {
             $subtotal +=  $arFacturaDetalle->getSubtotal();
             $iva += $arFacturaDetalle->getIva();
             $total +=  $arFacturaDetalle->getTotal();
+            $interesMora += $arFacturaDetalle->getInteresMora();
         }                           
         
         $arFacturasDetalleCursos = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso();        
@@ -79,6 +81,7 @@ class AfiFacturaRepository extends EntityRepository {
         $arFactura->setCurso($floCurso);
         $arFactura->setSubTotal($subtotal);
         $arFactura->setIva($iva);
+        $arFactura->setInteresMora($interesMora);
         $arFactura->setTotal($total);
         $em->persist($arFactura);
         $em->flush();

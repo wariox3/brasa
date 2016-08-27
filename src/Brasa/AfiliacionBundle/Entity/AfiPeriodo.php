@@ -130,7 +130,12 @@ class AfiPeriodo
     /**
      * @ORM\Column(name="numero_empleados", type="integer", nullable=true)
      */    
-    private $numeroEmpleados = 0;     
+    private $numeroEmpleados = 0; 
+
+    /**
+     * @ORM\Column(name="interes_mora", type="float")
+     */
+    private $interesMora = 0;
     
     /**
      * @ORM\ManyToOne(targetEntity="AfiCliente", inversedBy="periodosClienteRel")
@@ -152,6 +157,7 @@ class AfiPeriodo
      * @ORM\OneToMany(targetEntity="AfiFacturaDetalle", mappedBy="periodoRel")
      */
     protected $facturasDetallesPeriodoRel;     
+    
     
     /**
      * Constructor
@@ -723,6 +729,30 @@ class AfiPeriodo
     public function getNumeroEmpleados()
     {
         return $this->numeroEmpleados;
+    }
+
+    /**
+     * Set interesMora
+     *
+     * @param float $interesMora
+     *
+     * @return AfiPeriodo
+     */
+    public function setInteresMora($interesMora)
+    {
+        $this->interesMora = $interesMora;
+
+        return $this;
+    }
+
+    /**
+     * Get interesMora
+     *
+     * @return float
+     */
+    public function getInteresMora()
+    {
+        return $this->interesMora;
     }
 
     /**

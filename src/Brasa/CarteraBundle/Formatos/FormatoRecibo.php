@@ -123,7 +123,7 @@ class FormatoRecibo extends \FPDF_FPDF {
         $this->Cell(52, 5, $estadoAnulado, 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(21, 5, utf8_decode("ASESOR:") , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',8);
+        $this->SetFont('Arial','',7);
         $this->Cell(52, 5, $arRecibo->getAsesorRel()->getNombre(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(23, 5, utf8_decode("T. RET FUENTE:") , 1, 0, 'R', 1);

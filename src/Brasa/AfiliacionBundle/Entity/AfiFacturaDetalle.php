@@ -90,7 +90,12 @@ class AfiFacturaDetalle
     /**
      * @ORM\Column(name="total", type="float")
      */
-    private $total = 0;     
+    private $total = 0; 
+
+    /**
+     * @ORM\Column(name="interes_mora", type="float")
+     */
+    private $interesMora = 0;
     
     /**
      * @ORM\ManyToOne(targetEntity="AfiFactura", inversedBy="facturasDetallesFacturaRel")
@@ -105,6 +110,7 @@ class AfiFacturaDetalle
     protected $periodoRel;    
     
 
+    
 
     /**
      * Get codigoFacturaDetallePk
@@ -189,75 +195,51 @@ class AfiFacturaDetalle
     }
 
     /**
-     * Set total
+     * Set fechaDesde
      *
-     * @param float $total
+     * @param \DateTime $fechaDesde
      *
      * @return AfiFacturaDetalle
      */
-    public function setTotal($total)
+    public function setFechaDesde($fechaDesde)
     {
-        $this->total = $total;
+        $this->fechaDesde = $fechaDesde;
 
         return $this;
     }
 
     /**
-     * Get total
+     * Get fechaDesde
      *
-     * @return float
+     * @return \DateTime
      */
-    public function getTotal()
+    public function getFechaDesde()
     {
-        return $this->total;
+        return $this->fechaDesde;
     }
 
     /**
-     * Set facturaRel
+     * Set fechaHasta
      *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiFactura $facturaRel
+     * @param \DateTime $fechaHasta
      *
      * @return AfiFacturaDetalle
      */
-    public function setFacturaRel(\Brasa\AfiliacionBundle\Entity\AfiFactura $facturaRel = null)
+    public function setFechaHasta($fechaHasta)
     {
-        $this->facturaRel = $facturaRel;
+        $this->fechaHasta = $fechaHasta;
 
         return $this;
     }
 
     /**
-     * Get facturaRel
+     * Get fechaHasta
      *
-     * @return \Brasa\AfiliacionBundle\Entity\AfiFactura
+     * @return \DateTime
      */
-    public function getFacturaRel()
+    public function getFechaHasta()
     {
-        return $this->facturaRel;
-    }
-
-    /**
-     * Set periodoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodo $periodoRel
-     *
-     * @return AfiFacturaDetalle
-     */
-    public function setPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodo $periodoRel = null)
-    {
-        $this->periodoRel = $periodoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get periodoRel
-     *
-     * @return \Brasa\AfiliacionBundle\Entity\AfiPeriodo
-     */
-    public function getPeriodoRel()
-    {
-        return $this->periodoRel;
+        return $this->fechaHasta;
     }
 
     /**
@@ -429,54 +411,6 @@ class AfiFacturaDetalle
     }
 
     /**
-     * Set fechaDesde
-     *
-     * @param \DateTime $fechaDesde
-     *
-     * @return AfiFacturaDetalle
-     */
-    public function setFechaDesde($fechaDesde)
-    {
-        $this->fechaDesde = $fechaDesde;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaDesde
-     *
-     * @return \DateTime
-     */
-    public function getFechaDesde()
-    {
-        return $this->fechaDesde;
-    }
-
-    /**
-     * Set fechaHasta
-     *
-     * @param \DateTime $fechaHasta
-     *
-     * @return AfiFacturaDetalle
-     */
-    public function setFechaHasta($fechaHasta)
-    {
-        $this->fechaHasta = $fechaHasta;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaHasta
-     *
-     * @return \DateTime
-     */
-    public function getFechaHasta()
-    {
-        return $this->fechaHasta;
-    }
-
-    /**
      * Set subtotal
      *
      * @param float $subtotal
@@ -522,5 +456,101 @@ class AfiFacturaDetalle
     public function getIva()
     {
         return $this->iva;
+    }
+
+    /**
+     * Set total
+     *
+     * @param float $total
+     *
+     * @return AfiFacturaDetalle
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
+
+        return $this;
+    }
+
+    /**
+     * Get total
+     *
+     * @return float
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
+     * Set interesMora
+     *
+     * @param float $interesMora
+     *
+     * @return AfiFacturaDetalle
+     */
+    public function setInteresMora($interesMora)
+    {
+        $this->interesMora = $interesMora;
+
+        return $this;
+    }
+
+    /**
+     * Get interesMora
+     *
+     * @return float
+     */
+    public function getInteresMora()
+    {
+        return $this->interesMora;
+    }
+
+    /**
+     * Set facturaRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiFactura $facturaRel
+     *
+     * @return AfiFacturaDetalle
+     */
+    public function setFacturaRel(\Brasa\AfiliacionBundle\Entity\AfiFactura $facturaRel = null)
+    {
+        $this->facturaRel = $facturaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get facturaRel
+     *
+     * @return \Brasa\AfiliacionBundle\Entity\AfiFactura
+     */
+    public function getFacturaRel()
+    {
+        return $this->facturaRel;
+    }
+
+    /**
+     * Set periodoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodo $periodoRel
+     *
+     * @return AfiFacturaDetalle
+     */
+    public function setPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodo $periodoRel = null)
+    {
+        $this->periodoRel = $periodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get periodoRel
+     *
+     * @return \Brasa\AfiliacionBundle\Entity\AfiPeriodo
+     */
+    public function getPeriodoRel()
+    {
+        return $this->periodoRel;
     }
 }

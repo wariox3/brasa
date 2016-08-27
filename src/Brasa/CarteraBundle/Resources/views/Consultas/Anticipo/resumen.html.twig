@@ -76,7 +76,7 @@
                 
                 <td>{{ arAnticiposResumen.cuenta  }}</td>
                 <td>{{ arAnticiposResumen.numeroAnticipos  }}</td>
-                <td style="text-align: right">{{ arAnticiposResumen.vrTotal | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arAnticiposResumen.vrTotalPago | number_format(2, '.', ',') }}</td>
             </tr>
             {% endfor %}
         </table>  
@@ -96,6 +96,7 @@
                 <th>RTE IVA</th>
                 <th>RTE FTE</th>
                 <th>TOTAL</th>
+                <th>T. PAGO</th>
                 <th>ANU</th>
                 <th>AUT</th>
                 <th>IMP</th>
@@ -115,6 +116,7 @@
                 <td style="text-align: right">{{ arAnticipos.vrTotalReteIva | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arAnticipos.vrTotalReteFuente | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arAnticipos.vrTotal | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arAnticipos.vrTotalPago | number_format(2, '.', ',') }}</td>
                 <td>{% if arAnticipos.estadoAnulado == 1%}SI{% else %}NO{% endif %}</td>
                 <td>{% if arAnticipos.estadoAutorizado == 1%}SI{% else %}NO{% endif %}</td>
                 <td>{% if arAnticipos.estadoImpreso == 1%}SI{% else %}NO{% endif %}</td>

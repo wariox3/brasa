@@ -257,6 +257,7 @@ class FacturaController extends Controller
                     $arFacturaDetalle->setSena($arPeriodo->getSena());
                     $arFacturaDetalle->setIcbf($arPeriodo->getIcbf());
                     $arFacturaDetalle->setAdministracion($arPeriodo->getAdministracion());
+                    $arFacturaDetalle->setInteresMora($arPeriodo->getInteresMora());
                     $em->persist($arFacturaDetalle);
                     $arPeriodo->setEstadoFacturado(1);
                     $em->persist($arPeriodo);

@@ -55,14 +55,14 @@
                     <tr>
                         <td class="titulo">FECHA:</td>
                         <td class="td-in-well">{{ arFactura.fecha | date('Y/m/d') }}</td>
-                        <td class="titulo" >TOTAL:</td>
-                        <td align="right">{{ arFactura.total | number_format(0, '.', ',')}}</td>
+                        <td class="titulo" >INTERES MORA:</td>
+                        <td align="right">{{ arFactura.interesMora | number_format(0, '.', ',')}}</td>
                     </tr>                    
                     <tr>
                         <td class="titulo">VENCE:</td>
                         <td class="td-in-well">{{ arFactura.fechaVence | date('Y/m/d') }}</td>
-                        <td class="titulo" ></td>
-                        <td align="right"></td>
+                        <td class="titulo" >TOTAL:</td>
+                        <td align="right">{{ arFactura.total | number_format(0, '.', ',')}}</td>
                     </tr>                    
                 </table>
             </div>

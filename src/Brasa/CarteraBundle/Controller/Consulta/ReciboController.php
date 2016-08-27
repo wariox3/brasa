@@ -238,7 +238,7 @@ class ReciboController extends Controller
         for($col = 'A'; $col !== 'N'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
         }     
-        for($col = 'H'; $col !== 'N'; $col++) {
+        for($col = 'H'; $col !== '0'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }        
@@ -257,9 +257,10 @@ class ReciboController extends Controller
                     ->setCellValue('L1', 'TOTAL RTE IVA')
                     ->setCellValue('M1', 'TOTAL RTE FUENTE')
                     ->setCellValue('N1', 'TOTAL')
-                    ->setCellValue('O1', 'ANULADO')
-                    ->setCellValue('P1', 'AUTORIZADO')
-                    ->setCellValue('Q1', 'IMPRESO');
+                    ->setCellValue('O1', 'TOTAL PAGO')
+                    ->setCellValue('P1', 'ANULADO')
+                    ->setCellValue('Q1', 'AUTORIZADO')
+                    ->setCellValue('R1', 'IMPRESO');
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
         $arRecibos = new \Brasa\CarteraBundle\Entity\CarRecibo();
@@ -276,9 +277,10 @@ class ReciboController extends Controller
                     ->setCellValue('L' . $i, $arRecibo->getVrTotalReteIva())
                     ->setCellValue('M' . $i, $arRecibo->getVrTotalReteFuente())
                     ->setCellValue('N' . $i, $arRecibo->getVrTotal())
-                    ->setCellValue('O' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoAnulado()))
-                    ->setCellValue('P' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoAutorizado()))
-                    ->setCellValue('Q' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoImpreso()));
+                    ->setCellValue('O' . $i, $arRecibo->getVrTotalPago())
+                    ->setCellValue('P' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoAnulado()))
+                    ->setCellValue('Q' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoAutorizado()))
+                    ->setCellValue('R' . $i, $objFunciones->devuelveBoolean($arRecibo->getEstadoImpreso()));
             if($arRecibo->getClienteRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('D' . $i, $arRecibo->getClienteRel()->getNit());
@@ -350,7 +352,8 @@ class ReciboController extends Controller
                     ->setCellValue('I1', 'RTE ICA')
                     ->setCellValue('J1', 'RTE IVA')
                     ->setCellValue('K1', 'RTE FUENTE')
-                    ->setCellValue('L1', 'VALOR');
+                    ->setCellValue('L1', 'VALOR')
+                    ->setCellValue('M1', 'VALOR PAGO');
 
         $i = 2;
         $query = $em->createQuery($this->strDetalleDql);
@@ -370,7 +373,8 @@ class ReciboController extends Controller
                     ->setCellValue('I' . $i, $arReciboDetalle->getVrReteIca())
                     ->setCellValue('J' . $i, $arReciboDetalle->getVrReteIva())
                     ->setCellValue('K' . $i, $arReciboDetalle->getVrReteFuente())
-                    ->setCellValue('L' . $i, $arReciboDetalle->getValor());   
+                    ->setCellValue('L' . $i, $arReciboDetalle->getValor())
+                    ->setCellValue('M' . $i, $arReciboDetalle->getVrPagoDetalle());   
             $i++;
         }
 

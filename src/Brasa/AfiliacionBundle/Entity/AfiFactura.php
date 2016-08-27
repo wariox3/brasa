@@ -93,6 +93,11 @@ class AfiFactura
     private $afiliacion = false;
     
     /**
+     * @ORM\Column(name="interes_mora", type="float")
+     */
+    private $interesMora = 0;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="AfiCliente", inversedBy="facturasClienteRel")
      * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
      */
@@ -119,7 +124,6 @@ class AfiFactura
      */
     protected $facturasDetallesContratosFacturaRel;
 
-    
     
     
     /**
@@ -500,6 +504,30 @@ class AfiFactura
     public function getAfiliacion()
     {
         return $this->afiliacion;
+    }
+
+    /**
+     * Set interesMora
+     *
+     * @param float $interesMora
+     *
+     * @return AfiFactura
+     */
+    public function setInteresMora($interesMora)
+    {
+        $this->interesMora = $interesMora;
+
+        return $this;
+    }
+
+    /**
+     * Get interesMora
+     *
+     * @return float
+     */
+    public function getInteresMora()
+    {
+        return $this->interesMora;
     }
 
     /**

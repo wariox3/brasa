@@ -80,7 +80,7 @@ class CuentaCobroHorus2 extends \FPDF_FPDF {
         $this->ln(1);
         
         $this->SetY(50);
-        $List1 = array('Fecha emision:', 'Fecha vencimiento:', 'Forma pago:', 'Plazo:', 'Soporte:');
+        $List1 = array('Fecha emision:', 'Fecha vencimiento:', 'Forma pago:', 'Plazo:', 'Soporte:', 'Interes mora pila:');
         $this->SetFont('Arial', 'B', 8);
         foreach ($List1 as $col) {
             $this->SetX(225);
@@ -93,7 +93,8 @@ class CuentaCobroHorus2 extends \FPDF_FPDF {
             $arFactura->getFechaVence()->format('Y-m-d'),
             $arFactura->getClienteRel()->getFormaPagoRel()->getNombre(),
             $arFactura->getClienteRel()->getPlazoPago(),
-            substr (utf8_decode($arFactura->getSoporte()),0,16));        
+            substr (utf8_decode($arFactura->getSoporte()),0,16),
+            number_format($arFactura->getInteresMora(), 0, '.', '.'));        
         
         $this->SetY(47);
         $this->SetFont('Arial', '', 8);        
