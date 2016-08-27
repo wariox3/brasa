@@ -139,7 +139,7 @@ class MovimientoReciboController extends Controller
                                 foreach ($arDetallesRecibo AS $arDetalleRecibo) {
                                     $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
                                     $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleRecibo->getCodigoCuentaCobrarFk()); 
-                                    $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() - $arDetalleRecibo->getVrPagoDetalle());
+                                    $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() - $arDetalleRecibo->getVrPagoDetalle() - $arDetalleRecibo->getVrDescuento() - $arDetalleRecibo->getvrAjustePeso());
                                     $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() + $arDetalleRecibo->getVrPagoDetalle());
                                     $em->persist($arCuentaCobrar);
                                 }
@@ -165,7 +165,7 @@ class MovimientoReciboController extends Controller
                     foreach ($arDetallesRecibo AS $arDetalleRecibo) {
                         $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
                         $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleRecibo->getCodigoCuentaCobrarFk());
-                        $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleRecibo->getVrPagoDetalle());
+                        $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleRecibo->getVrPagoDetalle() + $arDetalleRecibo->getVrDescuento() + $arDetalleRecibo->getvrAjustePeso());
                         $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleRecibo->getVrPagoDetalle());
                         $em->persist($arCuentaCobrar);
                     }
