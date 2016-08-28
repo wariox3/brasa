@@ -24,7 +24,7 @@ class PagosController extends Controller
             if($form->get('BtnExcel')->isClicked()) {
                 set_time_limit(0);
                 ini_set("memory_limit", -1);                
-                $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+                /*$arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
                 $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findAll();
                 foreach ($arPagos as $arPago) { 
                     $ingresoBaseCotizacion = 0;
@@ -50,11 +50,11 @@ class PagosController extends Controller
                     $em->persist($arPagoActualizar);
                 }
                 $em->flush();
-                echo "hola";
+                echo "hola";*/
                 
-                //$this->filtrarLista($form, $request);
-                //$this->listar();
-                //$this->generarExcel();
+                $this->filtrarLista($form, $request);
+                $this->listar();
+                $this->generarExcel();
             }
             if($form->get('BtnExcelDetalle')->isClicked()) {
                 $this->filtrarLista($form, $request);
