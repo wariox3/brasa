@@ -163,10 +163,17 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 //$floIbcBrutoSalud = (($intDiasCotizarSalud - $intDiasIncapacidades) * ($floSalario / 30)) + $floIbcIncapacidades + $floSuplementario;                    
                 //$floIbcBrutoRiesgos = ($intDiasCotizarRiesgos * ($floSalario / 30)) + $floSuplementario;
                 //$floIbcBrutoCaja = ($intDiasCotizarCaja * ($floSalario / 30)) + $floSuplementario + $vacaciones;
-                $floIbcBrutoPension = $ibc;
-                $floIbcBrutoSalud = $ibc;                    
-                $floIbcBrutoRiesgos = $intDiasCotizarRiesgos * ($ibc/$intDiasCotizarPension);                
-                $floIbcBrutoCaja = ($intDiasCotizarCaja * ($ibc/$intDiasCotizarPension)) + $vacaciones;                
+                $floIbcBrutoPension = 0;
+                $floIbcBrutoSalud = 0;         
+                $floIbcBrutoRiesgos = 0;
+                $floIbcBrutoCaja = 0;
+                if($intDiasCotizarPension > 0) {
+                    $floIbcBrutoPension = $ibc;
+                    $floIbcBrutoSalud = $ibc;
+                    $floIbcBrutoRiesgos = $intDiasCotizarRiesgos * ($ibc/$intDiasCotizarPension);                
+                    $floIbcBrutoCaja = ($intDiasCotizarCaja * ($ibc/$intDiasCotizarPension)) + $vacaciones;
+                }
+                
                 
                 $floIbcPension = $this->redondearIbc($intDiasCotizarPension, $floIbcBrutoPension);
                 $floIbcSalud = $this->redondearIbc($intDiasCotizarSalud, $floIbcBrutoSalud);
@@ -246,8 +253,13 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $totalCotizacion = $floTotalCotizacionFondos + $floCotizacionSalud + $floCotizacionRiesgos + $floCotizacionCaja + $floCotizacionIcbf+$floCotizacionSena+$floCotizacionFSPSolidaridad+$floCotizacionFSPSubsistencia;
                 $totalCotizacionGeneral += $totalCotizacion;
                 $arAporte->setTotalCotizacion($totalCotizacion);
-                $em->persist($arAporte);                
-                $i++;
+                $sinLineaInicial = true;
+                if($intDiasCotizarPension > 0) {
+                    $sinLineaInicial = false;
+                    $em->persist($arAporte);    
+                    $i++;
+                }                                
+                
                 //Para las licencias segunda linea solo licencias
                 if($intDiasLicenciaNoRemunerada > 0) {
                     $arAporte = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte();
@@ -319,10 +331,10 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                         $arAporte->setIngreso($arPeriodoEmpleado->getIngreso());
                     }
 
-                    if($intDiasCotizarPension > 0) {
-                        $arAporte->setRetiro(' ');
+                    if($sinLineaInicial == true) {
+                        $arAporte->setRetiro($arPeriodoEmpleado->getRetiro());                        
                     } else {
-                        $arAporte->setRetiro($arPeriodoEmpleado->getRetiro());
+                        $arAporte->setRetiro(' ');
                     }                
 
                     if($arAporte->getTipoCotizante() == '19' || $arAporte->getTipoCotizante() == '12' || $arAporte->getTipoCotizante() == '23') {
@@ -333,26 +345,26 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                         $intDiasCotizarRiesgos = 0;
                     }                
                     $arAporte->setDiasCotizadosPension($intDiasCotizarPension);
-                    $arAporte->setDiasCotizadosSalud(0);
-                    $arAporte->setDiasCotizadosRiesgosProfesionales(0);
-                    $arAporte->setDiasCotizadosCajaCompensacion(0);                                            
+                    $arAporte->setDiasCotizadosSalud($intDiasCotizarSalud);
+                    $arAporte->setDiasCotizadosRiesgosProfesionales($intDiasCotizarRiesgos);
+                    $arAporte->setDiasCotizadosCajaCompensacion($intDiasCotizarCaja);                                            
                     
                     //Ibc
                     $floIbcBrutoPension = ($intDiasCotizarPension * ($floSalario / 30));
-                    $floIbcBrutoSalud = 0;                    
-                    $floIbcBrutoRiesgos = 0;
-                    $floIbcBrutoCaja = 0;
+                    $floIbcBrutoSalud = ($intDiasCotizarSalud * ($floSalario / 30));                    
+                    $floIbcBrutoRiesgos = ($intDiasCotizarRiesgos * ($floSalario / 30));
+                    $floIbcBrutoCaja = ($intDiasCotizarCaja * ($floSalario / 30));
                     $floIbcPension = $this->redondearIbc($intDiasCotizarPension, $floIbcBrutoPension);
-                    $floIbcSalud = 0;
-                    $floIbcRiesgos = 0;
-                    $floIbcCaja = 0;
+                    $floIbcSalud = $this->redondearIbc($intDiasCotizarSalud, $floIbcBrutoSalud);
+                    $floIbcRiesgos = $this->redondearIbc($intDiasCotizarRiesgos, $floIbcBrutoRiesgos);
+                    $floIbcCaja = $this->redondearIbc($intDiasCotizarCaja, $floIbcBrutoCaja);
                     
                     $arAporte->setIbcPension($floIbcPension);
-                    $arAporte->setIbcSalud(0);
-                    $arAporte->setIbcRiesgosProfesionales(0);
-                    $arAporte->setIbcCaja(0);                                    
+                    $arAporte->setIbcSalud($floIbcSalud);
+                    $arAporte->setIbcRiesgosProfesionales($floIbcRiesgos);
+                    $arAporte->setIbcCaja($floIbcCaja);                                    
 
-                    $floTarifaPension = $arPeriodoEmpleado->getTarifaPension();   // se quito un porcentaje de 4% (+ 4)         
+                    $floTarifaPension = 12;   // se quito un porcentaje de 4% (+ 4)         
                     $floTarifaSalud = 0;
                     $floTarifaRiesgos = 0;
                     $floTarifaCaja = 0;

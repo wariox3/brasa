@@ -26,7 +26,8 @@ class PagosController extends Controller
                 ini_set("memory_limit", -1);                
                 $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
                 $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findAll();
-                foreach ($arPagos as $arPago) {                    
+                foreach ($arPagos as $arPago) { 
+                    $ingresoBaseCotizacion = 0;
                     $arPagosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                     $arPagosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $arPago->getCodigoPagoPk()));            
                     foreach ($arPagosDetalles as $arPagoDetalle) {                        
@@ -39,13 +40,14 @@ class PagosController extends Controller
                             $arPagoDetalleAct->setVrIngresoBaseCotizacionAdicional(0);
                             $arPagoDetalleAct->setVrIngresoBaseCotizacionSalario(0);
                         }
+                        $ingresoBaseCotizacion += $arPagoDetalleAct->getVrIngresoBaseCotizacion();
                         $em->persist($arPagoDetalleAct);                                             
                     }     
-                    //$arPagoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-                    //$arPagoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($arPago->getCodigoPagoPk());
+                    $arPagoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+                    $arPagoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($arPago->getCodigoPagoPk());
                     
-                    //$arPagoActualizar->setVrIngresoBasePrestacion($ingresoBasePrestacion);
-                    //$em->persist($arPagoActualizar);
+                    $arPagoActualizar->setVrIngresoBaseCotizacion($ingresoBaseCotizacion);
+                    $em->persist($arPagoActualizar);
                 }
                 $em->flush();
                 echo "hola";
