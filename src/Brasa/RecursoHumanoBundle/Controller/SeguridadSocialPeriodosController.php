@@ -781,7 +781,7 @@ class SeguridadSocialPeriodosController extends Controller
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }
             if($form->get('BtnFiltrar')->isClicked()) {
-                $this->filtrarCopiarEmpleado($form);
+                $this->filtrarCopiarEmpleado($form, $codigoPeriodoDetalle);
                 $this->listarCopiarEmpleados($codigoPeriodoDetalle);
             }
         }
@@ -925,6 +925,7 @@ class SeguridadSocialPeriodosController extends Controller
                 );
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('numeroIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroNumeroIdentificacion')))                                            
             ->add('sucursalRel', 'entity', $arrayPropiedadesSucursal)    
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnCopiar', 'submit', array('label'  => 'Copiar',))    
@@ -975,14 +976,14 @@ class SeguridadSocialPeriodosController extends Controller
         
     }
     
-    private function filtrarCopiarEmpleado($form) {
+    private function filtrarCopiarEmpleado($form, $codigoPeriodoDetalle) {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
-        $codigoPeriodoDetalle = $form->get('sucursalRel')->getData();
-        $codigoPeriodoDetalle = $codigoPeriodoDetalle->getCodigoPeriodoDetallePk();
+        $numeroIdentificacion = $form->get('numeroIdentificacion')->getData();
         $this->strCodigoPeriodoDetalleCopias = $codigoPeriodoDetalle;
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
+        $session->set('filtroNumeroIdentificacion', $numeroIdentificacion);
     }
     
     private function filtrarDetalleAporte($form) {
@@ -1017,7 +1018,7 @@ class SeguridadSocialPeriodosController extends Controller
     private function listarCopiarEmpleados($codigoPeriodoDetalle) {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $this->strDqlListaEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->listaCopiarDql($codigoPeriodoDetalle, $session->get('filtroCodigoCentroCosto'),$this->strCodigoPeriodoDetalleCopias);
+        $this->strDqlListaEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->listaCopiarDql($codigoPeriodoDetalle, $session->get('filtroCodigoCentroCosto'),$this->strCodigoPeriodoDetalleCopias, $session->get('filtroNumeroIdentificacion'));
     }
 
     private function listarDetalleAportes($codigoPeriodoDetalle) {

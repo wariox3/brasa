@@ -249,7 +249,7 @@ class TurSoportePagoRepository extends EntityRepository {
                 if($arProgramacionDetalle['dia'.$i] != "") {                    
                     $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle['dia'.$i]);
                     if($arTurno) {
-                        $arrTurnos[] = array('horaDesde' => $arTurno->getHoraDesde(), 'turno' => $arTurno->getCodigoTurnoPk(), 'codigoProgramacionDetallePk' => $arProgramacionDetalle['codigoProgramacionDetallePk']);
+                        $arrTurnos[] = array('horaDesde' => $arTurno->getHoraDesde(), 'turno' => $arTurno->getCodigoTurnoPk(), 'codigoProgramacionDetallePk' => $arProgramacionDetalle['codigoProgramacionDetallePk'], 'novedad' => $arTurno->getNovedad());
                     }
                 }
             }
@@ -268,7 +268,9 @@ class TurSoportePagoRepository extends EntityRepository {
                        }                       
                     }                    
                     if($i == 31) {
-                        $strTurno = null;
+                        if(!$arrTurno['novedad']) {                            
+                            $strTurno = null;
+                        }                        
                     }
                 }  
                 if($strTurno) {

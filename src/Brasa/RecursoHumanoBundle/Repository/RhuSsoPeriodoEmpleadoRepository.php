@@ -32,7 +32,7 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
             return $dql;
     }
     
-    public function listaCopiarDql($codigoPeriodoDetalle, $strCodigoCentroCosto, $strCodigoSucursal ) {                    
+    public function listaCopiarDql($codigoPeriodoDetalle, $strCodigoCentroCosto, $strCodigoSucursal, $numeroIdentificacion = "" ) {                    
             $dql   = "SELECT pe, e FROM BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado pe JOIN pe.empleadoRel e "
                     ."WHERE pe.codigoPeriodoDetalleFk <> " . $codigoPeriodoDetalle . " ";
             if($strCodigoCentroCosto != "") {
@@ -40,6 +40,9 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
             }
             if($strCodigoSucursal != "") {
                 $dql .= " AND pe.codigoPeriodoDetalleFk = " . $strCodigoSucursal;
+            }
+            if($numeroIdentificacion != '') {
+                $dql .= " AND e.numeroIdentificacion = " . $numeroIdentificacion;
             }
             return $dql;
     }
@@ -124,6 +127,9 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
             $ibcMinimo = ($floSalario / 30) * $intDiasCotizar;            
             if($ibc < $ibcMinimo) {
                 $ibc = $ibcMinimo;
+            }
+            if($arContrato->getSalarioIntegral() == 1) {
+                $ibc = ($ibc * 70) / 100;
             }
             $arPeriodoEmpleadoActualizar->setIbc($ibc);
             $floSuplementario = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->tiempoSuplementario($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde()->format('Y-m-d'), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta()->format('Y-m-d'), $arContrato->getCodigoContratoPk());            

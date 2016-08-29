@@ -86,8 +86,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $arAporte->setVrIngresoBaseCotizacion($ibc);
                 $floSalarioIntegral = $arPeriodoEmpleado->getVrSalario();
                 if($arPeriodoEmpleado->getSalarioIntegral() == 'X') {
-                    $arAporte->setSalarioIntegral($arPeriodoEmpleado->getSalarioIntegral());                
-                    $floSalario = $floSalario*70/100;
+                    $arAporte->setSalarioIntegral($arPeriodoEmpleado->getSalarioIntegral());                                    
                 } else {
                     $arAporte->setSalarioIntegral(' ');                
                 }
@@ -122,11 +121,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                     $arAporte->setDiasVacaciones($arPeriodoEmpleado->getDiasVacaciones());
                 }   
                 
-                if($arPeriodoEmpleado->getSalarioIntegral() == 'X') {
-                    $arAporte->setSalarioBasico($floSalarioIntegral);            
-                } else {
-                    $arAporte->setSalarioBasico($floSalario);            
-                }                                    
+                $arAporte->setSalarioBasico($floSalario);                                                                
                 $arAporte->setCodigoEntidadPensionPertenece($arPeriodoEmpleado->getCodigoEntidadPensionPertenece());
                 $arAporte->setCodigoEntidadSaludPertenece($arPeriodoEmpleado->getCodigoEntidadSaludPertenece());
                 $arAporte->setCodigoEntidadCajaPertenece($arPeriodoEmpleado->getCodigoEntidadCajaPertenece());
