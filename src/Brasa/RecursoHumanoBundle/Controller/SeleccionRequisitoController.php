@@ -272,7 +272,6 @@ class SeleccionRequisitoController extends Controller
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
@@ -290,7 +289,6 @@ class SeleccionRequisitoController extends Controller
         $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'FECHA')
@@ -312,7 +310,8 @@ class SeleccionRequisitoController extends Controller
                     ->setCellValue('R1', 'LICENCIA CARRO')
                     ->setCellValue('S1', 'LICENCIA MOTO')
                     ->setCellValue('T1', 'CERRADO')
-                    ->setCellValue('U1', 'COMENTARIOS');
+                    ->setCellValue('U1', 'COMENTARIOS')
+                    ->setCellValue('V1', 'CODIGO USUARIO');
                     
 
         $i = 2;
@@ -423,7 +422,7 @@ class SeleccionRequisitoController extends Controller
             }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arSeleccionRequisito->getCodigoSeleccionRequisitoPk())
-                    ->setCellValue('B' . $i, $arSeleccionRequisito->getFecha())
+                    ->setCellValue('B' . $i, $arSeleccionRequisito->getFecha()->format('Y-m-d'))
                     ->setCellValue('C' . $i, $arSeleccionRequisito->getNombre())
                     ->setCellValue('D' . $i, $strNombreCentroCosto)
                     ->setCellValue('E' . $i, $strCargo)
@@ -442,7 +441,8 @@ class SeleccionRequisitoController extends Controller
                     ->setCellValue('R' . $i, $licenciaCarro)
                     ->setCellValue('S' . $i, $licenciaMoto)
                     ->setCellValue('T' . $i, $cerrado)
-                    ->setCellValue('U' . $i, $arSeleccionRequisito->getComentarios());
+                    ->setCellValue('U' . $i, $arSeleccionRequisito->getComentarios())
+                    ->setCellValue('V' . $i, $arSeleccionRequisito->getCodigoUsuario());
             $i++;
         }
 
