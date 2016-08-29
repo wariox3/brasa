@@ -61,8 +61,8 @@ class AfiliacionPagoPendienteController extends Controller
             $session->set('filtroDesde', $form->get('fechaDesde')->getData());
             $session->set('filtroHasta', $form->get('fechaHasta')->getData());
         } else {
-            $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
-            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d'));
+            $session->set('filtroDesde', $fechaDesde->format('Y-m-d'));
+            $session->set('filtroHasta', $fechaHasta->format('Y-m-d'));
         }
         
         $this->lista();

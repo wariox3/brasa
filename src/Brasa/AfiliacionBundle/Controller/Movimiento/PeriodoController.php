@@ -362,7 +362,9 @@ class PeriodoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->listaDQL(
                 $session->get('filtroCodigoCliente'),
-                $session->get('filtroPeriodoEstadoCerrado')
+                $session->get('filtroPeriodoEstadoCerrado'),
+                $session->get('filtroDesde'),
+                $session->get('filtroHasta')
                 ); 
     }
     
@@ -383,8 +385,17 @@ class PeriodoController extends Controller
     private function filtrar ($form) {        
         $session = $this->getRequest()->getSession();        
         $session->set('filtroNit', $form->get('TxtNit')->getData()); 
-        $session->set('filtroPeriodoEstadoCerrado', $form->get('estadoCerrado')->getData());                  
-        $this->lista();
+        $session->set('filtroPeriodoEstadoCerrado', $form->get('estadoCerrado')->getData()); 
+        $fechaDesde = $form->get('fechaDesde')->getData();
+        $fechaHasta = $form->get('fechaHasta')->getData();
+        if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
+            $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        } else {
+            $session->set('filtroDesde', $fechaDesde->format('Y-m-d'));
+            $session->set('filtroHasta', $fechaHasta->format('Y-m-d'));
+        }
+        //$this->lista();
     }
     
     private function formularioFiltro() {
@@ -407,6 +418,8 @@ class PeriodoController extends Controller
             ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
             ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                                                            
             ->add('estadoCerrado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'CERRADO', '0' => 'SIN CERRAR'), 'data' => $session->get('filtroPeriodoEstadoCerrado')))                                                
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
