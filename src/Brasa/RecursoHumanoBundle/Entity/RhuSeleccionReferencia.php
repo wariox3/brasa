@@ -60,7 +60,12 @@ class RhuSeleccionReferencia
     /**
      * @ORM\Column(name="estado_verificada", type="boolean")
      */    
-    private $estadoVerificada = 0;      
+    private $estadoVerificada = 0; 
+    
+    /**
+     * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
+     */    
+    private $codigoUsuario;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuSeleccion", inversedBy="seleccionesReferenciasSeleccionRel")
@@ -81,6 +86,8 @@ class RhuSeleccionReferencia
     protected $ciudadRel;    
     
 
+
+    
 
     /**
      * Get codigoSeleccionReferenciaPk
@@ -306,6 +313,30 @@ class RhuSeleccionReferencia
     public function getEstadoVerificada()
     {
         return $this->estadoVerificada;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuSeleccionReferencia
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
     }
 
     /**

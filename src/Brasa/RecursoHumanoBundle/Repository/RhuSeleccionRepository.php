@@ -32,9 +32,9 @@ class RhuSeleccionRepository extends EntityRepository {
             $dql .= " AND s.codigoCentroCostoFk = " . $codigoCentroCosto;
         }
         if($codigoRequisicion != "" ) {
-            $dql .= " AND s.codigoSeleccionRequisitoFk = " . $codigoRequisicion;
+            $dql .= " AND s.codigoSeleccionPk = " . $codigoRequisicion;
         }        
-        $dql .= " ORDER BY s.fecha";
+        $dql .= " ORDER BY s.fecha desc";
         return $dql;
     }
 

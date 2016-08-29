@@ -45,7 +45,12 @@ class RhuSeleccionPrueba
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
-    private $comentarios;              
+    private $comentarios;  
+    
+    /**
+     * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
+     */    
+    private $codigoUsuario;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuSeleccion", inversedBy="seleccionesPruebasSeleccionRel")
@@ -60,6 +65,8 @@ class RhuSeleccionPrueba
     protected $seleccionPruebaTipoRel;
 
 
+
+    
 
     /**
      * Get codigoSeleccionPruebaPk
@@ -213,6 +220,30 @@ class RhuSeleccionPrueba
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuSeleccionPrueba
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
     }
 
     /**

@@ -176,6 +176,33 @@ class RhuContratoRepository extends EntityRepository {
         return $dql;
     }
     
+    //lista contratos con las fecha de vencimiento, contratos vigentes
+    public function listaContratosFechaVencimientoDQL($strCodigoContratoTipo = "",$strCodigoEmpleadoTipo = "", $strCodigoZona = "", $strCodigoSubZona = "", $strCodigoCentroCosto = "", $strIdentificacion = "", $strVencimiento = "") {        
+        $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0 AND c.estadoActivo = 1";
+        if($strCodigoContratoTipo != "") {
+            $dql .= " AND c.codigoContratoTipoFk = " . $strCodigoContratoTipo;
+        }
+        if($strCodigoEmpleadoTipo != "") {
+            $dql .= " AND e.codigoEmpleadoTipoFk = " . $strCodigoEmpleadoTipo;
+        }
+        if($strCodigoZona != "") {
+            $dql .= " AND e.codigoZonaFk = " . $strCodigoZona;
+        }
+        if($strCodigoSubZona != "") {
+            $dql .= " AND e.codigoSubzonaFk = " . $strCodigoSubZona;
+        }
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND c.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }   
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if($strVencimiento != "") {
+            $dql .= " AND c.fechaHasta <='" .  $strVencimiento . "'";
+        }
+        return $dql;
+    }
+    
     //lista contratos carta laboral
     public function listaContratosCartaLaboralDQL($strCodigoCentroCosto = "", $strIdentificacion = "") {        
         $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0";

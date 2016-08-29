@@ -26,8 +26,14 @@ class RhuSeleccionEntrevistaTipo
      * @ORM\OneToMany(targetEntity="RhuSeleccionEntrevista", mappedBy="seleccionEntrevistaTipoRel")
      */
     protected $seleccionesEntrevistasSelecionEntrevistaTipoRel;
+    
+    /**
+     * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
+     */    
+    private $codigoUsuario;
 
  
+    
     /**
      * Constructor
      */
@@ -68,6 +74,30 @@ class RhuSeleccionEntrevistaTipo
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuSeleccionEntrevistaTipo
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
     }
 
     /**

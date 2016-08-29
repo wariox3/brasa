@@ -17,9 +17,7 @@ class RhuSeleccionType extends AbstractType
                     return $er->createQueryBuilder('s')
                     ->orderBy('s.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => false,
-                'empty_data' => 3,
-                'empty_value' => 'SELECCIÓN DE PERSONAL',            
+                'required' => true,           
             ))
             ->add('seleccionRequisitoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSeleccionRequisito',

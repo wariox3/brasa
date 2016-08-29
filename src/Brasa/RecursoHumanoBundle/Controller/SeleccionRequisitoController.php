@@ -51,9 +51,13 @@ class SeleccionRequisitoController extends Controller
         }
         $form = $this->createForm(new RhuSeleccionRequisitoType, $arRequisito);
         $form->handleRequest($request);
-        if ($form->isValid()) {           
+        if ($form->isValid()) { 
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arRequisito = $form->getData();
             $arRequisito->setFecha(new \DateTime('now'));
+            if($codigoSeleccionRequisito == 0) {
+                $arRequisito->setCodigoUsuario($arUsuario->getUserName());
+            }
             $em->persist($arRequisito);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {

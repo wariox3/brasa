@@ -259,9 +259,13 @@ class SeleccionController extends Controller
         $form = $this->createForm(new RhuSeleccionReferenciaType(), $arSeleccionReferencia);
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             if ($arSeleccion->getEstadoAutorizado() == 0){
                 $arSeleccionReferencia = $form->getData();
                 $arSeleccionReferencia->setSeleccionRel($arSeleccion);
+                if($codigoSeleccionReferencia == 0) {
+                    $arSeleccionReferencia->setCodigoUsuario($arUsuario->getUserName());
+                }
                 $em->persist($arSeleccionReferencia);
                 $em->flush();
                 if($form->get('guardarnuevo')->isClicked()) {
@@ -290,9 +294,13 @@ class SeleccionController extends Controller
         $form = $this->createForm(new RhuSeleccionPruebaType(), $arSeleccionPrueba);
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             if ($arSeleccion->getEstadoAutorizado() == 0){
                 $arSeleccionPrueba = $form->getData();
                 $arSeleccionPrueba->setSeleccionRel($arSeleccion);
+                if($codigoSeleccionPrueba == 0) {
+                    $arSeleccionPrueba->setCodigoUsuario($arUsuario->getUserName());
+                }
                 $em->persist($arSeleccionPrueba);
                 $em->flush();
                 if($form->get('guardarnuevo')->isClicked()) {
@@ -319,9 +327,13 @@ class SeleccionController extends Controller
         $form = $this->createForm(new RhuSeleccionVisitaType(), $arSeleccionVisita);
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             if ($arSeleccion->getEstadoAutorizado() == 0){
                 $arSeleccionVisita = $form->getData();
                 $arSeleccionVisita->setSeleccionRel($arSeleccion);
+                if($codigoSeleccionVisita == 0) {
+                    $arSeleccionVisita->setCodigoUsuario($arUsuario->getUserName());
+                }
                 $em->persist($arSeleccionVisita);
                 $em->flush();
                 if($form->get('guardarnuevo')->isClicked()) {
@@ -349,12 +361,16 @@ class SeleccionController extends Controller
         $form = $this->createForm(new RhuSeleccionEntrevistaType(), $arSeleccionEntrevista);
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             if ($arSeleccion->getEstadoAutorizado() == 0){
                 if ($form->get('seleccionEntrevistaTipoRel')->getData() == null){
                     $objMensaje->Mensaje("error", "Debe selecionar un tipo de entrevista", $this);
                 } else {
                     $arSeleccionEntrevista = $form->getData();
                     $arSeleccionEntrevista->setSeleccionRel($arSeleccion);
+                    if($codigoSeleccionEntrevista == 0) {
+                        $arSeleccionEntrevista->setCodigoUsuario($arUsuario->getUserName());
+                    }
                     $em->persist($arSeleccionEntrevista);
                     $em->flush();
                     if($form->get('guardarnuevo')->isClicked()) {

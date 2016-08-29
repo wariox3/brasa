@@ -235,30 +235,26 @@ class CreditosController extends Controller
                     $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));
                     if(count($arEmpleado) > 0) {
                         $arCredito->setEmpleadoRel($arEmpleado);
-                        if($arEmpleado->getCodigoContratoActivoFk() != '') {                        
-                            $arCredito->setCentroCostoRel($arEmpleado->getCentroCostoRel());
-                            $arCredito->setFecha(new \DateTime('now'));
-                            $douVrPagar = $form->get('vrPagar')->getData();
-                            $intCuotas = $form->get('numeroCuotas')->getData();
-                            $vrSeguro = $form->get('seguro')->getData();                            
-                            $vrSaltoTotal = $douVrPagar;
-                            //$douVrCuota = $douVrPagar / $intCuotas;
-                            //$arCredito->setVrCuota($douVrCuota);
-                            $arCredito->setSaldo($vrSaltoTotal);
-                            $arCredito->setSaldoTotal($vrSaltoTotal);
-                            if($codigoCredito == 0) {
-                                $arCredito->setCodigoUsuario($arUsuario->getUserName());
-                            }
-                            $em->persist($arCredito);
-                            $em->flush();
-                            if($form->get('guardarnuevo')->isClicked()) {
-                                return $this->redirect($this->generateUrl('brs_rhu_creditos_nuevo', array('codigoCredito' => 0 )));
-                            } else {
-                                return $this->redirect($this->generateUrl('brs_rhu_creditos_lista'));
-                            }                        
+                        $arCredito->setCentroCostoRel($arEmpleado->getCentroCostoRel());
+                        $arCredito->setFecha(new \DateTime('now'));
+                        $douVrPagar = $form->get('vrPagar')->getData();
+                        $intCuotas = $form->get('numeroCuotas')->getData();
+                        $vrSeguro = $form->get('seguro')->getData();                            
+                        $vrSaltoTotal = $douVrPagar;
+                        //$douVrCuota = $douVrPagar / $intCuotas;
+                        //$arCredito->setVrCuota($douVrCuota);
+                        $arCredito->setSaldo($vrSaltoTotal);
+                        $arCredito->setSaldoTotal($vrSaltoTotal);
+                        if($codigoCredito == 0) {
+                            $arCredito->setCodigoUsuario($arUsuario->getUserName());
+                        }
+                        $em->persist($arCredito);
+                        $em->flush();
+                        if($form->get('guardarnuevo')->isClicked()) {
+                            return $this->redirect($this->generateUrl('brs_rhu_creditos_nuevo', array('codigoCredito' => 0 )));
                         } else {
-                            $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
-                        }                    
+                            return $this->redirect($this->generateUrl('brs_rhu_creditos_lista'));
+                        }                                            
                     } else {
                         $objMensaje->Mensaje("error", "El empleado no existe", $this);
                     }                

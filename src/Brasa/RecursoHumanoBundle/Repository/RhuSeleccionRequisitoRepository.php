@@ -48,7 +48,7 @@ class RhuSeleccionRequisitoRepository extends EntityRepository {
             $dql .= " AND sq.fecha <='" . $strHasta . "'";
         }
          
-        $dql .= " ORDER BY sq.codigoSeleccionRequisitoPk";
+        $dql .= " ORDER BY sq.codigoSeleccionRequisitoPk DESC";
         return $dql;
     }   
     

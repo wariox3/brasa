@@ -866,9 +866,9 @@ brs_rhu_consultas_servicios_cobrar:
     path:     /rhu/consultas/servicios/cobrar
     defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:serviciosCobrar }
     
-brs_rhu_consultas_programaciones_pago:    
-    path:     /rhu/consultas/programaciones/pago
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:ProgramacionesPago }
+brs_rhu_consultas_pago:    
+    path:     /rhu/consultas/pago
+    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:Pago }
     
 brs_rhu_consultas_incapacidades_lista:    
     path:     /rhu/consultas/incapacidades/lista/

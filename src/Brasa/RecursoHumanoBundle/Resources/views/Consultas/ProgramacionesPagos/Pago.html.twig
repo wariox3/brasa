@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-{% block title %}Consulta programaciones de pago - Soga App{% endblock %}
+{% block title %}Consulta pagos - Soga App{% endblock %}
 {% block content %}
 <div class="container">
     <script type="text/javascript">
@@ -7,7 +7,7 @@
             $('.date').datepicker({ dateFormat: 'yy-mm-dd' ,dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Deciembre" ], monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]})  });
     </script>
     <div class="page-header">
-        <h3>Consulta programaciones pagos</h3>
+        <h3>Consulta pagos</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
             {{ form_errors(form) }}
@@ -46,7 +46,7 @@
                 </div>                     
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
-                        {{ form_widget(form.BtnFiltrarProgramacionesPago, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
+                        {{ form_widget(form.BtnFiltrarPago, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
                     </div>
                 </div>                    
             </div>
@@ -63,6 +63,8 @@
                 <th>DESDE</th>
                 <th>HASTA</th>
                 <th style="text-align: right">SALARIO</th>
+                <th style="text-align: right">IBC</th>
+                <th style="text-align: right">IBP</th>
                 <th style="text-align: right">DEVENGADO</th>
                 <th style="text-align: right">DEDUCCIONES</th>
                 <th style="text-align: right">NETO</th>
@@ -80,6 +82,8 @@
                 <td>{{ arPagos.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arPagos.fechaHasta |date("Y/m/d")  }}</td>
                 <td style="text-align: right">{{ arPagos.vrSalario | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagos.vrIngresoBaseCotizacion | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arPagos.vrIngresoBasePrestacion | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagos.vrDevengado | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagos.vrDeducciones | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arPagos.vrNeto | number_format(2, '.', ',') }}</td>
@@ -94,8 +98,7 @@
         </div>                
         <div class="btn-toolbar" style="float: right">                 
             <div class="btn-group">
-                {{ form_widget(form.BtnExcelProgramacionesPago, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
-                {{ form_widget(form.BtnPDFProgramacionesPago, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+                {{ form_widget(form.BtnExcelPago, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
             </div>
         </div>
         

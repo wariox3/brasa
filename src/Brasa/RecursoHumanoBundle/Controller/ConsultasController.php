@@ -9,7 +9,7 @@ class ConsultasController extends Controller
 {
     var $strSqlCreditoLista = "";
     var $strSqlServiciosPorCobrarLista = "";
-    var $strSqlProgramacionesPagoLista = "";
+    var $strSqlPagoLista = "";
     var $strSqlIncapacidadesLista = "";
     var $strSqlIncapacidadesCobrarLista = "";
     var $strSqlAportesLista = "";
@@ -91,36 +91,36 @@ class ConsultasController extends Controller
             ));
     }
 
-    public function programacionesPagoAction() {
+    public function PagoAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
-        $form = $this->formularioProgramacionesPagoLista();
+        $form = $this->formularioPagoLista();
         $form->handleRequest($request);
-        $this->ProgramacionesPagoListar();
+        $this->PagoListar();
         if ($form->isValid())
         {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if($form->get('BtnExcelProgramacionesPago')->isClicked()) {
-                $this->filtrarProgramacionesPagoLista($form);
-                $this->ProgramacionesPagoListar();
-                $this->generarProgramacionesPagoExcel();
+            if($form->get('BtnExcelPago')->isClicked()) {
+                $this->filtrarPagoLista($form);
+                $this->PagoListar();
+                $this->generarPagoExcel();
             }
-            if($form->get('BtnPDFProgramacionesPago')->isClicked()) {
-                $this->filtrarProgramacionesPagoLista($form);
-                $this->ProgramacionesPagoListar();
-                $objReporteProgramacionesPago = new \Brasa\RecursoHumanoBundle\Reportes\ReporteProgramacionesPago();
-                $objReporteProgramacionesPago->Generar($this, $this->strSqlProgramacionesPagoLista);
+            if($form->get('BtnPDFPago')->isClicked()) {
+                $this->filtrarPagoLista($form);
+                $this->PagoListar();
+                $objReportePago = new \Brasa\RecursoHumanoBundle\Reportes\ReportePago();
+                $objReportePago->Generar($this, $this->strSqlPagoLista);
 
             }
-            if($form->get('BtnFiltrarProgramacionesPago')->isClicked()) {
-                $this->filtrarProgramacionesPagoLista($form);
-                $this->ProgramacionesPagoListar();
+            if($form->get('BtnFiltrarPago')->isClicked()) {
+                $this->filtrarPagoLista($form);
+                $this->PagoListar();
             }
 
         }
-        $arPagos = $paginator->paginate($em->createQuery($this->strSqlProgramacionesPagoLista), $request->query->get('page', 1), 40);
-        return $this->render('BrasaRecursoHumanoBundle:Consultas/ProgramacionesPagos:ProgramacionesPago.html.twig', array(
+        $arPagos = $paginator->paginate($em->createQuery($this->strSqlPagoLista), $request->query->get('page', 1), 40);
+        return $this->render('BrasaRecursoHumanoBundle:Consultas/Pagos:Pago.html.twig', array(
             'arPagos' => $arPagos,
             'form' => $form->createView()
             ));
@@ -559,10 +559,10 @@ class ConsultasController extends Controller
                     );
     }
 
-    private function ProgramacionesPagoListar() {
+    private function PagoListar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strSqlProgramacionesPagoLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaConsultaPagosDQL(
+        $this->strSqlPagoLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->listaConsultaPagosDQL(
                     $session->get('filtroCodigoCentroCosto'),
                     $session->get('filtroIdentificacion'),
                     $session->get('filtroDesde'),
@@ -779,7 +779,7 @@ class ConsultasController extends Controller
         return $form;
     }
 
-    private function formularioProgramacionesPagoLista() {
+    private function formularioPagoLista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $arrayPropiedades = array(
@@ -803,9 +803,9 @@ class ConsultasController extends Controller
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('codigoPago', 'text', array('label'  => 'codigoPago'))
-            ->add('BtnFiltrarProgramacionesPago', 'submit', array('label'  => 'Filtrar'))
-            ->add('BtnExcelProgramacionesPago', 'submit', array('label'  => 'Excel',))
-            ->add('BtnPDFProgramacionesPago', 'submit', array('label'  => 'PDF',))
+            ->add('BtnFiltrarPago', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnExcelPago', 'submit', array('label'  => 'Excel',))
+            //->add('BtnPDFPago', 'submit', array('label'  => 'PDF',))
             ->getForm();
         return $form;
     }
@@ -1351,7 +1351,7 @@ class ConsultasController extends Controller
         }
     }
 
-    private function filtrarProgramacionesPagoLista($form) {
+    private function filtrarPagoLista($form) {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
@@ -1631,6 +1631,20 @@ class ConsultasController extends Controller
         $query = $em->createQuery($this->strSqlLista);
         $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
         $arPagos = $query->getResult();
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'AB'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }
+        for($col = 'G'; $col !== 'Y'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }
+        for($col = 'Z'; $col !== 'AB'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }
         foreach ($arPagos as $arPago) {
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arPago->getCodigoPagoPk())
@@ -1802,6 +1816,16 @@ class ConsultasController extends Controller
         $query = $em->createQuery($this->strSqlCostosIbcLista);
         $arIbc = new \Brasa\RecursoHumanoBundle\Entity\RhuIbc();
         $arIbc = $query->getResult();
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'K'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }
+        for($col = 'E'; $col !== 'E'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }
         foreach ($arIbc as $arIbc) {
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arIbc->getCodigoIbcPk())
@@ -1867,6 +1891,16 @@ class ConsultasController extends Controller
         $query = $em->createQuery($this->strSqlCreditoLista);
         $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
         $arCreditos = $query->getResult();
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'Z'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }
+        for($col = 'F'; $col !== 'H'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }
         foreach ($arCreditos as $arCredito) {
             if ($arCredito->getAprobado() == 1) {
                 $Aprobado = "SI";
@@ -1965,6 +1999,16 @@ class ConsultasController extends Controller
         $query = $em->createQuery($this->strSqlServiciosPorCobrarLista);
         $arServiciosPorCobrar = new \Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar();
         $arServiciosPorCobrar = $query->getResult();
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'AE'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }
+        for($col = 'G'; $col !== 'AC'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }
         foreach ($arServiciosPorCobrar as $arServiciosPorCobrar) {
             if ($arServiciosPorCobrar->getEstadoCobrado() == 1) {
                 $estado = "SI";
@@ -2026,7 +2070,7 @@ class ConsultasController extends Controller
         exit;
     }
 
-    private function generarProgramacionesPagoExcel() {
+    private function generarPagoExcel() {
         ob_clean();
         set_time_limit(0);
         ini_set("memory_limit", -1);
@@ -2052,15 +2096,27 @@ class ConsultasController extends Controller
                     ->setCellValue('G1', 'PERIODO DESDE')
                     ->setCellValue('H1', 'DESDE')
                     ->setCellValue('I1', 'HASTA')
-                    ->setCellValue('J1', 'VR. SALARIO ')
-                    ->setCellValue('K1', 'VR. DEVENGADO')
-                    ->setCellValue('L1', 'VR. DEDUCCIONES')
-                    ->setCellValue('M1', 'VR. NETO');
+                    ->setCellValue('J1', 'VR. SALARIO')
+                    ->setCellValue('K1', 'IBC')
+                    ->setCellValue('L1', 'IBP')
+                    ->setCellValue('M1', 'VR. DEVENGADO')
+                    ->setCellValue('N1', 'VR. DEDUCCIONES')
+                    ->setCellValue('O1', 'VR. NETO');
 
         $i = 2;
-        $query = $em->createQuery($this->strSqlProgramacionesPagoLista);
+        $query = $em->createQuery($this->strSqlPagoLista);
         $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
         $arPagos = $query->getResult();
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'Z'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }
+        for($col = 'J'; $col !== 'O'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }
         foreach ($arPagos as $arPago) {
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arPago->getCodigoPagoPk())
@@ -2073,18 +2129,20 @@ class ConsultasController extends Controller
                     ->setCellValue('H' . $i, $arPago->getFechaDesde()->format('Y/m/d'))
                     ->setCellValue('I' . $i, $arPago->getFechaHasta()->format('Y/m/d'))
                     ->setCellValue('J' . $i, $arPago->getVrSalario())
-                    ->setCellValue('K' . $i, $arPago->getVrDevengado())
-                    ->setCellValue('L' . $i, $arPago->getVrDeducciones())
-                    ->setCellValue('M' . $i, $arPago->getVrNeto());
+                    ->setCellValue('K' . $i, $arPago->getVrIngresoBaseCotizacion())
+                    ->setCellValue('L' . $i, $arPago->getVrIngresoBasePrestacion())
+                    ->setCellValue('M' . $i, $arPago->getVrDevengado())
+                    ->setCellValue('N' . $i, $arPago->getVrDeducciones())
+                    ->setCellValue('O' . $i, $arPago->getVrNeto());
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('ProgramacionesPagos');
+        $objPHPExcel->getActiveSheet()->setTitle('Pagos');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="ReporteProgramacionesPagos.xlsx"');
+        header('Content-Disposition: attachment;filename="ReportePagos.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -2135,6 +2193,16 @@ class ConsultasController extends Controller
         $query = $em->createQuery($this->strSqlIncapacidadesLista);
         $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
         $arIncapacidades = $query->getResult();
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'Z'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }
+        for($col = 'M'; $col !== 'O'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }
         foreach ($arIncapacidades as $arIncapacidad) {
             if ($arIncapacidad->getEstadoProrroga() == 1){
                 $prorroga = "SI";
@@ -2221,6 +2289,16 @@ class ConsultasController extends Controller
         $query = $em->createQuery($this->strSqlIncapacidadesCobrarLista);
         $arIncapacidadesCobrar = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
         $arIncapacidadesCobrar = $query->getResult();
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'Z'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }
+        for($col = 'M'; $col !== 'O'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }
         foreach ($arIncapacidadesCobrar as $arIncapacidadesCobrar) {
             if ($arIncapacidadesCobrar->getEstadoProrroga() == 1){
                 $prorroga = "SI";
@@ -2302,6 +2380,12 @@ class ConsultasController extends Controller
         $query = $em->createQuery($this->strSqlProcesosDisciplinariosLista);
         $arProcesosDisciplinarios = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
         $arProcesosDisciplinarios = $query->getResult();
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'K'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }
         foreach ($arProcesosDisciplinarios as $arProcesoDisciplinario) {
             if ($arProcesoDisciplinario->getAsunto() == Null){
                 $asunto = "NO APLICA";
@@ -2503,6 +2587,12 @@ class ConsultasController extends Controller
         $query = $em->createQuery($this->strSqlEmpleadosLista);
         $arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleados = $query->getResult();
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'AW'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }
         foreach ($arEmpleados as $arEmpleado) {
             if ($arEmpleado->getCodigoCentroCostoFk() == null){
                 $centroCosto = "";
@@ -2774,7 +2864,20 @@ class ConsultasController extends Controller
         $arEntidadCaja = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadCaja')->findBy(array('codigoInterface' =>$arAporte->getCodigoEntidadCajaPertenece()));
         $arEntidadCajaPertenece = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja();
         $arEntidadCajaPertenece = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadCaja')->find($arEntidadCaja[0]);
-
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'BZ'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }
+        for($col = 'V'; $col !== 'Y'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }
+        for($col = 'AQ'; $col !== 'BF'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arAporte->getCodigoAportePk())
                     ->setCellValue('B' . $i, $arAporte->getSsoSucursalRel()->getNombre())
@@ -2890,7 +2993,16 @@ class ConsultasController extends Controller
         $query = $em->createQuery($this->strSqlVacacionesPagarLista);
         $arVacacionesPagar = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arVacacionesPagar = $query->getResult();
-
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'Z'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }
+        for($col = 'K'; $col !== 'K'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }
         foreach ($arVacacionesPagar as $arVacacionesPagar) {
             if ($arVacacionesPagar->getEstadoActivo() == 1){
                 $vigente = "SI";
@@ -2949,7 +3061,7 @@ class ConsultasController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'K'; $col++) {
+        for($col = 'A'; $col !== 'Z'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
         }         
@@ -3043,6 +3155,7 @@ class ConsultasController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'CONTRATO')
@@ -3059,7 +3172,12 @@ class ConsultasController extends Controller
         $query = $em->createQuery($this->strSqlIngresosContratosLista);
         $arFechaIngresos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arFechaIngresos = $query->getResult();
-
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'K'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }
         foreach ($arFechaIngresos as $arFechaIngreso) {
             $tipo = "";
             if ($arFechaIngreso->getEmpleadoRel()->getCodigoEmpleadoTipoFk() != null){
