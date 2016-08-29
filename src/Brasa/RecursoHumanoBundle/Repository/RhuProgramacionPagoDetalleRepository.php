@@ -499,7 +499,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
             $intDiasLaborados = $intHorasLaboradas / $intFactorDia;                        
             $douAuxilioTransporteCotizacion = $arProgramacionPagoDetalle->getDiasTransporte() * ($arConfiguracion->getVrAuxilioTransporte() / 30);
             $arPago->setVrAuxilioTransporteCotizacion($douAuxilioTransporteCotizacion);
-            $arPago->setDiasLaborados($intDiasLaborados);
+            $arPago->setDiasLaborados($arProgramacionPagoDetalle->getDias());
             $em->persist($arPago);
             $codigoPago = 0;
             if($guardar == 1) {
