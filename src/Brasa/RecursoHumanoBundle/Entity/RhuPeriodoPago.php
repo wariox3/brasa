@@ -26,6 +26,11 @@ class RhuPeriodoPago
      * @ORM\Column(name="dias", type="integer")
      */
     private $dias = 0; 
+
+    /**
+     * @ORM\Column(name="limite_horas_extra", type="integer")
+     */
+    private $limiteHorasExtra = 0;
     
     /**
      * Esta propiedad define si tiene cortes en el mes o no 10 15 30
@@ -189,5 +194,29 @@ class RhuPeriodoPago
     public function getCentrosCostosPeriodoPagoRel()
     {
         return $this->centrosCostosPeriodoPagoRel;
+    }
+
+    /**
+     * Set limiteHorasExtra
+     *
+     * @param integer $limiteHorasExtra
+     *
+     * @return RhuPeriodoPago
+     */
+    public function setLimiteHorasExtra($limiteHorasExtra)
+    {
+        $this->limiteHorasExtra = $limiteHorasExtra;
+
+        return $this;
+    }
+
+    /**
+     * Get limiteHorasExtra
+     *
+     * @return integer
+     */
+    public function getLimiteHorasExtra()
+    {
+        return $this->limiteHorasExtra;
     }
 }

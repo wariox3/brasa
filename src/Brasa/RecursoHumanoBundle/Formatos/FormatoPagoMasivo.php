@@ -23,7 +23,7 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
         self::$fechaDesde = $fechaDesde;
         self::$fechaHasta = $fechaHasta;
         self::$dato = $dato;
-        $pdf = new FormatoPagoMasivo();
+        $pdf = new FormatoPagoMasivo('P', 'mm', array(215, 147));
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
@@ -140,8 +140,8 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
             $pdf->SetFillColor(200, 200, 200);
             $pdf->Cell(24, 6, "BANCO:" , 1, 0, 'L', 1);
             $pdf->SetFont('Arial','',6.5);
-            $pdf->SetFillColor(255, 255, 255);
-            $pdf->Cell(21, 6, utf8_decode($arPago->getEmpleadoRel()->getBancoRel()->getNombre()), 1, 0, 'L', 1);
+            $pdf->SetFillColor(255, 255, 255);            
+            $pdf->Cell(21, 6, substr(utf8_decode($arPago->getEmpleadoRel()->getBancoRel()->getNombre()), 0, 13), 1, 0, 'L', 1);
             //FILA 3
             $pdf->SetXY(10, $y+10);
             $pdf->SetFont('Arial','B',6.5);
@@ -229,7 +229,8 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
                     $totalValorExtras += $arPagoDetalle->getVrPago();
                 }
             }
-            $tope = 26; //Mensual 52
+            
+            $tope = $arPago->getCentroCostoRel()->getPeriodoPagoRel()->getLimiteHorasExtra();
             $totalCompensado = 0;            
             if($totalExtras > $tope){
                 $porCompensar = $totalExtras - $tope;            
@@ -302,7 +303,7 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
                 $pdf->Cell(143, 4, "", 0, 0, 'R');
                 $pdf->Cell(30, 4, "NETO PAGAR", 1, 0, 'R',true);
                 $pdf->Cell(20, 4, number_format($arPago->getVrNeto(), 0, '.', ','), 1, 0, 'R');
-                $pdf->Ln(6);
+                $pdf->Ln(-5);
                 
                 if($arPago->getCodigoSoportePagoFk()) {
                     $desde = $arPago->getFechaDesde()->format('j');
@@ -385,7 +386,7 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
     public function Footer() {
         
         $this->SetFont('Arial','', 8);  
-        $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
+        $this->Text(185, 140, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
     }    
 }
 
