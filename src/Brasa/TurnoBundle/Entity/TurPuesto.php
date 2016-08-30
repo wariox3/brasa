@@ -125,13 +125,7 @@ class TurPuesto
      * @ORM\ManyToOne(targetEntity="TurOperacion", inversedBy="puestosOperacionRel")
      * @ORM\JoinColumn(name="codigo_operacion_fk", referencedColumnName="codigo_operacion_pk")
      */
-    protected $operacionRel;    
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\ContabilidadBundle\Entity\CtbCentroCosto", inversedBy="turPuestosCentroCostoRel")
-     * @ORM\JoinColumn(name="codigo_centro_costo_contabilidad_fk", referencedColumnName="codigo_centro_costo_pk")
-     */
-    protected $centroCostoContabilidadRel;     
+    protected $operacionRel;           
     
     /**
      * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="puestoRel")
@@ -191,6 +185,7 @@ class TurPuesto
         $this->cierresMesServiciosPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->puestosDotacionesPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->simulacionesDetallesPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facturasDetallesPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -444,6 +439,54 @@ class TurPuesto
     }
 
     /**
+     * Set codigoZonaFk
+     *
+     * @param integer $codigoZonaFk
+     *
+     * @return TurPuesto
+     */
+    public function setCodigoZonaFk($codigoZonaFk)
+    {
+        $this->codigoZonaFk = $codigoZonaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoZonaFk
+     *
+     * @return integer
+     */
+    public function getCodigoZonaFk()
+    {
+        return $this->codigoZonaFk;
+    }
+
+    /**
+     * Set codigoOperacionFk
+     *
+     * @param integer $codigoOperacionFk
+     *
+     * @return TurPuesto
+     */
+    public function setCodigoOperacionFk($codigoOperacionFk)
+    {
+        $this->codigoOperacionFk = $codigoOperacionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoOperacionFk
+     *
+     * @return integer
+     */
+    public function getCodigoOperacionFk()
+    {
+        return $this->codigoOperacionFk;
+    }
+
+    /**
      * Set codigoCiudadFk
      *
      * @param integer $codigoCiudadFk
@@ -516,6 +559,30 @@ class TurPuesto
     }
 
     /**
+     * Set codigoCentroCostoContabilidadFk
+     *
+     * @param integer $codigoCentroCostoContabilidadFk
+     *
+     * @return TurPuesto
+     */
+    public function setCodigoCentroCostoContabilidadFk($codigoCentroCostoContabilidadFk)
+    {
+        $this->codigoCentroCostoContabilidadFk = $codigoCentroCostoContabilidadFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCentroCostoContabilidadFk
+     *
+     * @return integer
+     */
+    public function getCodigoCentroCostoContabilidadFk()
+    {
+        return $this->codigoCentroCostoContabilidadFk;
+    }
+
+    /**
      * Set clienteRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurCliente $clienteRel
@@ -585,6 +652,54 @@ class TurPuesto
     public function getProgramadorRel()
     {
         return $this->programadorRel;
+    }
+
+    /**
+     * Set zonaRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurZona $zonaRel
+     *
+     * @return TurPuesto
+     */
+    public function setZonaRel(\Brasa\TurnoBundle\Entity\TurZona $zonaRel = null)
+    {
+        $this->zonaRel = $zonaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get zonaRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurZona
+     */
+    public function getZonaRel()
+    {
+        return $this->zonaRel;
+    }
+
+    /**
+     * Set operacionRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurOperacion $operacionRel
+     *
+     * @return TurPuesto
+     */
+    public function setOperacionRel(\Brasa\TurnoBundle\Entity\TurOperacion $operacionRel = null)
+    {
+        $this->operacionRel = $operacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get operacionRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurOperacion
+     */
+    public function getOperacionRel()
+    {
+        return $this->operacionRel;
     }
 
     /**
@@ -860,54 +975,6 @@ class TurPuesto
     }
 
     /**
-     * Set codigoZonaFk
-     *
-     * @param integer $codigoZonaFk
-     *
-     * @return TurPuesto
-     */
-    public function setCodigoZonaFk($codigoZonaFk)
-    {
-        $this->codigoZonaFk = $codigoZonaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoZonaFk
-     *
-     * @return integer
-     */
-    public function getCodigoZonaFk()
-    {
-        return $this->codigoZonaFk;
-    }
-
-    /**
-     * Set zonaRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurZona $zonaRel
-     *
-     * @return TurPuesto
-     */
-    public function setZonaRel(\Brasa\TurnoBundle\Entity\TurZona $zonaRel = null)
-    {
-        $this->zonaRel = $zonaRel;
-
-        return $this;
-    }
-
-    /**
-     * Get zonaRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurZona
-     */
-    public function getZonaRel()
-    {
-        return $this->zonaRel;
-    }
-
-    /**
      * Add facturasDetallesPuestoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalle $facturasDetallesPuestoRel
@@ -939,101 +1006,5 @@ class TurPuesto
     public function getFacturasDetallesPuestoRel()
     {
         return $this->facturasDetallesPuestoRel;
-    }
-
-    /**
-     * Set codigoOperacionFk
-     *
-     * @param integer $codigoOperacionFk
-     *
-     * @return TurPuesto
-     */
-    public function setCodigoOperacionFk($codigoOperacionFk)
-    {
-        $this->codigoOperacionFk = $codigoOperacionFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoOperacionFk
-     *
-     * @return integer
-     */
-    public function getCodigoOperacionFk()
-    {
-        return $this->codigoOperacionFk;
-    }
-
-    /**
-     * Set operacionRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurOperacion $operacionRel
-     *
-     * @return TurPuesto
-     */
-    public function setOperacionRel(\Brasa\TurnoBundle\Entity\TurOperacion $operacionRel = null)
-    {
-        $this->operacionRel = $operacionRel;
-
-        return $this;
-    }
-
-    /**
-     * Get operacionRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurOperacion
-     */
-    public function getOperacionRel()
-    {
-        return $this->operacionRel;
-    }
-
-    /**
-     * Set codigoCentroCostoContabilidadFk
-     *
-     * @param integer $codigoCentroCostoContabilidadFk
-     *
-     * @return TurPuesto
-     */
-    public function setCodigoCentroCostoContabilidadFk($codigoCentroCostoContabilidadFk)
-    {
-        $this->codigoCentroCostoContabilidadFk = $codigoCentroCostoContabilidadFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCentroCostoContabilidadFk
-     *
-     * @return integer
-     */
-    public function getCodigoCentroCostoContabilidadFk()
-    {
-        return $this->codigoCentroCostoContabilidadFk;
-    }
-
-    /**
-     * Set centroCostoContabilidadRel
-     *
-     * @param \Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoContabilidadRel
-     *
-     * @return TurPuesto
-     */
-    public function setCentroCostoContabilidadRel(\Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoContabilidadRel = null)
-    {
-        $this->centroCostoContabilidadRel = $centroCostoContabilidadRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoContabilidadRel
-     *
-     * @return \Brasa\ContabilidadBundle\Entity\CtbCentroCosto
-     */
-    public function getCentroCostoContabilidadRel()
-    {
-        return $this->centroCostoContabilidadRel;
     }
 }

@@ -402,13 +402,7 @@ class RhuEmpleado
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="empleadosCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
-    protected $centroCostoRel;                 
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\ContabilidadBundle\Entity\CtbCentroCosto", inversedBy="rhuEmpleadosCentroCostoRel")
-     * @ORM\JoinColumn(name="codigo_centro_costo_contabilidad_fk", referencedColumnName="codigo_centro_costo_pk")
-     */
-    protected $centroCostoContabilidadRel;    
+    protected $centroCostoRel;                        
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuBanco", inversedBy="empleadosBancoRel")
@@ -705,16 +699,14 @@ class RhuEmpleado
      * @ORM\OneToMany(targetEntity="RhuCambioTipoContrato", mappedBy="empleadoRel")
      */
     protected $cambiosTiposContratosEmpleadoRel;
-    
-    
-    
-    
+       
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->pagosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->provisionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->serviciosCobrarEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosAdicionalesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->creditosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -1334,6 +1326,30 @@ class RhuEmpleado
     public function getCodigoCentroCostoFk()
     {
         return $this->codigoCentroCostoFk;
+    }
+
+    /**
+     * Set codigoCentroCostoContabilidadFk
+     *
+     * @param integer $codigoCentroCostoContabilidadFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoCentroCostoContabilidadFk($codigoCentroCostoContabilidadFk)
+    {
+        $this->codigoCentroCostoContabilidadFk = $codigoCentroCostoContabilidadFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCentroCostoContabilidadFk
+     *
+     * @return integer
+     */
+    public function getCodigoCentroCostoContabilidadFk()
+    {
+        return $this->codigoCentroCostoContabilidadFk;
     }
 
     /**
@@ -2955,6 +2971,40 @@ class RhuEmpleado
     }
 
     /**
+     * Add provisionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addProvisionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesEmpleadoRel)
+    {
+        $this->provisionesEmpleadoRel[] = $provisionesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove provisionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesEmpleadoRel
+     */
+    public function removeProvisionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesEmpleadoRel)
+    {
+        $this->provisionesEmpleadoRel->removeElement($provisionesEmpleadoRel);
+    }
+
+    /**
+     * Get provisionesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProvisionesEmpleadoRel()
+    {
+        return $this->provisionesEmpleadoRel;
+    }
+
+    /**
      * Add serviciosCobrarEmpleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuServicioCobrar $serviciosCobrarEmpleadoRel
@@ -4146,87 +4196,5 @@ class RhuEmpleado
     public function getCambiosTiposContratosEmpleadoRel()
     {
         return $this->cambiosTiposContratosEmpleadoRel;
-    }
-
-    /**
-     * Set codigoCentroCostoContabilidadFk
-     *
-     * @param integer $codigoCentroCostoContabilidadFk
-     *
-     * @return RhuEmpleado
-     */
-    public function setCodigoCentroCostoContabilidadFk($codigoCentroCostoContabilidadFk)
-    {
-        $this->codigoCentroCostoContabilidadFk = $codigoCentroCostoContabilidadFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCentroCostoContabilidadFk
-     *
-     * @return integer
-     */
-    public function getCodigoCentroCostoContabilidadFk()
-    {
-        return $this->codigoCentroCostoContabilidadFk;
-    }
-
-    /**
-     * Set centroCostoContabilidadRel
-     *
-     * @param \Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoContabilidadRel
-     *
-     * @return RhuEmpleado
-     */
-    public function setCentroCostoContabilidadRel(\Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoContabilidadRel = null)
-    {
-        $this->centroCostoContabilidadRel = $centroCostoContabilidadRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoContabilidadRel
-     *
-     * @return \Brasa\ContabilidadBundle\Entity\CtbCentroCosto
-     */
-    public function getCentroCostoContabilidadRel()
-    {
-        return $this->centroCostoContabilidadRel;
-    }
-
-    /**
-     * Add provisionesEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesEmpleadoRel
-     *
-     * @return RhuEmpleado
-     */
-    public function addProvisionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesEmpleadoRel)
-    {
-        $this->provisionesEmpleadoRel[] = $provisionesEmpleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove provisionesEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesEmpleadoRel
-     */
-    public function removeProvisionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesEmpleadoRel)
-    {
-        $this->provisionesEmpleadoRel->removeElement($provisionesEmpleadoRel);
-    }
-
-    /**
-     * Get provisionesEmpleadoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProvisionesEmpleadoRel()
-    {
-        return $this->provisionesEmpleadoRel;
     }
 }
