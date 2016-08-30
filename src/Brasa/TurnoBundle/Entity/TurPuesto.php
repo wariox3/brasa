@@ -93,7 +93,7 @@ class TurPuesto
     private $codigoInterface;    
     
     /**
-     * @ORM\Column(name="codigo_centro_costo_contabilidad_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_centro_costo_contabilidad_fk", type="string", length=20, nullable=true)
      */    
     private $codigoCentroCostoContabilidadFk;     
     
@@ -172,6 +172,7 @@ class TurPuesto
      */
     protected $facturasDetallesPuestoRel; 
     
+
     /**
      * Constructor
      */
@@ -561,7 +562,7 @@ class TurPuesto
     /**
      * Set codigoCentroCostoContabilidadFk
      *
-     * @param integer $codigoCentroCostoContabilidadFk
+     * @param string $codigoCentroCostoContabilidadFk
      *
      * @return TurPuesto
      */
@@ -575,7 +576,7 @@ class TurPuesto
     /**
      * Get codigoCentroCostoContabilidadFk
      *
-     * @return integer
+     * @return string
      */
     public function getCodigoCentroCostoContabilidadFk()
     {

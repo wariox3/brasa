@@ -145,7 +145,7 @@ class RhuEmpleado
     private $codigoCentroCostoFk; 
     
     /**
-     * @ORM\Column(name="codigo_centro_costo_contabilidad_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_centro_costo_contabilidad_fk", type="string", length=20, nullable=true)
      */    
     private $codigoCentroCostoContabilidadFk;    
     
@@ -700,6 +700,7 @@ class RhuEmpleado
      */
     protected $cambiosTiposContratosEmpleadoRel;
        
+
     /**
      * Constructor
      */
@@ -1331,7 +1332,7 @@ class RhuEmpleado
     /**
      * Set codigoCentroCostoContabilidadFk
      *
-     * @param integer $codigoCentroCostoContabilidadFk
+     * @param string $codigoCentroCostoContabilidadFk
      *
      * @return RhuEmpleado
      */
@@ -1345,7 +1346,7 @@ class RhuEmpleado
     /**
      * Get codigoCentroCostoContabilidadFk
      *
-     * @return integer
+     * @return string
      */
     public function getCodigoCentroCostoContabilidadFk()
     {

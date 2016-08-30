@@ -49,7 +49,7 @@ class CtbRegistro
     private $codigoTerceroFk;
 
     /**
-     * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_centro_costo_fk", type="string", length=20, nullable=true)
      */     
     private $codigoCentroCostoFk;                                          
     
@@ -83,13 +83,7 @@ class CtbRegistro
      * @ORM\ManyToOne(targetEntity="CtbCuenta", inversedBy="registrosCuentasRel")
      * @ORM\JoinColumn(name="codigo_cuenta_fk", referencedColumnName="codigo_cuenta_pk")
      */
-    protected $cuentaRel;       
-  
-    /**
-     * @ORM\ManyToOne(targetEntity="CtbCentroCosto", inversedBy="CtbRegistro")
-     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
-     */
-    private $centroCostoRel;      
+    protected $cuentaRel;             
 
     /**
      * @ORM\ManyToOne(targetEntity="CtbTercero", inversedBy="CtbRegistro")
@@ -104,9 +98,6 @@ class CtbRegistro
     protected $comprobanteRel;     
 
 
-
-
-    
 
     /**
      * Get codigoRegistroPk
@@ -265,7 +256,7 @@ class CtbRegistro
     /**
      * Set codigoCentroCostoFk
      *
-     * @param integer $codigoCentroCostoFk
+     * @param string $codigoCentroCostoFk
      *
      * @return CtbRegistro
      */
@@ -279,7 +270,7 @@ class CtbRegistro
     /**
      * Get codigoCentroCostoFk
      *
-     * @return integer
+     * @return string
      */
     public function getCodigoCentroCostoFk()
     {
@@ -428,30 +419,6 @@ class CtbRegistro
     public function getCuentaRel()
     {
         return $this->cuentaRel;
-    }
-
-    /**
-     * Set centroCostoRel
-     *
-     * @param \Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoRel
-     *
-     * @return CtbRegistro
-     */
-    public function setCentroCostoRel(\Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoRel = null)
-    {
-        $this->centroCostoRel = $centroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoRel
-     *
-     * @return \Brasa\ContabilidadBundle\Entity\CtbCentroCosto
-     */
-    public function getCentroCostoRel()
-    {
-        return $this->centroCostoRel;
     }
 
     /**

@@ -39,7 +39,7 @@ class CtbMovimientoHistorico
     private $codigoTerceroFk;    
     
     /**
-     * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_centro_costo_fk", type="string", length=20, nullable=true)
      */     
     private $codigoCentroCostoFk;           
     
@@ -72,20 +72,13 @@ class CtbMovimientoHistorico
      * @ORM\ManyToOne(targetEntity="CtbCuenta", inversedBy="CtbMovimientoHistorico")
      * @ORM\JoinColumn(name="codigo_cuenta_fk", referencedColumnName="codigo_cuenta_pk")
      */
-    protected $cuentaRel;       
-  
-    /**
-     * @ORM\ManyToOne(targetEntity="CtbCentroCosto", inversedBy="CtbMovimientoHistorico")
-     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
-     */
-    protected $centroCostosRel;
+    protected $cuentaRel;        
     
     /**
      * @ORM\ManyToOne(targetEntity="CtbComprobante", inversedBy="CtbMovimientoHistorico")
      * @ORM\JoinColumn(name="codigo_comprobante_fk", referencedColumnName="codigo_comprobante_pk")
      */
     protected $comprobanteRel;     
-
 
 
     /**
@@ -197,7 +190,7 @@ class CtbMovimientoHistorico
     /**
      * Set codigoCentroCostoFk
      *
-     * @param integer $codigoCentroCostoFk
+     * @param string $codigoCentroCostoFk
      *
      * @return CtbMovimientoHistorico
      */
@@ -211,7 +204,7 @@ class CtbMovimientoHistorico
     /**
      * Get codigoCentroCostoFk
      *
-     * @return integer
+     * @return string
      */
     public function getCodigoCentroCostoFk()
     {
@@ -360,30 +353,6 @@ class CtbMovimientoHistorico
     public function getCuentaRel()
     {
         return $this->cuentaRel;
-    }
-
-    /**
-     * Set centroCostosRel
-     *
-     * @param \Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostosRel
-     *
-     * @return CtbMovimientoHistorico
-     */
-    public function setCentroCostosRel(\Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostosRel = null)
-    {
-        $this->centroCostosRel = $centroCostosRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostosRel
-     *
-     * @return \Brasa\ContabilidadBundle\Entity\CtbCentroCosto
-     */
-    public function getCentroCostosRel()
-    {
-        return $this->centroCostosRel;
     }
 
     /**

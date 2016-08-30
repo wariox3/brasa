@@ -13,7 +13,7 @@ class CtbCentroCosto
 {
     /** 
      * @ORM\Id
-     * @ORM\Column(name="codigo_centro_costo_pk", type="integer")
+     * @ORM\Column(name="codigo_centro_costo_pk", type="string", length=20)
      * @ORM\GeneratedValue(strategy="AUTO")
      */    
     private $codigoCentroCostoPk;
@@ -29,10 +29,11 @@ class CtbCentroCosto
     private $codigoInterface;                 
     
 
+
     /**
      * Get codigoCentroCostoPk
      *
-     * @return integer
+     * @return string
      */
     public function getCodigoCentroCostoPk()
     {
