@@ -9,6 +9,8 @@ use Brasa\TurnoBundle\Form\Type\TurClientePuestoType;
 use Brasa\TurnoBundle\Form\Type\TurProyectoType;
 use Brasa\TurnoBundle\Form\Type\TurGrupoFacturacionType;
 use Brasa\TurnoBundle\Form\Type\TurClienteDireccionType;
+use PHPExcel_Shared_Date;
+use PHPExcel_Style_NumberFormat;
 class ClienteController extends Controller
 {
     var $strDqlLista = "";
@@ -397,6 +399,9 @@ class ClienteController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(9); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'T'; $col !== 'U'; $col++) {
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('yyyy/mm/dd');
+        }        
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'NIT')
                     ->setCellValue('B1', 'clase')
@@ -446,7 +451,7 @@ class ClienteController extends Controller
                     ->setCellValue('Q' . $i, 'S')
                     ->setCellValue('R' . $i, 'S')
                     ->setCellValue('S' . $i, 'S')
-                    ->setCellValue('T' . $i, $fecha->format('d/m/Y'));                                    
+                    ->setCellValue('T' . $i, PHPExcel_Shared_Date::PHPToExcel( gmmktime(0,0,0,$fecha->format('m'),$fecha->format('d'),$fecha->format('Y'))));                                    
             $i++;
         }
         

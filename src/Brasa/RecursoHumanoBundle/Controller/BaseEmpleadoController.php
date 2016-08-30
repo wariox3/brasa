@@ -5,7 +5,8 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuEmpleadoType;
 use Doctrine\ORM\EntityRepository;
-
+use PHPExcel_Shared_Date;
+use PHPExcel_Style_NumberFormat;
 class BaseEmpleadoController extends Controller
 {
     var $strSqlLista = "";
@@ -708,8 +709,13 @@ class BaseEmpleadoController extends Controller
         for($col = 'A'; $col !== 'AR'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
-        }        
-
+        }    
+        for($col = 'L'; $col !== 'M'; $col++) {
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('yyyy/mm/dd');
+        }         
+        for($col = 'T'; $col !== 'U'; $col++) {
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('yyyy/mm/dd');
+        } 
         $objPHPExcel->setActiveSheetIndex(0)
                                     ->setCellValue('A1', 'NIT')
                     ->setCellValue('B1', 'clase')
@@ -750,8 +756,8 @@ class BaseEmpleadoController extends Controller
                     ->setCellValue('H' . $i, $arEmpleado->getDireccion())
                     ->setCellValue('I' . $i, $arEmpleado->getCorreo())
                     ->setCellValue('J' . $i, $arEmpleado->getTelefono())
-                    ->setCellValue('K' . $i, $arEmpleado->getCelular())
-                    ->setCellValue('L' . $i, $fecha->format('d/m/Y'))
+                    ->setCellValue('K' . $i, $arEmpleado->getCelular())                    
+                    ->setCellValue('L' . $i, PHPExcel_Shared_Date::PHPToExcel( gmmktime(0,0,0,$fecha->format('m'),$fecha->format('d'),$fecha->format('Y'))))
                     ->setCellValue('M' . $i, $arEmpleado->getCiudadRel()->getCodigoInterface())
                     ->setCellValue('N' . $i, $arEmpleado->getCiudadRel()->getCodigoInterface())
                     ->setCellValue('O' . $i, '0')
@@ -759,7 +765,7 @@ class BaseEmpleadoController extends Controller
                     ->setCellValue('Q' . $i, 'S')
                     ->setCellValue('R' . $i, 'S')
                     ->setCellValue('S' . $i, 'S')
-                    ->setCellValue('T' . $i, $arEmpleado->getFechaNacimiento()->format('d/m/Y'));            
+                    ->setCellValue('T' . $i, PHPExcel_Shared_Date::PHPToExcel( gmmktime(0,0,0,$arEmpleado->getFechaNacimiento()->format('m'),$arEmpleado->getFechaNacimiento()->format('d'),$arEmpleado->getFechaNacimiento()->format('Y'))));                                                        
             $i++;
         }
 
