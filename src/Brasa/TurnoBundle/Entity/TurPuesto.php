@@ -128,6 +128,12 @@ class TurPuesto
     protected $operacionRel;           
     
     /**
+     * @ORM\ManyToOne(targetEntity="Brasa\ContabilidadBundle\Entity\CtbCentroCosto", inversedBy="turPuestosCentroCostoRel")
+     * @ORM\JoinColumn(name="codigo_centro_costo_contabilidad_fk", referencedColumnName="codigo_centro_costo_pk")
+     */
+    protected $centroCostoContabilidadRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="puestoRel")
      */
     protected $pedidosDetallesPuestoRel;    
@@ -1007,5 +1013,29 @@ class TurPuesto
     public function getFacturasDetallesPuestoRel()
     {
         return $this->facturasDetallesPuestoRel;
+    }
+
+    /**
+     * Set centroCostoContabilidadRel
+     *
+     * @param \Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoContabilidadRel
+     *
+     * @return TurPuesto
+     */
+    public function setCentroCostoContabilidadRel(\Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoContabilidadRel = null)
+    {
+        $this->centroCostoContabilidadRel = $centroCostoContabilidadRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoContabilidadRel
+     *
+     * @return \Brasa\ContabilidadBundle\Entity\CtbCentroCosto
+     */
+    public function getCentroCostoContabilidadRel()
+    {
+        return $this->centroCostoContabilidadRel;
     }
 }

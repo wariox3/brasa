@@ -86,6 +86,12 @@ class CtbRegistro
     protected $cuentaRel;             
 
     /**
+     * @ORM\ManyToOne(targetEntity="CtbCentroCosto", inversedBy="CtbRegistro")
+     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
+     */
+    private $centroCostoRel;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="CtbTercero", inversedBy="CtbRegistro")
      * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
      */
@@ -467,5 +473,29 @@ class CtbRegistro
     public function getComprobanteRel()
     {
         return $this->comprobanteRel;
+    }
+
+    /**
+     * Set centroCostoRel
+     *
+     * @param \Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoRel
+     *
+     * @return CtbRegistro
+     */
+    public function setCentroCostoRel(\Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoRel = null)
+    {
+        $this->centroCostoRel = $centroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoRel
+     *
+     * @return \Brasa\ContabilidadBundle\Entity\CtbCentroCosto
+     */
+    public function getCentroCostoRel()
+    {
+        return $this->centroCostoRel;
     }
 }
