@@ -305,7 +305,7 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
                 $pdf->Cell(20, 4, number_format($arPago->getVrNeto(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Ln(-5);
                 
-                if($arPago->getCodigoSoportePagoFk()) {
+                if($arPago->getCodigoSoportePagoFk() && $arPago->getCodigoCentroCostoFk() != 4) {
                     $desde = $arPago->getFechaDesde()->format('j');
                     $hasta = $arPago->getFechaHasta()->format('j');
                     if($hasta == 30) {$hasta = 31;}

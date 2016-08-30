@@ -141,12 +141,18 @@
                                         <li><a href="{{ path('brs_tur_base_turno') }}">Turno</a></li>
                                         <li><a href="{{ path('brs_tur_base_plantilla_lista') }}">Plantilla</a></li>
                                     </ul>
-                                </li>                                                                                                                                                                
+                                </li>   
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#">Operaciones</a>
+                                    <ul class="dropdown-menu">                                        
+                                        <li><a href="{{ path('brs_tur_base_proyecto') }}">Proyecto</a></li>                                        
+                                    </ul>
+                                </li>                                
                                 <li><a href="{{ path('brs_tur_base_prospecto_lista') }}">Prospecto</a></li>                                                                                                
                                 <li><a href="{{ path('brs_tur_base_concepto_servicio_lista') }}">Concepto servicio</a></li>
                                 <li class="dropdown-submenu">
                                     <a tabindex="-1" href="#">General</a>
-                                    <ul class="dropdown-menu">
+                                    <ul class="dropdown-menu">                                        
                                         <li><a href="{{ path('brs_tur_base_factura_concepto') }}">Conceptos factura</a></li>                                        
                                         <li><a href="{{ path('brs_tur_base_novedad_tipo') }}">Tipo novedad</a></li>
                                         <li><a href="{{ path('brs_tur_base_elemento_dotacion') }}">Elemento dotacion</a></li>
