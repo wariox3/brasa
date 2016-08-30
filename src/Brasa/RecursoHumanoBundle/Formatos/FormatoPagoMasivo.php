@@ -222,27 +222,28 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
             $dql = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->listaDql($arPago->getCodigoPagoPk());                
             $query = self::$em->createQuery($dql);
             $arPagoDetalles = $query->getResult();
-
+            $totalValorExtras = 0;
             foreach ($arPagoDetalles as $arPagoDetalle) { 
                 if($arPagoDetalle->getCodigoPagoConceptoFk() >= 3 && $arPagoDetalle->getCodigoPagoConceptoFk() <= 6) {
                     $totalExtras += $arPagoDetalle->getNumeroHoras();
+                    $totalValorExtras += $arPagoDetalle->getVrPago();
                 }
             }
-            $tope = ($arPago->getDiasLaborados() * 2) - 4;
+            $tope = 26; //Mensual 52
+            $totalCompensado = 0;            
             if($totalExtras > $tope){
                 $porCompensar = $totalExtras - $tope;            
-                $porCompensar = $totalExtras - $porCompensar;
+                $porCompensarDetalle = $totalExtras - $porCompensar;
                 foreach ($arPagoDetalles as $arPagoDetalle) { 
                     if($arPagoDetalle->getCodigoPagoConceptoFk() >= 3 && $arPagoDetalle->getCodigoPagoConceptoFk() <= 6) {
                         $porcentaje = $arPagoDetalle->getNumeroHoras() / $totalExtras;
-                        $horas = $porcentaje * $porCompensar;                    
+                        $horas = $porcentaje * $porCompensarDetalle;                    
                         $horas = round($horas);                    
-                        $horasCompensadas =  $arPagoDetalle->getNumeroHoras() - $horas;
-                        $valor = $horasCompensadas * $arPagoDetalle->getVrHora();    
+                        //$horasCompensadas =  $arPagoDetalle->getNumeroHoras() - $horas;
+                        $valor = $horas * $arPagoDetalle->getVrHora();    
                         $arPagoDetalle->setNumeroHoras($horas);
                         $arPagoDetalle->setVrPago($valor);
-                        $totalCompensado += $horas * $arPagoDetalle->getVrHora();
-                        $totalHorasCompensado += $horas;
+                        $totalCompensado += $valor;
                     }
                 }
             }            
@@ -279,7 +280,8 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
                 $pdf->Cell(10, 4, '', 1, 0, 'R');
                 $pdf->Cell(22, 4, '', 1, 0, 'R');
                 $pdf->Cell(7, 4, '', 1, 0, 'R');
-                $pdf->Cell(27, 4, number_format($totalCompensado, 0, '.', ','), 1, 0, 'R');    
+                $totalRegistro = $totalValorExtras - $totalCompensado;
+                $pdf->Cell(27, 4, number_format($totalRegistro, 0, '.', ','), 1, 0, 'R');    
                 $pdf->Cell(27, 4, number_format(0, 0, '.', ','), 1, 0, 'R');    
                 $pdf->Ln();
                 $pdf->SetAutoPageBreak(true, 15);            
@@ -364,49 +366,7 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
                             }
                             $pdf->Ln();
                             $pdf->SetAutoPageBreak(true, 15);
-                        }
-                        
-                        //$arProgramacionesDetalle =  self::$em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arSoportePago->getCodigoRecursoFk()), null, 2);                                                                                                                
-                        //foreach ($arProgramacionesDetalle as $arProgramacionDetalle) {            
-                            
-                        //}
-                        /*$arProgramacionesDetalle =  self::$em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arSoportePago->getCodigoRecursoFk()), null, 2);                                                                                                                
-                        foreach ($arProgramacionesDetalle as $arProgramacionDetalle) {            
-                            $pdf->SetFont('Arial', '', 5);
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia1(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia2(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia3(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia4(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia5(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia6(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia7(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia8(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia9(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia10(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia11(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia12(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia13(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia14(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia15(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia16(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia17(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia18(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia19(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia20(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia21(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia22(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia23(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia24(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia25(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia26(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia27(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia28(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia29(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia30(), 1, 0, 'L');
-                            $pdf->Cell(6.2, 4, $arProgramacionDetalle->getDia31(), 1, 0, 'L');
-                            $pdf->Ln();
-                            $pdf->SetAutoPageBreak(true, 15);
-                        } */                       
+                        }                                              
                     }
                 }    
             if($contador < $numeroPagos) {
