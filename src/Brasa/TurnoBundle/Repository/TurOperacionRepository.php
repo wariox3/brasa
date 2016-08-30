@@ -6,19 +6,19 @@ use Doctrine\ORM\EntityRepository;
 
 class TurOperacionRepository extends EntityRepository {
     
-    public function listaDql($codigoOperacion = '', $strNombre = "", $codigoCliente = '') {
+    public function listaDql($codigoOperacion = '', $strNombre = "", $codigoProyecto = '') {
         $em = $this->getEntityManager();
-        $dql   = "SELECT p FROM BrasaTurnoBundle:TurOperacion p WHERE p.codigoOperacionPk <> 0 ";
-        if($codigoCliente != "" ) {
-            $dql .= " AND p.codigoClienteFk = " . $codigoCliente;
+        $dql   = "SELECT o FROM BrasaTurnoBundle:TurOperacion o WHERE o.codigoOperacionPk <> 0 ";
+        if($codigoProyecto != "" ) {
+            $dql .= " AND o.codigoProyectoFk = " . $codigoProyecto;
         }
         if($strNombre != "" ) {
-            $dql .= " AND p.nombre LIKE '%" . $strNombre . "%'";
+            $dql .= " AND o.nombre LIKE '%" . $strNombre . "%'";
         }
         if($codigoOperacion != "" ) {
-            $dql .= " AND p.codigoOperacionPk = " . $codigoOperacion;
+            $dql .= " AND o.codigoOperacionPk = " . $codigoOperacion;
         }
-        $dql .= " ORDER BY p.nombre";
+        $dql .= " ORDER BY o.nombre";
         return $dql;
     }            
     

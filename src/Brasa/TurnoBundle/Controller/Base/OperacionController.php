@@ -4,12 +4,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Brasa\TurnoBundle\Form\Type\TurProyectoType;
-class ProyectoController extends Controller
+use Brasa\TurnoBundle\Form\Type\TurOperacionType;
+class OperacionController extends Controller
 {
     var $strDqlLista = "";
     /**
-     * @Route("/tur/base/proyecto", name="brs_tur_base_proyecto")
+     * @Route("/tur/base/operacion", name="brs_tur_base_operacion")
      */    
     public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();        
@@ -21,8 +21,8 @@ class ProyectoController extends Controller
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaTurnoBundle:TurProyecto')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_base_proyecto'));
+                $em->getRepository('BrasaTurnoBundle:TurOperacion')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_tur_base_operacion'));
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
@@ -33,36 +33,36 @@ class ProyectoController extends Controller
             }
         }
         
-        $arProyectos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
-        return $this->render('BrasaTurnoBundle:Base/Proyecto:lista.html.twig', array(
-            'arProyectos' => $arProyectos, 
+        $arOperaciones = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
+        return $this->render('BrasaTurnoBundle:Base/Operacion:lista.html.twig', array(
+            'arOperacions' => $arOperaciones, 
             'form' => $form->createView()));
     }
 
     /**
-     * @Route("/tur/base/proyecto/nuevo/{codigoProyecto}", name="brs_tur_base_proyecto_nuevo")
+     * @Route("/tur/base/operacion/nuevo/{codigoOperacion}", name="brs_tur_base_operacion_nuevo")
      */    
-    public function nuevoAction(Request $request, $codigoProyecto = '') {
+    public function nuevoAction(Request $request, $codigoOperacion = '') {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $arProyecto = new \Brasa\TurnoBundle\Entity\TurProyecto();
-        if($codigoProyecto != '' && $codigoProyecto != '0') {
-            $arProyecto = $em->getRepository('BrasaTurnoBundle:TurProyecto')->find($codigoProyecto);
+        $arOperacion = new \Brasa\TurnoBundle\Entity\TurOperacion();
+        if($codigoOperacion != '' && $codigoOperacion != '0') {
+            $arOperacion = $em->getRepository('BrasaTurnoBundle:TurOperacion')->find($codigoOperacion);
         }        
-        $form = $this->createForm(new TurProyectoType, $arProyecto);
+        $form = $this->createForm(new TurOperacionType, $arOperacion);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arProyecto = $form->getData();                        
-            $em->persist($arProyecto);
+            $arOperacion = $form->getData();                        
+            $em->persist($arOperacion);
             $em->flush();            
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_base_proyecto_nuevo', array('codigoProyecto' => 0 )));
+                return $this->redirect($this->generateUrl('brs_tur_base_operacion_nuevo', array('codigoOperacion' => 0 )));
             } else {
-                return $this->redirect($this->generateUrl('brs_tur_base_proyecto'));
+                return $this->redirect($this->generateUrl('brs_tur_base_operacion'));
             }                                   
         }
-        return $this->render('BrasaTurnoBundle:Base/Proyecto:nuevo.html.twig', array(
-            'arProyecto' => $arProyecto,
+        return $this->render('BrasaTurnoBundle:Base/Operacion:nuevo.html.twig', array(
+            'arOperacion' => $arOperacion,
             'form' => $form->createView()));
     }        
 
@@ -70,21 +70,43 @@ class ProyectoController extends Controller
     private function lista() {    
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurProyecto')->listaDQL('',
-                $session->get('filtroProyectoNombre'), ''   
+        $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurOperacion')->listaDQL('',
+                $session->get('filtroOperacionNombre'), $session->get('filtroTurnosCodigoProyecto')   
                 ); 
     }
 
     private function filtrar ($form) {        
         $session = $this->getRequest()->getSession();        
-        $session->set('filtroProyectoNombre', $form->get('TxtNombre')->getData());
+        $session->set('filtroOperacionNombre', $form->get('TxtNombre')->getData());
+        $arProyecto = $form->get('proyectoRel')->getData();
+        if($arProyecto) {
+            $session->set('filtroTurnosCodigoProyecto', $arProyecto->getCodigoProyectoPk());
+        } else {
+            $session->set('filtroTurnosCodigoProyecto', null);
+        }         
         $this->lista();
     }
     
     private function formularioFiltro() {
+        $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
+        $arrayPropiedadesProyecto = array(
+                'class' => 'BrasaTurnoBundle:TurProyecto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('p')
+                    ->orderBy('p.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroTurnosCodigoProyecto')) {
+            $arrayPropiedadesProyecto['data'] = $em->getReference("BrasaTurnoBundle:TurProyecto", $session->get('filtroTurnosCodigoProyecto'));
+        }         
         $form = $this->createFormBuilder()            
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroProyectoNombre')))
+            ->add('proyectoRel', 'entity', $arrayPropiedadesProyecto)                 
+            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroOperacionNombre')))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -109,26 +131,28 @@ class ProyectoController extends Controller
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'NOMBRE');
+                    ->setCellValue('B1', 'PROYECTO')    
+                    ->setCellValue('C1', 'NOMBRE');
 
         $i = 2;
         
         $query = $em->createQuery($this->strDqlLista);
-        $arProyectos = new \Brasa\TurnoBundle\Entity\TurProyecto();
-        $arProyectos = $query->getResult();
+        $arOperaciones = new \Brasa\TurnoBundle\Entity\TurOperacion();
+        $arOperaciones = $query->getResult();
                 
-        foreach ($arProyectos as $arProyecto) {            
+        foreach ($arOperaciones as $arOperacion) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arProyecto->getCodigoProyectoPk())
-                    ->setCellValue('B' . $i, $arProyecto->getNombre());                                    
+                    ->setCellValue('A' . $i, $arOperacion->getCodigoOperacionPk())
+                    ->setCellValue('B' . $i, $arOperacion->getProyectoRel()->getNombre())
+                    ->setCellValue('C' . $i, $arOperacion->getNombre());                                    
             $i++;
         }
         
-        $objPHPExcel->getActiveSheet()->setTitle('Proyecto');
+        $objPHPExcel->getActiveSheet()->setTitle('Operacion');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Proyectos.xlsx"');
+        header('Content-Disposition: attachment;filename="Operacions.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
