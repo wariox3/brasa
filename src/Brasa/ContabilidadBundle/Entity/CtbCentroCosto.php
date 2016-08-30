@@ -27,15 +27,7 @@ class CtbCentroCosto
      */
     private $codigoInterface;                 
     
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleado", mappedBy="centroCostoContabilidadRel")
-     */
-    protected $rhuEmpleadosCentroCostoRel;    
-    
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurPuesto", mappedBy="centroCostoContabilidadRel")
-     */
-    protected $turPuestosCentroCostoRel;     
+   
 
 
     /**

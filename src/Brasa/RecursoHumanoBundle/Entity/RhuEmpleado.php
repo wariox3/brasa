@@ -404,11 +404,7 @@ class RhuEmpleado
      */
     protected $centroCostoRel;                        
     
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\ContabilidadBundle\Entity\CtbCentroCosto", inversedBy="rhuEmpleadosCentroCostoRel")
-     * @ORM\JoinColumn(name="codigo_centro_costo_contabilidad_fk", referencedColumnName="codigo_centro_costo_pk")
-     */
-    protected $centroCostoContabilidadRel;     
+   
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuBanco", inversedBy="empleadosBancoRel")
