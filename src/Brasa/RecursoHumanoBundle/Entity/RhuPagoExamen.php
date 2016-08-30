@@ -35,7 +35,8 @@ class RhuPagoExamen
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
      */    
-    private $estadoAutorizado = 0;    
+    private $estadoAutorizado = 0;
+
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadExamen", inversedBy="pagosExamenesEntidadExamenRel")
@@ -47,6 +48,8 @@ class RhuPagoExamen
      * @ORM\OneToMany(targetEntity="RhuPagoExamenDetalle", mappedBy="pagoExamenRel")
      */
     protected $pagosExamenesDetallesPagoExamenRel;
+    
+    
     
     
     /**
@@ -140,6 +143,30 @@ class RhuPagoExamen
     }
 
     /**
+     * Set estadoAutorizado
+     *
+     * @param boolean $estadoAutorizado
+     *
+     * @return RhuPagoExamen
+     */
+    public function setEstadoAutorizado($estadoAutorizado)
+    {
+        $this->estadoAutorizado = $estadoAutorizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAutorizado
+     *
+     * @return boolean
+     */
+    public function getEstadoAutorizado()
+    {
+        return $this->estadoAutorizado;
+    }
+
+    /**
      * Set entidadExamenRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadExamen $entidadExamenRel
@@ -195,29 +222,5 @@ class RhuPagoExamen
     public function getPagosExamenesDetallesPagoExamenRel()
     {
         return $this->pagosExamenesDetallesPagoExamenRel;
-    }
-
-    /**
-     * Set estadoAutorizado
-     *
-     * @param boolean $estadoAutorizado
-     *
-     * @return RhuPagoExamen
-     */
-    public function setEstadoAutorizado($estadoAutorizado)
-    {
-        $this->estadoAutorizado = $estadoAutorizado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoAutorizado
-     *
-     * @return boolean
-     */
-    public function getEstadoAutorizado()
-    {
-        return $this->estadoAutorizado;
     }
 }

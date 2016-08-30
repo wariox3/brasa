@@ -17,12 +17,12 @@ class RhuExamenRepository extends EntityRepository {
         }
         if($boolAprobado == 1 ) {
             $dql .= " AND e.estadoAprobado = 1";
-        } elseif($boolAprobado == 0 or $boolAprobado == "") {
+        } elseif($boolAprobado == '0' or $boolAprobado == "") {
             $dql .= " AND e.estadoAprobado = 0";
         }
         if($boolControlPago == 1 ) {
             $dql .= " AND e.controlPago = 1";
-        } elseif($boolControlPago == 0 or $boolControlPago == "") {
+        } elseif($boolControlPago == '0' or $boolControlPago == "") {
             $dql .= " AND e.controlPago = 0";
         }
         $dql .= " ORDER BY e.codigoExamenPk";
@@ -136,7 +136,7 @@ class RhuExamenRepository extends EntityRepository {
     
     public function pendienteCobrarConsulta() {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuExamen e WHERE e.estadoCobrado = 0 ";
+        $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuExamen e WHERE e.estadoPagado = 0 ";
         return $dql;
     }
         

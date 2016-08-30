@@ -162,7 +162,10 @@ class PeriodoController extends Controller
                 $this->listaDetallePago($codigoPeriodo);
                 $this->generarDetallePagoExcel();
             }            
-            if ($form->get('BtnDetallePagoArchivo')->isClicked()) {             
+            if($request->request->get('OpGenerar')) {
+                $codigoProceso = $request->request->get('OpGenerar');             
+                $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
+                $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->findBy(array('codigoPeriodoFk' => $codigoPeriodo));
                 $arPeriodoDetallePagos = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago();
                 $arPeriodoDetallePagos = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetallePago')->findBy(array('codigoPeriodoFk' => $codigoPeriodo));
                 $totalCotizacion = 0;
@@ -171,8 +174,16 @@ class PeriodoController extends Controller
                 }
                 $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
                 $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-                //$strRutaArchivo = $arConfiguracion->getRutaTemporal();
-                $strRutaArchivo = "c:/xampp/";
+                if ($codigoProceso == 1){ //proceso a cargo del cliente
+                    $nit = $arPeriodo->getClienteRel()->getNit();
+                    $cliente = $arPeriodo->getClienteRel()->getNombreCorto();
+                    $sucursal = $arPeriodo->getClienteRel()->getCodigoSucursal();
+                } else {
+                    $nit = $arConfiguracion->getNitEmpresa();
+                    $cliente = $arConfiguracion->getNombreEmpresa();
+                    //$sucursal = $arConfiguracion->get;
+                }
+                $strRutaArchivo = $arConfiguracion->getRutaTemporal();
                 $strNombreArchivo = "pila" . date('YmdHis') . ".txt";
                 ob_clean();
                 $ar = fopen($strRutaArchivo . $strNombreArchivo, "a") or
@@ -180,15 +191,15 @@ class PeriodoController extends Controller
                 fputs($ar, '01');
                 fputs($ar, '1');
                 fputs($ar, '0001');
-                fputs($ar, $this->RellenarNr($arConfiguracion->getNombreEmpresa(), " ", 200, "D"));
+                fputs($ar, $this->RellenarNr($arConfiguracion->getNombreEmpresa(), " ", 200, "D")); //nombre empresa
                 fputs($ar, 'NI');
-                fputs($ar, $this->RellenarNr($arConfiguracion->getNitEmpresa(), " ", 16, "D"));
+                fputs($ar, $this->RellenarNr($arConfiguracion->getNitEmpresa(), " ", 16, "D")); // nit empresa
                 fputs($ar, '3');
                 fputs($ar, 'E');
                 fputs($ar, '          ');
                 fputs($ar, '          '); // Nro 9 del formato
                 fputs($ar, 'S'); // Nro 10 del formato
-                fputs($ar, $this->RellenarNr($arPeriodoDetallePagos->getPeriodoRel()->getClienteRel()->getCodigoSucursal(), " ", 10, "D"));
+                fputs($ar, $this->RellenarNr($arPeriodoDetallePagos->getPeriodoRel()->getClienteRel()->getCodigoSucursal(), " ", 10, "D")); //sucursal pila
                 fputs($ar, $this->RellenarNr('PAGO CONTADO', " ", 40, "D")); //ESTABA $arPeriodo->getClienteRel()->getNombreCorto()
                 //Arp del aportante
                 fputs($ar, '14-18 ');

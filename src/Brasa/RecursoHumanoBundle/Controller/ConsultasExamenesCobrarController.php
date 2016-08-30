@@ -84,37 +84,51 @@ class ConsultasExamenesCobrarController extends Controller
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
-                    ->setCellValue('B1', 'IDENTIFICACIÓN')
-                    ->setCellValue('C1', 'EMPLEADO')
-                    ->setCellValue('D1', 'CODIGO CONTRATO')                    
-                    ->setCellValue('E1', 'DESDE')
-                    ->setCellValue('F1', 'HASTA')
-                    ->setCellValue('G1', 'IBC')
-                    ->setCellValue('H1', 'IBP');
+                    ->setCellValue('B1', 'CENTRO COSTO')                        
+                    ->setCellValue('C1', 'IDENTIFICACIÓN')
+                    ->setCellValue('D1', 'NOMBRE')
+                    ->setCellValue('E1', 'CARGO')
+                    ->setCellValue('F1', 'FECHA')
+                    ->setCellValue('G1', 'EXAMEN')
+                    ->setCellValue('H1', 'ENTIDAD EXAMEN')
+                    ->setCellValue('I1', 'CIUDAD')
+                    ->setCellValue('J1', 'VALOR');
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
-        $arIngresosBase = new \Brasa\RecursoHumanoBundle\Entity\RhuIngresoBase();
-        $arIngresosBase = $query->getResult();
-        foreach ($arIngresosBase as $arIngresoBase) {
+        $arExamenesPendientePago = new \Brasa\RecursoHumanoBundle\Entity\RhuExamen();
+        $arExamenesPendientePago = $query->getResult(); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'Z'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }
+        for($col = 'j'; $col !== 'k'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('rigth');
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }
+        foreach ($arExamenesPendientePago as $arExamenPendientePago) {
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arIngresoBase->getCodigoIngresoBasePk())
-                    ->setCellValue('B' . $i, $arIngresoBase->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('C' . $i, $arIngresoBase->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('D' . $i, $arIngresoBase->getCodigoContratoFk())                    
-                    ->setCellValue('E' . $i, $arIngresoBase->getFechaDesde()->Format('Y-m-d'))
-                    ->setCellValue('F' . $i, $arIngresoBase->getFechaDesde()->Format('Y-m-d'))
-                    ->setCellValue('G' . $i, $arIngresoBase->getvrIngresoBaseCotizacion())
-                    ->setCellValue('H' . $i, $arIngresoBase->getvrIngresoBasePrestacion());
+                    ->setCellValue('A' . $i, $arExamenPendientePago->getCodigoExamenPk())
+                    ->setCellValue('B' . $i, $arExamenPendientePago->getCentroCostoRel()->getNombre())
+                    ->setCellValue('C' . $i, $arExamenPendientePago->getIdentificacion())
+                    ->setCellValue('D' . $i, $arExamenPendientePago->getNombreCorto())                    
+                    ->setCellValue('E' . $i, $arExamenPendientePago->getCargoRel()->getNombre())
+                    ->setCellValue('F' . $i, $arExamenPendientePago->getFecha()->Format('Y-m-d'))
+                    ->setCellValue('G' . $i, $arExamenPendientePago->getExamenClaseRel()->getNombre())
+                    ->setCellValue('H' . $i, $arExamenPendientePago->getEntidadExamenRel()->getNombre())
+                    ->setCellValue('I' . $i, $arExamenPendientePago->getCiudadRel()->getNombre())
+                    ->setCellValue('J' . $i, $arExamenPendientePago->getVrTotal());
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('IngresosEmpleado');
+        $objPHPExcel->getActiveSheet()->setTitle('PagoExamenPendiente');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="IngresosEmpleado.xlsx"');
+        header('Content-Disposition: attachment;filename="PagoExamenPendiente.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
