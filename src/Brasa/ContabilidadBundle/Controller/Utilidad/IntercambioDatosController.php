@@ -5,7 +5,8 @@ namespace Brasa\ContabilidadBundle\Controller\Utilidad;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
-
+use PHPExcel_Shared_Date;
+use PHPExcel_Style_NumberFormat;
 class IntercambioDatosController extends Controller
 {
     var $strDqlLista = "";      
@@ -283,6 +284,9 @@ class IntercambioDatosController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'K'; $col !== 'L'; $col++) {
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('yyyy/mm/dd');
+        }        
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'BASE')
                     ->setCellValue('B1', 'CHEQUE')
@@ -314,6 +318,7 @@ class IntercambioDatosController extends Controller
                     ->setCellValue('I' . $i, $arRegistroExportar->getDescripcionContable())
                     ->setCellValue('J' . $i, $arRegistroExportar->getDescripcionContable())
                     ->setCellValue('K' . $i, $arRegistroExportar->getFecha()->format('Y/m/d'))
+                    ->setCellValue('K' . $i, PHPExcel_Shared_Date::PHPToExcel( gmmktime(0,0,0,$arRegistroExportar->getFecha()->format('m'),$arRegistroExportar->getFecha()->format('d'),$arRegistroExportar->getFecha()->format('Y'))))                                                            
                     ->setCellValue('L' . $i, $arRegistroExportar->getNit()."-".$arRegistroExportar->getDigitoVerificacion());
             $i++;
         }

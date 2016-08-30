@@ -8,6 +8,9 @@ use Brasa\TurnoBundle\Form\Type\TurFacturaType;
 use Brasa\TurnoBundle\Form\Type\TurNotaCreditoType;
 use Brasa\TurnoBundle\Form\Type\TurFacturaDetalleType;
 use Brasa\TurnoBundle\Form\Type\TurFacturaDetalleNuevoType;
+use PHPExcel_Shared_Date;
+use PHPExcel_Style_NumberFormat;
+
 class FacturaController extends Controller
 {
     var $strListaDql = "";    
@@ -816,9 +819,9 @@ class FacturaController extends Controller
         for($col = 'A'; $col !== 'O'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
         }      
-        for($col = 'D'; $col !== 'D'; $col++) {            
-            $objPHPExcel->getActiveSheet()->getStyle($col)->setFormatCode('Fecha');
-        }       
+        for($col = 'D'; $col !== 'F'; $col++) {
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('yyyy/mm/dd');
+        }
         $objPHPExcel->setActiveSheetIndex(0)                
                     ->setCellValue('A1', 'ORIGEN')
                     ->setCellValue('B1', 'TIPODCTO')
@@ -829,7 +832,6 @@ class FacturaController extends Controller
                     ->setCellValue('G1', 'CODIGOCTA')
                     ->setCellValue('H1', 'BRUTO')
                     ->setCellValue('I1', 'CODCC');
-
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
         $arFacturas = new \Brasa\TurnoBundle\Entity\TurFactura();
@@ -838,9 +840,9 @@ class FacturaController extends Controller
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, 'FAC')
                     ->setCellValue('B' . $i, $arFactura->getFacturaTipoRel()->getAbreviatura())
-                    ->setCellValue('C' . $i, $arFactura->getNumero())
-                    ->setCellValue('D' . $i, $arFactura->getFecha()->format('Y/m/d'))
-                    ->setCellValue('E' . $i, $arFactura->getFechaVence()->format('Y/m/d'))
+                    ->setCellValue('C' . $i, $arFactura->getNumero())                    
+                    ->setCellValue('D' . $i, PHPExcel_Shared_Date::PHPToExcel( gmmktime(0,0,0,$arFactura->getFecha()->format('m'),$arFactura->getFecha()->format('d'),$arFactura->getFecha()->format('Y'))))                                        
+                    ->setCellValue('E' . $i, PHPExcel_Shared_Date::PHPToExcel( gmmktime(0,0,0,$arFactura->getFechaVence()->format('m'),$arFactura->getFechaVence()->format('d'),$arFactura->getFechaVence()->format('Y'))))                                        
                     ->setCellValue('F' . $i, $arFactura->getClienteRel()->getNit()."-".$arFactura->getClienteRel()->getDigitoVerificacion())
                     ->setCellValue('G' . $i, "13050501")
                     ->setCellValue('H' . $i, ($arFactura->getVrTotalNeto() * $arFactura->getOperacion()))
@@ -849,7 +851,8 @@ class FacturaController extends Controller
         }
         //Aunque la columna diga bruto EXPORTAR el valor neto.
         $objPHPExcel->getActiveSheet()->setTitle('Facturas');
-        $objPHPExcel->setActiveSheetIndex(0);
+        $objPHPExcel->setActiveSheetIndex(0);                
+        
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="Facturas.xlsx"');
