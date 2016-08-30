@@ -14,6 +14,7 @@ class CtbCentroCostoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder   
+            ->add('codigoCentroCostoPk', 'text', array('required' => true))
             ->add('nombre', 'text', array('required' => true))    
             ->add('codigoInterface', 'text', array('required' => false))    
             ->add('BtnGuardar', 'submit', array('label' => 'Guardar'));

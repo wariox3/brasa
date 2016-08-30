@@ -14,7 +14,6 @@ class CtbCentroCosto
     /** 
      * @ORM\Id
      * @ORM\Column(name="codigo_centro_costo_pk", type="string", length=20)
-     * @ORM\GeneratedValue(strategy="AUTO")
      */    
     private $codigoCentroCostoPk;
     
@@ -38,6 +37,29 @@ class CtbCentroCosto
      */
     protected $turPuestosCentroCostoRel;     
 
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->rhuEmpleadosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->turPuestosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set codigoCentroCostoPk
+     *
+     * @param string $codigoCentroCostoPk
+     *
+     * @return CtbCentroCosto
+     */
+    public function setCodigoCentroCostoPk($codigoCentroCostoPk)
+    {
+        $this->codigoCentroCostoPk = $codigoCentroCostoPk;
+
+        return $this;
+    }
 
     /**
      * Get codigoCentroCostoPk
@@ -95,14 +117,6 @@ class CtbCentroCosto
     public function getCodigoInterface()
     {
         return $this->codigoInterface;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->rhuEmpleadosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->turPuestosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
