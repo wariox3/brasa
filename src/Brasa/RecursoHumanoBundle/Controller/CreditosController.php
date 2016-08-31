@@ -220,6 +220,7 @@ class CreditosController extends Controller
         } else {
             $arCredito->setFechaInicio(new \DateTime('now'));
             $arCredito->setFechaCredito(new \DateTime('now'));
+            $arCredito->setFecha(new \DateTime('now'));
         }
         $form = $this->createForm(new RhuCreditoType, $arCredito);         
         $form->handleRequest($request);
@@ -229,22 +230,26 @@ class CreditosController extends Controller
                 $objMensaje->Mensaje("error", "El total a pagar y/o las cuotas no pueden estar en cero", $this);
             } else {
                 $arrControles = $request->request->All();
-                $arCredito = $form->getData();
+                //$arCredito = $form->getData();
                 if($arrControles['form_txtNumeroIdentificacion'] != '') {
                     $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                     $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));
                     if(count($arEmpleado) > 0) {
+                        
                         $arCredito->setEmpleadoRel($arEmpleado);
                         $arCredito->setCentroCostoRel($arEmpleado->getCentroCostoRel());
-                        $arCredito->setFecha(new \DateTime('now'));
-                        $douVrPagar = $form->get('vrPagar')->getData();
-                        $intCuotas = $form->get('numeroCuotas')->getData();
-                        $vrSeguro = $form->get('seguro')->getData();                            
-                        $vrSaltoTotal = $douVrPagar;
-                        //$douVrCuota = $douVrPagar / $intCuotas;
-                        //$arCredito->setVrCuota($douVrCuota);
-                        $arCredito->setSaldo($vrSaltoTotal);
-                        $arCredito->setSaldoTotal($vrSaltoTotal);
+                        
+                        if($codigoCredito == 0) {
+                            $arCredito->setCodigoUsuario($arUsuario->getUserName());
+                            $arCredito->setSaldo($form->get('vrPagar')->getData());
+                            $arCredito->setSaldoTotal($form->get('vrPagar')->getData());
+                        } else {
+                            
+                            $arCredito->setSaldo($arCredito->getVrPagar() - $valor);
+                            $arCredito->setSaldoTotal($arCredito->getVrPagar() - $arCredito->getAcumulado());
+                        }
+                        
+                        
                         if($codigoCredito == 0) {
                             $arCredito->setCodigoUsuario($arUsuario->getUserName());
                         }

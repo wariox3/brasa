@@ -133,6 +133,11 @@ class RhuCredito
      */    
     private $codigoUsuario;
     
+    /**
+     * @ORM\Column(name="total_pagos", type="float")
+     */
+    private $totalPagos = 0;
+    
     /**     
      * @ORM\Column(name="validar_cuotas", type="boolean")
      */    
@@ -183,6 +188,8 @@ class RhuCredito
     protected $VacacionesCreditosCreditoRel;
     
 
+    
+    
     /**
      * Constructor
      */
@@ -370,6 +377,30 @@ class RhuCredito
     public function getFechaCredito()
     {
         return $this->fechaCredito;
+    }
+
+    /**
+     * Set vrInicial
+     *
+     * @param float $vrInicial
+     *
+     * @return RhuCredito
+     */
+    public function setVrInicial($vrInicial)
+    {
+        $this->vrInicial = $vrInicial;
+
+        return $this;
+    }
+
+    /**
+     * Get vrInicial
+     *
+     * @return float
+     */
+    public function getVrInicial()
+    {
+        return $this->vrInicial;
     }
 
     /**
@@ -733,6 +764,30 @@ class RhuCredito
     }
 
     /**
+     * Set totalPagos
+     *
+     * @param float $totalPagos
+     *
+     * @return RhuCredito
+     */
+    public function setTotalPagos($totalPagos)
+    {
+        $this->totalPagos = $totalPagos;
+
+        return $this;
+    }
+
+    /**
+     * Get totalPagos
+     *
+     * @return float
+     */
+    public function getTotalPagos()
+    {
+        return $this->totalPagos;
+    }
+
+    /**
      * Set validarCuotas
      *
      * @param boolean $validarCuotas
@@ -986,29 +1041,5 @@ class RhuCredito
     public function getVacacionesCreditosCreditoRel()
     {
         return $this->VacacionesCreditosCreditoRel;
-    }
-
-    /**
-     * Set vrInicial
-     *
-     * @param float $vrInicial
-     *
-     * @return RhuCredito
-     */
-    public function setVrInicial($vrInicial)
-    {
-        $this->vrInicial = $vrInicial;
-
-        return $this;
-    }
-
-    /**
-     * Get vrInicial
-     *
-     * @return float
-     */
-    public function getVrInicial()
-    {
-        return $this->vrInicial;
     }
 }
