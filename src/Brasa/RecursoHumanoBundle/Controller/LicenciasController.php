@@ -210,7 +210,7 @@ class LicenciasController extends Controller
                     ->setCellValue('B1', 'IDENTIFICACIÓN')
                     ->setCellValue('C1', 'NOMBRE')
                     ->setCellValue('D1', 'CENTRO COSTO')
-                    ->setCellValue('E1', 'LICENCIA ')
+                    ->setCellValue('E1', 'LICENCIA')
                     ->setCellValue('F1', 'DESDE')
                     ->setCellValue('G1', 'HASTA')
                     ->setCellValue('H1', 'DÍAS');
@@ -230,7 +230,7 @@ class LicenciasController extends Controller
                     ->setCellValue('B' . $i, $arLicencia->getEmpleadoRel()->getnumeroIdentificacion())
                     ->setCellValue('C' . $i, $arLicencia->getEmpleadoRel()->getNombreCorto())
                     ->setCellValue('D' . $i, $centroCosto)
-                    ->setCellValue('E' . $i, $arLicencia->getLicenciaTipoRel()->getNombre())
+                    ->setCellValue('E' . $i, $arLicencia->getLicenciaTipoRel()->getNombre() )
                     ->setCellValue('F' . $i, $arLicencia->getFechaDesde()->format('Y-m-d'))
                     ->setCellValue('G' . $i, $arLicencia->getFechaHasta()->format('Y-m-d'))
                     ->setCellValue('H' . $i, $arLicencia->getCantidad());
