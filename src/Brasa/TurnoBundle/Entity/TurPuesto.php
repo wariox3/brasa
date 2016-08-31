@@ -127,6 +127,11 @@ class TurPuesto
      */
     protected $operacionRel;                   
     
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\ContabilidadBundle\Entity\CtbCentroCosto", inversedBy="turPuestosCentroCostoRel")
+     * @ORM\JoinColumn(name="codigo_centro_costo_contabilidad_fk", referencedColumnName="codigo_centro_costo_pk")
+     */
+    protected $centroCostoContabilidadRel;     
     
     /**
      * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="puestoRel")
