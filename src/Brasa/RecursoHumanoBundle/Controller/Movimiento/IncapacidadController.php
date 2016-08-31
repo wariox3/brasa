@@ -259,16 +259,18 @@ class IncapacidadController extends Controller
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'NÚMERO EPS')
                     ->setCellValue('C1', 'EPS')
-                    ->setCellValue('D1', 'IDENTIFICACIÓN')
-                    ->setCellValue('E1', 'NOMBRE')
-                    ->setCellValue('F1', 'CENTRO COSTO')
-                    ->setCellValue('G1', 'DESDE')
-                    ->setCellValue('H1', 'HASTA')
-                    ->setCellValue('I1', 'DÍAS');
+                    ->setCellValue('D1', 'INCAPACIDAD')
+                    ->setCellValue('E1', 'IDENTIFICACIÓN')
+                    ->setCellValue('F1', 'NOMBRE')
+                    ->setCellValue('G1', 'CENTRO COSTO')
+                    ->setCellValue('H1', 'DESDE')
+                    ->setCellValue('I1', 'HASTA')
+                    ->setCellValue('J1', 'DÍAS');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);        
@@ -288,12 +290,13 @@ class IncapacidadController extends Controller
                     ->setCellValue('A' . $i, $arIncapacidad->getCodigoIncapacidadPk())
                     ->setCellValue('B' . $i, $arIncapacidad->getNumeroEps())
                     ->setCellValue('C' . $i, $salud)
-                    ->setCellValue('D' . $i, $arIncapacidad->getEmpleadoRel()->getnumeroIdentificacion())
-                    ->setCellValue('E' . $i, $arIncapacidad->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('F' . $i, $centroCosto)
-                    ->setCellValue('G' . $i, $arIncapacidad->getFechaDesde()->format('Y-m-d'))
-                    ->setCellValue('H' . $i, $arIncapacidad->getFechaHasta()->format('Y-m-d'))
-                    ->setCellValue('I' . $i, $arIncapacidad->getCantidad());
+                    ->setCellValue('D' . $i, $arIncapacidad->getIncapacidadTipoRel()->getNombre())
+                    ->setCellValue('E' . $i, $arIncapacidad->getEmpleadoRel()->getnumeroIdentificacion())
+                    ->setCellValue('F' . $i, $arIncapacidad->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('G' . $i, $centroCosto)
+                    ->setCellValue('H' . $i, $arIncapacidad->getFechaDesde()->format('Y-m-d'))
+                    ->setCellValue('I' . $i, $arIncapacidad->getFechaHasta()->format('Y-m-d'))
+                    ->setCellValue('J' . $i, $arIncapacidad->getCantidad());
             $i++;
         }
 

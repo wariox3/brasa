@@ -179,6 +179,7 @@ class LicenciasController extends Controller
         $controles = $request->request->get('form');        
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);                
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        
     }         
     
     private function generarExcel() {
@@ -203,14 +204,16 @@ class LicenciasController extends Controller
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'IDENTIFICACIÓN')
                     ->setCellValue('C1', 'NOMBRE')
                     ->setCellValue('D1', 'CENTRO COSTO')
-                    ->setCellValue('E1', 'DESDE')
-                    ->setCellValue('F1', 'HASTA')
-                    ->setCellValue('G1', 'DÍAS');
+                    ->setCellValue('E1', 'LICENCIA')
+                    ->setCellValue('F1', 'DESDE')
+                    ->setCellValue('G1', 'HASTA')
+                    ->setCellValue('H1', 'DÍAS');
 
         $i = 2;
         $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
@@ -227,9 +230,10 @@ class LicenciasController extends Controller
                     ->setCellValue('B' . $i, $arLicencia->getEmpleadoRel()->getnumeroIdentificacion())
                     ->setCellValue('C' . $i, $arLicencia->getEmpleadoRel()->getNombreCorto())
                     ->setCellValue('D' . $i, $centroCosto)
-                    ->setCellValue('E' . $i, $arLicencia->getFechaDesde()->format('Y-m-d'))
-                    ->setCellValue('F' . $i, $arLicencia->getFechaHasta()->format('Y-m-d'))
-                    ->setCellValue('G' . $i, $arLicencia->getCantidad());
+                    ->setCellValue('E' . $i, $arLicencia->getLicenciaTipoRel()->getNombre())
+                    ->setCellValue('F' . $i, $arLicencia->getFechaDesde()->format('Y-m-d'))
+                    ->setCellValue('G' . $i, $arLicencia->getFechaHasta()->format('Y-m-d'))
+                    ->setCellValue('H' . $i, $arLicencia->getCantidad());
             $i++;
         }
 
