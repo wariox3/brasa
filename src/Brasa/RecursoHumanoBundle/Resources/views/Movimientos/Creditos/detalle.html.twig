@@ -62,16 +62,16 @@
                         <td class="td-label">{{ arCreditos.fechaInicio |date("Y/m/d") }}</td>
                         <td class="titulo">APROBADO:</th>
                         <td> {% if arCreditos.aprobado == 0 %} NO {% else %} SI {% endif %} </td>
-                        <td class="titulo">SALDO:</th>
-                        <td class="td-in-well" align="right">{{ arCreditos.saldo | number_format(2, '.', ',')}}</td>                                                                        
+                        <td class="titulo">TOTAL PAGOS:</th>
+                        <td class="td-in-well" align="right">{{ arCreditos.totalPagos | number_format(2, '.', ',')}}</td>                                                                        
                     </tr>
                     <tr>
                         <td class="titulo">TIPO PAGO:</th>
                         <td class="td-label">{{ arCreditos.creditoTipopagoRel.nombre }}</td>
                         <td class="titulo">SUSPENDIDO:</th>
                         <td> {% if arCreditos.estadoSuspendido == 0 %} NO {% else %} SI {% endif %} </td>
-                        <td class="titulo"></th>
-                        <td class="td-in-well" align="right"></td>                                                                        
+                        <td class="titulo">SALDO:</th>
+                        <td class="td-in-well" align="right">{{ arCreditos.saldo | number_format(2, '.', ',')}}</td>                                                                        
                     </tr>
                     <tr>
                         <td class="titulo"></td>

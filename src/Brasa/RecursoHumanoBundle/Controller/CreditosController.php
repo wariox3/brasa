@@ -245,8 +245,8 @@ class CreditosController extends Controller
                             $arCredito->setSaldoTotal($form->get('vrPagar')->getData());
                         } else {
                             
-                            $arCredito->setSaldo($arCredito->getVrPagar() - $valor);
-                            $arCredito->setSaldoTotal($arCredito->getVrPagar() - $arCredito->getAcumulado());
+                            $arCredito->setSaldo($arCredito->getVrPagar() - $arCredito->getTotalPagos());
+                            $arCredito->setSaldoTotal($arCredito->getVrPagar() - $arCredito->getTotalPagos());
                         }
                         
                         
