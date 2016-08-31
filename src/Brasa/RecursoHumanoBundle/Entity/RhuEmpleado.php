@@ -402,9 +402,7 @@ class RhuEmpleado
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="empleadosCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
-    protected $centroCostoRel;                        
-    
-   
+    protected $centroCostoRel;                              
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuBanco", inversedBy="empleadosBancoRel")
@@ -4199,5 +4197,29 @@ class RhuEmpleado
     public function getCambiosTiposContratosEmpleadoRel()
     {
         return $this->cambiosTiposContratosEmpleadoRel;
+    }
+
+    /**
+     * Set centroCostoContabilidadRel
+     *
+     * @param \Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoContabilidadRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setCentroCostoContabilidadRel(\Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoContabilidadRel = null)
+    {
+        $this->centroCostoContabilidadRel = $centroCostoContabilidadRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoContabilidadRel
+     *
+     * @return \Brasa\ContabilidadBundle\Entity\CtbCentroCosto
+     */
+    public function getCentroCostoContabilidadRel()
+    {
+        return $this->centroCostoContabilidadRel;
     }
 }
