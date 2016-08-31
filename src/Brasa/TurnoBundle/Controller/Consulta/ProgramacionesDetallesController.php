@@ -234,10 +234,16 @@ class ProgramacionesDetallesController extends Controller
             }
             if($arProgramacionDetalle->getRecursoRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('F' . $i, $arProgramacionDetalle->getRecursoRel()->getNombreCorto())
-                    ->setCellValue('G' . $i, $arProgramacionDetalle->getRecursoRel()->getRecursoTipoRel()->getNombre())                
-                    ->setCellValue('H' . $i, $arProgramacionDetalle->getRecursoRel()->getCentroCostoRel()->getNombre());
+                    ->setCellValue('F' . $i, $arProgramacionDetalle->getRecursoRel()->getNombreCorto());
             }
+            if($arProgramacionDetalle->getRecursoRel()->getRecursoTipoRel()) {
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('G' . $i, $arProgramacionDetalle->getRecursoRel()->getRecursoTipoRel()->getNombre());
+            }    
+            if($arProgramacionDetalle->getRecursoRel()->getCentroCostoRel()) {
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('H' . $i, $arProgramacionDetalle->getRecursoRel()->getCentroCostoRel()->getNombre());
+            }            
             
             $i++;
         }
