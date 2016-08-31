@@ -13,7 +13,7 @@ class CtbCentroCosto
 {
     /** 
      * @ORM\Id
-     * @ORM\Column(name="codigo_centro_costo_pk", type="string", length=20)
+     * @ORM\Column(name="codigo_centro_costo_pk", type="integer")
      */    
     private $codigoCentroCostoPk;
     
