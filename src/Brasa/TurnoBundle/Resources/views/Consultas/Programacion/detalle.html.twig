@@ -156,8 +156,7 @@
                     </tr>                    
                     {% set intCodigoPuesto = arProgramacionDetalle.codigoPuestoFk %}
                 {% endif %}                 
-                <tr>
-                    <input type="hidden" name="LblCodigo[]" value="{{ arProgramacionDetalle.codigoProgramacionDetallePk }}">
+                <tr>                    
                     <td>{{ arProgramacionDetalle.codigoRecursoFk }}</td>
                     <td><a href="javascript:abrirVentana3('{{ path('brs_tur_utilidad_recurso_programacion_masiva', { 'anio': arProgramacionDetalle.anio, 'mes': arProgramacionDetalle.mes, 'codigoRecurso': arProgramacionDetalle.codigoRecursoFk }) }}', 'VerProgramaciones', 600, 1200)">{{ arProgramacionDetalle.recursoRel.nombreCorto | default('') }}</a></td>                                                                                                    
                     <td>{{ arProgramacionDetalle.dia1  }}</td>
