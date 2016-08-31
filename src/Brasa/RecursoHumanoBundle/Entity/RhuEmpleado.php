@@ -4200,28 +4200,4 @@ class RhuEmpleado
     {
         return $this->cambiosTiposContratosEmpleadoRel;
     }
-
-    /**
-     * Set centroCostoContabilidadRel
-     *
-     * @param \Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoContabilidadRel
-     *
-     * @return RhuEmpleado
-     */
-    public function setCentroCostoContabilidadRel(\Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoContabilidadRel = null)
-    {
-        $this->centroCostoContabilidadRel = $centroCostoContabilidadRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoContabilidadRel
-     *
-     * @return \Brasa\ContabilidadBundle\Entity\CtbCentroCosto
-     */
-    public function getCentroCostoContabilidadRel()
-    {
-        return $this->centroCostoContabilidadRel;
-    }
 }
