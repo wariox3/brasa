@@ -154,9 +154,34 @@ class LicenciasController extends Controller
         if($session->get('filtroCodigoCentroCosto')) {
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));                                    
         }
+        $arrayPropiedadesLicenciaTipo = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuLicenciaTipo',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('lt')                                        
+                    ->orderBy('lt.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,  
+                'empty_data' => "",
+                'empty_value' => "TODOS",    
+                'data' => ""
+            );  
+        if($session->get('filtroLicenciaTipo')) {
+            $arrayPropiedadesLicenciaTipo['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuLicenciaTipo", $session->get('filtroLicenciaTipo'));                                    
+        }
+        $strNombreEmpleado = "";
+        if($session->get('filtroIdentificacion')) {
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $session->get('filtroIdentificacion')));
+            if($arEmpleado) {                
+                $strNombreEmpleado = $arEmpleado->getNombreCorto();
+            }  else {
+                $session->set('filtroIdentificacion', null);
+            }          
+        }
         $form = $this->createFormBuilder()                        
             ->add('centroCostoRel', 'entity', $arrayPropiedades)                                           
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                            
+            ->add('licenciaTipoRel', 'entity', $arrayPropiedadesLicenciaTipo)                                               
+            ->add('txtNumeroIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('txtNombreCorto', 'text', array('label'  => 'Nombre','data' => $strNombreEmpleado))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
@@ -169,7 +194,8 @@ class LicenciasController extends Controller
         $session = $this->getRequest()->getSession();
         $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->listaDQL(                   
                 $session->get('filtroCodigoCentroCosto'),
-                $session->get('filtroIdentificacion')
+                $session->get('filtroIdentificacion'),
+                $session->get('filtroLicenciaTipo')
                 );  
     }         
     
@@ -178,8 +204,8 @@ class LicenciasController extends Controller
         $request = $this->getRequest();
         $controles = $request->request->get('form');        
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);                
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        
+        $session->set('filtroIdentificacion', $form->get('txtNumeroIdentificacion')->getData());
+        $session->set('filtroLicenciaTipo', $controles['licenciaTipoRel']);
     }         
     
     private function generarExcel() {

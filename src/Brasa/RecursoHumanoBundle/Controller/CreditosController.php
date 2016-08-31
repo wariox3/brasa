@@ -194,10 +194,7 @@ class CreditosController extends Controller
         $controles = $request->request->get('form');
         $arrControles = $request->request->All();
         $session->set('filtroIdentificacion', $form->get('txtNumeroIdentificacion')->getData());
-        //$session->set('filtroIdentificacion', $arrControles['form_TxtIdentificacion']);
-        //$session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        //$session->set('filtroHasta', $form->get('fechaHasta')->getData());
-        
+                
         $dateFechaDesde = $form->get('fechaDesde')->getData();
         $dateFechaHasta = $form->get('fechaHasta')->getData();
         if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
@@ -237,7 +234,7 @@ class CreditosController extends Controller
                     if(count($arEmpleado) > 0) {                        
                         $arCredito->setEmpleadoRel($arEmpleado);
                         $arCredito->setCentroCostoRel($arEmpleado->getCentroCostoRel());
-                        
+                        $mensaje = '';
                         if($codigoCredito == 0) {
                             $arCredito->setCodigoUsuario($arUsuario->getUserName());
                             $arCredito->setSaldo($arCredito->getVrPagar());

@@ -11,15 +11,18 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuLicenciaRepository extends EntityRepository {
     
-    public function listaDQL($strCodigoCentroCosto = "", $strIdentificacion = "") {        
+    public function listaDQL($strCodigoCentroCosto = "", $strIdentificacion = "", $strLicenciaTipo = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT l, e FROM BrasaRecursoHumanoBundle:RhuLicencia l JOIN l.empleadoRel e WHERE l.codigoLicenciaPk <> 0";      
         if($strCodigoCentroCosto != "") {
             $dql .= " AND l.codigoCentroCostoFk = " . $strCodigoCentroCosto;
         }                       
         if($strIdentificacion != "" ) {
-            $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
-        } 
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if($strLicenciaTipo != "") {
+            $dql .= " AND l.codigoLicenciaTipoFk = " . $strLicenciaTipo;
+        }
         //$dql .= " ORDER BY e.nombreCorto";
         return $dql;
     }                    
