@@ -23,7 +23,8 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
         self::$fechaDesde = $fechaDesde;
         self::$fechaHasta = $fechaHasta;
         self::$dato = $dato;
-        $pdf = new FormatoPagoMasivo('P', 'mm', array(215, 147));
+        //$pdf = new FormatoPagoMasivo('P', 'mm', array(215, 147));
+        $pdf = new FormatoPagoMasivo('P','mm', 'letter');
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);

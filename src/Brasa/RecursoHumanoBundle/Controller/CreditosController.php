@@ -241,11 +241,26 @@ class CreditosController extends Controller
                         if($codigoCredito == 0) {
                             $arCredito->setCodigoUsuario($arUsuario->getUserName());
                             $arCredito->setSaldo($arCredito->getVrPagar());
-                        } else {                            
-                            $arCredito->setSaldo($arCredito->getVrPagar() - $arCredito->getTotalPagos());                            
-                        }                                                
-                        $em->persist($arCredito);
-                        $em->flush();
+                        } else {
+                            if ($arCredito->getVrPagar() > $arCredito->getSaldo()){
+                                if ($arCredito->getVrPagar() > $arCredito->getTotalPagos()){
+                                    $arCredito->setSaldo($arCredito->getVrPagar() - $arCredito->getTotalPagos()); 
+                                } else {
+                                    $mensaje = "El valor del credito no puede ser menor al total de pagos";
+                                }
+                            } else {
+                                $mensaje = "El valor del credito no puede ser menor al saldo";
+                            }
+                                                       
+                        }
+                        if ($mensaje == ""){
+                            $em->persist($arCredito);
+                            $em->flush();
+                        } else {
+                            $objMensaje->Mensaje("error", $mensaje, $this);
+                            return $this->redirect($this->generateUrl('brs_rhu_creditos_nuevo', array('codigoCredito' => $codigoCredito )));
+                        }
+                        
                         if($form->get('guardarnuevo')->isClicked()) {
                             return $this->redirect($this->generateUrl('brs_rhu_creditos_nuevo', array('codigoCredito' => 0 )));
                         } else {
