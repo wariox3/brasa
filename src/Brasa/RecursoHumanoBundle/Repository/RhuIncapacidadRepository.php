@@ -122,12 +122,12 @@ class RhuIncapacidadRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $strFechaDesde = $fechaDesde->format('Y-m-d');
         $strFechaHasta = $fechaHasta->format('Y-m-d');
-        $dql = "SELECT incapacidad FROM BrasaRecursoHumanoBundle:RhuIncapacidad incapacidad "
+        $dql = "SELECT incapacidad FROM BrasaRecursoHumanoBundle:RhuIncapacidad incapacidad JOIN incapacidad.incapacidadTipoRel it "
                 . "WHERE (((incapacidad.fechaDesde BETWEEN '$strFechaDesde' AND '$strFechaHasta') OR (incapacidad.fechaHasta BETWEEN '$strFechaDesde' AND '$strFechaHasta')) "
                 . "OR (incapacidad.fechaDesde >= '$strFechaDesde' AND incapacidad.fechaDesde <= '$strFechaHasta') "
                 . "OR (incapacidad.fechaHasta >= '$strFechaHasta' AND incapacidad.fechaDesde <= '$strFechaDesde')) "
                 . "AND incapacidad.codigoEmpleadoFk = '" . $codigoEmpleado . "' "
-                . "AND incapacidad.codigoIncapacidadTipoFk = " . $tipo;
+                . "AND it.tipo = " . $tipo;
         $objQuery = $em->createQuery($dql);  
         $arIncapacidades = $objQuery->getResult();         
         $intDiasIncapacidad = 0;

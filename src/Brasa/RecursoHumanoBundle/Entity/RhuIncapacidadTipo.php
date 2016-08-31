@@ -20,8 +20,23 @@ class RhuIncapacidadTipo
     /**
      * @ORM\Column(name="nombre", type="string", length=80, nullable=true)
      */    
-    private $nombre;     
-
+    private $nombre;      
+    
+    /**
+     * @ORM\Column(name="tipo", type="integer")
+     */
+    private $tipo = 0;      
+    
+    /**     
+     * @ORM\Column(name="genera_pago", type="boolean")
+     */    
+    private $generaPago = false;     
+    
+    /**     
+     * @ORM\Column(name="genera_ibc", type="boolean")
+     */    
+    private $generaIbc = false;     
+    
     /**
      * @ORM\Column(name="codigo_pago_concepto_fk", type="integer", nullable=true)
      */    
@@ -38,6 +53,7 @@ class RhuIncapacidadTipo
      */
     protected $incapacidadesIncapacidadTipoRel; 
     
+
     /**
      * Constructor
      */
@@ -78,6 +94,78 @@ class RhuIncapacidadTipo
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set tipo
+     *
+     * @param integer $tipo
+     *
+     * @return RhuIncapacidadTipo
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return integer
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
+
+    /**
+     * Set generaPago
+     *
+     * @param boolean $generaPago
+     *
+     * @return RhuIncapacidadTipo
+     */
+    public function setGeneraPago($generaPago)
+    {
+        $this->generaPago = $generaPago;
+
+        return $this;
+    }
+
+    /**
+     * Get generaPago
+     *
+     * @return boolean
+     */
+    public function getGeneraPago()
+    {
+        return $this->generaPago;
+    }
+
+    /**
+     * Set generaIbc
+     *
+     * @param boolean $generaIbc
+     *
+     * @return RhuIncapacidadTipo
+     */
+    public function setGeneraIbc($generaIbc)
+    {
+        $this->generaIbc = $generaIbc;
+
+        return $this;
+    }
+
+    /**
+     * Get generaIbc
+     *
+     * @return boolean
+     */
+    public function getGeneraIbc()
+    {
+        return $this->generaIbc;
     }
 
     /**
