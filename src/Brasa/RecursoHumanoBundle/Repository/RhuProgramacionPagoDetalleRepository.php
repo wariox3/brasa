@@ -81,112 +81,120 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                 $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
                 $arIncapacidades = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->periodo($arProgramacionPagoDetalle->getFechaDesdePago(), $arProgramacionPagoDetalle->getFechaHasta(), $arProgramacionPagoDetalle->getCodigoEmpleadoFk());                                                                        
                 foreach ($arIncapacidades as $arIncapacidad) {             
-                        $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
-                        $arPagoDetalle->setPagoRel($arPago);
-                        $arPagoDetalle->setPagoConceptoRel($arIncapacidad->getIncapacidadTipoRel()->getPagoConceptoRel());
+                    $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                    $arPagoDetalle->setPagoRel($arPago);
+                    $arPagoDetalle->setPagoConceptoRel($arIncapacidad->getIncapacidadTipoRel()->getPagoConceptoRel());
 
-                        $fechaDesde = $arProgramacionPagoDetalle->getFechaDesdePago();
-                        $fechaHasta = $arProgramacionPagoDetalle->getFechaHasta();
-                        if($arIncapacidad->getFechaDesde() >  $fechaDesde) {
-                            $fechaDesde = $arIncapacidad->getFechaDesde();
-                        }             
-                        if($arIncapacidad->getFechaHasta() < $fechaHasta) {
-                            $fechaHasta = $arIncapacidad->getFechaHasta();                
+                    $fechaDesde = $arProgramacionPagoDetalle->getFechaDesdePago();
+                    $fechaHasta = $arProgramacionPagoDetalle->getFechaHasta();
+                    if($arIncapacidad->getFechaDesde() >  $fechaDesde) {
+                        $fechaDesde = $arIncapacidad->getFechaDesde();
+                    }             
+                    if($arIncapacidad->getFechaHasta() < $fechaHasta) {
+                        $fechaHasta = $arIncapacidad->getFechaHasta();                
+                    }
+                    $intDias = $fechaDesde->diff($fechaHasta);
+                    $intDias = $intDias->format('%a');   
+                    $intDias += 1;
+                    $intHorasProcesarIncapacidad = $intDias * $intFactorDia;                                                                                                
+                    $intHorasLaboradas = $intHorasLaboradas - $intHorasProcesarIncapacidad;                                
+                    $douPagoDetalle = 0;
+                    $douIngresoBaseCotizacionIncapacidad = 0;
+                    $douIngresoBasePrestacionIncapacidad = 0;
+                    $intDiasTransporte = $intDiasTransporte - ($intHorasProcesarIncapacidad / $intFactorDia);
+
+                    if($arIncapacidad->getIncapacidadTipoRel()->getTipo() == 1) {
+                        if($arProgramacionPagoDetalle->getVrSalario() <= $douVrSalarioMinimo) {
+                            $douPagoDetalle = $intHorasProcesarIncapacidad * $douVrHora;
+                            $douIngresoBasePrestacionIncapacidad = $intHorasProcesarIncapacidad * $douVrHora;
                         }
-                        $intDias = $fechaDesde->diff($fechaHasta);
-                        $intDias = $intDias->format('%a');   
-                        $intDias += 1;
-                        $intHorasProcesarIncapacidad = $intDias * $intFactorDia;                                                                                                
-                        $intHorasLaboradas = $intHorasLaboradas - $intHorasProcesarIncapacidad;                                
-                        $douPagoDetalle = 0;
-                        $douIngresoBaseCotizacionIncapacidad = 0;
-                        $intDiasTransporte = $intDiasTransporte - ($intHorasProcesarIncapacidad / $intFactorDia);
-
-                        if($arIncapacidad->getCodigoIncapacidadTipoFk() == 1) {
-                            if($arProgramacionPagoDetalle->getVrSalario() <= $douVrSalarioMinimo) {
-                                $douPagoDetalle = $intHorasProcesarIncapacidad * $douVrHora;
-                                $douIngresoBaseCotizacionIncapacidad = $intHorasProcesarIncapacidad * $douVrHora;
-                            }
-                            if($arProgramacionPagoDetalle->getVrSalario() > $douVrSalarioMinimo && $arProgramacionPagoDetalle->getVrSalario() <= $douVrSalarioMinimo * 1.5) {
-                                $douPagoDetalle = $intHorasProcesarIncapacidad * $douVrHoraSalarioMinimo;
-                                $douIngresoBaseCotizacionIncapacidad = $intHorasProcesarIncapacidad * $douVrHora;
-                            }
-                            if($arProgramacionPagoDetalle->getVrSalario() > ($douVrSalarioMinimo * 1.5)) {
-                                $douPagoDetalle = $intHorasProcesarIncapacidad * $douVrHora;
-                                $douPagoDetalle = ($douPagoDetalle * $arIncapacidad->getPorcentajePago())/100;
-                                $douIngresoBaseCotizacionIncapacidad = $intHorasProcesarIncapacidad * $douVrHora;
-                            }
-                        } else {
+                        if($arProgramacionPagoDetalle->getVrSalario() > $douVrSalarioMinimo && $arProgramacionPagoDetalle->getVrSalario() <= $douVrSalarioMinimo * 1.5) {
+                            $douPagoDetalle = $intHorasProcesarIncapacidad * $douVrHoraSalarioMinimo;
+                            $douIngresoBasePrestacionIncapacidad = $intHorasProcesarIncapacidad * $douVrHora;
+                        }
+                        if($arProgramacionPagoDetalle->getVrSalario() > ($douVrSalarioMinimo * 1.5)) {
                             $douPagoDetalle = $intHorasProcesarIncapacidad * $douVrHora;
                             $douPagoDetalle = ($douPagoDetalle * $arIncapacidad->getPorcentajePago())/100;
-                            $douIngresoBaseCotizacionIncapacidad = $intHorasProcesarIncapacidad * $douVrHora;
-                        }
-                        $douPagoDetalle = round($douPagoDetalle);
-                        $arPagoDetalle->setNumeroHoras($intHorasProcesarIncapacidad);
-                        $arPagoDetalle->setNumeroDias($intDias);
-                        $arPagoDetalle->setVrHora($douVrHora);
-                        $arPagoDetalle->setDetalle($arIncapacidad->getIncapacidadDiagnosticoRel()->getNombre());
-                        $arPagoDetalle->setVrDia($douVrDia);
-                        $arPagoDetalle->setVrPago($douPagoDetalle);
-                        $arPagoDetalle->setOperacion(1);
-                        $arPagoDetalle->setVrPagoOperado($douPagoDetalle * 1);
-                        $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
-                        $douIngresoBasePrestacional += $douIngresoBaseCotizacionIncapacidad;                                        
-                        $douIngresoBaseCotizacion  += $douPagoDetalle;                                                                        
-                        $arPagoDetalle->setVrIngresoBasePrestacion($douIngresoBaseCotizacionIncapacidad);                                                                            
-                        $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);                                                                                                            
-                        $em->persist($arPagoDetalle);                                                                                                                                                                                                                      
+                            $douIngresoBasePrestacionIncapacidad = $intHorasProcesarIncapacidad * $douVrHora;
+                        }                            
+                    } else {
+                        $douPagoDetalle = $intHorasProcesarIncapacidad * $douVrHora;
+                        $douPagoDetalle = ($douPagoDetalle * $arIncapacidad->getPorcentajePago())/100;
+                        $douIngresoBasePrestacionIncapacidad = $intHorasProcesarIncapacidad * $douVrHora;
+                    }
+                    if($arIncapacidad->getIncapacidadTipoRel()->getGeneraIbc() == 1) {
+                        $douIngresoBaseCotizacionIncapacidad = $douPagoDetalle;
+                    }
+                    if($arIncapacidad->getIncapacidadTipoRel()->getGeneraPago() == 0) {
+                        $douPagoDetalle = 0;
+                    }
+                    
+                    $douPagoDetalle = round($douPagoDetalle);
+                    $arPagoDetalle->setNumeroHoras($intHorasProcesarIncapacidad);
+                    $arPagoDetalle->setNumeroDias($intDias);
+                    $arPagoDetalle->setVrHora($douVrHora);
+                    $arPagoDetalle->setDetalle($arIncapacidad->getIncapacidadDiagnosticoRel()->getNombre());
+                    $arPagoDetalle->setVrDia($douVrDia);
+                    $arPagoDetalle->setVrPago($douPagoDetalle);
+                    $arPagoDetalle->setOperacion(1);
+                    $arPagoDetalle->setVrPagoOperado($douPagoDetalle * 1);
+                    $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
+                    $douIngresoBasePrestacional += $douIngresoBasePrestacionIncapacidad;                                        
+                    $douIngresoBaseCotizacion  += $douIngresoBaseCotizacionIncapacidad;                                                                        
+                    $arPagoDetalle->setVrIngresoBasePrestacion($douIngresoBasePrestacionIncapacidad);                                                                            
+                    $arPagoDetalle->setVrIngresoBaseCotizacion($douIngresoBaseCotizacionIncapacidad);                                                                                                            
+                    $em->persist($arPagoDetalle);                                                                                                                                                                                                                      
                 }                
             }
 
             //Procesar Licencias                                                
             $arLicencias = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
             $arLicencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->periodo($arProgramacionPagoDetalle->getFechaDesdePago(), $arProgramacionPagoDetalle->getFechaHasta(), $arProgramacionPagoDetalle->getCodigoEmpleadoFk());
-            foreach ($arLicencias as $arLicencia) {
-                if($intHorasLaboradas > 0) {                                                                    
-                    $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
-                    $arPagoDetalle->setPagoRel($arPago);
-                    $arPagoDetalle->setPagoConceptoRel($arLicencia->getLicenciaTipoRel()->getPagoConceptoRel());                                
-                    $fechaDesde = $arProgramacionPagoDetalle->getFechaDesdePago();
-                    $fechaHasta = $arProgramacionPagoDetalle->getFechaHasta();
-                    if($arLicencia->getFechaDesde() >  $fechaDesde) {
-                        $fechaDesde = $arLicencia->getFechaDesde();
-                    }             
-                    if($arLicencia->getFechaHasta() < $fechaHasta) {
-                        $fechaHasta = $arLicencia->getFechaHasta();                
-                    }
-                    $intDias = $fechaDesde->diff($fechaHasta);
-                    $intDias = $intDias->format('%a');
-                    $intDias += 1;
-                    $intHorasProcesarLicencia = $intDias * $intFactorDia;
-
-                    $intHorasLaboradas = $intHorasLaboradas - $intHorasProcesarLicencia;                                                                    
-                    $douPagoDetalle = $intHorasProcesarLicencia * $douVrHora;
-                    $douIngresoBasePrestacional = $douIngresoBasePrestacional + $douPagoDetalle;                                        
-                    $arPagoDetalle->setVrIngresoBasePrestacion($douPagoDetalle);                                                                    
-                    if($arLicencia->getLicenciaTipoRel()->getAfectaSalud() == 0) {
-                        $douIngresoBaseCotizacion += $douPagoDetalle;                                        
-                        $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);
-                    }       
-                    if($arLicencia->getLicenciaTipoRel()->getAusentismo() == 1) {
-                        $arPagoDetalle->setDiasAusentismo($intDias);
-                    }
-                    if($arLicencia->getLicenciaTipoRel()->getPagoConceptoRel()->getOperacion() == 0) {
-                        $douPagoDetalle = 0;
-                    }                 
-                    $douPagoDetalle = round($douPagoDetalle);
-                    $arPagoDetalle->setVrPago($douPagoDetalle);
-                    $arPagoDetalle->setOperacion($arLicencia->getLicenciaTipoRel()->getPagoConceptoRel()->getOperacion());
-                    $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arLicencia->getLicenciaTipoRel()->getPagoConceptoRel()->getOperacion());                               
-                    $arPagoDetalle->setNumeroHoras($intHorasProcesarLicencia);
-                    $arPagoDetalle->setNumeroDias($intDias);
-                    $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);                                    
-                    $em->persist($arPagoDetalle);
-                    if($arLicencia->getAfectaTransporte() == 1){
-                        $intDiasLicenciaProcesar = intval($intHorasProcesarLicencia / $intFactorDia);
-                        $intDiasTransporte = $intDiasTransporte - $intDiasLicenciaProcesar;
-                    }
+            foreach ($arLicencias as $arLicencia) {   
+                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                $arPagoConcepto = $arLicencia->getLicenciaTipoRel()->getPagoConceptoRel();
+                $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                $arPagoDetalle->setPagoRel($arPago);
+                $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);                                
+                $fechaDesde = $arProgramacionPagoDetalle->getFechaDesdePago();
+                $fechaHasta = $arProgramacionPagoDetalle->getFechaHasta();
+                if($arLicencia->getFechaDesde() >  $fechaDesde) {
+                    $fechaDesde = $arLicencia->getFechaDesde();
+                }             
+                if($arLicencia->getFechaHasta() < $fechaHasta) {
+                    $fechaHasta = $arLicencia->getFechaHasta();                
                 }
+                $intDias = $fechaDesde->diff($fechaHasta);
+                $intDias = $intDias->format('%a');
+                $intDias += 1;
+                $intHorasProcesarLicencia = $intDias * $intFactorDia;
+
+                $intHorasLaboradas = $intHorasLaboradas - $intHorasProcesarLicencia;                                                                    
+                $douPagoDetalle = $intHorasProcesarLicencia * $douVrHora;
+                $douIngresoBasePrestacional = $douIngresoBasePrestacional + $douPagoDetalle;                                        
+                $arPagoDetalle->setVrIngresoBasePrestacion($douPagoDetalle);                                                                    
+                if($arPagoConcepto->getGeneraIngresoBaseCotizacion() == 1) {
+                    $douIngresoBaseCotizacion += $douPagoDetalle;                                        
+                    $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);
+                }
+                if($arLicencia->getLicenciaTipoRel()->getAusentismo() == 1) {
+                    $arPagoDetalle->setDiasAusentismo($intDias);
+                }
+                if($arPagoConcepto->getOperacion() == 0) {
+                    $douPagoDetalle = 0;
+                }                                  
+                $douPagoDetalle = round($douPagoDetalle);
+                $arPagoDetalle->setVrPago($douPagoDetalle);
+                $arPagoDetalle->setOperacion($arLicencia->getLicenciaTipoRel()->getPagoConceptoRel()->getOperacion());
+                $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arLicencia->getLicenciaTipoRel()->getPagoConceptoRel()->getOperacion());                               
+                $arPagoDetalle->setNumeroHoras($intHorasProcesarLicencia);
+                $arPagoDetalle->setNumeroDias($intDias);
+                $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);                                    
+                $em->persist($arPagoDetalle);
+                if($arLicencia->getAfectaTransporte() == 1){
+                    $intDiasLicenciaProcesar = intval($intHorasProcesarLicencia / $intFactorDia);
+                    $intDiasTransporte = $intDiasTransporte - $intDiasLicenciaProcesar;
+                }                
             }
 
             //Procesar los conceptos de pagos adicionales
