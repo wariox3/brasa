@@ -16,7 +16,6 @@ class TurRecurso
     /**
      * @ORM\Id
      * @ORM\Column(name="codigo_recurso_pk", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $codigoRecursoPk;    
     
@@ -209,7 +208,6 @@ class TurRecurso
      */
     protected $simulacionesDetallesRecursoRel; 
 
-
     /**
      * Constructor
      */
@@ -224,6 +222,20 @@ class TurRecurso
         $this->novedadesRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->novedadesRecursoReemplazoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->simulacionesDetallesRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set codigoRecursoPk
+     *
+     * @param integer $codigoRecursoPk
+     *
+     * @return TurRecurso
+     */
+    public function setCodigoRecursoPk($codigoRecursoPk)
+    {
+        $this->codigoRecursoPk = $codigoRecursoPk;
+
+        return $this;
     }
 
     /**
@@ -741,6 +753,78 @@ class TurRecurso
     }
 
     /**
+     * Set codigoTurnoFijoNominaFk
+     *
+     * @param string $codigoTurnoFijoNominaFk
+     *
+     * @return TurRecurso
+     */
+    public function setCodigoTurnoFijoNominaFk($codigoTurnoFijoNominaFk)
+    {
+        $this->codigoTurnoFijoNominaFk = $codigoTurnoFijoNominaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTurnoFijoNominaFk
+     *
+     * @return string
+     */
+    public function getCodigoTurnoFijoNominaFk()
+    {
+        return $this->codigoTurnoFijoNominaFk;
+    }
+
+    /**
+     * Set codigoTurnoFijoDescansoFk
+     *
+     * @param string $codigoTurnoFijoDescansoFk
+     *
+     * @return TurRecurso
+     */
+    public function setCodigoTurnoFijoDescansoFk($codigoTurnoFijoDescansoFk)
+    {
+        $this->codigoTurnoFijoDescansoFk = $codigoTurnoFijoDescansoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTurnoFijoDescansoFk
+     *
+     * @return string
+     */
+    public function getCodigoTurnoFijoDescansoFk()
+    {
+        return $this->codigoTurnoFijoDescansoFk;
+    }
+
+    /**
+     * Set codigoTurnoFijo31Fk
+     *
+     * @param string $codigoTurnoFijo31Fk
+     *
+     * @return TurRecurso
+     */
+    public function setCodigoTurnoFijo31Fk($codigoTurnoFijo31Fk)
+    {
+        $this->codigoTurnoFijo31Fk = $codigoTurnoFijo31Fk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTurnoFijo31Fk
+     *
+     * @return string
+     */
+    public function getCodigoTurnoFijo31Fk()
+    {
+        return $this->codigoTurnoFijo31Fk;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -1140,77 +1224,5 @@ class TurRecurso
     public function getSimulacionesDetallesRecursoRel()
     {
         return $this->simulacionesDetallesRecursoRel;
-    }
-
-    /**
-     * Set codigoTurnoFijoNominaFk
-     *
-     * @param string $codigoTurnoFijoNominaFk
-     *
-     * @return TurRecurso
-     */
-    public function setCodigoTurnoFijoNominaFk($codigoTurnoFijoNominaFk)
-    {
-        $this->codigoTurnoFijoNominaFk = $codigoTurnoFijoNominaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoTurnoFijoNominaFk
-     *
-     * @return string
-     */
-    public function getCodigoTurnoFijoNominaFk()
-    {
-        return $this->codigoTurnoFijoNominaFk;
-    }
-
-    /**
-     * Set codigoTurnoFijoDescansoFk
-     *
-     * @param string $codigoTurnoFijoDescansoFk
-     *
-     * @return TurRecurso
-     */
-    public function setCodigoTurnoFijoDescansoFk($codigoTurnoFijoDescansoFk)
-    {
-        $this->codigoTurnoFijoDescansoFk = $codigoTurnoFijoDescansoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoTurnoFijoDescansoFk
-     *
-     * @return string
-     */
-    public function getCodigoTurnoFijoDescansoFk()
-    {
-        return $this->codigoTurnoFijoDescansoFk;
-    }
-
-    /**
-     * Set codigoTurnoFijo31Fk
-     *
-     * @param string $codigoTurnoFijo31Fk
-     *
-     * @return TurRecurso
-     */
-    public function setCodigoTurnoFijo31Fk($codigoTurnoFijo31Fk)
-    {
-        $this->codigoTurnoFijo31Fk = $codigoTurnoFijo31Fk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoTurnoFijo31Fk
-     *
-     * @return string
-     */
-    public function getCodigoTurnoFijo31Fk()
-    {
-        return $this->codigoTurnoFijo31Fk;
     }
 }

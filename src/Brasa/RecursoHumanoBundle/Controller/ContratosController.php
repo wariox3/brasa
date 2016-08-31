@@ -239,6 +239,7 @@ class ContratosController extends Controller
                                                     $em->persist($arRecurso);
                                                 } else {
                                                     $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
+                                                    $arRecurso->setCodigoRecursoPk($arEmpleado->getCodigoEmpleadoPk());
                                                     $arRecurso->setEmpleadoRel($arEmpleado);
                                                     $arRecurso->setNumeroIdentificacion($arEmpleado->getNumeroIdentificacion());
                                                     $arRecurso->setNombreCorto($arEmpleado->getNombreCorto());

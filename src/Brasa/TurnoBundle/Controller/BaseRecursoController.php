@@ -60,7 +60,7 @@ class BaseRecursoController extends Controller
                 $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);                
                 if($arEmpleado) {
                     $arRecursoValidar = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk()));                 
-                    if(!$arRecursoValidar) {
+                    if(!$arRecursoValidar) {                        
                         $arRecurso->setEmpleadoRel($arEmpleado);
                         $arRecurso->setNumeroIdentificacion($arEmpleado->getNumeroIdentificacion());
                         $arRecurso->setNombreCorto($arEmpleado->getNombreCorto());
@@ -84,7 +84,8 @@ class BaseRecursoController extends Controller
                 if($arrControles['txtNumeroIdentificacion'] != '') {
                     $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                     $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));
-                    if(count($arEmpleado) > 0) {                   
+                    if(count($arEmpleado) > 0) {  
+                        $arRecurso->setCodigoRecursoPk($arEmpleado->getCodigoEmpleadoPk());
                         $arRecurso->setEmpleadoRel($arEmpleado);
                         $arUsuario = $this->getUser();
                         $arRecurso->setUsuario($arUsuario->getUserName());                        
