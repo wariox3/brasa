@@ -210,7 +210,7 @@ class LicenciasController extends Controller
                     ->setCellValue('B1', 'IDENTIFICACIÓN')
                     ->setCellValue('C1', 'NOMBRE')
                     ->setCellValue('D1', 'CENTRO COSTO')
-                    ->setCellValue('E1', 'LICENCIA')
+                    ->setCellValue('E1', 'LICENCIA ')
                     ->setCellValue('F1', 'DESDE')
                     ->setCellValue('G1', 'HASTA')
                     ->setCellValue('H1', 'DÍAS');
