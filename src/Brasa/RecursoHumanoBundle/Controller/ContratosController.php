@@ -471,7 +471,7 @@ class ContratosController extends Controller
                                     $arLiquidacionAdicionales->setCreditoRel($arCredito);
                                     $arLiquidacionAdicionales->setPagoConceptoRel($arCredito->getCreditoTipoRel()->getPagoConceptoRel());
                                     $arLiquidacionAdicionales->setLiquidacionRel($arLiquidacion);
-                                    $arLiquidacionAdicionales->setVrDeduccion($arCredito->getSaldoTotal());
+                                    $arLiquidacionAdicionales->setVrDeduccion($arCredito->getSaldo());
                                     $em->persist($arLiquidacionAdicionales);
                                 }
                             }

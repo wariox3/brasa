@@ -131,7 +131,7 @@ class CreditosController extends Controller
         $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
         if ($formCredito->isValid()) {
             $intCuotas = $formCredito->get('numeroCuotas')->getData();
-            $douVrCuota = $arCredito->getSaldoTotal() / $intCuotas;
+            $douVrCuota = $arCredito->getSaldo() / $intCuotas;
             $arCredito->setVrCuota($douVrCuota);
             $arCredito->setNumeroCuotaActual(0);
             $arCredito->setNumeroCuotas($intCuotas);
@@ -230,29 +230,20 @@ class CreditosController extends Controller
                 $objMensaje->Mensaje("error", "El total a pagar y/o las cuotas no pueden estar en cero", $this);
             } else {
                 $arrControles = $request->request->All();
-                //$arCredito = $form->getData();
+                $arCredito = $form->getData();
                 if($arrControles['form_txtNumeroIdentificacion'] != '') {
                     $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                     $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));
-                    if(count($arEmpleado) > 0) {
-                        
+                    if(count($arEmpleado) > 0) {                        
                         $arCredito->setEmpleadoRel($arEmpleado);
                         $arCredito->setCentroCostoRel($arEmpleado->getCentroCostoRel());
                         
                         if($codigoCredito == 0) {
                             $arCredito->setCodigoUsuario($arUsuario->getUserName());
-                            $arCredito->setSaldo($form->get('vrPagar')->getData());
-                            $arCredito->setSaldoTotal($form->get('vrPagar')->getData());
-                        } else {
-                            
-                            $arCredito->setSaldo($arCredito->getVrPagar() - $arCredito->getTotalPagos());
-                            $arCredito->setSaldoTotal($arCredito->getVrPagar() - $arCredito->getTotalPagos());
-                        }
-                        
-                        
-                        if($codigoCredito == 0) {
-                            $arCredito->setCodigoUsuario($arUsuario->getUserName());
-                        }
+                            $arCredito->setSaldo($arCredito->getVrPagar());
+                        } else {                            
+                            $arCredito->setSaldo($arCredito->getVrPagar() - $arCredito->getTotalPagos());                            
+                        }                                                
                         $em->persist($arCredito);
                         $em->flush();
                         if($form->get('guardarnuevo')->isClicked()) {
@@ -308,7 +299,7 @@ class CreditosController extends Controller
             ->add('creditoRel', 'text', array('data' => $codigoCreditoPk, 'attr' => array('readonly' => 'readonly')))
             ->add('vrCuota', 'text', array('data' => round($arCredito->getVrCuota(),2), 'attr' => array('readonly' => 'readonly')))
             ->add('saldo', 'text', array('data' => round($arCredito->getSaldo(),2), 'attr' => array('readonly' => 'readonly')))
-            ->add('saldoTotal', 'text', array('data' => round($arCredito->getSaldoTotal(),2), 'attr' => array('readonly' => 'readonly')))
+            ->add('saldoTotal', 'text', array('data' => round($arCredito->getSaldo(),2), 'attr' => array('readonly' => 'readonly')))
             ->add('vrAbono','text')
             ->add('tipoPago','hidden', array('data' => 'ABONO'))
             ->add('save', 'submit', array('label' => 'Guardar'))
@@ -320,11 +311,10 @@ class CreditosController extends Controller
                 $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCreditoPk);
                 $saldoA = $arCredito->getSaldo();
                 $Abono = $form->get('vrAbono')->getData();
-                if ($Abono > $arCredito->getSaldoTotal()){
+                if ($Abono > $arCredito->getSaldo()){
                     $mensaje = "El abono no puede ser superior al saldo!";
                 } else {
-                    $arCredito->setSaldo($saldoA - $Abono);
-                    $arCredito->setSaldoTotal($arCredito->getSaldo() - $arCredito->getVrCuotaTemporal());
+                    $arCredito->setSaldo($saldoA - $Abono);                    
                     if ($arCredito->getSaldo() <= 0){
                        $arCredito->setEstadoPagado(1);
                     }
@@ -485,7 +475,7 @@ class CreditosController extends Controller
                             ->setCellValue('G' . $i, $arCredito->getVrPagar())
                             ->setCellValue('H' . $i, $arCredito->getVrCuota())
                             ->setCellValue('I' . $i, $arCredito->getSeguro())
-                            ->setCellValue('J' . $i, $arCredito->getSaldoTotal())
+                            ->setCellValue('J' . $i, $arCredito->getSaldo())
                             ->setCellValue('K' . $i, $arCredito->getNumeroCuotas())
                             ->setCellValue('L' . $i, $arCredito->getNumeroCuotaActual())
                             ->setCellValue('M' . $i, $objFunciones->devuelveBoolean($arCredito->getEstadoPagado()))

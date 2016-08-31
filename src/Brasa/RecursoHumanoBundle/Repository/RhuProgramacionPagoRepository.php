@@ -323,8 +323,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $arPagosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                 $arPagosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $arPago->getCodigoPagoPk()));
                 foreach ($arPagosDetalles AS $arPagoDetalle) {
-                    if($arPagoDetalle->getCodigoCreditoFk() != "") {
-                        
+                    if($arPagoDetalle->getCodigoCreditoFk() != "") {                        
                         $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
                         $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arPagoDetalle->getCodigoCreditoFk());
                         //Crear credito pago, se guarda el pago en la tabla rhu_pago_credito
@@ -336,8 +335,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $arPagoCredito->setVrCuota($arPagoDetalle->getVrPago());
                         //Actualizar el saldo del credito
                         $arCredito->setNumeroCuotaActual($arCredito->getNumeroCuotaActual() + 1);
-                        $arCredito->setSaldo($arCredito->getSaldo() - $arPagoDetalle->getVrPago());                        
-                        $arCredito->setSaldoTotal($arCredito->getSaldoTotal() - $arPagoDetalle->getVrPago());//ojo hoy
+                        $arCredito->setSaldo($arCredito->getSaldo() - $arPagoDetalle->getVrPago()); 
+                        $arCredito->setTotalPagos($arCredito->getTotalPagos() + $arPagoDetalle->getVrPago());
                         if($arCredito->getSaldo() <= 0) {
                            $arCredito->setEstadoPagado(1);
                         }

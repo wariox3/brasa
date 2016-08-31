@@ -236,9 +236,9 @@ class RhuLiquidacionRepository extends EntityRepository {
                     if ($saldo < $deduccion ){
                         $validar = 1;
                     } else {
-                        $arCredito->setSaldo($saldo - $deduccion);
-                        $arCredito->setSaldoTotal($arCredito->getSaldoTotal() - $deduccion );
+                        $arCredito->setSaldo($saldo - $deduccion);                        
                         $arCredito->setNumeroCuotaActual($arCredito->getNumeroCuotaActual() + 1);
+                        $arCredito->setTotalPagos($arCredito->getTotalPagos() + $deduccion);
                         $arPagoCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
                         $arPagoCredito->setCreditoRel($arCredito);                        
                         $arPagoCredito->setfechaPago(new \ DateTime("now"));

@@ -130,7 +130,7 @@ class FormatoDetalleCredito extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "SALDO TEMPORAL:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $this->Cell(65, 6, number_format($arDetallePago->getSaldoTotal() , 2, '.', ','),1, 0, 'R', 1);
+        $this->Cell(65, 6, number_format($arDetallePago->getSaldo() , 2, '.', ','),1, 0, 'R', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(30, 6, "APROBADO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
