@@ -99,6 +99,7 @@ class AfiPeriodoRepository extends EntityRepository {
             $iva = round($administracion * $arConfiguracion->getPorcentajeIva() / 100);
             //$iva = $this->redondearCien($iva);
             $total = $subtotal + $iva;
+            $total = $this->redondearCien($total);
             $arPeriodoDetalle = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle();
             $arPeriodoDetalle->setPeriodoRel($arPeriodo);
             $arPeriodoDetalle->setContratoRel($arContrato);
@@ -455,6 +456,7 @@ class AfiPeriodoRepository extends EntityRepository {
                 //$arPeriodoDetallePago->setCentroTrabajoCodigoCt($arEmpleado->getContratoRel()->getCodigoCentroCostoFk());
                 $totalCotizacion = $floTotalCotizacionFondos + $floCotizacionSalud + $floCotizacionRiesgos + $floCotizacionCaja + $floCotizacionIcbf+$floCotizacionSena;
                 //$totalCotizacionGeneral += $totalCotizacion;
+                $totalCotizacion = $this->redondearCien($totalCotizacion);
                 $arPeriodoDetallePago->setTotalCotizacion($totalCotizacion);
                 $em->persist($arPeriodoDetallePago);
                 $secuencia++;

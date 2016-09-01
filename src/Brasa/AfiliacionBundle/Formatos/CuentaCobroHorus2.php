@@ -224,13 +224,13 @@ class CuentaCobroHorus2 extends \FPDF_FPDF {
                 $pdf->Cell(8, 4, $arPeriodoDetalles->getDias(), 1, 0, 'L');
                 $pdf->Cell(15, 4, number_format($arPeriodoDetalles->getSalario(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Cell(15, 4, $arPeriodoDetalles->getContratoRel()->getFechaDesde()->format('Y-m-d'), 1, 0, 'L');
-                //$pdf->Cell(33, 4, number_format($arPeriodoDetalle->getPension(), 0, '.', ','), 1, 0, 'R');
+                
                 $pdf->Cell(30, 4, utf8_decode($arPeriodoDetalles->getContratoRel()->getEntidadPensionRel()->getNombre()), 1, 0, 'L');
-                //$pdf->Cell(33, 4, number_format($arPeriodoDetalle->getSalud(), 0, '.', ','), 1, 0, 'R');
+                
                 $pdf->Cell(30, 4, utf8_decode($arPeriodoDetalles->getContratoRel()->getEntidadSaludRel()->getNombre()), 1, 0, 'L');
-                //$pdf->Cell(33, 4, number_format($arPeriodoDetalle->getRiesgos(), 0, '.', ','), 1, 0, 'R');
+                
                 $pdf->Cell(20, 4, utf8_decode($arPeriodoDetalles->getContratoRel()->getClasificacionRiesgoRel()->getNombre()), 1, 0, 'L');
-                //$pdf->Cell(33, 4, number_format($arPeriodoDetalle->getCaja(), 0, '.', ','), 1, 0, 'R');
+                
                 $pdf->Cell(15, 4, utf8_decode($arPeriodoDetalles->getContratoRel()->getEntidadCajaRel()->getNombre()), 1, 0, 'L');
                 $pdf->SetFont('Arial', '', 7);
                 $pdf->Cell(13, 4, number_format($arPeriodoDetalles->getAdministracion(), 0, '.', ','), 1, 0, 'R');

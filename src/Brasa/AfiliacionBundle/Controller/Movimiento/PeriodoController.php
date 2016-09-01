@@ -446,7 +446,7 @@ class PeriodoController extends Controller
             ->add('BtnDetalleCobroImprimir', 'submit', array('label'  => 'Imprimir',))            
             ->add('BtnDetallePagoEliminar', 'submit', array('label'  => 'Eliminar',))            
             ->add('BtnDetallePagoExcel', 'submit', array('label'  => 'Excel',))                            
-            ->add('BtnDetallePagoArchivo', 'submit', array('label'  => 'Archivo plano',))                                            
+            //->add('BtnDetallePagoArchivo', 'submit', array('label'  => 'Archivo plano',))                                            
             ->getForm();
         return $form;
     }     

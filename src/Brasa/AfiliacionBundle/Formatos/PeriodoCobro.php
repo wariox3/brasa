@@ -10,7 +10,7 @@ class PeriodoCobro extends \FPDF_FPDF {
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
         self::$codigoPeriodo = $codigoPeriodo;
-        $pdf = new PeriodoCobro('L');        
+        $pdf = new PeriodoCobro('L','mm','letter');        
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
@@ -28,7 +28,7 @@ class PeriodoCobro extends \FPDF_FPDF {
         $this->Image('imagenes/logos/logo.jpg', 12, 13, 35, 17);
         //INFORMACIÓN EMPRESA
         $this->SetXY(50, 10);
-        $this->Cell(150, 7, utf8_decode("RELACION COBRO"), 0, 0, 'C', 1);
+        $this->Cell(225, 7, utf8_decode("RELACION COBRO"), 0, 0, 'C', 1);
         $this->SetXY(50, 18);
         $this->SetFont('Arial','B',9);
         $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);
@@ -51,53 +51,90 @@ class PeriodoCobro extends \FPDF_FPDF {
         $this->SetXY(10, 40);
         $this->SetFillColor(200, 200, 200); 
         $this->SetFont('Arial','B',8);
-        $this->Cell(30, 6, utf8_decode("CÓDIGO:") , 1, 0, 'L', 1);
-        $this->SetFillColor(272, 272, 272); 
-        $this->SetFont('Arial','',8);
-        $this->Cell(30, 6, $arPeriodo->getCodigoPeriodoPk(), 1, 0, 'L', 1);
-        $this->SetFont('Arial','B',8);
-        $this->SetFillColor(200, 200, 200);
         $this->Cell(30, 6, "NIT:" , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',8);
-        $this->SetFillColor(272, 272, 272); 
-        $this->Cell(100, 6, $arPeriodo->getClienteRel()->getNit(), 1, 0, 'L', 1);
-        //linea 2
-        $this->SetXY(10, 45);
-        $this->SetFont('Arial','B',8);
-        $this->SetFillColor(200, 200, 200);
-        $this->Cell(30, 5, utf8_decode("FECHA:") , 1, 0, 'L', 1);
         $this->SetFillColor(272, 272, 272); 
         $this->SetFont('Arial','',8);
-        $this->Cell(30, 6, $arPeriodo->getFechaDesde()->format('Y/m/d'), 1, 0, 'L', 1);
+        $this->Cell(30, 6, $arPeriodo->getClienteRel()->getNit(), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->SetFillColor(200, 200, 200);
         $this->Cell(30, 6, "CLIENTE:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
         $this->SetFillColor(272, 272, 272); 
-        $this->Cell(100, 6, utf8_decode($arPeriodo->getClienteRel()->getNombreCorto()), 1, 0, 'L', 1);         
+        $this->Cell(100, 6, utf8_decode($arPeriodo->getClienteRel()->getNombreCorto()), 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->SetFillColor(200, 200, 200);
+        $this->Cell(30, 6, "DIRECCION:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->SetFillColor(272, 272, 272); 
+        $this->Cell(45, 6, utf8_decode($arPeriodo->getClienteRel()->getDireccion()), 1, 0, 'L', 1);
+        //linea 2
+        $this->SetXY(10, 45);
+        $this->SetFillColor(200, 200, 200); 
+        $this->SetFont('Arial','B',8);
+        $this->Cell(30, 6, "TELEFONO:" , 1, 0, 'L', 1);
+        $this->SetFillColor(272, 272, 272); 
+        $this->SetFont('Arial','',8);
+        $this->Cell(30, 6, $arPeriodo->getClienteRel()->getTelefono(), 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->SetFillColor(200, 200, 200);
+        $this->Cell(30, 6, "CORREO:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->SetFillColor(272, 272, 272); 
+        $this->Cell(100, 6, utf8_decode($arPeriodo->getClienteRel()->getEmail()), 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->SetFillColor(200, 200, 200);
+        $this->Cell(30, 6, "FORMA PAGO:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->SetFillColor(272, 272, 272); 
+        $this->Cell(45, 6, utf8_decode($arPeriodo->getClienteRel()->getFormaPagoRel()->getNombre()), 1, 0, 'L', 1);          
         //linea 3
         $this->SetXY(10, 50);
         $this->SetFont('Arial','B',8);
         $this->SetFillColor(200, 200, 200);
-        $this->Cell(30, 5, '' , 1, 0, 'L', 1);
+        $this->Cell(30, 5, 'PLAZO' , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
         $this->SetFillColor(272, 272, 272);
-        $this->Cell(30, 5, '' , 1, 0, 'R', 1);
+        $this->Cell(30, 5, utf8_decode($arPeriodo->getClienteRel()->getPlazoPago()), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->SetFillColor(200, 200, 200);
-        $this->Cell(30, 5, "TOTAL:" , 1, 0, 'R', 1);
+        $this->Cell(30, 5, "INTERES MORA:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
         $this->SetFillColor(272, 272, 272); 
-        $this->Cell(100, 5, number_format($arPeriodo->getTotal(), 0, '.', ',') , 1, 0, 'R', 1);
-        $this->SetFont('Arial','B',8);      
+        $this->Cell(100, 5, number_format($arPeriodo->getInteresMora(), 0, '.', ',') , 1, 0, 'R', 1);
+        $this->SetFont('Arial','B',8);
+        $this->SetFillColor(200, 200, 200);
+        $this->Cell(30, 5, "SOPORTE:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->SetFillColor(272, 272, 272); 
+        $this->Cell(45, 5, "", 1, 0, 'L', 1);
+        //linea 3
+        $this->SetXY(10, 55);
+        $this->SetFont('Arial','B',8);
+        $this->SetFillColor(200, 200, 200);
+        $this->Cell(30, 5, 'FECHA EMISION' , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->SetFillColor(272, 272, 272);
+        $this->Cell(30, 5, date('Y-m-d'), 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->SetFillColor(200, 200, 200);
+        $this->Cell(30, 5, "PERIODO:" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->SetFillColor(272, 272, 272); 
+        $this->Cell(100, 5, $arPeriodo->getFechaDesde()->format('Y-m-d'). ' - ' . $arPeriodo->getFechaHasta()->format('Y-m-d'), 1, 0, 'L', 1);
+        $this->SetFont('Arial','B',8);
+        $this->SetFillColor(200, 200, 200);
+        $this->Cell(30, 5, "" , 1, 0, 'L', 1);
+        $this->SetFont('Arial','',8);
+        $this->SetFillColor(272, 272, 272); 
+        $this->Cell(45, 5, "", 1, 0, 'L', 1);
         
         $this->EncabezadoDetalles();
         
     }
 
     public function EncabezadoDetalles() {
-        $this->Ln(12);
-        $header = array(utf8_decode('IDENTIF.'), 'NOMBRE', 'PENSION', 'SALUD', 'RIESGOS', 'CAJA', 'ADMIN', 'SUBTOTAL', 'IVA', 'TOTAL');
+        $this->Ln(10);
+        $header = array(utf8_decode('IDENTIFICACION'), 'NOMBRE', 'DIAS', 'SALARIO', 'FECHA ING','PENSION', 'SALUD', 'RIESGOS', 'CAJA', 'ADMON', 'SUBTOTAL', 'IVA', 'TOTAL', 'RET');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -105,7 +142,7 @@ class PeriodoCobro extends \FPDF_FPDF {
         $this->SetFont('', 'B', 6);
 
         //creamos la cabecera de la tabla.
-        $w = array(20, 60, 13, 13, 13, 13, 13, 13, 13, 19);
+        $w = array(20, 54, 8, 15, 15, 30, 30, 20, 15, 13, 13, 10, 15 ,7);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -127,38 +164,62 @@ class PeriodoCobro extends \FPDF_FPDF {
         
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
-        $var = 0;
+        $var = $arPeriodo->getTotal();
+        $var2 = count($arPeriodoDetalles);
         foreach ($arPeriodoDetalles as $arPeriodoDetalle) {                        
             $pdf->Cell(20, 4, $arPeriodoDetalle->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
-            $pdf->Cell(60, 4, utf8_decode($arPeriodoDetalle->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');                            
-            $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getPension(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getSalud(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getRiesgos(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getCaja(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getAdministracion(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getSubtotal(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getIva(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(19, 4, number_format($arPeriodoDetalle->getTotal(), 0, '.', ','), 1, 0, 'R');
-            $var += $arPeriodoDetalle->getTotal();
+                $pdf->SetFont('Arial', '', 6);
+                $pdf->Cell(54, 4, utf8_decode($arPeriodoDetalle->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');                            
+                $pdf->Cell(8, 4, $arPeriodoDetalle->getDias(), 1, 0, 'L');
+                $pdf->Cell(15, 4, number_format($arPeriodoDetalle->getSalario(), 0, '.', ','), 1, 0, 'R');
+                $pdf->Cell(15, 4, $arPeriodoDetalle->getContratoRel()->getFechaDesde()->format('Y-m-d'), 1, 0, 'L');
+                $pdf->Cell(30, 4, utf8_decode($arPeriodoDetalle->getContratoRel()->getEntidadPensionRel()->getNombre()), 1, 0, 'L');
+                $pdf->Cell(30, 4, utf8_decode($arPeriodoDetalle->getContratoRel()->getEntidadSaludRel()->getNombre()), 1, 0, 'L');
+                $pdf->Cell(20, 4, utf8_decode($arPeriodoDetalle->getContratoRel()->getClasificacionRiesgoRel()->getNombre()), 1, 0, 'L');
+                $pdf->Cell(15, 4, utf8_decode($arPeriodoDetalle->getContratoRel()->getEntidadCajaRel()->getNombre()), 1, 0, 'L');
+                $pdf->SetFont('Arial', '', 7);
+                $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getAdministracion(), 0, '.', ','), 1, 0, 'R');
+                $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getSubtotal(), 0, '.', ','), 1, 0, 'R');
+                $pdf->Cell(10, 4, number_format($arPeriodoDetalle->getIva(), 0, '.', ','), 1, 0, 'R');
+                $pdf->Cell(15, 4, number_format($arPeriodoDetalle->getTotal(), 0, '.', ','), 1, 0, 'R');
+                if ($arPeriodoDetalle->getContratoRel()->getIndefinido() == 1){
+                    $retiro = 'NO';
+                } else {
+                    $retiro = 'SI';
+                }
+                $pdf->Cell(7, 4, $retiro, 1, 0, 'L');
+            
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
             
         }
             $pdf->SetFont('Arial', 'B', 7);
-            $pdf->Cell(171, 5, "TOTAL: ", 0, 0, 'R');
+            $pdf->Cell(243, 5, "TOTAL: ", 0, 0, 'R');
             $pdf->SetFont('Arial', '', 7);
-            $pdf->Cell(19, 5, number_format($var,0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(15, 5, number_format($var,0, '.', ','), 1, 0, 'R');
             $pdf->Ln();
             $pdf->SetFont('Arial', 'B', 7);
-            $pdf->Cell(171, 5, "NUMERO DE EMPLEADOS: ", 0, 0, 'R');
+            $pdf->Cell(35, 5, "NUMERO DE EMPLEADOS: ", 0, 0, 'R');
             $pdf->SetFont('Arial', '', 7);
-            $pdf->Cell(19, 5, number_format($arPeriodo->getNumeroEmpleados(),0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(19, 5, number_format($var2,0, '.', ','), 1, 0, 'R');
         
     }
 
     public function Footer() {
-        $this->SetFont('Arial','', 8);  
-        $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
+        $arConfiguracion = new \Brasa\AfiliacionBundle\Entity\AfiConfiguracion();
+        $arConfiguracion = self::$em->getRepository('BrasaAfiliacionBundle:AfiConfiguracion')->find(1);
+        $this->SetY(120);
+        $this->Ln(3);
+        $this->SetFont('Arial', 'B', 11);
+        //$this->Text(10, $this->GetY($this->SetY(160)), utf8_decode($arConfiguracion->getInformacionPagoFactura()));
+        $this->SetY(187);
+        $this->MultiCell(261,5, $arConfiguracion->getInformacionPagoFactura(),0);
+        
+        $this->SetFont('Arial', 'B', 8);
+        //$this->Text(60, $this->GetY($this->SetY(205)), utf8_decode($arConfiguracion->getInformacionContactoFactura()));
+        $this->SetFont('Arial', '', 8);
+        //Número de página
+        $this->Text(255, 205, 'Pagina ' . $this->PageNo() . ' de {nb}');
     }    
 }
 
