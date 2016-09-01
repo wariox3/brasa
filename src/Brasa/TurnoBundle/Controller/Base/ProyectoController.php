@@ -12,8 +12,11 @@ class ProyectoController extends Controller
      * @Route("/tur/base/proyecto", name="brs_tur_base_proyecto")
      */    
     public function listaAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();        
-        $paginator  = $this->get('knp_paginator');
+        $em = $this->getDoctrine()->getManager(); 
+        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 83, 1)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }        
+        $paginator  = $this->get('knp_paginator');        
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->lista();

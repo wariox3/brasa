@@ -15,6 +15,9 @@ class ConsultasCostosController extends Controller
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 13)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }         
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioLista();
         $form->handleRequest($request);

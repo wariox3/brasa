@@ -42,7 +42,9 @@
                 <div id="documentos" style="width: 100%"><br>
                     <table class="table table-striped table-bordered table-condensed">
                         <tr>
-                            <th>CÓDIGO</th>
+                            <th>ID</th>
+                            <th>TIPO</th>
+                            <th>MODULO</th>
                             <th>PERMISO</th>
                             <th>INGRESO</th>
                             <th>NUEVO</th>
@@ -51,30 +53,23 @@
                             <th>AUTORIZAR</th>
                             <th>DESAUTORIZAR</th>
                             <th>APROBAR</th>
-                            <th>DESAPROBAR</th>
                             <th>ANULAR</th>
-                            <th>DESANULAR</th>
-                            <th>IMPRIMIR</th>
                             <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodosTabla(this, 'ChkSeleccionarPermisoDocumento[]');"/></th>
                         </tr>
                         {% for arPermisosDocumentos in arPermisosDocumentos %}
                             <tr>
-                                <td>
-                                    <input type="hidden" name="LblCodigoGuiaDocumento[]" value="{{ arPermisosDocumentos.codigoPermisoDocumentoPk }}">
-                                    <span class="badge">{{ arPermisosDocumentos.codigoPermisoDocumentoPk }}</span>
-                                </td>
+                                <td><span class="badge">{{ arPermisosDocumentos.codigoDocumentoFk }}</span></td>
+                                <td>{{ arPermisosDocumentos.documentoRel.tipo  }}</td>
+                                <td>{{ arPermisosDocumentos.documentoRel.modulo  }}</td>
                                 <td>{{ arPermisosDocumentos.documentoRel.nombre  }}</td>
-                                <td style="text-align: center"><input type="checkbox" name="ChkSeleccionarIngreso{{ arPermisosDocumentos.codigoPermisoDocumentoPk }}" {% if arPermisosDocumentos.ingreso == 1 %} checked="true" {% endif %}></td>
-                                <td style="text-align: center"><input type="checkbox" name="ChkSeleccionarNuevo{{ arPermisosDocumentos.codigoPermisoDocumentoPk }}" {% if arPermisosDocumentos.nuevo == 1 %} checked="true" {% endif %}></td>
-                                <td style="text-align: center"><input type="checkbox" name="ChkSeleccionarEditar{{ arPermisosDocumentos.codigoPermisoDocumentoPk }}" {% if arPermisosDocumentos.editar == 1 %} checked="true" {% endif %}></td>
-                                <td style="text-align: center"><input type="checkbox" name="ChkSeleccionarEliminar{{ arPermisosDocumentos.codigoPermisoDocumentoPk }}" {% if arPermisosDocumentos.eliminar == 1 %} checked="true" {% endif %}></td>
-                                <td style="text-align: center"><input type="checkbox" name="ChkSeleccionarAutorizar{{ arPermisosDocumentos.codigoPermisoDocumentoPk }}" {% if arPermisosDocumentos.autorizar == 1 %} checked="true" {% endif %}></td>
-                                <td style="text-align: center"><input type="checkbox" name="ChkSeleccionarDesautorizar{{ arPermisosDocumentos.codigoPermisoDocumentoPk }}" {% if arPermisosDocumentos.desautorizar == 1 %} checked="true" {% endif %}></td>
-                                <td style="text-align: center"><input type="checkbox" name="ChkSeleccionarAprobar{{ arPermisosDocumentos.codigoPermisoDocumentoPk }}" {% if arPermisosDocumentos.aprobar == 1 %} checked="true" {% endif %}></td>
-                                <td style="text-align: center"><input type="checkbox" name="ChkSeleccionarDesaprobar{{ arPermisosDocumentos.codigoPermisoDocumentoPk }}" {% if arPermisosDocumentos.desaprobar == 1 %} checked="true" {% endif %}></td>
-                                <td style="text-align: center"><input type="checkbox" name="ChkSeleccionarAnular{{ arPermisosDocumentos.codigoPermisoDocumentoPk }}" {% if arPermisosDocumentos.anular == 1 %} checked="true" {% endif %}></td>
-                                <td style="text-align: center"><input type="checkbox" name="ChkSeleccionarDesanular{{ arPermisosDocumentos.codigoPermisoDocumentoPk }}" {% if arPermisosDocumentos.desanular == 1 %} checked="true" {% endif %}></td>
-                                <td style="text-align: center"><input type="checkbox" name="ChkSeleccionarImprimir{{ arPermisosDocumentos.codigoPermisoDocumentoPk }}" {% if arPermisosDocumentos.imprimir == 1 %} checked="true" {% endif %}></td>
+                                <td>{% if arPermisosDocumentos.ingreso  == 1%} SI {% else %}NO{% endif%}</td>
+                                <td>{% if arPermisosDocumentos.nuevo  == 1%} SI {% else %}NO{% endif%}</td>
+                                <td>{% if arPermisosDocumentos.editar  == 1%} SI {% else %}NO{% endif%}</td>
+                                <td>{% if arPermisosDocumentos.eliminar  == 1%} SI {% else %}NO{% endif%}</td>
+                                <td>{% if arPermisosDocumentos.autorizar  == 1%} SI {% else %}NO{% endif%}</td>
+                                <td>{% if arPermisosDocumentos.desautorizar  == 1%} SI {% else %}NO{% endif%}</td>
+                                <td>{% if arPermisosDocumentos.aprobar  == 1%} SI {% else %}NO{% endif%}</td>
+                                <td>{% if arPermisosDocumentos.anular  == 1%} SI {% else %}NO{% endif%}</td>
                                 <td style="text-align: center"><input type="checkbox" name="ChkSeleccionarPermisoDocumento[]" value="{{ arPermisosDocumentos.codigoPermisoDocumentoPk }}" /></td>
                             </tr>
                         {% endfor %}

@@ -26,6 +26,9 @@ class ConsultasController extends Controller
     public function PagoPendientesBancoAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 30)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }         
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioPagoPendientesBancoLista();
         $form->handleRequest($request);
@@ -60,6 +63,9 @@ class ConsultasController extends Controller
     public function creditosGeneralAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 19)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }         
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioCreditosLista();
         $form->handleRequest($request);
@@ -94,6 +100,9 @@ class ConsultasController extends Controller
     public function PagoAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 20)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }         
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioPagoLista();
         $form->handleRequest($request);
@@ -163,6 +172,9 @@ class ConsultasController extends Controller
     public function IncapacidadesAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 22)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }         
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioIncapacidadesLista();
         $form->handleRequest($request);
@@ -197,6 +209,9 @@ class ConsultasController extends Controller
     public function IncapacidadesCobrarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 23)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }         
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioIncapacidadesCobrarLista();
         $form->handleRequest($request);
@@ -231,6 +246,9 @@ class ConsultasController extends Controller
     public function ProcesosDisciplinariosAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 33)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }         
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioProcesosDisciplinariosLista();
         $form->handleRequest($request);
@@ -265,6 +283,9 @@ class ConsultasController extends Controller
     public function AportesAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 24)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }         
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioAportesLista();
         $form->handleRequest($request);
@@ -299,6 +320,9 @@ class ConsultasController extends Controller
     public function VacacionesPagarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 28)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }         
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioVacacionesPagarLista();
         $form->handleRequest($request);
@@ -328,6 +352,9 @@ class ConsultasController extends Controller
     public function FechaTerminacionAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 26)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }         
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioFechaTerminacionLista();
         $form->handleRequest($request);
@@ -355,6 +382,9 @@ class ConsultasController extends Controller
     public function FechaIngresoAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 25)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }         
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioIngresosContratosLista();
         $form->handleRequest($request);
@@ -384,6 +414,9 @@ class ConsultasController extends Controller
     public function ContratoPeriodoAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 27)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }         
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioContratoPeriodo();
         $form->handleRequest($request);
@@ -412,6 +445,9 @@ class ConsultasController extends Controller
     public function EmpleadoAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 14)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }         
         $paginator  = $this->get('knp_paginator');
         $session = $this->getRequest()->getSession();
         $form = $this->formularioEmpleadoLista();
