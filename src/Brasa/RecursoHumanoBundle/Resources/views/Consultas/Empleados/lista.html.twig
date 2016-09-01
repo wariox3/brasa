@@ -55,8 +55,7 @@
                 <th>CENTRO COSTO</th>
                 <th>SUCURSAL SSO</th>
                 <th>CONTRATO</th>
-                <th>TELÉFONO</th>                
-                <th style="text-align: right">SALARIO</th>
+                <th>TELÉFONO</th>                                
                 <th>FECHA INICIO</th>
                 <th>ACT</th>
                 <th style="text-align: center"></th>
@@ -69,8 +68,7 @@
                 <td>{% if arEmpleados.centroCostoRel.nombre is defined %} {{ arEmpleados.centroCostoRel.nombre  }} {% endif %}</td>
                 <td>{% if arEmpleados.centroCostoRel.sucursalRel.nombre is defined %} {{ arEmpleados.centroCostoRel.sucursalRel.nombre  }} {% endif %}</td>
                 <td>{{ arEmpleados.codigoContratoActivoFk  }}</td>
-                <td>{{ arEmpleados.telefono }}</td>                
-                <td style="text-align: right">{{ arEmpleados.VrSalario | number_format(0, '.', ',') }}</td>                            
+                <td>{{ arEmpleados.telefono }}</td>                                
                 <td>{% if arEmpleados.fechaContrato != "" %} {{ arEmpleados.fechaContrato|date('Y/m/d')  }} {% else %} SIN DEFINIR {% endif %}</td>                                
                 <td>{% if arEmpleados.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>                                
                 <td style="text-align: center"><a href="{{ path('brs_rhu_consultas_empleado_detalle', { 'codigoEmpleado': arEmpleados.codigoEmpleadoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalle del registro"></a></td>                
