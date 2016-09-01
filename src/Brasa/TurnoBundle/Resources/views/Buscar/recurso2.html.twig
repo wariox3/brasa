@@ -18,20 +18,26 @@
         <div class="panel panel-default">
             <div class="panel-heading">Filtros de busqueda</div>
             <div class="panel-body">
-
                 <div class="form-group form-group-sm">  
-                    <label for="form_TxtNombre" class="col-sm-3 control-label">Nombre:</label>
-                    <div class="col-sm-9">                  
-                        {{ form_widget(form.TxtNombre , { 'attr': {'class': 'form-control', 'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}
-                    </div>                   
-                </div>  
-                     
-                <div class="form-group form-group-sm">  
-                    <label for="form_TxtCodigo" class="col-sm-3 control-label">Codigo:</label>
-                    <div class="col-sm-9">                  
+                    <label class="col-sm-2 control-label">Nombre:</label>
+                    <div class="col-sm-4">
+                        {{ form_widget(form.TxtNombre, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <label class="col-sm-2 control-label">Codigo:</label>
+                    <div class="col-sm-4">                  
                         {{ form_widget(form.TxtCodigo, { 'attr': {'class': 'form-control'} }) }}
-                    </div>      
-                </div>   
+                    </div>                    
+                </div>
+                <div class="form-group form-group-sm">  
+                    <label class="col-sm-2 control-label">Identificacion:</label>
+                    <div class="col-sm-4">
+                        {{ form_widget(form.TxtNumeroIdentificacion, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-4">                  
+                        
+                    </div>                    
+                </div> 
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
@@ -49,7 +55,7 @@
             {% for arRecursos in arRecursos %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arRecursos.codigoRecursoPk }}">{{ arRecursos.codigoRecursoPk }} </td>
-                <td>{{ arRecursos.codigoRecursoPk  }}</td>
+                <td>{{ arRecursos.numeroIdentificacion }}</td>
                 <td>{{ arRecursos.nombreCorto }}</td>                                                
                 <td style="text-align: center"><a href="javascript:selTercero('{{ arRecursos.codigoRecursoPk }}','{{ campoCodigo }}')" ><img src="{{ asset('imagenes/bootstrap/glyphicons_198_ok.png') }}" width=20 height=20></a></td>                                
             </tr>
