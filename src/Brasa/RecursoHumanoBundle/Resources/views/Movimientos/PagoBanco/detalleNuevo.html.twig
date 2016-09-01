@@ -14,9 +14,28 @@
         <div class="tab-pane active" id="pagos">
             <!-- Menu Encabezado Movimiento -->
             <div id="pagos" style="width: 100%"><br>
+                <div class="panel panel-default">
+                    <div class="panel-heading">Filtros de busqueda</div>
+                    <div class="panel-body">                                   
+                        <div class="form-group form-group-sm">  
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-4">                                
+                            </div>
+                            <label class="col-sm-2 control-label">Banco:</label>
+                            <div class="col-sm-4">                  
+                                {{ form_widget(form.bancoRel, { 'attr': {'class': 'form-control'} }) }}
+                            </div>                    
+                        </div> 
+                        <div class="form-group form-group-sm">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+                
                 <table class="table table-striped table-bordered table-condensed table-hover">
-                <tr>            
-                    <th>CÓDIGO</th>
+                <tr>                                
                     <th>TIPO</th>
                     <th>NÚMERO</th>
                     <th>CENTRO COSTO</th>
@@ -29,8 +48,7 @@
                     <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                 </tr>        
                     {%for arPagos in arPagos %}
-                       <tr>
-                        <td>{{arPagos.codigoPagoPk }}</td>
+                       <tr>                        
                         <td>{{arPagos.programacionPagoRel.pagoTipoRel.nombre }}</td>
                         <td>{{arPagos.numero }}</td>
                         <td>{{arPagos.centroCostoRel.nombre }}</td>
@@ -77,6 +95,10 @@
                         {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     </div>  
                 </div>
+            <br /><br />
+            <blockquote>
+                <p align="justify">El botón eliminar, sirve para quitar de la lista las programaciones que hayan sido pagadas individualmente, si quedo algún registro sin eliminar de una programación de pago, el sistema no dejara quitar la programación de la lista</p>
+            </blockquote>                     
         </div>                        
     </div>       
     
@@ -85,10 +107,6 @@
             {{ form_widget(form.BtnGuardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
         </div>  
     </div>
-    
-    <br /><br />
-    <blockquote>
-        <p align="justify">El botón eliminar, sirve para quitar de la lista las programaciones que hayan sido pagadas individualmente, si quedo algún registro sin eliminar de una programación de pago, el sistema no dejara quitar la programación de la lista</p>
-    </blockquote>    
+      
     {{ form_end(form) }}
 {% endblock %}
