@@ -49,7 +49,7 @@
                 <td>{{ arAspirantes.nombreCorto  }}</td>
                 <td>{{ arAspirantes.telefono }}</td>
                 <td>{{ arAspirantes.celular }}</td>
-                <td>{% if arAspirantes.inconsistencia == 1%} SI {% else %} NO {% endif %}</td>
+                <td>{% if arAspirantes.bloqueado == 1%} SI {% else %} NO {% endif %}</td>
                 <td>{{ arAspirantes.comentarios }}</td>
             </tr>
             {% endfor %}

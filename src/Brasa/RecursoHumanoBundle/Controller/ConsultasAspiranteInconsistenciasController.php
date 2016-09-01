@@ -125,7 +125,9 @@ class ConsultasAspiranteInconsistenciasController extends Controller
                     ->setCellValue('T1', 'COMENTARIOS');
 
         $i = 2;
-        $query = $em->createQuery($session->get('dqlAspiranteLista'));
+                
+        $query = $em->createQuery($this->strSqlLista);
+        $arAspirantes = new \Brasa\RecursoHumanoBundle\Entity\RhuAspirante();
         $arAspirantes = $query->getResult();
         foreach ($arAspirantes as $arAspirantes) {
             
@@ -171,7 +173,7 @@ class ConsultasAspiranteInconsistenciasController extends Controller
                 $disponibilidad = "NO APLICA";
             }
             $inconsistencia = "NO";
-            if ($arAspirantes->getInconsistencia() == 1){
+            if ($arAspirantes->getBloqueado() == 1){
                 $inconsistencia = "SI";
             }
             $objPHPExcel->setActiveSheetIndex(0)

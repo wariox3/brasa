@@ -115,13 +115,13 @@ class ConsultasController extends Controller
                 $this->PagoListar();
                 $this->generarPagoExcel();
             }
-            if($form->get('BtnPDFPago')->isClicked()) {
+            /*if($form->get('BtnPDFPago')->isClicked()) {
                 $this->filtrarPagoLista($form);
                 $this->PagoListar();
                 $objReportePago = new \Brasa\RecursoHumanoBundle\Reportes\ReportePago();
                 $objReportePago->Generar($this, $this->strSqlPagoLista);
 
-            }
+            }*/
             if($form->get('BtnFiltrarPago')->isClicked()) {
                 $this->filtrarPagoLista($form);
                 $this->PagoListar();

@@ -8,7 +8,7 @@ class AfiPeriodoRepository extends EntityRepository {
     
     public function listaDql($codigoCliente = "", $boolEstadoCerrado = "", $strDesde = "", $strHasta = "") {
         $em = $this->getEntityManager();
-        $dql   = "SELECT p FROM BrasaAfiliacionBundle:AfiPeriodo p WHERE p.codigoPeriodoPk <> 0";        
+        $dql   = "SELECT p,c FROM BrasaAfiliacionBundle:AfiPeriodo p JOIN p.clienteRel c WHERE p.codigoPeriodoPk <> 0";        
         if($codigoCliente != "" ) {
             $dql .= " AND p.codigoClienteFk = " . $codigoCliente;
         }        
@@ -24,7 +24,7 @@ class AfiPeriodoRepository extends EntityRepository {
         if($strHasta != "") {
             $dql .= " AND p.fechaDesde <='" . $strHasta . "'";
         }
-        $dql .= " ORDER BY p.codigoClienteFk asc";
+        $dql .= " ORDER BY c.nombreCorto asc";
         return $dql;
     }            
     
@@ -40,6 +40,7 @@ class AfiPeriodoRepository extends EntityRepository {
     }     
     
     public function generar($codigoPeriodo) {
+        set_time_limit(0);
         ob_clean();
         $em = $this->getEntityManager();
         $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();                
@@ -152,6 +153,8 @@ class AfiPeriodoRepository extends EntityRepository {
     }
     
     public function generarPago($codigoPeriodo) {
+        set_time_limit(0);
+        ob_clean();
         $em = $this->getEntityManager();
         $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();                
         $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);    

@@ -77,6 +77,22 @@ class PeriodoController extends Controller
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
             }
             
+            if ($form->get('BtnGenerarCobro')->isClicked()) {
+                $arPeriodos = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
+                $arPeriodos = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->findBy(array('estadoGenerado' => 0, 'estadoCerrado' => 0));
+                foreach ($arPeriodos as $arPeriodo){
+                    $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->generar($arPeriodo->getCodigoPeriodoPk());
+                }
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
+            }
+            if ($form->get('BtnGenerarPago')->isClicked()) {
+                $arPeriodos = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
+                $arPeriodos = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->findBy(array('estadoPagoGenerado' => 0, 'estadoCerrado' => 0));
+                foreach ($arPeriodos as $arPeriodo){
+                    $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->generarPago($arPeriodo->getCodigoPeriodoPk());
+                }
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
+            }
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->eliminar($arrSeleccionados);
@@ -93,7 +109,7 @@ class PeriodoController extends Controller
             }
         }
         
-        $arPeriodos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
+        $arPeriodos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 40);
         return $this->render('BrasaAfiliacionBundle:Movimiento/Periodo:lista.html.twig', array(
             'arPeriodos' => $arPeriodos, 
             'form' => $form->createView()));
@@ -433,6 +449,8 @@ class PeriodoController extends Controller
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('BtnGenerarCobro', 'submit', array('label'  => 'Generar cobro masivo',))    
+            ->add('BtnGenerarPago', 'submit', array('label'  => 'Generar pago masivo',))    
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
@@ -453,6 +471,8 @@ class PeriodoController extends Controller
 
     private function generarExcel() {
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -511,6 +531,8 @@ class PeriodoController extends Controller
     private function generarDetalleExcel() {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -597,6 +619,8 @@ class PeriodoController extends Controller
     private function generarDetallePagoExcel() {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();

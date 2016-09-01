@@ -11,6 +11,12 @@
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
+        <div class="btn-toolbar" style="float:left">
+            <div class="btn-group">                
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 26,  'numero': arPeriodo.codigoPeriodoPk }) }}', 'Archivos', 500, 700)" >Archivos</a>                
+            </div>
+        </div>
+        <br /><br />    
         <div class="panel panel-default">
             <div class="panel-heading">Información</div>
             <div class="panel-body">

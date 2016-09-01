@@ -76,17 +76,27 @@ class ConsultasEmpleadoEstudiosVencimientoController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');        
-        //$this->strFecha = $form->get('fecha')->getData()->format('Y-m-d');        
-        //$this->strNumeroIdentificacion = $form->get('TxtNumeroIdentificacion')->getData(); 
-        $session->set('filtroIdentificacion', $form->get('TxtNumeroIdentificacion')->getData());
-        $session->set('filtroHasta', $form->get('fecha')->getData());
-        $session->set('filtroHastaAcreditacion', $form->get('fechaAcreditacion')->getData());
+        $session->set('filtroIdentificacion', $form->get('TxtNumeroIdentificacion')->getData());        
+        $dateFechaHasta = $form->get('fecha')->getData();
+        $dateFechaHastaAcreditacion = $form->get('fechaAcreditacion')->getData();
+        if ($form->get('fecha')->getData() == null){
+            $session->set('filtroHasta', $form->get('fecha')->getData());
+        } else {
+            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d'));
+        }
+        if ($form->get('fechaAcreditacion')->getData() == null){
+            $session->set('filtroHastaAcreditacion', $form->get('fechaAcreditacion')->getData());
+        } else {
+            $session->set('filtroHastaAcreditacion', $dateFechaHastaAcreditacion->format('Y-m-d')); 
+        }
         
     }    
     
     private function generarExcel() {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
@@ -98,32 +108,10 @@ class ConsultasEmpleadoEstudiosVencimientoController extends Controller
                     ->setKeywords("office 2007 openxml php")
                     ->setCategory("Test result file");
                 $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
-                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true); 
+                for($col = 'A'; $col !== 'Z'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
+                }
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'CÓDIGO')
                             ->setCellValue('B1', 'FECHA')
@@ -142,14 +130,13 @@ class ConsultasEmpleadoEstudiosVencimientoController extends Controller
                             ->setCellValue('O1', 'CURSO ACREDITACIÓN')
                             ->setCellValue('P1', 'ACADEMIA')
                             ->setCellValue('Q1', 'FECHA INICIO ACREDITACIÓN')
-                            ->setCellValue('R1', 'FECHA TER ACREDITACIÓN')
-                            ->setCellValue('S1', 'FECHA VENCIMIENTO ACREDITACIÓN')
-                            ->setCellValue('T1', 'NUMERO REGISTRO')
-                            ->setCellValue('U1', 'NUMERO APROBACIÓN')
-                            ->setCellValue('V1', 'VALIDAR')
-                            ->setCellValue('W1', 'ESTADO')
-                            ->setCellValue('X1', 'ESTADO INVALIDO')
-                            ->setCellValue('Y1', 'COMENTARIOS');
+                            ->setCellValue('R1', 'FECHA VENCIMIENTO ACREDITACIÓN')
+                            ->setCellValue('S1', 'NUMERO REGISTRO')
+                            ->setCellValue('T1', 'NUMERO APROBACIÓN')
+                            ->setCellValue('U1', 'VALIDAR')
+                            ->setCellValue('V1', 'ESTADO')
+                            ->setCellValue('W1', 'ESTADO INVALIDO')
+                            ->setCellValue('x1', 'COMENTARIOS');
 
                 $i = 2;
                 $query = $em->createQuery($this->strDqlLista);
@@ -169,13 +156,9 @@ class ConsultasEmpleadoEstudiosVencimientoController extends Controller
                     if ($arEstudios->getFechaInicioAcreditacion() != null) {
                         $fechaInicioAcreditacion = $arEstudios->getFechaInicioAcreditacion()->format('Y/m/d');
                     }
-                    $fechaTerminacionAcreditacion = "";
-                    if ($arEstudios->getFechaTerminacionAcreditacion() != null) {
-                        $fechaTerminacionAcreditacion = $arEstudios->getFechaTerminacionAcreditacion()->format('Y/m/d');
-                    }
                     $fechaVencimientoControl = "";
-                    if ($arEstudios->getFechaVencimientoControl() != null) {
-                        $fechaVencimientoControl = $arEstudios->getFechaVencimientoControl()->format('Y/m/d');
+                    if ($arEstudios->getFechaVencimientoCurso() != null) {
+                        $fechaVencimientoControl = $arEstudios->getFechaVencimientoCurso()->format('Y/m/d');
                     }
                     $fechaVencimientoAcreditacion = "";
                     if ($arEstudios->getFechaVencimientoAcreditacion() != null) {
@@ -207,16 +190,24 @@ class ConsultasEmpleadoEstudiosVencimientoController extends Controller
                     } else {
                         $graduado = "NO";
                     }
+                    $ciudad = '';
+                    if ($arEstudios->getCodigoCiudadFk() != null){
+                        $ciudad = $arEstudios->getCiudadRel()->getNombre();
+                    }
+                    $cargo = '';
+                    if ($arEstudios->getEmpleadoRel()->getCodigoCargoFk() != null){
+                        $cargo = $arEstudios->getEmpleadoRel()->getCargoRel()->getNombre();
+                    }
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arEstudios->getCodigoEmpleadoEstudioPk())
                             ->setCellValue('B' . $i, $arEstudios->getFecha()->format('Y/m/d'))
                             ->setCellValue('C' . $i, $arEstudios->getEmpleadoRel()->getNumeroIdentificacion())
                             ->setCellValue('D' . $i, $arEstudios->getEmpleadoRel()->getNombreCorto())
-                            ->setCellValue('E' . $i, $arEstudios->getEmpleadoRel()->getCargoRel()->getNombre())
+                            ->setCellValue('E' . $i, $cargo)
                             ->setCellValue('F' . $i, $arEstudios->getEmpleadoEstudioTipoRel()->getNombre())
                             ->setCellValue('G' . $i, $arEstudios->getInstitucion())
                             ->setCellValue('H' . $i, $arEstudios->getTitulo())
-                            ->setCellValue('I' . $i, $arEstudios->getCiudadRel()->getNombre())
+                            ->setCellValue('I' . $i, $ciudad)
                             ->setCellValue('J' . $i, $fechaInicio)
                             ->setCellValue('K' . $i, $fechaTerminacion)
                             ->setCellValue('L' . $i, $fechaVencimientoControl)
@@ -225,14 +216,13 @@ class ConsultasEmpleadoEstudiosVencimientoController extends Controller
                             ->setCellValue('O' . $i, $tipoAcreditacion)
                             ->setCellValue('P' . $i, $academia)
                             ->setCellValue('Q' . $i, $fechaInicioAcreditacion)
-                            ->setCellValue('R' . $i, $fechaTerminacionAcreditacion)
-                            ->setCellValue('S' . $i, $fechaVencimientoAcreditacion)
-                            ->setCellValue('T' . $i, $arEstudios->getNumeroRegistro())
-                            ->setCellValue('U' . $i, $arEstudios->getNumeroAcreditacion())
-                            ->setCellValue('V' . $i, $objFunciones->devuelveBoolean($arEstudios->getValidarVencimiento()))
-                            ->setCellValue('W' . $i, $estado)
-                            ->setCellValue('X' . $i, $estadoInvalidado)
-                            ->setCellValue('Y' . $i, $arEstudios->getComentarios());
+                            ->setCellValue('R' . $i, $fechaVencimientoAcreditacion)
+                            ->setCellValue('S' . $i, $arEstudios->getNumeroRegistro())
+                            ->setCellValue('T' . $i, $arEstudios->getNumeroAcreditacion())
+                            ->setCellValue('U' . $i, $objFunciones->devuelveBoolean($arEstudios->getValidarVencimiento()))
+                            ->setCellValue('V' . $i, $estado)
+                            ->setCellValue('W' . $i, $estadoInvalidado)
+                            ->setCellValue('X' . $i, $arEstudios->getComentarios());
                     $i++;
                 }
 
@@ -258,6 +248,8 @@ class ConsultasEmpleadoEstudiosVencimientoController extends Controller
     private function generarInformeExcel() {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $nombreArchivo = "";
         $em = $this->getDoctrine()->getManager();
         $objPHPExcel = new \PHPExcel();
@@ -270,31 +262,10 @@ class ConsultasEmpleadoEstudiosVencimientoController extends Controller
                     ->setKeywords("office 2007 openxml php")
                     ->setCategory("Test result file");
                 $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
-                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true); 
+                for($col = 'A'; $col !== 'Z'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
+                }
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'Nit')
                             ->setCellValue('B1', 'RazonSocial')
@@ -339,10 +310,6 @@ class ConsultasEmpleadoEstudiosVencimientoController extends Controller
                     $fechaInicioAcreditacion = "";
                     if ($arEstudios->getFechaInicioAcreditacion() != null) {
                         $fechaInicioAcreditacion = $arEstudios->getFechaInicioAcreditacion()->format('Y/m/d');
-                    }
-                    $fechaTerminacionAcreditacion = "";
-                    if ($arEstudios->getFechaTerminacionAcreditacion() != null) {
-                        $fechaTerminacionAcreditacion = $arEstudios->getFechaTerminacionAcreditacion()->format('Y/m/d');
                     }
                     $tipoAcreditacion = "";
                     if ($arEstudios->getCodigoEstudioTipoAcreditacionFk() != null) {
@@ -426,7 +393,12 @@ class ConsultasEmpleadoEstudiosVencimientoController extends Controller
                     if ($arEstudios->getEmpleadoRel()->getCodigoContratoActivoFk() != null){
                         $codigoContrato = $arEstudios->getEmpleadoRel()->getCodigoContratoActivoFk();
                     } else {
-                        $codigoContrato = $arEstudios->getEmpleadoRel()->getCodigoContratoUltimoFk();
+                        if ($arEstudios->getEmpleadoRel()->getCodigoContratoUltimoFk() != 0){
+                            $codigoContrato = $arEstudios->getEmpleadoRel()->getCodigoContratoUltimoFk();
+                        } else {
+                            $codigoContrato = 0;
+                        }
+                        
                     }
                     $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
                     $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
@@ -437,9 +409,17 @@ class ConsultasEmpleadoEstudiosVencimientoController extends Controller
                     } else {
                         $telefono = $arEstudios->getEmpleadoRel()->getCelular();
                     }
-                    $ciudadLabora = $arContrato->getCiudadLaboraRel()->getNombre();
-                    $ciudadLabora = explode(" ", $ciudadLabora);
-                    $ciudadLabora = $ciudadLabora[0];
+                    $ciudadLabora = '';
+                    $departamentoLabora = '';
+                    $fechaDesde = '';
+                    if ($arContrato){
+                        $ciudadLabora = $arContrato->getCiudadLaboraRel()->getNombre();
+                        $ciudadLabora = explode(" ", $ciudadLabora);
+                        $ciudadLabora = $ciudadLabora[0];
+                        $departamentoLabora = $arContrato->getCiudadLaboraRel()->getDepartamentoRel()->getNombre();
+                        $fechaDesde = $arContrato->getFechaDesde()->format('d/m/Y');
+                        
+                    }
                     
                     $nivelEstudio = "";
                     $gradoBachiller = "Ninguna";
@@ -472,15 +452,15 @@ class ConsultasEmpleadoEstudiosVencimientoController extends Controller
                             ->setCellValue('I' . $i, $arEstudios->getEmpleadoRel()->getFechaNacimiento()->format('d/m/Y'))
                             ->setCellValue('J' . $i, $sexo)
                             ->setCellValue('K' . $i, $cargo)
-                            ->setCellValue('L' . $i, $arContrato->getFechaDesde()->format('d/m/Y'))
+                            ->setCellValue('L' . $i, $fechaDesde)
                             ->setCellValue('M' . $i, $tipoAcreditacion)
                             ->setCellValue('N' . $i, $academia)
                             ->setCellValue('O' . $i, $arEstudios->getNumeroAcreditacion())
                             ->setCellValue('P' . $i, "Principal")
                             ->setCellValue('Q' . $i, $telefono)
                             ->setCellValue('R' . $i, $arEstudios->getEmpleadoRel()->getDireccion())
-                            ->setCellValue('S' . $i, "duda")
-                            ->setCellValue('T' . $i, $arContrato->getCiudadLaboraRel()->getDepartamentoRel()->getNombre())
+                            ->setCellValue('S' . $i, "sin definir")
+                            ->setCellValue('T' . $i, $departamentoLabora)
                             ->setCellValue('U' . $i, $ciudadLabora)
                             ->setCellValue('V' . $i, $gradoBachiller)
                             ->setCellValue('W' . $i, ucfirst($superior))

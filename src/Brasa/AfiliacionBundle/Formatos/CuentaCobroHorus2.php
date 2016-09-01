@@ -64,7 +64,7 @@ class CuentaCobroHorus2 extends \FPDF_FPDF {
             $this->Ln(4);
         }
 
-        $Datos = array($arFactura->getClienteRel()->getNombreCorto(),
+        $Datos = array(utf8_decode($arFactura->getClienteRel()->getNombreCorto()),
             $arFactura->getClienteRel()->getNit() . "-" . $arFactura->getClienteRel()->getDigitoVerificacion(),
             $arFactura->getClienteRel()->getTelefono(),
             $arFactura->getClienteRel()->getDireccion(),

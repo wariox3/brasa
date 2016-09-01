@@ -125,6 +125,10 @@
         </div>
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
+                {{ form_widget(form.BtnGenerarCobro, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnGenerarPago, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            </div>
+            <div class="btn-group">
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
             <div class="btn-group">

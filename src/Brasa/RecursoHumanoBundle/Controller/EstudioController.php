@@ -336,8 +336,18 @@ class EstudioController extends Controller
         $session->set('filtroNombre', $form->get('TxtNombre')->getData());
         $session->set('filtroEstudio', $controles['empleadoEstudioTipoRel']);
         $session->set('filtroEstado', $controles['estudioEstadoRel']);     
-        $session->set('filtroDesde', $form->get('fechaVencimientoCurso')->getData());
-        $session->set('filtroHasta', $form->get('fechaVencimientoAcreditacion')->getData());
+        $dateFechaHasta = $form->get('fechaVencimientoCurso')->getData();
+        $dateFechaHastaAcreditacion = $form->get('fechaVencimientoAcreditacion')->getData();
+        if ($form->get('fechaVencimientoCurso')->getData() == null){
+            $session->set('filtroDesde', $form->get('fechaVencimientoCurso')->getData());
+        } else {
+            $session->set('filtroDesde', $dateFechaHasta->format('Y-m-d'));
+        }
+        if ($form->get('fechaVencimientoAcreditacion')->getData() == null){
+            $session->set('filtroHasta', $form->get('fechaVencimientoAcreditacion')->getData());
+        } else {
+            $session->set('filtroHasta', $dateFechaHastaAcreditacion->format('Y-m-d')); 
+        }
     }
     
     private function formularioDetalle($ar) {
@@ -364,10 +374,11 @@ class EstudioController extends Controller
     }
 
     private function generarExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         set_time_limit(0);
         ini_set("memory_limit", -1);
-        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
+        
         $em = $this->getDoctrine()->getManager();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
@@ -560,6 +571,8 @@ class EstudioController extends Controller
     private function generarInformeExcel() {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $nombreArchivo = "";
         $em = $this->getDoctrine()->getManager();
         $objPHPExcel = new \PHPExcel();

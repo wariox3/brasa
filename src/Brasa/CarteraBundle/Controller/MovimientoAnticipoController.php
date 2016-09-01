@@ -77,7 +77,7 @@ class MovimientoAnticipoController extends Controller
             if ($codigoAnticipo != 0 && $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->numeroRegistros($codigoAnticipo) > 0) {
                 if ($arAnticipo->getCodigoClienteFk() == $arCliente->getCodigoClientePk()) {
                     $arUsuario = $this->getUser();
-                    $arAnticipo->setUsuario($arUsuario->getUserName());            
+                    $arAnticipo->setUsuario($arUsuario->getUserName());
                     $em->persist($arAnticipo);
                     $em->flush();
                     if($form->get('guardarnuevo')->isClicked()) {
@@ -98,6 +98,8 @@ class MovimientoAnticipoController extends Controller
                 $arAnticipo->setUsuario($arUsuario->getUserName());
                 $valorAnticipo = $form->get('vrAnticipo')->getData();
                 if ($valorAnticipo > 0){
+                    $arAnticipo->setVrTotal($arAnticipo->getVrAnticipo());
+                    $arAnticipo->setVrTotalPago($arAnticipo->getVrAnticipo());
                     $em->persist($arAnticipo);
                     $em->flush();
                     if($form->get('guardarnuevo')->isClicked()) {
