@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Security\Core\SecurityContext;
 use Brasa\SeguridadBundle\Form\Type\UserType;
-
+use Brasa\SeguridadBundle\Form\Type\SegPermisoDocumentoType;
 class SegUsuariosController extends Controller
 {
     var $strDqlLista = "";
@@ -62,8 +62,7 @@ class SegUsuariosController extends Controller
         $form = $this->createFormBuilder()
             ->add('BtnEliminarEspecial', 'submit', array('label' => 'Eliminar'))
             ->add('BtnEliminarDocumento', 'submit', array('label' => 'Eliminar'))    
-            ->add('BtnEliminarRol', 'submit', array('label' => 'Eliminar'))
-            ->add('BtnActualizar', 'submit', array('label' => 'Actualizar'))    
+            ->add('BtnEliminarRol', 'submit', array('label' => 'Eliminar'))            
             ->getForm();
         $form->handleRequest($request);
         
@@ -106,73 +105,6 @@ class SegUsuariosController extends Controller
                 }
                 return $this->redirect($this->generateUrl('brs_seg_admin_usuario_detalle', array('codigoUsuario' => $codigoUsuario)));
             }            
-            if($form->get('BtnActualizar')->isClicked()) {
-                $arrControles = $request->request->All();
-                $intIndice = 0;
-                if (isset($arrControles['LblCodigoGuiaDocumento'])){
-                    foreach ($arrControles['LblCodigoGuiaDocumento'] as $intCodigo) {
-                        $arPermisoDocumento = new \Brasa\SeguridadBundle\Entity\SegPermisoDocumento();
-                        $arPermisoDocumento = $em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->find($intCodigo);
-                        if(isset($arrControles['ChkSeleccionarIngreso'.$intCodigo])) {
-                            $arPermisoDocumento->setIngreso(1);
-                        } else {
-                            $arPermisoDocumento->setIngreso(0);
-                        }
-                        if(isset($arrControles['ChkSeleccionarNuevo'.$intCodigo])) {
-                            $arPermisoDocumento->setNuevo(1);
-                        } else {
-                            $arPermisoDocumento->setNuevo(0);
-                        }
-                        if(isset($arrControles['ChkSeleccionarEditar'.$intCodigo])) {
-                            $arPermisoDocumento->setEditar(1);
-                        } else {
-                            $arPermisoDocumento->setEditar(0);
-                        }
-                        if(isset($arrControles['ChkSeleccionarEliminar'.$intCodigo])) {
-                            $arPermisoDocumento->setEliminar(1);
-                        } else {
-                            $arPermisoDocumento->setEliminar(0);
-                        }
-                        if(isset($arrControles['ChkSeleccionarAutorizar'.$intCodigo])) {
-                            $arPermisoDocumento->setAutorizar(1);
-                        } else {
-                            $arPermisoDocumento->setAutorizar(0);
-                        }
-                        if(isset($arrControles['ChkSeleccionarDesautorizar'.$intCodigo])) {
-                            $arPermisoDocumento->setDesautorizar(1);
-                        } else {
-                            $arPermisoDocumento->setDesautorizar(0);
-                        }
-                        if(isset($arrControles['ChkSeleccionarAprobar'.$intCodigo])) {
-                            $arPermisoDocumento->setAprobar(1);
-                        } else {
-                            $arPermisoDocumento->setAprobar(0);
-                        }
-                        if(isset($arrControles['ChkSeleccionarDesaprobar'.$intCodigo])) {
-                            $arPermisoDocumento->setDesaprobar(1);
-                        } else {
-                            $arPermisoDocumento->setDesaprobar(0);
-                        }
-                        if(isset($arrControles['ChkSeleccionarAnular'.$intCodigo])) {
-                            $arPermisoDocumento->setAnular(1);
-                        } else {
-                            $arPermisoDocumento->setAnular(0);
-                        }
-                        if(isset($arrControles['ChkSeleccionarDesanular'.$intCodigo])) {
-                            $arPermisoDocumento->setDesanular(1);
-                        } else {
-                            $arPermisoDocumento->setDesanular(0);
-                        }
-                        if(isset($arrControles['ChkSeleccionarImprimir'.$intCodigo])) {
-                            $arPermisoDocumento->setImprimir(1);
-                        } else {
-                            $arPermisoDocumento->setImprimir(0);
-                        }
-                        $em->persist($arPermisoDocumento);     
-                    }
-                }
-                $em->flush();
-            }
         }
         $arPermisosDocumentos = new \Brasa\SeguridadBundle\Entity\SegPermisoDocumento();
         $arPermisosDocumentos = $em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->findBy(array('codigoUsuarioFk' => $codigoUsuario));
@@ -415,13 +347,38 @@ class SegUsuariosController extends Controller
                 }
             }                                    
         }
-        $arDocumentos = $em->getRepository('BrasaSeguridadBundle:SegDocumento')->findBy(array(), array('modulo' => 'ASC','nombre' => 'ASC'));
+        $arDocumentos = $em->getRepository('BrasaSeguridadBundle:SegDocumento')->findBy(array(), array('tipo' => 'ASC','modulo' => 'ASC','nombre' => 'ASC'));
         return $this->render('BrasaSeguridadBundle:Usuarios:detalleNuevoPermisoDocumento.html.twig', array(
             'arDocumentos' => $arDocumentos,
             'form' => $form->createView()
                 ));
     }
 
+    /**
+     * @Route("/seg/usuario/detalle/permiso/documento/editar/{codigoPermisoDocumento}/", name="brs_seg_usuario_detalle_permiso_documento_editar")
+     */     
+    public function detallePermisoDocumentoEditarAction($codigoPermisoDocumento) {
+        $request = $this->getRequest();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $em = $this->getDoctrine()->getManager();
+        $arPermisoDocumento = new \Brasa\SeguridadBundle\Entity\SegPermisoDocumento();
+        if($codigoPermisoDocumento != 0) {
+            $arPermisoDocumento = $em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->find($codigoPermisoDocumento);
+        }
+        $form = $this->createForm(new SegPermisoDocumentoType(), $arPermisoDocumento);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            if ($form->get('guardar')->isClicked()) {
+                $arPermisoDocumento = $form->getData();   
+                $em->persist($arPermisoDocumento);
+                $em->flush();
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                            
+            }
+        }
+        return $this->render('BrasaSeguridadBundle:Usuarios:detalleEditarPermisoDocumento.html.twig', array(
+            'form' => $form->createView()));
+    }     
+    
     /**
      * @Route("/seg/usuario/detalle/rol/nuevo/{codigoUsuario}/", name="brs_seg_usuario_detalle_rol_nuevo")
      */     
