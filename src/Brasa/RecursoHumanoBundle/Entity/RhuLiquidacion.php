@@ -288,6 +288,11 @@ class RhuLiquidacion
     private $estadoContabilizado = 0;    
     
     /**
+     * @ORM\Column(name="dias_ausentismo_adicional", type="integer")
+     */    
+    private $diasAusentismoAdicional = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="liquidacionesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -1798,5 +1803,29 @@ class RhuLiquidacion
     public function getPagosBancosDetallesLiquidacionRel()
     {
         return $this->pagosBancosDetallesLiquidacionRel;
+    }
+
+    /**
+     * Set diasAusentismoAdicional
+     *
+     * @param integer $diasAusentismoAdicional
+     *
+     * @return RhuLiquidacion
+     */
+    public function setDiasAusentismoAdicional($diasAusentismoAdicional)
+    {
+        $this->diasAusentismoAdicional = $diasAusentismoAdicional;
+
+        return $this;
+    }
+
+    /**
+     * Get diasAusentismoAdicional
+     *
+     * @return integer
+     */
+    public function getDiasAusentismoAdicional()
+    {
+        return $this->diasAusentismoAdicional;
     }
 }

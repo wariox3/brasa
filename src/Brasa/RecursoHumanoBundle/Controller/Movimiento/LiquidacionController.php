@@ -319,6 +319,7 @@ class LiquidacionController extends Controller
             ->add('porcentajeIbp', 'number', array('data' =>$arLiquidacion->getPorcentajeIbp() ,'required' => false))      
             ->add('liquidarSalario', 'checkbox', array('required'  => false))
             ->add('vrIndemnizacion', 'number', array('data' =>$arLiquidacion->getVrIndemnizacion() ,'required' => false))                      
+            ->add('diasAusentismoAdicional', 'number', array('data' =>$arLiquidacion->getDiasAusentismoAdicional() ,'required' => false))                      
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $form->handleRequest($request);
@@ -326,10 +327,12 @@ class LiquidacionController extends Controller
             $arUsuario = $this->get('security.context')->getToken()->getUser();            
             $porcentajeIbp = $form->get('porcentajeIbp')->getData();
             $vrIndemnizacion = $form->get('vrIndemnizacion')->getData();
+            $diasAusentismoAdicional = $form->get('diasAusentismoAdicional')->getData();
             $liquidarSalario = $form->get('liquidarSalario')->getData();
             $arLiquidacion->setPorcentajeIbp($porcentajeIbp);
             $arLiquidacion->setLiquidarSalario($liquidarSalario);
             $arLiquidacion->setVrIndemnizacion($vrIndemnizacion);
+            $arLiquidacion->setDiasAusentismoAdicional($diasAusentismoAdicional);
             $em->persist($arLiquidacion);
             $em->flush();
             return $this->redirect($this->generateUrl('brs_rhu_movimiento_liquidacion_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));
