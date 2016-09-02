@@ -94,6 +94,16 @@ class RhuPagoAdicional
     private $codigoUsuario;
     
     /**
+     * @ORM\Column(name="fecha_creacion", type="datetime", nullable=true)
+     */    
+    private $fechaCreacion;     
+
+    /**
+     * @ORM\Column(name="fecha_ultima_edicion", type="datetime", nullable=true)
+     */    
+    private $fechaUltimaEdicion;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuPagoConcepto", inversedBy="pagosAdicionalesPagoConceptoRel")
      * @ORM\JoinColumn(name="codigo_pago_concepto_fk", referencedColumnName="codigo_pago_concepto_pk")
      */
@@ -111,6 +121,8 @@ class RhuPagoAdicional
      */
     protected $programacionPagoRel;    
     
+
+
 
     /**
      * Get codigoPagoAdicionalPk
@@ -192,6 +204,78 @@ class RhuPagoAdicional
     public function getTipoAdicional()
     {
         return $this->tipoAdicional;
+    }
+
+    /**
+     * Set modalidad
+     *
+     * @param integer $modalidad
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setModalidad($modalidad)
+    {
+        $this->modalidad = $modalidad;
+
+        return $this;
+    }
+
+    /**
+     * Get modalidad
+     *
+     * @return integer
+     */
+    public function getModalidad()
+    {
+        return $this->modalidad;
+    }
+
+    /**
+     * Set codigoPeriodoFk
+     *
+     * @param integer $codigoPeriodoFk
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setCodigoPeriodoFk($codigoPeriodoFk)
+    {
+        $this->codigoPeriodoFk = $codigoPeriodoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPeriodoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPeriodoFk()
+    {
+        return $this->codigoPeriodoFk;
+    }
+
+    /**
+     * Set fecha
+     *
+     * @param \DateTime $fecha
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setFecha($fecha)
+    {
+        $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    /**
+     * Get fecha
+     *
+     * @return \DateTime
+     */
+    public function getFecha()
+    {
+        return $this->fecha;
     }
 
     /**
@@ -363,6 +447,102 @@ class RhuPagoAdicional
     }
 
     /**
+     * Set estadoInactivo
+     *
+     * @param boolean $estadoInactivo
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setEstadoInactivo($estadoInactivo)
+    {
+        $this->estadoInactivo = $estadoInactivo;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoInactivo
+     *
+     * @return boolean
+     */
+    public function getEstadoInactivo()
+    {
+        return $this->estadoInactivo;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
+    }
+
+    /**
+     * Set fechaCreacion
+     *
+     * @param \DateTime $fechaCreacion
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setFechaCreacion($fechaCreacion)
+    {
+        $this->fechaCreacion = $fechaCreacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaCreacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaCreacion()
+    {
+        return $this->fechaCreacion;
+    }
+
+    /**
+     * Set fechaUltimaEdicion
+     *
+     * @param \DateTime $fechaUltimaEdicion
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setFechaUltimaEdicion($fechaUltimaEdicion)
+    {
+        $this->fechaUltimaEdicion = $fechaUltimaEdicion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaUltimaEdicion
+     *
+     * @return \DateTime
+     */
+    public function getFechaUltimaEdicion()
+    {
+        return $this->fechaUltimaEdicion;
+    }
+
+    /**
      * Set pagoConceptoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto $pagoConceptoRel
@@ -432,125 +612,5 @@ class RhuPagoAdicional
     public function getProgramacionPagoRel()
     {
         return $this->programacionPagoRel;
-    }
-
-    /**
-     * Set codigoUsuario
-     *
-     * @param string $codigoUsuario
-     *
-     * @return RhuPagoAdicional
-     */
-    public function setCodigoUsuario($codigoUsuario)
-    {
-        $this->codigoUsuario = $codigoUsuario;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoUsuario
-     *
-     * @return string
-     */
-    public function getCodigoUsuario()
-    {
-        return $this->codigoUsuario;
-    }
-
-    /**
-     * Set estadoInactivo
-     *
-     * @param boolean $estadoInactivo
-     *
-     * @return RhuPagoAdicional
-     */
-    public function setEstadoInactivo($estadoInactivo)
-    {
-        $this->estadoInactivo = $estadoInactivo;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoInactivo
-     *
-     * @return boolean
-     */
-    public function getEstadoInactivo()
-    {
-        return $this->estadoInactivo;
-    }
-
-    /**
-     * Set modalidad
-     *
-     * @param integer $modalidad
-     *
-     * @return RhuPagoAdicional
-     */
-    public function setModalidad($modalidad)
-    {
-        $this->modalidad = $modalidad;
-
-        return $this;
-    }
-
-    /**
-     * Get modalidad
-     *
-     * @return integer
-     */
-    public function getModalidad()
-    {
-        return $this->modalidad;
-    }
-
-    /**
-     * Set fecha
-     *
-     * @param \DateTime $fecha
-     *
-     * @return RhuPagoAdicional
-     */
-    public function setFecha($fecha)
-    {
-        $this->fecha = $fecha;
-
-        return $this;
-    }
-
-    /**
-     * Get fecha
-     *
-     * @return \DateTime
-     */
-    public function getFecha()
-    {
-        return $this->fecha;
-    }
-
-    /**
-     * Set codigoPeriodoFk
-     *
-     * @param integer $codigoPeriodoFk
-     *
-     * @return RhuPagoAdicional
-     */
-    public function setCodigoPeriodoFk($codigoPeriodoFk)
-    {
-        $this->codigoPeriodoFk = $codigoPeriodoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoPeriodoFk
-     *
-     * @return integer
-     */
-    public function getCodigoPeriodoFk()
-    {
-        return $this->codigoPeriodoFk;
     }
 }

@@ -77,6 +77,7 @@
                 <th>ACT</th>
                 <th>USUARIO</th>
                 <th></th>
+                <th></th>
                 <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
             </tr>
             {% for arPagosAdicionales in arPagosAdicionales %}                
@@ -95,6 +96,7 @@
                 <td>{% if arPagosAdicionales.estadoInactivo == 1 %} NO {% else %} SI {% endif %}</td>                        
                 <td>{{ arPagosAdicionales.codigoUsuario }}</td> 
                 <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_agregar_valoradicionaleditar', { 'tipo': arPagosAdicionales.tipoAdicional, 'codigoPagoAdicional': arPagosAdicionales.codigoPagoAdicionalPk, 'modalidad': modalidad, 'periodo': periodo }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                
+                <td><a href="{{ path('brs_rhu_movimiento_pago_adicional_detalle', { 'codigoPagoAdicional': arPagosAdicionales.codigoPagoAdicionalPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>                
                 <td style="text-align: center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPagosAdicionales.codigoPagoAdicionalPk }}" /></td>
             </tr>
             {% endfor %}

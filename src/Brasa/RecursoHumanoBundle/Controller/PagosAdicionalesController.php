@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuAdicionalPagoType;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class PagosAdicionalesController extends Controller
 {
@@ -190,6 +191,27 @@ class PagosAdicionalesController extends Controller
                     'form' => $form->createView()
                     ));
     }    
+
+    /**
+     * @Route("/rhu/movimiento/pago/adicional/detalle/{codigoPagoAdicional}", name="brs_rhu_movimiento_pago_adicional_detalle")
+     */    
+    public function detalleAdicionalAction($codigoPagoAdicional) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $objMensaje = $this->get('mensajes_brasa');
+        $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+        $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
+        $form = $this->createFormBuilder()
+            ->getForm();
+        $form->handleRequest($request);
+        if($form->isValid()) {           
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:detallePagoAdicional.html.twig', array(
+                    'arPagoAdicional' => $arPagoAdicional,
+                    'form' => $form->createView()
+                    ));
+    }
     
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();

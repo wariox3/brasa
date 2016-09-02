@@ -5,9 +5,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 
 class PagosAdicionalesAgregarController extends Controller
-{      
-    
-    //agregar adicionales al pago desde movimientos y solo permanente
+{              
     public function valorAdicionalAction($tipo, $modalidad, $periodo) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -116,6 +114,8 @@ class PagosAdicionalesAgregarController extends Controller
                                         $arPagoAdicional->setFecha($arPagoAdicionalPeriodo->getFecha());
                                     }                                                                                                            
                                 }
+                                $arPagoAdicional->setFechaCreacion(new \DateTime('now'));
+                                $arPagoAdicional->setFechaUltimaEdicion(new \DateTime('now'));
                                 $em->persist($arPagoAdicional);                                                        
                                 $em->flush();
                             }
@@ -137,7 +137,6 @@ class PagosAdicionalesAgregarController extends Controller
             ));
     }
     
-    //editar adicionales al pago desde movimientos y solo permanente
     public function valorAdicionalEditarAction($tipo, $codigoPagoAdicional, $modalidad, $periodo) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -244,6 +243,7 @@ class PagosAdicionalesAgregarController extends Controller
                         $arPagoAdicional->setTipoAdicional($tipo);
                         $arPagoAdicional->setPermanente(1);
                         $arPagoAdicional->setAplicaDiaLaborado($form->get('aplicarDiaLaborado')->getData());
+                        $arPagoAdicional->setFechaUltimaEdicion(new \DateTime('now'));
                         $em->persist($arPagoAdicional);                                                        
                         $em->flush();
                         if($form->get('BtnGuardaryNuevo')->isClicked()) {

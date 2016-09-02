@@ -205,23 +205,11 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                 $arPagoDetalle->setPagoRel($arPago);
                 $arPagoDetalle->setPagoConceptoRel($arPagoAdicional->getPagoConceptoRel());
                 $arPagoDetalle->setAdicional(1);
-                $douPagoDetalle = 0;
-                if($arPagoAdicional->getPagoConceptoRel()->getComponePorcentaje() == 1) {
-                    $douVrHoraAdicional = ($douVrHora * $arPagoAdicional->getPagoConceptoRel()->getPorPorcentaje())/100;
-                    $douPagoDetalle = $douVrHoraAdicional * $arPagoAdicional->getCantidad();
-                    $arPagoDetalle->setPorcentajeAplicado($arPagoAdicional->getPagoConceptoRel()->getPorPorcentaje());
-                    $arPagoDetalle->setVrHora($douVrHoraAdicional);
-                    $arPagoDetalle->setVrDia($douVrDia);
-                    $arPagoDetalle->setNumeroHoras($arPagoAdicional->getCantidad());
-                }
-                if($arPagoAdicional->getPagoConceptoRel()->getComponeValor() == 1) {
-                    $douPagoDetalle = $arPagoAdicional->getValor();
-                    if($arPagoAdicional->getAplicaDiaLaborado() == 1) {                                                
-                        $diasPeriodo = $arCentroCosto->getPeriodoPagoRel()->getDias();
-                        $valorDia = $arPagoAdicional->getValor() / $diasPeriodo;
-                        $douPagoDetalle = $valorDia * ($arProgramacionPagoDetalle->getHorasPeriodo() / $intFactorDia);
-                    }
-                    $arPagoDetalle->setVrDia($douVrDia);
+                $douPagoDetalle = $arPagoAdicional->getValor();
+                if($arPagoAdicional->getAplicaDiaLaborado() == 1) {                                                
+                    $diasPeriodo = $arCentroCosto->getPeriodoPagoRel()->getDias();
+                    $valorDia = $arPagoAdicional->getValor() / $diasPeriodo;
+                    $douPagoDetalle = $valorDia * ($arProgramacionPagoDetalle->getHorasPeriodo() / $intFactorDia);
                 }
                 $douPagoDetalle = round($douPagoDetalle);
                 $arPagoDetalle->setDetalle($arPagoAdicional->getDetalle());
