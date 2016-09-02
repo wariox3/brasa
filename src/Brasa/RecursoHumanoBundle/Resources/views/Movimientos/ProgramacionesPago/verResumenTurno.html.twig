@@ -161,7 +161,7 @@
                 <th>{{ form_widget(form.BtnActualizarHoras, { 'attr': {'class': 'btn btn-default btn-xs'} }) }}{{ form_widget(form.BtnActualizarHorasSoportePago, { 'attr': {'class': 'btn btn-default btn-xs'} }) }}</th>
             </tr>
         </table> 
-        {% if arPago.estadoPagado == 0 %}
+        {% if arProgramacionPagoDetalle.programacionPagoRel.estadoPagado == 0 %}
             <table class="table table-striped table-bordered table-condensed">
             <tr>
                 <th>CONCEPTO</th>                    

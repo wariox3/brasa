@@ -18,6 +18,11 @@ class RhuEmbargo
     private $codigoEmbargoPk;                          
     
     /**
+     * @ORM\Column(name="codigo_embargo_tipo_fk", type="integer", nullable=true)
+     */    
+    private $codigoEmbargoTipoFk;    
+    
+    /**
      * @ORM\Column(name="fecha", type="date")
      */    
     private $fecha;           
@@ -26,7 +31,7 @@ class RhuEmbargo
      * @ORM\Column(name="numero", type="string", length=30, nullable=true)
      */    
     private $numero;     
-    
+           
     /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
      */    
@@ -35,17 +40,37 @@ class RhuEmbargo
     /**     
      * @ORM\Column(name="estado_activo", type="boolean")
      */    
-    private $estadoActivo = 0;    
+    private $estadoActivo = false;    
     
     /**     
      * @ORM\Column(name="valor_fijo", type="boolean")
      */    
-    private $valorFijo = 0;    
+    private $valorFijo = false;    
+    
+    /**     
+     * @ORM\Column(name="porcentaje_devengado", type="boolean")
+     */    
+    private $porcentajeDevengado = false;    
+
+    /**     
+     * @ORM\Column(name="partesExcedaSalarioMinimo", type="boolean")
+     */    
+    private $partesExcedaSalarioMinimo = false; 
+    
+    /**
+     * @ORM\Column(name="partes", type="float")
+     */
+    private $partes = 0;    
     
     /**
      * @ORM\Column(name="valor", type="float")
      */
     private $valor = 0;
+
+    /**
+     * @ORM\Column(name="porcentaje", type="float")
+     */
+    private $porcentaje = 0;
     
     /**
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
@@ -58,11 +83,18 @@ class RhuEmbargo
     private $comentarios;    
     
     /**
+     * @ORM\ManyToOne(targetEntity="RhuEmbargoTipo", inversedBy="embargosEmbargoTipoRel")
+     * @ORM\JoinColumn(name="codigo_embargo_tipo_fk", referencedColumnName="codigo_embargo_tipo_pk")
+     */
+    protected $embargoTipoRel;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="embargosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
     protected $empleadoRel;    
     
+
 
     /**
      * Get codigoEmbargoPk
@@ -72,6 +104,30 @@ class RhuEmbargo
     public function getCodigoEmbargoPk()
     {
         return $this->codigoEmbargoPk;
+    }
+
+    /**
+     * Set codigoEmbargoTipoFk
+     *
+     * @param integer $codigoEmbargoTipoFk
+     *
+     * @return RhuEmbargo
+     */
+    public function setCodigoEmbargoTipoFk($codigoEmbargoTipoFk)
+    {
+        $this->codigoEmbargoTipoFk = $codigoEmbargoTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEmbargoTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEmbargoTipoFk()
+    {
+        return $this->codigoEmbargoTipoFk;
     }
 
     /**
@@ -267,6 +323,30 @@ class RhuEmbargo
     }
 
     /**
+     * Set embargoTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmbargoTipo $embargoTipoRel
+     *
+     * @return RhuEmbargo
+     */
+    public function setEmbargoTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmbargoTipo $embargoTipoRel = null)
+    {
+        $this->embargoTipoRel = $embargoTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get embargoTipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmbargoTipo
+     */
+    public function getEmbargoTipoRel()
+    {
+        return $this->embargoTipoRel;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -288,5 +368,101 @@ class RhuEmbargo
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
+    }
+
+    /**
+     * Set porcentajeDevengado
+     *
+     * @param boolean $porcentajeDevengado
+     *
+     * @return RhuEmbargo
+     */
+    public function setPorcentajeDevengado($porcentajeDevengado)
+    {
+        $this->porcentajeDevengado = $porcentajeDevengado;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeDevengado
+     *
+     * @return boolean
+     */
+    public function getPorcentajeDevengado()
+    {
+        return $this->porcentajeDevengado;
+    }
+
+    /**
+     * Set porcentaje
+     *
+     * @param float $porcentaje
+     *
+     * @return RhuEmbargo
+     */
+    public function setPorcentaje($porcentaje)
+    {
+        $this->porcentaje = $porcentaje;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentaje
+     *
+     * @return float
+     */
+    public function getPorcentaje()
+    {
+        return $this->porcentaje;
+    }
+
+    /**
+     * Set partesExcedaSalarioMinimo
+     *
+     * @param boolean $partesExcedaSalarioMinimo
+     *
+     * @return RhuEmbargo
+     */
+    public function setPartesExcedaSalarioMinimo($partesExcedaSalarioMinimo)
+    {
+        $this->partesExcedaSalarioMinimo = $partesExcedaSalarioMinimo;
+
+        return $this;
+    }
+
+    /**
+     * Get partesExcedaSalarioMinimo
+     *
+     * @return boolean
+     */
+    public function getPartesExcedaSalarioMinimo()
+    {
+        return $this->partesExcedaSalarioMinimo;
+    }
+
+    /**
+     * Set partes
+     *
+     * @param float $partes
+     *
+     * @return RhuEmbargo
+     */
+    public function setPartes($partes)
+    {
+        $this->partes = $partes;
+
+        return $this;
+    }
+
+    /**
+     * Get partes
+     *
+     * @return float
+     */
+    public function getPartes()
+    {
+        return $this->partes;
     }
 }

@@ -9,11 +9,22 @@ class RhuEmbargoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {        
-        $builder                                           
+        $builder   
+            ->add('embargoTipoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEmbargoTipo',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('et')
+                    ->orderBy('et.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                 
             ->add('numero', 'text', array('required' => false))   
             ->add('valor', 'number', array('required' => false))   
+            ->add('porcentaje', 'number', array('required' => false))                               
             ->add('valorFijo', 'checkbox', array('required'  => false))                
+            ->add('porcentajeDevengado', 'checkbox', array('required'  => false))                
             ->add('estadoActivo', 'checkbox', array('required'  => false))                
+            ->add('partesExcedaSalarioMinimo', 'checkbox', array('required'  => false))                                            
+            ->add('partes', 'number', array('required' => false))                                                           
             ->add('comentarios', 'textarea', array('required' => false))                
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));        

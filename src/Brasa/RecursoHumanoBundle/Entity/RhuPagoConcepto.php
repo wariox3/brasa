@@ -169,6 +169,11 @@ class RhuPagoConcepto
     protected $licenciasTiposPagoConceptoRel;         
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuEmbargoTipo", mappedBy="pagoConceptoRel")
+     */
+    protected $embargosTiposPagoConceptoRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuIncapacidadTipo", mappedBy="pagoConceptoRel")
      */
     protected $incapacidadesTiposPagoConceptoRel;    
@@ -1268,5 +1273,39 @@ class RhuPagoConcepto
     public function getLiquidacionesAdicionalesPagoConceptoRel()
     {
         return $this->liquidacionesAdicionalesPagoConceptoRel;
+    }
+
+    /**
+     * Add embargosTiposPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmbargoTipo $embargosTiposPagoConceptoRel
+     *
+     * @return RhuPagoConcepto
+     */
+    public function addEmbargosTiposPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmbargoTipo $embargosTiposPagoConceptoRel)
+    {
+        $this->embargosTiposPagoConceptoRel[] = $embargosTiposPagoConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove embargosTiposPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmbargoTipo $embargosTiposPagoConceptoRel
+     */
+    public function removeEmbargosTiposPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmbargoTipo $embargosTiposPagoConceptoRel)
+    {
+        $this->embargosTiposPagoConceptoRel->removeElement($embargosTiposPagoConceptoRel);
+    }
+
+    /**
+     * Get embargosTiposPagoConceptoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmbargosTiposPagoConceptoRel()
+    {
+        return $this->embargosTiposPagoConceptoRel;
     }
 }

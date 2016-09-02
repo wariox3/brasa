@@ -67,7 +67,7 @@ class EmbargoController extends Controller
         if($codigoEmbargo != 0) {
             $arEmbargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmbargo')->find($codigoEmbargo);
         } else {
-            $arEmbargo->setEstadoActivo(1);
+            $arEmbargo->setEstadoActivo(true);
             $arEmbargo->setFecha(new \DateTime('now'));
         }        
 
@@ -120,11 +120,6 @@ class EmbargoController extends Controller
         $em = $this->getDoctrine()->getManager();                
         $session = $this->getRequest()->getSession();
         $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmbargo')->listaDQL(                   
-                $session->get('filtroEmbargoNumero'),
-                $session->get('filtroCodigoCentroCosto'),
-                $session->get('filtroEmbargoEstadoTranscripcion'),
-                $session->get('filtroIdentificacion'),
-                $session->get('filtroEmbargoNumeroEps')
                 );  
     }         
     
@@ -132,11 +127,7 @@ class EmbargoController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');        
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);                
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroEmbargoNumero', $form->get('TxtNumero')->getData());
-        $session->set('filtroEmbargoNumeroEps', $form->get('TxtNumeroEps')->getData());                
-        $session->set('filtroEmbargoEstadoTranscripcion', $form->get('estadoTranscripcion')->getData());                        
     }         
     
     private function generarExcel() {
@@ -154,53 +145,26 @@ class EmbargoController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
-                    ->setCellValue('B1', 'NÚMERO EPS')
-                    ->setCellValue('C1', 'EPS')
-                    ->setCellValue('D1', 'INCAPACIDAD')
-                    ->setCellValue('E1', 'IDENTIFICACIÓN')
-                    ->setCellValue('F1', 'NOMBRE')
-                    ->setCellValue('G1', 'CENTRO COSTO')
-                    ->setCellValue('H1', 'DESDE')
-                    ->setCellValue('I1', 'HASTA')
-                    ->setCellValue('J1', 'DÍAS');
+                    ->setCellValue('B1', 'TIPO')
+                    ->setCellValue('C1', 'NUMERO')                    
+                    ->setCellValue('D1', 'IDENTIFICACIÓN')
+                    ->setCellValue('E1', 'NOMBRE')                    
+                    ->setCellValue('F1', 'FECHA');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);        
+        $arEmbargos = new \Brasa\RecursoHumanoBundle\Entity\RhuEmbargo();
         $arEmbargos = $query->getResult();
         foreach ($arEmbargos as $arEmbargo) {
-        $centroCosto = "";
-        if ($arEmbargo->getCodigoCentroCostoFk() != null){
-            $centroCosto = $arEmbargo->getCentroCostoRel()->getNombre();
-
-        }
-        $salud = "";
-        if ($arEmbargo->getCodigoEntidadSaludFk() != null){
-            $salud = $arEmbargo->getEntidadSaludRel()->getNombre();
-
-        }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arEmbargo->getCodigoEmbargoPk())
-                    ->setCellValue('B' . $i, $arEmbargo->getNumeroEps())
-                    ->setCellValue('C' . $i, $salud)
-                    ->setCellValue('D' . $i, $arEmbargo->getEmbargoTipoRel()->getNombre())
-                    ->setCellValue('E' . $i, $arEmbargo->getEmpleadoRel()->getnumeroIdentificacion())
-                    ->setCellValue('F' . $i, $arEmbargo->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('G' . $i, $centroCosto)
-                    ->setCellValue('H' . $i, $arEmbargo->getFechaDesde()->format('Y-m-d'))
-                    ->setCellValue('I' . $i, $arEmbargo->getFechaHasta()->format('Y-m-d'))
-                    ->setCellValue('J' . $i, $arEmbargo->getCantidad());
+                    ->setCellValue('B' . $i, $arEmbargo->getEmbargoTipoRel()->getNombre())
+                    ->setCellValue('C' . $i, $arEmbargo->getNumero())                                        
+                    ->setCellValue('D' . $i, $arEmbargo->getEmpleadoRel()->getnumeroIdentificacion())
+                    ->setCellValue('E' . $i, $arEmbargo->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('F' . $i, $arEmbargo->getFecha()->format('Y-m-d'));
             $i++;
         }
 
