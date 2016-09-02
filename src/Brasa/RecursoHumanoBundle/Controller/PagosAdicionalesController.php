@@ -49,8 +49,10 @@ class PagosAdicionalesController extends Controller
                         $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
                         if($arPagoAdicional->getEstadoInactivo() == 1) {
                             $arPagoAdicional->setEstadoInactivo(0);
+                            $arPagoAdicional->setFechaUltimaEdicion(new \DateTime('now'));
                         } else {
                             $arPagoAdicional->setEstadoInactivo(1);
+                            $arPagoAdicional->setFechaUltimaEdicion(new \DateTime('now'));
                         }
                         $em->persist($arPagoAdicional);
                     }

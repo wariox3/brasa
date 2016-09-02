@@ -19,6 +19,7 @@ class UtilidadesCargarAdicionalesPagoController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnCargar')->isClicked()) {
+                $arUsuario = $this->get('security.context')->getToken()->getUser();
                 set_time_limit(0);
                 ini_set("memory_limit", -1);
                 $fecha = new \DateTime('now');
@@ -83,6 +84,9 @@ class UtilidadesCargarAdicionalesPagoController extends Controller
                                 $arPagoAdicional->setCodigoPeriodoFk($periodo);
                                 $arPagoAdicional->setFecha($fecha);
                             }
+                            $arPagoAdicional->setFechaCreacion(new \DateTime('now'));
+                            $arPagoAdicional->setFechaUltimaEdicion(new \DateTime('now'));                            
+                            $arPagoAdicional->setCodigoUsuario($arUsuario->getUserName());                            
                             $em->persist($arPagoAdicional);                             
                         } else {
                             $error .= "Empleado" . $carga['identificacion'] . " no existe ";

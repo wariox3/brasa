@@ -109,6 +109,7 @@ class RhuPagoAdicionalRepository extends EntityRepository {
         $arPagosAdicionales = $objQuery->getResult();         
         return $arPagosAdicionales;
     } 
+    
     public function programacionPagoDql($codigoEmpleado = "", $fechaDesde, $fechaHasta) {
         $em = $this->getEntityManager();
         $dql = "SELECT pa FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa "
@@ -145,6 +146,7 @@ class RhuPagoAdicionalRepository extends EntityRepository {
             return true;
         }    
     }
+    
     public function eliminarTodoAdicionalesValor($codigoProgramacionPago) {
         $em = $this->getEntityManager();
         $arAdicionalesPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();

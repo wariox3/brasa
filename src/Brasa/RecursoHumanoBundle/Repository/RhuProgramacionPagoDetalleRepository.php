@@ -325,6 +325,9 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                 }                                                                                                                                                                                                                                                                                                                                              
             }
 
+            //Embargos            
+            
+            
             //Liquidar salario
             if($arContrato->getSalarioIntegral() == 1) {
                 $intPagoConceptoSalario = $arConfiguracion->getCodigoSalarioIntegral();

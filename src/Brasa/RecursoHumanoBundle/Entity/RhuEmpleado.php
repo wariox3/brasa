@@ -543,6 +543,11 @@ class RhuEmpleado
     protected $incapacidadesEmpleadoRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="RhuEmbargo", mappedBy="empleadoRel")
+     */
+    protected $embargosEmpleadoRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuVacacion", mappedBy="empleadoRel")
      */
     protected $vacacionesEmpleadoRel;           
@@ -4227,5 +4232,39 @@ class RhuEmpleado
     public function getCentroCostoContabilidadRel()
     {
         return $this->centroCostoContabilidadRel;
+    }
+
+    /**
+     * Add embargosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmbargo $embargosEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addEmbargosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmbargo $embargosEmpleadoRel)
+    {
+        $this->embargosEmpleadoRel[] = $embargosEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove embargosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmbargo $embargosEmpleadoRel
+     */
+    public function removeEmbargosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmbargo $embargosEmpleadoRel)
+    {
+        $this->embargosEmpleadoRel->removeElement($embargosEmpleadoRel);
+    }
+
+    /**
+     * Get embargosEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmbargosEmpleadoRel()
+    {
+        return $this->embargosEmpleadoRel;
     }
 }
