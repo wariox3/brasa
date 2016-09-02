@@ -483,9 +483,13 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                     $douPagoDetalle = $arEmbargo->getValor();
                 }
                 if($arEmbargo->getPorcentajeDevengado()) {                
-                    $douPagoDetalle = (($devengado - $salud - $pension) * $arEmbargo->getPorcentaje()) / 100;
+                    $douPagoDetalle = ($devengado * $arEmbargo->getPorcentaje()) / 100;
                     $douPagoDetalle = round($douPagoDetalle);
                 }
+                if($arEmbargo->getPorcentajeDevengadoMenosDescuentoLey()) {                
+                    $douPagoDetalle = (($devengado - $salud - $pension) * $arEmbargo->getPorcentaje()) / 100;
+                    $douPagoDetalle = round($douPagoDetalle);
+                }                
                 if($arEmbargo->getPartesExcedaSalarioMinimo()) {
                     $salarioMinimoDevengado = ($douVrSalarioMinimo / 30) * $arProgramacionPagoDetalle->getDiasTransporte();
                     $baseDescuento = $devengado - $salarioMinimoDevengado;

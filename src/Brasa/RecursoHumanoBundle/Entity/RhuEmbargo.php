@@ -53,6 +53,11 @@ class RhuEmbargo
     private $porcentajeDevengado = false;    
 
     /**     
+     * @ORM\Column(name="porcentaje_devengado_menos_descuento_ley", type="boolean")
+     */    
+    private $porcentajeDevengadoMenosDescuentoLey = false;    
+    
+    /**     
      * @ORM\Column(name="partesExcedaSalarioMinimo", type="boolean")
      */    
     private $partesExcedaSalarioMinimo = false; 
@@ -464,5 +469,29 @@ class RhuEmbargo
     public function getPartes()
     {
         return $this->partes;
+    }
+
+    /**
+     * Set porcentajeDevengadoMenosDescuentoLey
+     *
+     * @param boolean $porcentajeDevengadoMenosDescuentoLey
+     *
+     * @return RhuEmbargo
+     */
+    public function setPorcentajeDevengadoMenosDescuentoLey($porcentajeDevengadoMenosDescuentoLey)
+    {
+        $this->porcentajeDevengadoMenosDescuentoLey = $porcentajeDevengadoMenosDescuentoLey;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeDevengadoMenosDescuentoLey
+     *
+     * @return boolean
+     */
+    public function getPorcentajeDevengadoMenosDescuentoLey()
+    {
+        return $this->porcentajeDevengadoMenosDescuentoLey;
     }
 }
