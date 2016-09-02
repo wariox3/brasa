@@ -8,6 +8,7 @@ class ContratosController extends Controller
 {
     var $fechaDesdeInicia;
     var $fechaHastaInicia;
+    var $strSqlLista = "";
 
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -23,19 +24,19 @@ class ContratosController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if($form->get('BtnFiltrar')->isClicked()) {
-                $this->filtrar($form);
-                $form = $this->formularioLista();
+               $this->filtrar($form);
                 $this->listar();
             }
             if($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
-                $form = $this->formularioLista();
                 $this->listar();
                 $this->generarExcel();
+                
             }
         }
         
-        $arContratos = $paginator->paginate($em->createQuery($session->get('dqlContratoLista')), $request->query->get('page', 1), 20);
+        $arContratos = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);
+        
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:lista.html.twig', array(
             'arContratos' => $arContratos,
             'form' => $form->createView()));
@@ -712,15 +713,15 @@ class ContratosController extends Controller
     }
 
     private function listar() {
-        $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $session->set('dqlContratoLista', $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->listaDQL(
+        $em = $this->getDoctrine()->getManager();
+        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->listaDQL(
                 $session->get('filtroIdentificacion'),
                 $session->get('filtroDesdeInicia'),
                 $session->get('filtroHastaInicia'),
                 $session->get('filtroContratoActivo'),
                 $session->get('filtroCodigoCentroCosto')
-                ));
+                );
     }
     
     public function documentosAction($codigoContrato) {
@@ -873,9 +874,11 @@ class ContratosController extends Controller
                     ->setCellValue('X1', 'ULT. PAGO CESANTIAS')
                     ->setCellValue('Y1', 'ULT. PAGO VACACIONES');
         $i = 2;
-        $query = $em->createQuery($session->get('dqlContratoLista'));
+        
+        $query = $em->createQuery($this->strSqlLista);
         $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContratos = $query->getResult();
+        
         foreach ($arContratos as $arContrato) {
             if ($arContrato->getCodigoSalarioTipoFk() == null){
                 $tipoSalario = "";

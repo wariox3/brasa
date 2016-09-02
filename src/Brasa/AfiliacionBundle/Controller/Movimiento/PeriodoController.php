@@ -14,6 +14,7 @@ class PeriodoController extends Controller
     public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();        
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->lista();
@@ -25,26 +26,33 @@ class PeriodoController extends Controller
                 $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->generar($codigoPeriodo);
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
             }
+            
             if($request->request->get('OpDeshacer')) {            
                 $codigoPeriodo = $request->request->get('OpDeshacer');
-                $strSql = "DELETE FROM afi_periodo_detalle WHERE codigo_periodo_fk = " . $codigoPeriodo;           
-                $em->getConnection()->executeQuery($strSql);                 
-                $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
-                $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);                
-                $arPeriodo->setEstadoGenerado(0);
-                $arPeriodo->setSubtotal(0);
-                $arPeriodo->setTotal(0);
-                $arPeriodo->setIva(0);
-                $arPeriodo->setAdministracion(0);
-                $arPeriodo->setSalud(0);
-                $arPeriodo->setPension(0);
-                $arPeriodo->setRiesgos(0);
-                $arPeriodo->setCaja(0);
-                $arPeriodo->setIcbf(0);
-                $arPeriodo->setSena(0);
-                $em->persist($arPeriodo);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
+                $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();                
+                $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
+                if ($arPeriodo->getEstadoFacturado() == 0){
+                    $strSql = "DELETE FROM afi_periodo_detalle WHERE codigo_periodo_fk = " . $codigoPeriodo;           
+                    $em->getConnection()->executeQuery($strSql);                 
+                    $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
+                    $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);                
+                    $arPeriodo->setEstadoGenerado(0);
+                    $arPeriodo->setSubtotal(0);
+                    $arPeriodo->setTotal(0);
+                    $arPeriodo->setIva(0);
+                    $arPeriodo->setAdministracion(0);
+                    $arPeriodo->setSalud(0);
+                    $arPeriodo->setPension(0);
+                    $arPeriodo->setRiesgos(0);
+                    $arPeriodo->setCaja(0);
+                    $arPeriodo->setIcbf(0);
+                    $arPeriodo->setSena(0);
+                    $em->persist($arPeriodo);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
+                } else {
+                    $objMensaje->Mensaje('error','No se puede desgenerar el cobro, esta siendo utilizado en facturas',$this);
+                }    
             }
             
             if($request->request->get('OpGenerarPago')) {            
@@ -55,14 +63,20 @@ class PeriodoController extends Controller
                         
             if($request->request->get('OpDeshacerPago')) {            
                 $codigoPeriodo = $request->request->get('OpDeshacerPago');
-                $strSql = "DELETE FROM afi_periodo_detalle_pago WHERE codigo_periodo_fk = " . $codigoPeriodo;           
-                $em->getConnection()->executeQuery($strSql);                 
-                $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
-                $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);                
-                $arPeriodo->setEstadoPagoGenerado(0);
-                $em->persist($arPeriodo);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
+                $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();                
+                $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
+                if ($arPeriodo->getEstadoFacturado() == 0){
+                    $strSql = "DELETE FROM afi_periodo_detalle_pago WHERE codigo_periodo_fk = " . $codigoPeriodo;           
+                    $em->getConnection()->executeQuery($strSql);                 
+                    $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
+                    $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);                
+                    $arPeriodo->setEstadoPagoGenerado(0);
+                    $em->persist($arPeriodo);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
+                } else {
+                    $objMensaje->Mensaje('error','No se puede desgenerar el pago, esta siendo utilizado en facturas',$this);
+                }    
             }            
 
             if($request->request->get('OpCerrar')) {            

@@ -142,7 +142,7 @@ class PeriodoCobro extends \FPDF_FPDF {
         $this->SetFont('', 'B', 6);
 
         //creamos la cabecera de la tabla.
-        $w = array(20, 54, 8, 15, 15, 30, 30, 20, 15, 13, 13, 10, 15 ,7);
+        $w = array(20, 54, 8, 15, 15, 30, 30, 20, 15, 11, 15, 10, 15 ,7);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -166,6 +166,7 @@ class PeriodoCobro extends \FPDF_FPDF {
         $pdf->SetFont('Arial', '', 7);
         $var = $arPeriodo->getTotal();
         $var2 = count($arPeriodoDetalles);
+        $var3 = $arPeriodo->getSubtotal();
         foreach ($arPeriodoDetalles as $arPeriodoDetalle) {                        
             $pdf->Cell(20, 4, $arPeriodoDetalle->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
                 $pdf->SetFont('Arial', '', 6);
@@ -178,8 +179,8 @@ class PeriodoCobro extends \FPDF_FPDF {
                 $pdf->Cell(20, 4, utf8_decode($arPeriodoDetalle->getContratoRel()->getClasificacionRiesgoRel()->getNombre()), 1, 0, 'L');
                 $pdf->Cell(15, 4, utf8_decode($arPeriodoDetalle->getContratoRel()->getEntidadCajaRel()->getNombre()), 1, 0, 'L');
                 $pdf->SetFont('Arial', '', 7);
-                $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getAdministracion(), 0, '.', ','), 1, 0, 'R');
-                $pdf->Cell(13, 4, number_format($arPeriodoDetalle->getSubtotal(), 0, '.', ','), 1, 0, 'R');
+                $pdf->Cell(11, 4, number_format($arPeriodoDetalle->getAdministracion(), 0, '.', ','), 1, 0, 'R');
+                $pdf->Cell(15, 4, number_format($arPeriodoDetalle->getSubtotal(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Cell(10, 4, number_format($arPeriodoDetalle->getIva(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Cell(15, 4, number_format($arPeriodoDetalle->getTotal(), 0, '.', ','), 1, 0, 'R');
                 if ($arPeriodoDetalle->getContratoRel()->getIndefinido() == 1){
@@ -194,15 +195,19 @@ class PeriodoCobro extends \FPDF_FPDF {
             
         }
             $pdf->SetFont('Arial', 'B', 7);
-            $pdf->Cell(243, 5, "TOTAL: ", 0, 0, 'R');
-            $pdf->SetFont('Arial', '', 7);
+            $pdf->Cell(218, 5, "SUBTOTAL:", 0, 0, 'R');
+            
+            $pdf->Cell(15, 5, number_format($var3,0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(10, 5, "TOTAL:", 0, 0, 'R');
+            
             $pdf->Cell(15, 5, number_format($var,0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(7, 5, "", 0, 0, 'R');
             $pdf->Ln();
             $pdf->SetFont('Arial', 'B', 7);
             $pdf->Cell(35, 5, "NUMERO DE EMPLEADOS: ", 0, 0, 'R');
             $pdf->SetFont('Arial', '', 7);
             $pdf->Cell(19, 5, number_format($var2,0, '.', ','), 1, 0, 'R');
-        
+            
     }
 
     public function Footer() {
