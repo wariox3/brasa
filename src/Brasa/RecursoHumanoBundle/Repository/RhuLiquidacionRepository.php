@@ -99,7 +99,12 @@ class RhuLiquidacionRepository extends EntityRepository {
                     $salarioPromedioCesantias = ($salarioPromedioCesantias * $arLiquidacion->getPorcentajeIbp())/100;
                 }
                 if($arLiquidacion->getLiquidarSalario() == true) {
-                    $salarioPromedioCesantias = $douSalario + $auxilioTransporte;
+                    if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
+                        $salarioPromedioCesantias = $douSalario + $auxilioTransporte;
+                    } else {
+                        $salarioPromedioCesantias = $douSalario;
+                    }
+                    
                 }
                 $intDiasCesantias = $intDiasCesantias - $intDiasAusentismo;
                 $douCesantias = ($salarioPromedioCesantias * $intDiasCesantias) / 360;          
@@ -139,13 +144,22 @@ class RhuLiquidacionRepository extends EntityRepository {
                     if($arContrato->getCodigoSalarioTipoFk() == 2) {
                          $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrimaLiquidar) * 30;                                    
                     } else {
-                        $salarioPromedioPrimas = $douSalario;
+                        if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
+                            $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
+                        } else {
+                            $salarioPromedioPrimas = $douSalario;
+                        }                                                
                     }                    
                     if($arLiquidacion->getPorcentajeIbp() > 0) {
                         $salarioPromedioPrimas = ($salarioPromedioPrimas * $arLiquidacion->getPorcentajeIbp())/100;
                     }
                     if($arLiquidacion->getLiquidarSalario() == true) {
-                        $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
+                        if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
+                            $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
+                        } else {
+                            $salarioPromedioPrimas = $douSalario;
+                        }
+                        
                     }                    
                     $douPrima = ($salarioPromedioPrimas * $intDiasPrimaLiquidar) / 360;                
                     $arLiquidacion->setDiasPrimas($intDiasPrimaLiquidar);                    
