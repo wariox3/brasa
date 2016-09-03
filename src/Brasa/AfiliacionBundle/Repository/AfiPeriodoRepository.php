@@ -465,7 +465,14 @@ class AfiPeriodoRepository extends EntityRepository {
                 $secuencia++;
             }    
             
-        }  
+        }
+        $fecha = new \DateTime('now');
+        $fechaPeriodo = $arPeriodo->getFechaDesde();
+        $arPeriodo->setFechaPago($fecha);
+        $arPeriodo->setAnio($fechaPeriodo->format('Y'));
+        $arPeriodo->setMes($fechaPeriodo->format('m'));
+        $arPeriodo->setAnioPago($fecha->format('Y'));
+        $arPeriodo->setMesPago($fecha->format('m'));
         $arPeriodo->setEstadoPagoGenerado(1);
         $em->persist($arPeriodo);
         $em->flush();        

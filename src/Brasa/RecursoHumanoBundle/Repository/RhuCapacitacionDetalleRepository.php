@@ -13,7 +13,7 @@ class RhuCapacitacionDetalleRepository extends EntityRepository {
     
     public function listaDql($strCargo = "", $strCentroCosto = "", $strIdentificacion = "", $strNombre = "") {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuEmpleado e WHERE e.estadoContratoActivo = 1";
+        $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuEmpleado e WHERE e.codigoEmpleadoPk <> 0";
   
         if($strCargo != "") {
             $dql .= " AND e.codigoCargoFk = " . $strCargo;

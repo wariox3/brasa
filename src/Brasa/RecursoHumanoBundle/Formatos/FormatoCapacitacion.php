@@ -92,12 +92,16 @@ class FormatoCapacitacion extends \FPDF_FPDF {
             if ($arCapacitacionDetalle->getAsistencia() == 1){
                 $asistencia = "SI";
             }
+            $cargo = "";
+            if ($arCapacitacionDetalle->getEmpleadoRel()->getCodigoCargoFk() != null){
+                $cargo = $arCapacitacionDetalle->getEmpleadoRel()->getCargoRel()->getNombre();
+            }
             $pdf->SetFont('Arial', '', 7);
             $pdf->Cell(10, 8, '1', 1, 0, 'L');
             $pdf->Cell(22, 8, $arCapacitacionDetalle->getNumeroIdentificacion(), 1, 0, 'L');
             $pdf->Cell(57, 8, $arCapacitacionDetalle->getNombreCorto(), 1, 0, 'L');
             $pdf->SetFont('Arial', '', 6);
-            $pdf->Cell(57, 8, $arCapacitacionDetalle->getEmpleadoRel()->getCargoRel()->getNombre(), 1, 0, 'L');
+            $pdf->Cell(57, 8, $cargo, 1, 0, 'L');
             $pdf->SetFont('Arial', '', 7);
             $pdf->Cell(12, 8, $arCapacitacionDetalle->getEvaluacion(), 1, 0, 'L');
             $pdf->Cell(12, 8, $asistencia, 1, 0, 'L');
