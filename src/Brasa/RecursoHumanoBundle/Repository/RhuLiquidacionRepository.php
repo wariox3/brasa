@@ -113,6 +113,14 @@ class RhuLiquidacionRepository extends EntityRepository {
                 $arLiquidacion->setVrIngresoBasePrestacionCesantiasInicial($ibpCesantiasInicial); 
                 $arLiquidacion->setVrSalarioPromedioCesantias($salarioPromedioCesantias);
                 $arLiquidacion->setDiasCesantiasAusentismo($intDiasAusentismo);
+            } else {                
+                $arLiquidacion->setDiasCesantias(0);                
+                $arLiquidacion->setVrCesantias(0);
+                $arLiquidacion->setVrInteresesCesantias(0);                 
+                $arLiquidacion->setVrIngresoBasePrestacionCesantias(0);
+                $arLiquidacion->setVrIngresoBasePrestacionCesantiasInicial(0); 
+                $arLiquidacion->setVrSalarioPromedioCesantias(0);
+                $arLiquidacion->setDiasCesantiasAusentismo(0);                
             }
             //Liquidar primas
             if($arLiquidacion->getLiquidarPrima() == 1) {            
@@ -161,6 +169,12 @@ class RhuLiquidacionRepository extends EntityRepository {
                          */                                     
                 }                                                                                
                 $arLiquidacion->setFechaUltimoPagoPrimas($arLiquidacion->getContratoRel()->getFechaUltimoPagoPrimas());
+            } else {
+                    $arLiquidacion->setDiasPrimas(0);                    
+                    $arLiquidacion->setVrPrima(0);    
+                    $arLiquidacion->setVrIngresoBasePrestacionPrimas(0);
+                    $arLiquidacion->setVrIngresoBasePrestacionPrimasInicial(0);
+                    $arLiquidacion->setVrSalarioPromedioPrimas(0);                
             }
             //Liquidar vacaciones
             if($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones() < $arLiquidacion->getFechaHasta()) {
@@ -208,6 +222,7 @@ class RhuLiquidacionRepository extends EntityRepository {
         }
         $douTotal = $douCesantias + $douInteresesCesantias + $douPrima + $douVacaciones + $arLiquidacion->getVrIndemnizacion();
         $douTotal = $douTotal + $floAdicionales - $douAdicionalesPrima - $floDeducciones;
+        
         $arLiquidacion->setVrTotal($douTotal);
         $arLiquidacion->setVrSalario($douSalario);
         $arLiquidacion->setVrDeducciones($floDeducciones);

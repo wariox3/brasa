@@ -452,6 +452,10 @@ class ContratosController extends Controller
                                     $arLiquidacion->setLiquidarCesantias(1);
                                     $arLiquidacion->setLiquidarPrima(1);
                                     $arLiquidacion->setLiquidarVacaciones(1);
+                                    if($arContrato->getSalarioIntegral() == 1) {
+                                        $arLiquidacion->setLiquidarCesantias(0);
+                                        $arLiquidacion->setLiquidarPrima(0);                                        
+                                    }
                                     $arLiquidacion->setCodigoUsuario($arUsuario->getUserName());                                
                                     if($arContrato->getCodigoSalarioTipoFk() == 2) {
                                         if($arLiquidacion->getCodigoMotivoTerminacionContratoFk() != 5 && $arLiquidacion->getCodigoMotivoTerminacionContratoFk() != 4) {
