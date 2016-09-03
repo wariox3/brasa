@@ -239,7 +239,7 @@ class CreditosController extends Controller
                             $arCredito->setCodigoUsuario($arUsuario->getUserName());
                             $arCredito->setSaldo($arCredito->getVrPagar());
                         } else {
-                            if ($arCredito->getVrPagar() > $arCredito->getSaldo()){
+                            if ($arCredito->getVrPagar() >= $arCredito->getSaldo()){
                                 if ($arCredito->getVrPagar() > $arCredito->getTotalPagos()){
                                     $arCredito->setSaldo($arCredito->getVrPagar() - $arCredito->getTotalPagos()); 
                                 } else {
