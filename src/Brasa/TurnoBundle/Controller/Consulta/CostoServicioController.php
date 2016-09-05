@@ -40,8 +40,12 @@ class CostoServicioController extends Controller
     }        
     
     private function lista() {
+        $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();        
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurCierreMesServicio')->listaDql();                    
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurCierreMesServicio')->listaDql(
+                $session->get('filtroCodigoCliente'),
+                $session->get('filtroCodigoRecurso')
+                );                    
     }
 
     private function filtrar ($form) {

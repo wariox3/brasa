@@ -6,8 +6,14 @@ use Doctrine\ORM\EntityRepository;
 
 class TurCierreMesServicioRepository extends EntityRepository {
 
-    public function listaDql() {
-        $dql   = "SELECT cms FROM BrasaTurnoBundle:TurCierreMesServicio cms";
+    public function listaDql($codigoCliente = "", $codigoRecurso = "") {
+        $dql   = "SELECT cms FROM BrasaTurnoBundle:TurCierreMesServicio cms WHERE cms.codigoCierreMesServicioPk <> 0 ";
+        if($codigoCliente != "") {
+            $dql .= " AND cms.codigoClienteFk = " . $codigoCliente;  
+        }
+        if($codigoRecurso != "") {
+            $dql .= " AND cms.codigoRecursoFk = " . $codigoRecurso;  
+        }        
         return $dql;
     }
     

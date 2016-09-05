@@ -19,7 +19,9 @@ class CierreMesController extends Controller
         $form = $this->formularioGenerar();
         $form->handleRequest($request);        
         if ($form->isValid()) {
-            if($request->request->get('OpGenerar')) {            
+            if($request->request->get('OpGenerar')) { 
+                set_time_limit(0);
+                ini_set("memory_limit", -1);                
                 $codigoCierreMes = $request->request->get('OpGenerar');
                 $arCierreMes = new \Brasa\TurnoBundle\Entity\TurCierreMes();
                 $arCierreMes = $em->getRepository('BrasaTurnoBundle:TurCierreMes')->find($codigoCierreMes);
@@ -41,9 +43,9 @@ class CierreMesController extends Controller
                         $arCostoRecurso->setAnio($arCierreMes->getAnio());
                         $arCostoRecurso->setMes($arCierreMes->getMes());
                         $arCostoRecurso->setVrNomina($arrPagos[0]['vrNeto']); 
-                        $arCostoRecurso->setVrPrestaciones($arrPagos[0]['vrPrestaciones']);
-                        $arCostoRecurso->setVrAportesSociales($arrPagos[0]['vrAportes']);
-                        $floTotal = $arrPagos[0]['vrNeto'] + $arrPagos[0]['vrPrestaciones'] + $arrPagos[0]['vrAportes'];
+                        //$arCostoRecurso->setVrPrestaciones($arrPagos[0]['vrPrestaciones']);
+                        //$arCostoRecurso->setVrAportesSociales($arrPagos[0]['vrAportes']);
+                        $floTotal = $arrPagos[0]['vrNeto'];
                         $arCostoRecurso->setVrCostoTotal($floTotal);
                         $arrProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->detallesRecurso($arRecurso->getCodigoRecursoPk(), $arCierreMes->getAnio(), $arCierreMes->getMes());                                            
                         $intHoras = $arrProgramacionDetalles['horas'];
