@@ -566,6 +566,8 @@ class CapacitacionesController extends Controller
 
     private function generarExcel() {
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -577,27 +579,34 @@ class CapacitacionesController extends Controller
                     ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
                     ->setKeywords("office 2007 openxml php")
                     ->setCategory("Test result file");
-                $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10);
+                $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
                 $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+                for($col = 'A'; $col !== 'Z'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+                }
+                for($col = 'N'; $col !== 'O'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+                }
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'CÓDIGO')
                             ->setCellValue('B1', 'FECHA')
-                            ->setCellValue('C1', 'TIPO')
-                            ->setCellValue('D1', 'TEMA')
-                            ->setCellValue('E1', 'A CAPACITAR')
-                            ->setCellValue('F1', 'ASISTIERON')
-                            ->setCellValue('G1', 'ABIERTO')
-                            ->setCellValue('H1', 'VR CAPACITACION')
-                            ->setCellValue('I1', 'LUGAR');
+                            ->setCellValue('C1', 'HORA')
+                            ->setCellValue('D1', 'DURACION')
+                            ->setCellValue('E1', 'CIUDAD')
+                            ->setCellValue('F1', 'LUGAR')
+                            ->setCellValue('G1', 'TIPO')
+                            ->setCellValue('H1', 'TEMA')
+                            ->setCellValue('I1', 'METODOLOGIA')
+                            ->setCellValue('J1', 'OBJETIVO')
+                            ->setCellValue('K1', 'CONTENIDO')
+                            ->setCellValue('L1', 'A CAPACITAR')
+                            ->setCellValue('M1', 'ASISTIERON')
+                            ->setCellValue('N1', 'VR CAPACITACION')
+                            ->setCellValue('O1', 'FACILITADOR')
+                            ->setCellValue('P1', 'IDENTIFICACION')
+                            ->setCellValue('Q1', 'ABIERTO');
 
                 $i = 2;
                 $query = $em->createQuery($this->strDqlLista);
@@ -610,20 +619,38 @@ class CapacitacionesController extends Controller
                     }else{
                         $strCapacitacionTipo = $arCapacitacion->getCapacitacionTipoRel()->getNombre();
                     }
+                    if ($arCapacitacion->getCodigoCiudadFk() == null){
+                        $ciudad = "";
+                    }else{
+                        $ciudad = $arCapacitacion->getCiudadRel()->getNombre();
+                    }
+                    if ($arCapacitacion->getCodigoCapacitacionMetodologiaFk() == null){
+                        $strCapacitacionMetodologia = "";
+                    }else{
+                        $strCapacitacionMetodologia = $arCapacitacion->getCapacitacionMetodologiaRel()->getNombre();
+                    }
                     $estado = "SI";
                     if ($arCapacitacion->getEstado() == 1){
                         $estado = "NO";
                     }
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arCapacitacion->getCodigoCapacitacionPk())
-                            ->setCellValue('B' . $i, $arCapacitacion->getFecha())
-                            ->setCellValue('C' . $i, $strCapacitacionTipo)
-                            ->setCellValue('D' . $i, $arCapacitacion->getTema())
-                            ->setCellValue('E' . $i, $arCapacitacion->getNumeroPersonasCapacitar())
-                            ->setCellValue('F' . $i, $arCapacitacion->getNumeroPersonasAsistieron())
-                            ->setCellValue('G' . $i, $estado)
-                            ->setCellValue('H' . $i, $arCapacitacion->getVrCapacitacion())
-                            ->setCellValue('I' . $i, $arCapacitacion->getLugar());
+                            ->setCellValue('B' . $i, $arCapacitacion->getFechaCapacitacion()->format('Y-m-d'))
+                            ->setCellValue('C' . $i, $arCapacitacion->getFechaCapacitacion()->format('H:i:s'))
+                            ->setCellValue('D' . $i, $arCapacitacion->getDuracion())
+                            ->setCellValue('E' . $i, $ciudad)
+                            ->setCellValue('F' . $i, $arCapacitacion->getLugar())
+                            ->setCellValue('G' . $i, $strCapacitacionTipo)
+                            ->setCellValue('H' . $i, $arCapacitacion->getTema())
+                            ->setCellValue('I' . $i, $strCapacitacionMetodologia)
+                            ->setCellValue('J' . $i, $arCapacitacion->getObjetivo())
+                            ->setCellValue('K' . $i, $arCapacitacion->getContenido())
+                            ->setCellValue('L' . $i, $arCapacitacion->getNumeroPersonasCapacitar())
+                            ->setCellValue('M' . $i, $arCapacitacion->getNumeroPersonasAsistieron())
+                            ->setCellValue('N' . $i, $arCapacitacion->getVrCapacitacion())
+                            ->setCellValue('O' . $i, $arCapacitacion->getFacilitador())
+                            ->setCellValue('P' . $i, $arCapacitacion->getNumeroIdentificacionFacilitador())
+                            ->setCellValue('Q' . $i, $estado);
                     $i++;
                 }
 

@@ -12,14 +12,25 @@ class RhuCapacitacionType extends AbstractType
             ->add('capacitacionTipoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCapacitacionTipo',
                         'property' => 'nombre',
-            ))                          
-            //->add('fecha', 'date')
-            ->add('fechaCapacitacion', 'date')
+            ))
+            ->add('capacitacionMetodologiaRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCapacitacionMetodologia',
+                        'property' => 'nombre',
+            ))
+            ->add('ciudadRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenCiudad',
+                        'property' => 'nombre',
+            ))    
+            ->add('fechaCapacitacion', 'datetime', array('format' => 'yyyyMMdd'))
             ->add('tema', 'text', array('required' => false))
             ->add('numeroPersonasCapacitar', 'number', array('required' => true))
             ->add('vrCapacitacion', 'text', array('required' => false))
             ->add('lugar', 'text', array('required' => false))    
-            ->add('comentarios', 'textarea', array('required' => false))    
+            ->add('duracion', 'text', array('required' => false))
+            ->add('objetivo', 'textarea', array('required' => false))
+            ->add('contenido', 'textarea', array('required' => false))
+            ->add('facilitador', 'text', array('required' => false))
+            ->add('numeroIdentificacionFacilitador', 'text', array('required' => false))    
             ->add('guardar', 'submit');        
     }
  

@@ -57,6 +57,7 @@
                         <th>FECHA</th>
                         <th>TIPO</th>
                         <th>TEMA</th>
+                        <th>METODOLOGIA</th>
                         <th>PERSONAS CAPACITAR</th>
                         <th>PERSONAS ASISTIERON</th>
                         <th>ABIERTO</th>
@@ -67,9 +68,10 @@
                     {% for arCapacitaciones in arCapacitaciones %}
                         <tr>
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arCapacitaciones.codigoCapacitacionPk }}">{{ arCapacitaciones.codigoCapacitacionPk }} </td>
-                            <td>{{ arCapacitaciones.fechaCapacitacion |date("Y/m/d")  }}</td>
+                            <td>{{ arCapacitaciones.fechaCapacitacion |date("Y/m/d :H:i:s")  }}</td>
                             <td>{{ arCapacitaciones.capacitacionTipoRel.nombre  }}</td>
                             <td>{{ arCapacitaciones.tema  }}</td>
+                            <td>{{ arCapacitaciones.capacitacionMetodologiaRel.nombre | default('')  }}</td>
                             <td align="right">{{ arCapacitaciones.numeroPersonasCapacitar  }}</td>
                             <td align="right">{{ arCapacitaciones.numeroPersonasAsistieron  }}</td>
                             <td>{% if arCapacitaciones.estado == 0 %}SI{% else %}NO{% endif %}</td>

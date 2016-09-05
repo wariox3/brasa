@@ -14,21 +14,15 @@
                 </div>
             </div>                
             <div class="form-group form-group-sm">
-                <label for="form_fecha" class="col-sm-3 control-label">Fecha:</label>
+                <label for="form_fecha" class="col-sm-3 control-label">Fecha / hora:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.fechaCapacitacion) }}
                 </div>
-            </div>                
-            <div class="form-group form-group-sm">
-                <label for="form_tema" class="col-sm-3 control-label">Tema:</label>
-                <div class="col-sm-9">
-                    {{ form_widget(form.tema, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
-                </div>
             </div>
             <div class="form-group form-group-sm">
-                <label for="form_numeroPersonasCapacitar" class="col-sm-3 control-label">Personas a capacitar:</label>
+                <label for="form_ciudadRel" class="col-sm-3 control-label">Ciudad:</label>
                 <div class="col-sm-9">
-                        {{ form_widget(form.numeroPersonasCapacitar, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                        {{ form_widget(form.ciudadRel, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
                 </div>
             </div>
             <div class="form-group form-group-sm">
@@ -38,17 +32,59 @@
                 </div>
             </div>    
             <div class="form-group form-group-sm">
+                <label for="form_duracion" class="col-sm-3 control-label">Duracion:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.duracion, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>    
+            <div class="form-group form-group-sm">
+                <label for="form_tema" class="col-sm-3 control-label">Tema:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.tema, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_capacitacionMetodologiaRel" class="col-sm-3 control-label">Metodologia:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.capacitacionMetodologiaRel, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>    
+            <div class="form-group form-group-sm">
+                <label for="form_numeroPersonasCapacitar" class="col-sm-3 control-label">Personas a capacitar:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.numeroPersonasCapacitar, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>    
+            <div class="form-group form-group-sm">
                 <label for="form_vrCapacitacion" class="col-sm-3 control-label">Valor capacitación:</label>
                 <div class="col-sm-9">
                         {{ form_widget(form.vrCapacitacion, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
                 </div>
+            </div>
+            <div class="form-group">
+                <label for="form_objetivo" class="col-sm-3 control-label">Objetivo:</label>
+                <div class="col-sm-9">
+                            {{ form_widget(form.objetivo, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
             </div>    
             <div class="form-group">
-                <label for="form_comentarios" class="col-sm-3 control-label">Comentarios:</label>
+                <label for="form_comentarios" class="col-sm-3 control-label">Contenido:</label>
                 <div class="col-sm-9">
-                            {{ form_widget(form.comentarios, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                            {{ form_widget(form.contenido, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
                 </div>
-            </div>                 
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_facilitador" class="col-sm-3 control-label">Facilitador:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.facilitador, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>    
+            <div class="form-group form-group-sm">
+                <label for="form_numeroIdentificacionFacilitador" class="col-sm-3 control-label">Identificacion:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.numeroIdentificacionFacilitador, { 'attr': {'class': 'form-control','autofocus':'autofocus'} }) }}
+                </div>
+            </div>    
         </div>
     </div>
            

@@ -24,29 +24,51 @@
                     <td class="titulo">CÓDIGO:</td>
                     <td class="td-in-well">{{ arCapacitacion.codigoCapacitacionPk }}</td>
                     <td class="titulo">FECHA:</td>
-                    <td class="td-in-well">{{ arCapacitacion.fecha|date("Y/m/d") }}</td>
-                    <td class="titulo">ABIERTO</td>
-                    <td class="td-in-well">{% if arCapacitacion.estado == 0%}SI{% else %}NO{% endif%}</td>
+                    <td class="td-in-well">{{ arCapacitacion.fechaCapacitacion |date("Y/m/d") }}</td>
+                    <td class="titulo">HORA:</td>
+                    <td class="td-in-well">{{ arCapacitacion.fechaCapacitacion |date("H:i:s") }}</td>
                 </tr>
                 <tr>
-                    <td class="titulo">TIPO CAPACITACIÓN:</td>
-                    <td class="td-in-well">{{ arCapacitacion.capacitacionTipoRel.nombre |default('') }}</td>
-                    <td class="titulo">TEMA:</td>
-                    <td class="td-in-well">{{ arCapacitacion.tema }}</td>
+                    <td class="titulo">DURACION:</td>
+                    <td class="td-in-well">{{ arCapacitacion.duracion }}</td>
+                    <td class="titulo">CIUDAD:</td>
+                    <td class="td-in-well">{{ arCapacitacion.ciudadRel.nombre | default('') }}</td>
                     <td class="titulo">LUGAR:</td>
                     <td class="td-in-well">{{ arCapacitacion.lugar }}</td>
                 </tr>
                 <tr>
-                    <td class="titulo">PERSONAS CAPACITAR:</td>
-                    <td class="td-in-well">{{ arCapacitacion.numeroPersonasCapacitar }}</td>
-                    <td class="titulo">PERSONAS ASISTIERON:</td>
-                    <td class="td-in-well">{{ arCapacitacion.numeroPersonasAsistieron }}</td>
-                    <td class="titulo">VALOR CAPACITACIÓN</td>
-                    <td class="td-in-well" align="rigth">{{ arCapacitacion.vrCapacitacion }}</td></td>
+                    <td class="titulo">TIPO CAPACITACIÓN:</td>
+                    <td class="td-in-well">{{ arCapacitacion.capacitacionTipoRel.nombre | default('') }}</td>
+                    <td class="titulo">TEMA:</td>
+                    <td class="td-in-well">{{ arCapacitacion.tema }}</td>
+                    <td class="titulo">METODOLOGIA:</td>
+                    <td class="td-in-well">{{ arCapacitacion.capacitacionMetodologiaRel.nombre | default('') }}</td>
                 </tr>
                 <tr>
-                    <td colspan="8">COMENTARIOS: {{ arCapacitacion.comentarios }}</td>
+                    <td class="titulo">OBJETIVO:</td>
+                    <td class="td-in-well">{{ arCapacitacion.objetivo }}</td>
+                    <td class="titulo">CONTENIDO:</td>
+                    <td class="td-in-well">{{ arCapacitacion.contenido }}</td>
+                    <td class="titulo">PERSONAS A CAPACITAR</td>
+                    <td class="td-in-well" align="rigth">{{ arCapacitacion.numeroPersonasCapacitar }}</td></td>
                 </tr>
+                <tr>
+                    <td class="titulo">FACILITADOR:</td>
+                    <td class="td-in-well">{{ arCapacitacion.facilitador }}</td>
+                    <td class="titulo">IDENTIFICACION:</td>
+                    <td class="td-in-well">{{ arCapacitacion.numeroIdentificacionFacilitador }}</td>
+                    <td class="titulo">PERSONAS ASISTIERON:</td>
+                    <td class="td-in-well" align="rigth">{{ arCapacitacion.numeroPersonasAsistieron }}</td></td>
+                </tr>
+                <tr>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                    <td class="titulo">ABIERTO</td>
+                    <td class="td-in-well">{% if arCapacitacion.estado == 0%}SI{% else %}NO{% endif%}</td>
+                </tr>
+                
             </table>
             </div>
         </div>

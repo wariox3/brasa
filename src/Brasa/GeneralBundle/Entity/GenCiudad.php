@@ -107,6 +107,11 @@ class GenCiudad
     protected $rhuAspirantesCiudadRel;
     
     /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuCapacitacion", mappedBy="ciudadRel")
+     */
+    protected $rhuCapacitacionesCiudadRel;
+    
+    /**
      * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuExamen", mappedBy="ciudadRel")
      */
     protected $rhuExamenesCiudadRel;
@@ -245,6 +250,7 @@ class GenCiudad
         $this->rhuSeleccionesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuSeleccionesRequisitosCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuAspirantesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rhuCapacitacionesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuExamenesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuSeleccionesReferenciasCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuCentroCostosCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -262,6 +268,7 @@ class GenCiudad
         $this->turClientesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->turPuestosCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuContratosCiudadContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rhuContratosCiudadLaboraRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->configuracionesRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->carClientesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuClientesCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -269,8 +276,6 @@ class GenCiudad
         $this->afiEmpleadosCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuAcademiasCiudadRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
-    
 
     /**
      * Get codigoCiudadPk
@@ -788,6 +793,40 @@ class GenCiudad
     public function getRhuAspirantesCiudadRel()
     {
         return $this->rhuAspirantesCiudadRel;
+    }
+
+    /**
+     * Add rhuCapacitacionesCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacion $rhuCapacitacionesCiudadRel
+     *
+     * @return GenCiudad
+     */
+    public function addRhuCapacitacionesCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuCapacitacion $rhuCapacitacionesCiudadRel)
+    {
+        $this->rhuCapacitacionesCiudadRel[] = $rhuCapacitacionesCiudadRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuCapacitacionesCiudadRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacion $rhuCapacitacionesCiudadRel
+     */
+    public function removeRhuCapacitacionesCiudadRel(\Brasa\RecursoHumanoBundle\Entity\RhuCapacitacion $rhuCapacitacionesCiudadRel)
+    {
+        $this->rhuCapacitacionesCiudadRel->removeElement($rhuCapacitacionesCiudadRel);
+    }
+
+    /**
+     * Get rhuCapacitacionesCiudadRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuCapacitacionesCiudadRel()
+    {
+        return $this->rhuCapacitacionesCiudadRel;
     }
 
     /**

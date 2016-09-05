@@ -10,10 +10,10 @@ class FormatoCapacitacion extends \FPDF_FPDF {
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
         self::$codigoCapacitacion = $codigoCapacitacion;
-        $pdf = new FormatoCapacitacion();
+        $pdf = new FormatoCapacitacion('L','mm','letter');
         $pdf->AliasNbPages();
         $pdf->AddPage();
-        $pdf->SetFont('Times', '', 12);
+        $pdf->SetFont('Arial', '', 12);
         $this->Body($pdf);
 
         $pdf->Output("ActaCapacitacion.pdf", 'D');
@@ -37,29 +37,88 @@ class FormatoCapacitacion extends \FPDF_FPDF {
         $this->Line(10, 50, 60, 50);
         $this->Cell(0, 0, $this->Image('imagenes/logos/logo.jpg' , 15 ,20, 40 , 20,'JPG'), 0, 0, 'C', 0); //cuadro para el logo
         $this->SetXY(60, 10);
-        $this->Cell(90, 10, utf8_decode(""), 1, 0, 'C', 1); //cuardo mitad arriba
+        $this->Cell(160, 10, utf8_decode(""), 1, 0, 'C', 1); //cuardo mitad arriba
         $this->SetXY(60, 20);
         $this->SetFillColor(236, 236, 236);
-        $this->Cell(90, 20, utf8_decode("ACTA DE CAPACITACION"), 1, 0, 'C', 1); //cuardo mitad medio
+        $this->Cell(160, 20, utf8_decode($arContenidoFormatoA->getTitulo()), 1, 0, 'C', 1); //cuardo mitad medio
         $this->SetFillColor(272, 272, 272);
         $this->SetXY(60, 40);
-        $this->Cell(90, 10, utf8_decode(" "), 1, 0, 'C', 1); //cuardo mitad abajo
-        $this->SetXY(150, 10);
+        $this->Cell(160, 10, utf8_decode(" "), 1, 0, 'C', 1); //cuardo mitad abajo
+        $this->SetXY(220, 10);
         $this->Cell(53, 10, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 1, 0, 'C', 1); //cuadro derecho arriba
-        $this->SetXY(150, 20);
+        $this->SetXY(220, 20);
         $this->Cell(53, 20, utf8_decode($arContenidoFormatoA->getCodigoFormatoIso()), 1, 0, 'C', 1); //cuadro derecho mitad 1
-        $this->SetXY(150, 40);
+        $this->SetXY(220, 40);
         $this->Cell(53, 5, utf8_decode($arContenidoFormatoA->getVersion()), 1, 0, 'C', 1); //cuadro derecho abajo 1
-        $this->SetXY(150, 45);
+        $this->SetXY(220, 45);
         $this->Cell(53, 5, $arContenidoFormatoA->getFechaVersion()->format('Y-m-d'), 1, 0, 'C', 1); //cuadro derecho abajo 2
-              
+        
+        
         $this->EncabezadoDetalles();
 
     }
 
     public function EncabezadoDetalles() {
+        $arCapacitacion = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacion();
+        $arCapacitacion = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacion')->find(self::$codigoCapacitacion);
+        //informacion capacitacion
+        //linea 1
+        $ciudad = "";
+        if ($arCapacitacion->getCodigoCiudadFk() != null){
+            $ciudad = $arCapacitacion->getCiudadRel()->getNombre();
+        }
+        $this->SetXY(10, 55);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(15, 6, "FECHA:", 0, 0, '', 1);
+        $this->Cell(20, 6, $arCapacitacion->getFechaCapacitacion()->format('Y-m-d'), 'B', 0, 'C', 1);
+        $this->Cell(12, 6, "HORA:", 0, 0, '', 1);
+        $this->Cell(20, 6, $arCapacitacion->getFechaCapacitacion()->format('H:i:s'), 'B', 0, 'C', 1);
+        $this->Cell(21, 6, "DURACION:", 0, 0, 'B', 1);
+        $this->Cell(20, 6, $arCapacitacion->getDuracion(), 'B', 0, 'C', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(15, 6, "CIUDAD:", 0, 0, '', 1);
+        $this->SetFont('Arial','B',7);
+        $this->Cell(60, 6, $ciudad, 'B', 0, 'C', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(15, 6, "LUGAR:", 0, 0, '', 1);
+        $this->SetFont('Arial','B',7);
+        $this->Cell(65, 6, $arCapacitacion->getLugar(), 'B', 0, 'C', 1);
+        //linea 2
+        $this->SetXY(10, 62);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(15, 6, "TEMA:", 0, 0, '', 1);
+        $this->Cell(248, 6, $arCapacitacion->getTema(), 'B', 0, 'L', 1);
+        //linea 3
+        $metodologia = "";
+        if ($arCapacitacion->getCodigoCiudadFk() != null){
+            $metodologia = $arCapacitacion->getCapacitacionMetodologiaRel()->getNombre();
+        }
+        $this->SetXY(10, 69);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(25, 6, "METODOLOGIA:", 0, 0, '', 1);
+        $this->Cell(238, 6, $metodologia, 'B', 0, 'L', 1);
+        //linea 4
+        $this->SetXY(10, 76);
+        $this->Cell(18, 6, "OBJETIVO:", 0, 0, '', 1);
+        $this->SetFont('Arial','B',6.5);
+        $this->Cell(245, 6, $arCapacitacion->getObjetivo(), 'B', 0, 'L', 1);
+        //linea 5
+        $this->SetXY(10, 82);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(20, 10, "CONTENIDO:", 0, 0, '', 1);
+        $this->SetFont('Arial','B',6.5);
+        $this->Cell(243, 10, $arCapacitacion->getContenido(), 'B', 0, '', 1);
+        //linea 6
+        $this->SetXY(10, 92);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(22, 6, "FACILITADOR:", 0, 0, '', 1);
+        $this->Cell(158, 6, $arCapacitacion->getFacilitador(), 'B', 0, '', 1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(28, 6, "IDENTIFICACION:", 0, 0, '', 1);
+        $this->Cell(55, 6, $arCapacitacion->getNumeroIdentificacionFacilitador(), 'B', 0, '', 1);
+        
         $this->Ln(10);
-        $header = array(utf8_decode('NRO'), 'IDENTIFICACION', 'NOMBRE', utf8_decode('CARGO'),'EVAL %','ASISTIO', 'FIRMA');
+        $header = array(utf8_decode('N°'), 'NOMBRE', 'DOCUMENTO',  utf8_decode('CARGO'), 'PUESTO', 'CLIENTE', 'EV%', 'FIRMA');
         $this->SetFillColor(200, 200, 200);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -67,7 +126,7 @@ class FormatoCapacitacion extends \FPDF_FPDF {
         $this->SetFont('', 'B', 7);
 
         //creamos la cabecera de la tabla.
-        $w = array(10, 22, 57, 57,12,12,26);
+        $w = array(6, 55, 19, 54, 46, 46,9,30);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -86,8 +145,9 @@ class FormatoCapacitacion extends \FPDF_FPDF {
         $pdf->SetFont('Arial', '', 7);
         $arCapacitacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle();
         $arCapacitacionDetalle = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionDetalle')->findBy(array('codigoCapacitacionFk' => self::$codigoCapacitacion));
-        
+        $nro = 0;
         foreach ($arCapacitacionDetalle as $arCapacitacionDetalle) {
+            $nro ++;
             $asistencia = "NO";
             if ($arCapacitacionDetalle->getAsistencia() == 1){
                 $asistencia = "SI";
@@ -96,16 +156,17 @@ class FormatoCapacitacion extends \FPDF_FPDF {
             if ($arCapacitacionDetalle->getEmpleadoRel()->getCodigoCargoFk() != null){
                 $cargo = $arCapacitacionDetalle->getEmpleadoRel()->getCargoRel()->getNombre();
             }
-            $pdf->SetFont('Arial', '', 7);
-            $pdf->Cell(10, 8, '1', 1, 0, 'L');
-            $pdf->Cell(22, 8, $arCapacitacionDetalle->getNumeroIdentificacion(), 1, 0, 'L');
-            $pdf->Cell(57, 8, $arCapacitacionDetalle->getNombreCorto(), 1, 0, 'L');
             $pdf->SetFont('Arial', '', 6);
-            $pdf->Cell(57, 8, $cargo, 1, 0, 'L');
+            $pdf->Cell(6, 8, $nro, 1, 0, 'L');
+            $pdf->Cell(55, 8, $arCapacitacionDetalle->getNombreCorto(), 1, 0, 'L');
+            $pdf->Cell(19, 8, $arCapacitacionDetalle->getNumeroIdentificacion(), 1, 0, 'L');
+            $pdf->SetFont('Arial', '', 6);
+            $pdf->Cell(54, 8, $cargo, 1, 0, 'L');
+            $pdf->Cell(46, 8, "", 1, 0, 'L');
+            $pdf->Cell(46, 8, "", 1, 0, 'L');
             $pdf->SetFont('Arial', '', 7);
-            $pdf->Cell(12, 8, $arCapacitacionDetalle->getEvaluacion(), 1, 0, 'L');
-            $pdf->Cell(12, 8, $asistencia, 1, 0, 'L');
-            $pdf->Cell(26, 8, '', 1, 0, 'L');
+            $pdf->Cell(9, 8, $arCapacitacionDetalle->getEvaluacion(), 1, 0, 'L');
+            $pdf->Cell(30, 8, '', 1, 0, 'L');
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }
