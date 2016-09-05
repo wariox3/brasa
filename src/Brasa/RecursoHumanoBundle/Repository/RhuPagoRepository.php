@@ -472,9 +472,7 @@ class RhuPagoRepository extends EntityRepository {
         $em = $this->getEntityManager();             
         $strSql = "SELECT
                     COUNT(codigo_pago_pk) as numeroPagos,
-                    SUM(vr_neto) as vrNeto,
-                    SUM(vr_prestaciones) as vrPrestaciones,
-                    SUM(vr_aportes) as vrAportes
+                    SUM(vr_neto) as vrNeto                                        
                     FROM rhu_pago                                                            
                     WHERE rhu_pago.codigo_empleado_fk = $codigoEmpleado AND (rhu_pago.fecha_desde >='$strDesde' AND rhu_pago.fecha_hasta <='$strHasta')
                     GROUP BY codigo_empleado_fk"; 
