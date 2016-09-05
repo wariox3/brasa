@@ -386,8 +386,8 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
 
     public function Footer() {
         
-        $this->SetFont('Arial','', 8);  
-        $this->Text(185, 140, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
+        //$this->SetFont('Arial','', 8);  
+        //$this->Text(185, 140, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
     }    
 }
 
