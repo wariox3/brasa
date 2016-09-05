@@ -179,6 +179,11 @@ class TurPuesto
     protected $facturasDetallesPuestoRel; 
     
     /**
+     * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEmpleado", mappedBy="puestoRel")
+     */
+    protected $rhuEmpleadosPuestoRel;     
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -1036,5 +1041,39 @@ class TurPuesto
     public function getCentroCostoContabilidadRel()
     {
         return $this->centroCostoContabilidadRel;
+    }
+
+    /**
+     * Add rhuEmpleadosPuestoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosPuestoRel
+     *
+     * @return TurPuesto
+     */
+    public function addRhuEmpleadosPuestoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosPuestoRel)
+    {
+        $this->rhuEmpleadosPuestoRel[] = $rhuEmpleadosPuestoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove rhuEmpleadosPuestoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosPuestoRel
+     */
+    public function removeRhuEmpleadosPuestoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosPuestoRel)
+    {
+        $this->rhuEmpleadosPuestoRel->removeElement($rhuEmpleadosPuestoRel);
+    }
+
+    /**
+     * Get rhuEmpleadosPuestoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRhuEmpleadosPuestoRel()
+    {
+        return $this->rhuEmpleadosPuestoRel;
     }
 }

@@ -275,6 +275,17 @@
             </div>                           
         </div>
     </div>                
+    <div class="panel panel-default">
+        <div class="panel-heading">Información turnos</div>
+        <div class="panel-body">               
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Puesto:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.puestoRel, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                           
+        </div>
+    </div>                
     <div class="modal-footer">
         <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_empleados_lista') }}">Cancelar</a>
         <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_empleados_nuevo_enlazar') }}">Enlazar de registro de seleccion</a>            

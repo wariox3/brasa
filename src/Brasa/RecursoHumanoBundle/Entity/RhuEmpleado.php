@@ -375,6 +375,11 @@ class RhuEmpleado
     private $digitoVerificacion;
     
     /**
+     * @ORM\Column(name="codigo_puesto_fk", type="integer", nullable=true)
+     */    
+    private $codigoPuestoFk;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuClasificacionRiesgo", inversedBy="empleadosClasificacionRiesgoRel")
      * @ORM\JoinColumn(name="codigo_clasificacion_riesgo_fk", referencedColumnName="codigo_clasificacion_riesgo_pk")
      */
@@ -612,6 +617,11 @@ class RhuEmpleado
     protected $empleadosEstudiosEmpleadoRel;
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuAcreditacion", mappedBy="empleadoRel")
+     */
+    protected $acreditacionesEmpleadoRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuSsoPeriodoEmpleado", mappedBy="empleadoRel")
      */
     protected $ssoPeriodosEmpleadosEmpleadoRel;
@@ -711,7 +721,12 @@ class RhuEmpleado
      */
     protected $cambiosTiposContratosEmpleadoRel;
        
-
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\TurnoBundle\Entity\TurPuesto", inversedBy="rhuEmpleadosPuestoRel")
+     * @ORM\JoinColumn(name="codigo_puesto_fk", referencedColumnName="codigo_puesto_pk")
+     */
+    protected $puestoRel;
+    
     /**
      * Constructor
      */
@@ -4266,5 +4281,87 @@ class RhuEmpleado
     public function getEmbargosEmpleadoRel()
     {
         return $this->embargosEmpleadoRel;
+    }
+
+    /**
+     * Add acreditacionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion $acreditacionesEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addAcreditacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion $acreditacionesEmpleadoRel)
+    {
+        $this->acreditacionesEmpleadoRel[] = $acreditacionesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove acreditacionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion $acreditacionesEmpleadoRel
+     */
+    public function removeAcreditacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion $acreditacionesEmpleadoRel)
+    {
+        $this->acreditacionesEmpleadoRel->removeElement($acreditacionesEmpleadoRel);
+    }
+
+    /**
+     * Get acreditacionesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAcreditacionesEmpleadoRel()
+    {
+        return $this->acreditacionesEmpleadoRel;
+    }
+
+    /**
+     * Set codigoPuestoFk
+     *
+     * @param integer $codigoPuestoFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoPuestoFk($codigoPuestoFk)
+    {
+        $this->codigoPuestoFk = $codigoPuestoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPuestoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPuestoFk()
+    {
+        return $this->codigoPuestoFk;
+    }
+
+    /**
+     * Set puestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPuesto $puestoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setPuestoRel(\Brasa\TurnoBundle\Entity\TurPuesto $puestoRel = null)
+    {
+        $this->puestoRel = $puestoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get puestoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPuesto
+     */
+    public function getPuestoRel()
+    {
+        return $this->puestoRel;
     }
 }

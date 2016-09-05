@@ -58,7 +58,10 @@ class RhuAcademia
      */
     protected $empleadosEstudiosAcademiaRel;
 
-    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuAcreditacion", mappedBy="academiaRel")
+     */
+    protected $acreditacionesAcademiaRel;    
 
 
     /**
@@ -279,5 +282,39 @@ class RhuAcademia
     public function getEmpleadosEstudiosAcademiaRel()
     {
         return $this->empleadosEstudiosAcademiaRel;
+    }
+
+    /**
+     * Add acreditacionesAcademiaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion $acreditacionesAcademiaRel
+     *
+     * @return RhuAcademia
+     */
+    public function addAcreditacionesAcademiaRel(\Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion $acreditacionesAcademiaRel)
+    {
+        $this->acreditacionesAcademiaRel[] = $acreditacionesAcademiaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove acreditacionesAcademiaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion $acreditacionesAcademiaRel
+     */
+    public function removeAcreditacionesAcademiaRel(\Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion $acreditacionesAcademiaRel)
+    {
+        $this->acreditacionesAcademiaRel->removeElement($acreditacionesAcademiaRel);
+    }
+
+    /**
+     * Get acreditacionesAcademiaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAcreditacionesAcademiaRel()
+    {
+        return $this->acreditacionesAcademiaRel;
     }
 }

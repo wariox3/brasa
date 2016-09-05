@@ -128,6 +128,39 @@ class CierreMesController extends Controller
                 $em->flush();                                                  
                 return $this->redirect($this->generateUrl('brs_tur_proceso_cierre_mes'));                
             }
+            if($request->request->get('OpAsignarPuesto')) { 
+                set_time_limit(0);
+                ini_set("memory_limit", -1);                
+                $codigoCierreMes = $request->request->get('OpAsignarPuesto');
+                $arCierreMes = new \Brasa\TurnoBundle\Entity\TurCierreMes();
+                $arCierreMes = $em->getRepository('BrasaTurnoBundle:TurCierreMes')->find($codigoCierreMes);                                
+                $strUltimoDiaMes = date("d",(mktime(0,0,0,$arCierreMes->getMes()+1,1,$arCierreMes->getAnio())-1));
+                $strFechaDesde = $arCierreMes->getAnio() . "/" . $arCierreMes->getMes() . "/01";
+                $strFechaHasta = $arCierreMes->getAnio() . "/" . $arCierreMes->getMes() . "/" . $strUltimoDiaMes;
+                $arrRecursos = $em->getRepository('BrasaTurnoBundle:TurRecurso')->programacionFecha($arCierreMes->getAnio(), $arCierreMes->getMes());
+                foreach ($arrRecursos as $arrRecurso) {
+                    $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arrRecurso['codigo_empleado_fk']);
+                    if($arEmpleado) {
+                        if($arEmpleado->getEmpleadoTipoRel()->getTipo() == 2) {
+                            $arrProgramaciones = $em->getRepository('BrasaTurnoBundle:TurRecurso')->programacionFechaRecurso($arCierreMes->getAnio(), $arCierreMes->getMes(), $arrRecurso['codigo_recurso_fk']);
+                            if($arrProgramaciones) {
+                                $codigoPuesto = $arrProgramaciones[0]['codigo_puesto_fk'];
+                                if($codigoPuesto) {                                    
+                                    $arPuesto = $em->getRepository('BrasaTurnoBundle:TurPuesto')->find($codigoPuesto);
+                                    if($arPuesto) {
+                                        $arEmpleado->setPuestoRel($arPuesto);
+                                        $arEmpleado->setCentroCostoContabilidadRel($arPuesto->getCentroCostoContabilidadRel());
+                                        $em->persist($arEmpleado);                                        
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } 
+                $em->flush();
+            }
+            
             /*
             if($request->request->get('OpCerrar')) {
                 $codigoSoportePagoPeriodo = $request->request->get('OpCerrar');

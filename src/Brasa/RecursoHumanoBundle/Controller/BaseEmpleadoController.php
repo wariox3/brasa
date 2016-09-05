@@ -505,7 +505,8 @@ class BaseEmpleadoController extends Controller
                     ->setCellValue('AU1', 'ZONA')
                     ->setCellValue('AV1', 'SUBZONA')
                     ->setCellValue('AW1', 'TIPO')
-                    ->setCellValue('AX1', 'C. CONTABILIDAD');
+                    ->setCellValue('AX1', 'C. CONTABILIDAD')
+                    ->setCellValue('AY1', 'PUESTO');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
@@ -665,6 +666,9 @@ class BaseEmpleadoController extends Controller
             }
             if($arEmpleado->getCodigoEmpleadoTipoFk()) {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AW' . $i, $arEmpleado->getEmpleadoTipoRel()->getNombre()); 
+            }            
+            if($arEmpleado->getCodigoPuestoFk()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AY' . $i, $arEmpleado->getPuestoRel()->getNombre()); 
             }            
             $i++;
         }

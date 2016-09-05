@@ -29,9 +29,7 @@ class ContabilizarPagoController extends Controller
                     $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion;
                     $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
                     $arComprobanteContable = new \Brasa\ContabilidadBundle\Entity\CtbComprobante();                    
-                    $arComprobanteContable = $em->getRepository('BrasaContabilidadBundle:CtbComprobante')->find($arConfiguracion->getCodigoComprobantePagoNomina());
-                    $arCentroCosto = new \Brasa\ContabilidadBundle\Entity\CtbCentroCosto();                    
-                    $arCentroCosto =$em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find(1);                           
+                    $arComprobanteContable = $em->getRepository('BrasaContabilidadBundle:CtbComprobante')->find($arConfiguracion->getCodigoComprobantePagoNomina());                    
                     foreach ($arrSeleccionados AS $codigo) {                                     
                         $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
                         $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($codigo);
@@ -53,7 +51,7 @@ class ContabilizarPagoController extends Controller
                                 $arTercero->setEmail($arPago->getEmpleadoRel()->getCorreo());
                                 $em->persist($arTercero);                                 
                             }  
-                            $this->contabilizarPagoNomina($codigo,$arComprobanteContable,$arCentroCosto,$arTercero,$arPago, $arConfiguracionNomina);  
+                            $this->contabilizarPagoNomina($codigo,$arComprobanteContable, $arPago->getEmpleadoRel()->getCentroCostoContabilidadRel(), $arTercero,$arPago, $arConfiguracionNomina);  
                             $arPago->setEstadoContabilizado(1);                                
                             $em->persist($arPago);                            
                         }

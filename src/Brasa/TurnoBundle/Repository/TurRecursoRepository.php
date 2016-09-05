@@ -92,5 +92,20 @@ class TurRecursoRepository extends EntityRepository {
         $results = $statement->fetchAll();        
         
         return $results;
-    }                    
+    } 
+    
+    public function programacionFechaRecurso($strAnio, $strMes, $codigoRecurso) {
+        $em = $this->getEntityManager();             
+        $strSql = "SELECT codigo_puesto_fk,
+                    SUM(tur_programacion_detalle.horas)
+                    FROM tur_programacion_detalle                                                            
+                    WHERE tur_programacion_detalle.anio = $strAnio AND tur_programacion_detalle.mes = $strMes AND tur_programacion_detalle.codigo_recurso_fk = $codigoRecurso
+                    GROUP BY codigo_puesto_fk ORDER BY SUM(tur_programacion_detalle.horas) DESC LIMIT 1"; 
+        $connection = $em->getConnection();
+        $statement = $connection->prepare($strSql);        
+        $statement->execute();
+        $results = $statement->fetchAll();        
+        
+        return $results;
+    }    
 }

@@ -10,6 +10,13 @@ class RhuEmpleadoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('puestoRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurPuesto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('p')
+                    ->orderBy('p.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                  
             ->add('centroCostoContabilidadRel', 'entity', array(
                 'class' => 'BrasaContabilidadBundle:CtbCentroCosto',
                 'query_builder' => function (EntityRepository $er) {

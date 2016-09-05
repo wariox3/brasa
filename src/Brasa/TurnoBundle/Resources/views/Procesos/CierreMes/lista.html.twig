@@ -20,12 +20,14 @@
                 <th>MES</th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
             {% for arCierreMes in arCierreMes %}
             <tr>
                 <td>{{ arCierreMes.codigoCierreMesPk  }}</td>
                 <td>{{ arCierreMes.anio  }}</td>
                 <td>{{ arCierreMes.mes }}</td>
+                <td><button class="btn btn-default btn-xs" type="submit" name="OpAsignarPuesto" value="{{ arCierreMes.codigoCierreMesPk }}">Asignar puesto empleados</button></td>                
                 {% if arCierreMes.estadoGenerado == 0 %}
                     <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arCierreMes.codigoCierreMesPk }}">Generar</button></td>
                     <td></td>                                        
