@@ -245,7 +245,8 @@ class RhuLiquidacionRepository extends EntityRepository {
         $arLiquidacion->setEstadoGenerado(1);
         $arLiquidacion->setFechaInicioContrato($arContrato->getFechaDesde());
         $arLiquidacion->setFechaDesde($arContrato->getFechaDesde());
-        $arLiquidacion->setFechaHasta($arContrato->getFechaHasta());        
+        $arLiquidacion->setFechaHasta($arContrato->getFechaHasta()); 
+        $arLiquidacion->setMotivoTerminacionRel($arContrato->getTerminacionContratoRel());
         $em->persist($arLiquidacion);
         $em->flush();
         return true;
