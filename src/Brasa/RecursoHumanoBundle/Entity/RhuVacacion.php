@@ -163,6 +163,11 @@ class RhuVacacion
     private $vrPromedioRecargoNocturno = 0;    
     
     /**
+     * @ORM\Column(name="vr_ibc_promedio", type="float")
+     */
+    private $vrIbcPromedio = 0;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="vacacionesCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
@@ -1081,5 +1086,29 @@ class RhuVacacion
     public function getEstadoContabilizado()
     {
         return $this->estadoContabilizado;
+    }
+
+    /**
+     * Set vrIbcPromedio
+     *
+     * @param float $vrIbcPromedio
+     *
+     * @return RhuVacacion
+     */
+    public function setVrIbcPromedio($vrIbcPromedio)
+    {
+        $this->vrIbcPromedio = $vrIbcPromedio;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIbcPromedio
+     *
+     * @return float
+     */
+    public function getVrIbcPromedio()
+    {
+        return $this->vrIbcPromedio;
     }
 }
