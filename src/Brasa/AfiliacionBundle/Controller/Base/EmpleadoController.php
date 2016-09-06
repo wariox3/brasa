@@ -44,7 +44,7 @@ class EmpleadoController extends Controller
             }
         }
         
-        $arEmpleados = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
+        $arEmpleados = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 30);
         $arContratos = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->findAll();
         return $this->render('BrasaAfiliacionBundle:Base/Empleado:lista.html.twig', array(
             'arEmpleados' => $arEmpleados,
