@@ -257,19 +257,7 @@ class CuentaCobroAfiliacion extends \FPDF_FPDF {
         $this->SetFont('Arial', 'B', 6);        
         $this->Ln();
 
-        /*$this->GetY($this->SetY(170));
-        $this->SetX(10);
-        $this->SetFont('Arial', 'B', 6);
-        $this->Text(12, $this->GetY() + 8, 'Atentamente,');
-        $this->Cell(0, 0, $this->line(12, $this->GetY() + 20, 80, $this->GetY() + 20) . $this->Text(12, $this->GetY() + 23, $arConfiguracionGeneral->getRepresentanteLegal()) . $this->Text(12, $this->GetY() + 26, "C.C " . $arConfiguracionGeneral->getIdentificacionRepresentanteLegal()));        
         
-        $this->SetFont('Arial', '', 7);
-        $this->SetY(-70);
-        $this->Ln();
-        $this->line(10, 269, 205, 269);*/
-
-
-
         $this->Ln(3);
         $this->SetFont('Arial', 'B', 9);
         //$this->Text(10, $this->GetY($this->SetY(160)), utf8_decode($arConfiguracion->getInformacionPagoFactura()));

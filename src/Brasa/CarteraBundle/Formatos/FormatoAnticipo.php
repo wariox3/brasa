@@ -224,6 +224,10 @@ class FormatoAnticipo extends \FPDF_FPDF {
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }
+        $pdf->SetFont('Arial', 'B', 7);
+        $arAnticipo = new \Brasa\CarteraBundle\Entity\CarAnticipo();
+        $arAnticipo = self::$em->getRepository('BrasaCarteraBundle:CarAnticipo')->find(self::$codigoAnticipo);
+        $pdf->Cell(197, 5, utf8_decode("Usuario sistema: ").' '.$arAnticipo->getUsuario() , 0, 0, 'L', 0);
     }
 
     public function Footer() {

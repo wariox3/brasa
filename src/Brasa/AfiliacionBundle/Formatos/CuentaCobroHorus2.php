@@ -381,7 +381,7 @@ class CuentaCobroHorus2 extends \FPDF_FPDF {
 
 
 
-        $this->Ln(3);
+        /*$this->Ln(3);
         $this->SetFont('Arial', 'B', 11);
         //$this->Text(10, $this->GetY($this->SetY(160)), utf8_decode($arConfiguracion->getInformacionPagoFactura()));
         $this->SetY(187);
@@ -391,7 +391,19 @@ class CuentaCobroHorus2 extends \FPDF_FPDF {
         //$this->Text(60, $this->GetY($this->SetY(205)), utf8_decode($arConfiguracion->getInformacionContactoFactura()));
         $this->SetFont('Arial', '', 8);
         //Número de página
-        $this->Text(255, 205, 'Pagina ' . $this->PageNo() . ' de {nb}');
+        $this->Text(255, 205, 'Pagina ' . $this->PageNo() . ' de {nb}');*/
+        
+        $this->Ln(3);
+        $this->SetFont('Arial', 'B', 9);
+        //$this->Text(10, $this->GetY($this->SetY(160)), utf8_decode($arConfiguracion->getInformacionPagoFactura()));
+        $this->SetY(197);
+        $this->MultiCell(261,5, $arConfiguracion->getInformacionPagoFactura(),0);
+        
+        $this->SetFont('Arial', 'B', 8);
+        //$this->Text(60, $this->GetY($this->SetY(205)), utf8_decode($arConfiguracion->getInformacionContactoFactura()));
+        $this->SetFont('Arial', '', 8);
+        //Número de página
+        $this->Text(257, 207, 'Pagina ' . $this->PageNo() . ' de {nb}');
     }
 
     public function GenerarEncabezadoFactura($em) {

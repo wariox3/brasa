@@ -249,6 +249,10 @@ class MovimientoAnticipoController extends Controller
                     $objAnticipo = new \Brasa\CarteraBundle\Formatos\FormatoAnticipo();
                     $objAnticipo->Generar($this, $codigoAnticipo);
                     $arAnticipo->setEstadoImpresoAnticipado(1);
+                    if($arAnticipo->getNumero() == 0) {            
+                        $intNumero = $em->getRepository('BrasaCarteraBundle:CarConsecutivo')->consecutivo(1);
+                        $arAnticipo->setNumero($intNumero);
+                    }
                     $em->persist($arAnticipo);
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_detalle', array('codigoAnticipo' => $codigoAnticipo)));                        

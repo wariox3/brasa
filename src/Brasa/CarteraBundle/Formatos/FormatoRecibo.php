@@ -216,6 +216,10 @@ class FormatoRecibo extends \FPDF_FPDF {
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }
+        $pdf->SetFont('Arial', 'B', 7);
+        $arRecibo = new \Brasa\CarteraBundle\Entity\CarRecibo();
+        $arRecibo = self::$em->getRepository('BrasaCarteraBundle:CarRecibo')->find(self::$codigoRecibo); 
+        $pdf->Cell(197, 5, utf8_decode("Usuario sistema: ").' '.$arRecibo->getUsuario() , 0, 0, 'L', 0);
     }
 
     public function Footer() {
