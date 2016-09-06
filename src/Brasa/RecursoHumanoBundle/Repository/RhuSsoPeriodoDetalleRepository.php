@@ -92,33 +92,31 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 }
                 $floSuplementario = $arPeriodoEmpleado->getVrSuplementario();            
                 $floIbcIncapacidades = 0;
-
+                $ibcVacaciones = 0;
+                $ibcIncapacidad = 0;                
                 if($arPeriodoEmpleado->getVrSuplementario() > 0) {
                     $arAporte->setVariacionTransitoriaSalario('X');
                     $arAporte->setSuplementario($arPeriodoEmpleado->getVrSuplementario());
+                }                
+                if($arPeriodoEmpleado->getDiasIncapacidadGeneral() > 0 || $arPeriodoEmpleado->getDiasIncapacidadLaboral() > 0 || $arPeriodoEmpleado->getDiasLicenciaMaternidad() > 0) {
+                    $ibcIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibcIncapacidad($arPeriodo->getFechaDesde()->format('Y-m-d'), $arPeriodo->getFechaHasta()->format('Y-m-d'), $arContrato->getCodigoContratoPk());                                                            
                 }
                 if($arPeriodoEmpleado->getDiasIncapacidadGeneral() > 0) {
                     $arAporte->setIncapacidadGeneral('X');
-                    $arAporte->setDiasIncapacidadGeneral($arPeriodoEmpleado->getDiasIncapacidadGeneral());
-                    $floSalarioMesActual = $floSalario /*+ $floSuplementario*/;   
-                    $floSalarioMesAnterior = $this->ibcMesAnterior($arEmpleado->getCodigoEmpleadoPk(), $arPeriodoDetalle->getSsoPeriodoRel()->getMes(), $arPeriodoDetalle->getSsoPeriodoRel()->getAnio());
-                    $floIbcIncapacidadGeneral = $this->liquidarIncapacidadGeneral($floSalarioMesActual, $floSalarioMesAnterior, $arPeriodoEmpleado->getDiasIncapacidadGeneral());                        
-                    $floIbcIncapacidades += $floIbcIncapacidadGeneral;                
+                    $arAporte->setDiasIncapacidadGeneral($arPeriodoEmpleado->getDiasIncapacidadGeneral());                     
                 }
+                if($arPeriodoEmpleado->getDiasIncapacidadLaboral() > 0) {
+                    $arAporte->setIncapacidadAccidenteTrabajoEnfermedadProfesional($arPeriodoEmpleado->getDiasIncapacidadLaboral());                                        
+                }                 
                 if($arPeriodoEmpleado->getDiasLicenciaMaternidad() > 0) {
                     $arAporte->setLicenciaMaternidad('X');
                     $arAporte->setDiasLicenciaMaternidad($arPeriodoEmpleado->getDiasLicenciaMaternidad());
-                }       
-                if($arPeriodoEmpleado->getDiasIncapacidadLaboral() > 0) {
-                    $arAporte->setIncapacidadAccidenteTrabajoEnfermedadProfesional($arPeriodoEmpleado->getDiasIncapacidadLaboral());
-                    $floSalarioMesActual = $floSalario /*+ $floSuplementario*/;   
-                    $floSalarioMesAnterior = $this->ibcMesAnterior($arEmpleado->getCodigoEmpleadoPk(), $arPeriodoDetalle->getSsoPeriodoRel()->getMes(), $arPeriodoDetalle->getSsoPeriodoRel()->getAnio());
-                    $floIbcIncapacidadLaboral = $this->liquidarIncapacidadLaboral($floSalarioMesActual, $floSalarioMesAnterior, $arPeriodoEmpleado->getDiasIncapacidadLaboral());                        
-                    $floIbcIncapacidades += $floIbcIncapacidadLaboral;                                        
-                }          
+                }            
+                
                 if($arPeriodoEmpleado->getDiasVacaciones() > 0) {
                     $arAporte->setVacaciones('X');
                     $arAporte->setDiasVacaciones($arPeriodoEmpleado->getDiasVacaciones());
+                    $ibcVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibcVacaciones($arPeriodo->getFechaDesde()->format('Y-m-d'), $arPeriodo->getFechaHasta()->format('Y-m-d'), $arContrato->getCodigoContratoPk());                        
                 }   
                 
                 $arAporte->setSalarioBasico($floSalario);                                                                
@@ -165,8 +163,10 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 if($intDiasCotizarPension > 0) {
                     $floIbcBrutoPension = $ibc;
                     $floIbcBrutoSalud = $ibc;
-                    $floIbcBrutoRiesgos = $intDiasCotizarRiesgos * ($ibc/$intDiasCotizarPension);                
-                    $floIbcBrutoCaja = ($intDiasCotizarCaja * ($ibc/$intDiasCotizarPension)) + $vacaciones;
+                    $floIbcBrutoRiesgos = $ibc - $ibcVacaciones - $ibcIncapacidad;                
+                    $floIbcBrutoCaja = $ibc - $ibcIncapacidad;                    
+                    //$floIbcBrutoRiesgos = $intDiasCotizarRiesgos * ($ibc/$intDiasCotizarPension);                
+                    //$floIbcBrutoCaja = ($intDiasCotizarCaja * ($ibc/$intDiasCotizarPension)) + $vacaciones;
                 }
                 
                 

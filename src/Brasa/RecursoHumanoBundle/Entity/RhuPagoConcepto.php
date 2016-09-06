@@ -91,6 +91,11 @@ class RhuPagoConcepto
      * @ORM\Column(name="concepto_salud", type="boolean")
      */    
     private $conceptoSalud = false;        
+
+    /**
+     * @ORM\Column(name="concepto_vacacion", type="boolean")
+     */    
+    private $conceptoVacacion = false;
     
     /**
      * @ORM\Column(name="codigo_cuenta_fk", type="string", length=20, nullable=true)
@@ -1307,5 +1312,29 @@ class RhuPagoConcepto
     public function getEmbargosTiposPagoConceptoRel()
     {
         return $this->embargosTiposPagoConceptoRel;
+    }
+
+    /**
+     * Set conceptoVacacion
+     *
+     * @param boolean $conceptoVacacion
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setConceptoVacacion($conceptoVacacion)
+    {
+        $this->conceptoVacacion = $conceptoVacacion;
+
+        return $this;
+    }
+
+    /**
+     * Get conceptoVacacion
+     *
+     * @return boolean
+     */
+    public function getConceptoVacacion()
+    {
+        return $this->conceptoVacacion;
     }
 }

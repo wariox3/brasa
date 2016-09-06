@@ -203,7 +203,7 @@ class PagosController extends Controller
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                                            
             ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnCorregirIbc', 'submit', array('label'  => 'Corregir ibc', 'disabled' => false))
+            ->add('BtnCorregirIbc', 'submit', array('label'  => 'Corregir ibc', 'disabled' => true))
             ->add('BtnExcelDetalle', 'submit', array('label'  => 'Excel detalle',))
             //->add('BtnExcelResumen', 'submit', array('label'  => 'Excel resumen',))
             ->getForm();        
