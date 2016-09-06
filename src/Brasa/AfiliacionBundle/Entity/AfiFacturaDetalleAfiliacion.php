@@ -52,6 +52,8 @@ class AfiFacturaDetalleAfiliacion
 
     
 
+    
+
     /**
      * Get codigoFacturaDetalleAfiliacionPk
      *

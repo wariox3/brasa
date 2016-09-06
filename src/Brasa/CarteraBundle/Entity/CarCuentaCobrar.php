@@ -129,12 +129,11 @@ class CarCuentaCobrar
     /**
      * @ORM\OneToMany(targetEntity="CarAnticipoDetalle", mappedBy="cuentaCobrarRel")
      */
-    protected $anticipoDetallesCuentaCobrarRel;
+    protected $anticiposDetallesCuentaCobrarRel;
 
    
     
    
-    
     /**
      * Constructor
      */
@@ -143,7 +142,7 @@ class CarCuentaCobrar
         $this->notasCreditosDetallesCuentaCobrarRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->notasDebitosDetallesCuentaCobrarRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->recibosDetallesCuentaCobrarRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->anticipoDetallesCuentaCobrarRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->anticiposDetallesCuentaCobrarRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -691,36 +690,36 @@ class CarCuentaCobrar
     }
 
     /**
-     * Add anticipoDetallesCuentaCobrarRel
+     * Add anticiposDetallesCuentaCobrarRel
      *
-     * @param \Brasa\CarteraBundle\Entity\CarAnticipoDetalle $anticipoDetallesCuentaCobrarRel
+     * @param \Brasa\CarteraBundle\Entity\CarAnticipoDetalle $anticiposDetallesCuentaCobrarRel
      *
      * @return CarCuentaCobrar
      */
-    public function addAnticipoDetallesCuentaCobrarRel(\Brasa\CarteraBundle\Entity\CarAnticipoDetalle $anticipoDetallesCuentaCobrarRel)
+    public function addAnticiposDetallesCuentaCobrarRel(\Brasa\CarteraBundle\Entity\CarAnticipoDetalle $anticiposDetallesCuentaCobrarRel)
     {
-        $this->anticipoDetallesCuentaCobrarRel[] = $anticipoDetallesCuentaCobrarRel;
+        $this->anticiposDetallesCuentaCobrarRel[] = $anticiposDetallesCuentaCobrarRel;
 
         return $this;
     }
 
     /**
-     * Remove anticipoDetallesCuentaCobrarRel
+     * Remove anticiposDetallesCuentaCobrarRel
      *
-     * @param \Brasa\CarteraBundle\Entity\CarAnticipoDetalle $anticipoDetallesCuentaCobrarRel
+     * @param \Brasa\CarteraBundle\Entity\CarAnticipoDetalle $anticiposDetallesCuentaCobrarRel
      */
-    public function removeAnticipoDetallesCuentaCobrarRel(\Brasa\CarteraBundle\Entity\CarAnticipoDetalle $anticipoDetallesCuentaCobrarRel)
+    public function removeAnticiposDetallesCuentaCobrarRel(\Brasa\CarteraBundle\Entity\CarAnticipoDetalle $anticiposDetallesCuentaCobrarRel)
     {
-        $this->anticipoDetallesCuentaCobrarRel->removeElement($anticipoDetallesCuentaCobrarRel);
+        $this->anticiposDetallesCuentaCobrarRel->removeElement($anticiposDetallesCuentaCobrarRel);
     }
 
     /**
-     * Get anticipoDetallesCuentaCobrarRel
+     * Get anticiposDetallesCuentaCobrarRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getAnticipoDetallesCuentaCobrarRel()
+    public function getAnticiposDetallesCuentaCobrarRel()
     {
-        return $this->anticipoDetallesCuentaCobrarRel;
+        return $this->anticiposDetallesCuentaCobrarRel;
     }
 }

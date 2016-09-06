@@ -22,7 +22,21 @@ class RhuCapacitacionMetodologia
      */    
     private $nombre;
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuCapacitacion", mappedBy="capacitacionMetodologiaRel")
+     */
+    protected $capacitacionesCapacitacionMetodologiaRel;
     
+    
+
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->capacitacionesCapacitacionMetodologiaRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoCapacitacionMetodologiaPk
@@ -56,5 +70,39 @@ class RhuCapacitacionMetodologia
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Add capacitacionesCapacitacionMetodologiaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacion $capacitacionesCapacitacionMetodologiaRel
+     *
+     * @return RhuCapacitacionMetodologia
+     */
+    public function addCapacitacionesCapacitacionMetodologiaRel(\Brasa\RecursoHumanoBundle\Entity\RhuCapacitacion $capacitacionesCapacitacionMetodologiaRel)
+    {
+        $this->capacitacionesCapacitacionMetodologiaRel[] = $capacitacionesCapacitacionMetodologiaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove capacitacionesCapacitacionMetodologiaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacion $capacitacionesCapacitacionMetodologiaRel
+     */
+    public function removeCapacitacionesCapacitacionMetodologiaRel(\Brasa\RecursoHumanoBundle\Entity\RhuCapacitacion $capacitacionesCapacitacionMetodologiaRel)
+    {
+        $this->capacitacionesCapacitacionMetodologiaRel->removeElement($capacitacionesCapacitacionMetodologiaRel);
+    }
+
+    /**
+     * Get capacitacionesCapacitacionMetodologiaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCapacitacionesCapacitacionMetodologiaRel()
+    {
+        return $this->capacitacionesCapacitacionMetodologiaRel;
     }
 }

@@ -197,6 +197,13 @@ class PeriodoController extends Controller
                 $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
                 $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
                 $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
+                $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+                $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+                $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+                $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+                $arEntidadRiesgos = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
+                $arEntidadRiesgos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($arConfiguracionNomina->getCodigoEntidadRiesgoFk());
+                $condigoInterfaceRiesgos = $arEntidadRiesgos->getCodigoInterface();
                 if ($arPeriodo->getFechaPago() != null && $arPeriodo->getAnio() != null && $arPeriodo->getMes() != null && $arPeriodo->getAnioPago() != null && $arPeriodo->getMesPago() != null){
                     $arPeriodoDetallePagos = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago();
                     $arPeriodoDetallePagos = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetallePago')->findBy(array('codigoPeriodoFk' => $codigoPeriodo));
@@ -204,17 +211,14 @@ class PeriodoController extends Controller
                     foreach ($arPeriodoDetallePagos as $arPeriodoDetallesumaTotales){
                         $totalCotizacion += $arPeriodoDetallesumaTotales->getTotalCotizacion();
                     }
-                    $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
-                    $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
                     if ($codigoProceso == 1){ //proceso a cargo del cliente
                         $nit = $arPeriodo->getClienteRel()->getNit();
                         $cliente = $arPeriodo->getClienteRel()->getNombreCorto();
                         $sucursal = $arPeriodo->getClienteRel()->getCodigoSucursal();
-                    } else { //proceso a cargo de horus
+                    } else { //proceso interno horus
                         $nit = $arConfiguracion->getNitEmpresa();
                         $cliente = $arConfiguracion->getNombreEmpresa();
-                        $sucursal = $em->getRepository('BrasaAfiliacionBundle:AfiSucursal')->find(15);
-                        $sucursal = $sucursal->getCodigoInterface();
+                        $sucursal = $arPeriodo->getClienteRel()->getCodigoSucursal();
                     }
                     $strRutaArchivo = $arConfiguracion->getRutaTemporal();
                     $strNombreArchivo = "pila" . date('YmdHis') . ".txt";
@@ -235,10 +239,11 @@ class PeriodoController extends Controller
                     fputs($ar, $this->RellenarNr($sucursal, " ", 10, "D")); //sucursal pila
                     fputs($ar, $this->RellenarNr('PAGO CONTADO', " ", 40, "D")); //ESTABA $arPeriodo->getClienteRel()->getNombreCorto()
                     //Arp del aportante
-                    fputs($ar, '14-18 ');
+                    //fputs($ar, '14-18 ');
+                    fputs($ar, $this->RellenarNr($condigoInterfaceRiesgos, " ", 6, "D")); //Nro 13
                     //Periodo pago para los diferentes sistemas
                     fputs($ar, $arPeriodo->getAnio().'-'. $this->RellenarNr($arPeriodo->getMes(), "0", 2, "I"));
-                    fputs($ar, $arPeriodo->getAnio().'-'. $this->RellenarNr($arPeriodo->getMesPago(), "0", 2, "I"));
+                    fputs($ar, $arPeriodo->getAnioPago().'-'. $this->RellenarNr($arPeriodo->getMesPago(), "0", 2, "I"));
                     //Numero radicacion de la planilla
                     fputs($ar, '0000000000'); //Nro 16
                     //Fecha de pago

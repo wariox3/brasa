@@ -112,7 +112,8 @@ class AfiFactura
     /**
      * @ORM\OneToMany(targetEntity="AfiFacturaDetalle", mappedBy="facturaRel")
      */
-    protected $facturasDetallesFacturaRel;     
+    protected $facturasDetallesFacturaRel;
+    
     
     /**
      * @ORM\OneToMany(targetEntity="AfiFacturaDetalleCurso", mappedBy="facturaRel")
@@ -120,10 +121,16 @@ class AfiFactura
     protected $facturasDetallesCursosFacturaRel;
 
     /**
+     * @ORM\OneToMany(targetEntity="AfiFacturaDetalleAfiliacion", mappedBy="contratoRel")
+     */
+    protected $facturasDetallesAfiliacionesContratosRel;
+    
+    /**
      * @ORM\OneToMany(targetEntity="AfiFacturaDetalleAfiliacion", mappedBy="facturaRel")
      */
-    protected $facturasDetallesContratosFacturaRel;
+    protected $facturasDetallesAfiliacionesFacturaRel;
 
+    
     
     
     /**
@@ -133,7 +140,8 @@ class AfiFactura
     {
         $this->facturasDetallesFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->facturasDetallesCursosFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->facturasDetallesContratosFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facturasDetallesAfiliacionesContratosRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facturasDetallesAfiliacionesFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -647,36 +655,70 @@ class AfiFactura
     }
 
     /**
-     * Add facturasDetallesContratosFacturaRel
+     * Add facturasDetallesAfiliacionesContratosRel
      *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion $facturasDetallesContratosFacturaRel
+     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion $facturasDetallesAfiliacionesContratosRel
      *
      * @return AfiFactura
      */
-    public function addFacturasDetallesContratosFacturaRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion $facturasDetallesContratosFacturaRel)
+    public function addFacturasDetallesAfiliacionesContratosRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion $facturasDetallesAfiliacionesContratosRel)
     {
-        $this->facturasDetallesContratosFacturaRel[] = $facturasDetallesContratosFacturaRel;
+        $this->facturasDetallesAfiliacionesContratosRel[] = $facturasDetallesAfiliacionesContratosRel;
 
         return $this;
     }
 
     /**
-     * Remove facturasDetallesContratosFacturaRel
+     * Remove facturasDetallesAfiliacionesContratosRel
      *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion $facturasDetallesContratosFacturaRel
+     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion $facturasDetallesAfiliacionesContratosRel
      */
-    public function removeFacturasDetallesContratosFacturaRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion $facturasDetallesContratosFacturaRel)
+    public function removeFacturasDetallesAfiliacionesContratosRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion $facturasDetallesAfiliacionesContratosRel)
     {
-        $this->facturasDetallesContratosFacturaRel->removeElement($facturasDetallesContratosFacturaRel);
+        $this->facturasDetallesAfiliacionesContratosRel->removeElement($facturasDetallesAfiliacionesContratosRel);
     }
 
     /**
-     * Get facturasDetallesContratosFacturaRel
+     * Get facturasDetallesAfiliacionesContratosRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getFacturasDetallesContratosFacturaRel()
+    public function getFacturasDetallesAfiliacionesContratosRel()
     {
-        return $this->facturasDetallesContratosFacturaRel;
+        return $this->facturasDetallesAfiliacionesContratosRel;
+    }
+
+    /**
+     * Add facturasDetallesAfiliacionesFacturaRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion $facturasDetallesAfiliacionesFacturaRel
+     *
+     * @return AfiFactura
+     */
+    public function addFacturasDetallesAfiliacionesFacturaRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion $facturasDetallesAfiliacionesFacturaRel)
+    {
+        $this->facturasDetallesAfiliacionesFacturaRel[] = $facturasDetallesAfiliacionesFacturaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturasDetallesAfiliacionesFacturaRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion $facturasDetallesAfiliacionesFacturaRel
+     */
+    public function removeFacturasDetallesAfiliacionesFacturaRel(\Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleAfiliacion $facturasDetallesAfiliacionesFacturaRel)
+    {
+        $this->facturasDetallesAfiliacionesFacturaRel->removeElement($facturasDetallesAfiliacionesFacturaRel);
+    }
+
+    /**
+     * Get facturasDetallesAfiliacionesFacturaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturasDetallesAfiliacionesFacturaRel()
+    {
+        return $this->facturasDetallesAfiliacionesFacturaRel;
     }
 }

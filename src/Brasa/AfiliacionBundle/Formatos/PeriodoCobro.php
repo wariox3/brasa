@@ -166,7 +166,7 @@ class PeriodoCobro extends \FPDF_FPDF {
         $pdf->SetFont('Arial', '', 7);
         $var = $arPeriodo->getTotal();
         $var2 = count($arPeriodoDetalles);
-        $var3 = $arPeriodo->getSubtotal();
+        $var3 = 0;
         foreach ($arPeriodoDetalles as $arPeriodoDetalle) {                        
             $pdf->Cell(20, 4, $arPeriodoDetalle->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
                 $pdf->SetFont('Arial', '', 6);
@@ -174,10 +174,10 @@ class PeriodoCobro extends \FPDF_FPDF {
                 $pdf->Cell(8, 4, $arPeriodoDetalle->getDias(), 1, 0, 'L');
                 $pdf->Cell(15, 4, number_format($arPeriodoDetalle->getSalario(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Cell(15, 4, $arPeriodoDetalle->getContratoRel()->getFechaDesde()->format('Y-m-d'), 1, 0, 'L');
-                $pdf->Cell(30, 4, utf8_decode($arPeriodoDetalle->getContratoRel()->getEntidadPensionRel()->getNombre()), 1, 0, 'L');
-                $pdf->Cell(30, 4, utf8_decode($arPeriodoDetalle->getContratoRel()->getEntidadSaludRel()->getNombre()), 1, 0, 'L');
+                $pdf->Cell(30, 4, utf8_decode(substr($arPeriodoDetalle->getContratoRel()->getEntidadPensionRel()->getNombre(),0,18)), 1, 0, 'L');
+                $pdf->Cell(30, 4, utf8_decode(substr($arPeriodoDetalle->getContratoRel()->getEntidadSaludRel()->getNombre(),0,22)), 1, 0, 'L');
                 $pdf->Cell(20, 4, utf8_decode($arPeriodoDetalle->getContratoRel()->getClasificacionRiesgoRel()->getNombre()), 1, 0, 'L');
-                $pdf->Cell(15, 4, utf8_decode($arPeriodoDetalle->getContratoRel()->getEntidadCajaRel()->getNombre()), 1, 0, 'L');
+                $pdf->Cell(15, 4, utf8_decode(substr($arPeriodoDetalle->getContratoRel()->getEntidadCajaRel()->getNombre(),0,10)), 1, 0, 'L');
                 $pdf->SetFont('Arial', '', 7);
                 $pdf->Cell(11, 4, number_format($arPeriodoDetalle->getAdministracion(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Cell(15, 4, number_format($arPeriodoDetalle->getSubtotal(), 0, '.', ','), 1, 0, 'R');
@@ -189,17 +189,16 @@ class PeriodoCobro extends \FPDF_FPDF {
                     $retiro = 'SI';
                 }
                 $pdf->Cell(7, 4, $retiro, 1, 0, 'L');
-            
+                $var3 = $var3 + $arPeriodoDetalle->getSubtotal() - $arPeriodoDetalle->getAdministracion();
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
             
         }
             $pdf->SetFont('Arial', 'B', 7);
             $pdf->Cell(218, 5, "SUBTOTAL:", 0, 0, 'R');
-            
             $pdf->Cell(15, 5, number_format($var3,0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(10, 5, "TOTAL:", 0, 0, 'R');
             
+            $pdf->Cell(10, 5, "TOTAL:", 0, 0, 'R');
             $pdf->Cell(15, 5, number_format($var,0, '.', ','), 1, 0, 'R');
             $pdf->Cell(7, 5, "", 0, 0, 'R');
             $pdf->Ln();
