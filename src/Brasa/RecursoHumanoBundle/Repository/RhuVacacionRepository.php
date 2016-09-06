@@ -256,7 +256,7 @@ class RhuVacacionRepository extends EntityRepository {
                 $intDiaFin = $arVacacionDisfrute->getFechaHastaDisfrute()->format('j');
             }            
             $intDiasVacaciones = (($intDiaFin - $intDiaInicio)+1);
-            if($intDiasVacaciones == 1) {
+            if($intDiasVacaciones == 1 && $arVacacionDisfrute->getDiasDisfrutados() <= 0) {
                 $intDiasVacaciones = 0;
             }     
             $intDiasVacacionesTotal += $intDiasVacaciones;

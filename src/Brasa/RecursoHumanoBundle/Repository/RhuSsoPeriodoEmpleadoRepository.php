@@ -32,9 +32,9 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
             return $dql;
     }
     
-    public function listaCopiarDql($codigoPeriodoDetalle, $strCodigoCentroCosto, $strCodigoSucursal, $numeroIdentificacion = "" ) {                    
+    public function listaCopiarDql($codigoPeriodoDetalle, $strCodigoCentroCosto, $strCodigoSucursal, $numeroIdentificacion = "", $codigoPeriodo = "" ) {                    
             $dql   = "SELECT pe, e FROM BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado pe JOIN pe.empleadoRel e "
-                    ."WHERE pe.codigoPeriodoDetalleFk <> " . $codigoPeriodoDetalle . " ";
+                    ."WHERE pe.codigoPeriodoDetalleFk <> " . $codigoPeriodoDetalle . " AND pe.codigoPeriodoFk = $codigoPeriodo ";
             if($strCodigoCentroCosto != "") {
                 $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
             }

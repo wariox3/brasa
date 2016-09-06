@@ -1018,7 +1018,9 @@ class SeguridadSocialPeriodosController extends Controller
     private function listarCopiarEmpleados($codigoPeriodoDetalle) {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $this->strDqlListaEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->listaCopiarDql($codigoPeriodoDetalle, $session->get('filtroCodigoCentroCosto'),$this->strCodigoPeriodoDetalleCopias, $session->get('filtroNumeroIdentificacion'));
+        $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
+        $arPeriodoDetalle =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);        
+        $this->strDqlListaEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->listaCopiarDql($codigoPeriodoDetalle, $session->get('filtroCodigoCentroCosto'),$this->strCodigoPeriodoDetalleCopias, $session->get('filtroNumeroIdentificacion'), $arPeriodoDetalle->getCodigoPeriodoFk());
     }
 
     private function listarDetalleAportes($codigoPeriodoDetalle) {
