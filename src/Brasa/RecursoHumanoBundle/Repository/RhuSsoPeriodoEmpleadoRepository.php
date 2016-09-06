@@ -52,6 +52,7 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
         $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
         $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
         $ibcMinimoDia = $arConfiguracionNomina->getVrSalario() / 30;
+        $salarioMinimo = $arConfiguracionNomina->getVrSalario();
         $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
         $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);             
         $arPeriodoEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
@@ -149,7 +150,7 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
             $arPeriodoEmpleadoActualizar->setCodigoEntidadCajaPertenece($arContrato->getEntidadCajaRel()->getCodigoInterface());
             $intDiasLaborados = $intDiasCotizar - $intDiasLicencia;
             $ibc = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibc($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde()->format('Y-m-d'), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta()->format('Y-m-d'), $arContrato->getCodigoContratoPk());                        
-            $ibcMinimo = ($floSalario / 30) * $intDiasLaborados;            
+            $ibcMinimo = ($salarioMinimo / 30) * $intDiasLaborados;            
             if($ibc < $ibcMinimo) {
                 $ibc = $ibcMinimo;
             }

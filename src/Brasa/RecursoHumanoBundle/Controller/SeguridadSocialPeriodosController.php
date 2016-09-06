@@ -1,11 +1,12 @@
 <?php
 
 namespace Brasa\RecursoHumanoBundle\Controller;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuSsoPeriodoType;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuSsoPeriodoDetalleType;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuSsoAporteType; 
 
 class SeguridadSocialPeriodosController extends Controller
 {
@@ -603,7 +604,7 @@ class SeguridadSocialPeriodosController extends Controller
                 foreach ($arContratos as $arContrato) {
                     if($arContrato->getCentroCostoRel()->getCodigoSucursalFk() == $arPeriodoDetalle->getCodigoSucursalFk()) {
                         $arPeriodoEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
-                        $arPeriodoEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->findOneBy(array('codigoEmpleadoFk' => $arContrato->getCodigoEmpleadoFk()));                
+                        $arPeriodoEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->findOneBy(array('codigoEmpleadoFk' => $arContrato->getCodigoEmpleadoFk(), 'codigoPeriodoFk' => $arPeriodoDetalle->getCodigoPeriodoFk()));                
                         if(!$arPeriodoEmpleado) {
                             $arPeriodoEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
                             $arPeriodoEmpleado->setEmpleadoRel($arContrato->getEmpleadoRel());
@@ -685,6 +686,36 @@ class SeguridadSocialPeriodosController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/SeguridadSocial/Periodos:detalleAportes.html.twig', array(
             'arPeriodoDetalle' => $arPeriodoDetalle,
             'arSsoAportes' => $arSsoAportes,
+            'form' => $form->createView()));
+    }
+
+    /**
+     * @Route("/rhu/seguridadsocial/periodo/detalle/aporte/editar/{codigoAporte}", name="brs_rhu_seguridadsocial_periodo_detalle_aporte_editar")
+     */         
+    public function detalleAportesEditarAction($codigoAporte) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $arAporte = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte();
+        $arAporte =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoAporte')->find($codigoAporte);                
+        $form = $this->createForm(new RhuSsoAporteType, $arAporte);
+        $form->handleRequest($request);
+        if($form->isValid()) {
+            $arAporte = $form->getData();
+            if(!$arAporte->getIngreso()) {
+                $arAporte->setIngreso(' ');
+            }
+            if(!$arAporte->getRetiro()) {
+                $arAporte->setRetiro(' ');
+            }            
+            $totalCotizacion = $arAporte->getAportesFondoSolidaridadPensionalSolidaridad() + $arAporte->getAportesFondoSolidaridadPensionalSubsistencia() + $arAporte->getCotizacionPension() + $arAporte->getCotizacionSalud() + $arAporte->getCotizacionRiesgos() + $arAporte->getCotizacionCaja() + $arAporte->getCotizacionIcbf() + $arAporte->getCotizacionSena();            
+            $arAporte->setTotalCotizacion($totalCotizacion);
+            $em->persist($arAporte);
+            $em->flush();
+            $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->liquidar($arAporte->getCodigoPeriodoDetalleFk());
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+        }        
+        return $this->render('BrasaRecursoHumanoBundle:Utilidades/SeguridadSocial/Periodos:detalleAportesEditar.html.twig', array(
             'form' => $form->createView()));
     }
     

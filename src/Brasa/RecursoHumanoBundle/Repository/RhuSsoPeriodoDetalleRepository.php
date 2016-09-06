@@ -162,13 +162,18 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $floIbcBrutoCaja = 0;
                 if($intDiasCotizarPension > 0) {
                     $floIbcBrutoPension = $ibc;
-                    $floIbcBrutoSalud = $ibc;
-                    $floIbcBrutoRiesgos = $ibc - $ibcVacaciones - $ibcIncapacidad;                
-                    $floIbcBrutoCaja = $ibc - $ibcIncapacidad;                    
-                    //$floIbcBrutoRiesgos = $intDiasCotizarRiesgos * ($ibc/$intDiasCotizarPension);                
-                    //$floIbcBrutoCaja = ($intDiasCotizarCaja * ($ibc/$intDiasCotizarPension)) + $vacaciones;
                 }
-                
+                if($intDiasCotizarSalud > 0) {
+                    $floIbcBrutoSalud = $ibc;
+                }
+                if($intDiasCotizarRiesgos > 0) {
+                    $floIbcBrutoRiesgos = $ibc - $ibcVacaciones - $ibcIncapacidad;                
+                }
+                if($intDiasCotizarCaja > 0) {
+                    $floIbcBrutoCaja = ($ibc - $ibcVacaciones) + $vacaciones - $ibcIncapacidad;                    
+                }                                        
+                //$floIbcBrutoRiesgos = $intDiasCotizarRiesgos * ($ibc/$intDiasCotizarPension);                
+                //$floIbcBrutoCaja = ($intDiasCotizarCaja * ($ibc/$intDiasCotizarPension)) + $vacaciones;                               
                 
                 $floIbcPension = $this->redondearIbc($intDiasCotizarPension, $floIbcBrutoPension);
                 $floIbcSalud = $this->redondearIbc($intDiasCotizarSalud, $floIbcBrutoSalud);
@@ -249,7 +254,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $totalCotizacionGeneral += $totalCotizacion;
                 $arAporte->setTotalCotizacion($totalCotizacion);
                 $sinLineaInicial = true;
-                if($intDiasCotizarPension > 0) {
+                if($intDiasCotizarPension > 0 || $intDiasCotizarSalud > 0) {
                     $sinLineaInicial = false;
                     $em->persist($arAporte);    
                     $i++;
@@ -420,6 +425,23 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
         $arPeriodoDetalle->setEstadoGenerado(0);
         $arPeriodoDetalle->setNumeroRegistros(0);
         $arPeriodoDetalle->setTotalCotizacion(0);
+        $em->persist($arPeriodoDetalle);
+        $em->flush();
+        return true;
+    }    
+    
+    public function liquidar($codigoPeriodoDetalle) {
+        $em = $this->getEntityManager();
+        set_time_limit(0);   
+        $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();        
+        $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);        
+        $arAportes = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte();
+        $arAportes = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoAporte')->findBy(array('codigoPeriodoDetalleFk' => $codigoPeriodoDetalle));                    
+        $totalCotizacion = 0;
+        foreach ($arAportes as $arAporte) {
+            $totalCotizacion += $arAporte->getAportesFondoSolidaridadPensionalSolidaridad() + $arAporte->getAportesFondoSolidaridadPensionalSubsistencia() + $arAporte->getCotizacionPension() + $arAporte->getCotizacionSalud() + $arAporte->getCotizacionRiesgos() + $arAporte->getCotizacionCaja() + $arAporte->getCotizacionIcbf() + $arAporte->getCotizacionSena();
+        }
+        $arPeriodoDetalle->setTotalCotizacion($totalCotizacion);
         $em->persist($arPeriodoDetalle);
         $em->flush();
         return true;

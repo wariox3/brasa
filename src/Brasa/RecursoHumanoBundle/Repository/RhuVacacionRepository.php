@@ -244,30 +244,34 @@ class RhuVacacionRepository extends EntityRepository {
         foreach ($arVacacionesDisfrute as $arVacacionDisfrute) {            
             $intDiasVacaciones = 0;
             $intDiaInicio = 1;            
-            $intDiaFin = 30;
+            $intDiaFin = 30;            
+            $intDiaFinLiquidacion = date("d",(mktime(0,0,0,$fechaHasta->format('m')+1,1,$fechaHasta->format('Y'))-1));
             if($arVacacionDisfrute->getFechaDesdeDisfrute() <  $fechaDesde) {
                 $intDiaInicio = 1;                
             } else {
                 $intDiaInicio = $arVacacionDisfrute->getFechaDesdeDisfrute()->format('j');
             }
-            if($arVacacionDisfrute->getFechaHastaDisfrute() > $fechaHasta) {
-                $intDiaFin = 30;                
-            } else {
+            if($arVacacionDisfrute->getFechaHastaDisfrute() < $fechaHasta) {
                 $intDiaFin = $arVacacionDisfrute->getFechaHastaDisfrute()->format('j');
+                $intDiaFinLiquidacion = $arVacacionDisfrute->getFechaHastaDisfrute()->format('j');
             }            
             $intDiasVacaciones = (($intDiaFin - $intDiaInicio)+1);
+            $intDiasVacacionesLiquidar = (($intDiaFinLiquidacion - $intDiaInicio)+1);
             if($intDiasVacaciones == 1 && $arVacacionDisfrute->getDiasDisfrutados() <= 0) {
                 $intDiasVacaciones = 0;
+                $intDiasVacacionesLiquidar = 0;
+                
             }     
             $intDiasVacacionesTotal += $intDiasVacaciones;
             //$arVacacionDisfrute = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
             if($arVacacionDisfrute->getDiasDisfrutados() > 1) {
-                $vrDiaDisfrute = ($arVacacionDisfrute->getVrVacacionBruto() / $arVacacionDisfrute->getDiasDisfrutados());    
-                $vrAporteParafiscales += $intDiasVacaciones * $vrDiaDisfrute;
+                $vrDiaDisfrute = ($arVacacionDisfrute->getVrVacacionBruto() / $arVacacionDisfrute->getDiasVacaciones());    
+                $vrAporteParafiscales += $intDiasVacacionesLiquidar * $vrDiaDisfrute;
             } else {
                 $vrAporteParafiscales += $arVacacionDisfrute->getVrVacacionBruto();
-            }            
-            
+            }        
+            //$vrDiaVacacion = $arVacacionDisfrute->getVrVacacionBruto() / $arVacacionDisfrute->getDiasVacaciones();
+            //$vrAporteParafiscales = 
         }
         if($intDiasVacacionesTotal > 30) {
             $intDiasVacacionesTotal = 30;
