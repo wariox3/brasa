@@ -29,7 +29,7 @@ class ContabilizarLiquidacionController extends Controller
                     $arComprobanteContable = new \Brasa\ContabilidadBundle\Entity\CtbComprobante();                    
                     $arComprobanteContable = $em->getRepository('BrasaContabilidadBundle:CtbComprobante')->find($arConfiguracion->getCodigoComprobanteLiquidacion());
                     $arCentroCosto = new \Brasa\ContabilidadBundle\Entity\CtbCentroCosto();                    
-                    $arCentroCosto =$em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find(1);                           
+                    $arCentroCosto =$em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find(0);                           
                     foreach ($arrSeleccionados AS $codigo) {                                     
                         $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
                         $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigo);
@@ -101,25 +101,97 @@ class ContabilizarLiquidacionController extends Controller
             }                                           
         }
         */
-
-        //Liquidacion por pagar
-        if($arLiquidacion->getVrNeto() > 0) {
-            if($arConfiguracionNomina->getCuentaNominaPagar() != '') {           
-                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arConfiguracionNomina->getCuentaNominaPagar()); //estaba 250501                           
-                if($arCuenta) {
-                    $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                    //$arRegistro->setCentroCostoRel($arCentroCosto);
-                    $arRegistro->setCuentaRel($arCuenta);
-                    $arRegistro->setTerceroRel($arTercero);
-                    $arRegistro->setNumero($arLiquidacion->getNumero());
-                    $arRegistro->setNumeroReferencia($arLiquidacion->getNumero());
-                    $arRegistro->setFecha($arLiquidacion->getFechaHasta());
-                    $arRegistro->setCredito($arLiquidacion->getVrNeto());                            
-                    $arRegistro->setDescripcionContable('LIQUIDACION POR PAGAR');
-                    $em->persist($arRegistro);
-                }            
-            }            
+        //Cesantias
+        if($arLiquidacion->getVrCesantias() > 0) {
+            $arConfiguracionCuenta = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionCuenta')->find(1);
+            $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arConfiguracionCuenta->getCodigoCuentaFk()); 
+            if($arCuenta) {
+                $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+                $arRegistro->setComprobanteRel($arComprobanteContable);
+                //$arRegistro->setCentroCostoRel($arCentroCosto);
+                $arRegistro->setCuentaRel($arCuenta);
+                $arRegistro->setTerceroRel($arTercero);
+                $arRegistro->setNumero($arLiquidacion->getCodigoLiquidacionPk());
+                $arRegistro->setNumeroReferencia($arLiquidacion->getCodigoLiquidacionPk());
+                $arRegistro->setFecha($arLiquidacion->getFechaHasta());
+                $arRegistro->setDebito($arLiquidacion->getVrCesantias());                            
+                $arRegistro->setDescripcionContable('CESANTIAS');
+                $em->persist($arRegistro);
+            }             
+        }
+        
+        //Intereses cesantias
+        if($arLiquidacion->getVrInteresesCesantias() > 0) {
+            $arConfiguracionCuenta = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionCuenta')->find(2);
+            $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arConfiguracionCuenta->getCodigoCuentaFk()); 
+            if($arCuenta) {
+                $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+                $arRegistro->setComprobanteRel($arComprobanteContable);
+                //$arRegistro->setCentroCostoRel($arCentroCosto);
+                $arRegistro->setCuentaRel($arCuenta);
+                $arRegistro->setTerceroRel($arTercero);
+                $arRegistro->setNumero($arLiquidacion->getCodigoLiquidacionPk());
+                $arRegistro->setNumeroReferencia($arLiquidacion->getCodigoLiquidacionPk());
+                $arRegistro->setFecha($arLiquidacion->getFechaHasta());
+                $arRegistro->setDebito($arLiquidacion->getVrInteresesCesantias());                            
+                $arRegistro->setDescripcionContable('INTERESES CESANTIAS');
+                $em->persist($arRegistro);
+            }             
+        }  
+        //Primas
+        if($arLiquidacion->getVrPrima() > 0) {
+            $arConfiguracionCuenta = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionCuenta')->find(3);
+            $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arConfiguracionCuenta->getCodigoCuentaFk()); 
+            if($arCuenta) {
+                $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+                $arRegistro->setComprobanteRel($arComprobanteContable);
+                //$arRegistro->setCentroCostoRel($arCentroCosto);
+                $arRegistro->setCuentaRel($arCuenta);
+                $arRegistro->setTerceroRel($arTercero);
+                $arRegistro->setNumero($arLiquidacion->getCodigoLiquidacionPk());
+                $arRegistro->setNumeroReferencia($arLiquidacion->getCodigoLiquidacionPk());
+                $arRegistro->setFecha($arLiquidacion->getFechaHasta());
+                $arRegistro->setDebito($arLiquidacion->getVrPrima());                            
+                $arRegistro->setDescripcionContable('PRIMAS');
+                $em->persist($arRegistro);
+            }             
+        } 
+        //Vacaciones
+        if($arLiquidacion->getVrVacaciones() > 0) {
+            $arConfiguracionCuenta = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionCuenta')->find(4);
+            $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arConfiguracionCuenta->getCodigoCuentaFk()); 
+            if($arCuenta) {
+                $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+                $arRegistro->setComprobanteRel($arComprobanteContable);
+                //$arRegistro->setCentroCostoRel($arCentroCosto);
+                $arRegistro->setCuentaRel($arCuenta);
+                $arRegistro->setTerceroRel($arTercero);
+                $arRegistro->setNumero($arLiquidacion->getCodigoLiquidacionPk());
+                $arRegistro->setNumeroReferencia($arLiquidacion->getCodigoLiquidacionPk());
+                $arRegistro->setFecha($arLiquidacion->getFechaHasta());
+                $arRegistro->setDebito($arLiquidacion->getVrVacaciones());                            
+                $arRegistro->setDescripcionContable('VACACIONES');
+                $em->persist($arRegistro);
+            }             
+        }
+        
+        //Indemnizacion
+        if($arLiquidacion->getVrIndemnizacion() > 0) {
+            $arConfiguracionCuenta = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionCuenta')->find(6);
+            $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arConfiguracionCuenta->getCodigoCuentaFk()); 
+            if($arCuenta) {
+                $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+                $arRegistro->setComprobanteRel($arComprobanteContable);
+                //$arRegistro->setCentroCostoRel($arCentroCosto);
+                $arRegistro->setCuentaRel($arCuenta);
+                $arRegistro->setTerceroRel($arTercero);
+                $arRegistro->setNumero($arLiquidacion->getCodigoLiquidacionPk());
+                $arRegistro->setNumeroReferencia($arLiquidacion->getCodigoLiquidacionPk());
+                $arRegistro->setFecha($arLiquidacion->getFechaHasta());
+                $arRegistro->setDebito($arLiquidacion->getVrIndemnizacion());                            
+                $arRegistro->setDescripcionContable('VACACIONES');
+                $em->persist($arRegistro);
+            }             
         }        
     }    
     
