@@ -140,9 +140,12 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                     $intDiasCotizarPension = 0;
                     $intDiasCotizarCaja = 0;
                 }            
-                if($arAporte->getTipoCotizante() == '12' || $arAporte->getTipoCotizante() == '19') {
+                if($arAporte->getTipoCotizante() == '12') {
                     $intDiasCotizarRiesgos = 0;
-                }             
+                }     
+                if($arAporte->getTipoCotizante() == '23') {
+                    $intDiasCotizarSalud = 0;
+                }                
                 $arAporte->setDiasCotizadosPension($intDiasCotizarPension);
                 $arAporte->setDiasCotizadosSalud($intDiasCotizarSalud);
                 $arAporte->setDiasCotizadosRiesgosProfesionales($intDiasCotizarRiesgos);
