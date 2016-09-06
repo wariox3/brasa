@@ -31,7 +31,7 @@ class PagosController extends Controller
                     $arPagosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                     $arPagosDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->findBy(array('codigoPagoFk' => $arPago->getCodigoPagoPk()));            
                     foreach ($arPagosDetalles as $arPagoDetalle) {                        
-                        $arPagoDetalleAct = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                        /*$arPagoDetalleAct = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                         $arPagoDetalleAct = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->find($arPagoDetalle->getCodigoPagoDetallePk());
                         if($arPagoDetalle->getPagoConceptoRel()->getGeneraIngresoBaseCotizacion() == 1) {
                             $arPagoDetalleAct->setVrIngresoBaseCotizacion($arPagoDetalle->getVrPago());
@@ -39,9 +39,9 @@ class PagosController extends Controller
                             $arPagoDetalleAct->setVrIngresoBaseCotizacion(0);
                             $arPagoDetalleAct->setVrIngresoBaseCotizacionAdicional(0);
                             $arPagoDetalleAct->setVrIngresoBaseCotizacionSalario(0);
-                        }
-                        $ingresoBaseCotizacion += $arPagoDetalleAct->getVrIngresoBaseCotizacion();
-                        $em->persist($arPagoDetalleAct);                                             
+                        }*/
+                        $ingresoBaseCotizacion += $arPagoDetalle->getVrIngresoBaseCotizacion();
+                        //$em->persist($arPagoDetalleAct);                                             
                     }     
                     $arPagoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
                     $arPagoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->find($arPago->getCodigoPagoPk());
@@ -203,7 +203,7 @@ class PagosController extends Controller
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                                            
             ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnCorregirIbc', 'submit', array('label'  => 'Corregir ibc', 'disabled' => true))
+            ->add('BtnCorregirIbc', 'submit', array('label'  => 'Corregir ibc', 'disabled' => false))
             ->add('BtnExcelDetalle', 'submit', array('label'  => 'Excel detalle',))
             //->add('BtnExcelResumen', 'submit', array('label'  => 'Excel resumen',))
             ->getForm();        
