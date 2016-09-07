@@ -27,7 +27,7 @@
                 </ul>
             <a class="btn btn-default btn-sm" id="{{ path('brs_rhu_contratos_informacion_inicial', { 'codigoContrato': arContrato.codigoContratoPk}) }}" style="float:left">Informacion inicial contrato</a>
             {% if arContrato.indefinido == 0 %}
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_actualizar_terminado', { 'codigoContrato': arContrato.codigoContratoPk}) }}', 'Archivos', 700, 700)" >Actualizar contrato terminado</a>
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_actualizar_terminado', { 'codigoContrato': arContrato.codigoContratoPk}) }}', 'Archivos', 700, 1000)" >Actualizar contrato terminado</a>
             {% endif %}
         </div>  
         <br /> <br />
@@ -106,16 +106,16 @@
                     <td></td>
                     <td class="titulo">ENTIDAD CAJA:</td>
                     <td class="td-in-well">{{ arContrato.entidadCajaRel.nombre|default('SIN CONTRATO') }}</td>                    
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">TIPO COTIZANTE:</td>
+                    <td class="td-in-well">{{ arContrato.ssoTipoCotizanteRel.nombre|default('') }}</td>
                 </tr>     
                 <tr>
                     <td class="titulo"></td>
                     <td></td>
                     <td class="titulo">ENTIDAD CESANTIA:</td>
                     <td class="td-in-well">{{ arContrato.entidadCesantiaRel.nombre|default('') }}</td>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">SUBTIPO COTIZANTE:</td>
+                    <td class="td-in-well">{{ arContrato.ssoSubtipoCotizanteRel.nombre|default('') }}</td>
                 </tr>                
                 <tr>
                     <td colspan="8">COMENTARIOS: {{ arContrato.comentarios }}</td>

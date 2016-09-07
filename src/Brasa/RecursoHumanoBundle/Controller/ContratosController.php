@@ -614,6 +614,16 @@ class ContratosController extends Controller
                 'class' => 'BrasaRecursoHumanoBundle:RhuSalarioTipo',
                 'property' => 'nombre',
                 'data' => $arContrato->getSalarioTipoRel(),
+            ))  
+            ->add('ssoTipoCotizanteRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuSsoTipoCotizante',
+                'property' => 'nombre',
+                'data' => $arContrato->getSsoTipoCotizanteRel(),
+            ))
+            ->add('ssoSubtipoCotizanteRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuSsoSubtipoCotizante',
+                'property' => 'nombre',
+                'data' => $arContrato->getSsoSubtipoCotizanteRel(),
             ))                
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => $arContrato->getFechaHasta()  ,'attr' => array('class' => 'date',)))                                    
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
@@ -635,6 +645,8 @@ class ContratosController extends Controller
             $arContrato->setEntidadSaludRel($formActualizar->get('saludRel')->getData());
             $arContrato->setEntidadCajaRel($formActualizar->get('cajaRel')->getData());
             $arContrato->setFechaHasta($formActualizar->get('fechaHasta')->getData());
+            $arContrato->setSsoTipoCotizanteRel($formActualizar->get('ssoTipoCotizanteRel')->getData());
+            $arContrato->setSsoSubtipoCotizanteRel($formActualizar->get('ssoSubtipoCotizanteRel')->getData());
             $em->persist($arContrato);
             $em->flush();
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
