@@ -505,7 +505,7 @@ class BaseEmpleadoController extends Controller
                     ->setCellValue('AU1', 'ZONA')
                     ->setCellValue('AV1', 'SUBZONA')
                     ->setCellValue('AW1', 'TIPO')
-                    ->setCellValue('AX1', 'C. CONTABILIDAD')
+                    ->setCellValue('AX1', 'C.CONTABILIDAD')
                     ->setCellValue('AY1', 'PUESTO');
 
         $i = 2;
@@ -657,7 +657,7 @@ class BaseEmpleadoController extends Controller
                     ->setCellValue('AR' . $i, $departamentoEmpresa)
                     ->setCellValue('AS' . $i, $horario)
                     ->setCellValue('AT' . $i, $discapacidad)
-                    ->setCellValue('AX' . $i, $arEmpleado->getCodigoInterface());
+                    ->setCellValue('AX' . $i, $arEmpleado->getCodigoCentroCostoContabilidadFk());
             if($arEmpleado->getCodigoZonaFk()) {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AU' . $i, $arEmpleado->getZonaRel()->getNombre()); 
             }
