@@ -126,10 +126,14 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
 
                 //Dias
                 $intDiasLicenciaNoRemunerada = $arPeriodoEmpleado->getDiasLicencia();
+                //Para no generar la doblelinea
+                if($arAporte->getTipoCotizante() == '19') {
+                    $intDiasLicenciaNoRemunerada = 0;
+                }
                 $intDiasIncapacidades = $arPeriodoEmpleado->getDiasIncapacidadGeneral() + $arPeriodoEmpleado->getDiasIncapacidadLaboral();
                 $intDiasLicenciaMaternidad = $arPeriodoEmpleado->getDiasLicenciaMaternidad();
                 $intDiasVacaciones = $arPeriodoEmpleado->getDiasVacaciones();
-                
+
                 $intDiasCotizarPension = $intDiasCotizar - $intDiasLicenciaNoRemunerada;
                 $intDiasCotizarSalud = $intDiasCotizar - $intDiasLicenciaNoRemunerada;
                 $intDiasCotizarRiesgos = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasVacaciones;
