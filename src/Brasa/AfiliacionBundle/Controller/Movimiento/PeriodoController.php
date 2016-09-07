@@ -241,9 +241,9 @@ class PeriodoController extends Controller
                     fputs($ar, '01');
                     fputs($ar, '1');
                     fputs($ar, '0001');
-                    fputs($ar, $this->RellenarNr($cliente, " ", 200, "D")); //nombre empresa
+                    fputs($ar, $this->RellenarNr($cliente, " ", 200, "D")); //nombre empresa o cliente
                     fputs($ar, $tipoDoc); //tipo persona o empresa NI o CC
-                    fputs($ar, $this->RellenarNr($nit, " ", 16, "D")); // nit empresa
+                    fputs($ar, $this->RellenarNr($nit, " ", 16, "D")); // nit empresa o cliente
                     fputs($ar, '3');
                     fputs($ar, $tipo);
                     fputs($ar, '          ');
