@@ -247,14 +247,12 @@ class PuestoController extends Controller
                     ->setCellValue('G' . $i, $arPuesto->getCelular())
                     ->setCellValue('H' . $i, $arPuesto->getDireccion())
                     ->setCellValue('I' . $i, $arPuesto->getCostoDotacion())
-                    ->setCellValue('J' . $i, $arPuesto->getCodigoInterface());                                    
+                    ->setCellValue('J' . $i, $arPuesto->getCodigoInterface())
+                    ->setCellValue('L' . $i, $arPuesto->getCodigoCentroCostoContabilidadFk());                                    
                         
             if($arPuesto->getCodigoOperacionFk()) {
                  $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K' . $i, $arPuesto->getOperacionRel()->getNombre());
             }
-            if($arPuesto->getCodigoCentroCostoContabilidadFk()) {
-                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L' . $i, $arPuesto->getCentroCostoContabilidadRel()->getNombre());
-            }                  
             $i++;
             
         }

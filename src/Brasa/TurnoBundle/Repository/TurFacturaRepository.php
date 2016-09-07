@@ -467,27 +467,34 @@ class TurFacturaRepository extends EntityRepository {
                     }
 
                     //Ingreso
-                    $arCentroCosto =$em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find($arFactura->getFacturaTipoRel()->getCodigoCentroCostoContabilidad());                           
-                    $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro(); 
-                    if($arFactura->getFacturaTipoRel()->getTipo() == 2 || $arFactura->getFacturaTipoRel()->getTipo() == 3) {
-                        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaServicioRel()->getCodigoCuentaIngresoDevolucionFk());                                                                
-                    } else {
-                        $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaServicioRel()->getCodigoCuentaIngresoFk());                                                                 
-                    }      
-                    if($arFactura->getFacturaTipoRel()->getTipoCuentaIngreso() == 1) {
-                        $arRegistro->setDebito($arFactura->getVrSubtotal());
-                    } else {
-                        $arRegistro->setCredito($arFactura->getVrSubtotal());
-                    }
-                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                    $arRegistro->setCentroCostoRel($arCentroCosto);
-                    $arRegistro->setCuentaRel($arCuenta);
-                    $arRegistro->setTerceroRel($arTercero);
-                    $arRegistro->setNumero($arFactura->getNumero());
-                    $arRegistro->setNumeroReferencia($arFactura->getNumero());
-                    $arRegistro->setFecha($arFactura->getFecha()); 
-                    $arRegistro->setDescripcionContable('FACTURACION ' . $this->MesesEspañol($arFactura->getFecha()->format('m')));                    
-                    $em->persist($arRegistro);
+                    $strSql = "SELECT codigo_centro_costo_contabilidad_fk as centroCosto, SUM(subtotal) as subtotal                                        
+                                FROM tur_factura_detalle                                                            
+                                LEFT JOIN tur_puesto ON codigo_puesto_fk = codigo_puesto_pk
+                                WHERE codigo_factura_fk = $codigo 
+                                GROUP BY codigo_centro_costo_contabilidad_fk"; 
+                    $connection = $em->getConnection();
+                    $statement = $connection->prepare($strSql);        
+                    $statement->execute();
+                    $arFacturaDetalles = $statement->fetchAll();
+                    foreach ($arFacturaDetalles as $arFacturaDetalle) {
+                        $arCentroCosto =$em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find($arFacturaDetalle['centroCosto']);                           
+                        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro(); 
+                        if($arFactura->getFacturaTipoRel()->getTipo() == 2 || $arFactura->getFacturaTipoRel()->getTipo() == 3) {
+                            $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaServicioRel()->getCodigoCuentaIngresoDevolucionFk());                                                                
+                        } else {
+                            $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaServicioRel()->getCodigoCuentaIngresoFk());                                                                 
+                        }      
+                        $arRegistro->setCredito($arFacturaDetalle['subtotal']);
+                        $arRegistro->setComprobanteRel($arComprobanteContable);
+                        $arRegistro->setCentroCostoRel($arCentroCosto);
+                        $arRegistro->setCuentaRel($arCuenta);
+                        $arRegistro->setTerceroRel($arTercero);
+                        $arRegistro->setNumero($arFactura->getNumero());
+                        $arRegistro->setNumeroReferencia($arFactura->getNumero());
+                        $arRegistro->setFecha($arFactura->getFecha()); 
+                        $arRegistro->setDescripcionContable('FACTURACION ' . $this->MesesEspañol($arFactura->getFecha()->format('m')));                    
+                        $em->persist($arRegistro);                        
+                    }                    
                     
                     $arFactura->setEstadoContabilizado(1);
                     $em->persist($arFactura);                                            

@@ -41,7 +41,6 @@
                 <th>CLIENTE</th>
                 <th>NOMBRE</th>
                 <th>CIUDAD</th>
-                <th>CONTACTO</th>
                 <th>OPERACION</th>
                 <th>C.COSTO</th>                
                 <th>C.DOTACION</th>
@@ -55,9 +54,8 @@
                 <td>{{ arPuestos.clienteRel.nombreCorto | default('') }}</td>
                 <td>{{ arPuestos.nombre }}</td>
                 <td>{{ arPuestos.ciudadRel.nombre | default('')}}</td>
-                <td>{{ arPuestos.contacto | default('') }}</td>
                 <td>{{ arPuestos.operacionRel.nombre |default('')  }}</td>
-                <td>{{ arPuestos.centroCostoContabilidadRel.nombre | default('')  }}</td>                
+                <td>{{ arPuestos.codigoCentroCostoFk| default('')  }}</td>                
                 <td style="text-align: right">{{ arPuestos.costoDotacion | number_format(0, '.', ',') }}</td>
                 <td style="text-align: center"><a href="{{ path('brs_tur_base_puesto_nuevo', {'codigoPuesto': arPuestos.codigoPuestoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_tur_base_puesto_detalle', { 'codigoPuesto': arPuestos.codigoPuestoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>

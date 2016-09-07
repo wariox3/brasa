@@ -235,6 +235,7 @@ class RhuPagoDetalleRepository extends EntityRepository {
         }
         return $ibc;
     }         
+    
     public function ibcIncapacidad($fechaDesde, $fechaHasta, $codigoContrato) {
         $em = $this->getEntityManager();
         $dql   = "SELECT SUM(pd.vrIngresoBaseCotizacion) as ibc FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p JOIN pd.pagoConceptoRel pc "
