@@ -822,6 +822,7 @@ class ContratosController extends Controller
     }
 
     private function generarExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         set_time_limit(0);
         ini_set("memory_limit", -1);
@@ -838,57 +839,37 @@ class ContratosController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setAutoSize(true);
+        for($col = 'A'; $col !== 'AA'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }        
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIGO')
-                    ->setCellValue('B1', 'CODIGO EMPLEADO')
-                    ->setCellValue('C1', 'IDENTIFICACIÓN')
+                    ->setCellValue('A1', 'ID')
+                    ->setCellValue('B1', 'COD.EMP')
+                    ->setCellValue('C1', 'DOCUMENTO')
                     ->setCellValue('D1', 'EMPLEADO')
                     ->setCellValue('E1', 'TIPO')
                     ->setCellValue('F1', 'FECHA')
-                    ->setCellValue('G1', 'CENTRO COSTOS')
-                    ->setCellValue('H1', 'ENTIDAD SALUD')
-                    ->setCellValue('I1', 'ENTIDAD PENSIÓN')
-                    ->setCellValue('J1', 'CAJA COMPENSACIÓN')
-                    ->setCellValue('K1', 'ENTIDAD CESANTIA')
-                    ->setCellValue('L1', 'TIPO DE COTIZANTE')
-                    ->setCellValue('M1', 'SUBTIPO DE COTIZANTE')
+                    ->setCellValue('G1', 'C.COSTO')
+                    ->setCellValue('H1', 'E.SALUD')
+                    ->setCellValue('I1', 'E.PENSIÓN')
+                    ->setCellValue('J1', 'E.CAJA')
+                    ->setCellValue('K1', 'E.CESANTIA')
+                    ->setCellValue('L1', 'COTIZANTE')
+                    ->setCellValue('M1', 'SUBCOTIZANTE')
                     ->setCellValue('N1', 'TIEMPO')
                     ->setCellValue('O1', 'DESDE')
                     ->setCellValue('P1', 'HASTA')
                     ->setCellValue('Q1', 'SALARIO')
-                    ->setCellValue('R1', 'TIPO SALARIO')
+                    ->setCellValue('R1', 'SALARIO')
                     ->setCellValue('S1', 'CARGO')
                     ->setCellValue('T1', 'CARGO DESCRIPCION')
-                    ->setCellValue('U1', 'CLA. RIESGO')
-                    ->setCellValue('V1', 'ULT. PAGO')
-                    ->setCellValue('W1', 'ULT. PAGO PRIMAS')
-                    ->setCellValue('X1', 'ULT. PAGO CESANTIAS')
-                    ->setCellValue('Y1', 'ULT. PAGO VACACIONES');
+                    ->setCellValue('U1', 'RIESGO')
+                    ->setCellValue('V1', 'ULT.PAGO')
+                    ->setCellValue('W1', 'ULT.PAGO PRIMAS')
+                    ->setCellValue('X1', 'ULT.PAGO CESANTIAS')
+                    ->setCellValue('Y1', 'ULT.PAGO VACACIONES')
+                    ->setCellValue('Z1', 'TERMINADO');
         $i = 2;
         
         $query = $em->createQuery($this->strSqlLista);
@@ -932,7 +913,8 @@ class ContratosController extends Controller
                     ->setCellValue('V' . $i, $arContrato->getFechaUltimoPago()->Format('Y-m-d'))
                     ->setCellValue('W' . $i, $arContrato->getFechaUltimoPagoPrimas()->Format('Y-m-d'))
                     ->setCellValue('X' . $i, $arContrato->getFechaUltimoPagoCesantias()->Format('Y-m-d'))
-                    ->setCellValue('Y' . $i, $arContrato->getFechaUltimoPagoVacaciones()->Format('Y-m-d'));
+                    ->setCellValue('Y' . $i, $arContrato->getFechaUltimoPagoVacaciones()->Format('Y-m-d'))
+                    ->setCellValue('Z' . $i, $objFunciones->devuelveBoolean($arContrato->getEstadoTerminado()) );
             $i++;
         }
         $objPHPExcel->getActiveSheet()->setTitle('contratos');

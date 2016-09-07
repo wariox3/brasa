@@ -20,15 +20,18 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
             return $dql;
     }
     
-    public function listaTrasladoDql($codigoPeriodoDetalle, $strCodigoCentroCosto, $strCodigoSucursal) {                    
+    public function listaTrasladoDql($codigoPeriodoDetalle, $strCodigoCentroCosto, $strCodigoSucursal, $numeroIdentificacion = "", $codigoPeriodo = "") {                    
             $dql   = "SELECT pe, e FROM BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado pe JOIN pe.empleadoRel e "
-                    ."WHERE pe.codigoPeriodoDetalleFk <> " . $codigoPeriodoDetalle . " ";
+                    ."WHERE pe.codigoPeriodoDetalleFk <> " . $codigoPeriodoDetalle . " AND pe.codigoPeriodoFk = $codigoPeriodo ";
             if($strCodigoCentroCosto != "") {
                 $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
             }
             if($strCodigoSucursal != "") {
                 $dql .= " AND pe.codigoPeriodoDetalleFk = " . $strCodigoSucursal;
             }
+            if($numeroIdentificacion != '') {
+                $dql .= " AND e.numeroIdentificacion = " . $numeroIdentificacion;
+            }            
             return $dql;
     }
     
