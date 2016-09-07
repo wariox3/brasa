@@ -117,6 +117,11 @@ class RhuConfiguracion
     private $codigoComprobanteLiquidacion;    
     
     /**
+     * @ORM\Column(name="codigo_comprobante_vacacion", type="integer")
+     */
+    private $codigoComprobanteVacacion;    
+    
+    /**
      * @ORM\Column(name="codigo_comprobante_pago_banco", type="integer")
      */
     private $codigoComprobantePagoBanco;
@@ -1408,5 +1413,29 @@ class RhuConfiguracion
     public function getPrestacionesPorcentajeIndemnizacion()
     {
         return $this->prestacionesPorcentajeIndemnizacion;
+    }
+
+    /**
+     * Set codigoComprobanteVacacion
+     *
+     * @param integer $codigoComprobanteVacacion
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoComprobanteVacacion($codigoComprobanteVacacion)
+    {
+        $this->codigoComprobanteVacacion = $codigoComprobanteVacacion;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoComprobanteVacacion
+     *
+     * @return integer
+     */
+    public function getCodigoComprobanteVacacion()
+    {
+        return $this->codigoComprobanteVacacion;
     }
 }
