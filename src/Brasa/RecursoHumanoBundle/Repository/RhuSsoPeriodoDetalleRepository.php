@@ -257,7 +257,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $totalCotizacionGeneral += $totalCotizacion;
                 $arAporte->setTotalCotizacion($totalCotizacion);
                 $sinLineaInicial = true;
-                if($intDiasCotizarPension > 0 || $intDiasCotizarSalud > 0) {
+                if($intDiasCotizarPension > 0 || $intDiasCotizarSalud > 0 || $intDiasCotizarRiesgos > 0) {
                     $sinLineaInicial = false;
                     $em->persist($arAporte);    
                     $i++;
