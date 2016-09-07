@@ -82,32 +82,32 @@ class FormatoCapacitacion extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(15, 6, "LUGAR:", 0, 0, '', 1);
         $this->SetFont('Arial','B',7);
-        $this->Cell(65, 6, $arCapacitacion->getLugar(), 'B', 0, 'C', 1);
+        $this->Cell(65, 6, utf8_decode($arCapacitacion->getLugar()), 'B', 0, 'C', 1);
         //linea 2
         $this->SetXY(10, 62);
         $this->SetFont('Arial','B',8);
         $this->Cell(15, 6, "TEMA:", 0, 0, '', 1);
-        $this->Cell(248, 6, $arCapacitacion->getTema(), 'B', 0, 'L', 1);
+        $this->Cell(248, 6, utf8_decode($arCapacitacion->getTema()), 'B', 0, 'L', 1);
         //linea 3
         $metodologia = "";
-        if ($arCapacitacion->getCodigoCiudadFk() != null){
+        if ($arCapacitacion->getCodigoCapacitacionMetodologiaFk() != null){
             $metodologia = $arCapacitacion->getCapacitacionMetodologiaRel()->getNombre();
         }
         $this->SetXY(10, 69);
         $this->SetFont('Arial','B',8);
         $this->Cell(25, 6, "METODOLOGIA:", 0, 0, '', 1);
-        $this->Cell(238, 6, $metodologia, 'B', 0, 'L', 1);
+        $this->Cell(238, 6, utf8_decode($metodologia), 'B', 0, 'L', 1);
         //linea 4
         $this->SetXY(10, 76);
         $this->Cell(18, 6, "OBJETIVO:", 0, 0, '', 1);
         $this->SetFont('Arial','B',6.5);
-        $this->Cell(245, 6, $arCapacitacion->getObjetivo(), 'B', 0, 'L', 1);
+        $this->Cell(245, 6, utf8_decode($arCapacitacion->getObjetivo()), 'B', 0, 'L', 1);
         //linea 5
         $this->SetXY(10, 82);
         $this->SetFont('Arial','B',8);
         $this->Cell(20, 10, "CONTENIDO:", 0, 0, '', 1);
         $this->SetFont('Arial','B',6.5);
-        $this->Cell(243, 10, $arCapacitacion->getContenido(), 'B', 0, '', 1);
+        $this->Cell(243, 10, utf8_decode($arCapacitacion->getContenido()), 'B', 0, '', 1);
         //linea 6
         $this->SetXY(10, 92);
         $this->SetFont('Arial','B',8);

@@ -15,7 +15,7 @@ class CapacitacionesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 21, 1)) {
-            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));
         }
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
@@ -114,7 +114,7 @@ class CapacitacionesController extends Controller
                             $arCapacitacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle();
                             $arCapacitacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionDetalle')->find($codigoCapacitacionDetalle);
                             if ($arCapacitacionDetalle->getAsistencia() == 1){
-                                $contador ++;    
+                                $contador ++;
                             }
                             $em->remove($arCapacitacionDetalle);
                         }
@@ -213,7 +213,7 @@ class CapacitacionesController extends Controller
                     $arrControles = $request->request->All();
                     $intIndice = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {
-                        if($arrControles['TxtEvaluacion'.$intCodigo] != "") {                     
+                        if($arrControles['TxtEvaluacion'.$intCodigo] != "") {
                             $arCapacitacionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionDetalle();
                             $arCapacitacionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionDetalle')->find($intCodigo);
                             $evaluacion = $arrControles['TxtEvaluacion'.$intCodigo];
@@ -285,19 +285,11 @@ class CapacitacionesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');
         $arCapacitacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacion')->find($codigoCapacitacion);
-        
-        $form = $this->formularioDetalleNuevoEmpleado(); 
-        $form->handleRequest($request);     
+
+        $form = $this->formularioDetalleNuevoEmpleado();
+        $form->handleRequest($request);
         $this->listarDetalleNuevoEmpleado();
-        
-        
-        /*$form = $this->createFormBuilder()
-            ->add('BtnAgregar', 'submit', array('label'  => 'Agregar',))
-            ->getForm();
-        $form->handleRequest($request);*/
-        
-        
-        
+
         if ($form->isValid()) {
             if ($form->get('BtnAgregar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -316,21 +308,21 @@ class CapacitacionesController extends Controller
                         $em->flush();
                     }
                 }
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";    
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarDetalleNuevoEmpleado($form);
                 $this->listarDetalleNuevoEmpleado();
             }
-            
+
         }
-        
+
         /*$arEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionalesConcepto();
         $arEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findBy(array('estadoActivo' => 1));
         $arEmpleados = $paginator->paginate($arEmpleados, $request->query->get('page', 1), 90);*/
-        
+
         $arEmpleados = $paginator->paginate($em->createQuery($this->strDqlListaNuevoDetalleEmpleado), $request->query->get('page', 1), 90);
-        
+
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Capacitaciones:detalleNuevoEmpleado.html.twig', array(
             'arCapacitacion' => $arCapacitacion,
             'arEmpleados' => $arEmpleados,
@@ -398,15 +390,19 @@ class CapacitacionesController extends Controller
             $session->get('filtroHasta')
             );
     }
-    
+
     private function listarDetalleNuevoEmpleado() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $this->strDqlListaNuevoDetalleEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionDetalle')->listaDql(
         $session->get('filtroCodigoCargo'),
-        $session->get('filtroCodigoCentroCosto'),        
+        $session->get('filtroCodigoCentroCosto'),
         $session->get('filtroIdentificacion'),
-        $session->get('filtroNombre'));         
+        $session->get('filtroNombre'),
+        $session->get('filtroCodigoCliente'),
+        $session->get('filtroNombreCliente'),
+        $session->get('filtroCodigoPuesto')
+        );
     }
 
     private function formularioLista() {
@@ -492,7 +488,7 @@ class CapacitacionesController extends Controller
                     ->getForm();
         return $form;
     }
-    
+
     private function formularioDetalleNuevoEmpleado() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -524,14 +520,31 @@ class CapacitacionesController extends Controller
         if($session->get('filtroCodigoCentroCosto')) {
             $arrayPropiedadesCentro['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
         }
+        $arrayPropiedadesPuesto = array(
+                'class' => 'BrasaTurnoBundle:TurPuesto',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                    ->orderBy('c.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoPuesto')) {
+            $arrayPropiedadesPuesto['data'] = $em->getReference("BrasaTurnoBundle:TurPuesto", $session->get('filtroCodigoPuesto'));
+        }
         $form = $this->createFormBuilder()
             ->add('cargoRel', 'entity', $arrayPropiedadesCargo)
             ->add('centroCostoRel', 'entity', $arrayPropiedadesCentro)
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))    
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))    
+            ->add('puestoRel', 'entity', $arrayPropiedadesPuesto)
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))
+            ->add('TxtCodigoCliente', 'text', array('label'  => 'Codigo Cliente','data' => $session->get('filtroCodigoCliente')))
+            ->add('TxtNombreCliente', 'text', array('label'  => 'Nombre Cliente','data' => $session->get('filtroNombreCliente')))
             ->add('BtnAgregar', 'submit', array('label'  => 'Agregar',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))                
-            ->getForm();        
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->getForm();
         return $form;
     }
 
@@ -542,7 +555,7 @@ class CapacitacionesController extends Controller
         $session->set('filtroTipo', $controles['capacitacionTipoRel']);
         $session->set('filtroTema', $form->get('TxtTema')->getData());
         $session->set('filtroEstado', $form->get('estado')->getData());
-                
+
         $dateFechaDesde = $form->get('fechaDesde')->getData();
         $dateFechaHasta = $form->get('fechaHasta')->getData();
         if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
@@ -550,18 +563,21 @@ class CapacitacionesController extends Controller
             $session->set('filtroHasta', $form->get('fechaHasta')->getData());
         } else {
             $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
-            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
+            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d'));
         }
     }
-    
+
     private function filtrarDetalleNuevoEmpleado($form) {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCargo', $controles['cargoRel']);
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
+        $session->set('filtroCodigoPuesto', $controles['puestoRel']);
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroNombre', $form->get('TxtNombre')->getData());
+        $session->set('filtroCodigoCliente', $form->get('TxtCodigoCliente')->getData());
+        $session->set('filtroNombreCliente', $form->get('TxtNombreCliente')->getData());
     }
 
     private function generarExcel() {
@@ -579,11 +595,11 @@ class CapacitacionesController extends Controller
                     ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
                     ->setKeywords("office 2007 openxml php")
                     ->setCategory("Test result file");
-                $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+                $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10);
                 $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
                 for($col = 'A'; $col !== 'Z'; $col++) {
                     $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
-                    $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');
                 }
                 for($col = 'N'; $col !== 'O'; $col++) {
                     $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);

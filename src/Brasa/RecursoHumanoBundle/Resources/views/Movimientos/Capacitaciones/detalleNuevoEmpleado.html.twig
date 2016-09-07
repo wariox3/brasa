@@ -10,28 +10,40 @@
             <div class="panel-body">
                 <div class="form-group form-group-sm">
                     <label for="form_TxtIdentificacion" class="col-sm-2 control-label">Identificación:</label>
-                    <div class="col-sm-10">
+                    <div class="col-sm-3">
                         {{ form_widget(form.TxtIdentificacion, { 'attr': {'class': 'form-control'} }) }}
                     </div>
-                </div>
-                <div class="form-group form-group-sm">
                     <label for="form_TxtNombre" class="col-sm-2 control-label">Nombre:</label>
-                    <div class="col-sm-10">
+                    <div class="col-sm-5">
                         {{ form_widget(form.TxtNombre, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
                     </div>
                 </div>
                 <div class="form-group form-group-sm">
+                    <label for="form_TxtCodigoCliente" class="col-sm-2 control-label">Codigo cliente:</label>
+                    <div class="col-sm-3">
+                        {{ form_widget(form.TxtCodigoCliente, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <label for="form_TxtNombreCliente" class="col-sm-2 control-label">Cliente:</label>
+                    <div class="col-sm-5">
+                        {{ form_widget(form.TxtNombreCliente, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                    </div>
+                </div>    
+                <div class="form-group form-group-sm">
                     <label for="form_cargoRel" class="col-sm-2 control-label">Cargo:</label>
-                    <div class="col-sm-10">
+                    <div class="col-sm-3">
                         {{ form_widget(form.cargoRel, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
                     </div>
-                </div>
-                <div class="form-group form-group-sm">
-                    <label for="form_centroCostoRel" class="col-sm-2 control-label">Centro costo:</label>
-                    <div class="col-sm-10">
+                     <label for="form_centroCostoRel" class="col-sm-2 control-label">Centro costo:</label>
+                    <div class="col-sm-5">
                         {{ form_widget(form.centroCostoRel, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
                     </div>
                 </div>
+                <div class="form-group form-group-sm">
+                    <label for="form_puestoRel" class="col-sm-2 control-label">Puesto:</label>
+                    <div class="col-sm-10">
+                        {{ form_widget(form.puestoRel, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                    </div>
+                </div>    
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
@@ -47,7 +59,9 @@
                     <th>NOMBRE</th>
                     <th>CENTRO COSTO</th>
                     <th>CARGO</th>
-                    <th></th>
+                    <th>PUESTO</th>
+                    <th>CLIENTE</th>
+                    <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                 </tr>
 
                 {% for arEmpleados in arEmpleados %}
@@ -57,6 +71,8 @@
                         <td>{{ arEmpleados.nombreCorto }}</td>
                         <td>{{ arEmpleados.centroCostoRel.nombre | default('') }}</td>
                         <td>{{ arEmpleados.cargoRel.nombre | default('') }}</td>
+                        <td>{{ arEmpleados.puestoRel.nombre | default('') }}</td>
+                        <td>{{ arEmpleados.puestoRel.clienteRel.nombreCorto | default('') }}</td>
                         <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arEmpleados.codigoEmpleadoPk }}" /></td>
                     </tr>
                 {% endfor %}

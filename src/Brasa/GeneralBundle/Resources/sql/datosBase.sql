@@ -5731,6 +5731,10 @@ insert into `rhu_capacitacion_tipo` (`codigo_capacitacion_tipo_pk`, `nombre`) va
 insert into `rhu_capacitacion_tipo` (`codigo_capacitacion_tipo_pk`, `nombre`) values('2','INDUCCIÓN');
 insert into `rhu_capacitacion_tipo` (`codigo_capacitacion_tipo_pk`, `nombre`) values('3','OTROS');
 
+insert into `rhu_capacitacion_metodologia` (`codigo_capacitacion_metodologia_pk`, `nombre`) values('1','TEORICA');
+insert into `rhu_capacitacion_metodologia` (`codigo_capacitacion_metodologia_pk`, `nombre`) values('2','PRACTICA');
+insert into `rhu_capacitacion_metodologia` (`codigo_capacitacion_metodologia_pk`, `nombre`) values('3','EXPOSITIVA');
+
 insert into `rhu_permiso_tipo` (`codigo_permiso_tipo_pk`, `nombre`) values('1','CONSULTA ODONTOLOGIA');
 insert into `rhu_permiso_tipo` (`codigo_permiso_tipo_pk`, `nombre`) values('2','CONSULTA MEDICA');
 

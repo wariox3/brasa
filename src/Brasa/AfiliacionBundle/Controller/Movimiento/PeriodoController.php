@@ -65,7 +65,7 @@ class PeriodoController extends Controller
                 $codigoPeriodo = $request->request->get('OpDeshacerPago');
                 $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
                 $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
-                if ($arPeriodo->getEstadoFacturado() == 0){
+                
                     $strSql = "DELETE FROM afi_periodo_detalle_pago WHERE codigo_periodo_fk = " . $codigoPeriodo;
                     $em->getConnection()->executeQuery($strSql);
                     $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
@@ -74,9 +74,7 @@ class PeriodoController extends Controller
                     $em->persist($arPeriodo);
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
-                } else {
-                    $objMensaje->Mensaje('error','No se puede desgenerar el pago, esta siendo utilizado en facturas',$this);
-                }
+                
             }
 
             if($request->request->get('OpCerrar')) {

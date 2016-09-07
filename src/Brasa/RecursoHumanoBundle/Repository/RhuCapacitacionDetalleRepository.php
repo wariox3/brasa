@@ -11,9 +11,9 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuCapacitacionDetalleRepository extends EntityRepository {
     
-    public function listaDql($strCargo = "", $strCentroCosto = "", $strIdentificacion = "", $strNombre = "") {        
+    public function listaDql($strCargo = "", $strCentroCosto = "", $strIdentificacion = "", $strNombre = "", $strCodigoCliente = "", $strNombreCliente = "", $strPuesto) {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuEmpleado e WHERE e.codigoEmpleadoPk <> 0";
+        $dql   = "SELECT e,p,c FROM BrasaRecursoHumanoBundle:RhuEmpleado e LEFT JOIN e.puestoRel p LEFT JOIN p.clienteRel c WHERE e.codigoEmpleadoPk <> 0";
   
         if($strCargo != "") {
             $dql .= " AND e.codigoCargoFk = " . $strCargo;
@@ -26,6 +26,15 @@ class RhuCapacitacionDetalleRepository extends EntityRepository {
         }
         if($strNombre != "" ) {
             $dql .= " AND e.nombreCorto LIKE '%" . $strNombre . "%'";
+        }
+        if($strCodigoCliente != "" ) {
+            $dql .= " AND c.codigoClienteFk = '" . $strCodigoCliente . "'";
+        }
+        if($strNombreCliente != "" ) {
+            $dql .= " AND c.nombreCorto LIKE '%" . $strNombreCliente . "%'";
+        }
+        if($strPuesto != "") {
+            $dql .= " AND e.codigoPuestoFk = " . $strPuesto;
         }
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
         return $dql;
