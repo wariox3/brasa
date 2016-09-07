@@ -209,11 +209,26 @@ class PeriodoController extends Controller
                     foreach ($arPeriodoDetallePagos as $arPeriodoDetallesumaTotales){
                         $totalCotizacion += $arPeriodoDetallesumaTotales->getTotalCotizacion();
                     }
-                    if ($codigoProceso == 1){ //proceso a cargo del cliente
+                    if ($codigoProceso == 1){ //proceso a cargo del cliente independiente
+                        $tipo = "I";
+                        $tipoDoc = "CC";
+                        $formaPresentacion = "U";
                         $nit = $arPeriodo->getClienteRel()->getNit();
                         $cliente = $arPeriodo->getClienteRel()->getNombreCorto();
                         $sucursal = $arPeriodo->getClienteRel()->getCodigoSucursal();
-                    } else { //proceso interno horus
+                    }
+                    if ($codigoProceso == 2){ //proceso a cargo del cliente externo
+                        $tipo = "I";
+                        $tipoDoc = "CC";
+                        $formaPresentacion = "S";
+                        $nit = $arPeriodo->getClienteRel()->getNit();
+                        $cliente = $arPeriodo->getClienteRel()->getNombreCorto();
+                        $sucursal = $arPeriodo->getClienteRel()->getCodigoSucursal();
+                    }
+                    if ($codigoProceso == 3){ //proceso interno horus
+                        $tipo = "E";
+                        $tipoDoc = "NI";
+                        $formaPresentacion = "S";
                         $nit = $arConfiguracion->getNitEmpresa();
                         $cliente = $arConfiguracion->getNombreEmpresa();
                         $sucursal = $arPeriodo->getClienteRel()->getCodigoSucursal();
@@ -227,13 +242,13 @@ class PeriodoController extends Controller
                     fputs($ar, '1');
                     fputs($ar, '0001');
                     fputs($ar, $this->RellenarNr($cliente, " ", 200, "D")); //nombre empresa
-                    fputs($ar, 'NI');
+                    fputs($ar, $tipoDoc); //tipo persona o empresa NI o CC
                     fputs($ar, $this->RellenarNr($nit, " ", 16, "D")); // nit empresa
                     fputs($ar, '3');
-                    fputs($ar, 'E');
+                    fputs($ar, $tipo);
                     fputs($ar, '          ');
                     fputs($ar, '          '); // Nro 9 del formato
-                    fputs($ar, 'S'); // Nro 10 del formato
+                    fputs($ar, $formaPresentacion); // Nro 10 del formato
                     fputs($ar, $this->RellenarNr($sucursal, " ", 10, "D")); //sucursal pila
                     fputs($ar, $this->RellenarNr('PAGO CONTADO', " ", 40, "D")); //ESTABA $arPeriodo->getClienteRel()->getNombreCorto()
                     //Arp del aportante
