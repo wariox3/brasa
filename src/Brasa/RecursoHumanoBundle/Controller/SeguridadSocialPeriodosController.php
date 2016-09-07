@@ -736,6 +736,7 @@ class SeguridadSocialPeriodosController extends Controller
                     foreach ($arrSeleccionados AS $codigoPeriodoDetalleEmpleadoPk) {
                         $arPeriodoDetalleEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
                         $arPeriodoDetalleEmpleado =  $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->find($codigoPeriodoDetalleEmpleadoPk);
+                        $arPeriodoDetalleEmpleado->setSsoPeriodoRel($arPeriodoDetalle->getSsoPeriodoRel());
                         $arPeriodoDetalleEmpleado->setSsoPeriodoDetalleRel($arPeriodoDetalle);
                         $arPeriodoDetalleEmpleado->setSsoSucursalRel($arPeriodoDetalle->getSsoSucursalRel());
                         $em->persist($arPeriodoDetalleEmpleado);
