@@ -13,7 +13,7 @@ class RhuAcreditacionRepository extends EntityRepository {
     
     public function listaDql($strIdentificacion = "", $strFecha = "", $strFechaAcreditacion = "" ) {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT ee, e FROM BrasaRecursoHumanoBundle:RhuEmpleadoEstudio ee JOIN ee.empleadoRel e WHERE ee.validarVencimiento = 1";
+        $dql   = "SELECT a FROM BrasaRecursoHumanoBundle:RhuAcreditacion a JOIN a.empleadoRel e WHERE a.codigoAcreditacionPk <> 0";
    
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";

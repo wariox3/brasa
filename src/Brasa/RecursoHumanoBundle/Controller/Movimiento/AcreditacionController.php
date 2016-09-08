@@ -107,11 +107,13 @@ class AcreditacionController extends Controller
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();        
-        $form = $this->createFormBuilder()                                    
-            ->add('TxtNumero', 'text', array('label'  => 'Numero','data' => $session->get('filtroAcreditacionNumero')))                                                                                
+        $form = $this->createFormBuilder()       
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                
+            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))                
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnExcelInforme', 'submit', array('label'  => 'Informe'))                
             ->getForm();        
         return $form;
     }      
