@@ -46,13 +46,14 @@ class AnticipoResumen extends \FPDF_FPDF {
         $this->Cell(20, 4, utf8_decode("TELÉFONO:"), 0, 0, 'L', 1);
         $this->Cell(100, 4, $arConfiguracion->getTelefonoEmpresa(), 0, 0, 'L', 0);        
         
-        //$arAnticipo = new \Brasa\CarteraBundle\Entity\CarAnticipo();
-        //$arAnticipo = self::$em->getRepository('BrasaCarteraBundle:CarAnticipo')->find(self::$codigoAnticipo);        
-        
-        //$arAnticipoDetalles = new \Brasa\CarteraBundle\Entity\CarAnticipoDetalle();
-        //$arAnticipoDetalles = self::$em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->findBy(array('codigoAnticipoFk' => self::$codigoAnticipo));
+        //Fecha y hora de impresion
+        $this->SetFillColor(272, 272, 272);
+        $this->SetFont('Arial','B',7);
+        $this->SetXY(10, 35);
+        $this->Cell(20, 4, utf8_decode("Impresion:". date('Y-m-d H:i:s') .""), 0, 0, 'L', 1);
         $this->SetFillColor(236, 236, 236);        
         $this->SetFont('Arial','B',10);
+        //Fin fecha y hora impresion
         
         $intY = 40;
         //linea 1

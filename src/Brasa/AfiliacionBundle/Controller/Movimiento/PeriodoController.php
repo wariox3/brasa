@@ -5,6 +5,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\AfiliacionBundle\Form\Type\AfiPeriodoType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+
 class PeriodoController extends Controller
 {
     var $strDqlLista = "";
@@ -107,8 +109,12 @@ class PeriodoController extends Controller
             }
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
+                try{
+                    $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->eliminar($arrSeleccionados);
+                    return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el registro, tiene detalles asociados', $this);
+                 }
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
@@ -169,6 +175,7 @@ class PeriodoController extends Controller
     public function detalleAction(Request $request, $codigoPeriodo = '') {
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
         $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
         $form = $this->formularioDetalle();
@@ -189,6 +196,29 @@ class PeriodoController extends Controller
             if ($form->get('BtnDetallePagoExcel')->isClicked()) {
                 $this->listaDetallePago($codigoPeriodo);
                 $this->generarDetallePagoExcel();
+            }
+            if ($form->get('BtnDetalleCobroEliminar')->isClicked()) {
+                //$arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $registros = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetalle')->eliminar($arrSeleccionados);
+                if ($registros == TRUE){
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el registro', $this);
+                }
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo_detalle', array('codigoPeriodo' => $codigoPeriodo)));
+            }
+            if ($form->get('BtnDetallePagoEliminar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionarDetallePago');
+                $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetallePago')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo_detalle', array('codigoPeriodo' => $codigoPeriodo)));
+            }
+            if ($form->get('BtnDetalleTrasladarNuevo')->isClicked()) { // los descartados se pasaran a un nuevo periodo
+                //$arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if ($arPeriodo->getEstadoFacturado() == 0){
+                    $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetalle')->trasladoNuevo($arrSeleccionados,$codigoPeriodo);
+                } else {
+                    $objMensaje->Mensaje('error', 'El periodo se encuentra facturado', $this);
+                }
+                
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo_detalle', array('codigoPeriodo' => $codigoPeriodo)));
             }
             if($request->request->get('OpGenerar')) {
                 $codigoProceso = $request->request->get('OpGenerar');
@@ -543,12 +573,14 @@ class PeriodoController extends Controller
     private function formularioDetalle() {
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnDetalleCobroExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnDetalleCobroImprimir', 'submit', array('label'  => 'Imprimir',))
             ->add('BtnDetallePagoEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnDetalleCobroEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnDetallePagoExcel', 'submit', array('label'  => 'Excel',))
-            //->add('BtnDetallePagoArchivo', 'submit', array('label'  => 'Archivo plano',))
+            ->add('BtnDetalleTrasladarNuevo', 'submit', array('label'  => 'Traslado nuevo',))    
+                
+                
             ->getForm();
         return $form;
     }

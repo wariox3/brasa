@@ -27,7 +27,7 @@ class AfiPeriodoDetallePagoRepository extends EntityRepository {
         $em = $this->getEntityManager();
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigo) {
-                $ar = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigo);
+                $ar = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetallePago')->find($codigo);
                 $em->remove($ar);
             }
             $em->flush();

@@ -67,7 +67,8 @@
                 <th>TOTAL</th>
                 <th>COBRO</th>
                 <th>PAGO</th>
-                <th>CERRAR</th>                
+                <th>CERRAR</th>
+                <th>FACT</th>                
                 <th></th>
                 <th></th>
                 <th></th>
@@ -88,8 +89,7 @@
                     {% else %}                        
                         <td></td>                        
                     {% endif %}                                                                                            
-                {% endif %}   
-                
+                {% endif %}       
                 {% if arPeriodos.estadoPagoGenerado == 0 %}
                     <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerarPago" value="{{ arPeriodos.codigoPeriodoPk }}">Generar</button></td>
                 {% else %}
@@ -103,7 +103,12 @@
                     <td><button class="btn btn-default btn-xs" type="submit" name="OpCerrar" value="{{ arPeriodos.codigoPeriodoPk }}">Cerrar</button></td>
                 {% else %}                        
                     <td></td>                        
-                {% endif %} 
+                {% endif %}
+                {% if arPeriodos.estadoFacturado == 0 %}
+                    <td>NO</td>
+                {% else %}
+                    <td>SI</td>
+                {% endif %}
                 {% if arPeriodos.estadoGenerado == 0 and arPeriodos.estadoPagoGenerado == 0 %}
                     <td style="text-align: center"><a href="{{ path('brs_afi_movimiento_periodo_nuevo', {'codigoPeriodo': arPeriodos.codigoPeriodoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                    
                 {% else %}

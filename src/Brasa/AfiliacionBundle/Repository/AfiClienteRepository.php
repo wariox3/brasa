@@ -12,7 +12,7 @@ class AfiClienteRepository extends EntityRepository {
             $dql .= " AND c.nombreCorto LIKE '%" . $strNombre . "%'";
         }
         if($strCodigo != "" ) {
-            $dql .= " AND c.codigoClientePk LIKE '%" . $strCodigo . "%'";
+            $dql .= " AND c.codigoClientePk = " . $strCodigo . "";
         }
         if($strIndependiente == 1 ) {
             $dql .= " AND c.independiente = 1";
