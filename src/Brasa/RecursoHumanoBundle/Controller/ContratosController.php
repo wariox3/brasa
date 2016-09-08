@@ -839,7 +839,7 @@ class ContratosController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'AA'; $col++) {
+        for($col = 'A'; $col !== 'AB'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
         }        
@@ -869,7 +869,8 @@ class ContratosController extends Controller
                     ->setCellValue('W1', 'ULT.PAGO PRIMAS')
                     ->setCellValue('X1', 'ULT.PAGO CESANTIAS')
                     ->setCellValue('Y1', 'ULT.PAGO VACACIONES')
-                    ->setCellValue('Z1', 'TERMINADO');
+                    ->setCellValue('Z1', 'TERMINADO')
+                    ->setCellValue('AA1', 'LHE');
         $i = 2;
         
         $query = $em->createQuery($this->strSqlLista);
@@ -914,7 +915,8 @@ class ContratosController extends Controller
                     ->setCellValue('W' . $i, $arContrato->getFechaUltimoPagoPrimas()->Format('Y-m-d'))
                     ->setCellValue('X' . $i, $arContrato->getFechaUltimoPagoCesantias()->Format('Y-m-d'))
                     ->setCellValue('Y' . $i, $arContrato->getFechaUltimoPagoVacaciones()->Format('Y-m-d'))
-                    ->setCellValue('Z' . $i, $objFunciones->devuelveBoolean($arContrato->getEstadoTerminado()) );
+                    ->setCellValue('Z' . $i, $objFunciones->devuelveBoolean($arContrato->getEstadoTerminado()))
+                    ->setCellValue('AA' . $i, $objFunciones->devuelveBoolean($arContrato->getLimitarHoraExtra()));
             $i++;
         }
         $objPHPExcel->getActiveSheet()->setTitle('contratos');
