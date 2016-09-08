@@ -126,7 +126,7 @@ class FormatoCapacitacion extends \FPDF_FPDF {
         $this->SetFont('', 'B', 7);
 
         //creamos la cabecera de la tabla.
-        $w = array(6, 55, 19, 54, 46, 46,9,30);
+        $w = array(6, 55, 19, 40, 53, 53,9,30);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -156,14 +156,22 @@ class FormatoCapacitacion extends \FPDF_FPDF {
             if ($arCapacitacionDetalle->getEmpleadoRel()->getCodigoCargoFk() != null){
                 $cargo = $arCapacitacionDetalle->getEmpleadoRel()->getCargoRel()->getNombre();
             }
+            $puesto = "";
+            if ($arCapacitacionDetalle->getEmpleadoRel()->getCodigoPuestoFk() != null){
+                $puesto = $arCapacitacionDetalle->getEmpleadoRel()->getPuestoRel()->getNombre();
+            }
+            $cliente = "";
+            if ($arCapacitacionDetalle->getEmpleadoRel()->getCodigoPuestoFk() != null){
+                $cliente = $arCapacitacionDetalle->getEmpleadoRel()->getPuestoRel()->getClienteRel()->getNombreCorto();
+            }
             $pdf->SetFont('Arial', '', 6);
             $pdf->Cell(6, 8, $nro, 1, 0, 'L');
             $pdf->Cell(55, 8, $arCapacitacionDetalle->getNombreCorto(), 1, 0, 'L');
             $pdf->Cell(19, 8, $arCapacitacionDetalle->getNumeroIdentificacion(), 1, 0, 'L');
             $pdf->SetFont('Arial', '', 6);
-            $pdf->Cell(54, 8, $cargo, 1, 0, 'L');
-            $pdf->Cell(46, 8, "", 1, 0, 'L');
-            $pdf->Cell(46, 8, "", 1, 0, 'L');
+            $pdf->Cell(40, 8, substr($cargo,0,28), 1, 0, 'L');
+            $pdf->Cell(53, 8, substr($puesto,0,40), 1, 0, 'L');
+            $pdf->Cell(53, 8, substr($cliente,0,40), 1, 0, 'L');
             $pdf->SetFont('Arial', '', 7);
             $pdf->Cell(9, 8, $arCapacitacionDetalle->getEvaluacion(), 1, 0, 'L');
             $pdf->Cell(30, 8, '', 1, 0, 'L');

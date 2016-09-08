@@ -96,7 +96,11 @@
                 <td>{% if arFacturas.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arFacturas.estadoAnulado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arFacturas.afiliacion == 1 %} SI {% else %} NO {% endif %}</td>
-                <td style="text-align: center"><a href="{{ path('brs_afi_movimiento_factura_nuevo', {'codigoFactura': arFacturas.codigoFacturaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                {% if arFacturas.numero == 0 %}
+                    <td style="text-align: center"><a href="{{ path('brs_afi_movimiento_factura_nuevo', {'codigoFactura': arFacturas.codigoFacturaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                {% else %}
+                    <td></td>
+                {% endif %}
                 <td style="text-align: center"><a href="{{ path('brs_afi_movimiento_factura_detalle', { 'codigoFactura': arFacturas.codigoFacturaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arFacturas.codigoFacturaPk }}" /></td>
             </tr>
