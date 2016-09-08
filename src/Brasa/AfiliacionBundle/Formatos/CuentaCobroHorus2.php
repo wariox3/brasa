@@ -131,60 +131,10 @@ class CuentaCobroHorus2 extends \FPDF_FPDF {
     }
 
     public function Body($pdf) {
-        //Cursos
-        /*$arFacturaDetalles = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalleCurso();
-        $arFacturaDetalles = self::$em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleCurso')->findBy(array('codigoFacturaFk' => self::$codigoFactura));
-        if(count($arFacturaDetalles) > 0) {
-            $pdf->SetX(10);
-            $pdf->Ln(14); 
-            $pdf->SetFillColor(255,255,255);
-            $pdf->SetTextColor(0);
-            $pdf->SetFont('Arial', 'B', 14);        
-            $pdf->Cell(10, 4, "", 0, 0, 'L', 1);
-
-            $pdf->Ln(5);          
-            $header = array('FECHA', 'NUMERO', 'IDENTIFICACION', 'EMPLEADO', 'CERTIFICADO', 'PRECIO');
-            $pdf->SetFillColor(236, 236, 236);
-            $pdf->SetTextColor(0);
-            $pdf->SetDrawColor(0, 0, 0);
-            $pdf->SetLineWidth(.2);
-            $pdf->SetFont('', 'B', 7);
-
-            //creamos la cabecera de la tabla.
-            $w = array(20, 20, 25, 70, 40, 20);
-            for ($i = 0; $i < count($header); $i++)
-                if ($i == 0)
-                    $pdf->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
-                else
-                    $pdf->Cell($w[$i], 4, $header[$i], 1, 0, 'C', 1);
-
-            //Restauración de colores y fuentes
-            $pdf->SetFillColor(224, 235, 255);
-            $pdf->SetTextColor(0);
-            $pdf->SetFont('');
-            $pdf->Ln(4);
-
-
-            $pdf->SetX(10);
-            $pdf->SetFont('Arial', '', 7);
-            foreach ($arFacturaDetalles as $arFacturaDetalle) { 
-                $arCursosDetalles = new \Brasa\AfiliacionBundle\Entity\AfiCursoDetalle();
-                $arCursosDetalles = self::$em->getRepository('BrasaAfiliacionBundle:AfiCursoDetalle')->findBy(array('codigoCursoFk' => $arFacturaDetalle->getCodigoCursoFk()));
-                foreach ($arCursosDetalles as $arCursoDetalle) {
-                    $pdf->Cell(20, 4, $arCursoDetalle->getCursoRel()->getFechaProgramacion()->format('Y/m/d'), 1, 0, 'L');
-                    $pdf->Cell(20, 4, $arCursoDetalle->getCursoRel()->getNumero(), 1, 0, 'L');                
-                    $pdf->Cell(25, 4, $arCursoDetalle->getCursoRel()->getNumeroIdentificacion(), 1, 0, 'L');                
-                    $pdf->Cell(70, 4, $arCursoDetalle->getCursoRel()->getNombreCorto(), 1, 0, 'L');
-                    $pdf->Cell(40, 4, $arCursoDetalle->getCursoTipoRel()->getNombre(), 1, 0, 'L');
-                    $pdf->Cell(20, 4, number_format($arCursoDetalle->getPrecio(), 0, '.', ','), 1, 0, 'R');
-                    $pdf->Ln();
-                    $pdf->SetAutoPageBreak(true, 15);                    
-                }
-            }            
-        }*/
+        
         $pdf->SetFont('Arial', 'B', 6);
         $pdf->Ln(10);
-        $header = array(utf8_decode('IDENTIF.'), 'NOMBRE','DIAS', 'SALARIO','FECHA ING','PENSION', 'SALUD', 'RIESGOS', 'C. COMP', 'ADMON', 'SUBTOTAL', 'IVA', 'TOTAL','RET');
+        $header = array(utf8_decode('IDENTIFICACION'), 'NOMBRE','DIAS', 'SALARIO','FECHA ING','PENSION', 'SALUD', 'RIESGOS', 'C. COMP', 'ADMON', 'SUBTOTAL', 'IVA', 'TOTAL','RET');
         $pdf->SetFillColor(236, 236, 236);
         $pdf->SetTextColor(0);
         $pdf->SetDrawColor(0, 0, 0);
@@ -224,14 +174,10 @@ class CuentaCobroHorus2 extends \FPDF_FPDF {
                 $pdf->Cell(8, 4, $arPeriodoDetalles->getDias(), 1, 0, 'L');
                 $pdf->Cell(15, 4, number_format($arPeriodoDetalles->getSalario(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Cell(15, 4, $arPeriodoDetalles->getContratoRel()->getFechaDesde()->format('Y-m-d'), 1, 0, 'L');
-                
-                $pdf->Cell(30, 4, utf8_decode($arPeriodoDetalles->getContratoRel()->getEntidadPensionRel()->getNombre()), 1, 0, 'L');
-                
-                $pdf->Cell(30, 4, utf8_decode($arPeriodoDetalles->getContratoRel()->getEntidadSaludRel()->getNombre()), 1, 0, 'L');
-                
+                $pdf->Cell(30, 4, utf8_decode(substr($arPeriodoDetalles->getContratoRel()->getEntidadPensionRel()->getNombre(),0,20)), 1, 0, 'L');
+                $pdf->Cell(30, 4, utf8_decode(substr($arPeriodoDetalles->getContratoRel()->getEntidadSaludRel()->getNombre(),0,23)), 1, 0, 'L');
                 $pdf->Cell(20, 4, utf8_decode($arPeriodoDetalles->getContratoRel()->getClasificacionRiesgoRel()->getNombre()), 1, 0, 'L');
-                
-                $pdf->Cell(15, 4, utf8_decode($arPeriodoDetalles->getContratoRel()->getEntidadCajaRel()->getNombre()), 1, 0, 'L');
+                $pdf->Cell(15, 4, utf8_decode(substr($arPeriodoDetalles->getContratoRel()->getEntidadCajaRel()->getNombre(),0,20)), 1, 0, 'L');
                 $pdf->SetFont('Arial', '', 7);
                 $pdf->Cell(13, 4, number_format($arPeriodoDetalles->getAdministracion(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Cell(13, 4, number_format($arPeriodoDetalles->getSubtotal(), 0, '.', ','), 1, 0, 'R');

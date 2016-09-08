@@ -5,6 +5,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\AfiliacionBundle\Form\Type\AfiFacturaType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 
 class FacturaController extends Controller
@@ -16,6 +17,7 @@ class FacturaController extends Controller
     public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->lista();
@@ -41,8 +43,13 @@ class FacturaController extends Controller
             }
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_afi_movimiento_factura'));
+                try{
+                    $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->eliminar($arrSeleccionados);
+                    return $this->redirect($this->generateUrl('brs_afi_movimiento_factura'));
+                 } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el registro, tiene detalles asociados', $this);
+                 }   
+                //return $this->redirect($this->generateUrl('brs_afi_movimiento_factura'));
             }
             if ($form->get('BtnFiltrar')->isClicked()) {                
                 $this->filtrar($form);
@@ -476,6 +483,8 @@ class FacturaController extends Controller
     private function generarExcel() {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
