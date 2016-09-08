@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div class="form-group form-group-sm">
-                <label for="form_ciudadLaboraRel" class="col-sm-3 control-label">Ciudad Labora:</label>
+                <label for="form_ciudadLaboraRel" class="col-sm-3 control-label">Ciudad labora:</label>
                 <div class="col-sm-9">
                         {{ form_widget(form.ciudadLaboraRel, { 'attr': {'class': 'form-control'} }) }}
                 </div>
@@ -75,7 +75,6 @@
                 <div class="col-sm-4">
                     {{ form_widget(form.fechaHasta) }} 
                 </div>
-                <label for="form_fechaHasta" class="col-sm-4 control-label">Aplica a contrato termino fijo:</label>
             </div>    
             <div class="form-group form-group-sm">
                 <label for="form_vrSalario" class="col-sm-3 control-label">Salario:</label>
@@ -94,25 +93,19 @@
                 <div class="col-sm-9">
                         {{ form_widget(form.salarioTipoRel, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>                     
+            </div>  
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Limitar hora extra:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.limitarHoraExtra) }}
+                </div>
+            </div>                
             <div class="form-group form-group-sm">
                 <label for="form_horarioTrabajo" class="col-sm-3 control-label">Horario trabajo:</label>
                 <div class="col-sm-9">
                         {{ form_widget(form.horarioTrabajo, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
                 </div>
-            </div>    
-            <div class="form-group form-group-sm">
-                <label for="form_ssoTipoCotizanteRel" class="col-sm-3 control-label">Tipo cotizante:</label>
-                <div class="col-sm-9">
-                        {{ form_widget(form.ssoTipoCotizanteRel, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>                
-            <div class="form-group form-group-sm">
-                <label for="form_ssoSubtipoCotizanteRel" class="col-sm-3 control-label">Subtipo cotizante:</label>
-                <div class="col-sm-9">
-                        {{ form_widget(form.ssoSubtipoCotizanteRel, { 'attr': {'class': 'form-control'} }) }}
-                </div>
-            </div>                  
+            </div>                      
             <div class="form-group">
                 <label for="form_comentarios" class="col-sm-3 control-label">Comentarios:</label>
                 <div class="col-sm-9">
@@ -124,6 +117,18 @@
     <div class="panel panel-default">
         <div class="panel-heading">Informacion seguridad social</div>
         <div class="panel-body">
+            <div class="form-group form-group-sm">
+                <label for="form_ssoTipoCotizanteRel" class="col-sm-3 control-label">Tipo cotizante:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.ssoTipoCotizanteRel, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                
+            <div class="form-group form-group-sm">
+                <label for="form_ssoSubtipoCotizanteRel" class="col-sm-3 control-label">Subtipo cotizante:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.ssoSubtipoCotizanteRel, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>            
             <div class="form-group form-group-sm">
                 <label for="form_clasificacionRiesgoRel" class="col-sm-3 control-label">Clasificacion riesgo:</label>
                 <div class="col-sm-9">

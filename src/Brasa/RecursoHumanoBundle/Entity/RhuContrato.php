@@ -244,6 +244,11 @@ class RhuContrato
      */    
     private $codigoCiudadLaboraFk;
     
+    /**     
+     * @ORM\Column(name="limitarHoraExtra", type="boolean")
+     */    
+    private $limitarHoraExtra = false;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="contratosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
@@ -447,7 +452,6 @@ class RhuContrato
      */
     protected $disciplinariosContratoRel;     
     
-
     /**
      * Constructor
      */
@@ -456,6 +460,7 @@ class RhuContrato
         $this->liquidacionesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->programacionesPagosDetallesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->provisionesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ssoPeriodosEmpleadosContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ssoAportesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cambiosSalariosContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -1564,6 +1569,30 @@ class RhuContrato
     }
 
     /**
+     * Set limitarHoraExtra
+     *
+     * @param boolean $limitarHoraExtra
+     *
+     * @return RhuContrato
+     */
+    public function setLimitarHoraExtra($limitarHoraExtra)
+    {
+        $this->limitarHoraExtra = $limitarHoraExtra;
+
+        return $this;
+    }
+
+    /**
+     * Get limitarHoraExtra
+     *
+     * @return boolean
+     */
+    public function getLimitarHoraExtra()
+    {
+        return $this->limitarHoraExtra;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -2098,6 +2127,40 @@ class RhuContrato
     }
 
     /**
+     * Add provisionesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesContratoRel
+     *
+     * @return RhuContrato
+     */
+    public function addProvisionesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesContratoRel)
+    {
+        $this->provisionesContratoRel[] = $provisionesContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove provisionesContratoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesContratoRel
+     */
+    public function removeProvisionesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesContratoRel)
+    {
+        $this->provisionesContratoRel->removeElement($provisionesContratoRel);
+    }
+
+    /**
+     * Get provisionesContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProvisionesContratoRel()
+    {
+        return $this->provisionesContratoRel;
+    }
+
+    /**
      * Add ssoPeriodosEmpleadosContratoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado $ssoPeriodosEmpleadosContratoRel
@@ -2605,39 +2668,5 @@ class RhuContrato
     public function getDisciplinariosContratoRel()
     {
         return $this->disciplinariosContratoRel;
-    }
-
-    /**
-     * Add provisionesContratoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesContratoRel
-     *
-     * @return RhuContrato
-     */
-    public function addProvisionesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesContratoRel)
-    {
-        $this->provisionesContratoRel[] = $provisionesContratoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove provisionesContratoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesContratoRel
-     */
-    public function removeProvisionesContratoRel(\Brasa\RecursoHumanoBundle\Entity\RhuProvision $provisionesContratoRel)
-    {
-        $this->provisionesContratoRel->removeElement($provisionesContratoRel);
-    }
-
-    /**
-     * Get provisionesContratoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProvisionesContratoRel()
-    {
-        return $this->provisionesContratoRel;
     }
 }
