@@ -5527,8 +5527,8 @@ insert into `rhu_pago_concepto` (`codigo_pago_concepto_pk`, `nombre`, `compone_s
 insert into `rhu_pago_concepto` (`codigo_pago_concepto_pk`, `nombre`, `compone_salario`, `compone_porcentaje`, `compone_valor`, `por_porcentaje`, `prestacional`, `operacion`, `concepto_adicion`, `concepto_auxilio_transporte`, `concepto_incapacidad`, `concepto_pension`, `concepto_salud`, `codigo_cuenta_fk`, `tipo_cuenta`, `tipo_adicional`, `genera_ingreso_base_prestacion`, `genera_ingreso_base_cotizacion`) values('53','FONDO SOLIDARIDAD','0','1','0','1','0','-1','0','0','0','0','1','237005','2','0','0','0');
 update rhu_pago_concepto SET `codigo_cuenta_operacion_fk` = `codigo_cuenta_operacion_fk`, `tipo_cuenta_operacion` = `tipo_cuenta` where 1;
 
-INSERT INTO `rhu_incapacidad_tipo` (`codigo_incapacidad_tipo_pk`, `codigo_pago_concepto_fk`, `nombre`) VALUES('1','16','ENFERMEDAD GENERAL');
-INSERT INTO `rhu_incapacidad_tipo` (`codigo_incapacidad_tipo_pk`, `codigo_pago_concepto_fk`, `nombre`) VALUES('2','34','ENFERMEDAD LABORAL');
+insert into `rhu_incapacidad_tipo` (`codigo_incapacidad_tipo_pk`, `codigo_pago_concepto_fk`, `nombre`, `genera_pago`, `genera_ibc`, `tipo`) values('1','30','ENFERMEDAD GENERAL','1','1','1');
+insert into `rhu_incapacidad_tipo` (`codigo_incapacidad_tipo_pk`, `codigo_pago_concepto_fk`, `nombre`, `genera_pago`, `genera_ibc`, `tipo`) values('2','32','ENFERMEDAD LABORAL','1','1','2');
 
 INSERT INTO `rhu_licencia_tipo` (`codigo_licencia_tipo_pk`, `nombre`, `codigo_pago_concepto_fk`, `afecta_salud`, `ausentismo`) VALUES('1','LICENCIA NO REMUNERADA','23','1','1');
 INSERT INTO `rhu_licencia_tipo` (`codigo_licencia_tipo_pk`, `nombre`, `codigo_pago_concepto_fk`, `afecta_salud`, `ausentismo`) VALUES('2','LICENCIA REMUNERADA','20','0','1');
@@ -5554,61 +5554,6 @@ INSERT INTO `rhu_medio_magnetico_exogena` (`codigo_medio_magnetico_exogena_pk`, 
 INSERT INTO `rhu_pago_tipo` (`codigo_pago_tipo_pk`, `nombre`) VALUES('1','NOMINA');
 INSERT INTO `rhu_pago_tipo` (`codigo_pago_tipo_pk`, `nombre`) VALUES('2','PRIMAS');
 INSERT INTO `rhu_pago_tipo` (`codigo_pago_tipo_pk`, `nombre`) VALUES('3','CESANTIAS');
-
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('1','3','CATORCENA 1','1','1','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('2','3','CATORCENA 2','1','15','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('3','3','CATORCENA 3','1','29','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('4','3','CATORCENA 4','2','12','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('5','3','CATORCENA 5','2','26','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('6','3','CATORCENA 6','3','12','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('7','3','CATORCENA 7','3','26','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('8','3','CATORCENA 8','4','9','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('9','3','CATORCENA 9','4','23','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('10','3','CATORCENA 10','5','7','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('11','3','CATORCENA 11','5','21','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('12','3','CATORCENA 12','6','4','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('13','3','CATORCENA 13','6','18','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('14','3','CATORCENA 14','7','2','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('15','3','CATORCENA 15','7','16','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('16','3','CATORCENA 16','7','30','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('17','3','CATORCENA 17','8','13','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('18','3','CATORCENA 18','8','27','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('19','3','CATORCENA 19','9','10','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('20','3','CATORCENA 20','9','24','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('21','3','CATORCENA 21','10','8','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('22','3','CATORCENA 22','10','22','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('23','3','CATORCENA 23','11','5','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('24','3','CATORCENA 24','11','19','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('25','3','CATORCENA 25','12','3','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('26','3','CATORCENA 26','12','17','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('27','3','CATORCENA 27','12','31','0');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('28','3','CATORCENA 1','1','1','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('29','3','CATORCENA 2','1','15','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('30','3','CATORCENA 3','2','12','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('31','3','CATORCENA 4','2','26','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('32','3','CATORCENA 5','3','11','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('33','3','CATORCENA 6','3','25','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('34','3','CATORCENA 7','4','8','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('35','3','CATORCENA 8','4','22','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('36','3','CATORCENA 9','5','6','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('37','3','CATORCENA 10','5','20','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('38','3','CATORCENA 11','6','3','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('39','3','CATORCENA 12','6','17','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('40','3','CATORCENA 13','7','1','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('41','3','CATORCENA 14','7','15','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('42','3','CATORCENA 15','7','29','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('43','3','CATORCENA 16','8','12','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('44','3','CATORCENA 17','8','26','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('45','3','CATORCENA 18','9','9','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('46','3','CATORCENA 19','9','23','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('47','3','CATORCENA 20','10','7','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('48','3','CATORCENA 21','10','21','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('49','3','CATORCENA 22','11','4','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('50','3','CATORCENA 23','11','18','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('51','3','CATORCENA 24','12','2','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('52','3','CATORCENA 25','12','16','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('53','3','CATORCENA 26','12','30','1');
-INSERT INTO `rhu_periodo` (`codigo_periodo_pk`, `codigo_periodo_pago_fk`, `nombre`, `mes`, `dia_inicio`, `bisiesto`) VALUES('54','3','CATORCENA 27','12','31','1');
 
 INSERT INTO `rhu_periodo_pago` (`codigo_periodo_pago_pk`, `nombre`, `dias`, `continuo`, `periodos_mes`) VALUES('1','SEMANAL','7','1','4.28');
 INSERT INTO `rhu_periodo_pago` (`codigo_periodo_pago_pk`, `nombre`, `dias`, `continuo`, `periodos_mes`) VALUES('2','DECADAL','10','0','3');
@@ -5900,16 +5845,7 @@ insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tip
 INSERT INTO `seg_roles` (`codigo_rol_pk`, `nombre`) VALUES('ROLE_ADMIN','ADMINISTRADOR');
 INSERT INTO `seg_roles` (`codigo_rol_pk`, `nombre`) VALUES('ROLE_USER','USUARIO');
 
-INSERT INTO `users` (`id`, `username`, `nombre_corto`, `salt`, `password`, `email`, `is_active`, `empresa`, `roles`) VALUES('1','MARIOESTRADA','MARIO ESTRADA','9f86f39cd7c299efc10a2cbd375ad2d4','QVMBXCvFHaltPm/ebXycQ7rOvgbgLFfQQvSxZVa/I/FvtsO9Ps9k9B84YP6rC+1aEio86UKY0ZxwsAEV/se7+Q==','maestradaz3@gmail.com','1','emp1','ROLE_ADMIN');
-INSERT INTO `users` (`id`, `username`, `nombre_corto`, `salt`, `password`, `email`, `is_active`, `empresa`, `roles`) VALUES('2','PABLOARANZAZU','PABLO ARANZAZU','7fb88ebcff4bec1ae089355b3d42f254','iYgIUQ/CHkNJ/yHurnk5twbWUjHkKal1V6OPTIpN2OV9I5D+OpTFoLGj/NRfALioHaaPqB3vW9pQrhPa5kXB5Q==','analista.desarrollo@jgefectivo.com','1','emp1','ROLE_USER');
-INSERT INTO `users` (`id`, `username`, `nombre_corto`, `salt`, `password`, `email`, `is_active`, `empresa`, `roles`) VALUES('5','ADMINISTRADOR','ADMINISTRADOR','a0d365adb33e4d59b6a9c9af2639e2fb','VusE/ogCqpMWuaFE3rusp7Yx5nMK90tIMsa7dvgyD/NmwLkgc2nXuupaoBqsPt3shsB1UWqgRs/UFqioNrZbLg==','administrador@appsoga.com','1',NULL,'ROLE_ADMIN');
-
-insert into `seg_usuario_permiso_especial` (`codigo_usuario_permiso_especial_pk`, `codigo_usuario_fk`, `codigo_permiso_especial_fk`, `permitir`) values('1','1','1','1');
-insert into `seg_usuario_permiso_especial` (`codigo_usuario_permiso_especial_pk`, `codigo_usuario_fk`, `codigo_permiso_especial_fk`, `permitir`) values('2','2','1','1');
-insert into `seg_usuario_permiso_especial` (`codigo_usuario_permiso_especial_pk`, `codigo_usuario_fk`, `codigo_permiso_especial_fk`, `permitir`) values('3','5','1','1');
-insert into `seg_usuario_permiso_especial` (`codigo_usuario_permiso_especial_pk`, `codigo_usuario_fk`, `codigo_permiso_especial_fk`, `permitir`) values('4','2','2','1');
-insert into `seg_usuario_permiso_especial` (`codigo_usuario_permiso_especial_pk`, `codigo_usuario_fk`, `codigo_permiso_especial_fk`, `permitir`) values('5','1','2','1');
-insert into `seg_usuario_permiso_especial` (`codigo_usuario_permiso_especial_pk`, `codigo_usuario_fk`, `codigo_permiso_especial_fk`, `permitir`) values('6','5','2','1');
+INSERT INTO `users` (`id`, `username`, `nombre_corto`, `salt`, `password`, `email`, `is_active`, `empresa`, `roles`) VALUES('1','SOGA','SOGA','9f86f39cd7c299efc10a2cbd375ad2d4','QVMBXCvFHaltPm/ebXycQ7rOvgbgLFfQQvSxZVa/I/FvtsO9Ps9k9B84YP6rC+1aEio86UKY0ZxwsAEV/se7+Q==','sogaimplementacion@gmail.com','1','emp1','ROLE_ADMIN');
 
 
 CREATE TABLE `emp_users` (
