@@ -14,7 +14,7 @@ class AnticipoResumen extends \FPDF_FPDF {
         self::$fechaHasta = $fechaHasta;
         $pdf = new AnticipoResumen();
         $pdf->AliasNbPages();
-        $pdf->AddPage();
+        $pdf->AddPage('P','Letter');
         $pdf->SetFont('Times', '', 12);
         $this->Body($pdf);
 
@@ -134,7 +134,7 @@ class AnticipoResumen extends \FPDF_FPDF {
         $pdf->Ln();
         $pdf->Ln();
 
-        $header = array('NUMERO', 'FECHA', 'CUENTA', 'CLIENTE', 'DCTO', 'AJUSTE', 'RTEICA', 'RTEIVA', 'RTEFTE', 'TOTAL', 'T. PAGO');
+        $header = array('COD','NRO', 'FECHA', 'CUENTA', 'NIT','CLIENTE', 'DCTO', 'AJUSTE', 'RTEICA', 'RTEIVA', 'RTEFTE', 'TOTAL', 'T. PAGO');
         $pdf->SetFillColor(236, 236, 236);
         $pdf->SetTextColor(0);
         $pdf->SetDrawColor(0, 0, 0);
@@ -142,7 +142,7 @@ class AnticipoResumen extends \FPDF_FPDF {
         $pdf->SetFont('', 'B', 6);
 
         //creamos la cabecera de la tabla.
-        $w = array(13, 15, 30, 40, 13, 13, 13, 13, 13, 13, 13);
+        $w = array(8,8, 14, 30, 14,45, 12, 12, 12, 12, 12, 13, 13);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $pdf->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -159,15 +159,17 @@ class AnticipoResumen extends \FPDF_FPDF {
         $arAnticipos = $query->getResult();
         foreach ($arAnticipos as $arAnticipo) {
             //$pdf->Cell(20, 4, $arAnticipo->getAnticipoTipoRel()->getNombre(), 1, 0, 'L');                        
-            $pdf->Cell(13, 4, $arAnticipo->getNumero(), 1, 0, 'L');                        
-            $pdf->Cell(15, 4, $arAnticipo->getFecha()->format('Y/m/d'), 1, 0, 'L');                        
+            $pdf->Cell(8, 4, $arAnticipo->getCodigoAnticipoPk(), 1, 0, 'L');
+            $pdf->Cell(8, 4, $arAnticipo->getNumero(), 1, 0, 'L');                        
+            $pdf->Cell(14, 4, $arAnticipo->getFecha()->format('Y/m/d'), 1, 0, 'L');                        
             $pdf->Cell(30, 4, $arAnticipo->getCuentaRel()->getNombre(), 1, 0, 'L');                        
-            $pdf->Cell(40, 4, $arAnticipo->getClienteRel()->getNombreCorto(), 1, 0, 'L');                        
-            $pdf->Cell(13, 4, number_format($arAnticipo->getVrTotalDescuento(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(13, 4, number_format($arAnticipo->getVrTotalAjustePeso(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(13, 4, number_format($arAnticipo->getVrTotalReteIca(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(13, 4, number_format($arAnticipo->getVrTotalReteIva(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(13, 4, number_format($arAnticipo->getVrTotalReteFuente(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(14, 4, $arAnticipo->getClienteRel()->getNit(), 1, 0, 'L');
+            $pdf->Cell(45, 4, substr($arAnticipo->getClienteRel()->getNombreCorto(),0,32), 1, 0, 'L');                                                
+            $pdf->Cell(12, 4, number_format($arAnticipo->getVrTotalDescuento(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(12, 4, number_format($arAnticipo->getVrTotalAjustePeso(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(12, 4, number_format($arAnticipo->getVrTotalReteIca(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(12, 4, number_format($arAnticipo->getVrTotalReteIva(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(12, 4, number_format($arAnticipo->getVrTotalReteFuente(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(13, 4, number_format($arAnticipo->getVrTotal(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(13, 4, number_format($arAnticipo->getVrTotalPago(), 0, '.', ','), 1, 0, 'R');
             $pdf->Ln();

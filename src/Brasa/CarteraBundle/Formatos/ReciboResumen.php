@@ -13,7 +13,7 @@ class ReciboResumen extends \FPDF_FPDF {
         self::$fechaDesde = $fechaDesde;
         self::$fechaHasta = $fechaHasta;
         $pdf = new ReciboResumen();
-        $pdf->AliasNbPages();
+        $pdf->AliasNbPages('P','Letter');
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
         $this->Body($pdf);
@@ -53,6 +53,15 @@ class ReciboResumen extends \FPDF_FPDF {
         //$arReciboDetalles = self::$em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->findBy(array('codigoReciboFk' => self::$codigoRecibo));
         $this->SetFillColor(236, 236, 236);        
         $this->SetFont('Arial','B',10);
+        
+        //Fecha y hora de impresion
+        $this->SetFillColor(272, 272, 272);
+        $this->SetFont('Arial','B',7);
+        $this->SetXY(10, 35);
+        $this->Cell(20, 4, utf8_decode("Impresion:". date('Y-m-d H:i:s') .""), 0, 0, 'L', 1);
+        $this->SetFillColor(236, 236, 236);        
+        $this->SetFont('Arial','B',10);
+        //Fin fecha y hora impresion
         
         $intY = 40;
         //linea 1
@@ -161,7 +170,7 @@ class ReciboResumen extends \FPDF_FPDF {
             $pdf->Cell(8, 4, $arRecibo->getNumero(), 1, 0, 'L');                        
             $pdf->Cell(12, 4, $arRecibo->getFecha()->format('Y/m/d'), 1, 0, 'L');                        
             $pdf->Cell(35, 4, $arRecibo->getCuentaRel()->getNombre(), 1, 0, 'L');                        
-            $pdf->Cell(45, 4, $arRecibo->getClienteRel()->getNombreCorto(), 1, 0, 'L');                        
+            $pdf->Cell(45, 4, substr($arRecibo->getClienteRel()->getNombreCorto(),0,33), 1, 0, 'L');                        
             $pdf->Cell(11, 4, number_format($arRecibo->getVrTotalDescuento(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(11, 4, number_format($arRecibo->getVrTotalAjustePeso(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(11, 4, number_format($arRecibo->getVrTotalReteIca(), 0, '.', ','), 1, 0, 'R');

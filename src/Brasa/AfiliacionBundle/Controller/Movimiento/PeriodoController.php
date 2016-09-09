@@ -248,8 +248,8 @@ class PeriodoController extends Controller
                         $sucursal = $arPeriodo->getClienteRel()->getCodigoSucursal();
                     }
                     if ($codigoProceso == 2){ //proceso a cargo del cliente externo
-                        $tipo = "I";
-                        $tipoDoc = "CC";
+                        $tipo = "E";
+                        $tipoDoc = "NI";
                         $formaPresentacion = "S";
                         $nit = $arPeriodo->getClienteRel()->getNit();
                         $cliente = $arPeriodo->getClienteRel()->getNombreCorto();

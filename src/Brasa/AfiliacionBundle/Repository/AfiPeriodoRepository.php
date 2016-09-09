@@ -261,7 +261,15 @@ class AfiPeriodoRepository extends EntityRepository {
             }            
             if($arContrato->getCodigoTipoCotizanteFk() == '12' || $arContrato->getCodigoTipoCotizanteFk() == '19') {
                 $intDiasCotizarRiesgos = 0;
-            }             
+            }
+            if ($arContrato->getCodigoEntidadPensionFk() == 10){ //sin fondo
+                $intDiasCotizarPension = 0;
+                
+            }
+            if ($arContrato->getCodigoEntidadCajaFk() == 44){ // sin caja
+                $intDiasCotizarCaja = 0;
+                
+            }
             $arPeriodoDetallePago->setDiasCotizadosPension($intDiasCotizarPension);
             $arPeriodoDetallePago->setDiasCotizadosSalud($intDiasCotizarSalud);
             $arPeriodoDetallePago->setDiasCotizadosRiesgosProfesionales($intDiasCotizarRiesgos);
@@ -280,6 +288,12 @@ class AfiPeriodoRepository extends EntityRepository {
             if($intDiasCotizarRiesgos <= 0) {
                 $floIbcRiesgos = 0;
             }
+            if($intDiasCotizarPension <= 0) {
+                $floIbcPension = 0;
+            }
+            if($intDiasCotizarCaja <= 0) {
+                $floIbcCaja = 0;
+            }
             $arPeriodoDetallePago->setIbcPension($floIbcPension);
             $arPeriodoDetallePago->setIbcSalud($floIbcSalud);
             $arPeriodoDetallePago->setIbcRiesgosProfesionales($floIbcRiesgos);
@@ -290,6 +304,7 @@ class AfiPeriodoRepository extends EntityRepository {
             $floTarifaCaja = 4;
             $floTarifaIcbf = 0;
             $floTarifaSena = 0;
+            
             if($arContrato->getCodigoTipoCotizanteFk() == 19 || $arContrato->getCodigoTipoCotizanteFk() == 12) {
                 $floTarifaSalud = 12.5;
             }
@@ -297,6 +312,15 @@ class AfiPeriodoRepository extends EntityRepository {
                 $floTarifaSalud = 12.5;  
                 $floTarifaIcbf = 3;
                 $floTarifaSena = 2;                
+            }
+            if ($floIbcRiesgos == 0){
+                $floTarifaRiesgos = 0;
+            }
+            if ($floIbcPension == 0){
+                $floTarifaPension = 0;
+            }
+            if ($floIbcCaja == 0){
+                $floTarifaCaja = 0;
             }
             $arPeriodoDetallePago->setTarifaPension($floTarifaPension);
             $arPeriodoDetallePago->setTarifaSalud($floTarifaSalud);

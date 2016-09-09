@@ -128,7 +128,14 @@ class AfiPeriodoDetalleRepository extends EntityRepository {
             $arPeriodoTraslado->setSubtotal($subtotal);
             $arPeriodoTraslado->setIva($iva);
             $arPeriodoTraslado->setTotal($total);
+            
             $arPeriodo->setNumeroEmpleados($arPeriodo->getNumeroEmpleados() - 1);
+            $arPeriodo->setAdministracion($arPeriodo->getAdministracion() - $administracion);
+            $arPeriodo->setSubtotal($arPeriodo->getSubtotal() - $subtotal);
+            $arPeriodo->setIva($arPeriodo->getIva() - $iva);
+            $arPeriodo->setTotal($arPeriodo->getTotal() - $total);
+            $arPeriodo->setNumeroEmpleados($arPeriodo->getNumeroEmpleados() - 1);
+            
             $em->persist($arPeriodoTraslado);
             $em->persist($arPeriodo);
             $em->flush();
