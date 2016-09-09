@@ -57,6 +57,11 @@ class TurProgramacion
      */    
     private $estadoAnulado = false;    
     
+    /**     
+     * @ORM\Column(name="cierre_mes", type="boolean")
+     */    
+    private $cierreMes = false;    
+    
     /**
      * @ORM\Column(name="horas", type="integer")
      */    
@@ -480,5 +485,29 @@ class TurProgramacion
     public function getHorasNocturnas()
     {
         return $this->horasNocturnas;
+    }
+
+    /**
+     * Set cierreMes
+     *
+     * @param boolean $cierreMes
+     *
+     * @return TurProgramacion
+     */
+    public function setCierreMes($cierreMes)
+    {
+        $this->cierreMes = $cierreMes;
+
+        return $this;
+    }
+
+    /**
+     * Get cierreMes
+     *
+     * @return boolean
+     */
+    public function getCierreMes()
+    {
+        return $this->cierreMes;
     }
 }

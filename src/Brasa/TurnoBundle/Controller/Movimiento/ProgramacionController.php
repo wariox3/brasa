@@ -408,11 +408,12 @@ class ProgramacionController extends Controller
             $arrBotonAprobar['disabled'] = false;
             $arrBotonDetalleEliminar['disabled'] = true;            
             $arrBotonAnular['disabled'] = false;
-            if($ar->getEstadoAnulado() == 1) {
+            if($ar->getEstadoAnulado() == 1 || $ar->getCierreMes() == 1) {
                 $arrBotonDesAutorizar['disabled'] = true;
                 $arrBotonAnular['disabled'] = true;
                 $arrBotonAprobar['disabled'] = true;
             }
+            
         } else {
             $arrBotonDesAutorizar['disabled'] = true;            
         }

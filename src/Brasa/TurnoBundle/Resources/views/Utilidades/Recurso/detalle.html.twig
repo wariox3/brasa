@@ -57,12 +57,12 @@
             {% set deshabilitar15 = '' %}
             {% set deshabilitar30 = '' %}           
             {% for arProgramacionDetalle in arProgramacionDetalle %}
-                {% if arProgramacionDetalle.periodoBloqueo == '15' %}
+                {% if arProgramacionDetalle.periodoBloqueo >= '15' %}
                     {% set deshabilitar15 = 'disabled' %} 
                 {% else %}
                     {% set deshabilitar15 = '' %}                    
                 {% endif %} 
-                {% if arProgramacionDetalle.periodoBloqueo == '30' %}
+                {% if arProgramacionDetalle.periodoBloqueo >= '30' %}
                     {% set deshabilitar30 = 'disabled' %}   
                 {% else %}
                     {% set deshabilitar30 = '' %}                    
