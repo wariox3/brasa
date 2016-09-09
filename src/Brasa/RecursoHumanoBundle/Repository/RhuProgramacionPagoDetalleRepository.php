@@ -59,23 +59,19 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
             $salud = 0;
             $pension = 0;
             //Procesar vacaciones
-            $intDiasVacaciones = $arProgramacionPagoDetalle->getDiasVacaciones();
-            $intHorasVacaciones = $intDiasVacaciones * $intFactorDia;
-            if($intDiasVacaciones > 0) {
-                $intHorasLaboradas = $intHorasLaboradas - $intHorasVacaciones;
-                $intDiasTransporte = $intDiasTransporte - $intDiasVacaciones;
+            $intDiasVacaciones = $arProgramacionPagoDetalle->getDiasVacaciones();            
+            $ibcVacaciones = $arProgramacionPagoDetalle->getIbcVacaciones();
+            $ibcVacaciones = round($ibcVacaciones);
+            if($intDiasVacaciones > 0) {                                
                 $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($arConfiguracion->getCodigoVacacion());
-                $douIngresoBaseCotizacionVacaciones = $intHorasVacaciones * $douVrHora;
-                $douIngresoBaseCotizacionVacaciones = round($douIngresoBaseCotizacionVacaciones);
                 $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                 $arPagoDetalle->setPagoRel($arPago);
                 $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);                                        
                 $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
-                $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
-                $arPagoDetalle->setNumeroHoras($intHorasVacaciones);
+                $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());                
                 $arPagoDetalle->setNumeroDias($intDiasVacaciones);
-                $arPagoDetalle->setVrIngresoBasePrestacion($douIngresoBaseCotizacionVacaciones);
-                $arPagoDetalle->setVrIngresoBaseCotizacion($douIngresoBaseCotizacionVacaciones);
+                $arPagoDetalle->setVrIngresoBasePrestacion($ibcVacaciones);
+                $arPagoDetalle->setVrIngresoBaseCotizacion($ibcVacaciones);
                 $em->persist($arPagoDetalle);                                         
             }                        
 

@@ -124,6 +124,8 @@ class RhuVacacionRepository extends EntityRepository {
         foreach ($arVacacionBonificaciones as $arVacacionBonificacion) {
             $floBonificaciones += $arVacacionBonificacion->getVrBonificacion();
         }        
+        $promedioIbc = $floTotalVacacionBruto/$arVacacion->getDiasVacaciones();
+        $arVacacion->setVrIbcPromedio($promedioIbc);
         $arVacacion->setVrBonificacion($floBonificaciones);
         $arVacacion->setVrDeduccion($floDeducciones);
         $arVacacion->setVrVacacionBruto($floTotalVacacionBruto);
@@ -204,7 +206,9 @@ class RhuVacacionRepository extends EntityRepository {
         $query = $em->createQuery($dql);
         $arVacaciones = $query->getResult();
         $intDiasDevolver = 0;
+        $vrIbc = 0;
         foreach ($arVacaciones as $arVacacion) {
+            $intDias = 0;
             $dateFechaDesde =  "";
             $dateFechaHasta =  "";                            
             if($arVacacion->getFechaDesdeDisfrute() <  $fechaDesde == true) {
@@ -221,10 +225,13 @@ class RhuVacacionRepository extends EntityRepository {
             if($dateFechaDesde != "" && $dateFechaHasta != "") {
                 $intDias = $dateFechaDesde->diff($dateFechaHasta);
                 $intDias = $intDias->format('%a');
-                $intDiasDevolver += $intDias + 1;
-            }                            
+                $intDias = $intDias + 1;
+                $intDiasDevolver += $intDias;
+            }
+            $vrIbc += $intDias * $arVacacion->getVrIbcPromedio();
         }
-        return $intDiasDevolver;
+        $arrDevolver = array('dias' => $intDiasDevolver, 'ibc' => $vrIbc);
+        return $arrDevolver;
     }    
     
     //Seguridad social

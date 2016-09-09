@@ -115,7 +115,7 @@ class RhuSoportePagoHorarioRepository extends EntityRepository {
             $intHorasPermiso = $em->getRepository('BrasaRecursoHumanoBundle:RhuPermiso')->horasPermisoPeriodo($fechaDesde->format('Y/m/d'), $fechaHasta->format('Y/m/d'), $arContrato->getCodigoEmpleadoFk());
             $incapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->diasIncapacidadPeriodo($fechaDesde, $fechaHasta, $arContrato->getCodigoEmpleadoFk());
             $licencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicenciaPeriodo($fechaDesde, $fechaHasta, $arContrato->getCodigoEmpleadoFk());
-            $vacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $fechaDesde, $fechaHasta);
+            //$vacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $fechaDesde, $fechaHasta);
             $intHoras = $arrHorasTotal['horasDescanso'] + $arrHorasTotal['horasDiurnas'] + $arrHorasTotal['horasNocturnas'] + $arrHorasTotal['horasFestivasDiurnas'] + $arrHorasTotal['horasFestivasNocturnas'] + $arrHorasTotal['horasExtrasDiurnas'] + $arrHorasTotal['horasExtrasNocturnas'];
             $intHoras += $intHorasPermiso;
             $novedad = $incapacidad + $licencia + $vacacion;

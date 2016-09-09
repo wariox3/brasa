@@ -655,9 +655,11 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $arProgramacionPagoDetalle->setVrNetoPagar($floNeto);                
                 
                 //dias vacaciones
-                $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                
+                $arrVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                
+                $intDiasVacaciones = $arrVacaciones['dias'];                                
                 if($intDiasVacaciones > 0) {                                        
                     $arProgramacionPagoDetalle->setDiasVacaciones($intDiasVacaciones);
+                    $arProgramacionPagoDetalle->setIbcVacaciones($arrVacaciones['ibc']);
                 }                
                 //Licencias
                 $intDiasLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicenciaPeriodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), $arContrato->getCodigoEmpleadoFk());                
@@ -921,9 +923,11 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         $arProgramacionPagoDetalle->setVrNetoPagar($floNeto);                
 
         //dias vacaciones
-        $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());                
+        $arrVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta());               
+        $intDiasVacaciones = $arrVacaciones['dias'];
         if($intDiasVacaciones > 0) {                                        
             $arProgramacionPagoDetalle->setDiasVacaciones($intDiasVacaciones);
+            $arProgramacionPagoDetalle->setIbcVacaciones($arrVacaciones['ibc']);
         }                
         //Licencias
         $intDiasLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicenciaPeriodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), $arContrato->getCodigoEmpleadoFk());                

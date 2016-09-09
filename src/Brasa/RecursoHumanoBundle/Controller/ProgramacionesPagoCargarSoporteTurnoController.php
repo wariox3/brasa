@@ -81,13 +81,13 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                         $arProgramacionPagoDetalle->setDescuentoPension(0);
                     }   
                     //dias vacaciones
-                    $intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHastaReal());                
+                    $arrVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arContrato->getCodigoEmpleadoFk(), $arContrato->getCodigoContratoPk(), $arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHastaReal());                
+                    $intDiasVacaciones = $arrVacaciones['dias'];                                             
                     if($intDiasVacaciones > 0) {                                        
                         $arProgramacionPagoDetalle->setDiasVacaciones($intDiasVacaciones);
+                        $arProgramacionPagoDetalle->setIbcVacaciones($arrVacaciones['ibc']);
                     }           
-                    /*if($arSoportePago->getCodigoSoportePagoPk() == 40012) {
-                        echo "hola";
-                    }*/
+                    
                     //dias licencia                    
                     $intDiasLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicenciaPeriodo31($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHastaReal(), $arContrato->getCodigoEmpleadoFk());                
                     if($intDiasLicencia > 0) {                                        
