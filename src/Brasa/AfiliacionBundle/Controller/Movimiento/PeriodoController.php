@@ -248,7 +248,7 @@ class PeriodoController extends Controller
                         $tipoDoc = "CC";
                         $formaPresentacion = $form->get('tipo')->getData();
                         $nit = $arPeriodo->getClienteRel()->getNit();
-                        $cliente = $arPeriodo->getClienteRel()->getNombreCorto();
+                        $cliente = $arPeriodo->getClienteRel()->getNombreCorto(); 
                         $sucursal = $arPeriodo->getClienteRel()->getCodigoSucursal();
                     }
                     if ($codigoProceso == 2){ //proceso a cargo del cliente externo
@@ -260,7 +260,7 @@ class PeriodoController extends Controller
                         $tipoDoc = "NI";
                         $formaPresentacion = $form->get('tipo')->getData();
                         $nit = $arPeriodo->getClienteRel()->getNit();
-                        $cliente = $arPeriodo->getClienteRel()->getNombreCorto();
+                        $cliente = $arPeriodo->getClienteRel()->getNombreCorto(); 
                         $sucursal = $form->get('sucursal')->getData();
                     }
                     if ($codigoProceso == 3){ //proceso interno horus
