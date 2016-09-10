@@ -192,9 +192,12 @@
                             </button>
                             
                             <ul class="dropdown-menu" role="menu">
-                                <li><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="1">Cliente independiente</button></li>
+                                <li><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="1">Cliente independiente</button>
+                                {{ form_widget(form.tipo, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                                {{ form_widget(form.arlRel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}</li>
                                 <li class="divider"></li>
-                                <li><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="2">Cliente externo</button></li>
+                                <li><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="2">Cliente externo</button>
+                                Cod Sucursal: {{ form_widget(form.sucursal, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}</li>
                                 <li class="divider"></li>
                                 <li><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="3">Interno</button></li>
                             </ul>

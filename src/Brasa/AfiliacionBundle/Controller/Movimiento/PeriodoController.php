@@ -231,7 +231,7 @@ class PeriodoController extends Controller
                 $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
                 $arEntidadRiesgos = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
                 $arEntidadRiesgos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($arConfiguracionNomina->getCodigoEntidadRiesgoFk());
-                $condigoInterfaceRiesgos = $arEntidadRiesgos->getCodigoInterface();
+                $codigoInterfaceRiesgos = $arEntidadRiesgos->getCodigoInterface();
                 if ($arPeriodo->getFechaPago() != null && $arPeriodo->getAnio() != null && $arPeriodo->getMes() != null && $arPeriodo->getAnioPago() != null && $arPeriodo->getMesPago() != null){
                     $arPeriodoDetallePagos = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago();
                     $arPeriodoDetallePagos = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetallePago')->findBy(array('codigoPeriodoFk' => $codigoPeriodo));
@@ -240,17 +240,25 @@ class PeriodoController extends Controller
                         $totalCotizacion += $arPeriodoDetallesumaTotales->getTotalCotizacion();
                     }
                     if ($codigoProceso == 1){ //proceso a cargo del cliente independiente
+                        $codigoInterfaceRiesgos = $form->get('arlRel')->getData();
+                        $arEntidadRiesgos = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
+                        $arEntidadRiesgos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($codigoInterfaceRiesgos);
+                        $codigoInterfaceRiesgos = $arEntidadRiesgos->getCodigoInterface();
                         $tipo = "I";
                         $tipoDoc = "CC";
-                        $formaPresentacion = "U";
+                        $formaPresentacion = $form->get('tipo')->getData();
                         $nit = $arPeriodo->getClienteRel()->getNit();
                         $cliente = $arPeriodo->getClienteRel()->getNombreCorto();
                         $sucursal = $arPeriodo->getClienteRel()->getCodigoSucursal();
                     }
                     if ($codigoProceso == 2){ //proceso a cargo del cliente externo
+                        $codigoInterfaceRiesgos = $form->get('arlRel')->getData();
+                        $arEntidadRiesgos = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
+                        $arEntidadRiesgos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($codigoInterfaceRiesgos);
+                        $codigoInterfaceRiesgos = $arEntidadRiesgos->getCodigoInterface();
                         $tipo = "E";
                         $tipoDoc = "NI";
-                        $formaPresentacion = "S";
+                        $formaPresentacion = $form->get('tipo')->getData();
                         $nit = $arPeriodo->getClienteRel()->getNit();
                         $cliente = $arPeriodo->getClienteRel()->getNombreCorto();
                         $sucursal = $arPeriodo->getClienteRel()->getCodigoSucursal();
@@ -283,7 +291,7 @@ class PeriodoController extends Controller
                     fputs($ar, $this->RellenarNr('PAGO CONTADO', " ", 40, "D")); //ESTABA $arPeriodo->getClienteRel()->getNombreCorto()
                     //Arp del aportante
                     //fputs($ar, '14-18 ');
-                    fputs($ar, $this->RellenarNr($condigoInterfaceRiesgos, " ", 6, "D")); //Nro 13
+                    fputs($ar, $this->RellenarNr($codigoInterfaceRiesgos, " ", 6, "D")); //Nro 13
                     //Periodo pago para los diferentes sistemas
                     fputs($ar, $arPeriodo->getAnio().'-'. $this->RellenarNr($arPeriodo->getMes(), "0", 2, "I"));
                     fputs($ar, $arPeriodo->getAnioPago().'-'. $this->RellenarNr($arPeriodo->getMesPago(), "0", 2, "I"));
@@ -572,6 +580,17 @@ class PeriodoController extends Controller
 
     private function formularioDetalle() {
         $session = $this->getRequest()->getSession();
+        $arrayPropiedades = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true,
+                'empty_data' => "",
+                'empty_value' => "Seleccione...",
+                'data' => ""
+            );
         $form = $this->createFormBuilder()
             ->add('BtnDetalleCobroExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnDetalleCobroImprimir', 'submit', array('label'  => 'Imprimir',))
@@ -579,7 +598,9 @@ class PeriodoController extends Controller
             ->add('BtnDetalleCobroEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnDetallePagoExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnDetalleTrasladarNuevo', 'submit', array('label'  => 'Traslado nuevo',))    
-                
+            ->add('tipo', 'choice', array('choices'   => array('U' => 'Independiente', 'S' => 'Sucursal')))
+            ->add('arlRel', 'entity', $arrayPropiedades)  
+            ->add('sucursal','text')    
                 
             ->getForm();
         return $form;
