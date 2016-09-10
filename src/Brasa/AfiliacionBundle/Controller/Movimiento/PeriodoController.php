@@ -240,7 +240,7 @@ class PeriodoController extends Controller
                         $totalCotizacion += $arPeriodoDetallesumaTotales->getTotalCotizacion();
                     }
                     if ($codigoProceso == 1){ //proceso a cargo del cliente independiente
-                        $codigoInterfaceRiesgos = $form->get('arlRel')->getData();
+                        $codigoInterfaceRiesgos = $form->get('arlIRel')->getData();
                         $arEntidadRiesgos = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
                         $arEntidadRiesgos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($codigoInterfaceRiesgos);
                         $codigoInterfaceRiesgos = $arEntidadRiesgos->getCodigoInterface();
@@ -252,7 +252,7 @@ class PeriodoController extends Controller
                         $sucursal = $arPeriodo->getClienteRel()->getCodigoSucursal();
                     }
                     if ($codigoProceso == 2){ //proceso a cargo del cliente externo
-                        $codigoInterfaceRiesgos = $form->get('arlRel')->getData();
+                        $codigoInterfaceRiesgos = $form->get('arlERel')->getData();
                         $arEntidadRiesgos = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
                         $arEntidadRiesgos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($codigoInterfaceRiesgos);
                         $codigoInterfaceRiesgos = $arEntidadRiesgos->getCodigoInterface();
@@ -261,7 +261,7 @@ class PeriodoController extends Controller
                         $formaPresentacion = $form->get('tipo')->getData();
                         $nit = $arPeriodo->getClienteRel()->getNit();
                         $cliente = $arPeriodo->getClienteRel()->getNombreCorto();
-                        $sucursal = $arPeriodo->getClienteRel()->getCodigoSucursal();
+                        $sucursal = $form->get('sucursal')->getData();
                     }
                     if ($codigoProceso == 3){ //proceso interno horus
                         $tipo = "E";
@@ -580,7 +580,7 @@ class PeriodoController extends Controller
 
     private function formularioDetalle() {
         $session = $this->getRequest()->getSession();
-        $arrayPropiedades = array(
+        $arrayPropiedadesI = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('cc')
@@ -591,6 +591,17 @@ class PeriodoController extends Controller
                 'empty_value' => "Seleccione...",
                 'data' => ""
             );
+        $arrayPropiedadesE = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true,
+                'empty_data' => "",
+                'empty_value' => "Seleccione...",
+                'data' => ""
+            );            
         $form = $this->createFormBuilder()
             ->add('BtnDetalleCobroExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnDetalleCobroImprimir', 'submit', array('label'  => 'Imprimir',))
@@ -599,7 +610,8 @@ class PeriodoController extends Controller
             ->add('BtnDetallePagoExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnDetalleTrasladarNuevo', 'submit', array('label'  => 'Traslado nuevo',))    
             ->add('tipo', 'choice', array('choices'   => array('U' => 'Independiente', 'S' => 'Sucursal')))
-            ->add('arlRel', 'entity', $arrayPropiedades)  
+            ->add('arlIRel', 'entity', $arrayPropiedadesI)
+            ->add('arlERel', 'entity', $arrayPropiedadesE)    
             ->add('sucursal','text')    
                 
             ->getForm();
