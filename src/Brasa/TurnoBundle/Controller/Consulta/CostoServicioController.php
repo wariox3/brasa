@@ -43,15 +43,14 @@ class CostoServicioController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();        
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurCierreMesServicio')->listaDql(
-                $session->get('filtroCodigoCliente'),
-                $session->get('filtroCodigoRecurso')
+                $session->get('filtroCodigoCliente')
                 );                    
     }
 
     private function filtrar ($form) {
         $session = $this->getRequest()->getSession();        
         $session->set('filtroNit', $form->get('TxtNit')->getData());
-        $session->set('filtroCodigoRecurso', $form->get('TxtCodigoRecurso')->getData());
+        //$session->set('filtroCodigoRecurso', $form->get('TxtCodigoRecurso')->getData());
     }    
     
     private function formularioFiltro() {
@@ -70,7 +69,7 @@ class CostoServicioController extends Controller
         } else {
             $session->set('filtroCodigoCliente', null);
         }       
-        $strNombreRecurso = "";
+        /*$strNombreRecurso = "";
         if($session->get('filtroCodigoRecurso')) {
             $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($session->get('filtroCodigoRecurso'));
             if($arRecurso) {                
@@ -78,13 +77,13 @@ class CostoServicioController extends Controller
             }  else {
                 $session->set('filtroCodigoRecurso', null);
             }          
-        }
+        }*/
 
         $form = $this->createFormBuilder()
             ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
             ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                
-            ->add('TxtCodigoRecurso', 'text', array('label'  => 'Nit','data' => $session->get('filtroCodigoRecurso')))
-            ->add('TxtNombreRecurso', 'text', array('label'  => 'NombreCliente','data' => $strNombreRecurso))                                                                    
+            //->add('TxtCodigoRecurso', 'text', array('label'  => 'Nit','data' => $session->get('filtroCodigoRecurso')))
+            //->add('TxtNombreRecurso', 'text', array('label'  => 'NombreCliente','data' => $strNombreRecurso))                                                                    
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
