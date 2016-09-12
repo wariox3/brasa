@@ -226,7 +226,7 @@ class ServicioController extends Controller
             if($form->get('BtnDetalleEliminar')->isClicked()) {   
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurServicioDetalleCompuesto')->eliminarSeleccionados($arrSeleccionados);
-                //$em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);
+                $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->liquidar($codigoServicioDetalle);
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_compuesto_detalle', array('codigoServicioDetalle' => $codigoServicioDetalle)));
             }                                 
         }

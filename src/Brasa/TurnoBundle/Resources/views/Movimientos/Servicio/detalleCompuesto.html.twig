@@ -26,14 +26,14 @@
                     <tr>
                         <td class="titulo">CODIGO:</td>
                         <td class="td-in-well">{{ arServicioDetalle.codigoServicioDetallePk }}</td>
-                        <td class="titulo" ></td>
-                        <td align="right"></td>
+                        <td class="titulo" >MINIMO:</td>
+                        <td align="right">{{ arServicioDetalle.vrPrecioMinimo | number_format(0, '.', ',')}}</td>
                     </tr>
                     <tr>
                         <td class="titulo">CLIENTE:</td>
                         <td class="td-in-well">{{ arServicioDetalle.servicioRel.clienteRel.nombreCorto }}</td>
-                        <td class="titulo" >MINIMO:</td>
-                        <td align="right">{{ arServicioDetalle.vrPrecioMinimo | number_format(0, '.', ',')}}</td>
+                        <td class="titulo" >AJUSTADO:</td>
+                        <td align="right">{{ arServicioDetalle.vrPrecioAjustado | number_format(0, '.', ',')}}</td>
                     </tr>                 
                     <tr>
                         <td class="titulo" >HORAS:</td>

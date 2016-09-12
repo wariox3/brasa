@@ -64,6 +64,10 @@ class TurServicioRepository extends EntityRepository {
         $douTotalServicio = 0;
         $douTotalMinimoServicio = 0;
         $douTotalCostoCalculado = 0;
+        $subtotalGeneral = 0;
+        $baseAuiGeneral = 0;
+        $ivaGeneral = 0;
+        $totalGeneral = 0;
         $arServiciosDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
         $arServiciosDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->findBy(array('codigoServicioFk' => $codigoServicio));
         foreach ($arServiciosDetalle as $arServicioDetalle) {
@@ -223,6 +227,12 @@ class TurServicioRepository extends EntityRepository {
                 $arServicioDetalleActualizar->setDias($intDias);
 
                 $em->persist($arServicioDetalleActualizar);
+                
+                $subtotalGeneral += $subTotalDetalle;
+                $baseAuiGeneral += $baseAiuDetalle;
+                $ivaGeneral += $ivaDetalle;
+                $totalGeneral += $totalDetalle;
+                
                 $douTotalHoras += $douHoras;
                 $douTotalHorasDiurnas += $intHorasRealesDiurnas;
                 $douTotalHorasNocturnas += $intHorasRealesNocturnas;
@@ -230,22 +240,16 @@ class TurServicioRepository extends EntityRepository {
                 $douTotalCostoCalculado += $douCostoCalculado;
                 $douTotalServicio += $floVrServicio;
                 $intCantidad++;                
-            } else {
-                $arServicioDetalleActualizar = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
-                $arServicioDetalleActualizar = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($arServicioDetalle->getCodigoServicioDetallePk());                
-                $arServicioDetalleActualizar->setVrSubtotal(0);
-                $arServicioDetalleActualizar->setVrBaseAiu(0);
-                $arServicioDetalleActualizar->setVrIva(0);
-                $arServicioDetalleActualizar->setVrTotalDetalle(0);                        
-                $arServicioDetalleActualizar->setVrPrecioMinimo(0);
-                $arServicioDetalleActualizar->setVrPrecio(0);
-                $arServicioDetalleActualizar->setVrCosto(0);
-                $arServicioDetalleActualizar->setHoras(0);
-                $arServicioDetalleActualizar->setHorasDiurnas(0);
-                $arServicioDetalleActualizar->setHorasNocturnas(0);
-                $arServicioDetalleActualizar->setDias(0);
-
-                $em->persist($arServicioDetalleActualizar);                
+            } else {               
+                $douTotalHoras += $arServicioDetalle->getHoras();
+                $douTotalHorasDiurnas += $arServicioDetalle->getHorasDiurnas();
+                $douTotalHorasNocturnas += $arServicioDetalle->getHorasNocturnas();
+                $douTotalMinimoServicio += $arServicioDetalle->getVrPrecioMinimo();                
+                $subtotalGeneral += $arServicioDetalle->getVrSubtotal();
+                $baseAuiGeneral += $arServicioDetalle->getVrBaseAiu();
+                $ivaGeneral += $arServicioDetalle->getVrIva();
+                $totalGeneral += $arServicioDetalle->getVrTotalDetalle();                
+                
             }
         }
 
@@ -263,14 +267,14 @@ class TurServicioRepository extends EntityRepository {
         $arServicio->setVrTotalPrecioMinimo($douTotalMinimoServicio);
         $arServicio->setVrTotalOtros($floSubTotalConceptos);
         $arServicio->setVrTotalCosto($douTotalCostoCalculado);
-        $subtotal = $douTotalServicio + $floSubTotalConceptos;
-        $baseAiu = $subtotal*10/100;
-        $iva = $baseAiu*16/100;
-        $total = $subtotal + $iva;
-        $arServicio->setVrSubtotal($subtotal);
-        $arServicio->setVrBaseAiu($baseAiu);
-        $arServicio->setVrIva($iva);
-        $arServicio->setVrTotal($total);
+        //$subtotal = $douTotalServicio + $floSubTotalConceptos;
+        //$baseAiu = $subtotal*10/100;
+        //$iva = $baseAiu*16/100;
+        //$total = $subtotal + $iva;
+        $arServicio->setVrSubtotal($subtotalGeneral);
+        $arServicio->setVrBaseAiu($baseAuiGeneral);
+        $arServicio->setVrIva($ivaGeneral);
+        $arServicio->setVrTotal($totalGeneral);
         $em->persist($arServicio);
         $em->flush();
         return true;

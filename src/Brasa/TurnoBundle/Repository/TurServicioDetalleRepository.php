@@ -208,10 +208,9 @@ class TurServicioDetalleRepository extends EntityRepository {
             $precio = ($intHorasRealesDiurnas * $floVrHoraDiurna) + ($intHorasRealesNocturnas * $floVrHoraNocturna);
             $precio = round($precio);
             $floVrMinimoServicio = $precio;
-
             $floVrServicio = 0;
             $subTotalDetalle = 0;
-            if($arServicioDetalleCompuestoActualizar->getVrPrecioAjustado() != 0) {
+            if($arServicioDetalleCompuestoActualizar->getVrPrecioAjustado() != 0) {                
                 $floVrServicio = $arServicioDetalleCompuestoActualizar->getVrPrecioAjustado() * $arServicioDetalleCompuesto->getCantidad();
                 $precio = $arServicioDetalleCompuestoActualizar->getVrPrecioAjustado();
             } else {
