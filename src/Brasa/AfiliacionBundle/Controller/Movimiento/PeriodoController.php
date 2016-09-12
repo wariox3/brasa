@@ -398,18 +398,18 @@ class PeriodoController extends Controller
                         fputs($ar, $arPeriodoDetallePago->getCotizanteExoneradoPagoAporteParafiscalesSalud());
                         
                         if ($codigoProceso == 1){
+                            fputs($ar, "              ");
                             fputs($ar, "N");
                             fputs($ar, $this->RellenarNr($codigoInterfaceRiesgos, " ", 6, "D"));
                             fputs($ar, $arPeriodoDetallePago->getContratoRel()->getClasificacionRiesgoRel()->getCodigoClasificacionRiesgoPk());
+                            fputs($ar, " ");
+                            
                         } else {
                             fputs($ar, $this->RellenarNr($codigoInterfaceRiesgos, " ", 6, "D"));
                             fputs($ar, $arPeriodoDetallePago->getClaseRiesgoAfiliado());
+                            fputs($ar, "                ");
                         }
-                        
-                        //fputs($ar, "      ");
-                        
-                        //fputs($ar, $arPeriodoDetallePago->getClaseRiesgoAfiliado());
-                        fputs($ar, "                ");
+                                                
                         fputs($ar, "\n");
                     }
                     fclose($ar);
