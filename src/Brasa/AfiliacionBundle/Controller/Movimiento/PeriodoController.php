@@ -241,15 +241,16 @@ class PeriodoController extends Controller
                     }
                     if ($codigoProceso == 1){ //proceso a cargo del cliente independiente
                         $codigoInterfaceRiesgos = $form->get('arlIRel')->getData();
-                        $arEntidadRiesgos = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
-                        $arEntidadRiesgos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($codigoInterfaceRiesgos);
-                        $codigoInterfaceRiesgos = $arEntidadRiesgos->getCodigoInterface();
+                        $arEntidadRiesgos2 = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
+                        $arEntidadRiesgos2 = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($codigoInterfaceRiesgos);
+                        $codigoInterfaceRiesgos = $arEntidadRiesgos2->getCodigoInterface();
                         $tipo = "I";
                         $tipoDoc = "CC";
                         $formaPresentacion = $form->get('tipo')->getData();
                         $nit = $arPeriodo->getClienteRel()->getNit();
                         $cliente = $arPeriodo->getClienteRel()->getNombreCorto(); 
-                        $sucursal = $arPeriodo->getClienteRel()->getCodigoSucursal();
+                        $sucursal = '';
+                        $formato = '2';
                     }
                     if ($codigoProceso == 2){ //proceso a cargo del cliente externo
                         $codigoInterfaceRiesgos = $form->get('arlERel')->getData();
@@ -262,6 +263,7 @@ class PeriodoController extends Controller
                         $nit = $arPeriodo->getClienteRel()->getNit();
                         $cliente = $arPeriodo->getClienteRel()->getNombreCorto(); 
                         $sucursal = $form->get('sucursal')->getData();
+                        $formato = '2';
                     }
                     if ($codigoProceso == 3){ //proceso interno horus
                         $tipo = "E";
@@ -270,6 +272,7 @@ class PeriodoController extends Controller
                         $nit = $arConfiguracion->getNitEmpresa();
                         $cliente = $arConfiguracion->getNombreEmpresa();
                         $sucursal = $arPeriodo->getClienteRel()->getCodigoSucursal();
+                        $formato = '1';
                     }
                     $strRutaArchivo = $arConfiguracion->getRutaTemporal();
                     $strNombreArchivo = "pila" . date('YmdHis') . ".txt";
@@ -303,9 +306,9 @@ class PeriodoController extends Controller
                     fputs($ar, $this->RellenarNr(count($arPeriodoDetallePagos), "0", 5, "I"));
                     //Valor total de la nomina
                     fputs($ar, $this->RellenarNr($totalCotizacion, "0", 12, "I"));
-                    //fputs($ar, '000000000000'); //Es el anterior
-                    fputs($ar, '1');
-                    fputs($ar, '89');
+                    //fputs($ar, '000000000000'); //Es el anterior    
+                    fputs($ar, $formato); //1 o 2
+                    fputs($ar, '89'); // entidad por la cual paga la pila enlace operativo (89), simple otros (88)
                     fputs($ar, "\n");
                     //$arPeriodoDetallePagos = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago();
                     //$arPeriodoDetallePagos = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetallePago')->findBy(array('codigoPeriodoFk' => $codigoPeriodo));
@@ -393,10 +396,19 @@ class PeriodoController extends Controller
                         fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getNumeroIdentificacionResponsableUPCAdicional(), " ", 2, "I"));
                         //fputs($ar, "                ");
                         fputs($ar, $arPeriodoDetallePago->getCotizanteExoneradoPagoAporteParafiscalesSalud());
-                        //fputs($ar, " ");
-                        fputs($ar, $this->RellenarNr($arPeriodoDetallePago->getCodigoAdministradoraRiesgosLaborales(), " ", 6, "D"));
+                        
+                        if ($codigoProceso == 1){
+                            fputs($ar, "N");
+                            fputs($ar, $this->RellenarNr($codigoInterfaceRiesgos, " ", 6, "D"));
+                            fputs($ar, $arPeriodoDetallePago->getContratoRel()->getClasificacionRiesgoRel()->getCodigoClasificacionRiesgoPk());
+                        } else {
+                            fputs($ar, $this->RellenarNr($codigoInterfaceRiesgos, " ", 6, "D"));
+                            fputs($ar, $arPeriodoDetallePago->getClaseRiesgoAfiliado());
+                        }
+                        
                         //fputs($ar, "      ");
-                        fputs($ar, $arPeriodoDetallePago->getClaseRiesgoAfiliado());
+                        
+                        //fputs($ar, $arPeriodoDetallePago->getClaseRiesgoAfiliado());
                         fputs($ar, "                ");
                         fputs($ar, "\n");
                     }

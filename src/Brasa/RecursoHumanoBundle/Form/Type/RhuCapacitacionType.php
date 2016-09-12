@@ -22,15 +22,15 @@ class RhuCapacitacionType extends AbstractType
                         'property' => 'nombre',
             ))    
             ->add('fechaCapacitacion', 'datetime', array('format' => 'yyyyMMdd'))
-            ->add('tema', 'text', array('required' => false))
+            ->add('tema', 'text', array('required' => true))
             ->add('numeroPersonasCapacitar', 'number', array('required' => true))
             ->add('vrCapacitacion', 'text', array('required' => false))
-            ->add('lugar', 'text', array('required' => false))    
-            ->add('duracion', 'text', array('required' => false))
-            ->add('objetivo', 'textarea', array('required' => false))
-            ->add('contenido', 'textarea', array('required' => false))
-            ->add('facilitador', 'text', array('required' => false))
-            ->add('numeroIdentificacionFacilitador', 'text', array('required' => false))    
+            ->add('lugar', 'text', array('required' => true))    
+            ->add('duracion', 'text', array('required' => true))
+            ->add('objetivo', 'textarea', array('required' => true))
+            ->add('contenido', 'textarea', array('required' => true))
+            ->add('facilitador', 'text', array('required' => true))
+            ->add('numeroIdentificacionFacilitador', 'text', array('required' => true))    
             ->add('guardar', 'submit');        
     }
  

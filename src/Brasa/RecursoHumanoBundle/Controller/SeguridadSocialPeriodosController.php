@@ -225,7 +225,7 @@ class SeguridadSocialPeriodosController extends Controller
                 //fputs($ar, $this->RellenarNr($arPeriodoDetalle->getTotalCotizacion(), "0", 12, "I")); //duda nro 19
                 fputs($ar, '000000000000'); //Es el anterior
                 fputs($ar, '1');
-                fputs($ar, '89');
+                fputs($ar, '88');
                 fputs($ar, "\n");
 
                 $arSsoAportes = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte();
