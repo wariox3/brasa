@@ -22,6 +22,12 @@
                 <td class="titulo">CARGO:</td>
                 <td class="td-in-well">{{ arProgramacionPagoDetalle.contratoRel.cargoRel.nombre }}</td>
             </tr>
+            <tr>
+                <td class="titulo">PERIODO:</td>
+                <td class="td-in-well">{{ arProgramacionPagoDetalle.fechaDesdePago | date('Y/m/d') }}-{{ arProgramacionPagoDetalle.fechaHastaPago | date('Y/m/d') }}</td>
+                <td class="titulo"></td>
+                <td class="td-in-well"></td>
+            </tr>            
         </table>
         <table class="table table-striped table-bordered table-condensed">
             <tr>
