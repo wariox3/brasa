@@ -93,9 +93,7 @@ class VacacionesController extends Controller
             $arVacacion->setFecha(new \DateTime('now'));
             $arVacacion->setFechaDesdeDisfrute(new \DateTime('now'));
             $arVacacion->setFechaHastaDisfrute(new \DateTime('now'));
-        }
-        $arCreditosPendientes = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        }                
         $form = $this->createForm(new RhuVacacionType, $arVacacion);         
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -175,30 +173,9 @@ class VacacionesController extends Controller
                     }                
                 }
             }
-            if($form->get('ver')->isClicked()) {
-                if($arrControles['form_txtNumeroIdentificacion'] != '') {
-                    $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));
-                    if(count($arEmpleado) > 0) {
-                        $arVacacion->setEmpleadoRel($arEmpleado);
-                        if($arEmpleado->getCodigoContratoActivoFk() != '') {
-                            $arCreditosPendientes = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arEmpleado->getCodigoEmpleadoPk());
-                            $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
-                        }else {
-                            $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
-                        }     
-                    }else {
-                        $objMensaje->Mensaje("error", "El empleado no existe", $this);
-                    } 
-                } else {
-                        $objMensaje->Mensaje("error", "Digite el número de identificacion", $this);
-                    }
-            }
         }                    
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Vacaciones:nuevo.html.twig', array(
             'arVacacion' => $arVacacion,
-            'arCreditosPendientes' => $arCreditosPendientes,
-            'arContrato' => $arContrato,
             'form' => $form->createView()));
     }           
     

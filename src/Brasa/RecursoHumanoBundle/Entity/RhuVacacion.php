@@ -128,6 +128,11 @@ class RhuVacacion
     private $vrSalarioPromedio = 0;         
 
     /**
+     * @ORM\Column(name="vr_salario_promedio_propuesto", type="float")
+     */
+    private $vrSalarioPromedioPropuesto = 0;    
+    
+    /**
      * @ORM\Column(name="vr_vacacion_bruto", type="float")
      */
     private $vrVacacionBruto = 0;    
@@ -1110,5 +1115,29 @@ class RhuVacacion
     public function getVrIbcPromedio()
     {
         return $this->vrIbcPromedio;
+    }
+
+    /**
+     * Set vrSalarioPromedioPropuesto
+     *
+     * @param float $vrSalarioPromedioPropuesto
+     *
+     * @return RhuVacacion
+     */
+    public function setVrSalarioPromedioPropuesto($vrSalarioPromedioPropuesto)
+    {
+        $this->vrSalarioPromedioPropuesto = $vrSalarioPromedioPropuesto;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioPromedioPropuesto
+     *
+     * @return float
+     */
+    public function getVrSalarioPromedioPropuesto()
+    {
+        return $this->vrSalarioPromedioPropuesto;
     }
 }

@@ -83,6 +83,11 @@ class TurConceptoServicio
     protected $serviciosDetallesConceptoServicioRel;     
     
     /**
+     * @ORM\OneToMany(targetEntity="TurServicioDetalleCompuesto", mappedBy="conceptoServicioRel")
+     */
+    protected $serviciosDetallesCompuestosConceptoServicioRel;      
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurCotizacionDetalle", mappedBy="conceptoServicioRel")
      */
     protected $cotizacionesDetallesConceptoServicioRel;     
@@ -668,5 +673,39 @@ class TurConceptoServicio
     public function getNombreServicio()
     {
         return $this->nombreServicio;
+    }
+
+    /**
+     * Add serviciosDetallesCompuestosConceptoServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalleCompuesto $serviciosDetallesCompuestosConceptoServicioRel
+     *
+     * @return TurConceptoServicio
+     */
+    public function addServiciosDetallesCompuestosConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurServicioDetalleCompuesto $serviciosDetallesCompuestosConceptoServicioRel)
+    {
+        $this->serviciosDetallesCompuestosConceptoServicioRel[] = $serviciosDetallesCompuestosConceptoServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove serviciosDetallesCompuestosConceptoServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalleCompuesto $serviciosDetallesCompuestosConceptoServicioRel
+     */
+    public function removeServiciosDetallesCompuestosConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurServicioDetalleCompuesto $serviciosDetallesCompuestosConceptoServicioRel)
+    {
+        $this->serviciosDetallesCompuestosConceptoServicioRel->removeElement($serviciosDetallesCompuestosConceptoServicioRel);
+    }
+
+    /**
+     * Get serviciosDetallesCompuestosConceptoServicioRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiciosDetallesCompuestosConceptoServicioRel()
+    {
+        return $this->serviciosDetallesCompuestosConceptoServicioRel;
     }
 }

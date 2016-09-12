@@ -54,7 +54,13 @@
                 <div class="col-sm-9">
                     {{ form_widget(form.fechaHastaDisfrute, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>                 
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Salario promedio (propuesto):</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.vrSalarioPromedioPropuesto , { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                
             <div class="form-group">
                 <label for="form_comentarios" class="col-sm-3 control-label">Comentarios:</label>
                 <div class="col-sm-9">
@@ -64,52 +70,9 @@
                 
         </div>
     </div>
-    <table class="table table-striped table-bordered table-condensed">
-        <tr>
-            <th colspan="3">CRÉDITOS</th>
-        </tr>    
-        <tr>
-            <th>CÓDIGO</th>
-            <th>TIPO</th>
-            <th style="text-align: right">VALOR</th>            
-        </tr>
-        {% for arCreditosPendientes in arCreditosPendientes %}
-        <tr>
-            <td>
-                <input type="hidden" name="LblCodigoGuia[]" value="{{ arCreditosPendientes.codigoCreditoPk }}">
-                <span class="badge">{{ arCreditosPendientes.codigoCreditoPk }}</span>
-            </td>
-            <td>{{ arCreditosPendientes.creditoTipoRel.nombre }}</td>           
-            <td style="text-align: right">{{ arCreditosPendientes.saldoTotal | number_format(2, '.', ',') }}</td>            
-        </tr>
-        {% endfor %}
-    </table>
-    <table class="table table-striped table-bordered table-condensed">
-        <tr>
-            <th colspan="4">CONTRATO</th>
-        </tr>    
-        <tr>
-            <th>CÓDIGO</th>
-            <th>TIPO</th>
-            <th>CENTRO COSTO</th>
-            <th>ÚLTIMA FECHA VACACIONES</th>            
-        </tr>
-        
-        <tr>
-            <td>
-                <input type="hidden" name="LblCodigoGuia[]" value="{{ arContrato.codigoContratoPk }}">
-                <span class="badge">{{ arContrato.codigoContratoPk }}</span>
-            </td>
-            <td>{{ arContrato.contratoTipoRel.nombre|default('SIN TIPO')  }}</td>
-            <td>{{ arContrato.centroCostoRel.nombre|default('SIN centro')   }}</td>
-            <td>{{ arContrato.fechaUltimoPagoVacaciones |date("Y/m/d")  }}</td>
-        </tr>
-       
-    </table>
     
     <div class="modal-footer">
-        <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_movimiento_vacacion') }}">Cancelar</a>        
-        {{ form_widget(form.ver, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+        <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_movimiento_vacacion') }}">Cancelar</a>                
         {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
     </div>    
     {{ form_end(form) }}

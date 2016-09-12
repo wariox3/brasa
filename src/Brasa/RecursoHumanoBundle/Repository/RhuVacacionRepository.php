@@ -91,7 +91,9 @@ class RhuVacacionRepository extends EntityRepository {
         } else {            
             $floSalarioPromedio = $arContrato->getVrSalario() + $promedioRecargosNocturnos;
         }       
-        
+        if($arVacacion->getVrSalarioPromedioPropuesto() > 0) {
+            $floSalarioPromedio = $arVacacion->getVrSalarioPromedioPropuesto();
+        }
         $floTotalVacacionBrutoDisfrute = $floSalarioPromedio / 30 * $arVacacion->getDiasDisfrutadosReales();
         if($arVacacion->getDiasDisfrutadosReales() > 1) {
             $floTotalVacacionBrutoPagados = $floSalarioPromedio / 30 * $arVacacion->getDiasPagados();            

@@ -53,6 +53,11 @@ class TurModalidadServicio
     protected $serviciosDetallesModalidadServicioRel;     
     
     /**
+     * @ORM\OneToMany(targetEntity="TurServicioDetalleCompuesto", mappedBy="modalidadServicioRel")
+     */
+    protected $serviciosDetallesCompuestosModalidadServicioRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurCotizacionDetalle", mappedBy="modalidadServicioRel")
      */
     protected $cotizacionesDetallesModalidadServicioRel; 
@@ -343,5 +348,39 @@ class TurModalidadServicio
     public function getFacturasDetallesModalidadServicioRel()
     {
         return $this->facturasDetallesModalidadServicioRel;
+    }
+
+    /**
+     * Add serviciosDetallesCompuestosModalidadServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalleCompuesto $serviciosDetallesCompuestosModalidadServicioRel
+     *
+     * @return TurModalidadServicio
+     */
+    public function addServiciosDetallesCompuestosModalidadServicioRel(\Brasa\TurnoBundle\Entity\TurServicioDetalleCompuesto $serviciosDetallesCompuestosModalidadServicioRel)
+    {
+        $this->serviciosDetallesCompuestosModalidadServicioRel[] = $serviciosDetallesCompuestosModalidadServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove serviciosDetallesCompuestosModalidadServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalleCompuesto $serviciosDetallesCompuestosModalidadServicioRel
+     */
+    public function removeServiciosDetallesCompuestosModalidadServicioRel(\Brasa\TurnoBundle\Entity\TurServicioDetalleCompuesto $serviciosDetallesCompuestosModalidadServicioRel)
+    {
+        $this->serviciosDetallesCompuestosModalidadServicioRel->removeElement($serviciosDetallesCompuestosModalidadServicioRel);
+    }
+
+    /**
+     * Get serviciosDetallesCompuestosModalidadServicioRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiciosDetallesCompuestosModalidadServicioRel()
+    {
+        return $this->serviciosDetallesCompuestosModalidadServicioRel;
     }
 }

@@ -72,6 +72,11 @@ class TurServicioDetalle
      */    
     private $liquidarDiasReales = false;    
     
+    /**     
+     * @ORM\Column(name="compuesto", type="boolean")
+     */    
+    private $compuesto = false;      
+    
     /**
      * @ORM\Column(name="dias", type="integer")
      */    
@@ -275,6 +280,10 @@ class TurServicioDetalle
      */
     protected $pedidosDetallesServicioDetalleRel;     
     
+    /**
+     * @ORM\OneToMany(targetEntity="TurServicioDetalleCompuesto", mappedBy="servicioDetalleRel")
+     */
+    protected $serviciosDetallesCompuestosServicioDetalleRel;     
 
 
     /**
@@ -1525,5 +1534,63 @@ class TurServicioDetalle
     public function getEstadoCerrado()
     {
         return $this->estadoCerrado;
+    }
+
+    /**
+     * Set compuesto
+     *
+     * @param boolean $compuesto
+     *
+     * @return TurServicioDetalle
+     */
+    public function setCompuesto($compuesto)
+    {
+        $this->compuesto = $compuesto;
+
+        return $this;
+    }
+
+    /**
+     * Get compuesto
+     *
+     * @return boolean
+     */
+    public function getCompuesto()
+    {
+        return $this->compuesto;
+    }
+
+    /**
+     * Add serviciosDetallesCompuestosServicioDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalleCompuesto $serviciosDetallesCompuestosServicioDetalleRel
+     *
+     * @return TurServicioDetalle
+     */
+    public function addServiciosDetallesCompuestosServicioDetalleRel(\Brasa\TurnoBundle\Entity\TurServicioDetalleCompuesto $serviciosDetallesCompuestosServicioDetalleRel)
+    {
+        $this->serviciosDetallesCompuestosServicioDetalleRel[] = $serviciosDetallesCompuestosServicioDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove serviciosDetallesCompuestosServicioDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurServicioDetalleCompuesto $serviciosDetallesCompuestosServicioDetalleRel
+     */
+    public function removeServiciosDetallesCompuestosServicioDetalleRel(\Brasa\TurnoBundle\Entity\TurServicioDetalleCompuesto $serviciosDetallesCompuestosServicioDetalleRel)
+    {
+        $this->serviciosDetallesCompuestosServicioDetalleRel->removeElement($serviciosDetallesCompuestosServicioDetalleRel);
+    }
+
+    /**
+     * Get serviciosDetallesCompuestosServicioDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServiciosDetallesCompuestosServicioDetalleRel()
+    {
+        return $this->serviciosDetallesCompuestosServicioDetalleRel;
     }
 }

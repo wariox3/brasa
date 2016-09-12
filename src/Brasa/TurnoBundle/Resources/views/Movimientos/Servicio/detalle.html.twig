@@ -131,6 +131,7 @@
                             <th><p data-toggle="tooltip" data-placement="top" title="Precio ajustado">P.AJUSTADO</p></th>
                             <th>SUBTOTAL</th>
                             <th><p data-toggle="tooltip" data-placement="top" title="Grupo facturacion">GF</p></th>
+                            <th><p data-toggle="tooltip" data-placement="top" title="Servicio compuesto">C</p></th>
                             <th></th>
                             <th></th>
                             <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodosTabla(this, 'ChkSeleccionar[]');"/></th>
@@ -174,6 +175,12 @@
                                 {% endif %}                    
                                 <td style="text-align: right">{{ arServicioDetalle.vrSubTotal | number_format(0, '.', ',') }}</td> 
                                 <td>{{ arServicioDetalle.grupoFacturacionRel.abreviatura | default('')  }}</td>                                
+                                <td>{% if arServicioDetalle.compuesto == 1 %} 
+                                        <a href="{{ path('brs_tur_movimiento_servicio_compuesto_detalle', { 'codigoServicioDetalle': arServicioDetalle.codigoServicioDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a>                                                    
+                                    {% else %} 
+                                        NO 
+                                    {% endif %}
+                                </td>                                
                                 <td>{% if arServicio.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_servicio_detalle_nuevo', {'codigoServicio': arServicioDetalle.codigoServicioFk, 'codigoServicioDetalle': arServicioDetalle.codigoServicioDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                    
                                 <td style="text-align: center" {% if arServicioDetalle.ajusteProgramacion == 1 %} class="danger" {% endif %}><a href="{{ path('brs_tur_movimiento_servicio_detalle_recurso', { 'codigoServicioDetalle': arServicioDetalle.codigoServicioDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" width=22 height=22></a></td>                                    
                                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arServicioDetalle.codigoServicioDetallePk }}" /></td>

@@ -138,4 +138,127 @@ class TurServicioDetalleRepository extends EntityRepository {
         return count($arDetalles);
     }          
     
+    public function liquidar($codigoServicioDetalle) {
+        $em = $this->getEntityManager();
+        $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
+        $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigoServicioDetalle);
+        $intCantidad = 0;
+        $precio = 0;
+        $douTotalHoras = 0;
+        $douTotalHorasDiurnas = 0;
+        $douTotalHorasNocturnas = 0;
+        $douTotalServicio = 0;
+        $douTotalMinimoServicio = 0;
+        $douTotalCostoCalculado = 0;
+        $arServiciosDetalleCompuesto = new \Brasa\TurnoBundle\Entity\TurServicioDetalleCompuesto();
+        $arServiciosDetalleCompuesto = $em->getRepository('BrasaTurnoBundle:TurServicioDetalleCompuesto')->findBy(array('codigoServicioDetalleFk' => $codigoServicioDetalle));
+        foreach ($arServiciosDetalleCompuesto as $arServicioDetalleCompuesto) {            
+            if($arServicioDetalleCompuesto->getPeriodoRel()->getCodigoPeriodoPk() == 2) {
+                $intDias = 30;
+            } else {
+                $intDias = 30;
+            }
+
+            $intHorasRealesDiurnas = 0;
+            $intHorasRealesNocturnas = 0;
+            $intDiasOrdinarios = 0;
+            $intDiasSabados = 0;
+            $intDiasDominicales = 0;
+            $intDiasFestivos = 0;
+            if($arServicioDetalleCompuesto->getPeriodoRel()->getCodigoPeriodoPk() == 1) {
+                if($arServicioDetalleCompuesto->getLunes() == 1) {
+                    $intDiasOrdinarios += 4;
+                }
+                if($arServicioDetalleCompuesto->getMartes() == 1) {
+                    $intDiasOrdinarios += 4;
+                }
+                if($arServicioDetalleCompuesto->getMiercoles() == 1) {
+                    $intDiasOrdinarios += 4;
+                }
+                if($arServicioDetalleCompuesto->getJueves() == 1) {
+                    $intDiasOrdinarios += 4;
+                }
+                if($arServicioDetalleCompuesto->getViernes() == 1) {
+                    $intDiasOrdinarios += 4;
+                }
+                if($arServicioDetalleCompuesto->getSabado() == 1) {
+                    $intDiasSabados = 4;
+                }
+                if($arServicioDetalleCompuesto->getDomingo() == 1) {
+                    $intDiasDominicales = 4;
+                }
+                if($arServicioDetalleCompuesto->getFestivo() == 1) {
+                    $intDiasFestivos = 2;
+                }
+                $intTotalDias = $intDiasOrdinarios + $intDiasSabados + $intDiasDominicales + $intDiasFestivos;
+                $intHorasRealesDiurnas = $arServicioDetalleCompuesto->getConceptoServicioRel()->getHorasDiurnas() * $intTotalDias;
+                $intHorasRealesNocturnas = $arServicioDetalleCompuesto->getConceptoServicioRel()->getHorasNocturnas() * $intTotalDias;
+            }
+                        
+            $douHoras = ($intHorasRealesDiurnas + $intHorasRealesNocturnas ) * $arServicioDetalleCompuesto->getCantidad();
+            $arServicioDetalleCompuestoActualizar = new \Brasa\TurnoBundle\Entity\TurServicioDetalleCompuesto();
+            $arServicioDetalleCompuestoActualizar = $em->getRepository('BrasaTurnoBundle:TurServicioDetalleCompuesto')->find($arServicioDetalleCompuesto->getCodigoServicioDetalleCompuestoPk());
+            $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+            $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+            $floValorBaseServicio = $arConfiguracionNomina->getVrSalario() * $arServicioDetalle->getServicioRel()->getSectorRel()->getPorcentaje();
+            $floValorBaseServicioMes = $floValorBaseServicio + ($floValorBaseServicio * $arServicioDetalleCompuesto->getModalidadServicioRel()->getPorcentaje() / 100);
+            $floVrHoraDiurna = ((($floValorBaseServicioMes * 59.7) / 100)/30)/16;             
+            $floVrHoraNocturna = ((($floValorBaseServicioMes * 40.3) / 100)/30)/8;            
+
+            $precio = ($intHorasRealesDiurnas * $floVrHoraDiurna) + ($intHorasRealesNocturnas * $floVrHoraNocturna);
+            $precio = round($precio);
+            $floVrMinimoServicio = $precio;
+
+            $floVrServicio = 0;
+            $subTotalDetalle = 0;
+            if($arServicioDetalleCompuestoActualizar->getVrPrecioAjustado() != 0) {
+                $floVrServicio = $arServicioDetalleCompuestoActualizar->getVrPrecioAjustado() * $arServicioDetalleCompuesto->getCantidad();
+                $precio = $arServicioDetalleCompuestoActualizar->getVrPrecioAjustado();
+            } else {
+                $floVrServicio = $floVrMinimoServicio * $arServicioDetalleCompuesto->getCantidad();                
+            }
+            $subTotalDetalle = $floVrServicio;
+            $baseAiuDetalle = $subTotalDetalle*10/100;
+            $ivaDetalle = $baseAiuDetalle*16/100;
+            $totalDetalle = $subTotalDetalle + $ivaDetalle;
+
+            $arServicioDetalleCompuestoActualizar->setVrSubtotal($subTotalDetalle);
+            $arServicioDetalleCompuestoActualizar->setVrBaseAiu($baseAiuDetalle);
+            $arServicioDetalleCompuestoActualizar->setVrIva($ivaDetalle);
+            $arServicioDetalleCompuestoActualizar->setVrTotalDetalle($totalDetalle);                        
+            $arServicioDetalleCompuestoActualizar->setVrPrecioMinimo($floVrMinimoServicio);
+            $arServicioDetalleCompuestoActualizar->setVrPrecio($precio);
+
+            $arServicioDetalleCompuestoActualizar->setHoras($douHoras);
+            $arServicioDetalleCompuestoActualizar->setHorasDiurnas($intHorasRealesDiurnas);
+            $arServicioDetalleCompuestoActualizar->setHorasNocturnas($intHorasRealesNocturnas);
+            $arServicioDetalleCompuestoActualizar->setDias($intDias);
+
+            $em->persist($arServicioDetalleCompuestoActualizar);
+            $douTotalHoras += $douHoras;
+            $douTotalHorasDiurnas += $intHorasRealesDiurnas;
+            $douTotalHorasNocturnas += $intHorasRealesNocturnas;
+            $douTotalMinimoServicio += $floVrMinimoServicio;
+            $douTotalServicio += $floVrServicio;
+            $intCantidad++;                
+             
+        }
+
+        $arServicioDetalle->setHoras($douTotalHoras);
+        $arServicioDetalle->setHorasDiurnas($douTotalHorasDiurnas);
+        $arServicioDetalle->setHorasNocturnas($douTotalHorasNocturnas);        
+        $arServicioDetalle->setVrPrecioMinimo($douTotalMinimoServicio);        
+        $subtotal = $douTotalServicio;
+        $baseAiu = $subtotal*10/100;
+        $iva = $baseAiu*16/100;
+        $total = $subtotal + $iva;
+        $arServicioDetalle->setVrSubtotal($subtotal);
+        $arServicioDetalle->setVrBaseAiu($baseAiu);
+        $arServicioDetalle->setVrIva($iva);
+        $arServicioDetalle->setVrTotalDetalle($total);
+        $em->persist($arServicioDetalle);
+        $em->flush();
+        return true;
+    }    
+    
 }

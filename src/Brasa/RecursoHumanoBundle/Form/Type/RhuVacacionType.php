@@ -11,10 +11,10 @@ class RhuVacacionType extends AbstractType
         $builder
             ->add('diasDisfrutados', 'number', array('required' => true))                 
             ->add('diasPagados', 'number', array('required' => true))                 
+            ->add('vrSalarioPromedioPropuesto', 'number', array('required' => false))                 
             ->add('fechaDesdeDisfrute', 'date')
             ->add('fechaHastaDisfrute', 'date')               
-            ->add('comentarios', 'textarea', array('required' => false))    
-            ->add('ver', 'submit')
+            ->add('comentarios', 'textarea', array('required' => false))                
             ->add('guardar', 'submit');
     }
  

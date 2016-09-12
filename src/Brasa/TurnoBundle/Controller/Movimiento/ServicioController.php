@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurServicioType;
 use Brasa\TurnoBundle\Form\Type\TurServicioDetalleType;
+use Brasa\TurnoBundle\Form\Type\TurServicioDetalleCompuestoType;
 class ServicioController extends Controller
 {
     var $strListaDql = "";
@@ -203,6 +204,81 @@ class ServicioController extends Controller
                     'form' => $form->createView()
                     ));
     }
+
+    /**
+     * @Route("/tur/movimiento/servicio/compuesto/detalle/{codigoServicioDetalle}", name="brs_tur_movimiento_servicio_compuesto_detalle")
+     */    
+    public function detalleCompuestoAction($codigoServicioDetalle) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $objMensaje = $this->get('mensajes_brasa');
+        $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
+        $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigoServicioDetalle);
+        $form = $this->formularioCompuestoDetalle($arServicioDetalle);
+        $form->handleRequest($request);
+        if($form->isValid()) {              
+            if($form->get('BtnDetalleActualizar')->isClicked()) {                
+                $arrControles = $request->request->All();
+                $this->actualizarDetalleCompuesto($arrControles, $codigoServicioDetalle);                                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_compuesto_detalle', array('codigoServicioDetalle' => $codigoServicioDetalle)));
+            }
+            if($form->get('BtnDetalleEliminar')->isClicked()) {   
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurServicioDetalleCompuesto')->eliminarSeleccionados($arrSeleccionados);
+                //$em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_compuesto_detalle', array('codigoServicioDetalle' => $codigoServicioDetalle)));
+            }                                 
+        }
+
+        $dql = $em->getRepository('BrasaTurnoBundle:TurServicioDetalleCompuesto')->listaDql($codigoServicioDetalle);       
+        $arServiciosDetalleCompuesto = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 150);
+        return $this->render('BrasaTurnoBundle:Movimientos/Servicio:detalleCompuesto.html.twig', array(
+                    'arServicioDetalle' => $arServicioDetalle,
+                    'arServiciosDetalleCompuesto' => $arServiciosDetalleCompuesto,
+                    'form' => $form->createView()
+                    ));
+    }
+    
+    /**
+     * @Route("/tur/movimiento/servicio/compuesto/detalle/nuevo/{codigoServicioDetalle}/{codigoServicioDetalleCompuesto}", name="brs_tur_movimiento_servicio_compuesto_detalle_nuevo")
+     */    
+    public function detalleCompuestoNuevoAction($codigoServicioDetalle, $codigoServicioDetalleCompuesto = 0) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
+        $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigoServicioDetalle);
+        $arServicioDetalleCompuesto = new \Brasa\TurnoBundle\Entity\TurServicioDetalleCompuesto();
+        if($codigoServicioDetalleCompuesto != 0) {
+            $arServicioDetalleCompuesto = $em->getRepository('BrasaTurnoBundle:TurServicioDetalleCompuesto')->find($codigoServicioDetalleCompuesto);
+        } else {
+            $arPeriodo = new \Brasa\TurnoBundle\Entity\TurPeriodo();
+            $arPeriodo = $em->getRepository('BrasaTurnoBundle:TurPeriodo')->find(1);
+            $arServicioDetalleCompuesto->setLunes(true);
+            $arServicioDetalleCompuesto->setMartes(true);
+            $arServicioDetalleCompuesto->setMiercoles(true);
+            $arServicioDetalleCompuesto->setJueves(true);
+            $arServicioDetalleCompuesto->setViernes(true);
+            $arServicioDetalleCompuesto->setSabado(true);
+            $arServicioDetalleCompuesto->setDomingo(true);
+            $arServicioDetalleCompuesto->setFestivo(true);
+            $arServicioDetalleCompuesto->setCantidad(1);
+            $arServicioDetalleCompuesto->setServicioDetalleRel($arServicioDetalle);
+            $arServicioDetalleCompuesto->setPeriodoRel($arPeriodo);           
+        }
+        $form = $this->createForm(new TurServicioDetalleCompuestoType, $arServicioDetalleCompuesto);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arServicioDetalleCompuesto = $form->getData();
+            $em->persist($arServicioDetalleCompuesto);
+            $em->flush();
+            //$em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+        }
+        return $this->render('BrasaTurnoBundle:Movimientos/Servicio:detalleCompuestoNuevo.html.twig', array(
+            'arServicioDetalle' => $arServicioDetalle,
+            'form' => $form->createView()));
+    }    
     
     /**
      * @Route("/tur/movimiento/servicio/detalle/concepto/nuevo/{codigoServicio}", name="brs_tur_movimiento_servicio_detalle_concepto_nuevo")
@@ -629,6 +705,33 @@ class ServicioController extends Controller
         return $form;
     }
 
+    private function formularioCompuestoDetalle($ar) {        
+        $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);                
+        
+        /*if($ar->getEstadoAutorizado() == 1) {            
+            $arrBotonAutorizar['disabled'] = true;                        
+            $arrBotonDetalleEliminar['disabled'] = true;
+            $arrBotonDetalleActualizar['disabled'] = true;
+            $arrBotonCerrar['disabled'] = false;  
+            $arrBotonDetalleConceptoActualizar['disabled'] = true;
+            $arrBotonDetalleConceptoEliminar['disabled'] = true;            
+        } else {
+            $arrBotonDesAutorizar['disabled'] = true;            
+            $arrBotonImprimir['disabled'] = true;
+        }
+ 
+        if($ar->getEstadoCerrado() == 1) {
+            $arrBotonDesAutorizar['disabled'] = true;                        
+            $arrBotonCerrar['disabled'] = true;
+        }*/         
+        $form = $this->createFormBuilder()
+                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
+                    ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
+                    ->getForm();
+        return $form;
+    }    
+    
     private function formularioRecurso($intDiasSecuencia, $fechaIniciaPlantilla, $arPlantilla) {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -802,6 +905,23 @@ class ServicioController extends Controller
             $em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);             
         }       
     }
+    
+    private function actualizarDetalleCompuesto($arrControles, $codigoServicioDetalle) {
+        $em = $this->getDoctrine()->getManager();
+        $intIndice = 0;
+        if(isset($arrControles['LblCodigo'])) {
+            foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                $arServicioDetalleCompuesto = new \Brasa\TurnoBundle\Entity\TurServicioDetalleCompuesto();
+                $arServicioDetalleCompuesto = $em->getRepository('BrasaTurnoBundle:TurServicioDetalleCompuesto')->find($intCodigo);                
+                if($arrControles['TxtValorAjustado'.$intCodigo] != '') {
+                    $arServicioDetalleCompuesto->setVrPrecioAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
+                }                              
+                $em->persist($arServicioDetalleCompuesto);
+            }
+            $em->flush();                
+            $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->liquidar($codigoServicioDetalle);             
+        }       
+    }    
     
     private function actualizarDetalleRecurso($arrControles) {
         $em = $this->getDoctrine()->getManager();
