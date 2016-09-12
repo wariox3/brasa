@@ -29,7 +29,7 @@ class CarCliente
     private $digitoVerificacion;             
     
     /**
-     * @ORM\Column(name="nombre_corto", type="string", length=50)
+     * @ORM\Column(name="nombre_corto", type="string", length=200)
      */
     private $nombreCorto;      
 
@@ -125,7 +125,6 @@ class CarCliente
      * @ORM\OneToMany(targetEntity="CarAnticipo", mappedBy="clienteRel")
      */
     protected $anticiposClienteRel;
-    
     
     
     /**
