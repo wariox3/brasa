@@ -76,49 +76,49 @@ class EmpleadoContrato extends \FPDF_FPDF {
             $this->SetFont('Arial','B',7);
             $this->Cell(20, 5, utf8_decode("CODIGO:") , 1, 0, 'L', 1);
             $this->SetFont('Arial','',7);
-            $this->Cell(49, 5, $arEmpleado->getClienteRel()->getCodigoClientePk(), 1, 0, 'L', 1);
+            $this->Cell(49, 5, $arContrato->getClienteRel()->getCodigoClientePk(), 1, 0, 'L', 1);
             $this->SetFont('Arial','B',7);
             $this->Cell(19, 5, utf8_decode("NIT:") , 1, 0, 'L', 1);
             $this->SetFont('Arial','',7);
-            $this->Cell(47, 5, $arEmpleado->getClienteRel()->getNit(), 1, 0, 'L', 1);
+            $this->Cell(47, 5, $arContrato->getClienteRel()->getNit(), 1, 0, 'L', 1);
             $this->SetFont('Arial','B',7);
             $this->Cell(17, 5, utf8_decode("DV:") , 1, 0, 'L', 1);
             $this->SetFont('Arial','',8);
-            $this->Cell(45, 5, $arEmpleado->getClienteRel()->getDigitoVerificacion(), 1, 0, 'L', 1);
+            $this->Cell(45, 5, $arContrato->getClienteRel()->getDigitoVerificacion(), 1, 0, 'L', 1);
             //linea 2
             $this->SetXY(10, $intY+10);
             $this->SetFont('Arial','B',7);
             $this->Cell(20, 5, utf8_decode("NOMBRE:") , 1, 0, 'L', 1);
             $this->SetFont('Arial','',6.7);
-            $this->Cell(49, 5, $arEmpleado->getClienteRel()->getNombreCorto(), 1, 0, 'L', 1);
+            $this->Cell(49, 5, $arContrato->getClienteRel()->getNombreCorto(), 1, 0, 'L', 1);
             $this->SetFont('Arial','B',7);
             $this->Cell(19, 5, utf8_decode("ASESOR:") , 1, 0, 'L', 1);
             $this->SetFont('Arial','',6.4);
             $asesor = "";
-            if ($arEmpleado->getClienteRel()->getCodigoAsesorFk() != null){
-                $asesor = $arEmpleado->getClienteRel()->getAsesorRel()->getNombre();
+            if ($arContrato->getClienteRel()->getCodigoAsesorFk() != null){
+                $asesor = $arContrato->getClienteRel()->getAsesorRel()->getNombre();
             }
             $this->Cell(47, 5, utf8_decode($asesor), 1, 0, 'L', 1);
             $this->SetFont('Arial','B',7);
             $this->Cell(17, 5, 'EMAIL', 1, 0, 'L', 1);
             $this->SetFont('Arial','',7);
-            $this->Cell(45, 5, $arEmpleado->getClienteRel()->getEmail(), 1, 0, 'L', 1);
+            $this->Cell(45, 5, $arContrato->getClienteRel()->getEmail(), 1, 0, 'L', 1);
             //linea 3
             $this->SetXY(10, $intY+15);
             $this->SetFont('Arial','B',7);
             $this->Cell(20, 5, utf8_decode("TELEFONO:") , 1, 0, 'L', 1);
             $this->SetFont('Arial','',7);
-            $this->Cell(49, 5, $arEmpleado->getClienteRel()->getTelefono(), 1, 0, 'L', 1);
+            $this->Cell(49, 5, $arContrato->getClienteRel()->getTelefono(), 1, 0, 'L', 1);
             $this->SetFont('Arial','B',7);
             $this->Cell(19, 5, utf8_decode("CELULAR:") , 1, 0, 'L', 1);
             $this->SetFont('Arial','',8);
-            $this->Cell(47, 5, $arEmpleado->getClienteRel()->getCelular(), 1, 0, 'L', 1);
+            $this->Cell(47, 5, $arContrato->getClienteRel()->getCelular(), 1, 0, 'L', 1);
             $this->SetFont('Arial','B',7);
             $this->Cell(17, 5, 'F. PAGO', 1, 0, 'L', 1);
             $this->SetFont('Arial','',8);
             $formaPago = "";
-            if ($arEmpleado->getClienteRel()->getCodigoFormaPagoFk() != null){
-                $formaPago = $arEmpleado->getClienteRel()->getFormaPagoRel()->getNombre();
+            if ($arContrato->getClienteRel()->getCodigoFormaPagoFk() != null){
+                $formaPago = $arContrato->getClienteRel()->getFormaPagoRel()->getNombre();
             }
             $this->Cell(45, 5, $formaPago, 1, 0, 'L', 1);
             //linea 4
@@ -134,7 +134,7 @@ class EmpleadoContrato extends \FPDF_FPDF {
             $this->SetFont('Arial','B',7);
             $this->Cell(17, 5, "AFILIACION:" , 1, 0, 'L', 1);
             $this->SetFont('Arial','',8);
-            $this->Cell(45, 5, number_format($arEmpleado->getClienteRel()->getAfiliacion(), 2, '.', ','), 1, 0, 'R', 1);
+            $this->Cell(45, 5, number_format($arContrato->getClienteRel()->getAfiliacion(), 2, '.', ','), 1, 0, 'R', 1);
             //linea empleado
             $this->SetFillColor(200, 200, 200); 
             $this->SetXY(10, $intY+25);
