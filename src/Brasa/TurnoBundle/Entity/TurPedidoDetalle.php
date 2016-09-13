@@ -83,9 +83,14 @@ class TurPedidoDetalle
     private $diaHasta = 1;         
     
     /**     
-     * @ORM\Column(name="liquidarDiasReales", type="boolean")
+     * @ORM\Column(name="liquidar_dias_reales", type="boolean")
      */    
     private $liquidarDiasReales = false;    
+    
+    /**     
+     * @ORM\Column(name="compuesto", type="boolean")
+     */    
+    private $compuesto = false;     
     
     /**
      * @ORM\Column(name="dias", type="integer")
@@ -315,6 +320,11 @@ class TurPedidoDetalle
      * @ORM\JoinColumn(name="codigo_servicio_detalle_fk", referencedColumnName="codigo_servicio_detalle_pk")
      */
     protected $servicioDetalleRel;     
+    
+    /**
+     * @ORM\OneToMany(targetEntity="TurPedidoDetalleCompuesto", mappedBy="pedidoRel")
+     */
+    protected $pedidosDetallesCompuestosPedidoDetalleRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="TurPedidoDetalleRecurso", mappedBy="pedidoDetalleRel", cascade={"persist", "remove"})
@@ -1924,5 +1934,63 @@ class TurPedidoDetalle
     public function getMes()
     {
         return $this->mes;
+    }
+
+    /**
+     * Set compuesto
+     *
+     * @param boolean $compuesto
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setCompuesto($compuesto)
+    {
+        $this->compuesto = $compuesto;
+
+        return $this;
+    }
+
+    /**
+     * Get compuesto
+     *
+     * @return boolean
+     */
+    public function getCompuesto()
+    {
+        return $this->compuesto;
+    }
+
+    /**
+     * Add pedidosDetallesCompuestosPedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPedidoDetalleRel
+     *
+     * @return TurPedidoDetalle
+     */
+    public function addPedidosDetallesCompuestosPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPedidoDetalleRel)
+    {
+        $this->pedidosDetallesCompuestosPedidoDetalleRel[] = $pedidosDetallesCompuestosPedidoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pedidosDetallesCompuestosPedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPedidoDetalleRel
+     */
+    public function removePedidosDetallesCompuestosPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPedidoDetalleRel)
+    {
+        $this->pedidosDetallesCompuestosPedidoDetalleRel->removeElement($pedidosDetallesCompuestosPedidoDetalleRel);
+    }
+
+    /**
+     * Get pedidosDetallesCompuestosPedidoDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPedidosDetallesCompuestosPedidoDetalleRel()
+    {
+        return $this->pedidosDetallesCompuestosPedidoDetalleRel;
     }
 }

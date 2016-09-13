@@ -48,6 +48,11 @@ class TurModalidadServicio
     protected $pedidosDetallesModalidadServicioRel;     
 
     /**
+     * @ORM\OneToMany(targetEntity="TurPedidoDetalleCompuesto", mappedBy="modalidadServicioRel")
+     */
+    protected $pedidosDetallesCompuestosModalidadServicioRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurServicioDetalle", mappedBy="modalidadServicioRel")
      */
     protected $serviciosDetallesModalidadServicioRel;     
@@ -382,5 +387,39 @@ class TurModalidadServicio
     public function getServiciosDetallesCompuestosModalidadServicioRel()
     {
         return $this->serviciosDetallesCompuestosModalidadServicioRel;
+    }
+
+    /**
+     * Add pedidosDetallesCompuestosModalidadServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosModalidadServicioRel
+     *
+     * @return TurModalidadServicio
+     */
+    public function addPedidosDetallesCompuestosModalidadServicioRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosModalidadServicioRel)
+    {
+        $this->pedidosDetallesCompuestosModalidadServicioRel[] = $pedidosDetallesCompuestosModalidadServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pedidosDetallesCompuestosModalidadServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosModalidadServicioRel
+     */
+    public function removePedidosDetallesCompuestosModalidadServicioRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosModalidadServicioRel)
+    {
+        $this->pedidosDetallesCompuestosModalidadServicioRel->removeElement($pedidosDetallesCompuestosModalidadServicioRel);
+    }
+
+    /**
+     * Get pedidosDetallesCompuestosModalidadServicioRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPedidosDetallesCompuestosModalidadServicioRel()
+    {
+        return $this->pedidosDetallesCompuestosModalidadServicioRel;
     }
 }
