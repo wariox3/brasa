@@ -224,8 +224,8 @@ class AfiPeriodoRepository extends EntityRepository {
             if($arContrato->getIndefinido() == 0 && $fechaTerminaCotrato <= $arPeriodo->getFechaHasta()) {                    
                 $arPeriodoDetallePago->setRetiro('X');                    
             }
-            if ($arPeriodoDetallePago->getIngreso() == 'X' && $arPeriodoDetallePago->getRetiro() == 'X'){
-                $arPeriodoDetallePago->setIngreso('');
+            if($arPeriodoDetallePago->getIngreso() == 'X' && $arPeriodoDetallePago->getRetiro() == 'X'){
+                $arPeriodoDetallePago->setIngreso(' ');
             }
             if($intDiasIncapacidadGeneral > 0) {
                 $arPeriodoDetallePago->setIncapacidadGeneral('X');

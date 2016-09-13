@@ -375,6 +375,7 @@ class PeriodoController extends Controller
                         $tipoDoc = "CC";
                         $formaPresentacion = $form->get('tipo')->getData();
                         $nit = $arPeriodo->getClienteRel()->getNit();
+                        $dv = $arPeriodo->getClienteRel()->getDigitoVerificacion();
                         $cliente = $arPeriodo->getClienteRel()->getNombreCorto(); 
                         $sucursal = '';
                         $formato = '2';
@@ -531,7 +532,12 @@ class PeriodoController extends Controller
                         
                         if ($codigoProceso == 1 || $codigoProceso == 2){
                             fputs($ar, "              ");
-                            fputs($ar, "N");
+                            if ($codigoProceso == 1){
+                                fputs($ar, "N");
+                            } else {
+                                fputs($ar, "S");
+                            }
+                            
                             fputs($ar, $this->RellenarNr($codigoInterfaceRiesgos, " ", 6, "D"));
                             fputs($ar, $arPeriodoDetallePago->getContratoRel()->getClasificacionRiesgoRel()->getCodigoClasificacionRiesgoPk());
                             fputs($ar, " ");
