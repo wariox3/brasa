@@ -41,7 +41,7 @@ class NotaCredito2 extends \FPDF_FPDF {
         $this->Text(135, 65, "Fecha Vence");
         $this->Text(170, 65, ucwords(strtolower($this->devuelveMes($arFactura->getFechaVence()->format('m')))) . " " . $arFactura->getFechaVence()->format('d') . " de " . $arFactura->getFechaVence()->format('Y'));        
         $this->Text(15, 70, utf8_decode("Señores"));
-        $this->Text(45, 70, $arFactura->getClienteRel()->getNombreCorto());
+        $this->Text(45, 70, $arFactura->getClienteRel()->getNombreCompleto());
         $this->Text(135, 70, "Nit");
         $this->Text(170, 70, $arFactura->getClienteRel()->getNit(). "-" . $arFactura->getClienteRel()->getDigitoVerificacion());        
         $this->Text(15, 80, "Direccion");
