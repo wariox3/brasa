@@ -230,7 +230,7 @@ class VacacionesController extends Controller
                         $em->flush();
                         return $this->redirect($this->generateUrl('brs_rhu_movimiento_vacacion_detalle', array('codigoVacacion' => $codigoVacacion)));                                                
                     } else {
-                        $objMensaje->Mensaje("error", "Hay saldos en creditos que son inferiores a la deducciones", $this);
+                        $objMensaje->Mensaje("error", "Una de las deducciones de creditos es mayor al saldo pendiente, por favor verifique los creditos del empleado", $this);
                         return $this->redirect($this->generateUrl('brs_rhu_movimiento_vacacion_detalle', array('codigoVacacion' => $codigoVacacion)));                                                
                     }                    
                 } else {
@@ -238,13 +238,13 @@ class VacacionesController extends Controller
                 }
             }            
             
-            if($form->get('BtnEliminarDeduccion')->isClicked()) {
+            if($form->get('BtnEliminarAdicional')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoVacacionDeduccion) {
-                        $arVacacionDeduccion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
-                        $arVacacionDeduccion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionCredito')->find($codigoVacacionDeduccion);
-                        $em->remove($arVacacionDeduccion);                        
+                    foreach ($arrSeleccionados AS $codigo) {
+                        $arVacacionAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional();
+                        $arVacacionAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionAdicional')->find($codigo);
+                        $em->remove($arVacacionAdicional);                        
                     }
                     $em->flush();
                 }                
@@ -267,14 +267,11 @@ class VacacionesController extends Controller
             
         }
 
-        $dql = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionCredito')->listaDql($codigoVacacion);                
-        $arVacacionDeducciones = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 20);                                
-        $dql = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionBonificacion')->listaDql($codigoVacacion);                
-        $arVacacionBonificaciones = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 20);                        
+        $dql = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionAdicional')->listaDql($codigoVacacion);                
+        $arVacacionAdicionales = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 20);                                
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Vacaciones:detalle.html.twig', array(
                     'arVacaciones' => $arVacacion,
-                    'arVacacionDeducciones' => $arVacacionDeducciones,
-                    'arVacacionBonificaciones' => $arVacacionBonificaciones,
+                    'arVacacionAdicionales' => $arVacacionAdicionales,
                     'form' => $form->createView()
                     ));
     }
@@ -306,12 +303,12 @@ class VacacionesController extends Controller
                         if($arrControles['TxtValor'.$codigoCredito] != '') {
                             $valor = $arrControles['TxtValor'.$codigoCredito];                
                         }
-                        $arVacacionCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
-                        $arVacacionCredito->setCreditoRel($arCredito);
-                        $arVacacionCredito->setVacacionRel($arVacacion);
-                        $arVacacionCredito->setVrDeduccion($valor);
-                        $arVacacionCredito->setPagoConceptoRel($arCredito->getCreditoTipoRel()->getPagoConceptoRel());
-                        $em->persist($arVacacionCredito);            
+                        $arVacacionAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional();
+                        $arVacacionAdicional->setCreditoRel($arCredito);
+                        $arVacacionAdicional->setVacacionRel($arVacacion);
+                        $arVacacionAdicional->setVrDeduccion($valor);
+                        $arVacacionAdicional->setPagoConceptoRel($arCredito->getCreditoTipoRel()->getPagoConceptoRel());
+                        $em->persist($arVacacionAdicional);            
                         $floVrDeducciones += $valor;
                     }                                                       
                     $em->flush();                        
@@ -353,11 +350,11 @@ class VacacionesController extends Controller
             if ($form->get('BtnGuardar')->isClicked()) {
                 $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
                 $arPagoConcepto = $form->get('pagoConceptoRel')->getData();
-                $arVacacionCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
-                $arVacacionCredito->setVacacionRel($arVacacion); 
-                $arVacacionCredito->setPagoConceptoRel($arPagoConcepto);
-                $arVacacionCredito->setVrDeduccion($form->get('TxtValor')->getData());  
-                $em->persist($arVacacionCredito);
+                $arVacacionAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional();
+                $arVacacionAdicional->setVacacionRel($arVacacion); 
+                $arVacacionAdicional->setPagoConceptoRel($arPagoConcepto);
+                $arVacacionAdicional->setVrDeduccion($form->get('TxtValor')->getData());  
+                $em->persist($arVacacionAdicional);
                 $em->flush();                        
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->liquidar($arVacacion->getCodigoVacacionPk());                                                    
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                
@@ -394,11 +391,11 @@ class VacacionesController extends Controller
                         if($arrControles['TxtValor'.$codigo] != '') {
                             $valor = $arrControles['TxtValor'.$codigo];                
                         }
-                        $arVacacionBonificacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionBonificacion();
-                        $arVacacionBonificacion->setPagoConceptoRel($arPagoConcepto);
-                        $arVacacionBonificacion->setVacacionRel($arVacacion);
-                        $arVacacionBonificacion->setVrBonificacion($valor);
-                        $em->persist($arVacacionBonificacion);            
+                        $arVacacionAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional();
+                        $arVacacionAdicional->setPagoConceptoRel($arPagoConcepto);
+                        $arVacacionAdicional->setVacacionRel($arVacacion);
+                        $arVacacionAdicional->setVrBonificacion($valor);
+                        $em->persist($arVacacionAdicional);            
                     }                                                       
                     $em->flush();                        
                     $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->liquidar($arVacacion->getCodigoVacacionPk());                    
@@ -470,13 +467,12 @@ class VacacionesController extends Controller
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonGenerarPago = array('label' => 'Generar pago', 'disabled' => false);
         $arrBotonLiquidar = array('label' => 'Liquidar', 'disabled' => false);
-        $arrBotonEliminarDeduccion = array('label'  => 'Eliminar deduccion', 'disabled' => false);
-        $arrBotonEliminarBonificacion = array('label'  => 'Eliminar bonificacion', 'disabled' => false);
+        $arrBotonEliminarAdicional = array('label'  => 'Eliminar', 'disabled' => false);
+        
         if($arVacacion->getEstadoAutorizado() == 1) {            
             $arrBotonLiquidar['disabled'] = true;
             $arrBotonAutorizar['disabled'] = true;
-            $arrBotonEliminarDeduccion['disabled'] = true;
-            $arrBotonEliminarBonificacion['disabled'] = true;            
+            $arrBotonEliminarAdicional['disabled'] = true;            
         } else {
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonGenerarPago['disabled'] = true;
@@ -494,8 +490,7 @@ class VacacionesController extends Controller
                     ->add('BtnImprimir', 'submit', $arrBotonImprimir) 
                     ->add('BtnGenerarPago', 'submit', $arrBotonGenerarPago)
                     ->add('BtnLiquidar', 'submit', $arrBotonLiquidar)
-                    ->add('BtnEliminarDeduccion', 'submit', $arrBotonEliminarDeduccion)
-                    ->add('BtnEliminarBonificacion', 'submit', $arrBotonEliminarBonificacion)
+                    ->add('BtnEliminarAdicional', 'submit', $arrBotonEliminarAdicional)
                     ->getForm();  
         return $form;
     } 

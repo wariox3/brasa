@@ -191,6 +191,11 @@ class RhuVacacion
     protected $contratoRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuVacacionAdicional", mappedBy="vacacionRel")
+     */
+    protected $vacacionesAdicionalesVacacionRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuVacacionCredito", mappedBy="vacacionRel")
      */
     protected $VacacionesCreditosVacacionRel;
@@ -1139,5 +1144,39 @@ class RhuVacacion
     public function getVrSalarioPromedioPropuesto()
     {
         return $this->vrSalarioPromedioPropuesto;
+    }
+
+    /**
+     * Add vacacionesAdicionalesVacacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional $vacacionesAdicionalesVacacionRel
+     *
+     * @return RhuVacacion
+     */
+    public function addVacacionesAdicionalesVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional $vacacionesAdicionalesVacacionRel)
+    {
+        $this->vacacionesAdicionalesVacacionRel[] = $vacacionesAdicionalesVacacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove vacacionesAdicionalesVacacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional $vacacionesAdicionalesVacacionRel
+     */
+    public function removeVacacionesAdicionalesVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional $vacacionesAdicionalesVacacionRel)
+    {
+        $this->vacacionesAdicionalesVacacionRel->removeElement($vacacionesAdicionalesVacacionRel);
+    }
+
+    /**
+     * Get vacacionesAdicionalesVacacionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVacacionesAdicionalesVacacionRel()
+    {
+        return $this->vacacionesAdicionalesVacacionRel;
     }
 }

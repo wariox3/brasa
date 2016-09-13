@@ -187,6 +187,11 @@ class RhuCredito
      */
     protected $VacacionesCreditosCreditoRel;
     
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuVacacionAdicional", mappedBy="creditoRel")
+     */
+    protected $vacacionesAdicionalesCreditoRel;    
 
     
     
@@ -1041,5 +1046,39 @@ class RhuCredito
     public function getVacacionesCreditosCreditoRel()
     {
         return $this->VacacionesCreditosCreditoRel;
+    }
+
+    /**
+     * Add vacacionesAdicionalesCreditoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional $vacacionesAdicionalesCreditoRel
+     *
+     * @return RhuCredito
+     */
+    public function addVacacionesAdicionalesCreditoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional $vacacionesAdicionalesCreditoRel)
+    {
+        $this->vacacionesAdicionalesCreditoRel[] = $vacacionesAdicionalesCreditoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove vacacionesAdicionalesCreditoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional $vacacionesAdicionalesCreditoRel
+     */
+    public function removeVacacionesAdicionalesCreditoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional $vacacionesAdicionalesCreditoRel)
+    {
+        $this->vacacionesAdicionalesCreditoRel->removeElement($vacacionesAdicionalesCreditoRel);
+    }
+
+    /**
+     * Get vacacionesAdicionalesCreditoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVacacionesAdicionalesCreditoRel()
+    {
+        return $this->vacacionesAdicionalesCreditoRel;
     }
 }

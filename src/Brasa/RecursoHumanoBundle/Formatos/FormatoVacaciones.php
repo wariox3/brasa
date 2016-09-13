@@ -53,10 +53,7 @@ class FormatoVacaciones extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
-        $arVacaciones = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find(self::$codigoVacacion);        
-        $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
-        $arCreditos = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionCredito')->findBy(array('codigoVacacionFk' => self::$codigoVacacion));
-        $duoRegistrosCreditos = count($arCreditos);       
+        $arVacaciones = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find(self::$codigoVacacion);              
         $intY = 40;
         //FILA 1
         $this->SetFont('Arial', 'B', 7);
@@ -201,10 +198,12 @@ class FormatoVacaciones extends \FPDF_FPDF {
         $this->SetXY($intX, $intY + 12);
         $this->Cell(43, 5, utf8_decode("VR. PENSIÓN:"), 1, 0, 'L', 1);
         $this->SetXY($intX, $intY + 18);
-        $this->Cell(43, 5, utf8_decode("VR. DEDUCCION CREDITOS:"), 1, 0, 'L', 1);
+        $this->Cell(43, 5, utf8_decode("VR. DEDUCCIONES:"), 1, 0, 'L', 1);
         $this->SetXY($intX, $intY + 24);
         $this->Cell(43, 5, utf8_decode("TOTAL DEDUCCIONES:"), 1, 0, 'L', 1);        
         $this->SetXY($intX, $intY + 30);
+        $this->Cell(43, 5, utf8_decode("TOTAL BONIFICACIONES:"), 1, 0, 'L', 1);                
+        $this->SetXY($intX, $intY + 36);
         $this->Cell(43, 5, "TOTAL A PAGAR:", 1, 0, 'L', 1);
         $intX = 163;
         $intY = 102;
@@ -222,33 +221,39 @@ class FormatoVacaciones extends \FPDF_FPDF {
         $this->SetXY($intX, $intY + 24);        
         $this->Cell(32, 5, number_format($floTotalDeducciones, 0, '.', ','), 1, 0, 'R', 1);
         $this->SetXY($intX, $intY + 30);
+        $this->Cell(32, 5, number_format($arVacaciones->getVrBonificacion(), 0, '.', ','), 1, 0, 'R', 1);
+        $this->SetXY($intX, $intY + 36);
         $this->Cell(32, 5, number_format($arVacaciones->getVrVacacion(), 0, '.', ','), 1, 0, 'R', 1);
-        //DEDUCCIONES CREDITOS TIPO VACACIÓN
-        if ($duoRegistrosCreditos > 0){
+        //ADICIONALES
+        $arVacacionAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional();
+        $arVacacionAdicionales = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionAdicional')->findBy(array('codigoVacacionFk' => self::$codigoVacacion));                
+        if($arVacacionAdicionales){
             $intX = 10;
             $this->SetXY($intX, 150);
             $this->SetFillColor(217, 217, 217);
             $this->SetFont('Arial', 'B', 9);
-            $this->Cell(185, 5, utf8_decode("DEDUCCIONES VACACIÓN:"), 1, 0, 'C', 1);
+            $this->Cell(185, 5, utf8_decode("ADICIONALES"), 1, 0, 'C', 1);
 
             $intY = 150 + 5;
             $this->SetXY($intX, $intY);
 
-            $this->SetFont('Arial', 'B', 8);
-            $this->Cell(20, 4, utf8_decode("CÓDIGO"), 1, 0, 'C', 1);
+            $this->SetFont('Arial', 'B', 8);            
             $this->Cell(20, 4, utf8_decode("CREDITO"), 1, 0, 'C', 1);
-            $this->Cell(110, 4, utf8_decode("TIPO"), 1, 0, 'L', 1);
-            $this->Cell(35, 4, utf8_decode("VALOR"), 1, 0, 'R', 1);
+            $this->Cell(20, 4, utf8_decode("CODIGO"), 1, 0, 'L', 1);
+            $this->Cell(80, 4, utf8_decode("CONCEPTO"), 1, 0, 'L', 1);
+            $this->Cell(32, 4, utf8_decode("BONIFICACION"), 1, 0, 'R', 1);
+            $this->Cell(33, 4, utf8_decode("DEDUCCION"), 1, 0, 'R', 1);
             $incremento = 4;
-            foreach ($arCreditos as $arCreditos) {
+            foreach ($arVacacionAdicionales as $arVacacionAdicional) {
                 $intY = $intY + $incremento;
                 $this->SetXY($intX, $intY);
                 $this->SetFillColor(255, 255, 255);
-                $this->SetFont('Arial', '', 8);
-                $this->Cell(20, 4, $arCreditos->getCodigoVacacionCreditoPk(), 1, 0, 'L', 1);
-                $this->Cell(20, 4, $arCreditos->getCodigoCreditoFk(), 1, 0, 'L', 1);
-                $this->Cell(110, 4, utf8_decode($arCreditos->getPagoConceptoRel()->getNombre()), 1, 0, 'L', 1);
-                $this->Cell(35, 4, number_format($arCreditos->getVrDeduccion(), 2, '.', ','), 1, 0, 'R', 1);
+                $this->SetFont('Arial', '', 8);                
+                $this->Cell(20, 4, $arVacacionAdicional->getCodigoCreditoFk(), 1, 0, 'L', 1);
+                $this->Cell(20, 4, $arVacacionAdicional->getCodigoPagoConceptoFk(), 1, 0, 'L', 1);
+                $this->Cell(80, 4, utf8_decode($arVacacionAdicional->getPagoConceptoRel()->getNombre()), 1, 0, 'L', 1);
+                $this->Cell(32, 4, number_format($arVacacionAdicional->getVrBonificacion(), 0, '.', ','), 1, 0, 'R', 1);
+                $this->Cell(33, 4, number_format($arVacacionAdicional->getVrDeduccion(), 0, '.', ','), 1, 0, 'R', 1);
                 //$incremento = $incremento + 4;
             }
         }

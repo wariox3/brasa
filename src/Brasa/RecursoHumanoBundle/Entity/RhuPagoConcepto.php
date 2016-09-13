@@ -218,6 +218,11 @@ class RhuPagoConcepto
      */
     protected $liquidacionesAdicionalesPagoConceptoRel;    
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuVacacionAdicional", mappedBy="pagoConceptoRel")
+     */
+    protected $vacacionesAdicionalesPagoConceptoRel;     
+    
 
     /**
      * Constructor
@@ -1336,5 +1341,39 @@ class RhuPagoConcepto
     public function getConceptoVacacion()
     {
         return $this->conceptoVacacion;
+    }
+
+    /**
+     * Add vacacionesAdicionalesPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional $vacacionesAdicionalesPagoConceptoRel
+     *
+     * @return RhuPagoConcepto
+     */
+    public function addVacacionesAdicionalesPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional $vacacionesAdicionalesPagoConceptoRel)
+    {
+        $this->vacacionesAdicionalesPagoConceptoRel[] = $vacacionesAdicionalesPagoConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove vacacionesAdicionalesPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional $vacacionesAdicionalesPagoConceptoRel
+     */
+    public function removeVacacionesAdicionalesPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional $vacacionesAdicionalesPagoConceptoRel)
+    {
+        $this->vacacionesAdicionalesPagoConceptoRel->removeElement($vacacionesAdicionalesPagoConceptoRel);
+    }
+
+    /**
+     * Get vacacionesAdicionalesPagoConceptoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVacacionesAdicionalesPagoConceptoRel()
+    {
+        return $this->vacacionesAdicionalesPagoConceptoRel;
     }
 }

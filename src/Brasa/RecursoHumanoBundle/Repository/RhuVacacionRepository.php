@@ -115,17 +115,17 @@ class RhuVacacionRepository extends EntityRepository {
         }
         $arVacacion->setVrPension($douPension);                                   
         $floDeducciones = 0;
-        $arVacacionDeducciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
-        $arVacacionDeducciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionCredito')->FindBy(array('codigoVacacionFk' => $codigoVacacion));        
-        foreach ($arVacacionDeducciones as $arVacacionDeduccion) {
-            $floDeducciones += $arVacacionDeduccion->getVrDeduccion();
-        }
-        $floBonificaciones = 0;
-        $arVacacionBonificaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionBonificacion();
-        $arVacacionBonificaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionBonificacion')->FindBy(array('codigoVacacionFk' => $codigoVacacion));        
-        foreach ($arVacacionBonificaciones as $arVacacionBonificacion) {
-            $floBonificaciones += $arVacacionBonificacion->getVrBonificacion();
-        }        
+        $floBonificaciones = 0;        
+        $arVacacionAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional();
+        $arVacacionAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionAdicional')->FindBy(array('codigoVacacionFk' => $codigoVacacion));        
+        foreach ($arVacacionAdicionales as $arVacacionAdicional) {
+            if($arVacacionAdicional->getVrDeduccion() > 0) {
+                $floDeducciones += $arVacacionAdicional->getVrDeduccion();
+            }
+            if($arVacacionAdicional->getVrBonificacion() > 0) {
+                $floBonificaciones += $arVacacionAdicional->getVrBonificacion();
+            }            
+        }               
         $promedioIbc = $floTotalVacacionBruto/$arVacacion->getDiasVacaciones();
         $arVacacion->setVrIbcPromedio($promedioIbc);
         $arVacacion->setVrBonificacion($floBonificaciones);
@@ -145,14 +145,14 @@ class RhuVacacionRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $validar = '';
         
-        $arVacacionCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
-        $arVacacionCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionCredito')->findBy(array('codigoVacacionFk' => $codigoVacacion));                                 
+        $arVacacionAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional();
+        $arVacacionAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionAdicional')->findBy(array('codigoVacacionFk' => $codigoVacacion));                                 
         $deduccion = 0;
-        if ($arVacacionCreditos != null){
-            foreach ($arVacacionCreditos as $arVacacionCredito){
-                if ($arVacacionCredito->getCodigoCreditoFk() != null){
-                    $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arVacacionCredito->getCodigoCreditoFk());
-                    $deduccion = $arVacacionCredito->getVrDeduccion();
+        if ($arVacacionAdicionales != null){
+            foreach ($arVacacionAdicionales as $arVacacionAdicional){
+                if ($arVacacionAdicional->getCodigoCreditoFk() != null){
+                    $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($arVacacionAdicional->getCodigoCreditoFk());
+                    $deduccion = $arVacacionAdicional->getVrDeduccion();
                     $saldo = $arCredito->getSaldo();
                     if ($saldo < $deduccion ){
                         $validar = 1;

@@ -64,14 +64,13 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arCreditos, 'CÓDIGO', 'c.codigoCreditoPk') }}</th>
                 <th>TIPO</th>
-                <th>FECHA INICIO</th>
-                <th>IDENTIFICACIÓN</th>
+                <th>INICIA</th>
+                <th>DOCUMENTO</th>
                 <th>EMPLEADO</th>
-                <th style="text-align: right">VR. CREDITO</th>
-                <th style="text-align: right">VR. CUOTA</th>
-                <th style="text-align: right">VR. SEGURO</th>
+                <th style="text-align: right">VR.CREDITO</th>
+                <th style="text-align: right">VR.CUOTA</th>                
                 <th style="text-align: right">CUOTAS</th>
-                <th style="text-align: right">C. ACTUAL</th>
+                <th style="text-align: right">C.ACTUAL</th>
                 <th style="text-align: right">PAGADO</th>
                 <th style="text-align: right">APROBADO</th>
                 <th style="text-align: right">SUSPENDIDO</th>
@@ -87,8 +86,7 @@
                 <td>{{ arCreditos.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arCreditos.empleadoRel.nombreCorto  }}</td>
                 <td style="text-align: right">{{ arCreditos.VrPagar | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arCreditos.VrCuota | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arCreditos.Seguro | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arCreditos.VrCuota | number_format(2, '.', ',') }}</td>                
                 <td style="text-align: right">{{ arCreditos.numeroCuotas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arCreditos.numeroCuotaActual | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right" {% if arCreditos.estadoPagado == 1 %} class="success"> SI {% else %} <td {{ arCreditos.estadoPagado }} class="danger">NO {% endif %}</td>
