@@ -38,10 +38,8 @@ class IntercambioDatosController extends Controller
                         $arRegistroExportar->setDebito($arRegistro->getDebito());
                         $arRegistroExportar->setCredito($arRegistro->getCredito());
                         $arRegistroExportar->setNit($arRegistro->getTerceroRel()->getNumeroIdentificacion());
-                        $arRegistroExportar->setDigitoVerificacion($arRegistro->getTerceroRel()->getDigitoVerificacion());
-                        if($arRegistro->getCodigoCentroCostoFk()) {
-                            $arRegistroExportar->setCentroCosto($arRegistro->getCentroCostoRel()->getNombre());
-                        }
+                        $arRegistroExportar->setDigitoVerificacion($arRegistro->getTerceroRel()->getDigitoVerificacion());                        
+                        $arRegistroExportar->setCentroCosto($arRegistro->getCodigoCentroCostoFk());                        
                         
                         if($arRegistro->getDebito() > 0) {
                             $arRegistroExportar->setTipo(1);
@@ -73,9 +71,7 @@ class IntercambioDatosController extends Controller
                     $arRegistroExportar->setCredito($arRegistro->getCredito());
                     $arRegistroExportar->setNit($arRegistro->getTerceroRel()->getNumeroIdentificacion());
                     $arRegistroExportar->setDigitoVerificacion($arRegistro->getTerceroRel()->getDigitoVerificacion());
-                    if($arRegistro->getCodigoCentroCostoFk()) {
-                        $arRegistroExportar->setCentroCosto($arRegistro->getCentroCostoRel()->getNombre());
-                    }
+                    $arRegistroExportar->setCentroCosto($arRegistro->getCodigoCentroCostoFk());
 
                     if($arRegistro->getDebito() > 0) {
                         $arRegistroExportar->setTipo(1);
