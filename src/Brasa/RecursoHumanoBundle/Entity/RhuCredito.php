@@ -180,21 +180,13 @@ class RhuCredito
     /**
      * @ORM\OneToMany(targetEntity="RhuLiquidacionAdicionales", mappedBy="creditoRel")
      */
-    protected $liquidacionesAdicionalesCreditoRel;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="RhuVacacionCredito", mappedBy="creditoRel")
-     */
-    protected $VacacionesCreditosCreditoRel;
-    
+    protected $liquidacionesAdicionalesCreditoRel;        
     
     /**
      * @ORM\OneToMany(targetEntity="RhuVacacionAdicional", mappedBy="creditoRel")
      */
     protected $vacacionesAdicionalesCreditoRel;    
-
-    
-    
+        
     /**
      * Constructor
      */
@@ -203,7 +195,7 @@ class RhuCredito
         $this->creditosPagosCreditoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosDetallesCreditoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->liquidacionesAdicionalesCreditoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->VacacionesCreditosCreditoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vacacionesAdicionalesCreditoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1012,40 +1004,6 @@ class RhuCredito
     public function getLiquidacionesAdicionalesCreditoRel()
     {
         return $this->liquidacionesAdicionalesCreditoRel;
-    }
-
-    /**
-     * Add vacacionesCreditosCreditoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosCreditoRel
-     *
-     * @return RhuCredito
-     */
-    public function addVacacionesCreditosCreditoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosCreditoRel)
-    {
-        $this->VacacionesCreditosCreditoRel[] = $vacacionesCreditosCreditoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove vacacionesCreditosCreditoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosCreditoRel
-     */
-    public function removeVacacionesCreditosCreditoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosCreditoRel)
-    {
-        $this->VacacionesCreditosCreditoRel->removeElement($vacacionesCreditosCreditoRel);
-    }
-
-    /**
-     * Get vacacionesCreditosCreditoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getVacacionesCreditosCreditoRel()
-    {
-        return $this->VacacionesCreditosCreditoRel;
     }
 
     /**

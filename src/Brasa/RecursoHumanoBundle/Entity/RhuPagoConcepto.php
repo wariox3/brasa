@@ -201,17 +201,7 @@ class RhuPagoConcepto
     /**
      * @ORM\OneToMany(targetEntity="RhuCreditoTipo", mappedBy="pagoConceptoRel")
      */
-    protected $creditosTiposPagoConceptoRel;
-
-    /**
-     * @ORM\OneToMany(targetEntity="RhuVacacionBonificacion", mappedBy="pagoConceptoRel")
-     */
-    protected $vacacionesBonificacionesPagoConceptoRel;    
-    
-    /**
-     * @ORM\OneToMany(targetEntity="RhuVacacionCredito", mappedBy="pagoConceptoRel")
-     */
-    protected $vacacionesCreditosPagoConceptoRel;     
+    protected $creditosTiposPagoConceptoRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="RhuLiquidacionAdicionales", mappedBy="pagoConceptoRel")
@@ -233,14 +223,14 @@ class RhuPagoConcepto
         $this->pagosDetallesSedesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pagosAdicionalesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->licenciasTiposPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->embargosTiposPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->incapacidadesTiposPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tiposPensionesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tiposPensionesPagoConceptoFondoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tiposSaludPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->creditosTiposPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->vacacionesBonificacionesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->vacacionesCreditosPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->liquidacionesAdicionalesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vacacionesAdicionalesPagoConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -611,6 +601,30 @@ class RhuPagoConcepto
     public function getConceptoSalud()
     {
         return $this->conceptoSalud;
+    }
+
+    /**
+     * Set conceptoVacacion
+     *
+     * @param boolean $conceptoVacacion
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setConceptoVacacion($conceptoVacacion)
+    {
+        $this->conceptoVacacion = $conceptoVacacion;
+
+        return $this;
+    }
+
+    /**
+     * Get conceptoVacacion
+     *
+     * @return boolean
+     */
+    public function getConceptoVacacion()
+    {
+        return $this->conceptoVacacion;
     }
 
     /**
@@ -1014,6 +1028,40 @@ class RhuPagoConcepto
     }
 
     /**
+     * Add embargosTiposPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmbargoTipo $embargosTiposPagoConceptoRel
+     *
+     * @return RhuPagoConcepto
+     */
+    public function addEmbargosTiposPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmbargoTipo $embargosTiposPagoConceptoRel)
+    {
+        $this->embargosTiposPagoConceptoRel[] = $embargosTiposPagoConceptoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove embargosTiposPagoConceptoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmbargoTipo $embargosTiposPagoConceptoRel
+     */
+    public function removeEmbargosTiposPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmbargoTipo $embargosTiposPagoConceptoRel)
+    {
+        $this->embargosTiposPagoConceptoRel->removeElement($embargosTiposPagoConceptoRel);
+    }
+
+    /**
+     * Get embargosTiposPagoConceptoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmbargosTiposPagoConceptoRel()
+    {
+        return $this->embargosTiposPagoConceptoRel;
+    }
+
+    /**
      * Add incapacidadesTiposPagoConceptoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadTipo $incapacidadesTiposPagoConceptoRel
@@ -1184,74 +1232,6 @@ class RhuPagoConcepto
     }
 
     /**
-     * Add vacacionesBonificacionesPagoConceptoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionBonificacion $vacacionesBonificacionesPagoConceptoRel
-     *
-     * @return RhuPagoConcepto
-     */
-    public function addVacacionesBonificacionesPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionBonificacion $vacacionesBonificacionesPagoConceptoRel)
-    {
-        $this->vacacionesBonificacionesPagoConceptoRel[] = $vacacionesBonificacionesPagoConceptoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove vacacionesBonificacionesPagoConceptoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionBonificacion $vacacionesBonificacionesPagoConceptoRel
-     */
-    public function removeVacacionesBonificacionesPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionBonificacion $vacacionesBonificacionesPagoConceptoRel)
-    {
-        $this->vacacionesBonificacionesPagoConceptoRel->removeElement($vacacionesBonificacionesPagoConceptoRel);
-    }
-
-    /**
-     * Get vacacionesBonificacionesPagoConceptoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getVacacionesBonificacionesPagoConceptoRel()
-    {
-        return $this->vacacionesBonificacionesPagoConceptoRel;
-    }
-
-    /**
-     * Add vacacionesCreditosPagoConceptoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosPagoConceptoRel
-     *
-     * @return RhuPagoConcepto
-     */
-    public function addVacacionesCreditosPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosPagoConceptoRel)
-    {
-        $this->vacacionesCreditosPagoConceptoRel[] = $vacacionesCreditosPagoConceptoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove vacacionesCreditosPagoConceptoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosPagoConceptoRel
-     */
-    public function removeVacacionesCreditosPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosPagoConceptoRel)
-    {
-        $this->vacacionesCreditosPagoConceptoRel->removeElement($vacacionesCreditosPagoConceptoRel);
-    }
-
-    /**
-     * Get vacacionesCreditosPagoConceptoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getVacacionesCreditosPagoConceptoRel()
-    {
-        return $this->vacacionesCreditosPagoConceptoRel;
-    }
-
-    /**
      * Add liquidacionesAdicionalesPagoConceptoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales $liquidacionesAdicionalesPagoConceptoRel
@@ -1283,64 +1263,6 @@ class RhuPagoConcepto
     public function getLiquidacionesAdicionalesPagoConceptoRel()
     {
         return $this->liquidacionesAdicionalesPagoConceptoRel;
-    }
-
-    /**
-     * Add embargosTiposPagoConceptoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmbargoTipo $embargosTiposPagoConceptoRel
-     *
-     * @return RhuPagoConcepto
-     */
-    public function addEmbargosTiposPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmbargoTipo $embargosTiposPagoConceptoRel)
-    {
-        $this->embargosTiposPagoConceptoRel[] = $embargosTiposPagoConceptoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove embargosTiposPagoConceptoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmbargoTipo $embargosTiposPagoConceptoRel
-     */
-    public function removeEmbargosTiposPagoConceptoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmbargoTipo $embargosTiposPagoConceptoRel)
-    {
-        $this->embargosTiposPagoConceptoRel->removeElement($embargosTiposPagoConceptoRel);
-    }
-
-    /**
-     * Get embargosTiposPagoConceptoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEmbargosTiposPagoConceptoRel()
-    {
-        return $this->embargosTiposPagoConceptoRel;
-    }
-
-    /**
-     * Set conceptoVacacion
-     *
-     * @param boolean $conceptoVacacion
-     *
-     * @return RhuPagoConcepto
-     */
-    public function setConceptoVacacion($conceptoVacacion)
-    {
-        $this->conceptoVacacion = $conceptoVacacion;
-
-        return $this;
-    }
-
-    /**
-     * Get conceptoVacacion
-     *
-     * @return boolean
-     */
-    public function getConceptoVacacion()
-    {
-        return $this->conceptoVacacion;
     }
 
     /**

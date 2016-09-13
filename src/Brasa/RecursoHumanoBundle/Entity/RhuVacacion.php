@@ -193,29 +193,21 @@ class RhuVacacion
     /**
      * @ORM\OneToMany(targetEntity="RhuVacacionAdicional", mappedBy="vacacionRel")
      */
-    protected $vacacionesAdicionalesVacacionRel;    
-    
-    /**
-     * @ORM\OneToMany(targetEntity="RhuVacacionCredito", mappedBy="vacacionRel")
-     */
-    protected $VacacionesCreditosVacacionRel;
-      
-    /**
-     * @ORM\OneToMany(targetEntity="RhuVacacionBonificacion", mappedBy="vacacionRel")
-     */
-    protected $vacacionesBonificacionesVacacionRel;    
+    protected $vacacionesAdicionalesVacacionRel;          
 
     /**
      * @ORM\OneToMany(targetEntity="RhuPagoBancoDetalle", mappedBy="vacacionRel")
      */
     protected $pagosBancosDetallesVacacionRel;    
     
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->VacacionesCreditosVacacionRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vacacionesAdicionalesVacacionRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosBancosDetallesVacacionRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -493,6 +485,30 @@ class RhuVacacion
     }
 
     /**
+     * Set vrBonificacion
+     *
+     * @param float $vrBonificacion
+     *
+     * @return RhuVacacion
+     */
+    public function setVrBonificacion($vrBonificacion)
+    {
+        $this->vrBonificacion = $vrBonificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrBonificacion
+     *
+     * @return float
+     */
+    public function getVrBonificacion()
+    {
+        return $this->vrBonificacion;
+    }
+
+    /**
      * Set vrVacacion
      *
      * @param float $vrVacacion
@@ -538,6 +554,78 @@ class RhuVacacion
     public function getDiasVacaciones()
     {
         return $this->diasVacaciones;
+    }
+
+    /**
+     * Set diasDisfrutados
+     *
+     * @param integer $diasDisfrutados
+     *
+     * @return RhuVacacion
+     */
+    public function setDiasDisfrutados($diasDisfrutados)
+    {
+        $this->diasDisfrutados = $diasDisfrutados;
+
+        return $this;
+    }
+
+    /**
+     * Get diasDisfrutados
+     *
+     * @return integer
+     */
+    public function getDiasDisfrutados()
+    {
+        return $this->diasDisfrutados;
+    }
+
+    /**
+     * Set diasPagados
+     *
+     * @param integer $diasPagados
+     *
+     * @return RhuVacacion
+     */
+    public function setDiasPagados($diasPagados)
+    {
+        $this->diasPagados = $diasPagados;
+
+        return $this;
+    }
+
+    /**
+     * Get diasPagados
+     *
+     * @return integer
+     */
+    public function getDiasPagados()
+    {
+        return $this->diasPagados;
+    }
+
+    /**
+     * Set diasDisfrutadosReales
+     *
+     * @param integer $diasDisfrutadosReales
+     *
+     * @return RhuVacacion
+     */
+    public function setDiasDisfrutadosReales($diasDisfrutadosReales)
+    {
+        $this->diasDisfrutadosReales = $diasDisfrutadosReales;
+
+        return $this;
+    }
+
+    /**
+     * Get diasDisfrutadosReales
+     *
+     * @return integer
+     */
+    public function getDiasDisfrutadosReales()
+    {
+        return $this->diasDisfrutadosReales;
     }
 
     /**
@@ -661,6 +749,30 @@ class RhuVacacion
     }
 
     /**
+     * Set vrSalarioPromedioPropuesto
+     *
+     * @param float $vrSalarioPromedioPropuesto
+     *
+     * @return RhuVacacion
+     */
+    public function setVrSalarioPromedioPropuesto($vrSalarioPromedioPropuesto)
+    {
+        $this->vrSalarioPromedioPropuesto = $vrSalarioPromedioPropuesto;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioPromedioPropuesto
+     *
+     * @return float
+     */
+    public function getVrSalarioPromedioPropuesto()
+    {
+        return $this->vrSalarioPromedioPropuesto;
+    }
+
+    /**
      * Set vrVacacionBruto
      *
      * @param float $vrVacacionBruto
@@ -706,6 +818,150 @@ class RhuVacacion
     public function getEstadoAutorizado()
     {
         return $this->estadoAutorizado;
+    }
+
+    /**
+     * Set estadoPagoGenerado
+     *
+     * @param boolean $estadoPagoGenerado
+     *
+     * @return RhuVacacion
+     */
+    public function setEstadoPagoGenerado($estadoPagoGenerado)
+    {
+        $this->estadoPagoGenerado = $estadoPagoGenerado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagoGenerado
+     *
+     * @return boolean
+     */
+    public function getEstadoPagoGenerado()
+    {
+        return $this->estadoPagoGenerado;
+    }
+
+    /**
+     * Set estadoPagoBanco
+     *
+     * @param boolean $estadoPagoBanco
+     *
+     * @return RhuVacacion
+     */
+    public function setEstadoPagoBanco($estadoPagoBanco)
+    {
+        $this->estadoPagoBanco = $estadoPagoBanco;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagoBanco
+     *
+     * @return boolean
+     */
+    public function getEstadoPagoBanco()
+    {
+        return $this->estadoPagoBanco;
+    }
+
+    /**
+     * Set estadoContabilizado
+     *
+     * @param boolean $estadoContabilizado
+     *
+     * @return RhuVacacion
+     */
+    public function setEstadoContabilizado($estadoContabilizado)
+    {
+        $this->estadoContabilizado = $estadoContabilizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoContabilizado
+     *
+     * @return boolean
+     */
+    public function getEstadoContabilizado()
+    {
+        return $this->estadoContabilizado;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuVacacion
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
+    }
+
+    /**
+     * Set vrPromedioRecargoNocturno
+     *
+     * @param float $vrPromedioRecargoNocturno
+     *
+     * @return RhuVacacion
+     */
+    public function setVrPromedioRecargoNocturno($vrPromedioRecargoNocturno)
+    {
+        $this->vrPromedioRecargoNocturno = $vrPromedioRecargoNocturno;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPromedioRecargoNocturno
+     *
+     * @return float
+     */
+    public function getVrPromedioRecargoNocturno()
+    {
+        return $this->vrPromedioRecargoNocturno;
+    }
+
+    /**
+     * Set vrIbcPromedio
+     *
+     * @param float $vrIbcPromedio
+     *
+     * @return RhuVacacion
+     */
+    public function setVrIbcPromedio($vrIbcPromedio)
+    {
+        $this->vrIbcPromedio = $vrIbcPromedio;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIbcPromedio
+     *
+     * @return float
+     */
+    public function getVrIbcPromedio()
+    {
+        return $this->vrIbcPromedio;
     }
 
     /**
@@ -781,263 +1037,37 @@ class RhuVacacion
     }
 
     /**
-     * Add vacacionesCreditosVacacionRel
+     * Add vacacionesAdicionalesVacacionRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosVacacionRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional $vacacionesAdicionalesVacacionRel
      *
      * @return RhuVacacion
      */
-    public function addVacacionesCreditosVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosVacacionRel)
+    public function addVacacionesAdicionalesVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional $vacacionesAdicionalesVacacionRel)
     {
-        $this->VacacionesCreditosVacacionRel[] = $vacacionesCreditosVacacionRel;
+        $this->vacacionesAdicionalesVacacionRel[] = $vacacionesAdicionalesVacacionRel;
 
         return $this;
     }
 
     /**
-     * Remove vacacionesCreditosVacacionRel
+     * Remove vacacionesAdicionalesVacacionRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosVacacionRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional $vacacionesAdicionalesVacacionRel
      */
-    public function removeVacacionesCreditosVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito $vacacionesCreditosVacacionRel)
+    public function removeVacacionesAdicionalesVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional $vacacionesAdicionalesVacacionRel)
     {
-        $this->VacacionesCreditosVacacionRel->removeElement($vacacionesCreditosVacacionRel);
+        $this->vacacionesAdicionalesVacacionRel->removeElement($vacacionesAdicionalesVacacionRel);
     }
 
     /**
-     * Get vacacionesCreditosVacacionRel
+     * Get vacacionesAdicionalesVacacionRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getVacacionesCreditosVacacionRel()
+    public function getVacacionesAdicionalesVacacionRel()
     {
-        return $this->VacacionesCreditosVacacionRel;
-    }
-
-    /**
-     * Set diasDisfrutados
-     *
-     * @param integer $diasDisfrutados
-     *
-     * @return RhuVacacion
-     */
-    public function setDiasDisfrutados($diasDisfrutados)
-    {
-        $this->diasDisfrutados = $diasDisfrutados;
-
-        return $this;
-    }
-
-    /**
-     * Get diasDisfrutados
-     *
-     * @return integer
-     */
-    public function getDiasDisfrutados()
-    {
-        return $this->diasDisfrutados;
-    }
-
-    /**
-     * Set diasPagados
-     *
-     * @param integer $diasPagados
-     *
-     * @return RhuVacacion
-     */
-    public function setDiasPagados($diasPagados)
-    {
-        $this->diasPagados = $diasPagados;
-
-        return $this;
-    }
-
-    /**
-     * Get diasPagados
-     *
-     * @return integer
-     */
-    public function getDiasPagados()
-    {
-        return $this->diasPagados;
-    }
-
-    /**
-     * Set codigoUsuario
-     *
-     * @param string $codigoUsuario
-     *
-     * @return RhuVacacion
-     */
-    public function setCodigoUsuario($codigoUsuario)
-    {
-        $this->codigoUsuario = $codigoUsuario;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoUsuario
-     *
-     * @return string
-     */
-    public function getCodigoUsuario()
-    {
-        return $this->codigoUsuario;
-    }
-
-    /**
-     * Set vrPromedioRecargoNocturno
-     *
-     * @param float $vrPromedioRecargoNocturno
-     *
-     * @return RhuVacacion
-     */
-    public function setVrPromedioRecargoNocturno($vrPromedioRecargoNocturno)
-    {
-        $this->vrPromedioRecargoNocturno = $vrPromedioRecargoNocturno;
-
-        return $this;
-    }
-
-    /**
-     * Get vrPromedioRecargoNocturno
-     *
-     * @return float
-     */
-    public function getVrPromedioRecargoNocturno()
-    {
-        return $this->vrPromedioRecargoNocturno;
-    }
-
-    /**
-     * Set estadoPagoGenerado
-     *
-     * @param boolean $estadoPagoGenerado
-     *
-     * @return RhuVacacion
-     */
-    public function setEstadoPagoGenerado($estadoPagoGenerado)
-    {
-        $this->estadoPagoGenerado = $estadoPagoGenerado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoPagoGenerado
-     *
-     * @return boolean
-     */
-    public function getEstadoPagoGenerado()
-    {
-        return $this->estadoPagoGenerado;
-    }
-
-    /**
-     * Add vacacionesBonificacionesVacacionRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionBonificacion $vacacionesBonificacionesVacacionRel
-     *
-     * @return RhuVacacion
-     */
-    public function addVacacionesBonificacionesVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionBonificacion $vacacionesBonificacionesVacacionRel)
-    {
-        $this->vacacionesBonificacionesVacacionRel[] = $vacacionesBonificacionesVacacionRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove vacacionesBonificacionesVacacionRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionBonificacion $vacacionesBonificacionesVacacionRel
-     */
-    public function removeVacacionesBonificacionesVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionBonificacion $vacacionesBonificacionesVacacionRel)
-    {
-        $this->vacacionesBonificacionesVacacionRel->removeElement($vacacionesBonificacionesVacacionRel);
-    }
-
-    /**
-     * Get vacacionesBonificacionesVacacionRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getVacacionesBonificacionesVacacionRel()
-    {
-        return $this->vacacionesBonificacionesVacacionRel;
-    }
-
-    /**
-     * Set vrBonificacion
-     *
-     * @param float $vrBonificacion
-     *
-     * @return RhuVacacion
-     */
-    public function setVrBonificacion($vrBonificacion)
-    {
-        $this->vrBonificacion = $vrBonificacion;
-
-        return $this;
-    }
-
-    /**
-     * Get vrBonificacion
-     *
-     * @return float
-     */
-    public function getVrBonificacion()
-    {
-        return $this->vrBonificacion;
-    }
-
-    /**
-     * Set diasDisfrutadosReales
-     *
-     * @param integer $diasDisfrutadosReales
-     *
-     * @return RhuVacacion
-     */
-    public function setDiasDisfrutadosReales($diasDisfrutadosReales)
-    {
-        $this->diasDisfrutadosReales = $diasDisfrutadosReales;
-
-        return $this;
-    }
-
-    /**
-     * Get diasDisfrutadosReales
-     *
-     * @return integer
-     */
-    public function getDiasDisfrutadosReales()
-    {
-        return $this->diasDisfrutadosReales;
-    }
-
-    /**
-     * Set estadoPagoBanco
-     *
-     * @param boolean $estadoPagoBanco
-     *
-     * @return RhuVacacion
-     */
-    public function setEstadoPagoBanco($estadoPagoBanco)
-    {
-        $this->estadoPagoBanco = $estadoPagoBanco;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoPagoBanco
-     *
-     * @return boolean
-     */
-    public function getEstadoPagoBanco()
-    {
-        return $this->estadoPagoBanco;
+        return $this->vacacionesAdicionalesVacacionRel;
     }
 
     /**
@@ -1072,111 +1102,5 @@ class RhuVacacion
     public function getPagosBancosDetallesVacacionRel()
     {
         return $this->pagosBancosDetallesVacacionRel;
-    }
-
-    /**
-     * Set estadoContabilizado
-     *
-     * @param boolean $estadoContabilizado
-     *
-     * @return RhuVacacion
-     */
-    public function setEstadoContabilizado($estadoContabilizado)
-    {
-        $this->estadoContabilizado = $estadoContabilizado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoContabilizado
-     *
-     * @return boolean
-     */
-    public function getEstadoContabilizado()
-    {
-        return $this->estadoContabilizado;
-    }
-
-    /**
-     * Set vrIbcPromedio
-     *
-     * @param float $vrIbcPromedio
-     *
-     * @return RhuVacacion
-     */
-    public function setVrIbcPromedio($vrIbcPromedio)
-    {
-        $this->vrIbcPromedio = $vrIbcPromedio;
-
-        return $this;
-    }
-
-    /**
-     * Get vrIbcPromedio
-     *
-     * @return float
-     */
-    public function getVrIbcPromedio()
-    {
-        return $this->vrIbcPromedio;
-    }
-
-    /**
-     * Set vrSalarioPromedioPropuesto
-     *
-     * @param float $vrSalarioPromedioPropuesto
-     *
-     * @return RhuVacacion
-     */
-    public function setVrSalarioPromedioPropuesto($vrSalarioPromedioPropuesto)
-    {
-        $this->vrSalarioPromedioPropuesto = $vrSalarioPromedioPropuesto;
-
-        return $this;
-    }
-
-    /**
-     * Get vrSalarioPromedioPropuesto
-     *
-     * @return float
-     */
-    public function getVrSalarioPromedioPropuesto()
-    {
-        return $this->vrSalarioPromedioPropuesto;
-    }
-
-    /**
-     * Add vacacionesAdicionalesVacacionRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional $vacacionesAdicionalesVacacionRel
-     *
-     * @return RhuVacacion
-     */
-    public function addVacacionesAdicionalesVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional $vacacionesAdicionalesVacacionRel)
-    {
-        $this->vacacionesAdicionalesVacacionRel[] = $vacacionesAdicionalesVacacionRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove vacacionesAdicionalesVacacionRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional $vacacionesAdicionalesVacacionRel
-     */
-    public function removeVacacionesAdicionalesVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional $vacacionesAdicionalesVacacionRel)
-    {
-        $this->vacacionesAdicionalesVacacionRel->removeElement($vacacionesAdicionalesVacacionRel);
-    }
-
-    /**
-     * Get vacacionesAdicionalesVacacionRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getVacacionesAdicionalesVacacionRel()
-    {
-        return $this->vacacionesAdicionalesVacacionRel;
     }
 }

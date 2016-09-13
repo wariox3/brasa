@@ -117,46 +117,28 @@ class ContabilizarVacacionController extends Controller
                                 }             
                             }               
                             
-                            //Bonificaciones
-                            $arVacacionBonificaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionBonificacion();
-                            $arVacacionBonificaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionBonificacion')->findBy(array('codigoVacacionFk' => $codigo));
-                            foreach ($arVacacionBonificaciones as $arVacacionBonificacion) {
-                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arVacacionBonificacion->getPagoConceptoRel()->getCodigoCuentaFk()); 
+                            //Adicionales
+                            $arVacacionAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional();
+                            $arVacacionAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionAdicional')->findBy(array('codigoVacacionFk' => $codigo));
+                            foreach ($arVacacionAdicionales as $arVacacionAdicional) {
+                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arVacacionAdicional->getPagoConceptoRel()->getCodigoCuentaFk()); 
                                 if($arCuenta) {
                                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
                                     $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    //$arRegistro->setCentroCostoRel($arCentroCosto);
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
                                     $arRegistro->setNumero($arVacacion->getCodigoVacacionPk());
                                     $arRegistro->setNumeroReferencia($arVacacion->getCodigoVacacionPk());
                                     $arRegistro->setFecha($arVacacion->getFecha()); 
-                                    $arRegistro->setDebito($arVacacionBonificacion->getVrBonificacion());                                                                       
-                                    $arRegistro->setDescripcionContable($arVacacionBonificacion->getPagoConceptoRel()->getNombre());
+                                    if($arVacacionAdicional->getVrBonificacion() > 0) {
+                                        $arRegistro->setDebito($arVacacionAdicional->getVrBonificacion());    
+                                    } else {
+                                        $arRegistro->setCredito($arVacacionAdicional->getVrDeduccion());
+                                    }                                                                         
+                                    $arRegistro->setDescripcionContable($arVacacionAdicional->getPagoConceptoRel()->getNombre());
                                     $em->persist($arRegistro);
                                 }                                    
-                            }                             
-                            
-                            
-                            //Deducciones
-                            $arVacacionDeducciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
-                            $arVacacionDeducciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacionCredito')->findBy(array('codigoVacacionFk' => $codigo));
-                            foreach ($arVacacionDeducciones as $arVacacionDeduccion) {
-                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arVacacionDeduccion->getPagoConceptoRel()->getCodigoCuentaFk()); 
-                                if($arCuenta) {
-                                    $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    //$arRegistro->setCentroCostoRel($arCentroCosto);
-                                    $arRegistro->setCuentaRel($arCuenta);
-                                    $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arVacacion->getCodigoVacacionPk());
-                                    $arRegistro->setNumeroReferencia($arVacacion->getCodigoVacacionPk());
-                                    $arRegistro->setFecha($arVacacion->getFecha()); 
-                                    $arRegistro->setCredito($arVacacionDeduccion->getVrDeduccion());                                                                       
-                                    $arRegistro->setDescripcionContable($arVacacionDeduccion->getPagoConceptoRel()->getNombre());
-                                    $em->persist($arRegistro);
-                                }                                    
-                            }                            
+                            }                                                                                                                
                             
                             //Vacaciones por pagar
                             if($arVacacion->getVrVacacion() >  0) {
