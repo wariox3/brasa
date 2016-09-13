@@ -2,7 +2,7 @@
 
 namespace Brasa\TurnoBundle\Formatos;
 
-class FormatoFactura extends \FPDF_FPDF {
+class Factura1 extends \FPDF_FPDF {
 
     public static $em;
     public static $codigoFactura;
@@ -22,7 +22,7 @@ class FormatoFactura extends \FPDF_FPDF {
         $strLetras = \Brasa\GeneralBundle\MisClases\Funciones::devolverNumeroLetras($arFactura->getVrTotal());
         self::$strLetras = $strLetras;
         ob_clean();
-        $pdf = new FormatoFactura();
+        $pdf = new Factura1();
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);

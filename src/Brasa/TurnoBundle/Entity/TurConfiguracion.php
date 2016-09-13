@@ -97,6 +97,11 @@ class TurConfiguracion
     private $validarHorasProgramacion = false;    
     
     /**
+     * @ORM\Column(name="codigo_formato_factura", type="integer")
+     */    
+    private $codigoFormatoFactura = 0;    
+    
+    /**
      * Set codigoConfiguracionPk
      *
      * @param integer $codigoConfiguracionPk
@@ -526,5 +531,29 @@ class TurConfiguracion
     public function getValidarHorasProgramacion()
     {
         return $this->validarHorasProgramacion;
+    }
+
+    /**
+     * Set codigoFormatoFactura
+     *
+     * @param integer $codigoFormatoFactura
+     *
+     * @return TurConfiguracion
+     */
+    public function setCodigoFormatoFactura($codigoFormatoFactura)
+    {
+        $this->codigoFormatoFactura = $codigoFormatoFactura;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFormatoFactura
+     *
+     * @return integer
+     */
+    public function getCodigoFormatoFactura()
+    {
+        return $this->codigoFormatoFactura;
     }
 }

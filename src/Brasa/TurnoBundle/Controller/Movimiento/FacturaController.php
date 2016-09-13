@@ -264,8 +264,16 @@ class FacturaController extends Controller
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 } else {
                     if($arFactura->getFacturaTipoRel()->getTipo() == 1) {
-                        $objFactura = new \Brasa\TurnoBundle\Formatos\Factura2();
-                        $objFactura->Generar($this, $codigoFactura);                                            
+                        $arConfiguracion = new \Brasa\TurnoBundle\Entity\TurConfiguracion();
+                        $arConfiguracion = $em->getRepository('BrasaTurnoBundle:TurConfiguracion')->find(1);
+                        if($arConfiguracion->getCodigoFormatoFactura() <= 1) {
+                            $objFactura = new \Brasa\TurnoBundle\Formatos\Factura1();
+                            $objFactura->Generar($this, $codigoFactura);                            
+                        }
+                        if($arConfiguracion->getCodigoFormatoFactura() == 2) {
+                            $objFactura = new \Brasa\TurnoBundle\Formatos\Factura2();
+                            $objFactura->Generar($this, $codigoFactura);                            
+                        }                                            
                     } 
                     if($arFactura->getFacturaTipoRel()->getTipo() == 2) {
                         $objNotaCredito = new \Brasa\TurnoBundle\Formatos\NotaCredito2();
