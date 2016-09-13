@@ -110,8 +110,7 @@
                             <th>SERVICIO</th>
                             <th>MODALIDAD</th>
                             <th>PERIODO</th>
-                            <th><p data-toggle="tooltip" data-placement="top" title="Liquidar dias reales">LDR</p></th>
-                            <th>PLANTILLA</th>
+                            <th><p data-toggle="tooltip" data-placement="top" title="Liquidar dias reales">LDR</p></th>                            
                             <th>DESDE</th>
                             <th>HASTA</th>
                             <th><p data-toggle="tooltip" data-placement="top" title="Cantidad de recuresos">CANT</p></th>
@@ -150,8 +149,7 @@
                                 <td>{{ arServicioDetalle.conceptoServicioRel.nombre  }}</td>                    
                                 <td>{{ arServicioDetalle.modalidadServicioRel.nombre  }}</td>                    
                                 <td>{{ arServicioDetalle.periodoRel.nombre  }}</td>
-                                <td>{% if arServicioDetalle.liquidarDiasReales == 1 %} SI {% else %} NO {% endif %}</td>
-                                <td>{% if arServicioDetalle.codigoPlantillaFk is not null %} <a href="{{ path('brs_tur_base_plantilla_detalle', { 'codigoPlantilla': arServicioDetalle.codigoPlantillaFk }) }}" target="_blanck">{% endif %}{{ arServicioDetalle.plantillaRel.nombre | default('')  }}</a> ({{ arServicioDetalle.fechaIniciaPlantilla | date('Y/m/d')  }})</td>                    
+                                <td>{% if arServicioDetalle.liquidarDiasReales == 1 %} SI {% else %} NO {% endif %}</td>                                
                                 <td>{{ arServicioDetalle.fechaDesde |date('Y/m/d') }}</td>    
                                 <td>{{ arServicioDetalle.fechaHasta |date('Y/m/d') }}</td>                    
                                 <td>{{ arServicioDetalle.cantidad  }}</td>

@@ -62,6 +62,7 @@ class TurPedidoDetalleType extends AbstractType
             ->add('festivo', 'checkbox', array('required'  => false))                                              
             ->add('dia31', 'checkbox', array('required'  => false))                            
             ->add('liquidarDiasReales', 'checkbox', array('required'  => false))
+            ->add('compuesto', 'checkbox', array('required'  => false))
             ->add('detalle', 'textarea', array('required' => false)) 
             ->add('detallePuesto', 'text', array('required' => false))                            
             ->add('guardar', 'submit')

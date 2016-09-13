@@ -220,13 +220,14 @@ class ServicioController extends Controller
         if($form->isValid()) {              
             if($form->get('BtnDetalleActualizar')->isClicked()) {                
                 $arrControles = $request->request->All();
-                $this->actualizarDetalleCompuesto($arrControles, $codigoServicioDetalle);                                
+                $this->actualizarDetalleCompuesto($arrControles, $codigoServicioDetalle, $arServicioDetalle->getCodigoServicioFk());                                
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_compuesto_detalle', array('codigoServicioDetalle' => $codigoServicioDetalle)));
             }
             if($form->get('BtnDetalleEliminar')->isClicked()) {   
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurServicioDetalleCompuesto')->eliminarSeleccionados($arrSeleccionados);
                 $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->liquidar($codigoServicioDetalle);
+                $em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($arServicioDetalle->getCodigoServicioFk());
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_servicio_compuesto_detalle', array('codigoServicioDetalle' => $codigoServicioDetalle)));
             }                                 
         }
@@ -272,7 +273,8 @@ class ServicioController extends Controller
             $arServicioDetalleCompuesto = $form->getData();
             $em->persist($arServicioDetalleCompuesto);
             $em->flush();
-            //$em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);
+            $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->liquidar($codigoServicioDetalle);
+            $em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($arServicioDetalle->getCodigoServicioFk());
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
         return $this->render('BrasaTurnoBundle:Movimientos/Servicio:detalleCompuestoNuevo.html.twig', array(
@@ -906,7 +908,7 @@ class ServicioController extends Controller
         }       
     }
     
-    private function actualizarDetalleCompuesto($arrControles, $codigoServicioDetalle) {
+    private function actualizarDetalleCompuesto($arrControles, $codigoServicioDetalle, $codigoServicio) {
         $em = $this->getDoctrine()->getManager();
         $intIndice = 0;
         if(isset($arrControles['LblCodigo'])) {
@@ -919,7 +921,8 @@ class ServicioController extends Controller
                 $em->persist($arServicioDetalleCompuesto);
             }
             $em->flush();                
-            $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->liquidar($codigoServicioDetalle);             
+            $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->liquidar($codigoServicioDetalle);
+            $em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);
         }       
     }    
     

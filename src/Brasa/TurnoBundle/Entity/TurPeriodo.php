@@ -33,6 +33,11 @@ class TurPeriodo
     protected $pedidosDetallesPeriodoRel;     
 
     /**
+     * @ORM\OneToMany(targetEntity="TurPedidoDetalleCompuesto", mappedBy="periodoRel")
+     */
+    protected $pedidosDetallesCompuestosPeriodoRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurServicioDetalle", mappedBy="periodoRel")
      */
     protected $serviciosDetallesPeriodoRel;    
@@ -286,5 +291,39 @@ class TurPeriodo
     public function getServiciosDetallesCompuestosPeriodoRel()
     {
         return $this->serviciosDetallesCompuestosPeriodoRel;
+    }
+
+    /**
+     * Add pedidosDetallesCompuestosPeriodoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPeriodoRel
+     *
+     * @return TurPeriodo
+     */
+    public function addPedidosDetallesCompuestosPeriodoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPeriodoRel)
+    {
+        $this->pedidosDetallesCompuestosPeriodoRel[] = $pedidosDetallesCompuestosPeriodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pedidosDetallesCompuestosPeriodoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPeriodoRel
+     */
+    public function removePedidosDetallesCompuestosPeriodoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPeriodoRel)
+    {
+        $this->pedidosDetallesCompuestosPeriodoRel->removeElement($pedidosDetallesCompuestosPeriodoRel);
+    }
+
+    /**
+     * Get pedidosDetallesCompuestosPeriodoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPedidosDetallesCompuestosPeriodoRel()
+    {
+        return $this->pedidosDetallesCompuestosPeriodoRel;
     }
 }

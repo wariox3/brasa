@@ -76,6 +76,11 @@ class TurConceptoServicio
      * @ORM\OneToMany(targetEntity="TurPedidoDetalle", mappedBy="conceptoServicioRel")
      */
     protected $pedidosDetallesConceptoServicioRel;     
+
+    /**
+     * @ORM\OneToMany(targetEntity="TurPedidoDetalleCompuesto", mappedBy="conceptoServicioRel")
+     */
+    protected $pedidosDetallesCompuestosConceptoServicioRel;     
     
     /**
      * @ORM\OneToMany(targetEntity="TurServicioDetalle", mappedBy="conceptoServicioRel")
@@ -707,5 +712,39 @@ class TurConceptoServicio
     public function getServiciosDetallesCompuestosConceptoServicioRel()
     {
         return $this->serviciosDetallesCompuestosConceptoServicioRel;
+    }
+
+    /**
+     * Add pedidosDetallesCompuestosConceptoServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosConceptoServicioRel
+     *
+     * @return TurConceptoServicio
+     */
+    public function addPedidosDetallesCompuestosConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosConceptoServicioRel)
+    {
+        $this->pedidosDetallesCompuestosConceptoServicioRel[] = $pedidosDetallesCompuestosConceptoServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pedidosDetallesCompuestosConceptoServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosConceptoServicioRel
+     */
+    public function removePedidosDetallesCompuestosConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosConceptoServicioRel)
+    {
+        $this->pedidosDetallesCompuestosConceptoServicioRel->removeElement($pedidosDetallesCompuestosConceptoServicioRel);
+    }
+
+    /**
+     * Get pedidosDetallesCompuestosConceptoServicioRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPedidosDetallesCompuestosConceptoServicioRel()
+    {
+        return $this->pedidosDetallesCompuestosConceptoServicioRel;
     }
 }
