@@ -483,8 +483,12 @@ class TurFacturaRepository extends EntityRepository {
                             $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaServicioRel()->getCodigoCuentaIngresoDevolucionFk());                                                                
                         } else {
                             $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arFactura->getFacturaServicioRel()->getCodigoCuentaIngresoFk());                                                                 
-                        }      
-                        $arRegistro->setCredito($arFacturaDetalle['subtotal']);
+                        }
+                        if($arFactura->getFacturaTipoRel()->getTipoCuentaIngreso() == 1) {
+                            $arRegistro->setDebito($arFacturaDetalle['subtotal']);
+                        } else {                            
+                            $arRegistro->setCredito($arFacturaDetalle['subtotal']);
+                        }                                                
                         $arRegistro->setComprobanteRel($arComprobanteContable);
                         $arRegistro->setCentroCostoRel($arCentroCosto);
                         $arRegistro->setCuentaRel($arCuenta);
@@ -496,7 +500,7 @@ class TurFacturaRepository extends EntityRepository {
                         $em->persist($arRegistro);                        
                     }                    
                     
-                    $arFactura->setEstadoContabilizado(1);
+                    //$arFactura->setEstadoContabilizado(1);
                     $em->persist($arFactura);                                            
                 }
             }
