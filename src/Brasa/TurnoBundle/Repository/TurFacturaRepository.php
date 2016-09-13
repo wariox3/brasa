@@ -500,7 +500,7 @@ class TurFacturaRepository extends EntityRepository {
                         $em->persist($arRegistro);                        
                     }                    
                     
-                    //$arFactura->setEstadoContabilizado(1);
+                    $arFactura->setEstadoContabilizado(1);
                     $em->persist($arFactura);                                            
                 }
             }
