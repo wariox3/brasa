@@ -183,26 +183,11 @@
                     </div>
                     <div class="btn-toolbar" style="float: right">
                         
-                        
                         <div class="btn-group">
+                            <a class="btn btn-default btn-sm" id="{{ path('brs_afi_movimiento_periodo_archivoplano', { 'codigoPeriodo': arPeriodo.codigoPeriodoPk}) }}" style="float:left">Archivo plano</a>
+                        </div>
+                        <div class="btn-group">    
                             {{ form_widget(form.BtnDetallePagoExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                            {% if arPeriodo.estadoPagoGenerado == 1 %} 
-                            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-                                Archivo plano <span class="caret"></span>
-                            </button>
-                            
-                            <ul class="dropdown-menu" role="menu">
-                                <li><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="1">Cliente independiente</button>
-                                {{ form_widget(form.tipo, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                                {{ form_widget(form.arlIRel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}</li>
-                                <li class="divider"></li>
-                                <li><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="2">Cliente externo</button>
-                                Cod Sucursal: {{ form_widget(form.sucursal, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                                {{ form_widget(form.arlERel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}</li></li>
-                                <li class="divider"></li>
-                                <li><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="3">Interno</button></li>
-                            </ul>
-                            {% endif %}
                         </div>
                         {% if arPeriodo.estadoPagoGenerado == 1 %}    
                         <div class="btn-group">
