@@ -16,14 +16,14 @@ class RhuAcreditacionType extends AbstractType
                     return $er->createQueryBuilder('at')
                     ->orderBy('at.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => false))                 
+                'required' => true))                 
             ->add('academiaRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuAcademia',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => false))           
+                'required' => true))           
             ->add('fechaInicio', 'date', array('format' => 'yyyyMMdd'))                            
             ->add('fechaTerminacion', 'date', array('format' => 'yyyyMMdd'))
             ->add('fechaVencimiento', 'date', array('format' => 'yyyyMMdd'))    
