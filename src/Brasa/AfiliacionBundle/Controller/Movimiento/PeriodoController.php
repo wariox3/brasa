@@ -49,6 +49,9 @@ class PeriodoController extends Controller
                     $arPeriodo->setCaja(0);
                     $arPeriodo->setIcbf(0);
                     $arPeriodo->setSena(0);
+                    $arPeriodo->setInteresMora(0);
+                    $arPeriodo->setTotalAnterior(0);
+                    $arPeriodo->setSubtotalAnterior(0);
                     $em->persist($arPeriodo);
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
@@ -99,6 +102,7 @@ class PeriodoController extends Controller
                 }
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
             }
+            
             if ($form->get('BtnGenerarPago')->isClicked()) {
                 $arPeriodos = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
                 $arPeriodos = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->findBy(array('estadoPagoGenerado' => 0, 'estadoCerrado' => 0));
@@ -107,6 +111,16 @@ class PeriodoController extends Controller
                 }
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
             }
+            
+            if ($form->get('BtnGenerarInteresMora')->isClicked()) {
+                $arPeriodos = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
+                $arPeriodos = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->findBy(array('estadoGenerado' => 1, 'estadoCerrado' => 0, 'estadoFacturado' => 0));
+                foreach ($arPeriodos as $arPeriodo){
+                    $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->generarInteresMora($arPeriodo->getCodigoPeriodoPk());
+                }
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
+            }
+            
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 try{
@@ -116,11 +130,13 @@ class PeriodoController extends Controller
                     $objMensaje->Mensaje('error', 'No se puede eliminar el registro, tiene detalles asociados', $this);
                  }
             }
+            
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
                 $form = $this->formularioFiltro();
                 $this->lista();
             }
+            
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
                 $this->generarExcel();
@@ -241,9 +257,7 @@ class PeriodoController extends Controller
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
         $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
-
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-
         $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('brs_afi_movimiento_periodo_interesmora', array('codigoPeriodo' => $codigoPeriodo)))
             ->add('interesMora', 'number', array('data' =>$arPeriodo->getInteresMora() ,'required' => true))
@@ -252,10 +266,9 @@ class PeriodoController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $arPeriodo->setInteresMora($form->get('interesMora')->getData());
-            $arPeriodo->setTotal($arPeriodo->getTotal() + $form->get('interesMora')->getData());
-            $em->persist($arPeriodo);
-            $em->flush();
+            if ($arPeriodo->getEstadoGenerado() == 1 && $arPeriodo->getEstadoCerrado() == 0 && $arPeriodo->getEstadoFacturado() == 0){
+                $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->generarInteresMora($codigoPeriodo);
+            }    
             return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo_detalle', array('codigoPeriodo' => $codigoPeriodo)));
         }
         return $this->render('BrasaAfiliacionBundle:Movimiento/Periodo:interesMora.html.twig', array(
@@ -642,6 +655,7 @@ class PeriodoController extends Controller
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnGenerarCobro', 'submit', array('label'  => 'Generar cobro masivo',))
             ->add('BtnGenerarPago', 'submit', array('label'  => 'Generar pago masivo',))
+            ->add('BtnGenerarInteresMora', 'submit', array('label'  => 'Generar Int x mora masivo',))    
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
         return $form;

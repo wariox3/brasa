@@ -138,6 +138,16 @@ class AfiPeriodo
     private $interesMora = 0;
     
     /**
+     * @ORM\Column(name="total_anterior", type="float")
+     */
+    private $totalAnterior = 0;
+    
+    /**
+     * @ORM\Column(name="subtotal_anterior", type="float")
+     */
+    private $subtotalAnterior = 0;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="AfiCliente", inversedBy="periodosClienteRel")
      * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
      */
@@ -157,6 +167,9 @@ class AfiPeriodo
      * @ORM\OneToMany(targetEntity="AfiFacturaDetalle", mappedBy="periodoRel")
      */
     protected $facturasDetallesPeriodoRel;     
+    
+    
+    
     
     
     /**
@@ -753,6 +766,54 @@ class AfiPeriodo
     public function getInteresMora()
     {
         return $this->interesMora;
+    }
+
+    /**
+     * Set totalAnterior
+     *
+     * @param float $totalAnterior
+     *
+     * @return AfiPeriodo
+     */
+    public function setTotalAnterior($totalAnterior)
+    {
+        $this->totalAnterior = $totalAnterior;
+
+        return $this;
+    }
+
+    /**
+     * Get totalAnterior
+     *
+     * @return float
+     */
+    public function getTotalAnterior()
+    {
+        return $this->totalAnterior;
+    }
+
+    /**
+     * Set subtotalAnterior
+     *
+     * @param float $subtotalAnterior
+     *
+     * @return AfiPeriodo
+     */
+    public function setSubtotalAnterior($subtotalAnterior)
+    {
+        $this->subtotalAnterior = $subtotalAnterior;
+
+        return $this;
+    }
+
+    /**
+     * Get subtotalAnterior
+     *
+     * @return float
+     */
+    public function getSubtotalAnterior()
+    {
+        return $this->subtotalAnterior;
     }
 
     /**

@@ -132,6 +132,7 @@ class AfiPeriodoRepository extends EntityRepository {
             $subtotalGeneral += $subtotal;
             $ivaGeneral += $iva;
             $totalGeneral += $total;
+            
         }
         //if($arPeriodo->getClienteRel()->getRedondearCobro() == 1) {
         //    $totalGeneral = $this->redondearCien($totalGeneral);
@@ -149,7 +150,13 @@ class AfiPeriodoRepository extends EntityRepository {
         $arPeriodo->setTotal($totalGeneral);
         $arPeriodo->setNumeroEmpleados($numeroContratos);
         $em->persist($arPeriodo);
-        $em->flush();        
+        $em->flush();
+        
+        // interes por mora
+        if ($arPeriodo->getEstadoGenerado() == 1 && $arPeriodo->getEstadoCerrado() == 0 && $arPeriodo->getEstadoFacturado() == 0){
+            $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->generarInteresMora($codigoPeriodo);
+        }
+                
     }
     
     public function generarPago($codigoPeriodo) {
@@ -502,7 +509,46 @@ class AfiPeriodoRepository extends EntityRepository {
         $arPeriodo->setEstadoPagoGenerado(1);
         $em->persist($arPeriodo);
         $em->flush();        
-    }    
+    }
+
+    public function generarInteresMora($codigoPeriodo) {
+        set_time_limit(0);
+        ob_clean();
+        $em = $this->getEntityManager();
+        $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();                
+        $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
+        
+        $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+        $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
+        $validar = $arPeriodo->getFechaPago();
+        $hoy = new \DateTime(date('Y-m-d'));
+        if ($hoy > $validar){
+        $intDias = $validar->diff($hoy);
+        $intDias = $intDias->format('%a');
+            
+            if ($arPeriodo->getInteresMora() == 0){
+                $valorTotal = $arPeriodo->getTotal();
+                $valorSubtotal = $arPeriodo->getSubtotal();
+                $porcentajeInteres = 2;
+                $valorInteresMora = $valorTotal * $porcentajeInteres / 100;
+                $arPeriodo->setTotalAnterior($valorTotal);
+                $arPeriodo->setInteresMora($valorInteresMora);
+                $arPeriodo->setSubtotal($arPeriodo->getSubtotal() + $valorInteresMora);
+                $arPeriodo->setSubtotalAnterior($valorSubtotal);
+                $arPeriodo->setTotal($this->redondearCien($arPeriodo->getTotal() + $valorInteresMora));
+            } else {
+                $valorTotal = $arPeriodo->getTotalAnterior();
+                $valorSubtotal = $arPeriodo->getSubtotalAnterior();
+                $porcentajeInteres = 2;
+                $valorInteresMora = $valorTotal * $porcentajeInteres / 100;
+                $arPeriodo->setInteresMora($valorInteresMora);
+                $arPeriodo->setSubtotal($valorSubtotal + $valorInteresMora);
+                $arPeriodo->setTotal($this->redondearCien($valorTotal + $valorInteresMora));
+            }
+        }
+        $em->persist($arPeriodo);
+        $em->flush();        
+    }
     
     public function redondearIbc($intDias, $floIbcBruto, $salarioMinimo) {
         $floIbc = 0;       

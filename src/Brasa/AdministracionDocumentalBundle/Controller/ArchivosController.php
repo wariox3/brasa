@@ -115,8 +115,8 @@ class ArchivosController extends Controller
                 
                 $message = \Swift_Message::newInstance()
         ->setSubject('Hello Email')
-        ->setFrom('analista.desarrollo@jgefectivo.com')
-        ->setTo('desarrollo@jgefectivo.com')
+        ->setFrom('paul6126@hotmail.com')
+        ->setTo('analista.desarrollo@jgefectivo.com')
         ->setBody('You should see me from the profiler!')
     ;
 
