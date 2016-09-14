@@ -20,27 +20,33 @@
             <div class="panel-heading">Filtros de busqueda</div>
             <div class="panel-body">
 
-                <div class="form-group form-group-sm">  
-                    <label for="form_TxtNombre" class="col-sm-2 control-label">Nombre:</label>
-                    <div class="col-sm-6">                  
+                <div class="form-group form-group-sm">                      
+                    <label class="col-sm-3 control-label">Nombre:</label>
+                    <div class="col-sm-9">                  
                         {{ form_widget(form.TxtNombre , { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
-                    </div>
-                    <label for="form_TxtIdentificacion" class="col-sm-2 control-label">Identificación:</label>
-                    <div class="col-sm-2">                  
-                        {{ form_widget(form.TxtIdentificacion, { 'attr': {'class': 'form-control'} }) }}
-                    </div>                    
+                    </div>                   
                 </div>  
                      
-                <div class="form-group form-group-sm">  
-                    <label for="form_centroCostoRel" class="col-sm-2 control-label">Centro Costo:</label>
-                    <div class="col-sm-6">                  
+                <div class="form-group form-group-sm"> 
+                    <label class="col-sm-3 control-label">Identificación:</label>
+                    <div class="col-sm-3">                  
+                        {{ form_widget(form.TxtIdentificacion, { 'attr': {'class': 'form-control'} }) }}
+                    </div>                                        
+                    <label class="col-sm-3 control-label">Centro costo:</label>
+                    <div class="col-sm-3">                  
                         {{ form_widget(form.centroCostoRel, { 'attr': {'class': 'form-control'} }) }}
-                    </div>
-                    <label for="form_estadoActivo" class="col-sm-2 control-label">Estado:</label>
-                    <div class="col-sm-2">                  
+                    </div>                   
+                </div>  
+                <div class="form-group form-group-sm">                     
+                    <label class="col-sm-3 control-label">Codigo:</label>
+                    <div class="col-sm-3">                  
+                        {{ form_widget(form.TxtCodigo, { 'attr': {'class': 'form-control'} }) }}
+                    </div> 
+                    <label class="col-sm-3 control-label">Estado:</label>
+                    <div class="col-sm-3">                  
                         {{ form_widget(form.estadoActivo, { 'attr': {'class': 'form-control'} }) }}
                     </div>                    
-                </div>   
+                </div>                     
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}

@@ -44,6 +44,32 @@ class RhuEmpleadoRepository extends EntityRepository {
         return $dql;
     }
 
+    public function buscarDql($strNombre = "", $strCodigoCentroCosto = "", $boolMostrarActivos = 2, $strIdentificacion = "", $codigoEmpleado = "") {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuEmpleado e WHERE e.codigoEmpleadoPk <> 0";
+        if($strNombre != "" ) {
+            $dql .= " AND e.nombreCorto LIKE '%" . $strNombre . "%'";
+        }
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }
+        if($boolMostrarActivos == 1 ) {
+            $dql .= " AND e.estadoActivo = 1";
+        }
+        if($boolMostrarActivos == "0") {
+            $dql .= " AND e.estadoActivo = 0";
+        }
+        if($codigoEmpleado != "") {
+            $dql .= " AND e.codigoEmpleadoPk = " . $codigoEmpleado;
+        }
+
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
+        }
+        $dql .= " ORDER BY e.nombreCorto";
+        return $dql;
+    }    
+    
     public function ListaEmpleadoDQL($strCodigoCentroCosto = "", $strNombre = "", $strIdentificacion = "", $strCodigoEntidadSalud = "", $strCodigoEntidadPension = "", $strCodigoEntidadCaja = "", $strDesde = "", $strHasta = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuEmpleado e WHERE e.codigoEmpleadoPk <> 0";

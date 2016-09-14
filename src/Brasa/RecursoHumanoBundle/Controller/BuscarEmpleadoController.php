@@ -32,12 +32,12 @@ class BuscarEmpleadoController extends Controller
     private function listar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->listaDQL(
+        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->buscarDql(
                 $session->get('filtroEmpleadoNombre'), 
                 $session->get('filtroCodigoCentroCosto'),
                 $session->get('filtroEmpleadoActivo'),                
                 $session->get('filtroIdentificacion'),
-                ""                
+                $session->get('filtroRhuCodigoEmpleado')
                 ); 
     }       
     
@@ -63,6 +63,7 @@ class BuscarEmpleadoController extends Controller
             ->add('estadoActivo', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ACTIVOS', '0' => 'INACTIVOS')))                            
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                            
+            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroRhuCodigoEmpleado')))                                            
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();        
         return $form;
@@ -76,6 +77,7 @@ class BuscarEmpleadoController extends Controller
         $session->set('filtroEmpleadoNombre', $form->get('TxtNombre')->getData());
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroEmpleadoActivo', $form->get('estadoActivo')->getData());
+        $session->set('filtroRhuCodigoEmpleado', $form->get('TxtCodigo')->getData());
     }    
     
     private function generarExcel() {
