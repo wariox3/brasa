@@ -520,16 +520,40 @@ class AfiPeriodoRepository extends EntityRepository {
         
         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
-        $validar = $arPeriodo->getFechaPago();
+        $arPeriodo->getFechaDesde();
+        
+        //$validar = $arPeriodo->getFechaDesde();
+        
+        $fecha = $arPeriodo->getFechaDesde()->format('Y-m-d');
+        $nuevafecha = strtotime ( '+1 month' , strtotime ( $fecha ) ) ;
+        $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
+        $nuevafecha = strtotime ( '+15 day' , strtotime ( $nuevafecha ) ) ;
+        $fecha1 = date ( 'Y-m-d' , $nuevafecha );
+        
+        $fecha2 = strtotime ( '+4 day' , strtotime ( $fecha1 ) ) ;
+        $fecha2 = date ( 'Y-m-d' , $fecha2 );
+        
+        $fecha16 = new \DateTime($fecha1);
+        $fecha20 = new \DateTime($fecha2);
+        
         $hoy = new \DateTime(date('Y-m-d'));
-        if ($hoy > $validar){
-        $intDias = $validar->diff($hoy);
-        $intDias = $intDias->format('%a');
-            
+        //$hoy = new \DateTime('2016-09-21');
+        $porcentajeInteres = 0;
+        $control = false;
+        if ($hoy >= $fecha16 && $hoy <= $fecha20){
+            $porcentajeInteres = 0.5;
+            $control = true;
+        }
+        if ($hoy > $fecha20){
+            $porcentajeInteres = 1;
+            $control = true;
+        }
+        
+        if ($control == true){           
             if ($arPeriodo->getInteresMora() == 0){
                 $valorTotal = $arPeriodo->getTotal();
                 $valorSubtotal = $arPeriodo->getSubtotal();
-                $porcentajeInteres = 2;
+                //$porcentajeInteres = 2;
                 $valorInteresMora = $valorTotal * $porcentajeInteres / 100;
                 $arPeriodo->setTotalAnterior($valorTotal);
                 $arPeriodo->setInteresMora($valorInteresMora);
@@ -539,7 +563,7 @@ class AfiPeriodoRepository extends EntityRepository {
             } else {
                 $valorTotal = $arPeriodo->getTotalAnterior();
                 $valorSubtotal = $arPeriodo->getSubtotalAnterior();
-                $porcentajeInteres = 2;
+                //$porcentajeInteres = 2;
                 $valorInteresMora = $valorTotal * $porcentajeInteres / 100;
                 $arPeriodo->setInteresMora($valorInteresMora);
                 $arPeriodo->setSubtotal($valorSubtotal + $valorInteresMora);

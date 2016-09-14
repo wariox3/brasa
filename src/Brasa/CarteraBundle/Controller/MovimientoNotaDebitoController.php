@@ -285,7 +285,59 @@ class MovimientoNotaDebitoController extends Controller
             'arCuentasCobrar' => $arCuentasCobrar,
             'arNotaDebito' => $arNotaDebito,
             'form' => $form->createView()));
-    } 
+    }
+    
+    /**
+     * @Route("/cartera/movimiento/notadebito/anticipo/nuevo/{codigoNotaDebito}", name="brs_cartera_movimiento_notadebito_anticipo_nuevo")
+     */
+    public function anticipoAction($codigoNotaDebito) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $paginator  = $this->get('knp_paginator');
+        $arNotaDebito = new \Brasa\CarteraBundle\Entity\CarNotaDebito();
+        $arNotaDebito = $em->getRepository('BrasaCarteraBundle:CarNotaDebito')->find($codigoNotaDebito);
+        /*$arCuentasCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
+        $arCuentasCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->cuentasCobrar($arNotaDebito->getCodigoClienteFk());
+        $arCuentasCobrar = $paginator->paginate($arCuentasCobrar, $request->query->get('page', 1), 50);*/
+        $arAnticipos = new \Brasa\CarteraBundle\Entity\CarAnticipo();
+        $arAnticipos = $em->getRepository('BrasaCarteraBundle:CarAnticipo')->anticipos($arNotaDebito->getCodigoClienteFk());
+        $arAnticipos = $paginator->paginate($arAnticipos, $request->query->get('page', 1), 50);
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        $form->handleRequest($request); 
+        if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
+            if ($form->get('BtnGuardar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $arrControles = $request->request->All();
+                $intIndice = 0;
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $anticipo) {
+                        
+                        $anticipo = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($codigoCuentaCobrar);
+                        
+                        $arNotaDebito->setFecha($fecha);
+                        $arNotaDebito->setFechaPago($fecha);
+                        $arNotaDebito->setValor($arrControles['TxtSaldo'.$codigoCuentaCobrar]);
+                        $arNotaDebito->setUsuario($arUsuario->getUserName());
+                        $arNotaDebito->setNumeroFactura($arCuentaCobrar->getNumeroDocumento());
+                        $arNotaDebito->setCuentaCobrarTipoRel($arCuentaCobrar->getCuentaCobrarTipoRel());
+                        $em->persist($arNotaDebitoDetalle);                            
+                        
+                    }
+                    $em->flush();
+                } 
+                $em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->liquidar($codigoNotaDebito);
+            }            
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+        }
+        return $this->render('BrasaCarteraBundle:Movimientos/NotaDebito:detalleNuevo.html.twig', array(
+            'arCuentasCobrar' => $arCuentasCobrar,
+            'arNotaDebito' => $arNotaDebito,
+            'form' => $form->createView()));
+    }
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();

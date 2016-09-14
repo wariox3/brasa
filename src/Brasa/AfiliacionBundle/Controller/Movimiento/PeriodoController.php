@@ -238,9 +238,9 @@ class PeriodoController extends Controller
             }
             
         }
-        $arPeriodoDetalles = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
+        $arPeriodoDetalles = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 100);
         $dql = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetallePago')->listaDQL($codigoPeriodo);
-        $arPeriodoDetallesPagos = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 20);
+        $arPeriodoDetallesPagos = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 100);
         return $this->render('BrasaAfiliacionBundle:Movimiento/Periodo:detalle.html.twig', array(
             'arPeriodo' => $arPeriodo,
             'arPeriodoDetalles' => $arPeriodoDetalles,
