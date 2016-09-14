@@ -62,9 +62,9 @@ class RhuAcreditacion
     private $numeroAcreditacion;
     
     /**
-     * @ORM\Column(name="codigo_estudio_tipo_acreditacion_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_acreditacion_tipo_fk", type="integer", nullable=true)
      */    
-    private $codigoEstudioTipoAcreditacionFk;
+    private $codigoAcreditacionTipoFk;
     
     /**
      * @ORM\Column(name="codigo_estudio_estado_fk", type="integer", nullable=true)
@@ -110,6 +110,12 @@ class RhuAcreditacion
      */
     protected $academiaRel;        
    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuAcreditacionTipo", inversedBy="acreditacionesAcreditacionTipoRel")
+     * @ORM\JoinColumn(name="codigo_acreditacion_tipo_fk", referencedColumnName="codigo_acreditacion_tipo_pk")
+     */
+    protected $acreditacionTipoRel;     
+
 
     /**
      * Get codigoAcreditacionPk
@@ -314,27 +320,27 @@ class RhuAcreditacion
     }
 
     /**
-     * Set codigoEstudioTipoAcreditacionFk
+     * Set codigoAcreditacionTipoFk
      *
-     * @param integer $codigoEstudioTipoAcreditacionFk
+     * @param integer $codigoAcreditacionTipoFk
      *
      * @return RhuAcreditacion
      */
-    public function setCodigoEstudioTipoAcreditacionFk($codigoEstudioTipoAcreditacionFk)
+    public function setCodigoAcreditacionTipoFk($codigoAcreditacionTipoFk)
     {
-        $this->codigoEstudioTipoAcreditacionFk = $codigoEstudioTipoAcreditacionFk;
+        $this->codigoAcreditacionTipoFk = $codigoAcreditacionTipoFk;
 
         return $this;
     }
 
     /**
-     * Get codigoEstudioTipoAcreditacionFk
+     * Get codigoAcreditacionTipoFk
      *
      * @return integer
      */
-    public function getCodigoEstudioTipoAcreditacionFk()
+    public function getCodigoAcreditacionTipoFk()
     {
-        return $this->codigoEstudioTipoAcreditacionFk;
+        return $this->codigoAcreditacionTipoFk;
     }
 
     /**
@@ -527,5 +533,29 @@ class RhuAcreditacion
     public function getAcademiaRel()
     {
         return $this->academiaRel;
+    }
+
+    /**
+     * Set acreditacionTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacionTipo $acreditacionTipoRel
+     *
+     * @return RhuAcreditacion
+     */
+    public function setAcreditacionTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAcreditacionTipo $acreditacionTipoRel = null)
+    {
+        $this->acreditacionTipoRel = $acreditacionTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get acreditacionTipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacionTipo
+     */
+    public function getAcreditacionTipoRel()
+    {
+        return $this->acreditacionTipoRel;
     }
 }

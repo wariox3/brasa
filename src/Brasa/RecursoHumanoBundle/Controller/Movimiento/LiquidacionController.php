@@ -437,97 +437,72 @@ class LiquidacionController extends Controller
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
-                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-                for($col = 'A'; $col !== 'AZ'; $col++) {
-                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
-                    $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
-                }
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'AZ'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }
+        for($col = 'J'; $col !== 'R'; $col++) {            
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }
+        for($col = 'V'; $col !== 'Z'; $col++) {            
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }         
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CÓDIGO')
-                    ->setCellValue('B1', 'EMPLEADO')
-                    ->setCellValue('C1', 'CENTRO COSTOS')
-                    ->setCellValue('D1', 'CONTRATO')
-                    ->setCellValue('E1', 'FECHA DESDE')
-                    ->setCellValue('F1', 'FECHA HASTA')
-                    ->setCellValue('G1', 'VR AUX TRANSPORTE')
-                    ->setCellValue('H1', 'VR CESANTIAS')
-                    ->setCellValue('I1', 'VR INTERESES CESANTIAS')
-                    ->setCellValue('J1', 'VR PRIMA')
-                    ->setCellValue('K1', 'VR DEDUCCIONES PRIMA')
-                    ->setCellValue('L1', 'VR VACACIONES')
-                    ->setCellValue('M1', 'DÍAS CESANTIAS')
-                    ->setCellValue('N1', 'DÍAS VACACIONES')
-                    ->setCellValue('O1', 'DÍAS PRIMA')
-                    ->setCellValue('P1', 'FECHA ULTIMO PAGO')
-                    ->setCellValue('Q1', 'VR INGRESO BASE PRESTACIONAL ADICIONAL')
-                    ->setCellValue('R1', 'VR INGRESO BASE PRESTACIONAL CESANTIAS')
-                    ->setCellValue('S1', 'VR INGRESO BASE PRESTACIONAL CESANTIAS INICIAL')
-                    ->setCellValue('T1', 'VR INGRESO BASE PRESTACIONAL PRIMA')
-                    ->setCellValue('U1', 'VR INGRESO BASE PRESTACIONAL PRIMA INICIAL')
-                    ->setCellValue('V1', 'VR BASE PRESTACIONES')
-                    ->setCellValue('W1', 'VR BASE PRESTACIONES TOTAL')
-                    ->setCellValue('X1', 'VR SALARIO')
-                    ->setCellValue('Y1', 'VR SALARIO VACACIONES')
-                    ->setCellValue('Z1', 'FECHA ULTIMA PAGO PRIMAS')
-                    ->setCellValue('AA1', 'FECHA ULTIMA PAGO VACACIONES')
-                    ->setCellValue('AB1', 'FECHA ULTIMA PAGO CESANTIAS')
-                    ->setCellValue('AC1', 'VR DEDUCCIONES')
-                    ->setCellValue('AD1', 'VR BONIFICACIONES')
-                    ->setCellValue('AE1', 'VR TOTAL')
-                    ->setCellValue('AF1', 'COMENTARIOS');    
+                    ->setCellValue('A1', 'NUMERO')
+                    ->setCellValue('B1', 'CODIGO')
+                    ->setCellValue('C1', 'DOCUMENTO')
+                    ->setCellValue('D1', 'EMPLEADO')
+                    ->setCellValue('E1', 'CENTRO COSTO')
+                    ->setCellValue('F1', 'CONTRATO')
+                    ->setCellValue('G1', 'DESDE')
+                    ->setCellValue('H1', 'HASTA')
+                    ->setCellValue('I1', 'AUX.TTE')
+                    ->setCellValue('J1', 'CESANTIAS')
+                    ->setCellValue('K1', 'INTERESES')
+                    ->setCellValue('L1', 'PRIMA')
+                    ->setCellValue('M1', 'DED.PRIMA')
+                    ->setCellValue('N1', 'VACACIONES')
+                    ->setCellValue('O1', 'D.CES')
+                    ->setCellValue('P1', 'D.VAC')
+                    ->setCellValue('Q1', 'D.PRI')
+                    ->setCellValue('R1', 'F.ULT.PAGO')
+                    ->setCellValue('S1', 'F.ULT.PAGO.PRI')
+                    ->setCellValue('T1', 'F.ULT.PAGO.VAC')
+                    ->setCellValue('U1', 'F.ULT.PAGO.CES')
+                    ->setCellValue('V1', 'DEDUCCIONES')
+                    ->setCellValue('W1', 'BONIFICACIONES')
+                    ->setCellValue('X1', 'TOTAL');    
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
         $arLiquidaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
         $arLiquidaciones = $query->getResult();
         foreach ($arLiquidaciones as $arLiquidacion) {
-            if ($arLiquidacion->getFechaUltimoPagoPrimas() == null){
-                $fechaUltimaPagoPrimas = "SIN FECHA";
-            }else{
-                $fechaUltimaPagoPrimas = $arLiquidacion->getFechaUltimoPagoPrimas()->format('Y-m-d');
-            }
-            if ($arLiquidacion->getFechaUltimoPagoVacaciones() == null){
-                $fechaUltimaPagoVacaciones = "SIN FECHA";
-            }else{
-                $fechaUltimaPagoVacaciones = $arLiquidacion->getFechaUltimoPagoVacaciones()->format('Y-m-d');
-            }
-            if ($arLiquidacion->getFechaUltimoPagoCesantias() == null){
-                $fechaUltimaPagoCesantias = "SIN FECHA";
-            }else{
-                $fechaUltimaPagoCesantias = $arLiquidacion->getFechaUltimoPagoCesantias()->format('Y-m-d');
-            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arLiquidacion->getCodigoLiquidacionPk())
-                    ->setCellValue('B' . $i, $arLiquidacion->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('C' . $i, $arLiquidacion->getCentroCostoRel()->getNombre())
-                    ->setCellValue('D' . $i, $arLiquidacion->getCodigoContratoFk())
-                    ->setCellValue('E' . $i, $arLiquidacion->getFechaDesde()->format('Y-m-d'))
-                    ->setCellValue('F' . $i, $arLiquidacion->getFechaHasta()->format('Y-m-d'))
-                    ->setCellValue('G' . $i, $arLiquidacion->getVrAuxilioTransporte())
-                    ->setCellValue('H' . $i, $arLiquidacion->getVrCesantias())
-                    ->setCellValue('I' . $i, $arLiquidacion->getVrInteresesCesantias())
-                    ->setCellValue('J' . $i, $arLiquidacion->getVrPrima())
-                    ->setCellValue('K' . $i, $arLiquidacion->getVrDeduccionPrima())
-                    ->setCellValue('L' . $i, $arLiquidacion->getVrVacaciones())
-                    ->setCellValue('M' . $i, $arLiquidacion->getDiasCesantias())
-                    ->setCellValue('N' . $i, $arLiquidacion->getDiasVacaciones())
-                    ->setCellValue('O' . $i, $arLiquidacion->getDiasPrimas())
-                    ->setCellValue('P' . $i, $arLiquidacion->getFechaUltimoPago())
-                    ->setCellValue('Q' . $i, $arLiquidacion->getVrIngresoBasePrestacionAdicional())
-                    ->setCellValue('R' . $i, $arLiquidacion->getVrIngresoBasePrestacionCesantias())
-                    ->setCellValue('S' . $i, $arLiquidacion->getVrIngresoBasePrestacionCesantiasInicial())
-                    ->setCellValue('T' . $i, $arLiquidacion->getVrIngresoBasePrestacionPrimas())
-                    ->setCellValue('U' . $i, $arLiquidacion->getVrIngresoBasePrestacionPrimasInicial())
-                    ->setCellValue('V' . $i, $arLiquidacion->getVrBasePrestaciones())
-                    ->setCellValue('W' . $i, $arLiquidacion->getVrBasePrestacionesTotal())
-                    ->setCellValue('X' . $i, $arLiquidacion->getVrSalario())
-                    ->setCellValue('Y' . $i, $arLiquidacion->getVrSalarioVacaciones())
-                    ->setCellValue('Z' . $i, $fechaUltimaPagoPrimas)
-                    ->setCellValue('AA' . $i, $fechaUltimaPagoVacaciones)
-                    ->setCellValue('AB' . $i, $fechaUltimaPagoCesantias)
-                    ->setCellValue('AC' . $i, $arLiquidacion->getVrDeducciones())
-                    ->setCellValue('AD' . $i, $arLiquidacion->getVrBonificaciones())
-                    ->setCellValue('AE' . $i, $arLiquidacion->getVrTotal())
-                    ->setCellValue('AF' . $i, $arLiquidacion->getComentarios());
+                    ->setCellValue('B' . $i, $arLiquidacion->getCodigoEmpleadoFk())
+                    ->setCellValue('C' . $i, $arLiquidacion->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('D' . $i, $arLiquidacion->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('E' . $i, $arLiquidacion->getCentroCostoRel()->getNombre())
+                    ->setCellValue('F' . $i, $arLiquidacion->getCodigoContratoFk())
+                    ->setCellValue('G' . $i, $arLiquidacion->getFechaDesde()->format('Y-m-d'))
+                    ->setCellValue('H' . $i, $arLiquidacion->getFechaHasta()->format('Y-m-d'))
+                    ->setCellValue('I' . $i, $arLiquidacion->getVrAuxilioTransporte())
+                    ->setCellValue('J' . $i, $arLiquidacion->getVrCesantias())
+                    ->setCellValue('K' . $i, $arLiquidacion->getVrInteresesCesantias())
+                    ->setCellValue('L' . $i, $arLiquidacion->getVrPrima())
+                    ->setCellValue('M' . $i, $arLiquidacion->getVrDeduccionPrima())
+                    ->setCellValue('N' . $i, $arLiquidacion->getVrVacaciones())
+                    ->setCellValue('O' . $i, $arLiquidacion->getDiasCesantias())
+                    ->setCellValue('P' . $i, $arLiquidacion->getDiasVacaciones())
+                    ->setCellValue('Q' . $i, $arLiquidacion->getDiasPrimas())
+                    ->setCellValue('R' . $i, $arLiquidacion->getFechaUltimoPago()->format('Y-m-d'))
+                    ->setCellValue('S' . $i, $arLiquidacion->getFechaUltimoPagoPrimas()->format('Y-m-d'))
+                    ->setCellValue('T' . $i, $arLiquidacion->getFechaUltimoPagoVacaciones()->format('Y-m-d'))
+                    ->setCellValue('U' . $i, $arLiquidacion->getFechaUltimoPagoCesantias()->format('Y-m-d'))
+                    ->setCellValue('V' . $i, $arLiquidacion->getVrDeducciones())
+                    ->setCellValue('W' . $i, $arLiquidacion->getVrBonificaciones())
+                    ->setCellValue('X' . $i, $arLiquidacion->getVrTotal());
             $i++;
         }
 
