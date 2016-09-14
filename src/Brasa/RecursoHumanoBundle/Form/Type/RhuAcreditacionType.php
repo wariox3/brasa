@@ -23,13 +23,9 @@ class RhuAcreditacionType extends AbstractType
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))           
-            ->add('fechaInicio', 'date', array('format' => 'yyyyMMdd'))                            
-            ->add('fechaTerminacion', 'date', array('format' => 'yyyyMMdd'))
-            ->add('fechaVencimiento', 'date', array('format' => 'yyyyMMdd'))    
+                'required' => true))              
             ->add('comentarios', 'textarea', array('required' => false))
-            ->add('numeroRegistro', 'text', array('required' => false))                
-            ->add('numeroAcreditacion', 'text', array('required' => false))                
+            ->add('numeroRegistro', 'text', array('required' => false))                            
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

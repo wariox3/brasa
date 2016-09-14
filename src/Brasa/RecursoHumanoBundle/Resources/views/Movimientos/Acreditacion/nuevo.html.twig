@@ -17,12 +17,12 @@
                     <div class="row">
                       <div class="col-lg-2">
                         <div class="input-group">
-                          <input id="form_txtNumeroIdentificacion"  name="form_txtNumeroIdentificacion"  type="text" class="form-control" value="{{ arEstudio.empleadoRel.numeroIdentificacion |default('') }}"/>
+                          <input id="form_txtNumeroIdentificacion"  name="form_txtNumeroIdentificacion"  type="text" class="form-control" value="{{ arAcreditacion.empleadoRel.numeroIdentificacion |default('') }}"/>
                         </div>
                       </div>
                       <div class="col-lg-10">
                         <div class="input-group">                                      
-                          <input id="form_txtNombreCorto"  name="form_txtNombreCorto"  type="text" class="form-control" value="{{ arEstudio.empleadoRel.nombreCorto |default('') }}" readOnly="ReadOnly" />
+                          <input id="form_txtNombreCorto"  name="form_txtNombreCorto"  type="text" class="form-control" value="{{ arAcreditacion.empleadoRel.nombreCorto |default('') }}" readOnly="ReadOnly" />
                           <span class="input-group-btn">                                        
                             <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_buscar_empleado') }}', 'buscarEmpleado', 600, 900)">Buscar</a>
                           </span>
@@ -36,25 +36,7 @@
                 <div class="col-sm-9">
                         {{ form_widget(form.acreditacionTipoRel, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
                 </div>
-            </div>                   
-            <div class="form-group form-group-sm">
-                <label for="form_fechaInicio" class="col-sm-3 control-label">Fecha inicio:</label>
-                <div class="col-sm-9">
-                        {{ form_widget(form.fechaInicio) }}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label for="form_fechaTerminacion" class="col-sm-3 control-label">Fecha terminación:</label>
-                <div class="col-sm-9">
-                        {{ form_widget(form.fechaTerminacion) }}
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label class="col-sm-3 control-label">Fecha vencimiento:</label>
-                <div class="col-sm-9">
-                        {{ form_widget(form.fechaVencimiento) }}
-                </div>
-            </div>    
+            </div>                     
             <div class="form-group form-group-sm">
                 <label for="form_numeroRegistro" class="col-sm-3 control-label">Numero registro:</label>
                 <div class="col-sm-9">
@@ -66,13 +48,7 @@
                 <div class="col-sm-9">
                         {{ form_widget(form.academiaRel, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
                 </div>
-            </div>          
-            <div class="form-group form-group-sm">
-                <label for="form_numeroAcreditacion" class="col-sm-3 control-label">Numero aprobación:</label>
-                <div class="col-sm-9">
-                        {{ form_widget(form.numeroAcreditacion, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
-                </div>
-            </div>    
+            </div>              
             <div class="form-group">
                 <label for="form_comentarios" class="col-sm-3 control-label">Comentarios:</label>
                 <div class="col-sm-9">

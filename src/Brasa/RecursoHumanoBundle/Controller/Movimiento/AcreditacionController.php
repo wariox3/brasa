@@ -73,8 +73,6 @@ class AcreditacionController extends Controller
         } else {            
             $arAcreditacion->setFecha(new \DateTime('now'));
             $arAcreditacion->setFechaInicio(new \DateTime('now'));
-            $arAcreditacion->setFechaEstado(new \DateTime('now'));
-            $arAcreditacion->setFechaEstadoInvalido(new \DateTime('now'));
             $arAcreditacion->setFechaTerminacion(new \DateTime('now'));
             $arAcreditacion->setFechaVencimiento(new \DateTime('now'));
         }        
@@ -278,74 +276,19 @@ class AcreditacionController extends Controller
                     } else {
                         $sexo = 2;
                     }
-                    $cargo = "";
-                    if ($arAcreditacion->getCodigoAcreditacionTipoFk() != null){
-                        if ($arAcreditacion->getAcreditacionTipoRel()->getCargo() == "VIGILANTE"){
-                            $cargo = 1;
-                        }
-                        if ($arAcreditacion->getAcreditacionTipoRel()->getCargo() == "ESCOLTA"){
-                            $cargo = 2;
-                        }
-                        if ($arAcreditacion->getAcreditacionTipoRel()->getCargo() == "TRIPULANTE"){
-                            $cargo = 3;
-                        }
-                        if ($arAcreditacion->getAcreditacionTipoRel()->getCargo() == "SUPERVISOR"){
-                            $cargo = 4;
-                        }
-                        if ($arAcreditacion->getAcreditacionTipoRel()->getCargo() == "OPERADOR DE MEDIOS TECNOLOGICOS"){
-                            $cargo = 5;
-                        }
-                        if ($arAcreditacion->getAcreditacionTipoRel()->getCargo() == "MANEJADOR CANINO"){
-                            $cargo = 6;
-                        }
-                        if ($arAcreditacion->getAcreditacionTipoRel()->getCargo() == "DIRECTIVO"){
-                            $cargo = 7;
-                        }
-                    } else {
-                        $cargo = "";
-                    }    
+                    
                     //CONTRATO
                     $codigoContrato = "";
                     if ($arAcreditacion->getEmpleadoRel()->getCodigoContratoActivoFk() != null){
-                        $codigoContrato = $arAcreditacion->getEmpleadoRel()->getCodigoContratoActivoFk();
-                        
-                    } else {
-                        if ($arAcreditacion->getEmpleadoRel()->getCodigoContratoUltimoFk() != null){
-                            $codigoContrato = $arAcreditacion->getEmpleadoRel()->getCodigoContratoUltimoFk();
-                        } else {
-                            $codigoContrato = 0;
-                        }                        
-                    }
-                    
+                        $codigoContrato = $arAcreditacion->getEmpleadoRel()->getCodigoContratoActivoFk();                        
+                    } else {                       
+                        $codigoContrato = $arAcreditacion->getEmpleadoRel()->getCodigoContratoUltimoFk();                        
+                    }                    
                     $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
                     $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);                    
-                    
-                    $ciudadLabora = "";
-                    if ($arContrato != null){
-                        if ($arContrato->getCodigoCiudadLaboraFk() != null){
-                            $ciudadLabora = $arContrato->getCiudadLaboraRel()->getNombre();
-                        }
-                        $ciudadLabora = explode(" ", $ciudadLabora);
-                        $ciudadLabora = $ciudadLabora[0];
-
-                        if ($ciudadLabora == ""){
-                            $departamentoCiudadLabora = "";
-                        } else {
-                            $departamentoCiudadLabora = $arContrato->getCiudadLaboraRel()->getDepartamentoRel()->getNombre();
-                        }
-                    $contratoFechaDesde = $arContrato->getFechaDesde()->format('d/m/Y');    
-                    } else {
-                        $ciudadLabora = "";
-                        $departamentoCiudadLabora = "";
-                        $contratoFechaDesde = "";
-                    }
-                    $academia = "";
-                    $telefono = "";  
-                    $tipoAcreditacion = "";
-                    $nivelEstudio = "";
-                    $gradoBachiller = "Ninguna";
-                    $superior = "Ninguna";                   
-                        
+                                                            
+                    $gradoBachiller = "11";
+                    $superior = "Ninguna";                                           
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arConfiguracion->getNitEmpresa().$arConfiguracion->getDigitoVerificacionEmpresa())
                             ->setCellValue('B' . $i, strtoupper($arConfiguracion->getNombreEmpresa()))
@@ -357,17 +300,17 @@ class AcreditacionController extends Controller
                             ->setCellValue('H' . $i, strtoupper($arAcreditacion->getEmpleadoRel()->getApellido2()))
                             ->setCellValue('I' . $i, $arAcreditacion->getEmpleadoRel()->getFechaNacimiento()->format('d/m/Y'))
                             ->setCellValue('J' . $i, $sexo)
-                            ->setCellValue('K' . $i, $cargo)
-                            ->setCellValue('L' . $i, $contratoFechaDesde)
-                            ->setCellValue('M' . $i, $tipoAcreditacion)
-                            ->setCellValue('N' . $i, $academia)
-                            ->setCellValue('O' . $i, $arAcreditacion->getNumeroAcreditacion())
+                            ->setCellValue('K' . $i, $arAcreditacion->getAcreditacionTipoRel()->getCargoCodigo())
+                            ->setCellValue('L' . $i, $arContrato->getFechaDesde()->format('d/m/Y'))
+                            ->setCellValue('M' . $i, $arAcreditacion->getAcreditacionTipoRel()->getCodigo())
+                            ->setCellValue('N' . $i, $arAcreditacion->getAcademiaRel()->getNit())
+                            ->setCellValue('O' . $i, $arAcreditacion->getNumeroRegistro())
                             ->setCellValue('P' . $i, "Principal")
-                            ->setCellValue('Q' . $i, $telefono)
+                            ->setCellValue('Q' . $i, $arAcreditacion->getEmpleadoRel()->getTelefono())
                             ->setCellValue('R' . $i, $arAcreditacion->getEmpleadoRel()->getDireccion())
-                            ->setCellValue('S' . $i, $arAcreditacion->getEmpleadoRel()->getDireccion())//FALTA LA DIRECCION DEL PUESTO
-                            ->setCellValue('T' . $i, $departamentoCiudadLabora)
-                            ->setCellValue('U' . $i, $ciudadLabora)
+                            ->setCellValue('S' . $i, $arAcreditacion->getEmpleadoRel()->getDireccion())
+                            ->setCellValue('T' . $i, $arContrato->getCiudadLaboraRel()->getDepartamentoRel()->getNombre())
+                            ->setCellValue('U' . $i, $arContrato->getCiudadLaboraRel()->getNombre())
                             ->setCellValue('V' . $i, $gradoBachiller)
                             ->setCellValue('W' . $i, ucfirst($superior))
                             ->setCellValue('X' . $i, "Ninguna");

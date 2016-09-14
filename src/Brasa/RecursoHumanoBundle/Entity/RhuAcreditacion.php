@@ -81,6 +81,11 @@ class RhuAcreditacion
      */    
     private $estadoValidado = false;    
     
+    /**     
+     * @ORM\Column(name="estado_acreditado", type="boolean")
+     */    
+    private $estadoAcreditado = false;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="acreditacionesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
@@ -470,5 +475,29 @@ class RhuAcreditacion
     public function getAcreditacionTipoRel()
     {
         return $this->acreditacionTipoRel;
+    }
+
+    /**
+     * Set estadoAcreditado
+     *
+     * @param boolean $estadoAcreditado
+     *
+     * @return RhuAcreditacion
+     */
+    public function setEstadoAcreditado($estadoAcreditado)
+    {
+        $this->estadoAcreditado = $estadoAcreditado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAcreditado
+     *
+     * @return boolean
+     */
+    public function getEstadoAcreditado()
+    {
+        return $this->estadoAcreditado;
     }
 }
