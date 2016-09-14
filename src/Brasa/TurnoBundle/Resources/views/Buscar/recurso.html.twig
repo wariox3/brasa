@@ -34,9 +34,9 @@
                     <div class="col-sm-4">
                         {{ form_widget(form.TxtNumeroIdentificacion, { 'attr': {'class': 'form-control'} }) }}
                     </div>
-                    <label class="col-sm-2 control-label"></label>
+                    <label class="col-sm-2 control-label">Inactivos:</label>
                     <div class="col-sm-4">                  
-                        
+                        {{ form_widget(form.inactivos) }}
                     </div>                    
                 </div>                    
                 <div class="form-group form-group-sm">
@@ -52,6 +52,7 @@
                 <th>IDENTIFICACION</th>
                 <th>{{ knp_pagination_sortable(arRecursos, 'NOMBRE', 'e.nombreCorto') }}</th>
                 <th>{{ knp_pagination_sortable(arRecursos, 'APODO', 'e.apodo') }}</th>
+                <th>ACT</th>
                 <th></th>
             </tr>
             {% for arRecursos in arRecursos %}
@@ -60,6 +61,7 @@
                 <td>{{ arRecursos.numeroIdentificacion  }}</td>
                 <td>{{ arRecursos.nombreCorto }}</td>
                 <td>{{ arRecursos.apodo }}</td>
+                <td>{% if arRecursos.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: center"><a href="javascript:selTercero('{{ arRecursos.codigoRecursoPk }}','{{ arRecursos.nombreCorto }}','{{ campoCodigo }}','{{ campoNombre }}')" ><img src="{{ asset('imagenes/bootstrap/glyphicons_198_ok.png') }}" width=20 height=20></a></td>                                
             </tr>
             {% endfor %} 

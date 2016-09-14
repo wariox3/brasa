@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 class TurRecursoRepository extends EntityRepository {    
     
-    public function ListaDql($strNombre = "", $strCodigo = "", $codigoCentroCosto = "", $strNumeroIdentificacion = "", $codigoRecursoGrupo = "", $estadoRetirado = "") {
+    public function ListaDql($strNombre = "", $strCodigo = "", $codigoCentroCosto = "", $strNumeroIdentificacion = "", $codigoRecursoGrupo = "", $estadoRetirado = "", $estadoActivo = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT r FROM BrasaTurnoBundle:TurRecurso r WHERE r.codigoRecursoPk <> 0";
         if($strNombre != "" ) {
@@ -29,11 +29,48 @@ class TurRecursoRepository extends EntityRepository {
         }
         if($estadoRetirado == "0") {
             $dql .= " AND r.estadoRetiro = 0";
-        }        
+        }   
+        if($estadoActivo == 1 ) {
+            $dql .= " AND r.estadoActivo = 1";
+        }
+        if($estadoActivo == "0") {
+            $dql .= " AND r.estadoActivo = 0";
+        }         
         $dql .= " ORDER BY r.nombreCorto";
         return $dql;
     }            
 
+    public function buscarDql($strNombre = "", $strCodigo = "", $codigoCentroCosto = "", $strNumeroIdentificacion = "", $codigoRecursoGrupo = "", $estadoRetirado = "", $inactivos = "") {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT r FROM BrasaTurnoBundle:TurRecurso r WHERE r.codigoRecursoPk <> 0";
+        if($strNombre != "" ) {
+            $dql .= " AND r.nombreCorto LIKE '%" . $strNombre . "%'";
+        }
+        if($strCodigo != "" ) {
+            $dql .= " AND r.codigoRecursoPk = " . $strCodigo;
+        }
+        if($strNumeroIdentificacion != "" ) {
+            $dql .= " AND r.numeroIdentificacion LIKE '%" . $strNumeroIdentificacion . "%'";
+        }        
+        if($codigoCentroCosto != "" ) {
+            $dql .= " AND r.codigoCentroCostoFk = " . $codigoCentroCosto ;
+        }   
+        if($codigoRecursoGrupo != "" ) {
+            $dql .= " AND r.codigoRecursoGrupoFk = " . $codigoRecursoGrupo ;
+        }        
+        if($estadoRetirado == 1 ) {
+            $dql .= " AND r.estadoRetiro = 1";
+        }
+        if($estadoRetirado == "0") {
+            $dql .= " AND r.estadoRetiro = 0";
+        }   
+        if(!$inactivos) {
+            $dql .= " AND r.estadoActivo = 1";
+        }      
+        $dql .= " ORDER BY r.nombreCorto";
+        return $dql;
+    }     
+    
     public function disponibles($strDia = "", $strAnio = "", $strMes = "") {
         $em = $this->getEntityManager();             
         $strSql = "SELECT

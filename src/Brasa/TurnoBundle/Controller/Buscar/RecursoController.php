@@ -64,12 +64,13 @@ class RecursoController extends Controller
     
     private function lista() {  
         $session = $this->getRequest()->getSession();
-        $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurRecurso')->listaDQL(
+        $em = $this->getDoctrine()->getManager();        
+        $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurRecurso')->buscarDQL(
                 $this->strNombre,                
                 $this->strCodigo,
                 "",
-                $session->get('filtroTurnoNumeroIdentificacion')
+                $session->get('filtroTurnoNumeroIdentificacion'),
+                "", "", $session->get('filtroTurnoRecursoInactivo')
                 ); 
     }       
     
@@ -77,7 +78,8 @@ class RecursoController extends Controller
         $session = $this->getRequest()->getSession();        
         $form = $this->createFormBuilder()                                                
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->strNombre))
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->strCodigo))            
+            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->strCodigo)) 
+            ->add('inactivos', 'checkbox', array('required'  => false, 'data' => $session->get('filtroTurnoRecursoInactivo')))                
             ->add('TxtNumeroIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroTurnoNumeroIdentificacion')))            
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();        
@@ -90,6 +92,7 @@ class RecursoController extends Controller
         $controles = $request->request->get('form');
         $this->strNombre = $form->get('TxtNombre')->getData();
         $this->strCodigo = $form->get('TxtCodigo')->getData();
+        $session->set('filtroTurnoRecursoInactivo', $form->get('inactivos')->getData());  
         $session->set('filtroTurnoNumeroIdentificacion', $form->get('TxtNumeroIdentificacion')->getData());        
     }    
           

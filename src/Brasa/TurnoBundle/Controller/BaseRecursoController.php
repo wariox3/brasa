@@ -25,19 +25,23 @@ class BaseRecursoController extends Controller
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
             }
-            if ($form->get('BtnExcel')->isClicked()) {
-                /*$arRecursos = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findAll();
-                foreach ($arRecursos as $arRecurso) {
-                    $arRecursoAct = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($arRecurso->getCodigoRecursoPk());
-                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arRecurso->getNumeroIdentificacion()));
-                    if($arEmpleado) {
-                        $arRecursoAct->setCodigoEmpleadoFk($arEmpleado->getCodigoEmpleadoPk());
-                        $em->persist($arRecursoAct);
+            if ($form->get('BtnActivar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigo) {
+                        $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
+                        $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigo);
+                        if($arRecurso->getEstadoActivo() == 0) {
+                            $arRecurso->setEstadoActivo(1);
+                            $arRecurso->setEstadoRetiro(0);
+                            $em->persist($arRecurso);                            
+                        }
                     }
-                }
-                $em->flush();
-                 * 
-                 */
+                    $em->flush();
+                }    
+                return $this->redirect($this->generateUrl('brs_tur_base_recurso_lista'));                
+            }            
+            if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
                 $this->generarExcel();
             }
@@ -286,6 +290,7 @@ class BaseRecursoController extends Controller
             ->add('estadoRetirado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'RETIRADO', '0' => 'SIN RETIRAR'), 'data' => $session->get('filtroRecursoEstadoRetirado')))                
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnActivar', 'submit', array('label'  => 'Activar'))
             ->getForm();
         return $form;
     }

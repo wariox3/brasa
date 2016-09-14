@@ -111,6 +111,9 @@
                 <a class="btn btn-default btn-sm" href="{{ path('brs_tur_base_recurso_nuevo', {'codigoRecurso': 0, 'codigoEmpleado': 0}) }}">Nuevo</a>                                                
                 <a class="btn btn-default btn-sm" href="{{ path('brs_tur_base_recurso_nuevo_enlazar') }}">Nuevo desde empleados</a>            
             </div>
+            <div class="btn-group">                
+                {{ form_widget(form.BtnActivar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            </div>            
         </div>
         <!-- Fin Botones Menu Items -->
         {{ form_rest(form) }}
