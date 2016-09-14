@@ -98,7 +98,7 @@ class RegistrosController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'M'; $col++) {
+        for($col = 'A'; $col !== 'N'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
         }      
         for($col = 'I'; $col !== 'L'; $col++) {            
@@ -116,7 +116,8 @@ class RegistrosController extends Controller
                     ->setCellValue('I1', 'DEBITO')
                     ->setCellValue('J1', 'CREDITO')
                     ->setCellValue('K1', 'BASE')
-                    ->setCellValue('L1', 'DETALLE');
+                    ->setCellValue('L1', 'C.COSTO')
+                    ->setCellValue('M1', 'DETALLE');
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
@@ -133,7 +134,8 @@ class RegistrosController extends Controller
                     ->setCellValue('I' . $i, $arRegistro->getDebito())
                     ->setCellValue('J' . $i, $arRegistro->getCredito())
                     ->setCellValue('K' . $i, $arRegistro->getBase())
-                    ->setCellValue('L' . $i, $arRegistro->getDescripcionContable());            
+                    ->setCellValue('L' . $i, $arRegistro->getCodigoCentroCostoFk())
+                    ->setCellValue('M' . $i, $arRegistro->getDescripcionContable());            
             if($arRegistro->getTerceroRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G' . $i, $arRegistro->getTerceroRel()->getNumeroIdentificacion());
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H' . $i, $arRegistro->getTerceroRel()->getNombreCorto());
