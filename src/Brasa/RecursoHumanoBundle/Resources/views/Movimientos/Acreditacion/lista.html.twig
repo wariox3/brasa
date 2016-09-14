@@ -41,8 +41,8 @@
                 <th>{{ knp_pagination_sortable(arAcreditaciones, 'CODIGO', 'ee.codigoAcreditacionPk') }}</th>
                 <th>DOCUMENTO</th>
                 <th>{{ knp_pagination_sortable(arAcreditaciones, 'NOMBRE', 'e.nombreCorto') }}</th>                
-                <th>INICIO</th>
-                <th>TERMINACIÓN</th>
+                <th>REGISTRO</th>
+                <th>VAL</th>
                 <th>VENCIMIENTO</th>                
                 <th style="text-align: center"></th>                
                 <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
@@ -52,8 +52,8 @@
                 <td>{{ arAcreditaciones.codigoAcreditacionPk }} </td>
                 <td>{{ arAcreditaciones.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arAcreditaciones.empleadoRel.nombreCorto  }}</td>                                                
-                <td>{{ arAcreditaciones.fechaInicio | date('Y/m/d') }}</td>
-                <td>{{ arAcreditaciones.fechaTerminacion | date('Y/m/d') }}</td>                
+                <td>{{ arAcreditaciones.numeroRegistro }}</td>               
+                <td>{% if arAcreditaciones.estadoValidado == 1 %} SI {% else %} NO {% endif %}</td>                 
                 <td>{{ arAcreditaciones.fechaVencimiento | date('Y/m/d') }}</td>                                                
                 <td style="text-align: center"><a href="{{ path('brs_rhu_movimiento_acreditacion_nuevo', {'codigoAcreditacion': arAcreditaciones.codigoAcreditacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arAcreditaciones.codigoAcreditacionPk }}" /></td>

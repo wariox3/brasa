@@ -246,11 +246,12 @@ class AcreditacionController extends Controller
                             ->setCellValue('X1', 'Discapacidad');
 
                 $i = 2;
-                $query = $em->createQuery($this->strSqlLista);
+                $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+                $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);                
+                $dql   = "SELECT a FROM BrasaRecursoHumanoBundle:RhuAcreditacion a WHERE a.estadoValidado = 0";                
+                $query = $em->createQuery($dql);
                 $arAcreditaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion();
                 $arAcreditaciones = $query->getResult();
-                $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
-                $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
                 foreach ($arAcreditaciones as $arAcreditacion) {
                     
                     //tipo identificacion

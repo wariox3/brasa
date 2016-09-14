@@ -33,6 +33,11 @@ class RhuAcreditacionTipo
     private $cargo; 
     
     /**
+     * @ORM\Column(name="cargo_codigo", type="string", length=10, nullable=true)
+     */    
+    private $cargoCodigo;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuAcreditacion", mappedBy="acreditacionTipoRel")
      */
     protected $acreditacionesAcreditacionTipoRel;
@@ -159,5 +164,29 @@ class RhuAcreditacionTipo
     public function getAcreditacionesAcreditacionTipoRel()
     {
         return $this->acreditacionesAcreditacionTipoRel;
+    }
+
+    /**
+     * Set cargoCodigo
+     *
+     * @param string $cargoCodigo
+     *
+     * @return RhuAcreditacionTipo
+     */
+    public function setCargoCodigo($cargoCodigo)
+    {
+        $this->cargoCodigo = $cargoCodigo;
+
+        return $this;
+    }
+
+    /**
+     * Get cargoCodigo
+     *
+     * @return string
+     */
+    public function getCargoCodigo()
+    {
+        return $this->cargoCodigo;
     }
 }

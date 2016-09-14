@@ -64,17 +64,7 @@ class RhuAcreditacion
     /**
      * @ORM\Column(name="codigo_acreditacion_tipo_fk", type="integer", nullable=true)
      */    
-    private $codigoAcreditacionTipoFk;
-    
-    /**
-     * @ORM\Column(name="codigo_estudio_estado_fk", type="integer", nullable=true)
-     */    
-    private $codigoEstudioEstadoFk;
-    
-    /**
-     * @ORM\Column(name="codigo_estudio_estado_invalido_fk", type="integer", nullable=true)
-     */    
-    private $codigoEstudioEstadoInvalidoFk;
+    private $codigoAcreditacionTipoFk;        
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
@@ -84,19 +74,12 @@ class RhuAcreditacion
     /**
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
      */    
-    private $codigoUsuario;
+    private $codigoUsuario;    
     
-    /**
-     * @ORM\Column(name="fecha_estado", type="date", nullable=true)
-     */     
-    
-    private $fechaEstado;
-    
-    /**
-     * @ORM\Column(name="fecha_estado_invalido", type="date", nullable=true)
-     */     
-    
-    private $fechaEstadoInvalido;
+    /**     
+     * @ORM\Column(name="estado_validado", type="boolean")
+     */    
+    private $estadoValidado = false;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="acreditacionesEmpleadoRel")
@@ -115,6 +98,8 @@ class RhuAcreditacion
      * @ORM\JoinColumn(name="codigo_acreditacion_tipo_fk", referencedColumnName="codigo_acreditacion_tipo_pk")
      */
     protected $acreditacionTipoRel;     
+
+
 
 
     /**
@@ -344,54 +329,6 @@ class RhuAcreditacion
     }
 
     /**
-     * Set codigoEstudioEstadoFk
-     *
-     * @param integer $codigoEstudioEstadoFk
-     *
-     * @return RhuAcreditacion
-     */
-    public function setCodigoEstudioEstadoFk($codigoEstudioEstadoFk)
-    {
-        $this->codigoEstudioEstadoFk = $codigoEstudioEstadoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoEstudioEstadoFk
-     *
-     * @return integer
-     */
-    public function getCodigoEstudioEstadoFk()
-    {
-        return $this->codigoEstudioEstadoFk;
-    }
-
-    /**
-     * Set codigoEstudioEstadoInvalidoFk
-     *
-     * @param integer $codigoEstudioEstadoInvalidoFk
-     *
-     * @return RhuAcreditacion
-     */
-    public function setCodigoEstudioEstadoInvalidoFk($codigoEstudioEstadoInvalidoFk)
-    {
-        $this->codigoEstudioEstadoInvalidoFk = $codigoEstudioEstadoInvalidoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoEstudioEstadoInvalidoFk
-     *
-     * @return integer
-     */
-    public function getCodigoEstudioEstadoInvalidoFk()
-    {
-        return $this->codigoEstudioEstadoInvalidoFk;
-    }
-
-    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -440,51 +377,27 @@ class RhuAcreditacion
     }
 
     /**
-     * Set fechaEstado
+     * Set estadoValidado
      *
-     * @param \DateTime $fechaEstado
+     * @param boolean $estadoValidado
      *
      * @return RhuAcreditacion
      */
-    public function setFechaEstado($fechaEstado)
+    public function setEstadoValidado($estadoValidado)
     {
-        $this->fechaEstado = $fechaEstado;
+        $this->estadoValidado = $estadoValidado;
 
         return $this;
     }
 
     /**
-     * Get fechaEstado
+     * Get estadoValidado
      *
-     * @return \DateTime
+     * @return boolean
      */
-    public function getFechaEstado()
+    public function getEstadoValidado()
     {
-        return $this->fechaEstado;
-    }
-
-    /**
-     * Set fechaEstadoInvalido
-     *
-     * @param \DateTime $fechaEstadoInvalido
-     *
-     * @return RhuAcreditacion
-     */
-    public function setFechaEstadoInvalido($fechaEstadoInvalido)
-    {
-        $this->fechaEstadoInvalido = $fechaEstadoInvalido;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaEstadoInvalido
-     *
-     * @return \DateTime
-     */
-    public function getFechaEstadoInvalido()
-    {
-        return $this->fechaEstadoInvalido;
+        return $this->estadoValidado;
     }
 
     /**
