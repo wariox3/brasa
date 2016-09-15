@@ -495,14 +495,22 @@ class LiquidacionController extends Controller
                     ->setCellValue('N' . $i, $arLiquidacion->getVrVacaciones())
                     ->setCellValue('O' . $i, $arLiquidacion->getDiasCesantias())
                     ->setCellValue('P' . $i, $arLiquidacion->getDiasVacaciones())
-                    ->setCellValue('Q' . $i, $arLiquidacion->getDiasPrimas())
-                    ->setCellValue('R' . $i, $arLiquidacion->getFechaUltimoPago()->format('Y-m-d'))
-                    ->setCellValue('S' . $i, $arLiquidacion->getFechaUltimoPagoPrimas()->format('Y-m-d'))
-                    ->setCellValue('T' . $i, $arLiquidacion->getFechaUltimoPagoVacaciones()->format('Y-m-d'))
-                    ->setCellValue('U' . $i, $arLiquidacion->getFechaUltimoPagoCesantias()->format('Y-m-d'))
+                    ->setCellValue('Q' . $i, $arLiquidacion->getDiasPrimas())                                        
                     ->setCellValue('V' . $i, $arLiquidacion->getVrDeducciones())
                     ->setCellValue('W' . $i, $arLiquidacion->getVrBonificaciones())
                     ->setCellValue('X' . $i, $arLiquidacion->getVrTotal());
+            if($arLiquidacion->getFechaUltimoPago()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('R' . $i, $arLiquidacion->getFechaUltimoPago()->format('Y-m-d'));
+            }
+            if($arLiquidacion->getFechaUltimoPagoPrimas()) {
+                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('S' . $i, $arLiquidacion->getFechaUltimoPagoPrimas()->format('Y-m-d'));
+            }
+            if($arLiquidacion->getFechaUltimoPagoVacaciones()) {
+                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('T' . $i, $arLiquidacion->getFechaUltimoPagoVacaciones()->format('Y-m-d'));
+            }
+            if($arLiquidacion->getFechaUltimoPagoCesantias()) {
+                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U' . $i, $arLiquidacion->getFechaUltimoPagoCesantias()->format('Y-m-d'));
+            }
             $i++;
         }
 

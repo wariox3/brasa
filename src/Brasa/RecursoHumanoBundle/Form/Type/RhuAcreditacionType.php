@@ -16,14 +16,22 @@ class RhuAcreditacionType extends AbstractType
                     return $er->createQueryBuilder('at')
                     ->orderBy('at.codigoAcreditacionTipoPk', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                 
+                'required' => true))
+            ->add('acreditacionRechazoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuAcreditacionRechazo',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('ar')
+                    ->orderBy('ar.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false))                            
             ->add('academiaRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuAcademia',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))              
+                'required' => true))                                  
+            ->add('estadoRechazado', 'checkbox', array('required'  => false))                            
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('numeroRegistro', 'text', array('required' => false))                            
             ->add('guardar', 'submit')

@@ -9,15 +9,15 @@ use Brasa\RecursoHumanoBundle\Form\Type\RhuAcreditacionType;
 class AcreditacionController extends Controller
 {
     var $strSqlLista = "";
-    
+
     /**
      * @Route("/rhu/movimiento/acreditacion/", name="brs_rhu_movimiento_acreditacion")
-     */     
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         /*if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 12, 1)) {
-            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));
         }*/
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioLista();
@@ -26,17 +26,17 @@ class AcreditacionController extends Controller
         if($form->isValid()) {
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form);
+                $this->formularioLista();
                 $this->listar();
             }
 
             if($form->get('BtnExcel')->isClicked()) {
                 $this->filtrarLista($form);
+                $this->formularioLista();
                 $this->listar();
                 $this->generarExcel();
-            }            
+            }
             if($form->get('BtnExcelInforme')->isClicked()) {
-                $this->filtrarLista($form);
-                $this->listar();
                 $this->generarInformeExcel();
             }
             if($form->get('BtnEliminar')->isClicked()) {
@@ -47,65 +47,63 @@ class AcreditacionController extends Controller
                         $arAcreditacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacion')->find($codigoAcreditacion);
                         if($arAcreditacion->getEstadoValidado() == 0) {
                             $em->remove($arAcreditacion);
-                        }                        
+                        }
                     }
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_movimiento_acreditacion'));
                 }
             }
-            
+
         }
         $arAcreditaciones = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Acreditacion:lista.html.twig', array(
             'arAcreditaciones' => $arAcreditaciones,
             'form' => $form->createView()
             ));
-    }    
+    }
 
     /**
      * @Route("/rhu/movimiento/acreditacion/nuevo/{codigoAcreditacion}", name="brs_rhu_movimiento_acreditacion_nuevo")
-     */    
+     */
     public function nuevoAction($codigoAcreditacion = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();                 
-        $arAcreditacion = new \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion();       
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arAcreditacion = new \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion();
         if($codigoAcreditacion != 0) {
             $arAcreditacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacion')->find($codigoAcreditacion);
-        } else {            
+        } else {
             $arAcreditacion->setFecha(new \DateTime('now'));
-            $arAcreditacion->setFechaInicio(new \DateTime('now'));
-            $arAcreditacion->setFechaTerminacion(new \DateTime('now'));
             $arAcreditacion->setFechaVencimiento(new \DateTime('now'));
-        }        
+        }
 
-        $form = $this->createForm(new RhuAcreditacionType(), $arAcreditacion);                     
+        $form = $this->createForm(new RhuAcreditacionType(), $arAcreditacion);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arUsuario = $this->get('security.context')->getToken()->getUser();
-            $arAcreditacion = $form->getData();                          
+            $arAcreditacion = $form->getData();
             $arrControles = $request->request->All();
             if($arrControles['form_txtNumeroIdentificacion'] != '') {
                 $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));                
-                if(count($arEmpleado) > 0) {                                            
-                    $arAcreditacion->setEmpleadoRel($arEmpleado);                    
+                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));
+                if(count($arEmpleado) > 0) {
+                    $arAcreditacion->setEmpleadoRel($arEmpleado);
                     if($codigoAcreditacion == 0) {
-                        $arAcreditacion->setCodigoUsuario($arUsuario->getUserName());                                           
+                        $arAcreditacion->setCodigoUsuario($arUsuario->getUserName());
                     }
                     $em->persist($arAcreditacion);
                     $em->flush();
 
-                    if($form->get('guardarnuevo')->isClicked()) {                                                        
-                        return $this->redirect($this->generateUrl('brs_rhu_movimiento_acreditacion_nuevo', array('codigoAcreditacion' => 0)));                                        
+                    if($form->get('guardarnuevo')->isClicked()) {
+                        return $this->redirect($this->generateUrl('brs_rhu_movimiento_acreditacion_nuevo', array('codigoAcreditacion' => 0)));
                     } else {
                         return $this->redirect($this->generateUrl('brs_rhu_movimiento_acreditacion'));
-                    }                                                                                                                             
+                    }
                 } else {
-                    $objMensaje->Mensaje("error", "El empleado no existe", $this);                                    
+                    $objMensaje->Mensaje("error", "El empleado no existe", $this);
                 }
-            }            
-        }                
+            }
+        }
 
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Acreditacion:nuevo.html.twig', array(
             'arAcreditacion' => $arAcreditacion,
@@ -114,7 +112,7 @@ class AcreditacionController extends Controller
 
     /**
      * @Route("/rhu/movimiento/acreditacion/cargar/validacion/", name="brs_rhu_movimiento_acreditacion_cargar_validacion")
-     */    
+     */
     public function cargarValidacionAction() {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
@@ -132,52 +130,52 @@ class AcreditacionController extends Controller
             if($form->get('BtnCargar')->isClicked()) {
                 $arUsuario = $this->get('security.context')->getToken()->getUser();
                 set_time_limit(0);
-                ini_set("memory_limit", -1);                
-                $form['attachment']->getData()->move($rutaTemporal->getRutaTemporal(), "archivo.csv");                
+                ini_set("memory_limit", -1);
+                $form['attachment']->getData()->move($rutaTemporal->getRutaTemporal(), "archivo.csv");
                 $numero = $form->get('numero')->getData();
                 $fecha = $form->get('fecha')->getData();
-                $ruta = $rutaTemporal->getRutaTemporal(). "archivo.csv";                                
+                $ruta = $rutaTemporal->getRutaTemporal(). "archivo.csv";
                 if (($gestor = fopen($ruta, "r")) !== FALSE) {
                     while (($datos = fgetcsv($gestor, 1000, ",")) !== FALSE) {
-                        $registro = explode("\t",$datos[0]);      
+                        $registro = explode("\t",$datos[0]);
                         if(count($registro) > 1) {
                             $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $registro[4]));
                             if($arEmpleado) {
                                 $arAcreditaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion();
-                                $arAcreditaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacion')->findBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk(), 'estadoValidado' => 0));
-                                foreach ($arAcreditaciones as $arAcreditacion) {  
-                                    $cargo = $arAcreditacion->getAcreditacionTipoRel()->getCargo();                                    
+                                $arAcreditaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacion')->findBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk(), 'estadoValidado' => 0, 'estadoRechazado' => 0));
+                                foreach ($arAcreditaciones as $arAcreditacion) {
+                                    $cargo = $arAcreditacion->getAcreditacionTipoRel()->getCargo();
                                     //Para quitar los formatos de html del string
                                     $cargo2 = strip_tags($registro[5]);
                                     $detalle = strip_tags($registro[6]);
                                     if ($cargo == $cargo2){
                                         $arAcreditacionActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion();
-                                        $arAcreditacionActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacion')->find($arAcreditacion->getCodigoAcreditacionPk());                                                                            
+                                        $arAcreditacionActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacion')->find($arAcreditacion->getCodigoAcreditacionPk());
                                         $arAcreditacionActualizar->setNumeroValidacion($numero);
                                         $arAcreditacionActualizar->setFechaValidacion($fecha);
                                         $arAcreditacionActualizar->setEstadoValidado(1);
                                         $arAcreditacionActualizar->setDetalleValidacion($detalle);
                                         $em->persist($arAcreditacionActualizar);
                                     }
-                                }                                
-                            }                             
-                        }                                                                           
+                                }
+                            }
+                        }
                     }
                     fclose($gestor);
                     $em->flush();
                 }
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                                                
-            }                                   
-        }         
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }
+        }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Acreditacion:cargarValidacion.html.twig', array(
             'form' => $form->createView()
             ));
-    }    
+    }
 
     /**
      * @Route("/rhu/movimiento/acreditacion/cargar/acreditacion/", name="brs_rhu_movimiento_acreditacion_cargar_acreditacion")
-     */    
+     */
     public function cargarAcreditacionAction() {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
@@ -193,75 +191,128 @@ class AcreditacionController extends Controller
             if($form->get('BtnCargar')->isClicked()) {
                 $arUsuario = $this->get('security.context')->getToken()->getUser();
                 set_time_limit(0);
-                ini_set("memory_limit", -1);                
-                $form['attachment']->getData()->move($rutaTemporal->getRutaTemporal(), "archivo.csv");                
-                $ruta = $rutaTemporal->getRutaTemporal(). "archivo.csv";                                
+                ini_set("memory_limit", -1);
+                $form['attachment']->getData()->move($rutaTemporal->getRutaTemporal(), "archivo.csv");
+                $ruta = $rutaTemporal->getRutaTemporal(). "archivo.csv";
                 if (($gestor = fopen($ruta, "r")) !== FALSE) {
                     while (($datos = fgetcsv($gestor, 1000, ",")) !== FALSE) {
-                        $registro = explode("\t",$datos[0]);      
+                        $registro = explode("\t",$datos[0]);
                         if(count($registro) > 1) {
                             $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $registro[4]));
                             if($arEmpleado) {
                                 $arAcreditaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion();
                                 $arAcreditaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacion')->findBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk(), 'estadoValidado' => 1, 'estadoAcreditado' => 0));
-                                foreach ($arAcreditaciones as $arAcreditacion) {  
-                                    $cargo = $arAcreditacion->getAcreditacionTipoRel()->getCargo();                                    
-                                    $cargo2 = strip_tags($registro[5]);                                    
+                                foreach ($arAcreditaciones as $arAcreditacion) {
+                                    $cargo = $arAcreditacion->getAcreditacionTipoRel()->getCargo();
+                                    $cargo2 = strip_tags($registro[5]);
                                     $strFecha = strip_tags($registro[6]);
-                                    $fecha = date_create($strFecha);                                    
+                                    $fecha = date_create($strFecha);
                                     if ($cargo == $cargo2){
                                         $arAcreditacionActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion();
-                                        $arAcreditacionActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacion')->find($arAcreditacion->getCodigoAcreditacionPk());                                                                            
+                                        $arAcreditacionActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacion')->find($arAcreditacion->getCodigoAcreditacionPk());
                                         $arAcreditacionActualizar->setEstadoAcreditado(1);
                                         $arAcreditacionActualizar->setFechaAcreditacion(new \DateTime('now'));
                                         $arAcreditacionActualizar->setFechaVencimiento($fecha);
                                         $em->persist($arAcreditacionActualizar);
                                     }
-                                }                                
-                            }                             
-                        }                                                                           
+                                }
+                            }
+                        }
                     }
                     fclose($gestor);
                     $em->flush();
                 }
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                                                
-            }                                   
-        }         
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }
+        }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Acreditacion:cargarAcreditacion.html.twig', array(
             'form' => $form->createView()
             ));
     }
-    
+
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();        
-        $form = $this->createFormBuilder()       
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))                
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))            
+        $session = $this->getRequest()->getSession();
+        $strNombreEmpleado = "";
+        if($session->get('filtroIdentificacion')) {
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $session->get('filtroIdentificacion')));
+            if($arEmpleado) {
+                $strNombreEmpleado = $arEmpleado->getNombreCorto();
+                $session->set('filtroRhuCodigoEmpleado', $arEmpleado->getCodigoEmpleadoPk());
+            }  else {
+                $session->set('filtroIdentificacion', null);
+                $session->set('filtroRhuCodigoEmpleado', null);
+            }
+        } else {
+            $session->set('filtroRhuCodigoEmpleado', null);
+        }
+        $dateFecha = new \DateTime('now');
+        $strFechaDesde = $dateFecha->format('Y/m/')."01";
+        $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
+        $strFechaHasta = $dateFecha->format('Y/m/').$intUltimoDia;
+        if($session->get('filtroRhuAcreditacionFechaDesde') != "") {
+            $strFechaDesde = $session->get('filtroRhuAcreditacionFechaDesde');
+        }
+        if($session->get('filtroRhuAcreditacionFechaHasta') != "") {
+            $strFechaHasta = $session->get('filtroRhuAcreditacionFechaHasta');
+        }
+        $dateFechaDesde = date_create($strFechaDesde);
+        $dateFechaHasta = date_create($strFechaHasta);
+        $form = $this->createFormBuilder()
+            ->add('txtNumeroIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('txtNombreCorto', 'text', array('label'  => 'Nombre','data' => $strNombreEmpleado))
+            ->add('estadoRechazado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'RECHAZADO', '0' => 'SIN RECHAZAR'), 'data' => $session->get('filtroRhuAcreditacionEstadoRechazado')))
+            ->add('estadoValidado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'VALIDADO', '0' => 'SIN VALIDAR'), 'data' => $session->get('filtroRhuAcreditacionEstadoValidado')))
+            ->add('estadoAcreditado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ACREDITADO', '0' => 'SIN ACREDITAR'), 'data' => $session->get('filtroRhuAcreditacionEstadoAcreditado')))
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))
+            ->add('filtrarFecha', 'checkbox', array('required'  => false, 'data' => $session->get('filtroRhuAcreditacionFiltrarFecha')))
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnExcelInforme', 'submit', array('label'  => 'Informe'))                
-            ->getForm();        
+            ->add('BtnExcelInforme', 'submit', array('label'  => 'Informe'))
+            ->getForm();
         return $form;
-    }      
-    
+    }
+
     private function listar() {
-        $em = $this->getDoctrine()->getManager();                
+        $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacion')->listaDQL(                   
-                );  
-    }         
-    
+        $strFechaDesde = "";
+        $strFechaHasta = "";
+        $filtrarFecha = $session->get('filtroRhuAcreditacionFiltrarFecha');
+        if($filtrarFecha) {
+            $strFechaDesde = $session->get('filtroRhuAcreditacionFechaDesde');
+            $strFechaHasta = $session->get('filtroRhuAcreditacionFechaHasta');
+        }
+        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacion')->listaDQL(
+                $session->get('filtroRhuCodigoEmpleado'),
+                $session->get('filtroRhuAcreditacionEstadoRechazado'),
+                $session->get('filtroRhuAcreditacionEstadoValidado'),
+                $session->get('filtroRhuAcreditacionEstadoAcreditado'),
+                $strFechaDesde,
+                $strFechaHasta
+                );
+    }
+
     private function filtrarLista($form) {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
-        $controles = $request->request->get('form');        
-        //$session->set('filtroAcreditacionNumero', $form->get('TxtNumero')->getData());
-    }         
-    
+        $controles = $request->request->get('form');
+        $session->set('filtroIdentificacion', $form->get('txtNumeroIdentificacion')->getData());
+        $session->set('filtroRhuAcreditacionEstadoRechazado', $form->get('estadoRechazado')->getData());
+        $session->set('filtroRhuAcreditacionEstadoValidado', $form->get('estadoValidado')->getData());
+        $session->set('filtroRhuAcreditacionEstadoAcreditado', $form->get('estadoAcreditado')->getData());
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        $session->set('filtroRhuAcreditacionFechaDesde', $dateFechaDesde->format('Y/m/d'));
+        $session->set('filtroRhuAcreditacionFechaHasta', $dateFechaHasta->format('Y/m/d'));
+        $session->set('filtroRhuAcreditacionFiltrarFecha', $form->get('filtrarFecha')->getData());
+    }
+
     private function generarExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -274,28 +325,53 @@ class AcreditacionController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
-        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10);
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'O'; $col++) {            
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
+        }        
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CÓDIGO')
-                    ->setCellValue('B1', 'TIPO')
-                    ->setCellValue('C1', 'NUMERO')                    
-                    ->setCellValue('D1', 'IDENTIFICACIÓN')
-                    ->setCellValue('E1', 'NOMBRE')                    
-                    ->setCellValue('F1', 'FECHA');
+                    ->setCellValue('A1', 'ID')
+                    ->setCellValue('B1', 'DOCUMENTO')
+                    ->setCellValue('C1', 'NOMBRE')
+                    ->setCellValue('D1', 'TIPO')
+                    ->setCellValue('E1', 'CARGO')
+                    ->setCellValue('F1', 'REGISTRO')
+                    ->setCellValue('G1', 'REC')
+                    ->setCellValue('H1', 'MOTIVO')
+                    ->setCellValue('I1', 'VAL')
+                    ->setCellValue('J1', 'NUMERO')
+                    ->setCellValue('K1', 'FECHA')
+                    ->setCellValue('L1', 'ACREDITADO')
+                    ->setCellValue('M1', 'FECHA')
+                    ->setCellValue('N1', 'VENCE');
 
         $i = 2;
-        $query = $em->createQuery($this->strSqlLista);        
+        $query = $em->createQuery($this->strSqlLista);
         $arAcreditaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion();
         $arAcreditaciones = $query->getResult();
         foreach ($arAcreditaciones as $arAcreditacion) {
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arAcreditacion->getCodigoAcreditacionPk())
-                    ->setCellValue('B' . $i, "")
-                    ->setCellValue('C' . $i, $arAcreditacion->getNumeroRegistro())                                        
-                    ->setCellValue('D' . $i, $arAcreditacion->getEmpleadoRel()->getnumeroIdentificacion())
-                    ->setCellValue('E' . $i, $arAcreditacion->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('F' . $i, $arAcreditacion->getFecha()->format('Y-m-d'));
+                    ->setCellValue('B' . $i, $arAcreditacion->getEmpleadoRel()->getnumeroIdentificacion())
+                    ->setCellValue('C' . $i, $arAcreditacion->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('D' . $i, $arAcreditacion->getAcreditacionTipoRel()->getNombre())
+                    ->setCellValue('E' . $i, $arAcreditacion->getAcreditacionTipoRel()->getCargo())
+                    ->setCellValue('F' . $i, $arAcreditacion->getNumeroRegistro())
+                    ->setCellValue('G' . $i, $objFunciones->devuelveBoolean($arAcreditacion->getEstadoRechazado()))
+                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arAcreditacion->getEstadoValidado()))
+                    ->setCellValue('J' . $i, $arAcreditacion->getNumeroValidacion())                    
+                    ->setCellValue('L' . $i, $objFunciones->devuelveBoolean($arAcreditacion->getEstadoAcreditado()));
+            if($arAcreditacion->getCodigoAcreditacionRechazoFk()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H' . $i, $arAcreditacion->getAcreditacionRechazoRel()->getNombre());
+            }
+            if($arAcreditacion->getEstadoValidado()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K' . $i, $arAcreditacion->getFechaValidacion()->format('Y-m-d'));
+            }
+            if($arAcreditacion->getEstadoAcreditado()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M' . $i, $arAcreditacion->getFechaAcreditacion()->format('Y-m-d'));
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('N' . $i, $arAcreditacion->getFechaVencimiento()->format('Y-m-d'));
+            }            
             $i++;
         }
 
@@ -316,8 +392,8 @@ class AcreditacionController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }     
-    
+    }
+
     private function generarInformeExcel() {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
@@ -334,12 +410,12 @@ class AcreditacionController extends Controller
                     ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
                     ->setKeywords("office 2007 openxml php")
                     ->setCategory("Test result file");
-                $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+                $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10);
                 $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
                 for($col = 'A'; $col !== 'Y'; $col++) {
                     $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
-                    $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
-                }                
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');
+                }
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'Nit')
                             ->setCellValue('B1', 'RazonSocial')
@@ -368,13 +444,13 @@ class AcreditacionController extends Controller
 
                 $i = 2;
                 $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
-                $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);                
-                $dql   = "SELECT a FROM BrasaRecursoHumanoBundle:RhuAcreditacion a WHERE a.estadoValidado = 0";                
+                $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+                $dql   = "SELECT a FROM BrasaRecursoHumanoBundle:RhuAcreditacion a WHERE a.estadoValidado = 0 AND a.estadoRechazado = 0";
                 $query = $em->createQuery($dql);
                 $arAcreditaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion();
                 $arAcreditaciones = $query->getResult();
                 foreach ($arAcreditaciones as $arAcreditacion) {
-                    
+
                     //tipo identificacion
                     $tipoIdentificacion = 1;
                     if ($arAcreditacion->getEmpleadoRel()->getCodigoTipoIdentificacionFk() == 13){
@@ -399,19 +475,19 @@ class AcreditacionController extends Controller
                     } else {
                         $sexo = 2;
                     }
-                    
+
                     //CONTRATO
                     $codigoContrato = "";
                     if ($arAcreditacion->getEmpleadoRel()->getCodigoContratoActivoFk() != null){
-                        $codigoContrato = $arAcreditacion->getEmpleadoRel()->getCodigoContratoActivoFk();                        
-                    } else {                       
-                        $codigoContrato = $arAcreditacion->getEmpleadoRel()->getCodigoContratoUltimoFk();                        
-                    }                    
+                        $codigoContrato = $arAcreditacion->getEmpleadoRel()->getCodigoContratoActivoFk();
+                    } else {
+                        $codigoContrato = $arAcreditacion->getEmpleadoRel()->getCodigoContratoUltimoFk();
+                    }
                     $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-                    $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);                    
-                                                            
+                    $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
+
                     $gradoBachiller = "11";
-                    $superior = "Ninguna";                                           
+                    $superior = "Ninguna";
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arConfiguracion->getNitEmpresa().$arConfiguracion->getDigitoVerificacionEmpresa())
                             ->setCellValue('B' . $i, strtoupper($arConfiguracion->getNombreEmpresa()))
@@ -439,7 +515,7 @@ class AcreditacionController extends Controller
                             ->setCellValue('X' . $i, "Ninguna");
                     $i++;
                 }
-                
+
                 $nombreArchivo = "APO".$arConfiguracion->getNitEmpresa()."".date('Y-m-d');
                 $objPHPExcel->getActiveSheet()->setTitle('EstudiosInforme');
                 $objPHPExcel->setActiveSheetIndex(0);
@@ -458,5 +534,5 @@ class AcreditacionController extends Controller
                 $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
                 $objWriter->save('php://output');
                 exit;
-            }     
+            }
 }

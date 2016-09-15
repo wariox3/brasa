@@ -11,19 +11,36 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuAcreditacionRepository extends EntityRepository {
     
-    public function listaDql($strIdentificacion = "", $strFecha = "", $strFechaAcreditacion = "" ) {        
+    public function listaDql($codigoEmpleado = "", $estadoRechazado = "", $estadoValidado = "", $estadoAcreditado = "", $fechaDesde = "", $fechaHasta = "") {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT a FROM BrasaRecursoHumanoBundle:RhuAcreditacion a JOIN a.empleadoRel e WHERE a.codigoAcreditacionPk <> 0";
-   
-        if($strIdentificacion != "" ) {
-            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        $dql   = "SELECT a FROM BrasaRecursoHumanoBundle:RhuAcreditacion a WHERE a.codigoAcreditacionPk <> 0";  
+        if($codigoEmpleado != "" ) {
+            $dql .= " AND a.codigoEmpleadoFk = " . $codigoEmpleado;
         }
-        if ($strFecha != ""){
-            $dql .= " AND ee.fechaVencimientoCurso <='" . $strFecha . "'";
+        if($estadoRechazado == 1 ) {
+            $dql .= " AND a.estadoRechazado = 1";
         }
-        if ($strFechaAcreditacion != ""){
-            $dql .= " AND ee.fechaVencimientoAcreditacion <='" . $strFechaAcreditacion . "'";
+        if($estadoRechazado == "0") {
+            $dql .= " AND a.estadoRechazado = 0";
+        }        
+        if($estadoValidado == 1 ) {
+            $dql .= " AND a.estadoValidado = 1";
         }
+        if($estadoValidado == "0") {
+            $dql .= " AND a.estadoValidado = 0";
+        }    
+        if($estadoAcreditado == 1 ) {
+            $dql .= " AND a.estadoAcreditado = 1";
+        }
+        if($estadoAcreditado == "0") {
+            $dql .= " AND a.estadoAcreditado = 0";
+        }  
+        if($fechaDesde != '') {
+            $dql .= " AND a.fechaVencimiento >= '$fechaDesde'";
+        }
+        if($fechaHasta != '') {
+            $dql .= " AND a.fechaVencimiento <= '$fechaHasta'";
+        }        
         //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
         return $dql;
     } 

@@ -69,6 +69,11 @@ class RhuAcreditacion
     private $codigoAcreditacionTipoFk;        
     
     /**
+     * @ORM\Column(name="codigo_acreditacion_rechazo_fk", type="integer", nullable=true)
+     */    
+    private $codigoAcreditacionRechazoFk;     
+    
+    /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
     private $comentarios;
@@ -92,6 +97,11 @@ class RhuAcreditacion
      * @ORM\Column(name="estado_acreditado", type="boolean")
      */    
     private $estadoAcreditado = false;    
+
+    /**     
+     * @ORM\Column(name="estado_rechazado", type="boolean")
+     */    
+    private $estadoRechazado = false; 
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="acreditacionesEmpleadoRel")
@@ -110,6 +120,12 @@ class RhuAcreditacion
      * @ORM\JoinColumn(name="codigo_acreditacion_tipo_fk", referencedColumnName="codigo_acreditacion_tipo_pk")
      */
     protected $acreditacionTipoRel;     
+
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuAcreditacionRechazo", inversedBy="acreditacionesAcreditacionRechazoRel")
+     * @ORM\JoinColumn(name="codigo_acreditacion_rechazo_fk", referencedColumnName="codigo_acreditacion_rechazo_pk")
+     */
+    protected $acreditacionRechazoRel;     
 
 
 
@@ -364,6 +380,30 @@ class RhuAcreditacion
     }
 
     /**
+     * Set codigoAcreditacionRechazoFk
+     *
+     * @param integer $codigoAcreditacionRechazoFk
+     *
+     * @return RhuAcreditacion
+     */
+    public function setCodigoAcreditacionRechazoFk($codigoAcreditacionRechazoFk)
+    {
+        $this->codigoAcreditacionRechazoFk = $codigoAcreditacionRechazoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoAcreditacionRechazoFk
+     *
+     * @return integer
+     */
+    public function getCodigoAcreditacionRechazoFk()
+    {
+        return $this->codigoAcreditacionRechazoFk;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -385,6 +425,30 @@ class RhuAcreditacion
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Set detalleValidacion
+     *
+     * @param string $detalleValidacion
+     *
+     * @return RhuAcreditacion
+     */
+    public function setDetalleValidacion($detalleValidacion)
+    {
+        $this->detalleValidacion = $detalleValidacion;
+
+        return $this;
+    }
+
+    /**
+     * Get detalleValidacion
+     *
+     * @return string
+     */
+    public function getDetalleValidacion()
+    {
+        return $this->detalleValidacion;
     }
 
     /**
@@ -460,6 +524,30 @@ class RhuAcreditacion
     }
 
     /**
+     * Set estadoRechazado
+     *
+     * @param boolean $estadoRechazado
+     *
+     * @return RhuAcreditacion
+     */
+    public function setEstadoRechazado($estadoRechazado)
+    {
+        $this->estadoRechazado = $estadoRechazado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoRechazado
+     *
+     * @return boolean
+     */
+    public function getEstadoRechazado()
+    {
+        return $this->estadoRechazado;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -532,26 +620,26 @@ class RhuAcreditacion
     }
 
     /**
-     * Set detalleValidacion
+     * Set acreditacionRechazoRel
      *
-     * @param string $detalleValidacion
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacionRechazo $acreditacionRechazoRel
      *
      * @return RhuAcreditacion
      */
-    public function setDetalleValidacion($detalleValidacion)
+    public function setAcreditacionRechazoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAcreditacionRechazo $acreditacionRechazoRel = null)
     {
-        $this->detalleValidacion = $detalleValidacion;
+        $this->acreditacionRechazoRel = $acreditacionRechazoRel;
 
         return $this;
     }
 
     /**
-     * Get detalleValidacion
+     * Get acreditacionRechazoRel
      *
-     * @return string
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacionRechazo
      */
-    public function getDetalleValidacion()
+    public function getAcreditacionRechazoRel()
     {
-        return $this->detalleValidacion;
+        return $this->acreditacionRechazoRel;
     }
 }

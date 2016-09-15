@@ -19,16 +19,56 @@
         <div class="panel panel-default">
             <div class="panel-heading">Filtros de busqueda</div>
             <div class="panel-body">
-                <div class="form-group form-group-sm">  
-                    <label class="col-sm-2 control-label">Identificacion:</label>
-                    <div class="col-sm-4">                  
-                        {{ form_widget(form.TxtIdentificacion, { 'attr': {'class': 'form-control'} }) }}
+                <div class="form-group form-group-sm">
+                <label for="form_TxtIdentificacion" class="col-sm-2 control-label">Empleado:</label>
+                <div class="col-sm-10">
+                    <div class="row">
+                      <div class="col-lg-2">
+                        <div class="input-group">
+                          {{ form_widget(form.txtNumeroIdentificacion, { 'attr': {'class': 'form-control'} }) }} 
+                        </div>
+                      </div>
+                      <div class="col-lg-10">
+                        <div class="input-group">                                      
+                            {{ form_widget(form.txtNombreCorto, { 'attr': {'class': 'form-control', 'readOnly': 'ReadOnly'} }) }}                              
+                          <span class="input-group-btn">                                        
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_buscar_empleado') }}', 'buscarEmpleado', 600, 900)">Buscar</a>
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <label for="form_TxtNombre" class="col-sm-2 control-label">Nombre:</label>
+                </div>
+                </div>                
+                <div class="form-group form-group-sm">  
+                    <label class="col-sm-2 control-label">Fecha vence desde:</label>
                     <div class="col-sm-4">                  
-                        {{ form_widget(form.TxtNombre, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.fechaDesde) }}
+                    </div>
+                    <label class="col-sm-2 control-label">Rechazado:</label>
+                    <div class="col-sm-4">                  
+                        {{ form_widget(form.estadoRechazado, { 'attr': {'class': 'form-control'} }) }}
                     </div>                    
-                </div>  
+                </div>
+                <div class="form-group form-group-sm">  
+                    <label class="col-sm-2 control-label">Fecha vence hasta</label>
+                    <div class="col-sm-4">                  
+                        {{ form_widget(form.fechaHasta) }}
+                    </div>
+                    <label class="col-sm-2 control-label">Validado:</label>
+                    <div class="col-sm-4">                  
+                        {{ form_widget(form.estadoValidado, { 'attr': {'class': 'form-control'} }) }}
+                    </div>                    
+                </div> 
+                <div class="form-group form-group-sm">  
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-4">                  
+                        {{ form_widget(form.filtrarFecha) }}
+                    </div>
+                    <label class="col-sm-2 control-label">Acreditado:</label>
+                    <div class="col-sm-4">                  
+                        {{ form_widget(form.estadoAcreditado, { 'attr': {'class': 'form-control'} }) }}
+                    </div>                    
+                </div>                    
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
@@ -44,11 +84,12 @@
                 <th>TIPO</th>
                 <th>CARGO</th>
                 <th>REGISTRO</th>                
+                <th>REC</th>
                 <th>VAL</th>
                 <th>FECHA</th>                
                 <th>ACR</th>  
                 <th>FECHA</th>
-                <th>VENCIMIENTO</th>                
+                <th>VENCE</th>                
                 <th style="text-align: center"></th>                
                 <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
             </tr>
@@ -60,12 +101,13 @@
                 <td>{{ arAcreditaciones.acreditacionTipoRel.nombre |default('value') }}</td>                                                
                 <td>{{ arAcreditaciones.acreditacionTipoRel.cargo |default('value') }}</td>                                                                
                 <td>{{ arAcreditaciones.numeroRegistro }}</td>                               
+                <td>{% if arAcreditaciones.estadoRechazado == 1 %} SI [{{ arAcreditaciones.acreditacionRechazoRel.nombre | default('') }}] {% else %} NO {% endif %}</td>                 
                 <td>{% if arAcreditaciones.estadoValidado == 1 %} SI [{{ arAcreditaciones.numeroValidacion }}] {% else %} NO {% endif %}</td>                 
                 <td>{% if arAcreditaciones.estadoValidado == 1 %}{{ arAcreditaciones.fechaValidacion | date('Y/m/d') }}{% endif %}</td>                                                
                 <td>{% if arAcreditaciones.estadoAcreditado == 1 %} SI {% else %} NO {% endif %}</td>                                                
                 <td>{% if arAcreditaciones.estadoAcreditado == 1 %}{{ arAcreditaciones.fechaAcreditacion | date('Y/m/d') }}{% endif %}</td>                                                
                 <td>{% if arAcreditaciones.estadoAcreditado == 1 %}{{ arAcreditaciones.fechaVencimiento | date('Y/m/d') }}{% endif %}</td>                                                
-                <td style="text-align: center"><a href="{{ path('brs_rhu_movimiento_acreditacion_nuevo', {'codigoAcreditacion': arAcreditaciones.codigoAcreditacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
+                <td style="text-align: center">{% if arAcreditaciones.estadoValidado == 0 %}<a href="{{ path('brs_rhu_movimiento_acreditacion_nuevo', {'codigoAcreditacion': arAcreditaciones.codigoAcreditacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arAcreditaciones.codigoAcreditacionPk }}" /></td>
             </tr>
             {% endfor %}
