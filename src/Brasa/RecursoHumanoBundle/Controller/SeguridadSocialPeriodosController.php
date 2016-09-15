@@ -348,85 +348,59 @@ class SeguridadSocialPeriodosController extends Controller
                     ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
                     ->setKeywords("office 2007 openxml php")
                     ->setCategory("Test result file");
-                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
                 $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
-                $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('AA')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('AC')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('AD')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('AE')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('AF')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('AG')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('AH')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('AI')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('AJ')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('AK')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('AL')->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+                for($col = 'A'; $col !== 'AN'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+                }
+                for($col = 'G'; $col !== 'M'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+                }
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'IDENTIFICACIÓN')
                     ->setCellValue('B1', 'NOMBRE')
                     ->setCellValue('C1', 'C. COSTO')
                     ->setCellValue('D1', 'CONTRATO')
-                    ->setCellValue('E1', 'ING')
-                    ->setCellValue('F1', 'RET')
-                    ->setCellValue('G1', 'VST')
-                    ->setCellValue('H1', 'SLN')
-                    ->setCellValue('I1', 'IGE')
-                    ->setCellValue('J1', 'LMA')
-                    ->setCellValue('K1', 'VAC')    
-                    ->setCellValue('L1', 'IRP')
-                    ->setCellValue('M1', 'SALARIO')
-                    ->setCellValue('N1', 'VR.VAC')
-                    ->setCellValue('O1', 'SI')
-                    ->setCellValue('P1', 'D.P')
-                    ->setCellValue('Q1', 'D.S')
-                    ->setCellValue('R1', 'D.R.P')
-                    ->setCellValue('S1', 'D.C')
-                    ->setCellValue('T1', 'IBC P')
-                    ->setCellValue('U1', 'IBC S')
-                    ->setCellValue('V1', 'IBC R')
-                    ->setCellValue('W1', 'IBC C')
-                    ->setCellValue('X1', 'T.P')
-                    ->setCellValue('Y1', 'T.S')
-                    ->setCellValue('Z1', 'T.R')
-                    ->setCellValue('AA1', 'T.C')
-                    ->setCellValue('AB1', 'T.SN')
-                    ->setCellValue('AC1', 'T.I')
-                    ->setCellValue('AD1', 'C.P')
-                    ->setCellValue('AE1', 'C.FSSO')
-                    ->setCellValue('AF1', 'C.FSSU')
-                    ->setCellValue('AG1', 'C.S')
-                    ->setCellValue('AH1', 'C.R')
-                    ->setCellValue('AI1', 'C.C')
-                    ->setCellValue('AJ1', 'C.SN')
-                    ->setCellValue('AK1', 'C.I')
-                    ->setCellValue('AL1', 'TOTAL');
+                    
+                    ->setCellValue('E1', 'EPS')
+                    ->setCellValue('F1', 'SALUD')    
+                        
+                    ->setCellValue('G1', 'ING')
+                    ->setCellValue('H1', 'RET')
+                    ->setCellValue('I1', 'VST')
+                    ->setCellValue('J1', 'SLN')
+                    ->setCellValue('K1', 'IGE')
+                    ->setCellValue('L1', 'LMA')
+                    ->setCellValue('M1', 'VAC')    
+                    ->setCellValue('N1', 'IRP')
+                    ->setCellValue('O1', 'SALARIO')
+                    ->setCellValue('P1', 'VR.VAC')
+                    ->setCellValue('Q1', 'SI')
+                    ->setCellValue('R1', 'D.P')
+                    ->setCellValue('S1', 'D.S')
+                    ->setCellValue('T1', 'D.R.P')
+                    ->setCellValue('U1', 'D.C')
+                    ->setCellValue('V1', 'IBC P')
+                    ->setCellValue('W1', 'IBC S')
+                    ->setCellValue('X1', 'IBC R')
+                    ->setCellValue('Y1', 'IBC C')
+                    ->setCellValue('Z1', 'T.P')
+                    ->setCellValue('AA1', 'T.S')
+                    ->setCellValue('AB1', 'T.R')
+                    ->setCellValue('AC1', 'T.C')
+                    ->setCellValue('AD1', 'T.SN')
+                    ->setCellValue('AE1', 'T.I')
+                    ->setCellValue('AF1', 'C.P')
+                    ->setCellValue('AG1', 'C.FSSO')
+                    ->setCellValue('AH1', 'C.FSSU')
+                    ->setCellValue('AI1', 'C.S')
+                    ->setCellValue('AJ1', 'C.R')
+                    ->setCellValue('AK1', 'C.C')
+                    ->setCellValue('AL1', 'C.SN')
+                    ->setCellValue('AM1', 'C.I')
+                    ->setCellValue('AN1', 'TOTAL');
                 
                 $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
                 $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);
@@ -467,40 +441,42 @@ class SeguridadSocialPeriodosController extends Controller
                     ->setCellValue('B' . $i, $arSsoAporte->getEmpleadoRel()->getNombreCorto())       
                     ->setCellValue('C' . $i, $arSsoAporte->getContratoRel()->getCentroCostoRel()->getNombre())        
                     ->setCellValue('D' . $i, $arSsoAporte->getCodigoContratoFk())
-                    ->setCellValue('E' . $i, $arSsoAporte->getIngreso())        
-                    ->setCellValue('F' . $i, $arSsoAporte->getRetiro())
-                    ->setCellValue('G' . $i, $arSsoAporte->getVariacionTransitoriaSalario())
-                    ->setCellValue('H' . $i, $suspencionTemporalContratoLicenciaServicios)
-                    ->setCellValue('I' . $i, $incapacidadGeneral)
-                    ->setCellValue('J' . $i, $licenciaMaternidad)
-                    ->setCellValue('K' . $i, $vacaciones)
-                    ->setCellValue('L' . $i, $riesgosProfesionales)
-                    ->setCellValue('M' . $i, $arSsoAporte->getSalarioBasico())
-                    ->setCellValue('N' . $i, $arSsoAporte->getVrVacaciones())
-                    ->setCellValue('O' . $i, $salarioIntegral)        
-                    ->setCellValue('P' . $i, $arSsoAporte->getDiasCotizadosPension())
-                    ->setCellValue('Q' . $i, $arSsoAporte->getDiasCotizadosSalud())
-                    ->setCellValue('R' . $i, $arSsoAporte->getDiasCotizadosRiesgosProfesionales())
-                    ->setCellValue('S' . $i, $arSsoAporte->getDiasCotizadosCajaCompensacion())
-                    ->setCellValue('T' . $i, $arSsoAporte->getIbcPension())
-                    ->setCellValue('U' . $i, $arSsoAporte->getIbcSalud())
-                    ->setCellValue('V' . $i, $arSsoAporte->getIbcRiesgosProfesionales())
-                    ->setCellValue('W' . $i, $arSsoAporte->getIbcCaja())
-                    ->setCellValue('X' . $i, $arSsoAporte->getTarifaPension())
-                    ->setCellValue('Y' . $i, $arSsoAporte->getTarifaSalud())
-                    ->setCellValue('Z' . $i, $arSsoAporte->getTarifaRiesgos())
-                    ->setCellValue('AA' . $i, $arSsoAporte->getTarifaCaja())
-                    ->setCellValue('AB' . $i, $arSsoAporte->getTarifaSena())
-                    ->setCellValue('AC' . $i, $arSsoAporte->getTarifaIcbf())
-                    ->setCellValue('AD' . $i, $arSsoAporte->getCotizacionPension())
-                    ->setCellValue('AE' . $i, $arSsoAporte->getAportesFondoSolidaridadPensionalSolidaridad())
-                    ->setCellValue('AF' . $i, $arSsoAporte->getAportesFondoSolidaridadPensionalSubsistencia())
-                    ->setCellValue('AG' . $i, $arSsoAporte->getCotizacionSalud())
-                    ->setCellValue('AH' . $i, $arSsoAporte->getCotizacionRiesgos())
-                    ->setCellValue('AI' . $i, $arSsoAporte->getCotizacionCaja())
-                    ->setCellValue('AJ' . $i, $arSsoAporte->getCotizacionSena())
-                    ->setCellValue('AK' . $i, $arSsoAporte->getCotizacionIcbf())
-                    ->setCellValue('AL' . $i, $arSsoAporte->getTotalCotizacion());
+                    ->setCellValue('E' . $i, $arSsoAporte->getContratoRel()->GetEntidadSaludRel()->getCodigoInterface())       
+                    ->setCellValue('F' . $i, $arSsoAporte->getContratoRel()->GetEntidadPensionRel()->getCodigoInterface())                  
+                    ->setCellValue('G' . $i, $arSsoAporte->getIngreso())        
+                    ->setCellValue('H' . $i, $arSsoAporte->getRetiro())
+                    ->setCellValue('I' . $i, $arSsoAporte->getVariacionTransitoriaSalario())
+                    ->setCellValue('J' . $i, $suspencionTemporalContratoLicenciaServicios)
+                    ->setCellValue('K' . $i, $incapacidadGeneral)
+                    ->setCellValue('L' . $i, $licenciaMaternidad)
+                    ->setCellValue('M' . $i, $vacaciones)
+                    ->setCellValue('N' . $i, $riesgosProfesionales)
+                    ->setCellValue('O' . $i, $arSsoAporte->getSalarioBasico())
+                    ->setCellValue('P' . $i, $arSsoAporte->getVrVacaciones())
+                    ->setCellValue('Q' . $i, $salarioIntegral)        
+                    ->setCellValue('R' . $i, $arSsoAporte->getDiasCotizadosPension())
+                    ->setCellValue('S' . $i, $arSsoAporte->getDiasCotizadosSalud())
+                    ->setCellValue('T' . $i, $arSsoAporte->getDiasCotizadosRiesgosProfesionales())
+                    ->setCellValue('U' . $i, $arSsoAporte->getDiasCotizadosCajaCompensacion())
+                    ->setCellValue('V' . $i, $arSsoAporte->getIbcPension())
+                    ->setCellValue('W' . $i, $arSsoAporte->getIbcSalud())
+                    ->setCellValue('X' . $i, $arSsoAporte->getIbcRiesgosProfesionales())
+                    ->setCellValue('Y' . $i, $arSsoAporte->getIbcCaja())
+                    ->setCellValue('Z' . $i, $arSsoAporte->getTarifaPension())
+                    ->setCellValue('AA' . $i, $arSsoAporte->getTarifaSalud())
+                    ->setCellValue('AB' . $i, $arSsoAporte->getTarifaRiesgos())
+                    ->setCellValue('AC' . $i, $arSsoAporte->getTarifaCaja())
+                    ->setCellValue('AD' . $i, $arSsoAporte->getTarifaSena())
+                    ->setCellValue('AE' . $i, $arSsoAporte->getTarifaIcbf())
+                    ->setCellValue('AF' . $i, $arSsoAporte->getCotizacionPension())
+                    ->setCellValue('AG' . $i, $arSsoAporte->getAportesFondoSolidaridadPensionalSolidaridad())
+                    ->setCellValue('AH' . $i, $arSsoAporte->getAportesFondoSolidaridadPensionalSubsistencia())
+                    ->setCellValue('AI' . $i, $arSsoAporte->getCotizacionSalud())
+                    ->setCellValue('AJ' . $i, $arSsoAporte->getCotizacionRiesgos())
+                    ->setCellValue('AK' . $i, $arSsoAporte->getCotizacionCaja())
+                    ->setCellValue('AL' . $i, $arSsoAporte->getCotizacionSena())
+                    ->setCellValue('AM' . $i, $arSsoAporte->getCotizacionIcbf())
+                    ->setCellValue('AN' . $i, $arSsoAporte->getTotalCotizacion());
                     $i++;
                 }
 

@@ -237,6 +237,11 @@ class PeriodoController extends Controller
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo_detalle', array('codigoPeriodo' => $codigoPeriodo)));
             }
             
+            if ($form->get('BtnDetalleInteresMora')->isClicked()) {
+                $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->generarInteresMora($codigoPeriodo);
+                return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo_detalle', array('codigoPeriodo' => $codigoPeriodo)));
+            }
+            
         }
         $arPeriodoDetalles = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 100);
         $dql = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetallePago')->listaDQL($codigoPeriodo);
@@ -251,7 +256,7 @@ class PeriodoController extends Controller
     /**
      * @Route("/afi/movimiento/periodo/interesmora/{codigoPeriodo}", name="brs_afi_movimiento_periodo_interesmora")
      */
-    public function interesmoraAction(Request $request, $codigoPeriodo = '') {
+    /*public function interesmoraAction(Request $request, $codigoPeriodo = '') {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
@@ -275,7 +280,7 @@ class PeriodoController extends Controller
             'arPeriodo' => $arPeriodo,
             'form' => $form->createView()
         ));
-    }
+    }*/
 
     /**
      * @Route("/afi/movimiento/periodo/actualizarfechapago/{codigoPeriodo}", name="brs_afi_movimiento_periodo_actualizarfechapago")
@@ -670,11 +675,9 @@ class PeriodoController extends Controller
             ->add('BtnDetallePagoEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnDetalleCobroEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnDetallePagoExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnDetalleTrasladarNuevo', 'submit', array('label'  => 'Traslado nuevo',))    
-            //->add('tipo', 'choice', array('choices'   => array('U' => 'Independiente', 'S' => 'Sucursal')))
-            //->add('arlIRel', 'entity', $arrayPropiedadesI)
-            //->add('arlERel', 'entity', $arrayPropiedadesE)    
-            //->add('sucursal','text')    
+            ->add('BtnDetalleTrasladarNuevo', 'submit', array('label'  => 'Traslado nuevo',))
+            ->add('BtnDetalleInteresMora', 'submit', array('label'  => 'Interes mora',))    
+              
                 
             ->getForm();
         return $form;
