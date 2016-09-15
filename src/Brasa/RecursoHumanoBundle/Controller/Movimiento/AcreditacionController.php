@@ -45,7 +45,9 @@ class AcreditacionController extends Controller
                     foreach ($arrSeleccionados AS $codigoAcreditacion) {
                         $arAcreditacion = new \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion();
                         $arAcreditacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacion')->find($codigoAcreditacion);
-                        $em->remove($arAcreditacion);
+                        if($arAcreditacion->getEstadoValidado() == 0) {
+                            $em->remove($arAcreditacion);
+                        }                        
                     }
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_movimiento_acreditacion'));
@@ -110,6 +112,127 @@ class AcreditacionController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/movimiento/acreditacion/cargar/validacion/", name="brs_rhu_movimiento_acreditacion_cargar_validacion")
+     */    
+    public function cargarValidacionAction() {
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $request = $this->getRequest();
+        $rutaTemporal = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $rutaTemporal = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $form = $this->createFormBuilder()
+            ->add('numero', 'text', array('required' => true))
+            ->add('fecha', 'date', array('format' => 'yyyyMMdd', 'data' => new \DateTime('now')))
+            ->add('attachment', 'file')
+            ->add('BtnCargar', 'submit', array('label'  => 'Cargar'))
+            ->getForm();
+        $form->handleRequest($request);
+        if($form->isValid()) {
+            if($form->get('BtnCargar')->isClicked()) {
+                $arUsuario = $this->get('security.context')->getToken()->getUser();
+                set_time_limit(0);
+                ini_set("memory_limit", -1);                
+                $form['attachment']->getData()->move($rutaTemporal->getRutaTemporal(), "archivo.csv");                
+                $numero = $form->get('numero')->getData();
+                $fecha = $form->get('fecha')->getData();
+                $ruta = $rutaTemporal->getRutaTemporal(). "archivo.csv";                                
+                if (($gestor = fopen($ruta, "r")) !== FALSE) {
+                    while (($datos = fgetcsv($gestor, 1000, ",")) !== FALSE) {
+                        $registro = explode("\t",$datos[0]);      
+                        if(count($registro) > 1) {
+                            $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $registro[4]));
+                            if($arEmpleado) {
+                                $arAcreditaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion();
+                                $arAcreditaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacion')->findBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk(), 'estadoValidado' => 0));
+                                foreach ($arAcreditaciones as $arAcreditacion) {  
+                                    $cargo = $arAcreditacion->getAcreditacionTipoRel()->getCargo();                                    
+                                    //Para quitar los formatos de html del string
+                                    $cargo2 = strip_tags($registro[5]);
+                                    $detalle = strip_tags($registro[6]);
+                                    if ($cargo == $cargo2){
+                                        $arAcreditacionActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion();
+                                        $arAcreditacionActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacion')->find($arAcreditacion->getCodigoAcreditacionPk());                                                                            
+                                        $arAcreditacionActualizar->setNumeroValidacion($numero);
+                                        $arAcreditacionActualizar->setFechaValidacion($fecha);
+                                        $arAcreditacionActualizar->setEstadoValidado(1);
+                                        $arAcreditacionActualizar->setDetalleValidacion($detalle);
+                                        $em->persist($arAcreditacionActualizar);
+                                    }
+                                }                                
+                            }                             
+                        }                                                                           
+                    }
+                    fclose($gestor);
+                    $em->flush();
+                }
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                                                
+            }                                   
+        }         
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Acreditacion:cargarValidacion.html.twig', array(
+            'form' => $form->createView()
+            ));
+    }    
+
+    /**
+     * @Route("/rhu/movimiento/acreditacion/cargar/acreditacion/", name="brs_rhu_movimiento_acreditacion_cargar_acreditacion")
+     */    
+    public function cargarAcreditacionAction() {
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $request = $this->getRequest();
+        $rutaTemporal = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $rutaTemporal = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $form = $this->createFormBuilder()
+            ->add('attachment', 'file')
+            ->add('BtnCargar', 'submit', array('label'  => 'Cargar'))
+            ->getForm();
+        $form->handleRequest($request);
+        if($form->isValid()) {
+            if($form->get('BtnCargar')->isClicked()) {
+                $arUsuario = $this->get('security.context')->getToken()->getUser();
+                set_time_limit(0);
+                ini_set("memory_limit", -1);                
+                $form['attachment']->getData()->move($rutaTemporal->getRutaTemporal(), "archivo.csv");                
+                $ruta = $rutaTemporal->getRutaTemporal(). "archivo.csv";                                
+                if (($gestor = fopen($ruta, "r")) !== FALSE) {
+                    while (($datos = fgetcsv($gestor, 1000, ",")) !== FALSE) {
+                        $registro = explode("\t",$datos[0]);      
+                        if(count($registro) > 1) {
+                            $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $registro[4]));
+                            if($arEmpleado) {
+                                $arAcreditaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion();
+                                $arAcreditaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacion')->findBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk(), 'estadoValidado' => 1, 'estadoAcreditado' => 0));
+                                foreach ($arAcreditaciones as $arAcreditacion) {  
+                                    $cargo = $arAcreditacion->getAcreditacionTipoRel()->getCargo();                                    
+                                    $cargo2 = strip_tags($registro[5]);                                    
+                                    $strFecha = strip_tags($registro[6]);
+                                    $fecha = date_create($strFecha);                                    
+                                    if ($cargo == $cargo2){
+                                        $arAcreditacionActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion();
+                                        $arAcreditacionActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacion')->find($arAcreditacion->getCodigoAcreditacionPk());                                                                            
+                                        $arAcreditacionActualizar->setEstadoAcreditado(1);
+                                        $arAcreditacionActualizar->setFechaAcreditacion(new \DateTime('now'));
+                                        $arAcreditacionActualizar->setFechaVencimiento($fecha);
+                                        $em->persist($arAcreditacionActualizar);
+                                    }
+                                }                                
+                            }                             
+                        }                                                                           
+                    }
+                    fclose($gestor);
+                    $em->flush();
+                }
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                                                
+            }                                   
+        }         
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Acreditacion:cargarAcreditacion.html.twig', array(
+            'form' => $form->createView()
+            ));
+    }
+    
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();        

@@ -41,10 +41,13 @@
                 <th>{{ knp_pagination_sortable(arAcreditaciones, 'CODIGO', 'ee.codigoAcreditacionPk') }}</th>
                 <th>DOCUMENTO</th>
                 <th>{{ knp_pagination_sortable(arAcreditaciones, 'NOMBRE', 'e.nombreCorto') }}</th>                
-                <th>REGISTRO</th>
-                <th>ACREDITACION</th>
+                <th>TIPO</th>
+                <th>CARGO</th>
+                <th>REGISTRO</th>                
                 <th>VAL</th>
-                <th>ACR</th>
+                <th>FECHA</th>                
+                <th>ACR</th>  
+                <th>FECHA</th>
                 <th>VENCIMIENTO</th>                
                 <th style="text-align: center"></th>                
                 <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
@@ -54,11 +57,14 @@
                 <td>{{ arAcreditaciones.codigoAcreditacionPk }} </td>
                 <td>{{ arAcreditaciones.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arAcreditaciones.empleadoRel.nombreCorto  }}</td>                                                
-                <td>{{ arAcreditaciones.numeroRegistro }}</td>               
-                <td>{{ arAcreditaciones.numeroAcreditacion }}</td>               
-                <td>{% if arAcreditaciones.estadoValidado == 1 %} SI {% else %} NO {% endif %}</td>                 
-                <td>{% if arAcreditaciones.estadoAcreditado == 1 %} SI {% else %} NO {% endif %}</td>                 
-                <td>{{ arAcreditaciones.fechaVencimiento | date('Y/m/d') }}</td>                                                
+                <td>{{ arAcreditaciones.acreditacionTipoRel.nombre |default('value') }}</td>                                                
+                <td>{{ arAcreditaciones.acreditacionTipoRel.cargo |default('value') }}</td>                                                                
+                <td>{{ arAcreditaciones.numeroRegistro }}</td>                               
+                <td>{% if arAcreditaciones.estadoValidado == 1 %} SI [{{ arAcreditaciones.numeroValidacion }}] {% else %} NO {% endif %}</td>                 
+                <td>{% if arAcreditaciones.estadoValidado == 1 %}{{ arAcreditaciones.fechaValidacion | date('Y/m/d') }}{% endif %}</td>                                                
+                <td>{% if arAcreditaciones.estadoAcreditado == 1 %} SI {% else %} NO {% endif %}</td>                                                
+                <td>{% if arAcreditaciones.estadoAcreditado == 1 %}{{ arAcreditaciones.fechaAcreditacion | date('Y/m/d') }}{% endif %}</td>                                                
+                <td>{% if arAcreditaciones.estadoAcreditado == 1 %}{{ arAcreditaciones.fechaVencimiento | date('Y/m/d') }}{% endif %}</td>                                                
                 <td style="text-align: center"><a href="{{ path('brs_rhu_movimiento_acreditacion_nuevo', {'codigoAcreditacion': arAcreditaciones.codigoAcreditacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arAcreditaciones.codigoAcreditacionPk }}" /></td>
             </tr>
@@ -72,7 +78,11 @@
         <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
                 {{ knp_pagination_render(arAcreditaciones) }}
         </div>
-        <div class="btn-toolbar" style="float: right">
+        <div class="btn-toolbar" style="float: right">            
+            <div class="btn-group">
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_acreditacion_cargar_validacion') }}', 'cargarValidacion', 600, 900)" >Cargar validacion</a>
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_acreditacion_cargar_acreditacion') }}', 'cargarAcreditacion', 600, 900)" >Cargar acreditacion</a>
+            </div>
             <div class="btn-group">
                 {{ form_widget(form.BtnExcelInforme, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>

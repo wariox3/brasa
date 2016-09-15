@@ -17,7 +17,8 @@ class ContratosController extends Controller
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
         $paginator  = $this->get('knp_paginator');
-        $session = $this->getRequest()->getSession();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $session = $this->getRequest()->getSession();        
         $form = $this->formularioLista();
         $form->handleRequest($request);
         $this->listar();
@@ -32,6 +33,41 @@ class ContratosController extends Controller
                 $this->listar();
                 $this->generarExcel();
                 
+            }
+            if($form->get('BtnEliminar')->isClicked()) {
+                if($em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 33, 4)) {
+                    $arrSeleccionados = $request->request->get('ChkSeleccionarContrato');
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados AS $codigo) {
+                            $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                            $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigo);                                                
+                            if($arContrato->getEstadoActivo() == 1 && $arContrato->getEstadoTerminado() == 0) {
+                                $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato->getCodigoEmpleadoFk());
+                                $arEmpleado->setCodigoCentroCostoFk(NULL);
+                                $arEmpleado->setCodigoTipoTiempoFk(NULL);
+                                $arEmpleado->setVrSalario(0);
+                                $arEmpleado->setCodigoClasificacionRiesgoFk(NULL);
+                                $arEmpleado->setCodigoCargoFk(NULL);
+                                $arEmpleado->setCargoDescripcion(NULL);
+                                $arEmpleado->setCodigoTipoPensionFk(NULL);
+                                $arEmpleado->setCodigoTipoCotizanteFk(NULL);
+                                $arEmpleado->setCodigoSubtipoCotizanteFk(NULL);
+                                $arEmpleado->setCodigoEntidadSaludFk(NULL);
+                                $arEmpleado->setCodigoEntidadPensionFk(NULL);
+                                $arEmpleado->setCodigoEntidadCajaFk(NULL);
+                                $arEmpleado->setEstadoContratoActivo(0);
+                                $arEmpleado->setCodigoContratoActivoFk(NULL);                        
+                                $em->remove($arContrato);
+                                $em->persist($arEmpleado);                            
+                            }
+                        }
+                        $em->flush();
+                        return $this->redirect($this->generateUrl('brs_rhu_base_contratos_lista'));
+                    }
+                } else {
+                    $objMensaje->Mensaje('error', "No tiene permisos para esta opcion", $this);
+                }                
             }
         }
         
@@ -60,8 +96,7 @@ class ContratosController extends Controller
         }
         $form = $this->createFormBuilder()
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir Contrato'))
-            ->add('BtnImprimirCartaPresentacion', 'submit', array('label'  => 'Carta presentación'))
-            ->add('BtnInactivarContrato', 'submit', array('label'  => 'Inactivar', 'disabled' => $disabled))    
+            ->add('BtnImprimirCartaPresentacion', 'submit', array('label'  => 'Carta presentación'))            
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
@@ -74,32 +109,7 @@ class ContratosController extends Controller
                 $objFormatoContrato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCartaPresentacion();
                 $objFormatoContrato->Generar($this, $codigoContrato,$arUsuario);
             }
-            if($form->get('BtnInactivarContrato')->isClicked()) {
-                $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato->getCodigoEmpleadoFk());
-                $arContrato->setEstadoActivo(0);
-                $arContrato->setIndefinido(0);
-                $arContrato->setEstadoLiquidado(0);
-                $arContrato->setCodigoMotivoTerminacionContratoFk(8);
-                $arEmpleado->setCodigoCentroCostoFk(NULL);
-                $arEmpleado->setCodigoTipoTiempoFk(NULL);
-                $arEmpleado->setVrSalario(0);
-                $arEmpleado->setCodigoClasificacionRiesgoFk(NULL);
-                $arEmpleado->setCodigoCargoFk(NULL);
-                $arEmpleado->setCargoDescripcion(NULL);
-                $arEmpleado->setCodigoTipoPensionFk(NULL);
-                $arEmpleado->setCodigoTipoCotizanteFk(NULL);
-                $arEmpleado->setCodigoSubtipoCotizanteFk(NULL);
-                $arEmpleado->setCodigoEntidadSaludFk(NULL);
-                $arEmpleado->setCodigoEntidadPensionFk(NULL);
-                $arEmpleado->setCodigoEntidadCajaFk(NULL);
-                $arEmpleado->setEstadoContratoActivo(0);
-                $arEmpleado->setCodigoContratoActivoFk(NULL);
-                $arEmpleado->setCodigoContratoUltimoFk($codigoContrato);
-                $em->persist($arContrato);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_base_contratos_detalles', array('codigoContrato' => $codigoContrato)));
-            }
+            
             //$arrSeleccionados = $request->request->get('ChkSeleccionar');
             if($request->request->get('ImprimirTrasladoPension')) {
                 $codigoTrasladoPension = $request->request->get('ImprimirTrasladoPension');
@@ -804,6 +814,7 @@ class ContratosController extends Controller
             ->add('fechaHastaInicia', 'date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('estadoActivo', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ACTIVOS', '0' => 'INACTIVOS')))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->getForm();
         return $form;

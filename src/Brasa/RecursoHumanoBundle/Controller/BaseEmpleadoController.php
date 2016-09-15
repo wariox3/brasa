@@ -73,8 +73,7 @@ class BaseEmpleadoController extends Controller
         $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $paginator  = $this->get('knp_paginator');
-        $form = $this->createFormBuilder()
-            ->add('BtnInactivarContrato', 'submit', array('label'  => 'Inactivar',))
+        $form = $this->createFormBuilder()            
             ->add('BtnEliminarEmpleadoEstudio', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEliminarEmpleadoFamilia', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
@@ -107,45 +106,7 @@ class BaseEmpleadoController extends Controller
         $arDotacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado));
         $arAdicionalesPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
         $arAdicionalesPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado, 'permanente' => 1));
-        if($form->isValid()) {
-            if($form->get('BtnInactivarContrato')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionarContrato');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoContrato) {
-                        $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-                        $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
-                        if ($arContratos->getEstadoActivo() == 0 && $arContratos->getIndefinido() == 0){
-                            $objMensaje->Mensaje("error", "El contrato " . $codigoContrato . " ya esta activo", $this);
-                        } else {
-                            $arContratos->setEstadoActivo(0);
-                            $arContratos->setIndefinido(0);
-                            $arContratos->setEstadoLiquidado(0);
-                            $arContratos->setCodigoMotivoTerminacionContratoFk(8);
-                            $arEmpleado->setCodigoCentroCostoFk(NULL);
-                            $arEmpleado->setCodigoTipoTiempoFk(NULL);
-                            $arEmpleado->setVrSalario(0);
-                            $arEmpleado->setCodigoClasificacionRiesgoFk(NULL);
-                            $arEmpleado->setCodigoCargoFk(NULL);
-                            $arEmpleado->setCargoDescripcion(NULL);
-                            $arEmpleado->setCodigoTipoPensionFk(NULL);
-                            $arEmpleado->setCodigoTipoCotizanteFk(NULL);
-                            $arEmpleado->setCodigoSubtipoCotizanteFk(NULL);
-                            $arEmpleado->setCodigoEntidadSaludFk(NULL);
-                            $arEmpleado->setCodigoEntidadPensionFk(NULL);
-                            $arEmpleado->setCodigoEntidadCajaFk(NULL);
-                            $arEmpleado->setEstadoContratoActivo(0);
-                            $arEmpleado->setCodigoContratoActivoFk(NULL);
-                            $arEmpleado->setCodigoContratoUltimoFk($codigoContrato);
-                            $em->persist($arContratos);
-                            $em->flush();
-                        }
-                        
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_base_empleados_detalles', array('codigoEmpleado' => $codigoEmpleado)));
-                }
-            }
-
+        if($form->isValid()) {            
             if($form->get('BtnEliminarEmpleadoEstudio')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionarEmpleadoEstudio');
                 if(count($arrSeleccionados) > 0) {

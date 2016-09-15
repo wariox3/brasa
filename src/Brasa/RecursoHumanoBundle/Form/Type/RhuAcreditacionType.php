@@ -14,7 +14,7 @@ class RhuAcreditacionType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuAcreditacionTipo',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('at')
-                    ->orderBy('at.nombre', 'ASC');},
+                    ->orderBy('at.codigoAcreditacionTipoPk', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                 
             ->add('academiaRel', 'entity', array(

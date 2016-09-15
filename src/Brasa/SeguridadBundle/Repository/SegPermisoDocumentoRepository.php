@@ -23,6 +23,11 @@ class SegPermisoDocumentoRepository extends EntityRepository {
                         $boolPermiso = true;
                     }
                     break;
+                case 4: //Eliminar
+                    if($arPermisoDocumento->getEliminar() == 1) {
+                        $boolPermiso = true;
+                    }
+                    break;                    
             }     
         }                                           
         return $boolPermiso;        

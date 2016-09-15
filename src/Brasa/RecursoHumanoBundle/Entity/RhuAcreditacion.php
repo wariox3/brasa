@@ -26,24 +26,21 @@ class RhuAcreditacion
      * @ORM\Column(name="fecha", type="date", nullable=true)
      */     
     
-    private $fecha;
+    private $fecha;    
+
+    /**
+     * @ORM\Column(name="fecha_validacion", type="date", nullable=true)
+     */         
+    private $fechaValidacion;            
     
     /**
-     * @ORM\Column(name="fecha_inicio", type="date", nullable=true)
-     */     
-    
-    private $fechaInicio;
-    
-    /**
-     * @ORM\Column(name="fecha_terminacion", type="date", nullable=true)
-     */     
-    
-    private $fechaTerminacion;
+     * @ORM\Column(name="fecha_acreditacion", type="date", nullable=true)
+     */         
+    private $fechaAcreditacion;    
     
     /**
      * @ORM\Column(name="fecha_vencimiento", type="date", nullable=true)
-     */     
-    
+     */         
     private $fechaVencimiento;            
     
     /**
@@ -55,6 +52,11 @@ class RhuAcreditacion
      * @ORM\Column(name="numero_registro", type="string", length=20, nullable=true)
      */    
     private $numeroRegistro;
+
+    /**
+     * @ORM\Column(name="numero_validacion", type="string", length=20, nullable=true)
+     */    
+    private $numeroValidacion;
     
     /**
      * @ORM\Column(name="numero_acreditacion", type="string", length=20, nullable=true)
@@ -71,6 +73,11 @@ class RhuAcreditacion
      */    
     private $comentarios;
 
+    /**
+     * @ORM\Column(name="detalle_validacion", type="string", length=150, nullable=true)
+     */    
+    private $detalleValidacion;    
+    
     /**
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
      */    
@@ -103,7 +110,6 @@ class RhuAcreditacion
      * @ORM\JoinColumn(name="codigo_acreditacion_tipo_fk", referencedColumnName="codigo_acreditacion_tipo_pk")
      */
     protected $acreditacionTipoRel;     
-
 
 
 
@@ -166,51 +172,51 @@ class RhuAcreditacion
     }
 
     /**
-     * Set fechaInicio
+     * Set fechaValidacion
      *
-     * @param \DateTime $fechaInicio
+     * @param \DateTime $fechaValidacion
      *
      * @return RhuAcreditacion
      */
-    public function setFechaInicio($fechaInicio)
+    public function setFechaValidacion($fechaValidacion)
     {
-        $this->fechaInicio = $fechaInicio;
+        $this->fechaValidacion = $fechaValidacion;
 
         return $this;
     }
 
     /**
-     * Get fechaInicio
+     * Get fechaValidacion
      *
      * @return \DateTime
      */
-    public function getFechaInicio()
+    public function getFechaValidacion()
     {
-        return $this->fechaInicio;
+        return $this->fechaValidacion;
     }
 
     /**
-     * Set fechaTerminacion
+     * Set fechaAcreditacion
      *
-     * @param \DateTime $fechaTerminacion
+     * @param \DateTime $fechaAcreditacion
      *
      * @return RhuAcreditacion
      */
-    public function setFechaTerminacion($fechaTerminacion)
+    public function setFechaAcreditacion($fechaAcreditacion)
     {
-        $this->fechaTerminacion = $fechaTerminacion;
+        $this->fechaAcreditacion = $fechaAcreditacion;
 
         return $this;
     }
 
     /**
-     * Get fechaTerminacion
+     * Get fechaAcreditacion
      *
      * @return \DateTime
      */
-    public function getFechaTerminacion()
+    public function getFechaAcreditacion()
     {
-        return $this->fechaTerminacion;
+        return $this->fechaAcreditacion;
     }
 
     /**
@@ -283,6 +289,30 @@ class RhuAcreditacion
     public function getNumeroRegistro()
     {
         return $this->numeroRegistro;
+    }
+
+    /**
+     * Set numeroValidacion
+     *
+     * @param string $numeroValidacion
+     *
+     * @return RhuAcreditacion
+     */
+    public function setNumeroValidacion($numeroValidacion)
+    {
+        $this->numeroValidacion = $numeroValidacion;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroValidacion
+     *
+     * @return string
+     */
+    public function getNumeroValidacion()
+    {
+        return $this->numeroValidacion;
     }
 
     /**
@@ -406,6 +436,30 @@ class RhuAcreditacion
     }
 
     /**
+     * Set estadoAcreditado
+     *
+     * @param boolean $estadoAcreditado
+     *
+     * @return RhuAcreditacion
+     */
+    public function setEstadoAcreditado($estadoAcreditado)
+    {
+        $this->estadoAcreditado = $estadoAcreditado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAcreditado
+     *
+     * @return boolean
+     */
+    public function getEstadoAcreditado()
+    {
+        return $this->estadoAcreditado;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -478,26 +532,26 @@ class RhuAcreditacion
     }
 
     /**
-     * Set estadoAcreditado
+     * Set detalleValidacion
      *
-     * @param boolean $estadoAcreditado
+     * @param string $detalleValidacion
      *
      * @return RhuAcreditacion
      */
-    public function setEstadoAcreditado($estadoAcreditado)
+    public function setDetalleValidacion($detalleValidacion)
     {
-        $this->estadoAcreditado = $estadoAcreditado;
+        $this->detalleValidacion = $detalleValidacion;
 
         return $this;
     }
 
     /**
-     * Get estadoAcreditado
+     * Get detalleValidacion
      *
-     * @return boolean
+     * @return string
      */
-    public function getEstadoAcreditado()
+    public function getDetalleValidacion()
     {
-        return $this->estadoAcreditado;
+        return $this->detalleValidacion;
     }
 }
