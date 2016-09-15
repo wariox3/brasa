@@ -34,7 +34,7 @@
                 </td>
                 <td>{{arDirectorios.ruta}}</td>
                 <td>{{arDirectorios.nombre}}</td>
-                <td style="text-align: center"><a href="{{ path('brs_gen_utilidad_gestorarchivo_directorio_nuevo',{'codigoDirectorio': arDirectorios.codigoDirectorioPk, 'codigoDirectorioPadre': arDirectorios.codigoDirectorioPadreFk })}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_gen_utilidad_gestorarchivo_directorio_nuevo',{'codigoDirectorio': arDirectorios.codigoDirectorioPk, 'codigoDirectorioPadre': arDirectorios.codigoDirectorioPadreFk })}}', 'Archivos', 400, 800)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_gen_utilidad_gestorarchivo', { 'codigoDirectorioPadre': arDirectorios.codigoDirectorioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_144_folder_open.png') }}" width=22 height=22 title="Detalle del registro"></a></td>                
                 <td style="text-align: center"><input type="checkbox" name="ChkSeleccionarDirectorio[]" value="{{ arDirectorios.codigoDirectorioPk }}" /></td>
             {%endfor%}
