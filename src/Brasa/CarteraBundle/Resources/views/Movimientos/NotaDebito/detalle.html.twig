@@ -23,7 +23,7 @@
                 {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                 {{ form_widget(form.BtnAnular, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 24,  'numero': arEmpleado.codigoEmpleadoPk }) }}', 'Archivos', 500, 700)" >Archivos</a>                
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 24,  'numero': arNotaDebito.codigoNotaDebitoPk }) }}', 'Archivos', 500, 700)" >Archivos</a>                
             </div>
         </div>
         <div style="float:right">
@@ -118,6 +118,9 @@
         </table>
             <div class="btn-toolbar" style="float: right">
                 {% if arNotaDebito.estadoAutorizado == 0 %}
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_cartera_movimiento_notadebito_anticipo_nuevo', {'codigoNotaDebito': arNotaDebito.codigoNotaDebitoPk, 'codigoNotaDebitoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Anticipo</a>
+                    </div>
                     <div class="btn-group">
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_cartera_movimiento_notadebito_detalle_nuevo', {'codigoNotaDebito': arNotaDebito.codigoNotaDebitoPk, 'codigoNotaDebitoDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
                     </div>

@@ -72,8 +72,8 @@ class FormatoNotaDebito extends \FPDF_FPDF {
         $this->SetXY(10, $intY+5);
         $this->SetFont('Arial','B',8);
         $this->Cell(26, 5, utf8_decode("CLIENTE:") , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',7);
-        $this->Cell(52, 5, $arNotaDebito->getClienteRel()->getNombreCorto(), 1, 0, 'L', 1);
+        $this->SetFont('Arial','',6.5);
+        $this->Cell(52, 5, utf8_decode($arNotaDebito->getClienteRel()->getNombreCorto()), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(21, 5, utf8_decode("NIT:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
@@ -87,11 +87,11 @@ class FormatoNotaDebito extends \FPDF_FPDF {
         $this->SetFont('Arial','B',8);
         $this->Cell(26, 5, utf8_decode("CUENTA BANCO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(52, 5, $arNotaDebito->getCuentaRel()->getNombre(), 1, 0, 'L', 1);
+        $this->Cell(52, 5, utf8_decode($arNotaDebito->getCuentaRel()->getNombre()), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(21, 5, utf8_decode("CONCEPTO:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(52, 5, $arNotaDebito->getNotaDebitoConceptoRel()->getNombre(), 1, 0, 'L', 1);
+        $this->Cell(52, 5, utf8_decode($arNotaDebito->getNotaDebitoConceptoRel()->getNombre()), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->Cell(23, 5, utf8_decode("") , 1, 0, 'R', 1);
         $this->SetFont('Arial','',8);
@@ -162,8 +162,8 @@ class FormatoNotaDebito extends \FPDF_FPDF {
         $this->SetXY(10, $intY+30);
         $this->SetFont('Arial','B',8);
         $this->Cell(26, 5, utf8_decode("COMENTARIOS:") , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',7);
-        $this->Cell(168, 5, $arNotaDebito->getComentarios(), 1, 0, 'L', 1);
+        $this->SetFont('Arial','',6.5);
+        $this->Cell(168, 5, utf8_decode($arNotaDebito->getComentarios()), 1, 0, 'L', 1);
         
         $this->EncabezadoDetalles();
         

@@ -61,6 +61,16 @@ class CarAnticipoRepository extends EntityRepository
         return $dql;
     }
     
+   public function anticipos($codigCliente = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT a FROM BrasaCarteraBundle:CarAnticipo a where a.codigoAnticipoPk <> 0 and a.vrAnticipo > 0 and a.codigoClienteFk = " . $codigCliente . "";        
+        $query = $em->createQuery($dql);        
+        $arAnticipos = $query->getResult();        
+        
+        return $arAnticipos;
+        
+    }
+    
    public function imprimir($codigo) {
         $em = $this->getEntityManager();  
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();

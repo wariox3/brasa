@@ -132,21 +132,27 @@ class MovimientoNotaDebitoController extends Controller
                     $arInconsistencias = $em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->findBy(array('codigoNotaDebitoFk' =>$codigoNotaDebito,'estadoInconsistencia' => 1));
                     if ($arInconsistencias == null){
                         if($arNotaDebito->getEstadoAutorizado() == 0) {
-                            if($em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->numeroRegistros($codigoNotaDebito) > 0) {
-                                $arNotaDebito->setEstadoAutorizado(1);
-                                $arDetallesNotaDebito = $em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->findBy(array('codigoNotaDebitoFk' => $codigoNotaDebito));
-                                foreach ($arDetallesNotaDebito AS $arDetalleNotaDebito) {
-                                    $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
-                                    $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleNotaDebito->getCodigoCuentaCobrarFk());
-                                    $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleNotaDebito->getVrPagoDetalle());
-                                    $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleNotaDebito->getVrPagoDetalle());
-                                    $em->persist($arCuentaCobrar);
-                                }
-                                $em->persist($arNotaDebito);
-                                $em->flush();                        
+                            if ($arNotaDebito->getValor() == 0 && $arNotaDebito->getNumero() == 0){
+                                if($em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->numeroRegistros($codigoNotaDebito) > 0) {
+                                    $arNotaDebito->setEstadoAutorizado(1);
+                                    $arDetallesNotaDebito = $em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->findBy(array('codigoNotaDebitoFk' => $codigoNotaDebito));
+                                    foreach ($arDetallesNotaDebito AS $arDetalleNotaDebito) {
+                                        $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
+                                        $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleNotaDebito->getCodigoCuentaCobrarFk());
+                                        $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleNotaDebito->getVrPagoDetalle());
+                                        $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleNotaDebito->getVrPagoDetalle());
+                                        $em->persist($arCuentaCobrar);
+                                    }
+                                    $em->persist($arNotaDebito);
+                                    $em->flush();                        
+                                } else {
+                                    $objMensaje->Mensaje('error', 'Debe adicionar detalles al recibo de caja', $this);
+                                }                    
                             } else {
-                                $objMensaje->Mensaje('error', 'Debe adicionar detalles al recibo de caja', $this);
-                            }                    
+                                $arNotaDebito->setEstadoAutorizado(1);
+                                $em->persist($arNotaDebito);
+                                $em->flush();
+                            }    
                         }
                     } else {
                         $objMensaje->Mensaje('error', 'No se puede autorizar, hay inconsistencias', $this);
@@ -297,9 +303,7 @@ class MovimientoNotaDebitoController extends Controller
         $paginator  = $this->get('knp_paginator');
         $arNotaDebito = new \Brasa\CarteraBundle\Entity\CarNotaDebito();
         $arNotaDebito = $em->getRepository('BrasaCarteraBundle:CarNotaDebito')->find($codigoNotaDebito);
-        /*$arCuentasCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
-        $arCuentasCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->cuentasCobrar($arNotaDebito->getCodigoClienteFk());
-        $arCuentasCobrar = $paginator->paginate($arCuentasCobrar, $request->query->get('page', 1), 50);*/
+        
         $arAnticipos = new \Brasa\CarteraBundle\Entity\CarAnticipo();
         $arAnticipos = $em->getRepository('BrasaCarteraBundle:CarAnticipo')->anticipos($arNotaDebito->getCodigoClienteFk());
         $arAnticipos = $paginator->paginate($arAnticipos, $request->query->get('page', 1), 50);
@@ -314,27 +318,21 @@ class MovimientoNotaDebitoController extends Controller
                 $arrControles = $request->request->All();
                 $intIndice = 0;
                 if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $anticipo) {
+                    foreach ($arrSeleccionados AS $codigoAnticipo) {
                         
-                        $anticipo = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($codigoCuentaCobrar);
-                        
-                        $arNotaDebito->setFecha($fecha);
-                        $arNotaDebito->setFechaPago($fecha);
-                        $arNotaDebito->setValor($arrControles['TxtSaldo'.$codigoCuentaCobrar]);
-                        $arNotaDebito->setUsuario($arUsuario->getUserName());
-                        $arNotaDebito->setNumeroFactura($arCuentaCobrar->getNumeroDocumento());
-                        $arNotaDebito->setCuentaCobrarTipoRel($arCuentaCobrar->getCuentaCobrarTipoRel());
-                        $em->persist($arNotaDebitoDetalle);                            
-                        
+                        $anticipo = $em->getRepository('BrasaCarteraBundle:CarAnticipo')->find($codigoAnticipo);
+                        $arNotaDebito->setValor($anticipo->getVrAnticipo());
+                        $arNotaDebito->setNumero($anticipo->getNumero());
+                        $em->persist($arNotaDebito);                            
                     }
                     $em->flush();
                 } 
-                $em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->liquidar($codigoNotaDebito);
+                //$em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->liquidar($codigoNotaDebito);
             }            
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
         }
-        return $this->render('BrasaCarteraBundle:Movimientos/NotaDebito:detalleNuevo.html.twig', array(
-            'arCuentasCobrar' => $arCuentasCobrar,
+        return $this->render('BrasaCarteraBundle:Movimientos/NotaDebito:anticipoNuevo.html.twig', array(
+            'arAnticipos' => $arAnticipos,
             'arNotaDebito' => $arNotaDebito,
             'form' => $form->createView()));
     }
