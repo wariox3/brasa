@@ -516,7 +516,7 @@ class AcreditacionController extends Controller
                     $i++;
                 }
 
-                $nombreArchivo = "APO".$arConfiguracion->getNitEmpresa()."".date('Y-m-d');
+                $nombreArchivo = "APO".$arConfiguracion->getNitEmpresa().$arConfiguracion->getDigitoVerificacionEmpresa()."".date('Ymd')."01";
                 $objPHPExcel->getActiveSheet()->setTitle('EstudiosInforme');
                 $objPHPExcel->setActiveSheetIndex(0);
 
