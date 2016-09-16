@@ -603,8 +603,15 @@ class PeriodoController extends Controller
                     $arPeriodoDetallePagos = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago();
                     $arPeriodoDetallePagos = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetallePago')->findBy(array('codigoPeriodoFk' => $codigoPeriodo));
                     
-                    $arPagosDetalle = $em->createQuery($arPagosDetalle);
-        //$arPagosDetalle = $arPagosDetalle->getResult();
+                   
+                    $query = $em->createQuery($em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetallePago')->empleadoSucursales($codigoPeriodo));
+                    $arSucursales = $query->getResult();
+                    $totalSucursales = count($arSucursales);
+                    foreach ($arSucursales as $arSucursales){
+                        $dato = $arSucursales->getContratoRel()->getSucursalRel()->getNombre();
+                    }
+                    
+                    
                     
                     $totalCotizacion = 0;
                     foreach ($arPeriodoDetallePagos as $arPeriodoDetallesumaTotales){

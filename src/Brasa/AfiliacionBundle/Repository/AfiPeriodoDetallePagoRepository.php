@@ -32,6 +32,16 @@ class AfiPeriodoDetallePagoRepository extends EntityRepository {
             }
             $em->flush();
         }
-    }     
+    }
+    
+    public function empleadoSucursales($codigoPeriodo = "") {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT pdp,c FROM BrasaAfiliacionBundle:AfiPeriodoDetallePago pdp JOIN pdp.contratoRel c WHERE pdp.codigoPeriodoDetallePagoPk <> 0 ";
+        if($codigoPeriodo != "") {
+            $dql .= " AND pdp.codigoPeriodoFk = " . $codigoPeriodo ;
+        }
+        $dql .= " GROUP BY c.codigoSucursalFk ";
+        return $dql;
+    }
         
 }

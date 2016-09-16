@@ -473,6 +473,11 @@ class AfiPeriodoDetallePago
     private $claseRiesgoAfiliado;
     
     /**
+     * @ORM\Column(name="codigo_sucursal_fk", type="integer", nullable=true)
+     */    
+    private $codigoSucursalFk;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="AfiPeriodo", inversedBy="periodosDetallesPagosPeriodoRel")
      * @ORM\JoinColumn(name="codigo_periodo_fk", referencedColumnName="codigo_periodo_pk")
      */
@@ -490,6 +495,11 @@ class AfiPeriodoDetallePago
      */
     protected $contratoRel;    
     
+    /**
+     * @ORM\ManyToOne(targetEntity="AfiSucursal", inversedBy="periodosDetallesPagosSucursalRel")
+     * @ORM\JoinColumn(name="codigo_sucursal_fk", referencedColumnName="codigo_sucursal_pk")
+     */
+    protected $sucursalRel;
 
 
 
@@ -2688,6 +2698,30 @@ class AfiPeriodoDetallePago
     }
 
     /**
+     * Set codigoSucursalFk
+     *
+     * @param integer $codigoSucursalFk
+     *
+     * @return AfiPeriodoDetallePago
+     */
+    public function setCodigoSucursalFk($codigoSucursalFk)
+    {
+        $this->codigoSucursalFk = $codigoSucursalFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSucursalFk
+     *
+     * @return integer
+     */
+    public function getCodigoSucursalFk()
+    {
+        return $this->codigoSucursalFk;
+    }
+
+    /**
      * Set periodoRel
      *
      * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodo $periodoRel
@@ -2757,5 +2791,29 @@ class AfiPeriodoDetallePago
     public function getContratoRel()
     {
         return $this->contratoRel;
+    }
+
+    /**
+     * Set sucursalRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiSucursal $sucursalRel
+     *
+     * @return AfiPeriodoDetallePago
+     */
+    public function setSucursalRel(\Brasa\AfiliacionBundle\Entity\AfiSucursal $sucursalRel = null)
+    {
+        $this->sucursalRel = $sucursalRel;
+
+        return $this;
+    }
+
+    /**
+     * Get sucursalRel
+     *
+     * @return \Brasa\AfiliacionBundle\Entity\AfiSucursal
+     */
+    public function getSucursalRel()
+    {
+        return $this->sucursalRel;
     }
 }

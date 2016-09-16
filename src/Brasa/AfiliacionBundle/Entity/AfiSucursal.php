@@ -30,14 +30,21 @@ class AfiSucursal
     /**
      * @ORM\OneToMany(targetEntity="AfiContrato", mappedBy="sucursalRel")
      */
-    protected $contratosSucursalRel;        
+    protected $contratosSucursalRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="AfiPeriodoDetallePago", mappedBy="sucursalRel")
+     */
+    protected $periodosDetallesPagosSucursalRel;
 
+    
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->contratosSucursalRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->periodosDetallesPagosSucursalRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -130,5 +137,39 @@ class AfiSucursal
     public function getContratosSucursalRel()
     {
         return $this->contratosSucursalRel;
+    }
+
+    /**
+     * Add periodosDetallesPagosSucursalRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosSucursalRel
+     *
+     * @return AfiSucursal
+     */
+    public function addPeriodosDetallesPagosSucursalRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosSucursalRel)
+    {
+        $this->periodosDetallesPagosSucursalRel[] = $periodosDetallesPagosSucursalRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove periodosDetallesPagosSucursalRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosSucursalRel
+     */
+    public function removePeriodosDetallesPagosSucursalRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodosDetallesPagosSucursalRel)
+    {
+        $this->periodosDetallesPagosSucursalRel->removeElement($periodosDetallesPagosSucursalRel);
+    }
+
+    /**
+     * Get periodosDetallesPagosSucursalRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPeriodosDetallesPagosSucursalRel()
+    {
+        return $this->periodosDetallesPagosSucursalRel;
     }
 }

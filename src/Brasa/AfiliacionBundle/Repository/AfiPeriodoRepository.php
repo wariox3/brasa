@@ -198,6 +198,7 @@ class AfiPeriodoRepository extends EntityRepository {
             $arPeriodoDetallePago->setCodigoEntidadPensionPertenece($arContrato->getEntidadPensionRel()->getCodigoInterface());
             $arPeriodoDetallePago->setCodigoEntidadSaludPertenece($arContrato->getEntidadSaludRel()->getCodigoInterface());
             $arPeriodoDetallePago->setCodigoEntidadCajaPertenece($arContrato->getEntidadCajaRel()->getCodigoInterface());
+            $arPeriodoDetallePago->setSucursalRel($arContrato->getSucursalRel());
             //Parametros generales
             $floSalario = $arContrato->getVrSalario();
             $floSalarioIntegral = $arPeriodoDetallePago->getSalarioIntegral();
