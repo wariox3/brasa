@@ -4,12 +4,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+
 //use Brasa\AfiliacionBundle\Form\Type\AfiIngresoType;
-class IngresoController extends Controller
+
+class generalController extends Controller
 {
     var $strDqlLista = "";
     /**
-     * @Route("/afi/consulta/contrato/ingreso", name="brs_afi_consulta_contrato_ingreso")
+     * @Route("/afi/consulta/contrato/general", name="brs_afi_consulta_contrato_general")
      */    
     public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -32,16 +34,16 @@ class IngresoController extends Controller
             }
         }
         
-        $arIngresos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 70);
-        return $this->render('BrasaAfiliacionBundle:Consulta/Contrato:ingreso.html.twig', array(
-            'arIngresos' => $arIngresos, 
+        $arGeneral = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 300);
+        return $this->render('BrasaAfiliacionBundle:Consulta/Contrato:general.html.twig', array(
+            'arGeneral' => $arGeneral, 
             'form' => $form->createView()));
     }
     
     private function lista() {    
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->listaConsultaDql(
+        $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->listaConsultaGeneralDql(
                 $session->get('filtroEmpleadoNombre'),
                 $session->get('filtroCodigoCliente'),
                 $session->get('filtroEmpleadoIdentificacion'),
@@ -140,36 +142,35 @@ class IngresoController extends Controller
                     ->setCellValue('V1', 'ARL')
                     ->setCellValue('W1', 'CAJA')
                     ->setCellValue('X1', 'CLIENTE')
-                    ->setCellValue('Y1', 'INDEFINIDO')
-                    ->setCellValue('Z1', 'ACTIVO');
+                    ->setCellValue('Y1', 'RETIRADO');
         $i = 2;
         
         $query = $em->createQuery($this->strDqlLista);
         //$arIngresos = new \Brasa\AfiliacionBundle\Entity\AfiEmpleado();
-        $arIngresos = $query->getResult();
+        $arGeneral = $query->getResult();
                 
-        foreach ($arIngresos as $arIngresos) {
+        foreach ($arGeneral as $arGeneral) {
         $ciudad = '';
-        if ($arIngresos->getEmpleadoRel()->getCodigoCiudadFk() != null){
-            $ciudad = $arIngresos->getEmpleadoRel()->getCiudadRel()->getNombre();
+        if ($arGeneral->getEmpleadoRel()->getCodigoCiudadFk() != null){
+            $ciudad = $arGeneral->getEmpleadoRel()->getCiudadRel()->getNombre();
         }
         $rh = '';
-        if ($arIngresos->getEmpleadoRel()->getCodigoRhPk() != null){
-            $rh = $arIngresos->getEmpleadoRel()->getRhRel()->getTipo();
+        if ($arGeneral->getEmpleadoRel()->getCodigoRhPk() != null){
+            $rh = $arGeneral->getEmpleadoRel()->getRhRel()->getTipo();
         }
         $estadoCivil = '';
-        if ($arIngresos->getEmpleadoRel()->getCodigoEstadoCivilFk() != null){
-            $estadoCivil = $arIngresos->getEmpleadoRel()->getEstadoCivilRel()->getNombre();
+        if ($arGeneral->getEmpleadoRel()->getCodigoEstadoCivilFk() != null){
+            $estadoCivil = $arGeneral->getEmpleadoRel()->getEstadoCivilRel()->getNombre();
         }
-        if ($arIngresos->getEmpleadoRel()->getCodigoSexoFk() == 'M'){
+        if ($arGeneral->getEmpleadoRel()->getCodigoSexoFk() == 'M'){
             $sexo = 'MASCULINO';
         } else {
             $sexo = 'FEMENINO';
         }
-        if ($arIngresos->getEmpleadoRel()->getCodigoContratoActivo() == null){
+        if ($arGeneral->getEmpleadoRel()->getCodigoContratoActivo() == null){
             $codigoContratoActivo = 0;
         } else {
-            $codigoContratoActivo = $arIngresos->getEmpleadoRel()->getCodigoContratoActivo();
+            $codigoContratoActivo = $arGeneral->getEmpleadoRel()->getCodigoContratoActivo();
         }
         $arContrato = new \Brasa\AfiliacionBundle\Entity\AfiContrato();
         $arContrato = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->find($codigoContratoActivo);
@@ -213,18 +214,13 @@ class IngresoController extends Controller
             }
         }
         $cliente = '';
-        if ($arIngresos->getEmpleadoRel()->getCodigoClienteFk() != null){
-            $cliente = $arIngresos->getEmpleadoRel()->getClienteRel()->getNombreCorto();
+        if ($arGeneral->getEmpleadoRel()->getCodigoClienteFk() != null){
+            $cliente = $arGeneral->getEmpleadoRel()->getClienteRel()->getNombreCorto();
         }
-        if ($arIngresos->getEmpleadoRel()->getClienteRel()->getIndependiente() == 1){
+        if ($arGeneral->getEmpleadoRel()->getClienteRel()->getIndependiente() == 1){
             $independiente = 'SI';
         } else {
             $independiente = 'NO';
-        }
-        if ($arIngresos->getEmpleadoRel()->getEstadoActivo() == 1){
-            $activo = 'SI';
-        } else {
-            $activo = 'NO';
         }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arIngresos->getCodigoEmpleadoFk())

@@ -35,6 +35,29 @@ class AfiContratoRepository extends EntityRepository {
         //$dql .= " ORDER BY pd.codigoPeriodoDetallePk";
         return $dql;
     }
+
+    public function listaConsultaGeneralDql($strEmpleado = '', $codigoCliente = '', $strIdentificacion = '',$strDesde = "", $strHasta = "") {
+        //$em = $this->getEntityManager();
+        $dql   = "SELECT c,e FROM BrasaAfiliacionBundle:AfiContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0";
+        if($strEmpleado != '') {
+            $dql .= " AND e.nombreCorto LIKE '%" . $strEmpleado . "%'";
+        }
+        if($codigoCliente != '') {
+            $dql .= " AND e.codigoClienteFk = " . $codigoCliente;
+        } 
+        if($strIdentificacion != '') {
+            $dql .= " AND e.numeroIdentificacion = " . $strIdentificacion;
+        } 
+        if($strDesde != "") {
+            $dql .= " AND c.fechaDesde >='" . $strDesde . "'";
+        }
+        if($strHasta != "") {
+            $dql .= " AND c.fechaDesde <='" . $strHasta . "'";
+        }
+        
+        //$dql .= " ORDER BY pd.codigoPeriodoDetallePk";
+        return $dql;
+    }
     
     public function listaConsultaPagoPendienteDql($strEmpleado = '', $codigoCliente = '', $strIdentificacion = '',$strDesde = "", $strHasta = "") {
         //$em = $this->getEntityManager();
