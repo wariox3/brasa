@@ -99,6 +99,8 @@ class IngresoController extends Controller
 
     private function generarExcel() {
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -140,8 +142,7 @@ class IngresoController extends Controller
                     ->setCellValue('V1', 'ARL')
                     ->setCellValue('W1', 'CAJA')
                     ->setCellValue('X1', 'CLIENTE')
-                    ->setCellValue('Y1', 'INDEFINIDO')
-                    ->setCellValue('Z1', 'ACTIVO');
+                    ->setCellValue('Y1', 'RETIRADO');
         $i = 2;
         
         $query = $em->createQuery($this->strDqlLista);
@@ -211,20 +212,20 @@ class IngresoController extends Controller
             if ($arContrato->getCodigoEntidadCajaFk() != null){
                 $caja = $arContrato->getEntidadCajaRel()->getNombre();
             }
+            if ($arContrato->getIndefinido() == 1){
+                $indefinido = 'NO';
+            } else {
+                $indefinido = 'SI';
+            }
         }
         $cliente = '';
         if ($arIngresos->getEmpleadoRel()->getCodigoClienteFk() != null){
             $cliente = $arIngresos->getEmpleadoRel()->getClienteRel()->getNombreCorto();
         }
         if ($arIngresos->getEmpleadoRel()->getClienteRel()->getIndependiente() == 1){
-            $independiente = 'SI';
-        } else {
             $independiente = 'NO';
-        }
-        if ($arIngresos->getEmpleadoRel()->getEstadoActivo() == 1){
-            $activo = 'SI';
         } else {
-            $activo = 'NO';
+            $independiente = 'SI';
         }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arIngresos->getCodigoEmpleadoFk())
@@ -251,16 +252,15 @@ class IngresoController extends Controller
                     ->setCellValue('V' . $i, $arl)
                     ->setCellValue('W' . $i, $caja)
                     ->setCellValue('X' . $i, $cliente)
-                    ->setCellValue('Y' . $i, $independiente)
-                    ->setCellValue('Z' . $i, $activo);                                    
+                    ->setCellValue('Y' . $i, $indefinido);                                    
             $i++;
         }
         
-        $objPHPExcel->getActiveSheet()->setTitle('Empleado');
+        $objPHPExcel->getActiveSheet()->setTitle('EmpleadoContratoIngreso');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Empleados.xlsx"');
+        header('Content-Disposition: attachment;filename="EmpleadosContratoIngreso.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
