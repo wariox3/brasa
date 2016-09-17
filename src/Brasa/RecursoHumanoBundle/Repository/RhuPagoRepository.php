@@ -213,7 +213,7 @@ class RhuPagoRepository extends EntityRepository {
     } 
     
     public function pendientesContabilizarDql() {        
-        $dql   = "SELECT p FROM BrasaRecursoHumanoBundle:RhuPago p WHERE p.estadoContabilizado = 0 AND p.estadoPagado = 1 AND p.vrNeto > 0";       
+        $dql   = "SELECT p FROM BrasaRecursoHumanoBundle:RhuPago p WHERE p.estadoContabilizado = 0 AND p.estadoPagado = 1 AND p.vrNeto >= 0";       
         $dql .= " ORDER BY p.codigoPagoPk DESC";
         return $dql;
     } 
