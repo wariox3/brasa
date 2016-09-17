@@ -119,7 +119,7 @@ class FormatoProcesoDisciplinario extends \FPDF_FPDF {
         }
         $sustitucion8 = $descargos;
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-        $arContrato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arProcesoDisciplinario->getEmpleadoRel()->getCodigoContratoActivoFk());
+        $arContrato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arProcesoDisciplinario->getCodigoContratoFk());
         $sustitucion9 = $arContrato->getContratoTipoRel()->getNombre();
         $sustitucion10 = $arProcesoDisciplinario->getDisciplinarioTipoRel()->getNombre();
         if ($arProcesoDisciplinario->getFechaHastaSancion() == null){

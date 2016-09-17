@@ -28,27 +28,27 @@ class RhuDesempenoDetalle
     private $codigoDesempenoConceptoFk;    
     
     /**     
-     * @ORM\Column(name="siempre", type="integer")
+     * @ORM\Column(name="siempre", type="boolean")
      */    
     private $siempre = 0;
     
     /**     
-     * @ORM\Column(name="casi_siempre", type="integer")
+     * @ORM\Column(name="casi_siempre", type="boolean")
      */    
     private $casiSiempre = 0;
     
     /**     
-     * @ORM\Column(name="algunas_veces", type="integer")
+     * @ORM\Column(name="algunas_veces", type="boolean")
      */    
     private $algunasVeces = 0;
     
     /**     
-     * @ORM\Column(name="casi_nunca", type="integer")
+     * @ORM\Column(name="casi_nunca", type="boolean")
      */    
     private $casiNunca = 0;
 
     /**     
-     * @ORM\Column(name="nunca", type="integer")
+     * @ORM\Column(name="nunca", type="boolean")
      */    
     private $nunca = 0;         
     
@@ -65,6 +65,8 @@ class RhuDesempenoDetalle
     protected $desempenoConceptoRel;    
     
 
+
+    
 
     /**
      * Get codigoDesempenoDetallePk
@@ -127,7 +129,7 @@ class RhuDesempenoDetalle
     /**
      * Set siempre
      *
-     * @param integer $siempre
+     * @param boolean $siempre
      *
      * @return RhuDesempenoDetalle
      */
@@ -141,7 +143,7 @@ class RhuDesempenoDetalle
     /**
      * Get siempre
      *
-     * @return integer
+     * @return boolean
      */
     public function getSiempre()
     {
@@ -151,7 +153,7 @@ class RhuDesempenoDetalle
     /**
      * Set casiSiempre
      *
-     * @param integer $casiSiempre
+     * @param boolean $casiSiempre
      *
      * @return RhuDesempenoDetalle
      */
@@ -165,7 +167,7 @@ class RhuDesempenoDetalle
     /**
      * Get casiSiempre
      *
-     * @return integer
+     * @return boolean
      */
     public function getCasiSiempre()
     {
@@ -175,7 +177,7 @@ class RhuDesempenoDetalle
     /**
      * Set algunasVeces
      *
-     * @param integer $algunasVeces
+     * @param boolean $algunasVeces
      *
      * @return RhuDesempenoDetalle
      */
@@ -189,7 +191,7 @@ class RhuDesempenoDetalle
     /**
      * Get algunasVeces
      *
-     * @return integer
+     * @return boolean
      */
     public function getAlgunasVeces()
     {
@@ -199,7 +201,7 @@ class RhuDesempenoDetalle
     /**
      * Set casiNunca
      *
-     * @param integer $casiNunca
+     * @param boolean $casiNunca
      *
      * @return RhuDesempenoDetalle
      */
@@ -213,7 +215,7 @@ class RhuDesempenoDetalle
     /**
      * Get casiNunca
      *
-     * @return integer
+     * @return boolean
      */
     public function getCasiNunca()
     {
@@ -223,7 +225,7 @@ class RhuDesempenoDetalle
     /**
      * Set nunca
      *
-     * @param integer $nunca
+     * @param boolean $nunca
      *
      * @return RhuDesempenoDetalle
      */
@@ -237,7 +239,7 @@ class RhuDesempenoDetalle
     /**
      * Get nunca
      *
-     * @return integer
+     * @return boolean
      */
     public function getNunca()
     {
