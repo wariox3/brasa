@@ -7,6 +7,7 @@ use Brasa\RecursoHumanoBundle\Form\Type\RhuEmpleadoType;
 use Doctrine\ORM\EntityRepository;
 use PHPExcel_Shared_Date;
 use PHPExcel_Style_NumberFormat;
+
 class BaseEmpleadoController extends Controller
 {
     var $strSqlLista = "";

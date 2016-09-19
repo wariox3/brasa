@@ -4,6 +4,7 @@ namespace Brasa\AdministracionDocumentalBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
 class ArchivosController extends Controller
 {
     public function listaAction($codigoDocumento, $numero) {
@@ -82,7 +83,7 @@ class ArchivosController extends Controller
     public function enviarAction($codigoDocumento, $numero,$codigoArchivo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $objMensaje = $this->get('mensajes_brasa'); 
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();  
         $arArchivo = new \Brasa\AdministracionDocumentalBundle\Entity\AdArchivo();
         $arArchivo = $em->getRepository('BrasaAdministracionDocumentalBundle:AdArchivo')->find($codigoArchivo);
         $strRuta = $arArchivo->getDirectorioRel()->getRutaPrincipal() . $arArchivo->getDirectorioRel()->getNumero() . "/" . $arArchivo->getCodigoArchivoPk() . "_" . $arArchivo->getNombre();
@@ -97,31 +98,14 @@ class ArchivosController extends Controller
         if($form->isValid()) {
             if($form->get('BtnEnviar')->isClicked()) {                
                 
-               /* $para  = 'aranzatus21@gmail.com'; // atención a la coma
-                
-                $título = 'Prueba envio email soga';
-
-                $mensaje = 'Hola';
-
-                // Para enviar un correo HTML, debe establecerse la cabecera Content-type
-                $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
-                $cabeceras .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-
-                // Cabeceras adicionales
-                $cabeceras .= 'From: Recordatorio <analista.desarrollo@jgefectivo.com>' . "\r\n";
-
-                // Enviarlo
-                mail($para, $título, $mensaje, $cabeceras);*/
-                
-                $message = \Swift_Message::newInstance()
-        ->setSubject('Hello Email')
-        ->setFrom('paul6126@hotmail.com')
-        ->setTo('analista.desarrollo@jgefectivo.com')
-        ->setBody('You should see me from the profiler!')
-    ;
-
-    $this->get('mailer')->send($message);
-                
+               $message = \Swift_Message::newInstance()
+                    ->setSubject('Mensaje de prueba ')
+                    ->setFrom('analista.desarrollo@jgefectivo.com', "SogaApp" )
+                    ->setTo('analista.desarrollo@jgefectivo.com')
+                    ->setBody('Hola prueba','text/html');
+               $this->get('mailer')->send($message);
+               $this->get('session')->getFlashBag()->add("suceso", "Mensaje enviado ");                            
+               $objMensaje->Mensaje("error", "Mensaje enviado", $this);
             }                                   
         }         
         return $this->render('BrasaAdministracionDocumentalBundle:Archivos:enviar.html.twig', array(
