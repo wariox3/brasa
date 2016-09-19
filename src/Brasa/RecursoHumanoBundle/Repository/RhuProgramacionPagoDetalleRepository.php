@@ -490,6 +490,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                     $salarioMinimoDevengado = ($douVrSalarioMinimo / 30) * $arProgramacionPagoDetalle->getDiasTransporte();
                     $baseDescuento = $devengado - $salarioMinimoDevengado;
                     if($baseDescuento > 0) {
+                        
                         $douPagoDetalle = $baseDescuento / $arEmbargo->getPartes();
                     }
                 }

@@ -100,13 +100,14 @@ class ArchivosController extends Controller
                 
                $message = \Swift_Message::newInstance()
                     ->setSubject('Mensaje de prueba ')
-                    ->setFrom('analista.desarrollo@jgefectivo.com', "SogaApp" )
+                    ->setFrom('sogaimplementacion@gmail.com', "SogaApp" )
                     ->setTo('analista.desarrollo@jgefectivo.com')
                     ->setBody('Hola prueba','text/html');
                $this->get('mailer')->send($message);
-               $this->get('session')->getFlashBag()->add("suceso", "Mensaje enviado ");                            
+               //$this->get('session')->getFlashBag()->add("suceso", "Mensaje enviado ");                            
                $objMensaje->Mensaje("error", "Mensaje enviado", $this);
-            }                                   
+            }
+            
         }         
         return $this->render('BrasaAdministracionDocumentalBundle:Archivos:enviar.html.twig', array(
             'form' => $form->createView(),

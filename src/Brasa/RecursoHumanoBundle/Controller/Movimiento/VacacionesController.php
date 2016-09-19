@@ -150,12 +150,12 @@ class VacacionesController extends Controller
                                         $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
                                         $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->pendientes($arEmpleado->getCodigoEmpleadoPk());
                                         foreach ($arCreditos as $arCredito) {
-                                            $arVacacionCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionCredito();
-                                            $arVacacionCredito->setCreditoRel($arCredito);
-                                            $arVacacionCredito->setVacacionRel($arVacacion);
-                                            $arVacacionCredito->setVrDeduccion($arCredito->getVrCuota());
-                                            $arVacacionCredito->setPagoConceptoRel($arCredito->getCreditoTipoRel()->getPagoConceptoRel());
-                                            $em->persist($arVacacionCredito);            
+                                            $arVacacionAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacionAdicional();
+                                            $arVacacionAdicional->setCreditoRel($arCredito);
+                                            $arVacacionAdicional->setVacacionRel($arVacacion);
+                                            $arVacacionAdicional->setVrDeduccion($arCredito->getVrCuota());
+                                            $arVacacionAdicional->setPagoConceptoRel($arCredito->getCreditoTipoRel()->getPagoConceptoRel());
+                                            $em->persist($arVacacionAdicional);            
                                             $floVrDeducciones += $arCredito->getVrCuota();
                                         }                                         
                                     }
