@@ -1,12 +1,15 @@
 <?php
 
 namespace Brasa\RecursoHumanoBundle\Entity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="rhu_academia")
  * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuAcademiaRepository")
+ * @DoctrineAssert\UniqueEntity(fields={"nit"},message="Ya existe este nit")
  */
 class RhuAcademia
 {
@@ -18,7 +21,7 @@ class RhuAcademia
     private $codigoAcademiaPk;
     
     /**
-     * @ORM\Column(name="nit", type="string", length=21, nullable=true)
+     * @ORM\Column(name="nit", type="string", length=21, nullable=false, unique=true)
      */    
     private $nit;
     
@@ -64,6 +67,7 @@ class RhuAcademia
     protected $acreditacionesAcademiaRel;    
 
 
+    
     
     /**
      * Constructor
