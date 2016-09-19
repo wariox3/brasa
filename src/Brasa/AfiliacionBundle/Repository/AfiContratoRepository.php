@@ -38,7 +38,7 @@ class AfiContratoRepository extends EntityRepository {
 
     public function listaConsultaGeneralDql($strEmpleado = '', $codigoCliente = '', $strIdentificacion = '',$strDesde = "", $strHasta = "") {
         //$em = $this->getEntityManager();
-        $dql   = "SELECT c,e FROM BrasaAfiliacionBundle:AfiContrato c LEFT JOIN c.empleadoRel e LEFT JOIN e.clienteRel ce  WHERE c.codigoContratoPk <> 0";
+        $dql   = "SELECT c,e FROM BrasaAfiliacionBundle:AfiEmpleado e JOIN e.contratoRel c   WHERE c.codigoContratoPk <> 0";
         if($strEmpleado != '') {
             $dql .= " AND e.nombreCorto LIKE '%" . $strEmpleado . "%'";
         }

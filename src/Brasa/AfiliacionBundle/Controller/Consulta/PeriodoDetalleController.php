@@ -171,7 +171,7 @@ class PeriodoDetalleController extends Controller
                 $objPHPExcel->getActiveSheet()->getStyle($i)->getFont()->setBold(true);
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getNombreCorto())
-                    ->setCellValue('B' . $i, $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getTelefono())
+                    ->setCellValue('B' . $i, $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getTelefono(). ' - ' .$arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getCelular())
                     ->setCellValue('C' . $i, $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getEmail());
                 $i = $i+1;
                 $cliente = $arPeriodoDetalle->getPeriodoRel()->getCodigoClienteFk();

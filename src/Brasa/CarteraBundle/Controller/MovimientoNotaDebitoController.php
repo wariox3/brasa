@@ -132,7 +132,7 @@ class MovimientoNotaDebitoController extends Controller
                     $arInconsistencias = $em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->findBy(array('codigoNotaDebitoFk' =>$codigoNotaDebito,'estadoInconsistencia' => 1));
                     if ($arInconsistencias == null){
                         if($arNotaDebito->getEstadoAutorizado() == 0) {
-                            if ($arNotaDebito->getValor() == 0 && $arNotaDebito->getNumero() == 0){
+                            if ($em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->findBy(array('codigoNotaDebitoFk' => $codigoNotaDebito))){
                                 if($em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->numeroRegistros($codigoNotaDebito) > 0) {
                                     $arNotaDebito->setEstadoAutorizado(1);
                                     $arDetallesNotaDebito = $em->getRepository('BrasaCarteraBundle:CarNotaDebitoDetalle')->findBy(array('codigoNotaDebitoFk' => $codigoNotaDebito));

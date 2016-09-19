@@ -18,7 +18,7 @@ class RhuAcademia
     private $codigoAcademiaPk;
     
     /**
-     * @ORM\Column(name="nit", type="string", length=10, nullable=true)
+     * @ORM\Column(name="nit", type="string", length=21, nullable=true)
      */    
     private $nit;
     
@@ -64,12 +64,14 @@ class RhuAcademia
     protected $acreditacionesAcademiaRel;    
 
 
+    
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->empleadosEstudiosAcademiaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->acreditacionesAcademiaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
