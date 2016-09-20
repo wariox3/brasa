@@ -10,7 +10,10 @@ class UtilidadesCartaLaboralController extends Controller
 {
     var $strDqlLista = "";
     public function listaAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();        
+        $em = $this->getDoctrine()->getManager();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 83)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioLista();
         $form->handleRequest($request);

@@ -12,6 +12,9 @@ class UtilidadesRegistroVisitasController extends Controller
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $em = $this->getDoctrine()->getManager();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 86)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $nombreVisitante = "";
         $arVisitante = new \Brasa\RecursoHumanoBundle\Entity\RhuVisitante();

@@ -10,6 +10,9 @@ class UtilidadesPagosController extends Controller
     public function generarPeriodoAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 74)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
         $paginator  = $this->get('knp_paginator');
         $form = $this->createFormBuilder()
             ->add('ChkMostrarInactivos', 'checkbox', array('label'=> '', 'required'  => false,))

@@ -16,6 +16,9 @@ class MovimientoTareaController extends Controller
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 111, 1)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioFiltro();
         $form->handleRequest($request);

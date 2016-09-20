@@ -11,6 +11,9 @@ class UtilidadesMediosMagneticosController extends Controller
     public function InformeAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 78)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
         $fechaActual = date('Y-m-j');
         $anioActual = date('Y');
         $fechaPrimeraAnterior = strtotime ( '-1 year' , strtotime ( $fechaActual ) ) ;

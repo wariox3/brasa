@@ -12,6 +12,9 @@ class UtilidadesCartasController extends Controller
     public function generarAction() {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 82)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder()
             ->add('cartaTipoRel', 'entity',

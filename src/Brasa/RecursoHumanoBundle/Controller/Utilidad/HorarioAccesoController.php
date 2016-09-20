@@ -16,6 +16,9 @@ class HorarioAccesoController extends Controller
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $em = $this->getDoctrine()->getManager();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 85)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
         $strDql = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorarioPeriodo')->listaDql(1,0);
         $arHorarioPeriodo = $paginator->paginate($em->createQuery($strDql), $request->query->get('page', 1), 20);                
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/HorarioAcceso:lista.html.twig', array(

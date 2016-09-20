@@ -18,7 +18,7 @@ class formatoPagoMasivoController extends Controller
     public function listaAction($codigoProgramacionPago = "") {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 61)) {
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 75)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
         $paginator  = $this->get('knp_paginator');        

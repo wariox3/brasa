@@ -18,6 +18,9 @@ class MovimientoNotaDebitoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $session = $this->getRequest()->getSession();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 117, 1)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioFiltro();
         $form->handleRequest($request);        
