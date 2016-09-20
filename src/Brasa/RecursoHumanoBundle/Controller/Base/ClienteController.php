@@ -15,7 +15,10 @@ class ClienteController extends Controller
      * @Route("/rhu/base/cliente", name="brs_rhu_base_cliente")
      */       
     public function listaAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();        
+        $em = $this->getDoctrine()->getManager();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 94, 1)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
         $paginator  = $this->get('knp_paginator');
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()

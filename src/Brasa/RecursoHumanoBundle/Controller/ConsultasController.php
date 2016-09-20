@@ -138,6 +138,9 @@ class ConsultasController extends Controller
     public function serviciosCobrarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 107, 1)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioServiciosPorCobrarLista();
         $form->handleRequest($request);
@@ -483,6 +486,9 @@ class ConsultasController extends Controller
     public function DotacionesPendientesAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 108, 1)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioDotacionesPendientesLista();
         $form->handleRequest($request);
