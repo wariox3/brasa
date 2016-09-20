@@ -60,18 +60,24 @@ class FacturasDetallesController extends Controller
                 );
     }
 
-    private function filtrar ($form) {
-        $session = $this->getRequest()->getSession();        
-        $session->set('filtroProgramacionCodigo', $form->get('TxtCodigo')->getData());
-        $session->set('filtroProgramacionEstadoAutorizado', $form->get('estadoAutorizado')->getData());                  
-        $session->set('filtroNit', $form->get('TxtNit')->getData());
-        $session->set('filtroCodigoRecurso', $form->get('TxtCodigoRecurso')->getData());
+    private function filtrar ($form) { 
+        $session = $this->getRequest()->getSession();   
+        $arFacturaTipo = $form->get('facturaTipoRel')->getData();
+        if($arFacturaTipo) {
+            $session->set('filtroTurnosCodigoFacturaTipo', $arFacturaTipo->getCodigoFacturaTipoPk());
+        } else {
+            $session->set('filtroTurnosCodigoFacturaTipo', null);
+        }             
+        $session->set('filtroFacturaNumero', $form->get('TxtNumero')->getData());
+        $session->set('filtroFacturaEstadoAutorizado', $form->get('estadoAutorizado')->getData());          
+        $session->set('filtroFacturaEstadoAnulado', $form->get('estadoAnulado')->getData());          
+        $session->set('filtroNit', $form->get('TxtNit')->getData());                         
         $dateFechaDesde = $form->get('fechaDesde')->getData();
         $dateFechaHasta = $form->get('fechaHasta')->getData();
-        $session->set('filtroProgramacionFechaDesde', $dateFechaDesde->format('Y/m/d'));
-        $session->set('filtroProgramacionFechaHasta', $dateFechaHasta->format('Y/m/d'));                 
-        $session->set('filtroProgramacionFiltrarFecha', $form->get('filtrarFecha')->getData());
-    }    
+        $session->set('filtroFacturaFechaDesde', $dateFechaDesde->format('Y/m/d'));
+        $session->set('filtroFacturaFechaHasta', $dateFechaHasta->format('Y/m/d'));                 
+        $session->set('filtroFacturaFiltrarFecha', $form->get('filtrarFecha')->getData());
+    }  
     
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
@@ -149,123 +155,63 @@ class FacturasDetallesController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(9); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'AN'; $col++) {
+        for($col = 'A'; $col !== 'M'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
-        }                   
+        }               
+        for($col = 'G'; $col !== 'K'; $col++) {  
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('rigth');
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }         
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIGO')
-                    ->setCellValue('B1', 'PROG')
+                    ->setCellValue('A1', 'TIPO')
+                    ->setCellValue('B1', 'NUMERO')
                     ->setCellValue('C1', 'FECHA')
-                    ->setCellValue('D1', 'CLIENTE')
-                    ->setCellValue('E1', 'PUESTO')
-                    ->setCellValue('F1', 'RECURSO')
-                    ->setCellValue('G1', 'TIPO')
-                    ->setCellValue('H1', 'C.COSTO')
-                    ->setCellValue('I1', 'D1')
-                    ->setCellValue('J1', 'D2')
-                    ->setCellValue('K1', 'D3')
-                    ->setCellValue('L1', 'D4')
-                    ->setCellValue('M1', 'D5')
-                    ->setCellValue('N1', 'D6')
-                    ->setCellValue('O1', 'D7')
-                    ->setCellValue('P1', 'D8')
-                    ->setCellValue('Q1', 'D9')
-                    ->setCellValue('R1', 'D10')
-                    ->setCellValue('S1', 'D11')
-                    ->setCellValue('T1', 'D12')
-                    ->setCellValue('U1', 'D13')
-                    ->setCellValue('V1', 'D14')
-                    ->setCellValue('W1', 'D15')
-                    ->setCellValue('X1', 'D16')
-                    ->setCellValue('Y1', 'D17')
-                    ->setCellValue('Z1', 'D18')
-                    ->setCellValue('AA1', 'D19')
-                    ->setCellValue('AB1', 'D20')
-                    ->setCellValue('AC1', 'D21')
-                    ->setCellValue('AD1', 'D22')
-                    ->setCellValue('AE1', 'D23')
-                    ->setCellValue('AF1', 'D24')
-                    ->setCellValue('AG1', 'D25')
-                    ->setCellValue('AH1', 'D26')
-                    ->setCellValue('AI1', 'D27')
-                    ->setCellValue('AJ1', 'D28')
-                    ->setCellValue('AK1', 'D29')
-                    ->setCellValue('AL1', 'D30')
-                    ->setCellValue('AM1', 'D31');
+                    ->setCellValue('D1', 'NIT')
+                    ->setCellValue('E1', 'CLIENTE')
+                    ->setCellValue('F1', 'SERVICIO')
+                    ->setCellValue('G1', 'CANT')
+                    ->setCellValue('H1', 'PRECIO')
+                    ->setCellValue('I1', 'IVA')
+                    ->setCellValue('J1', 'SUBTOTAL')
+                    ->setCellValue('K1', 'ANIO')
+                    ->setCellValue('L1', 'MES');
         
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
-        $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
-        $arProgramacionDetalles = $query->getResult();
-        foreach ($arProgramacionDetalles as $arProgramacionDetalle) {            
+        $arFacturaDetalles = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
+        $arFacturaDetalles = $query->getResult();
+        foreach ($arFacturaDetalles as $arFacturaDetalle) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arProgramacionDetalle->getCodigoProgramacionDetallePk())
-                    ->setCellValue('B' . $i, $arProgramacionDetalle->getProgramacionRel()->getCodigoProgramacionPk())
-                    ->setCellValue('C' . $i, $arProgramacionDetalle->getProgramacionRel()->getFecha()->format('Y-m'))
-                    ->setCellValue('D' . $i, $arProgramacionDetalle->getProgramacionRel()->getClienteRel()->getNombreCorto())                                        
-                    ->setCellValue('I' . $i, $arProgramacionDetalle->getDia1())
-                    ->setCellValue('J' . $i, $arProgramacionDetalle->getDia2())
-                    ->setCellValue('K' . $i, $arProgramacionDetalle->getDia3())
-                    ->setCellValue('L' . $i, $arProgramacionDetalle->getDia4())
-                    ->setCellValue('M' . $i, $arProgramacionDetalle->getDia5())
-                    ->setCellValue('N' . $i, $arProgramacionDetalle->getDia6())
-                    ->setCellValue('O' . $i, $arProgramacionDetalle->getDia7())
-                    ->setCellValue('P' . $i, $arProgramacionDetalle->getDia8())
-                    ->setCellValue('Q' . $i, $arProgramacionDetalle->getDia9())
-                    ->setCellValue('R' . $i, $arProgramacionDetalle->getDia10())
-                    ->setCellValue('S' . $i, $arProgramacionDetalle->getDia11())
-                    ->setCellValue('T' . $i, $arProgramacionDetalle->getDia12())
-                    ->setCellValue('U' . $i, $arProgramacionDetalle->getDia13())
-                    ->setCellValue('V' . $i, $arProgramacionDetalle->getDia14())
-                    ->setCellValue('W' . $i, $arProgramacionDetalle->getDia15())
-                    ->setCellValue('X' . $i, $arProgramacionDetalle->getDia16())
-                    ->setCellValue('Y' . $i, $arProgramacionDetalle->getDia17())
-                    ->setCellValue('Z' . $i, $arProgramacionDetalle->getDia18())
-                    ->setCellValue('AA' . $i, $arProgramacionDetalle->getDia19())
-                    ->setCellValue('AB' . $i, $arProgramacionDetalle->getDia20())
-                    ->setCellValue('AC' . $i, $arProgramacionDetalle->getDia21())
-                    ->setCellValue('AD' . $i, $arProgramacionDetalle->getDia22())
-                    ->setCellValue('AE' . $i, $arProgramacionDetalle->getDia23())
-                    ->setCellValue('AF' . $i, $arProgramacionDetalle->getDia24())
-                    ->setCellValue('AG' . $i, $arProgramacionDetalle->getDia25())
-                    ->setCellValue('AH' . $i, $arProgramacionDetalle->getDia26())
-                    ->setCellValue('AI' . $i, $arProgramacionDetalle->getDia27())
-                    ->setCellValue('AJ' . $i, $arProgramacionDetalle->getDia28())
-                    ->setCellValue('AK' . $i, $arProgramacionDetalle->getDia29())
-                    ->setCellValue('AL' . $i, $arProgramacionDetalle->getDia30())
-                    ->setCellValue('AM' . $i, $arProgramacionDetalle->getDia31());  
+                    ->setCellValue('A' . $i, $arFacturaDetalle->getFacturaRel()->getFacturaTipoRel()->getNombre())
+                    ->setCellValue('B' . $i, $arFacturaDetalle->getFacturaRel()->getNumero())                    
+                    ->setCellValue('C' . $i, $arFacturaDetalle->getFacturaRel()->getFecha()->format('Y-m'))
+                    ->setCellValue('D' . $i, $arFacturaDetalle->getFacturaRel()->getClienteRel()->getNit())              
+                    ->setCellValue('E' . $i, $arFacturaDetalle->getFacturaRel()->getClienteRel()->getNombreCorto())              
+                    ->setCellValue('F' . $i, $arFacturaDetalle->getConceptoServicioRel()->getNombre())                                  
+                    ->setCellValue('G' . $i, $arFacturaDetalle->getCantidad())
+                    ->setCellValue('H' . $i, $arFacturaDetalle->getVrPrecio())
+                    ->setCellValue('I' . $i, $arFacturaDetalle->getPorIva())
+                    ->setCellValue('J' . $i, $arFacturaDetalle->getSubtotal());  
             
-            if($arProgramacionDetalle->getPuestoRel()) {
-                $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('E' . $i, $arProgramacionDetalle->getPuestoRel()->getNombre());
-            }
-            if($arProgramacionDetalle->getRecursoRel()) {
-                $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('F' . $i, $arProgramacionDetalle->getRecursoRel()->getNombreCorto());
-            }
-            if($arProgramacionDetalle->getRecursoRel()->getRecursoTipoRel()) {
-                $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('G' . $i, $arProgramacionDetalle->getRecursoRel()->getRecursoTipoRel()->getNombre());
-            }    
-            if($arProgramacionDetalle->getRecursoRel()->getCentroCostoRel()) {
-                $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('H' . $i, $arProgramacionDetalle->getRecursoRel()->getCentroCostoRel()->getNombre());
-            }            
+            if($arFacturaDetalle->getCodigoPedidoDetalleFk()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K' . $i, $arFacturaDetalle->getPedidoDetalleRel()->getAnio());
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L' . $i, $arFacturaDetalle->getPedidoDetalleRel()->getMes());
+            }                     
             
             $i++;
         }
-        $intNum = count($arProgramacionDetalles);
+        $intNum = count($arFacturaDetalle);
         $intNum += 1;                
         //$objPHPExcel->getActiveSheet()->getStyle('A1:AL1')->getFont()->setBold(true);        
         
         //$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
         
-        $objPHPExcel->getActiveSheet()->setTitle('ProgramacionDetalle');
+        $objPHPExcel->getActiveSheet()->setTitle('FacturaDetalle');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="ProgramacionDetalle.xlsx"');
+        header('Content-Disposition: attachment;filename="FacturaDetalle.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

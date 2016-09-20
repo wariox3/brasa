@@ -56,6 +56,19 @@ class IncapacidadController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_movimiento_incapacidad'));
                 }
             }
+            if($form->get('BtnLegalizar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigoIncapacidad) {
+                        $arIncapacidad = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
+                        $arIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($codigoIncapacidad);
+                        $arIncapacidad->setEstadoLegalizado(1);
+                        $em->persist($arIncapacidad);
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_movimiento_incapacidad'));
+                }
+            }            
             
         }
         $arIncapacidades = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);
@@ -239,6 +252,7 @@ class IncapacidadController extends Controller
             ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnLegalizar', 'submit', array('label'  => 'Legalizar',))
             ->getForm();        
         return $form;
     }      
@@ -253,7 +267,7 @@ class IncapacidadController extends Controller
                 $session->get('filtroIdentificacion'),
                 $session->get('filtroIncapacidadNumeroEps'),
                 $session->get('filtroRhuIncapacidadTipo'),
-                $session->get('filtroIncapacidadEstadoTranscripcion')
+                $session->get('filtroIncapacidadEstadoLegalizado')
                 );  
     }         
     

@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-{% block title %}Consulta programacion detalle - Soga App{% endblock %}
+{% block title %}Consulta factura detalle - Soga App{% endblock %}
 {% block content %}
 <script>
     $(function () {
@@ -87,11 +87,23 @@
             <tr>                
                 <th>TIPO</th>
                 <th>NUMERO</th>
+                <th>FECHA</th>
+                <th>SERVICIO</th>
+                <th>CANT</th>
+                <th>PRECIO</th>
+                <th>IVA</th>
+                <th>SUBTOTAL</th>
             </tr>
             {% for arFacturaDetalle in arFacturaDetalle %}
             <tr>                                             
                 <td>{{ arFacturaDetalle.facturaRel.facturaTipoRel.nombre  }}</td>                  
-                <td>{{ arFacturaDetalle.facturaRel.numero  }}</td>                  
+                <td>{{ arFacturaDetalle.facturaRel.numero  }}</td>
+                <td>{{ arFacturaDetalle.facturaRel.fecha|date('Y/m/d')  }}</td>
+                <td>{{ arFacturaDetalle.conceptoServicioRel.nombre | default('') }}</td>                                                                
+                <td style="text-align: right">{{ arFacturaDetalle.cantidad | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arFacturaDetalle.vrPrecio | number_format(0, '.', ',') }}</td>                                    
+                <td style="text-align: right">{{ arFacturaDetalle.porIva | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arFacturaDetalle.subtotal | number_format(0, '.', ',') }}</td>                                                
             </tr>
             
             {% endfor %}
