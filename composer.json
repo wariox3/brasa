@@ -21,7 +21,7 @@
         "knplabs/knp-paginator-bundle": "~2.4",
         "phpoffice/phpexcel": "dev-develop",
         "wisembly/excelant": "*",
-        "royopa/fpdf-symfony2": "dev-master",
+        "royopa/fpdf-symfony2": "1.0",
         "ob/highcharts-bundle": "*"        
     },
     "require-dev": {
