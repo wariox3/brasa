@@ -12,6 +12,9 @@ class DirectorioController extends Controller
     public function listaAction($codigoDirectorioPadre = 0) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 72)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
         $paginator  = $this->get('knp_paginator');
         $form = $this->createFormBuilder() //
             ->add('BtnEliminarDirectorio', 'submit', array('label'  => 'Eliminar directorio'))

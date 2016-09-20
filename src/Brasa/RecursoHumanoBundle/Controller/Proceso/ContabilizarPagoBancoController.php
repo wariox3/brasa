@@ -15,7 +15,10 @@ class ContabilizarPagoBancoController extends Controller
      */     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();  
+        $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 70)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioLista();

@@ -138,7 +138,7 @@ class ConsultasController extends Controller
     public function serviciosCobrarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 107, 1)) {
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 38)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
         $paginator  = $this->get('knp_paginator');
@@ -486,7 +486,7 @@ class ConsultasController extends Controller
     public function DotacionesPendientesAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 108, 1)) {
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 39)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
         $paginator  = $this->get('knp_paginator');
