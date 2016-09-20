@@ -26,11 +26,13 @@ class IncapacidadController extends Controller
         if($form->isValid()) {
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form);
+                $this->formularioLista();
                 $this->listar();
             }
 
             if($form->get('BtnExcel')->isClicked()) {
                 $this->filtrarLista($form);
+                $this->formularioLista();
                 $this->listar();
                 $this->generarExcel();
             }
@@ -183,7 +185,20 @@ class IncapacidadController extends Controller
 
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();        
+        $session = $this->getRequest()->getSession();    
+        $strNombreEmpleado = "";
+        if($session->get('filtroIdentificacion')) {
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $session->get('filtroIdentificacion')));
+            if($arEmpleado) {
+                $strNombreEmpleado = $arEmpleado->getNombreCorto();
+                $session->set('filtroRhuCodigoEmpleado', $arEmpleado->getCodigoEmpleadoPk());
+            }  else {
+                $session->set('filtroIdentificacion', null);
+                $session->set('filtroRhuCodigoEmpleado', null);
+            }
+        } else {
+            $session->set('filtroRhuCodigoEmpleado', null);            
+        }        
         $arrayPropiedades = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'query_builder' => function (EntityRepository $er) {
@@ -198,12 +213,28 @@ class IncapacidadController extends Controller
         if($session->get('filtroCodigoCentroCosto')) {
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));                                    
         }
+        $arrayPropiedadesIncapacidadTipo = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuIncapacidadTipo',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('it')                                        
+                    ->orderBy('it.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,  
+                'empty_data' => "",
+                'empty_value' => "TODOS",    
+                'data' => ""
+            );  
+        if($session->get('filtroRhuIncapacidadTipo')) {
+            $arrayPropiedadesIncapacidadTipo['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuIncapacidadTipo", $session->get('filtroRhuIncapacidadTipo'));                                    
+        }        
         $form = $this->createFormBuilder()                        
-            ->add('centroCostoRel', 'entity', $arrayPropiedades)                                           
-            ->add('TxtNumero', 'number', array('data' => $session->get('filtroNumeroIncapacidad')))                            
+            ->add('txtNumeroIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('txtNombreCorto', 'text', array('label'  => 'Nombre','data' => $strNombreEmpleado))                
+            ->add('centroCostoRel', 'entity', $arrayPropiedades)                                                       
+            ->add('incapacidadTipoRel', 'entity', $arrayPropiedadesIncapacidadTipo)                                                                       
             ->add('TxtNumeroEps', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIncapacidadNumeroEps')))                                                        
-            ->add('estadoTranscripcion', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'),'data' => $session->get('filtroIncapacidadEstadoTranscripcion')))                                        
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                            
+            ->add('estadoTranscripcion', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'),'data' => $session->get('filtroIncapacidadEstadoTranscripcion')))                                                    
+            ->add('estadoLegalizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'LEGALIZADA', '0' => 'SIN LEGALIZAR'),'data' => $session->get('filtroIncapacidadEstadoLegalizado')))                                                    
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
@@ -216,11 +247,13 @@ class IncapacidadController extends Controller
         $em = $this->getDoctrine()->getManager();                
         $session = $this->getRequest()->getSession();
         $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->listaDQL(                   
-                $session->get('filtroIncapacidadNumero'),
+                "",
                 $session->get('filtroCodigoCentroCosto'),
                 $session->get('filtroIncapacidadEstadoTranscripcion'),
                 $session->get('filtroIdentificacion'),
-                $session->get('filtroIncapacidadNumeroEps')
+                $session->get('filtroIncapacidadNumeroEps'),
+                $session->get('filtroRhuIncapacidadTipo'),
+                $session->get('filtroIncapacidadEstadoTranscripcion')
                 );  
     }         
     
@@ -229,13 +262,15 @@ class IncapacidadController extends Controller
         $request = $this->getRequest();
         $controles = $request->request->get('form');        
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);                
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroIncapacidadNumero', $form->get('TxtNumero')->getData());
+        $session->set('filtroRhuIncapacidadTipo', $controles['incapacidadTipoRel']);                
+        $session->set('filtroIdentificacion', $form->get('txtNumeroIdentificacion')->getData());        
         $session->set('filtroIncapacidadNumeroEps', $form->get('TxtNumeroEps')->getData());                
         $session->set('filtroIncapacidadEstadoTranscripcion', $form->get('estadoTranscripcion')->getData());                        
+        $session->set('filtroIncapacidadEstadoLegalizado', $form->get('estadoLegalizado')->getData());                        
     }         
     
     private function generarExcel() {
+        $objFuncinoes = new \Brasa\GeneralBundle\MisClases\Funciones();        
         ob_clean();
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -250,27 +285,21 @@ class IncapacidadController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+        for($col = 'A'; $col !== 'L'; $col++) {            
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
+        } 
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
-                    ->setCellValue('B1', 'NÚMERO EPS')
+                    ->setCellValue('B1', 'NÚMERO')
                     ->setCellValue('C1', 'EPS')
-                    ->setCellValue('D1', 'INCAPACIDAD')
-                    ->setCellValue('E1', 'IDENTIFICACIÓN')
+                    ->setCellValue('D1', 'TIPO')
+                    ->setCellValue('E1', 'DOCUMENTO')
                     ->setCellValue('F1', 'NOMBRE')
                     ->setCellValue('G1', 'CENTRO COSTO')
                     ->setCellValue('H1', 'DESDE')
                     ->setCellValue('I1', 'HASTA')
-                    ->setCellValue('J1', 'DÍAS');
+                    ->setCellValue('J1', 'DÍAS')
+                    ->setCellValue('K1', 'LEG');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);        
@@ -296,7 +325,8 @@ class IncapacidadController extends Controller
                     ->setCellValue('G' . $i, $centroCosto)
                     ->setCellValue('H' . $i, $arIncapacidad->getFechaDesde()->format('Y-m-d'))
                     ->setCellValue('I' . $i, $arIncapacidad->getFechaHasta()->format('Y-m-d'))
-                    ->setCellValue('J' . $i, $arIncapacidad->getCantidad());
+                    ->setCellValue('J' . $i, $arIncapacidad->getCantidad())
+                    ->setCellValue('K' . $i, $objFuncinoes->devuelveBoolean($arIncapacidad->getEstadoLegalizado()));
             $i++;
         }
 

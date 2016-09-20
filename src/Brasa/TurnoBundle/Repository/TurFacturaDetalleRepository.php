@@ -16,6 +16,39 @@ class TurFacturaDetalleRepository extends EntityRepository {
         return $dql;
     }     
     
+    public function listaConsultaDql($numeroFactura = "", $codigoCliente = "", $boolEstadoAutorizado = "", $strFechaDesde = "", $strFechaHasta = "", $boolEstadoAnulado = "", $codigoFacturaTipo = "") {
+        $dql   = "SELECT fd FROM BrasaTurnoBundle:TurFacturaDetalle fd JOIN fd.facturaRel f WHERE fd.codigoFacturaDetallePk <> 0";
+        if($numeroFactura != "") {
+            $dql .= " AND f.numero = " . $numeroFactura;
+        }
+        if($codigoCliente != "") {
+            $dql .= " AND f.codigoClienteFk = " . $codigoCliente;
+        }
+        if($codigoFacturaTipo != "") {
+            $dql .= " AND f.codigoFacturaTipoFk = " . $codigoFacturaTipo;
+        }        
+        if($boolEstadoAutorizado == 1 ) {
+            $dql .= " AND f.estadoAutorizado = 1";
+        }
+        if($boolEstadoAutorizado == "0") {
+            $dql .= " AND f.estadoAutorizado = 0";
+        }
+        if($boolEstadoAnulado == 1 ) {
+            $dql .= " AND f.estadoAnulado = 1";
+        }
+        if($boolEstadoAnulado == "0") {
+            $dql .= " AND f.estadoAnulado = 0";
+        }
+        if($strFechaDesde != "") {
+            $dql .= " AND f.fecha >= '" . $strFechaDesde . " 00:00:00'";
+        }
+        if($strFechaHasta != "") {
+            $dql .= " AND f.fecha <= '" . $strFechaHasta . " 23:59:59'";
+        }
+        $dql .= " ORDER BY f.codigoFacturaTipoFk, f.fecha DESC, f.numero DESC";
+        return $dql;
+    }    
+    
     public function listaCliente($codigoCliente, $codigoFactura = "", $tipo = "") {
         $dql   = "SELECT fd FROM BrasaTurnoBundle:TurFacturaDetalle fd JOIN fd.facturaRel f JOIN f.facturaTipoRel ft WHERE f.codigoClienteFk =  " . $codigoCliente . " ";
         

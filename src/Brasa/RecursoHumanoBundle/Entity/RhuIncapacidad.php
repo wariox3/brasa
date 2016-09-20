@@ -122,6 +122,11 @@ class RhuIncapacidad
      */    
     private $codigoUsuario;
     
+    /**     
+     * @ORM\Column(name="estado_legalizado", type="boolean")
+     */    
+    private $estadoLegalizado = false;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuIncapacidadTipo", inversedBy="incapacidadesIncapacidadTipoRel")
      * @ORM\JoinColumn(name="codigo_incapacidad_tipo_fk", referencedColumnName="codigo_incapacidad_tipo_pk")
@@ -896,5 +901,29 @@ class RhuIncapacidad
     public function getContratoRel()
     {
         return $this->contratoRel;
+    }
+
+    /**
+     * Set estadoLegalizado
+     *
+     * @param boolean $estadoLegalizado
+     *
+     * @return RhuIncapacidad
+     */
+    public function setEstadoLegalizado($estadoLegalizado)
+    {
+        $this->estadoLegalizado = $estadoLegalizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoLegalizado
+     *
+     * @return boolean
+     */
+    public function getEstadoLegalizado()
+    {
+        return $this->estadoLegalizado;
     }
 }

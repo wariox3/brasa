@@ -69,6 +69,11 @@ class RhuCentroCosto
     private $estadoActivo = false;     
 
     /**     
+     * @ORM\Column(name="imprimir_programacion_formato", type="boolean")
+     */    
+    private $imprimirProgramacionFormato = false;     
+    
+    /**     
      * @ORM\Column(name="generar_pago_automatico", type="boolean")
      */    
     private $generarPagoAutomatico = false;    
@@ -1662,5 +1667,29 @@ class RhuCentroCosto
     public function getCodigoRecursoGrupoFk()
     {
         return $this->codigoRecursoGrupoFk;
+    }
+
+    /**
+     * Set imprimirProgramacionFormato
+     *
+     * @param boolean $imprimirProgramacionFormato
+     *
+     * @return RhuCentroCosto
+     */
+    public function setImprimirProgramacionFormato($imprimirProgramacionFormato)
+    {
+        $this->imprimirProgramacionFormato = $imprimirProgramacionFormato;
+
+        return $this;
+    }
+
+    /**
+     * Get imprimirProgramacionFormato
+     *
+     * @return boolean
+     */
+    public function getImprimirProgramacionFormato()
+    {
+        return $this->imprimirProgramacionFormato;
     }
 }

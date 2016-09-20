@@ -120,7 +120,7 @@ class PagosAdicionalesAgregarController extends Controller
                                 $em->flush();
                             }
                             if($form->get('BtnGuardaryNuevo')->isClicked()) {
-                                return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_valoradicional', array('tipo' => $tipo, 'modalidad' => $modalidad) ));
+                                return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_agregar_valoradicional', array('tipo' => $tipo, 'modalidad' => $modalidad, 'periodo' => $periodo) ));
                             } else {
                                 return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista', array('modalidad' => $modalidad, 'periodo' => $periodo)));
                             }

@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuIncapacidadRepository extends EntityRepository {
     
-    public function listaDQL($intNumero = "", $strCodigoCentroCosto = "", $boolEstadoTranscripcion = "", $strIdentificacion = "", $strNumeroEps = "") {        
+    public function listaDQL($intNumero = "", $strCodigoCentroCosto = "", $boolEstadoTranscripcion = "", $strIdentificacion = "", $strNumeroEps = "", $codigoIncapacidadTipo = "", $estadoLegalizado = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT i, e FROM BrasaRecursoHumanoBundle:RhuIncapacidad i JOIN i.empleadoRel e WHERE i.codigoIncapacidadPk <> 0";      
         if($intNumero != "") {
@@ -31,7 +31,15 @@ class RhuIncapacidadRepository extends EntityRepository {
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
         } 
-        
+        if($codigoIncapacidadTipo != "") {
+            $dql .= " AND i.codigoIncapacidadTipoFk = " . $codigoIncapacidadTipo;
+        }        
+        if($estadoLegalizado == 1 ) {
+            $dql .= " AND i.estadoLegalizado = 1";
+        }
+        if($estadoLegalizado == "0") {
+            $dql .= " AND a.estadoLegalizado = 0";
+        }        
         //$dql .= " ORDER BY e.nombreCorto";
         return $dql;
     }                    
