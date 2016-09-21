@@ -139,18 +139,25 @@ class generalController extends Controller
         
         foreach ($arGeneral as $arGeneral) {
         
-        //$arContrato = new \Brasa\AfiliacionBundle\Entity\AfiContrato();
-        //$arContrato = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->find($codigoContratoActivo);
-        
+        $arContratos = new \Brasa\AfiliacionBundle\Entity\AfiContrato();
+        $arContratos = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->findAll();
+        if ($arGeneral['cliente'] != null){
+            $cliente = $arGeneral['cliente'];
+        } else {
+           foreach ($arContratos as $arContratos) {
+               $arContrato = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->find($arGeneral['codigoContratoPk']);
+               $cliente = $arContrato->getClienteRel()->getNombreCorto();
+           } 
+        }
         
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arGeneral['codigoContratoPk'])
-                    ->setCellValue('B' . $i, $arGeneral['codigoContratoPk'])
-                    ->setCellValue('C' . $i, $arGeneral['codigoContratoPk'])
-                    ->setCellValue('D' . $i, $arGeneral['codigoContratoPk'])
-                    ->setCellValue('E' . $i, $arGeneral['codigoContratoPk'])
-                    ->setCellValue('F' . $i, $arGeneral['codigoContratoPk'])
-                    ->setCellValue('G' . $i, $arGeneral['codigoContratoPk']);
+                    ->setCellValue('B' . $i, $cliente)
+                    ->setCellValue('C' . $i, $arGeneral['identificacion'])
+                    ->setCellValue('D' . $i, $arGeneral['empleado'])
+                    ->setCellValue('E' . $i, $arGeneral['desde'])
+                    ->setCellValue('F' . $i, $arGeneral['hasta'])
+                    ->setCellValue('G' . $i, $arGeneral['indefinido']);
             $i++;
         }
         
