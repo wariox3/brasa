@@ -90,19 +90,31 @@ class DisciplinarioController extends Controller
             $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arrControles = $request->request->All();
             $arDisciplinario = $form->getData();
+            $contratoTerminado = false;
             if ($arDisciplinario->getEstadoCerrado() == 0){
                 if($arrControles['form_txtNumeroIdentificacion'] != '') {
                     $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                     $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));
                     if(count($arEmpleado) > 0) {
                         $arDisciplinario->setEmpleadoRel($arEmpleado);
-                        if($arEmpleado->getCodigoContratoActivoFk() != '') {
-                            $arDisciplinario->setCentroCostoRel($arEmpleado->getCentroCostoRel());
-                            $arDisciplinario->setCargoRel($arEmpleado->getCargoRel());
+                        if ($arEmpleado->getCodigoContratoActivoFk() != ''){
+                            $codigoContrato = $arEmpleado->getCodigoContratoActivoFk();
+                        } else {
+                            $codigoContrato = $arEmpleado->getCodigoContratoUltimoFk();
+                            $contratoTerminado = true;
+                        }
+                        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
+                        if($codigoContrato != '') {
+                            if ($contratoTerminado == true){
+                                $arDisciplinario->setCentroCostoRel($arContrato->getCentroCostoRel());
+                                $arDisciplinario->setCargoRel($arContrato->getCargoRel());
+                            } else {
+                                $arDisciplinario->setCentroCostoRel($arEmpleado->getCentroCostoRel());
+                                $arDisciplinario->setCargoRel($arEmpleado->getCargoRel());
+                            }
                             if($codigoDisciplinario == 0) {
                                 $arDisciplinario->setCodigoUsuario($arUsuario->getUserName());
-                                $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-                                $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
                                 $arDisciplinario->setContratoRel($arContrato);                            
                             }
                             $em->persist($arDisciplinario);
@@ -237,7 +249,12 @@ class DisciplinarioController extends Controller
                 $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                 $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));
                 if(count($arEmpleado) > 0) {
-                    if($arEmpleado->getCodigoContratoActivoFk() != '') {
+                    if ($arEmpleado->getCodigoContratoActivoFk() != ''){
+                        $codigoContrato = $arEmpleado->getCodigoContratoActivoFk();
+                    } else {
+                        $codigoContrato = $arEmpleado->getCodigoContratoUltimoFk();
+                    }
+                    if($codigoContrato != '') {
                         $arDisciplinarioDescargo->setEmpleadoRel($arEmpleado);
                         $em->persist($arDisciplinarioDescargo);
                         $em->flush();
