@@ -149,7 +149,11 @@ class generalController extends Controller
                $cliente = $arContrato->getClienteRel()->getNombreCorto();
            } 
         }
-        
+        if ($arGeneral['indefinido'] == 1){
+            $retirado = "NO";
+        } else {
+            $retirado = "SI";
+        }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arGeneral['codigoContratoPk'])
                     ->setCellValue('B' . $i, $cliente)
@@ -157,7 +161,7 @@ class generalController extends Controller
                     ->setCellValue('D' . $i, $arGeneral['empleado'])
                     ->setCellValue('E' . $i, $arGeneral['desde'])
                     ->setCellValue('F' . $i, $arGeneral['hasta'])
-                    ->setCellValue('G' . $i, $arGeneral['indefinido']);
+                    ->setCellValue('G' . $i, $retirado);
             $i++;
         }
         
