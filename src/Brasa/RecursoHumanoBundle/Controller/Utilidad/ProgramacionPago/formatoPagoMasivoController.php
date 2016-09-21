@@ -40,57 +40,17 @@ class formatoPagoMasivoController extends Controller
                     $codigoSubzona = $arSubzona->getCodigoSubzonaPk();
                 } else {
                     $codigoSubzona = "";
-                }                    
-                $objFormatoPagoMasivo = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPagoMasivo();
-                $objFormatoPagoMasivo->Generar($this, $form->get('numero')->getData(), "", "", $codigoZona, $codigoSubzona, $form->get('porFecha')->getData(), $fechaDesde->format('Y-m-d'), $fechaHasta->format('Y-m-d'), $form->get('dato')->getData());
-                /* else {
-                    $codigoProgramacionPago = $form->get('numero')->getData();
-                    $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-                    $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);                
-                    if(count($arProgramacionPago) > 0) {
-                        if($arProgramacionPago->getEstadoPagado() == 1) {
-                            $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
-                            $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-                            $strRutaGeneral = $arConfiguracion->getRutaTemporal();
-                            if(!file_exists($strRutaGeneral)) {
-                                mkdir($strRutaGeneral, 0777);
-                            }                               
-                            $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-                            $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
-                            $strRuta = $strRutaGeneral . "CompropantesPago" . $codigoProgramacionPago . "/";
-                            if(!file_exists($strRuta)) {
-                                mkdir($strRuta, 0777);
-                            }
-                            foreach ($arPagos as $arPago) {                                        
-                                $objFormatoPago = new \Brasa\RecursoHumanoBundle\Formatos\FormatoPago();
-                                $objFormatoPago->Generar($this, $arPago->getCodigoPagoPk(), $strRuta);
-                            }            
-                            $strRutaZip = $strRutaGeneral . 'ComprobantesPago' . $codigoProgramacionPago . '.zip';
-                            $this->comprimir($strRuta, $strRutaZip);                                                
-                            $dir = opendir($strRuta);                
-                            while ($current = readdir($dir)){
-                                if( $current != "." && $current != "..") {
-                                    unlink($strRuta . $current);
-                                }                    
-                            } 
-                            rmdir($strRuta);
-
-                            // Generate response
-                            $response = new Response();
-
-                            // Set headers
-                            $response->headers->set('Cache-Control', 'private');
-                            $response->headers->set('Content-type', 'application/zip');
-                            $response->headers->set('Content-Transfer-Encoding', 'binary');                
-                            $response->headers->set('Content-Disposition', 'attachment; filename="ComprobantesPago' . $codigoProgramacionPago . '.zip";');
-                            //$response->headers->set('Content-length', '');        
-                            $response->sendHeaders();
-                            $response->setContent(readfile($strRutaZip));    
-                            unlink($strRutaZip);                        
-                        }                     
-                    }
-                } 
-                */
+                }    
+                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+                $codigoFormato = $arConfiguracion->getCodigoFormatoPago();
+                if($codigoFormato <= 1) {
+                    $objFormatoPago = new \Brasa\RecursoHumanoBundle\Formatos\PagoMasivo1();
+                    $objFormatoPago->Generar($this, $form->get('numero')->getData(), "", "", $codigoZona, $codigoSubzona, $form->get('porFecha')->getData(), $fechaDesde->format('Y-m-d'), $fechaHasta->format('Y-m-d'), $form->get('dato')->getData());
+                }
+                if($codigoFormato == 2) {
+                    $objFormatoPago = new \Brasa\RecursoHumanoBundle\Formatos\PagoMasivo2();
+                    $objFormatoPago->Generar($this, $form->get('numero')->getData(), "", "", $codigoZona, $codigoSubzona, $form->get('porFecha')->getData(), $fechaDesde->format('Y-m-d'), $fechaHasta->format('Y-m-d'), $form->get('dato')->getData());
+                }                                 
             }            
         }                    
         return $this->render('BrasaRecursoHumanoBundle:Utilidades/ProgramacionesPago:comprobanteMasivo.html.twig', array(            
