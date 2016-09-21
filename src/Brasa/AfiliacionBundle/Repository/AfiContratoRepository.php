@@ -37,8 +37,8 @@ class AfiContratoRepository extends EntityRepository {
     }
 
     public function listaConsultaGeneralDql($strEmpleado = '', $codigoCliente = '', $strIdentificacion = '',$strDesde = "", $strHasta = "") {
-        //$em = $this->getEntityManager();
-        $dql   = "SELECT c,e FROM BrasaAfiliacionBundle:AfiEmpleado e JOIN e.contratoRel c   WHERE c.codigoContratoPk <> 0";
+        $em = $this->getEntityManager();
+        /*$dql   = "SELECT c,e FROM BrasaAfiliacionBundle:AfiContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0";
         if($strEmpleado != '') {
             $dql .= " AND e.nombreCorto LIKE '%" . $strEmpleado . "%'";
         }
@@ -56,7 +56,42 @@ class AfiContratoRepository extends EntityRepository {
         }
         
         //$dql .= " ORDER BY pd.codigoPeriodoDetallePk";
-        return $dql;
+        return $dql;*/
+        $strSql = "SELECT
+                afi_contrato.codigo_contrato_pk as codigoContratoPk,
+                afi_cliente.nombre_corto as cliente,
+                afi_empleado.numero_identificacion as identificacion,
+                afi_empleado.nombre_corto as empleado,
+                afi_contrato.indefinido as indefinido,
+                afi_contrato.fecha_desde as desde,
+                afi_contrato.fecha_hasta as hasta
+                FROM
+                afi_empleado
+                INNER JOIN afi_contrato ON afi_contrato.codigo_empleado_fk = afi_empleado.codigo_empleado_pk
+                LEFT JOIN afi_cliente ON afi_empleado.codigo_cliente_fk = afi_cliente.codigo_cliente_pk AND afi_contrato.codigo_cliente_fk = afi_cliente.codigo_cliente_pk
+                WHERE  afi_contrato.codigo_contrato_pk <> 0";
+        if($strEmpleado != '') {
+            $strSql .= " AND afi_empleado.numero_corto LIKE '%" . $strEmpleado . "%'";
+        }
+        if($codigoCliente != '') {
+            $strSql .= " AND afi_contrato.codigo_cliente_fk = " . $codigoCliente;
+        } 
+        if($strIdentificacion != '') {
+            $strSql .= " AND afi_empleado.numero_identificacion = " . $strIdentificacion;
+        }
+        if($strDesde != "") {
+            $strSql .= " AND afi_contrato.fecha_desde >='" . $strDesde . "'";
+        }
+        if($strHasta != "") {
+            $strSql .= " AND afi_contrato.fecha_hasta <='" . $strHasta . "'";
+        }        
+                //afi_contrato.codigo_cliente_fk = '401' AND
+                //afi_empleado.numero_identificacion = '98553229'";
+        $connection = $em->getConnection();
+        $statement = $connection->prepare($strSql);        
+        $statement->execute();
+        $strSql = $statement->fetchAll();
+        return $strSql;
     }
     
     public function listaConsultaPagoPendienteDql($strEmpleado = '', $codigoCliente = '', $strIdentificacion = '',$strDesde = "", $strHasta = "") {

@@ -83,11 +83,19 @@
             {% for arGeneral in arGeneral %}
             <tr>
                 <td>{{ arGeneral.codigoContratoPk  }}</td>
-                <td>{{ arGeneral.clienteRel.nombreCorto |default('')  }}</td>                
-                <td>{{ arGeneral.empleadoRel.numeroIdentificacion }}</td>
-                <td>{{ arGeneral.empleadoRel.nombreCorto }}</td>
-                <td>{{ arGeneral.fechaDesde | date('Y-m-d') }}</td>
-                <td>{{ arGeneral.fechaHasta | date('Y-m-d') }}</td>
+                {% if arGeneral.cliente != null%}
+                    <td>{{ arGeneral.cliente  }}</td>
+                {% else %}
+                    {% for arContratos in arContratos %}
+                    {% if arContratos.codigoContratoPk ==  arGeneral.codigoContratoPk %}
+                        <td>{{ arContratos.clienteRel.nombreCorto  }}</td>
+                    {% endif %}    
+                    {% endfor %}        
+                {% endif %}                
+                <td>{{ arGeneral.identificacion }}</td>
+                <td>{{ arGeneral.empleado }}</td>
+                <td>{{ arGeneral.desde | date('Y-m-d') }}</td>
+                <td>{{ arGeneral.hasta | date('Y-m-d') }}</td>
                 <td>{% if arGeneral.indefinido == 1 %} NO {% else %} SI {% endif %}</td>
             </tr>
 

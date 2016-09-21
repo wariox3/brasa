@@ -5801,7 +5801,7 @@ INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tip
 INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('86','HORARIO ACCESO VISITANTE','UTILIDAD','RECURSO HUMANO');
 INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('87','ANALIZAR INCONSISTENCIA','UTILIDAD','TURNOS');
 INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('88','DESCARGA MASIVA (PROGRAMACION)','UTILIDAD','TURNOS');
-INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('89','FACTURA DETALLE','CONSULTA',NULL);
+INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('89','FACTURA DETALLE','CONSULTA','TURNO');
 
 INSERT INTO `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) VALUES('1','PROGRAMACION PAGO','MOVIMIENTO','RECURSO HUMANO');
 INSERT INTO `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) VALUES('2','PAGO','MOVIMIENTO','RECURSO HUMANO');

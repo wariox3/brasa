@@ -34,9 +34,11 @@ class generalController extends Controller
             }
         }
         
-        $arGeneral = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 300);
+        $arGeneral = $paginator->paginate($this->strDqlLista, $request->query->get('page', 1), 300);
+        $arContratos = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->findAll();
         return $this->render('BrasaAfiliacionBundle:Consulta/Contrato:general.html.twig', array(
-            'arGeneral' => $arGeneral, 
+            'arGeneral' => $arGeneral,
+            'arContratos' => $arContratos,
             'form' => $form->createView()));
     }
     
@@ -120,137 +122,35 @@ class generalController extends Controller
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
         }      
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'IDENTIFICACION')
-                    ->setCellValue('C1', 'TIPO ID')
+                    ->setCellValue('A1', 'CONTRATO')
+                    ->setCellValue('B1', 'CLIENTE')
+                    ->setCellValue('C1', 'IDENTIFICACION')
                     ->setCellValue('D1', 'EMPLEADO')
-                    ->setCellValue('E1', 'CIUDAD')
-                    ->setCellValue('F1', 'DIRECCION')
-                    ->setCellValue('G1', 'BARRIO')
-                    ->setCellValue('H1', 'TELEFONO')
-                    ->setCellValue('I1', 'CELULAR')
-                    ->setCellValue('J1', 'EMAIL')
-                    ->setCellValue('K1', 'RH')
-                    ->setCellValue('L1', 'ESTADO CIVIL')
-                    ->setCellValue('M1', 'FECHA NAC')
-                    ->setCellValue('N1', 'SEXO')
-                    ->setCellValue('O1', 'CARGO')
-                    ->setCellValue('P1', 'FECHA DESDE')
-                    ->setCellValue('Q1', 'FECHA HASTA')
-                    ->setCellValue('R1', 'TIPO CONTIZANTE')
-                    ->setCellValue('S1', 'SUCURSAL')
-                    ->setCellValue('T1', 'PENSION')
-                    ->setCellValue('U1', 'SALUD')
-                    ->setCellValue('V1', 'ARL')
-                    ->setCellValue('W1', 'CAJA')
-                    ->setCellValue('X1', 'CLIENTE')
-                    ->setCellValue('Y1', 'RETIRADO');
+                    ->setCellValue('E1', 'DESDE')
+                    ->setCellValue('F1', 'HASTA')
+                    ->setCellValue('G1', 'RETIRADO');
         $i = 2;
         
-        $query = $em->createQuery($this->strDqlLista);
+        //$query = $em->createQuery($this->strDqlLista);
         //$arIngresos = new \Brasa\AfiliacionBundle\Entity\AfiEmpleado();
-        $arGeneral = $query->getResult();
+        //$arGeneral = $query->getResult();
                 
-        foreach ($arGeneral as $arGeneral) {
-        $ciudad = '';
-        if ($arGeneral->getEmpleadoRel()->getCodigoCiudadFk() != null){
-            $ciudad = $arGeneral->getEmpleadoRel()->getCiudadRel()->getNombre();
-        }
-        $rh = '';
-        if ($arGeneral->getEmpleadoRel()->getCodigoRhPk() != null){
-            $rh = $arGeneral->getEmpleadoRel()->getRhRel()->getTipo();
-        }
-        $estadoCivil = '';
-        if ($arGeneral->getEmpleadoRel()->getCodigoEstadoCivilFk() != null){
-            $estadoCivil = $arGeneral->getEmpleadoRel()->getEstadoCivilRel()->getNombre();
-        }
-        if ($arGeneral->getEmpleadoRel()->getCodigoSexoFk() == 'M'){
-            $sexo = 'MASCULINO';
-        } else {
-            $sexo = 'FEMENINO';
-        }
-        if ($arGeneral->getEmpleadoRel()->getCodigoContratoActivo() == null){
-            $codigoContratoActivo = 0;
-        } else {
-            $codigoContratoActivo = $arGeneral->getEmpleadoRel()->getCodigoContratoActivo();
-        }
-        $arContrato = new \Brasa\AfiliacionBundle\Entity\AfiContrato();
-        $arContrato = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->find($codigoContratoActivo);
+        $arGeneral = $this->strDqlLista;
         
-        $cargo = '';
-        $fechaDesde = '';
-        $fechaHasta = '';
-        $tipoCotizante = '';
-        $sucursal = '';
-        $pension = '';
-        $salud = '';
-        $arl = '';
-        $caja = '';
-        if ($arContrato != null){
-            
-            if ($arContrato->getCodigoCargoFk() != null){
-                $cargo = $arContrato->getCargoRel()->getNombre();
-            }
-            if ($arContrato->getFechaDesde() != null){
-                $fechaDesde = $arContrato->getFechaDesde()->format('Y-m-d');
-            }
-            if ($arContrato->getFechaHasta() != null){
-                $fechaHasta = $arContrato->getFechaHasta()->format('Y-m-d');
-            }
-            if ($arContrato->getCodigoTipoCotizanteFk() != null){
-                $tipoCotizante = $arContrato->getSsoTipoCotizanteRel()->getNombre();
-            }
-            if ($arContrato->getCodigoSucursalFk() != null){
-                $sucursal = $arContrato->getSucursalRel()->getNombre();
-            }
-            if ($arContrato->getCodigoEntidadPensionFk() != null){
-                $pension = $arContrato->getEntidadPensionRel()->getNombre();
-            }if ($arContrato->getCodigoEntidadSaludFk() != null){
-                $salud = $arContrato->getEntidadSaludRel()->getNombre();
-            }
-            if ($arContrato->getCodigoClasificacionRiesgoFk() != null){
-                $arl = $arContrato->getClasificacionRiesgoRel()->getNombre();
-            }
-            if ($arContrato->getCodigoEntidadCajaFk() != null){
-                $caja = $arContrato->getEntidadCajaRel()->getNombre();
-            }
-            if ($arContrato->getIndefinido() == 1){
-                $independiente = 'NO';
-            } else {
-                $independiente = 'SI';
-            }
-        }
-        $cliente = '';
-        if ($arGeneral->getEmpleadoRel()->getCodigoClienteFk() != null){
-            $cliente = $arGeneral->getEmpleadoRel()->getClienteRel()->getNombreCorto();
-        }
+        foreach ($arGeneral as $arGeneral) {
+        
+        //$arContrato = new \Brasa\AfiliacionBundle\Entity\AfiContrato();
+        //$arContrato = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->find($codigoContratoActivo);
+        
         
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arGeneral->getCodigoEmpleadoFk())
-                    ->setCellValue('B' . $i, $arGeneral->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('C' . $i, $arGeneral->getEmpleadoRel()->getTipoIdentificacionRel()->getNombre())
-                    ->setCellValue('D' . $i, $arGeneral->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('E' . $i, $ciudad)
-                    ->setCellValue('F' . $i, $arGeneral->getEmpleadoRel()->getDireccion())
-                    ->setCellValue('G' . $i, $arGeneral->getEmpleadoRel()->getBarrio())
-                    ->setCellValue('H' . $i, $arGeneral->getEmpleadoRel()->getTelefono())
-                    ->setCellValue('I' . $i, $arGeneral->getEmpleadoRel()->getCelular())
-                    ->setCellValue('J' . $i, $arGeneral->getEmpleadoRel()->getCorreo())
-                    ->setCellValue('K' . $i, $rh)
-                    ->setCellValue('L' . $i, $estadoCivil)
-                    ->setCellValue('M' . $i, $arGeneral->getEmpleadoRel()->getFechaNacimiento()->format('Y-m-d'))
-                    ->setCellValue('N' . $i, $sexo)
-                    ->setCellValue('O' . $i, $cargo)
-                    ->setCellValue('P' . $i, $fechaDesde)
-                    ->setCellValue('Q' . $i, $fechaHasta)
-                    ->setCellValue('R' . $i, $tipoCotizante)
-                    ->setCellValue('S' . $i, $sucursal)
-                    ->setCellValue('T' . $i, $pension)
-                    ->setCellValue('U' . $i, $salud)
-                    ->setCellValue('V' . $i, $arl)
-                    ->setCellValue('W' . $i, $caja)
-                    ->setCellValue('X' . $i, $cliente)
-                    ->setCellValue('Y' . $i, $independiente);                                    
+                    ->setCellValue('A' . $i, $arGeneral['codigoContratoPk'])
+                    ->setCellValue('B' . $i, $arGeneral['codigoContratoPk'])
+                    ->setCellValue('C' . $i, $arGeneral['codigoContratoPk'])
+                    ->setCellValue('D' . $i, $arGeneral['codigoContratoPk'])
+                    ->setCellValue('E' . $i, $arGeneral['codigoContratoPk'])
+                    ->setCellValue('F' . $i, $arGeneral['codigoContratoPk'])
+                    ->setCellValue('G' . $i, $arGeneral['codigoContratoPk']);
             $i++;
         }
         
