@@ -54,3 +54,6 @@ brasa_general:
     resource: "@BrasaGeneralBundle/Resources/config/routing.yml"
     prefix:   /
 
+brasa_general_annotation:
+    resource: "@BrasaGeneralBundle/Controller/"
+    type:     annotation 
