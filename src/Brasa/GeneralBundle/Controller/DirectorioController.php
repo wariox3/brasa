@@ -62,14 +62,14 @@ class DirectorioController extends Controller
         }
         
         $queryDirectorios = $em->getRepository('BrasaGeneralBundle:GenDirectorio')->findBy(array('codigoDirectorioPadreFk' => $codigoDirectorioPadre));
-        $arDirectorios = $paginator->paginate($queryDirectorios, $this->get('request')->query->get('page', 1),500);
+        $arDirectorios = $paginator->paginate($queryDirectorios, $this->get('request')->query->get('page', 1),50);
         if ($codigoDirectorioPadre == 0){
             $codigo = null;
         }else{
             $codigo = $codigoDirectorioPadre;
         }
         $queryArchivos = $em->getRepository('BrasaGeneralBundle:GenArchivo')->findBy(array('codigoDirectorioFk' => $codigo));
-        $arArchivos = $paginator->paginate($queryArchivos, $this->get('request')->query->get('page', 1),500);        
+        $arArchivos = $paginator->paginate($queryArchivos, $this->get('request')->query->get('page', 1),50);        
         
         $codigoDirectorioPadreAux = $codigoDirectorioPadre;
         while ($codigoDirectorioPadreAux != null && $codigoDirectorioPadreAux != 0) {
