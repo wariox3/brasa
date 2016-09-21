@@ -1,6 +1,6 @@
 <?php
 namespace Brasa\RecursoHumanoBundle\Formatos;
-class FormatoPagoMasivo extends \FPDF_FPDF {
+class PagoMasivo1 extends \FPDF_FPDF {
     public static $em;    
     public static $codigoProgramacionPago;
     public static $codigoPago;
@@ -24,7 +24,7 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
         self::$fechaHasta = $fechaHasta;
         self::$dato = $dato;
         //$pdf = new FormatoPagoMasivo('P', 'mm', array(215, 147));
-        $pdf = new FormatoPagoMasivo('P','mm', 'letter');
+        $pdf = new PagoMasivo1('P','mm', 'letter');
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
@@ -222,33 +222,7 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
             $arPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();        
             $dql = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->listaDql($arPago->getCodigoPagoPk());                
             $query = self::$em->createQuery($dql);
-            $arPagoDetalles = $query->getResult();
-            $totalValorExtras = 0;
-            foreach ($arPagoDetalles as $arPagoDetalle) { 
-                if($arPagoDetalle->getCodigoPagoConceptoFk() >= 3 && $arPagoDetalle->getCodigoPagoConceptoFk() <= 6) {
-                    $totalExtras += $arPagoDetalle->getNumeroHoras();
-                    $totalValorExtras += $arPagoDetalle->getVrPago();
-                }
-            }
-            
-            $tope = $arPago->getCentroCostoRel()->getPeriodoPagoRel()->getLimiteHorasExtra();
-            $totalCompensado = 0;            
-            if($totalExtras > $tope){
-                $porCompensar = $totalExtras - $tope;            
-                $porCompensarDetalle = $totalExtras - $porCompensar;
-                foreach ($arPagoDetalles as $arPagoDetalle) { 
-                    if($arPagoDetalle->getCodigoPagoConceptoFk() >= 3 && $arPagoDetalle->getCodigoPagoConceptoFk() <= 6) {
-                        $porcentaje = $arPagoDetalle->getNumeroHoras() / $totalExtras;
-                        $horas = $porcentaje * $porCompensarDetalle;                    
-                        $horas = round($horas);                    
-                        //$horasCompensadas =  $arPagoDetalle->getNumeroHoras() - $horas;
-                        $valor = $horas * $arPagoDetalle->getVrHora();    
-                        $arPagoDetalle->setNumeroHoras($horas);
-                        $arPagoDetalle->setVrPago($valor);
-                        $totalCompensado += $valor;
-                    }
-                }
-            }            
+            $arPagoDetalles = $query->getResult();           
             foreach ($arPagoDetalles as $arPagoDetalle) {            
                 $pdf->SetFont('Arial', '', 5.4);
                 $pdf->Cell(13, 4, $arPagoDetalle->getCodigoPagoConceptoFk(), 1, 0, 'L');
@@ -270,23 +244,6 @@ class FormatoPagoMasivo extends \FPDF_FPDF {
                 }
                 $pdf->Ln();
                 $pdf->SetAutoPageBreak(true, 15);
-            }
-            if($totalCompensado > 0) {              
-                $pdf->SetFont('Arial', '', 5.4);
-                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                $arPagoConcepto = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(71);                    
-                $pdf->Cell(13, 4, '71', 1, 0, 'L');
-                $pdf->Cell(87, 4, utf8_decode($arPagoConcepto->getNombre()), 1, 0, 'L');
-                $pdf->SetFont('Arial', '', 5.5);            
-                $pdf->SetFont('Arial', '', 7);
-                $pdf->Cell(10, 4, '', 1, 0, 'R');
-                $pdf->Cell(22, 4, '', 1, 0, 'R');
-                $pdf->Cell(7, 4, '', 1, 0, 'R');
-                $totalRegistro = $totalValorExtras - $totalCompensado;
-                $pdf->Cell(27, 4, number_format($totalRegistro, 0, '.', ','), 1, 0, 'R');    
-                $pdf->Cell(27, 4, number_format(0, 0, '.', ','), 1, 0, 'R');    
-                $pdf->Ln();
-                $pdf->SetAutoPageBreak(true, 15);            
             }
             
             //TOTALES

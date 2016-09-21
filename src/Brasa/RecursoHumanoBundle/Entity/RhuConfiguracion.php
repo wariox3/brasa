@@ -246,6 +246,10 @@ class RhuConfiguracion
      */
     private $afectaVacacionesParafiscales = false;
     
+    /**
+     * @ORM\Column(name="codigo_formato_pago", type="integer")
+     */    
+    private $codigoFormatoPago = 0;    
     
     /**
      * Tipo de base para la liquidacion de vacaciones 1-salario 2-salario+prestaciones 3-salario+recargos
@@ -1437,5 +1441,29 @@ class RhuConfiguracion
     public function getCodigoComprobanteVacacion()
     {
         return $this->codigoComprobanteVacacion;
+    }
+
+    /**
+     * Set codigoFormatoPago
+     *
+     * @param integer $codigoFormatoPago
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoFormatoPago($codigoFormatoPago)
+    {
+        $this->codigoFormatoPago = $codigoFormatoPago;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFormatoPago
+     *
+     * @return integer
+     */
+    public function getCodigoFormatoPago()
+    {
+        return $this->codigoFormatoPago;
     }
 }

@@ -100,6 +100,11 @@ class TurConfiguracion
      * @ORM\Column(name="codigo_formato_factura", type="integer")
      */    
     private $codigoFormatoFactura = 0;    
+
+    /**
+     * @ORM\Column(name="codigo_formato_programacion", type="integer")
+     */    
+    private $codigoFormatoProgramacion = 0;
     
     /**
      * Set codigoConfiguracionPk
@@ -555,5 +560,29 @@ class TurConfiguracion
     public function getCodigoFormatoFactura()
     {
         return $this->codigoFormatoFactura;
+    }
+
+    /**
+     * Set codigoFormatoProgramacion
+     *
+     * @param integer $codigoFormatoProgramacion
+     *
+     * @return TurConfiguracion
+     */
+    public function setCodigoFormatoProgramacion($codigoFormatoProgramacion)
+    {
+        $this->codigoFormatoProgramacion = $codigoFormatoProgramacion;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFormatoProgramacion
+     *
+     * @return integer
+     */
+    public function getCodigoFormatoProgramacion()
+    {
+        return $this->codigoFormatoProgramacion;
     }
 }
