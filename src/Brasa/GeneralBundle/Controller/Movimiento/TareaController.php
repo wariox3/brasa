@@ -88,8 +88,9 @@ class TareaController extends Controller
             $arTarea->setUsuarioTareaFk($arTarea->getUsuarioTareaFk()->getUsername());
             $arTarea->setUsuarioCreaFk($arUsuario->getUserName());
             $em->persist($arTarea);
+            $arUsuarioResponsable = $em->getRepository('BrasaSeguridadBundle:User')->findOneBy(array('username' => $arTarea->getUsuarioTareaFk()));
             $arUsuarioAct = new \Brasa\SeguridadBundle\Entity\User();
-            $arUsuarioAct = $em->getRepository('BrasaSeguridadBundle:User')->find($arUsuario->getId());
+            $arUsuarioAct = $em->getRepository('BrasaSeguridadBundle:User')->find($arUsuarioResponsable->getId());
             $arUsuarioAct->setTareasPendientes($arUsuarioAct->getTareasPendientes() + 1);
             $em->persist($arUsuarioAct);
             $em->flush();
