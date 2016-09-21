@@ -13,23 +13,14 @@ use Doctrine\ORM\EntityRepository;
 class GenTareaRepository extends EntityRepository
 {
     
-    public function listaDql($boolEstadoTerminado = "", $boolEstadoAnulado = "", $codigoUsuarioTarea = "") {
-        $dql   = "SELECT t FROM BrasaGeneralBundle:GenTarea t WHERE t.codigoTareaPk <> 0";        
-        if($boolEstadoTerminado == 1 ) {
+    public function listaDql($usuario = "", $estadoTerminado = "") {
+        $dql   = "SELECT t FROM BrasaGeneralBundle:GenTarea t WHERE t.usuarioTareaFk = '" . $usuario . "'";        
+        if($estadoTerminado == 1 ) {
             $dql .= " AND t.estadoTerminado = 1";
         }
-        if($boolEstadoTerminado == "0") {
+        if($estadoTerminado == "0") {
             $dql .= " AND t.estadoTerminado = 0";
-        } 
-        if($boolEstadoAnulado == 1 ) {
-            $dql .= " AND t.estadoAnulado = 1";
-        }
-        if($boolEstadoAnulado == "0") {
-            $dql .= " AND t.estadoAnulado = 0";
-        }  
-        if($codigoUsuarioTarea != "") {
-            $dql .= " AND t.usuarioTareaFk = '" . $codigoUsuarioTarea . "'";
-        }        
+        }          
         return $dql;
     }    
     

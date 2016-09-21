@@ -75,14 +75,6 @@ brs_gen_borrar_bd:
     pattern:  /general/borrar/bd/
     defaults: { _controller: BrasaGeneralBundle:ConfiguracionGeneral:borrarBD }
 
-brs_gen_mov_tarea_lista:
-    pattern:  /general/movimiento/tarea/lista/
-    defaults: { _controller: BrasaGeneralBundle:MovimientoTarea:lista } 
-
-brs_gen_mov_tarea_nuevo:
-    pattern:  /general/movimiento/tarea/nuevo/{codigoTarea}/
-    defaults: { _controller: BrasaGeneralBundle:MovimientoTarea:nuevo } 
-
 #//Gestor de archivos 
 
 brs_gen_utilidad_gestorarchivo:

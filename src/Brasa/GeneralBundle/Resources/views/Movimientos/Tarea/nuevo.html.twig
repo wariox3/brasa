@@ -8,7 +8,7 @@
         <div class="panel-heading">Informacion</div>
         <div class="panel-body">
             <div class="form-group form-group-sm">
-                <label for="form_usuarioTareaFk" class="col-sm-2 control-label">Usuario:</label>
+                <label for="form_usuarioTareaFk" class="col-sm-2 control-label">Responsable:</label>
                 <div class="col-sm-10">
                     {{ form_widget(form.usuarioTareaFk, { 'attr': {'class': 'form-control'} }) }}
                 </div>
@@ -40,7 +40,7 @@
         </div>
     </div>                   
     <div class="modal-footer">
-        <a class="btn btn-default btn-sm" href="{{ path('brs_gen_mov_tarea_lista') }}">Cancelar</a>        
+        <a class="btn btn-default btn-sm" href="{{ path('brs_gen_movimiento_tarea') }}">Cancelar</a>        
         {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
         {{ form_widget(form.guardarnuevo, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
     </div>   

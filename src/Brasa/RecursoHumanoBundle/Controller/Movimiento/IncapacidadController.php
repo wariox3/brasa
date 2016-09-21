@@ -313,10 +313,13 @@ class IncapacidadController extends Controller
                     ->setCellValue('H1', 'DESDE')
                     ->setCellValue('I1', 'HASTA')
                     ->setCellValue('J1', 'DÍAS')
-                    ->setCellValue('K1', 'LEG');
+                    ->setCellValue('K1', 'LEG')
+                    ->setCellValue('L1', 'COD')
+                    ->setCellValue('M1', 'DIAGNOSTICO');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);        
+        $arIncapacidades = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidad();
         $arIncapacidades = $query->getResult();
         foreach ($arIncapacidades as $arIncapacidad) {
         $centroCosto = "";
@@ -340,7 +343,12 @@ class IncapacidadController extends Controller
                     ->setCellValue('H' . $i, $arIncapacidad->getFechaDesde()->format('Y-m-d'))
                     ->setCellValue('I' . $i, $arIncapacidad->getFechaHasta()->format('Y-m-d'))
                     ->setCellValue('J' . $i, $arIncapacidad->getCantidad())
-                    ->setCellValue('K' . $i, $objFuncinoes->devuelveBoolean($arIncapacidad->getEstadoLegalizado()));
+                    ->setCellValue('K' . $i, $objFuncinoes->devuelveBoolean($arIncapacidad->getEstadoLegalizado()))
+                    ->setCellValue('L' . $i, $arIncapacidad->getCodigoIncapacidadDiagnosticoFk());
+            if($arIncapacidad->getCodigoIncapacidadDiagnosticoFk()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M' . $i, $arIncapacidad->getIncapacidadDiagnosticoRel()->getNombre());
+            }
+            
             $i++;
         }
 

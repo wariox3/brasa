@@ -16,23 +16,12 @@
             <div class="panel-heading">Filtros de busqueda</div>
             <div class="panel-body">                                    
                 <div class="form-group form-group-sm">  
-                    <label for="form_usuarioTareaRel" class="col-sm-2 control-label">Responsable:</label>
+                    <label class="col-sm-2 control-label"></label>
                     <div class="col-sm-4">
-                        {{ form_widget(form.usuarioTareaRel, { 'attr': {'class': 'form-control'} }) }}
                     </div>
-                    <label for="form_estadoTerminado" class="col-sm-2 control-label">Terminado:</label>
+                    <label class="col-sm-2 control-label">Terminado:</label>
                     <div class="col-sm-4">                  
                         {{ form_widget(form.estadoTerminado, { 'attr': {'class': 'form-control'} }) }}
-                    </div>                    
-                </div> 
-                <div class="form-group form-group-sm">  
-                    <label for="form_TxtNumero" class="col-sm-2 control-label"></label>
-                    <div class="col-sm-4">
-                        
-                    </div>
-                    <label for="form_estadoAnulado" class="col-sm-2 control-label">Anulado:</label>
-                    <div class="col-sm-4">                  
-                        {{ form_widget(form.estadoAnulado, { 'attr': {'class': 'form-control'} }) }}
                     </div>                    
                 </div>                    
                 <div class="form-group form-group-sm">
@@ -43,35 +32,26 @@
             </div>
         </div>
         <table  class="table table-striped table-bordered table-condensed table-hover">
-            <tr>
-                <th>CODIGO</th>                
+            <tr>                               
                 <th>FECHA</th>
                 <th>PROGRAMADA</th>                
                 <th>CREA</th>
                 <th>RESPONSABLE</th>
                 <th>ASUNTO</th>                                
                 <th>COMENTARIOS</th>
-                <th>TER</th>   
-                <th>ANU</th>                
-                <th></th>
-                <th></th>
+                <th>TER</th>                   
                 <th></th>
             </tr>
             {% for arTareas in arTareas %}
-            <tr>                
-                <td>{{ arTareas.codigoTareaPk  }}</td>  
-                <td>{{ arTareas.fecha |date("Y/m/d")  }}</td> 
-                <td>{{ arTareas.fechaProgramada |date("Y/m/d")  }} {{ arTareas.hora |date("H:i") }}</td> 
+            <tr>                                
+                <td>{{ arTareas.fecha |date("Y/m/d  H:i")  }}</td> 
+                <td>{{ arTareas.fechaProgramada |date("Y/m/d H:i")  }}</td> 
                 <td>{{ arTareas.usuarioCreaFk  }}</td>                
                 <td>{{ arTareas.usuarioTareaFk  }}</td>                                
                 <td>{{ arTareas.asunto }}</td>                 
                 <td>{{ arTareas.comentarios  }}</td>
                 <td>{% if arTareas.estadoTerminado == 1 %} SI {% else %} NO {% endif %}</td>                                              
-                <td>{% if arTareas.estadoAnulado == 1 %} SI {% else %} NO {% endif %}</td>                              
-                
-                <td style="text-align: center">{% if arTareas.estadoTerminado == 0 and arTareas.estadoAnulado == 0 %}<a href="{{ path('brs_gen_mov_tarea_nuevo', {'codigoTarea': arTareas.codigoTareaPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                
-                <td>{% if arTareas.estadoTerminado == 0 and arTareas.estadoAnulado == 0 %}<button class="btn btn-default btn-xs" type="submit" name="OpCerrar" value="{{ arTareas.codigoTareaPk }}">Cerrar</button>{% endif %}</td>
-                <td>{% if arTareas.estadoTerminado == 0 and arTareas.estadoAnulado == 0 %}<button class="btn btn-default btn-xs" type="submit" name="OpAnular" value="{{ arTareas.codigoTareaPk }}">Anular</button>{% endif %}</td>                
+                <td style="text-align: center">{% if arTareas.estadoTerminado == 0 %}<button class="btn btn-default btn-xs" type="submit" name="OpTerminar" value="{{ arTareas.codigoTareaPk }}">Terminar</button>{% endif %}</td>                
             </tr>
             
             {% endfor %}
@@ -89,7 +69,7 @@
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
             <div class="btn-group">                                
-                <a class="btn btn-default btn-sm" href="{{ path('brs_gen_mov_tarea_nuevo', {'codigoTarea': 0}) }}">Nuevo</a>                                                
+                <a class="btn btn-default btn-sm" href="{{ path('brs_gen_movimiento_tarea_nuevo', {'codigoTarea': 0}) }}">Nuevo</a>                                                
             </div>
         </div>
         <!-- Fin Botones Menu Items -->

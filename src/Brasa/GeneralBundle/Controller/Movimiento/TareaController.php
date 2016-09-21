@@ -1,42 +1,44 @@
 <?php
-namespace Brasa\GeneralBundle\Controller;
+namespace Brasa\GeneralBundle\Controller\Movimiento;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\GeneralBundle\Form\Type\GenTareaType;
 
-class MovimientoTareaController extends Controller
+class TareaController extends Controller
 {
     var $strListaDql = "";
     var $estadoTerminado = "";
-    var $estadoAnulado = "";
-    var $codigoUsuario = "";
 
+    
+    /**
+     * @Route("/gen/movimiento/tarea/", name="brs_gen_movimiento_tarea")
+     */    
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $request = $this->getRequest();
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 111, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
-        }
+        }        
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
-        $this->estadoTerminado = 0;
-        $this->estadoAnulado = 0;
-        $this->lista();
+        $this->estadoTerminado = 0;        
+        $this->lista($this->getUser()->getUserName());
         if ($form->isValid()) {
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
-                $this->lista();
+                $this->lista($this->getUser()->getUserName());
             }
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
-                $this->lista();
+                $this->lista($this->getUser()->getUserName());
                 $this->generarExcel();
             }
-            if($request->request->get('OpCerrar')) {
-                $codigo = $request->request->get('OpCerrar');
+            if($request->request->get('OpTerminar')) {
+                $codigo = $request->request->get('OpTerminar');
                 $arTarea = new \Brasa\GeneralBundle\Entity\GenTarea();
                 $arTarea = $em->getRepository('BrasaGeneralBundle:GenTarea')->find($codigo);
                 if($arTarea->getEstadoTerminado() == 0) {
@@ -44,33 +46,21 @@ class MovimientoTareaController extends Controller
                     if($arUsuario->getUsername() == $arTarea->getUsuarioTareaFk()) {
                         $arTarea->setEstadoTerminado(1);
                         $arTarea->setFechaTermina(new \DateTime('now'));
-                        $arTarea->setUsuarioTerminaFk($arUsuario->getUserName());
+                        $arTarea->setUsuarioTerminaFk($arUsuario->getUserName());                        
                         $em->persist($arTarea);
+                        
+                        $arUsuarioResponsable = $em->getRepository('BrasaSeguridadBundle:User')->findOneBy(array('username' => $arTarea->getUsuarioTareaFk()));
+                        $arUsuarioAct = new \Brasa\SeguridadBundle\Entity\User();
+                        $arUsuarioAct = $em->getRepository('BrasaSeguridadBundle:User')->find($arUsuarioResponsable->getId());
+                        $arUsuarioAct->setTareasPendientes($arUsuarioAct->getTareasPendientes() - 1);
+                        $em->persist($arUsuarioAct);                        
                         $em->flush();                        
                     } else {
                         $objMensaje->Mensaje("error", "Solo puede terminar la tarea el usuario responsable " . $arTarea->getUsuarioTareaFk(), $this);
                     }
 
                 }
-                return $this->redirect($this->generateUrl('brs_gen_mov_tarea_lista'));
-            }
-            if($request->request->get('OpAnular')) {
-                $codigo = $request->request->get('OpAnular');
-                $arTarea = new \Brasa\GeneralBundle\Entity\GenTarea();
-                $arTarea = $em->getRepository('BrasaGeneralBundle:GenTarea')->find($codigo);
-                if($arTarea->getEstadoTerminado() == 0) {
-                    $arUsuario = $this->getUser();
-                    if($arUsuario->getUsername() == $arTarea->getUsuarioCreaFk()) {                        
-                        $arTarea->setEstadoAnulado(1);
-                        $arTarea->setFechaAnula(new \DateTime('now'));
-                        $arTarea->setUsuarioAnulaFk($arUsuario->getUserName());
-                        $em->persist($arTarea);
-                        $em->flush();                        
-                    } else {
-                        $objMensaje->Mensaje("error", "Solo puede anular la tarea el usuario que la creo " . $arTarea->getUsuarioCreaFk(), $this);    
-                    }
-                }
-                return $this->redirect($this->generateUrl('brs_gen_mov_tarea_lista'));
+                return $this->redirect($this->generateUrl('brs_gen_movimiento_tarea'));
             }
         }
 
@@ -80,6 +70,9 @@ class MovimientoTareaController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/gen/movimiento/tarea/nuevo/{codigoTarea}", name="brs_gen_movimiento_tarea_nuevo")
+     */    
     public function nuevoAction($codigoTarea) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -98,11 +91,15 @@ class MovimientoTareaController extends Controller
             $arTarea->setUsuarioTareaFk($arTarea->getUsuarioTareaFk()->getUsername());
             $arTarea->setUsuarioCreaFk($arUsuario->getUserName());
             $em->persist($arTarea);
+            $arUsuarioAct = new \Brasa\SeguridadBundle\Entity\User();
+            $arUsuarioAct = $em->getRepository('BrasaSeguridadBundle:User')->find($arUsuario->getId());
+            $arUsuarioAct->setTareasPendientes($arUsuarioAct->getTareasPendientes() + 1);
+            $em->persist($arUsuarioAct);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_gen_mov_tarea_nuevo', array('codigoTarea' => 0 )));
+                return $this->redirect($this->generateUrl('brs_gen_movimiento_tarea_nuevo', array('codigoTarea' => 0 )));
             } else {
-                return $this->redirect($this->generateUrl('brs_gen_mov_tarea_lista'));
+                return $this->redirect($this->generateUrl('brs_gen_movimiento_tarea'));
             }
         }
         return $this->render('BrasaGeneralBundle:Movimientos/Tarea:nuevo.html.twig', array(
@@ -110,45 +107,23 @@ class MovimientoTareaController extends Controller
             'form' => $form->createView()));
     }
 
-    private function lista() {
+    private function lista($usuario) {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaGeneralBundle:GenTarea')->listaDQL(
-                $this->estadoTerminado,
-                $this->estadoAnulado, 
-                $this->codigoUsuario
+        $this->strListaDql =  $em->getRepository('BrasaGeneralBundle:GenTarea')->listaDQL(                
+                $usuario,
+                $this->estadoTerminado
         );
     }
 
     private function filtrar ($form) {
-        $arUsuario = $form->get('usuarioTareaRel')->getData();
-        $this->estadoTerminado = $form->get('estadoTerminado')->getData();
-        $this->estadoAnulado = $form->get('estadoAnulado')->getData();
-        if($arUsuario) {
-            $this->codigoUsuario = $arUsuario->getUsername();
-        }        
+        $this->estadoTerminado = $form->get('estadoTerminado')->getData();               
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
-        $arrayPropiedadesUsuario = array(
-                'class' => 'BrasaSeguridadBundle:User',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('u')
-                    ->orderBy('u.nombreCorto', 'ASC');},
-                'property' => 'nombreCorto',
-                'required' => false,
-                'empty_data' => "",
-                'empty_value' => "TODOS",
-                'data' => ""
-            );
-        if($this->codigoUsuario != "") {
-            $arrayPropiedadesUsuario['data'] = $em->getReference("BrasaSeguridadBundle:User", $this->codigoUsuario);
-        }        
+        $session = $this->getRequest()->getSession();       
         $form = $this->createFormBuilder()
-            ->add('usuarioTareaRel', 'entity', $arrayPropiedadesUsuario)
-            ->add('estadoTerminado', 'choice', array('choices'   => array('0' => 'SIN TERMINAR', '1' => 'TERMINADA', '2' => 'TODOS'), 'data' => $this->estadoTerminado))
-            ->add('estadoAnulado', 'choice', array('choices'   => array('0' => 'SIN ANULAR', '2' => 'TODOS', '1' => 'ANULADAS'), 'data' => $this->estadoAnulado))
+            ->add('estadoTerminado', 'choice', array('choices'   => array('0' => 'SIN TERMINAR', '1' => 'TERMINADA', '2' => 'TODOS'), 'data' => $this->estadoTerminado))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();

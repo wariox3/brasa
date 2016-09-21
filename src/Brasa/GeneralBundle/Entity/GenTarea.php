@@ -18,12 +18,12 @@ class GenTarea
     private $codigoTareaPk;                    
     
     /**
-     * @ORM\Column(name="fecha", type="date", nullable=true)
+     * @ORM\Column(name="fecha", type="datetime", nullable=true)
      */    
     private $fecha;             
 
     /**
-     * @ORM\Column(name="fecha_programada", type="date", nullable=true)
+     * @ORM\Column(name="fecha_programada", type="datetime", nullable=true)
      */    
     private $fechaProgramada;    
     
@@ -81,6 +81,7 @@ class GenTarea
      * @ORM\Column(name="comentarios", type="string", length=250, nullable=true)
      */    
     private $comentarios;           
+
 
 
     /**

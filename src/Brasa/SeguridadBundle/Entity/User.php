@@ -64,6 +64,11 @@ class User implements UserInterface, \Serializable
     private $roles;    
     
     /**
+     * @ORM\Column(name="tareasPendientes", type="integer")
+     */
+    private $tareasPendientes = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="SegRoles", inversedBy="usersRolRel")
      * @ORM\JoinColumn(name="roles", referencedColumnName="codigo_rol_pk")
      */
@@ -460,5 +465,29 @@ class User implements UserInterface, \Serializable
     public function getPermisosDocumentosUsuarioRel()
     {
         return $this->permisosDocumentosUsuarioRel;
+    }
+
+    /**
+     * Set tareasPendientes
+     *
+     * @param integer $tareasPendientes
+     *
+     * @return User
+     */
+    public function setTareasPendientes($tareasPendientes)
+    {
+        $this->tareasPendientes = $tareasPendientes;
+
+        return $this;
+    }
+
+    /**
+     * Get tareasPendientes
+     *
+     * @return integer
+     */
+    public function getTareasPendientes()
+    {
+        return $this->tareasPendientes;
     }
 }
