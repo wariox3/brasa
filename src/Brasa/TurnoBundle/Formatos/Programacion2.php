@@ -1,6 +1,6 @@
 <?php
 namespace Brasa\TurnoBundle\Formatos;
-class FormatoProgramacion extends \FPDF_FPDF {
+class Programacion2 extends \FPDF_FPDF {
     public static $em;
     
     public static $codigoProgramacion;
@@ -10,7 +10,7 @@ class FormatoProgramacion extends \FPDF_FPDF {
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
         self::$codigoProgramacion = $codigoProgramacion;
-        $pdf = new FormatoProgramacion('L');
+        $pdf = new Programacion2('L');
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);

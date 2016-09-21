@@ -159,8 +159,16 @@ class ProgramacionController extends Controller
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_programacion_detalle', array('codigoProgramacion' => $codigoProgramacion)));
             }
             if($form->get('BtnImprimir')->isClicked()) {
-                $objProgramacion = new \Brasa\TurnoBundle\Formatos\FormatoProgramacion();
-                $objProgramacion->Generar($this, $codigoProgramacion);
+                $arConfiguracion = $em->getRepository('BrasaTurnoBundle:TurConfiguracion')->find(1);
+                $codigoFormato = $arConfiguracion->getCodigoFormatoProgramacion();
+                if($codigoFormato <= 1) {
+                    $objProgramacion = new \Brasa\TurnoBundle\Formatos\Programacion1();
+                    $objProgramacion->Generar($this, $codigoProgramacion);                    
+                }
+                if($codigoFormato == 2) {
+                    $objProgramacion = new \Brasa\TurnoBundle\Formatos\Programacion2();
+                    $objProgramacion->Generar($this, $codigoProgramacion);                    
+                }                
             }
             if($form->get('BtnAnular')->isClicked()) {
                 $strResultado = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->anular($codigoProgramacion);
