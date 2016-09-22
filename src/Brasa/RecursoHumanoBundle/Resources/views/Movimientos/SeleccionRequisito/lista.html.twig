@@ -62,7 +62,7 @@
                 <th>{{ knp_pagination_sortable(arRequisitos, 'CÓDIGO', 'sq.codigoSeleccionRequisitoPk') }}</th>
                 <th>FECHA</th>
                 <th>NOMBRE</th>
-                <th>CENTRO COSTO</th>
+                <th>GRUPO PAGO</th>
                 <th>ZONA</th>
                 <th>CARGO</th>
                 <th>CANT</th>
@@ -78,7 +78,7 @@
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arRequisitos.codigoSeleccionRequisitoPk }}">{{ arRequisitos.codigoSeleccionRequisitoPk }} </td>
                 <td>{{ arRequisitos.fecha | date("Y/m/d")  }}</td>
                 <td>{{ arRequisitos.nombre  }}</td>                                
-                <td>{{ arRequisitos.centroCostoRel.nombre|default('SIN CENTRO COSTO')  }}</td>
+                <td>{{ arRequisitos.centroCostoRel.nombre|default('SIN GRUPO PAGO')  }}</td>
                 <td>{{ arRequisitos.zonaRel.nombre|default('')  }}</td>
                 <td>{{ arRequisitos.cargoRel.nombre|default('SIN CARGO')  }}</td>
                 <td>{{ arRequisitos.cantidadSolicitida  }}</td>

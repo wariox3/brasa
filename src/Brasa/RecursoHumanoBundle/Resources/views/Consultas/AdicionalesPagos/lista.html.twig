@@ -24,7 +24,7 @@
                     </div>                    
                 </div>
                 <div class="form-group form-group-sm">  
-                    <label for="form_centroCostoRel" class="col-sm-2 control-label">Centro costo:</label>
+                    <label for="form_centroCostoRel" class="col-sm-2 control-label">Grupo pago:</label>
                     <div class="col-sm-10">                   
                         {{ form_widget(form.centroCostoRel, { 'attr': {'class': 'form-control'} }) }}
                     </div>                    
@@ -49,7 +49,7 @@
                 <th>DETALLE</th>
                 <th>IDENTIFICACIÓN</th>
                 <th>EMPLEADO</th>
-                <th>CENTRO COSTOS</th>
+                <th>GRUPO PAGO</th>
                 <th>CANTIDAD</th>
                 <th>VALOR</th>
                 <th>PERMANENTE</th>
@@ -65,7 +65,7 @@
                 <td>{{ arAdicionalesPago.detalle }}</td>
                 <td>{{ arAdicionalesPago.empleadoRel.numeroIdentificacion }}</td>
                 <td>{{ arAdicionalesPago.empleadoRel.nombreCorto|default('Sin nombre') }}</td>
-                <td>{{ arAdicionalesPago.empleadoRel.centroCostoRel.nombre|default('Sin centro costo') }}</td>
+                <td>{{ arAdicionalesPago.empleadoRel.centroCostoRel.nombre|default('Sin grupo pago') }}</td>
                 <td style="text-align: right">{{ arAdicionalesPago.cantidad | number_format(1, '.', ',') }}</td>                            
                 <td style="text-align: right">{{ arAdicionalesPago.valor | number_format(2, '.', ',') }}</td>                                                        
                 <td>{% if arAdicionalesPago.permanente == 1 %} SI {% else %} NO {% endif %}</td>                        

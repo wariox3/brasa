@@ -20,7 +20,7 @@
             <div class="panel-heading">Filtros de busqueda</div>
             <div class="panel-body">
                 <div class="form-group form-group-sm">
-                    <label for="form_centroCostoRel" class="col-sm-2 control-label">Centro costo:</label>
+                    <label for="form_centroCostoRel" class="col-sm-2 control-label">Grupo pago:</label>
                     <div class="col-sm-10">
                         {{ form_widget(form.centroCostoRel, { 'attr': {'class': 'form-control'} }) }}
                     </div>
@@ -54,7 +54,7 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arCartas, 'CODIGO', 'c.codigoCartaPk') }}</th>
                 <th>FECHA</th>
-                <th>CENTRO COSTO</th>
+                <th>GRUPO PAGO</th>
                 <th>IDENTIFICACIÓN</th>
                 <th>{{ knp_pagination_sortable(arCartas, 'NOMBRE', 'c.nombreCorto') }}</th>
                 <th>CARGO</th>

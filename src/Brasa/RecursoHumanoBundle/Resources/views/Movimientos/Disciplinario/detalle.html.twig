@@ -56,7 +56,7 @@
                         <td>{% if arDisciplinario.estadoSuspension == 1%}{{ arDisciplinario.fechaHastaSancion | date('Y/m/d') }} {% else %}NO APLICA{% endif%}</td>
                     </tr>
                     <tr>
-                        <td class="titulo">CENTRO COSTO:</td>
+                        <td class="titulo">GRUPO PAGO:</td>
                         <td>{{ arDisciplinario.centroCostoRel.nombre | default('') }}</td>
                         <td class="titulo">CARGO:</td>
                         <td>{{ arDisciplinario.cargoRel.nombre | default('') }}</td>

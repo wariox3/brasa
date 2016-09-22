@@ -62,7 +62,7 @@
                 <th>{{ knp_pagination_sortable(arRequisitos, 'CÓDIGO', 'sq.codigoSeleccionRequisitoPk') }}</th>
                 <th>FECHA</th>
                 <th>NOMBRE</th>
-                <th>CENTRO COSTO</th>
+                <th>GRUPO PAGO</th>
                 <th>CARGO</th>
                 <th>CANTIDAD SOLICITADA</th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Abierto">ABIERTO</p></th>
@@ -74,7 +74,7 @@
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arRequisitos.codigoSeleccionRequisitoPk }}">{{ arRequisitos.codigoSeleccionRequisitoPk }} </td>
                 <td>{{ arRequisitos.fecha | date("Y/m/d")  }}</td>
                 <td>{{ arRequisitos.nombre  }}</td>                                
-                <td>{{ arRequisitos.centroCostoRel.nombre|default('SIN CENTRO COSTO')  }}</td>
+                <td>{{ arRequisitos.centroCostoRel.nombre|default('SIN GRUPO PAGO')  }}</td>
                 <td>{{ arRequisitos.cargoRel.nombre|default('SIN CARGO')  }}</td>
                 <td>{{ arRequisitos.cantidadSolicitida  }}</td>
                 <td>{% if arRequisitos.estadoAbierto == 0 %} SI {% else %} NO {% endif %}</td>
