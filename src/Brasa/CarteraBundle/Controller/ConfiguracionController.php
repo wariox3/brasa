@@ -13,14 +13,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class ConfiguracionController extends Controller
 {
+    
     /**
      * @Route("/car/configuracion/{codigoConfiguracionPk}", name="brs_car_configuracion")
      */
     public function configuracionAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        //$arConfiguracion = new \Brasa\CarteraBundle\Entity\CarConfiguracion();
-        //$arConfiguracion = $em->getRepository('BrasaCarteraBundle:CarConfiguracion')->find(1);
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 91)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
         $arConsecutivo = new \Brasa\CarteraBundle\Entity\CarConsecutivo();
         $arConsecutivo = $em->getRepository('BrasaCarteraBundle:CarConsecutivo')->findAll();
 

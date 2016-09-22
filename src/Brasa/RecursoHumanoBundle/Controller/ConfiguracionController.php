@@ -15,6 +15,9 @@ class ConfiguracionController extends Controller
     public function configuracionAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 92)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
