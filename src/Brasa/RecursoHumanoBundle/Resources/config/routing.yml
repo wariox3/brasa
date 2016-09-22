@@ -786,6 +786,10 @@ brs_rhu_requisicionaspirante_detalle:
     path:     /rhu/requisicionaspirante/detalle/{codigoSeleccionRequisito}
     defaults: { _controller: BrasaRecursoHumanoBundle:SeleccionRequisicionAspirante:detalle }    
 
+brs_rhu_descartar_aspirante:
+    path:     /rhu/seleccionrequisicion/descartaraspirante/{codigoSelReqAsp}  
+    defaults: { _controller: BrasaRecursoHumanoBundle:SeleccionRequisito:descartar }
+
 brs_rhu_ss_periodo_lista:
     path:     /rhu/seguridadsocial/periodo/lista
     defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:lista }

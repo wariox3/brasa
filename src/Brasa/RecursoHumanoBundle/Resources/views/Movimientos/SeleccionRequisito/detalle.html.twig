@@ -111,7 +111,7 @@
                     {% if arRequisito.codigoLicenciaCarroFk == 2 %}
                         <td class="td-in-well">NO</td>
                     {% endif%}
-                    {% if arRequisito.codigoLicenciaCarroFk == 3 %}
+                    {% if arRequisito.codigoLicenciaCarroFk == 0 %}
                         <td class="td-in-well">NO APLICA</td>
                     {% endif%}
                 </tr>
@@ -144,7 +144,7 @@
                     {% if arRequisito.codigoLicenciaMotoFk == 2 %}
                         <td class="td-in-well">NO</td>
                     {% endif%}
-                    {% if arRequisito.codigoLicenciaMotoFk == 3 %}
+                    {% if arRequisito.codigoLicenciaMotoFk == 0 %}
                         <td class="td-in-well">NO APLICA</td>
                     {% endif%}
                 </tr>
@@ -212,6 +212,8 @@
                     <th>IDENTIFICACION</th>
                     <th>NOMBRE</th>
                     <th>APROBADO</th>
+                    <th>COMENTARIOS</th>
+                    <th></th>
                     <th></th>
                 </tr>
                 {% for arRequisicionDetalle in arRequisicionDetalle %}
@@ -220,8 +222,14 @@
                     <td>{{ arRequisicionDetalle.aspiranteRel.numeroIdentificacion  }}</td>
                     <td>{{ arRequisicionDetalle.aspiranteRel.nombreCorto  }}</td>
                     <td>{% if arRequisicionDetalle.estadoAprobado == 1 %}SI{% else %}NO{% endif %}</td>
+                    <td>{{ arRequisicionDetalle.comentarios }}</td>
+                    {% if arRequisicionDetalle.estadoAprobado == 0 %}
+                        <td style="text-align: center"><a class="btn btn-default btn-sm" id="{{ path('brs_rhu_descartar_aspirante', { 'codigoSelReqAsp' : arRequisicionDetalle.codigoSeleccionRequisicionAspirantePk}) }}" style="float:center">Descartar</a></td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    
                     <td align="center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arRequisicionDetalle.codigoSeleccionRequisicionAspirantePk }}" /></td>
-
                 </tr>
                 {% endfor %}
                 </table>

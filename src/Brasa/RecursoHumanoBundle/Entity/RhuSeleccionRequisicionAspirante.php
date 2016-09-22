@@ -31,6 +31,21 @@ class RhuSeleccionRequisicionAspirante
      * @ORM\Column(name="estado_aprobado", type="boolean")
      */    
     private $estadoAprobado = false;
+    
+    /**
+     * @ORM\Column(name="codigo_motivo_descarte_requisicion_aspirante_fk", type="integer", nullable=true)
+     */    
+    private $codigoMotivoDescarteRequisicionAspitanteFk;
+    
+    /**
+     * @ORM\Column(name="fechaDescarte", type="datetime", nullable=true)
+     */
+    private $fechaDescarte;
+    
+    /**
+     * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
+     */    
+    private $comentarios;
 
    /**
      * @ORM\ManyToOne(targetEntity="RhuSeleccionRequisito", inversedBy="seleccionesRequisicionesAspirantesSeleccionRequisitoRel")
@@ -43,6 +58,14 @@ class RhuSeleccionRequisicionAspirante
      * @ORM\JoinColumn(name="codigo_aspirante_fk", referencedColumnName="codigo_aspirante_pk")
      */
     protected $aspiranteRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuMotivoDescarteRequisicionAspitante", inversedBy="motivosDescartesseleccionRequisicionAspiranteRel")
+     * @ORM\JoinColumn(name="codigo_motivo_descarte_requisicion_aspirante_fk", referencedColumnName="codigo_motivo_descarte_requisicion_aspirante_pk")
+     */
+    protected $motivoDescarteRequisicionAspiranteRel;
+    
+    
 
     
 
@@ -105,6 +128,102 @@ class RhuSeleccionRequisicionAspirante
     }
 
     /**
+     * Set estadoAprobado
+     *
+     * @param boolean $estadoAprobado
+     *
+     * @return RhuSeleccionRequisicionAspirante
+     */
+    public function setEstadoAprobado($estadoAprobado)
+    {
+        $this->estadoAprobado = $estadoAprobado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAprobado
+     *
+     * @return boolean
+     */
+    public function getEstadoAprobado()
+    {
+        return $this->estadoAprobado;
+    }
+
+    /**
+     * Set codigoMotivoDescarteRequisicionAspitanteFk
+     *
+     * @param integer $codigoMotivoDescarteRequisicionAspitanteFk
+     *
+     * @return RhuSeleccionRequisicionAspirante
+     */
+    public function setCodigoMotivoDescarteRequisicionAspitanteFk($codigoMotivoDescarteRequisicionAspitanteFk)
+    {
+        $this->codigoMotivoDescarteRequisicionAspitanteFk = $codigoMotivoDescarteRequisicionAspitanteFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoMotivoDescarteRequisicionAspitanteFk
+     *
+     * @return integer
+     */
+    public function getCodigoMotivoDescarteRequisicionAspitanteFk()
+    {
+        return $this->codigoMotivoDescarteRequisicionAspitanteFk;
+    }
+
+    /**
+     * Set fechaDescarte
+     *
+     * @param \DateTime $fechaDescarte
+     *
+     * @return RhuSeleccionRequisicionAspirante
+     */
+    public function setFechaDescarte($fechaDescarte)
+    {
+        $this->fechaDescarte = $fechaDescarte;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaDescarte
+     *
+     * @return \DateTime
+     */
+    public function getFechaDescarte()
+    {
+        return $this->fechaDescarte;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     *
+     * @return RhuSeleccionRequisicionAspirante
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
+    }
+
+    /**
      * Set seleccionRequisitoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito $seleccionRequisitoRel
@@ -153,26 +272,26 @@ class RhuSeleccionRequisicionAspirante
     }
 
     /**
-     * Set estadoAprobado
+     * Set motivoDescarteRequisicionAspiranteRel
      *
-     * @param boolean $estadoAprobado
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuMotivoDescarteRequisicionAspitante $motivoDescarteRequisicionAspiranteRel
      *
      * @return RhuSeleccionRequisicionAspirante
      */
-    public function setEstadoAprobado($estadoAprobado)
+    public function setMotivoDescarteRequisicionAspiranteRel(\Brasa\RecursoHumanoBundle\Entity\RhuMotivoDescarteRequisicionAspitante $motivoDescarteRequisicionAspiranteRel = null)
     {
-        $this->estadoAprobado = $estadoAprobado;
+        $this->motivoDescarteRequisicionAspiranteRel = $motivoDescarteRequisicionAspiranteRel;
 
         return $this;
     }
 
     /**
-     * Get estadoAprobado
+     * Get motivoDescarteRequisicionAspiranteRel
      *
-     * @return boolean
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuMotivoDescarteRequisicionAspitante
      */
-    public function getEstadoAprobado()
+    public function getMotivoDescarteRequisicionAspiranteRel()
     {
-        return $this->estadoAprobado;
+        return $this->motivoDescarteRequisicionAspiranteRel;
     }
 }

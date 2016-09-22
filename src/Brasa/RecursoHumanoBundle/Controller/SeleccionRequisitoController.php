@@ -180,6 +180,65 @@ class SeleccionRequisitoController extends Controller
                     'form' => $form->createView()
                     ));
     }
+    
+    public function descartarAction($codigoSelReqAsp) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        
+        $arSeleccionRequisicionAspirante = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisicionAspirante();
+        $arSeleccionRequisicionAspirante = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisicionAspirante')->find($codigoSelReqAsp);
+        $arSeleccionRequisicion = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito();
+        $arSeleccionRequisicion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisito')->find($arSeleccionRequisicionAspirante->getCodigoSeleccionRequisitoFk());
+        
+        $form = $this->createFormBuilder()
+            ->setAction($this->generateUrl('brs_rhu_descartar_aspirante', array('codigoSelReqAsp' => $codigoSelReqAsp )))
+            ->add('comentarios', 'textarea', array('data' =>$arSeleccionRequisicionAspirante->getComentarios() ,'required' => true))                      
+            ->add('fechaDescarte', 'date', array('label'  => 'Fecha', 'data' => new \DateTime('now')))
+            ->add('motivoDescarteRequisicionAspiranteRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuMotivoDescarteRequisicionAspitante',
+                'property' => 'nombre',
+            ))
+            ->add('bloqueado', 'checkbox', array('required'  => false))
+            ->add('comentariosAspirante', 'textarea', array('required'  => false))                      
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        $form->handleRequest($request);
+           
+        if ($form->isValid()) {
+            
+                if ($arSeleccionRequisicion->getEstadoCerrado() == 0){
+                    $arUsuario = $this->get('security.context')->getToken()->getUser();
+                    $arSeleccionRequisicionAspirante->setComentarios($form->get('comentarios')->getData());
+                    $arSeleccionRequisicionAspirante->setFechaDescarte($form->get('fechaDescarte')->getData());
+                    $arSeleccionRequisicionAspirante->setMotivoDescarteRequisicionAspiranteRel($form->get('motivoDescarteRequisicionAspiranteRel')->getData());
+                    $arSeleccionRequisicionAspirante->setEstadoAprobado(0);
+                    if ($form->get('bloqueado')->getData() == true){
+                        $arAspirante = $em->getRepository('BrasaRecursoHumanoBundle:RhuAspirante')->find($arSeleccionRequisicionAspirante->getCodigoAspiranteFk());
+                        $arAspirante->setBloqueado(1);
+                        $arAspirante->setComentarios($form>get('comentariosAspirante')->getData());
+                        $em->persist($arAspirante);
+                    }
+                    
+                    $em->persist($arSeleccionRequisicionAspirante);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_seleccionrequisito_detalle', array('codigoSeleccionRequisito' => $arSeleccionRequisicionAspirante->getCodigoSeleccionRequisitoFk())));
+                } else {
+                    $objMensaje->Mensaje("error", "La requisicion esta cerrada, no puede realizar el proceso", $this);
+                    return $this->redirect($this->generateUrl('brs_rhu_seleccionrequisito_detalle', array('codigoSeleccionRequisito' => $arSeleccionRequisicionAspirante->getCodigoSeleccionRequisitoFk())));
+                }    
+            
+                
+                //return $this->redirect($this->generateUrl('brs_rhu_seleccion_detalle', array('codigoSeleccion' => $codigoSeleccion)));
+            
+            
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/SeleccionRequisito:descartarAspirante.html.twig', array(
+            'arSeleccionRequisicion' => $arSeleccionRequisicion,
+            'arSeleccionRequisicionAspirante' => $arSeleccionRequisicionAspirante,
+            'form' => $form->createView()
+        ));
+    }
  
     private function listar() {
         $em = $this->getDoctrine()->getManager();                
