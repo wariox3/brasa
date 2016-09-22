@@ -56,6 +56,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
             $douIngresoBasePrestacional = 0;
             $douIngresoBaseCotizacion = 0;  
             $devengado = 0;
+            $devengadoPrestacional = 0;
             $salud = 0;
             $pension = 0;
             //Procesar vacaciones
@@ -130,6 +131,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                     
                     $douPagoDetalle = round($douPagoDetalle);
                     $devengado += $douPagoDetalle;
+                    $devengadoPrestacional += $douPagoDetalle;
                     $arPagoDetalle->setNumeroHoras($intHorasProcesarIncapacidad);
                     $arPagoDetalle->setNumeroDias($intDias);
                     $arPagoDetalle->setVrHora($douVrHora);
@@ -185,6 +187,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                 }                                  
                 $douPagoDetalle = round($douPagoDetalle);
                 $devengado += $douPagoDetalle;
+                $devengadoPrestacional += $douPagoDetalle;
                 $arPagoDetalle->setVrPago($douPagoDetalle);
                 $arPagoDetalle->setOperacion($arLicencia->getLicenciaTipoRel()->getPagoConceptoRel()->getOperacion());
                 $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arLicencia->getLicenciaTipoRel()->getPagoConceptoRel()->getOperacion());                               
@@ -215,6 +218,9 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                 $douPagoDetalle = round($douPagoDetalle);
                 if($arPagoAdicional->getPagoConceptoRel()->getOperacion() == 1) {
                     $devengado += $douPagoDetalle;
+                    if($arPagoAdicional->getPagoConceptoRel()->getPrestacional() == 1) {
+                        $devengadoPrestacional += $douPagoDetalle;
+                    }
                 }                
                 $arPagoDetalle->setDetalle($arPagoAdicional->getDetalle());
                 $arPagoDetalle->setVrPago($douPagoDetalle);
@@ -259,6 +265,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                 $arPagoDetalle->setNumeroHoras($arrHorasExtra['horas']);
                 $douPagoDetalle = round($douPagoDetalle);                
                 $devengado += $douPagoDetalle;
+                $devengadoPrestacional += $douPagoDetalle;
                 $arPagoDetalle->setVrPago($douPagoDetalle);
                 $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
                 $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConcepto->getOperacion());                                
@@ -347,6 +354,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
             $douPagoDetalle = $horasOrdinariasDiurnas * $douVrHora;
             $douPagoDetalle = round($douPagoDetalle);
             $devengado += $douPagoDetalle;
+            $devengadoPrestacional += $douPagoDetalle;
             $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
             $arPagoDetalle->setPagoRel($arPago);
             $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
@@ -469,7 +477,9 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                     }
                 }                            
             }
-
+            if($arProgramacionPagoDetalle->getCodigoEmpleadoFk() == 2172) {
+                echo "hola";
+            }
             //Embargos
             $arEmbargos = new \Brasa\RecursoHumanoBundle\Entity\RhuEmbargo();
             $arEmbargos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmbargo')->findBy(array('codigoEmpleadoFk' => $arProgramacionPagoDetalle->getCodigoEmpleadoFk(), 'estadoActivo' => 1));
@@ -482,6 +492,10 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                     $douPagoDetalle = ($devengado * $arEmbargo->getPorcentaje()) / 100;
                     $douPagoDetalle = round($douPagoDetalle);
                 }
+                if($arEmbargo->getPorcentajeDevengadoPrestacional()) {                
+                    $douPagoDetalle = ($devengadoPrestacional * $arEmbargo->getPorcentaje()) / 100;
+                    $douPagoDetalle = round($douPagoDetalle);
+                }                
                 if($arEmbargo->getPorcentajeDevengadoMenosDescuentoLey()) {                
                     $douPagoDetalle = (($devengado - $salud - $pension) * $arEmbargo->getPorcentaje()) / 100;
                     $douPagoDetalle = round($douPagoDetalle);

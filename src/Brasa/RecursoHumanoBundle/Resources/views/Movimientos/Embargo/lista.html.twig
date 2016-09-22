@@ -33,7 +33,10 @@
                 <th>VLR</th>
                 <th>VALOR</th>
                 <th>% DEV</th>
+                <th>% DEV(PRES)</th>
                 <th>%</th>
+                <th>PARTES</th>
+                <th>N.PARTES</th>
                 <th>ACT</th>                
                 <th style="text-align: center"></th>                
                 <th></th>
@@ -49,9 +52,11 @@
                 <td>{% if arEmbargos.valorFijo == 1 %} SI {% else %} NO {% endif %}</td>                                                
                 <td style="text-align: right">{{ arEmbargos.valor | number_format(0, '.', ',') }}</td>
                 <td>{% if arEmbargos.porcentajeDevengado == 1 %} SI {% else %} NO {% endif %}</td>                                                
+                <td>{% if arEmbargos.porcentajeDevengadoPrestacional == 1 %} SI {% else %} NO {% endif %}</td>                                                
                 <td style="text-align: right">{{ arEmbargos.porcentaje | number_format(0, '.', ',') }}</td>                
-                <td>{% if arEmbargos.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>
-                
+                <td>{% if arEmbargos.partesExcedaSalarioMinimo == 1 %} SI {% else %} NO {% endif %}</td>
+                <td style="text-align: right">{{ arEmbargos.partes | number_format(0, '.', ',') }}</td>
+                <td>{% if arEmbargos.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td style="text-align: center"><a href="{{ path('brs_rhu_movimiento_embargo_nuevo', {'codigoEmbargo': arEmbargos.codigoEmbargoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arEmbargos.codigoEmbargoPk }}" /></td>
             </tr>

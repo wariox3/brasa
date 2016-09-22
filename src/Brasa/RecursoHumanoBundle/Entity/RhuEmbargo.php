@@ -53,6 +53,11 @@ class RhuEmbargo
     private $porcentajeDevengado = false;    
 
     /**     
+     * @ORM\Column(name="porcentaje_devengado_prestacional", type="boolean")
+     */    
+    private $porcentajeDevengadoPrestacional = false;     
+    
+    /**     
      * @ORM\Column(name="porcentaje_devengado_menos_descuento_ley", type="boolean")
      */    
     private $porcentajeDevengadoMenosDescuentoLey = false;    
@@ -493,5 +498,29 @@ class RhuEmbargo
     public function getPorcentajeDevengadoMenosDescuentoLey()
     {
         return $this->porcentajeDevengadoMenosDescuentoLey;
+    }
+
+    /**
+     * Set porcentajeDevengadoPrestacional
+     *
+     * @param boolean $porcentajeDevengadoPrestacional
+     *
+     * @return RhuEmbargo
+     */
+    public function setPorcentajeDevengadoPrestacional($porcentajeDevengadoPrestacional)
+    {
+        $this->porcentajeDevengadoPrestacional = $porcentajeDevengadoPrestacional;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeDevengadoPrestacional
+     *
+     * @return boolean
+     */
+    public function getPorcentajeDevengadoPrestacional()
+    {
+        return $this->porcentajeDevengadoPrestacional;
     }
 }
