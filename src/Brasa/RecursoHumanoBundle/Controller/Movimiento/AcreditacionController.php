@@ -74,6 +74,7 @@ class AcreditacionController extends Controller
             $arAcreditacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacion')->find($codigoAcreditacion);
         } else {
             $arAcreditacion->setFecha(new \DateTime('now'));
+            $arAcreditacion->setFechaVenceCurso(new \DateTime('now'));
             $arAcreditacion->setFechaVencimiento(new \DateTime('now'));
         }
 
@@ -335,16 +336,17 @@ class AcreditacionController extends Controller
                     ->setCellValue('B1', 'DOCUMENTO')
                     ->setCellValue('C1', 'NOMBRE')
                     ->setCellValue('D1', 'TIPO')
-                    ->setCellValue('E1', 'CARGO')
-                    ->setCellValue('F1', 'REGISTRO')
-                    ->setCellValue('G1', 'REC')
-                    ->setCellValue('H1', 'MOTIVO')
-                    ->setCellValue('I1', 'VAL')
-                    ->setCellValue('J1', 'NUMERO')
-                    ->setCellValue('K1', 'FECHA')
-                    ->setCellValue('L1', 'ACREDITADO')
-                    ->setCellValue('M1', 'FECHA')
-                    ->setCellValue('N1', 'VENCE');
+                    ->setCellValue('E1', 'VENCE')
+                    ->setCellValue('F1', 'CARGO')
+                    ->setCellValue('G1', 'REGISTRO')
+                    ->setCellValue('H1', 'REC')
+                    ->setCellValue('I1', 'MOTIVO')
+                    ->setCellValue('J1', 'VAL')
+                    ->setCellValue('K1', 'NUMERO')
+                    ->setCellValue('L1', 'FECHA')
+                    ->setCellValue('M1', 'ACREDITADO')
+                    ->setCellValue('N1', 'FECHA')
+                    ->setCellValue('O1', 'VENCE');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
@@ -356,21 +358,22 @@ class AcreditacionController extends Controller
                     ->setCellValue('B' . $i, $arAcreditacion->getEmpleadoRel()->getnumeroIdentificacion())
                     ->setCellValue('C' . $i, $arAcreditacion->getEmpleadoRel()->getNombreCorto())
                     ->setCellValue('D' . $i, $arAcreditacion->getAcreditacionTipoRel()->getNombre())
-                    ->setCellValue('E' . $i, $arAcreditacion->getAcreditacionTipoRel()->getCargo())
-                    ->setCellValue('F' . $i, $arAcreditacion->getNumeroRegistro())
-                    ->setCellValue('G' . $i, $objFunciones->devuelveBoolean($arAcreditacion->getEstadoRechazado()))
-                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arAcreditacion->getEstadoValidado()))
-                    ->setCellValue('J' . $i, $arAcreditacion->getNumeroValidacion())                    
-                    ->setCellValue('L' . $i, $objFunciones->devuelveBoolean($arAcreditacion->getEstadoAcreditado()));
+                    ->setCellValue('E' . $i, $arAcreditacion->getFechaVenceCurso()->format('Y/m/d'))
+                    ->setCellValue('F' . $i, $arAcreditacion->getAcreditacionTipoRel()->getCargo())
+                    ->setCellValue('G' . $i, $arAcreditacion->getNumeroRegistro())
+                    ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arAcreditacion->getEstadoRechazado()))
+                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arAcreditacion->getEstadoValidado()))
+                    ->setCellValue('K' . $i, $arAcreditacion->getNumeroValidacion())                    
+                    ->setCellValue('M' . $i, $objFunciones->devuelveBoolean($arAcreditacion->getEstadoAcreditado()));
             if($arAcreditacion->getCodigoAcreditacionRechazoFk()) {
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H' . $i, $arAcreditacion->getAcreditacionRechazoRel()->getNombre());
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I' . $i, $arAcreditacion->getAcreditacionRechazoRel()->getNombre());
             }
             if($arAcreditacion->getEstadoValidado()) {
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K' . $i, $arAcreditacion->getFechaValidacion()->format('Y-m-d'));
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L' . $i, $arAcreditacion->getFechaValidacion()->format('Y-m-d'));
             }
             if($arAcreditacion->getEstadoAcreditado()) {
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M' . $i, $arAcreditacion->getFechaAcreditacion()->format('Y-m-d'));
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('N' . $i, $arAcreditacion->getFechaVencimiento()->format('Y-m-d'));
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('N' . $i, $arAcreditacion->getFechaAcreditacion()->format('Y-m-d'));
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('O' . $i, $arAcreditacion->getFechaVencimiento()->format('Y-m-d'));
             }            
             $i++;
         }

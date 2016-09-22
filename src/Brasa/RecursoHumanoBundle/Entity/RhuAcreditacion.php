@@ -29,6 +29,12 @@ class RhuAcreditacion
     private $fecha;    
 
     /**
+     * @ORM\Column(name="fechaVenceCurso", type="date", nullable=true)
+     */     
+    
+    private $fechaVenceCurso;     
+    
+    /**
      * @ORM\Column(name="fecha_validacion", type="date", nullable=true)
      */         
     private $fechaValidacion;            
@@ -641,5 +647,29 @@ class RhuAcreditacion
     public function getAcreditacionRechazoRel()
     {
         return $this->acreditacionRechazoRel;
+    }
+
+    /**
+     * Set fechaVenceCurso
+     *
+     * @param \DateTime $fechaVenceCurso
+     *
+     * @return RhuAcreditacion
+     */
+    public function setFechaVenceCurso($fechaVenceCurso)
+    {
+        $this->fechaVenceCurso = $fechaVenceCurso;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVenceCurso
+     *
+     * @return \DateTime
+     */
+    public function getFechaVenceCurso()
+    {
+        return $this->fechaVenceCurso;
     }
 }

@@ -82,6 +82,7 @@
                 <th>DOCUMENTO</th>
                 <th>{{ knp_pagination_sortable(arAcreditaciones, 'NOMBRE', 'e.nombreCorto') }}</th>                
                 <th>TIPO</th>
+                <th>VENCE</th>
                 <th>CARGO</th>
                 <th>REGISTRO</th>                
                 <th>REC</th>
@@ -99,6 +100,7 @@
                 <td>{{ arAcreditaciones.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arAcreditaciones.empleadoRel.nombreCorto  }}</td>                                                
                 <td>{{ arAcreditaciones.acreditacionTipoRel.nombre |default('value') }}</td>                                                
+                <td>{{ arAcreditaciones.fechaVenceCurso |date('Y/m/d') }}</td>                                               
                 <td>{{ arAcreditaciones.acreditacionTipoRel.cargo |default('value') }}</td>                                                                
                 <td>{{ arAcreditaciones.numeroRegistro }}</td>                               
                 <td>{% if arAcreditaciones.estadoRechazado == 1 %} SI [{{ arAcreditaciones.acreditacionRechazoRel.nombre | default('') }}] {% else %} NO {% endif %}</td>                 

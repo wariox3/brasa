@@ -20,4 +20,16 @@ class RhuVacacionAdicionalRepository extends EntityRepository {
         $dql .= " ORDER BY va.codigoVacacionAdicionalPk";
         return $dql;
     }     
+    public function listaConsultaDql($fechaDesde = "", $fechaHasta = "", $codigoEmpleado = "", $codigoPagoConcepto = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT va FROM BrasaRecursoHumanoBundle:RhuVacacionAdicional va JOIN va.vacacionRel v WHERE va.codigoVacacionAdicionalPk <> 0";        
+        $dql .= " AND v.fecha >= '" . $fechaDesde . "' AND v.fecha <='" . $fechaHasta . " '"; 
+        if($codigoEmpleado != "") {
+            $dql .= " AND v.codigoEmpleadoFk = " . $codigoEmpleado;
+        }
+        if($codigoPagoConcepto != "") {
+            $dql .= " AND va.codigoPagoConceptoFk = " . $codigoPagoConcepto;
+        }        
+        return $dql;
+    }    
 }

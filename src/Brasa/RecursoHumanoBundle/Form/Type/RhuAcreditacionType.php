@@ -34,6 +34,7 @@ class RhuAcreditacionType extends AbstractType
             ->add('estadoRechazado', 'checkbox', array('required'  => false))                            
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('numeroRegistro', 'text', array('required' => false))                            
+            ->add('fechaVenceCurso', 'date', array('format' => 'yyyyMMdd'))                             
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }
