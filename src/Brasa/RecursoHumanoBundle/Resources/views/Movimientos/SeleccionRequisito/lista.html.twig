@@ -81,7 +81,7 @@
                 <td>{{ arRequisitos.centroCostoRel.nombre|default('SIN GRUPO PAGO')  }}</td>
                 <td>{{ arRequisitos.zonaRel.nombre|default('')  }}</td>
                 <td>{{ arRequisitos.cargoRel.nombre|default('SIN CARGO')  }}</td>
-                <td>{{ arRequisitos.cantidadSolicitida  }}</td>
+                <td>{{ arRequisitos.cantidadSolicitada  }}</td>
                 <td>{% if arRequisitos.estadoCerrado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{{ arRequisitos.codigoUsuario  }}</td>
                 {% if arRequisitos.estadoCerrado == 0 %}
@@ -103,6 +103,9 @@
                 {{ knp_pagination_render(arRequisitos) }}       
         </div>
         <div class="btn-toolbar" style="float: right">
+            <div class="btn-group">                                
+                {{ form_widget(form.BtnExcelDetalle, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            </div>
             <div class="btn-group">                                
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>

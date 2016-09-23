@@ -32,7 +32,7 @@ class RhuSeleccionRequisito
     /**     
      * @ORM\Column(name="cantidad_solicitada", type="integer")
      */    
-    private $cantidadSolicitida;
+    private $cantidadSolicitada;
     
     /**
      * @ORM\Column(name="fecha_pruebas", type="datetime", nullable=true)
@@ -189,7 +189,7 @@ class RhuSeleccionRequisito
     
 
     
-    
+
     /**
      * Constructor
      */
@@ -258,27 +258,27 @@ class RhuSeleccionRequisito
     }
 
     /**
-     * Set cantidadSolicitida
+     * Set cantidadSolicitada
      *
-     * @param integer $cantidadSolicitida
+     * @param integer $cantidadSolicitada
      *
      * @return RhuSeleccionRequisito
      */
-    public function setCantidadSolicitida($cantidadSolicitida)
+    public function setCantidadSolicitada($cantidadSolicitada)
     {
-        $this->cantidadSolicitida = $cantidadSolicitida;
+        $this->cantidadSolicitada = $cantidadSolicitada;
 
         return $this;
     }
 
     /**
-     * Get cantidadSolicitida
+     * Get cantidadSolicitada
      *
      * @return integer
      */
-    public function getCantidadSolicitida()
+    public function getCantidadSolicitada()
     {
-        return $this->cantidadSolicitida;
+        return $this->cantidadSolicitada;
     }
 
     /**

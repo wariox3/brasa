@@ -33,12 +33,18 @@
                 <th>CÓDIGO</th>
                 <th>REQUISICIÓN</th>
                 <th>APROBADO</th>
+                <th>MOTIVO</th>
+                <th>FECHA DESCARTADO</th>
+                <th>COMENTARIOS</th>
             </tr>
             {% for arRequisicionAplicada in arRequisicionAplicada %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arRequisicionAplicada.codigoSeleccionRequisicionAspirantePk }}">{{ arRequisicionAplicada.codigoSeleccionRequisicionAspirantePk }} </td>
                 <td>{{ arRequisicionAplicada.seleccionRequisitoRel.nombre  }}</td>
                 <td>{% if arRequisicionAplicada.estadoAprobado == 1%}SI{% else %}NO{% endif %}</td>
+                <td>{{ arRequisicionAplicada.motivoDescarteRequisicionAspiranteRel.nombre | default('') }}</td>
+                <td>{% if arRequisicionAplicada.fechaDescarte != null %}{{ arRequisicionAplicada.fechaDescarte | date('Y-m-d') }}{% endif %}</td>
+                <td>{{ arRequisicionAplicada.comentarios  }}</td>
             </tr>
             {% endfor %}
         </table>

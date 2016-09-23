@@ -36,7 +36,12 @@ class SeleccionRequisitoController extends Controller
                 $this->filtrar($form, $request);
                 $this->listar();
                 $this->generarExcel();
-            }            
+            }
+            if ($form->get('BtnExcelDetalle')->isClicked()) {
+                $this->filtrar($form, $request);
+                $this->listar();
+                $this->generarExcelDetalle();
+            }
         }                      
         $arRequisitos = $paginator->paginate($em->createQuery($this->strSqlLista), $request->query->get('page', 1), 20);                
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/SeleccionRequisito:lista.html.twig', array('arRequisitos' => $arRequisitos, 'form' => $form->createView()));     
@@ -81,7 +86,7 @@ class SeleccionRequisitoController extends Controller
         $arRequisicion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisito')->find($codigoSeleccionRequisito);
         $arRequisicionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisicionAspirante();
         $arRequisicionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisicionAspirante')->findBy(array ('codigoSeleccionRequisitoFk' => $codigoSeleccionRequisito));
-        $form = $this->formularioDetalle();
+        $form = $this->formularioDetalle($arRequisicion);
         $form->handleRequest($request);
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');                                                   
@@ -132,32 +137,56 @@ class SeleccionRequisitoController extends Controller
                     ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
                     ->setKeywords("office 2007 openxml php")
                     ->setCategory("Test result file");
-                for($col = 'A'; $col !== 'AR'; $col++) {
+                $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle('2')->getFont()->setBold(true);
+                for($col = 'A'; $col !== 'K'; $col++) {
                     $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
                     $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
                 }
-                $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
-                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+                if ($arRequisicion->getEstadoCerrado() == 1){
+                    $estado = "CERRADO";
+                } else {
+                    $estado = "ABIERTO";
+                }
                 $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'CODIGO')
-                            ->setCellValue('B1', 'IDENTIFICACION')
-                            ->setCellValue('C1', 'NOMBRE')
-                            ->setCellValue('D1', 'APROBADO');
-                $i = 2;
-                //$arBancos = $em->getRepository('BrasaRecursoHumanoBundle:RhuBanco')->findAll();
+                            ->setCellValue('A1', 'REQUISICION:')
+                            ->setCellValue('B1', $arRequisicion->getNombre())
+                            ->setCellValue('C1', 'ESTADO:')
+                            ->setCellValue('D1', $estado);
+                
+                $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue('A2', 'CODIGO')
+                            ->setCellValue('B2', 'IDENTIFICACION')
+                            ->setCellValue('C2', 'NOMBRE')
+                            ->setCellValue('D2', 'APROBADO')
+                            ->setCellValue('E2', 'MOTIVO')
+                            ->setCellValue('F2', 'FECHA DESCARTE')
+                            ->setCellValue('G2', 'COMENTARIOS');
+                $i = 3;
                 
                 foreach ($arRequisicionDetalle as $arRequisicionDetalle) {
                     if ($arRequisicionDetalle->getEstadoAprobado() == 1){
-                        $estado = "SI";
+                        $aprobado = "SI";
                     } else {
-                        $estado = "NO";
+                        $aprobado = "NO";
                     }
-                        
+                    if ($arRequisicionDetalle->getFechaDescarte()){
+                        $fechaDescarte = $arRequisicionDetalle->getFechaDescarte()->format('Y-m-d');
+                    } else {
+                        $fechaDescarte = "No aplica";
+                    }
+                    
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arRequisicionDetalle->getCodigoAspiranteFk())
                             ->setCellValue('B' . $i, $arRequisicionDetalle->getAspiranteRel()->getNumeroIdentificacion())
                             ->setCellValue('C' . $i, $arRequisicionDetalle->getAspiranteRel()->getNombreCorto())
-                            ->setCellValue('D' . $i, $estado);
+                            ->setCellValue('D' . $i, $aprobado)
+                            ->setCellValue('F' . $i, $fechaDescarte)
+                            ->setCellValue('G' . $i, $arRequisicionDetalle->getComentarios());
+                    if($arRequisicionDetalle->getCodigoMotivoDescarteRequisicionAspitanteFk()) {
+                        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E' . $i, $arRequisicionDetalle->getMotivoDescarteRequisicionAspiranteRel()->getNombre());                
+                    }        
                     $i++;
                 }
 
@@ -202,7 +231,7 @@ class SeleccionRequisitoController extends Controller
         $arSeleccionRequisicionAspirante = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisicionAspirante')->find($codigoSelReqAsp);
         $arSeleccionRequisicion = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito();
         $arSeleccionRequisicion = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisito')->find($arSeleccionRequisicionAspirante->getCodigoSeleccionRequisitoFk());
-        
+        $codigoAspirante = $arSeleccionRequisicionAspirante->getCodigoAspiranteFk();
         $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('brs_rhu_descartar_aspirante', array('codigoSelReqAsp' => $codigoSelReqAsp )))
             ->add('comentarios', 'textarea', array('data' =>$arSeleccionRequisicionAspirante->getComentarios() ,'required' => true))                      
@@ -226,9 +255,9 @@ class SeleccionRequisitoController extends Controller
                     $arSeleccionRequisicionAspirante->setMotivoDescarteRequisicionAspiranteRel($form->get('motivoDescarteRequisicionAspiranteRel')->getData());
                     $arSeleccionRequisicionAspirante->setEstadoAprobado(0);
                     if ($form->get('bloqueado')->getData() == true){
-                        $arAspirante = $em->getRepository('BrasaRecursoHumanoBundle:RhuAspirante')->find($arSeleccionRequisicionAspirante->getCodigoAspiranteFk());
+                        $arAspirante = $em->getRepository('BrasaRecursoHumanoBundle:RhuAspirante')->find($codigoAspirante);
                         $arAspirante->setBloqueado(1);
-                        $arAspirante->setComentarios($form>get('comentariosAspirante')->getData());
+                        $arAspirante->setComentarios($form->get('comentariosAspirante')->getData());
                         $em->persist($arAspirante);
                     }
                     
@@ -310,19 +339,30 @@ class SeleccionRequisitoController extends Controller
             ->add('estadoCerrado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAbiertoSeleccionRequisito'))) 
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnEstadoAbierto', 'submit', array('label'  => 'Cerrar',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))            
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('BtnExcelDetalle', 'submit', array('label'  => 'Excel detalle',))    
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();        
         return $form;
     }
     
-    private function formularioDetalle() {        
+    private function formularioDetalle($ar) {
+        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
+        $arrBotonAprobarDetalle = array('label' => 'Aprobar', 'disabled' => false);
+        $arrBotonDesaprobarDetalle = array('label' => 'Desaprobar', 'disabled' => false);
+        $arrBotonEliminarDetalle = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonExcelAspirante = array('label' => 'Excel', 'disabled' => false);
+        if($ar->getEstadoCerrado() == 1) {
+            $arrBotonAprobarDetalle['disabled'] = true;
+            $arrBotonDesaprobarDetalle['disabled'] = true;
+            $arrBotonEliminarDetalle['disabled'] = true;
+        }
         $form = $this->createFormBuilder()
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
-            ->add('BtnAprobarDetalle', 'submit', array('label'  => 'Aprobar',))
-            ->add('BtnDesaprobarDetalle', 'submit', array('label'  => 'Desaprobar',))
-            ->add('BtnEliminarDetalle', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnExcelAspirante', 'submit', array('label'  => 'Excel'))    
+            ->add('BtnImprimir', 'submit', $arrBotonImprimir)    
+            ->add('BtnAprobarDetalle', 'submit', $arrBotonAprobarDetalle)
+            ->add('BtnDesaprobarDetalle', 'submit', $arrBotonDesaprobarDetalle)
+            ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)
+            ->add('BtnExcelAspirante', 'submit', $arrBotonExcelAspirante)    
             ->getForm();        
         return $form;
     }    
@@ -342,25 +382,10 @@ class SeleccionRequisitoController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setAutoSize(true);
+        for($col = 'A'; $col !== 'V'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'FECHA')
@@ -498,7 +523,7 @@ class SeleccionRequisitoController extends Controller
                     ->setCellValue('C' . $i, $arSeleccionRequisito->getNombre())
                     ->setCellValue('D' . $i, $strNombreCentroCosto)
                     ->setCellValue('E' . $i, $strCargo)
-                    ->setCellValue('F' . $i, $arSeleccionRequisito->getCantidadSolicitida())
+                    ->setCellValue('F' . $i, $arSeleccionRequisito->getCantidadSolicitada())
                     ->setCellValue('G' . $i, $strCiudad)
                     ->setCellValue('H' . $i, $strEstadoCivil)
                     ->setCellValue('I' . $i, $strEstudioTipo)
@@ -524,6 +549,105 @@ class SeleccionRequisitoController extends Controller
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="RequisitosSeleccion.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }
+    
+    private function generarExcelDetalle() {
+        ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
+        $em = $this->getDoctrine()->getManager(); 
+        $session = $this->get('session');
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+        for($col = 'A'; $col !== 'O'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
+                } 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'CODIGO')
+                    ->setCellValue('B1', 'FECHA')
+                    ->setCellValue('C1', 'REQUISICION')
+                    ->setCellValue('D1', 'CENTRO COSTO')
+                    ->setCellValue('E1', 'CARGO')
+                    ->setCellValue('F1', 'CANTIDAD')
+                    ->setCellValue('G1', 'ESTADO')
+                    ->setCellValue('H1', 'IDENTIFICACION')
+                    ->setCellValue('I1', 'ASPIRANTE')
+                    ->setCellValue('J1', 'APROBADO')
+                    ->setCellValue('K1', 'MOTIVO')
+                    ->setCellValue('L1', 'FECHA DESCARTADO')
+                    ->setCellValue('M1', 'COMENTARIOS');
+        $i = 2;
+       
+        $arRequisicionDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito();
+        $arRequisicionDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisito')->listaDetalleDql(
+                $session->get('filtroNombreSeleccionRequisito'),
+                $session->get('filtroAbiertoSeleccionRequisito'),
+                $session->get('filtroCodigoCargo'),
+                $session->get('filtroDesde'),
+                $session->get('filtroHasta')
+                );
+        $arRequisicionDetalle = $em->createQuery($arRequisicionDetalle);
+        $arRequisicionDetalle = $arRequisicionDetalle->getResult();
+        foreach ($arRequisicionDetalle as $arRequisicionDetalle) {
+        if ($arRequisicionDetalle->getSeleccionRequisitoRel()->getEstadoCerrado() == 1){
+            $estado = "CERRADO";
+        } else {
+            $estado = "ABIERTO";
+        }
+        if ($arRequisicionDetalle->getEstadoAprobado() == 1){
+            $aprobado = "SI";
+        } else {
+            $aprobado = "NO";
+        }
+        if ($arRequisicionDetalle->getFechaDescarte()){
+            $fechaDescarte = $arRequisicionDetalle->getFechaDescarte()->format('Y-m-d');
+        } else {
+            $fechaDescarte = "No aplica";
+        }
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arRequisicionDetalle->getSeleccionRequisitoRel()->getCodigoSeleccionRequisitoPk())
+                    ->setCellValue('B' . $i, $arRequisicionDetalle->getSeleccionRequisitoRel()->getFecha()->format('Y-m-d'))
+                    ->setCellValue('C' . $i, $arRequisicionDetalle->getSeleccionRequisitoRel()->getNombre())
+                    ->setCellValue('D' . $i, $arRequisicionDetalle->getSeleccionRequisitoRel()->getCentroCostoRel()->getNombre())
+                    ->setCellValue('E' . $i, $arRequisicionDetalle->getSeleccionRequisitoRel()->getCargoRel()->getNombre())
+                    ->setCellValue('F' . $i, $arRequisicionDetalle->getSeleccionRequisitoRel()->getCantidadSolicitada())
+                    ->setCellValue('G' . $i, $estado)
+                    ->setCellValue('H' . $i, $arRequisicionDetalle->getAspiranteRel()->getNumeroIdentificacion())
+                    ->setCellValue('I' . $i, $arRequisicionDetalle->getAspiranteRel()->getNombreCorto())
+                    ->setCellValue('J' . $i, $aprobado)
+                    ->setCellValue('L' . $i, $fechaDescarte)
+                    ->setCellValue('M' . $i, $arRequisicionDetalle->getComentarios());
+            if($arRequisicionDetalle->getCodigoMotivoDescarteRequisicionAspitanteFk()) {
+                        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K' . $i, $arRequisicionDetalle->getMotivoDescarteRequisicionAspiranteRel()->getNombre());                
+                    }
+            $i++;
+        }
+
+        $objPHPExcel->getActiveSheet()->setTitle('RequisicionDetalle');
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="RequisitoDetalle.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

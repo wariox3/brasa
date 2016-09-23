@@ -52,6 +52,32 @@ class RhuSeleccionRequisitoRepository extends EntityRepository {
         return $dql;
     }   
     
+    public function listaDetalleDql($strNombre = "", $boolCerrado = 2, $strCargo = "", $strDesde = "", $strHasta= "") {                
+        $dql   = "SELECT sra,sr FROM BrasaRecursoHumanoBundle:RhuSeleccionRequisicionAspirante sra JOIN sra.seleccionRequisitoRel sr WHERE sr.codigoSeleccionRequisitoPk <> 0";
+        if($strNombre != "" ) {
+            $dql .= " AND sr.nombre LIKE '%" . $strNombre . "%'";
+        }   
+        
+        if($boolCerrado == 1 ) {
+            $dql .= " AND sr.estadoCerrado = 1";
+        } elseif($boolCerrado == 0 || $boolCerrado == '0') {
+            $dql .= " AND sr.estadoCerrado = 0";
+        }            
+        
+        if($strCargo != "") {
+            $dql .= " AND sr.codigoCargoFk = " . $strCargo;
+        }
+        if($strDesde != "" || $strDesde != 0){
+            $dql .= " AND sr.fecha >='" . $strDesde . "'";
+        }
+        if($strHasta != "" || $strHasta != 0) {
+            $dql .= " AND sr.fecha <='" . $strHasta . "'";
+        }
+         
+        $dql .= " ORDER BY sr.codigoSeleccionRequisitoPk DESC";
+        return $dql;
+    }   
+    
     // Esta funcion cambiar el estado abierto del requisito (Abierto / Cerrado)
     public function estadoAbiertoSeleccionRequisitos($arrSeleccionados) {
         $em = $this->getEntityManager();

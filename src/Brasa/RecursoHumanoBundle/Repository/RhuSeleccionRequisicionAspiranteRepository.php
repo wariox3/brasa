@@ -85,10 +85,10 @@ class RhuSeleccionRequisicionAspiranteRepository extends EntityRepository {
                         
                         foreach ($arSeleccion as $arSeleccion){
                             if ($arSeleccion->getEstadoCerrado() == 1 || $arSeleccion->getEstadoAprobado() == 1){
-                                $mensaje = "error";
+                                $mensaje = "El proceso de seleccion esta aprobado y/o cerrado, no se puede desaprobar";
                             } else {
                               if ($em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionEntrevista')->findBy(array('codigoSeleccionFk' => $arSeleccion)) || $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionPrueba')->findBy(array('codigoSeleccionFk' => $arSeleccion)) || $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionReferencia')->findBy(array('codigoSeleccionFk' => $arSeleccion)) || $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionEntrevista')->findBy(array('codigoSeleccionFk' => $arSeleccion))){
-                                $mensaje = "error";   
+                                $mensaje = "El proceso de seleccion tiene detalles asociados, no se puede desaprobar";   
                               } else {
                                   $em->remove($arSeleccion);
                                   
