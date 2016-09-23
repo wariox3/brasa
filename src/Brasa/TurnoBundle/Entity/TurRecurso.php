@@ -27,12 +27,7 @@ class TurRecurso
     /**
      * @ORM\Column(name="codigo_recurso_grupo_fk", type="integer", nullable=true)
      */    
-    private $codigoRecursoGrupoFk;    
-    
-    /**
-     * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
-     */    
-    private $codigoCentroCostoFk;            
+    private $codigoRecursoGrupoFk;                   
     
     /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
@@ -155,13 +150,7 @@ class TurRecurso
      * @ORM\ManyToOne(targetEntity="TurRecursoGrupo", inversedBy="recursosRecursoGrupoRel")
      * @ORM\JoinColumn(name="codigo_recurso_grupo_fk", referencedColumnName="codigo_recurso_grupo_pk")
      */
-    protected $recursoGrupoRel;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="TurCentroCosto", inversedBy="recursosCentroCostoRel")
-     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
-     */
-    protected $centroCostoRel;    
+    protected $recursoGrupoRel;        
     
     /**
      * @ORM\OneToMany(targetEntity="TurProgramacionDetalle", mappedBy="recursoRel")
@@ -294,30 +283,6 @@ class TurRecurso
     public function getCodigoRecursoGrupoFk()
     {
         return $this->codigoRecursoGrupoFk;
-    }
-
-    /**
-     * Set codigoCentroCostoFk
-     *
-     * @param integer $codigoCentroCostoFk
-     *
-     * @return TurRecurso
-     */
-    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
-    {
-        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCentroCostoFk
-     *
-     * @return integer
-     */
-    public function getCodigoCentroCostoFk()
-    {
-        return $this->codigoCentroCostoFk;
     }
 
     /**
@@ -894,30 +859,6 @@ class TurRecurso
     public function getRecursoGrupoRel()
     {
         return $this->recursoGrupoRel;
-    }
-
-    /**
-     * Set centroCostoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurCentroCosto $centroCostoRel
-     *
-     * @return TurRecurso
-     */
-    public function setCentroCostoRel(\Brasa\TurnoBundle\Entity\TurCentroCosto $centroCostoRel = null)
-    {
-        $this->centroCostoRel = $centroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurCentroCosto
-     */
-    public function getCentroCostoRel()
-    {
-        return $this->centroCostoRel;
     }
 
     /**

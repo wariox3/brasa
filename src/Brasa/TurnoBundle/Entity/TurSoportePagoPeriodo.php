@@ -66,12 +66,7 @@ class TurSoportePagoPeriodo
      * Cuando el usuario activa descanso festivos le suma 8 horas por cada festivo  
      * @ORM\Column(name="descanso_festivo_fijo", type="boolean")
      */    
-    private $descansoFestivoFijo = false;     
-    
-    /**
-     * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
-     */    
-    private $codigoCentroCostoFk;    
+    private $descansoFestivoFijo = false;          
 
     /**
      * @ORM\Column(name="codigo_recurso_grupo_fk", type="integer", nullable=true)
@@ -121,13 +116,7 @@ class TurSoportePagoPeriodo
     /**     
      * @ORM\Column(name="inconsistencias", type="boolean")
      */    
-    private $inconsistencias = false;    
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="TurCentroCosto", inversedBy="soportesPagosPeriodosCentroCostoRel")
-     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
-     */
-    protected $centroCostoRel;     
+    private $inconsistencias = false;            
     
     /**
      * @ORM\ManyToOne(targetEntity="TurRecursoGrupo", inversedBy="soportesPagosPeriodosRecursoGrupoRel")
@@ -150,13 +139,13 @@ class TurSoportePagoPeriodo
      */
     protected $soportesPagosDetallesSoportePagoPeriodoRel;     
     
-
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->soportesPagosSoportePagoPeriodoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->soportesPagosInconsistenciasSoportePagoPeriodoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->soportesPagosDetallesSoportePagoPeriodoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -243,6 +232,54 @@ class TurSoportePagoPeriodo
     }
 
     /**
+     * Set vrPago
+     *
+     * @param float $vrPago
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setVrPago($vrPago)
+    {
+        $this->vrPago = $vrPago;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPago
+     *
+     * @return float
+     */
+    public function getVrPago()
+    {
+        return $this->vrPago;
+    }
+
+    /**
+     * Set vrDevengado
+     *
+     * @param float $vrDevengado
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setVrDevengado($vrDevengado)
+    {
+        $this->vrDevengado = $vrDevengado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrDevengado
+     *
+     * @return float
+     */
+    public function getVrDevengado()
+    {
+        return $this->vrDevengado;
+    }
+
+    /**
      * Set festivos
      *
      * @param integer $festivos
@@ -315,6 +352,30 @@ class TurSoportePagoPeriodo
     }
 
     /**
+     * Set diasDescansoFijo
+     *
+     * @param integer $diasDescansoFijo
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setDiasDescansoFijo($diasDescansoFijo)
+    {
+        $this->diasDescansoFijo = $diasDescansoFijo;
+
+        return $this;
+    }
+
+    /**
+     * Get diasDescansoFijo
+     *
+     * @return integer
+     */
+    public function getDiasDescansoFijo()
+    {
+        return $this->diasDescansoFijo;
+    }
+
+    /**
      * Set descansoFestivoFijo
      *
      * @param boolean $descansoFestivoFijo
@@ -339,27 +400,27 @@ class TurSoportePagoPeriodo
     }
 
     /**
-     * Set codigoCentroCostoFk
+     * Set codigoRecursoGrupoFk
      *
-     * @param integer $codigoCentroCostoFk
+     * @param integer $codigoRecursoGrupoFk
      *
      * @return TurSoportePagoPeriodo
      */
-    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
+    public function setCodigoRecursoGrupoFk($codigoRecursoGrupoFk)
     {
-        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
+        $this->codigoRecursoGrupoFk = $codigoRecursoGrupoFk;
 
         return $this;
     }
 
     /**
-     * Get codigoCentroCostoFk
+     * Get codigoRecursoGrupoFk
      *
      * @return integer
      */
-    public function getCodigoCentroCostoFk()
+    public function getCodigoRecursoGrupoFk()
     {
-        return $this->codigoCentroCostoFk;
+        return $this->codigoRecursoGrupoFk;
     }
 
     /**
@@ -435,290 +496,6 @@ class TurSoportePagoPeriodo
     }
 
     /**
-     * Set diaFestivoReal
-     *
-     * @param integer $diaFestivoReal
-     *
-     * @return TurSoportePagoPeriodo
-     */
-    public function setDiaFestivoReal($diaFestivoReal)
-    {
-        $this->diaFestivoReal = $diaFestivoReal;
-
-        return $this;
-    }
-
-    /**
-     * Get diaFestivoReal
-     *
-     * @return integer
-     */
-    public function getDiaFestivoReal()
-    {
-        return $this->diaFestivoReal;
-    }
-
-    /**
-     * Set diaDomingoReal
-     *
-     * @param integer $diaDomingoReal
-     *
-     * @return TurSoportePagoPeriodo
-     */
-    public function setDiaDomingoReal($diaDomingoReal)
-    {
-        $this->diaDomingoReal = $diaDomingoReal;
-
-        return $this;
-    }
-
-    /**
-     * Get diaDomingoReal
-     *
-     * @return integer
-     */
-    public function getDiaDomingoReal()
-    {
-        return $this->diaDomingoReal;
-    }
-
-    /**
-     * Set centroCostoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurCentroCosto $centroCostoRel
-     *
-     * @return TurSoportePagoPeriodo
-     */
-    public function setCentroCostoRel(\Brasa\TurnoBundle\Entity\TurCentroCosto $centroCostoRel = null)
-    {
-        $this->centroCostoRel = $centroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurCentroCosto
-     */
-    public function getCentroCostoRel()
-    {
-        return $this->centroCostoRel;
-    }
-
-    /**
-     * Add soportesPagosSoportePagoPeriodoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosSoportePagoPeriodoRel
-     *
-     * @return TurSoportePagoPeriodo
-     */
-    public function addSoportesPagosSoportePagoPeriodoRel(\Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosSoportePagoPeriodoRel)
-    {
-        $this->soportesPagosSoportePagoPeriodoRel[] = $soportesPagosSoportePagoPeriodoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove soportesPagosSoportePagoPeriodoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosSoportePagoPeriodoRel
-     */
-    public function removeSoportesPagosSoportePagoPeriodoRel(\Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosSoportePagoPeriodoRel)
-    {
-        $this->soportesPagosSoportePagoPeriodoRel->removeElement($soportesPagosSoportePagoPeriodoRel);
-    }
-
-    /**
-     * Get soportesPagosSoportePagoPeriodoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSoportesPagosSoportePagoPeriodoRel()
-    {
-        return $this->soportesPagosSoportePagoPeriodoRel;
-    }
-
-    /**
-     * Add soportesPagosDetallesSoportePagoPeriodoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoPeriodoRel
-     *
-     * @return TurSoportePagoPeriodo
-     */
-    public function addSoportesPagosDetallesSoportePagoPeriodoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoPeriodoRel)
-    {
-        $this->soportesPagosDetallesSoportePagoPeriodoRel[] = $soportesPagosDetallesSoportePagoPeriodoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove soportesPagosDetallesSoportePagoPeriodoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoPeriodoRel
-     */
-    public function removeSoportesPagosDetallesSoportePagoPeriodoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoPeriodoRel)
-    {
-        $this->soportesPagosDetallesSoportePagoPeriodoRel->removeElement($soportesPagosDetallesSoportePagoPeriodoRel);
-    }
-
-    /**
-     * Get soportesPagosDetallesSoportePagoPeriodoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSoportesPagosDetallesSoportePagoPeriodoRel()
-    {
-        return $this->soportesPagosDetallesSoportePagoPeriodoRel;
-    }
-
-    /**
-     * Set vrPago
-     *
-     * @param float $vrPago
-     *
-     * @return TurSoportePagoPeriodo
-     */
-    public function setVrPago($vrPago)
-    {
-        $this->vrPago = $vrPago;
-
-        return $this;
-    }
-
-    /**
-     * Get vrPago
-     *
-     * @return float
-     */
-    public function getVrPago()
-    {
-        return $this->vrPago;
-    }
-
-    /**
-     * Set diaDescanso
-     *
-     * @param integer $diaDescanso
-     *
-     * @return TurSoportePagoPeriodo
-     */
-    public function setDiaDescanso($diaDescanso)
-    {
-        $this->diaDescanso = $diaDescanso;
-
-        return $this;
-    }
-
-    /**
-     * Get diaDescanso
-     *
-     * @return integer
-     */
-    public function getDiaDescanso()
-    {
-        return $this->diaDescanso;
-    }
-
-    /**
-     * Set codigoRecursoGrupoFk
-     *
-     * @param integer $codigoRecursoGrupoFk
-     *
-     * @return TurSoportePagoPeriodo
-     */
-    public function setCodigoRecursoGrupoFk($codigoRecursoGrupoFk)
-    {
-        $this->codigoRecursoGrupoFk = $codigoRecursoGrupoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoRecursoGrupoFk
-     *
-     * @return integer
-     */
-    public function getCodigoRecursoGrupoFk()
-    {
-        return $this->codigoRecursoGrupoFk;
-    }
-
-    /**
-     * Set recursoGrupoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurRecursoGrupo $recursoGrupoRel
-     *
-     * @return TurSoportePagoPeriodo
-     */
-    public function setRecursoGrupoRel(\Brasa\TurnoBundle\Entity\TurRecursoGrupo $recursoGrupoRel = null)
-    {
-        $this->recursoGrupoRel = $recursoGrupoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get recursoGrupoRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurRecursoGrupo
-     */
-    public function getRecursoGrupoRel()
-    {
-        return $this->recursoGrupoRel;
-    }
-
-    /**
-     * Set vrDevengado
-     *
-     * @param float $vrDevengado
-     *
-     * @return TurSoportePagoPeriodo
-     */
-    public function setVrDevengado($vrDevengado)
-    {
-        $this->vrDevengado = $vrDevengado;
-
-        return $this;
-    }
-
-    /**
-     * Get vrDevengado
-     *
-     * @return float
-     */
-    public function getVrDevengado()
-    {
-        return $this->vrDevengado;
-    }
-
-    /**
-     * Set diasDescansoFijo
-     *
-     * @param integer $diasDescansoFijo
-     *
-     * @return TurSoportePagoPeriodo
-     */
-    public function setDiasDescansoFijo($diasDescansoFijo)
-    {
-        $this->diasDescansoFijo = $diasDescansoFijo;
-
-        return $this;
-    }
-
-    /**
-     * Get diasDescansoFijo
-     *
-     * @return integer
-     */
-    public function getDiasDescansoFijo()
-    {
-        return $this->diasDescansoFijo;
-    }
-
-    /**
      * Set estadoProgramacionPago
      *
      * @param boolean $estadoProgramacionPago
@@ -767,6 +544,78 @@ class TurSoportePagoPeriodo
     }
 
     /**
+     * Set diaFestivoReal
+     *
+     * @param integer $diaFestivoReal
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setDiaFestivoReal($diaFestivoReal)
+    {
+        $this->diaFestivoReal = $diaFestivoReal;
+
+        return $this;
+    }
+
+    /**
+     * Get diaFestivoReal
+     *
+     * @return integer
+     */
+    public function getDiaFestivoReal()
+    {
+        return $this->diaFestivoReal;
+    }
+
+    /**
+     * Set diaDomingoReal
+     *
+     * @param integer $diaDomingoReal
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setDiaDomingoReal($diaDomingoReal)
+    {
+        $this->diaDomingoReal = $diaDomingoReal;
+
+        return $this;
+    }
+
+    /**
+     * Get diaDomingoReal
+     *
+     * @return integer
+     */
+    public function getDiaDomingoReal()
+    {
+        return $this->diaDomingoReal;
+    }
+
+    /**
+     * Set diaDescanso
+     *
+     * @param integer $diaDescanso
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setDiaDescanso($diaDescanso)
+    {
+        $this->diaDescanso = $diaDescanso;
+
+        return $this;
+    }
+
+    /**
+     * Get diaDescanso
+     *
+     * @return integer
+     */
+    public function getDiaDescanso()
+    {
+        return $this->diaDescanso;
+    }
+
+    /**
      * Set inconsistencias
      *
      * @param boolean $inconsistencias
@@ -788,6 +637,64 @@ class TurSoportePagoPeriodo
     public function getInconsistencias()
     {
         return $this->inconsistencias;
+    }
+
+    /**
+     * Set recursoGrupoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurRecursoGrupo $recursoGrupoRel
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setRecursoGrupoRel(\Brasa\TurnoBundle\Entity\TurRecursoGrupo $recursoGrupoRel = null)
+    {
+        $this->recursoGrupoRel = $recursoGrupoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get recursoGrupoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurRecursoGrupo
+     */
+    public function getRecursoGrupoRel()
+    {
+        return $this->recursoGrupoRel;
+    }
+
+    /**
+     * Add soportesPagosSoportePagoPeriodoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosSoportePagoPeriodoRel
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function addSoportesPagosSoportePagoPeriodoRel(\Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosSoportePagoPeriodoRel)
+    {
+        $this->soportesPagosSoportePagoPeriodoRel[] = $soportesPagosSoportePagoPeriodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove soportesPagosSoportePagoPeriodoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosSoportePagoPeriodoRel
+     */
+    public function removeSoportesPagosSoportePagoPeriodoRel(\Brasa\TurnoBundle\Entity\TurSoportePago $soportesPagosSoportePagoPeriodoRel)
+    {
+        $this->soportesPagosSoportePagoPeriodoRel->removeElement($soportesPagosSoportePagoPeriodoRel);
+    }
+
+    /**
+     * Get soportesPagosSoportePagoPeriodoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSoportesPagosSoportePagoPeriodoRel()
+    {
+        return $this->soportesPagosSoportePagoPeriodoRel;
     }
 
     /**
@@ -822,5 +729,39 @@ class TurSoportePagoPeriodo
     public function getSoportesPagosInconsistenciasSoportePagoPeriodoRel()
     {
         return $this->soportesPagosInconsistenciasSoportePagoPeriodoRel;
+    }
+
+    /**
+     * Add soportesPagosDetallesSoportePagoPeriodoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoPeriodoRel
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function addSoportesPagosDetallesSoportePagoPeriodoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoPeriodoRel)
+    {
+        $this->soportesPagosDetallesSoportePagoPeriodoRel[] = $soportesPagosDetallesSoportePagoPeriodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove soportesPagosDetallesSoportePagoPeriodoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoPeriodoRel
+     */
+    public function removeSoportesPagosDetallesSoportePagoPeriodoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoDetalle $soportesPagosDetallesSoportePagoPeriodoRel)
+    {
+        $this->soportesPagosDetallesSoportePagoPeriodoRel->removeElement($soportesPagosDetallesSoportePagoPeriodoRel);
+    }
+
+    /**
+     * Get soportesPagosDetallesSoportePagoPeriodoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSoportesPagosDetallesSoportePagoPeriodoRel()
+    {
+        return $this->soportesPagosDetallesSoportePagoPeriodoRel;
     }
 }

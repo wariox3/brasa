@@ -714,22 +714,11 @@ class ServicioController extends Controller
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);                
         
-        /*if($ar->getEstadoAutorizado() == 1) {            
-            $arrBotonAutorizar['disabled'] = true;                        
+        if($ar->getServicioRel()->getEstadoAutorizado() == 1) {                            
             $arrBotonDetalleEliminar['disabled'] = true;
             $arrBotonDetalleActualizar['disabled'] = true;
-            $arrBotonCerrar['disabled'] = false;  
-            $arrBotonDetalleConceptoActualizar['disabled'] = true;
-            $arrBotonDetalleConceptoEliminar['disabled'] = true;            
-        } else {
-            $arrBotonDesAutorizar['disabled'] = true;            
-            $arrBotonImprimir['disabled'] = true;
         }
- 
-        if($ar->getEstadoCerrado() == 1) {
-            $arrBotonDesAutorizar['disabled'] = true;                        
-            $arrBotonCerrar['disabled'] = true;
-        }*/         
+          
         $form = $this->createFormBuilder()
                     ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
                     ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
@@ -857,54 +846,13 @@ class ServicioController extends Controller
         if(isset($arrControles['LblCodigo'])) {
             foreach ($arrControles['LblCodigo'] as $intCodigo) {
                 $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
-                $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($intCodigo);
-                //$arServicioDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);
-                if($arrControles['TxtValorAjustado'.$intCodigo] != '') {
-                    $arServicioDetalle->setVrPrecioAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
-                }            
-                /*if(isset($arrControles['chkLunes'.$intCodigo])) {
-                    $arServicioDetalle->setLunes(1);
-                } else {
-                    $arServicioDetalle->setLunes(0);
+                $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($intCodigo);                
+                if($arServicioDetalle->getCompuesto() == 0) {
+                    if($arrControles['TxtValorAjustado'.$intCodigo] != '') {
+                        $arServicioDetalle->setVrPrecioAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
+                    }                                               
+                    $em->persist($arServicioDetalle);                    
                 }
-                if(isset($arrControles['chkMartes'.$intCodigo])) {
-                    $arServicioDetalle->setMartes(1);
-                } else {
-                    $arServicioDetalle->setMartes(0);
-                }
-                if(isset($arrControles['chkMiercoles'.$intCodigo])) {
-                    $arServicioDetalle->setMiercoles(1);
-                } else {
-                    $arServicioDetalle->setMiercoles(0);
-                }
-                if(isset($arrControles['chkJueves'.$intCodigo])) {
-                    $arServicioDetalle->setJueves(1);
-                } else {
-                    $arServicioDetalle->setJueves(0);
-                }
-                if(isset($arrControles['chkViernes'.$intCodigo])) {
-                    $arServicioDetalle->setViernes(1);
-                } else {
-                    $arServicioDetalle->setViernes(0);
-                }
-                if(isset($arrControles['chkSabado'.$intCodigo])) {
-                    $arServicioDetalle->setSabado(1);
-                } else {
-                    $arServicioDetalle->setSabado(0);
-                }
-                if(isset($arrControles['chkDomingo'.$intCodigo])) {
-                    $arServicioDetalle->setDomingo(1);
-                } else {
-                    $arServicioDetalle->setDomingo(0);
-                }
-                if(isset($arrControles['chkFestivo'.$intCodigo])) {
-                    $arServicioDetalle->setFestivo(1);
-                } else {
-                    $arServicioDetalle->setFestivo(0);
-                }
-                 * 
-                 */                    
-                $em->persist($arServicioDetalle);
             }
             $em->flush();                
             $em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);             

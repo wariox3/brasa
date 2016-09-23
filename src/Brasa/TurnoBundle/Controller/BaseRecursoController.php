@@ -206,7 +206,7 @@ class BaseRecursoController extends Controller
         $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurRecurso')->listaDQL(
                 $session->get('filtroNombreRecurso'),                
                 $session->get('filtroCodigoRecurso'),
-                $session->get('filtroCodigoCentroCostoRecurso'),
+                "",
                 $session->get('filtroIdentificacionRecurso'),
                 $session->get('filtroCodigoRecursoGrupo'),
                 $session->get('filtroRecursoEstadoRetirado')                
@@ -228,10 +228,6 @@ class BaseRecursoController extends Controller
         $session->set('filtroCodigoRecurso', $form->get('TxtCodigo')->getData());
         $session->set('filtroNombreRecurso', $form->get('TxtNombre')->getData());
         $session->set('filtroIdentificacionRecurso', $form->get('TxtNumeroIdentificacion')->getData());                
-        $arCentroCosto = $form->get('centroCostoRel')->getData();
-        if($arCentroCosto) {
-            $session->set('filtroCodigoCentroCostoRecurso', $arCentroCosto->getCodigoCentroCostoPk());
-        }
         $arRecursoGrupo = $form->get('recursoGrupoRel')->getData();
         if($arRecursoGrupo) {
             $session->set('filtroCodigoRecursoGrupo', $arRecursoGrupo->getCodigoRecursoGrupoPk());
@@ -252,21 +248,7 @@ class BaseRecursoController extends Controller
     
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
-        $arrayPropiedadesCentroCosto = array(
-                'class' => 'BrasaTurnoBundle:TurCentroCosto',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cc')
-                    ->orderBy('cc.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => false,
-                'empty_data' => "",
-                'empty_value' => "TODOS",
-                'data' => ""
-            );
-        if($session->get('filtroCodigoCentroCostoRecurso')) {
-            $arrayPropiedadesCentroCosto['data'] = $em->getReference("BrasaTurnoBundle:TurCentroCosto", $session->get('filtroCodigoCentroCostoRecurso'));
-        }     
+        $session = $this->getRequest()->getSession();     
         $arrayPropiedadesRecursoGrupo = array(
                 'class' => 'BrasaTurnoBundle:TurRecursoGrupo',
                 'query_builder' => function (EntityRepository $er) {
@@ -282,7 +264,6 @@ class BaseRecursoController extends Controller
             $arrayPropiedadesRecursoGrupo['data'] = $em->getReference("BrasaTurnoBundle:TurRecursoGrupo", $session->get('filtroCodigoRecursoGrupo'));
         }        
         $form = $this->createFormBuilder()            
-            ->add('centroCostoRel', 'entity', $arrayPropiedadesCentroCosto)
             ->add('recursoGrupoRel', 'entity', $arrayPropiedadesRecursoGrupo)
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombreRecurso')))
             ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCodigoRecurso')))                  
@@ -354,12 +335,11 @@ class BaseRecursoController extends Controller
                     ->setCellValue('A1', 'CÓDIG0')
                     ->setCellValue('B1', 'IDENTIFICACION')
                     ->setCellValue('C1', 'NOMBRE')
-                    ->setCellValue('D1', 'TIPO')
-                    ->setCellValue('E1', 'CENTRO COSTOS')
-                    ->setCellValue('F1', 'GRUPO')
-                    ->setCellValue('G1', 'ACTIVO')
-                    ->setCellValue('H1', 'RETIRO')
-                    ->setCellValue('I1', 'F.RETIRO');
+                    ->setCellValue('D1', 'TIPO')                    
+                    ->setCellValue('E1', 'GRUPO')
+                    ->setCellValue('F1', 'ACTIVO')
+                    ->setCellValue('G1', 'RETIRO')
+                    ->setCellValue('H1', 'F.RETIRO');
 
         $i = 2;
         
@@ -371,14 +351,19 @@ class BaseRecursoController extends Controller
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arRecurso->getCodigoRecursoPk())
                     ->setCellValue('B' . $i, $arRecurso->getNumeroIdentificacion())
-                    ->setCellValue('C' . $i, $arRecurso->getNombreCorto())
-                    ->setCellValue('D' . $i, $arRecurso->getRecursoTipoRel()->getNombre())
-                    ->setCellValue('E' . $i, $arRecurso->getCentroCostoRel()->getNombre())
-                    ->setCellValue('F' . $i, $arRecurso->getRecursoGrupoRel()->getNombre())
-                    ->setCellValue('G' . $i, $objFunciones->devuelveBoolean($arRecurso->getEstadoActivo()))
-                    ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arRecurso->getEstadoRetiro()))
-                    ->setCellValue('I' . $i, $arRecurso->getFechaRetiro()->format('Y/m/d'));
-                        
+                    ->setCellValue('C' . $i, $arRecurso->getNombreCorto())                                                            
+                    ->setCellValue('F' . $i, $objFunciones->devuelveBoolean($arRecurso->getEstadoActivo()))
+                    ->setCellValue('G' . $i, $objFunciones->devuelveBoolean($arRecurso->getEstadoRetiro()));
+
+            if($arRecurso->getCodigoRecursoTipoFk()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D' . $i, $arRecurso->getRecursoTipoRel()->getNombre());
+            }
+            if($arRecurso->getCodigoRecursoGrupoFk()) {
+               $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E' . $i, $arRecurso->getRecursoGrupoRel()->getNombre()); 
+            }            
+            if($arRecurso->getFechaRetiro()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H' . $i, $arRecurso->getFechaRetiro()->format('Y/m/d'));
+            }            
             $i++;
         }
         

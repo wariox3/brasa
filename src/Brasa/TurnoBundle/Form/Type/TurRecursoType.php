@@ -22,14 +22,7 @@ class TurRecursoType extends AbstractType
                     return $er->createQueryBuilder('rg')
                     ->orderBy('rg.codigoRecursoGrupoPk', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                             
-            ->add('centroCostoRel', 'entity', array(
-                'class' => 'BrasaTurnoBundle:TurCentroCosto',
-                'query_builder' => function (EntityRepository $er)  {
-                    return $er->createQueryBuilder('cc')
-                    ->orderBy('cc.codigoCentroCostoPk', 'ASC');},
-                'property' => 'nombre',
-                'required' => true))                             
+                'required' => true))                                                          
             ->add('numeroIdentificacion', 'text', array('required' => true))                             
             ->add('nombreCorto', 'text', array('required' => true))
             ->add('apodo', 'text', array('required' => false))    

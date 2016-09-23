@@ -126,8 +126,7 @@
                             <th>SERVICIO</th>
                             <th>MODALIDAD</th>
                             <th>PERIODO</th>
-                            <th><p data-toggle="tooltip" data-placement="top" title="Liquidar dias reales">LDR</p></th>                            
-                            <th>PLANTILLA</th>
+                            <th><p data-toggle="tooltip" data-placement="top" title="Liquidar dias reales">LDR</p></th>                                                        
                             <th>DES</th>
                             <th>HAS</th>
                             <th>CANT</th>
@@ -145,10 +144,12 @@
                             <th>DIAS</th>
                             <th><p data-toggle="tooltip" data-placement="top" title="Precio minimo">P.MIN</p></th>                            
                             <th><p data-toggle="tooltip" data-placement="top" title="Precio ajustado">P.AJU</p></th>                            
+                            <th>SUBTOTAL</th>  
                             <th>TOTAL</th>  
                             <th><p data-toggle="tooltip" data-placement="top" title="Grupo facturacion">GF</p></th>                            
                             <th>PRG</th>
                             <th>FAC</th>
+                            <th>C</th>
                             <th></th>
                             <th></th>               
                             <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
@@ -167,39 +168,39 @@
                                 <td>{{ arPedidoDetalle.conceptoServicioRel.nombre  }}</td>                    
                                 <td>{{ arPedidoDetalle.modalidadServicioRel.nombre  }}</td>                    
                                 <td>{{ arPedidoDetalle.periodoRel.nombre  }}</td>
-                                <td>{% if arPedidoDetalle.liquidarDiasReales == 1 %} SI {% else %} NO {% endif %}</td>                                
-                                <td>{% if arPedidoDetalle.codigoPlantillaFk is not null %} <a href="{{ path('brs_tur_base_plantilla_detalle', { 'codigoPlantilla': arPedidoDetalle.codigoPlantillaFk }) }}" target="_blanck">{% endif %}{{ arPedidoDetalle.plantillaRel.nombre | default('')  }}</a> ({{ arPedidoDetalle.fechaIniciaPlantilla | date('Y/m/d')  }})</td>                    
-                                {% if arPedido.estadoAutorizado == 0 %}                        
-                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiaDesde{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.diaDesde  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
-                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtDiaHasta{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.diaHasta  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
-                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.cantidad  }}" size="3" style="width:30px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
-                                    {% else %}                        
-                                    <td>{{ arPedidoDetalle.diaDesde }}</td>    
-                                    <td>{{ arPedidoDetalle.diaHasta }}</td>    
-                                    <td>{{ arPedidoDetalle.cantidad  }}</td>
-                                {% endif %}
-                                <td>{% if arPedidoDetalle.lunes == 1 %} SI {% else %} NO {% endif %}</td>
-                                <td>{% if arPedidoDetalle.martes == 1 %} SI {% else %} NO {% endif %}</td>
-                                <td>{% if arPedidoDetalle.miercoles == 1 %} SI {% else %} NO {% endif %}</td>
-                                <td>{% if arPedidoDetalle.jueves == 1 %} SI {% else %} NO {% endif %}</td>
-                                <td>{% if arPedidoDetalle.viernes == 1 %} SI {% else %} NO {% endif %}</td>
-                                <td>{% if arPedidoDetalle.sabado == 1 %} SI {% else %} NO {% endif %}</td>
-                                <td>{% if arPedidoDetalle.domingo == 1 %} SI {% else %} NO {% endif %}</td>
-                                <td>{% if arPedidoDetalle.festivo == 1 %} SI {% else %} NO {% endif %}</td>                                
+                                <td>{% if arPedidoDetalle.compuesto == 0 %}{% if arPedidoDetalle.liquidarDiasReales == 1 %} SI {% else %} NO {% endif %}{% endif %}</td>                                                                                       
+                                <td>{% if arPedidoDetalle.compuesto == 0 %}{{ arPedidoDetalle.diaDesde }}{% endif %}</td>    
+                                <td>{% if arPedidoDetalle.compuesto == 0 %}{{ arPedidoDetalle.diaHasta }}{% endif %}</td>    
+                                <td>{% if arPedidoDetalle.compuesto == 0 %}{{ arPedidoDetalle.cantidad  }}{% endif %}</td>
+                                <td>{% if arPedidoDetalle.compuesto == 0 %}{% if arPedidoDetalle.lunes == 1 %} SI {% else %} NO {% endif %}{% endif %}</td>
+                                <td>{% if arPedidoDetalle.compuesto == 0 %}{% if arPedidoDetalle.martes == 1 %} SI {% else %} NO {% endif %}{% endif %}</td>
+                                <td>{% if arPedidoDetalle.compuesto == 0 %}{% if arPedidoDetalle.miercoles == 1 %} SI {% else %} NO {% endif %}{% endif %}</td>
+                                <td>{% if arPedidoDetalle.compuesto == 0 %}{% if arPedidoDetalle.jueves == 1 %} SI {% else %} NO {% endif %}{% endif %}</td>
+                                <td>{% if arPedidoDetalle.compuesto == 0 %}{% if arPedidoDetalle.viernes == 1 %} SI {% else %} NO {% endif %}{% endif %}</td>
+                                <td>{% if arPedidoDetalle.compuesto == 0 %}{% if arPedidoDetalle.sabado == 1 %} SI {% else %} NO {% endif %}{% endif %}</td>
+                                <td>{% if arPedidoDetalle.compuesto == 0 %}{% if arPedidoDetalle.domingo == 1 %} SI {% else %} NO {% endif %}{% endif %}</td>
+                                <td>{% if arPedidoDetalle.compuesto == 0 %}{% if arPedidoDetalle.festivo == 1 %} SI {% else %} NO {% endif %}{% endif %}</td>                                
                                 <td style="text-align: right">{{ arPedidoDetalle.horas | number_format(0, '.', ',') }}({{ arPedidoDetalle.horasProgramadas | number_format(0, '.', ',') }})</td> 
                                 <td style="text-align: right">{{ arPedidoDetalle.horasDiurnas | number_format(0, '.', ',') }}({{ arPedidoDetalle.horasDiurnasProgramadas | number_format(0, '.', ',') }})</td> 
                                 <td style="text-align: right">{{ arPedidoDetalle.horasNocturnas | number_format(0, '.', ',') }}({{ arPedidoDetalle.horasNocturnasProgramadas | number_format(0, '.', ',') }})</td> 
                                 <td style="text-align: right">{{ arPedidoDetalle.dias | number_format(0, '.', ',') }}</td>                                 
                                 <td style="text-align: right">{{ arPedidoDetalle.vrPrecioMinimo | number_format(0, '.', ',') }}</td>                     
-                                {% if arPedido.estadoAutorizado == 0 %}
+                                {% if arPedido.estadoAutorizado == 0 and arPedidoDetalle.compuesto == 0%}
                                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtValorAjustado{{ arPedidoDetalle.codigoPedidoDetallePk }}" value="{{ arPedidoDetalle.vrPrecioAjustado  }}" size="10" style="text-align: right; width:80px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
                                     {% else %}
                                     <td style="text-align: right">{{ arPedidoDetalle.vrPrecioAjustado | number_format(0, '.', ',') }}</td> 
                                 {% endif %}                    
+                                <td style="text-align: right">{{ arPedidoDetalle.vrSubtotal | number_format(0, '.', ',') }}</td>                                                     
                                 <td style="text-align: right">{{ arPedidoDetalle.vrTotalDetalle | number_format(0, '.', ',') }}</td>                                                     
                                 <td>{{ arPedidoDetalle.grupoFacturacionRel.abreviatura | default('')  }}</td>                                                                
                                 <td>{% if arPedidoDetalle.estadoProgramado == 1 %} SI {% else %} NO {% endif %}</td>
                                 <td>{% if arPedidoDetalle.estadoFacturado == 1 %} SI {% else %} NO {% endif %}</td>
+                                <td>{% if arPedidoDetalle.compuesto == 1 %} 
+                                        <a href="{{ path('brs_tur_movimiento_pedido_compuesto_detalle', { 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a>                                                    
+                                    {% else %} 
+                                        NO 
+                                    {% endif %}
+                                </td>                                 
                                 <td>{% if arPedido.estadoAutorizado == 0 %}<a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_pedido_detalle_nuevo', {'codigoPedido': arPedido.codigoPedidoPk, 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>                                        
                                 <td style="text-align: center" {% if arPedidoDetalle.ajusteProgramacion == 1 %} class="danger" {% endif %}><a href="{{ path('brs_tur_movimiento_pedido_detalle_recurso', { 'codigoPedidoDetalle': arPedidoDetalle.codigoPedidoDetallePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_043_group.png') }}" width=22 height=22></a></td>                                                        
                                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPedidoDetalle.codigoPedidoDetallePk }}" /></td>

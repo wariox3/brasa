@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurPedidoType;
 use Brasa\TurnoBundle\Form\Type\TurPedidoDetalleType;
+use Brasa\TurnoBundle\Form\Type\TurPedidoDetalleCompuestoType;
 use PHPExcel_Style_Border;
 class PedidoController extends Controller
 {
@@ -238,6 +239,42 @@ class PedidoController extends Controller
     }
 
     /**
+     * @Route("/tur/movimiento/pedido/compuesto/detalle/{codigoPedidoDetalle}", name="brs_tur_movimiento_pedido_compuesto_detalle")
+     */     
+    public function detalleCompuestoAction($codigoPedidoDetalle) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $objMensaje = $this->get('mensajes_brasa');
+        $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);
+        $form = $this->formularioDetalleCompuesto($arPedidoDetalle);
+        $form->handleRequest($request);
+        if($form->isValid()) {                                       
+            if($form->get('BtnDetalleActualizar')->isClicked()) {                
+                $arrControles = $request->request->All();
+                $this->actualizarDetalleCompuesto($arrControles, $codigoPedidoDetalle, $arPedidoDetalle->getCodigoPedidoFk());                                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_compuesto_detalle', array('codigoPedidoDetalle' => $codigoPedidoDetalle)));
+            }           
+            if($form->get('BtnDetalleEliminar')->isClicked()) {   
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleCompuesto')->eliminarSeleccionados($arrSeleccionados);
+                $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->liquidar($codigoPedidoDetalle);
+                $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($arPedidoDetalle->getCodigoPedidoFk());
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_compuesto_detalle', array('codigoPedidoDetalle' => $codigoPedidoDetalle)));
+            }             
+        }
+        
+        $dql = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleCompuesto')->listaDql($codigoPedidoDetalle);       
+        $arPedidoDetalleCompuesto = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 150);
+        return $this->render('BrasaTurnoBundle:Movimientos/Pedido:detalleCompuesto.html.twig', array(
+                    'arPedidoDetalle' => $arPedidoDetalle,
+                    'arPedidoDetalleCompuesto' => $arPedidoDetalleCompuesto,
+                    'form' => $form->createView()
+                    ));
+    }    
+    
+    /**
      * @Route("/tur/movimiento/pedido/detalle/concepto/nuevo/{codigoPedido}", name="brs_tur_movimiento_pedido_detalle_concepto_nuevo")
      */
     public function detalleConceptoNuevoAction($codigoPedido) {
@@ -397,6 +434,54 @@ class PedidoController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/movimiento/pedido/compuesto/detalle/nuevo/{codigoPedidoDetalle}/{codigoPedidoDetalleCompuesto}", name="brs_tur_movimiento_pedido_compuesto_detalle_nuevo")
+     */    
+    public function detalleCompuestoNuevoAction($codigoPedidoDetalle, $codigoPedidoDetalleCompuesto = 0) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);
+        $arPedidoDetalleCompuesto = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto();
+        if($codigoPedidoDetalleCompuesto != 0) {
+            $arPedidoDetalleCompuesto = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleCompuesto')->find($codigoPedidoDetalleCompuesto);
+        } else {            
+            $arPedidoDetalleCompuesto->setPedidoDetalleRel($arPedidoDetalle);
+            $arPedidoDetalleCompuesto->setCantidad(1);
+            $arPedidoDetalleCompuesto->setLunes(true);
+            $arPedidoDetalleCompuesto->setMartes(true);
+            $arPedidoDetalleCompuesto->setMiercoles(true);
+            $arPedidoDetalleCompuesto->setJueves(true);
+            $arPedidoDetalleCompuesto->setViernes(true);
+            $arPedidoDetalleCompuesto->setSabado(true);
+            $arPedidoDetalleCompuesto->setDomingo(true);
+            $arPedidoDetalleCompuesto->setFestivo(true);            
+        }
+        $form = $this->createForm(new TurPedidoDetalleCompuestoType, $arPedidoDetalleCompuesto);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arPedidoDetalleCompuesto = $form->getData();           
+            $arPeriodo = $form->get('periodoRel')->getData();
+            if($arPeriodo->getCodigoPeriodoPk() == 1) {
+                $intAnio = $arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('Y');                
+                $intMes = $arPedidoDetalle->getPedidoRel()->getFechaProgramacion()->format('m');
+                $intDiaFinalMes = date("d",(mktime(0,0,0,$intMes+1,1,$intAnio)-1));
+                $arPedidoDetalleCompuesto->setDiaDesde(1);
+                $arPedidoDetalleCompuesto->setDiaHasta($intDiaFinalMes);
+            }
+            
+            $em->persist($arPedidoDetalleCompuesto);
+            $em->flush();
+            $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->liquidar($codigoPedidoDetalle);
+            $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($arPedidoDetalle->getCodigoPedidoFk());
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            
+        }
+        return $this->render('BrasaTurnoBundle:Movimientos/Pedido:detalleCompuestoNuevo.html.twig', array(
+            'arPedidoDetalle' => $arPedidoDetalle,
+            'form' => $form->createView()));
+    }    
+    
     /**
      * @Route("/tur/movimiento/pedido/detalle/cotizacion/nuevo/{codigoPedido}/{codigoPedidoDetalle}", name="brs_tur_movimiento_pedido_detalle_cotizacion_nuevo")
      */    
@@ -890,6 +975,22 @@ class PedidoController extends Controller
         return $form;
     }
 
+    private function formularioDetalleCompuesto($ar) {        
+        $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);        
+        
+        if($ar->getPedidoRel()->getEstadoAutorizado() == 1) {                        
+            $arrBotonDetalleEliminar['disabled'] = true;
+            $arrBotonDetalleActualizar['disabled'] = true;
+        } 
+
+        $form = $this->createFormBuilder()
+                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
+                    ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
+                    ->getForm();
+        return $form;
+    }    
+    
     private function formularioRecurso($fechaIniciaPlantilla, $arPlantilla) {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -1023,18 +1124,35 @@ class PedidoController extends Controller
             foreach ($arrControles['LblCodigo'] as $intCodigo) {
                 $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
                 $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($intCodigo);
-                $arPedidoDetalle->setCantidad($arrControles['TxtCantidad'.$intCodigo]);            
-                $arPedidoDetalle->setDiaDesde($arrControles['TxtDiaDesde'.$intCodigo]);
-                $arPedidoDetalle->setDiaHasta($arrControles['TxtDiaHasta'.$intCodigo]);
-                if($arrControles['TxtValorAjustado'.$intCodigo] != '') {
-                    $arPedidoDetalle->setVrPrecioAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
-                }            
+                if($arPedidoDetalle->getCompuesto() == 0) {
+                    if($arrControles['TxtValorAjustado'.$intCodigo] != '') {
+                        $arPedidoDetalle->setVrPrecioAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
+                    }                       
+                }         
                 $em->persist($arPedidoDetalle);
             }
             $em->flush();                
             $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);            
         }        
     }
+    
+    private function actualizarDetalleCompuesto($arrControles, $codigoPedidoDetalle, $codigoPedido) {
+        $em = $this->getDoctrine()->getManager();
+        $intIndice = 0;
+        if(isset($arrControles['LblCodigo'])) {
+            foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                $arPedidoDetalleCompuesto = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto();
+                $arPedidoDetalleCompuesto = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleCompuesto')->find($intCodigo);
+                if($arrControles['TxtValorAjustado'.$intCodigo] != '') {
+                    $arPedidoDetalleCompuesto->setVrPrecioAjustado($arrControles['TxtValorAjustado'.$intCodigo]);                
+                }            
+                $em->persist($arPedidoDetalleCompuesto);
+            }
+            $em->flush();                
+            $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->liquidar($codigoPedidoDetalle);            
+            $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);            
+        }        
+    }    
     
     private function actualizarDetalleRecurso($arrControles) {
         $em = $this->getDoctrine()->getManager();

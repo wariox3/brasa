@@ -20,9 +20,9 @@
                     <div class="col-sm-4">
                         {{ form_widget(form.TxtNombre , { 'attr': {'class': 'form-control'} }) }}
                     </div>
-                    <label for="form_centroCostoRel" class="col-sm-2 control-label">Centro costo:</label>
+                    <label class="col-sm-2 control-label"></label>
                     <div class="col-sm-4">                  
-                        {{ form_widget(form.centroCostoRel , { 'attr': {'class': 'form-control'} }) }}
+                        
                     </div>                    
                 </div>
                 <div class="form-group form-group-sm">  
@@ -57,8 +57,7 @@
                 <th>{{ knp_pagination_sortable(arRecursos, 'CÓDIGO', 'p.codigoRecursoPk') }}</th>
                 <th>TIPO</th>
                 <th>IDENTIFICACION</th>
-                <th>NOMBRE</th>
-                <th>CENTRO COSTO</th>
+                <th>NOMBRE</th>                
                 <th>GRUPO</th>
                 <th>APODO</th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Turno fijo">TF</p></th>
@@ -75,8 +74,7 @@
                 <td>{{ arRecursos.codigoRecursoPk  }}</td>                               
                 <td>{{ arRecursos.recursoTipoRel.nombre |default('') }}</td>                
                 <td>{{ arRecursos.numeroIdentificacion }}</td>                
-                <td>{{ arRecursos.nombreCorto }}</td>   
-                <td>{{ arRecursos.centroCostoRel.nombre | default('') }}</td>   
+                <td>{{ arRecursos.nombreCorto }}</td>                   
                 <td>{{ arRecursos.recursoGrupoRel.nombre | default('') }}</td>   
                 <td>{{ arRecursos.apodo }}</td> 
                 <td>{{ arRecursos.codigoTurnoFijoNominaFk }}</td> 

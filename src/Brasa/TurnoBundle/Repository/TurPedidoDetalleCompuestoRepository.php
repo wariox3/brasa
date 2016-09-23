@@ -183,17 +183,13 @@ class TurPedidoDetalleCompuestoRepository extends EntityRepository {
         if(count($arrSeleccionados) > 0) {
             $em = $this->getEntityManager();
             foreach ($arrSeleccionados AS $codigo) {  
-                $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoPedidoDetalleFk' => $codigo));
-                $arFacturaDetalle = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->findBy(array('codigoPedidoDetalleFk' => $codigo));
-                if(!$arProgramacionDetalle && !$arFacturaDetalle) {
-                    $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigo);                
-                    $em->remove($arPedidoDetalle);                     
-                }                                     
+                $arPedidoDetalleCompuesto = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleCompuesto')->find($codigo);                
+                $em->remove($arPedidoDetalleCompuesto);                     
             }                                         
             $em->flush();         
         }
         
-    }        
+    }         
     
     public function numeroRegistros($codigo) {
         $em = $this->getEntityManager();
