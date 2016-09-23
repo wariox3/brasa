@@ -137,19 +137,17 @@ class DirectorioController extends Controller
                 $arArchivo->setNombre($objArchivo->getClientOriginalName());
                 $arArchivo->setArchivo($objArchivo->getClientMimeType());                               
                 $arArchivo->setDirectorioRel($arDirectorio);               
-                //$tamaño = $objArchivo->getClientSize() ;
-                
-                $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
-                $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-                if ($arDirectorio == null){
-                    $strDestino = $arConfiguracion->getRutaDirectorio();
-                }else{
-                    $strDestino = $arConfiguracion->getRutaDirectorio() . $arDirectorio->getRuta();
-                }
-                $strArchivo = $arArchivo->getCodigoArchivoPk() . "_" . $objArchivo->getClientOriginalName();
                 if ($objArchivo->getClientSize()){
                     $em->persist($arArchivo);
                     $em->flush();
+                    $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+                    $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+                    if ($arDirectorio == null){
+                        $strDestino = $arConfiguracion->getRutaDirectorio();
+                    }else{
+                        $strDestino = $arConfiguracion->getRutaDirectorio() . $arDirectorio->getRuta();
+                    }
+                    $strArchivo = $arArchivo->getCodigoArchivoPk() . "_" . $objArchivo->getClientOriginalName();
                     $form['attachment']->getData()->move($strDestino, $strArchivo);
                     echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
                 } else {
