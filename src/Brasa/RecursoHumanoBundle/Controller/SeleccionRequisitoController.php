@@ -109,6 +109,18 @@ class SeleccionRequisitoController extends Controller
                     $objMensaje->Mensaje('error', 'No se puede aprobar, la requisicion esta cerrada', $this);
                 }
             }
+            if($form->get('BtnDesaprobarDetalle')->isClicked()) {
+                if($arRequisicion->getEstadoCerrado() == 0) {
+                    $strRespuesta = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionRequisicionAspirante')->desaprobarDetallesSeleccionados($arrSeleccionados);
+                    if ($strRespuesta == ''){
+                        return $this->redirect($this->generateUrl('brs_rhu_seleccionrequisito_detalle', array('codigoSeleccionRequisito' => $codigoSeleccionRequisito)));
+                    }else{
+                        $objMensaje->Mensaje('error', $strRespuesta, $this);
+                    }
+                } else {
+                    $objMensaje->Mensaje('error', 'No se puede aprobar, la requisicion esta cerrada', $this);
+                }
+            }
             if($form->get('BtnExcelAspirante')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();
                 ob_clean();
@@ -308,6 +320,7 @@ class SeleccionRequisitoController extends Controller
         $form = $this->createFormBuilder()
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
             ->add('BtnAprobarDetalle', 'submit', array('label'  => 'Aprobar',))
+            ->add('BtnDesaprobarDetalle', 'submit', array('label'  => 'Desaprobar',))
             ->add('BtnEliminarDetalle', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcelAspirante', 'submit', array('label'  => 'Excel'))    
             ->getForm();        
