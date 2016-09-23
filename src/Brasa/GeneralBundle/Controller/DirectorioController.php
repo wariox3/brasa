@@ -120,7 +120,7 @@ class DirectorioController extends Controller
     public function cargarArchivoAction($codigoDirectorioPadre) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $objMensaje = $this->get('mensajes_brasa'); 
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes(); 
         $form = $this->createFormBuilder()
             ->add('descripcion', 'text', array('required' => false))    
             ->add('attachment', 'file') 
@@ -137,9 +137,8 @@ class DirectorioController extends Controller
                 $arArchivo->setNombre($objArchivo->getClientOriginalName());
                 $arArchivo->setArchivo($objArchivo->getClientMimeType());                               
                 $arArchivo->setDirectorioRel($arDirectorio);               
-                                   
-                $em->persist($arArchivo);
-                $em->flush();
+                //$tamaño = $objArchivo->getClientSize() ;
+                
                 $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
                 $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
                 if ($arDirectorio == null){
@@ -148,8 +147,15 @@ class DirectorioController extends Controller
                     $strDestino = $arConfiguracion->getRutaDirectorio() . $arDirectorio->getRuta();
                 }
                 $strArchivo = $arArchivo->getCodigoArchivoPk() . "_" . $objArchivo->getClientOriginalName();
-                $form['attachment']->getData()->move($strDestino, $strArchivo);
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                if ($objArchivo->getClientSize()){
+                    $em->persist($arArchivo);
+                    $em->flush();
+                    $form['attachment']->getData()->move($strDestino, $strArchivo);
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                } else {
+                    $objMensaje->Mensaje('error', "El archivo tiene un tamaño mayor al permitido", $this);
+                }    
+                
                 
             }                                   
         }         
