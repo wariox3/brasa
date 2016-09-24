@@ -54,8 +54,8 @@ class ArchivosController extends Controller
                         $form['attachment']->getData()->move($strDestino, $strArchivo);                    
                         return $this->redirect($this->generateUrl('brs_ad_archivos_lista', array('codigoDocumento' => $codigoDocumento, 'numero' => $numero)));
                     } else {
-                    $objMensaje->Mensaje('error', "El archivo tiene un tamaño mayor al permitido", $this);
-                }    
+                        $objMensaje->Mensaje('error', "El archivo tiene un tamaño mayor al permitido", $this);
+                    }    
                 } else {
                     $objMensaje->Mensaje("error", "Solo se pueden cargar arhivos pdf", $this);
                 }
