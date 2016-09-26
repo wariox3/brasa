@@ -14,7 +14,7 @@ class FacturaTipoController extends Controller
     public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();        
         $paginator  = $this->get('knp_paginator');
-        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 87, 1)) {
+        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 119, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
         $form = $this->formularioFiltro();

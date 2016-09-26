@@ -5802,6 +5802,13 @@ INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tip
 INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('87','ANALIZAR INCONSISTENCIA','UTILIDAD','TURNOS');
 INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('88','DESCARGA MASIVA (PROGRAMACION)','UTILIDAD','TURNOS');
 INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('89','FACTURA DETALLE','CONSULTA','TURNO');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('90','CONFIGURACION TURNO','CONFIGURACION','TURNOS');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('91','CONFIGURACION CARTERA','CONFIGURACION','CARTERA');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('92','CONFIGURACION NOMINA','CONFIGURACION','RECURSO HUMANO');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('93','CONFIGURACION GENERAL','CONFIGURACION','GENERAL');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('94','CONCEPTO PAGO CONSOLIDADO (NOM,PRIM,VAC)','CONSULTA','RECURSO HUMANO');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('95','EDITAR FACTURA','UTILIDAD','TURNOS');
+
 
 INSERT INTO `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) VALUES('1','PROGRAMACION PAGO','MOVIMIENTO','RECURSO HUMANO');
 INSERT INTO `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) VALUES('2','PAGO','MOVIMIENTO','RECURSO HUMANO');
@@ -5919,6 +5926,7 @@ INSERT INTO `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) 
 INSERT INTO `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) VALUES('116','RECIBO','MOVIMIENTO','CARTERA');
 INSERT INTO `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) VALUES('117','NOTA CREDITO','MOVIMIENTO','CARTERA');
 INSERT INTO `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) VALUES('118','NOTA DEBITO','MOVIMIENTO','CARTERA');
+INSERT INTO `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) VALUES('119','TIPO FACTURA','ADMINISTRACION','TURNO');
 
 INSERT INTO `seg_roles` (`codigo_rol_pk`, `nombre`) VALUES('ROLE_ADMIN','ADMINISTRADOR');
 INSERT INTO `seg_roles` (`codigo_rol_pk`, `nombre`) VALUES('ROLE_USER','USUARIO');
