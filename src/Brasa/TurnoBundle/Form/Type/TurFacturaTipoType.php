@@ -5,13 +5,13 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
 
-class TurFacturaConceptoType extends AbstractType
+class TurFacturaTipoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder                      
             ->add('nombre', 'text', array('required' => true)) 
-            ->add('porIva', 'number')                
+            ->add('consecutivo', 'number')                
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

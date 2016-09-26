@@ -216,20 +216,14 @@ class TurFactura
     /**
      * @ORM\OneToMany(targetEntity="TurFacturaDetalle", mappedBy="facturaRel", cascade={"persist", "remove"})
      */
-    protected $facturasDetallesFacturaRel; 
+    protected $facturasDetallesFacturaRel;     
 
-    /**
-     * @ORM\OneToMany(targetEntity="TurFacturaDetalleConcepto", mappedBy="facturaRel", cascade={"persist", "remove"})
-     */
-    protected $facturasDetallesConceptosFacturaRel; 
-    
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->facturasDetallesFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->facturasDetallesConceptosFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1186,39 +1180,5 @@ class TurFactura
     public function getFacturasDetallesFacturaRel()
     {
         return $this->facturasDetallesFacturaRel;
-    }
-
-    /**
-     * Add facturasDetallesConceptosFacturaRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosFacturaRel
-     *
-     * @return TurFactura
-     */
-    public function addFacturasDetallesConceptosFacturaRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosFacturaRel)
-    {
-        $this->facturasDetallesConceptosFacturaRel[] = $facturasDetallesConceptosFacturaRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove facturasDetallesConceptosFacturaRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosFacturaRel
-     */
-    public function removeFacturasDetallesConceptosFacturaRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosFacturaRel)
-    {
-        $this->facturasDetallesConceptosFacturaRel->removeElement($facturasDetallesConceptosFacturaRel);
-    }
-
-    /**
-     * Get facturasDetallesConceptosFacturaRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFacturasDetallesConceptosFacturaRel()
-    {
-        return $this->facturasDetallesConceptosFacturaRel;
     }
 }
