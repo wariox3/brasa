@@ -82,6 +82,7 @@ class RhuSeleccionRequisitoRepository extends EntityRepository {
     public function estadoAbiertoSeleccionRequisitos($arrSeleccionados) {
         $em = $this->getEntityManager();
         $estado = true;
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         if(count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigoSeleccion) {                
                 $arSeleccionRequisito = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisito();
@@ -100,15 +101,10 @@ class RhuSeleccionRequisitoRepository extends EntityRepository {
                     if ($estado == true){
                         $arSeleccionRequisito->setEstadoCerrado(1);
                     } else {
-                        echo "No se puede cerrar la requisicion " .$codigoSeleccion. ", tiene procesos de selecciones abiertos";
+                        $objMensaje->Mensaje('error', 'No se puede cerrar la requisicion " .$codigoSeleccion. ", tiene procesos de selecciones abiertos! ', $this);
+                        //echo "No se puede cerrar la requisicion " .$codigoSeleccion. ", tiene procesos de selecciones abiertos! "." <br>";
                     }
                     
-                    /*if (count($arSeleccion) > 0){
-                        foreach ($arSeleccion AS $arSeleccion) {
-                            $arSeleccion->setEstadoCerrado(1);
-                        }
-                        $em->persist($arSeleccion);
-                    }*/
                     
                 } 
                 $em->persist($arSeleccionRequisito);
