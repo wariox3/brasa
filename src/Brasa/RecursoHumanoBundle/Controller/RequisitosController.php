@@ -156,7 +156,7 @@ class RequisitosController extends Controller
                     $arrControles = $request->request->All();
                     $intIndice = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {
-                        if($arrControles['TxtCantidad'.$intCodigo] != "" && $arrControles['TxtCantidadPendiente'.$intCodigo] != 0) {
+                        if($arrControles['TxtCantidad'.$intCodigo] != "" && $arrControles['TxtCantidadPendiente'.$intCodigo] != '') {
                             $intCantidad = $arrControles['TxtCantidad'.$intCodigo];
                             $intCantidadPendiente = $arrControles['TxtCantidadPendiente'.$intCodigo];
                             $arRequisitoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoDetalle();
