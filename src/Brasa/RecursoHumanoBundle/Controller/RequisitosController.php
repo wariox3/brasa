@@ -102,8 +102,8 @@ class RequisitosController extends Controller
                         $arRequisitoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuRequisitoDetalle();
                         $arRequisitoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisitoDetalle')->find($codigoRequisitoDetallePk);
                         if($arRequisitoDetalle->getEstadoNoAplica() == 0) {
-                            if($arRequisitoDetalle->getEstadoEntregado() == 1 && $arRequisitoDetalle->getCantidadPendiente() != 0) {
-                                $arRequisitoDetalle->setEstadoEntregado(1);
+                            if($arRequisitoDetalle->getEstadoEntregado() == 1) {
+                                $arRequisitoDetalle->setEstadoEntregado(0);
                                 $arRequisitoDetalle->setEstadoPendiente(1);
                             } else {
                                 $arRequisitoDetalle->setEstadoEntregado(1);
