@@ -92,7 +92,7 @@ class FormatoSeleccionRequisito extends \FPDF_FPDF {
         $this->SetFont('Arial','B',7);
         $this->Cell(24, 6, utf8_decode("CANTIDAD:") , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(50, 6, $arSeleccionRequisito->getCantidadSolicitida() , 1, 0, 'L', 1);
+        $this->Cell(50, 6, $arSeleccionRequisito->getCantidadSolicitada() , 1, 0, 'L', 1);
         $this->SetFont('Arial','B',7);
         $this->Cell(25, 6, "ESTADO CIVIL:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
