@@ -30,11 +30,23 @@
                 </div>                
             </div>
             <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label"></label>
+                <div class="col-sm-8">
+                    Ejemplo: Bueno, excelente, apto, entre otros
+                </div>                
+            </div>    
+            <div class="form-group form-group-sm">
                 <label for="form_resultadoCuantitativo" class="col-sm-4 control-label">Resultado cuantitativo:</label>
                 <div class="col-sm-8">
                     {{ form_widget(form.resultadoCuantitativo, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
                 </div>                
             </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label"></label>
+                <div class="col-sm-8">
+                    Ejemplo: 80, 90, 95, entre otros
+                </div>                
+            </div>    
             <div class="form-group form-group-sm">
                 <label for="form_nombreQuienEntrevista" class="col-sm-4 control-label">Persona que entrevista:</label>
                 <div class="col-sm-8">
