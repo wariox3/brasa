@@ -709,7 +709,7 @@ class CursoController extends Controller
                     ->setCellValue('Q1', 'PROVEEDOR')
                     ->setCellValue('R1', 'ASESOR')
                     ->setCellValue('S1', 'COSTO')
-                    ->setCellValue('T1', 'TOTAL')
+                    ->setCellValue('T1', 'PRECIO')
                     ->setCellValue('U1', 'UTILIDAD');
 
         $i = 2;    
@@ -758,9 +758,9 @@ class CursoController extends Controller
                     ->setCellValue('P' . $i, $arCursoDetalle->getCursoTipoRel()->getNombre())
                     ->setCellValue('Q' . $i, $proveedor)
                     ->setCellValue('R' . $i, $arCursoDetalle->getCursoRel()->getClienteRel()->getAsesorRel()->getNombre())
-                    ->setCellValue('S' . $i, $arCursoDetalle->getCursoRel()->getCosto())
-                    ->setCellValue('T' . $i, $arCursoDetalle->getCursoRel()->getTotal())
-                    ->setCellValue('U' . $i, $arCursoDetalle->getCursoRel()->getTotal()-$arCursoDetalle->getCursoRel()->getCosto());
+                    ->setCellValue('S' . $i, $arCursoDetalle->getCosto())
+                    ->setCellValue('T' . $i, $arCursoDetalle->getPrecio())
+                    ->setCellValue('U' . $i, $arCursoDetalle->getPrecio() - $arCursoDetalle->getCosto());
             
             if($arCursoDetalle->getCursoRel()->getCodigoEmpleadoFk() != null) {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H' . $i, $arCursoDetalle->getCursoRel()->getEmpleadoRel()->getNumeroIdentificacion());
