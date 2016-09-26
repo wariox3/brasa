@@ -96,13 +96,12 @@ class RhuSeleccionRequisitoRepository extends EntityRepository {
                                 $estado = false;
                             }
                         }
-                        
+                        //$em->persist($arSeleccion);
                     }
                     if ($estado == true){
                         $arSeleccionRequisito->setEstadoCerrado(1);
                     } else {
-                        $objMensaje->Mensaje('error', 'No se puede cerrar la requisicion " .$codigoSeleccion. ", tiene procesos de selecciones abiertos! ', $this);
-                        //echo "No se puede cerrar la requisicion " .$codigoSeleccion. ", tiene procesos de selecciones abiertos! "." <br>";
+                        echo "No se puede cerrar la requisicion " .$codigoSeleccion. ", tiene procesos de selecciones abiertos! "." <br>";
                     }
                     
                     
