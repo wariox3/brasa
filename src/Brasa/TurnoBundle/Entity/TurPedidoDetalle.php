@@ -322,7 +322,7 @@ class TurPedidoDetalle
     protected $servicioDetalleRel;     
     
     /**
-     * @ORM\OneToMany(targetEntity="TurPedidoDetalleCompuesto", mappedBy="pedidoRel")
+     * @ORM\OneToMany(targetEntity="TurPedidoDetalleCompuesto", mappedBy="pedidoDetalleRel", cascade={"persist", "remove"})
      */
     protected $pedidosDetallesCompuestosPedidoDetalleRel;    
     
@@ -352,11 +352,13 @@ class TurPedidoDetalle
     protected $cierresMesServiciosPedidoDetalleRel;    
     
 
+
     /**
      * Constructor
      */
     public function __construct()
     {
+        $this->pedidosDetallesCompuestosPedidoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pedidosDetallesRecursosPedidoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->programacionesDetallesPedidoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->facturasDetallesPedidoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -420,6 +422,30 @@ class TurPedidoDetalle
     public function getCodigoProyectoFk()
     {
         return $this->codigoProyectoFk;
+    }
+
+    /**
+     * Set codigoGrupoFacturacionFk
+     *
+     * @param integer $codigoGrupoFacturacionFk
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setCodigoGrupoFacturacionFk($codigoGrupoFacturacionFk)
+    {
+        $this->codigoGrupoFacturacionFk = $codigoGrupoFacturacionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoGrupoFacturacionFk
+     *
+     * @return integer
+     */
+    public function getCodigoGrupoFacturacionFk()
+    {
+        return $this->codigoGrupoFacturacionFk;
     }
 
     /**
@@ -567,6 +593,54 @@ class TurPedidoDetalle
     }
 
     /**
+     * Set anio
+     *
+     * @param integer $anio
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setAnio($anio)
+    {
+        $this->anio = $anio;
+
+        return $this;
+    }
+
+    /**
+     * Get anio
+     *
+     * @return integer
+     */
+    public function getAnio()
+    {
+        return $this->anio;
+    }
+
+    /**
+     * Set mes
+     *
+     * @param integer $mes
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setMes($mes)
+    {
+        $this->mes = $mes;
+
+        return $this;
+    }
+
+    /**
+     * Get mes
+     *
+     * @return integer
+     */
+    public function getMes()
+    {
+        return $this->mes;
+    }
+
+    /**
      * Set diaDesde
      *
      * @param integer $diaDesde
@@ -636,6 +710,30 @@ class TurPedidoDetalle
     public function getLiquidarDiasReales()
     {
         return $this->liquidarDiasReales;
+    }
+
+    /**
+     * Set compuesto
+     *
+     * @param boolean $compuesto
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setCompuesto($compuesto)
+    {
+        $this->compuesto = $compuesto;
+
+        return $this;
+    }
+
+    /**
+     * Get compuesto
+     *
+     * @return boolean
+     */
+    public function getCompuesto()
+    {
+        return $this->compuesto;
     }
 
     /**
@@ -927,6 +1025,102 @@ class TurPedidoDetalle
     }
 
     /**
+     * Set vrPrecio
+     *
+     * @param float $vrPrecio
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setVrPrecio($vrPrecio)
+    {
+        $this->vrPrecio = $vrPrecio;
+
+        return $this;
+    }
+
+    /**
+     * Get vrPrecio
+     *
+     * @return float
+     */
+    public function getVrPrecio()
+    {
+        return $this->vrPrecio;
+    }
+
+    /**
+     * Set vrSubtotal
+     *
+     * @param float $vrSubtotal
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setVrSubtotal($vrSubtotal)
+    {
+        $this->vrSubtotal = $vrSubtotal;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSubtotal
+     *
+     * @return float
+     */
+    public function getVrSubtotal()
+    {
+        return $this->vrSubtotal;
+    }
+
+    /**
+     * Set vrIva
+     *
+     * @param float $vrIva
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setVrIva($vrIva)
+    {
+        $this->vrIva = $vrIva;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIva
+     *
+     * @return float
+     */
+    public function getVrIva()
+    {
+        return $this->vrIva;
+    }
+
+    /**
+     * Set vrBaseAiu
+     *
+     * @param float $vrBaseAiu
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setVrBaseAiu($vrBaseAiu)
+    {
+        $this->vrBaseAiu = $vrBaseAiu;
+
+        return $this;
+    }
+
+    /**
+     * Get vrBaseAiu
+     *
+     * @return float
+     */
+    public function getVrBaseAiu()
+    {
+        return $this->vrBaseAiu;
+    }
+
+    /**
      * Set vrTotalDetalle
      *
      * @param float $vrTotalDetalle
@@ -948,6 +1142,30 @@ class TurPedidoDetalle
     public function getVrTotalDetalle()
     {
         return $this->vrTotalDetalle;
+    }
+
+    /**
+     * Set vrTotalDetalleAfectado
+     *
+     * @param float $vrTotalDetalleAfectado
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setVrTotalDetalleAfectado($vrTotalDetalleAfectado)
+    {
+        $this->vrTotalDetalleAfectado = $vrTotalDetalleAfectado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalDetalleAfectado
+     *
+     * @return float
+     */
+    public function getVrTotalDetalleAfectado()
+    {
+        return $this->vrTotalDetalleAfectado;
     }
 
     /**
@@ -1263,6 +1481,102 @@ class TurPedidoDetalle
     }
 
     /**
+     * Set marca
+     *
+     * @param boolean $marca
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setMarca($marca)
+    {
+        $this->marca = $marca;
+
+        return $this;
+    }
+
+    /**
+     * Get marca
+     *
+     * @return boolean
+     */
+    public function getMarca()
+    {
+        return $this->marca;
+    }
+
+    /**
+     * Set ajusteProgramacion
+     *
+     * @param boolean $ajusteProgramacion
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setAjusteProgramacion($ajusteProgramacion)
+    {
+        $this->ajusteProgramacion = $ajusteProgramacion;
+
+        return $this;
+    }
+
+    /**
+     * Get ajusteProgramacion
+     *
+     * @return boolean
+     */
+    public function getAjusteProgramacion()
+    {
+        return $this->ajusteProgramacion;
+    }
+
+    /**
+     * Set detalle
+     *
+     * @param string $detalle
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setDetalle($detalle)
+    {
+        $this->detalle = $detalle;
+
+        return $this;
+    }
+
+    /**
+     * Get detalle
+     *
+     * @return string
+     */
+    public function getDetalle()
+    {
+        return $this->detalle;
+    }
+
+    /**
+     * Set detallePuesto
+     *
+     * @param string $detallePuesto
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setDetallePuesto($detallePuesto)
+    {
+        $this->detallePuesto = $detallePuesto;
+
+        return $this;
+    }
+
+    /**
+     * Get detallePuesto
+     *
+     * @return string
+     */
+    public function getDetallePuesto()
+    {
+        return $this->detallePuesto;
+    }
+
+    /**
      * Set pedidoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurPedido $pedidoRel
@@ -1308,6 +1622,30 @@ class TurPedidoDetalle
     public function getProyectoRel()
     {
         return $this->proyectoRel;
+    }
+
+    /**
+     * Set grupoFacturacionRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurGrupoFacturacion $grupoFacturacionRel
+     *
+     * @return TurPedidoDetalle
+     */
+    public function setGrupoFacturacionRel(\Brasa\TurnoBundle\Entity\TurGrupoFacturacion $grupoFacturacionRel = null)
+    {
+        $this->grupoFacturacionRel = $grupoFacturacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get grupoFacturacionRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurGrupoFacturacion
+     */
+    public function getGrupoFacturacionRel()
+    {
+        return $this->grupoFacturacionRel;
     }
 
     /**
@@ -1452,6 +1790,40 @@ class TurPedidoDetalle
     public function getServicioDetalleRel()
     {
         return $this->servicioDetalleRel;
+    }
+
+    /**
+     * Add pedidosDetallesCompuestosPedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPedidoDetalleRel
+     *
+     * @return TurPedidoDetalle
+     */
+    public function addPedidosDetallesCompuestosPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPedidoDetalleRel)
+    {
+        $this->pedidosDetallesCompuestosPedidoDetalleRel[] = $pedidosDetallesCompuestosPedidoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pedidosDetallesCompuestosPedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPedidoDetalleRel
+     */
+    public function removePedidosDetallesCompuestosPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPedidoDetalleRel)
+    {
+        $this->pedidosDetallesCompuestosPedidoDetalleRel->removeElement($pedidosDetallesCompuestosPedidoDetalleRel);
+    }
+
+    /**
+     * Get pedidosDetallesCompuestosPedidoDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPedidosDetallesCompuestosPedidoDetalleRel()
+    {
+        return $this->pedidosDetallesCompuestosPedidoDetalleRel;
     }
 
     /**
@@ -1622,375 +1994,5 @@ class TurPedidoDetalle
     public function getCierresMesServiciosPedidoDetalleRel()
     {
         return $this->cierresMesServiciosPedidoDetalleRel;
-    }
-
-    /**
-     * Set marca
-     *
-     * @param boolean $marca
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setMarca($marca)
-    {
-        $this->marca = $marca;
-
-        return $this;
-    }
-
-    /**
-     * Get marca
-     *
-     * @return boolean
-     */
-    public function getMarca()
-    {
-        return $this->marca;
-    }
-
-    /**
-     * Set ajusteProgramacion
-     *
-     * @param boolean $ajusteProgramacion
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setAjusteProgramacion($ajusteProgramacion)
-    {
-        $this->ajusteProgramacion = $ajusteProgramacion;
-
-        return $this;
-    }
-
-    /**
-     * Get ajusteProgramacion
-     *
-     * @return boolean
-     */
-    public function getAjusteProgramacion()
-    {
-        return $this->ajusteProgramacion;
-    }
-
-    /**
-     * Set codigoGrupoFacturacionFk
-     *
-     * @param integer $codigoGrupoFacturacionFk
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setCodigoGrupoFacturacionFk($codigoGrupoFacturacionFk)
-    {
-        $this->codigoGrupoFacturacionFk = $codigoGrupoFacturacionFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoGrupoFacturacionFk
-     *
-     * @return integer
-     */
-    public function getCodigoGrupoFacturacionFk()
-    {
-        return $this->codigoGrupoFacturacionFk;
-    }
-
-    /**
-     * Set grupoFacturacionRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurGrupoFacturacion $grupoFacturacionRel
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setGrupoFacturacionRel(\Brasa\TurnoBundle\Entity\TurGrupoFacturacion $grupoFacturacionRel = null)
-    {
-        $this->grupoFacturacionRel = $grupoFacturacionRel;
-
-        return $this;
-    }
-
-    /**
-     * Get grupoFacturacionRel
-     *
-     * @return \Brasa\TurnoBundle\Entity\TurGrupoFacturacion
-     */
-    public function getGrupoFacturacionRel()
-    {
-        return $this->grupoFacturacionRel;
-    }
-
-    /**
-     * Set vrSubtotal
-     *
-     * @param float $vrSubtotal
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setVrSubtotal($vrSubtotal)
-    {
-        $this->vrSubtotal = $vrSubtotal;
-
-        return $this;
-    }
-
-    /**
-     * Get vrSubtotal
-     *
-     * @return float
-     */
-    public function getVrSubtotal()
-    {
-        return $this->vrSubtotal;
-    }
-
-    /**
-     * Set vrIva
-     *
-     * @param float $vrIva
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setVrIva($vrIva)
-    {
-        $this->vrIva = $vrIva;
-
-        return $this;
-    }
-
-    /**
-     * Get vrIva
-     *
-     * @return float
-     */
-    public function getVrIva()
-    {
-        return $this->vrIva;
-    }
-
-    /**
-     * Set vrBaseAiu
-     *
-     * @param float $vrBaseAiu
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setVrBaseAiu($vrBaseAiu)
-    {
-        $this->vrBaseAiu = $vrBaseAiu;
-
-        return $this;
-    }
-
-    /**
-     * Get vrBaseAiu
-     *
-     * @return float
-     */
-    public function getVrBaseAiu()
-    {
-        return $this->vrBaseAiu;
-    }
-
-    /**
-     * Set detalle
-     *
-     * @param string $detalle
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setDetalle($detalle)
-    {
-        $this->detalle = $detalle;
-
-        return $this;
-    }
-
-    /**
-     * Get detalle
-     *
-     * @return string
-     */
-    public function getDetalle()
-    {
-        return $this->detalle;
-    }
-
-    /**
-     * Set vrPrecio
-     *
-     * @param float $vrPrecio
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setVrPrecio($vrPrecio)
-    {
-        $this->vrPrecio = $vrPrecio;
-
-        return $this;
-    }
-
-    /**
-     * Get vrPrecio
-     *
-     * @return float
-     */
-    public function getVrPrecio()
-    {
-        return $this->vrPrecio;
-    }
-
-    /**
-     * Set detallePuesto
-     *
-     * @param string $detallePuesto
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setDetallePuesto($detallePuesto)
-    {
-        $this->detallePuesto = $detallePuesto;
-
-        return $this;
-    }
-
-    /**
-     * Get detallePuesto
-     *
-     * @return string
-     */
-    public function getDetallePuesto()
-    {
-        return $this->detallePuesto;
-    }
-
-    /**
-     * Set vrTotalDetalleAfectado
-     *
-     * @param float $vrTotalDetalleAfectado
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setVrTotalDetalleAfectado($vrTotalDetalleAfectado)
-    {
-        $this->vrTotalDetalleAfectado = $vrTotalDetalleAfectado;
-
-        return $this;
-    }
-
-    /**
-     * Get vrTotalDetalleAfectado
-     *
-     * @return float
-     */
-    public function getVrTotalDetalleAfectado()
-    {
-        return $this->vrTotalDetalleAfectado;
-    }
-
-    /**
-     * Set anio
-     *
-     * @param integer $anio
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setAnio($anio)
-    {
-        $this->anio = $anio;
-
-        return $this;
-    }
-
-    /**
-     * Get anio
-     *
-     * @return integer
-     */
-    public function getAnio()
-    {
-        return $this->anio;
-    }
-
-    /**
-     * Set mes
-     *
-     * @param integer $mes
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setMes($mes)
-    {
-        $this->mes = $mes;
-
-        return $this;
-    }
-
-    /**
-     * Get mes
-     *
-     * @return integer
-     */
-    public function getMes()
-    {
-        return $this->mes;
-    }
-
-    /**
-     * Set compuesto
-     *
-     * @param boolean $compuesto
-     *
-     * @return TurPedidoDetalle
-     */
-    public function setCompuesto($compuesto)
-    {
-        $this->compuesto = $compuesto;
-
-        return $this;
-    }
-
-    /**
-     * Get compuesto
-     *
-     * @return boolean
-     */
-    public function getCompuesto()
-    {
-        return $this->compuesto;
-    }
-
-    /**
-     * Add pedidosDetallesCompuestosPedidoDetalleRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPedidoDetalleRel
-     *
-     * @return TurPedidoDetalle
-     */
-    public function addPedidosDetallesCompuestosPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPedidoDetalleRel)
-    {
-        $this->pedidosDetallesCompuestosPedidoDetalleRel[] = $pedidosDetallesCompuestosPedidoDetalleRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove pedidosDetallesCompuestosPedidoDetalleRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPedidoDetalleRel
-     */
-    public function removePedidosDetallesCompuestosPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPedidoDetalleRel)
-    {
-        $this->pedidosDetallesCompuestosPedidoDetalleRel->removeElement($pedidosDetallesCompuestosPedidoDetalleRel);
-    }
-
-    /**
-     * Get pedidosDetallesCompuestosPedidoDetalleRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPedidosDetallesCompuestosPedidoDetalleRel()
-    {
-        return $this->pedidosDetallesCompuestosPedidoDetalleRel;
     }
 }

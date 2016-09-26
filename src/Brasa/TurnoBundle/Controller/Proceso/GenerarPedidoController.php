@@ -113,6 +113,7 @@ class GenerarPedidoController extends Controller
                         $arPedidoDetalleNuevo->setAjusteProgramacion($arServicioDetalle->getAjusteProgramacion());
                         $arPedidoDetalleNuevo->setAnio($anio);
                         $arPedidoDetalleNuevo->setMes($mes);                        
+                        $arPedidoDetalleNuevo->setCompuesto($arServicioDetalle->getCompuesto());
                         if($intDiaInicial != 0 && $intDiaFinal != 0) { 
                             $em->persist($arPedidoDetalleNuevo);                      
                             $arServicioDetalleRecursos = new \Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso();
@@ -125,6 +126,73 @@ class GenerarPedidoController extends Controller
                                 $em->persist($arPedidoDetalleRecursoNuevo);
                             }                        
                         }
+                        if($arServicioDetalle->getCompuesto() == 1) {
+                            $arServicioDetallesCompuestos = new \Brasa\TurnoBundle\Entity\TurServicioDetalleCompuesto();
+                            $arServicioDetallesCompuestos = $em->getRepository('BrasaTurnoBundle:TurServicioDetalleCompuesto')->findBy(array('codigoServicioDetalleFk' => $arServicioDetalle->getCodigoServicioDetallePk()));
+                            foreach ($arServicioDetallesCompuestos as $arServicioDetalleCompuesto) {
+                                $arPedidoDetalleCompuesto = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto();
+                                $arPedidoDetalleCompuesto->setPedidoDetalleRel($arPedidoDetalleNuevo);
+                                $arPedidoDetalleCompuesto->setModalidadServicioRel($arServicioDetalleCompuesto->getModalidadServicioRel());
+                                $arPedidoDetalleCompuesto->setPeriodoRel($arServicioDetalleCompuesto->getPeriodoRel());
+                                $arPedidoDetalleCompuesto->setConceptoServicioRel($arServicioDetalleCompuesto->getConceptoServicioRel());                                                                                                                                                       
+                                $arPedidoDetalleCompuesto->setDias($arServicioDetalleCompuesto->getDias());
+                                $arPedidoDetalleCompuesto->setLunes($arServicioDetalleCompuesto->getLunes());
+                                $arPedidoDetalleCompuesto->setMartes($arServicioDetalleCompuesto->getMartes());
+                                $arPedidoDetalleCompuesto->setMiercoles($arServicioDetalleCompuesto->getMiercoles());
+                                $arPedidoDetalleCompuesto->setJueves($arServicioDetalleCompuesto->getJueves());
+                                $arPedidoDetalleCompuesto->setViernes($arServicioDetalleCompuesto->getViernes());
+                                $arPedidoDetalleCompuesto->setSabado($arServicioDetalleCompuesto->getSabado());
+                                $arPedidoDetalleCompuesto->setDomingo($arServicioDetalleCompuesto->getDomingo());
+                                $arPedidoDetalleCompuesto->setFestivo($arServicioDetalleCompuesto->getFestivo());                            
+                                $arPedidoDetalleCompuesto->setCantidad($arServicioDetalleCompuesto->getCantidad());
+                                $arPedidoDetalleCompuesto->setVrPrecioAjustado($arServicioDetalleCompuesto->getVrPrecioAjustado());                                                                
+                                $arPedidoDetalleCompuesto->setLiquidarDiasReales($arServicioDetalleCompuesto->getLiquidarDiasReales());                                
+
+                                $strAnioMes = $arPedidoNuevo->getFechaProgramacion()->format('Y/m/');
+                                $dateFechaDesde = date_create($strAnioMes . "1");
+                                $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFechaDesde->format('m')+1,1,$dateFechaDesde->format('Y'))-1));
+                                $dateFechaHasta = date_create($strAnioMes . $strUltimoDiaMes);
+                                $intDiaInicial = 0;
+                                $intDiaFinal = 0;
+                                if($dateFechaDesde < $arServicioDetalle->getFechaHasta()) {
+                                    $dateFechaProceso = $dateFechaDesde;
+                                    if($arServicioDetalle->getFechaDesde() <= $dateFechaHasta) {
+                                        if($arServicioDetalle->getFechaDesde() > $dateFechaProceso) {
+                                            $dateFechaProceso = $arServicioDetalle->getFechaDesde();
+                                            if($dateFechaProceso <= $arServicioDetalle->getFechaHasta()) {
+                                                $intDiaInicial = $dateFechaProceso->format('j');
+                                            }
+                                        } else {
+                                           $intDiaInicial = $dateFechaProceso->format('j'); 
+                                        }                            
+                                    }                         
+                                    $dateFechaProceso = $dateFechaHasta;
+                                    if($dateFechaHasta >= $arServicioDetalle->getFechaDesde()) {
+                                        if($arServicioDetalle->getFechaHasta() < $dateFechaProceso) {
+                                            $dateFechaProceso = $arServicioDetalle->getFechaHasta();
+                                            if($dateFechaProceso >= $arServicioDetalle->getFechaHasta()) {
+                                                $intDiaFinal =  $dateFechaProceso->format('j');                                
+                                            }                                                        
+                                        } else {
+                                            $intDiaFinal =  $dateFechaProceso->format('j');
+                                        }                            
+                                    }                            
+                                }
+
+                                $arPedidoDetalleCompuesto->setDiaDesde($intDiaInicial);
+                                $arPedidoDetalleCompuesto->setDiaHasta($intDiaFinal); 
+
+                                $strUltimoDiaMes = date("j",(mktime(0,0,0,$dateFechaDesde->format('m')+1,1,$dateFechaDesde->format('Y'))-1));
+                                $arPeriodo = new \Brasa\TurnoBundle\Entity\TurPeriodo();
+                                if($intDiaInicial != 1 || $intDiaFinal != $strUltimoDiaMes) {
+                                    $arPeriodo = $em->getRepository('BrasaTurnoBundle:TurPeriodo')->find(2);
+                                } else {
+                                    $arPeriodo = $em->getRepository('BrasaTurnoBundle:TurPeriodo')->find(1);
+                                }                            
+                                $arPedidoDetalleCompuesto->setPeriodoRel($arPeriodo);  
+                                $em->persist($arPedidoDetalleCompuesto);
+                            }
+                        }                         
                     }                   
                     
                     $arServicioDetallesConceptos = new \Brasa\TurnoBundle\Entity\TurServicioDetalleConcepto();
@@ -146,6 +214,11 @@ class GenerarPedidoController extends Controller
                     $arServicio->setFechaGeneracion($fecha);                    
                     $em->persist($arServicio);
                     $em->flush();
+                    $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                    $arPedidoDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $arPedidoNuevo->getCodigoPedidoPk(), 'compuesto' => 1));
+                    foreach ($arPedidoDetalles as $arPedidoDetalle) {
+                        $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->liquidar($arPedidoDetalle->getCodigoPedidoDetallePk());
+                    }                    
                     $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($arPedidoNuevo->getCodigoPedidoPk());
                     $em->getRepository('BrasaTurnoBundle:TurPedido')->autorizar($arPedidoNuevo->getCodigoPedidoPk());                      
                 } else {
@@ -153,6 +226,7 @@ class GenerarPedidoController extends Controller
                 }                
                 //return $this->redirect($this->generateUrl('brs_tur_proceso_generar_pedido_lista'));                                                 
             }
+            
             if ($form->get('BtnGenerar')->isClicked()) {                 
                 set_time_limit(0);
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -231,6 +305,7 @@ class GenerarPedidoController extends Controller
                                 $arPedidoDetalleNuevo->setAjusteProgramacion($arServicioDetalle->getAjusteProgramacion());
                                 $arPedidoDetalleNuevo->setAnio($anio);
                                 $arPedidoDetalleNuevo->setMes($mes);
+                                $arPedidoDetalleNuevo->setCompuesto($arServicioDetalle->getCompuesto());
                                 if($intDiaInicial != 0 && $intDiaFinal != 0) { 
                                     $em->persist($arPedidoDetalleNuevo);                      
                                     $arServicioDetalleRecursos = new \Brasa\TurnoBundle\Entity\TurServicioDetalleRecurso();
@@ -243,11 +318,85 @@ class GenerarPedidoController extends Controller
                                         $em->persist($arPedidoDetalleRecursoNuevo);
                                     }                        
                                 }
+                                if($arServicioDetalle->getCompuesto() == 1) {
+                                    $arServicioDetallesCompuestos = new \Brasa\TurnoBundle\Entity\TurServicioDetalleCompuesto();
+                                    $arServicioDetallesCompuestos = $em->getRepository('BrasaTurnoBundle:TurServicioDetalleCompuesto')->findBy(array('codigoServicioDetalleFk' => $arServicioDetalle->getCodigoServicioDetallePk()));
+                                    foreach ($arServicioDetallesCompuestos as $arServicioDetalleCompuesto) {
+                                        $arPedidoDetalleCompuesto = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto();
+                                        $arPedidoDetalleCompuesto->setPedidoDetalleRel($arPedidoDetalleNuevo);
+                                        $arPedidoDetalleCompuesto->setModalidadServicioRel($arServicioDetalleCompuesto->getModalidadServicioRel());
+                                        $arPedidoDetalleCompuesto->setPeriodoRel($arServicioDetalleCompuesto->getPeriodoRel());
+                                        $arPedidoDetalleCompuesto->setConceptoServicioRel($arServicioDetalleCompuesto->getConceptoServicioRel());                                                                                                                                                       
+                                        $arPedidoDetalleCompuesto->setDias($arServicioDetalleCompuesto->getDias());
+                                        $arPedidoDetalleCompuesto->setLunes($arServicioDetalleCompuesto->getLunes());
+                                        $arPedidoDetalleCompuesto->setMartes($arServicioDetalleCompuesto->getMartes());
+                                        $arPedidoDetalleCompuesto->setMiercoles($arServicioDetalleCompuesto->getMiercoles());
+                                        $arPedidoDetalleCompuesto->setJueves($arServicioDetalleCompuesto->getJueves());
+                                        $arPedidoDetalleCompuesto->setViernes($arServicioDetalleCompuesto->getViernes());
+                                        $arPedidoDetalleCompuesto->setSabado($arServicioDetalleCompuesto->getSabado());
+                                        $arPedidoDetalleCompuesto->setDomingo($arServicioDetalleCompuesto->getDomingo());
+                                        $arPedidoDetalleCompuesto->setFestivo($arServicioDetalleCompuesto->getFestivo());                            
+                                        $arPedidoDetalleCompuesto->setCantidad($arServicioDetalleCompuesto->getCantidad());
+                                        $arPedidoDetalleCompuesto->setVrPrecioAjustado($arServicioDetalleCompuesto->getVrPrecioAjustado());                                                                
+                                        $arPedidoDetalleCompuesto->setLiquidarDiasReales($arServicioDetalleCompuesto->getLiquidarDiasReales());                                
+
+                                        $strAnioMes = $arPedidoNuevo->getFechaProgramacion()->format('Y/m/');
+                                        $dateFechaDesde = date_create($strAnioMes . "1");
+                                        $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFechaDesde->format('m')+1,1,$dateFechaDesde->format('Y'))-1));
+                                        $dateFechaHasta = date_create($strAnioMes . $strUltimoDiaMes);
+                                        $intDiaInicial = 0;
+                                        $intDiaFinal = 0;
+                                        if($dateFechaDesde < $arServicioDetalle->getFechaHasta()) {
+                                            $dateFechaProceso = $dateFechaDesde;
+                                            if($arServicioDetalle->getFechaDesde() <= $dateFechaHasta) {
+                                                if($arServicioDetalle->getFechaDesde() > $dateFechaProceso) {
+                                                    $dateFechaProceso = $arServicioDetalle->getFechaDesde();
+                                                    if($dateFechaProceso <= $arServicioDetalle->getFechaHasta()) {
+                                                        $intDiaInicial = $dateFechaProceso->format('j');
+                                                    }
+                                                } else {
+                                                   $intDiaInicial = $dateFechaProceso->format('j'); 
+                                                }                            
+                                            }                         
+                                            $dateFechaProceso = $dateFechaHasta;
+                                            if($dateFechaHasta >= $arServicioDetalle->getFechaDesde()) {
+                                                if($arServicioDetalle->getFechaHasta() < $dateFechaProceso) {
+                                                    $dateFechaProceso = $arServicioDetalle->getFechaHasta();
+                                                    if($dateFechaProceso >= $arServicioDetalle->getFechaHasta()) {
+                                                        $intDiaFinal =  $dateFechaProceso->format('j');                                
+                                                    }                                                        
+                                                } else {
+                                                    $intDiaFinal =  $dateFechaProceso->format('j');
+                                                }                            
+                                            }                            
+                                        }
+
+                                        $arPedidoDetalleCompuesto->setDiaDesde($intDiaInicial);
+                                        $arPedidoDetalleCompuesto->setDiaHasta($intDiaFinal); 
+
+                                        $strUltimoDiaMes = date("j",(mktime(0,0,0,$dateFechaDesde->format('m')+1,1,$dateFechaDesde->format('Y'))-1));
+                                        $arPeriodo = new \Brasa\TurnoBundle\Entity\TurPeriodo();
+                                        if($intDiaInicial != 1 || $intDiaFinal != $strUltimoDiaMes) {
+                                            $arPeriodo = $em->getRepository('BrasaTurnoBundle:TurPeriodo')->find(2);
+                                        } else {
+                                            $arPeriodo = $em->getRepository('BrasaTurnoBundle:TurPeriodo')->find(1);
+                                        }                            
+                                        $arPedidoDetalleCompuesto->setPeriodoRel($arPeriodo);  
+                                        $em->persist($arPedidoDetalleCompuesto);
+                                    }
+                                }                                
+                                
+                                
                             }  
                             
                             $arServicio->setFechaGeneracion($fecha);
                             $em->persist($arServicio);
                             $em->flush();
+                            $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                            $arPedidoDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->findBy(array('codigoPedidoFk' => $arPedidoNuevo->getCodigoPedidoPk(), 'compuesto' => 1));
+                            foreach ($arPedidoDetalles as $arPedidoDetalle) {
+                                $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->liquidar($arPedidoDetalle->getCodigoPedidoDetallePk());
+                            }                            
                             $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($arPedidoNuevo->getCodigoPedidoPk());
                             $em->getRepository('BrasaTurnoBundle:TurPedido')->autorizar($arPedidoNuevo->getCodigoPedidoPk()); 
                         }
