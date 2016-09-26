@@ -41,10 +41,10 @@ class RhuSeleccionRequisitoRepository extends EntityRepository {
         if($strCargo != "") {
             $dql .= " AND sq.codigoCargoFk = " . $strCargo;
         }
-        if($strDesde != "" || $strDesde != 0){
+        if($strDesde != "" || $strDesde != '0'){
             $dql .= " AND sq.fecha >='" . $strDesde . "'";
         }
-        if($strHasta != "" || $strHasta != 0) {
+        if($strHasta != "" || $strHasta != '0') {
             $dql .= " AND sq.fecha <='" . $strHasta . "'";
         }
          
