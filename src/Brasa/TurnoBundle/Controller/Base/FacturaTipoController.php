@@ -4,12 +4,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Brasa\TurnoBundle\Form\Type\TurFacturaConceptoType;
-class FacturaConceptoController extends Controller
+use Brasa\TurnoBundle\Form\Type\TurFacturaTipoType;
+class FacturaTipoController extends Controller
 {
     var $strDqlLista = "";
     /**
-     * @Route("/tur/base/factura/concepto", name="brs_tur_base_factura_concepto")
+     * @Route("/tur/base/factura/tipo", name="brs_tur_base_factura_tipo")
      */    
     public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();        
@@ -24,8 +24,8 @@ class FacturaConceptoController extends Controller
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaTurnoBundle:TurFacturaConcepto')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_base_factura_concepto'));
+                $em->getRepository('BrasaTurnoBundle:TurFacturaTipo')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_tur_base_factura_tipo'));
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
@@ -36,36 +36,36 @@ class FacturaConceptoController extends Controller
             }
         }
         
-        $arFacturaConceptos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
-        return $this->render('BrasaTurnoBundle:Base/FacturaConcepto:lista.html.twig', array(
-            'arFacturaConceptos' => $arFacturaConceptos, 
+        $arFacturaTipos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
+        return $this->render('BrasaTurnoBundle:Base/FacturaTipo:lista.html.twig', array(
+            'arFacturaTipos' => $arFacturaTipos, 
             'form' => $form->createView()));
     }
 
     /**
-     * @Route("/tur/base/factura/concepto/nuevo/{codigoFacturaConcepto}", name="brs_tur_base_factura_concepto_nuevo")
+     * @Route("/tur/base/factura/tipo/nuevo/{codigoFacturaTipo}", name="brs_tur_base_factura_tipo_nuevo")
      */    
-    public function nuevoAction(Request $request, $codigoFacturaConcepto = '') {
+    public function nuevoAction(Request $request, $codigoFacturaTipo = '') {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $arFacturaConcepto = new \Brasa\TurnoBundle\Entity\TurFacturaConcepto();
-        if($codigoFacturaConcepto != '' && $codigoFacturaConcepto != '0') {
-            $arFacturaConcepto = $em->getRepository('BrasaTurnoBundle:TurFacturaConcepto')->find($codigoFacturaConcepto);
+        $arFacturaTipo = new \Brasa\TurnoBundle\Entity\TurFacturaTipo();
+        if($codigoFacturaTipo != '' && $codigoFacturaTipo != '0') {
+            $arFacturaTipo = $em->getRepository('BrasaTurnoBundle:TurFacturaTipo')->find($codigoFacturaTipo);
         }        
-        $form = $this->createForm(new TurFacturaConceptoType, $arFacturaConcepto);
+        $form = $this->createForm(new TurFacturaTipoType, $arFacturaTipo);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arFacturaConcepto = $form->getData();                        
-            $em->persist($arFacturaConcepto);
+            $arFacturaTipo = $form->getData();                        
+            $em->persist($arFacturaTipo);
             $em->flush();            
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_base_factura_conceto_nuevo', array('codigoFacturaConcepto' => 0 )));
+                return $this->redirect($this->generateUrl('brs_tur_base_factura_conceto_nuevo', array('codigoFacturaTipo' => 0 )));
             } else {
-                return $this->redirect($this->generateUrl('brs_tur_base_factura_concepto'));
+                return $this->redirect($this->generateUrl('brs_tur_base_factura_tipo'));
             }                                   
         }
-        return $this->render('BrasaTurnoBundle:Base/FacturaConcepto:nuevo.html.twig', array(
-            'arFacturaConcepto' => $arFacturaConcepto,
+        return $this->render('BrasaTurnoBundle:Base/FacturaTipo:nuevo.html.twig', array(
+            'arFacturaTipo' => $arFacturaTipo,
             'form' => $form->createView()));
     }        
 
@@ -73,21 +73,21 @@ class FacturaConceptoController extends Controller
     private function lista() {    
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurFacturaConcepto')->listaDQL(
-                $session->get('filtroFacturaConceptoNombre')   
+        $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurFacturaTipo')->listaDQL(
+                $session->get('filtroFacturaTipoNombre')   
                 ); 
     }
 
     private function filtrar ($form) {        
         $session = $this->getRequest()->getSession();        
-        $session->set('filtroFacturaConceptoNombre', $form->get('TxtNombre')->getData());
+        $session->set('filtroFacturaTipoNombre', $form->get('TxtNombre')->getData());
         $this->lista();
     }
     
     private function formularioFiltro() {
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()            
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroFacturaConceptoNombre')))
+            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroFacturaTipoNombre')))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -117,21 +117,21 @@ class FacturaConceptoController extends Controller
         $i = 2;
         
         $query = $em->createQuery($this->strDqlLista);
-        $arFacturaConceptos = new \Brasa\TurnoBundle\Entity\TurFacturaConcepto();
-        $arFacturaConceptos = $query->getResult();
+        $arFacturaTipos = new \Brasa\TurnoBundle\Entity\TurFacturaTipo();
+        $arFacturaTipos = $query->getResult();
                 
-        foreach ($arFacturaConceptos as $arFacturaConcepto) {            
+        foreach ($arFacturaTipos as $arFacturaTipo) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arFacturaConcepto->getCodigoFacturaConceptoPk())
-                    ->setCellValue('B' . $i, $arFacturaConcepto->getNombre());                                    
+                    ->setCellValue('A' . $i, $arFacturaTipo->getCodigoFacturaTipoPk())
+                    ->setCellValue('B' . $i, $arFacturaTipo->getNombre());                                    
             $i++;
         }
         
-        $objPHPExcel->getActiveSheet()->setTitle('FacturaConcepto');
+        $objPHPExcel->getActiveSheet()->setTitle('FacturaTipo');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="FacturaConceptos.xlsx"');
+        header('Content-Disposition: attachment;filename="FacturaTipos.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

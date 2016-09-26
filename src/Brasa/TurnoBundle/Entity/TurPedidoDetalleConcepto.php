@@ -88,12 +88,7 @@ class TurPedidoDetalleConcepto
      * @ORM\ManyToOne(targetEntity="TurConceptoServicio", inversedBy="pedidosDetallesConceptosConceptoServicioRel")
      * @ORM\JoinColumn(name="codigo_concepto_servicio_fk", referencedColumnName="codigo_concepto_servicio_pk")
      */
-    protected $conceptoServicioRel;     
-    
-    /**
-     * @ORM\OneToMany(targetEntity="TurFacturaDetalleConcepto", mappedBy="pedidoDetalleConceptoRel")
-     */
-    protected $facturasDetallesConceptosPedidoDetalleConceptoRel; 
+    protected $conceptoServicioRel;         
 
     /**
      * @ORM\OneToMany(targetEntity="TurFacturaDetalle", mappedBy="pedidoDetalleConceptoRel")
@@ -105,7 +100,7 @@ class TurPedidoDetalleConcepto
      */
     public function __construct()
     {
-        $this->facturasDetallesConceptosPedidoDetalleConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facturasDetallesPedidoDetalleConceptoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -260,6 +255,30 @@ class TurPedidoDetalleConcepto
     public function getPorIva()
     {
         return $this->porIva;
+    }
+
+    /**
+     * Set porBaseIva
+     *
+     * @param integer $porBaseIva
+     *
+     * @return TurPedidoDetalleConcepto
+     */
+    public function setPorBaseIva($porBaseIva)
+    {
+        $this->porBaseIva = $porBaseIva;
+
+        return $this;
+    }
+
+    /**
+     * Get porBaseIva
+     *
+     * @return integer
+     */
+    public function getPorBaseIva()
+    {
+        return $this->porBaseIva;
     }
 
     /**
@@ -428,64 +447,6 @@ class TurPedidoDetalleConcepto
     public function getConceptoServicioRel()
     {
         return $this->conceptoServicioRel;
-    }
-
-    /**
-     * Add facturasDetallesConceptosPedidoDetalleConceptoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosPedidoDetalleConceptoRel
-     *
-     * @return TurPedidoDetalleConcepto
-     */
-    public function addFacturasDetallesConceptosPedidoDetalleConceptoRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosPedidoDetalleConceptoRel)
-    {
-        $this->facturasDetallesConceptosPedidoDetalleConceptoRel[] = $facturasDetallesConceptosPedidoDetalleConceptoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove facturasDetallesConceptosPedidoDetalleConceptoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosPedidoDetalleConceptoRel
-     */
-    public function removeFacturasDetallesConceptosPedidoDetalleConceptoRel(\Brasa\TurnoBundle\Entity\TurFacturaDetalleConcepto $facturasDetallesConceptosPedidoDetalleConceptoRel)
-    {
-        $this->facturasDetallesConceptosPedidoDetalleConceptoRel->removeElement($facturasDetallesConceptosPedidoDetalleConceptoRel);
-    }
-
-    /**
-     * Get facturasDetallesConceptosPedidoDetalleConceptoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFacturasDetallesConceptosPedidoDetalleConceptoRel()
-    {
-        return $this->facturasDetallesConceptosPedidoDetalleConceptoRel;
-    }
-
-    /**
-     * Set porBaseIva
-     *
-     * @param integer $porBaseIva
-     *
-     * @return TurPedidoDetalleConcepto
-     */
-    public function setPorBaseIva($porBaseIva)
-    {
-        $this->porBaseIva = $porBaseIva;
-
-        return $this;
-    }
-
-    /**
-     * Get porBaseIva
-     *
-     * @return integer
-     */
-    public function getPorBaseIva()
-    {
-        return $this->porBaseIva;
     }
 
     /**
