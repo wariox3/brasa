@@ -86,7 +86,7 @@
                             <td>{% if arRequisitosDetalles.estadoEntregado == 1%} SI {% else %} NO {% endif %}</td>
                             <td>{% if arRequisitosDetalles.estadoNoAplica == 1%} SI {% else %} NO {% endif %}</td>
                             <td>{% if arRequisitosDetalles.estadoPendiente == 1%} SI {% else %} NO {% endif %}</td>
-                            {% if arRequisito.estadoCerrado == 0 %}
+                            {% if arRequisito.estadoAutorizado == 0 %}
                                 <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arRequisitosDetalles.codigoRequisitoDetallePk }}" value="{{ arRequisitosDetalles.cantidad }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                                 <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidadPendiente{{ arRequisitosDetalles.codigoRequisitoDetallePk }}" value="{{ arRequisitosDetalles.cantidadPendiente }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                             {% else %}
