@@ -65,7 +65,7 @@ class RhuSeleccionRequisitoType extends AbstractType
             ->add('edadMinima', 'text', array('required' => false))
             ->add('edadMaxima', 'text', array('required' => false))
             ->add('codigoReligionFk', 'choice', array('choices'   => array('1' => 'CATOLICO', '2' => 'CRISTIANO', '3' => 'PROTESTANTE', '4' => 'INDIFERENTE')))
-            ->add('cantidadSolicitida', 'number', array('label' => 'Cantidad Solicitada', 'required' => true))
+            ->add('cantidadSolicitada', 'number', array('label' => 'Cantidad Solicitada', 'required' => true))
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

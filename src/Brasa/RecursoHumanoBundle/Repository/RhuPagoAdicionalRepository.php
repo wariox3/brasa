@@ -48,7 +48,7 @@ class RhuPagoAdicionalRepository extends EntityRepository {
     public function listaAdicionalesDql($strIdentificacion = "", $aplicarDiaLaborado = "", $codigoCentroCosto = "", $codigoPagoConcepto = "", $estadoInactivo = "", $modalidad = "", $periodo = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT pa,e FROM BrasaRecursoHumanoBundle:RhuPagoAdicional pa JOIN pa.empleadoRel e WHERE pa.codigoPagoAdicionalPk <> 0 ";   
-        if($periodo != "" && $periodo != 0) {
+        if($periodo != "" && $periodo != '0') {
             $dql .= " AND pa.codigoPeriodoFk = " . $periodo;
         } 
         if($modalidad != "" ) {
@@ -60,19 +60,19 @@ class RhuPagoAdicionalRepository extends EntityRepository {
         if($aplicarDiaLaborado == 1 ) {
             $dql .= " AND pa.aplicaDiaLaborado = 1";
         }
-        if($aplicarDiaLaborado == 0 ) {
+        if($aplicarDiaLaborado == '0' ) {
             $dql .= " AND pa.aplicaDiaLaborado = 0";
         }
-        if($codigoCentroCosto != "" || $codigoCentroCosto != 0 ) {
+        if($codigoCentroCosto != "" || $codigoCentroCosto != '0' ) {
             $dql .= " AND e.codigoCentroCostoFk = " . $codigoCentroCosto;
         }
-        if($codigoPagoConcepto != "" || $codigoPagoConcepto != 0 ) {
+        if($codigoPagoConcepto != "" || $codigoPagoConcepto != '0' ) {
             $dql .= " AND pa.codigoPagoConceptoFk = " . $codigoPagoConcepto;
         }
         if($estadoInactivo == 1 ) {
             $dql .= " AND pa.estadoInactivo = 1";
         }
-        if($estadoInactivo == 0 ) {
+        if($estadoInactivo == '0' ) {
             $dql .= " AND pa.estadoInactivo = 0";
         }        
         $dql .= " ORDER BY pa.codigoPagoAdicionalPk DESC";
@@ -88,14 +88,14 @@ class RhuPagoAdicionalRepository extends EntityRepository {
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
         }
-        if($codigoCentroCosto != "" || $codigoCentroCosto != 0 ) {
+        if($codigoCentroCosto != "" || $codigoCentroCosto != '0' ) {
             $dql .= " AND e.codigoCentroCostoFk = " . $codigoCentroCosto;
         }
         
         if($aplicaDiaLaborado == 1 ) {
             $dql .= " AND pa.aplicaDiaLaborado = 1";
         }
-        if($aplicaDiaLaborado == 0 ) {
+        if($aplicaDiaLaborado == '0' ) {
             $dql .= " AND pa.aplicaDiaLaborado = 0";
         }
         return $dql;
