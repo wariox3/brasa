@@ -89,7 +89,8 @@
                             {% if arRequisito.estadoAutorizado == 0 %} 
                                 <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad{{ arRequisitosDetalles.codigoRequisitoDetallePk }}" value="{{ arRequisitosDetalles.cantidad }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                                 <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidadPendiente{{ arRequisitosDetalles.codigoRequisitoDetallePk }}" value="{{ arRequisitosDetalles.cantidadPendiente }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                            {% else %}
+                            {% endif %}
+                            {% if arRequisito.estadoAutorizado == 1 %}
                                 <td style="text-align: right">{{ arRequisitosDetalles.cantidad | number_format(0, '.', ',') }}</td>
                                 <td style="text-align: right">{{ arRequisitosDetalles.cantidadPendiente | number_format(0, '.', ',') }}</td>
                             {% endif %}                             
