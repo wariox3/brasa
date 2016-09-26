@@ -34,7 +34,7 @@ class RhuSeleccionRequisitoRepository extends EntityRepository {
         
         if($boolCerrado == 1 ) {
             $dql .= " AND sq.estadoCerrado = 1";
-        } elseif($boolCerrado == 0 || $boolCerrado == '0') {
+        } elseif($boolCerrado == '0') {
             $dql .= " AND sq.estadoCerrado = 0";
         }            
         
