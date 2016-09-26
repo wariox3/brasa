@@ -136,7 +136,7 @@ class FormatoSeleccionRequisito extends \FPDF_FPDF {
     public function EncabezadoDetalles() {
         
         $this->Ln(14);
-        $header = array('ID', 'TIPO', 'FECHA PRUEBA','IDENTIFICACION', 'NOMBRE', 'TELEFONO', 'CELULAR');
+        $header = array('ID', 'TIPO', 'FECHA PROCESO','IDENTIFICACION', 'NOMBRE', 'TELEFONO', 'CELULAR');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -166,7 +166,7 @@ class FormatoSeleccionRequisito extends \FPDF_FPDF {
         foreach ($arSelecciones as $arSeleccion) {            
             $pdf->Cell(10, 4, $arSeleccion->getCodigoSeleccionPk(), 1, 0, 'L');
             $pdf->Cell(40, 4, utf8_decode($arSeleccion->getSeleccionTipoRel()->getNombre()), 1, 0, 'L');
-            $pdf->Cell(22, 4, '', 1, 0, 'L');
+            $pdf->Cell(22, 4, $arSeleccion->getFecha(), 1, 0, 'L');
             $pdf->Cell(22, 4, $arSeleccion->getNumeroIdentificacion(), 1, 0, 'L');
             $pdf->Cell(65, 4, utf8_decode($arSeleccion->getNombreCorto()), 1, 0, 'L');
             $pdf->Cell(15, 4, $arSeleccion->getTelefono(), 1, 0, 'L');
