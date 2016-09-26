@@ -96,6 +96,7 @@ class FormatoRequisitos extends \FPDF_FPDF {
             $pdf->SetFont('Arial', '', 8);
             $pdf->Cell(15, 4, $arRequisitoDetalle->getCodigoRequisitoDetallePk(), 1, 0, 'L');
             $pdf->Cell(100, 4, utf8_decode($arRequisitoDetalle->getRequisitoConceptoRel()->getNombre()), 1, 0, 'L');
+            $pdf->SetFont('Arial', '', 7.5);
             $pdf->Cell(24, 4, $arRequisitoDetalle->getTipo(), 1, 0, 'L');
             if($arRequisitoDetalle->getEstadoEntregado() == 1) {
                 $pdf->Cell(21, 4, 'SI', 1, 0, 'L');
