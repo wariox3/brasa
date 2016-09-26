@@ -63,11 +63,15 @@ class RhuPagoAdicionalRepository extends EntityRepository {
         if($aplicarDiaLaborado == '0' ) {
             $dql .= " AND pa.aplicaDiaLaborado = 0";
         }
-        if($codigoCentroCosto != "" || $codigoCentroCosto != '0' ) {
-            $dql .= " AND e.codigoCentroCostoFk = " . $codigoCentroCosto;
+        if($codigoCentroCosto) {
+            if($codigoCentroCosto != '0')  {
+                $dql .= " AND e.codigoCentroCostoFk = " . $codigoCentroCosto;                
+            }            
         }
-        if($codigoPagoConcepto != "" || $codigoPagoConcepto != '0' ) {
-            $dql .= " AND pa.codigoPagoConceptoFk = " . $codigoPagoConcepto;
+        if($codigoPagoConcepto) {
+            if($codigoPagoConcepto != '0') {
+                $dql .= " AND pa.codigoPagoConceptoFk = " . $codigoPagoConcepto;
+            }            
         }
         if($estadoInactivo == 1 ) {
             $dql .= " AND pa.estadoInactivo = 1";
