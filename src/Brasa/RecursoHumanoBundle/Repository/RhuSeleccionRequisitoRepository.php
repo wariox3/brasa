@@ -96,7 +96,7 @@ class RhuSeleccionRequisitoRepository extends EntityRepository {
                                 $estado = false;
                             }
                         }
-                        //$em->persist($arSeleccion);
+                        
                     }
                     if ($estado == true){
                         $arSeleccionRequisito->setEstadoCerrado(1);
