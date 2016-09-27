@@ -728,6 +728,11 @@ class RhuEmpleado
     protected $puestoRel;
     
     /**
+     * @ORM\OneToMany(targetEntity="RhuPagoBancoDetalle", mappedBy="empleadoRel")
+     */
+    protected $pagosBancosDetallesEmpleadoRel;    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -4363,5 +4368,39 @@ class RhuEmpleado
     public function getPuestoRel()
     {
         return $this->puestoRel;
+    }
+
+    /**
+     * Add pagosBancosDetallesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addPagosBancosDetallesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesEmpleadoRel)
+    {
+        $this->pagosBancosDetallesEmpleadoRel[] = $pagosBancosDetallesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosBancosDetallesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesEmpleadoRel
+     */
+    public function removePagosBancosDetallesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesEmpleadoRel)
+    {
+        $this->pagosBancosDetallesEmpleadoRel->removeElement($pagosBancosDetallesEmpleadoRel);
+    }
+
+    /**
+     * Get pagosBancosDetallesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosBancosDetallesEmpleadoRel()
+    {
+        return $this->pagosBancosDetallesEmpleadoRel;
     }
 }

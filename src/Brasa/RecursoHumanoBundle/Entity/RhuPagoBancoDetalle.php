@@ -48,6 +48,11 @@ class RhuPagoBancoDetalle
     private $nombreCorto;    
     
     /**
+     * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
+     */    
+    private $codigoEmpleadoFk;     
+    
+    /**
      * @ORM\Column(name="codigo_banco_fk", type="integer", nullable=true)
      */    
     private $codigoBancoFk;      
@@ -96,6 +101,13 @@ class RhuPagoBancoDetalle
      * @ORM\JoinColumn(name="codigo_banco_fk", referencedColumnName="codigo_banco_pk")
      */
     protected $bancoRel; 
+
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="pagosBancosDetallesEmpleadoRel")
+     * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
+     */
+    protected $empleadoRel;    
+    
 
     /**
      * Get codigoPagoBancoDetallePk
@@ -156,6 +168,54 @@ class RhuPagoBancoDetalle
     }
 
     /**
+     * Set codigoVacacionFk
+     *
+     * @param integer $codigoVacacionFk
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setCodigoVacacionFk($codigoVacacionFk)
+    {
+        $this->codigoVacacionFk = $codigoVacacionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoVacacionFk
+     *
+     * @return integer
+     */
+    public function getCodigoVacacionFk()
+    {
+        return $this->codigoVacacionFk;
+    }
+
+    /**
+     * Set codigoLiquidacionFk
+     *
+     * @param integer $codigoLiquidacionFk
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setCodigoLiquidacionFk($codigoLiquidacionFk)
+    {
+        $this->codigoLiquidacionFk = $codigoLiquidacionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoLiquidacionFk
+     *
+     * @return integer
+     */
+    public function getCodigoLiquidacionFk()
+    {
+        return $this->codigoLiquidacionFk;
+    }
+
+    /**
      * Set numeroIdentificacion
      *
      * @param string $numeroIdentificacion
@@ -201,6 +261,54 @@ class RhuPagoBancoDetalle
     public function getNombreCorto()
     {
         return $this->nombreCorto;
+    }
+
+    /**
+     * Set codigoEmpleadoFk
+     *
+     * @param integer $codigoEmpleadoFk
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setCodigoEmpleadoFk($codigoEmpleadoFk)
+    {
+        $this->codigoEmpleadoFk = $codigoEmpleadoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEmpleadoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEmpleadoFk()
+    {
+        return $this->codigoEmpleadoFk;
+    }
+
+    /**
+     * Set codigoBancoFk
+     *
+     * @param integer $codigoBancoFk
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setCodigoBancoFk($codigoBancoFk)
+    {
+        $this->codigoBancoFk = $codigoBancoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoBancoFk
+     *
+     * @return integer
+     */
+    public function getCodigoBancoFk()
+    {
+        return $this->codigoBancoFk;
     }
 
     /**
@@ -324,27 +432,51 @@ class RhuPagoBancoDetalle
     }
 
     /**
-     * Set codigoBancoFk
+     * Set vacacionRel
      *
-     * @param integer $codigoBancoFk
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionRel
      *
      * @return RhuPagoBancoDetalle
      */
-    public function setCodigoBancoFk($codigoBancoFk)
+    public function setVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionRel = null)
     {
-        $this->codigoBancoFk = $codigoBancoFk;
+        $this->vacacionRel = $vacacionRel;
 
         return $this;
     }
 
     /**
-     * Get codigoBancoFk
+     * Get vacacionRel
      *
-     * @return integer
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuVacacion
      */
-    public function getCodigoBancoFk()
+    public function getVacacionRel()
     {
-        return $this->codigoBancoFk;
+        return $this->vacacionRel;
+    }
+
+    /**
+     * Set liquidacionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionRel
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setLiquidacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionRel = null)
+    {
+        $this->liquidacionRel = $liquidacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get liquidacionRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion
+     */
+    public function getLiquidacionRel()
+    {
+        return $this->liquidacionRel;
     }
 
     /**
@@ -372,98 +504,26 @@ class RhuPagoBancoDetalle
     }
 
     /**
-     * Set codigoVacacionFk
+     * Set empleadoRel
      *
-     * @param integer $codigoVacacionFk
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
      *
      * @return RhuPagoBancoDetalle
      */
-    public function setCodigoVacacionFk($codigoVacacionFk)
+    public function setEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel = null)
     {
-        $this->codigoVacacionFk = $codigoVacacionFk;
+        $this->empleadoRel = $empleadoRel;
 
         return $this;
     }
 
     /**
-     * Get codigoVacacionFk
+     * Get empleadoRel
      *
-     * @return integer
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado
      */
-    public function getCodigoVacacionFk()
+    public function getEmpleadoRel()
     {
-        return $this->codigoVacacionFk;
-    }
-
-    /**
-     * Set vacacionRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionRel
-     *
-     * @return RhuPagoBancoDetalle
-     */
-    public function setVacacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionRel = null)
-    {
-        $this->vacacionRel = $vacacionRel;
-
-        return $this;
-    }
-
-    /**
-     * Get vacacionRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuVacacion
-     */
-    public function getVacacionRel()
-    {
-        return $this->vacacionRel;
-    }
-
-    /**
-     * Set codigoLiquidacionFk
-     *
-     * @param integer $codigoLiquidacionFk
-     *
-     * @return RhuPagoBancoDetalle
-     */
-    public function setCodigoLiquidacionFk($codigoLiquidacionFk)
-    {
-        $this->codigoLiquidacionFk = $codigoLiquidacionFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoLiquidacionFk
-     *
-     * @return integer
-     */
-    public function getCodigoLiquidacionFk()
-    {
-        return $this->codigoLiquidacionFk;
-    }
-
-    /**
-     * Set liquidacionRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionRel
-     *
-     * @return RhuPagoBancoDetalle
-     */
-    public function setLiquidacionRel(\Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionRel = null)
-    {
-        $this->liquidacionRel = $liquidacionRel;
-
-        return $this;
-    }
-
-    /**
-     * Get liquidacionRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion
-     */
-    public function getLiquidacionRel()
-    {
-        return $this->liquidacionRel;
+        return $this->empleadoRel;
     }
 }

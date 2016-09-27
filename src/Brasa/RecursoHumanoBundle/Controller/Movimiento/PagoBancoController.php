@@ -70,13 +70,16 @@ class PagoBancoController extends Controller
             $arPagoBanco->getFechaAplicacion();
             $arPagoBanco->getFechaTrasmision();
         } else {
+            $arPagoBanco->setFecha(new \DateTime('now'));
             $arPagoBanco->setFechaAplicacion(new \DateTime('now'));
             $arPagoBanco->setFechaTrasmision(new \DateTime('now'));
         }
         $form = $this->createForm(new RhuPagoBancoType, $arPagoBanco);
         $form->handleRequest($request);
-        if ($form->isValid()) {           
+        if ($form->isValid()) {      
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arPagoBanco = $form->getData();
+            $arPagoBanco->setCodigoUsuario($arUsuario->getUsername());
             $em->persist($arPagoBanco);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
@@ -255,12 +258,11 @@ class PagoBancoController extends Controller
                                             $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
                                             $arPagoBancoDetalle->setPagoBancoRel($arPagoBanco);
                                             $arPagoBancoDetalle->setPagoRel($arPago);
-                                            $arPagoBancoDetalle->setNumeroIdentificacion($arPago->getEmpleadoRel()->getNumeroIdentificacion());
-                                            $arPagoBancoDetalle->setNombreCorto($arPago->getEmpleadoRel()->getNombreCorto());
                                             $arPagoBancoDetalle->setCuenta($arPago->getEmpleadoRel()->getCuenta());
                                             $valorPagar = round($arPago->getVrNeto());
                                             $arPagoBancoDetalle->setVrPago($valorPagar);
                                             $arPagoBancoDetalle->setBancoRel($arPago->getEmpleadoRel()->getBancoRel());                                        
+                                            $arPagoBancoDetalle->setEmpleadoRel($arPago->getEmpleadoRel());
                                             $em->persist($arPagoBancoDetalle); 
                                             $arPago->setEstadoPagadoBanco(1);
                                             $em->persist($arPago);                            
@@ -282,13 +284,11 @@ class PagoBancoController extends Controller
                                     $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
                                     $arPagoBancoDetalle->setPagoBancoRel($arPagoBanco);
                                     $arPagoBancoDetalle->setPagoRel($arPago);
-                                    $arPagoBancoDetalle->setNumeroIdentificacion($arPago->getEmpleadoRel()->getNumeroIdentificacion());
-                                    $arPagoBancoDetalle->setNombreCorto($arPago->getEmpleadoRel()->getNombreCorto());
-                                    $arPagoBancoDetalle->setCodigoBancoFk($arPago->getEmpleadoRel()->getCodigoBancoFk());
                                     $arPagoBancoDetalle->setCuenta($arPago->getEmpleadoRel()->getCuenta());
                                     $valorPagar = round($arPago->getVrNeto());
                                     $arPagoBancoDetalle->setVrPago($valorPagar); 
                                     $arPagoBancoDetalle->setBancoRel($arPago->getEmpleadoRel()->getBancoRel());                                        
+                                    $arPagoBancoDetalle->setEmpleadoRel($arPago->getEmpleadoRel());
                                     $em->persist($arPagoBancoDetalle); 
                                     $arPago->setEstadoPagadoBanco(1);
                                     $em->persist($arPago);                            
@@ -369,13 +369,11 @@ class PagoBancoController extends Controller
                                 $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
                                 $arPagoBancoDetalle->setPagoBancoRel($arPagoBanco);
                                 $arPagoBancoDetalle->setVacacionRel($arVacacion);
-                                $arPagoBancoDetalle->setNumeroIdentificacion($arVacacion->getEmpleadoRel()->getNumeroIdentificacion());
-                                $arPagoBancoDetalle->setNombreCorto($arVacacion->getEmpleadoRel()->getNombreCorto());
-                                $arPagoBancoDetalle->setCodigoBancoFk($arVacacion->getEmpleadoRel()->getCodigoBancoFk());
                                 $arPagoBancoDetalle->setCuenta($arVacacion->getEmpleadoRel()->getCuenta());
                                 $valorPagar = round($arVacacion->getVrVacacion());
                                 $arPagoBancoDetalle->setVrPago($valorPagar); 
                                 $arPagoBancoDetalle->setBancoRel($arVacacion->getEmpleadoRel()->getBancoRel());                                        
+                                $arPagoBancoDetalle->setEmpleadoRel($arVacacion->getEmpleadoRel());
                                 $em->persist($arPagoBancoDetalle); 
                                 $arVacacion->setEstadoPagoBanco(1);
                                 $em->persist($arVacacion);                            
@@ -420,13 +418,11 @@ class PagoBancoController extends Controller
                                 $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
                                 $arPagoBancoDetalle->setPagoBancoRel($arPagoBanco);
                                 $arPagoBancoDetalle->setLiquidacionRel($arLiquidacion);
-                                $arPagoBancoDetalle->setNumeroIdentificacion($arLiquidacion->getEmpleadoRel()->getNumeroIdentificacion());
-                                $arPagoBancoDetalle->setNombreCorto($arLiquidacion->getEmpleadoRel()->getNombreCorto());
-                                $arPagoBancoDetalle->setCodigoBancoFk($arLiquidacion->getEmpleadoRel()->getCodigoBancoFk());
                                 $arPagoBancoDetalle->setCuenta($arLiquidacion->getEmpleadoRel()->getCuenta());
                                 $valorPagar = round($arLiquidacion->getVrTotal());
                                 $arPagoBancoDetalle->setVrPago($valorPagar); 
                                 $arPagoBancoDetalle->setBancoRel($arLiquidacion->getEmpleadoRel()->getBancoRel());                                        
+                                $arPagoBancoDetalle->setEmpleadoRel($arLiquidacion->getEmpleadoRel());
                                 $em->persist($arPagoBancoDetalle); 
                                 $arLiquidacion->setEstadoPagoBanco(1);
                                 $em->persist($arLiquidacion);                            

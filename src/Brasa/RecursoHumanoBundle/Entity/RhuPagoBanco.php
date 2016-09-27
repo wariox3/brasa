@@ -23,6 +23,11 @@ class RhuPagoBanco
     private $codigoPagoBancoTipoFk;    
     
     /**
+     * @ORM\Column(name="fecha", type="date", nullable=true)
+     */    
+    private $fecha;     
+    
+    /**
      * @ORM\Column(name="fecha_trasmision", type="date", nullable=true)
      */    
     private $fechaTrasmision;    
@@ -66,6 +71,16 @@ class RhuPagoBanco
      * @ORM\Column(name="estado_impreso", type="boolean")
      */
     private $estadoImpreso = 0;    
+    
+    /**
+     * @ORM\Column(name="estado_contabilizado", type="boolean")
+     */
+    private $estadoContabilizado = 0;     
+    
+    /**
+     * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
+     */    
+    private $codigoUsuario;    
     
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCuenta", inversedBy="rhuPagosBancosCuentaRel")
@@ -424,5 +439,77 @@ class RhuPagoBanco
     public function getPagosBancosDetallesPagoBancoRel()
     {
         return $this->pagosBancosDetallesPagoBancoRel;
+    }
+
+    /**
+     * Set estadoContabilizado
+     *
+     * @param boolean $estadoContabilizado
+     *
+     * @return RhuPagoBanco
+     */
+    public function setEstadoContabilizado($estadoContabilizado)
+    {
+        $this->estadoContabilizado = $estadoContabilizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoContabilizado
+     *
+     * @return boolean
+     */
+    public function getEstadoContabilizado()
+    {
+        return $this->estadoContabilizado;
+    }
+
+    /**
+     * Set fecha
+     *
+     * @param \DateTime $fecha
+     *
+     * @return RhuPagoBanco
+     */
+    public function setFecha($fecha)
+    {
+        $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    /**
+     * Get fecha
+     *
+     * @return \DateTime
+     */
+    public function getFecha()
+    {
+        return $this->fecha;
+    }
+
+    /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuPagoBanco
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
     }
 }

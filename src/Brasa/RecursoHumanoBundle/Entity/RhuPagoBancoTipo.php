@@ -23,6 +23,11 @@ class RhuPagoBancoTipo
     private $nombre;
 
     /**
+     * @ORM\Column(name="codigo_cuenta_fk", type="string", length=20, nullable=true)
+     */     
+    private $codigoCuentaFk;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuPagoBanco", mappedBy="pagoBancoTipoRel")
      */
     protected $pagosBancosPagoBancoTipoRel;     
@@ -102,5 +107,29 @@ class RhuPagoBancoTipo
     public function getPagosBancosPagoBancoTipoRel()
     {
         return $this->pagosBancosPagoBancoTipoRel;
+    }
+
+    /**
+     * Set codigoCuentaFk
+     *
+     * @param string $codigoCuentaFk
+     *
+     * @return RhuPagoBancoTipo
+     */
+    public function setCodigoCuentaFk($codigoCuentaFk)
+    {
+        $this->codigoCuentaFk = $codigoCuentaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCuentaFk
+     *
+     * @return string
+     */
+    public function getCodigoCuentaFk()
+    {
+        return $this->codigoCuentaFk;
     }
 }
