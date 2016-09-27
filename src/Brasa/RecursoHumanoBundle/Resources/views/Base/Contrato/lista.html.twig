@@ -98,7 +98,7 @@
                             <td style="text-align: right">{{ arContratos.vrSalario | number_format(0, '.', ',') }}</td>                            
                             <td>{% if arContratos.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>
                             <td>{{ arContratos.fechaUltimoPagoVacaciones |date("Y/m/d")  }}</td>
-                            {% if arContratos.indefinido == 1 %}
+                            {% if arContratos.estadoTerminado == 0 %}
                                 <td style="text-align: center"><a class="btn btn-default btn-xs" id="{{ path('brs_rhu_contratos_terminar', { 'codigoContrato': arContratos.codigoContratoPk}) }}" style="float:left">Terminar</a></td>                                
                                 <td style="text-align: center"><a class="btn btn-default btn-xs" id="{{ path('brs_rhu_contratos_cambiotipocontrato', { 'codigoContrato': arContratos.codigoContratoPk}) }}" style="float:left">Cambio contrato</a></td>                                
                                 <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_contratos_nuevo', { 'codigoContrato': arContratos.codigoContratoPk,  'codigoEmpleado': arContratos.codigoEmpleadoFk}) }}', 'AgregarContrato', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                                            

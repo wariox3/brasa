@@ -203,6 +203,15 @@ class ProvisionController extends Controller
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_rhu_proceso_provision'));                
             }
+            if($request->request->get('OpCerrar')) {
+                $codigoProvisionPeriodo = $request->request->get('OpCerrar');
+                $arProvisionPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuProvisionPeriodo();
+                $arProvisionPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuProvisionPeriodo')->find($codigoProvisionPeriodo);                
+                $arProvisionPeriodo->setEstadoCerrado(1);               
+                $em->persist($arProvisionPeriodo);
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_rhu_proceso_provision'));                
+            }            
             if($request->request->get('OpExcel')) {
                 set_time_limit(0);
                 ini_set("memory_limit", -1); 

@@ -98,6 +98,11 @@ class RhuProvisionPeriodo
     private $estadoGenerado = 0;    
     
     /**
+     * @ORM\Column(name="estado_cerrado", type="boolean")
+     */    
+    private $estadoCerrado = 0;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuProvision", mappedBy="provisionPeriodoRel")
      */
     protected $provisionesProvisionPeriodoRel;      
@@ -535,5 +540,29 @@ class RhuProvisionPeriodo
     public function getVrIngresoBasePrestacion()
     {
         return $this->vrIngresoBasePrestacion;
+    }
+
+    /**
+     * Set estadoCerrado
+     *
+     * @param boolean $estadoCerrado
+     *
+     * @return RhuProvisionPeriodo
+     */
+    public function setEstadoCerrado($estadoCerrado)
+    {
+        $this->estadoCerrado = $estadoCerrado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCerrado
+     *
+     * @return boolean
+     */
+    public function getEstadoCerrado()
+    {
+        return $this->estadoCerrado;
     }
 }
