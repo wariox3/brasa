@@ -62,7 +62,12 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         $this->SetFont('Arial', 'B', 8);
         $this->Cell(35, 5, "SUBZONA:", 1, 0, 'L', 1);
         $this->SetFont('Arial', '', 7);
-        $this->Cell(95, 5, utf8_decode($arLiquidacion->getEmpleadoRel()->getSubzonaRel()->getNombre()), 1, 0, 'L', 1);
+        $subzona = "";
+        if($arLiquidacion->getEmpleadoRel()->getCodigoSubzonaFk()) {
+            $subzona = $arLiquidacion->getEmpleadoRel()->getSubzonaRel()->getNombre();
+        }
+           
+        $this->Cell(95, 5, utf8_decode($subzona), 1, 0, 'L', 1);
         //FILA 2
         $intY += 5;
         $this->SetFont('Arial', 'B', 8);
