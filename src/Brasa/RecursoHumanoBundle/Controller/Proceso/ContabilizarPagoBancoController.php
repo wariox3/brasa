@@ -57,6 +57,7 @@ class ContabilizarPagoBancoController extends Controller
                                     $arTercero->setTelefono($arPagoBancoDetalle->getEmpleadoRel()->getTelefono());
                                     $arTercero->setCelular($arPagoBancoDetalle->getEmpleadoRel()->getCelular());
                                     $arTercero->setEmail($arPagoBancoDetalle->getEmpleadoRel()->getCorreo());
+                                    $em->persist($arTercero);
                                 }                                
                                 $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arPagoBanco->getPagoBancoTipoRel()->getCodigoCuentaFk());                                                                                            
@@ -73,7 +74,7 @@ class ContabilizarPagoBancoController extends Controller
                                 //Banco
                                 $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro(); 
                                 $codigoCuenta = $arPagoBanco->getCuentaRel()->getCodigoCuentaFk();
-                                $arCuentaBanco = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find(1105);                            
+                                $arCuentaBanco = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($codigoCuenta);                            
                                 $arRegistro->setComprobanteRel($arComprobanteContable);                                
                                 $arRegistro->setCuentaRel($arCuentaBanco);
                                 $arRegistro->setTerceroRel($arTercero);
@@ -86,15 +87,15 @@ class ContabilizarPagoBancoController extends Controller
                                 
                             }                            
                         }
-                        //$arPagoBanco->setEstadoContabilizado(1);
-                        //$em->persist($arPagoBanco);
+                        $arPagoBanco->setEstadoContabilizado(1);
+                        $em->persist($arPagoBanco);
                     }
                     $em->flush();
                 }
             }            
         }       
                 
-        $arPagosBanco = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);                               
+        $arPagosBanco = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 300);                               
         return $this->render('BrasaRecursoHumanoBundle:Procesos/Contabilizar:pagoBanco.html.twig', array(
             'arPagosBanco' => $arPagosBanco,
             'form' => $form->createView()));
