@@ -36,11 +36,11 @@ class RhuProvisionRepository extends EntityRepository {
                 $contabilizado = False;
                 $arProvisionContabilizado = $em->getRepository('BrasaRecursoHumanoBundle:RhuProvision')->findBy(array('codigoProvisionPeriodoFk' => $codigo, 'estadoContabilizado' => 1));
                 if ($arProvisionContabilizado){
-                    $mensaje = "No se puede eliminar la provision ". $codigo.", tiene registros contabilizados! <br>";
+                    $mensaje = "No se puede eliminar la provision ". $codigo.", tiene registros contabilizados!";
                 } else {
                     $arProvisionPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuProvisionPeriodo')->find($codigo);
                     if ($arProvisionPeriodo->getEstadoGenerado() == 1){
-                        $mensaje = "No se puede eliminar la provision ". $codigo.", tiene registros generados! ";
+                        $mensaje = "No se puede eliminar la provision ". $codigo.", tiene registros generados!";
                     } else {
                         $em->remove($arProvisionPeriodo);
                     }
