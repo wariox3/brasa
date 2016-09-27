@@ -220,8 +220,7 @@ class ProvisionController extends Controller
             }
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $respuesta = $em->getRepository('BrasaRecursoHumanoBundle:RhuProvision')->eliminar($arrSeleccionados);
-                
+                $respuesta = $em->getRepository('BrasaRecursoHumanoBundle:RhuProvision')->eliminar($arrSeleccionados);                
                 if ($respuesta != ''){
                     $objMensaje->Mensaje('error', $respuesta, $this);
                 }

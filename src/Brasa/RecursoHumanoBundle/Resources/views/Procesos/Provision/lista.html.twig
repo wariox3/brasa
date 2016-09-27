@@ -20,6 +20,12 @@
                 <th>PRIMAS</th>
                 <th>VACACIONES</th>
                 <th>INDEMNIZACION</th>
+                <th>PENSION</th>
+                <th>SALUD</th>
+                <th>RIESGOS</th>
+                <th>CAJA</th>
+                <th>SENA</th>
+                <th>ICBF</th>                
                 <th></th>
                 <th></th>
                 <th></th>
@@ -38,6 +44,12 @@
                 <td style="text-align: right">{{ arProvisionPeriodo.vrPrimas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arProvisionPeriodo.vrVacaciones | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arProvisionPeriodo.vrIndemnizacion | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProvisionPeriodo.vrPension | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProvisionPeriodo.vrSalud | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProvisionPeriodo.vrRiesgos | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProvisionPeriodo.vrCaja | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProvisionPeriodo.vrSena | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProvisionPeriodo.vrIcbf | number_format(0, '.', ',') }}</td>                
                 <td>{% if arProvisionPeriodo.estadoGenerado == 0 %}<button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arProvisionPeriodo.codigoProvisionPeriodoPk }}">Generar</button>{% endif %}</td>
                 <td>{% if arProvisionPeriodo.estadoGenerado == 1 and arProvisionPeriodo.estadoCerrado == 0 %}<button class="btn btn-default btn-xs" type="submit" name="OpDeshacer" value="{{ arProvisionPeriodo.codigoProvisionPeriodoPk }}">Deshacer</button>{% endif %}</td>
                 <td>{% if arProvisionPeriodo.estadoGenerado == 1 and arProvisionPeriodo.estadoCerrado == 0 %}<button class="btn btn-default btn-xs" type="submit" name="OpCerrar" value="{{ arProvisionPeriodo.codigoProvisionPeriodoPk }}">Cerrar</button>{% endif %}</td>
