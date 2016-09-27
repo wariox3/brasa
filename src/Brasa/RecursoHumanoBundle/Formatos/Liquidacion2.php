@@ -1,6 +1,6 @@
 <?php
 namespace Brasa\RecursoHumanoBundle\Formatos;
-class FormatoLiquidacion extends \FPDF_FPDF {
+class Liquidacion2 extends \FPDF_FPDF {
     public static $em;
     public static $codigoLiquidacion;
 
@@ -9,7 +9,7 @@ class FormatoLiquidacion extends \FPDF_FPDF {
         $em = $miThis->getDoctrine()->getManager();
         self::$em = $em;
         self::$codigoLiquidacion = $codigoLiquidacion;
-        $pdf = new FormatoLiquidacion();
+        $pdf = new Liquidacion2();
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);

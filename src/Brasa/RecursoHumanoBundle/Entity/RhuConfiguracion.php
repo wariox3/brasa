@@ -252,6 +252,11 @@ class RhuConfiguracion
     private $codigoFormatoPago = 0;    
     
     /**
+     * @ORM\Column(name="codigo_formato_liquidacion", type="integer")
+     */    
+    private $codigoFormatoLiquidacion = 0;     
+    
+    /**
      * Tipo de base para la liquidacion de vacaciones 1-salario 2-salario+prestaciones 3-salario+recargos
      * @ORM\Column(name="tipo_base_pago_vacaciones", type="integer")
      */
@@ -1465,5 +1470,29 @@ class RhuConfiguracion
     public function getCodigoFormatoPago()
     {
         return $this->codigoFormatoPago;
+    }
+
+    /**
+     * Set codigoFormatoLiquidacion
+     *
+     * @param integer $codigoFormatoLiquidacion
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoFormatoLiquidacion($codigoFormatoLiquidacion)
+    {
+        $this->codigoFormatoLiquidacion = $codigoFormatoLiquidacion;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFormatoLiquidacion
+     *
+     * @return integer
+     */
+    public function getCodigoFormatoLiquidacion()
+    {
+        return $this->codigoFormatoLiquidacion;
     }
 }

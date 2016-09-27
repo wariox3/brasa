@@ -88,8 +88,16 @@ class LiquidacionController extends Controller
         if($form->isValid()) {
             if($form->get('BtnImprimir')->isClicked()) {
                 if($arLiquidacion->getEstadoGenerado() == 1) {
-                $objFormatoLiquidacion = new \Brasa\RecursoHumanoBundle\Formatos\FormatoLiquidacion();
-                $objFormatoLiquidacion->Generar($this, $codigoLiquidacion);
+                    $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+                    $codigoFormato = $arConfiguracion->getCodigoFormatoLiquidacion();
+                    if($codigoFormato <= 1) {
+                        $objFormatoLiquidacion = new \Brasa\RecursoHumanoBundle\Formatos\Liquidacion1();
+                        $objFormatoLiquidacion->Generar($this, $codigoLiquidacion);                                          
+                    }
+                    if($codigoFormato == 2) {
+                        $objFormatoLiquidacion = new \Brasa\RecursoHumanoBundle\Formatos\Liquidacion2();
+                        $objFormatoLiquidacion->Generar($this, $codigoLiquidacion);                                     
+                }                                       
                 }
             }
             if($form->get('BtnAutorizar')->isClicked()) {
