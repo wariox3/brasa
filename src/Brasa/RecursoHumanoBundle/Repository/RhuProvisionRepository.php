@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuProvisionRepository extends EntityRepository {
+    
     public function listaDql($codigoProvisionPeriodo = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT p FROM BrasaRecursoHumanoBundle:RhuProvision p WHERE p.codigoProvisionPk <> 0";
@@ -25,5 +26,27 @@ class RhuProvisionRepository extends EntityRepository {
         $dql   = "SELECT p FROM BrasaRecursoHumanoBundle:RhuProvision p JOIN p.provisionPeriodoRel pp WHERE pp.estadoGenerado = 1 AND p.estadoContabilizado = 0 ";
         $dql .= " ORDER BY p.codigoProvisionPk ASC";
         return $dql;
-    }     
+    }
+    
+    public function eliminar($arrSeleccionados) {        
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigo) {
+                $contabilizado = False;
+                $arProvisionContabilizado = $em->getRepository('BrasaRecursoHumanoBundle:RhuProvision')->findBy(array('codigoProvisionPeriodoFk' => $codigo, 'estadoContabilizado' => 1));
+                if ($arProvisionContabilizado){
+                    echo "No se puede eliminar la provision ". $codigo.", tiene registros contabilizados! <br>";
+                } else {
+                    $arProvisionPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuProvisionPeriodo')->find($codigo);
+                    if ($arProvisionPeriodo->getEstadoGenerado() == 1){
+                        $arProvisionEliminar = $em->getRepository('BrasaRecursoHumanoBundle:RhuProvision')->findBy(array('codigoProvisionPeriodoFk' => $codigo));
+                        $em->remove($arProvisionEliminar);
+                    }
+                    $em->remove($arProvisionPeriodo);
+                }  
+            }
+            $em->flush();
+        }    
+    }
+    
 }

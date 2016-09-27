@@ -29,6 +29,7 @@
                 <th></th>
                 <th></th>
                 <th></th>
+                <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
             </tr>
             {% for arProvisionPeriodo in arProvisionPeriodo %}
             <tr>
@@ -51,9 +52,18 @@
                 <td>{% if arProvisionPeriodo.estadoGenerado == 0 %}<button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arProvisionPeriodo.codigoProvisionPeriodoPk }}">Generar</button>{% endif %}</td>
                 <td>{% if arProvisionPeriodo.estadoGenerado == 1 %}<button class="btn btn-default btn-xs" type="submit" name="OpDeshacer" value="{{ arProvisionPeriodo.codigoProvisionPeriodoPk }}">Deshacer</button>{% endif %}</td>
                 <td>{% if arProvisionPeriodo.estadoGenerado == 1 %}<button class="btn btn-default btn-xs" type="submit" name="OpExcel" value="{{ arProvisionPeriodo.codigoProvisionPeriodoPk }}">Excel</button>{% endif %}</td>                
+                <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arProvisionPeriodo.codigoProvisionPeriodoPk }}" /></td>
             </tr>
             {% endfor %}
         </table>
+        <div class="btn-toolbar" style="float: right">                 
+            <div class="btn-group">                
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_proceso_provision_nuevo') }}', 'NuevoPeriodo', 400, 500)" >Nuevo</a>
+            </div>
+            <div class="btn-group">
+                {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                               
+            </div>
+        </div>
         {{ form_rest(form) }}
     {{ form_end(form) }}
 

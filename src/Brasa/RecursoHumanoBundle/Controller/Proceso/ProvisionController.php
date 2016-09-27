@@ -206,18 +206,59 @@ class ProvisionController extends Controller
                 ini_set("memory_limit", -1); 
                 $codigoProvisionPeriodo = $request->request->get('OpExcel');
                 $this->generarExcel($codigoProvisionPeriodo);
-            }            
+            }
+            if ($form->get('BtnEliminar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuProvision')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_rhu_proceso_provision'));
+            }
         }       
         $dql = $em->getRepository('BrasaRecursoHumanoBundle:RhuProvisionPeriodo')->listaDql(); 
         $arProvisionPeriodo = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 300);                               
         return $this->render('BrasaRecursoHumanoBundle:Procesos/Provision:lista.html.twig', array(
             'arProvisionPeriodo' => $arProvisionPeriodo,
             'form' => $form->createView()));
-    }          
+    }
+    
+    /**
+     * @Route("/rhu/proceso/provision/nuevo/", name="brs_rhu_proceso_provision_nuevo")
+     */
+    public function nuevoAction() {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $dateFecha = new \DateTime('now');
+        $strFechaDesde = $dateFecha->format('Y/m/')."01";
+        $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
+        $strFechaHasta = $dateFecha->format('Y/m/').$intUltimoDia;
+        $dateFechaDesde = date_create($strFechaDesde);
+        $dateFechaHasta = date_create($strFechaHasta);
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))    
+            ->getForm();
+        $form->handleRequest($request); 
+        if ($form->isValid()) {
+            if ($form->get('BtnGuardar')->isClicked()) {
+
+                $arProvisionPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuProvisionPeriodo();
+                $arProvisionPeriodo->setFechaDesde($form->get('fechaDesde')->getData());
+                $arProvisionPeriodo->setFechaHasta($form->get('fechaHasta')->getData());
+                $em->persist($arProvisionPeriodo); 
+                $em->flush();
+
+            }            
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+            
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Procesos/Provision:nuevo.html.twig', array(
+            //'arProvisionPeriodo' => $arProvisionPeriodo,
+            'form' => $form->createView()));
+    }    
     
     private function formularioLista() {
         $form = $this->createFormBuilder()                        
-            
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))            
             ->getForm();        
         return $form;
     }                  
