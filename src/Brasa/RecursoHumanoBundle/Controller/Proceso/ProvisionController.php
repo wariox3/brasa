@@ -14,10 +14,12 @@ class ProvisionController extends Controller
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 63)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
-        $paginator  = $this->get('knp_paginator');        
+        $paginator  = $this->get('knp_paginator');
+        $respuesta = '';
         $form = $this->formularioLista();
         $form->handleRequest($request);
         if($form->isValid()) {            
@@ -209,7 +211,11 @@ class ProvisionController extends Controller
             }
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuProvision')->eliminar($arrSeleccionados);
+                $respuesta = $em->getRepository('BrasaRecursoHumanoBundle:RhuProvision')->eliminar($arrSeleccionados);
+                
+                if ($respuesta != ''){
+                    $objMensaje->Mensaje('error', $respuesta, $this);
+                }
                 return $this->redirect($this->generateUrl('brs_rhu_proceso_provision'));
             }
         }       

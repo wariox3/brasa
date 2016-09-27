@@ -34,7 +34,7 @@ class CtbTercero
     private $digitoVerificacion;     
     
     /**
-     * @ORM\Column(name="nombre_corto", type="string", length=120)
+     * @ORM\Column(name="nombre_corto", type="string", length=300)
      */
     private $nombreCorto;   
     
@@ -59,7 +59,7 @@ class CtbTercero
     private $apellido2;
     
     /**
-     * @ORM\Column(name="razon_social", type="string", length=250, nullable=true)
+     * @ORM\Column(name="razon_social", type="string", length=300, nullable=true)
      */
     private $razonSocial;
 
@@ -111,6 +111,7 @@ class CtbTercero
      */
     protected $asientosDetallesTerceroRel;
            
+    
     /**
      * Constructor
      */
