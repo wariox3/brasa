@@ -25,6 +25,8 @@ class ConfiguracionController extends Controller
         $arConsecutivo = $em->getRepository('BrasaRecursoHumanoBundle:RhuConsecutivo')->findAll();
         $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
         $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->findAll();
+        $arConfiguracionProvision = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracionProvision();
+        $arConfiguracionProvision = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionProvision')->findAll();
         $arrayPropiedadesConceptoAuxilioTransporte = array(
             'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
             'query_builder' => function (EntityRepository $er) {
@@ -158,6 +160,7 @@ class ConfiguracionController extends Controller
             ->add('conceptoVacacion', 'entity', $arrayPropiedadesConceptoVacacion, array('required' => true))
             ->add('afectaVacacionesParafiscales', 'checkbox', array('data' => $arConfiguracion->getAfectaVacacionesParafiscales(), 'required' => false))    
             ->add('guardar', 'submit', array('label' => 'Actualizar'))
+            //->add('guardarProvision', 'submit', array('label' => 'Actualizar'))
             ->getForm();
         $formConfiguracion->handleRequest($request);
         if ($formConfiguracion->isValid()) {
@@ -220,6 +223,27 @@ class ConfiguracionController extends Controller
                         }
                         $intIndiceConsecutivo++;
                     }
+                    
+                    //provision
+            $intCodigoProvision = 0;
+                    foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                        $arConfiguracionProvision = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracionProvision();
+                        $arConfiguracionProvision = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionProvision')->find($intCodigo);
+                        if(count($arConfiguracionProvision) > 0) {
+                                $intCuenta = $arrControles['TxtCuenta'.$intCodigo];
+                                $arConfiguracionProvision->setCodigoCuentaFk($intCuenta);
+                                $intTipoCuenta = $arrControles['TxtTipoCuenta'.$intCodigo];
+                                $arConfiguracionProvision->setTipoCuenta($intTipoCuenta);
+                                $intCuentaOperacion = $arrControles['TxtCuentaOperacion'.$intCodigo];
+                                $arConfiguracionProvision->setCodigoCuentaOperacionFk($intCuentaOperacion);
+                                $intCuentaComercial = $arrControles['TxtCuentaComercial'.$intCodigo];
+                                $arConfiguracionProvision->setCodigoCuentaComercialFk($intCuentaComercial);
+                                $em->persist($arConfiguracionProvision);
+                        }
+                        $intCodigoProvision++;
+                    }
+                    //fin provision
+                    
             $arCuentaNominaPagar = new \Brasa\ContabilidadBundle\Entity\CtbCuenta();
             $arCuentaNominaPagar = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuentaNominaPagar);        
             if ($arCuentaNominaPagar == null){
@@ -242,7 +266,8 @@ class ConfiguracionController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Configuracion:Configuracion.html.twig', array(
             'formConfiguracion' => $formConfiguracion->createView(),
             'arConsecutivo' => $arConsecutivo,
-            'arPagoConcepto' => $arPagoConcepto
+            'arPagoConcepto' => $arPagoConcepto,
+            'arConfiguracionProvision' => $arConfiguracionProvision
         ));
     }
 
