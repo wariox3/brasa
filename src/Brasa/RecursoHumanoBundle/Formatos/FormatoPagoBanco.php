@@ -115,8 +115,8 @@ class FormatoPagoBanco extends \FPDF_FPDF {
         foreach ($arPagoBancoDetalles as $arPagoBancoDetalle) {            
             $pdf->Cell(20, 4, $arPagoBancoDetalle->getCodigoPagoBancoDetallePk(), 1, 0, 'L');
             $pdf->Cell(25, 4, $arPagoBancoDetalle->getPagoBancoRel()->getPagoBancoTipoRel()->getNombre(), 1, 0, 'L');
-            $pdf->Cell(25, 4, $arPagoBancoDetalle->getNumeroIdentificacion(), 1, 0, 'L');
-            $pdf->Cell(105, 4, utf8_decode($arPagoBancoDetalle->getNombreCorto()), 1, 0, 'L');
+            $pdf->Cell(25, 4, $arPagoBancoDetalle->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
+            $pdf->Cell(105, 4, utf8_decode($arPagoBancoDetalle->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');
             $pdf->Cell(15, 4, number_format($arPagoBancoDetalle->getVrPago(), 0, '.', ','), 1, 0, 'R');
             $var += $arPagoBancoDetalle->getVrPago();
             $pdf->Ln();

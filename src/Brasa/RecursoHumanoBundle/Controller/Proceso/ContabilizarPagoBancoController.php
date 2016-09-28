@@ -77,7 +77,7 @@ class ContabilizarPagoBancoController extends Controller
                                 $arCuentaBanco = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($codigoCuenta);                            
                                 $arRegistro->setComprobanteRel($arComprobanteContable);                                
                                 $arRegistro->setCuentaRel($arCuentaBanco);
-                                $arRegistro->setTerceroRel($arTercero);
+                                //$arRegistro->setTerceroRel($arTercero);
                                 $arRegistro->setNumero($arPagoBanco->getCodigoPagoBancoPk());
                                 $arRegistro->setNumeroReferencia($arPagoBanco->getCodigoPagoBancoPk());                                                                
                                 $arRegistro->setFecha($arPagoBancoDetalle->getPagoBancoRel()->getFechaAplicacion());

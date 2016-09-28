@@ -35,17 +35,7 @@ class RhuPagoBancoDetalle
     /**
      * @ORM\Column(name="codigo_liquidacion_fk", type="integer", nullable=true)
      */    
-    private $codigoLiquidacionFk;    
-    
-    /**
-     * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false)
-     */         
-    private $numeroIdentificacion;    
-    
-    /**
-     * @ORM\Column(name="nombre_corto", type="string", length=80, nullable=true)
-     */    
-    private $nombreCorto;    
+    private $codigoLiquidacionFk;           
     
     /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
@@ -108,6 +98,8 @@ class RhuPagoBancoDetalle
      */
     protected $empleadoRel;    
     
+
+
 
     /**
      * Get codigoPagoBancoDetallePk
@@ -213,54 +205,6 @@ class RhuPagoBancoDetalle
     public function getCodigoLiquidacionFk()
     {
         return $this->codigoLiquidacionFk;
-    }
-
-    /**
-     * Set numeroIdentificacion
-     *
-     * @param string $numeroIdentificacion
-     *
-     * @return RhuPagoBancoDetalle
-     */
-    public function setNumeroIdentificacion($numeroIdentificacion)
-    {
-        $this->numeroIdentificacion = $numeroIdentificacion;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroIdentificacion
-     *
-     * @return string
-     */
-    public function getNumeroIdentificacion()
-    {
-        return $this->numeroIdentificacion;
-    }
-
-    /**
-     * Set nombreCorto
-     *
-     * @param string $nombreCorto
-     *
-     * @return RhuPagoBancoDetalle
-     */
-    public function setNombreCorto($nombreCorto)
-    {
-        $this->nombreCorto = $nombreCorto;
-
-        return $this;
-    }
-
-    /**
-     * Get nombreCorto
-     *
-     * @return string
-     */
-    public function getNombreCorto()
-    {
-        return $this->nombreCorto;
     }
 
     /**
