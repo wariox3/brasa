@@ -471,52 +471,52 @@ class PagosAdicionalesController extends Controller
                         $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                         $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($intCodigo);
                         if(count($arProgramacionPagoDetalle) > 0) {
-                            if($arrControles['TxtHN'.$intCodigo] != "" && $arrControles['TxtHN'.$intCodigo] != 0) {
+                            if($arrControles['TxtHN'.$intCodigo] != "" ) {
                                 $intHoras = $arrControles['TxtHN'.$intCodigo];
                                 $arProgramacionPagoDetalle->setHorasNocturnas($intHoras);
                                 $em->persist($arProgramacionPagoDetalle);
                             }
-                            if($arrControles['TxtHFD'.$intCodigo] != "" && $arrControles['TxtHFD'.$intCodigo] != 0) {
+                            if($arrControles['TxtHFD'.$intCodigo] != "" ) {
                                 $intHoras = $arrControles['TxtHFD'.$intCodigo];
                                 $arProgramacionPagoDetalle->setHorasFestivasDiurnas($intHoras);
                                 $em->persist($arProgramacionPagoDetalle);
                             }
-                            if($arrControles['TxtHFN'.$intCodigo] != "" && $arrControles['TxtHFN'.$intCodigo] != 0) {
+                            if($arrControles['TxtHFN'.$intCodigo] != "" ) {
                                 $intHoras = $arrControles['TxtHFN'.$intCodigo];
                                 $arProgramacionPagoDetalle->setHorasFestivasNocturnas($intHoras);
                                 $em->persist($arProgramacionPagoDetalle);
                             }
-                            if($arrControles['TxtHEOD'.$intCodigo] != "" && $arrControles['TxtHEOD'.$intCodigo] != 0) {
+                            if($arrControles['TxtHEOD'.$intCodigo] != "" ) {
                                 $intHoras = $arrControles['TxtHEOD'.$intCodigo];
                                 $arProgramacionPagoDetalle->setHorasExtrasOrdinariasDiurnas($intHoras);
                                 $em->persist($arProgramacionPagoDetalle);
                             }
-                            if($arrControles['TxtHEON'.$intCodigo] != "" && $arrControles['TxtHEON'.$intCodigo] != 0) {
+                            if($arrControles['TxtHEON'.$intCodigo] != "" ) {
                                 $intHoras = $arrControles['TxtHEON'.$intCodigo];
                                 $arProgramacionPagoDetalle->setHorasExtrasOrdinariasNocturnas($intHoras);
                                 $em->persist($arProgramacionPagoDetalle);
                             }
-                            if($arrControles['TxtHEFD'.$intCodigo] != "" && $arrControles['TxtHEFD'.$intCodigo] != 0) {
+                            if($arrControles['TxtHEFD'.$intCodigo] != "" ) {
                                 $intHoras = $arrControles['TxtHEFD'.$intCodigo];
                                 $arProgramacionPagoDetalle->setHorasExtrasFestivasDiurnas($intHoras);
                                 $em->persist($arProgramacionPagoDetalle);
                             }
-                            if($arrControles['TxtHEFN'.$intCodigo] != "" && $arrControles['TxtHEFN'.$intCodigo] != 0) {
+                            if($arrControles['TxtHEFN'.$intCodigo] != "" ) {
                                 $intHoras = $arrControles['TxtHEFN'.$intCodigo];
                                 $arProgramacionPagoDetalle->setHorasExtrasFestivasNocturnas($intHoras);
                                 $em->persist($arProgramacionPagoDetalle);
                             }
-                            if($arrControles['TxtHRN'.$intCodigo] != "" && $arrControles['TxtHRN'.$intCodigo] != 0) {
+                            if($arrControles['TxtHRN'.$intCodigo] != "" ) {
                                 $intHoras = $arrControles['TxtHRN'.$intCodigo];
                                 $arProgramacionPagoDetalle->setHorasRecargoNocturno($intHoras);
                                 $em->persist($arProgramacionPagoDetalle);
                             }
-                            if($arrControles['TxtHRFD'.$intCodigo] != "" && $arrControles['TxtHRFD'.$intCodigo] != 0) {
+                            if($arrControles['TxtHRFD'.$intCodigo] != "" ) {
                                 $intHoras = $arrControles['TxtHRFD'.$intCodigo];
                                 $arProgramacionPagoDetalle->setHorasRecargoFestivoDiurno($intHoras);
                                 $em->persist($arProgramacionPagoDetalle);
                             }
-                            if($arrControles['TxtHRFN'.$intCodigo] != "" && $arrControles['TxtHRFN'.$intCodigo] != 0) {
+                            if($arrControles['TxtHRFN'.$intCodigo] != "" ) {
                                 $intHoras = $arrControles['TxtHRFN'.$intCodigo];
                                 $arProgramacionPagoDetalle->setHorasRecargoFestivoNocturno($intHoras);
                                 $em->persist($arProgramacionPagoDetalle);
