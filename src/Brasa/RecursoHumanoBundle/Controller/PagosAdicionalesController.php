@@ -588,6 +588,7 @@ class PagosAdicionalesController extends Controller
         //$arEmpleados = $paginator->paginate($em->createQuery($this->strDqlListaTiempoSuplementarioMasivo), $request->query->get('page', 1), 50);                               
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:generarMasivoSuplementarioDetalle.html.twig', array(
             'arProgramacionPagoDetalle' => $arProgramacionPagoDetalle,
+            'arProgramacionPago' => $arProgramacionPago,
             'form' => $form->createView()
             ));
     }

@@ -40,90 +40,7 @@ class EstudioController extends Controller
                 $this->filtrar($form);
                 $this->listar();
             }
-            if($form->get('BtnGenerar')->isClicked()) {
-                if(count($arrSelecionados) > 0) {
-                    foreach ($arrSelecionados AS $codigoEstudio) {
-                        $arEstudio = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio();
-                        $arEstudio = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudio')->find($codigoEstudio);
-                        $arEstudio->setCodigoEstudioEstadoFk(1);
-                        $arEstudio->setFechaEstado($form->get('fechaGenerarHoy')->getData());
-                        $arEstudio->setFechaVencimientoAcreditacion(null);
-                        $arEstudio->setCodigoEstudioEstadoInvalidoFk(null);
-                        $em->persist($arEstudio);   
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_estudio_lista'));
-                }
-            }
-            if($form->get('BtnValidado')->isClicked()) {
-                if(count($arrSelecionados) > 0) {
-                    foreach ($arrSelecionados AS $codigoEstudio) {
-                        $arEstudio = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio();
-                        $arEstudio = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudio')->find($codigoEstudio);
-                        $arEstudio->setCodigoEstudioEstadoFk(3);
-                        $arEstudio->setFechaEstado($form->get('fechaValidadoHoy')->getData());
-                        $arEstudio->setFechaVencimientoAcreditacion(null);
-                        $arEstudio->setCodigoEstudioEstadoInvalidoFk(null);
-                        $em->persist($arEstudio);   
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_estudio_lista'));
-                }
-            }
-            if($form->get('BtnAcademia')->isClicked()) {
-                if(count($arrSelecionados) > 0) {
-                    foreach ($arrSelecionados AS $codigoEstudio) {
-                        $arEstudio = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio();
-                        $arEstudio = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudio')->find($codigoEstudio);
-                        $arEstudio->setCodigoEstudioEstadoFk(2);
-                        $arEstudio->setCodigoEstudioEstadoInvalidoFk(1);
-                        $arEstudio->setFechaEstado($form->get('fechaNoValidadoHoy')->getData());
-                        $arEstudio->setFechaEstadoInvalido($form->get('fechaNoValidadoHoy')->getData());
-                        $arEstudio->setFechaVencimientoAcreditacion(null);
-                        $em->persist($arEstudio);   
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_estudio_lista'));
-                }
-            }
-            if($form->get('BtnEmpleador')->isClicked()) {
-                if(count($arrSelecionados) > 0) {
-                    foreach ($arrSelecionados AS $codigoEstudio) {
-                        $arEstudio = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio();
-                        $arEstudio = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudio')->find($codigoEstudio);
-                        $arEstudio->setCodigoEstudioEstadoFk(2);
-                        $arEstudio->setCodigoEstudioEstadoInvalidoFk(2);
-                        $arEstudio->setFechaEstado($form->get('fechaNoValidadoHoy')->getData());
-                        $arEstudio->setFechaEstadoInvalido($form->get('fechaNoValidadoHoy')->getData());
-                        $arEstudio->setFechaVencimientoAcreditacion(null);
-                        $em->persist($arEstudio);   
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_estudio_lista'));
-                }
-            }
-            if($form->get('BtnAcreditado')->isClicked()) {
-                $arrControles = $request->request->All();
-                if(count($arrSelecionados) > 0) {
-                    $intIndice = 0;
-                    foreach ($arrSelecionados AS $codigoEstudio) {
-                        $arEstudio = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudio();
-                        $arEstudio = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudio')->find($codigoEstudio);
-                        $arEstudio->setCodigoEstudioEstadoFk(4);
-                        $arEstudio->setFechaEstado($form->get('fechaAcreditadoHoy')->getData());
-                        $arEstudio->setFechaVencimientoAcreditacion($form->get('fechaVenAcreditacion')->getData());
-                        $arEstudio->setCodigoEstudioEstadoInvalidoFk(null);
-                        if($arrControles['TxtNumeroAcreditacion'.$codigoEstudio] != "" || $arrControles['TxtNumeroAcreditacion'.$codigoEstudio] != 0) {
-                            $numero = $arrControles['TxtNumeroAcreditacion'.$codigoEstudio];
-                            $arEstudio->setNumeroAcreditacion($numero);
-                        }
-                        $em->persist($arEstudio);
-                        $intIndice++;
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_estudio_lista'));
-                }
-            }
+            
             if($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
                 $this->listar();
@@ -314,16 +231,7 @@ class EstudioController extends Controller
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->add('BtnExcelInforme', 'submit', array('label'  => 'Informe'))    
-            ->add('BtnValidado', 'submit', array('label'  => 'Validado'))
-            ->add('BtnGenerar', 'submit', array('label'  => 'Generar solicitud'))    
-            ->add('BtnAcademia', 'submit', array('label'  => 'Por academia'))    
-            ->add('BtnEmpleador', 'submit', array('label'  => 'Por empleador'))    
-            ->add('fechaVenAcreditacion','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => new \DateTime('now'),'attr' => array('class' => 'date',)))    
-            ->add('fechaGenerarHoy','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => new \DateTime('now'),'attr' => array('class' => 'date',)))    
-            ->add('fechaValidadoHoy','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => new \DateTime('now'),'attr' => array('class' => 'date',)))        
-            ->add('fechaNoValidadoHoy','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => new \DateTime('now'),'attr' => array('class' => 'date',)))            
-            ->add('fechaAcreditadoHoy','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => new \DateTime('now'),'attr' => array('class' => 'date',)))                
-            ->add('BtnAcreditado', 'submit', array('label'  => 'Acreditado'))    
+            
             ->getForm();
         return $form;
     }
@@ -358,17 +266,7 @@ class EstudioController extends Controller
         $arrBotonNoValidado = array('label' => 'No validado', 'disabled' => false);
         $arrBotonAcreditado = array('label' => 'Acreditado', 'disabled' => false);
         $form = $this->createFormBuilder()
-            ->add('TxtNumeroAcreditacion', 'text', array('label'  => 'Numero aprobacion', 'required' => false ))    
-            ->add('BtnValidado', 'submit', array('label'  => 'Validado'))
-            ->add('BtnGenerar', 'submit', array('label'  => 'Generar solicitud'))    
-            ->add('BtnAcademia', 'submit', array('label'  => 'Por academia'))    
-            ->add('BtnEmpleador', 'submit', array('label'  => 'Por empleador'))    
-            ->add('fechaVenAcreditacion','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => new \DateTime('now'),'attr' => array('class' => 'date',)))    
-            ->add('fechaGenerarHoy','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => new \DateTime('now'),'attr' => array('class' => 'date',)))    
-            ->add('fechaValidadoHoy','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => new \DateTime('now'),'attr' => array('class' => 'date',)))        
-            ->add('fechaNoValidadoHoy','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => new \DateTime('now'),'attr' => array('class' => 'date',)))            
-            ->add('fechaAcreditadoHoy','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => new \DateTime('now'),'attr' => array('class' => 'date',)))                
-            ->add('BtnAcreditado', 'submit', array('label'  => 'Acreditado'))
+            
                 ->getForm();  
         return $form;
     }

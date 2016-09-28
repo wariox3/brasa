@@ -38,16 +38,6 @@
                     <div class="col-sm-4">                  
                         {{ form_widget(form.empleadoEstudioTipoRel, { 'attr': {'class': 'form-control'} }) }}
                     </div>
-                </div>
-                <div class="form-group form-group-sm">
-                    <label for="form_fechaVencimientoAcreditacion" class="col-sm-2 control-label">F. ven acreditación:</label>
-                    <div class="col-sm-4">
-                        {{ form_widget(form.fechaVencimientoAcreditacion, {'attr': {'maxlength' : 10} }) }} 
-                    </div>
-                    <label for="form_estudioEstadoRel" class="col-sm-2 control-label">Estado:</label>
-                    <div class="col-sm-4">                  
-                        {{ form_widget(form.estudioEstadoRel, { 'attr': {'class': 'form-control'} }) }}
-                    </div>
                 </div>    
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
@@ -67,10 +57,6 @@
                 <th>FECHA INICIO</th>
                 <th>FECHA TERMINACIÓN</th>
                 <th>FECHA VEN CURSO/ESTUDIO</th>
-                <th>FECHA VEN ACREDITACIÓN</th>
-                <th>ESTADO</th>
-                <th>F. ESTADO</th>
-                <th style="text-align: center"></th>
                 <th></th>
                 <th></th>
                 <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
@@ -86,10 +72,6 @@
                 <td>{% if arEstudios.fechaInicio != null %}{{ arEstudios.fechaInicio | date('Y/m/d') }}{% else %}{% endif%}</td>
                 <td>{% if arEstudios.fechaTerminacion != null %}{{ arEstudios.fechaTerminacion | date('Y/m/d') }}{% else %}{% endif%}</td>
                 <td>{% if arEstudios.fechaVencimientoCurso != null %}{{ arEstudios.fechaVencimientoCurso | date('Y/m/d') }}{% else %}{% endif%}</td>
-                <td>{% if arEstudios.fechaVencimientoAcreditacion != null %}{{ arEstudios.fechaVencimientoAcreditacion | date('Y/m/d') }}{% else %}{% endif%}</td>
-                <td>{{ arEstudios.estudioEstadoRel.nombre  | default('')}}</td>
-                <td>{% if arEstudios.fechaEstado != null %}{{ arEstudios.fechaEstado | date('Y/m/d') }}{% else %}{% endif%}</td>
-                <td style="text-align: right"><input class="input-grid" type="text" name="TxtNumeroAcreditacion{{ arEstudios.codigoEmpleadoEstudioPk }}" value="" size="20" style="text-align: right; width:85px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_estudio_nuevo', {'codigoEstudio': arEstudios.codigoEmpleadoEstudioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_estudio_detalle', { 'codigoEstudio': arEstudios.codigoEmpleadoEstudioPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arEstudios.codigoEmpleadoEstudioPk }}" /></td>
@@ -105,45 +87,6 @@
                 {{ knp_pagination_render(arEstudios) }}
         </div>
         <div class="btn-toolbar" style="float: right">
-            <div class="btn-group">
-                <div class="btn-group" style="float: right">
-                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-                        Acreditado <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                      <li>{{ form_widget(form.BtnAcreditado, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}{{ form_widget(form.fechaAcreditadoHoy, {'attr': {'maxlength' : 10} }) }}F. vencimiento{{ form_widget(form.fechaVenAcreditacion, {'attr': {'maxlength' : 10} }) }}</li>              
-                      <li class="divider"></li>              
-                    </ul>
-                </div>      
-                <div class="btn-group" style="float: right">
-                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-                        Validado <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                      <li>{{ form_widget(form.BtnValidado, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}{{ form_widget(form.fechaValidadoHoy, {'attr': {'maxlength' : 10} }) }}</li>              
-                      <li class="divider"></li>              
-                    </ul>
-                </div>
-                <div class="btn-group" style="float: right">
-                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-                        No validado <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                      <li>{{ form_widget(form.BtnAcademia, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}</li>              
-                      <li class="divider"></li>
-                      <li>{{ form_widget(form.BtnEmpleador, { 'attr': {'class': 'btn btn-default btn-sm'} }) }} {{ form_widget(form.fechaNoValidadoHoy, {'attr': {'maxlength' : 10} }) }}</li>              
-                    </ul>
-                </div>
-                <div class="btn-group" style="float: right">
-                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-                        Generar solicitud <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                      <li>{{ form_widget(form.BtnGenerar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}{{ form_widget(form.fechaGenerarHoy, {'attr': {'maxlength' : 10} }) }}</li>              
-                      <li class="divider"></li>              
-                    </ul>
-                </div>    
-            </div>
             <div class="btn-group">
                 {{ form_widget(form.BtnExcelInforme, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>

@@ -15,44 +15,7 @@
         {{ form_errors(form) }}
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 9,  'numero': arEstudio.codigoEmpleadoEstudioPk }) }}', 'Archivos', 500, 700)" >Archivos</a>
-                <div class="btn-group" style="float: right">
-                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-                        Acreditado <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                      <li>{{ form_widget(form.BtnAcreditado, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}{{ form_widget(form.fechaAcreditadoHoy, {'attr': {'maxlength' : 10} }) }}F. vencimiento{{ form_widget(form.fechaVenAcreditacion, {'attr': {'maxlength' : 10} }) }} Nro acreditacion {{ form_widget(form.TxtNumeroAcreditacion, { 'attr': {'class': 'form-control'} }) }}</li>              
-                      <li class="divider"></li>              
-                    </ul>
-                </div>      
-                <div class="btn-group" style="float: right">
-                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-                        Validado <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                      <li>{{ form_widget(form.BtnValidado, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}{{ form_widget(form.fechaValidadoHoy, {'attr': {'maxlength' : 10} }) }}</li>              
-                      <li class="divider"></li>              
-                    </ul>
-                </div>
-                <div class="btn-group" style="float: right">
-                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-                        No validado <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                      <li>{{ form_widget(form.BtnAcademia, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}</li>              
-                      <li class="divider"></li>
-                      <li>{{ form_widget(form.BtnEmpleador, { 'attr': {'class': 'btn btn-default btn-sm'} }) }} {{ form_widget(form.fechaNoValidadoHoy, {'attr': {'maxlength' : 10} }) }}</li>              
-                    </ul>
-                </div>
-                <div class="btn-group" style="float: right">
-                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-                        Generar solicitud <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                      <li>{{ form_widget(form.BtnGenerar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}{{ form_widget(form.fechaGenerarHoy, {'attr': {'maxlength' : 10} }) }}</li>              
-                      <li class="divider"></li>              
-                    </ul>
-                </div>
+                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_ad_archivos_lista', { 'codigoDocumento': 9,  'numero': arEstudio.codigoEmpleadoEstudioPk }) }}', 'Archivos', 500, 700)" >Archivos</a>      
             </div>
         </div>
         <br /><br />

@@ -551,7 +551,7 @@
                         <tr>
                             <td><input type="hidden" name="LblCodigo[]" value="{{ arExamenes.codigoExamenPk }}">{{ arExamenes.codigoExamenPk }} </td>                            
                             <td>{{ arExamenes.examenClaseRel.nombre }}</td>                                                        
-                            <td>{{ arExamenes.fechaVence |date("Y/m/d")  }}</td>                                                        
+                            <td>{{ arExamenes.fecha |date("Y/m/d")  }}</td>                                                        
                         </tr>
                     {% endfor %}
                 </table>
