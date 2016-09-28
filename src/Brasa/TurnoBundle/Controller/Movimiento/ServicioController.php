@@ -547,22 +547,7 @@ class ServicioController extends Controller
         $em = $this->getDoctrine()->getManager();
         $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
         $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigoServicioDetalle);        
-        $arrayPropiedadesCentroCosto = array(
-                'class' => 'BrasaTurnoBundle:TurCentroCosto',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cc')
-                    ->orderBy('cc.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => false,
-                'empty_data' => "",
-                'empty_value' => "TODOS",
-                'data' => ""
-            );
-        if($this->codigoCentroCosto != "") {
-            $arrayPropiedadesCentroCosto['data'] = $em->getReference("BrasaTurnoBundle:TurCentroCosto", $this->codigoCentroCosto);
-        }        
-        $form = $this->createFormBuilder()
-            ->add('centroCostoRel', 'entity', $arrayPropiedadesCentroCosto)
+        $form = $this->createFormBuilder()            
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->nombreRecurso))
             ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoRecurso))                            
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -614,7 +599,7 @@ class ServicioController extends Controller
         $this->strListaDqlRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->listaDQL(
                 $this->nombreRecurso,                
                 $this->codigoRecurso,
-                $this->codigoCentroCosto
+                ""
                 ); 
     }     
     
@@ -627,11 +612,7 @@ class ServicioController extends Controller
     }
 
     private function filtrarRecurso($form) {       
-        $this->nombreRecurso = $form->get('TxtNombre')->getData();
-        $arCentroCosto = $form->get('centroCostoRel')->getData();
-        if($arCentroCosto) {
-            $this->codigoCentroCosto = $arCentroCosto->getCodigoCentroCostoPk();
-        }        
+        $this->nombreRecurso = $form->get('TxtNombre')->getData();                       
     }    
     
     private function formularioFiltro() {

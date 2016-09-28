@@ -51,10 +51,7 @@ class TurRecursoRepository extends EntityRepository {
         }
         if($strNumeroIdentificacion != "" ) {
             $dql .= " AND r.numeroIdentificacion LIKE '%" . $strNumeroIdentificacion . "%'";
-        }        
-        if($codigoCentroCosto != "" ) {
-            $dql .= " AND r.codigoCentroCostoFk = " . $codigoCentroCosto ;
-        }   
+        }           
         if($codigoRecursoGrupo != "" ) {
             $dql .= " AND r.codigoRecursoGrupoFk = " . $codigoRecursoGrupo ;
         }        
