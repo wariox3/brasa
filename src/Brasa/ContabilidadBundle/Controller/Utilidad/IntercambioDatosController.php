@@ -40,8 +40,10 @@ class IntercambioDatosController extends Controller
                         $arRegistroExportar->setCuenta($arRegistro->getCodigoCuentaFk());
                         $arRegistroExportar->setDebito($arRegistro->getDebito());
                         $arRegistroExportar->setCredito($arRegistro->getCredito());
-                        $arRegistroExportar->setNit($arRegistro->getTerceroRel()->getNumeroIdentificacion());
-                        $arRegistroExportar->setDigitoVerificacion($arRegistro->getTerceroRel()->getDigitoVerificacion());                        
+                        if($arRegistro->getCodigoTerceroFk()) {
+                            $arRegistroExportar->setNit($arRegistro->getTerceroRel()->getNumeroIdentificacion());
+                            $arRegistroExportar->setDigitoVerificacion($arRegistro->getTerceroRel()->getDigitoVerificacion());                                                    
+                        }
                         $arRegistroExportar->setCentroCosto($arRegistro->getCodigoCentroCostoFk());                        
                         
                         if($arRegistro->getDebito() > 0) {
@@ -72,8 +74,10 @@ class IntercambioDatosController extends Controller
                     $arRegistroExportar->setCuenta($arRegistro->getCodigoCuentaFk());
                     $arRegistroExportar->setDebito($arRegistro->getDebito());
                     $arRegistroExportar->setCredito($arRegistro->getCredito());
-                    $arRegistroExportar->setNit($arRegistro->getTerceroRel()->getNumeroIdentificacion());
-                    $arRegistroExportar->setDigitoVerificacion($arRegistro->getTerceroRel()->getDigitoVerificacion());
+                    if($arRegistro->getCodigoTerceroFk()) {
+                        $arRegistroExportar->setNit($arRegistro->getTerceroRel()->getNumeroIdentificacion());
+                        $arRegistroExportar->setDigitoVerificacion($arRegistro->getTerceroRel()->getDigitoVerificacion());                                                    
+                    }
                     $arRegistroExportar->setCentroCosto($arRegistro->getCodigoCentroCostoFk());
 
                     if($arRegistro->getDebito() > 0) {
