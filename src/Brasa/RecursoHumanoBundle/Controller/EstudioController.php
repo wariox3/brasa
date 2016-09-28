@@ -119,53 +119,6 @@ class EstudioController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             
-            if($form->get('BtnGenerar')->isClicked()) {
-                $arEstudio->setCodigoEstudioEstadoFk(1);
-                $arEstudio->setFechaEstado($form->get('fechaGenerarHoy')->getData());
-                $arEstudio->setFechaVencimientoAcreditacion(null);
-                $arEstudio->setCodigoEstudioEstadoInvalidoFk(null);
-                $em->persist($arEstudio);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_estudio_detalle', array('codigoEstudio' => $codigoEstudio)));                                                
-            }
-            if($form->get('BtnAcademia')->isClicked()) {
-                $arEstudio->setCodigoEstudioEstadoFk(2);
-                $arEstudio->setCodigoEstudioEstadoInvalidoFk(1);
-                $arEstudio->setFechaEstado($form->get('fechaNoValidadoHoy')->getData());
-                $arEstudio->setFechaEstadoInvalido($form->get('fechaNoValidadoHoy')->getData());
-                $arEstudio->setFechaVencimientoAcreditacion(null);
-                $em->persist($arEstudio);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_estudio_detalle', array('codigoEstudio' => $codigoEstudio)));                                                
-            }
-            if($form->get('BtnEmpleador')->isClicked()) {
-                $arEstudio->setCodigoEstudioEstadoFk(2);
-                $arEstudio->setCodigoEstudioEstadoInvalidoFk(2);
-                $arEstudio->setFechaEstado($form->get('fechaNoValidadoHoy')->getData());
-                $arEstudio->setFechaEstadoInvalido($form->get('fechaNoValidadoHoy')->getData());
-                $arEstudio->setFechaVencimientoAcreditacion(null);
-                $em->persist($arEstudio);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_estudio_detalle', array('codigoEstudio' => $codigoEstudio)));                                                
-            }
-            if($form->get('BtnValidado')->isClicked()) {
-                $arEstudio->setCodigoEstudioEstadoFk(3);
-                $arEstudio->setFechaEstado($form->get('fechaValidadoHoy')->getData());
-                $arEstudio->setFechaVencimientoAcreditacion(null);
-                $arEstudio->setCodigoEstudioEstadoInvalidoFk(null);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_estudio_detalle', array('codigoEstudio' => $codigoEstudio)));                                                
-            }
-            if($form->get('BtnAcreditado')->isClicked()) {
-                $arEstudio->setCodigoEstudioEstadoFk(4);
-                $arEstudio->setFechaEstado($form->get('fechaAcreditadoHoy')->getData());
-                $arEstudio->setFechaVencimientoAcreditacion($form->get('fechaVenAcreditacion')->getData());
-                $arEstudio->setCodigoEstudioEstadoInvalidoFk(null);
-                $arEstudio->setNumeroAcreditacion($form->get('TxtNumeroAcreditacion')->getData());
-                $em->persist($arEstudio);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_estudio_detalle', array('codigoEstudio' => $codigoEstudio)));                                                
-            }
             
         }
         $arEstudio = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudio')->find($codigoEstudio);
@@ -182,9 +135,7 @@ class EstudioController extends Controller
                 $session->get('filtroIdentificacion'),
                 $session->get('filtroNombre'),
                 $session->get('filtroEstudio'),
-                $session->get('filtroEstado'),
-                $session->get('filtroDesde'),
-                $session->get('filtroHasta')
+                $session->get('filtroDesde')
                 );
     }
 
@@ -205,32 +156,17 @@ class EstudioController extends Controller
         if($session->get('filtroEstudio')) {
             $arrayPropiedadesEstudio['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuEmpleadoEstudioTipo", $session->get('filtroEstudio'));
         }
-        $arrayPropiedadesEstado = array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuEstudioEstado',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cc')
-                    ->orderBy('cc.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => false,
-                'empty_data' => "",
-                'empty_value' => "TODOS",
-                'data' => ""
-            );
-        if($session->get('filtroEstado')) {
-            $arrayPropiedadesEstado['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuEstudioEstado", $session->get('filtroEstado'));
-        }
+        
 
         $form = $this->createFormBuilder()
             ->add('empleadoEstudioTipoRel', 'entity', $arrayPropiedadesEstudio)
-            ->add('estudioEstadoRel', 'entity', $arrayPropiedadesEstado)    
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))    
             ->add('fechaVencimientoCurso','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('fechaVencimientoAcreditacion','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))    
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
-            ->add('BtnExcelInforme', 'submit', array('label'  => 'Informe'))    
+            //->add('BtnExcelInforme', 'submit', array('label'  => 'Informe'))    
             
             ->getForm();
         return $form;
@@ -243,18 +179,11 @@ class EstudioController extends Controller
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroNombre', $form->get('TxtNombre')->getData());
         $session->set('filtroEstudio', $controles['empleadoEstudioTipoRel']);
-        $session->set('filtroEstado', $controles['estudioEstadoRel']);     
         $dateFechaHasta = $form->get('fechaVencimientoCurso')->getData();
-        $dateFechaHastaAcreditacion = $form->get('fechaVencimientoAcreditacion')->getData();
         if ($form->get('fechaVencimientoCurso')->getData() == null){
             $session->set('filtroDesde', $form->get('fechaVencimientoCurso')->getData());
         } else {
             $session->set('filtroDesde', $dateFechaHasta->format('Y-m-d'));
-        }
-        if ($form->get('fechaVencimientoAcreditacion')->getData() == null){
-            $session->set('filtroHasta', $form->get('fechaVencimientoAcreditacion')->getData());
-        } else {
-            $session->set('filtroHasta', $dateFechaHastaAcreditacion->format('Y-m-d')); 
         }
     }
     
@@ -288,33 +217,11 @@ class EstudioController extends Controller
                     ->setKeywords("office 2007 openxml php")
                     ->setCategory("Test result file");
                 $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
-                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setAutoSize(true);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'Z'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        }
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'CÓDIGO')
                             ->setCellValue('B1', 'FECHA')
@@ -330,18 +237,9 @@ class EstudioController extends Controller
                             ->setCellValue('L1', 'FECHA VENCIMIENTO CONTROL')
                             ->setCellValue('M1', 'GRADO BACHILLER')
                             ->setCellValue('N1', 'GRADUADO')
-                            ->setCellValue('O1', 'CURSO ACREDITACIÓN')
-                            ->setCellValue('P1', 'ACADEMIA')
-                            ->setCellValue('Q1', 'FECHA INICIO ACREDITACIÓN')
-                            ->setCellValue('R1', 'FECHA VEN ACREDITACIÓN')
-                            ->setCellValue('S1', 'NUMERO REGISTRO')
-                            ->setCellValue('T1', 'NUMERO APROBACIÓN')
-                            ->setCellValue('U1', 'VALIDAR')
-                            ->setCellValue('V1', 'ESTADO')
-                            ->setCellValue('W1', 'FECHA ESTADO')
-                            ->setCellValue('X1', 'ESTADO INVALIDO')
-                            ->setCellValue('Y1', 'FECHA ESTADO INVALIDO')
-                            ->setCellValue('Z1', 'COMENTARIOS');
+                            ->setCellValue('O1', 'NUMERO REGISTRO')
+                            ->setCellValue('P1', 'VALIDAR')
+                            ->setCellValue('Q1', 'COMENTARIOS');
 
                 $i = 2;
                 $query = $em->createQuery($this->strListaDql);
@@ -430,18 +328,9 @@ class EstudioController extends Controller
                             ->setCellValue('L' . $i, $fechaVencimientoControl)
                             ->setCellValue('M' . $i, $gradoBachiller)
                             ->setCellValue('N' . $i, $objFunciones->devuelveBoolean($arEstudios->getGraduado()))
-                            ->setCellValue('O' . $i, $tipoAcreditacion)
-                            ->setCellValue('P' . $i, $academia)
-                            ->setCellValue('Q' . $i, $fechaInicioAcreditacion)
-                            ->setCellValue('R' . $i, $fechaVencimientoAcreditacion)
-                            ->setCellValue('S' . $i, $arEstudios->getNumeroRegistro())
-                            ->setCellValue('T' . $i, $arEstudios->getNumeroAcreditacion())
-                            ->setCellValue('U' . $i, $objFunciones->devuelveBoolean($arEstudios->getValidarVencimiento()))
-                            ->setCellValue('V' . $i, $estado)
-                            ->setCellValue('W' . $i, $fechaEstado)
-                            ->setCellValue('X' . $i, $estadoInvalidado)
-                            ->setCellValue('Y' . $i, $fechaEstadoInvalido)
-                            ->setCellValue('Z' . $i, $arEstudios->getComentarios())
+                            ->setCellValue('O' . $i, $arEstudios->getNumeroRegistro())
+                            ->setCellValue('P' . $i, $objFunciones->devuelveBoolean($arEstudios->getValidarVencimiento()))
+                            ->setCellValue('Q' . $i, $arEstudios->getComentarios())
                             
                             ;
                     $i++;
@@ -466,7 +355,7 @@ class EstudioController extends Controller
                 exit;
             }
             
-    private function generarInformeExcel() {
+    /*private function generarInformeExcel() {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         set_time_limit(0);
@@ -741,5 +630,5 @@ class EstudioController extends Controller
                 $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
                 $objWriter->save('php://output');
                 exit;
-            }        
+            } */       
 }
