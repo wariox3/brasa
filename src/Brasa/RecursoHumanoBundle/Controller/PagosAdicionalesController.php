@@ -431,6 +431,7 @@ class PagosAdicionalesController extends Controller
         $request = $this->getRequest();
         $session = $this->get('session');
         $paginator  = $this->get('knp_paginator');
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
         $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
@@ -456,126 +457,78 @@ class PagosAdicionalesController extends Controller
         $form = $this->createFormBuilder()
             ->add('departamentoEmpresaRel', 'entity', $arrayPropiedadesDepartamentoEmpresa)
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))                                
-            ->add('BtnGenerar', 'submit', array('label'  => 'Generar',))    
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))    
             ->getForm();
         $form->handleRequest($request);
         $this->listarTiempoSuplementarioMasivo($arProgramacionPago);
         if($form->isValid()) {
             $arrControles = $request->request->All();
             
-            if($form->get('BtnGenerar')->isClicked()) {
+            if($form->get('BtnGuardar')->isClicked()) {
+                if ($arProgramacionPago->getEstadoPagado() == 0){
                     $intIndice = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {
                         $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                         $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($intCodigo);
                         if(count($arProgramacionPagoDetalle) > 0) {
-                            if($arrControles['TxtRNFC'.$intCodigo] != "" && $arrControles['TxtRNFC'.$intCodigo] != 0) {
-                                
-                                $intHoras = $arrControles['TxtRNFC'.$intCodigo];
-                                $arPagoAdicional->setCantidad($intHoras);
-                                $arPagoAdicional->setTipoAdicional($arPagoConcepto->getTipoAdicional());
-                                $em->persist($arPagoAdicional);
+                            if($arrControles['TxtHN'.$intCodigo] != "" && $arrControles['TxtHN'.$intCodigo] != 0) {
+                                $intHoras = $arrControles['TxtHN'.$intCodigo];
+                                $arProgramacionPagoDetalle->setHorasNocturnas($intHoras);
+                                $em->persist($arProgramacionPagoDetalle);
                             }
-                            if($arrControles['TxtRNFNC'.$intCodigo] != "" && $arrControles['TxtRNFNC'.$intCodigo] != 0) {
-                                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(41);                                                                
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);                                
-                                $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
-                                $intHoras = $arrControles['TxtRNFNC'.$intCodigo];
-                                $arPagoAdicional->setCantidad($intHoras);
-                                $arPagoAdicional->setTipoAdicional(4);
-                                $em->persist($arPagoAdicional);
+                            if($arrControles['TxtHFD'.$intCodigo] != "" && $arrControles['TxtHFD'.$intCodigo] != 0) {
+                                $intHoras = $arrControles['TxtHFD'.$intCodigo];
+                                $arProgramacionPagoDetalle->setHorasFestivasDiurnas($intHoras);
+                                $em->persist($arProgramacionPagoDetalle);
                             }
-                            if($arrControles['TxtHEFD'.$intCodigo] != "" && $arrControles['TxtHEFD'.$intCodigo] != 0) {
-                                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(42);                                                                
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
-                                $intHoras = $arrControles['TxtHEFD'.$intCodigo];
-                                $arPagoAdicional->setCantidad($intHoras);
-                                $arPagoAdicional->setTipoAdicional($arPagoConcepto->getTipoAdicional());
-                                $em->persist($arPagoAdicional);
-                            }
-                            if($arrControles['TxtHEFN'.$intCodigo] != "" && $arrControles['TxtHEFN'.$intCodigo] != 0) {
-                                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(43);                                                                
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado); 
-                                $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
-                                $intHoras = $arrControles['TxtHEFN'.$intCodigo];
-                                $arPagoAdicional->setCantidad($intHoras);
-                                $arPagoAdicional->setTipoAdicional($arPagoConcepto->getTipoAdicional());
-                                $em->persist($arPagoAdicional);
+                            if($arrControles['TxtHFN'.$intCodigo] != "" && $arrControles['TxtHFN'.$intCodigo] != 0) {
+                                $intHoras = $arrControles['TxtHFN'.$intCodigo];
+                                $arProgramacionPagoDetalle->setHorasFestivasNocturnas($intHoras);
+                                $em->persist($arProgramacionPagoDetalle);
                             }
                             if($arrControles['TxtHEOD'.$intCodigo] != "" && $arrControles['TxtHEOD'.$intCodigo] != 0) {
-                                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(44);                                                                
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
                                 $intHoras = $arrControles['TxtHEOD'.$intCodigo];
-                                $arPagoAdicional->setCantidad($intHoras);
-                                $arPagoAdicional->setTipoAdicional($arPagoConcepto->getTipoAdicional());
-                                $em->persist($arPagoAdicional);
+                                $arProgramacionPagoDetalle->setHorasExtrasOrdinariasDiurnas($intHoras);
+                                $em->persist($arProgramacionPagoDetalle);
                             }
                             if($arrControles['TxtHEON'.$intCodigo] != "" && $arrControles['TxtHEON'.$intCodigo] != 0) {
-                                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(45);                                                                
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
                                 $intHoras = $arrControles['TxtHEON'.$intCodigo];
-                                $arPagoAdicional->setCantidad($intHoras);
-                                $arPagoAdicional->setTipoAdicional($arPagoConcepto->getTipoAdicional());
-                                $em->persist($arPagoAdicional);
+                                $arProgramacionPagoDetalle->setHorasExtrasOrdinariasNocturnas($intHoras);
+                                $em->persist($arProgramacionPagoDetalle);
                             }
-                            if($arrControles['TxtDC'.$intCodigo] != "" && $arrControles['TxtDC'.$intCodigo] != 0) {
-                                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(46);                                                                
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
-                                $intHoras = $arrControles['TxtDC'.$intCodigo];
-                                $arPagoAdicional->setCantidad($intHoras);
-                                $arPagoAdicional->setTipoAdicional($arPagoConcepto->getTipoAdicional());
-                                $em->persist($arPagoAdicional);
+                            if($arrControles['TxtHEFD'.$intCodigo] != "" && $arrControles['TxtHEFD'.$intCodigo] != 0) {
+                                $intHoras = $arrControles['TxtHEFD'.$intCodigo];
+                                $arProgramacionPagoDetalle->setHorasExtrasFestivasDiurnas($intHoras);
+                                $em->persist($arProgramacionPagoDetalle);
                             }
-                            if($arrControles['TxtDNC'.$intCodigo] != "" && $arrControles['TxtDNC'.$intCodigo] != 0) {
-                                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(47);                                                                
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
-                                $intHoras = $arrControles['TxtDNC'.$intCodigo];
-                                $arPagoAdicional->setCantidad($intHoras);
-                                $arPagoAdicional->setTipoAdicional($arPagoConcepto->getTipoAdicional());
-                                $em->persist($arPagoAdicional);
+                            if($arrControles['TxtHEFN'.$intCodigo] != "" && $arrControles['TxtHEFN'.$intCodigo] != 0) {
+                                $intHoras = $arrControles['TxtHEFN'.$intCodigo];
+                                $arProgramacionPagoDetalle->setHorasExtrasFestivasNocturnas($intHoras);
+                                $em->persist($arProgramacionPagoDetalle);
                             }
-                            if($arrControles['TxtRN'.$intCodigo] != "" && $arrControles['TxtRN'.$intCodigo] != 0) {
-                                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(48);                                                                
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
-                                $intHoras = $arrControles['TxtRN'.$intCodigo];
-                                $arPagoAdicional->setCantidad($intHoras);
-                                $arPagoAdicional->setTipoAdicional($arPagoConcepto->getTipoAdicional());
-                                $em->persist($arPagoAdicional);
+                            if($arrControles['TxtHRN'.$intCodigo] != "" && $arrControles['TxtHRN'.$intCodigo] != 0) {
+                                $intHoras = $arrControles['TxtHRN'.$intCodigo];
+                                $arProgramacionPagoDetalle->setHorasRecargoNocturno($intHoras);
+                                $em->persist($arProgramacionPagoDetalle);
+                            }
+                            if($arrControles['TxtHRFD'.$intCodigo] != "" && $arrControles['TxtHRFD'.$intCodigo] != 0) {
+                                $intHoras = $arrControles['TxtHRFD'.$intCodigo];
+                                $arProgramacionPagoDetalle->setHorasRecargoFestivoDiurno($intHoras);
+                                $em->persist($arProgramacionPagoDetalle);
+                            }
+                            if($arrControles['TxtHRFN'.$intCodigo] != "" && $arrControles['TxtHRFN'.$intCodigo] != 0) {
+                                $intHoras = $arrControles['TxtHRFN'.$intCodigo];
+                                $arProgramacionPagoDetalle->setHorasRecargoFestivoNocturno($intHoras);
+                                $em->persist($arProgramacionPagoDetalle);
                             }
                         }
                         $intIndice++;
                     }
+                } else {
+                    $objMensaje->Mensaje("error", "La programacion esta pagada, no se puede modificar el tiempo suplementario!", $this);
+                }    
                     $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));                                                
                     //echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
             }
             if($form->get('BtnFiltrar')->isClicked()) {
