@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-{% block title %}Adicionales al pago suplementario masivo - Soga App{% endblock %}
+{% block title %}tiempo suplementario masivo - Soga App{% endblock %}
 {% block content %}
 <script>
     $(function () {
@@ -16,7 +16,7 @@
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
     {{ form_errors(form) }} 
     <div class="page-header">
-        <h3>Generar pagos adicionales (Masivo-Detalle)</h3>
+        <h3>Generar tiempo suplementario (Masivo-Detalle)</h3>
     </div>
     <div class="panel panel-default">
             <div class="panel-heading">Filtros de busqueda</div>
@@ -51,20 +51,20 @@
                         <th><p data-toggle="tooltip" data-placement="top" title="Horas nocturas">H.N</p></th>
                         <th><p data-toggle="tooltip" data-placement="top" title="Horas festivas diurnas">H.F.D</p></th>
                         <th><p data-toggle="tooltip" data-placement="top" title="Horas festivas nocturas">H.F.N</p></th>
-                        <th><p data-toggle="tooltip" data-placement="top" title="Horas extras ordinarias diurnas">H.E.F.D</p></th>
-                        <th><p data-toggle="tooltip" data-placement="top" title="Horas extras ordinarias nocturnas">H.E.F.N</p></th>
-                        <th><p data-toggle="tooltip" data-placement="top" title="Horas extras festivas diurnas">H.E.O.D</p></th>
-                        <th><p data-toggle="tooltip" data-placement="top" title="Horas extras festivas nocturnas">H.E.O.N</p></th>
-                        <th><p data-toggle="tooltip" data-placement="top" title="Horas recargo nocturno">D.C</p></th>
-                        <th><p data-toggle="tooltip" data-placement="top" title="Horas recargo festivo diurno">D.N.C</p></th>
+                        <th><p data-toggle="tooltip" data-placement="top" title="Horas extras ordinarias diurnas">H.E.O.D</p></th>
+                        <th><p data-toggle="tooltip" data-placement="top" title="Horas extras ordinarias nocturnas">H.E.O.N</p></th>
+                        <th><p data-toggle="tooltip" data-placement="top" title="Horas extras festivas diurnas">H.E.F.D</p></th>
+                        <th><p data-toggle="tooltip" data-placement="top" title="Horas extras festivas nocturnas">H.E.F.N</p></th>
+                        <th><p data-toggle="tooltip" data-placement="top" title="Horas recargo nocturno">H.R.N</p></th>
+                        <th><p data-toggle="tooltip" data-placement="top" title="Horas recargo festivo diurno">H.R.F.D</p></th>
                         <th><p data-toggle="tooltip" data-placement="top" title="Horas recargo festivo nocturno">H.R.F.N</p></th>
 
                     </tr>
                     {% for arProgramacionPagoDetalle in arProgramacionPagoDetalle %}
                     <tr >
                         <td>
-                            <input type="hidden" name="LblCodigo[]" value="{{ arProgramacionPagoDetalle.empleadoRel.codigoEmpleadoPk }}">
-                            <span class="badge">{{ arProgramacionPagoDetalle.empleadoRel.codigoEmpleadoPk }}</span>
+                            <input type="hidden" name="LblCodigo[]" value="{{ arProgramacionPagoDetalle.codigoProgramacionPagoDetallePk }}">
+                            <span class="badge">{{ arProgramacionPagoDetalle.codigoProgramacionPagoDetallePk }}</span>
                         </td>
                         <td>{{ arProgramacionPagoDetalle.empleadoRel.numeroIdentificacion}}</td>
                         <td>{{ arProgramacionPagoDetalle.empleadoRel.nombre1}} {{ arProgramacionPagoDetalle.empleadoRel.nombre2}}</td>
@@ -72,16 +72,29 @@
                         <td>{{ arProgramacionPagoDetalle.empleadoRel.apellido2 }}</td>
                         <td>{{ arProgramacionPagoDetalle.departamentoEmpresaRel.nombre | default('NO TIENE DEPARTAMENTO E.')}}</td>
                         <td style="text-align: right">{{ arProgramacionPagoDetalle.empleadoRel.vrSalario | number_format(2, '.', ',') }}</td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtRN{{ arProgramacionPagoDetalle.codigoEmpleadoFk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtRNFC{{ arProgramacionPagoDetalle.codigoEmpleadoFk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtRNFNC{{ arProgramacionPagoDetalle.codigoEmpleadoFk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtHEFD{{ arProgramacionPagoDetalle.codigoEmpleadoFk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtHEFN{{ arProgramacionPagoDetalle.codigoEmpleadoFk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtHEOD{{ arProgramacionPagoDetalle.codigoEmpleadoFk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtHEON{{ arProgramacionPagoDetalle.codigoEmpleadoFk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDC{{ arProgramacionPagoDetalle.codigoEmpleadoFk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtDNC{{ arProgramacionPagoDetalle.codigoEmpleadoFk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                        <td style="text-align: right"><input class="input-grid" type="text" name="TxtRN{{ arProgramacionPagoDetalle.codigoEmpleadoFk }}" value="0" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        {% if arProgramacionPago.estadoPagado == 0 %}
+                            <td style="text-align: right"><input class="input-grid" type="text" name="TxtHN{{ arProgramacionPagoDetalle.codigoProgramacionPagoDetallePk }}" value="{{ arProgramacionPagoDetalle.horasNocturnas }}" size="5" style="text-align: right; width:40px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                            <td style="text-align: right"><input class="input-grid" type="text" name="TxtHFD{{ arProgramacionPagoDetalle.codigoProgramacionPagoDetallePk }}" value="{{ arProgramacionPagoDetalle.horasFestivasDiurnas }}" size="5" style="text-align: right; width:40px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                            <td style="text-align: right"><input class="input-grid" type="text" name="TxtHFN{{ arProgramacionPagoDetalle.codigoProgramacionPagoDetallePk }}" value="{{ arProgramacionPagoDetalle.horasFestivasNocturnas }}" size="5" style="text-align: right; width:40px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                            <td style="text-align: right"><input class="input-grid" type="text" name="TxtHEOD{{ arProgramacionPagoDetalle.codigoProgramacionPagoDetallePk }}" value="{{ arProgramacionPagoDetalle.horasExtrasOrdinariasDiurnas }}" size="5" style="text-align: right; width:40px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                            <td style="text-align: right"><input class="input-grid" type="text" name="TxtHEON{{ arProgramacionPagoDetalle.codigoProgramacionPagoDetallePk }}" value="{{ arProgramacionPagoDetalle.horasExtrasOrdinariasNocturnas }}" size="5" style="text-align: right; width:40px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                            <td style="text-align: right"><input class="input-grid" type="text" name="TxtHEFD{{ arProgramacionPagoDetalle.codigoProgramacionPagoDetallePk }}" value="{{ arProgramacionPagoDetalle.horasExtrasFestivasDiurnas }}" size="5" style="text-align: right; width:40px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                            <td style="text-align: right"><input class="input-grid" type="text" name="TxtHEFN{{ arProgramacionPagoDetalle.codigoProgramacionPagoDetallePk }}" value="{{ arProgramacionPagoDetalle.horasExtrasFestivasNocturnas }}" size="5" style="text-align: right; width:40px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                            <td style="text-align: right"><input class="input-grid" type="text" name="TxtHRN{{ arProgramacionPagoDetalle.codigoProgramacionPagoDetallePk }}" value="{{ arProgramacionPagoDetalle.horasRecargoNocturno }}" size="5" style="text-align: right; width:40px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                            <td style="text-align: right"><input class="input-grid" type="text" name="TxtHRFD{{ arProgramacionPagoDetalle.codigoProgramacionPagoDetallePk }}" value="{{ arProgramacionPagoDetalle.horasRecargoFestivoDiurno }}" size="5" style="text-align: right; width:40px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                            <td style="text-align: right"><input class="input-grid" type="text" name="TxtHRFN{{ arProgramacionPagoDetalle.codigoProgramacionPagoDetallePk }}" value="{{ arProgramacionPagoDetalle.horasRecargoFestivoNocturno }}" size="5" style="text-align: right; width:40px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                        {% else %}
+                            <td style="text-align: right">{{ arProgramacionPagoDetalle.horasNocturnas | number_format(0, '.', ',') }}</td> 
+                            <td style="text-align: right">{{ arProgramacionPagoDetalle.horasFestivasDiurnas | number_format(0, '.', ',') }}</td>                               
+                            <td style="text-align: right">{{ arProgramacionPagoDetalle.horasFestivasNocturnas | number_format(0, '.', ',') }}</td>                                               
+                            <td style="text-align: right">{{ arProgramacionPagoDetalle.horasExtrasOrdinariasDiurnas | number_format(0, '.', ',') }}</td>                               
+                            <td style="text-align: right">{{ arProgramacionPagoDetalle.horasExtrasOrdinariasNocturnas | number_format(0, '.', ',') }}</td>                                               
+                            <td style="text-align: right">{{ arProgramacionPagoDetalle.horasExtrasFestivasDiurnas | number_format(0, '.', ',') }}</td>                               
+                            <td style="text-align: right">{{ arProgramacionPagoDetalle.horasExtrasFestivasNocturnas | number_format(0, '.', ',') }}</td>                                                               
+                            <td style="text-align: right">{{ arProgramacionPagoDetalle.horasRecargoNocturno | number_format(0, '.', ',') }}</td>                                                                               
+                            <td style="text-align: right">{{ arProgramacionPagoDetalle.horasRecargoFestivoDiurno | number_format(0, '.', ',') }}</td>                                                                                               
+                            <td style="text-align: right">{{ arProgramacionPagoDetalle.horasRecargoFestivoNocturno | number_format(0, '.', ',') }}</td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                 </table>      
@@ -90,7 +103,7 @@
                         {{ knp_pagination_render(arProgramacionPagoDetalle) }}                
                     </div>            
                     <div class="btn-group">
-                        <a href="#" class="btn btn-default btn-sm">Empleados <span class="badge">{{ arProgramacionPagoDetalle.getTotalItemCount }}</span></a>
+                        <a href="#" class="btn btn-default btn-sm">Registros <span class="badge">{{ arProgramacionPagoDetalle.getTotalItemCount }}</span></a>
 
                     </div>
                 </div>        
