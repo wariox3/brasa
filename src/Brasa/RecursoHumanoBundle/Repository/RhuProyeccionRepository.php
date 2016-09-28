@@ -22,10 +22,10 @@ class RhuProyeccionRepository extends EntityRepository {
                 $dql .= " AND e.numeroIdentificacion = " . $strIdentificacion;
             }
             if ($strDesde != ""){
-                $dql .= " AND p.fechaDesde >='" . date_format($strDesde, ('Y-m-d')). "'";
+                $dql .= " AND p.fechaDesde >='" . $strDesde . "'";
             }
             if($strHasta != "") {
-                $dql .= " AND p.fechaHasta <='" . date_format($strHasta, ('Y-m-d')). "'";
+                $dql .= " AND p.fechaHasta <='" . $strHasta . "'";
             }
             //$dql .= " ORDER BY p.empleadoRel.nombreCorto";
             return $dql;
