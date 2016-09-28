@@ -113,6 +113,8 @@ class PagosAdicionalesAgregarController extends Controller
                                         $arPagoAdicional->setCodigoPeriodoFk($periodo);   
                                         $arPagoAdicional->setFecha($arPagoAdicionalPeriodo->getFecha());
                                     }                                                                                                            
+                                } else {
+                                    $arPagoAdicional->setPermanente(1);
                                 }
                                 $arPagoAdicional->setFechaCreacion(new \DateTime('now'));
                                 $arPagoAdicional->setFechaUltimaEdicion(new \DateTime('now'));
