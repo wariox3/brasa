@@ -41,7 +41,7 @@ class ContabilizarPagoBancoController extends Controller
                         $arPagoBancoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->findBy(array('codigoPagoBancoFk' => $codigo));
                         foreach ($arPagoBancoDetalles as $arPagoBancoDetalle) {
                             if($arPagoBancoDetalle->getVrPago() > 0) {
-                                $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arPagoBancoDetalle->getNumeroIdentificacion()));
+                                $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arPagoBancoDetalle->getEmpleadoRel()->getNumeroIdentificacion()));
                                 if(!$arTercero) {                                                                  
                                     $arTercero = new \Brasa\ContabilidadBundle\Entity\CtbTercero();
                                     $arTercero->setCiudadRel($arPagoBancoDetalle->getEmpleadoRel()->getCiudadRel());
@@ -82,7 +82,7 @@ class ContabilizarPagoBancoController extends Controller
                                 $arRegistro->setNumeroReferencia($arPagoBanco->getCodigoPagoBancoPk());                                                                
                                 $arRegistro->setFecha($arPagoBancoDetalle->getPagoBancoRel()->getFechaAplicacion());
                                 $arRegistro->setCredito($arPagoBancoDetalle->getVrPago());                            
-                                $arRegistro->setDescripcionContable($arPagoBancoDetalle->getNombreCorto());
+                                $arRegistro->setDescripcionContable($arPagoBancoDetalle->getEmpleadoRel()->getNombreCorto());
                                 $em->persist($arRegistro);                                
                                 
                             }                            
