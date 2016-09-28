@@ -171,6 +171,35 @@ class ProgramacionesPagoController extends Controller
                 }
                 return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
             }
+            /*if ($form->get('BtnActualizarDetalle')->isClicked()) {
+                $arrControles = $request->request->All();
+                if ($arProgramacionPago->getEstadoPagado() == 0 ){
+                    
+                    foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                        $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+                        $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($intCodigo);
+                        if(count($arProgramacionPagoDetalle) > 0) {
+                    
+                            if($arrControles['TxtHorasNocturnas'.$intCodigo] != "") {
+                                $arProgramacionPagoDetalle->setHorasNocturnas($arrControles['TxtHorasNocturnas'.$intCodigo]);
+                                
+                                $em->persist($arProgramacionPagoDetalle);
+                            }
+                            if($arrControles['TxtHorasFestivasDiurnas'.$intCodigo] != "") {
+                                $arProgramacionPagoDetalle->setHorasNocturnas($arrControles['TxtHorasFestivasDiurnas'.$intCodigo]);
+                                
+                                $em->persist($arProgramacionPagoDetalle);
+                            }
+                            
+                        }
+                        
+                        
+                    }
+                    //$em->persist($arProgramacionPagoDetalle);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
+                }
+            }*/
 
         }
         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
@@ -556,6 +585,7 @@ class ProgramacionesPagoController extends Controller
         $arrBotonGenerarEmpleados = array('label' => 'Cargar contratos', 'disabled' => false);
         $arrBotonEliminarEmpleados = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonEliminarTodoEmpleados = array('label' => 'Eliminar todo', 'disabled' => false);
+        //$arrBotonActualizarDetalle = array('label' => 'Actualizar detalle', 'disabled' => false);
         if($arProgramacionPago->getEstadoGenerado() == 1) {            
             $arrBotonGenerarEmpleados['disabled'] = true;                                            
             $arrBotonEliminarTodoEmpleados['disabled'] = true;            
@@ -564,10 +594,12 @@ class ProgramacionesPagoController extends Controller
         if($arProgramacionPago->getEstadoPagado() == 1) {            
             $arrBotonGenerarEmpleados['disabled'] = true;         
             $arrBotonEliminarEmpleados['disabled'] = true;                                    
-            $arrBotonEliminarTodoEmpleados['disabled'] = true;            
+            $arrBotonEliminarTodoEmpleados['disabled'] = true;
+            //$arrBotonActualizarDetalle['disabled'] = true;            
             
         }        
         $form = $this->createFormBuilder()    
+                   // ->add('BtnActualizarDetalle', 'submit', $arrBotonActualizarDetalle)
                     ->add('BtnGenerarEmpleados', 'submit', $arrBotonGenerarEmpleados)                        
                     ->add('BtnEliminarEmpleados', 'submit', $arrBotonEliminarEmpleados)
                     ->add('BtnEliminarTodoEmpleados', 'submit', $arrBotonEliminarTodoEmpleados)                    

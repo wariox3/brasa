@@ -405,6 +405,8 @@ class PagosAdicionalesController extends Controller
         $paginator  = $this->get('knp_paginator');
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
+        $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+        $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
         //$query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->listaDQL('', $arProgramacionPago->getCodigoCentroCostoFk(), 1));
         //$arEmpleados = $paginator->paginate($query, $request->query->get('page', 1), 50);
         //$form = $this->formularioLista();
@@ -436,16 +438,11 @@ class PagosAdicionalesController extends Controller
             if($form->get('BtnGenerar')->isClicked()) {
                     $intIndice = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {
-                        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($intCodigo);
-                        if(count($arEmpleado) > 0) {
+                        $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+                        $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($intCodigo);
+                        if(count($arProgramacionPagoDetalle) > 0) {
                             if($arrControles['TxtRNFC'.$intCodigo] != "" && $arrControles['TxtRNFC'.$intCodigo] != 0) {
-                                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(40);                                                                
-                                $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                                $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
-                                $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                                $arPagoAdicional->setProgramacionPagoRel($arProgramacionPago);
+                                
                                 $intHoras = $arrControles['TxtRNFC'.$intCodigo];
                                 $arPagoAdicional->setCantidad($intHoras);
                                 $arPagoAdicional->setTipoAdicional($arPagoConcepto->getTipoAdicional());
@@ -558,9 +555,11 @@ class PagosAdicionalesController extends Controller
                 $this->listarTiempoSuplementarioMasivo($arProgramacionPago);
             }
         }
-        $arEmpleados = $paginator->paginate($em->createQuery($this->strDqlListaTiempoSuplementarioMasivo), $request->query->get('page', 1), 50);                               
+        
+        $arProgramacionPagoDetalle = $paginator->paginate($arProgramacionPagoDetalle, $request->query->get('page', 1), 50);                               
+        //$arEmpleados = $paginator->paginate($em->createQuery($this->strDqlListaTiempoSuplementarioMasivo), $request->query->get('page', 1), 50);                               
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagosAdicionales:generarMasivoSuplementarioDetalle.html.twig', array(
-            'arEmpleados' => $arEmpleados,
+            'arProgramacionPagoDetalle' => $arProgramacionPagoDetalle,
             'form' => $form->createView()
             ));
     }
