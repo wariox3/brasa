@@ -31,13 +31,16 @@
         <div class="btn-toolbar" style="float: left">
             <div class="btn-group" style="float: left">
                 <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arPagosAdicionalesPeriodos.getTotalItemCount }}</span></div>                        
-            </div>
+            </div>           
             <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
                 {{ knp_pagination_render(arPagosAdicionalesPeriodos) }}       
             </div>
         </div>
 
         <div class="btn-toolbar" style="float:right">
+            <div class="btn-group">
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_movimiento_pago_adicional_periodo_nuevo', {'codigoPagoAdicionalPeriodo': 0}) }}">Nuevo</a>                
+            </div>             
              <div class="btn-group">
                 {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                        
             </div>
