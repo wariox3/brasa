@@ -1,14 +1,21 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
-
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCreditoType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
+
+
+
 
 class CreditosController extends Controller
 {
     var $strSqlLista = "";
+    
+    /**
+     * @Route("/rhu/creditos/lista", name="brs_rhu_creditos_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -118,6 +125,9 @@ class CreditosController extends Controller
             ));
     }
 
+    /**
+     * @Route("/rhu/creditos/refinanciar/{codigoCredito}", name="brs_rhu_creditos_refinanciar")
+     */
     public function refinanciarAction($codigoCredito) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -207,6 +217,9 @@ class CreditosController extends Controller
         
     }
 
+    /**
+     * @Route("/rhu/creditos/nuevo/{codigoCredito}", name="brs_rhu_creditos_nuevo")
+     */
     public function nuevoAction($codigoCredito = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -274,7 +287,10 @@ class CreditosController extends Controller
             'arCredito' => $arCredito,
             'form' => $form->createView()));
     }
-
+    
+    /**
+     * @Route("/rhu/creditos/detalle/{codigoCreditoPk}", name="brs_rhu_credito_detalle")
+     */
     public function detalleAction($codigoCreditoPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -299,7 +315,10 @@ class CreditosController extends Controller
                     'form' => $form->createView()
                     ));
     }
-
+    
+    /**
+     * @Route("/rhu/creditos/detalle/nuevo/{codigoCreditoPk}", name="brs_rhu_credito_nuevo_detalle")
+     */
     public function nuevoDetalleAction($codigoCreditoPk) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -353,7 +372,10 @@ class CreditosController extends Controller
             'mensaje' => $mensaje,
             'form' => $form->createView()));
     }
-
+    
+    /**
+     * @Route("/rhu/cargar/creditos", name="brs_rhu_cargar_creditos")
+     */
     public function cargarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

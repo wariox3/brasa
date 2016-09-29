@@ -1,16 +1,21 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuDesempenoType;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuDesempenoObservacionesType;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuDesempenoAspectosMejorarType;
 use Doctrine\ORM\EntityRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
 
 class DesempenosController extends Controller
 {
     var $strDqlLista = "";
-
+    
+    /**
+     * @Route("/rhu/desempeno/lista", name="brs_rhu_desempeno_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -63,6 +68,9 @@ class DesempenosController extends Controller
             'form' => $form->createView()));
     }
     
+    /**
+     * @Route("/rhu/desempeno/nuevo/{codigoDesempeno}", name="brs_rhu_desempeno_nuevo")
+     */
     public function nuevoAction($codigoDesempeno = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -115,6 +123,9 @@ class DesempenosController extends Controller
             'form' => $form->createView()));
     }
     
+    /**
+     * @Route("/rhu/desempeno/detalle/{codigoDesempeno}", name="brs_rhu_desempeno_detalle")
+     */
     public function detalleAction($codigoDesempeno) {
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');
@@ -391,6 +402,9 @@ class DesempenosController extends Controller
                     ));
     }
     
+    /**
+     * @Route("/rhu/desempeno/detalle/nuevo/{codigoDesempeno}", name="brs_rhu_desempeno_detalle_nuevo")
+     */
     public function detalleNuevoAction($codigoDesempeno) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -423,6 +437,9 @@ class DesempenosController extends Controller
             'form' => $form->createView()));
     }
     
+    /**
+     * @Route("/rhu/desempeno/detalle/nuevo/comentario/{codigoDesempeno}", name="brs_rhu_desempeno_detalle_nuevo_observacion")
+     */
     public function detalleNuevoObservacionAction($codigoDesempeno) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();        
@@ -440,6 +457,9 @@ class DesempenosController extends Controller
             'form' => $form->createView()));
     }
     
+    /**
+     * @Route("/rhu/desempeno/detalle/nuevo/aspectosMejorar/{codigoDesempeno}", name="brs_rhu_desempeno_detalle_nuevo_aspectosMejorar")
+     */
     public function detalleNuevoAspectosMejorarAction($codigoDesempeno) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();        

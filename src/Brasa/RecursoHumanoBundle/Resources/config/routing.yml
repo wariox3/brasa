@@ -6,14 +6,6 @@ brs_rhu_como_iniciar:
     path:     /rhu/como/iniciar   
     defaults: { _controller: BrasaRecursoHumanoBundle:Default:comoIniciar }
     
-brs_rhu_credito_detalle:
-    path:     /rhu/creditos/detalle/{codigoCreditoPk}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:detalle }
-    
-brs_rhu_credito_nuevo_detalle:
-    path:     /rhu/creditos/detalle/nuevo/{codigoCreditoPk}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:nuevoDetalle }    
-
 brs_rhu_base_creditotipo_listar:
    path:     /rhu/base/creditotipo/listar
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCreditoTipo:listar }
@@ -33,14 +25,6 @@ brs_rhu_base_desempeno_concepto_listar:
 brs_rhu_base_desempeno_concepto_nuevo:
    path:     /rhu/base/desempeno/concepto/nuevo/{codigoDesempenoConcepto}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseDesempenoConcepto:nuevo }
-   
-brs_rhu_desempeno_detalle_nuevo_observacion:
-   path:     /rhu/desempeno/detalle/nuevo/comentario/{codigoDesempeno}
-   defaults: { _controller: BrasaRecursoHumanoBundle:Desempenos:detalleNuevoObservacion }
-   
-brs_rhu_desempeno_detalle_nuevo_aspectosMejorar:
-   path:     /rhu/desempeno/detalle/nuevo/aspectosMejorar/{codigoDesempeno}
-   defaults: { _controller: BrasaRecursoHumanoBundle:Desempenos:detalleNuevoAspectosMejorar }   
    
 brs_rhu_base_creditotipo_nuevo:
    path:     /rhu/base/creditotipo/nuevo/{codigoCreditoTipoPk}
@@ -277,23 +261,7 @@ brs_rhu_base_dotacion_cargo_nuevo:
 brs_rhu_base_dotacion_cargo_nuevomultiple:
    path:     /rhu/base/dotacion/cargo/nuevomultiple/{codigoDotacionCargo}
    defaults: { _controller: BrasaRecursoHumanoBundle:BaseDotacionCargo:nuevoMultiple }
-    
-brs_rhu_creditos_lista:
-    path:     /rhu/creditos/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:lista }       
-
-brs_rhu_creditos_nuevo:
-    path:     /rhu/creditos/nuevo/{codigoCredito}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:nuevo }          
-
-brs_rhu_creditos_refinanciar:
-    path:     /rhu/creditos/refinanciar/{codigoCredito}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:refinanciar }
-    
-brs_rhu_cargar_creditos:
-    path:     /rhu/cargar/creditos
-    defaults: { _controller: BrasaRecursoHumanoBundle:Creditos:cargar }
-    
+        
 brs_rhu_cargar_control_acceso_empleados:
     path:     /rhu/cargar/control/acceso/empleados
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesHorarioAcceso:cargar } 
@@ -1024,23 +992,7 @@ brs_rhu_requisito_detalle:
 
 brs_rhu_requisito_detalle_nuevo:
     path:     /rhu/requisito/detalle/nuevo/{codigoRequisito}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Requisitos:detalleNuevo }
-    
-brs_rhu_desempeno_nuevo:
-    path:     /rhu/desempeno/nuevo/{codigoDesempeno}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Desempenos:nuevo }
-    
-brs_rhu_desempeno_lista:
-    path:     /rhu/desempeno/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:Desempenos:lista }
-    
-brs_rhu_desempeno_detalle:
-    path:     /rhu/desempeno/detalle/{codigoDesempeno}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Desempenos:detalle }
-    
-brs_rhu_desempeno_detalle_nuevo:
-    path:     /rhu/desempeno/detalle/nuevo/{codigoDesempeno}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Desempenos:detalleNuevo }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:Requisitos:detalleNuevo }        
 
 brs_rhu_capacitacion_nuevo:
     path:     /rhu/capacitacion/nuevo/{codigoCapacitacion}
