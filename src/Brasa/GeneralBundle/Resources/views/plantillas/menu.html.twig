@@ -12,6 +12,7 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administración <b class="caret"></b></a>
                     <ul class="dropdown-menu">
+                        {% if arModulo.general == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">General</a>
                             <ul class="dropdown-menu">
@@ -23,6 +24,8 @@
                                 <li><a href="{{ path('brs_gen_base_contenido_formato_secundario_lista') }}">Formatos secundario</a></li>
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.contabilidad == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Contabilidad</a>
                             <ul class="dropdown-menu">
@@ -32,6 +35,8 @@
                                 <li><a href="{{ path('brs_ctb_base_centro_costo_lista') }}">Centro de Costos</a></li>
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.recursoHumano == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Recurso humano</a>
                             <ul class="dropdown-menu">
@@ -122,6 +127,8 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.transporte == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Transporte</a>
                             <ul class="dropdown-menu">
@@ -130,6 +137,8 @@
                                 <li><a href="{{ path('brs_tte_base_productos_lista') }}">Productos</a></li>
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.turno == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Turno</a>
                             <ul class="dropdown-menu">
@@ -175,6 +184,8 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.cartera == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Cartera</a>
                             <ul class="dropdown-menu">
@@ -190,6 +201,8 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.afiliacion == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Afiliacion</a>
                             <ul class="dropdown-menu">
@@ -200,11 +213,13 @@
                                 <li><a href="{{ path('brs_afi_base_sucursal') }}">Sucursales</a></li>
                             </ul>
                         </li>
+                        {% endif %}
                     </ul>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Consultas <b class="caret"></b></a>
                     <ul class="dropdown-menu">
+                        {% if arModulo.contabilidad == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Contabilidad</a>
                             <ul class="dropdown-menu">
@@ -214,6 +229,8 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.recursoHumano == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Recurso humano</a>
                             <ul class="dropdown-menu">
@@ -330,6 +347,8 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.turno == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Turnos</a>
                             <ul class="dropdown-menu">
@@ -374,6 +393,8 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.cartera == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Cartera</a>
                             <ul class="dropdown-menu">
@@ -415,6 +436,8 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.afiliacion == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Afiliacion</a>
                             <ul class="dropdown-menu">
@@ -446,11 +469,13 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
                     </ul>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Procesos <b class="caret"></b></a>
                     <ul class="dropdown-menu">
+                        {% if arModulo.contabilidad == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Contabilidad</a>
                             <ul class="dropdown-menu">
@@ -462,6 +487,8 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.recursoHumano == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Recurso humano</a>
                             <ul class="dropdown-menu">
@@ -501,6 +528,8 @@
                                 </li>                                
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.turno == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Turno</a>
                             <ul class="dropdown-menu">
@@ -548,6 +577,8 @@
                                 </li>                                
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.afiliacion == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Afiliacion</a>
                             <ul class="dropdown-menu">
@@ -555,11 +586,13 @@
                                 <li><a href="{{ path('brs_afi_proceso_actualizar_clientecartera') }}">Actualizar cliente cartera</a></li>
                             </ul>
                         </li>
+                        {% endif %}
                     </ul>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Utilidades <b class="caret"></b></a>
                     <ul class="dropdown-menu">
+                        {% if arModulo.general == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">General</a>
                             <ul class="dropdown-menu">
@@ -577,6 +610,8 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.contabilidad == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Contabilidad</a>
                             <ul class="dropdown-menu">
@@ -588,6 +623,8 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.recursoHumano == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Recursos humanos</a>
                             <ul class="dropdown-menu">
@@ -653,6 +690,8 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.turno == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Turnos</a>
                             <ul class="dropdown-menu">
@@ -671,11 +710,13 @@
                                 </li>                                
                             </ul>
                         </li>
+                        {% endif %}
                     </ul>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Movimientos <b class="caret"></b></a>
                     <ul class="dropdown-menu">
+                        {% if arModulo.contabilidad == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Contabilidad</a>
                             <ul class="dropdown-menu">
@@ -688,6 +729,8 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.recursoHumano == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Recurso humano</a>
                             <ul class="dropdown-menu">
@@ -779,6 +822,8 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.turno == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Turno</a>
                             <ul class="dropdown-menu">
@@ -820,6 +865,8 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.transporte == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Transporte</a>
                             <ul class="dropdown-menu">
@@ -838,6 +885,8 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.cartera == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Cartera</a>
                             <ul class="dropdown-menu">
@@ -873,6 +922,8 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.afiliacion == 1 %}
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Afiliacion</a>
                             <ul class="dropdown-menu">                                
@@ -883,6 +934,7 @@
                                 <li><a href="{{ path('brs_afi_movimiento_factura') }}">Factura</a></li>
                             </ul>
                         </li>
+                        {% endif %}
                     </ul>
                 </li>
             </ul>

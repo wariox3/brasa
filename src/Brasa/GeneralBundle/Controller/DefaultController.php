@@ -33,6 +33,7 @@ class DefaultController extends Controller
     
     public function menuAction()
     {
+        $em = $this->getDoctrine()->getManager();
         //$arUsuario = new \Brasa\SeguridadBundle\Entity\User();
         //$arUsuario = $this->get('security.context')->getToken()->getUser();
         //$strUsuario = $arUsuario->getNombreCorto();
@@ -40,8 +41,11 @@ class DefaultController extends Controller
         //$obj = new \Brasa\GeneralBundle\MisClases\CambiarBD();
         //$obj->setUpAppConnection($this);
         //\Brasa\GeneralBundle\MisClases\CambiarBD::setUpAppConnection();
-        
-        return $this->render('BrasaGeneralBundle:plantillas:menu.html.twig');
+        $arModulo = new \Brasa\GeneralBundle\Entity\GenModulo();
+        $arModulo = $em->getRepository('BrasaGeneralBundle:GenModulo')->find(1);
+        return $this->render('BrasaGeneralBundle:plantillas:menu.html.twig', array(
+            'arModulo' => $arModulo
+        ));
     }                  
     
 }
