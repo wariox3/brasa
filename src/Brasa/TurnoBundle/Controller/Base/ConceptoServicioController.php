@@ -1,15 +1,19 @@
 <?php
-namespace Brasa\TurnoBundle\Controller;
+namespace Brasa\TurnoBundle\Controller\Base;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurConceptoServicioType;
-class BaseConceptoServicioController extends Controller
+class ConceptoServicioController extends Controller
 {
     var $strDqlLista = "";
     var $strCodigo = "";
     var $strNombre = "";
     
+    /**
+     * @Route("/tur/base/concepto/servicio/lista", name="brs_tur_base_concepto_servicio_lista")
+     */    
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -41,7 +45,10 @@ class BaseConceptoServicioController extends Controller
             'arConceptoServicios' => $arConceptoServicios, 
             'form' => $form->createView()));
     }
-
+    
+    /**
+     * @Route("/tur/base/concepto/servicio/nuevo/{codigoConceptoServicio}", name="brs_tur_base_concepto_servicio_nuevo")
+     */    
     public function nuevoAction($codigoConceptoServicio) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();

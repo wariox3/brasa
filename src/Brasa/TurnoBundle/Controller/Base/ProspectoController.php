@@ -1,15 +1,19 @@
 <?php
-namespace Brasa\TurnoBundle\Controller;
+namespace Brasa\TurnoBundle\Controller\Base;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurProspectoType;
-class BaseProspectoController extends Controller
+class ProspectoController extends Controller
 {
     var $strDqlLista = "";
     var $strCodigo = "";
     var $strNombre = "";
     
+    /**
+     * @Route("/tur/base/prospecto/lista", name="brs_tur_base_prospecto_lista")
+     */     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();        
@@ -42,6 +46,9 @@ class BaseProspectoController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/base/prospecto/nuevo/{codigoProspecto}", name="brs_tur_base_prospecto_nuevo")
+     */     
     public function nuevoAction($codigoProspecto = '') {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();

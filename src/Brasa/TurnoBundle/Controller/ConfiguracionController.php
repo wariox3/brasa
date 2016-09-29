@@ -4,6 +4,7 @@ namespace Brasa\TurnoBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -12,6 +13,10 @@ use Doctrine\ORM\EntityRepository;
  */
 class ConfiguracionController extends Controller
 {
+    
+    /**
+     * @Route("/tur/configuracion/{codigoConfiguracionPk}", name="brs_tur_configuracion")
+     */     
     public function configuracionAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

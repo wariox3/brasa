@@ -2,17 +2,13 @@ brasa_afiliacion_annotation:
     resource: "@BrasaAfiliacionBundle/Controller/"
     type:     annotation
 
-brasa_turno:
-    resource: "@BrasaTurnoBundle/Resources/config/routing.yml"
-    prefix:   /
-
 brasa_turno_annotation:
     resource: "@BrasaTurnoBundle/Controller/"
     type:     annotation 
 
-brasa_administracion_documental:
-    resource: "@BrasaAdministracionDocumentalBundle/Resources/config/routing.yml"
-    prefix:   /
+brasa_administracion_documental_annotation:
+    resource: "@BrasaAdministracionDocumentalBundle/Controller/"
+    type:     annotation 
 
 brasa_recurso_humano:
     resource: "@BrasaRecursoHumanoBundle/Resources/config/routing.yml"
@@ -30,7 +26,7 @@ brasa_cartera:
     resource: "@BrasaCarteraBundle/Controller/"
     type:     annotation 
 
-brasa_contabilidad:
+brasa_contabilidad_annotation:
     resource: "@BrasaContabilidadBundle/Controller"
     type:     annotation
 

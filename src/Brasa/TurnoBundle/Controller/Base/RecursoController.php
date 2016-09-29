@@ -1,15 +1,18 @@
 <?php
-namespace Brasa\TurnoBundle\Controller;
+namespace Brasa\TurnoBundle\Controller\Base;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurRecursoType;
-class BaseRecursoController extends Controller
+class RecursoController extends Controller
 {
     var $strDqlLista = "";
     var $strDqlListaEmpleados = "";
     
+    /**
+     * @Route("/tur/base/recurso/lista", name="brs_tur_base_recurso_lista")
+     */     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -52,7 +55,10 @@ class BaseRecursoController extends Controller
             'arRecursos' => $arRecursos, 
             'form' => $form->createView()));
     }
-
+    
+    /**
+     * @Route("/tur/base/recurso/nuevo/{codigoRecurso}/{codigoEmpleado}", name="brs_tur_base_recurso_nuevo")
+     */ 
     public function nuevoAction($codigoRecurso = '', $codigoEmpleado = '') {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -128,6 +134,9 @@ class BaseRecursoController extends Controller
             'form' => $form->createView()));
     }        
 
+    /**
+     * @Route("/tur/base/recurso/detalle/{codigoRecurso}", name="brs_tur_base_recurso_detalle")
+     */     
     public function detalleAction($codigoRecurso) {
         $em = $this->getDoctrine()->getManager(); 
         $request = $this->getRequest();
@@ -149,6 +158,9 @@ class BaseRecursoController extends Controller
                     ));
     }    
     
+    /**
+     * @Route("/tur/base/recurso/nuevo/enlazar/", name="brs_tur_base_recurso_nuevo_enlazar")
+     */     
     public function enlazarAction() {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();

@@ -1,6 +1,6 @@
 <?php
 
-namespace Brasa\TurnoBundle\Controller;
+namespace Brasa\TurnoBundle\Controller\Base;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -8,12 +8,15 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurPlantillaType;
 
-class BasePlantillaController extends Controller {
+class PlantillaController extends Controller {
 
     var $strDqlLista = "";
     var $strCodigo = "";
     var $strNombre = "";
 
+    /**
+     * @Route("/tur/base/plantilla/lista", name="brs_tur_base_plantilla_lista")
+     */     
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -46,6 +49,9 @@ class BasePlantillaController extends Controller {
                     'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/base/plantilla/nuevo/{codigoPlantilla}", name="brs_tur_base_plantilla_nuevo")
+     */     
     public function nuevoAction($codigoPlantilla = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -73,6 +79,9 @@ class BasePlantillaController extends Controller {
                     'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/base/plantilla/detalle/{codigoPlantilla}", name="brs_tur_base_plantilla_detalle")
+     */     
     public function detalleAction($codigoPlantilla) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

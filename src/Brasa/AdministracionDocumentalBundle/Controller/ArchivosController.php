@@ -1,12 +1,16 @@
 <?php
 
 namespace Brasa\AdministracionDocumentalBundle\Controller;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
 class ArchivosController extends Controller
 {
+    
+    /**
+     * @Route("/ad/archivos/lista/{codigoDocumento}/{numero}", name="brs_ad_archivos_lista")
+     */     
     public function listaAction($codigoDocumento, $numero) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();  
@@ -19,7 +23,10 @@ class ArchivosController extends Controller
             'numero' => $numero,
             ));
     }  
-    
+        
+    /**
+     * @Route("/ad/archivos/cargar/{codigoDocumento}/{numero}", name="brs_ad_archivos_cargar")
+     */    
     public function cargarAction($codigoDocumento, $numero) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -66,6 +73,9 @@ class ArchivosController extends Controller
             ));
     } 
     
+    /**
+     * @Route("/ad/archivos/descargar/{codigoArchivo}", name="brs_ad_archivos_descargar")
+     */    
     public function descargarAction($codigoArchivo) {
         $em = $this->getDoctrine()->getManager();
         $arArchivo = new \Brasa\AdministracionDocumentalBundle\Entity\AdArchivo();
@@ -84,6 +94,9 @@ class ArchivosController extends Controller
               
     }
     
+    /**
+     * @Route("/ad/archivos/enviar/{codigoDocumento}/{numero}/{codigoArchivo}", name="brs_ad_archivos_enviar")
+     */    
     public function enviarAction($codigoDocumento, $numero,$codigoArchivo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
