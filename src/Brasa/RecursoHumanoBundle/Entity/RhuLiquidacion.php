@@ -293,6 +293,11 @@ class RhuLiquidacion
     private $diasAusentismoAdicional = 0;    
     
     /**
+     * @ORM\Column(name="vr_salario_vacacion_propuesto", type="float")
+     */
+    private $VrSalarioVacacionPropuesto = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="liquidacionesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -333,6 +338,7 @@ class RhuLiquidacion
     public function __construct()
     {
         $this->liquidacionesAdicionalesLiquidacionRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosBancosDetallesLiquidacionRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -658,6 +664,30 @@ class RhuLiquidacion
     }
 
     /**
+     * Set vrIndemnizacion
+     *
+     * @param float $vrIndemnizacion
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrIndemnizacion($vrIndemnizacion)
+    {
+        $this->VrIndemnizacion = $vrIndemnizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIndemnizacion
+     *
+     * @return float
+     */
+    public function getVrIndemnizacion()
+    {
+        return $this->VrIndemnizacion;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -706,6 +736,30 @@ class RhuLiquidacion
     }
 
     /**
+     * Set diasCesantiasAusentismo
+     *
+     * @param integer $diasCesantiasAusentismo
+     *
+     * @return RhuLiquidacion
+     */
+    public function setDiasCesantiasAusentismo($diasCesantiasAusentismo)
+    {
+        $this->diasCesantiasAusentismo = $diasCesantiasAusentismo;
+
+        return $this;
+    }
+
+    /**
+     * Get diasCesantiasAusentismo
+     *
+     * @return integer
+     */
+    public function getDiasCesantiasAusentismo()
+    {
+        return $this->diasCesantiasAusentismo;
+    }
+
+    /**
      * Set diasVacaciones
      *
      * @param integer $diasVacaciones
@@ -727,6 +781,30 @@ class RhuLiquidacion
     public function getDiasVacaciones()
     {
         return $this->diasVacaciones;
+    }
+
+    /**
+     * Set diasVacacionesAusentismo
+     *
+     * @param integer $diasVacacionesAusentismo
+     *
+     * @return RhuLiquidacion
+     */
+    public function setDiasVacacionesAusentismo($diasVacacionesAusentismo)
+    {
+        $this->diasVacacionesAusentismo = $diasVacacionesAusentismo;
+
+        return $this;
+    }
+
+    /**
+     * Get diasVacacionesAusentismo
+     *
+     * @return integer
+     */
+    public function getDiasVacacionesAusentismo()
+    {
+        return $this->diasVacacionesAusentismo;
     }
 
     /**
@@ -1039,6 +1117,54 @@ class RhuLiquidacion
     public function getVrSalario()
     {
         return $this->VrSalario;
+    }
+
+    /**
+     * Set vrSalarioPromedioCesantias
+     *
+     * @param float $vrSalarioPromedioCesantias
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrSalarioPromedioCesantias($vrSalarioPromedioCesantias)
+    {
+        $this->VrSalarioPromedioCesantias = $vrSalarioPromedioCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioPromedioCesantias
+     *
+     * @return float
+     */
+    public function getVrSalarioPromedioCesantias()
+    {
+        return $this->VrSalarioPromedioCesantias;
+    }
+
+    /**
+     * Set vrSalarioPromedioPrimas
+     *
+     * @param float $vrSalarioPromedioPrimas
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrSalarioPromedioPrimas($vrSalarioPromedioPrimas)
+    {
+        $this->VrSalarioPromedioPrimas = $vrSalarioPromedioPrimas;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioPromedioPrimas
+     *
+     * @return float
+     */
+    public function getVrSalarioPromedioPrimas()
+    {
+        return $this->VrSalarioPromedioPrimas;
     }
 
     /**
@@ -1426,6 +1552,150 @@ class RhuLiquidacion
     }
 
     /**
+     * Set estadoPagoBanco
+     *
+     * @param boolean $estadoPagoBanco
+     *
+     * @return RhuLiquidacion
+     */
+    public function setEstadoPagoBanco($estadoPagoBanco)
+    {
+        $this->estadoPagoBanco = $estadoPagoBanco;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagoBanco
+     *
+     * @return boolean
+     */
+    public function getEstadoPagoBanco()
+    {
+        return $this->estadoPagoBanco;
+    }
+
+    /**
+     * Set liquidarSalario
+     *
+     * @param boolean $liquidarSalario
+     *
+     * @return RhuLiquidacion
+     */
+    public function setLiquidarSalario($liquidarSalario)
+    {
+        $this->liquidarSalario = $liquidarSalario;
+
+        return $this;
+    }
+
+    /**
+     * Get liquidarSalario
+     *
+     * @return boolean
+     */
+    public function getLiquidarSalario()
+    {
+        return $this->liquidarSalario;
+    }
+
+    /**
+     * Set porcentajeIbp
+     *
+     * @param float $porcentajeIbp
+     *
+     * @return RhuLiquidacion
+     */
+    public function setPorcentajeIbp($porcentajeIbp)
+    {
+        $this->porcentajeIbp = $porcentajeIbp;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeIbp
+     *
+     * @return float
+     */
+    public function getPorcentajeIbp()
+    {
+        return $this->porcentajeIbp;
+    }
+
+    /**
+     * Set estadoContabilizado
+     *
+     * @param boolean $estadoContabilizado
+     *
+     * @return RhuLiquidacion
+     */
+    public function setEstadoContabilizado($estadoContabilizado)
+    {
+        $this->estadoContabilizado = $estadoContabilizado;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoContabilizado
+     *
+     * @return boolean
+     */
+    public function getEstadoContabilizado()
+    {
+        return $this->estadoContabilizado;
+    }
+
+    /**
+     * Set diasAusentismoAdicional
+     *
+     * @param integer $diasAusentismoAdicional
+     *
+     * @return RhuLiquidacion
+     */
+    public function setDiasAusentismoAdicional($diasAusentismoAdicional)
+    {
+        $this->diasAusentismoAdicional = $diasAusentismoAdicional;
+
+        return $this;
+    }
+
+    /**
+     * Get diasAusentismoAdicional
+     *
+     * @return integer
+     */
+    public function getDiasAusentismoAdicional()
+    {
+        return $this->diasAusentismoAdicional;
+    }
+
+    /**
+     * Set vrSalarioVacacionPropuesto
+     *
+     * @param float $vrSalarioVacacionPropuesto
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrSalarioVacacionPropuesto($vrSalarioVacacionPropuesto)
+    {
+        $this->VrSalarioVacacionPropuesto = $vrSalarioVacacionPropuesto;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioVacacionPropuesto
+     *
+     * @return float
+     */
+    public function getVrSalarioVacacionPropuesto()
+    {
+        return $this->VrSalarioVacacionPropuesto;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -1556,222 +1826,6 @@ class RhuLiquidacion
     }
 
     /**
-     * Set vrSalarioPromedioCesantias
-     *
-     * @param float $vrSalarioPromedioCesantias
-     *
-     * @return RhuLiquidacion
-     */
-    public function setVrSalarioPromedioCesantias($vrSalarioPromedioCesantias)
-    {
-        $this->VrSalarioPromedioCesantias = $vrSalarioPromedioCesantias;
-
-        return $this;
-    }
-
-    /**
-     * Get vrSalarioPromedioCesantias
-     *
-     * @return float
-     */
-    public function getVrSalarioPromedioCesantias()
-    {
-        return $this->VrSalarioPromedioCesantias;
-    }
-
-    /**
-     * Set vrSalarioPromedioPrimas
-     *
-     * @param float $vrSalarioPromedioPrimas
-     *
-     * @return RhuLiquidacion
-     */
-    public function setVrSalarioPromedioPrimas($vrSalarioPromedioPrimas)
-    {
-        $this->VrSalarioPromedioPrimas = $vrSalarioPromedioPrimas;
-
-        return $this;
-    }
-
-    /**
-     * Get vrSalarioPromedioPrimas
-     *
-     * @return float
-     */
-    public function getVrSalarioPromedioPrimas()
-    {
-        return $this->VrSalarioPromedioPrimas;
-    }
-
-    /**
-     * Set liquidarSalario
-     *
-     * @param boolean $liquidarSalario
-     *
-     * @return RhuLiquidacion
-     */
-    public function setLiquidarSalario($liquidarSalario)
-    {
-        $this->liquidarSalario = $liquidarSalario;
-
-        return $this;
-    }
-
-    /**
-     * Get liquidarSalario
-     *
-     * @return boolean
-     */
-    public function getLiquidarSalario()
-    {
-        return $this->liquidarSalario;
-    }
-
-    /**
-     * Set porcentajeIbp
-     *
-     * @param float $porcentajeIbp
-     *
-     * @return RhuLiquidacion
-     */
-    public function setPorcentajeIbp($porcentajeIbp)
-    {
-        $this->porcentajeIbp = $porcentajeIbp;
-
-        return $this;
-    }
-
-    /**
-     * Get porcentajeIbp
-     *
-     * @return float
-     */
-    public function getPorcentajeIbp()
-    {
-        return $this->porcentajeIbp;
-    }
-
-    /**
-     * Set estadoContabilizado
-     *
-     * @param boolean $estadoContabilizado
-     *
-     * @return RhuLiquidacion
-     */
-    public function setEstadoContabilizado($estadoContabilizado)
-    {
-        $this->estadoContabilizado = $estadoContabilizado;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoContabilizado
-     *
-     * @return boolean
-     */
-    public function getEstadoContabilizado()
-    {
-        return $this->estadoContabilizado;
-    }
-
-    /**
-     * Set vrIndemnizacion
-     *
-     * @param float $vrIndemnizacion
-     *
-     * @return RhuLiquidacion
-     */
-    public function setVrIndemnizacion($vrIndemnizacion)
-    {
-        $this->VrIndemnizacion = $vrIndemnizacion;
-
-        return $this;
-    }
-
-    /**
-     * Get vrIndemnizacion
-     *
-     * @return float
-     */
-    public function getVrIndemnizacion()
-    {
-        return $this->VrIndemnizacion;
-    }
-
-    /**
-     * Set diasCesantiasAusentismo
-     *
-     * @param integer $diasCesantiasAusentismo
-     *
-     * @return RhuLiquidacion
-     */
-    public function setDiasCesantiasAusentismo($diasCesantiasAusentismo)
-    {
-        $this->diasCesantiasAusentismo = $diasCesantiasAusentismo;
-
-        return $this;
-    }
-
-    /**
-     * Get diasCesantiasAusentismo
-     *
-     * @return integer
-     */
-    public function getDiasCesantiasAusentismo()
-    {
-        return $this->diasCesantiasAusentismo;
-    }
-
-    /**
-     * Set diasVacacionesAusentismo
-     *
-     * @param integer $diasVacacionesAusentismo
-     *
-     * @return RhuLiquidacion
-     */
-    public function setDiasVacacionesAusentismo($diasVacacionesAusentismo)
-    {
-        $this->diasVacacionesAusentismo = $diasVacacionesAusentismo;
-
-        return $this;
-    }
-
-    /**
-     * Get diasVacacionesAusentismo
-     *
-     * @return integer
-     */
-    public function getDiasVacacionesAusentismo()
-    {
-        return $this->diasVacacionesAusentismo;
-    }
-
-    /**
-     * Set estadoPagoBanco
-     *
-     * @param boolean $estadoPagoBanco
-     *
-     * @return RhuLiquidacion
-     */
-    public function setEstadoPagoBanco($estadoPagoBanco)
-    {
-        $this->estadoPagoBanco = $estadoPagoBanco;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoPagoBanco
-     *
-     * @return boolean
-     */
-    public function getEstadoPagoBanco()
-    {
-        return $this->estadoPagoBanco;
-    }
-
-    /**
      * Add pagosBancosDetallesLiquidacionRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesLiquidacionRel
@@ -1803,29 +1857,5 @@ class RhuLiquidacion
     public function getPagosBancosDetallesLiquidacionRel()
     {
         return $this->pagosBancosDetallesLiquidacionRel;
-    }
-
-    /**
-     * Set diasAusentismoAdicional
-     *
-     * @param integer $diasAusentismoAdicional
-     *
-     * @return RhuLiquidacion
-     */
-    public function setDiasAusentismoAdicional($diasAusentismoAdicional)
-    {
-        $this->diasAusentismoAdicional = $diasAusentismoAdicional;
-
-        return $this;
-    }
-
-    /**
-     * Get diasAusentismoAdicional
-     *
-     * @return integer
-     */
-    public function getDiasAusentismoAdicional()
-    {
-        return $this->diasAusentismoAdicional;
     }
 }

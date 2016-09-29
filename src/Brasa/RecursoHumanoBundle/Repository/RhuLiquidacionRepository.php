@@ -200,7 +200,10 @@ class RhuLiquidacionRepository extends EntityRepository {
                         $salarioVacaciones = $salarioPromedioCesantias - $auxilioTransporte;           
                     } else {
                         $salarioVacaciones = $douSalario;
-                    }                     
+                    }   
+                    if($arLiquidacion->getVrSalarioVacacionPropuesto() > 0) {
+                        $salarioVacaciones = $arLiquidacion->getVrSalarioVacacionPropuesto();
+                    }
                     $intDiasAusentismo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->diasAusentismo($dateFechaDesde->format('Y-m-d'), $dateFechaHasta->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());                                                
                     $intDiasAusentismo += $arLiquidacion->getDiasAusentismoAdicional();
                     $intDiasVacaciones = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta);                                
