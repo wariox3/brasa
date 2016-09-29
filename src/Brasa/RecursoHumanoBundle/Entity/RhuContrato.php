@@ -122,6 +122,11 @@ class RhuContrato
      */    
     private $comentarios;    
     
+    /**
+     * @ORM\Column(name="comentarios_terminacion", type="string", length=200, nullable=true)
+     */    
+    private $comentariosTerminacion;    
+    
     /**     
      * @ORM\Column(name="indefinido", type="boolean")
      */    
@@ -2668,5 +2673,29 @@ class RhuContrato
     public function getDisciplinariosContratoRel()
     {
         return $this->disciplinariosContratoRel;
+    }
+
+    /**
+     * Set comentariosTerminacion
+     *
+     * @param string $comentariosTerminacion
+     *
+     * @return RhuContrato
+     */
+    public function setComentariosTerminacion($comentariosTerminacion)
+    {
+        $this->comentariosTerminacion = $comentariosTerminacion;
+
+        return $this;
+    }
+
+    /**
+     * Get comentariosTerminacion
+     *
+     * @return string
+     */
+    public function getComentariosTerminacion()
+    {
+        return $this->comentariosTerminacion;
     }
 }

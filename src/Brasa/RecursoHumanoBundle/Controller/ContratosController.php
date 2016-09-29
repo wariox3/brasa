@@ -396,6 +396,7 @@ class ContratosController extends Controller
                 'class' => 'BrasaRecursoHumanoBundle:RhuMotivoTerminacionContrato',
                         'property' => 'motivo',
             ))      
+            ->add('comentarioTerminacion', 'textarea', array('required' => false))
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $formContrato->handleRequest($request);
@@ -410,8 +411,9 @@ class ContratosController extends Controller
             $arUsuario = $this->get('security.context')->getToken()->getUser();
             $dateFechaHasta = $formContrato->get('fechaTerminacion')->getData();
             $arMotivoTerminacion = new \Brasa\RecursoHumanoBundle\Entity\RhuMotivoTerminacionContrato();
-            $codigoMotivoContrato = $formContrato->get('terminacionContratoRel')->getData();
+            $codigoMotivoContrato = $formContrato->get('terminacionContratoRel')->getData();            
             $arMotivoTerminacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuMotivoTerminacionContrato')->find($codigoMotivoContrato);           
+            $comentarioTerminacion = $formContrato->get('comentarioTerminacion')->getData();            
             if($dateFechaHasta >= $arContrato->getFechaUltimoPago()) {
                 if ($em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(),11)){
                     if($em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->validarCierreContrato($dateFechaHasta, $arContrato->getCodigoEmpleadoFk())) {
@@ -424,6 +426,7 @@ class ContratosController extends Controller
                                 $arContrato->setEstadoTerminado(1);
                                 $arContrato->setCodigoUsuarioTermina($arUsuario->getUserName());
                                 $arContrato->setTerminacionContratoRel($codigoMotivoContrato);
+                                $arContrato->setComentariosTerminacion($comentarioTerminacion);
                                 $em->persist($arContrato);
                                 $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                                 $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato->getCodigoEmpleadoFk());
