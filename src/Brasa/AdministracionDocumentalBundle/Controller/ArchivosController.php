@@ -95,6 +95,21 @@ class ArchivosController extends Controller
     }
     
     /**
+     * @Route("/ad/archivos/eliminar/{codigoArchivo}", name="brs_ad_archivos_eliminar")
+     */    
+    public function EliminarAction($codigoArchivo) {
+        $em = $this->getDoctrine()->getManager();
+        $arArchivo = new \Brasa\AdministracionDocumentalBundle\Entity\AdArchivo();
+        $arArchivo = $em->getRepository('BrasaAdministracionDocumentalBundle:AdArchivo')->find($codigoArchivo);
+        $em->remove($arArchivo);
+        $em->flush();
+        //$rutadirectorio = $arArchivo->getDirectorioRel()->getRutaPrincipal() . $arArchivo->getDirectorioRel()->getNumero() . "/" . $arArchivo->getCodigoArchivoPk() . "_" . $arArchivo->getNombre();
+        $strRuta = $arArchivo->getDirectorioRel()->getRutaPrincipal() . $arArchivo->getDirectorioRel()->getNumero() . "/" . $codigoArchivo . "_" . $arArchivo->getNombre();
+        unlink($strRuta);
+        return $this->redirect($this->generateUrl('brs_ad_archivos_lista', array('codigoDocumento' => $arArchivo->getCodigoDocumentoFk(), 'numero' =>$arArchivo->getNumero())));      
+    }
+    
+    /**
      * @Route("/ad/archivos/enviar/{codigoDocumento}/{numero}/{codigoArchivo}", name="brs_ad_archivos_enviar")
      */    
     public function enviarAction($codigoDocumento, $numero,$codigoArchivo) {
