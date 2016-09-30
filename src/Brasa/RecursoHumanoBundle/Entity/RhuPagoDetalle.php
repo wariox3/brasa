@@ -103,6 +103,11 @@ class RhuPagoDetalle
     private $vrIngresoBaseCotizacionAdicional = 0;           
     
     /**
+     * @ORM\Column(name="vr_ingreso_base_cotizacion_incapacidad", type="float")
+     */
+    private $vrIngresoBaseCotizacionIncapacidad = 0;    
+    
+    /**
      * @ORM\Column(name="vr_extra", type="float")
      */
     private $vrExtra= 0;     
@@ -816,5 +821,29 @@ class RhuPagoDetalle
     public function getVrExtra()
     {
         return $this->vrExtra;
+    }
+
+    /**
+     * Set vrIngresoBaseCotizacionIncapacidad
+     *
+     * @param float $vrIngresoBaseCotizacionIncapacidad
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setVrIngresoBaseCotizacionIncapacidad($vrIngresoBaseCotizacionIncapacidad)
+    {
+        $this->vrIngresoBaseCotizacionIncapacidad = $vrIngresoBaseCotizacionIncapacidad;
+
+        return $this;
+    }
+
+    /**
+     * Get vrIngresoBaseCotizacionIncapacidad
+     *
+     * @return float
+     */
+    public function getVrIngresoBaseCotizacionIncapacidad()
+    {
+        return $this->vrIngresoBaseCotizacionIncapacidad;
     }
 }

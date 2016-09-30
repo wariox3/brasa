@@ -101,6 +101,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                     $douPagoDetalle = 0;
                     $douIngresoBaseCotizacionIncapacidad = 0;
                     $douIngresoBasePrestacionIncapacidad = 0;
+                    $douIngresoBaseCotizacionIncapacidadControl = 0;
                     $intDiasTransporte = $intDiasTransporte - ($intHorasProcesarIncapacidad / $intFactorDia);
 
                     if($arIncapacidad->getIncapacidadTipoRel()->getTipo() == 1) {
@@ -122,6 +123,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                         $douPagoDetalle = ($douPagoDetalle * $arIncapacidad->getPorcentajePago())/100;
                         $douIngresoBasePrestacionIncapacidad = $intHorasProcesarIncapacidad * $douVrHora;
                     }
+                    $douIngresoBaseCotizacionIncapacidadControl = $douPagoDetalle;
                     if($arIncapacidad->getIncapacidadTipoRel()->getGeneraIbc() == 1) {
                         $douIngresoBaseCotizacionIncapacidad = $douPagoDetalle;
                     }
@@ -144,7 +146,8 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                     $douIngresoBasePrestacional += $douIngresoBasePrestacionIncapacidad;                                        
                     $douIngresoBaseCotizacion  += $douIngresoBaseCotizacionIncapacidad;                                                                        
                     $arPagoDetalle->setVrIngresoBasePrestacion($douIngresoBasePrestacionIncapacidad);                                                                            
-                    $arPagoDetalle->setVrIngresoBaseCotizacion($douIngresoBaseCotizacionIncapacidad);                                                                                                            
+                    $arPagoDetalle->setVrIngresoBaseCotizacion($douIngresoBaseCotizacionIncapacidad); 
+                    $arPagoDetalle->setVrIngresoBaseCotizacionIncapacidad($douIngresoBaseCotizacionIncapacidadControl);
                     $em->persist($arPagoDetalle);                                                                                                                                                                                                                      
                 }                
             }
