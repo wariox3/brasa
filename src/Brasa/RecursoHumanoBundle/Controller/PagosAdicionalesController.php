@@ -61,23 +61,6 @@ class PagosAdicionalesController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista', array('modalidad' => $modalidad, 'periodo' => $periodo)));
                 }
             }            
-            if($form->get('BtnAplicaDiaLaborado')->isClicked()) {
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados as $codigoPagoAdicional) {
-                        $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
-                        $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);
-                        if($arPagoAdicional->getAplicaDiaLaborado() == 1) {
-                            $arPagoAdicional->setAplicaDiaLaborado(0);
-                        } else {
-                            $arPagoAdicional->setAplicaDiaLaborado(1);
-                        }
-                        $em->persist($arPagoAdicional);
-                    }
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_pagos_adicionales_lista', array('modalidad' => $modalidad, 'periodo' => $periodo)));
-                }
-            }
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form);
                 $form = $this->formularioLista();
