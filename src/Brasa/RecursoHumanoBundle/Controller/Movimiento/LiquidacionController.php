@@ -25,15 +25,31 @@ class LiquidacionController extends Controller
         $form = $this->formularioLista();
         $form->handleRequest($request);
         $this->listar();
-        if($form->isValid()) {
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');
+        if($form->isValid()) {            
+            if($form->get('BtnLiquidar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigo) {
+                        $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
+                        $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigo);
+                        if($arLiquidacion->getEstadoPagoGenerado() == 0) {
+                            $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($codigo);    
+                        }
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_movimiento_liquidacion'));
+                }
+            }
+            
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
+                $this->formularioLista();
                 $this->listar();
             }
             
             if($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
+                $this->formularioLista();
                 $this->listar();
                 $this->generarExcel();
             }
@@ -130,6 +146,7 @@ class LiquidacionController extends Controller
             if($form->get('BtnLiquidar')->isClicked()) {
                 if($arLiquidacion->getEstadoAutorizado() == 0) {
                     $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($codigoLiquidacion);
+                    $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_movimiento_liquidacion_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));
                 } else {
                     $objMensaje->Mensaje("error", "No puede reliquidar una liquidacion autorizada", $this);
@@ -367,6 +384,20 @@ class LiquidacionController extends Controller
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
+        $strNombreEmpleado = "";
+        if($session->get('filtroIdentificacion')) {
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $session->get('filtroIdentificacion')));
+            if($arEmpleado) {
+                $strNombreEmpleado = $arEmpleado->getNombreCorto();
+                $session->set('filtroRhuCodigoEmpleado', $arEmpleado->getCodigoEmpleadoPk());
+            }  else {
+                $session->set('filtroIdentificacion', null);
+                $session->set('filtroRhuCodigoEmpleado', null);
+            }
+        } else {
+            $session->set('filtroRhuCodigoEmpleado', null);
+        }        
+        
         $arrayPropiedadesCentroCosto = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'query_builder' => function (EntityRepository $er) {
@@ -383,9 +414,11 @@ class LiquidacionController extends Controller
         }
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedadesCentroCosto)    
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('txtNumeroIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('txtNombreCorto', 'text', array('label'  => 'Nombre','data' => $strNombreEmpleado))
             ->add('estadoGenerado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'),'data' => $session->get('filtroGenerado')))
             ->add('estadoPagado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'),'data' => $session->get('filtroPagado')))
+            ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar'))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->getForm();
@@ -428,7 +461,7 @@ class LiquidacionController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        $session->set('filtroIdentificacion', $form->get('txtNumeroIdentificacion')->getData());
         $session->set('filtroGenerado', $controles['estadoGenerado']);
         $session->set('filtroPagado', $controles['estadoPagado']);
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);

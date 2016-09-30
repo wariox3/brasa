@@ -10,25 +10,53 @@
         <div class="panel panel-default">
             <div class="panel-heading">Filtros de busqueda</div>
             <div class="panel-body"> 
-                <div class="form-group form-group-sm">  
-                    <label for="form_TxtIdentificacion" class="col-sm-2 control-label">Identificación:</label>
-                    <div class="col-sm-10">                  
-                        {{ form_widget(form.TxtIdentificacion, { 'attr': {'class': 'form-control'} }) }}
+                <div class="form-group form-group-sm">
+                    <label for="form_TxtIdentificacion" class="col-sm-2 control-label">Empleado:</label>
+                    <div class="col-sm-10">
+                        <div class="row">
+                          <div class="col-lg-2">
+                            <div class="input-group">
+                              {{ form_widget(form.txtNumeroIdentificacion, { 'attr': {'class': 'form-control'} }) }} 
+                            </div>
+                          </div>
+                          <div class="col-lg-10">
+                            <div class="input-group">                                      
+                                {{ form_widget(form.txtNombreCorto, { 'attr': {'class': 'form-control', 'readOnly': 'ReadOnly'} }) }}                              
+                              <span class="input-group-btn">                                        
+                                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_buscar_empleado') }}', 'buscarEmpleado', 600, 900)">Buscar</a>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
                     </div>
-                </div>
+                </div> 
                <div class="form-group form-group-sm">  
-                    <label for="form_estadoGenerado" class="col-sm-2 control-label">Generado:</label>
+                    <label class="col-sm-2 control-label"></label>
                     <div class="col-sm-4">                  
-                        {{ form_widget(form.estadoGenerado, { 'attr': {'class': 'form-control'} }) }}
+                        
                     </div>
                     <label for="form_estadoPagado" class="col-sm-2 control-label">Pagado:</label>
                     <div class="col-sm-4">                  
                         {{ form_widget(form.estadoPagado, { 'attr': {'class': 'form-control'} }) }}
                     </div>                    
                 </div>
+               <div class="form-group form-group-sm">  
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-4">                  
+                        
+                    </div>                   
+                    <label for="form_estadoGenerado" class="col-sm-2 control-label">Generado:</label>
+                    <div class="col-sm-4">                  
+                        {{ form_widget(form.estadoGenerado, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>                    
                 <div class="form-group form-group-sm">  
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-4">                  
+                        
+                    </div>                    
                     <label for="form_centroCostoRel" class="col-sm-2 control-label">Grupo pago:</label>
-                    <div class="col-sm-10">                  
+                    <div class="col-sm-4">                  
                         {{ form_widget(form.centroCostoRel, { 'attr': {'class': 'form-control'} }) }}
                     </div>
                 </div>    
@@ -51,8 +79,9 @@
                         <th>TOTAL</th>
                         <th>GEN</th>
                         <th>PAG</th>
+                        <th>USUARIO</th>
                         <th></th>
-                        <th></th>
+                        <th><input type="checkbox" name="ChkSeleccionar" OnClick="ChequearTodosTabla(this, 'ChkSeleccionar[]');"/></th>
                     </tr>
                     {% for arLiquidaciones in arLiquidaciones %}
                         <tr>
@@ -66,9 +95,10 @@
                             <td style="text-align: right">{{ arLiquidaciones.vrTotal | number_format(0, '.', ',') }}</td>                            
                             <td>{%if arLiquidaciones.estadoGenerado == 1%} SI {%else%} NO {%endif%}</td>
                             <td>{%if arLiquidaciones.estadoPagoGenerado == 1%} SI {%else%} NO {%endif%}</td>
+                            <td>{{ arLiquidaciones.codigoUsuario  }}</td>                            
                             <!-- <td style="text-align: center"><a href="{{ path('brs_rhu_movimiento_liquidacion_nuevo', {'codigoLiquidacion': arLiquidaciones.codigoLiquidacionPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>-->
                             <td style="text-align: center"><a href="{{ path('brs_rhu_movimiento_liquidacion_detalle', { 'codigoLiquidacion': arLiquidaciones.codigoLiquidacionPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                
-                            <td><input type="checkbox" name="ChkSeleccionarContrato[]" value="{{ arLiquidaciones.codigoLiquidacionPk }}" /></td>
+                            <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arLiquidaciones.codigoLiquidacionPk }}" /></td>
                         </tr>
                     {% endfor %}
                 </table>                       
@@ -84,6 +114,9 @@
             <div class="btn-group">                
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
             </div>
+            <div class="btn-group">                
+                {{ form_widget(form.BtnLiquidar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+            </div>            
         </div>          
         <!-- Fin Botones Menu Items -->
         {{ form_rest(form) }}

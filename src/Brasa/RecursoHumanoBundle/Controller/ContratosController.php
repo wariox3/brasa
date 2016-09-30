@@ -470,20 +470,26 @@ class ContratosController extends Controller
                                         $arLiquidacion->setLiquidarPrima(0);                                        
                                     }
                                     $arLiquidacion->setCodigoUsuario($arUsuario->getUserName());                                
-                                    if($arContrato->getCodigoSalarioTipoFk() == 2) {
-                                        if($arLiquidacion->getCodigoMotivoTerminacionContratoFk() != 5 && $arLiquidacion->getCodigoMotivoTerminacionContratoFk() != 4) {
-                                            $intDiasLaborados = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($arContrato->getFechaDesde(), $arContrato->getFechaHasta());                                
-                                            if($intDiasLaborados < 30) {
-                                                $arLiquidacion->setLiquidarSalario(1);
-                                            } else {
-                                                if($intDiasLaborados <= 120) {
-                                                    $arLiquidacion->setPorcentajeIbp(95);
+                                    //Para clientes que manejan porcentajes en la liquidacion
+                                    $arLiquidacion->setPorcentajeIbp(100);
+                                    $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+                                    $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+                                    if($arConfiguracion->getGeneraPorcetnajeLiquidacion()) {
+                                        if($arContrato->getCodigoSalarioTipoFk() == 2) {
+                                            if($arLiquidacion->getCodigoMotivoTerminacionContratoFk() != 5 && $arLiquidacion->getCodigoMotivoTerminacionContratoFk() != 4) {
+                                                $intDiasLaborados = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($arContrato->getFechaDesde(), $arContrato->getFechaHasta());                                
+                                                if($intDiasLaborados < 30) {
+                                                    $arLiquidacion->setLiquidarSalario(1);
                                                 } else {
-                                                    $arLiquidacion->setPorcentajeIbp(90);
-                                                }
-                                            }                                             
-                                        }                                   
-                                    }
+                                                    if($intDiasLaborados <= 120) {
+                                                        $arLiquidacion->setPorcentajeIbp(95);
+                                                    } else {
+                                                        $arLiquidacion->setPorcentajeIbp(90);
+                                                    }
+                                                }                                             
+                                            }                                   
+                                        }                                        
+                                    }                                    
                                     $em->persist($arLiquidacion);
                                     //Verificar creditos
                                     $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();

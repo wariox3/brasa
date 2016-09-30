@@ -263,6 +263,12 @@ class RhuConfiguracion
     private $tipoBasePagoVacaciones;    
     
     /**
+     * Se activa cuando el cliente maneja porcentajes en las liquidaciones
+     * @ORM\Column(name="genera_porcentaje_liquidacion", type="boolean")
+     */
+    private $generaPorcetnajeLiquidacion = false;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="configuracionEntidadRiesgoProfesionalRel")
      * @ORM\JoinColumn(name="codigo_entidad_riesgo_fk", referencedColumnName="codigo_entidad_riesgo_pk")
      */
@@ -1494,5 +1500,29 @@ class RhuConfiguracion
     public function getCodigoFormatoLiquidacion()
     {
         return $this->codigoFormatoLiquidacion;
+    }
+
+    /**
+     * Set generaPorcetnajeLiquidacion
+     *
+     * @param boolean $generaPorcetnajeLiquidacion
+     *
+     * @return RhuConfiguracion
+     */
+    public function setGeneraPorcetnajeLiquidacion($generaPorcetnajeLiquidacion)
+    {
+        $this->generaPorcetnajeLiquidacion = $generaPorcetnajeLiquidacion;
+
+        return $this;
+    }
+
+    /**
+     * Get generaPorcetnajeLiquidacion
+     *
+     * @return boolean
+     */
+    public function getGeneraPorcetnajeLiquidacion()
+    {
+        return $this->generaPorcetnajeLiquidacion;
     }
 }

@@ -119,13 +119,10 @@
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>    
             <div class="btn-group">
-                {#<a class="btn btn-default btn-sm" href="{{ path('brs_rhu_pagos_adicionales_agregar_tiempoadicional' ) }}" >Tiempo suplementario</a>#}
-                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_pagos_adicionales_agregar_valoradicional', { 'tipo': 1, 'modalidad': modalidad, 'periodo': periodo }) }}" >Bonificacion</a>                        
-                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_pagos_adicionales_agregar_valoradicional', { 'tipo': 3, 'modalidad': modalidad, 'periodo': periodo }) }}" >Comision</a>                                                
-                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_pagos_adicionales_agregar_valoradicional', { 'tipo': 2, 'modalidad': modalidad, 'periodo': periodo }) }}" >Descuento</a>
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_pagos_adicionales_agregar_valoradicional', { 'tipo': 1, 'modalidad': modalidad, 'periodo': periodo }) }}" >Nueva bonificacion</a>                        
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_pagos_adicionales_agregar_valoradicional', { 'tipo': 2, 'modalidad': modalidad, 'periodo': periodo }) }}" >Nuevo descuento</a>
              </div>
-             <div class="btn-group">
-                {{ form_widget(form.BtnAplicaDiaLaborado, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                                                
+             <div class="btn-group">                
                 {{ form_widget(form.BtnInactivar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                                        
                 {{ form_widget(form.BtnRetirarConcepto, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}                        
             </div>
