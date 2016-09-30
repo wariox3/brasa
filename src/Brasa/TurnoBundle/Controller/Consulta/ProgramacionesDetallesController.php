@@ -213,7 +213,7 @@ class ProgramacionesDetallesController extends Controller
                     ->setCellValue('T' . $i, $arProgramacionDetalle->getDia13())
                     ->setCellValue('U' . $i, $arProgramacionDetalle->getDia14())
                     ->setCellValue('V' . $i, $arProgramacionDetalle->getDia15())
-                    ->setCellValue('X' . $i, $arProgramacionDetalle->getDia16())
+                    ->setCellValue('W' . $i, $arProgramacionDetalle->getDia16())
                     ->setCellValue('X' . $i, $arProgramacionDetalle->getDia17())
                     ->setCellValue('Y' . $i, $arProgramacionDetalle->getDia18())
                     ->setCellValue('Z' . $i, $arProgramacionDetalle->getDia19())
