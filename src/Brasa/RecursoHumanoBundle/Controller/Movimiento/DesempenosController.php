@@ -148,13 +148,13 @@ class DesempenosController extends Controller
         if($form->isValid()) {
             if($form->get('BtnAutorizar')->isClicked()) {
                 if($arDesempeno->getEstadoAutorizado() == 0) {
-                    if ($arDesempeno->getTotalDesempeno() != 0 || $arDesempeno->getSubTotal1() != 0 || $arDesempeno->getSubTotal2() != 0){
+                    if ($arDesempeno->getInconsistencia() == 0){
                         $arDesempeno->setEstadoAutorizado(1);
                         $em->persist($arDesempeno);
                         $em->flush();
                         return $this->redirect($this->generateUrl('brs_rhu_desempeno_detalle', array('codigoDesempeno' => $codigoDesempeno)));
                     }else{
-                        $objMensaje->Mensaje("error", "No se puede autorizar sin ser evaluado el empleado", $this);
+                        $objMensaje->Mensaje("error", "revise por favor las respuestas, tiene inconsistencias, de clic en actualizar para ver inconsistencias", $this);
                     }
                 }
             }
@@ -168,8 +168,12 @@ class DesempenosController extends Controller
             }
             if($form->get('BtnImprimir')->isClicked()) {
                 if($arDesempeno->getEstadoAutorizado() == 1) {
-                    $objFormato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDesempenos();
-                    $objFormato->Generar($this, $codigoDesempeno);
+                    if ($arDesempeno->getInconsistencia() == 0){
+                        $objFormato = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDesempenos();
+                        $objFormato->Generar($this, $codigoDesempeno);
+                    } else {
+                        $objMensaje->Mensaje("error", "revise por favor las respuestas, tiene inconsistencias, de clic en actualizar para ver inconsistencias", $this);
+                    }
                 }    
             }
             if($form->get('BtnCerrar')->isClicked()) {
@@ -198,30 +202,112 @@ class DesempenosController extends Controller
             if ($form->get('BtnActualizarDetalle')->isClicked()) {                
                     $arrControles = $request->request->All();
                     $intIndice = 0;
+                    $control = true;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {
-                        if($arrControles['TxtSiempre'.$intCodigo] != "" || $arrControles['TxtCasiSiempre'.$intCodigo] != "" || $arrControles['TxtAlgunasVeces'.$intCodigo] != "" || $arrControles['TxtCasiNunca'.$intCodigo] != "" || $arrControles['TxtNunca'.$intCodigo] != "") {
-                            $intSiempre = $arrControles['TxtSiempre'.$intCodigo];
-                            $intCasiSiempre = $arrControles['TxtCasiSiempre'.$intCodigo];
-                            $intAlgunasVeces = $arrControles['TxtAlgunasVeces'.$intCodigo];
-                            $intCasiNunca = $arrControles['TxtCasiNunca'.$intCodigo];
-                            $intNunca = $arrControles['TxtNunca'.$intCodigo];
-                            $arDesempenoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoDetalle();
-                            $arDesempenoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoDetalle')->find($intCodigo);
-                            $arDesempenoDetalle->setSiempre($intSiempre);
-                            $arDesempenoDetalle->setCasiSiempre($intCasiSiempre);
-                            $arDesempenoDetalle->setAlgunasVeces($intAlgunasVeces);
-                            $arDesempenoDetalle->setCasiNunca($intCasiNunca);
-                            $arDesempenoDetalle->setNunca($intNunca);
-                            $em->persist($arDesempenoDetalle);
-
-                        }
+                        $arDesempenoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoDetalle();
+                        $arDesempenoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoDetalle')->find($intCodigo);
+                        
+                            if($arrControles['TxtSiempre'.$intCodigo] != "") {
+                                if ($arrControles['TxtSiempre'.$intCodigo] <= 1){
+                                    $intSiempre = $arrControles['TxtSiempre'.$intCodigo];
+                                    $arDesempenoDetalle->setSiempre($intSiempre);
+                                    $em->persist($arDesempenoDetalle);
+                                } else {
+                                    $objMensaje->Mensaje("error", "La opcion de respuesta debe ser cero(0) o uno (1) en el registro " .$intCodigo."", $this);
+                                    $control = false;
+                                    $arDesempeno->setInconsistencia(true);
+                                }
+                            } else {
+                                $objMensaje->Mensaje("error", "Hay opciones sin respuesta en el registro " .$intCodigo."", $this);
+                                $control = false;
+                                $arDesempeno->setInconsistencia(true);
+                            }
+                            
+                            if($arrControles['TxtCasiSiempre'.$intCodigo] != "") {
+                                if ($arrControles['TxtCasiSiempre'.$intCodigo] <= 1){
+                                    $intCasiSiempre = $arrControles['TxtCasiSiempre'.$intCodigo];
+                                    $arDesempenoDetalle->setCasiSiempre($intCasiSiempre);
+                                    $em->persist($arDesempenoDetalle);
+                                } else {
+                                    $objMensaje->Mensaje("error", "La opcion de respuesta debe ser cero(0) o uno (1) en el registro " .$intCodigo."", $this);
+                                    $control = false;
+                                    $arDesempeno->setInconsistencia(true);
+                                }
+                            } else {
+                                $objMensaje->Mensaje("error", "Hay opciones sin respuesta en el registro " .$intCodigo."", $this);
+                                $control = false;
+                                $arDesempeno->setInconsistencia(true);
+                            }
+                            if($arrControles['TxtAlgunasVeces'.$intCodigo] != "") {
+                                if ($arrControles['TxtAlgunasVeces'.$intCodigo] <= 1){
+                                    $intAlgunasVeces = $arrControles['TxtAlgunasVeces'.$intCodigo];
+                                    $arDesempenoDetalle->setAlgunasVeces($intAlgunasVeces);
+                                    $em->persist($arDesempenoDetalle);
+                                } else {
+                                    $objMensaje->Mensaje("error", "La opcion de respuesta debe ser cero(0) o uno (1) en el registro " .$intCodigo."", $this);
+                                    $control = false;
+                                    $arDesempeno->setInconsistencia(true);
+                                }
+                            } else {
+                                $objMensaje->Mensaje("error", "Hay opciones sin respuesta en el registro " .$intCodigo."", $this);
+                                $control = false;
+                                $arDesempeno->setInconsistencia(true);
+                            }
+                            if($arrControles['TxtCasiNunca'.$intCodigo] != "") {
+                                if ($arrControles['TxtCasiNunca'.$intCodigo] <= 1){
+                                    $intCasiNunca = $arrControles['TxtCasiNunca'.$intCodigo];
+                                    $arDesempenoDetalle->setCasiNunca($intCasiNunca);
+                                    $em->persist($arDesempenoDetalle);
+                                } else {
+                                    $objMensaje->Mensaje("error", "La opcion de respuesta debe ser cero(0) o uno (1) en el registro " .$intCodigo."", $this);
+                                    $control = false;
+                                    $arDesempeno->setInconsistencia(true);
+                                }
+                            } else {
+                                $objMensaje->Mensaje("error", "Hay opciones sin respuesta en el registro " .$intCodigo."", $this);
+                                $control = false;
+                                $arDesempeno->setInconsistencia(true);
+                            }
+                            if($arrControles['TxtNunca'.$intCodigo] != "") {
+                                if ($arrControles['TxtNunca'.$intCodigo] <= 1){
+                                    $intNunca = $arrControles['TxtNunca'.$intCodigo];
+                                    $arDesempenoDetalle->setNunca($intNunca);
+                                    $em->persist($arDesempenoDetalle);
+                                } else {
+                                    $objMensaje->Mensaje("error", "La opcion de respuesta debe ser cero(0) o uno (1) en el registro " .$intCodigo."", $this);
+                                    $control = false;
+                                    $arDesempeno->setInconsistencia(true);
+                                }
+                            } else {
+                                $objMensaje->Mensaje("error", "Hay opciones sin respuesta en el registro " .$intCodigo."", $this);
+                                $control = false;
+                                $arDesempeno->setInconsistencia(true);
+                            }
+                            if ($intSiempre + $intCasiSiempre + $intAlgunasVeces + $intCasiNunca + $intNunca == 0){
+                                $objMensaje->Mensaje("error", "Debe ingresar una opcion de respuesta en el registro " .$intCodigo."" , $this);
+                                $control = false;
+                                $arDesempeno->setInconsistencia(true);
+                            }
+                            if ($intSiempre + $intCasiSiempre + $intAlgunasVeces + $intCasiNunca + $intNunca > 1){
+                                $objMensaje->Mensaje("error", "Debe ingresar solo un uno (1) en la opcion de respuesta en el registro " .$intCodigo."" , $this);
+                                $control = false;
+                                $arDesempeno->setInconsistencia(true);
+                            } 
                     }
+                    if ($control == true){
+                        $arDesempeno->setInconsistencia(0);
+                    }
+                    $total = 0;
+                    $arDesempeno->setSubTotal1(0);
+                    $arDesempeno->setSubTotal2(0);
+                    $arDesempeno->setTotalDesempeno(0);
+                    $em->persist($arDesempeno);
+                    $em->persist($arDesempenoDetalle);
+                    $em->flush();
                     $strObservaciones = $arrControles['TextareaObservaciones'];
                     $strAspectosMejorar = $arrControles['TextareaAspectosMejorar'];
                     $arDesempeno->setObservaciones($strObservaciones);
                     $arDesempeno->setAspectosMejorar($strAspectosMejorar);
-                    $em->persist($arDesempeno);
-                    $em->flush();
                     $intSiempreAreaProfesional = 0;
                     $intCasiSiempreAreaProfesional = 0;
                     $intAlgunasVecesAreaProfesional = 0;
@@ -266,6 +352,7 @@ class DesempenosController extends Controller
                     $intPreguntasConstruccionMantenimientoRelaciones = 0;
                     $arDesempenoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoDetalle();
                     $arDesempenoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoDetalle')->findBy(array('codigoDesempenoFk' => $codigoDesempeno));
+                    if ($control == true){
                     foreach ($arDesempenoDetalles as $arDesempenoDetalle) {
                         if ($arDesempenoDetalle->getDesempenoConceptoRel()->getCodigoDesempenoConceptoTipoFk() == 1){
                             $intSiempreAreaProfesional = $intSiempreAreaProfesional + $arDesempenoDetalle->getSiempre();
@@ -390,6 +477,7 @@ class DesempenosController extends Controller
                     $arDesempeno->setTotalDesempeno(round($total));
                     $em->persist($arDesempeno);
                     $em->flush();
+                    }
             }  
         }          
             $arDesempenosDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoDetalle();

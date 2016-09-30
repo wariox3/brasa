@@ -51,8 +51,8 @@
                     <td class="td-in-well">{{ arDesempeno.dependenciaEvalua }}</td>
                 </tr>
                 <tr>
-                    <td class="titulo"></td>
-                    <td class="td-in-well"></td>
+                    <td class="titulo">INCONSISTENCIA:</td>
+                    <td class="td-in-well">{% if arDesempeno.inconsistencia == 1 %} SI {% else %} NO {% endif %}</td>
                     <td class="titulo">ESTADO AUTORIZADO:</td>
                     <td class="td-in-well">{% if arDesempeno.estadoAutorizado == 1%} SI {% else %} NO {% endif %}</td>
                     <td class="titulo">ESTADO CERRADO:</td>
@@ -94,11 +94,11 @@
                             <td>{{ arDesempenosDetalles.desempenoConceptoRel.nombre }}</td>
                             <td>{{ arDesempenosDetalles.desempenoConceptoRel.desempenoConceptoTipoRel.nombre }}</td>
                             {% if arDesempeno.estadoCerrado == 0 %}
-                                <td style="text-align: right"><input class="input-grid" type="text" name="TxtSiempre{{ arDesempenosDetalles.codigoDesempenoDetallePk }}" value="{{ arDesempenosDetalles.siempre }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                                <td style="text-align: right"><input class="input-grid" type="text" name="TxtCasiSiempre{{ arDesempenosDetalles.codigoDesempenoDetallePk }}" value="{{ arDesempenosDetalles.casiSiempre }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                                <td style="text-align: right"><input class="input-grid" type="text" name="TxtAlgunasVeces{{ arDesempenosDetalles.codigoDesempenoDetallePk }}" value="{{ arDesempenosDetalles.algunasVeces }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                                <td style="text-align: right"><input class="input-grid" type="text" name="TxtCasiNunca{{ arDesempenosDetalles.codigoDesempenoDetallePk }}" value="{{ arDesempenosDetalles.casiNunca }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
-                                <td style="text-align: right"><input class="input-grid" type="text" name="TxtNunca{{ arDesempenosDetalles.codigoDesempenoDetallePk }}" value="{{ arDesempenosDetalles.nunca }}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                                <td style="text-align: right"><input class="input-grid" type="text" name="TxtSiempre{{ arDesempenosDetalles.codigoDesempenoDetallePk }}" value="{% if arDesempenosDetalles.siempre == false %}0{% else %}{{arDesempenosDetalles.siempre}}{% endif %}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                                <td style="text-align: right"><input class="input-grid" type="text" name="TxtCasiSiempre{{ arDesempenosDetalles.codigoDesempenoDetallePk }}" value="{% if arDesempenosDetalles.casiSiempre == false %}0{% else %}{{arDesempenosDetalles.casiSiempre}}{% endif %}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                                <td style="text-align: right"><input class="input-grid" type="text" name="TxtAlgunasVeces{{ arDesempenosDetalles.codigoDesempenoDetallePk }}" value="{% if arDesempenosDetalles.algunasVeces == false %}0{% else %}{{arDesempenosDetalles.algunasVeces}}{% endif %}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                                <td style="text-align: right"><input class="input-grid" type="text" name="TxtCasiNunca{{ arDesempenosDetalles.codigoDesempenoDetallePk }}" value="{% if arDesempenosDetalles.casiNunca == false %}0{% else %}{{arDesempenosDetalles.casiNunca}}{% endif %}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
+                                <td style="text-align: right"><input class="input-grid" type="text" name="TxtNunca{{ arDesempenosDetalles.codigoDesempenoDetallePk }}" value="{% if arDesempenosDetalles.nunca == false %}0{% else %}{{arDesempenosDetalles.nunca}}{% endif %}" size="5" style="text-align: right; width:50px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                             {% else %}
                                 <td style="text-align: right">{{ arDesempenosDetalles.siempre | number_format(0, '.', ',') }}</td>
                                 <td style="text-align: right">{{ arDesempenosDetalles.casiSiempre | number_format(0, '.', ',') }}</td>

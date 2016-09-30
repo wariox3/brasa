@@ -121,7 +121,12 @@ class RhuDesempeno
      * @ORM\Column(name="estado_cerrado", type="boolean")
      */    
     private $estadoCerrado = 0;
-
+    
+    /**     
+     * @ORM\Column(name="inconsistencia", type="boolean")
+     */    
+    private $inconsistencia = 0;
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuCargo", inversedBy="desempenosCargoRel")
      * @ORM\JoinColumn(name="codigo_cargo_fk", referencedColumnName="codigo_cargo_pk")
@@ -139,6 +144,7 @@ class RhuDesempeno
      */
     protected $desempenosDetallesDesempenoRel;
 
+    
     
     /**
      * Constructor
@@ -660,6 +666,30 @@ class RhuDesempeno
     public function getEstadoCerrado()
     {
         return $this->estadoCerrado;
+    }
+
+    /**
+     * Set inconsistencia
+     *
+     * @param boolean $inconsistencia
+     *
+     * @return RhuDesempeno
+     */
+    public function setInconsistencia($inconsistencia)
+    {
+        $this->inconsistencia = $inconsistencia;
+
+        return $this;
+    }
+
+    /**
+     * Get inconsistencia
+     *
+     * @return boolean
+     */
+    public function getInconsistencia()
+    {
+        return $this->inconsistencia;
     }
 
     /**
