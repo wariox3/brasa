@@ -427,5 +427,284 @@ class TurProgramacionRepository extends EntityRepository {
         $em->persist($arProgramacion);
         $em->flush();                                         
         return $strResultado;
-    }         
+    }  
+    
+    public function actualizarHorasProgramadas($codigoProgramacion) {        
+        $em = $this->getEntityManager();        
+        $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();        
+        $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion); 
+        $douTotalHoras = 0;        
+        $douTotalHorasDiurnas = 0;
+        $douTotalHorasNocturnas = 0;        
+        $arProgramacionesDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();        
+        $arProgramacionesDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoProgramacionFk' => $codigoProgramacion));         
+        foreach ($arProgramacionesDetalle as $arProgramacionDetalle) {
+            $douHorasDetalle = 0;
+            $douHorasDiurnas = 0;
+            $douHorasNocturnas = 0;
+            $arProgramacionesDetalleActualizar = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();        
+            $arProgramacionesDetalleActualizar = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($arProgramacionDetalle->getCodigoProgramacionDetallePk());                                     
+            if($arProgramacionDetalle->getDia1() != '') {                
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia1());                 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }
+            }
+            if($arProgramacionDetalle->getDia2() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia2());                 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                               
+            }
+            if($arProgramacionDetalle->getDia3() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia3());                 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }               
+            }
+            if($arProgramacionDetalle->getDia4() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia4());                 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                
+            }
+            if($arProgramacionDetalle->getDia5() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia5());                 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                 
+            }
+            if($arProgramacionDetalle->getDia6() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia6());                 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }              
+            }
+            if($arProgramacionDetalle->getDia7() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia7());                 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                
+            }
+            if($arProgramacionDetalle->getDia8() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia8());                 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }               
+            }            
+            if($arProgramacionDetalle->getDia9() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia9());                 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }               
+            }
+            if($arProgramacionDetalle->getDia10() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia10());                 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }               
+            }
+            if($arProgramacionDetalle->getDia11() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia11());                 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                
+            }
+            if($arProgramacionDetalle->getDia12() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia12());                 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                
+            }
+            if($arProgramacionDetalle->getDia13() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia13());                 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                
+            }
+            if($arProgramacionDetalle->getDia14() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia14());                 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                
+            }
+            if($arProgramacionDetalle->getDia15() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia15());                 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                
+            }
+            if($arProgramacionDetalle->getDia16() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia16());                 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }               
+            }
+            if($arProgramacionDetalle->getDia17() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia17());                 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                
+            }
+            if($arProgramacionDetalle->getDia18() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia18()); 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                
+            }
+            if($arProgramacionDetalle->getDia19() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia19()); 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                
+            }
+            if($arProgramacionDetalle->getDia20() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia20()); 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                
+            }
+            if($arProgramacionDetalle->getDia21() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia21()); 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                
+            }
+            if($arProgramacionDetalle->getDia22() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia22());                 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                
+            }
+            if($arProgramacionDetalle->getDia23() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia23()); 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                 
+            }
+            if($arProgramacionDetalle->getDia24() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia24());                 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                 
+            }
+            if($arProgramacionDetalle->getDia25() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia25()); 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                 
+            }
+            if($arProgramacionDetalle->getDia26() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia26()); 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                } 
+            }
+            if($arProgramacionDetalle->getDia27() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia27()); 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                
+            }
+            if($arProgramacionDetalle->getDia28() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia28()); 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                
+            }
+            if($arProgramacionDetalle->getDia29() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia29()); 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                 
+            }
+            if($arProgramacionDetalle->getDia30() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia30()); 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                
+            }
+            if($arProgramacionDetalle->getDia31() != '') {
+                $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arProgramacionDetalle->getDia31()); 
+                if($arTurno) {
+                    $douHorasDetalle += $arTurno->getHoras();
+                    $douHorasDiurnas += $arTurno->getHorasDiurnas();
+                    $douHorasNocturnas += $arTurno->getHorasNocturnas();                    
+                }                
+            }                  
+            $douTotalHoras += $douHorasDetalle;
+            $douTotalHorasDiurnas += $douHorasDiurnas;
+            $douTotalHorasNocturnas += $douHorasNocturnas;
+            $arProgramacionesDetalleActualizar->setHoras($douHorasDetalle);
+            $arProgramacionesDetalleActualizar->setHorasDiurnas($douHorasDiurnas);
+            $arProgramacionesDetalleActualizar->setHorasNocturnas($douHorasNocturnas);
+            $em->persist($arProgramacionesDetalleActualizar);  
+            
+        }
+        $arProgramacion->setHoras($douTotalHoras);
+        $arProgramacion->setHorasDiurnas($douTotalHorasDiurnas);
+        $arProgramacion->setHorasNocturnas($douTotalHorasNocturnas);
+        $em->persist($arProgramacion);        
+        return true;
+    }            
 }
