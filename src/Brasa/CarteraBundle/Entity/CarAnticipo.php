@@ -110,7 +110,7 @@ class CarAnticipo
     private $estadoAutorizado = 0;
     
     /**
-     * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
+     * @ORM\Column(name="comentarios", type="string", length=600, nullable=true)
      */    
     private $comentarios;
     
@@ -149,7 +149,6 @@ class CarAnticipo
     protected $anticiposDetallesAnticiposRel;
     
    
-    
     
     /**
      * Constructor

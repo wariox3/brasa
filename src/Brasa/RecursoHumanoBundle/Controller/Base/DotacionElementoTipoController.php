@@ -41,7 +41,7 @@ class DotacionElementoTipoController extends Controller
                         $em->remove($arDotacionElementosTipos);
                     }
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_base_dotacionElementoTipo_lista'));
+                    return $this->redirect($this->generateUrl('brs_rhu_base_dotacion_elemento_tipo_lista'));
                 } catch (ForeignKeyConstraintViolationException $e) { 
                     $objMensaje->Mensaje('error', 'No se puede eliminar el elemento tipo porque esta siendo utilizado', $this);
                   }    
@@ -123,9 +123,9 @@ class DotacionElementoTipoController extends Controller
             $arDotacionElementoTipo = $formDotacionElementoTipo->getData();
             $em->flush();
             if($formDotacionElementoTipo->get('guardarynuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_base_dotacionElementoTipo_nuevo', array('codigoDotacionElementoTipo' => 0)));
+                return $this->redirect($this->generateUrl('brs_rhu_base_dotacion_elemento_tipo_nuevo', array('codigoDotacionElementoTipo' => 0)));
             } else {
-                return $this->redirect($this->generateUrl('brs_rhu_base_dotacionElementoTipo_lista'));
+                return $this->redirect($this->generateUrl('brs_rhu_base_dotacion_elemento_tipo_lista'));
             }
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/DotacionElementosTipos:nuevo.html.twig', array(

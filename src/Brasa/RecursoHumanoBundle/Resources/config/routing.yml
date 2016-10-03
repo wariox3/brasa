@@ -143,18 +143,6 @@ brs_rhu_dotacion_detalle_editar:
    defaults: { _controller: BrasaRecursoHumanoBundle:Dotacion:editarElemento }       
     
 
-    
-brs_rhu_base_dotacion_cargo_lista:
-   path:     /rhu/base/dotacion/cargo/lista
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseDotacionCargo:lista }
-   
-brs_rhu_base_dotacion_cargo_nuevo:
-   path:     /rhu/base/dotacion/cargo/nuevo/{codigoDotacionCargo}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseDotacionCargo:nuevo }
-   
-brs_rhu_base_dotacion_cargo_nuevomultiple:
-   path:     /rhu/base/dotacion/cargo/nuevomultiple/{codigoDotacionCargo}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseDotacionCargo:nuevoMultiple }
         
 brs_rhu_cargar_control_acceso_empleados:
     path:     /rhu/cargar/control/acceso/empleados

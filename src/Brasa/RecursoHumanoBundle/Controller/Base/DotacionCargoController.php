@@ -1,9 +1,10 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuDotacionCargoType;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
@@ -12,9 +13,13 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
  * RhuDotacionCargo controller.
  *
  */
-class BaseDotacionCargoController extends Controller
+class DotacionCargoController extends Controller
 {
     var $strDqlLista = "";
+    
+    /**
+     * @Route("/rhu/base/dotacion/cargo/lista", name="brs_rhu_base_dotacion_cargo_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -57,6 +62,9 @@ class BaseDotacionCargoController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/dotacion/cargo/nuevo/{codigoDotacionCargo}", name="brs_rhu_base_dotacion_cargo_nuevo")
+     */
     public function nuevoAction($codigoDotacionCargo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -77,6 +85,9 @@ class BaseDotacionCargoController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/dotacion/cargo/nuevomultiple/{codigoDotacionCargo}", name="brs_rhu_base_dotacion_cargo_nuevomultiple")
+     */
     public function nuevoMultipleAction($codigoDotacionCargo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

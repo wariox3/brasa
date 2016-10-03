@@ -173,9 +173,10 @@ class FormatoAnticipo extends \FPDF_FPDF {
         //linea 8
         $this->SetXY(10, $intY+35);
         $this->SetFont('Arial','B',8);
-        $this->Cell(26, 5, utf8_decode("COMENTARIOS:") , 1, 0, 'L', 1);
-        $this->SetFont('Arial','',7);
-        $this->Cell(168, 5, $arAnticipo->getComentarios(), 1, 0, 'L', 1);
+        //$this->Cell(26, 5, utf8_decode("COMENTARIOS:") , 1, 0, 'L', 1);
+        $this->SetFont('Arial','b',7);
+        //$this->Cell(168, 5, $arAnticipo->getComentarios(), 1, 0, 'L', 1);
+        $this->MultiCell(194,4, "COMENTARIOS: ".$arAnticipo->getComentarios(),1);
         
         $this->EncabezadoDetalles();
         
