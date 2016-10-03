@@ -380,9 +380,14 @@ class FacturaController extends Controller
                         $arFacturaDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
                         $arFacturaDetalle->setModalidadServicioRel($arPedidoDetalle->getModalidadServicioRel());
                         $arFacturaDetalle->setGrupoFacturacionRel($arPedidoDetalle->getGrupoFacturacionRel());
-                        $arFacturaDetalle->setPedidoDetalleRel($arPedidoDetalle);
-                        $arFacturaDetalle->setCantidad($arPedidoDetalle->getCantidad());
-                        $arFacturaDetalle->setVrPrecio($arPedidoDetalle->getVrPrecio());
+                        $arFacturaDetalle->setPedidoDetalleRel($arPedidoDetalle);                        
+                        if($arPedidoDetalle->getCompuesto()) {
+                            $arFacturaDetalle->setCantidad(1);    
+                            $arFacturaDetalle->setVrPrecio($arPedidoDetalle->getVrSubtotal());                            
+                        } else {
+                            $arFacturaDetalle->setCantidad($arPedidoDetalle->getCantidad());    
+                            $arFacturaDetalle->setVrPrecio($arPedidoDetalle->getVrPrecio());
+                        }                        
                         $arFacturaDetalle->setPorIva($arPedidoDetalle->getConceptoServicioRel()->getPorIva());
                         $arFacturaDetalle->setPorBaseIva($arPedidoDetalle->getConceptoServicioRel()->getPorBaseIva());
                         $arFacturaDetalle->setFechaProgramacion($arPedidoDetalle->getPedidoRel()->getFechaProgramacion());
