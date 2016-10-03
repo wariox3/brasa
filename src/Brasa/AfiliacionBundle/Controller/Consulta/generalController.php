@@ -50,7 +50,8 @@ class generalController extends Controller
                 $session->get('filtroCodigoCliente'),
                 $session->get('filtroEmpleadoIdentificacion'),
                 $session->get('filtroDesde'),
-                $session->get('filtroHasta')
+                $session->get('filtroHasta'),
+                $session->get('filtroActivo')
                 ); 
     }       
 
@@ -68,7 +69,7 @@ class generalController extends Controller
             $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
             $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d'));
         }
-        
+        $session->set('filtroActivo', $form->get('estadoActivo')->getData());
         $this->lista();
     }
     
@@ -95,6 +96,7 @@ class generalController extends Controller
             ->add('TxtNumeroIdentificacion', 'text', array('label'  => 'Nombre','data' => $session->get('filtroEmpleadoIdentificacion')))
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('estadoActivo', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ACTIVO', '0' => 'RETIRADO'), 'data' => $session->get('filtroActivo')))                
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();

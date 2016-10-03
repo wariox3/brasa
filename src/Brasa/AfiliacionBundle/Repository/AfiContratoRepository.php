@@ -36,7 +36,7 @@ class AfiContratoRepository extends EntityRepository {
         return $dql;
     }
 
-    public function listaConsultaGeneralDql($strEmpleado = '', $codigoCliente = '', $strIdentificacion = '',$strDesde = "", $strHasta = "") {
+    public function listaConsultaGeneralDql($strEmpleado = '', $codigoCliente = '', $strIdentificacion = '',$strDesde = "", $strHasta = "", $estado = "") {
         $em = $this->getEntityManager();
         /*$dql   = "SELECT c,e FROM BrasaAfiliacionBundle:AfiContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0";
         if($strEmpleado != '') {
@@ -84,9 +84,13 @@ class AfiContratoRepository extends EntityRepository {
         }
         if($strHasta != "") {
             $strSql .= " AND afi_contrato.fecha_hasta <='" . $strHasta . "'";
-        }        
-                //afi_contrato.codigo_cliente_fk = '401' AND
-                //afi_empleado.numero_identificacion = '98553229'";
+        }
+        if($estado == 1 ) {
+            $strSql .= " AND afi_contrato.indefinido = 1";
+        }
+        if($estado == "0") {
+            $strSql .= " AND afi_contrato.indefinido = 0";
+        }
         $connection = $em->getConnection();
         $statement = $connection->prepare($strSql);        
         $statement->execute();
