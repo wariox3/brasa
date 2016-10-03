@@ -291,8 +291,16 @@ class FacturaController extends Controller
             }
             if($form->get('BtnVistaPrevia')->isClicked()) {                                
                 if($arFactura->getFacturaTipoRel()->getTipo() == 1) {
-                    $objFactura = new \Brasa\TurnoBundle\Formatos\Factura2();
-                    $objFactura->Generar($this, $codigoFactura);                                            
+                    $arConfiguracion = new \Brasa\TurnoBundle\Entity\TurConfiguracion();
+                    $arConfiguracion = $em->getRepository('BrasaTurnoBundle:TurConfiguracion')->find(1);
+                    if($arConfiguracion->getCodigoFormatoFactura() <= 1) {
+                        $objFactura = new \Brasa\TurnoBundle\Formatos\Factura1();
+                        $objFactura->Generar($this, $codigoFactura);                            
+                    }
+                    if($arConfiguracion->getCodigoFormatoFactura() == 2) {
+                        $objFactura = new \Brasa\TurnoBundle\Formatos\Factura2();
+                        $objFactura->Generar($this, $codigoFactura);                            
+                    }                                            
                 } 
                 if($arFactura->getFacturaTipoRel()->getTipo() == 2) {
                     $objNotaCredito = new \Brasa\TurnoBundle\Formatos\NotaCredito2();
@@ -301,7 +309,7 @@ class FacturaController extends Controller
                 if($arFactura->getFacturaTipoRel()->getTipo() == 3) {
                     $objNotaDebito = new \Brasa\TurnoBundle\Formatos\NotaDebito2();
                     $objNotaDebito->Generar($this, $codigoFactura);                        
-                }                 
+                }                
                 return $this->redirect($this->generateUrl('brs_tur_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));                                                
             }            
         }

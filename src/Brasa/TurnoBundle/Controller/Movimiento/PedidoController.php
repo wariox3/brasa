@@ -61,10 +61,11 @@ class PedidoController extends Controller
         $request = $this->getRequest();
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $em = $this->getDoctrine()->getManager();
-        $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
+        $em = $this->getDoctrine()->getManager();        
+        $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();        
         if($codigoPedido != 0) {
             $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);
+            $fechaOriginal = $arPedido->getFechaProgramacion();
         }else{
             $arPedido->setFecha(new \DateTime('now'));            
             $arPedido->setFechaProgramacion(new \DateTime('now'));            
@@ -78,9 +79,21 @@ class PedidoController extends Controller
                 $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
                 $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $arrControles['txtNit']));                
                 if(count($arCliente) > 0) {
-                    $arPedido->setClienteRel($arCliente);
-                    $fechaProgramacion = $arPedido->getFechaProgramacion()->format('Y/m/');
-                    $arPedido->setFechaProgramacion(date_create($fechaProgramacion . '01'));
+                    $arPedido->setClienteRel($arCliente);                    
+                    if($codigoPedido != 0){
+                        $numeroRegistros = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->numeroRegistros($codigoPedido);
+                        if($numeroRegistros <= 0) {
+                            $fechaProgramacion = $arPedido->getFechaProgramacion()->format('Y/m/');
+                            $arPedido->setFechaProgramacion(date_create($fechaProgramacion . '01'));                            
+                        } else {
+                            $arPedido->setFechaProgramacion($fechaOriginal);
+                            $objMensaje->Mensaje("error", "No se actualizo la fecha del pedido porque tiene detalles, debe eliminarlos antes de cambiar la fecha", $this);
+                        }
+                    } else {
+                        $fechaProgramacion = $arPedido->getFechaProgramacion()->format('Y/m/');
+                        $arPedido->setFechaProgramacion(date_create($fechaProgramacion . '01'));                                                
+                    }
+                    
                     $arUsuario = $this->getUser();
                     $arPedido->setUsuario($arUsuario->getUserName());
                     $em->persist($arPedido);
@@ -1338,18 +1351,34 @@ class PedidoController extends Controller
         $query = $em->createQuery($em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->listaDql($codigoPedido));
         $arPedidoDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
         $arPedidoDetalles = $query->getResult();
-
-        foreach ($arPedidoDetalles as $arPedidoDetalle) {            
-            $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPedidoDetalle->getPuestoRel()->getNombre())
-                    ->setCellValue('B' . $i, $arPedidoDetalle->getModalidadServicioRel()->getNombre())
-                    ->setCellValue('C' . $i, $arPedidoDetalle->getVrSubtotal() / $arPedidoDetalle->getDias())
-                    ->setCellValue('D' . $i, $arPedidoDetalle->getDias())
-                    ->setCellValue('E' . $i, $arPedidoDetalle->getVrSubtotal());
-                    $objPHPExcel->getActiveSheet()->getStyle('A' . $i)->getFont()->setBold(true);
-            $i++;
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A' . $i, $arPedidoDetalle->getConceptoServicioRel()->getNombreFacturacion(). ' ' . $arPedidoDetalle->getDetalle() . " desde " . $arPedidoDetalle->getDiaDesde() . " hasta " . $arPedidoDetalle->getDiaHasta());            
-            $i++;
+        foreach ($arPedidoDetalles as $arPedidoDetalle) {  
+            if($arPedidoDetalle->getCompuesto()) {
+                $arPedidoDetallesCompuestos = new \Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto();
+                $arPedidoDetallesCompuestos = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalleCompuesto')->findBy(array('codigoPedidoDetalleFk' => $arPedidoDetalle->getCodigoPedidoDetallePk()));  
+                foreach ($arPedidoDetallesCompuestos as $arPedidoDetalleCompuesto) {
+                    $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue('A' . $i, $arPedidoDetalle->getPuestoRel()->getNombre())
+                            ->setCellValue('B' . $i, $arPedidoDetalleCompuesto->getModalidadServicioRel()->getNombre())
+                            ->setCellValue('C' . $i, $arPedidoDetalleCompuesto->getVrSubtotal() / $arPedidoDetalleCompuesto->getDias())
+                            ->setCellValue('D' . $i, $arPedidoDetalleCompuesto->getDias())
+                            ->setCellValue('E' . $i, $arPedidoDetalleCompuesto->getVrSubtotal());
+                            $objPHPExcel->getActiveSheet()->getStyle('A' . $i)->getFont()->setBold(true);
+                    $i++;
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A' . $i, $arPedidoDetalleCompuesto->getConceptoServicioRel()->getNombreFacturacion(). ' ' . $arPedidoDetalleCompuesto->getDetalle() . " desde " . $arPedidoDetalleCompuesto->getDiaDesde() . " hasta " . $arPedidoDetalleCompuesto->getDiaHasta());            
+                    $i++;                     
+                }
+            } else {
+                $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue('A' . $i, $arPedidoDetalle->getPuestoRel()->getNombre())
+                        ->setCellValue('B' . $i, $arPedidoDetalle->getModalidadServicioRel()->getNombre())
+                        ->setCellValue('C' . $i, $arPedidoDetalle->getVrSubtotal() / $arPedidoDetalle->getDias())
+                        ->setCellValue('D' . $i, $arPedidoDetalle->getDias())
+                        ->setCellValue('E' . $i, $arPedidoDetalle->getVrSubtotal());
+                        $objPHPExcel->getActiveSheet()->getStyle('A' . $i)->getFont()->setBold(true);
+                $i++;
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A' . $i, $arPedidoDetalle->getConceptoServicioRel()->getNombreFacturacion(). ' ' . $arPedidoDetalle->getDetalle() . " desde " . $arPedidoDetalle->getDiaDesde() . " hasta " . $arPedidoDetalle->getDiaHasta());            
+                $i++;                
+            }
         }
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C' . ($i+1), 'SUB TOTAL')->setCellValue('E' . ($i+1), $arPedido->getVrSubtotal());        
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C' . ($i+2), 'BASE GRAVABLE')->setCellValue('E' . ($i+2), $arPedido->getVrBaseAiu());        

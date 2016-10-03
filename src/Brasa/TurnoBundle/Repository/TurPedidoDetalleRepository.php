@@ -512,7 +512,7 @@ class TurPedidoDetalleRepository extends EntityRepository {
         $arPedidoDetalle->setVrBaseAiu($baseAiu);
         $arPedidoDetalle->setVrIva($iva);
         $arPedidoDetalle->setVrTotalDetalle($total);        
-        
+        $arPedidoDetalle->setVrTotalDetallePendiente($subtotalGeneral - $arPedidoDetalle->getVrTotalDetalleAfectado());
         $em->persist($arPedidoDetalle);
         $em->flush();
         return true;

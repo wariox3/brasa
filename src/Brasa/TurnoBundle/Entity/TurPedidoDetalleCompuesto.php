@@ -158,6 +158,11 @@ class TurPedidoDetalleCompuesto
     private $dia31 = false;                                  
     
     /**
+     * @ORM\Column(name="detalle", type="string", length=300, nullable=true)
+     */
+    private $detalle;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurPedidoDetalle", inversedBy="pedidosDetallesCompuestosPedidoDetalleRel")
      * @ORM\JoinColumn(name="codigo_pedido_detalle_fk", referencedColumnName="codigo_pedido_detalle_pk")
      */
@@ -959,5 +964,29 @@ class TurPedidoDetalleCompuesto
     public function getPeriodoRel()
     {
         return $this->periodoRel;
+    }
+
+    /**
+     * Set detalle
+     *
+     * @param string $detalle
+     *
+     * @return TurPedidoDetalleCompuesto
+     */
+    public function setDetalle($detalle)
+    {
+        $this->detalle = $detalle;
+
+        return $this;
+    }
+
+    /**
+     * Get detalle
+     *
+     * @return string
+     */
+    public function getDetalle()
+    {
+        return $this->detalle;
     }
 }
