@@ -1,9 +1,10 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuDotacionElementoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
@@ -11,9 +12,12 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
  * RhuDotacionElemento controller.
  *
  */
-class BaseDotacionElementoController extends Controller
+class DotacionElementoController extends Controller
 {
 
+    /**
+     * @Route("/rhu/base/dotacion/elemento/lista", name="brs_rhu_base_dotacion_elemento_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -40,7 +44,7 @@ class BaseDotacionElementoController extends Controller
 
                     }
                 $em->flush();    
-                return $this->redirect($this->generateUrl('brs_rhu_base_dotacionElemento_lista'));
+                return $this->redirect($this->generateUrl('brs_rhu_base_dotacion_elemento_lista'));
                 } catch (ForeignKeyConstraintViolationException $e) { 
                     $objMensaje->Mensaje('error', 'No se puede eliminar la dotacion elemento porque esta siendo utilizado', $this);
                   }
@@ -109,6 +113,9 @@ class BaseDotacionElementoController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/dotacion/elemento/nuevo/{codigoDotacionElemento}", name="brs_rhu_base_dotacion_elemento_nuevo")
+     */
     public function nuevoAction($codigoDotacionElemento) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -126,9 +133,9 @@ class BaseDotacionElementoController extends Controller
             $arDotacionElemento = $formDotacionElemento->getData();
             $em->flush();
             if($formDotacionElemento->get('guardarynuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_base_dotacionElemento_nuevo', array('codigoDotacionElemento' => 0)));
+                return $this->redirect($this->generateUrl('brs_rhu_base_dotacion_elemento_nuevo', array('codigoDotacionElemento' => 0)));
             } else {
-                return $this->redirect($this->generateUrl('brs_rhu_base_dotacionElemento_lista'));
+                return $this->redirect($this->generateUrl('brs_rhu_base_dotacion_elemento_lista'));
             }
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/DotacionElementos:nuevo.html.twig', array(

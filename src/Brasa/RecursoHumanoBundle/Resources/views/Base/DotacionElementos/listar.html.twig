@@ -20,7 +20,7 @@
                 <td>{{arDotacionElementos.codigoDotacionElementoPk}}</td>
                 <td>{{arDotacionElementos.dotacion}}</td>
                 <td>{{arDotacionElementos.dotacionElementoTipoRel.nombre}}</td>
-                <td align="center"><a href="{{ path('brs_rhu_base_dotacionElemento_nuevo',{'codigoDotacionElemento': arDotacionElementos.codigoDotacionElementoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
+                <td align="center"><a href="{{ path('brs_rhu_base_dotacion_elemento_nuevo',{'codigoDotacionElemento': arDotacionElementos.codigoDotacionElementoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td align="center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDotacionElementos.codigoDotacionElementoPk }}" /></td>
             {%endfor%}
             </tr>            
@@ -36,7 +36,7 @@
             {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
         </div>
         <div class="btn-group">
-            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_dotacionElemento_nuevo', {'codigoDotacionElemento': 0}) }}">Nuevo</a>
+            <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_dotacion_elemento_nuevo', {'codigoDotacionElemento': 0}) }}">Nuevo</a>
         </div>
         <div class="btn-group">
             {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}</td>                   

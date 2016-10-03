@@ -1,19 +1,23 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuEmpleadoInformacionInternaTipoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
- * BaseEmpleadoInformacionInternaTipo  Controller.
+ * EmpleadoInformacionInternaTipo  Controller.
  *
  */
-class BaseEmpleadoInformacionInternaTipoController extends Controller
+class EmpleadoInformacionInternaTipoController extends Controller
 {
 
+    /**
+     * @Route("/rhu/base/empleado/informacion/interna/tipo/lista", name="brs_rhu_base_empleado_informacion_interna_tipo_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -58,6 +62,9 @@ class BaseEmpleadoInformacionInternaTipoController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/empleado/informacion/interna/tipo/nuevo/{codigoInformacionInternaTipo}", name="brs_rhu_base_empleado_informacion_interna_tipo_nuevo")
+     */
     public function nuevoAction($codigoInformacionInternaTipo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

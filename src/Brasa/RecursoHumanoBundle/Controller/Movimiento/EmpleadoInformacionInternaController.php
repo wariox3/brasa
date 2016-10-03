@@ -1,9 +1,10 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuEmpleadoInformacionInternaType;
 
 /**
@@ -13,6 +14,9 @@ use Brasa\RecursoHumanoBundle\Form\Type\RhuEmpleadoInformacionInternaType;
 class EmpleadoInformacionInternaController extends Controller
 {
 
+    /**
+     * @Route("/rhu/empleado/informacion/interna/lista", name="brs_rhu_empleado_informacion_interna_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -52,6 +56,9 @@ class EmpleadoInformacionInternaController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/empleado/informacion/interna/nuevo/{codigoInformacionInterna}", name="brs_rhu_empleado_informacion_interna_nuevo")
+     */
     public function nuevoAction($codigoInformacionInterna = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();

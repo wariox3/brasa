@@ -1,9 +1,10 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuLicenciaTipoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
@@ -12,9 +13,12 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
  * RhuLicenciaTipo controller.
  *
  */
-class BaseLicenciaTipoController extends Controller
+class LicenciaTipoController extends Controller
 {
 
+    /**
+     * @Route("/rhu/base/licenciatipo/listar", name="brs_rhu_base_licenciatipo_listar")
+     */
     public function listarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -116,6 +120,9 @@ class BaseLicenciaTipoController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/licenciatipo/nuevo/{codigoLicenciaTipoPk}", name="brs_rhu_base_licenciatipo_nuevo")
+     */
     public function nuevoAction($codigoLicenciaTipoPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

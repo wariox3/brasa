@@ -15,7 +15,7 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 class DotacionElementoTipoController extends Controller
 {
     /**
-     * @Route("/rhu/base/dotacion/elemento/tipo/lista", name="brs_rhu_base_dotacionElementoTipo_lista")
+     * @Route("/rhu/base/dotacion/elemento/tipo/lista", name="brs_rhu_base_dotacion_elemento_tipo_lista")
      */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
@@ -104,7 +104,7 @@ class DotacionElementoTipoController extends Controller
     }
     
     /**
-     * @Route("/rhu/base/dotacion/elemento/tipo/nuevo/{codigoDotacionElementoTipo}", name="brs_rhu_base_dotacionElementoTipo_nuevo")
+     * @Route("/rhu/base/dotacion/elemento/tipo/nuevo/{codigoDotacionElementoTipo}", name="brs_rhu_base_dotacion_elemento_tipo_nuevo")
      */
     public function nuevoAction($codigoDotacionElementoTipo) {
         $em = $this->getDoctrine()->getManager();

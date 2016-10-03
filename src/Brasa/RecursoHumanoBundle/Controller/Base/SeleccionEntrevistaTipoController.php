@@ -1,9 +1,10 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuSeleccionEntrevistaTipoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
@@ -11,9 +12,12 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
  * RhuSeleccionEntrevistaTipo controller.
  *
  */
-class BaseSeleccionEntrevistaTipoController extends Controller
+class SeleccionEntrevistaTipoController extends Controller
 {
 
+    /**
+     * @Route("/rhu/base/seleccion/entrevista/tipo/listar", name="brs_rhu_base_seleccion_entrevista_tipo_listar")
+     */
     public function listarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -101,6 +105,9 @@ class BaseSeleccionEntrevistaTipoController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/seleccion/entrevista/tipo/nuevo{codigoSeleccionEntrevistaTipo}", name="brs_rhu_base_seleccion_entrevista_tipo_nuevo")
+     */
     public function nuevoAction($codigoSeleccionEntrevistaTipo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

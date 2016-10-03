@@ -4,83 +4,7 @@ brs_rhu_inicio:
 
 brs_rhu_como_iniciar:
     path:     /rhu/como/iniciar   
-    defaults: { _controller: BrasaRecursoHumanoBundle:Default:comoIniciar }
-    
-brs_rhu_base_creditotipo_listar:
-   path:     /rhu/base/creditotipo/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseCreditoTipo:listar }
-   
-brs_rhu_base_desempeno_concepto_tipo_listar:
-   path:     /rhu/base/desempeno/concepto/tipo/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseDesempenoConceptoTipo:listar }
-   
-brs_rhu_base_desempeno_concepto_tipo_nuevo:
-   path:     /rhu/base/desempeno/concepto/tipo/nuevo/{codigoDesempenoConceptoTipo}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseDesempenoConceptoTipo:nuevo }
-   
-brs_rhu_base_desempeno_concepto_listar:
-   path:     /rhu/base/desempeno/concepto/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseDesempenoConcepto:listar }
-   
-brs_rhu_base_desempeno_concepto_nuevo:
-   path:     /rhu/base/desempeno/concepto/nuevo/{codigoDesempenoConcepto}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseDesempenoConcepto:nuevo }
-   
-brs_rhu_base_creditotipo_nuevo:
-   path:     /rhu/base/creditotipo/nuevo/{codigoCreditoTipoPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseCreditoTipo:nuevo }
-   
-brs_rhu_base_creditotipo_detalle:
-   path:     /rhu/base/creditotipo/detalle/{codigoCreditoTipoPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseCreditoTipo:detalle }
-   
-brs_rhu_base_licenciatipo_listar:
-   path:     /rhu/base/licenciatipo/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseLicenciaTipo:listar }
-   
-brs_rhu_base_licenciatipo_nuevo:
-   path:     /rhu/base/licenciatipo/nuevo/{codigoLicenciaTipoPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseLicenciaTipo:nuevo }   
-   
-brs_rhu_base_ssosucursal_listar:
-   path:     /rhu/base/ssosucursal/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSsoSucursal:listar }
-   
-brs_rhu_base_ssosucursal_nuevo:
-   path:     /rhu/base/ssosucursal/nuevo/{codigoSucursalPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSsoSucursal:nuevo }
-   
-brs_rhu_base_departamento_empresa_listar:
-   path:     /rhu/base/departamento/empresa/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseDepartamentoEmpresa:listar }
-   
-brs_rhu_base_departamento_empresa_nuevo:
-   path:     /rhu/base/departamento/empresa/nuevo/{codigoDepartamentoEmpresa}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseDepartamentoEmpresa:nuevo }
-   
-brs_rhu_base_seleccion_prueba_tipo_listar:
-   path:     /rhu/base/seleccion/prueba/tipo/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSeleccionPruebaTipo:listar }
-   
-brs_rhu_base_seleccion_prueba_tipo_nuevo:
-   path:     /rhu/base/seleccion/prueba/tipo/nuevo{codigoSeleccionPruebaTipo}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSeleccionPruebaTipo:nuevo }
-   
-brs_rhu_base_seleccion_entrevista_tipo_listar:
-   path:     /rhu/base/seleccion/entrevista/tipo/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSeleccionEntrevistaTipo:listar }
-   
-brs_rhu_base_seleccion_entrevista_tipo_nuevo:
-   path:     /rhu/base/seleccion/entrevista/tipo/nuevo{codigoSeleccionEntrevistaTipo}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSeleccionEntrevistaTipo:nuevo }   
-   
-brs_rhu_empleado_informacion_interna_lista:
-    path:     /rhu/empleado/informacion/interna/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoInformacionInterna:lista }    
-
-brs_rhu_empleado_informacion_interna_nuevo:
-    path:     /rhu/empleado/informacion/interna/nuevo/{codigoInformacionInterna}
-    defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoInformacionInterna:nuevo }   
+    defaults: { _controller: BrasaRecursoHumanoBundle:Default:comoIniciar }                 
 
 brs_rhu_utilidades_pagos_generar_periodo:
     path:     /rhu/utilidades/pagos/generar/periodo
@@ -140,31 +64,7 @@ brs_rhu_pagos_adicionales_agregar_valoradicionaleditar:
     
 brs_rhu_pagos_adicionales_agregar_valoradicional:
     path:     /rhu/pagos/adicionales/agregar/valoradicional/{tipo}/{modalidad}/{periodo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:valorAdicional }       
-    
-brs_rhu_base_empleado_estudio_tipo_lista:
-    path:     /rhu/empleado/estudio/tipo/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleadoEstudioTipo:lista }    
-
-brs_rhu_base_empleado_estudio_tipo_nuevo:
-    path:     /rhu/empleado/estudio/tipo/nuevo/{codigoTipoEstudio}
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleadoEstudioTipo:nuevo } 
-    
-brs_rhu_base_empleado_informacion_interna_tipo_lista:
-    path:     /rhu/empleado/informacion/interna/tipo/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleadoInformacionInternaTipo:lista }    
-
-brs_rhu_base_empleado_informacion_interna_tipo_nuevo:
-    path:     /rhu/empleado/informacion/interna/tipo/nuevo/{codigoInformacionInternaTipo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleadoInformacionInternaTipo:nuevo }
-    
-brs_rhu_base_empleado_informacion_interna_lista:
-    path:     /rhu/empleado/informacion/interna/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleadoInformacionInterna:lista }    
-
-brs_rhu_base_empleado_informacion_interna_nuevo:
-    path:     /rhu/empleado/informacion/interna/nuevo/{codigoInformacionInterna}
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleadoInformacionInterna:nuevo }
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:valorAdicional }                
     
 brs_rhu_base_capacitacion_tipo_lista:
     path:     /rhu/capacitacion/tipo/lista
@@ -242,13 +142,7 @@ brs_rhu_dotacion_detalle_editar:
    path:     /rhu/base/empleadoDotacion/detalle/editar/{codigoDotacionDetalle}
    defaults: { _controller: BrasaRecursoHumanoBundle:Dotacion:editarElemento }       
     
-brs_rhu_base_dotacionElemento_lista:
-    path:     /rhu/base/dotacion/elemento/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseDotacionElemento:lista }
-    
-brs_rhu_base_dotacionElemento_nuevo:
-    path:     /rhu/base/dotacion/elemento/nuevo/{codigoDotacionElemento}
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseDotacionElemento:nuevo }
+
     
 brs_rhu_base_dotacion_cargo_lista:
    path:     /rhu/base/dotacion/cargo/lista

@@ -1,16 +1,20 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuSsoSucursalType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 
-class BaseSsoSucursalController extends Controller
+class SsoSucursalController extends Controller
 {
-
+    
+    /**
+     * @Route("/rhu/base/ssosucursal/listar", name="brs_rhu_base_ssosucursal_listar")
+     */
     public function listarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -107,6 +111,9 @@ class BaseSsoSucursalController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/ssosucursal/nuevo/{codigoSucursalPk}", name="brs_rhu_base_ssosucursal_nuevo")
+     */
     public function nuevoAction($codigoSucursalPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

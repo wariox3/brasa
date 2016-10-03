@@ -1,23 +1,27 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Brasa\RecursoHumanoBundle\Form\Type\RhuSeleccionPruebaTipoType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuDepartamentoEmpresaType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
- * RhuSeleccionPruebaTipo controller.
+ * RhuDepartamentoEmpresa controller.
  *
  */
-class BaseSeleccionPruebaTipoController extends Controller
+class DepartamentoEmpresaController extends Controller
 {
 
+    /**
+     * @Route("/rhu/base/departamento/empresa/listar", name="brs_rhu_base_departamento_empresa_listar")
+     */
     public function listarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
-        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 49, 1)) {
+        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 58, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
         $paginator  = $this->get('knp_paginator');
@@ -27,20 +31,20 @@ class BaseSeleccionPruebaTipoController extends Controller
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
-        $arSeleccionPruebasTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionPruebaTipo();
+        $arDepartamentosEmpresa = new \Brasa\RecursoHumanoBundle\Entity\RhuDepartamentoEmpresa();
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
                 try{
-                    foreach ($arrSeleccionados AS $codigoSeleccionPruebaTipoPk) {
-                        $arSeleccionPruebaTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionPruebaTipo();
-                        $arSeleccionPruebaTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionPruebaTipo')->find($codigoSeleccionPruebaTipoPk);
-                        $em->remove($arSeleccionPruebaTipo);
+                    foreach ($arrSeleccionados AS $codigoDepartamentoEmpresaPk) {
+                        $arDepartamentosEmpresa = new \Brasa\RecursoHumanoBundle\Entity\RhuDepartamentoEmpresa();
+                        $arDepartamentosEmpresa = $em->getRepository('BrasaRecursoHumanoBundle:RhuDepartamentoEmpresa')->find($codigoDepartamentoEmpresaPk);
+                        $em->remove($arDepartamentosEmpresa);
                     }
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_base_seleccion_prueba_tipo_listar'));
+                    return $this->redirect($this->generateUrl('brs_rhu_base_departamento_empresa_listar'));
                 } catch (ForeignKeyConstraintViolationException $e) { 
-                    $objMensaje->Mensaje('error', 'No se puede eliminar el tipo de prueba porque esta siendo utilizado', $this);
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el departamento empresa porque esta siendo utilizado', $this);
                   }    
             }    
         
@@ -61,21 +65,21 @@ class BaseSeleccionPruebaTipoController extends Controller
                             ->setCellValue('B1', 'NOMBRE');
 
                 $i = 2;
-                $arSeleccionPruebasTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionPruebaTipo')->findAll();
+                $arDepartamentosEmpresa = $em->getRepository('BrasaRecursoHumanoBundle:RhuDepartamentoEmpresa')->findAll();
                 
-                foreach ($arSeleccionPruebasTipo as $arSeleccionPruebasTipo) {
+                foreach ($arDepartamentosEmpresa as $arDepartamentosEmpresa) {
                     $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A' . $i, $arSeleccionPruebasTipo->getCodigoSeleccionPruebaTipoPk())
-                            ->setCellValue('B' . $i, $arSeleccionPruebasTipo->getNombre());
+                            ->setCellValue('A' . $i, $arDepartamentosEmpresa->getCodigoDepartamentoEmpresaPk())
+                            ->setCellValue('B' . $i, $arDepartamentosEmpresa->getNombre());
                     $i++;
                 }
 
-                $objPHPExcel->getActiveSheet()->setTitle('Selección prueba tipo');
+                $objPHPExcel->getActiveSheet()->setTitle('Departamentos empresa');
                 $objPHPExcel->setActiveSheetIndex(0);
 
                 // Redirect output to a client’s web browser (Excel2007)
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="SeleccionPruebaTipo.xlsx"');
+                header('Content-Disposition: attachment;filename="DepartamentosEmpresa.xlsx"');
                 header('Cache-Control: max-age=0');
                 // If you're serving to IE 9, then the following may be needed
                 header('Cache-Control: max-age=1');
@@ -90,37 +94,40 @@ class BaseSeleccionPruebaTipoController extends Controller
             }
             
         }
-        $arSeleccionPruebasTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionPruebaTipo();
-        $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionPruebaTipo')->findAll();
-        $arSeleccionPruebasTipo = $paginator->paginate($query, $this->get('request')->query->get('page', 1),50);
+        $arDepartamentosEmpresa = new \Brasa\RecursoHumanoBundle\Entity\RhuDepartamentoEmpresa();
+        $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuDepartamentoEmpresa')->findAll();
+        $arDepartamentosEmpresa = $paginator->paginate($query, $this->get('request')->query->get('page', 1),50);
 
-        return $this->render('BrasaRecursoHumanoBundle:Base/SeleccionPruebaTipo:listar.html.twig', array(
-                    'arSeleccionPruebasTipo' => $arSeleccionPruebasTipo,
+        return $this->render('BrasaRecursoHumanoBundle:Base/DepartamentosEmpresa:listar.html.twig', array(
+                    'arDepartamentosEmpresa' => $arDepartamentosEmpresa,
                     'form'=> $form->createView()
            
         ));
     }
     
-    public function nuevoAction($codigoSeleccionPruebaTipo) {
+    /**
+     * @Route("/rhu/base/departamento/empresa/nuevo/{codigoDepartamentoEmpresa}", name="brs_rhu_base_departamento_empresa_nuevo")
+     */
+    public function nuevoAction($codigoDepartamentoEmpresa) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arSeleccionPruebaTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionPruebaTipo();
-        if ($codigoSeleccionPruebaTipo != 0)
+        $arDepartamentoEmpresa = new \Brasa\RecursoHumanoBundle\Entity\RhuDepartamentoEmpresa();
+        if ($codigoDepartamentoEmpresa != 0)
         {
-            $arSeleccionPruebaTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuSeleccionPruebaTipo')->find($codigoSeleccionPruebaTipo);
+            $arDepartamentoEmpresa = $em->getRepository('BrasaRecursoHumanoBundle:RhuDepartamentoEmpresa')->find($codigoDepartamentoEmpresa);
         }    
-        $formSeleccionPruebaTipo = $this->createForm(new RhuSeleccionPruebaTipoType(), $arSeleccionPruebaTipo);
-        $formSeleccionPruebaTipo->handleRequest($request);
-        if ($formSeleccionPruebaTipo->isValid())
+        $formDepartamentoEmpresa = $this->createForm(new RhuDepartamentoEmpresaType(), $arDepartamentoEmpresa);
+        $formDepartamentoEmpresa->handleRequest($request);
+        if ($formDepartamentoEmpresa->isValid())
         {
             // guardar la tarea en la base de datos
-            $em->persist($arSeleccionPruebaTipo);
-            $arSeleccionPruebaTipo = $formSeleccionPruebaTipo->getData();
+            $em->persist($arDepartamentoEmpresa);
+            $arDepartamentoEmpresa = $formDepartamentoEmpresa->getData();
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_base_seleccion_prueba_tipo_listar'));
+            return $this->redirect($this->generateUrl('brs_rhu_base_departamento_empresa_listar'));
         }
-        return $this->render('BrasaRecursoHumanoBundle:Base/SeleccionPruebaTipo:nuevo.html.twig', array(
-            'formSeleccionPruebaTipo' => $formSeleccionPruebaTipo->createView(),
+        return $this->render('BrasaRecursoHumanoBundle:Base/DepartamentosEmpresa:nuevo.html.twig', array(
+            'formDepartamentoEmpresa' => $formDepartamentoEmpresa->createView(),
         ));
     }
 }

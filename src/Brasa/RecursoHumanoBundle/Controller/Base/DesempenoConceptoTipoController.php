@@ -1,23 +1,27 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Brasa\RecursoHumanoBundle\Form\Type\RhuEmpleadoEstudioTipoType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuDesempenoConceptoTipoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
- * RhuBaseEmpleadoEstudioTipo controller.
+ * RhuDesempenoConceptoTipo controller.
  *
  */
-class BaseEmpleadoEstudioTipoController extends Controller
+class DesempenoConceptoTipoController extends Controller
 {
 
-    public function listaAction() {
+    /**
+     * @Route("/rhu/base/desempeno/concepto/tipo/listar", name="brs_rhu_base_desempeno_concepto_tipo_listar")
+     */
+    public function listarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
-        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 38, 1)) {
+        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 47, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
         $paginator  = $this->get('knp_paginator');
@@ -27,56 +31,59 @@ class BaseEmpleadoEstudioTipoController extends Controller
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
-        $arTipoEstudios = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudioTipo();
+        $arDesempenoConceptoTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoConceptoTipo();
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
                 try{
-                    foreach ($arrSeleccionados AS $codigoTipoEstudio) {
-                        $arTipoEstudio = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudioTipo();
-                        $arTipoEstudio = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudioTipo')->find($codigoTipoEstudio);
-                        $em->remove($arTipoEstudio);
+                    foreach ($arrSeleccionados AS $codigoDesempenoConceptoTipo) {
+                        $arDesempenoConceptoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoConceptoTipo();
+                        $arDesempenoConceptoTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoConceptoTipo')->find($codigoDesempenoConceptoTipo);
+                        $em->remove($arDesempenoConceptoTipo);
                     }
                     $em->flush();
-                } catch (ForeignKeyConstraintViolationException $e) {
-                        $objMensaje->Mensaje('error', 'No se puede eliminar el tipo de estudio porque esta siendo utilizado', $this);
-                    }    
+                } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el concepto tipo porque esta siendo utilizado', $this);
+                  }    
             }
               
             if($form->get('BtnExcel')->isClicked()) { 
                 $this->generarExcel();
             }
         }
-        $arTipoEstudios = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudioTipo();
-        $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudioTipo')->findAll();
-        $arTipoEstudios = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
+        $arDesempenoConceptoTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoConceptoTipo();
+        $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoConceptoTipo')->findAll();
+        $arDesempenoConceptoTipos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
 
-        return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoEstudioTipo:listar.html.twig', array(
-                    'arTipoEstudios' => $arTipoEstudios,
+        return $this->render('BrasaRecursoHumanoBundle:Base/DesempenoConceptoTipo:listar.html.twig', array(
+                    'arDesempenoConceptoTipos' => $arDesempenoConceptoTipos,
                     'form'=> $form->createView()
            
         ));
     }
     
-    public function nuevoAction($codigoTipoEstudio) {
+    /**
+     * @Route("/rhu/base/desempeno/concepto/tipo/nuevo/{codigoDesempenoConceptoTipo}", name="brs_rhu_base_desempeno_concepto_tipo_nuevo")
+     */
+    public function nuevoAction($codigoDesempenoConceptoTipo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arTipoEstudios = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudioTipo();
-        if ($codigoTipoEstudio != 0)
+        $arDesempenoConceptoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoConceptoTipo();
+        if ($codigoDesempenoConceptoTipo != 0)
         {
-            $arTipoEstudios = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudioTipo')->find($codigoTipoEstudio);
+            $arDesempenoConceptoTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoConceptoTipo')->find($codigoDesempenoConceptoTipo);
         }    
-        $form = $this->createForm(new RhuEmpleadoEstudioTipoType(), $arTipoEstudios);
+        $form = $this->createForm(new RhuDesempenoConceptoTipoType(), $arDesempenoConceptoTipo);
         $form->handleRequest($request);
         if ($form->isValid())
         {
             // guardar la tarea en la base de datos
-            $arTipoEstudios = $form->getData();
-            $em->persist($arTipoEstudios);
+            $arDesempenoConceptoTipo = $form->getData();
+            $em->persist($arDesempenoConceptoTipo);
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_base_empleado_estudio_tipo_lista'));
+            return $this->redirect($this->generateUrl('brs_rhu_base_desempeno_concepto_tipo_listar'));
         }
-        return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoEstudioTipo:nuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Base/DesempenoConceptoTipo:nuevo.html.twig', array(
             'form' => $form->createView(),
         ));
     }
@@ -96,25 +103,25 @@ class BaseEmpleadoEstudioTipoController extends Controller
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'Código')
-                    ->setCellValue('B1', 'Estudio');
+                    ->setCellValue('A1', 'CÓDIGO')
+                    ->setCellValue('B1', 'TIPO CONCEPTO');
         $i = 2;
-        $arTipoEstudios = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudioTipo')->findAll();
+        $arDesempenoConceptoTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoConceptoTipo')->findAll();
 
-        foreach ($arTipoEstudios as $arTipoEstudio) {
+        foreach ($arDesempenoConceptoTipos as $arDesempenoConceptoTipo) {
 
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arTipoEstudio->getEmpleadoEstudioTipoPk())
-                    ->setCellValue('B' . $i, $arTipoEstudio->getNombre());
+                    ->setCellValue('A' . $i, $arDesempenoConceptoTipo->getcodigoDesempenoConceptoTipoPk())
+                    ->setCellValue('B' . $i, $arDesempenoConceptoTipo->getNombre());
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('TipoEstudios');
+        $objPHPExcel->getActiveSheet()->setTitle('DesempenosConceptosTipos');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="TipoEstudios.xlsx"');
+        header('Content-Disposition: attachment;filename="DesempenosConceptosTipos.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

@@ -1,9 +1,9 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
-
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCreditoTipoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
@@ -11,9 +11,12 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
  * RhucreditoTipo controller.
  *
  */
-class BaseCreditoTipoController extends Controller
+class CreditoTipoController extends Controller
 {
-
+    
+    /**
+     * @Route("/rhu/base/creditotipo/listar", name="brs_rhu_base_creditotipo_listar")
+     */
     public function listarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -116,6 +119,9 @@ class BaseCreditoTipoController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/creditotipo/nuevo/{codigoCreditoTipoPk}", name="brs_rhu_base_creditotipo_nuevo")
+     */
     public function nuevoAction($codigoCreditoTipoPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -145,6 +151,9 @@ class BaseCreditoTipoController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/creditotipo/detalle/{codigoCreditoTipoPk}", name="brs_rhu_base_creditotipo_detalle")
+     */
     public function detalleAction($codigoCreditoTipoPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
