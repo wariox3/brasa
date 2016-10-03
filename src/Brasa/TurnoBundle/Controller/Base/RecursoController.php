@@ -117,7 +117,9 @@ class RecursoController extends Controller
             } 
             if($form->get('BtnActualizar')->isClicked()) {
                 if($codigoRecurso != '' && $codigoRecurso != '0') {
-                    $arEmpleado = $arRecurso->getEmpleadoRel();                                                            
+                    $arEmpleado = $arRecurso->getEmpleadoRel();
+                    $arRecurso->setNumeroIdentificacion($arEmpleado->getNumeroIdentificacion());
+                    $arRecurso->setNombreCorto($arEmpleado->getNombreCorto());
                     $arRecurso->setTelefono($arEmpleado->getTelefono());
                     $arRecurso->setCelular($arEmpleado->getCelular());
                     $arRecurso->setDireccion($arEmpleado->getDireccion());
