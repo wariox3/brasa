@@ -255,7 +255,7 @@ class Factura1 extends \FPDF_FPDF {
             number_format($arFactura->getVrIva(), 0, '.', ','),
             number_format($arFactura->getVrRetencionFuente(), 0, '.', ','),
             number_format($arFactura->getVrRetencionIva(), 0, '.', ','),
-            number_format($arFactura->getVrTotal(), 0, '.', ',')
+            number_format($arFactura->getVrTotalNeto(), 0, '.', ',')
         );
 
         $this->SetFont('Arial', '', 7.5);
