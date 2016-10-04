@@ -38,10 +38,13 @@ class GenerarSoportePagoController extends Controller
                 $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($dateFechaDesde->format('Y-m-').'01', $dateFechaHasta->format('Y-m-').'31');                
                 
                 $dql   = "SELECT pd.codigoRecursoFk FROM BrasaTurnoBundle:TurProgramacionDetalle pd JOIN pd.recursoRel r "
-                        . "WHERE pd.anio = " . $arSoportePagoPeriodo->getFechaDesde()->format('Y') . " AND pd.mes = " . $arSoportePagoPeriodo->getFechaDesde()->format('m') . " AND r.codigoRecursoGrupoFk = " . $arSoportePagoPeriodo->getCodigoRecursoGrupoFk() . " GROUP BY pd.codigoRecursoFk";      
+                        . "WHERE pd.anio = " . $arSoportePagoPeriodo->getFechaDesde()->format('Y') . " AND pd.mes = " . $arSoportePagoPeriodo->getFechaDesde()->format('m') . " GROUP BY pd.codigoRecursoFk";      
                 $query = $em->createQuery($dql);                
                 $arRecursosResumen = $query->getResult();
                 foreach($arRecursosResumen as $arRecursoResumen) {
+                    if($arRecursoResumen['codigoRecursoFk'] == 2500) {
+                        echo "hola";
+                    }
                     $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
                     $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($arRecursoResumen['codigoRecursoFk']);                    
                     $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
@@ -58,37 +61,39 @@ class GenerarSoportePagoController extends Controller
                     $arContratos = $query->getResult();
                     $numeroContratos = count($arContratos);
                     foreach ($arContratos as $arContrato) {
-                        if($arContrato->getEstadoTerminado() == 0 || $arContrato->getFechaHasta() >= $arSoportePagoPeriodo->getFechaDesde()) {
-                            if($arContrato->getFechaDesde() <= $arSoportePagoPeriodo->getFechaHasta()) {
-                                $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();                                                
-                                $arSoportePago->setCodigoContratoFk($arContrato->getCodigoContratoPk());
-                                $arSoportePago->setVrSalario($arContrato->getVrSalario());                            
-                                $arSoportePago->setRecursoRel($arRecurso);
-                                $arSoportePago->setSoportePagoPeriodoRel($arSoportePagoPeriodo);
-                                if($numeroContratos > 1) {
-                                    if($arContrato->getFechaDesde() > $arSoportePagoPeriodo->getFechaDesde()) {
-                                        $arSoportePago->setFechaDesde($arContrato->getFechaDesde());
-                                        $arSoportePago->setFechaHasta($arSoportePagoPeriodo->getFechaHasta());
-                                    }
-                                    if($arContrato->getFechaHasta() < $arSoportePagoPeriodo->getFechaHasta()) {
+                        if($arContrato->getCentroCostoRel()->getCodigoRecursoGrupoFk() == $arSoportePagoPeriodo->getCodigoRecursoGrupoFk()) {
+                            if($arContrato->getEstadoTerminado() == 0 || $arContrato->getFechaHasta() >= $arSoportePagoPeriodo->getFechaDesde()) {
+                                if($arContrato->getFechaDesde() <= $arSoportePagoPeriodo->getFechaHasta()) {
+                                    $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();                                                
+                                    $arSoportePago->setCodigoContratoFk($arContrato->getCodigoContratoPk());
+                                    $arSoportePago->setVrSalario($arContrato->getVrSalario());                            
+                                    $arSoportePago->setRecursoRel($arRecurso);
+                                    $arSoportePago->setSoportePagoPeriodoRel($arSoportePagoPeriodo);
+                                    if($numeroContratos > 1) {
+                                        if($arContrato->getFechaDesde() > $arSoportePagoPeriodo->getFechaDesde()) {
+                                            $arSoportePago->setFechaDesde($arContrato->getFechaDesde());
+                                            $arSoportePago->setFechaHasta($arSoportePagoPeriodo->getFechaHasta());
+                                        }
+                                        if($arContrato->getFechaHasta() < $arSoportePagoPeriodo->getFechaHasta()) {
+                                            $arSoportePago->setFechaDesde($arSoportePagoPeriodo->getFechaDesde());
+                                            $arSoportePago->setFechaHasta($arContrato->getFechaHasta());                                        
+                                        }
+                                    } else {
                                         $arSoportePago->setFechaDesde($arSoportePagoPeriodo->getFechaDesde());
-                                        $arSoportePago->setFechaHasta($arContrato->getFechaHasta());                                        
+                                        $arSoportePago->setFechaHasta($arSoportePagoPeriodo->getFechaHasta());                                    
                                     }
-                                } else {
-                                    $arSoportePago->setFechaDesde($arSoportePagoPeriodo->getFechaDesde());
-                                    $arSoportePago->setFechaHasta($arSoportePagoPeriodo->getFechaHasta());                                    
-                                }
-                                /* Se suspende mientras se analizan los datos de los turnos fijos
-                                 * if($arContrato->getCodigoSalarioTipoFk() == 1) {
-                                    $arSoportePago->setTurnoFijo(1);
-                                }
-                                 * 
-                                 */
-                                if($arRecurso->getCodigoTurnoFijoNominaFk()) {
+                                    /* Se suspende mientras se analizan los datos de los turnos fijos
+                                     * if($arContrato->getCodigoSalarioTipoFk() == 1) {
                                         $arSoportePago->setTurnoFijo(1);
-                                }                      
-                                $em->persist($arSoportePago);                                                    
-                            }
+                                    }
+                                     * 
+                                     */
+                                    if($arRecurso->getCodigoTurnoFijoNominaFk()) {
+                                            $arSoportePago->setTurnoFijo(1);
+                                    }                      
+                                    $em->persist($arSoportePago);                                                    
+                                }
+                            }                                                    
                         }                        
                     }   
                                       
