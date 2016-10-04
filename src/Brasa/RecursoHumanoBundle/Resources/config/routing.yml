@@ -226,13 +226,7 @@ brs_rhu_facturas_detalle_nuevo_seleccion:
     path:     /rhu/facturas/detalle/nuevo/seleccion/{codigoFactura}
     defaults: { _controller: BrasaRecursoHumanoBundle:Facturas:detalleNuevoSeleccion }                            
    
-brs_rhu_base_sede_listar:
-   path:     /rhu/base/sede/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSede:lista }
-   
-brs_rhu_base_sede_nuevo:
-   path:     /rhu/base/sede/nuevo/{codigoSedePk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSede:nuevo }
+
    
 brs_rhu_examen_listar:
    path:     /rhu/examen/listar

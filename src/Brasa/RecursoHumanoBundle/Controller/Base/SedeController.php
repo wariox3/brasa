@@ -1,8 +1,9 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuSedeType;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
