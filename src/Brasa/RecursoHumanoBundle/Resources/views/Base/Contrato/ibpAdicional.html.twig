@@ -29,7 +29,19 @@
             <div class="col-sm-5">
                     {{ form_widget(formIbpAdicional.promedioRecargoNocturnoInicial, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
             </div>
-        </div> 
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-sm-7 control-label">Fecha ultimo periodo cesantias:</label>
+            <div class="col-sm-5">
+                    {{ form_widget(formIbpAdicional.fechaUltimoPagoCesantias) }}
+            </div>
+        </div>            
+        <div class="form-group form-group-sm">
+            <label class="col-sm-7 control-label">Fecha ultimo periodo primas:</label>
+            <div class="col-sm-5">
+                    {{ form_widget(formIbpAdicional.fechaUltimoPagoPrimas) }}
+            </div>
+        </div>            
         <div class="form-group form-group-sm">
             <label class="col-sm-7 control-label">Fecha ultimo periodo vacaciones:</label>
             <div class="col-sm-5">

@@ -688,6 +688,8 @@ class ContratosController extends Controller
             ->add('ibpCesantiasInicial', 'number', array('data' =>$arContrato->getIbpCesantiasInicial() ,'required' => false))      
             ->add('ibpPrimasInicial', 'number', array('data' =>$arContrato->getIbpPrimasInicial() ,'required' => false))                      
             ->add('promedioRecargoNocturnoInicial', 'number', array('data' =>$arContrato->getPromedioRecargoNocturnoInicial() ,'required' => false))                                      
+            ->add('fechaUltimoPagoCesantias','date',array('data' =>$arContrato->getFechaUltimoPagoCesantias(), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                 
+            ->add('fechaUltimoPagoPrimas','date',array('data' =>$arContrato->getFechaUltimoPagoPrimas(), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                 
             ->add('fechaUltimoPagoVacaciones','date',array('data' =>$arContrato->getFechaUltimoPagoVacaciones(), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                 
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
@@ -697,10 +699,14 @@ class ContratosController extends Controller
             $ibpCesantiasInicial = $formIbpAdicional->get('ibpCesantiasInicial')->getData();
             $ibpPrimasInicial = $formIbpAdicional->get('ibpPrimasInicial')->getData();
             $promedioRecargoNocturnoInicial = $formIbpAdicional->get('promedioRecargoNocturnoInicial')->getData();
+            $fechaUltimoPagoCesantias = $formIbpAdicional->get('fechaUltimoPagoCesantias')->getData();
+            $fechaUltimoPagoPrimas = $formIbpAdicional->get('fechaUltimoPagoPrimas')->getData();
             $fechaUltimoPagoVacaciones = $formIbpAdicional->get('fechaUltimoPagoVacaciones')->getData();
             $arContrato->setIbpCesantiasInicial($ibpCesantiasInicial);
             $arContrato->setIbpPrimasInicial($ibpPrimasInicial);
             $arContrato->setPromedioRecargoNocturnoInicial($promedioRecargoNocturnoInicial);
+            $arContrato->setFechaUltimoPagoCesantias($fechaUltimoPagoCesantias);
+            $arContrato->setFechaUltimoPagoPrimas($fechaUltimoPagoPrimas);
             $arContrato->setFechaUltimoPagoVacaciones($fechaUltimoPagoVacaciones);
             $em->persist($arContrato);
             $em->flush();
