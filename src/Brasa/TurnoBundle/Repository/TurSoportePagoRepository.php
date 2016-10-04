@@ -226,8 +226,12 @@ class TurSoportePagoRepository extends EntityRepository {
         return true;        
     }    
     
-    public function generar($arSoportePago = "", $intDiaInicial, $intDiaFinal, $arFestivos, $dateFechaDesde, $dateFechaHasta) {
+    public function generar($arSoportePago = "", $arFestivos) {
         $em = $this->getEntityManager();
+        $intDiaInicial= $arSoportePago->getFechaDesde()->format('j');
+        $intDiaFinal = $arSoportePago->getFechaHasta()->format('j'); 
+        $dateFechaDesde = $arSoportePago->getFechaDesde();
+        $dateFechaHasta = $arSoportePago->getFechaHasta();
         $turnoFijo = 0;                
         $arRecurso = $arSoportePago->getRecursoRel();        
         if($arRecurso->getCodigoTurnoFijoNominaFk()) {
