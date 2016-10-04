@@ -160,7 +160,10 @@ class RhuLiquidacionRepository extends EntityRepository {
                             $salarioPromedioPrimas = $douSalario;
                         }
                         
-                    }                    
+                    }  
+                    if($arLiquidacion->getVrSalarioPrimaPropuesto() > 0) {
+                        $salarioPromedioPrimas = $arLiquidacion->getVrSalarioPrimaPropuesto();
+                    }
                     $douPrima = ($salarioPromedioPrimas * $intDiasPrimaLiquidar) / 360;                
                     $arLiquidacion->setDiasPrimas($intDiasPrimaLiquidar);                    
                     $arLiquidacion->setVrPrima($douPrima);    

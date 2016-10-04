@@ -296,6 +296,11 @@ class RhuLiquidacion
      * @ORM\Column(name="vr_salario_vacacion_propuesto", type="float")
      */
     private $VrSalarioVacacionPropuesto = 0;    
+
+    /**
+     * @ORM\Column(name="vr_salario_prima_propuesto", type="float")
+     */
+    private $VrSalarioPrimaPropuesto = 0; 
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="liquidacionesEmpleadoRel")
@@ -1857,5 +1862,29 @@ class RhuLiquidacion
     public function getPagosBancosDetallesLiquidacionRel()
     {
         return $this->pagosBancosDetallesLiquidacionRel;
+    }
+
+    /**
+     * Set vrSalarioPrimaPropuesto
+     *
+     * @param float $vrSalarioPrimaPropuesto
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrSalarioPrimaPropuesto($vrSalarioPrimaPropuesto)
+    {
+        $this->VrSalarioPrimaPropuesto = $vrSalarioPrimaPropuesto;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioPrimaPropuesto
+     *
+     * @return float
+     */
+    public function getVrSalarioPrimaPropuesto()
+    {
+        return $this->VrSalarioPrimaPropuesto;
     }
 }

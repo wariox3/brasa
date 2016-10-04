@@ -346,6 +346,7 @@ class LiquidacionController extends Controller
             ->add('vrIndemnizacion', 'number', array('data' =>$arLiquidacion->getVrIndemnizacion() ,'required' => false))                      
             ->add('diasAusentismoAdicional', 'number', array('data' =>$arLiquidacion->getDiasAusentismoAdicional() ,'required' => false))                      
             ->add('vrSalarioVacacionPropuesto', 'number', array('data' =>$arLiquidacion->getVrSalarioVacacionPropuesto() ,'required' => false))                      
+            ->add('vrSalarioPrimaPropuesto', 'number', array('data' =>$arLiquidacion->getVrSalarioPrimaPropuesto() ,'required' => false))                                      
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $form->handleRequest($request);
@@ -356,11 +357,13 @@ class LiquidacionController extends Controller
             $diasAusentismoAdicional = $form->get('diasAusentismoAdicional')->getData();
             $liquidarSalario = $form->get('liquidarSalario')->getData();
             $vrSalarioVacacionPropuesto = $form->get('vrSalarioVacacionPropuesto')->getData();
+            $vrSalarioPrimaPropuesto = $form->get('vrSalarioPrimaPropuesto')->getData();
             $arLiquidacion->setPorcentajeIbp($porcentajeIbp);
             $arLiquidacion->setLiquidarSalario($liquidarSalario);
             $arLiquidacion->setVrIndemnizacion($vrIndemnizacion);
             $arLiquidacion->setDiasAusentismoAdicional($diasAusentismoAdicional);
             $arLiquidacion->setVrSalarioVacacionPropuesto($vrSalarioVacacionPropuesto);
+            $arLiquidacion->setVrSalarioPrimaPropuesto($vrSalarioPrimaPropuesto);
             $em->persist($arLiquidacion);
             $em->flush();
             return $this->redirect($this->generateUrl('brs_rhu_movimiento_liquidacion_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));
