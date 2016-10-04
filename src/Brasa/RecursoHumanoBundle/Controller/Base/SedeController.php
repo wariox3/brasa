@@ -8,9 +8,13 @@ use Brasa\RecursoHumanoBundle\Form\Type\RhuSedeType;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
-class BaseSedeController extends Controller
+class SedeController extends Controller
 {
     var $strSqlLista = "";
+    
+    /**
+     * @Route("/rhu/base/sede/listar", name="brs_rhu_base_sede_listar")
+     */ 
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -111,6 +115,9 @@ class BaseSedeController extends Controller
             ));
     }
     
+    /**
+     * @Route("/rhu/base/sede/nuevo/{codigoSedePk}", name="brs_rhu_base_sede_nuevo")
+     */ 
     public function nuevoAction($codigoSedePk) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();

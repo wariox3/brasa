@@ -162,7 +162,7 @@ class ContratosController extends Controller
      * @Route("/rhu/contratos/nuevo/{codigoContrato}/{codigoEmpleado}", name="brs_rhu_contratos_nuevo")
      */
     public function nuevoAction($codigoContrato, $codigoEmpleado) {
-        $request = $this->getRequest();
+        $request = $this->getRequest(); 
         $em = $this->getDoctrine()->getManager();        
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
