@@ -233,13 +233,16 @@ class ContratosController extends Controller
                                         $arContrato->setFecha(date_create(date('Y-m-d H:i:s')));
                                         $arContrato->setEmpleadoRel($arEmpleado);
                                         $arContrato->setFechaHasta($form->get('fechaHasta')->getData());
-                                        $dateFechaUltimoPago = $arContrato->getFechaDesde()->format('Y-m-d');
-                                        $dateFechaUltimoPago = date("Y-m-d", strtotime("$dateFechaUltimoPago -1 day"));
-                                        $dateFechaUltimoPago = date_create_from_format('Y-m-d H:i', $dateFechaUltimoPago . "00:00");
-                                        $arContrato->setFechaUltimoPago($dateFechaUltimoPago);
-                                        $arContrato->setFechaUltimoPagoCesantias($arContrato->getFechaDesde());
-                                        $arContrato->setFechaUltimoPagoPrimas($arContrato->getFechaDesde());
-                                        $arContrato->setFechaUltimoPagoVacaciones($arContrato->getFechaDesde());
+                                        //Ojooooo no quitar, solo crea estas fechas cuando es un contrato nuevo
+                                        if($codigoContrato == 0) {
+                                            $dateFechaUltimoPago = $arContrato->getFechaDesde()->format('Y-m-d');
+                                            $dateFechaUltimoPago = date("Y-m-d", strtotime("$dateFechaUltimoPago -1 day"));
+                                            $dateFechaUltimoPago = date_create_from_format('Y-m-d H:i', $dateFechaUltimoPago . "00:00");
+                                            $arContrato->setFechaUltimoPago($dateFechaUltimoPago);
+                                            $arContrato->setFechaUltimoPagoCesantias($arContrato->getFechaDesde());
+                                            $arContrato->setFechaUltimoPagoPrimas($arContrato->getFechaDesde());
+                                            $arContrato->setFechaUltimoPagoVacaciones($arContrato->getFechaDesde());                                            
+                                        }
                                         $arContrato->setFactor($arContrato->getTipoTiempoRel()->getFactor());
                                         $arContrato->setFactorHorasDia($arContrato->getTipoTiempoRel()->getFactorHorasDia());
                                         if($arContrato->getTipoTiempoRel()->getFactor() > 0) {
@@ -711,7 +714,9 @@ class ContratosController extends Controller
             ->add('ibpCesantiasInicial', 'number', array('data' =>$arContrato->getIbpCesantiasInicial() ,'required' => false))      
             ->add('ibpPrimasInicial', 'number', array('data' =>$arContrato->getIbpPrimasInicial() ,'required' => false))                      
             ->add('promedioRecargoNocturnoInicial', 'number', array('data' =>$arContrato->getPromedioRecargoNocturnoInicial() ,'required' => false))                                      
-            ->add('fechaUltimoPagoVacaciones','date',array('data' =>$arContrato->getFechaUltimoPagoVacaciones(), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                 
+            ->add('fechaUltimoPagoCesantias','date',array('data' =>$arContrato->getFechaUltimoPagoCesantias(), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                 
+            ->add('fechaUltimoPagoPrimas','date',array('data' =>$arContrato->getFechaUltimoPagoPrimas(), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                 
+            ->add('fechaUltimoPagoVacaciones','date',array('data' =>$arContrato->getFechaUltimoPagoVacaciones(), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $formIbpAdicional->handleRequest($request);    
@@ -720,10 +725,14 @@ class ContratosController extends Controller
             $ibpCesantiasInicial = $formIbpAdicional->get('ibpCesantiasInicial')->getData();
             $ibpPrimasInicial = $formIbpAdicional->get('ibpPrimasInicial')->getData();
             $promedioRecargoNocturnoInicial = $formIbpAdicional->get('promedioRecargoNocturnoInicial')->getData();
-            $fechaUltimoPagoVacaciones = $formIbpAdicional->get('fechaUltimoPagoVacaciones')->getData();
+            $fechaUltimoPagoCesantias = $formIbpAdicional->get('fechaUltimoPagoCesantias')->getData();
+            $fechaUltimoPagoPrimas = $formIbpAdicional->get('fechaUltimoPagoPrimas')->getData();
+            $fechaUltimoPagoVacaciones = $formIbpAdicional->get('fechaUltimoPagoVacaciones')->getData(); 
             $arContrato->setIbpCesantiasInicial($ibpCesantiasInicial);
             $arContrato->setIbpPrimasInicial($ibpPrimasInicial);
             $arContrato->setPromedioRecargoNocturnoInicial($promedioRecargoNocturnoInicial);
+            $arContrato->setFechaUltimoPagoCesantias($fechaUltimoPagoCesantias);
+            $arContrato->setFechaUltimoPagoPrimas($fechaUltimoPagoPrimas);
             $arContrato->setFechaUltimoPagoVacaciones($fechaUltimoPagoVacaciones);
             $em->persist($arContrato);
             $em->flush();
