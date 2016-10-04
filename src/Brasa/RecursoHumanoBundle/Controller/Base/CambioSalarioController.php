@@ -1,12 +1,16 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
 class CambioSalarioController extends Controller
 {
+    /**
+     * @Route("/rhu/cambiosalario/nuevo/{codigoContrato}/{codigoCambioSalario}", name="brs_rhu_cambio_salario_nuevo")
+     */
     public function nuevoAction($codigoContrato, $codigoCambioSalario = 0) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

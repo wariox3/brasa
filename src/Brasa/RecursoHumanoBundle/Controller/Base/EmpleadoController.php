@@ -1,16 +1,21 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuEmpleadoType;
 use Doctrine\ORM\EntityRepository;
 use PHPExcel_Shared_Date;
 use PHPExcel_Style_NumberFormat;
 
-class BaseEmpleadoController extends Controller
+class EmpleadoController extends Controller
 {
     var $strSqlLista = "";
+    
+    /**
+     * @Route("/rhu/base/empleados/lista", name="brs_rhu_base_empleados_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -68,7 +73,10 @@ class BaseEmpleadoController extends Controller
             'form' => $form->createView()
             ));
     }
-
+    
+    /**
+     * @Route("/rhu/base/empleados/detalles/{codigoEmpleado}", name="brs_rhu_base_empleados_detalles")
+     */
     public function detalleAction($codigoEmpleado) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -175,6 +183,9 @@ class BaseEmpleadoController extends Controller
                     ));
     }
 
+    /**
+     * @Route("/rhu/base/empleados/nuevo/{codigoEmpleado}/{codigoSeleccion}", name="brs_rhu_base_empleados_nuevo")
+     */
     public function nuevoAction($codigoEmpleado, $codigoSeleccion = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -263,6 +274,9 @@ class BaseEmpleadoController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/base/empleados/nuevo/enlazar/", name="brs_rhu_base_empleados_nuevo_enlazar")
+     */
     public function enlazarAction() {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -281,6 +295,9 @@ class BaseEmpleadoController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/base/empleados/cargar/foto/{codigoEmpleado}", name="brs_rhu_base_empleados_cargar_foto")
+     */
     public function cargarFotoAction($codigoEmpleado) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();

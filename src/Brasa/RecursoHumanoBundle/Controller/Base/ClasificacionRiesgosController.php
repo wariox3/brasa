@@ -1,9 +1,10 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuClasificacionRiesgosType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
@@ -11,9 +12,11 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
  * RhuClasificacionRiesgos controller.
  *
  */
-class BaseClasificacionRiesgosController extends Controller
+class ClasificacionRiesgosController extends Controller
 {
-
+    /**
+     * @Route("/rhu/base/clasificacion/listar", name="brs_rhu_base_clasificacion_listar")
+     */
     public function listarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -109,6 +112,9 @@ class BaseClasificacionRiesgosController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/clasificacion/nuevo/{codigoClasificacionPk}", name="brs_rhu_base_clasificacion_nuevo")
+     */
     public function nuevoAction($codigoClasificacionPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

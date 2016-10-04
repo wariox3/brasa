@@ -1,16 +1,19 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuRiesgoProfesionalType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 
-class BaseRiesgoProfesionalController extends Controller
+class RiesgoProfesionalController extends Controller
 {
-
+    /**
+     * @Route("/rhu/base/riesgoProfesional/listar", name="brs_rhu_base_riesgoProfesional_listar")
+     */
     public function listarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -110,6 +113,10 @@ class BaseRiesgoProfesionalController extends Controller
         ));
     }
     
+    
+    /**
+     * @Route("/rhu/base/riesgoProfesional/nuevo/{codigoEntidadRiesgoProfesionalPk}", name="brs_rhu_base_riesgoProfesional_nuevo")
+     */
     public function nuevoAction($codigoEntidadRiesgoProfesionalPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

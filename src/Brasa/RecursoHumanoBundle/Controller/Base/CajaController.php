@@ -1,9 +1,10 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCajaType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
@@ -11,9 +12,11 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
  * RhuCaja controller.
  *
  */
-class BaseCajaController extends Controller
+class CajaController extends Controller
 {
-
+    /**
+     * @Route("/rhu/base/caja/listar", name="brs_rhu_base_caja_listar")
+     */
     public function listarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -114,6 +117,9 @@ class BaseCajaController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/caja/nuevo/{codigoEntidadCajaPk}", name="brs_rhu_base_caja_nuevo")
+     */
     public function nuevoAction($codigoEntidadCajaPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

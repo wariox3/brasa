@@ -1,9 +1,10 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuAcademiaType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
@@ -14,9 +15,11 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
  * RhuAcademia controller.
  *
  */
-class BaseAcademiaController extends Controller
+class AcademiaController extends Controller
 {
-
+    /**
+     * @Route("/rhu/base/academia/listar", name="brs_rhu_base_academia_listar")
+     */
     public function listarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -122,6 +125,9 @@ class BaseAcademiaController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/academia/nuevo/{codigoAcademiaPk}", name="brs_rhu_base_academia_nuevo")
+     */
     public function nuevoAction($codigoAcademiaPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

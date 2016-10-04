@@ -1,9 +1,10 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuTurnoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
@@ -11,9 +12,11 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
  * RhuTurno controller.
  *
  */
-class BaseTurnoController extends Controller
+class TurnoController extends Controller
 {
-
+    /**
+     * @Route("/rhu/base/turno/listar", name="brs_rhu_base_turno_listar")
+     */
     public function listarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -122,6 +125,9 @@ class BaseTurnoController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/turno/nuevo/{codigoTurnoPk}", name="brs_rhu_base_turno_nuevo")
+     */
     public function nuevoAction($codigoTurnoPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

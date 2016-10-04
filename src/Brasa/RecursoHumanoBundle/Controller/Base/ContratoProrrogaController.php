@@ -1,12 +1,16 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
 class ContratoProrrogaController extends Controller
 {
+    /**
+     * @Route("/rhu/contrato/prorroga/nuevo/{codigoContrato}/{codigoContratoProrroga}", name="brs_rhu_contrato_prorroga_nuevo")
+     */
     public function nuevoAction($codigoContrato, $codigoContratoProrroga = 0) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

@@ -1,25 +1,28 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Brasa\RecursoHumanoBundle\Form\Type\RhuSaludTipoType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuPensionTipoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
- * RhuBaseSaludTipo controller.
+ * RhuPensionTipo controller.
  *
  */
-class BaseSaludTipoController extends Controller
+class PensionTipoController extends Controller
 {
-
+    /**
+     * @Route("/rhu/base/pension/tipo/lista", name="brs_rhu_base_pension_tipo_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
-        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 65, 1)) {
+        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 66, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
-        }
+        }        
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
@@ -27,57 +30,60 @@ class BaseSaludTipoController extends Controller
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
-        $arSaludTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud();
+        $arPensionTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuTipoPension();
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
                 try{
-                    foreach ($arrSeleccionados AS $codigoSaludTipo) {
-                        $arSaludTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud();
-                        $arSaludTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuTipoSalud')->find($codigoSaludTipo);
-                        $em->remove($arSaludTipo);
+                    foreach ($arrSeleccionados AS $codigoPensionTipo) {
+                        $arPensionTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuTipoPension();
+                        $arPensionTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuTipoPension')->find($codigoPensionTipo);
+                        $em->remove($arPensionTipo);
                     }
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_base_salud_tipo_lista'));
-                } catch (ForeignKeyConstraintViolationException $e) { 
-                    $objMensaje->Mensaje('error', 'No se puede eliminar el tipo de salud porque esta siendo utilizado', $this);
-                  }    
+                    return $this->redirect($this->generateUrl('brs_rhu_base_pension_tipo_lista'));
+               } catch (ForeignKeyConstraintViolationException $e) { 
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el tipo de pension porque esta siendo utilizado', $this);
+                 }     
             }
               
             if($form->get('BtnExcel')->isClicked()) { 
                 $this->generarExcel();
             }
         }
-        $arSaludTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud();
-        $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuTipoSalud')->findAll();
-        $arSaludTipos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
+        $arPensionTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuTipoPension();
+        $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuTipoPension')->findAll();
+        $arPensionTipos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
 
-        return $this->render('BrasaRecursoHumanoBundle:Base/SaludTipo:listar.html.twig', array(
-                    'arSaludTipos' => $arSaludTipos,
+        return $this->render('BrasaRecursoHumanoBundle:Base/PensionTipo:listar.html.twig', array(
+                    'arPensionTipos' => $arPensionTipos,
                     'form'=> $form->createView()
            
         ));
     }
     
-    public function nuevoAction($codigoSaludTipo) {
+    /**
+     * @Route("/rhu/base/pension/tipo/nuevo/{codigoPensionTipo}", name="brs_rhu_base_pension_tipo_nuevo")
+     */
+    public function nuevoAction($codigoPensionTipo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arSaludTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuTipoSalud();
-        if ($codigoSaludTipo != 0)
+        $arPensionTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuTipoPension();
+        if ($codigoPensionTipo != 0)
         {
-            $arSaludTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuTipoSalud')->find($codigoSaludTipo);
+            $arPensionTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuTipoPension')->find($codigoPensionTipo);
         }    
-        $form = $this->createForm(new RhuSaludTipoType(), $arSaludTipo);
+        $form = $this->createForm(new RhuPensionTipoType(), $arPensionTipo);
         $form->handleRequest($request);
         if ($form->isValid())
         {
             // guardar la tarea en la base de datos
-            $arSaludTipo = $form->getData();
-            $em->persist($arSaludTipo);
+            $arPensionTipo = $form->getData();
+            $em->persist($arPensionTipo);
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_base_salud_tipo_lista'));
+            return $this->redirect($this->generateUrl('brs_rhu_base_pension_tipo_lista'));
         }
-        return $this->render('BrasaRecursoHumanoBundle:Base/SaludTipo:nuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Base/PensionTipo:nuevo.html.twig', array(
             'form' => $form->createView(),
         ));
     }
@@ -103,29 +109,29 @@ class BaseSaludTipoController extends Controller
                     ->setCellValue('D1', 'PORCENTAJE EMPLEADOR')
                     ->setCellValue('E1', 'CONCEPTO');
         $i = 2;
-        $arSaludTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuTipoSalud')->findAll();
+        $arPensionTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuTipoPension')->findAll();
 
-        foreach ($arSaludTipos as $arSaludTipo) {
-            if ($arSaludTipo->getCodigoPagoConceptoFk() == null){
+        foreach ($arPensionTipos as $arPensionTipo) {
+            if ($arPensionTipo->getCodigoPagoConceptoFk() == null){
                 $pagoConcepto = "";
             } else {
-                $pagoConcepto = $arSaludTipo->getPagoConceptoRel()->getNombre();
+                $pagoConcepto = $arPensionTipo->getPagoConceptoRel()->getNombre();
             }
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arSaludTipo->getCodigoTipoSaludPk())
-                    ->setCellValue('B' . $i, $arSaludTipo->getNombre())
-                    ->setCellValue('C' . $i, $arSaludTipo->getPorcentajeEmpleado())
-                    ->setCellValue('D' . $i, $arSaludTipo->getPorcentajeEmpleador())
+                    ->setCellValue('A' . $i, $arPensionTipo->getCodigoTipoPensionPk())
+                    ->setCellValue('B' . $i, $arPensionTipo->getNombre())
+                    ->setCellValue('C' . $i, $arPensionTipo->getPorcentajeEmpleado())
+                    ->setCellValue('D' . $i, $arPensionTipo->getPorcentajeEmpleador())
                     ->setCellValue('E' . $i, $pagoConcepto);
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('SaludTipos');
+        $objPHPExcel->getActiveSheet()->setTitle('PensionTipos');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="SaludTipos.xlsx"');
+        header('Content-Disposition: attachment;filename="PensionTipos.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

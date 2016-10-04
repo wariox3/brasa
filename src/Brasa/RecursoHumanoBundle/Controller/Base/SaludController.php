@@ -1,9 +1,10 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuSaludType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
@@ -11,9 +12,11 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
  * RhuEntidadSalud controller.
  *
  */
-class BaseSaludController extends Controller
+class SaludController extends Controller
 {
-
+    /**
+     * @Route("/rhu/base/salud/listar", name="brs_rhu_base_salud_listar")
+     */
     public function listarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -115,6 +118,9 @@ class BaseSaludController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/salud/nuevo/{codigoEntidadSaludPk}", name="brs_rhu_base_salud_nuevo")
+     */
     public function nuevoAction($codigoEntidadSaludPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

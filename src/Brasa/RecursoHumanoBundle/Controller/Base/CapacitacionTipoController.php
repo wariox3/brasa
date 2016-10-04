@@ -1,19 +1,22 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCapacitacionTipoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
- * BaseCapacitacionTipoController controller.
+ * CapacitacionTipoController controller.
  *
  */
-class BaseCapacitacionTipoController extends Controller
+class CapacitacionTipoController extends Controller
 {
-
+    /**
+     * @Route("/rhu/capacitacion/tipo/lista", name="brs_rhu_base_capacitacion_tipo_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -59,6 +62,9 @@ class BaseCapacitacionTipoController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/capacitacion/tipo/nuevo/{codigoTipoCapacitacion}", name="brs_rhu_base_capacitacion_tipo_nuevo")
+     */
     public function nuevoAction($codigoTipoCapacitacion) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

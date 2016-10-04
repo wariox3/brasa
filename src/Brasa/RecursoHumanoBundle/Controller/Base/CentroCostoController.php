@@ -1,12 +1,17 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCentroCostoType;
 
-class BaseCentroCostoController extends Controller
+class CentroCostoController extends Controller
 {
+    
+    /**
+     * @Route("/rhu/base/centroscostos/lista", name="brs_rhu_base_centros_costos_lista")
+     */ 
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -72,7 +77,10 @@ class BaseCentroCostoController extends Controller
             'arCentrosCostos' => $arCentrosCostos,
             'form' => $form->createView()));
     }
-
+    
+    /**
+     * @Route("/rhu/base/centroscostos/nuevo/{codigoCentroCosto}", name="brs_rhu_base_centros_costos_nuevo")
+     */ 
     public function nuevoAction($codigoCentroCosto) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();  
@@ -131,7 +139,10 @@ class BaseCentroCostoController extends Controller
             'arCentroCosto' => $arCentroCosto,            
             'form' => $form->createView()));
     }
-
+    
+    /**
+     * @Route("/rhu/base/centroscostos/detalle/{codigoCentroCosto}", name="brs_rhu_base_centros_costos_detalle")
+     */ 
     public function detalleAction($codigoCentroCosto) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -151,7 +162,7 @@ class BaseCentroCostoController extends Controller
                     ));
     }    
     
-     private function generarExcel() {
+    private function generarExcel() {
          $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
          ob_clean();
          $em = $this->getDoctrine()->getManager();

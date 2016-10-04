@@ -1,14 +1,19 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuEmpleadoEstudioType;
 
 
 class EmpleadoEstudioController extends Controller
+
 {
+    /**
+     * @Route("/rhu/base/empleadoEstudio/nuevo/{codigoEmpleado}/{codigoEmpleadoEstudio}", name="brs_rhu_base_empleado_estudio_nuevo")
+     */
     public function nuevoAction($codigoEmpleado, $codigoEmpleadoEstudio = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();

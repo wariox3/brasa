@@ -1,22 +1,25 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Brasa\RecursoHumanoBundle\Form\Type\RhuEstudioTipoAcreditacionType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuAcreditacionTipoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 //use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 //use Doctrine\DBAL\Driver\PDOException;
 
 /**
- * BaseEstudioTipoAcreditacionController.
+ * AcreditacionTipoController.
  *
  */
-class BaseEstudioTipoAcreditacionController extends Controller
+class AcreditacionTipoController extends Controller
 {
-
+    /**
+     * @Route("/rhu/base/acreditacion/tipo/lista", name="brs_rhu_base_acreditacion_tipo_lista")
+     */ 
     public function listarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -31,21 +34,21 @@ class BaseEstudioTipoAcreditacionController extends Controller
             ->getForm(); 
         $form->handleRequest($request);
         
-        $arEstudioTipoAcreditaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuEstudioTipoAcreditacion();
+        $arAcreditacionesTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacionTipo();
         
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
                 try{
-                    foreach ($arrSeleccionados AS $codigoEstudioTipoAcreditacionPk) {
-                        $arEstudioTipoAcreditacion = new \Brasa\RecursoHumanoBundle\Entity\RhuEstudioTipoAcreditacion();
-                        $arEstudioTipoAcreditacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuEstudioTipoAcreditacion')->find($codigoEstudioTipoAcreditacionPk);
-                        $em->remove($arEstudioTipoAcreditacion);
+                    foreach ($arrSeleccionados AS $codigoAcreditacionTipoPk) {
+                        $arAcreditacionesTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacionTipo();
+                        $arAcreditacionesTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacionTipo')->find($codigoAcreditacionTipoPk);
+                        $em->remove($arAcreditacionesTipo);
                     }
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_base_estudiotipoacreditacion_listar'));
+                    return $this->redirect($this->generateUrl('brs_rhu_base_acreditacion_tipo_lista'));
                 } catch (ForeignKeyConstraintViolationException $e) { 
-                    $objMensaje->Mensaje('error', 'No se puede eliminar el estudio porque esta siendo utilizado', $this);
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el tipo de acreditacion porque esta siendo utilizado', $this);
                   }     
             }   
         
@@ -62,6 +65,10 @@ class BaseEstudioTipoAcreditacionController extends Controller
                     ->setCategory("Test result file");
                 $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
                 $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+                for($col = 'A'; $col !== 'Z'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+                }
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'CODIGO')
                             ->setCellValue('B1', 'CODIGO ESTUDIO')
@@ -69,24 +76,24 @@ class BaseEstudioTipoAcreditacionController extends Controller
                             ->setCellValue('D1', 'CARGO');
 
                 $i = 2;
-                $arEstudioTipoAcreditacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuEstudioTipoAcreditacion')->findAll();
+                $arAcreditacionTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacionTipo')->findAll();
                 
-                foreach ($arEstudioTipoAcreditacion as $arEstudioTipoAcreditacion) {
+                foreach ($arAcreditacionTipo as $arAcreditacionTipo) {
                        
                     $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A' . $i, $arEstudioTipoAcreditacion->getCodigoEstudioAcreditacionPk())
-                            ->setCellValue('B' . $i, $arEstudioTipoAcreditacion->getCodigoAlterno())
-                            ->setCellValue('C' . $i, $arEstudioTipoAcreditacion->getNombre())
-                            ->setCellValue('D' . $i, $arEstudioTipoAcreditacion->getCargo());
+                            ->setCellValue('A' . $i, $arAcreditacionTipo->getCodigoAcreditacionTipoPk())
+                            ->setCellValue('B' . $i, $arAcreditacionTipo->getCodigo())
+                            ->setCellValue('C' . $i, $arAcreditacionTipo->getNombre())
+                            ->setCellValue('D' . $i, $arAcreditacionTipo->getCargo());
                     $i++;
                 }
 
-                $objPHPExcel->getActiveSheet()->setTitle('EstudioTipoAcreditacion');
+                $objPHPExcel->getActiveSheet()->setTitle('TipoAcreditacion');
                 $objPHPExcel->setActiveSheetIndex(0);
 
                 // Redirect output to a client’s web browser (Excel2007)
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="EstudioTipoAcreditacion.xlsx"');
+                header('Content-Disposition: attachment;filename="TipoAcreditacion.xlsx"');
                 header('Cache-Control: max-age=0');
                 // If you're serving to IE 9, then the following may be needed
                 header('Cache-Control: max-age=1');
@@ -101,37 +108,40 @@ class BaseEstudioTipoAcreditacionController extends Controller
             }
             
         }
-        $arEstudioTipoAcreditacion = new \Brasa\RecursoHumanoBundle\Entity\RhuEstudioTipoAcreditacion();
-        $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuEstudioTipoAcreditacion')->findAll();
-        $arEstudioTipoAcreditacion = $paginator->paginate($query, $this->get('request')->query->get('page', 1),40);
+        $arAcreditacionTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacionTipo();
+        $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacionTipo')->findAll();
+        $arAcreditacionTipo = $paginator->paginate($query, $this->get('request')->query->get('page', 1),40);
 
-        return $this->render('BrasaRecursoHumanoBundle:Base/EstudioTipoAcreditacion:listar.html.twig', array(
-                    'arEstudioTipoAcreditacion' => $arEstudioTipoAcreditacion,
+        return $this->render('BrasaRecursoHumanoBundle:Base/AcreditacionTipo:listar.html.twig', array(
+                    'arAcreditacionTipo' => $arAcreditacionTipo,
                     'form'=> $form->createView()
            
         ));
     }
     
-    public function nuevoAction($codigoEstudioTipoAcreditacionPk) {
+    /**
+     * @Route("/rhu/base/acreditacion/tipo/nuevo/{codigoAcreditacionTipoPk}", name="brs_rhu_base_acreditacion_tipo_nuevo")
+     */ 
+    public function nuevoAction($codigoAcreditacionTipoPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arEstudioTipoAcreditacion = new \Brasa\RecursoHumanoBundle\Entity\RhuEstudioTipoAcreditacion();
-        if ($codigoEstudioTipoAcreditacionPk != 0)
+        $arAcreditacionTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacionTipo();
+        if ($codigoAcreditacionTipoPk != 0)
         {
-            $arEstudioTipoAcreditacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuEstudioTipoAcreditacion')->find($codigoEstudioTipoAcreditacionPk);
+            $arAcreditacionTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacionTipo')->find($codigoAcreditacionTipoPk);
         }    
-        $formEstudioTipoAcreditacion = $this->createForm(new RhuEstudioTipoAcreditacionType(), $arEstudioTipoAcreditacion);
-        $formEstudioTipoAcreditacion->handleRequest($request);
-        if ($formEstudioTipoAcreditacion->isValid())
+        $formAcreditacionTipo = $this->createForm(new RhuAcreditacionTipoType(), $arAcreditacionTipo);
+        $formAcreditacionTipo->handleRequest($request);
+        if ($formAcreditacionTipo->isValid())
         {
             // guardar la tarea en la base de datos
-            $arEstudioTipoAcreditacion = $formEstudioTipoAcreditacion->getData();
-            $em->persist($arEstudioTipoAcreditacion);
+            $arAcreditacionTipo = $formAcreditacionTipo->getData();
+            $em->persist($arAcreditacionTipo);
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_base_estudiotipoacreditacion_listar'));
+            return $this->redirect($this->generateUrl('brs_rhu_base_acreditacion_tipo_lista'));
         }
-        return $this->render('BrasaRecursoHumanoBundle:Base/EstudioTipoAcreditacion:nuevo.html.twig', array(
-            'formEstudioTipoAcreditacion' => $formEstudioTipoAcreditacion->createView(),
+        return $this->render('BrasaRecursoHumanoBundle:Base/AcreditacionTipo:nuevo.html.twig', array(
+            'formAcreditacionTipo' => $formAcreditacionTipo->createView(),
         ));
     }
     

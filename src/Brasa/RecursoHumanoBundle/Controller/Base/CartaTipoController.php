@@ -1,9 +1,10 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCartaTipoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
@@ -11,9 +12,13 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
  * RhuCartaTipo controller.
  *
  */
-class BaseCartaTipoController extends Controller
+class CartaTipoController extends Controller
 {
     var $strDqlLista = "";
+    
+    /**
+     * @Route("/rhu/base/carta/tipo/lista", name="brs_rhu_base_carta_tipo_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -52,6 +57,9 @@ class BaseCartaTipoController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/carta/tipo/nuevo/{codigoCartaTipo}", name="brs_rhu_base_carta_tipo_nuevo")
+     */
     public function nuevoAction($codigoCartaTipo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

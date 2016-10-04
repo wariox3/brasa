@@ -1,10 +1,11 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -13,6 +14,9 @@ use Doctrine\ORM\EntityRepository;
  */
 class CertificadoIngresoController extends Controller
 {
+    /**
+     * @Route("/rhu/base/Certificado/generar/{codigoEmpleado}", name="brs_rhu_base_certificadoIngreso_generar")
+     */
     public function CertificadoAction($codigoEmpleado) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

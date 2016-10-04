@@ -1,23 +1,28 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Brasa\RecursoHumanoBundle\Form\Type\RhuContratoTipoType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Brasa\RecursoHumanoBundle\Form\Type\RhuDisciplinarioTipoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
- * RhuContratosTipo controller.
+ * RhuDisciplinarioTipo controller.
  *
  */
-class BaseContratosTipoController extends Controller
+class DisciplinarioTipoController extends Controller
 {
     var $strDqlLista = "";
+    
+    /**
+     * @Route("/rhu/base/disciplinario/tipo/lista", name="brs_rhu_base_disciplinario_tipo_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
-        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 43, 1)) {
+        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 44, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
         $paginator  = $this->get('knp_paginator');
@@ -31,50 +36,53 @@ class BaseContratosTipoController extends Controller
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
                 try{
-                    foreach ($arrSeleccionados AS $codigoContratoTipo) {
-                        $arContratoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuContratoTipo();
-                        $arContratoTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuContratoTipo')->find($codigoContratoTipo);
-                        $em->remove($arContratoTipo);                   
+                    foreach ($arrSeleccionados AS $codigoDisciplinarioTipo) {
+                        $arDisciplinarioTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioTipo();
+                        $arDisciplinarioTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinarioTipo')->find($codigoDisciplinarioTipo);
+                        $em->remove($arDisciplinarioTipo);                 
                     }
                     $em->flush(); 
-                    return $this->redirect($this->generateUrl('brs_rhu_base_contrato_tipo_lista'));
+                    return $this->redirect($this->generateUrl('brs_rhu_base_disciplinario_tipo_lista'));
                 } catch (ForeignKeyConstraintViolationException $e) { 
-                    $objMensaje->Mensaje('error', 'No se puede eliminar el tipo de contrato porque esta siendo utilizado', $this);
-                  }    
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el tipo de proceso disciplinario porque esta siendo utilizado', $this);
+                  }
             }                        
         }
         
-        $arContratosTipos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);        
-        return $this->render('BrasaRecursoHumanoBundle:Base/ContratoTipo:listar.html.twig', array(
-                    'arContratosTipos' => $arContratosTipos,
+        $arDisciplinarioTipos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);        
+        return $this->render('BrasaRecursoHumanoBundle:Base/DisciplinarioTipo:listar.html.twig', array(
+                    'arDisciplinarioTipos' => $arDisciplinarioTipos,
                     'form'=> $form->createView()
            
         ));
     }
     
-    public function nuevoAction($codigoContratoTipo) {
+    /**
+     * @Route("/rhu/base/disciplinario/tipo/nuevo/{codigoDisciplinarioTipo}", name="brs_rhu_base_disciplinario_tipo_nuevo")
+     */
+    public function nuevoAction($codigoDisciplinarioTipo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arContratoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuContratoTipo();
-        if ($codigoContratoTipo != 0) {
-            $arContratoTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuContratoTipo')->find($codigoContratoTipo);
+        $arDisciplinarioTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioTipo();
+        if ($codigoDisciplinarioTipo != 0) {
+            $arDisciplinarioTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinarioTipo')->find($codigoDisciplinarioTipo);
         }    
-        $form = $this->createForm(new RhuContratoTipoType(), $arContratoTipo);
+        $form = $this->createForm(new RhuDisciplinarioTipoType(), $arDisciplinarioTipo);
         $form->handleRequest($request);
         if ($form->isValid()) {                        
-            $arContratoTipo = $form->getData();
-            $em->persist($arContratoTipo);
+            $arDisciplinarioTipo = $form->getData();
+            $em->persist($arDisciplinarioTipo);
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_base_contrato_tipo_lista'));
+            return $this->redirect($this->generateUrl('brs_rhu_base_disciplinario_tipo_lista'));
         }
-        return $this->render('BrasaRecursoHumanoBundle:Base/ContratoTipo:nuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Base/DisciplinarioTipo:nuevo.html.twig', array(
             'form' => $form->createView(),
         ));
     }
     
     private function listar() {
         $em = $this->getDoctrine()->getManager();        
-        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuContratoTipo')->listaDql();         
+        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinarioTipo')->listaDql();         
     }        
     
     private function generarExcel() {
@@ -95,21 +103,21 @@ class BaseContratosTipoController extends Controller
                     ->setCellValue('A1', 'Codigo')
                     ->setCellValue('B1', 'Nombre');
         $i = 2;
-        $arContratoTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContratoTipo')->findAll();
+        $arDisciplinarioTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinarioTipo')->findAll();
 
-        foreach ($arContratoTipos as $arContratoTipos) {
+        foreach ($arDisciplinarioTipos as $arDisciplinarioTipos) {
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arContratoTipos->getcodigoContratoTipoPk())
-                    ->setCellValue('B' . $i, $arContratoTipos->getnombre());
+                    ->setCellValue('A' . $i, $arDisciplinarioTipos->getcodigoDisciplinarioTipoPk())
+                    ->setCellValue('B' . $i, $arDisciplinarioTipos->getnombre());
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('Contrato_tipos');
+        $objPHPExcel->getActiveSheet()->setTitle('Disciplinario_Tipos');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Contratos_Tipos.xlsx"');
+        header('Content-Disposition: attachment;filename="Disciplinario_Tipos.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

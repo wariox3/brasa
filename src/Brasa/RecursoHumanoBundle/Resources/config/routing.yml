@@ -64,15 +64,7 @@ brs_rhu_pagos_adicionales_agregar_valoradicionaleditar:
     
 brs_rhu_pagos_adicionales_agregar_valoradicional:
     path:     /rhu/pagos/adicionales/agregar/valoradicional/{tipo}/{modalidad}/{periodo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:valorAdicional }                
-    
-brs_rhu_base_capacitacion_tipo_lista:
-    path:     /rhu/capacitacion/tipo/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCapacitacionTipo:lista }    
-
-brs_rhu_base_capacitacion_tipo_nuevo:
-    path:     /rhu/capacitacion/tipo/nuevo/{codigoTipoCapacitacion}
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCapacitacionTipo:nuevo }           
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:valorAdicional }                               
     
 brs_rhu_pago_concepto_lista:
     path:     /rhu/pago/concepto/lista
@@ -140,9 +132,7 @@ brs_rhu_dotacion_detalle_devolucion:
    
 brs_rhu_dotacion_detalle_editar:
    path:     /rhu/base/empleadoDotacion/detalle/editar/{codigoDotacionDetalle}
-   defaults: { _controller: BrasaRecursoHumanoBundle:Dotacion:editarElemento }       
-    
-
+   defaults: { _controller: BrasaRecursoHumanoBundle:Dotacion:editarElemento }          
         
 brs_rhu_cargar_control_acceso_empleados:
     path:     /rhu/cargar/control/acceso/empleados
@@ -207,150 +197,10 @@ brs_rhu_programaciones_pago_cargar_adicionales_pago:
 brs_rhu_utilidades_medios_magneticos_informe:
     path:     /rhu/utilidades/mediosmagneticos/informe
     defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesMediosMagneticos:Informe }    
-    
+        
 brs_rhu_utilidades_informacion_dane_informe:
     path:     /rhu/utilidades/informaciondane/informe
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesInformacionDane:Informe }        
-    
-brs_rhu_base_centros_costos_lista:
-    path:     /rhu/base/centroscostos/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCentroCosto:lista } 
-
-brs_rhu_base_centros_costos_nuevo:
-    path:     /rhu/base/centroscostos/nuevo/{codigoCentroCosto}
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCentroCosto:nuevo }
-    
-brs_rhu_base_centros_costos_detalle:
-    path:     /rhu/base/centroscostos/detalle/{codigoCentroCosto}
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCentroCosto:detalle }        
-    
-brs_rhu_base_empleados_lista:
-    path:     /rhu/base/empleados/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleado:lista }     
-    
-brs_rhu_base_empleados_detalles:
-    path:     /rhu/base/empleados/detalles/{codigoEmpleado}
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleado:detalle }    
-    
-brs_rhu_base_empleados_nuevo:
-    path:     /rhu/base/empleados/nuevo/{codigoEmpleado}/{codigoSeleccion}
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleado:nuevo }     
-
-brs_rhu_base_empleados_nuevo_enlazar:
-    path:     /rhu/base/empleados/nuevo/enlazar/
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleado:enlazar }         
-    
-brs_rhu_base_empleados_cargar_foto:
-    path:     /rhu/base/empleados/cargar/foto/{codigoEmpleado}
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseEmpleado:cargarFoto }     
-    
-brs_rhu_base_empleado_estudio_nuevo:
-    path:     /rhu/base/empleadoEstudio/nuevo/{codigoEmpleado}/{codigoEmpleadoEstudio}
-    defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoEstudio:nuevo }   
-    
-brs_rhu_base_empleado_familia_nuevo:
-    path:     /rhu/base/empleadoFamilia/nuevo/{codigoEmpleado}/{codigoEmpleadoFamilia}
-    defaults: { _controller: BrasaRecursoHumanoBundle:EmpleadoFamilia:nuevo }
-
-brs_rhu_base_contratos_lista:
-    path:     /rhu/base/contratos/lista/
-    defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:lista }    
-
-brs_rhu_base_contratos_detalles:
-    path:     /rhu/base/contratos/detalle/{codigoContrato}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:detalle }
-    
-brs_rhu_base_contratos_documentos:
-    path:     /rhu/base/contratos/documentos/{codigoContrato}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:documentos }    
-    
-brs_rhu_base_disciplinario_tipo_lista:
-    path:     /rhu/base/disciplinario/tipo/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseDisciplinarioTipo:lista } 
-
-brs_rhu_base_disciplinario_tipo_nuevo:
-    path:     /rhu/base/disciplinario/tipo/nuevo/{codigoDisciplinarioTipo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseDisciplinarioTipo:nuevo }
-    
-brs_rhu_base_pension_tipo_lista:
-    path:     /rhu/base/pension/tipo/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:BasePensionTipo:lista } 
-
-brs_rhu_base_pension_tipo_nuevo:
-    path:     /rhu/base/pension/tipo/nuevo/{codigoPensionTipo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:BasePensionTipo:nuevo }
-    
-brs_rhu_base_salud_tipo_lista:
-    path:     /rhu/base/salud/tipo/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseSaludTipo:lista } 
-
-brs_rhu_base_salud_tipo_nuevo:
-    path:     /rhu/base/salud/tipo/nuevo/{codigoSaludTipo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseSaludTipo:nuevo }    
-    
-brs_rhu_base_contrato_tipo_lista:
-    path:     /rhu/base/contrato/tipo/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseContratosTipo:lista } 
-
-brs_rhu_base_contrato_tipo_nuevo:
-    path:     /rhu/base/contrato/tipo/nuevo/{codigoContratoTipo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseContratosTipo:nuevo }
-    
-brs_rhu_base_carta_tipo_lista:
-    path:     /rhu/base/carta/tipo/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCartaTipo:lista } 
-
-brs_rhu_base_carta_tipo_nuevo:
-    path:     /rhu/base/carta/tipo/nuevo/{codigoCartaTipo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:BaseCartaTipo:nuevo }    
-    
-brs_rhu_contratos_nuevo:
-    path:     /rhu/contratos/nuevo/{codigoContrato}/{codigoEmpleado}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:nuevo }    
-
-brs_rhu_contratos_terminar:
-    path:     /rhu/contratos/terminar/{codigoContrato}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:terminar }
-    
-brs_rhu_contratos_cambiotipocontrato:
-    path:     /rhu/contratos/cambiotipocontrato/{codigoContrato}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:cambioContrato }    
-    
-brs_rhu_contratos_informacion_inicial:
-    path:     /rhu/contratos/informacion/inicial/{codigoContrato}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:informacionInicial }
-    
-brs_rhu_contratos_actualizar_terminado:
-    path:     /rhu/contratos/actualizar/terminado/{codigoContrato}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:actualizarContratoTerminado }    
-
-brs_rhu_contratos_sedes_nuevo:
-    path:     /rhu/contratos/sedes/nuevo/{codigoContrato}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Contratos:detalleSedeNuevo }
-    
-brs_rhu_traslado_pension_nuevo:
-    path:     /rhu/traslado/pension/nuevo/{codigoContrato}/{codigoTrasladoPension}
-    defaults: { _controller: BrasaRecursoHumanoBundle:TrasladoPension:nuevo }
-    
-brs_rhu_traslado_pension_editar:
-    path:     /rhu/traslado/pension/editar/{codigoContrato}/{codigoTrasladoPension}
-    defaults: { _controller: BrasaRecursoHumanoBundle:TrasladoPension:editar }    
-    
-brs_rhu_traslado_salud_nuevo:
-    path:     /rhu/traslado/salud/nuevo/{codigoContrato}/{codigoTrasladoSalud}
-    defaults: { _controller: BrasaRecursoHumanoBundle:TrasladoSalud:nuevo } 
-    
-brs_rhu_traslado_salud_editar:
-    path:     /rhu/traslado/salud/editar/{codigoContrato}/{codigoTrasladoSalud}
-    defaults: { _controller: BrasaRecursoHumanoBundle:TrasladoSalud:editar }    
-    
-brs_rhu_cambio_salario_nuevo:
-    path:     /rhu/cambiosalario/nuevo/{codigoContrato}/{codigoCambioSalario}
-    defaults: { _controller: BrasaRecursoHumanoBundle:CambioSalario:nuevo }
-    
-brs_rhu_contrato_prorroga_nuevo:
-    path:     /rhu/contrato/prorroga/nuevo/{codigoContrato}/{codigoContratoProrroga}
-    defaults: { _controller: BrasaRecursoHumanoBundle:ContratoProrroga:nuevo }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesInformacionDane:Informe }                                                        
     
 brs_rhu_facturas_lista:
     path:     /rhu/facturas/lista
@@ -374,83 +224,7 @@ brs_rhu_facturas_detalle_nuevo_examen:
 
 brs_rhu_facturas_detalle_nuevo_seleccion:
     path:     /rhu/facturas/detalle/nuevo/seleccion/{codigoFactura}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Facturas:detalleNuevoSeleccion }
-
-brs_rhu_base_salud_listar:
-   path:     /rhu/base/salud/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSalud:listar }
-   
-brs_rhu_base_salud_nuevo:
-   path:     /rhu/base/salud/nuevo/{codigoEntidadSaludPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseSalud:nuevo }
-   
-brs_rhu_base_riesgoProfesional_listar:
-   path:     /rhu/base/riesgoProfesional/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseRiesgoProfesional:listar }
-   
-brs_rhu_base_riesgoProfesional_nuevo:
-   path:     /rhu/base/riesgoProfesional/nuevo/{codigoEntidadRiesgoProfesionalPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseRiesgoProfesional:nuevo }   
-   
-brs_rhu_base_banco_listar:
-   path:     /rhu/base/banco/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseBanco:listar }
-   
-brs_rhu_base_banco_nuevo:
-   path:     /rhu/base/banco/nuevo/{codigoBancoPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseBanco:nuevo }
-   
-brs_rhu_base_academia_listar:
-   path:     /rhu/base/academia/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseAcademia:listar }
-   
-brs_rhu_base_academia_nuevo:
-   path:     /rhu/base/academia/nuevo/{codigoAcademiaPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseAcademia:nuevo }
-   
-brs_rhu_base_estudiotipoacreditacion_listar:
-   path:     /rhu/base/estudiotipoacreditacion/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseEstudioTipoAcreditacion:listar }
-   
-brs_rhu_base_estudiotipoacreditacion_nuevo:
-   path:     /rhu/base/estudiotipoacreditacion/nuevo/{codigoEstudioTipoAcreditacionPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseEstudioTipoAcreditacion:nuevo }   
-   
-brs_rhu_base_horario_listar:
-   path:     /rhu/base/horario/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseHorario:listar }
-   
-brs_rhu_base_horario_nuevo:
-   path:     /rhu/base/horario/nuevo/{codigoHorarioPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseHorario:nuevo }
-   
-brs_rhu_base_turno_listar:
-   path:     /rhu/base/turno/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseTurno:listar }
-   
-brs_rhu_base_turno_nuevo:
-   path:     /rhu/base/turno/nuevo/{codigoTurnoPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseTurno:nuevo }   
-   
-brs_rhu_base_certificadoIngreso_generar:
-   path:     /rhu/base/Certificado/generar/{codigoEmpleado}
-   defaults: { _controller: BrasaRecursoHumanoBundle:CertificadoIngreso:certificado }   
-   
-brs_rhu_base_caja_listar:
-   path:     /rhu/base/caja/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseCaja:listar }
-   
-brs_rhu_base_caja_nuevo:
-   path:     /rhu/base/caja/nuevo/{codigoEntidadCajaPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseCaja:nuevo }   
-   
-brs_rhu_base_clasificacion_listar:
-   path:     /rhu/base/clasificacion/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseClasificacionRiesgos:listar }
-   
-brs_rhu_base_clasificacion_nuevo:
-   path:     /rhu/base/clasificacion/nuevo/{codigoClasificacionPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseClasificacionRiesgos:nuevo }   
+    defaults: { _controller: BrasaRecursoHumanoBundle:Facturas:detalleNuevoSeleccion }                            
    
 brs_rhu_base_sede_listar:
    path:     /rhu/base/sede/listar

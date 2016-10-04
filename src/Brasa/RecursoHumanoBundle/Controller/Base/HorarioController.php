@@ -1,9 +1,10 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuHorarioType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
@@ -11,9 +12,11 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
  * RhuHorario controller.
  *
  */
-class BaseHorarioController extends Controller
+class HorarioController extends Controller
 {
-
+    /**
+     * @Route("/rhu/base/horario/listar", name="brs_rhu_base_horario_listar")
+     */
     public function listarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -128,6 +131,9 @@ class BaseHorarioController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/horario/nuevo/{codigoHorarioPk}", name="brs_rhu_base_horario_nuevo")
+     */
     public function nuevoAction($codigoHorarioPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

@@ -1,38 +1,42 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
-class TrasladoSaludController extends Controller
+class TrasladoPensionController extends Controller
 {
-    public function nuevoAction($codigoContrato, $codigoTrasladoSalud = 0) {
+    /**
+     * @Route("/rhu/traslado/pension/nuevo/{codigoContrato}/{codigoTrasladoPension}", name="brs_rhu_traslado_pension_nuevo")
+     */
+    public function nuevoAction($codigoContrato, $codigoTrasladoPension = 0) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $arTrasladoSalud = new \Brasa\RecursoHumanoBundle\Entity\RhuTrasladoSalud();
+        $arTrasladoPension = new \Brasa\RecursoHumanoBundle\Entity\RhuTrasladoPension();
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
-        if ($codigoTrasladoSalud != 0)
+        if ($codigoTrasladoPension != 0)
         {
-            $arTrasladoSalud = $em->getRepository('BrasaRecursoHumanoBundle:RhuTrasladoSalud')->find($codigoTrasladoSalud);
+            $codigoTrasladoPension = $em->getRepository('BrasaRecursoHumanoBundle:RhuTrasladoPension')->find($codigoTrasladoPension);
         }
         if ($arContrato->getEstadoActivo()== 0){
             $objMensaje->Mensaje("error", "No tiene contrato activo", $this);
         }
         $form = $this->createFormBuilder()
-            ->add('entidadSaludNuevaRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuEntidadSalud',
+            ->add('entidadPensionNuevaRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuEntidadPension',
                 'query_builder' => function (EntityRepository $er)  {
-                    return $er->createQueryBuilder('es')
-                    ->orderBy('es.nombre', 'ASC');},
+                    return $er->createQueryBuilder('ep')
+                    ->orderBy('ep.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))
             ->add('fechaAplicacion', 'date', array('data' => new \DateTime('now')))
-            ->add('fechaFosyga', 'date', array('data' => new \DateTime('now')))                                
-            ->add('tipo', 'choice', array('choices' => array('1' => 'TRASLADO', '2' => 'CAMBIO')))                                
+            ->add('fechaFosyga', 'date', array('data' => new \DateTime('now')))                
             ->add('detalle', 'text', array('required' => true))
+            ->add('tipo', 'choice', array('choices' => array('1' => 'TRASLADO', '2' => 'CAMBIO')))                                                
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $form->handleRequest($request);
@@ -41,54 +45,58 @@ class TrasladoSaludController extends Controller
             if ($arContrato->getEstadoActivo()== 0){
                 $objMensaje->Mensaje("error", "No tiene contrato activo", $this);
             }else{
-                $arEntidadSalud = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud();
-                $arEntidadSalud = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadSalud')->find($arContrato->getCodigoEntidadSaludFk());
-                $arTrasladoSalud->setContratoRel($arContrato);
-                $arTrasladoSalud->setEmpleadoRel($arContrato->getEmpleadoRel());
-                $arTrasladoSalud->setFecha($form->get('fechaAplicacion')->getData());
-                $arTrasladoSalud->setEntidadSaludNuevaRel($form->get('entidadSaludNuevaRel')->getData());
-                $arTrasladoSalud->setEntidadSaludAnteriorRel($arEntidadSalud);
-                $arTrasladoSalud->setDetalle($form->get('detalle')->getData());
-                $arTrasladoSalud->setTipo($form->get('tipo')->getData());
-                $arTrasladoSalud->setFechaFosyga($form->get('fechaFosyga')->getData());
+                $arEntidadPension = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension();
+                $arEntidadPension = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadPension')->find($arContrato->getCodigoEntidadPensionFk());
+                $arTrasladoPension->setContratoRel($arContrato);
+                $arTrasladoPension->setEmpleadoRel($arContrato->getEmpleadoRel());
+                $arTrasladoPension->setFecha($form->get('fechaAplicacion')->getData());
+                $arTrasladoPension->setEntidadPensionNuevaRel($form->get('entidadPensionNuevaRel')->getData());
+                $arTrasladoPension->setEntidadPensionAnteriorRel($arEntidadPension);
+                $arTrasladoPension->setDetalle($form->get('detalle')->getData());
+                $arTrasladoPension->setTipo($form->get('tipo')->getData());
+                $arTrasladoPension->setFechaFosyga($form->get('fechaFosyga')->getData());
                 if ($form->get('tipo')->getData() == 1){
-                    $arTrasladoSalud->setEstadoAfiliado(1);
+                    $arTrasladoPension->setEstadoAfiliado(1);
                 }
-                $arContrato->setEntidadSaludRel($form->get('entidadSaludNuevaRel')->getData());
+                $arContrato->setEntidadPensionRel($form->get('entidadPensionNuevaRel')->getData());
                 $arEmpleadoActualizar = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                 $arEmpleadoActualizar = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato->getEmpleadoRel());
                 if ($arEmpleadoActualizar->getCodigoCentroCostoFk() <> null){
-                    $arEmpleadoActualizar->setEntidadSaludRel($form->get('entidadSaludNuevaRel')->getData());
+                    $arEmpleadoActualizar->setEntidadPensionRel($form->get('entidadPensionNuevaRel')->getData());
                     $em->persist($arEmpleadoActualizar);
                 }
                 $em->persist($arContrato);
-                $em->persist($arTrasladoSalud);
+                $em->persist($arTrasladoPension);
                 $em->flush();
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                 
             }
+            
         }
-        return $this->render('BrasaRecursoHumanoBundle:TrasladoSalud:nuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:TrasladoPension:nuevo.html.twig', array(
             'form' => $form->createView(),
             'arContrato' => $arContrato,
         ));
     }
     
-    public function editarAction($codigoContrato, $codigoTrasladoSalud = 0) {
+    /**
+     * @Route("/rhu/traslado/pension/editar/{codigoContrato}/{codigoTrasladoPension}", name="brs_rhu_traslado_pension_editar")
+     */
+    public function editarAction($codigoContrato, $codigoTrasladoPension = 0) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
-        $arTrasladoSalud = new \Brasa\RecursoHumanoBundle\Entity\RhuTrasladoSalud();
-        $arTrasladoSalud = $em->getRepository('BrasaRecursoHumanoBundle:RhuTrasladoSalud')->find($codigoTrasladoSalud);
-        $estadoAfiliado = $arTrasladoSalud->getEstadoAfiliado(); 
+        $arTrasladoPension = new \Brasa\RecursoHumanoBundle\Entity\RhuTrasladoPension();
+        $arTrasladoPension = $em->getRepository('BrasaRecursoHumanoBundle:RhuTrasladoPension')->find($codigoTrasladoPension);
+        $estadoAfiliado = $arTrasladoPension->getEstadoAfiliado(); 
         if ($estadoAfiliado == 1){
             $nombreEstadoAfiliado = "CERRADO";
         } else {
             $nombreEstadoAfiliado = "ABIERTO";
         }
         $form = $this->createFormBuilder()    
-            ->setAction($this->generateUrl('brs_rhu_traslado_salud_editar', array('codigoContrato' => $codigoContrato, 'codigoTrasladoSalud' => $codigoTrasladoSalud)))
+            ->setAction($this->generateUrl('brs_rhu_traslado_pension_editar', array('codigoContrato' => $codigoContrato, 'codigoTrasladoPension' => $codigoTrasladoPension)))
             ->add('fechaCambioAfiliacion', 'date', array('data' => new \DateTime('now')))
             ->add('estadoAfiliado', 'choice', array('choices' => array($estadoAfiliado => $nombreEstadoAfiliado, '1' => 'CERRADO', '0' => 'ABIERTO')))                                                
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
@@ -100,16 +108,16 @@ class TrasladoSaludController extends Controller
                 $objMensaje->Mensaje("error", "No tiene contrato activo", $this);
             }else{
                 
-                $arTrasladoSalud->setFechaCambioAfiliacion($form->get('fechaCambioAfiliacion')->getData());
-                $arTrasladoSalud->setEstadoAfiliado($form->get('estadoAfiliado')->getData());
-                $em->persist($arTrasladoSalud);
+                $arTrasladoPension->setFechaCambioAfiliacion($form->get('fechaCambioAfiliacion')->getData());
+                $arTrasladoPension->setEstadoAfiliado($form->get('estadoAfiliado')->getData());
+                $em->persist($arTrasladoPension);
                 $em->flush();
                 //echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                 
                 return $this->redirect($this->generateUrl('brs_rhu_base_contratos_detalles', array('codigoContrato' => $codigoContrato)));
             }
             
         }
-        return $this->render('BrasaRecursoHumanoBundle:TrasladoSalud:editar.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:TrasladoPension:editar.html.twig', array(
             'form' => $form->createView(),
             'arContrato' => $arContrato,
         ));
