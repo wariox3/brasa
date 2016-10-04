@@ -195,6 +195,13 @@ class PagoBancoController extends Controller
                     $objMensaje->Mensaje('error', 'El pago al banco debe estar autorizado ', $this);
                 }
             }
+            if($form->get('BtnArchivoDavivienda')->isClicked()) {
+                if($arPagoBanco->getEstadoAutorizado() == 1) {
+                    $this->generarArchivoDavivienda($arPagoBanco);
+                } else {
+                    $objMensaje->Mensaje('error', 'El pago al banco debe estar autorizado ', $this);
+                }
+            }
             
         }        
         $dql = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->listaDetalleDql($codigoPagoBanco);
@@ -608,7 +615,8 @@ class PagoBancoController extends Controller
         $arrBotonArchivoBancolombiaPab = array('label' => 'Bancolombia Pab', 'disabled' => false);
         $arrBotonArchivoBancolombiaSap = array('label' => 'Bancolombia Sap', 'disabled' => false);
         $arrBotonArchivoAvvillasInterno = array('label' => 'Av Villas Interno', 'disabled' => false);
-        $arrBotonArchivoAvvillasOtros = array('label' => 'Av Villas Otros', 'disabled' => false);        
+        $arrBotonArchivoAvvillasOtros = array('label' => 'Av Villas Otros', 'disabled' => false);
+        $arrBotonArchivoDavivienda = array('label' => 'Davivienda', 'disabled' => false);        
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;
             $arrBotonEliminarDetalle['disabled'] = true;
@@ -627,6 +635,7 @@ class PagoBancoController extends Controller
                     ->add('BtnArchivoBancolombiaSap', 'submit', $arrBotonArchivoBancolombiaSap)
                     ->add('BtnArchivoAvvillasInterno', 'submit', $arrBotonArchivoAvvillasInterno)
                     ->add('BtnArchivoAvvillasOtros', 'submit', $arrBotonArchivoAvvillasOtros)
+                    ->add('BtnArchivoDavivienda', 'submit', $arrBotonArchivoDavivienda)
                     ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)
                     ->getForm();  
         return $form;
@@ -873,6 +882,85 @@ class PagoBancoController extends Controller
         //Fin cuerpo 
         //Pie de pagina
         fputs($ar, "4" . $this->RellenarNr(count($arPagosBancoDetalle), "0", 8) . $strValorTotal . "\n");
+        fclose($ar);
+        $em->flush();
+                    
+        header('Content-Description: File Transfer');
+        header('Content-Type: text/csv; charset=ISO-8859-15');
+        header('Content-Disposition: attachment; filename='.basename($strArchivo));
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($strArchivo));
+        readfile($strArchivo);
+        exit;
+        
+        
+    }
+    
+    private function generarArchivoDavivienda ($arPagoBanco) {
+        $em = $this->getDoctrine()->getManager();
+        //$arPagoBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco();
+        $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $strNombreArchivo = "pagoAvvillasOtros" . date('YmdHis') . ".txt";
+        $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
+        //$strArchivo = "c:/xampp/" . $strNombreArchivo;   
+        ob_clean();
+        $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
+        ob_clean();
+        $strValorTotal = 0;
+        $arPagosBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
+        $arPagosBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->findBy(array ('codigoPagoBancoFk' => $arPagoBanco->getCodigoPagoBancoPk()));                        
+        foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
+            $strValorTotal += round($arPagoBancoDetalle->getVrPago());
+        }        
+        // Encabezado
+        /*$strTipoRegistro = "TR";
+        $cuentaOrigen = $this->RellenarNr2($arPagoBanco->getCuentaRel()->getCuenta(), " ", 17, "D");
+        $tipoCuentaOrigen = "0"; //duda
+        $codigoProducto = "PP"; //duda
+        $strFechaCreacion = $arPagoBanco->getFechaTrasmision()->format('Ymd');
+        $strNitEmpresa = $this->RellenarNr(utf8_decode($arConfiguracionGeneral->getNitEmpresa()),"0",15);
+        $tipoId = "03"; //duda
+        $strNombreEmpresa = $this->RellenarNr2(utf8_decode(substr($arConfiguracionGeneral->getNombreEmpresa(), 0, 16)), " ", 16, "D");
+        $codPlazaOrigen = "0002"; //duda
+        $tipoRegistros = "PPD"; //duda
+        $strSecuencia = "000000";
+        $canal = "4"; //duda
+        //$strValorTotal = $this->RellenarNr($strValorTotal, "0", 18);
+        $strValorTotal = ($this->RellenarNr($strValorTotal, "0", 16) . "00");
+        //Fin encabezado
+        fputs($ar, $strTipoRegistro . $cuentaOrigen . $tipoCuentaOrigen . $codigoProducto . $strFechaCreacion . $strNitEmpresa . $tipoId . $strNombreEmpresa . $codPlazaOrigen . $tipoRegistros . $strSecuencia . $canal . "\n");*/
+        //Inicio cuerpo
+        foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
+            if($arPagoBancoDetalle->getVrPago() > 0) {
+                fputs($ar, "TR"); //(1)Tipo registro de traslado            
+                /*fputs($ar, "32"); // codigo transaccion DUDA
+                fputs($ar, "0040"); // codigo banco des
+                fputs($ar, "0002"); // codigo plaza des*/
+                fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getEmpleadoRel()->getNumeroIdentificacion(), "0", 16)); //(15) Nit del beneficiario           
+                fputs($ar, "0000000000000000"); // referencia
+                fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getCuenta(), "0", 16)); // Nro cuenta destino
+                fputs($ar, "CA");// tipo producto
+                fputs($ar, "000051");// codigo banco
+                $duoValorNetoPagar = round($arPagoBancoDetalle->getVrPago()); // Valor transacción
+                fputs($ar, $this->RellenarNr($duoValorNetoPagar, "0", 16) . "00");
+                fputs($ar, "000000"); // talon
+                fputs($ar, "02"); // tipo identificacion
+                fputs($ar, "1"); // validacion ach
+                fputs($ar, "9999"); // resultado del proceso
+                fputs($ar, "0000000000000000000000000000000000000000"); // respuesta del proceso
+                fputs($ar, "000000000000000000"); // valor acumulado del cobro
+                fputs($ar, "00000000"); // fecha aplicacion
+                fputs($ar, "0000"); // oficina de recuado
+                fputs($ar, "0000"); // motivo
+                fputs($ar, "0000000"); // campos futuros
+                fputs($ar, "\n");                
+            }
+        }
+        //Fin cuerpo 
+        //Pie de pagina
         fclose($ar);
         $em->flush();
                     

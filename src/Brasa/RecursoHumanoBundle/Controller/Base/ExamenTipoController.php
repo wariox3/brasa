@@ -1,9 +1,10 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuExamenTipoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
@@ -12,9 +13,11 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
  * RhuExamenTipo controller.
  *
  */
-class BaseExamenTipoController extends Controller
+class ExamenTipoController extends Controller
 {
-
+    /**
+     * @Route("/rhu/base/examentipo/listar", name="brs_rhu_base_examentipo_listar")
+     */
     public function listarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -65,6 +68,9 @@ class BaseExamenTipoController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/examentipo/nuevo/{codigoExamenTipoPk}", name="brs_rhu_base_examentipo_nuevo")
+     */
     public function nuevoAction($codigoExamenTipoPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

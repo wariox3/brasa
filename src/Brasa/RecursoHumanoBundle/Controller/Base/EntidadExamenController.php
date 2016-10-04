@@ -1,8 +1,9 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
@@ -14,9 +15,11 @@ use Brasa\RecursoHumanoBundle\Form\Type\RhuEntidadExamenType;
  * RhuEntidadExamen controller.
  *
  */
-class BaseEntidadExamenController extends Controller
+class EntidadExamenController extends Controller
 {
-
+    /**
+     * @Route("/rhu/base/entidadexamen/listar", name="brs_rhu_base_entidadexamen_listar")
+     */
     public function listarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -120,6 +123,9 @@ class BaseEntidadExamenController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/entidadexamen/nuevo/{codigoEntidadExamenPk}", name="brs_rhu_base_entidadexamen_nuevo")
+     */
     public function nuevoAction($codigoEntidadExamenPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -147,6 +153,9 @@ class BaseEntidadExamenController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/entidadexamen/detalle/{codigoEntidadExamenPk}", name="brs_rhu_base_entidadexamen_detalle")
+     */
     public function detalleAction($codigoEntidadExamenPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -195,6 +204,9 @@ class BaseEntidadExamenController extends Controller
                     ));
     } 
     
+    /**
+     * @Route("/rhu/base/entidadexamen/detalle/nuevo/{codigoEntidadExamenPk}", name="brs_rhu_base_entidadexamen_detalle_nuevo")
+     */
     public function detalleNuevoAction($codigoEntidadExamenPk) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();        

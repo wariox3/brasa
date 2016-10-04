@@ -224,9 +224,7 @@ brs_rhu_facturas_detalle_nuevo_examen:
 
 brs_rhu_facturas_detalle_nuevo_seleccion:
     path:     /rhu/facturas/detalle/nuevo/seleccion/{codigoFactura}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Facturas:detalleNuevoSeleccion }                            
-   
-
+    defaults: { _controller: BrasaRecursoHumanoBundle:Facturas:detalleNuevoSeleccion }                               
    
 brs_rhu_examen_listar:
    path:     /rhu/examen/listar
@@ -262,43 +260,7 @@ brs_rhu_examen_restriccion_medica_agregar:
     
 brs_rhu_examen_restriccion_medica_detalle:
     path:     /rhu/examen/restriccion/medica/detalle/{codigoRestriccionMedica}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Examen:detalleRestriccionMedica }    
-   
-brs_rhu_base_entidadexamen_listar:
-   path:     /rhu/base/entidadexamen/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseEntidadExamen:listar }
-   
-brs_rhu_base_entidadexamen_nuevo:
-   path:     /rhu/base/entidadexamen/nuevo/{codigoEntidadExamenPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseEntidadExamen:nuevo }
-   
-brs_rhu_base_entidadexamen_detalle:
-   path:     /rhu/base/entidadexamen/detalle/{codigoEntidadExamenPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseEntidadExamen:detalle }
-   
-brs_rhu_base_entidadexamen_detalle_nuevo:
-   path:     /rhu/base/entidadexamen/detalle/nuevo/{codigoEntidadExamenPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseEntidadExamen:detalleNuevo }   
-   
-brs_rhu_base_examentipo_listar:      
-   path:     /rhu/base/examentipo/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseExamenTipo:listar }
-   
-brs_rhu_base_examentipo_nuevo:
-   path:     /rhu/base/examentipo/nuevo/{codigoExamenTipoPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseExamenTipo:nuevo } 
-   
-brs_rhu_base_examen_cargo_lista:
-   path:     /rhu/base/examen/cargo/lista
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseExamenCargo:lista }
-   
-brs_rhu_base_examen_cargo_nuevo:
-   path:     /rhu/base/examen/cargo/nuevo/{codigoExamenCargo}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseExamenCargo:nuevo }
-   
-brs_rhu_base_examen_cargo_nuevomultiple:
-   path:     /rhu/base/examen/cargo/nuevomultiple/{codigoExamenCargo}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseExamenCargo:nuevoMultiple }  
+    defaults: { _controller: BrasaRecursoHumanoBundle:Examen:detalleRestriccionMedica }                 
 
 brs_rhu_base_pension_listar:
    path:     /rhu/base/pension/listar
