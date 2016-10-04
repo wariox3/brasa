@@ -31,8 +31,8 @@ class RhuExamenType extends AbstractType
             ->add('ciudadRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'property' => 'nombre',
-            ))
-            ->add('fecha', 'date')            
+            ))           
+            ->add('fecha','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('codigoSexoFk', 'choice', array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO')))
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('identificacion', 'number', array('required' => true))
