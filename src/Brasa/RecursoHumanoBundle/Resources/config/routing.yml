@@ -64,15 +64,7 @@ brs_rhu_pagos_adicionales_agregar_valoradicionaleditar:
     
 brs_rhu_pagos_adicionales_agregar_valoradicional:
     path:     /rhu/pagos/adicionales/agregar/valoradicional/{tipo}/{modalidad}/{periodo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:valorAdicional }                               
-    
-brs_rhu_pago_concepto_lista:
-    path:     /rhu/pago/concepto/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:BasePagoConcepto:lista }    
-
-brs_rhu_pago_concepto_nuevo:
-    path:     /rhu/pago/concepto/nuevo/{codigoPagoConcepto}
-    defaults: { _controller: BrasaRecursoHumanoBundle:BasePagoConcepto:nuevo }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:valorAdicional }                                       
     
 brs_rhu_incapacidades_pagos_nuevo:
     path:     /rhu/incapacidades/pagos/nuevo/{codigoIncapacidadPago}
@@ -260,43 +252,7 @@ brs_rhu_examen_restriccion_medica_agregar:
     
 brs_rhu_examen_restriccion_medica_detalle:
     path:     /rhu/examen/restriccion/medica/detalle/{codigoRestriccionMedica}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Examen:detalleRestriccionMedica }                 
-
-brs_rhu_base_pension_listar:
-   path:     /rhu/base/pension/listar
-   defaults: { _controller: BrasaRecursoHumanoBundle:BasePension:listar }
-   
-brs_rhu_base_pension_nuevo:
-   path:     /rhu/base/pension/nuevo/{codigoEntidadPensionPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BasePension:nuevo }    
-
-brs_rhu_base_requisito_cargo_lista:
-   path:     /rhu/base/requisito/cargo/lista
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseRequisitoCargo:lista }
-   
-brs_rhu_base_requisito_cargo_nuevo:
-   path:     /rhu/base/requisito/cargo/nuevo/{codigoRequisitoCargo}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseRequisitoCargo:nuevo }
-   
-brs_rhu_base_requisito_cargo_nuevomultiple:
-   path:     /rhu/base/requisito/cargo/nuevomultiple/{codigoRequisitoCargo}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseRequisitoCargo:nuevoMultiple }   
-   
-brs_rhu_base_requisito_concepto_lista:
-   path:     /rhu/base/requisito/concepto/lista
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseRequisitoConcepto:lista }
-   
-brs_rhu_base_requisito_concepto_nuevo:
-   path:     /rhu/base/requisito/concepto/nuevo/{codigoRequisitoConcepto}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BaseRequisitoConcepto:nuevo } 
-   
-brs_rhu_base_permiso_tipo_lista:
-   path:     /rhu/base/permiso/tipo/lista
-   defaults: { _controller: BrasaRecursoHumanoBundle:BasePermisoTipo:lista }
-   
-brs_rhu_base_permiso_tipo_nuevo:
-   path:     /rhu/base/permiso/tipo/nuevo/{codigoPermisoTipoPk}
-   defaults: { _controller: BrasaRecursoHumanoBundle:BasePermisoTipo:nuevo }   
+    defaults: { _controller: BrasaRecursoHumanoBundle:Examen:detalleRestriccionMedica }                        
 
 brs_rhu_aspirante_lista:
     path:     /rhu/aspirante/lista
@@ -404,31 +360,15 @@ brs_rhu_ss_periodo_detalle_empleados_trasladar:
     
 brs_rhu_ss_periodo_detalle_empleados_copiar:
     path:     /rhu/seguridadsocial/periodo/detalle/empleados/copiar/{codigoPeriodoDetalle}
-    defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:copiarEmpleados }    
-    
-brs_rhu_consultas_empleado:    
-    path:     /rhu/consultas/empleado
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:Empleado }
-    
-brs_rhu_consultas_empleado_detalle:    
-    path:     /rhu/consultas/empleado/detalle/{codigoEmpleado}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:EmpleadoDetalle }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:copiarEmpleados }           
 
-brs_rhu_consultas_empleado_estudios_vencimiento:    
-    path:     /rhu/consultas/empleado/estudios/vencimiento
-    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasEmpleadoEstudiosVencimiento:lista }
 
-brs_rhu_consultas_examenes_vencimiento:    
-    path:     /rhu/consultas/examanes/vencimiento
-    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasExamenesVencimiento:lista }
 
-brs_rhu_consultas_empleado_requisitos_pendientes:    
-    path:     /rhu/consultas/empleado/requisitos/pendientes
-    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasEmpleadoRequisitosPendientes:lista }
 
-brs_rhu_consultas_costos_general:    
-    path:     /rhu/consultas/costos/general
-    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasCostos:lista }
+
+
+
+
     
 brs_rhu_consultas_costos_ingresos_empleado:    
     path:     /rhu/consultas/costos/ingresos/empleado
@@ -437,86 +377,10 @@ brs_rhu_consultas_costos_ingresos_empleado:
 brs_rhu_consultas_pagos_deducciones_empleado:    
     path:     /rhu/consultas/pagos/deducciones/empleado
     defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasPagosDeduccionesEmpleado:lista }    
-    
-brs_rhu_consultas_creditos_general:    
-    path:     /rhu/consultas/creditos/general
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:creditosGeneral } 
-    
-brs_rhu_consultas_pago_pendientes_banco:    
-    path:     /rhu/consultas/pago/pendientes/banco
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:PagoPendientesBanco }    
-
-brs_rhu_consultas_servicios_cobrar:    
-    path:     /rhu/consultas/servicios/cobrar
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:serviciosCobrar }
-    
-brs_rhu_consultas_pago:    
-    path:     /rhu/consultas/pago
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:Pago }
-    
-brs_rhu_consultas_incapacidades_lista:    
-    path:     /rhu/consultas/incapacidades/lista/
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:Incapacidades }
-
-brs_rhu_consultas_incapacidades_cobrar_pago:    
-    path:     /rhu/consultas/incapacidades/cobrar/pago
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:IncapacidadesCobrar }
-    
-brs_rhu_consultas_sso_aportes:    
-    path:     /rhu/consultas/sso/aportes
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:Aportes }
-    
-brs_rhu_consultas_contrato_vacaciones_pagar:    
-    path:     /rhu/consultas/contrato/vacaciones/pagar
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:VacacionesPagar }
-    
-brs_rhu_consultas_contrato_fecha_terminacion:    
-    path:     /rhu/consultas/contrato/fecha/terminacion
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:FechaTerminacion }
-    
-brs_rhu_consultas_contrato_fecha_ingreso:    
-    path:     /rhu/consultas/contrato/fecha/ingreso
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:FechaIngreso }    
-
-brs_rhu_consultas_contrato_periodo:    
-    path:     /rhu/consultas/contrato/periodo
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:ContratoPeriodo } 
-
+     
 brs_rhu_utilidades_proyeccion:    
     path:     /rhu/utilidades/proyeccion
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesProyeccion:lista }
-    
-brs_rhu_consultas_procesos_disciplinarios:    
-    path:     /rhu/consultas/procesos/disciplinarios
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:ProcesosDisciplinarios } 
-    
-brs_rhu_consultas_dotacion_pendiente:    
-    path:     /rhu/consultas/dotacion/pendiente
-    defaults: { _controller: BrasaRecursoHumanoBundle:Consultas:DotacionesPendientes }    
-
-brs_rhu_consultas_examen_cobrar:    
-    path:     /rhu/consultas/examen/cobrar
-    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasExamenesCobrar:lista }
-    
-brs_rhu_consultas_control_acceso_empleados:    
-    path:     /rhu/consultas/control/acceso/empleado
-    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasControlAccesosEmpleados:lista }
-    
-brs_rhu_consultas_control_acceso_visitantes:    
-    path:     /rhu/consultas/control/acceso/visitantes
-    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasControlAccesosVisitantes:lista } 
-    
-brs_rhu_consultas_permisos:    
-    path:     /rhu/consultas/permisos
-    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasPermisos:lista }
-    
-brs_rhu_consultas_adicionales_pago:    
-    path:     /rhu/consultas/adicionales/pago
-    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasAdicionalesPago:lista }
-    
-brs_rhu_consultas_aspirantes_inconsistencias:    
-    path:     /rhu/consultas/aspirantes/inconsistencias
-    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasAspiranteInconsistencias:lista }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesProyeccion:lista }                
     
 brs_rhu_pago_examen_lista:
     path:     /rhu/pago/examen/lista

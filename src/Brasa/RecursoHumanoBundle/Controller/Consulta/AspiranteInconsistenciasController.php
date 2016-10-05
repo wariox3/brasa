@@ -1,14 +1,17 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Consulta;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
-class ConsultasAspiranteInconsistenciasController extends Controller
+class AspiranteInconsistenciasController extends Controller
 {
     var $strSqlLista = "";    
-
+    /**
+     * @Route("/rhu/consultas/aspirantes/inconsistencias", name="brs_rhu_consultas_aspirantes_inconsistencias")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

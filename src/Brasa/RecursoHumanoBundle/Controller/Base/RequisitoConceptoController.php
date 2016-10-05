@@ -1,9 +1,10 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuRequisitoConceptoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
@@ -11,10 +12,13 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
  * RhuRequisitoConcepto controller.
  *
  */
-class BaseRequisitoConceptoController extends Controller
+class RequisitoConceptoController extends Controller
 {
     var $strDqlLista = "";
     
+    /**
+     * @Route("/rhu/base/requisito/concepto/lista", name="brs_rhu_base_requisito_concepto_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -53,6 +57,9 @@ class BaseRequisitoConceptoController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/requisito/concepto/nuevo/{codigoRequisitoConcepto}", name="brs_rhu_base_requisito_concepto_nuevo")
+     */
     public function nuevoAction($codigoRequisitoConcepto) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

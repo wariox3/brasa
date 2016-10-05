@@ -1,11 +1,12 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Consulta;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
-class ConsultasAdicionalesPagoController extends Controller
+class AdicionalesPagoController extends Controller
 {
     var $strDqlLista = "";   
     var $nombre = "";
@@ -13,6 +14,9 @@ class ConsultasAdicionalesPagoController extends Controller
     var $centroCosto = "";
     var $aplicaDiaLaborado = 2;
     
+    /**
+     * @Route("/rhu/consultas/adicionales/pago", name="brs_rhu_consultas_adicionales_pago")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

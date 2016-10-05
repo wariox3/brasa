@@ -1,9 +1,12 @@
 <?php
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Consulta;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
-class ConsultasPermisosController extends Controller
+
+class PermisosController extends Controller
 {
     var $strListaDql = "";
     var $nombre = "";
@@ -14,7 +17,10 @@ class ConsultasPermisosController extends Controller
     var $afectaHorario = "";
     var $fechaDesde = "";
     var $fechaHasta = "";
-
+    
+    /**
+     * @Route("/rhu/consultas/permisos", name="brs_rhu_consultas_permisos")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

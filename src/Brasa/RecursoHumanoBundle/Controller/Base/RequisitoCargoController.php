@@ -1,9 +1,10 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuRequisitoCargoType;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
@@ -12,9 +13,13 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
  * RhuRequisitoCargo controller.
  *
  */
-class BaseRequisitoCargoController extends Controller
+class RequisitoCargoController extends Controller
 {
     var $strDqlLista = "";
+    
+    /**
+     * @Route("/rhu/base/requisito/cargo/lista", name="brs_rhu_base_requisito_cargo_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -58,6 +63,9 @@ class BaseRequisitoCargoController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/requisito/cargo/nuevo/{codigoRequisitoCargo}", name="brs_rhu_base_requisito_cargo_nuevo")
+     */
     public function nuevoAction($codigoRequisitoCargo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -78,6 +86,9 @@ class BaseRequisitoCargoController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/requisito/cargo/nuevomultiple/{codigoRequisitoCargo}", name="brs_rhu_base_requisito_cargo_nuevomultiple")
+     */
     public function nuevoMultipleAction($codigoRequisitoCargo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

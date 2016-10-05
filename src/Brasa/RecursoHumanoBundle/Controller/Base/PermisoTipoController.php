@@ -1,9 +1,10 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuPermisoTipoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
@@ -11,9 +12,11 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
  * RhuPermisoTipo controller.
  *
  */
-class BasePermisoTipoController extends Controller
+class PermisoTipoController extends Controller
 {
-
+    /**
+     * @Route("/rhu/base/permiso/tipo/lista", name="brs_rhu_base_permiso_tipo_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -103,6 +106,9 @@ class BasePermisoTipoController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/permiso/tipo/nuevo/{codigoPermisoTipoPk}", name="brs_rhu_base_permiso_tipo_nuevo")
+     */
     public function nuevoAction($codigoPermisoTipoPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

@@ -992,6 +992,16 @@ class PagoBancoController extends Controller
         //Inicio cuerpo
         foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
             if($arPagoBancoDetalle->getVrPago() > 0) {
+                $tipocuenta = $arPagoBancoDetalle->getEmpleadoRel()->getTipoCuenta();
+                if ($tipocuenta == "S"){
+                    $tipo = "CA";
+                }
+                if ($tipocuenta == "D"){
+                    $tipo = "CC";
+                }
+                if ($tipocuenta == "DP"){
+                    $tipo = "DP";
+                }
                 fputs($ar, "TR"); //(1)Tipo registro de traslado            
                 /*fputs($ar, "32"); // codigo transaccion DUDA
                 fputs($ar, "0040"); // codigo banco des
@@ -999,7 +1009,7 @@ class PagoBancoController extends Controller
                 fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getEmpleadoRel()->getNumeroIdentificacion(), "0", 16)); //(15) Nit del beneficiario           
                 fputs($ar, "0000000000000000"); // referencia
                 fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getCuenta(), "0", 16)); // Nro cuenta destino
-                fputs($ar, "CA");// tipo producto
+                fputs($ar, $tipo);// tipo producto
                 fputs($ar, "000051");// codigo banco
                 $duoValorNetoPagar = round($arPagoBancoDetalle->getVrPago()); // Valor transacción
                 fputs($ar, $this->RellenarNr($duoValorNetoPagar, "0", 16) . "00");

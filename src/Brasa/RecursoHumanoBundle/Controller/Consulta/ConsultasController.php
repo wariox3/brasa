@@ -1,8 +1,9 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Consulta;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
 class ConsultasController extends Controller
@@ -23,6 +24,9 @@ class ConsultasController extends Controller
     var $strSqlDotacionesPendientesLista = "";
     var $strSqlProcesosDisciplinariosLista = "";    
 
+    /**
+     * @Route("/rhu/consultas/pago/pendientes/banco", name="brs_rhu_consultas_pago_pendientes_banco")
+     */
     public function PagoPendientesBancoAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -60,6 +64,9 @@ class ConsultasController extends Controller
             ));
     }
 
+    /**
+     * @Route("/rhu/consultas/creditos/general", name="brs_rhu_consultas_creditos_general")
+     */
     public function creditosGeneralAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -97,6 +104,9 @@ class ConsultasController extends Controller
             ));
     }
 
+    /**
+     * @Route("/rhu/consultas/pago", name="brs_rhu_consultas_pago")
+     */
     public function PagoAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -135,6 +145,9 @@ class ConsultasController extends Controller
             ));
     }
 
+    /**
+     * @Route("/rhu/consultas/servicios/cobrar", name="brs_rhu_consultas_servicios_cobrar")
+     */
     public function serviciosCobrarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -172,6 +185,9 @@ class ConsultasController extends Controller
             ));
     }
 
+    /**
+     * @Route("/rhu/consultas/incapacidades/lista/", name="brs_rhu_consultas_incapacidades_lista")
+     */
     public function IncapacidadesAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -209,6 +225,9 @@ class ConsultasController extends Controller
             ));
     }
 
+    /**
+     * @Route("/rhu/consultas/incapacidades/cobrar/pago", name="brs_rhu_consultas_incapacidades_cobrar_pago")
+     */
     public function IncapacidadesCobrarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -246,6 +265,9 @@ class ConsultasController extends Controller
             ));
     }
 
+    /**
+     * @Route("/rhu/consultas/procesos/disciplinarios", name="brs_rhu_consultas_procesos_disciplinarios")
+     */
     public function ProcesosDisciplinariosAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -283,6 +305,9 @@ class ConsultasController extends Controller
             ));
     }
 
+    /**
+     * @Route("/rhu/consultas/sso/aportes", name="brs_rhu_consultas_sso_aportes")
+     */
     public function AportesAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -320,6 +345,9 @@ class ConsultasController extends Controller
             ));
     }
 
+    /**
+     * @Route("/rhu/consultas/contrato/vacaciones/pagar", name="brs_rhu_consultas_contrato_vacaciones_pagar")
+     */
     public function VacacionesPagarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -352,6 +380,9 @@ class ConsultasController extends Controller
             ));
     }
     
+    /**
+     * @Route("/rhu/consultas/contrato/fecha/terminacion", name="brs_rhu_consultas_contrato_fecha_terminacion")
+     */
     public function FechaTerminacionAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -382,6 +413,9 @@ class ConsultasController extends Controller
             ));
     }
     
+    /**
+     * @Route("/rhu/consultas/contrato/fecha/ingreso", name="brs_rhu_consultas_contrato_fecha_ingreso")
+     */
     public function FechaIngresoAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -414,6 +448,9 @@ class ConsultasController extends Controller
             ));
     }
     
+    /**
+     * @Route("/rhu/consultas/contrato/periodo", name="brs_rhu_consultas_contrato_periodo")
+     */
     public function ContratoPeriodoAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -445,6 +482,9 @@ class ConsultasController extends Controller
             ));
     }    
 
+    /**
+     * @Route("/rhu/consultas/empleado", name="brs_rhu_consultas_empleado")
+     */
     public function EmpleadoAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -483,6 +523,9 @@ class ConsultasController extends Controller
             ));
     }
     
+    /**
+     * @Route("/rhu/consultas/dotacion/pendiente", name="brs_rhu_consultas_dotacion_pendiente")
+     */
     public function DotacionesPendientesAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -515,6 +558,9 @@ class ConsultasController extends Controller
             ));
     }
 
+    /**
+     * @Route("/rhu/consultas/empleado/detalle/{codigoEmpleado}", name="brs_rhu_consultas_empleado_detalle")
+     */
     public function EmpleadodetalleAction($codigoEmpleado) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

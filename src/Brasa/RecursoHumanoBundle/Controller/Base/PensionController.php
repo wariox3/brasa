@@ -1,8 +1,9 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuPensionType;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
@@ -11,9 +12,11 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
  * RhuEntidadPension controller.
  *
  */
-class BasePensionController extends Controller
+class PensionController extends Controller
 {
-
+    /**
+     * @Route("/rhu/base/pension/listar", name="brs_rhu_base_pension_listar")
+     */
     public function listarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -117,6 +120,9 @@ class BasePensionController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/pension/nuevo/{codigoEntidadPensionPk}", name="brs_rhu_base_pension_nuevo")
+     */
     public function nuevoAction($codigoEntidadPensionPk) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

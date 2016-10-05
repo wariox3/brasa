@@ -1,9 +1,10 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuPagoConceptoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
@@ -11,9 +12,11 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
  * RhuPagoConcepto controller.
  *
  */
-class BasePagoConceptoController extends Controller
+class PagoConceptoController extends Controller
 {
-
+    /**
+     * @Route("/rhu/base/pago/concepto/lista", name="brs_rhu_base_pago_concepto_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -179,6 +182,9 @@ class BasePagoConceptoController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/base/pago/concepto/nuevo/{codigoPagoConcepto}", name="brs_rhu_base_pago_concepto_nuevo")
+     */
     public function nuevoAction($codigoPagoConcepto) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -198,7 +204,7 @@ class BasePagoConceptoController extends Controller
             if ($arCuenta){
                 $em->persist($arPagoConcepto);
                 $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_pago_concepto_lista'));
+                return $this->redirect($this->generateUrl('brs_rhu_base_pago_concepto_lista'));
             } else {
                 $objMensaje->Mensaje("error", "No existe la cuenta en el plan de cuentas", $this);
             }
