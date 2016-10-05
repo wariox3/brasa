@@ -1,14 +1,18 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Consulta;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
-class ConsultasIngresosEmpleadoController extends Controller
+class IngresosEmpleadoController extends Controller
 {
     var $strDqlLista = "";        
     
+    /**
+     * @Route("/rhu/consultas/costos/ingresos/empleado", name="brs_rhu_consultas_costos_ingresos_empleado")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

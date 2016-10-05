@@ -361,22 +361,6 @@ brs_rhu_ss_periodo_detalle_empleados_trasladar:
 brs_rhu_ss_periodo_detalle_empleados_copiar:
     path:     /rhu/seguridadsocial/periodo/detalle/empleados/copiar/{codigoPeriodoDetalle}
     defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:copiarEmpleados }           
-
-
-
-
-
-
-
-
-    
-brs_rhu_consultas_costos_ingresos_empleado:    
-    path:     /rhu/consultas/costos/ingresos/empleado
-    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasIngresosEmpleado:lista }
-    
-brs_rhu_consultas_pagos_deducciones_empleado:    
-    path:     /rhu/consultas/pagos/deducciones/empleado
-    defaults: { _controller: BrasaRecursoHumanoBundle:ConsultasPagosDeduccionesEmpleado:lista }    
      
 brs_rhu_utilidades_proyeccion:    
     path:     /rhu/utilidades/proyeccion
