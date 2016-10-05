@@ -42,9 +42,9 @@ class GenerarSoportePagoController extends Controller
                 $query = $em->createQuery($dql);                
                 $arRecursosResumen = $query->getResult();
                 foreach($arRecursosResumen as $arRecursoResumen) {
-                    if($arRecursoResumen['codigoRecursoFk'] == 2500) {
+                    /*if($arRecursoResumen['codigoRecursoFk'] == 2500) {
                         echo "hola";
-                    }
+                    }*/
                     $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
                     $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($arRecursoResumen['codigoRecursoFk']);                    
                     $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();

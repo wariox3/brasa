@@ -63,6 +63,11 @@ class RhuSsoPeriodoDetalle
     private $totalCotizacion = 0;
     
     /**
+     * @ORM\Column(name="estado_pago_banco", type="boolean")
+     */
+    private $estadoPagoBanco = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="ssoPeriodosDetallesSsoPeriodoRel")
      * @ORM\JoinColumn(name="codigo_periodo_fk", referencedColumnName="codigo_periodo_pk")
      */
@@ -435,5 +440,29 @@ class RhuSsoPeriodoDetalle
     public function getSsoPeriodosEmpleadosSsoPeriodoDetalleRel()
     {
         return $this->ssoPeriodosEmpleadosSsoPeriodoDetalleRel;
+    }
+
+    /**
+     * Set estadoPagoBanco
+     *
+     * @param boolean $estadoPagoBanco
+     *
+     * @return RhuSsoPeriodoDetalle
+     */
+    public function setEstadoPagoBanco($estadoPagoBanco)
+    {
+        $this->estadoPagoBanco = $estadoPagoBanco;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagoBanco
+     *
+     * @return boolean
+     */
+    public function getEstadoPagoBanco()
+    {
+        return $this->estadoPagoBanco;
     }
 }

@@ -119,6 +119,7 @@
             <div class="btn-toolbar" style="float: right">              
                 {%if arPagoBanco.estadoAutorizado == 0 %}                    
                     <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_pago_banco_detalle_liquidacion_nuevo', {'codigoPagoBanco': arPagoBanco.codigoPagoBancoPK}) }}', 'AgregarPagoBancoDetalle', 600, 900)">Nuevo seguridad social</a>
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_pago_banco_detalle_liquidacion_nuevo', {'codigoPagoBanco': arPagoBanco.codigoPagoBancoPK}) }}', 'AgregarPagoBancoDetalle', 600, 900)">Nuevo liquidacion</a>
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_pago_banco_detalle_vacacion_nuevo', {'codigoPagoBanco': arPagoBanco.codigoPagoBancoPK}) }}', 'AgregarPagoBancoDetalle', 600, 900)">Nuevo vacaciones</a>
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_pago_banco_detalle_nuevo', {'codigoPagoBanco': arPagoBanco.codigoPagoBancoPK}) }}', 'AgregarPagoBancoDetalle', 600, 1200)">Nuevo nomina</a>
