@@ -916,22 +916,28 @@ class PagoBancoController extends Controller
             $strValorTotal += round($arPagoBancoDetalle->getVrPago());
         }        
         // Encabezado
-        /*$strTipoRegistro = "TR";
-        $cuentaOrigen = $this->RellenarNr2($arPagoBanco->getCuentaRel()->getCuenta(), " ", 17, "D");
-        $tipoCuentaOrigen = "0"; //duda
-        $codigoProducto = "PP"; //duda
-        $strFechaCreacion = $arPagoBanco->getFechaTrasmision()->format('Ymd');
-        $strNitEmpresa = $this->RellenarNr(utf8_decode($arConfiguracionGeneral->getNitEmpresa()),"0",15);
-        $tipoId = "03"; //duda
-        $strNombreEmpresa = $this->RellenarNr2(utf8_decode(substr($arConfiguracionGeneral->getNombreEmpresa(), 0, 16)), " ", 16, "D");
-        $codPlazaOrigen = "0002"; //duda
-        $tipoRegistros = "PPD"; //duda
-        $strSecuencia = "000000";
-        $canal = "4"; //duda
-        //$strValorTotal = $this->RellenarNr($strValorTotal, "0", 18);
-        $strValorTotal = ($this->RellenarNr($strValorTotal, "0", 16) . "00");
+        $strTipoRegistro = "RC";
+        $strNitEmpresa = $this->RellenarNr(utf8_decode($arConfiguracionGeneral->getNitEmpresa()),"0",16); //nit
+        $strCodigoServicio = "NOMI";
+        $strCodigoSubServicio = "0000";
+        $cuentaOrigen = $this->RellenarNr($arPagoBanco->getCuentaRel()->getCuenta(), "0", 16); // cuenta
+        $srtTipoCuenta = $arPagoBanco->getCuentaRel()->getTipo(); // tipo cuenta
+        $srtCodigoBanco = "000051"; //codigo banco
+        $strValorTotal = ($this->RellenarNr($strValorTotal, "0", 16) . "00"); // valor transaccion total
+        $srtTotalRegistros = $this->RellenarNr($arPagoBanco->getNumeroRegistros(), "0", 6); // numero de registros
+        $strFechaProceso = $arPagoBanco->getFechaTrasmision()->format('Ymd');
+        $strHoraProceso = "000000";
+        $strCodigoOperador = "0000";
+        $strCodigoNoProcesado = "9999";
+        $strFechaAplicacion = $arPagoBanco->getFechaAplicacion()->format('Ymd');
+        $strHoraAplicacion = "000000";
+        $strIndicadorInscripcion = "00";
+        $strTipoIdentificacionEmpresa = "01";
+        $strNumeroCliente = "000000000000";
+        $strOficinaRecaudo = "0000";
+        $strCampoFuturo = "0000000000000000000000000000000000000000";        
         //Fin encabezado
-        fputs($ar, $strTipoRegistro . $cuentaOrigen . $tipoCuentaOrigen . $codigoProducto . $strFechaCreacion . $strNitEmpresa . $tipoId . $strNombreEmpresa . $codPlazaOrigen . $tipoRegistros . $strSecuencia . $canal . "\n");*/
+        fputs($ar, $strTipoRegistro . $strNitEmpresa . $strCodigoServicio . $strCodigoSubServicio . $cuentaOrigen . $srtTipoCuenta . $srtCodigoBanco . $strValorTotal . $srtTotalRegistros . $strFechaProceso . $strHoraProceso . $strCodigoOperador . $strCodigoNoProcesado . $strFechaAplicacion . $strHoraAplicacion . $strIndicadorInscripcion . $strTipoIdentificacionEmpresa . $strNumeroCliente . $strOficinaRecaudo . $strCampoFuturo . "\n");
         //Inicio cuerpo
         foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
             if($arPagoBancoDetalle->getVrPago() > 0) {
