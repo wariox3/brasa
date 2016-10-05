@@ -5,7 +5,7 @@ namespace Brasa\GeneralBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="gen_sector_economica")
+ * @ORM\Table(name="gen_sector_economico")
  * @ORM\Entity(repositoryClass="Brasa\GeneralBundle\Repository\GenSectorEconomicoRepository")
  */
 class GenSectorEconomico
