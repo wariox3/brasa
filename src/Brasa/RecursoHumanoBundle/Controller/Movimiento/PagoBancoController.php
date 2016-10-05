@@ -903,7 +903,7 @@ class PagoBancoController extends Controller
         //$arPagoBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco();
         $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-        $strNombreArchivo = "pagoAvvillasOtros" . date('YmdHis') . ".txt";
+        $strNombreArchivo = "pagoDavivienda" . date('YmdHis') . ".txt";
         $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
         //$strArchivo = "c:/xampp/" . $strNombreArchivo;   
         ob_clean();
