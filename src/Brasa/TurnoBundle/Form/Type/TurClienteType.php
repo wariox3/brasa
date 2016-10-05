@@ -51,7 +51,42 @@ class TurClienteType extends AbstractType
                     return $er->createQueryBuilder('sc')
                     ->orderBy('sc.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                             
+                'required' => true))   
+            ->add('coberturaRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenCobertura',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('c')
+                    ->orderBy('c.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))    
+            ->add('dimensionRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenDimension',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('d')
+                    ->orderBy('d.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))
+            ->add('origenCapitalRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenOrigenCapital',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('oc')
+                    ->orderBy('oc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true)) 
+            ->add('origenJudicialRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenOrigenJudicial',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('oj')
+                    ->orderBy('oj.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))  
+            ->add('sectorEconomicoRel', 'entity', array(
+                'class' => 'BrasaGeneralBundle:GenSectorEconomico',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('se')
+                    ->orderBy('se.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                            
             ->add('nit', 'number', array('required' => true))
             ->add('digitoVerificacion', 'text', array('required' => false))  
             ->add('nombreCorto', 'text', array('required' => true)) 

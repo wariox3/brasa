@@ -93,6 +93,31 @@ class TurCliente
     private $codigoSectorComercialFk;
     
     /**
+     * @ORM\Column(name="codigo_cobertura_fk", type="integer", nullable=true)
+     */    
+    private $codigoCoberturaFk;    
+    
+    /**
+     * @ORM\Column(name="codigo_dimension_fk", type="integer", nullable=true)
+     */    
+    private $codigoDimensionFk;    
+    
+    /**
+     * @ORM\Column(name="codigo_origen_capital_fk", type="integer", nullable=true)
+     */    
+    private $codigoOrigenCapitalFk;    
+    
+    /**
+     * @ORM\Column(name="codigo_origen_judicial_fk", type="integer", nullable=true)
+     */    
+    private $codigoOrigenJudicialFk;     
+    
+    /**
+     * @ORM\Column(name="codigo_sector_economico_fk", type="integer", nullable=true)
+     */    
+    private $codigoSectorEconomicoFk;    
+    
+    /**
      * @ORM\Column(name="direccion", type="string", length=120, nullable=true)
      */
     private $direccion;
@@ -213,6 +238,36 @@ class TurCliente
     protected $sectorComercialRel;    
     
     /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCobertura", inversedBy="turClientesCoberturaRel")
+     * @ORM\JoinColumn(name="codigo_cobertura_fk", referencedColumnName="codigo_cobertura_pk")
+     */
+    protected $coberturaRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenDimension", inversedBy="turClientesDimensionRel")
+     * @ORM\JoinColumn(name="codigo_dimension_fk", referencedColumnName="codigo_dimension_pk")
+     */
+    protected $dimensionRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenOrigenCapital", inversedBy="turClientesOrigenCapitalRel")
+     * @ORM\JoinColumn(name="codigo_origen_capital_fk", referencedColumnName="codigo_origen_capital_pk")
+     */
+    protected $origenCapitalRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenOrigenJudicial", inversedBy="turClientesOrigenJudicialRel")
+     * @ORM\JoinColumn(name="codigo_origen_judicial_fk", referencedColumnName="codigo_origen_judicial_pk")
+     */
+    protected $origenJudicialRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenSectorEconomico", inversedBy="turClientesSectorEconomicoRel")
+     * @ORM\JoinColumn(name="codigo_sector_economico_fk", referencedColumnName="codigo_sector_economico_pk")
+     */
+    protected $sectorEconomicoRel;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTipoIdentificacion", inversedBy="turClientesTipoIdentificacionRel")
      * @ORM\JoinColumn(name="codigo_tipo_identificacion_fk", referencedColumnName="codigo_tipo_identificacion_pk")
      */
@@ -295,6 +350,7 @@ class TurCliente
         $this->facturasClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->programacionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->puestosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->operacionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->proyectosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->gruposFacturacionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contratosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -311,6 +367,30 @@ class TurCliente
     public function getCodigoClientePk()
     {
         return $this->codigoClientePk;
+    }
+
+    /**
+     * Set codigoTipoIdentificacionFk
+     *
+     * @param integer $codigoTipoIdentificacionFk
+     *
+     * @return TurCliente
+     */
+    public function setCodigoTipoIdentificacionFk($codigoTipoIdentificacionFk)
+    {
+        $this->codigoTipoIdentificacionFk = $codigoTipoIdentificacionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTipoIdentificacionFk
+     *
+     * @return integer
+     */
+    public function getCodigoTipoIdentificacionFk()
+    {
+        return $this->codigoTipoIdentificacionFk;
     }
 
     /**
@@ -407,6 +487,102 @@ class TurCliente
     public function getNombreCompleto()
     {
         return $this->nombreCompleto;
+    }
+
+    /**
+     * Set nombre1
+     *
+     * @param string $nombre1
+     *
+     * @return TurCliente
+     */
+    public function setNombre1($nombre1)
+    {
+        $this->nombre1 = $nombre1;
+
+        return $this;
+    }
+
+    /**
+     * Get nombre1
+     *
+     * @return string
+     */
+    public function getNombre1()
+    {
+        return $this->nombre1;
+    }
+
+    /**
+     * Set nombre2
+     *
+     * @param string $nombre2
+     *
+     * @return TurCliente
+     */
+    public function setNombre2($nombre2)
+    {
+        $this->nombre2 = $nombre2;
+
+        return $this;
+    }
+
+    /**
+     * Get nombre2
+     *
+     * @return string
+     */
+    public function getNombre2()
+    {
+        return $this->nombre2;
+    }
+
+    /**
+     * Set apellido1
+     *
+     * @param string $apellido1
+     *
+     * @return TurCliente
+     */
+    public function setApellido1($apellido1)
+    {
+        $this->apellido1 = $apellido1;
+
+        return $this;
+    }
+
+    /**
+     * Get apellido1
+     *
+     * @return string
+     */
+    public function getApellido1()
+    {
+        return $this->apellido1;
+    }
+
+    /**
+     * Set apellido2
+     *
+     * @param string $apellido2
+     *
+     * @return TurCliente
+     */
+    public function setApellido2($apellido2)
+    {
+        $this->apellido2 = $apellido2;
+
+        return $this;
+    }
+
+    /**
+     * Get apellido2
+     *
+     * @return string
+     */
+    public function getApellido2()
+    {
+        return $this->apellido2;
     }
 
     /**
@@ -527,6 +703,150 @@ class TurCliente
     public function getCodigoFormaPagoFk()
     {
         return $this->codigoFormaPagoFk;
+    }
+
+    /**
+     * Set codigoSectorComercialFk
+     *
+     * @param integer $codigoSectorComercialFk
+     *
+     * @return TurCliente
+     */
+    public function setCodigoSectorComercialFk($codigoSectorComercialFk)
+    {
+        $this->codigoSectorComercialFk = $codigoSectorComercialFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSectorComercialFk
+     *
+     * @return integer
+     */
+    public function getCodigoSectorComercialFk()
+    {
+        return $this->codigoSectorComercialFk;
+    }
+
+    /**
+     * Set codigoCoberturaFk
+     *
+     * @param integer $codigoCoberturaFk
+     *
+     * @return TurCliente
+     */
+    public function setCodigoCoberturaFk($codigoCoberturaFk)
+    {
+        $this->codigoCoberturaFk = $codigoCoberturaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCoberturaFk
+     *
+     * @return integer
+     */
+    public function getCodigoCoberturaFk()
+    {
+        return $this->codigoCoberturaFk;
+    }
+
+    /**
+     * Set codigoDimensionFk
+     *
+     * @param integer $codigoDimensionFk
+     *
+     * @return TurCliente
+     */
+    public function setCodigoDimensionFk($codigoDimensionFk)
+    {
+        $this->codigoDimensionFk = $codigoDimensionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoDimensionFk
+     *
+     * @return integer
+     */
+    public function getCodigoDimensionFk()
+    {
+        return $this->codigoDimensionFk;
+    }
+
+    /**
+     * Set codigoOrigenCapitalFk
+     *
+     * @param integer $codigoOrigenCapitalFk
+     *
+     * @return TurCliente
+     */
+    public function setCodigoOrigenCapitalFk($codigoOrigenCapitalFk)
+    {
+        $this->codigoOrigenCapitalFk = $codigoOrigenCapitalFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoOrigenCapitalFk
+     *
+     * @return integer
+     */
+    public function getCodigoOrigenCapitalFk()
+    {
+        return $this->codigoOrigenCapitalFk;
+    }
+
+    /**
+     * Set codigoOrigenJudicialFk
+     *
+     * @param integer $codigoOrigenJudicialFk
+     *
+     * @return TurCliente
+     */
+    public function setCodigoOrigenJudicialFk($codigoOrigenJudicialFk)
+    {
+        $this->codigoOrigenJudicialFk = $codigoOrigenJudicialFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoOrigenJudicialFk
+     *
+     * @return integer
+     */
+    public function getCodigoOrigenJudicialFk()
+    {
+        return $this->codigoOrigenJudicialFk;
+    }
+
+    /**
+     * Set codigoSectorEconomicoFk
+     *
+     * @param integer $codigoSectorEconomicoFk
+     *
+     * @return TurCliente
+     */
+    public function setCodigoSectorEconomicoFk($codigoSectorEconomicoFk)
+    {
+        $this->codigoSectorEconomicoFk = $codigoSectorEconomicoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSectorEconomicoFk
+     *
+     * @return integer
+     */
+    public function getCodigoSectorEconomicoFk()
+    {
+        return $this->codigoSectorEconomicoFk;
     }
 
     /**
@@ -866,6 +1186,30 @@ class TurCliente
     }
 
     /**
+     * Set facturaAgrupada
+     *
+     * @param boolean $facturaAgrupada
+     *
+     * @return TurCliente
+     */
+    public function setFacturaAgrupada($facturaAgrupada)
+    {
+        $this->facturaAgrupada = $facturaAgrupada;
+
+        return $this;
+    }
+
+    /**
+     * Get facturaAgrupada
+     *
+     * @return boolean
+     */
+    public function getFacturaAgrupada()
+    {
+        return $this->facturaAgrupada;
+    }
+
+    /**
      * Set usuario
      *
      * @param string $usuario
@@ -1031,6 +1375,174 @@ class TurCliente
     public function getCiudadRel()
     {
         return $this->ciudadRel;
+    }
+
+    /**
+     * Set sectorComercialRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenSectorComercial $sectorComercialRel
+     *
+     * @return TurCliente
+     */
+    public function setSectorComercialRel(\Brasa\GeneralBundle\Entity\GenSectorComercial $sectorComercialRel = null)
+    {
+        $this->sectorComercialRel = $sectorComercialRel;
+
+        return $this;
+    }
+
+    /**
+     * Get sectorComercialRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenSectorComercial
+     */
+    public function getSectorComercialRel()
+    {
+        return $this->sectorComercialRel;
+    }
+
+    /**
+     * Set coberturaRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenCobertura $coberturaRel
+     *
+     * @return TurCliente
+     */
+    public function setCoberturaRel(\Brasa\GeneralBundle\Entity\GenCobertura $coberturaRel = null)
+    {
+        $this->coberturaRel = $coberturaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get coberturaRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenCobertura
+     */
+    public function getCoberturaRel()
+    {
+        return $this->coberturaRel;
+    }
+
+    /**
+     * Set dimensionRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenDimension $dimensionRel
+     *
+     * @return TurCliente
+     */
+    public function setDimensionRel(\Brasa\GeneralBundle\Entity\GenDimension $dimensionRel = null)
+    {
+        $this->dimensionRel = $dimensionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get dimensionRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenDimension
+     */
+    public function getDimensionRel()
+    {
+        return $this->dimensionRel;
+    }
+
+    /**
+     * Set origenCapitalRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenOrigenCapital $origenCapitalRel
+     *
+     * @return TurCliente
+     */
+    public function setOrigenCapitalRel(\Brasa\GeneralBundle\Entity\GenOrigenCapital $origenCapitalRel = null)
+    {
+        $this->origenCapitalRel = $origenCapitalRel;
+
+        return $this;
+    }
+
+    /**
+     * Get origenCapitalRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenOrigenCapital
+     */
+    public function getOrigenCapitalRel()
+    {
+        return $this->origenCapitalRel;
+    }
+
+    /**
+     * Set origenJudicialRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenOrigenJudicial $origenJudicialRel
+     *
+     * @return TurCliente
+     */
+    public function setOrigenJudicialRel(\Brasa\GeneralBundle\Entity\GenOrigenJudicial $origenJudicialRel = null)
+    {
+        $this->origenJudicialRel = $origenJudicialRel;
+
+        return $this;
+    }
+
+    /**
+     * Get origenJudicialRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenOrigenJudicial
+     */
+    public function getOrigenJudicialRel()
+    {
+        return $this->origenJudicialRel;
+    }
+
+    /**
+     * Set sectorEconomicoRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenSectorEconomico $sectorEconomicoRel
+     *
+     * @return TurCliente
+     */
+    public function setSectorEconomicoRel(\Brasa\GeneralBundle\Entity\GenSectorEconomico $sectorEconomicoRel = null)
+    {
+        $this->sectorEconomicoRel = $sectorEconomicoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get sectorEconomicoRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenSectorEconomico
+     */
+    public function getSectorEconomicoRel()
+    {
+        return $this->sectorEconomicoRel;
+    }
+
+    /**
+     * Set tipoIdentificacionRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenTipoIdentificacion $tipoIdentificacionRel
+     *
+     * @return TurCliente
+     */
+    public function setTipoIdentificacionRel(\Brasa\GeneralBundle\Entity\GenTipoIdentificacion $tipoIdentificacionRel = null)
+    {
+        $this->tipoIdentificacionRel = $tipoIdentificacionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoIdentificacionRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenTipoIdentificacion
+     */
+    public function getTipoIdentificacionRel()
+    {
+        return $this->tipoIdentificacionRel;
     }
 
     /**
@@ -1238,6 +1750,40 @@ class TurCliente
     }
 
     /**
+     * Add operacionesClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurOperacion $operacionesClienteRel
+     *
+     * @return TurCliente
+     */
+    public function addOperacionesClienteRel(\Brasa\TurnoBundle\Entity\TurOperacion $operacionesClienteRel)
+    {
+        $this->operacionesClienteRel[] = $operacionesClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove operacionesClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurOperacion $operacionesClienteRel
+     */
+    public function removeOperacionesClienteRel(\Brasa\TurnoBundle\Entity\TurOperacion $operacionesClienteRel)
+    {
+        $this->operacionesClienteRel->removeElement($operacionesClienteRel);
+    }
+
+    /**
+     * Get operacionesClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getOperacionesClienteRel()
+    {
+        return $this->operacionesClienteRel;
+    }
+
+    /**
      * Add proyectosClienteRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurProyecto $proyectosClienteRel
@@ -1439,255 +1985,5 @@ class TurCliente
     public function getPuestosDotacionesClienteRel()
     {
         return $this->puestosDotacionesClienteRel;
-    }
-
-    /**
-     * Set facturaAgrupada
-     *
-     * @param boolean $facturaAgrupada
-     *
-     * @return TurCliente
-     */
-    public function setFacturaAgrupada($facturaAgrupada)
-    {
-        $this->facturaAgrupada = $facturaAgrupada;
-
-        return $this;
-    }
-
-    /**
-     * Get facturaAgrupada
-     *
-     * @return boolean
-     */
-    public function getFacturaAgrupada()
-    {
-        return $this->facturaAgrupada;
-    }
-
-    /**
-     * Add operacionesClienteRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurOperacion $operacionesClienteRel
-     *
-     * @return TurCliente
-     */
-    public function addOperacionesClienteRel(\Brasa\TurnoBundle\Entity\TurOperacion $operacionesClienteRel)
-    {
-        $this->operacionesClienteRel[] = $operacionesClienteRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove operacionesClienteRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurOperacion $operacionesClienteRel
-     */
-    public function removeOperacionesClienteRel(\Brasa\TurnoBundle\Entity\TurOperacion $operacionesClienteRel)
-    {
-        $this->operacionesClienteRel->removeElement($operacionesClienteRel);
-    }
-
-    /**
-     * Get operacionesClienteRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getOperacionesClienteRel()
-    {
-        return $this->operacionesClienteRel;
-    }
-
-    /**
-     * Set codigoSectorComercialFk
-     *
-     * @param integer $codigoSectorComercialFk
-     *
-     * @return TurCliente
-     */
-    public function setCodigoSectorComercialFk($codigoSectorComercialFk)
-    {
-        $this->codigoSectorComercialFk = $codigoSectorComercialFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoSectorComercialFk
-     *
-     * @return integer
-     */
-    public function getCodigoSectorComercialFk()
-    {
-        return $this->codigoSectorComercialFk;
-    }
-
-    /**
-     * Set sectorComercialRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenSectorComercial $sectorComercialRel
-     *
-     * @return TurCliente
-     */
-    public function setSectorComercialRel(\Brasa\GeneralBundle\Entity\GenSectorComercial $sectorComercialRel = null)
-    {
-        $this->sectorComercialRel = $sectorComercialRel;
-
-        return $this;
-    }
-
-    /**
-     * Get sectorComercialRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenSectorComercial
-     */
-    public function getSectorComercialRel()
-    {
-        return $this->sectorComercialRel;
-    }
-
-    /**
-     * Set codigoTipoIdentificacionFk
-     *
-     * @param integer $codigoTipoIdentificacionFk
-     *
-     * @return TurCliente
-     */
-    public function setCodigoTipoIdentificacionFk($codigoTipoIdentificacionFk)
-    {
-        $this->codigoTipoIdentificacionFk = $codigoTipoIdentificacionFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoTipoIdentificacionFk
-     *
-     * @return integer
-     */
-    public function getCodigoTipoIdentificacionFk()
-    {
-        return $this->codigoTipoIdentificacionFk;
-    }
-
-    /**
-     * Set nombre1
-     *
-     * @param string $nombre1
-     *
-     * @return TurCliente
-     */
-    public function setNombre1($nombre1)
-    {
-        $this->nombre1 = $nombre1;
-
-        return $this;
-    }
-
-    /**
-     * Get nombre1
-     *
-     * @return string
-     */
-    public function getNombre1()
-    {
-        return $this->nombre1;
-    }
-
-    /**
-     * Set nombre2
-     *
-     * @param string $nombre2
-     *
-     * @return TurCliente
-     */
-    public function setNombre2($nombre2)
-    {
-        $this->nombre2 = $nombre2;
-
-        return $this;
-    }
-
-    /**
-     * Get nombre2
-     *
-     * @return string
-     */
-    public function getNombre2()
-    {
-        return $this->nombre2;
-    }
-
-    /**
-     * Set apellido1
-     *
-     * @param string $apellido1
-     *
-     * @return TurCliente
-     */
-    public function setApellido1($apellido1)
-    {
-        $this->apellido1 = $apellido1;
-
-        return $this;
-    }
-
-    /**
-     * Get apellido1
-     *
-     * @return string
-     */
-    public function getApellido1()
-    {
-        return $this->apellido1;
-    }
-
-    /**
-     * Set apellido2
-     *
-     * @param string $apellido2
-     *
-     * @return TurCliente
-     */
-    public function setApellido2($apellido2)
-    {
-        $this->apellido2 = $apellido2;
-
-        return $this;
-    }
-
-    /**
-     * Get apellido2
-     *
-     * @return string
-     */
-    public function getApellido2()
-    {
-        return $this->apellido2;
-    }
-
-    /**
-     * Set tipoIdentificacionRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTipoIdentificacion $tipoIdentificacionRel
-     *
-     * @return TurCliente
-     */
-    public function setTipoIdentificacionRel(\Brasa\GeneralBundle\Entity\GenTipoIdentificacion $tipoIdentificacionRel = null)
-    {
-        $this->tipoIdentificacionRel = $tipoIdentificacionRel;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoIdentificacionRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenTipoIdentificacion
-     */
-    public function getTipoIdentificacionRel()
-    {
-        return $this->tipoIdentificacionRel;
     }
 }
