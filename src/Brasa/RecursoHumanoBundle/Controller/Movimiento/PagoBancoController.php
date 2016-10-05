@@ -917,10 +917,10 @@ class PagoBancoController extends Controller
         }        
         // Encabezado
         $strTipoRegistro = "RC";
-        $strNitEmpresa = $this->RellenarNr(utf8_decode($arConfiguracionGeneral->getNitEmpresa()),"0",16); //nit
+        $strNitEmpresa = $this->RellenarNr(utf8_decode($arConfiguracionGeneral->getNitEmpresa().$arConfiguracionGeneral->getDigitoVerificacionEmpresa()),"0",16); //nit
         $strCodigoServicio = "NOMI";
         $strCodigoSubServicio = "0000";
-        $cuentaOrigen = $this->RellenarNr($arPagoBanco->getCuentaRel()->getCuenta().$arPagoBanco->getCuentaRel()->getDigitoVerificacionEmpresa(), "0", 16); // cuenta
+        $cuentaOrigen = $this->RellenarNr($arPagoBanco->getCuentaRel()->getCuenta(), "0", 16); // cuenta
         $srtTipoCuenta = $arPagoBanco->getCuentaRel()->getTipo(); // tipo cuenta
         $srtCodigoBanco = "000051"; //codigo banco
         $strValorTotal = ($this->RellenarNr($strValorTotal, "0", 16) . "00"); // valor transaccion total
