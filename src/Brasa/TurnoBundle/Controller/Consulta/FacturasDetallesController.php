@@ -178,7 +178,9 @@ class FacturasDetallesController extends Controller
                     ->setCellValue('I1', 'IVA')
                     ->setCellValue('J1', 'SUBTOTAL')
                     ->setCellValue('K1', 'ANIO')
-                    ->setCellValue('L1', 'MES');
+                    ->setCellValue('L1', 'MES')
+                    ->setCellValue('M1', 'PUESTO')
+                    ->setCellValue('N1', 'C.COSTO');
         
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -201,7 +203,10 @@ class FacturasDetallesController extends Controller
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K' . $i, $arFacturaDetalle->getPedidoDetalleRel()->getAnio());
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L' . $i, $arFacturaDetalle->getPedidoDetalleRel()->getMes());
             }                     
-            
+            if($arFacturaDetalle->getCodigoPuestoFk()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M' . $i, $arFacturaDetalle->getPuestoRel()->getNombre());
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('N' . $i, $arFacturaDetalle->getPuestoRel()->getCodigoCentroCostoContabilidadFk());
+            }             
             $i++;
         }
         $intNum = count($arFacturaDetalle);
