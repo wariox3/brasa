@@ -36,6 +36,11 @@ class RhuPagoBancoDetalle
      * @ORM\Column(name="codigo_liquidacion_fk", type="integer", nullable=true)
      */    
     private $codigoLiquidacionFk;           
+
+    /**
+     * @ORM\Column(name="codigo_aporte_fk", type="integer", nullable=true)
+     */    
+    private $codigoAporteFk; 
     
     /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
@@ -85,6 +90,12 @@ class RhuPagoBancoDetalle
      * @ORM\JoinColumn(name="codigo_liquidacion_fk", referencedColumnName="codigo_liquidacion_pk")
      */
     protected $liquidacionRel;     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuSsoAporte", inversedBy="pagosBancosDetallesSsoAporteRel")
+     * @ORM\JoinColumn(name="codigo_aporte_fk", referencedColumnName="codigo_aporte_pk")
+     */
+    protected $ssoAporteRel;     
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuBanco", inversedBy="pagosBancosDetallesBancoRel")
@@ -469,5 +480,53 @@ class RhuPagoBancoDetalle
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
+    }
+
+    /**
+     * Set codigoAporteFk
+     *
+     * @param integer $codigoAporteFk
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setCodigoAporteFk($codigoAporteFk)
+    {
+        $this->codigoAporteFk = $codigoAporteFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoAporteFk
+     *
+     * @return integer
+     */
+    public function getCodigoAporteFk()
+    {
+        return $this->codigoAporteFk;
+    }
+
+    /**
+     * Set ssoAporteRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAporteRel
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setSsoAporteRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAporteRel = null)
+    {
+        $this->ssoAporteRel = $ssoAporteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ssoAporteRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte
+     */
+    public function getSsoAporteRel()
+    {
+        return $this->ssoAporteRel;
     }
 }

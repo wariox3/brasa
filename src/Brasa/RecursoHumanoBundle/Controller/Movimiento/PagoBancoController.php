@@ -446,6 +446,57 @@ class PagoBancoController extends Controller
             'arLiquidaciones' => $arLiquidaciones,
             'form' => $form->createView()));
     } 
+
+    /**
+     * @Route("/rhu/movimiento/pago/banco/detalle/seguridad/social/nuevo/{codigoPagoBanco}", name="brs_rhu_movimiento_pago_banco_detalle_seguridad_social_nuevo")
+     */    
+    public function detalleSeguridadSocialNuevoAction($codigoPagoBanco) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arPagoBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco();
+        $arPagoBanco = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBanco')->find($codigoPagoBanco);
+        $arSsoPediodoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
+        $arSsoPediodoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->findBy(array('estadoCerrado' => 1, 'estadoPagoBanco' => 0));
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))            
+            ->getForm();
+        $form->handleRequest($request); 
+        if ($form->isValid()) {
+            if ($arPagoBanco->getEstadoAutorizado() == 0){
+                if ($form->get('BtnGuardar')->isClicked()) {                              
+                    $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados AS $codigo) {  
+                            //$arSsoPediodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
+                            //$arSsoPediodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigo);                            
+                            $arSsoAportes = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte();
+                            $arSsoAportes = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoAporte')->findBy(array('codigoPeriodoDetalleFk' => $codigo));                            
+                            foreach ($arSsoAportes as $arSsoAporte) {
+                                $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
+                                $arPagoBancoDetalle->setPagoBancoRel($arPagoBanco);
+                                $arPagoBancoDetalle->setSsoAporteRel($arSsoAporte);
+                                $arPagoBancoDetalle->setCuenta($arSsoAporte->getEmpleadoRel()->getCuenta());
+                                $valorPagar = round($arSsoAporte->getTotalCotizacion());
+                                $arPagoBancoDetalle->setVrPago($valorPagar); 
+                                //$arPagoBancoDetalle->setBancoRel();                                        
+                                $arPagoBancoDetalle->setEmpleadoRel($arSsoAporte->getEmpleadoRel());
+                                $em->persist($arPagoBancoDetalle); 
+                                //$arLiquidacion->setEstadoPagoBanco(1);
+                                //$em->persist($arLiquidacion);                                
+                            }
+                        }
+                        $em->flush();
+                    }
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBanco')->liquidar($codigoPagoBanco);
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
+                }
+            }                    
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagoBanco:detalleSeguridadSocialNuevo.html.twig', array(
+            'arSsoPediodoDetalles' => $arSsoPediodoDetalles,
+            'form' => $form->createView()));
+    } 
     
     private function listar() {
         $session = $this->getRequest()->getSession();

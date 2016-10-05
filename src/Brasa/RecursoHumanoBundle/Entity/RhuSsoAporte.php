@@ -529,7 +529,11 @@ class RhuSsoAporte
      */
     protected $cargoRel;     
     
-
+   
+    /**
+     * @ORM\OneToMany(targetEntity="RhuPagoBancoDetalle", mappedBy="ssoAporteRel")
+     */
+    protected $pagosBancosDetallesSsoAporteRel; 
 
     /**
      * Get codigoAportePk
@@ -2963,5 +2967,46 @@ class RhuSsoAporte
     public function getCargoRel()
     {
         return $this->cargoRel;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->pagosBancosDetallesSsoAporteRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add pagosBancosDetallesSsoAporteRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesSsoAporteRel
+     *
+     * @return RhuSsoAporte
+     */
+    public function addPagosBancosDetallesSsoAporteRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesSsoAporteRel)
+    {
+        $this->pagosBancosDetallesSsoAporteRel[] = $pagosBancosDetallesSsoAporteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove pagosBancosDetallesSsoAporteRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesSsoAporteRel
+     */
+    public function removePagosBancosDetallesSsoAporteRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesSsoAporteRel)
+    {
+        $this->pagosBancosDetallesSsoAporteRel->removeElement($pagosBancosDetallesSsoAporteRel);
+    }
+
+    /**
+     * Get pagosBancosDetallesSsoAporteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosBancosDetallesSsoAporteRel()
+    {
+        return $this->pagosBancosDetallesSsoAporteRel;
     }
 }

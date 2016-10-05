@@ -13,42 +13,52 @@
             {{ form_errors(form) }}
         <div class="panel panel-default">
             <div class="panel-heading">Filtros de busqueda</div>
-            <div class="panel-body">                                                         
+            <div class="panel-body">
                 <div class="form-group form-group-sm">  
-                    <label for="form_TxtComprobante" class="col-sm-2 control-label">Comprobante:</label>
-                    <div class="col-sm-4">                  
-                        {{ form_widget(form.TxtComprobante, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                    <label class="col-sm-2 control-label">Comprobante:</label>
+                    <div class="col-sm-4">
+                        {{ form_widget(form.TxtComprobante, { 'attr': {'class': 'form-control'} }) }}
                     </div>
-                    <label for="form_TxtNumero" class="col-sm-2 control-label">Numero:</label>
+                    <label class="col-sm-2 control-label">Numero:</label>
                     <div class="col-sm-4">                  
                         {{ form_widget(form.TxtNumero, { 'attr': {'class': 'form-control'} }) }}
                     </div>                    
-                </div>     
+                </div>                                        
                 <div class="form-group form-group-sm">  
-                    <label for="form_TxtComprobante" class="col-sm-2 control-label"></label>
-                    <div class="col-sm-4">                  
-                        {{ form_widget(form.TxtComprobante, { 'attr': {'class': 'form-control'} }) }}
+                    <label class="col-sm-2 control-label">Desde</label>
+                    <div class="col-sm-4">
+                        {{ form_widget(form.fechaDesde, {'attr': {'maxlength' : 10} }) }}
                     </div>
-                    <label for="form_TxtNumeroReferencia" class="col-sm-2 control-label">Numero referencia:</label>
+                    <label class="col-sm-2 control-label">Numero referencia:</label>
                     <div class="col-sm-4">                  
                         {{ form_widget(form.TxtNumeroReferencia, { 'attr': {'class': 'form-control'} }) }}
                     </div>                    
-                </div>                     
-                <div class="form-group form-group-sm">
-                    <label for="form_fechaDesde" class="col-sm-2 control-label">Desde:</label>
+                </div>
+                <div class="form-group form-group-sm">  
+                    <label class="col-sm-2 control-label">Hasta</label>
                     <div class="col-sm-4">
-                        {{ form_widget(form.fechaDesde, {'attr': {'maxlength' : 10, 'class': 'form-control'} }) }} 
-                    </div>  
-                    <label for="form_fechaHasta" class="col-sm-2 control-label">Hasta:</label>
-                    <div class="col-sm-4">
-                        {{ form_widget(form.fechaHasta, {'attr': {'maxlength' : 10, 'class': 'form-control'} }) }} 
-                    </div>                      
+                        {{ form_widget(form.fechaHasta, {'attr': {'maxlength' : 10} }) }}
+                    </div>
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-4">                  
+                        
+                    </div>                    
+                </div> 
+                <div class="form-group form-group-sm">  
+                    <label class="col-sm-2 control-label">Filtrar por fecha:</label>
+                    <div class="col-sm-4"> 
+                        {{ form_widget(form.filtrarFecha) }}
+                    </div>
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-4">                  
+                        
+                    </div>                    
                 </div>                     
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
                     </div>
-                </div>    
+                </div>
             </div>
         </div> 
         <table  class="table table-striped table-bordered table-condensed table-hover">            

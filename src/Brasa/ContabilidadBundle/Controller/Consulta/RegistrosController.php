@@ -52,37 +52,62 @@ class RegistrosController extends Controller
     private function listar() {        
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->listaDql(
-                    $session->get('filtroCodigoComprobante'),
-                    $session->get('filtroNumero'),
-                    $session->get('filtroNumeroReferencia'),
-                    $session->get('filtroDesde'),
-                    $session->get('filtroHasta')
+        $strFechaDesde = "";
+        $strFechaHasta = "";
+        $filtrarFecha = $session->get('filtroCtbRegistroFiltrarFecha');
+        if($filtrarFecha) {
+            $strFechaDesde = $session->get('filtroCtbRegistroFechaDesde');
+            $strFechaHasta = $session->get('filtroCtbRegistroFechaHasta');
+        }        
+        $this->strDqlLista =  $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->listaDQL(
+                    $session->get('filtroCtbCodigoComprobante'),    
+                    $session->get('filtroCtbNumero'),
+                    $session->get('filtroCtbNumeroReferencia'),
+                    $strFechaDesde,
+                    $strFechaHasta
                     );
     }       
     
     private function formularioLista() {
-        $em = $this->getDoctrine()->getManager();                
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $dateFecha = new \DateTime('now');
+        $strFechaDesde = $dateFecha->format('Y/m/')."01";
+        $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
+        $strFechaHasta = $dateFecha->format('Y/m/').$intUltimoDia;  
+        if($session->get('filtroCtbRegistroFechaDesde') != "") {
+            $strFechaDesde = $session->get('filtroCtbRegistroFechaDesde');
+        }
+        if($session->get('filtroCtbRegistroFechaHasta') != "") {
+            $strFechaHasta = $session->get('filtroCtbRegistroFechaHasta');
+        }    
+        $dateFechaDesde = date_create($strFechaDesde);
+        $dateFechaHasta = date_create($strFechaHasta);
+        
         $form = $this->createFormBuilder()
-            ->add('TxtComprobante', 'text', array('label'  => 'Comprobante'))
-            ->add('TxtNumero', 'text', array('label'  => 'Numero'))
-            ->add('TxtNumeroReferencia', 'text', array('label'  => 'Numero referencia'))
-            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCtbNumero')))
+            ->add('TxtNumeroReferencia', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCtbNumeroReferencia')))
+            ->add('TxtComprobante', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCtbCodigoComprobante')))                
+            ->add('fechaDesde','date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                
+            ->add('fechaHasta','date',  array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                                                            
+            ->add('filtrarFecha', 'checkbox', array('required'  => false, 'data' => $session->get('filtroCtbRegistroFiltrarFecha')))                 
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }    
 
     private function filtrar($form, Request $request) {
-        $session = $this->get('session');  
-        $controles = $request->request->get('form');
-        $session->set('filtroCodigoComprobante', $controles['TxtComprobante']);                
-        $session->set('filtroNumero', $controles['TxtNumero']);
-        $session->set('filtroNumeroReferencia', $controles['TxtNumeroReferencia']);
-        $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-        $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        $session = $this->get('session');                
+        $session->set('filtroCtbNumero', $form->get('TxtNumero')->getData());                
+        $session->set('filtroCtbNumeroReferencia',$form->get('TxtNumeroReferencia')->getData());                
+        $session->set('filtroCtbCodigoComprobante', $form->get('TxtComprobante')->getData());
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        $session->set('filtroCtbRegistroFechaDesde', $dateFechaDesde->format('Y/m/d'));
+        $session->set('filtroCtbRegistroFechaHasta', $dateFechaHasta->format('Y/m/d'));                 
+        $session->set('filtroCtbRegistroFiltrarFecha', $form->get('filtrarFecha')->getData()); 
     }   
 
     private function generarExcel() {

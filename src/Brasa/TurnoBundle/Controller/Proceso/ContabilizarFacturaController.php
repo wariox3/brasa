@@ -44,6 +44,48 @@ class ContabilizarFacturaController extends Controller
             'form' => $form->createView()));
     }   
     
+    /**
+     * @Route("/rhu/proceso/contabilizar/factura/descontabilizar", name="brs_rhu_proceso_contabilizar_factura_descontabilizar")
+     */    
+    public function descontabilizarAction() {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $session = $this->getRequest()->getSession(); 
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $form = $this->createFormBuilder()
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                                            
+            ->add('BtnDescontabilizar', 'submit', array('label'  => 'Descontabilizar',))    
+            ->getForm();
+        $form->handleRequest($request);        
+        if ($form->isValid()) {             
+            if ($form->get('BtnDescontabilizar')->isClicked()) {
+                $dateFechaDesde = $form->get('fechaDesde')->getData();
+                $dateFechaHasta = $form->get('fechaHasta')->getData();
+                if($dateFechaDesde != "" && $dateFechaHasta != "") {
+                    if($dateFechaDesde <= $dateFechaHasta) {
+                        $dql = $em->getRepository('BrasaTurnoBundle:TurFactura')->listaFechaDql($dateFechaDesde->format('Y-m-d'), $dateFechaHasta->format('Y-m-d'));
+                        $query = $em->createQuery($dql);
+                        $arFacturas = $query->getResult();
+                        foreach ($arFacturas as $arFactura) {
+                            $arFacturaAct = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($arFactura->getCodigoFacturaPk());
+                            $arFacturaAct->setEstadoContabilizado(0);
+                            $em->persist($arFacturaAct);
+                        }
+                        $em->flush();
+                        echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                        
+                    } else {
+                        $objMensaje->Mensaje('error', 'La fecha desde debe ser menor o igual a la fecha hasta', $this);
+                    }                    
+                } else {
+                    $objMensaje->Mensaje('error', 'Debe seleccionar un filtro', $this);
+                }                               
+            }
+        }
+        return $this->render('BrasaTurnoBundle:Procesos/Contabilizar:facturaDescontabilizar.html.twig', array(
+            'form' => $form->createView()));
+    }    
+    
     private function lista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
