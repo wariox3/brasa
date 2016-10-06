@@ -7,13 +7,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use PHPExcel_Shared_Date;
 use PHPExcel_Style_NumberFormat;
+use Symfony\Component\HttpFoundation\Request;
 class IntercambioDatosController extends Controller
 {
     var $strDqlLista = "";      
     /**
      * @Route("/ctb/utilidades/intercambio/datos/exportar", name="brs_ctb_utilidades_intercambio_datos_exportar")
      */
-    public function exportarAction() {
+    public function exportarAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 73)) {
@@ -25,6 +26,7 @@ class IntercambioDatosController extends Controller
         $this->listar();
         if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
+            /*
             if($form->get('BtnExportar')->isClicked()) {
                 set_time_limit(0);
                 ini_set("memory_limit", -1);
@@ -92,8 +94,10 @@ class IntercambioDatosController extends Controller
                 }
                 $em->flush();
             }
-            
-            if($form->get('BtnGenerarPlano')->isClicked()) {
+           
+             * 
+             */ 
+            if($form->get('BtnGenerarIlimitada')->isClicked()) {
                 
                 $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);                                    
                 $strNombreArchivo = "ExpIlimitada" . date('YmdHis') . ".txt";
@@ -142,35 +146,74 @@ class IntercambioDatosController extends Controller
             }
             
             if($form->get('BtnGenerarOfimatica')->isClicked()) {
+                $this->filtrar($form, $request);
+                $this->listar();
                 $this->generarExcelInterfaceOfimatica();
             }            
         }
-        $arRegistros = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 40);
+        
         return $this->render('BrasaContabilidadBundle:Utilidad/IntercambioDatos:exportar.html.twig', array(
-            'arRegistros' => $arRegistros,
             'form' => $form->createView()
             ));
     }          
     
     private function listar() {        
+        $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->listaPendienteExportarDql();
-    }                 
+        $strFechaDesde = "";
+        $strFechaHasta = "";
+        $filtrarFecha = $session->get('filtroCtbRegistroFiltrarFecha');
+        if($filtrarFecha) {
+            $strFechaDesde = $session->get('filtroCtbRegistroFechaDesde');
+            $strFechaHasta = $session->get('filtroCtbRegistroFechaHasta');
+        }        
+        $this->strDqlLista =  $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->listaDQL(
+                    $session->get('filtroCtbCodigoComprobante'),    
+                    $session->get('filtroCtbNumero'),
+                    "",
+                    $strFechaDesde,
+                    $strFechaHasta
+                    );
+    }                
+    
+    private function filtrar($form, Request $request) {
+        $session = $this->get('session');                
+        $session->set('filtroCtbNumero', $form->get('TxtNumero')->getData());                        
+        $session->set('filtroCtbCodigoComprobante', $form->get('TxtComprobante')->getData());
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        $session->set('filtroCtbRegistroFechaDesde', $dateFechaDesde->format('Y/m/d'));
+        $session->set('filtroCtbRegistroFechaHasta', $dateFechaHasta->format('Y/m/d'));                 
+        $session->set('filtroCtbRegistroFiltrarFecha', $form->get('filtrarFecha')->getData()); 
+    }     
     
     private function formulario() {
-        $em = $this->getDoctrine()->getManager();                
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $dateFecha = new \DateTime('now');
+        $strFechaDesde = $dateFecha->format('Y/m/')."01";
+        $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
+        $strFechaHasta = $dateFecha->format('Y/m/').$intUltimoDia;  
+        if($session->get('filtroCtbRegistroFechaDesde') != "") {
+            $strFechaDesde = $session->get('filtroCtbRegistroFechaDesde');
+        }
+        if($session->get('filtroCtbRegistroFechaHasta') != "") {
+            $strFechaHasta = $session->get('filtroCtbRegistroFechaHasta');
+        }    
+        $dateFechaDesde = date_create($strFechaDesde);
+        $dateFechaHasta = date_create($strFechaHasta);
+        
         $form = $this->createFormBuilder()
-            ->add('TxtComprobante', 'text', array('label'  => 'Comprobante'))
-            ->add('TxtNumero', 'text', array('label'  => 'Numero'))
-            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
-            ->add('BtnExportar', 'submit', array('label'  => 'Exportar',))
-            ->add('BtnExportarTodo', 'submit', array('label'  => 'Exportar todo (max 5000)',))
+            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCtbNumero')))            
+            ->add('TxtComprobante', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCtbCodigoComprobante')))                
+            ->add('fechaDesde','date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                
+            ->add('fechaHasta','date',  array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                                                            
+            ->add('filtrarFecha', 'checkbox', array('required'  => false, 'data' => $session->get('filtroCtbRegistroFiltrarFecha')))                                         
+            
             ->add('BtnGenerarOfimatica', 'submit', array('label'  => 'Ofimatica',))    
-            ->add('BtnGenerarPlano', 'submit', array('label'  => 'ilimitada',))
+            ->add('BtnGenerarIlimitada', 'submit', array('label'  => 'Ilimitada',))                
             ->getForm();
-        return $form;
+        return $form;                
     }    
   
     private function generarExcel() {
@@ -304,25 +347,26 @@ class IntercambioDatosController extends Controller
                     ->setCellValue('K1', 'FECHAMVTO')
                     ->setCellValue('L1', 'NIT');
         $i = 2;
-        $dql = $em->getRepository('BrasaContabilidadBundle:CtbRegistroExportar')->listaDql();
-        $query = $em->createQuery($dql);
-        $arRegistrosExportar = new \Brasa\ContabilidadBundle\Entity\CtbRegistroExportar();
-        $arRegistrosExportar = $query->getResult();
-        foreach ($arRegistrosExportar as $arRegistroExportar) {
+        $query = $em->createQuery($this->strDqlLista);
+        $arRegistros = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();
+        $arRegistros = $query->getResult();        
+        foreach ($arRegistros as $arRegistro) {
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arRegistroExportar->getBase())
-                    ->setCellValue('B' . $i, $arRegistroExportar->getNumeroReferencia())
-                    ->setCellValue('C' . $i, $arRegistroExportar->getCentroCosto())
-                    ->setCellValue('D' . $i, $this->RellenarNr($arRegistroExportar->getComprobante(), "0", 2))
-                    ->setCellValue('E' . $i, $arRegistroExportar->getCuenta())
-                    ->setCellValue('F' . $i, $arRegistroExportar->getCredito())
-                    ->setCellValue('G' . $i, $arRegistroExportar->getNumero())
-                    ->setCellValue('H' . $i, $arRegistroExportar->getDebito())
-                    ->setCellValue('I' . $i, $arRegistroExportar->getDescripcionContable())
-                    ->setCellValue('J' . $i, $arRegistroExportar->getDescripcionContable())
-                    ->setCellValue('K' . $i, $arRegistroExportar->getFecha()->format('Y/m/d'))
-                    ->setCellValue('K' . $i, PHPExcel_Shared_Date::PHPToExcel( gmmktime(0,0,0,$arRegistroExportar->getFecha()->format('m'),$arRegistroExportar->getFecha()->format('d'),$arRegistroExportar->getFecha()->format('Y'))))                                                            
-                    ->setCellValue('L' . $i, $arRegistroExportar->getNit()."-".$arRegistroExportar->getDigitoVerificacion());
+                    ->setCellValue('A' . $i, $arRegistro->getBase())
+                    ->setCellValue('B' . $i, $arRegistro->getNumeroReferencia())
+                    ->setCellValue('C' . $i, $arRegistro->getCodigoCentroCostoFk())
+                    ->setCellValue('D' . $i, $this->RellenarNr($arRegistro->getCodigoComprobanteFk(), "0", 2))
+                    ->setCellValue('E' . $i, $arRegistro->getCodigoCuentaFk())
+                    ->setCellValue('F' . $i, $arRegistro->getCredito())
+                    ->setCellValue('G' . $i, $arRegistro->getNumero())
+                    ->setCellValue('H' . $i, $arRegistro->getDebito())
+                    ->setCellValue('I' . $i, $arRegistro->getDescripcionContable())
+                    ->setCellValue('J' . $i, $arRegistro->getDescripcionContable())
+                    ->setCellValue('K' . $i, $arRegistro->getFecha()->format('Y/m/d'))
+                    ->setCellValue('K' . $i, PHPExcel_Shared_Date::PHPToExcel( gmmktime(0,0,0,$arRegistro->getFecha()->format('m'),$arRegistro->getFecha()->format('d'),$arRegistro->getFecha()->format('Y'))));
+            if($arRegistro->getCodigoTerceroFk()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L' . $i, $arRegistro->getTerceroRel()->getNumeroIdentificacion()."-".$arRegistro->getTerceroRel()->getDigitoVerificacion());
+            }
             $i++;
         }
 

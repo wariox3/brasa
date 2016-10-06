@@ -90,8 +90,7 @@ class RegistrosController extends Controller
             ->add('TxtComprobante', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCtbCodigoComprobante')))                
             ->add('fechaDesde','date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                
             ->add('fechaHasta','date',  array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                                                            
-            ->add('filtrarFecha', 'checkbox', array('required'  => false, 'data' => $session->get('filtroCtbRegistroFiltrarFecha')))                 
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->add('filtrarFecha', 'checkbox', array('required'  => false, 'data' => $session->get('filtroCtbRegistroFiltrarFecha')))                             
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
