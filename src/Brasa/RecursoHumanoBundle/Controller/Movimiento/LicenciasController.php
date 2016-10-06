@@ -1,13 +1,19 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuLicenciaType;
 
 class LicenciasController extends Controller
 {
     var $strSqlLista = "";
+    
+    /**
+     * @Route("/rhu/licencias/lista", name="brs_rhu_licencias_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -50,6 +56,9 @@ class LicenciasController extends Controller
             ));
     }
     
+    /**
+     * @Route("/rhu/licencias/nuevo/{codigoLicencia}", name="brs_rhu_licencias_nuevo")
+     */
     public function nuevoAction($codigoLicencia = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();

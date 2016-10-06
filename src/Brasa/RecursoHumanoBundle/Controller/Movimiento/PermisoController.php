@@ -1,8 +1,9 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuPermisoType;
 
@@ -10,6 +11,10 @@ use Brasa\RecursoHumanoBundle\Form\Type\RhuPermisoType;
 class PermisoController extends Controller
 {
     var $strListaDql = "";
+    
+    /**
+     * @Route("/rhu/permiso/lista", name="brs_rhu_permiso_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -56,6 +61,9 @@ class PermisoController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Permisos:lista.html.twig', array('arPermisos' => $arPermisos, 'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/permiso/nuevo/{codigoPermiso}", name="brs_rhu_permiso_nuevo")
+     */
     public function nuevoAction($codigoPermiso = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -113,6 +121,9 @@ class PermisoController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/permiso/detalle/{codigoPermiso}", name="brs_rhu_permiso_detalle")
+     */
     public function detalleAction($codigoPermiso) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

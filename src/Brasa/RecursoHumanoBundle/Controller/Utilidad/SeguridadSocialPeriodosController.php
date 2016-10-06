@@ -1,6 +1,7 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Utilidad;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
@@ -17,6 +18,9 @@ class SeguridadSocialPeriodosController extends Controller
     var $strCodigoPeriodoDetalleTraslados = "";
     var $strCodigoPeriodoDetalleCopias = "";
 
+    /**
+     * @Route("/rhu/seguridadsocial/periodo/lista", name="brs_rhu_ss_periodo_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -94,6 +98,9 @@ class SeguridadSocialPeriodosController extends Controller
             'form' => $form->createView()));
     }
     
+    /**
+     * @Route("/rhu/seguridadsocial/periodo/nuevo/{codigoPeriodo}", name="brs_rhu_ss_periodo_nuevo")
+     */
     public function nuevoAction($codigoPeriodo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -116,6 +123,9 @@ class SeguridadSocialPeriodosController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/seguridadsocial/periodo/detalle/{codigoPeriodo}", name="brs_rhu_ss_periodo_detalle")
+     */
     public function detalleAction($codigoPeriodo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -521,6 +531,9 @@ class SeguridadSocialPeriodosController extends Controller
             'form' => $form->createView()));
     }
     
+    /**
+     * @Route("/rhu/seguridadsocial/periodo/detalle/nuevo/{codigoPeriodo}/{codigoPeriodoDetallePk}", name="brs_rhu_ss_periodo_detalle_nuevo")
+     */
     public function detalleNuevoAction($codigoPeriodo, $codigoPeriodoDetallePk) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -544,6 +557,9 @@ class SeguridadSocialPeriodosController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/seguridadsocial/periodo/detalle/empleados/{codigoPeriodoDetalle}", name="brs_rhu_ss_periodo_detalle_empleados")
+     */
     public function detalleEmpleadosAction($codigoPeriodoDetalle) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -626,6 +642,9 @@ class SeguridadSocialPeriodosController extends Controller
             'form' => $form->createView()));
     }
     
+    /**
+     * @Route("/rhu/seguridadsocial/periodo/detalle/aportes/{codigoPeriodoDetalle}", name="brs_rhu_ss_periodo_detalle_aportes")
+     */
     public function detalleAportesAction($codigoPeriodoDetalle) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -698,6 +717,9 @@ class SeguridadSocialPeriodosController extends Controller
             'form' => $form->createView()));
     }
     
+    /**
+     * @Route("/rhu/seguridadsocial/periodo/detalle/empleados/trasladar/{codigoPeriodoDetalle}", name="brs_rhu_ss_periodo_detalle_empleados_trasladar")
+     */
     public function trasladarEmpleadosAction($codigoPeriodoDetalle) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -736,6 +758,9 @@ class SeguridadSocialPeriodosController extends Controller
             'form' => $form->createView()));
     }
     
+    /**
+     * @Route("/rhu/seguridadsocial/periodo/detalle/empleados/copiar/{codigoPeriodoDetalle}", name="brs_rhu_ss_periodo_detalle_empleados_copiar")
+     */
     public function copiarEmpleadosAction($codigoPeriodoDetalle) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -803,6 +828,9 @@ class SeguridadSocialPeriodosController extends Controller
             'form' => $form->createView()));
     }
     
+    /**
+     * @Route("/rhu/seguridadsocial/resumen/pago/{codigoPeriodoDetalle}/{codigoEmpleado}", name="brs_rhu_ss_resumen_pago")
+     */
     public function resumenPagosAction($codigoPeriodoDetalle, $codigoEmpleado) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

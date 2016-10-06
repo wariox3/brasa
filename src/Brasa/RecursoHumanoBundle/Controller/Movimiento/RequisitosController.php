@@ -1,13 +1,18 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuRequisitoType;
 use Doctrine\ORM\EntityRepository;
 class RequisitosController extends Controller
 {
     var $strDqlLista = "";
 
+    /**
+     * @Route("/rhu/requisito/lista", name="brs_rhu_requisito_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -50,6 +55,9 @@ class RequisitosController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/requisito/detalle/{codigoRequisito}", name="brs_rhu_requisito_detalle")
+     */
     public function detalleAction($codigoRequisito) {
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');
@@ -180,6 +188,9 @@ class RequisitosController extends Controller
                     ));
     }
 
+    /**
+     * @Route("/rhu/requisito/detalle/nuevo/{codigoRequisito}", name="brs_rhu_requisito_detalle_nuevo")
+     */
     public function detalleNuevoAction($codigoRequisito) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -224,6 +235,9 @@ class RequisitosController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/requisito/nuevo/{codigoRequisito}", name="brs_rhu_requisito_nuevo")
+     */
     public function nuevoAction($codigoRequisito) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();

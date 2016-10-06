@@ -1,8 +1,9 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuSeleccionRequisitoType;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,6 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 class SeleccionRequisitoController extends Controller
 {
     var $strSqlLista = "";
+    
+    /**
+     * @Route("/rhu/seleccionrequisito/lista", name="brs_rhu_seleccionrequisito_lista")
+     */
     public function listaAction() {        
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -47,6 +52,9 @@ class SeleccionRequisitoController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/SeleccionRequisito:lista.html.twig', array('arRequisitos' => $arRequisitos, 'form' => $form->createView()));     
     } 
     
+    /**
+     * @Route("/rhu/seleccionrequisito/nuevo/{codigoSeleccionRequisito}", name="brs_rhu_seleccionrequisito_nuevo")
+     */
     public function nuevoAction($codigoSeleccionRequisito) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -78,6 +86,9 @@ class SeleccionRequisitoController extends Controller
             'form' => $form->createView()));
     }
     
+    /**
+     * @Route("/rhu/seleccionrequisito/detalle/{codigoSeleccionRequisito}", name="brs_rhu_seleccionrequisito_detalle")
+     */
     public function detalleAction($codigoSeleccionRequisito) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();    
@@ -222,6 +233,9 @@ class SeleccionRequisitoController extends Controller
                     ));
     }
     
+    /**
+     * @Route("/rhu/seleccionrequisicion/descartaraspirante/{codigoSelReqAsp}", name="brs_rhu_descartar_aspirante")
+     */
     public function descartarAction($codigoSelReqAsp) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();

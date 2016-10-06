@@ -1,8 +1,9 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -12,6 +13,9 @@ class SeleccionRequisicionAspiranteController extends Controller
     
     var $strSqlLista = "";
     
+    /**
+     * @Route("/rhu/requisicionaspirante/lista", name="brs_rhu_requisicionaspirante_lista")
+     */
     public function listaAction() {        
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();    
@@ -31,6 +35,9 @@ class SeleccionRequisicionAspiranteController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/SeleccionRequisitoAspirante:lista.html.twig', array('arRequisitos' => $arRequisitos, 'form' => $form->createView()));     
     } 
     
+    /**
+     * @Route("/rhu/requisicionaspirante/detalle/{codigoSeleccionRequisito}", name="brs_rhu_requisicionaspirante_detalle")
+     */
     public function detalleAction($codigoSeleccionRequisito) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

@@ -1,12 +1,18 @@
 <?php
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuPagoIncapacidadType;
 
 class PagoIncapacidadController extends Controller
 {
     var $strSqlLista = "";
+    
+    /**
+     * @Route("/rhu/incapacidades/pagos/lista", name="brs_rhu_incapacidades_pagos_lista")
+     */
     public function listaAction() {        
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -38,6 +44,9 @@ class PagoIncapacidadController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Incapacidades/PagoIncapacidades:lista.html.twig', array('arIncapacidadPagos' => $arIncapacidadPagos, 'form' => $form->createView()));
     } 
     
+    /**
+     * @Route("/rhu/incapacidades/pagos/nuevo/{codigoIncapacidadPago}", name="brs_rhu_incapacidades_pagos_nuevo")
+     */
     public function nuevoAction($codigoIncapacidadPago) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -64,6 +73,9 @@ class PagoIncapacidadController extends Controller
             'form' => $form->createView()));
     }
     
+    /**
+     * @Route("/rhu/incapacidades/pagos/detalle/{codigoIncapacidadPago}", name="brs_rhu_incapacidades_pagos_detalle")
+     */
     public function detalleAction($codigoIncapacidadPago) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();    
@@ -130,6 +142,9 @@ class PagoIncapacidadController extends Controller
                     ));
     }
     
+    /**
+     * @Route("/rhu/incapacidades/pagos/detalle/nuevo/{codigoIncapacidadPago}", name="brs_rhu_incapacidades_pagos_detalle_nuevo")
+     */
     public function detalleNuevoAction($codigoIncapacidadPago) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();

@@ -1,8 +1,9 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuDotacionType;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuDotacionElementoType;
@@ -12,6 +13,9 @@ class DotacionController extends Controller
 {
     var $strListaDql = "";
 
+    /**
+     * @Route("/rhu/base/empleado/dotacion/lista", name="brs_rhu_dotacion_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -64,6 +68,9 @@ class DotacionController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Dotacion:lista.html.twig', array('arDotaciones' => $arDotaciones, 'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/base/empleado/dotacion/nuevo/{codigoDotacion}", name="brs_rhu_dotacion_nuevo")
+     */
     public function nuevoAction($codigoDotacion = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -128,6 +135,9 @@ class DotacionController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/base/empleado/dotacion/detalle/{codigoDotacion}", name="brs_rhu_dotacion_detalle")
+     */
     public function detalleAction($codigoDotacion) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -210,6 +220,9 @@ class DotacionController extends Controller
                     ));
     }
 
+    /**
+     * @Route("/rhu/base/empleado/dotacion/detalle/nuevo/{codigoDotacion}", name="brs_rhu_dotacion_detalle_nuevo")
+     */
     public function detalleNuevoAction($codigoDotacion) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -257,6 +270,9 @@ class DotacionController extends Controller
             'form' => $form->createView()));
     }
     
+    /**
+     * @Route("/rhu/base/empleado/dotacion/detalle/devolucion/{codigoDotacion}", name="brs_rhu_dotacion_detalle_devolucion")
+     */
     public function detalleDevolucionAction($codigoDotacion) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();

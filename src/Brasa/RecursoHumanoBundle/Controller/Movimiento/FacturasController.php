@@ -1,8 +1,9 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuFacturaType;
 use Doctrine\ORM\EntityRepository;
 
@@ -10,6 +11,9 @@ class FacturasController extends Controller
 {
     var $strSqlLista = "";
     
+    /**
+     * @Route("/rhu/facturas/lista", name="brs_rhu_facturas_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -56,6 +60,9 @@ class FacturasController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Facturas:lista.html.twig', array('arFacturas' => $arFacturas, 'form' => $form->createView()));
     }       
     
+    /**
+     * @Route("/rhu/facturas/nuevo/{codigoFactura}", name="brs_rhu_facturas_nuevo")
+     */
     public function nuevoAction($codigoFactura) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -90,6 +97,9 @@ class FacturasController extends Controller
             'form' => $form->createView()));
     }    
     
+    /**
+     * @Route("/rhu/facturas/detalle/{codigoFactura}", name="brs_rhu_facturas_detalle")
+     */
     public function detalleAction($codigoFactura) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();                 
@@ -169,6 +179,9 @@ class FacturasController extends Controller
                     ));
     }
     
+    /**
+     * @Route("/rhu/facturas/detalle/nuevo/servicio/{codigoFactura}", name="brs_rhu_facturas_detalle_nuevo_servicio")
+     */
     public function detalleNuevoServicioAction($codigoFactura) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -249,6 +262,9 @@ class FacturasController extends Controller
             'form' => $form->createView()));
     }    
     
+    /**
+     * @Route("/rhu/facturas/detalle/nuevo/examen/{codigoFactura}", name="brs_rhu_facturas_detalle_nuevo_examen")
+     */
     public function detalleNuevoExamenAction($codigoFactura) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -286,6 +302,9 @@ class FacturasController extends Controller
             'form' => $form->createView()));
     }        
     
+    /**
+     * @Route("/rhu/facturas/detalle/nuevo/seleccion/{codigoFactura}", name="brs_rhu_facturas_detalle_nuevo_seleccion")
+     */
     public function detalleNuevoSeleccionAction($codigoFactura) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();

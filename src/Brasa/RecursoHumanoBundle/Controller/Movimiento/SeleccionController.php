@@ -1,8 +1,9 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuSeleccionType;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuSeleccionReferenciaType;
@@ -12,6 +13,9 @@ use Brasa\RecursoHumanoBundle\Form\Type\RhuSeleccionEntrevistaType;
 
 class SeleccionController extends Controller
 {
+    /**
+     * @Route("/rhu/seleccion/lista", name="brs_rhu_seleccion_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -71,6 +75,9 @@ class SeleccionController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Seleccion:lista.html.twig', array('arSelecciones' => $arSelecciones, 'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/seleccion/nuevo/{codigoSeleccion}", name="brs_rhu_seleccion_nuevo")
+     */
     public function nuevoAction($codigoSeleccion) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -108,6 +115,9 @@ class SeleccionController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/seleccion/detalle/{codigoSeleccion}", name="brs_rhu_seleccion_detalle")
+     */
     public function detalleAction($codigoSeleccion) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -247,6 +257,9 @@ class SeleccionController extends Controller
                     ));
     }
 
+    /**
+     * @Route("/rhu/seleccion/agregar/referencia/{codigoSeleccion}/{codigoSeleccionReferencia}", name="brs_rhu_seleccion_agregar_referencia")
+     */
     public function agregarReferenciaAction($codigoSeleccion, $codigoSeleccionReferencia) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -282,6 +295,9 @@ class SeleccionController extends Controller
             ));
     }
 
+    /**
+     * @Route("/rhu/seleccion/agregar/prueba/{codigoSeleccion}/{codigoSeleccionPrueba}", name="brs_rhu_seleccion_agregar_prueba")
+     */
     public function agregarPruebaAction($codigoSeleccion, $codigoSeleccionPrueba) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -315,6 +331,9 @@ class SeleccionController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Seleccion:agregarPrueba.html.twig', array('form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/seleccion/agregar/visita/{codigoSeleccion}/{codigoSeleccionVisita}", name="brs_rhu_seleccion_agregar_visita")
+     */
     public function agregarVisitaAction($codigoSeleccion, $codigoSeleccionVisita) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -348,6 +367,9 @@ class SeleccionController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Seleccion:agregarVisita.html.twig', array('form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/seleccion/agregar/entrevista/{codigoSeleccion}/{codigoSeleccionEntrevista}", name="brs_rhu_seleccion_agregar_entrevista")
+     */
     public function agregarEntrevistaAction($codigoSeleccion, $codigoSeleccionEntrevista) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -386,6 +408,9 @@ class SeleccionController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Seleccion:agregarEntrevista.html.twig', array('form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/seleccion/cerrar/{codigoSeleccion}", name="brs_rhu_seleccion_cerrar")
+     */
     public function cerrarAction($codigoSeleccion) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();

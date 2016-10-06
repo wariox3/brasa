@@ -1,8 +1,9 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuEmpleadoEstudioType;
 
@@ -10,6 +11,10 @@ use Brasa\RecursoHumanoBundle\Form\Type\RhuEmpleadoEstudioType;
 class EstudioController extends Controller
 {
     var $strListaDql = "";
+    
+    /**
+     * @Route("/rhu/estudio/lista", name="brs_rhu_estudio_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -57,6 +62,9 @@ class EstudioController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Estudios:lista.html.twig', array('arEstudios' => $arEstudios, 'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/estudio/nuevo/{codigoEstudio}", name="brs_rhu_estudio_nuevo")
+     */
     public function nuevoAction($codigoEstudio = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -109,6 +117,9 @@ class EstudioController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/estudio/detalle/{codigoEstudio}", name="brs_rhu_estudio_detalle")
+     */
     public function detalleAction($codigoEstudio) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
