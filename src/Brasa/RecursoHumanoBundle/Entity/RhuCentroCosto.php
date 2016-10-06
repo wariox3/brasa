@@ -210,12 +210,7 @@ class RhuCentroCosto
     /**
      * @ORM\OneToMany(targetEntity="RhuSede", mappedBy="centroCostoRel")
      */
-    protected $sedesCentroCostoRel;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="RhuExamen", mappedBy="centroCostoRel")
-     */
-    protected $examenesCentroCostoRel;
+    protected $sedesCentroCostoRel;    
 
     /**
      * @ORM\OneToMany(targetEntity="RhuLiquidacion", mappedBy="centroCostoRel")
@@ -267,8 +262,6 @@ class RhuCentroCosto
      */
     protected $soportesPagosHorariosCentroCostoRel;    
     
-
-
     /**
      * Constructor
      */
@@ -284,7 +277,6 @@ class RhuCentroCosto
         $this->serviciosCobrarCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->facturasCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->sedesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->examenesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->liquidacionesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->vacacionesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dotacionesCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -545,6 +537,30 @@ class RhuCentroCosto
     public function getEstadoActivo()
     {
         return $this->estadoActivo;
+    }
+
+    /**
+     * Set imprimirProgramacionFormato
+     *
+     * @param boolean $imprimirProgramacionFormato
+     *
+     * @return RhuCentroCosto
+     */
+    public function setImprimirProgramacionFormato($imprimirProgramacionFormato)
+    {
+        $this->imprimirProgramacionFormato = $imprimirProgramacionFormato;
+
+        return $this;
+    }
+
+    /**
+     * Get imprimirProgramacionFormato
+     *
+     * @return boolean
+     */
+    public function getImprimirProgramacionFormato()
+    {
+        return $this->imprimirProgramacionFormato;
     }
 
     /**
@@ -833,6 +849,30 @@ class RhuCentroCosto
     public function getCodigoUsuario()
     {
         return $this->codigoUsuario;
+    }
+
+    /**
+     * Set codigoRecursoGrupoFk
+     *
+     * @param integer $codigoRecursoGrupoFk
+     *
+     * @return RhuCentroCosto
+     */
+    public function setCodigoRecursoGrupoFk($codigoRecursoGrupoFk)
+    {
+        $this->codigoRecursoGrupoFk = $codigoRecursoGrupoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoRecursoGrupoFk
+     *
+     * @return integer
+     */
+    public function getCodigoRecursoGrupoFk()
+    {
+        return $this->codigoRecursoGrupoFk;
     }
 
     /**
@@ -1272,40 +1312,6 @@ class RhuCentroCosto
     }
 
     /**
-     * Add examenesCentroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesCentroCostoRel
-     *
-     * @return RhuCentroCosto
-     */
-    public function addExamenesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesCentroCostoRel)
-    {
-        $this->examenesCentroCostoRel[] = $examenesCentroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove examenesCentroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesCentroCostoRel
-     */
-    public function removeExamenesCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuExamen $examenesCentroCostoRel)
-    {
-        $this->examenesCentroCostoRel->removeElement($examenesCentroCostoRel);
-    }
-
-    /**
-     * Get examenesCentroCostoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getExamenesCentroCostoRel()
-    {
-        return $this->examenesCentroCostoRel;
-    }
-
-    /**
      * Add liquidacionesCentroCostoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion $liquidacionesCentroCostoRel
@@ -1643,53 +1649,5 @@ class RhuCentroCosto
     public function getSoportesPagosHorariosCentroCostoRel()
     {
         return $this->soportesPagosHorariosCentroCostoRel;
-    }
-
-    /**
-     * Set codigoRecursoGrupoFk
-     *
-     * @param integer $codigoRecursoGrupoFk
-     *
-     * @return RhuCentroCosto
-     */
-    public function setCodigoRecursoGrupoFk($codigoRecursoGrupoFk)
-    {
-        $this->codigoRecursoGrupoFk = $codigoRecursoGrupoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoRecursoGrupoFk
-     *
-     * @return integer
-     */
-    public function getCodigoRecursoGrupoFk()
-    {
-        return $this->codigoRecursoGrupoFk;
-    }
-
-    /**
-     * Set imprimirProgramacionFormato
-     *
-     * @param boolean $imprimirProgramacionFormato
-     *
-     * @return RhuCentroCosto
-     */
-    public function setImprimirProgramacionFormato($imprimirProgramacionFormato)
-    {
-        $this->imprimirProgramacionFormato = $imprimirProgramacionFormato;
-
-        return $this;
-    }
-
-    /**
-     * Get imprimirProgramacionFormato
-     *
-     * @return boolean
-     */
-    public function getImprimirProgramacionFormato()
-    {
-        return $this->imprimirProgramacionFormato;
     }
 }

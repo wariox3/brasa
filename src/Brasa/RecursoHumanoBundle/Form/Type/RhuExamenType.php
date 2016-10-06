@@ -20,14 +20,7 @@ class RhuExamenType extends AbstractType
             ->add('entidadExamenRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadExamen',
                 'property' => 'nombre',
-            ))
-            ->add('centroCostoRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cc')
-                    ->orderBy('cc.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => true))                            
+            ))                          
             ->add('ciudadRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'property' => 'nombre',

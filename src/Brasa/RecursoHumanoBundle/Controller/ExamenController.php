@@ -128,8 +128,7 @@ class ExamenController extends Controller
                     $arExamen->setEmpleadoRel($arEmpleado);
                     if($arEmpleado->getCodigoContratoActivoFk() != '') {
                         $arExamen->setIdentificacion($arEmpleado->getNumeroIdentificacion());
-                        $arExamen->setNombreCorto($arEmpleado->getNombreCorto());
-                        $arExamen->setCentroCostoRel($arEmpleado->getCentroCostoRel());
+                        $arExamen->setNombreCorto($arEmpleado->getNombreCorto());                        
                         $arExamen->setCiudadRel($arEmpleado->getCiudadRel());
                         $arExamen->setEmpleadoRel($arEmpleado);
                         $arExamen->setControl(1);
@@ -497,8 +496,9 @@ class ExamenController extends Controller
         $this->strListaDql =  $em->getRepository('BrasaRecursoHumanoBundle:RhuExamen')->listaDQL(
                 $session->get('filtroCodigoCentroCosto'),
                 $session->get('filtroIdentificacion'),
-                $session->get('filtroAprobadoExamen'),
-                $session->get('filtroControlPago')
+                $session->get('filtroRhuExamenEstadoAprobado'),
+                $session->get('filtroControlPago'),
+                $session->get('filtroRhuExamenEstadoAutorizado')
                 );
     }
 
@@ -506,33 +506,34 @@ class ExamenController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $session->set('filtroAprobadoExamen', $form->get('estadoAprobado')->getData());
+        $session->set('filtroIdentificacion', $form->get('txtNumeroIdentificacion')->getData());
+        $session->set('filtroRhuExamenEstadoAutorizado', $form->get('estadoAutorizado')->getData());
+        $session->set('filtroRhuExamenEstadoAprobado', $form->get('estadoAprobado')->getData());
         $session->set('filtroControlPago', $form->get('controlPago')->getData());
     }
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $arrayPropiedades = array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cc')
-                    ->orderBy('cc.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => false,
-                'empty_data' => "",
-                'empty_value' => "TODOS",
-                'data' => ""
-            );
-        if($session->get('filtroCodigoCentroCosto')) {
-            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
-        }
-        $form = $this->createFormBuilder()
-            ->add('centroCostoRel', 'entity', $arrayPropiedades)
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
-            ->add('estadoAprobado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAprobadoExamen')))
+        $strNombreEmpleado = "";
+        if($session->get('filtroIdentificacion')) {
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $session->get('filtroIdentificacion')));
+            if($arEmpleado) {
+                $strNombreEmpleado = $arEmpleado->getNombreCorto();
+                $session->set('filtroRhuCodigoEmpleado', $arEmpleado->getCodigoEmpleadoPk());
+            }  else {
+                $session->set('filtroIdentificacion', null);
+                $session->set('filtroRhuCodigoEmpleado', null);
+            }
+        } else {
+            $session->set('filtroRhuCodigoEmpleado', null);
+        }        
+        
+        $form = $this->createFormBuilder()            
+            ->add('txtNumeroIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('txtNombreCorto', 'text', array('label'  => 'Nombre','data' => $strNombreEmpleado))
+            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADOS', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroRhuExamenEstadoAutorizado')))
+            ->add('estadoAprobado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'APROBADOS', '0' => 'SIN APROBAR'), 'data' => $session->get('filtroRhuExamenEstadoAprobado')))
             ->add('controlPago', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroControlPago')))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))

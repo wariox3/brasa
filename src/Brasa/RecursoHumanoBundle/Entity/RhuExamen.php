@@ -138,13 +138,7 @@ class RhuExamen
      * @ORM\ManyToOne(targetEntity="RhuEntidadExamen", inversedBy="examenesEntidadExamenRel")
      * @ORM\JoinColumn(name="codigo_entidad_examen_fk", referencedColumnName="codigo_entidad_examen_pk")
      */
-    protected $entidadExamenRel;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="examenesCentroCostoRel")
-     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
-     */
-    protected $centroCostoRel;
+    protected $entidadExamenRel;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuFactura", inversedBy="examenesFacturaRel")
@@ -163,7 +157,6 @@ class RhuExamen
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
     protected $empleadoRel;
-
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuCargo", inversedBy="examenesCargoRel")
@@ -186,8 +179,7 @@ class RhuExamen
      */
     protected $examenesExamenRestriccionMedicaRel;
     
-    
-    
+
     /**
      * Constructor
      */
@@ -782,30 +774,6 @@ class RhuExamen
     public function getEntidadExamenRel()
     {
         return $this->entidadExamenRel;
-    }
-
-    /**
-     * Set centroCostoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
-     *
-     * @return RhuExamen
-     */
-    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
-    {
-        $this->centroCostoRel = $centroCostoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
-     */
-    public function getCentroCostoRel()
-    {
-        return $this->centroCostoRel;
     }
 
     /**
