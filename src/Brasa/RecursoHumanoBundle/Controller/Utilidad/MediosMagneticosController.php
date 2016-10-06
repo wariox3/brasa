@@ -1,13 +1,16 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Utilidad;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
-class UtilidadesMediosMagneticosController extends Controller
+class MediosMagneticosController extends Controller
 {
-               
+    /**
+     * @Route("/rhu/utilidades/mediosmagneticos/informe", name="brs_rhu_utilidades_medios_magneticos_informe")
+     */           
     public function InformeAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

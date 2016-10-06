@@ -1,14 +1,18 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Proceso;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
-class ProcesoCierreAnioController extends Controller
+class CierreAnioController extends Controller
 {
     var $strSqlLista = "";
 
+    /**
+     * @Route("/rhu/proceso/cierre/anio", name="brs_rhu_proceso_cierre_anio")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -64,6 +68,9 @@ class ProcesoCierreAnioController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/proceso/cierre/anio/cerrar/{codigoCierreAnio}", name="brs_rhu_proceso_cierre_anio_cerrar")
+     */
     public function cerrarAction($codigoCierreAnio) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();

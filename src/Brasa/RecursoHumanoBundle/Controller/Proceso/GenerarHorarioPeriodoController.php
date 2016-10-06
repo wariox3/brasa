@@ -1,11 +1,17 @@
 <?php
-namespace Brasa\RecursoHumanoBundle\Controller;
+
+namespace Brasa\RecursoHumanoBundle\Controller\Proceso;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 
-class ProcesoGenerarHorarioPeriodoController extends Controller
+class GenerarHorarioPeriodoController extends Controller
 {
+    /**
+     * @Route("/rhu/proceso/control/acceso/periodo/horario/lista", name="brs_rhu_proceso_control_acceso_horario_periodo_listar")
+     */
     public function listarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -63,6 +69,9 @@ class ProcesoGenerarHorarioPeriodoController extends Controller
         ));
     }
     
+    /**
+     * @Route("/rhu/proceso/control/acceso/periodo/horario/nuevo/{codigoHorarioPeriodo}", name="brs_rhu_proceso_control_acceso_horario_periodo_nuevo")
+     */
     public function nuevoAction($codigoHorarioPeriodo = 0) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

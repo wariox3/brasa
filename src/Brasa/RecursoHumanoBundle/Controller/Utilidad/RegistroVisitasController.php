@@ -1,13 +1,17 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Utilidad;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuRegistroVisitaType;
 
-class UtilidadesRegistroVisitasController extends Controller
+class RegistroVisitasController extends Controller
 {
+    /**
+     * @Route("/rhu/utilidades/control/acceso/visitante", name="brs_rhu_utilidades_control_acceso_visitante")
+     */
     public function registroAction() {
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
@@ -77,6 +81,9 @@ class UtilidadesRegistroVisitasController extends Controller
         'form' => $form->createView()));
     } 
     
+    /**
+     * @Route("/rhu/utilidades/salida/control/acceso/visitantes/{codigoRegistroVisita}", name="brs_rhu_utilidades_salida_control_acceso_visitantes")
+     */
     public function salidaAction($codigoRegistroVisita) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();

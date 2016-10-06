@@ -1,8 +1,9 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuControlAccesoEmpleadoType;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuHorarioAccesoType;
@@ -11,6 +12,9 @@ class ControlAccesoEmpleadoController extends Controller
 {
     var $strSqlLista = "";
     
+    /**
+     * @Route("/rhu/control/acceso/empleado/lista", name="brs_rhu_control_acceso_empleado_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -105,6 +109,9 @@ class ControlAccesoEmpleadoController extends Controller
         }
     }
 
+    /**
+     * @Route("/rhu/control/acceso/empleado/nuevo/{codigoHorarioAcceso}", name="brs_rhu_control_acceso_empleado_nuevo")
+     */
     public function nuevoAction($codigoHorarioAcceso) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();       

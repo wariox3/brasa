@@ -1,14 +1,18 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Utilidad;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
-class UtilidadesProyeccionController extends Controller
+class ProyeccionController extends Controller
 {
     var $strDqlLista = "";
     
+    /**
+     * @Route("/rhu/utilidades/proyeccion", name="brs_rhu_utilidades_proyeccion")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

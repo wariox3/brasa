@@ -1,14 +1,18 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Utilidad;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
-class UtilidadesSupervigilanciaParafiscalesController extends Controller
+class SupervigilanciaParafiscalesController extends Controller
 {
     var $strDqlLista = "";
     
+    /**
+     * @Route("/rhu/utilidades/supervigilancia/parafiscales", name="brs_rhu_utilidades_supervigilancia_parafiscales")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

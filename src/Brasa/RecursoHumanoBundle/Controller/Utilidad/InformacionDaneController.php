@@ -1,12 +1,16 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Utilidad;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
-class UtilidadesInformacionDaneController extends Controller
-{
 
+class InformacionDaneController extends Controller
+{
+    /**
+     * @Route("/rhu/utilidades/informaciondane/informe", name="brs_rhu_utilidades_informacion_dane_informe")
+     */
     public function InformeAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

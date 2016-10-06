@@ -1,7 +1,9 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCapacitacionType;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCapacitacionDetalleType;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCapacitacionNotaType;
@@ -11,6 +13,9 @@ class CapacitacionesController extends Controller
     var $strDqlLista = "";
     var $strDqlListaNuevoDetalleEmpleado = "";
 
+    /**
+     * @Route("/rhu/capacitacion/lista", name="brs_rhu_capacitacion_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -61,6 +66,9 @@ class CapacitacionesController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/capacitacion/detalle/{codigoCapacitacion}", name="brs_rhu_capacitacion_detalle")
+     */
     public function detalleAction($codigoCapacitacion) {
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');
@@ -258,6 +266,9 @@ class CapacitacionesController extends Controller
                     ));
     }
 
+    /**
+     * @Route("/rhu/capacitacion/detalle/nuevo/{codigoCapacitacion}", name="brs_rhu_capacitacion_detalle_nuevo")
+     */
     public function detalleNuevoAction($codigoCapacitacion) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -280,6 +291,9 @@ class CapacitacionesController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/capacitacion/detalle/nuevo/empleado/{codigoCapacitacion}", name="brs_rhu_capacitacion_detalle_nuevo_empleado")
+     */
     public function detalleNuevoEmpleadoAction($codigoCapacitacion) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -329,6 +343,9 @@ class CapacitacionesController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/capacitacion/detalle/nuevo/nota/{codigoCapacitacion}", name="brs_rhu_capacitacion_detalle_nuevo_nota")
+     */
     public function detalleNuevoNotaAction($codigoCapacitacion) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -351,6 +368,9 @@ class CapacitacionesController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/capacitacion/nuevo/{codigoCapacitacion}", name="brs_rhu_capacitacion_nuevo")
+     */
     public function nuevoAction($codigoCapacitacion) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();

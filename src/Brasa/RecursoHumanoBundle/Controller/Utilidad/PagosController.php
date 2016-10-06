@@ -1,12 +1,17 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Utilidad;
+
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 
-class UtilidadesPagosController extends Controller
+class PagosController extends Controller
 {
+    /**
+     * @Route("/rhu/utilidades/pagos/generar/periodo", name="brs_rhu_utilidades_pagos_generar_periodo")
+     */
     public function generarPeriodoAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

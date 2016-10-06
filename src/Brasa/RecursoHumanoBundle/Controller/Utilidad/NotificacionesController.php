@@ -1,11 +1,15 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Utilidad;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
-class UtilidadesNotificacionesController extends Controller
+class NotificacionesController extends Controller
 {
+    /**
+     * @Route("/rhu/utilidades/notificaciones/cierreprogramacionpago", name="brs_rhu_utilidades_notificaciones_cierreprogramacionpago")
+     */
     public function cierreProgramacionPagoAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

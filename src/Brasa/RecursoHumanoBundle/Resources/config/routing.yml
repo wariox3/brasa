@@ -4,39 +4,7 @@ brs_rhu_inicio:
 
 brs_rhu_como_iniciar:
     path:     /rhu/como/iniciar   
-    defaults: { _controller: BrasaRecursoHumanoBundle:Default:comoIniciar }                 
-
-brs_rhu_utilidades_pagos_generar_periodo:
-    path:     /rhu/utilidades/pagos/generar/periodo
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesPagos:generarPeriodo }          
-    
-brs_rhu_utilidades_pagos_pagar:
-    path:     /rhu/utilidades/pagos/pagar
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesPagosPagar:pagar }      
-    
-brs_rhu_utilidades_notificaciones_cierreprogramacionpago:
-    path:     /rhu/utilidades/notificaciones/cierreprogramacionpago
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesNotificaciones:cierreProgramacionPago }            
-    
-brs_rhu_utilidades_certificado_ingreso_retencion:
-    path:     /rhu/utilidades/certificado/ingreso/retencion
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCertificadoIngresoRetencion:Certificado }     
-
-brs_rhu_utilidades_carta_laboral:
-    path:     /rhu/utilidades/carta/laboral
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCartaLaboral:lista }
-    
-brs_rhu_utilidades_cartas_generar:
-    path:     /rhu/utilidades/cartas/generar
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCartas:generar }    
-
-brs_rhu_utilidades_supervigilancia_parafiscales:
-    path:     /rhu/utilidades/supervigilancia/parafiscales
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesSupervigilanciaParafiscales:lista }      
-    
-brs_rhu_utilidades_control_acceso_visitante:
-    path:     /rhu/utilidades/control/acceso/visitante
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesRegistroVisitas:registro }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:Default:comoIniciar }                                                                                 
     
 brs_rhu_pagos_adicionales_lista:
     path:     /rhu/pagos/adicionales/lista/{modalidad}/{periodo}
@@ -80,19 +48,7 @@ brs_rhu_incapacidades_pagos_detalle:
     
 brs_rhu_incapacidades_pagos_detalle_nuevo:
     path:     /rhu/incapacidades/pagos/detalle/nuevo/{codigoIncapacidadPago}
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagoIncapacidad:detalleNuevo }                   
-
-brs_rhu_accidente_trabajo_lista:
-    path:     /rhu/accidente/trabajo/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:AccidenteTrabajo:lista }   
-   
-brs_rhu_accidente_trabajo_nuevo:
-    path:     /rhu/accidente/trabajo/nuevo/{codigoAccidenteTrabajo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:AccidenteTrabajo:nuevo }
-    
-brs_rhu_accidente_trabajo_detalle:
-    path:     /rhu/accidente/trabajo/detalle/{codigoAccidenteTrabajo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:AccidenteTrabajo:detalle }   
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagoIncapacidad:detalleNuevo }                     
 
 brs_rhu_licencias_lista:
     path:     /rhu/licencias/lista
@@ -124,19 +80,7 @@ brs_rhu_dotacion_detalle_devolucion:
    
 brs_rhu_dotacion_detalle_editar:
    path:     /rhu/base/empleadoDotacion/detalle/editar/{codigoDotacionDetalle}
-   defaults: { _controller: BrasaRecursoHumanoBundle:Dotacion:editarElemento }          
-        
-brs_rhu_cargar_control_acceso_empleados:
-    path:     /rhu/cargar/control/acceso/empleados
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesHorarioAcceso:cargar } 
-    
-brs_rhu_salida_control_acceso_empleados:
-    path:     /rhu/salida/control/acceso/empleados/{codigoHorarioAcceso}
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesHorarioAcceso:salida }
-    
-brs_rhu_salida_control_acceso_visitantes:
-    path:     /rhu/salida/control/acceso/visitantes/{codigoRegistroVisita}
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesRegistroVisitas:salida }    
+   defaults: { _controller: BrasaRecursoHumanoBundle:Dotacion:editarElemento }                               
 
 brs_rhu_pagos_lista:
     path:     /rhu/pagos/lista
@@ -170,29 +114,13 @@ brs_rhu_programaciones_pago_agregar_empleado:
     path:     /rhu/programaciones/pago/agregar/empleado/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPago:agregarEmpleado }     
 
-brs_rhu_programaciones_pago_cargar_tiempo_sede:
-    path:     /rhu/programaciones/pago/cargar/tiempo/sede/{codigoProgramacionPago}
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCargarTiempoSedes:cargar }
-
 brs_rhu_programaciones_pago_cargar_soporte_turno:
     path:     /rhu/programaciones/pago/cargar/soporte/turno/{codigoProgramacionPago}
     defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPagoCargarSoporteTurno:cargar }
 
 brs_rhu_programaciones_pago_cargar_soporte_horario:
     path:     /rhu/programaciones/pago/cargar/soporte/horario/{codigoProgramacionPago}
-    defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPagoCargarSoporteHorario:cargar }
-
-brs_rhu_programaciones_pago_cargar_adicionales_pago:
-    path:     /rhu/programaciones/pago/cargar/adicionales/pago/{periodo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesCargarAdicionalesPago:cargar }
-    
-brs_rhu_utilidades_medios_magneticos_informe:
-    path:     /rhu/utilidades/mediosmagneticos/informe
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesMediosMagneticos:Informe }    
-        
-brs_rhu_utilidades_informacion_dane_informe:
-    path:     /rhu/utilidades/informaciondane/informe
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesInformacionDane:Informe }                                                        
+    defaults: { _controller: BrasaRecursoHumanoBundle:ProgramacionesPagoCargarSoporteHorario:cargar }                                                          
     
 brs_rhu_facturas_lista:
     path:     /rhu/facturas/lista
@@ -252,19 +180,7 @@ brs_rhu_examen_restriccion_medica_agregar:
     
 brs_rhu_examen_restriccion_medica_detalle:
     path:     /rhu/examen/restriccion/medica/detalle/{codigoRestriccionMedica}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Examen:detalleRestriccionMedica }                        
-
-brs_rhu_aspirante_lista:
-    path:     /rhu/aspirante/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:Aspirante:lista }         
-    
-brs_rhu_aspirante_nuevo:
-    path:     /rhu/aspirante/nuevo/{codigoAspirante}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Aspirante:nuevo }
-    
-brs_rhu_aspirante_historial:    
-    path:     /rhu/aspirante/historial/{codigoAspirante}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Aspirante:historial }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:Examen:detalleRestriccionMedica }                            
     
 brs_rhu_seleccion_lista:
     path:     /rhu/seleccion/lista
@@ -296,11 +212,7 @@ brs_rhu_seleccion_detalle:
     
 brs_rhu_seleccion_cerrar:
     path:     /rhu/seleccion/cerrar/{codigoSeleccion}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:cerrar }    
-    
-brs_rhu_aspirante_detalle:
-    path:     /rhu/aspirante/detalle/{codigoAspirante}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Aspirante:detalle }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:Seleccion:cerrar }            
     
 brs_rhu_seleccionrequisito_lista:
     path:     /rhu/seleccionrequisito/lista
@@ -360,11 +272,7 @@ brs_rhu_ss_periodo_detalle_empleados_trasladar:
     
 brs_rhu_ss_periodo_detalle_empleados_copiar:
     path:     /rhu/seguridadsocial/periodo/detalle/empleados/copiar/{codigoPeriodoDetalle}
-    defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:copiarEmpleados }           
-     
-brs_rhu_utilidades_proyeccion:    
-    path:     /rhu/utilidades/proyeccion
-    defaults: { _controller: BrasaRecursoHumanoBundle:UtilidadesProyeccion:lista }                
+    defaults: { _controller: BrasaRecursoHumanoBundle:SeguridadSocialPeriodos:copiarEmpleados }                                
     
 brs_rhu_pago_examen_lista:
     path:     /rhu/pago/examen/lista
@@ -412,31 +320,7 @@ brs_rhu_estudio_estado_invalido:
     
 brs_rhu_configuracion_nomina:
     path:     /rhu/configuracion/{codigoConfiguracionPk}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Configuracion:configuracion }    
-    
-brs_rhu_proceso_cierre_anio:
-    path:     /rhu/proceso/cierre/anio
-    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoCierreAnio:lista }        
-
-brs_rhu_proceso_cierre_anio_cerrar:
-    path:     /rhu/proceso/cierre/anio/cerrar/{codigoCierreAnio}
-    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoCierreAnio:cerrar }                  
-    
-brs_rhu_proceso_control_acceso_horario_periodo_listar:
-    path:     /rhu/proceso/control/acceso/periodo/horario/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoGenerarHorarioPeriodo:listar }
-    
-brs_rhu_proceso_control_acceso_horario_periodo_nuevo:
-    path:     /rhu/proceso/control/acceso/periodo/horario/nuevo/{codigoHorarioPeriodo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoGenerarHorarioPeriodo:nuevo }
-    
-brs_rhu_proceso_control_acceso_horario_periodo_generar:
-    path:     /rhu/proceso/control/acceso/periodo/horario/nuevo/{codigoHorarioPeriodo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoGenerarHorarioPeriodo:generar }
-    
-brs_rhu_proceso_control_acceso_horario_periodo_cerrar:
-    path:     /rhu/proceso/control/acceso/periodo/horario/nuevo/{codigoHorarioPeriodo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:ProcesoGenerarHorarioPeriodo:cerrar }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:Configuracion:configuracion }                                 
     
 brs_rhu_requisito_nuevo:
     path:     /rhu/requisito/nuevo/{codigoRequisito}
@@ -453,38 +337,8 @@ brs_rhu_requisito_detalle:
 brs_rhu_requisito_detalle_nuevo:
     path:     /rhu/requisito/detalle/nuevo/{codigoRequisito}
     defaults: { _controller: BrasaRecursoHumanoBundle:Requisitos:detalleNuevo }        
-
-brs_rhu_capacitacion_nuevo:
-    path:     /rhu/capacitacion/nuevo/{codigoCapacitacion}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Capacitaciones:nuevo }    
     
-brs_rhu_capacitacion_lista:
-    path:     /rhu/capacitacion/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:Capacitaciones:lista }
-
-brs_rhu_capacitacion_detalle:
-    path:     /rhu/capacitacion/detalle/{codigoCapacitacion}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Capacitaciones:detalle }    
     
-brs_rhu_capacitacion_detalle_nuevo:
-    path:     /rhu/capacitacion/detalle/nuevo/{codigoCapacitacion}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Capacitaciones:detalleNuevo }
-
-brs_rhu_capacitacion_detalle_nuevo_nota:
-    path:     /rhu/capacitacion/detalle/nuevo/nota/{codigoCapacitacion}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Capacitaciones:detalleNuevoNota }    
-    
-brs_rhu_capacitacion_detalle_nuevo_empleado:
-    path:     /rhu/capacitacion/detalle/nuevo/empleado/{codigoCapacitacion}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Capacitaciones:detalleNuevoEmpleado }
-    
-brs_rhu_control_acceso_empleado_lista:
-    path:     /rhu/control/acceso/empleado/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:ControlAccesoEmpleado:lista }
-    
-brs_rhu_control_acceso_empleado_nuevo:
-    path:     /rhu/control/acceso/empleado/nuevo/{codigoHorarioAcceso}
-    defaults: { _controller: BrasaRecursoHumanoBundle:ControlAccesoEmpleado:nuevo }    
     
 brs_rhu_buscar_empleado:
     pattern:  /rhu/buscar/empleado

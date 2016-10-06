@@ -1,16 +1,20 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Utilidad;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use ZipArchive;
 use Symfony\Component\HttpFoundation\Response;
 
-class UtilidadesCertificadoIngresoRetencionController extends Controller
+class CertificadoIngresoRetencionController extends Controller
 {
     var $strDqlLista = "";
     
+    /**
+     * @Route("/rhu/utilidades/certificado/ingreso/retencion", name="brs_rhu_utilidades_certificado_ingreso_retencion")
+     */
     public function CertificadoAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

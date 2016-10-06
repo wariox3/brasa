@@ -76,6 +76,9 @@ class HorarioAccesoController extends Controller
         'form' => $form->createView()));
     }
     
+    /**
+     * @Route("/rhu/utilidad/cargar/control/acceso/empleados", name="brs_rhu_utilidad_cargar_control_acceso_empleados")
+     */
     public function cargarAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

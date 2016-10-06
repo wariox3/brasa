@@ -1,16 +1,18 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuAspiranteType;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 
 class AspiranteController extends Controller
 {
+    /**
+     * @Route("/rhu/movimientos/aspirante/lista", name="brs_rhu_movimiento_aspirante_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -37,7 +39,7 @@ class AspiranteController extends Controller
                             $objMensaje->Mensaje("error", "No se puede eliminar esta aprobado o autorizado", $this);
                         }     
                     }
-                    return $this->redirect($this->generateUrl('brs_rhu_aspirante_lista'));
+                    return $this->redirect($this->generateUrl('brs_rhu_movimiento_aspirante_lista'));
                 }
             }
 
@@ -57,6 +59,9 @@ class AspiranteController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Aspirante:lista.html.twig', array('arAspirantes' => $arAspirantes, 'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/movimientos/aspirante/nuevo/{codigoAspirante}", name="brs_rhu_movimiento_aspirante_nuevo")
+     */
     public function nuevoAction($codigoAspirante) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -87,12 +92,12 @@ class AspiranteController extends Controller
             $em->persist($arAspirante);
             $em->flush();
             if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_rhu_aspirante_nuevo', array('codigoAspirante' => 0)));
+                return $this->redirect($this->generateUrl('brs_rhu_movimiento_aspirante_nuevo', array('codigoAspirante' => 0)));
             } else {
                 if ($codigoAspirante == 0){
-                    return $this->redirect($this->generateUrl('brs_rhu_aspirante_detalle', array('codigoAspirante' => $arAspirante->getCodigoAspirantePk())));
+                    return $this->redirect($this->generateUrl('brs_rhu_movimiento_aspirante_detalle', array('codigoAspirante' => $arAspirante->getCodigoAspirantePk())));
                 }else {
-                    return $this->redirect($this->generateUrl('brs_rhu_aspirante_lista'));
+                    return $this->redirect($this->generateUrl('brs_rhu_movimiento_aspirante_lista'));
                 }
             }
         }
@@ -173,7 +178,9 @@ class AspiranteController extends Controller
             'form' => $form->createView()));
     }
     
-    
+    /**
+     * @Route("/rhu/movimientos/aspirante/historial/{codigoAspirante}", name="brs_rhu_movimiento_aspirante_historial")
+     */
     public function historialAction($codigoAspirante) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -207,6 +214,9 @@ class AspiranteController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/movimientos/aspirante/detalle/{codigoAspirante}", name="brs_rhu_movimiento_aspirante_detalle")
+     */
     public function detalleAction($codigoAspirante) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -222,7 +232,7 @@ class AspiranteController extends Controller
                     $arAspirante->setEstadoAutorizado(1);
                     $em->persist($arAspirante);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_aspirante_detalle', array('codigoAspirante' => $codigoAspirante)));   
+                    return $this->redirect($this->generateUrl('brs_rhu_movimiento_aspirante_detalle', array('codigoAspirante' => $codigoAspirante)));   
                 }
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {
@@ -230,7 +240,7 @@ class AspiranteController extends Controller
                     $arAspirante->setEstadoAutorizado(0);
                     $em->persist($arAspirante);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_aspirante_detalle', array('codigoAspirante' => $codigoAspirante)));
+                    return $this->redirect($this->generateUrl('brs_rhu_movimiento_aspirante_detalle', array('codigoAspirante' => $codigoAspirante)));
                 }
             }
 
@@ -238,7 +248,7 @@ class AspiranteController extends Controller
                 if($arAspirante->getEstadoAutorizado() == 1) {
                     $strRespuesta = $em->getRepository('BrasaRecursoHumanoBundle:RhuAspirante')->estadoAprobadoAspirantes($codigoAspirante);
                     if ($strRespuesta == ''){
-                        return $this->redirect($this->generateUrl('brs_rhu_aspirante_detalle', array('codigoAspirante' => $codigoAspirante)));
+                        return $this->redirect($this->generateUrl('brs_rhu_movimiento_aspirante_detalle', array('codigoAspirante' => $codigoAspirante)));
                     }else{
                         $objMensaje->Mensaje('error', $strRespuesta, $this);
                     }

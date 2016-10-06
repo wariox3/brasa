@@ -1,8 +1,9 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuAccidenteTrabajoType;
 use Doctrine\ORM\EntityRepository;
 
@@ -11,6 +12,9 @@ class AccidenteTrabajoController extends Controller
 {
     var $strSqlLista = "";
     
+    /**
+     * @Route("/rhu/movimiento/accidente/trabajo/lista", name="brs_rhu_movimiento_accidente_trabajo_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -37,7 +41,7 @@ class AccidenteTrabajoController extends Controller
                             $em->flush();
                         }
                     }
-                    return $this->redirect($this->generateUrl('brs_rhu_accidente_trabajo_lista'));
+                    return $this->redirect($this->generateUrl('brs_rhu_movimiento_accidente_trabajo_lista'));
                 }
                 $this->filtrarLista($form);
                 $this->listar();
@@ -51,10 +55,10 @@ class AccidenteTrabajoController extends Controller
                             $arAccidentesTrabajo->setEstadoAccidente(1);
                             $em->persist($arAccidentesTrabajo);
                             $em->flush();
-                            return $this->redirect($this->generateUrl('brs_rhu_accidente_trabajo_lista'));
+                            return $this->redirect($this->generateUrl('brs_rhu_movimiento_accidente_trabajo_lista'));
                         }
                         else {
-                            return $this->redirect($this->generateUrl('brs_rhu_accidente_trabajo_lista'));
+                            return $this->redirect($this->generateUrl('brs_rhu_movimiento_accidente_trabajo_lista'));
                         }
                     }
                 }
@@ -85,6 +89,62 @@ class AccidenteTrabajoController extends Controller
             ));
     }
 
+    /**
+     * @Route("/rhu/movimiento/accidente/trabajo/nuevo/{codigoAccidenteTrabajo}", name="brs_rhu_movimiento_accidente_trabajo_nuevo")
+     */
+    public function nuevoAction($codigoAccidenteTrabajo = 0) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arAccidenteTrabajo = new \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo();    
+        if($codigoAccidenteTrabajo != 0) {
+            $arAccidenteTrabajo = $em->getRepository('BrasaRecursoHumanoBundle:RhuAccidenteTrabajo')->find($codigoAccidenteTrabajo);
+        } 
+        $form = $this->createForm(new RhuAccidenteTrabajoType, $arAccidenteTrabajo);         
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
+            $arrControles = $request->request->All();
+            $arAccidenteTrabajo = $form->getData();
+            if($arrControles['form_txtNumeroIdentificacion'] != '') {
+                $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));
+                $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+                $arEntidadRiesgo = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
+                $arEntidadRiesgo = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($arConfiguracion->getCodigoEntidadRiesgoFk());
+                if(count($arEmpleado) > 0) {
+                    $arAccidenteTrabajo->setEmpleadoRel($arEmpleado);
+                    if($arEmpleado->getCodigoContratoActivoFk() != '') {                        
+                        $arAccidenteTrabajo->setCentroCostoRel($arEmpleado->getCentroCostoRel());
+                        $arAccidenteTrabajo->setEntidadRiesgoProfesionalRel(($arEntidadRiesgo));
+                        if($codigoAccidenteTrabajo == 0) {
+                            $arAccidenteTrabajo->setCodigoUsuario($arUsuario->getUserName());
+                        }
+                        $em->persist($arAccidenteTrabajo);
+                        $em->flush();
+                        if($form->get('guardarnuevo')->isClicked()) {
+                            return $this->redirect($this->generateUrl('brs_rhu_movimiento_accidente_trabajo_nuevo', array('codigoAccidenteTrabajo' => 0 )));
+                        } else {
+                            return $this->redirect($this->generateUrl('brs_rhu_movimiento_accidente_trabajo_lista'));
+                        }                        
+                    } else {
+                        $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
+                    }                    
+                } else {
+                    $objMensaje->Mensaje("error", "El empleado no existe", $this);
+                }                
+            }
+        }
+
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/AccidentesTrabajo:nuevo.html.twig', array(
+            'arAccidenteTrabajo' => $arAccidenteTrabajo,
+            'form' => $form->createView()));
+    }
+    
+    /**
+     * @Route("/rhu/movimiento/accidente/trabajo/detalle/{codigoAccidenteTrabajo}", name="brs_rhu_movimiento_accidente_trabajo_detalle")
+     */
     public function detalleAction($codigoAccidenteTrabajo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -167,57 +227,7 @@ class AccidenteTrabajoController extends Controller
             $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
         }
     }
-
-    public function nuevoAction($codigoAccidenteTrabajo = 0) {
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();
-        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $arAccidenteTrabajo = new \Brasa\RecursoHumanoBundle\Entity\RhuAccidenteTrabajo();    
-        if($codigoAccidenteTrabajo != 0) {
-            $arAccidenteTrabajo = $em->getRepository('BrasaRecursoHumanoBundle:RhuAccidenteTrabajo')->find($codigoAccidenteTrabajo);
-        } 
-        $form = $this->createForm(new RhuAccidenteTrabajoType, $arAccidenteTrabajo);         
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $arUsuario = $this->get('security.context')->getToken()->getUser();
-            $arrControles = $request->request->All();
-            $arAccidenteTrabajo = $form->getData();
-            if($arrControles['form_txtNumeroIdentificacion'] != '') {
-                $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));
-                $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
-                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
-                $arEntidadRiesgo = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
-                $arEntidadRiesgo = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($arConfiguracion->getCodigoEntidadRiesgoFk());
-                if(count($arEmpleado) > 0) {
-                    $arAccidenteTrabajo->setEmpleadoRel($arEmpleado);
-                    if($arEmpleado->getCodigoContratoActivoFk() != '') {                        
-                        $arAccidenteTrabajo->setCentroCostoRel($arEmpleado->getCentroCostoRel());
-                        $arAccidenteTrabajo->setEntidadRiesgoProfesionalRel(($arEntidadRiesgo));
-                        if($codigoAccidenteTrabajo == 0) {
-                            $arAccidenteTrabajo->setCodigoUsuario($arUsuario->getUserName());
-                        }
-                        $em->persist($arAccidenteTrabajo);
-                        $em->flush();
-                        if($form->get('guardarnuevo')->isClicked()) {
-                            return $this->redirect($this->generateUrl('brs_rhu_accidente_trabajo_nuevo', array('codigoAccidenteTrabajo' => 0 )));
-                        } else {
-                            return $this->redirect($this->generateUrl('brs_rhu_accidente_trabajo_lista'));
-                        }                        
-                    } else {
-                        $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
-                    }                    
-                } else {
-                    $objMensaje->Mensaje("error", "El empleado no existe", $this);
-                }                
-            }
-        }
-
-        return $this->render('BrasaRecursoHumanoBundle:Movimientos/AccidentesTrabajo:nuevo.html.twig', array(
-            'arAccidenteTrabajo' => $arAccidenteTrabajo,
-            'form' => $form->createView()));
-    }
-
+    
     private function generarExcel() {
         ob_clean();
         $em = $this->getDoctrine()->getManager();        

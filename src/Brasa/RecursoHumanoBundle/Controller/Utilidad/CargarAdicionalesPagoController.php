@@ -1,11 +1,15 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Utilidad;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
-class UtilidadesCargarAdicionalesPagoController extends Controller
+class CargarAdicionalesPagoController extends Controller
 {
+    /**
+     * @Route("/rhu/programaciones/pago/cargar/adicionales/pago/{periodo}", name="brs_rhu_programaciones_pago_cargar_adicionales_pago")
+     */
     public function cargarAction($periodo) {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();

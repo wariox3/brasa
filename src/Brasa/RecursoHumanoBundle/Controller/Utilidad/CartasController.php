@@ -1,14 +1,18 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Utilidad;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCartaType;
 
 
-class UtilidadesCartasController extends Controller
+class CartasController extends Controller
 {
+    /**
+     * @Route("/rhu/utilidades/cartas/generar", name="brs_rhu_utilidades_cartas_generar")
+     */
     public function generarAction() {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();

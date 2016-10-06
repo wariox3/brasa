@@ -1,14 +1,19 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Utilidad;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 
-class UtilidadesCartaLaboralController extends Controller
+class CartaLaboralController extends Controller
 {
     var $strDqlLista = "";
+    
+    /**
+     * @Route("/rhu/utilidades/carta/laboral", name="brs_rhu_utilidades_carta_laboral")
+     */
     public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 83)) {

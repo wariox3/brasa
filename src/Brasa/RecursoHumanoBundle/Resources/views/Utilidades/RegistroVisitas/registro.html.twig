@@ -83,7 +83,7 @@
                 <td>{{ arRegistroVisitas.motivo  }}</td>
                 <td>{{ arRegistroVisitas.codigoEscarapela  }}</td>
                 <td>{{ arRegistroVisitas.comentarios  }}</td>
-                <td style="text-align: center"><a id="{{ path('brs_rhu_salida_control_acceso_visitantes',{'codigoRegistroVisita': arRegistroVisitas.codigoRegistroVisitaPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_192_circle_remove.png') }}" width=20 height=20 title="salida visitante"></a></td>                                
+                <td style="text-align: center"><a id="{{ path('brs_rhu_utilidades_salida_control_acceso_visitantes',{'codigoRegistroVisita': arRegistroVisitas.codigoRegistroVisitaPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_192_circle_remove.png') }}" width=20 height=20 title="salida visitante"></a></td>                                
             </tr>
             {% set contador = contador + 1  %}
             {% endfor %}                        
