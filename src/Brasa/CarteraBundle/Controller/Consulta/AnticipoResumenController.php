@@ -41,7 +41,7 @@ class AnticipoResumenController extends Controller
             
             gen_cuenta.nombre AS cuenta, 
             COUNT(car_anticipo.codigo_anticipo_pk) AS numeroAnticipos, 
-            SUM(car_anticipo.vr_total_pago) AS vrTotalPago
+            SUM(car_anticipo.vr_total) AS vrTotalPago
             FROM car_anticipo  
             
             LEFT JOIN gen_cuenta ON car_anticipo.codigo_cuenta_fk = gen_cuenta.codigo_cuenta_pk 

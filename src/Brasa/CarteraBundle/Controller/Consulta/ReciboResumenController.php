@@ -41,7 +41,7 @@ class ReciboResumenController extends Controller
             car_recibo_tipo.nombre AS tipo, 
             gen_cuenta.nombre AS cuenta, 
             COUNT(car_recibo.codigo_recibo_pk) AS numeroRecibos, 
-            SUM(car_recibo.vr_total_pago) AS vrTotalPago
+            SUM(car_recibo.vr_total) AS vrTotalPago
             FROM car_recibo  
             LEFT JOIN car_recibo_tipo ON car_recibo.codigo_recibo_tipo_fk = car_recibo_tipo.codigo_recibo_tipo_pk 
             LEFT JOIN gen_cuenta ON car_recibo.codigo_cuenta_fk = gen_cuenta.codigo_cuenta_pk 
