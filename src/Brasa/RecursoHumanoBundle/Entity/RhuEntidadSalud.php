@@ -83,6 +83,11 @@ class RhuEntidadSalud
     protected $afiContratosEntidadSaludRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="RhuSsoAporte", mappedBy="entidadSaludRel")
+     */
+    protected $ssoAportesEntidadSaludRel;    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -497,5 +502,39 @@ class RhuEntidadSalud
     public function getAfiContratosEntidadSaludRel()
     {
         return $this->afiContratosEntidadSaludRel;
+    }
+
+    /**
+     * Add ssoAportesEntidadSaludRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEntidadSaludRel
+     *
+     * @return RhuEntidadSalud
+     */
+    public function addSsoAportesEntidadSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEntidadSaludRel)
+    {
+        $this->ssoAportesEntidadSaludRel[] = $ssoAportesEntidadSaludRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove ssoAportesEntidadSaludRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEntidadSaludRel
+     */
+    public function removeSsoAportesEntidadSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEntidadSaludRel)
+    {
+        $this->ssoAportesEntidadSaludRel->removeElement($ssoAportesEntidadSaludRel);
+    }
+
+    /**
+     * Get ssoAportesEntidadSaludRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSsoAportesEntidadSaludRel()
+    {
+        return $this->ssoAportesEntidadSaludRel;
     }
 }

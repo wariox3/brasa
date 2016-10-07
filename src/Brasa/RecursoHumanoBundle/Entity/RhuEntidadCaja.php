@@ -62,6 +62,10 @@ class RhuEntidadCaja
      */
     protected $afiContratosEntidadCajaRel;    
     
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSsoAporte", mappedBy="entidadCajaRel")
+     */
+    protected $ssoAportesEntidadCajaRel;    
 
     /**
      * Constructor
@@ -338,5 +342,39 @@ class RhuEntidadCaja
     public function getAfiContratosEntidadCajaRel()
     {
         return $this->afiContratosEntidadCajaRel;
+    }
+
+    /**
+     * Add ssoAportesEntidadCajaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEntidadCajaRel
+     *
+     * @return RhuEntidadCaja
+     */
+    public function addSsoAportesEntidadCajaRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEntidadCajaRel)
+    {
+        $this->ssoAportesEntidadCajaRel[] = $ssoAportesEntidadCajaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove ssoAportesEntidadCajaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEntidadCajaRel
+     */
+    public function removeSsoAportesEntidadCajaRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEntidadCajaRel)
+    {
+        $this->ssoAportesEntidadCajaRel->removeElement($ssoAportesEntidadCajaRel);
+    }
+
+    /**
+     * Get ssoAportesEntidadCajaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSsoAportesEntidadCajaRel()
+    {
+        return $this->ssoAportesEntidadCajaRel;
     }
 }

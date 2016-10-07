@@ -487,11 +487,31 @@ class RhuSsoAporte
      * @ORM\Column(name="clase_riesgo_afiliado", type="string", length=20, nullable=true)
      */    
     private $claseRiesgoAfiliado;
-    
+        
     /**
      * @ORM\Column(name="total_cotizacion", type="float")
      */
     private $totalCotizacion;        
+    
+    /**
+     * @ORM\Column(name="codigo_entidad_pension_fk", type="integer", nullable=true)
+     */    
+    private $codigoEntidadPensionFk;     
+    
+    /**
+     * @ORM\Column(name="codigo_entidad_salud_fk", type="integer", nullable=true)
+     */    
+    private $codigoEntidadSaludFk;       
+    
+     /**
+     * @ORM\Column(name="codigo_entidad_riesgo_fk", type="integer", nullable=true)
+     */    
+    private $codigoEntidadRiesgoFk;    
+    
+     /**
+     * @ORM\Column(name="codigo_entidad_caja_fk", type="integer", nullable=true)
+     */    
+    private $codigoEntidadCajaFk;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="ssoAportesSsoPeriodoRel")
@@ -529,11 +549,43 @@ class RhuSsoAporte
      */
     protected $cargoRel;     
     
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEntidadPension", inversedBy="ssoAportesEntidadPensionRel")
+     * @ORM\JoinColumn(name="codigo_entidad_pension_fk", referencedColumnName="codigo_entidad_pension_pk")
+     */
+    protected $entidadPensionRel;     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEntidadSalud", inversedBy="ssoAportesEntidadSaludRel")
+     * @ORM\JoinColumn(name="codigo_entidad_salud_fk", referencedColumnName="codigo_entidad_salud_pk")
+     */
+    protected $entidadSaludRel;       
    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="ssoAportesEntidadRiesgoProfesionalRel")
+     * @ORM\JoinColumn(name="codigo_entidad_riesgo_fk", referencedColumnName="codigo_entidad_riesgo_pk")
+     */
+    protected $entidadRiesgoProfesionalRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuEntidadCaja", inversedBy="ssoAportesEntidadCajaRel")
+     * @ORM\JoinColumn(name="codigo_entidad_caja_fk", referencedColumnName="codigo_entidad_caja_pk")
+     */
+    protected $entidadCajaRel;    
+    
     /**
      * @ORM\OneToMany(targetEntity="RhuPagoBancoDetalle", mappedBy="ssoAporteRel")
      */
     protected $pagosBancosDetallesSsoAporteRel; 
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->pagosBancosDetallesSsoAporteRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoAportePk
@@ -2826,6 +2878,102 @@ class RhuSsoAporte
     }
 
     /**
+     * Set codigoEntidadPensionFk
+     *
+     * @param integer $codigoEntidadPensionFk
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoEntidadPensionFk($codigoEntidadPensionFk)
+    {
+        $this->codigoEntidadPensionFk = $codigoEntidadPensionFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadPensionFk
+     *
+     * @return integer
+     */
+    public function getCodigoEntidadPensionFk()
+    {
+        return $this->codigoEntidadPensionFk;
+    }
+
+    /**
+     * Set codigoEntidadSaludFk
+     *
+     * @param integer $codigoEntidadSaludFk
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoEntidadSaludFk($codigoEntidadSaludFk)
+    {
+        $this->codigoEntidadSaludFk = $codigoEntidadSaludFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadSaludFk
+     *
+     * @return integer
+     */
+    public function getCodigoEntidadSaludFk()
+    {
+        return $this->codigoEntidadSaludFk;
+    }
+
+    /**
+     * Set codigoEntidadRiesgoFk
+     *
+     * @param integer $codigoEntidadRiesgoFk
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoEntidadRiesgoFk($codigoEntidadRiesgoFk)
+    {
+        $this->codigoEntidadRiesgoFk = $codigoEntidadRiesgoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadRiesgoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEntidadRiesgoFk()
+    {
+        return $this->codigoEntidadRiesgoFk;
+    }
+
+    /**
+     * Set codigoEntidadCajaFk
+     *
+     * @param integer $codigoEntidadCajaFk
+     *
+     * @return RhuSsoAporte
+     */
+    public function setCodigoEntidadCajaFk($codigoEntidadCajaFk)
+    {
+        $this->codigoEntidadCajaFk = $codigoEntidadCajaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadCajaFk
+     *
+     * @return integer
+     */
+    public function getCodigoEntidadCajaFk()
+    {
+        return $this->codigoEntidadCajaFk;
+    }
+
+    /**
      * Set ssoPeriodoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo $ssoPeriodoRel
@@ -2968,12 +3116,101 @@ class RhuSsoAporte
     {
         return $this->cargoRel;
     }
+
     /**
-     * Constructor
+     * Set entidadPensionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension $entidadPensionRel
+     *
+     * @return RhuSsoAporte
      */
-    public function __construct()
+    public function setEntidadPensionRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension $entidadPensionRel = null)
     {
-        $this->pagosBancosDetallesSsoAporteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->entidadPensionRel = $entidadPensionRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadPensionRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension
+     */
+    public function getEntidadPensionRel()
+    {
+        return $this->entidadPensionRel;
+    }
+
+    /**
+     * Set entidadSaludRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud $entidadSaludRel
+     *
+     * @return RhuSsoAporte
+     */
+    public function setEntidadSaludRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud $entidadSaludRel = null)
+    {
+        $this->entidadSaludRel = $entidadSaludRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadSaludRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud
+     */
+    public function getEntidadSaludRel()
+    {
+        return $this->entidadSaludRel;
+    }
+
+    /**
+     * Set entidadRiesgoProfesionalRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel
+     *
+     * @return RhuSsoAporte
+     */
+    public function setEntidadRiesgoProfesionalRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel = null)
+    {
+        $this->entidadRiesgoProfesionalRel = $entidadRiesgoProfesionalRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadRiesgoProfesionalRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional
+     */
+    public function getEntidadRiesgoProfesionalRel()
+    {
+        return $this->entidadRiesgoProfesionalRel;
+    }
+
+    /**
+     * Set entidadCajaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja $entidadCajaRel
+     *
+     * @return RhuSsoAporte
+     */
+    public function setEntidadCajaRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja $entidadCajaRel = null)
+    {
+        $this->entidadCajaRel = $entidadCajaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadCajaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja
+     */
+    public function getEntidadCajaRel()
+    {
+        return $this->entidadCajaRel;
     }
 
     /**

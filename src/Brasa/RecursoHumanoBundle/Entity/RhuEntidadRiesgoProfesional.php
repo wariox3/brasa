@@ -50,9 +50,13 @@ class RhuEntidadRiesgoProfesional
     /**
      * @ORM\OneToMany(targetEntity="RhuAccidenteTrabajo", mappedBy="entidadRiesgoProfesionalRel")
      */
-    protected $accidentesTrabajoEntidadRiesgoRel;
+    protected $accidentesTrabajoEntidadRiesgoRel;   
    
-   
+    /**
+     * @ORM\OneToMany(targetEntity="RhuSsoAporte", mappedBy="entidadRiesgoProfesionalRel")
+     */
+    protected $ssoAportesEntidadRiesgoProfesionalRel;     
+    
     /**
      * Constructor
      */
@@ -258,5 +262,39 @@ class RhuEntidadRiesgoProfesional
     public function getAccidentesTrabajoEntidadRiesgoRel()
     {
         return $this->accidentesTrabajoEntidadRiesgoRel;
+    }
+
+    /**
+     * Add ssoAportesEntidadRiesgoProfesionalRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEntidadRiesgoProfesionalRel
+     *
+     * @return RhuEntidadRiesgoProfesional
+     */
+    public function addSsoAportesEntidadRiesgoProfesionalRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEntidadRiesgoProfesionalRel)
+    {
+        $this->ssoAportesEntidadRiesgoProfesionalRel[] = $ssoAportesEntidadRiesgoProfesionalRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove ssoAportesEntidadRiesgoProfesionalRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEntidadRiesgoProfesionalRel
+     */
+    public function removeSsoAportesEntidadRiesgoProfesionalRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEntidadRiesgoProfesionalRel)
+    {
+        $this->ssoAportesEntidadRiesgoProfesionalRel->removeElement($ssoAportesEntidadRiesgoProfesionalRel);
+    }
+
+    /**
+     * Get ssoAportesEntidadRiesgoProfesionalRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSsoAportesEntidadRiesgoProfesionalRel()
+    {
+        return $this->ssoAportesEntidadRiesgoProfesionalRel;
     }
 }

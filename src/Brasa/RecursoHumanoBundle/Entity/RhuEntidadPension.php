@@ -68,6 +68,11 @@ class RhuEntidadPension
     protected $afiContratosEntidadPensionRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="RhuSsoAporte", mappedBy="entidadPensionRel")
+     */
+    protected $ssoAportesEntidadPensionRel;    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -377,5 +382,39 @@ class RhuEntidadPension
     public function getAfiContratosEntidadPensionRel()
     {
         return $this->afiContratosEntidadPensionRel;
+    }
+
+    /**
+     * Add ssoAportesEntidadPensionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEntidadPensionRel
+     *
+     * @return RhuEntidadPension
+     */
+    public function addSsoAportesEntidadPensionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEntidadPensionRel)
+    {
+        $this->ssoAportesEntidadPensionRel[] = $ssoAportesEntidadPensionRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove ssoAportesEntidadPensionRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEntidadPensionRel
+     */
+    public function removeSsoAportesEntidadPensionRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAportesEntidadPensionRel)
+    {
+        $this->ssoAportesEntidadPensionRel->removeElement($ssoAportesEntidadPensionRel);
+    }
+
+    /**
+     * Get ssoAportesEntidadPensionRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSsoAportesEntidadPensionRel()
+    {
+        return $this->ssoAportesEntidadPensionRel;
     }
 }

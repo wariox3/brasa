@@ -122,8 +122,11 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $arAporte->setSalarioBasico($floSalario);                                                                
                 $arAporte->setCodigoEntidadPensionPertenece($arPeriodoEmpleado->getCodigoEntidadPensionPertenece());
                 $arAporte->setCodigoEntidadSaludPertenece($arPeriodoEmpleado->getCodigoEntidadSaludPertenece());
-                $arAporte->setCodigoEntidadCajaPertenece($arPeriodoEmpleado->getCodigoEntidadCajaPertenece());
-
+                $arAporte->setCodigoEntidadCajaPertenece($arPeriodoEmpleado->getCodigoEntidadCajaPertenece());                
+                $arAporte->setEntidadPensionRel($arContrato->getEntidadPensionRel());
+                $arAporte->setEntidadSaludRel($arContrato->getEntidadSaludRel());
+                $arAporte->setEntidadCajaRel($arContrato->getEntidadCajaRel());
+                
                 //Dias
                 $intDiasLicenciaNoRemunerada = $arPeriodoEmpleado->getDiasLicencia();
                 //Para no generar la doblelinea
