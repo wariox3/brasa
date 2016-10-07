@@ -4,6 +4,7 @@ namespace Brasa\RecursoHumanoBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -12,11 +13,14 @@ use Doctrine\ORM\EntityRepository;
  */
 class ConfiguracionController extends Controller
 {
+    /**
+     * @Route("/rhu/configuracion/{codigoConfiguracionPk}", name="brs_rhu_configuracion_nomina")
+     */
     public function configuracionAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 92)) {
-            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));
         }
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
@@ -129,7 +133,7 @@ class ConfiguracionController extends Controller
             'property' => 'nombre',
             'required' => false);
         $arrayPropiedadesConceptoVacacion['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $arConfiguracion->getCodigoVacacion());
-        
+
         $formConfiguracion = $this->createFormBuilder()
             ->add('conceptoAuxilioTransporte', 'entity', $arrayPropiedadesConceptoAuxilioTransporte)
             ->add('vrAuxilioTransporte', 'number', array('data' => $arConfiguracion->getVrAuxilioTransporte(), 'required' => true))
@@ -154,11 +158,11 @@ class ConfiguracionController extends Controller
             ->add('prestacionesPorcentajePrimas', 'number', array('data' => $arConfiguracion->getPrestacionesPorcentajePrimas(), 'required' => true))
             ->add('aportesPorcentajeCaja', 'number', array('data' => $arConfiguracion->getAportesPorcentajeCaja(), 'required' => true))
             ->add('aportesPorcentajeVacaciones', 'number', array('data' => $arConfiguracion->getAportesPorcentajeVacaciones(), 'required' => true))
-            ->add('tipoBasePagoVacaciones', 'choice', array('choices' => array('1' => 'SALARIO', '2' => 'SALARIO PRESTACIONAL', '3' => 'SALARIO+RECARGOS NOCTURNOS', '0' => 'SIN ASIGNAR'), 'data' => $arConfiguracion->getTipoBasePagoVacaciones()))                
+            ->add('tipoBasePagoVacaciones', 'choice', array('choices' => array('1' => 'SALARIO', '2' => 'SALARIO PRESTACIONAL', '3' => 'SALARIO+RECARGOS NOCTURNOS', '0' => 'SIN ASIGNAR'), 'data' => $arConfiguracion->getTipoBasePagoVacaciones()))
             ->add('cuentaNominaPagar', 'number', array('data' => $arConfiguracion->getCuentaNominaPagar(), 'required' => true))
             ->add('cuentaPago', 'number', array('data' => $arConfiguracion->getCuentaPago(), 'required' => true))
             ->add('conceptoVacacion', 'entity', $arrayPropiedadesConceptoVacacion, array('required' => true))
-            ->add('afectaVacacionesParafiscales', 'checkbox', array('data' => $arConfiguracion->getAfectaVacacionesParafiscales(), 'required' => false))    
+            ->add('afectaVacacionesParafiscales', 'checkbox', array('data' => $arConfiguracion->getAfectaVacacionesParafiscales(), 'required' => false))
             ->add('guardar', 'submit', array('label' => 'Actualizar'))
             //->add('guardarProvision', 'submit', array('label' => 'Actualizar'))
             ->getForm();
@@ -223,7 +227,7 @@ class ConfiguracionController extends Controller
                         }
                         $intIndiceConsecutivo++;
                     }
-                    
+
                     //provision
             $intCodigoProvision = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {
@@ -243,25 +247,25 @@ class ConfiguracionController extends Controller
                         $intCodigoProvision++;
                     }
                     //fin provision
-                    
+
             $arCuentaNominaPagar = new \Brasa\ContabilidadBundle\Entity\CtbCuenta();
-            $arCuentaNominaPagar = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuentaNominaPagar);        
+            $arCuentaNominaPagar = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuentaNominaPagar);
             if ($arCuentaNominaPagar == null){
                 $objMensaje->Mensaje("error", "La cuenta de contabilidad nomina por pagar " .$cuentaNominaPagar. " no existe", $this);
             } else {
                 $arConfiguracion->setCuentaNominaPagar($cuentaNominaPagar);
             }
             $arCuentaPagos = new \Brasa\ContabilidadBundle\Entity\CtbCuenta();
-            $arCuentaPagos = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuentaPago);        
+            $arCuentaPagos = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuentaPago);
             if ($arCuentaPagos == null){
                 $objMensaje->Mensaje("error", "La cuenta de contabilidad pagos " .$cuentaPago. " no existe", $this);
             } else {
-                $arConfiguracion->setCuentaPago($cuentaPago);   
+                $arConfiguracion->setCuentaPago($cuentaPago);
             }
         $em->persist($arConfiguracion);
-        $em->flush();    
-        return $this->redirect($this->generateUrl('brs_rhu_configuracion_nomina', array('codigoConfiguracionPk' => 1)));                            
-            
+        $em->flush();
+        return $this->redirect($this->generateUrl('brs_rhu_configuracion_nomina', array('codigoConfiguracionPk' => 1)));
+
         }
         return $this->render('BrasaRecursoHumanoBundle:Configuracion:Configuracion.html.twig', array(
             'formConfiguracion' => $formConfiguracion->createView(),

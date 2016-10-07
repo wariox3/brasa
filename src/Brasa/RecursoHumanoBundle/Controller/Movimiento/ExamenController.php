@@ -1,6 +1,8 @@
 <?php
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuExamenType;
@@ -13,6 +15,9 @@ class ExamenController extends Controller
 {
     var $strListaDql = "";
 
+    /**
+     * @Route("/rhu/examen/listar", name="brs_rhu_examen_listar")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -43,6 +48,9 @@ class ExamenController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Examen:lista.html.twig', array('arExamenes' => $arExamenes, 'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/examen/nuevo/{codigoExamen}", name="brs_rhu_examen_nuevo")
+     */
     public function nuevoAction($codigoExamen) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -106,6 +114,9 @@ class ExamenController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/examen/nuevo/control/{codigoExamen}", name="brs_rhu_examen_nuevo_control")
+     */
     public function nuevoControlAction($codigoExamen) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -153,6 +164,9 @@ class ExamenController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/examen/detalle/{codigoExamen}", name="brs_rhu_examen_detalle")
+     */
     public function detalleAction($codigoExamen) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -278,6 +292,9 @@ class ExamenController extends Controller
                     ));
     }
 
+    /**
+     * @Route("/rhu/examen/detalle/nuevo/{codigoExamen}", name="brs_rhu_examen_detalle_nuevo")
+     */
     public function detalleNuevoAction($codigoExamen) {
         $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
@@ -323,6 +340,9 @@ class ExamenController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/examen/detalle/nuevo/comentario/{codigoExamenDetalle}", name="brs_rhu_examen_detalle_nuevo_comentario")
+     */
     public function detalleNuevoComentarioAction($codigoExamenDetalle) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -340,6 +360,9 @@ class ExamenController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/examen/restriccion/medica/agregar/{codigoExamen}/{codigoRestriccionMedica}", name="brs_rhu_examen_restriccion_medica_agregar")
+     */
     public function agregarRestriccionMedicaAction($codigoExamen,$codigoRestriccionMedica) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -391,6 +414,9 @@ class ExamenController extends Controller
             ));
     }
 
+    /**
+     * @Route("/rhu/examen/restriccion/medica/editar/{codigoExamen}/{codigoRestriccionMedica}", name="brs_rhu_examen_restriccion_medica_editar")
+     */
     public function editarRestriccionMedicaAction($codigoExamen,$codigoRestriccionMedica) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -461,6 +487,9 @@ class ExamenController extends Controller
             ));
     }
 
+    /**
+     * @Route("/rhu/examen/restriccion/medica/detalle/{codigoRestriccionMedica}", name="brs_rhu_examen_restriccion_medica_detalle")
+     */
     public function detalleRestriccionMedicaAction($codigoRestriccionMedica) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

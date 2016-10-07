@@ -1,14 +1,18 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Buscar;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
 class BuscarEmpleadoController extends Controller
 {
     var $strDqlLista = "";        
     
+     /**
+     * @Route("/rhu/buscar/empleado", name="brs_rhu_buscar_empleado")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

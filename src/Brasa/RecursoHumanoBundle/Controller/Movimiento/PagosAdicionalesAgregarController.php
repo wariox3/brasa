@@ -1,11 +1,16 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
 class PagosAdicionalesAgregarController extends Controller
-{              
+{
+    /**
+     * @Route("/rhu/pagos/adicionales/agregar/valoradicional/{tipo}/{modalidad}/{periodo}", name="brs_rhu_pagos_adicionales_agregar_valoradicional")
+     */
     public function valorAdicionalAction($tipo, $modalidad, $periodo) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -139,6 +144,9 @@ class PagosAdicionalesAgregarController extends Controller
             ));
     }
     
+    /**
+     * @Route("/rhu/pagos/adicionales/agregar/valoradicionaleditar/{tipo}/{codigoPagoAdicional}/{modalidad}/{periodo}", name="brs_rhu_pagos_adicionales_agregar_valoradicionaleditar")
+     */
     public function valorAdicionalEditarAction($tipo, $codigoPagoAdicional, $modalidad, $periodo) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();

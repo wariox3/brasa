@@ -1,6 +1,6 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -17,6 +17,9 @@ class PagosAdicionalesController extends Controller
     var $identificacion = "";
     var $aplicarDiaLaborado = 2;
     
+    /**
+     * @Route("/rhu/pagos/adicionales/lista/{modalidad}/{periodo}", name="brs_rhu_pagos_adicionales_lista")
+     */
     public function listaAction($modalidad, $periodo) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -91,6 +94,9 @@ class PagosAdicionalesController extends Controller
                     ));
     }
     
+    /**
+     * @Route("/rhu/pagos/adicionales/fecha/lista/{modalidad}", name="brs_rhu_pagos_adicionales_lista_fecha")
+     */
     public function listaFechaAction($modalidad) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -320,6 +326,9 @@ class PagosAdicionalesController extends Controller
         $session->set('filtroPagoAdicionalEstadoInactivo', $form->get('estadoInactivo')->getData());
     }
 
+    /**
+     * @Route("/rhu/pagos/adicionales/detalle/{codigoProgramacionPago}", name="brs_rhu_pagos_adicionales_detalle")
+     */ 
     public function detalleAction($codigoProgramacionPago) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -389,6 +398,9 @@ class PagosAdicionalesController extends Controller
                     ));
     }
 
+    /**
+     * @Route("/rhu/pagos/adicionales/generarmasivo/lista", name="brs_rhu_pagos_adicionales_generarmasivo_lista")
+     */
     public function generarMasivoListaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -408,6 +420,9 @@ class PagosAdicionalesController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/pagos/adicionales/generarmasivo/suplementario/detalle/{codigoProgramacionPago}", name="brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle")
+     */
     public function generarMasivoSuplementarioDetalleAction($codigoProgramacionPago) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -544,6 +559,7 @@ class PagosAdicionalesController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoDepartamentoEmpresa', $controles['departamentoEmpresaRel']);
     }
+    
     
     public function generarMasivoValorDetalleAction($codigoCentroCosto) {
         $em = $this->getDoctrine()->getManager();

@@ -1,6 +1,6 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -12,6 +12,10 @@ class ProgramacionesPagoController extends Controller
 {
     var $strDqlLista = "";
     var $intNumero = 0;
+    
+    /**
+     * @Route("/rhu/programaciones/pago/lista", name="brs_rhu_programaciones_pago_lista")
+     */
     public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 1, 1)) {
@@ -94,6 +98,9 @@ class ProgramacionesPagoController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/programaciones/pago/nuevo", name="brs_rhu_programaciones_pago_nuevo")
+     */
     public function nuevoAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
@@ -117,6 +124,9 @@ class ProgramacionesPagoController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/programaciones/pago/detalle/{codigoProgramacionPago}", name="brs_rhu_programaciones_pago_detalle")
+     */
     public function detalleAction($codigoProgramacionPago, Request $request) {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = $this->get('mensajes_brasa');
@@ -236,6 +246,9 @@ class ProgramacionesPagoController extends Controller
                     ));
     }
 
+    /**
+     * @Route("/rhu/programaciones/pago/detalle/prima/{codigoProgramacionPago}", name="brs_rhu_programaciones_pago_detalle_prima")
+     */
     public function detallePrimaAction($codigoProgramacionPago, Request $request) {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = $this->get('mensajes_brasa');
@@ -272,6 +285,9 @@ class ProgramacionesPagoController extends Controller
                     ));
     }
 
+    /**
+     * @Route("/rhu/programaciones/pago/agregar/empleado/{codigoProgramacionPago}", name="brs_rhu_programaciones_pago_agregar_empleado")
+     */
     public function agregarEmpleadoAction($codigoProgramacionPago, Request $request) {
         $em = $this->getDoctrine()->getManager();
         $form = $this->createFormBuilder()
@@ -324,6 +340,9 @@ class ProgramacionesPagoController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/rhu/programaciones/pago/inconsistencias/{codigoProgramacionPago}", name="brs_rhu_programaciones_pago_inconsistencias")
+     */
     public function inconsistenciasAction ($codigoProgramacionPago, Request $request) {
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');

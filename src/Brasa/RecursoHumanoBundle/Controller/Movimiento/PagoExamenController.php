@@ -1,12 +1,18 @@
 <?php
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuPagoExamenType;
 //use Brasa\RecursoHumanoBundle\Form\Type\RhuExamenDetalleType;
 class PagoExamenController extends Controller
 {
     var $strSqlLista = "";
+    
+    /**
+     * @Route("/rhu/pago/examen/lista", name="brs_rhu_pago_examen_lista")
+     */
     public function listaAction() {        
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -38,6 +44,9 @@ class PagoExamenController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/PagoExamen:lista.html.twig', array('arPagoExamenes' => $arPagoExamenes, 'form' => $form->createView()));
     } 
     
+    /**
+     * @Route("/rhu/pago/examen/nuevo/{codigoPagoExamen}", name="brs_rhu_pago_examen_nuevo")
+     */
     public function nuevoAction($codigoPagoExamen) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
@@ -62,6 +71,9 @@ class PagoExamenController extends Controller
             'form' => $form->createView()));
     }
     
+    /**
+     * @Route("/rhu/pago/examen/detalle/{codigoPagoExamen}", name="brs_rhu_pago_examen_detalle")
+     */
     public function detalleAction($codigoPagoExamen) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();    
@@ -117,6 +129,9 @@ class PagoExamenController extends Controller
                     ));
     }
     
+    /**
+     * @Route("/rhu/pago/examen/detalle/nuevo/{codigoPagoExamen}", name="brs_rhu_pago_examen_detalle_nuevo")
+     */
     public function detalleNuevoAction($codigoPagoExamen) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
