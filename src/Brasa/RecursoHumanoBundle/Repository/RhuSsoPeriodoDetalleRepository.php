@@ -21,7 +21,9 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
         set_time_limit(0);
         $intNumeroEmpleados = 0;
         $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
-        $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+        $arConfiguracionNomina = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);                
+        $arEntidadRiesgos = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
+        $arEntidadRiesgos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($arConfiguracionNomina->getCodigoEntidadRiesgoFk());        
         $arPeriodoEmpleadoValidar = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
         $arPeriodoEmpleadoValidar = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->findOneBy(array('codigoPeriodoDetalleFk' => $codigoPeriodoDetalle));        
         if ($arPeriodoEmpleadoValidar == null){
@@ -126,6 +128,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $arAporte->setEntidadPensionRel($arContrato->getEntidadPensionRel());
                 $arAporte->setEntidadSaludRel($arContrato->getEntidadSaludRel());
                 $arAporte->setEntidadCajaRel($arContrato->getEntidadCajaRel());
+                $arAporte->setEntidadRiesgoProfesionalRel($arEntidadRiesgos);
                 
                 //Dias
                 $intDiasLicenciaNoRemunerada = $arPeriodoEmpleado->getDiasLicencia();
@@ -322,7 +325,10 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                     $arAporte->setCodigoEntidadPensionPertenece($arPeriodoEmpleado->getCodigoEntidadPensionPertenece());
                     $arAporte->setCodigoEntidadSaludPertenece($arPeriodoEmpleado->getCodigoEntidadSaludPertenece());
                     $arAporte->setCodigoEntidadCajaPertenece($arPeriodoEmpleado->getCodigoEntidadCajaPertenece());
-
+                    $arAporte->setEntidadPensionRel($arContrato->getEntidadPensionRel());
+                    $arAporte->setEntidadSaludRel($arContrato->getEntidadSaludRel());
+                    $arAporte->setEntidadCajaRel($arContrato->getEntidadCajaRel());
+                    $arAporte->setEntidadRiesgoProfesionalRel($arEntidadRiesgos);
                     //Dias
                     $intDiasLicenciaNoRemunerada = $arPeriodoEmpleado->getDiasLicencia();
                     $intDiasIncapacidades = $arPeriodoEmpleado->getDiasIncapacidadGeneral() + $arPeriodoEmpleado->getDiasIncapacidadLaboral();
