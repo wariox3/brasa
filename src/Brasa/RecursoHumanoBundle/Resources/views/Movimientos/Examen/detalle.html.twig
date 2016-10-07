@@ -113,8 +113,8 @@
                     </td>
                 {% else %}
                     <td class="td-in-well" align="right">{{ arExamenDetalle.vrPrecio | number_format(0, '.', ',') }}</td>
-                    <td>{{ arExamenDetalle.fechaVence | date("Y/m/d")}}</td>
                     <td>{{ arExamenDetalle.fechaExamen | date("Y/m/d")}}</td>
+                    <td>{{ arExamenDetalle.fechaVence | date("Y/m/d")}}</td>
                     <td>{% if arExamenDetalle.validarVencimiento == 1 %} SI {% else %} NO {% endif %}</td>
                 {% endif %}
                 <td>{% if arExamenDetalle.estadoAprobado == 1 %} SI {% else %} NO {% endif %}</td>

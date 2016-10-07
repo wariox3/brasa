@@ -1,6 +1,6 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -11,6 +11,10 @@ class PagosController extends Controller
 {
     var $strDqlLista = "";
     var $intNumero = 0;
+    
+    /**
+     * @Route("/rhu/pagos/lista", name="brs_rhu_pagos_lista")
+     */ 
     public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();  
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 2, 1)) {
@@ -86,6 +90,9 @@ class PagosController extends Controller
             'form' => $form->createView()));
     }       
     
+    /**
+     * @Route("/rhu/pagos/detalle/{codigoPago}", name="brs_rhu_pagos_detalle")
+     */ 
     public function detalleAction($codigoPago, Request $request) {
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');

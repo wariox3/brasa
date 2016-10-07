@@ -32,15 +32,7 @@ brs_rhu_pagos_adicionales_agregar_valoradicionaleditar:
     
 brs_rhu_pagos_adicionales_agregar_valoradicional:
     path:     /rhu/pagos/adicionales/agregar/valoradicional/{tipo}/{modalidad}/{periodo}
-    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:valorAdicional }                                                                
-                               
-brs_rhu_pagos_lista:
-    path:     /rhu/pagos/lista
-    defaults: { _controller: BrasaRecursoHumanoBundle:Pagos:lista }     
-    
-brs_rhu_pagos_detalle:
-    path:     /rhu/pagos/detalle/{codigoPago}
-    defaults: { _controller: BrasaRecursoHumanoBundle:Pagos:detalle }    
+    defaults: { _controller: BrasaRecursoHumanoBundle:PagosAdicionalesAgregar:valorAdicional }                                                                                                   
 
 brs_rhu_programaciones_pago_lista:
     path:     /rhu/programaciones/pago/lista
