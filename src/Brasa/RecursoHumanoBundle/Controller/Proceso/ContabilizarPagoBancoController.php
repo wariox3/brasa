@@ -67,6 +67,8 @@ class ContabilizarPagoBancoController extends Controller
                                 }
 
                                 if($arPagoBancoDetalle->getCodigoAporteFk()) {
+                                    $arSsoAporte = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte();
+                                    $arSsoAporte = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoAporte')->find($arPagoBancoDetalle->getCodigoAporteFk());
                                     //Pension
                                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();
                                     $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arCuentaPension->getCodigoCuentaFk());
@@ -77,7 +79,7 @@ class ContabilizarPagoBancoController extends Controller
                                     $arRegistro->setNumeroReferencia($arPagoBanco->getCodigoPagoBancoPk());
                                     $arRegistro->setFecha($arPagoBanco->getFecha());
                                     $arRegistro->setDebito($arPagoBancoDetalle->getVrPago());
-                                    $arRegistro->setDescripcionContable('ENTIDAD PENSION');
+                                    $arRegistro->setDescripcionContable('SS ENTIDAD PENSION');
                                     $em->persist($arRegistro);
 
                                     //Salud
@@ -90,7 +92,7 @@ class ContabilizarPagoBancoController extends Controller
                                     $arRegistro->setNumeroReferencia($arPagoBanco->getCodigoPagoBancoPk());
                                     $arRegistro->setFecha($arPagoBanco->getFecha());
                                     $arRegistro->setDebito($arPagoBancoDetalle->getVrPago());
-                                    $arRegistro->setDescripcionContable('ENTIDAD SALUD');
+                                    $arRegistro->setDescripcionContable('SS ENTIDAD SALUD');
                                     $em->persist($arRegistro);
 
                                     //Riesgos
@@ -103,7 +105,7 @@ class ContabilizarPagoBancoController extends Controller
                                     $arRegistro->setNumeroReferencia($arPagoBanco->getCodigoPagoBancoPk());
                                     $arRegistro->setFecha($arPagoBanco->getFecha());
                                     $arRegistro->setDebito($arPagoBancoDetalle->getVrPago());
-                                    $arRegistro->setDescripcionContable('ENTIDAD RIESGOS');
+                                    $arRegistro->setDescripcionContable('SS ENTIDAD RIESGOS');
                                     $em->persist($arRegistro);
 
                                     //Parafiscales
@@ -116,7 +118,7 @@ class ContabilizarPagoBancoController extends Controller
                                     $arRegistro->setNumeroReferencia($arPagoBanco->getCodigoPagoBancoPk());
                                     $arRegistro->setFecha($arPagoBanco->getFecha());
                                     $arRegistro->setDebito($arPagoBancoDetalle->getVrPago());
-                                    $arRegistro->setDescripcionContable('ENTIDAD CAJA (PARAFISCALES)');
+                                    $arRegistro->setDescripcionContable('SS ENTIDAD CAJA (PARAFISCALES)');
                                     $em->persist($arRegistro);
 
                                 } else {

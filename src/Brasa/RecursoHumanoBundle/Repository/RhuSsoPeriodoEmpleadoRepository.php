@@ -162,9 +162,9 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
             if($ibc < $ibcMinimo) {
                 $ibc = $ibcMinimo;
             }
-            if($arContrato->getSalarioIntegral() == 1) {
+            /*if($arContrato->getSalarioIntegral() == 1) {
                 $ibc = ($ibc * 70) / 100;
-            }
+            }*/
             $arPeriodoEmpleadoActualizar->setIbc($ibc);                        
             $em->persist($arPeriodoEmpleadoActualizar);
             $arPeriodoDetalle->setEstadoActualizado(1);
