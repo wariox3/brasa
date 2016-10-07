@@ -5,9 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 class RhuSeleccionRequisitoRepository extends EntityRepository {                   
-    
-     
-    
+         
     public function eliminarSeleccionRequisitos($arrSeleccionados) {
         $em = $this->getEntityManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
