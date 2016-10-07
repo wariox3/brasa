@@ -625,7 +625,7 @@ class ExamenController extends Controller
                     ->setCellValue('D1', 'EDAD')
                     ->setCellValue('E1', 'SEXO')
                     ->setCellValue('F1', 'CARGO')
-                    ->setCellValue('G1', 'CENTRO COSTOS')
+                    ->setCellValue('G1', '')
                     ->setCellValue('H1', 'PAGA EMPLEADO')
                     ->setCellValue('I1', 'ENTIDAD / LABORATORIO')
                     ->setCellValue('J1', 'CIUDAD')
@@ -645,24 +645,21 @@ class ExamenController extends Controller
                 $arExamenes = $query->getResult();
 
         foreach ($arExamenes as $arExamen) {
-            $strNombreCentroCosto = "";
-            if($arExamen->getCentroCostoRel()) {
-                $strNombreCentroCosto = $arExamen->getCentroCostoRel()->getNombre();
-            }
             $strNombreEntidad = "SIN ENTIDAD";
             if($arExamen->getEntidadExamenRel()) {
                 $strNombreEntidad = $arExamen->getEntidadExamenRel()->getNombre();
             }
 
             //Calculo edad
-            $varFechaNacimientoAnio = $arExamen->getFechaNacimiento()->format('Y');
+            /*$varFechaNacimientoAnio = $arExamen->getFechaNacimiento()->format('Y');
             $varFechaNacimientoMes =  $arExamen->getFechaNacimiento()->format('m');
             $varMesActual = date('m');
             if ($varMesActual >= $varFechaNacimientoMes){
                 $varEdad = date('Y') - $varFechaNacimientoAnio;
             } else {
                 $varEdad = date('Y') - $varFechaNacimientoAnio -1;
-            }
+            }*/
+            $varEdad = "";
             //Fin calculo edad
             $arDetalleExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenDetalle')->findBy(array('codigoExamenFk' => $arExamen->getCodigoExamenPk()));
             $objPHPExcel->setActiveSheetIndex(0)
@@ -672,7 +669,7 @@ class ExamenController extends Controller
                     ->setCellValue('D' . $i, $varEdad)
                     ->setCellValue('E' . $i, $arExamen->getCodigoSexoFk())
                     ->setCellValue('F' . $i, $arExamen->getCargoRel()->getNombre())
-                    ->setCellValue('G' . $i, $arExamen->getCentroCostoRel()->getNombre())
+                    ->setCellValue('G' . $i, "")
                     ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arExamen->getControlPago()))
                     ->setCellValue('I' . $i, $strNombreEntidad)
                     ->setCellValue('J' . $i, $arExamen->getCiudadRel()->getNombre())
