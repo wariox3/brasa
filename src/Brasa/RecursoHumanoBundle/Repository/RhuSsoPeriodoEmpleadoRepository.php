@@ -162,6 +162,7 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
             if($ibc < $ibcMinimo) {
                 $ibc = $ibcMinimo;
             }
+            //Se quita porque ya en la generacion se calcula el 70%
             /*if($arContrato->getSalarioIntegral() == 1) {
                 $ibc = ($ibc * 70) / 100;
             }*/

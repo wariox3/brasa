@@ -509,17 +509,30 @@ class VacacionesController extends Controller
                     ->setKeywords("office 2007 openxml php")
                     ->setCategory("Test result file");
                 $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
-                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);    
+                $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);   
+                for($col = 'A'; $col !== 'P'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                    
+                }
+                for($col = 'G'; $col !== 'P'; $col++) {            
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+                }
+                
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'CODIGO')
-                            ->setCellValue('B1', 'C. COSTO')
+                            ->setCellValue('B1', 'GRUPO PAGO')
                             ->setCellValue('C1', 'DESDE')
                             ->setCellValue('D1', 'HASTA')
-                            ->setCellValue('E1', 'IDENTIFICACION')
+                            ->setCellValue('E1', 'DOCUMENTO')
                             ->setCellValue('F1', 'EMPLEADO')
-                            ->setCellValue('G1', 'DIAS')
-                            ->setCellValue('H1', 'VR VACACIONES')
-                            ->setCellValue('I1', 'PAGADO');
+                            ->setCellValue('G1', 'D.DIS')
+                            ->setCellValue('H1', 'D.DIS.REALES')
+                            ->setCellValue('I1', 'D.PAG')    
+                            ->setCellValue('J1', 'DIAS')
+                            ->setCellValue('K1', 'VR VACACIONES')
+                            ->setCellValue('L1', 'VR DEDUCCIONES')
+                            ->setCellValue('M1', 'VR BONIFICACIONES')
+                            ->setCellValue('N1', 'VR PAGAR')
+                            ->setCellValue('O1', 'PAGADO');
 
                 $i = 2;
                 $query = $em->createQuery($this->strSqlLista);
@@ -527,25 +540,28 @@ class VacacionesController extends Controller
                 $arVacaciones = $query->getResult();
                 
                 foreach ($arVacaciones as $arVacacion) {
-                    if ($arVacacion->getEstadoPagado() == 1)
-                    {
+                    if ($arVacacion->getEstadoPagado() == 1) {
                         $Estado = "SI";
-                    }
-                    else
-                    {
+                    } else {
                         $Estado = "NO"; 
                     }
                     
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arVacacion->getCodigoVacacionPk())
                             ->setCellValue('B' . $i, $arVacacion->getCentroCostoRel()->getNombre())
-                            ->setCellValue('C' . $i, $arVacacion->getFechaDesdeDisfrute())
-                            ->setCellValue('D' . $i, $arVacacion->getFechaHastaDisfrute())
+                            ->setCellValue('C' . $i, $arVacacion->getFechaDesdeDisfrute()->format('Y/m/d'))
+                            ->setCellValue('D' . $i, $arVacacion->getFechaHastaDisfrute()->format('Y/m/d'))
                             ->setCellValue('E' . $i, $arVacacion->getEmpleadoRel()->getNumeroIdentificacion())
                             ->setCellValue('F' . $i, $arVacacion->getEmpleadoRel()->getNombreCorto())
-                            ->setCellValue('G' . $i, $arVacacion->getDiasVacaciones())
-                            ->setCellValue('H' . $i, round($arVacacion->getVrVacacion()))
-                            ->setCellValue('I' . $i, $Estado);
+                            ->setCellValue('G' . $i, $arVacacion->getDiasDisfrutados())
+                            ->setCellValue('H' . $i, $arVacacion->getDiasDisfrutadosReales())
+                            ->setCellValue('I' . $i, $arVacacion->getDiasPagados())
+                            ->setCellValue('J' . $i, $arVacacion->getDiasVacaciones())
+                            ->setCellValue('K' . $i, round($arVacacion->getVrVacacionBruto()))
+                            ->setCellValue('L' . $i, round($arVacacion->getVrDeduccion()))
+                            ->setCellValue('M' . $i, round($arVacacion->getVrBonificacion()))
+                            ->setCellValue('N' . $i, round($arVacacion->getVrVacacion()))
+                            ->setCellValue('O' . $i, $Estado);
                     $i++;
                 }
 

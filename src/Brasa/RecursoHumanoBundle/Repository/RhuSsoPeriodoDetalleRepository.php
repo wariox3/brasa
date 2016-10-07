@@ -370,6 +370,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                     $floIbcBrutoSalud = ($intDiasCotizarSalud * ($floSalario / 30));                    
                     $floIbcBrutoRiesgos = ($intDiasCotizarRiesgos * ($floSalario / 30));
                     $floIbcBrutoCaja = ($intDiasCotizarCaja * ($floSalario / 30));
+                    
                     $floIbcPension = $this->redondearIbc($intDiasCotizarPension, $floIbcBrutoPension);
                     $floIbcSalud = $this->redondearIbc($intDiasCotizarSalud, $floIbcBrutoSalud);
                     $floIbcRiesgos = $this->redondearIbc($intDiasCotizarRiesgos, $floIbcBrutoRiesgos);
