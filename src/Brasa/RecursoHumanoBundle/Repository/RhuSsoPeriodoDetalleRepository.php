@@ -400,10 +400,19 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                         $floCotizacionFSPSolidaridad = 0;
                         $floCotizacionFSPSubsistencia = 0;
                     }
-                    
+                    $ibcCajaVacaciones = 0;
+                    if($sinLineaInicial) {
+                        if($vacaciones > 0) {
+                            $ibcCajaVacaciones = $vacaciones;
+                            $floTarifaCaja = 4;
+                            $floIbcCaja = $this->redondearIbc($intDiasCotizarCaja, $ibcCajaVacaciones);
+                            $arAporte->setIbcCaja($floIbcCaja);
+                            $arAporte->setTarifaCaja($floTarifaCaja); 
+                        }
+                    }
                     $floCotizacionSalud = $this->redondearAporte($floSalario + $floSuplementario, $floIbcSalud, $floTarifaSalud, $intDiasCotizarSalud);
                     $floCotizacionRiesgos = $this->redondearAporte($floSalario + $floSuplementario, $floIbcRiesgos, $floTarifaRiesgos, $intDiasCotizarRiesgos);
-                    $floCotizacionCaja = $this->redondearAporte($floSalario + $floSuplementario, $floIbcCaja, $floTarifaCaja, $intDiasCotizarCaja);
+                    $floCotizacionCaja = $this->redondearAporte($ibcCajaVacaciones, $ibcCajaVacaciones, $floTarifaCaja, 0);
                     $floTotalCotizacionFondos = $floAporteVoluntarioFondoPensionesObligatorias + $floCotizacionVoluntariaFondoPensionesObligatorias + $floCotizacionPension;
                     
                     $arAporte->setAporteVoluntarioFondoPensionesObligatorias($floAporteVoluntarioFondoPensionesObligatorias);
