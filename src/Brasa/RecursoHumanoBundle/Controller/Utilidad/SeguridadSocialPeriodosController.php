@@ -364,8 +364,7 @@ class SeguridadSocialPeriodosController extends Controller
                 $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
                 $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
                 for($col = 'A'; $col !== 'AN'; $col++) {
-                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
-                    $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                    
                 }
                 for($col = 'G'; $col !== 'M'; $col++) {
                     $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
@@ -375,11 +374,9 @@ class SeguridadSocialPeriodosController extends Controller
                     ->setCellValue('A1', 'IDENTIFICACIÓN')
                     ->setCellValue('B1', 'NOMBRE')
                     ->setCellValue('C1', 'C. COSTO')
-                    ->setCellValue('D1', 'CONTRATO')
-                    
+                    ->setCellValue('D1', 'CONTRATO')                    
                     ->setCellValue('E1', 'EPS')
-                    ->setCellValue('F1', 'SALUD')    
-                        
+                    ->setCellValue('F1', 'SALUD')                            
                     ->setCellValue('G1', 'ING')
                     ->setCellValue('H1', 'RET')
                     ->setCellValue('I1', 'VST')
@@ -413,7 +410,11 @@ class SeguridadSocialPeriodosController extends Controller
                     ->setCellValue('AK1', 'C.C')
                     ->setCellValue('AL1', 'C.SN')
                     ->setCellValue('AM1', 'C.I')
-                    ->setCellValue('AN1', 'TOTAL');
+                    ->setCellValue('AN1', 'TOTAL')
+                    ->setCellValue('AO1', 'E.PENSION')
+                    ->setCellValue('AP1', 'E.SALUD')
+                    ->setCellValue('AQ1', 'E.RIESGOS')
+                    ->setCellValue('AR1', 'E.CAJA');
                 
                 $arPeriodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
                 $arPeriodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigoPeriodoDetalle);
@@ -422,7 +423,7 @@ class SeguridadSocialPeriodosController extends Controller
                     ->setCellValue('B2', $arPeriodoDetalle->getCodigoSucursalFk())
                     ->setCellValue('B3', $arPeriodoDetalle->getSsoSucursalRel()->getNombre())    ;*/
                 $i = 2;
-                $arSsoAportes = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte();
+                $arSsoAportes = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte();                    
                 $arSsoAportes = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoAporte')->findBy(array('codigoPeriodoDetalleFk' => $codigoPeriodoDetalle));
                 foreach ($arSsoAportes as $arSsoAporte) {            
                     $suspencionTemporalContratoLicenciaServicios = "";
@@ -490,6 +491,18 @@ class SeguridadSocialPeriodosController extends Controller
                     ->setCellValue('AL' . $i, $arSsoAporte->getCotizacionSena())
                     ->setCellValue('AM' . $i, $arSsoAporte->getCotizacionIcbf())
                     ->setCellValue('AN' . $i, $arSsoAporte->getTotalCotizacion());
+                    if($arSsoAporte->getCodigoEntidadPensionFk()) {
+                        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AO1' . $i, $arSsoAporte->getEntidadPensionRel()->getNombre());
+                    }
+                    if($arSsoAporte->getCodigoEntidadSaludFk()) {
+                        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AP1' . $i, $arSsoAporte->getEntidadSaludRel()->getNombre());
+                    }                    
+                    if($arSsoAporte->getCodigoEntidadRiesgoFk()) {
+                        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AQ1' . $i, $arSsoAporte->getEntidadRiesgoProfesionalRel()->getNombre());
+                    }
+                    if($arSsoAporte->getCodigoEntidadCajaFk()) {
+                        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AR1' . $i, $arSsoAporte->getEntidadCajaRel()->getNombre());
+                    }                    
                     $i++;
                 }
 

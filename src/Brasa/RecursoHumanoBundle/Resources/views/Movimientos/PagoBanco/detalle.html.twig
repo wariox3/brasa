@@ -92,9 +92,9 @@
                      <td>{{ arPagoBancoDetalle.codigoPagoFk  }}</td>
                      <td>{{ arPagoBancoDetalle.codigoVacacionFk  }}</td>
                      <td>{{ arPagoBancoDetalle.codigoLiquidacionFk  }}</td>
-                     <td>{{ arPagoBancoDetalle.codigoAporteFk  }}</td>
-                     <td>{{ arPagoBancoDetalle.empleadoRel.numeroIdentificacion  }}</td>
-                     <td>{{ arPagoBancoDetalle.empleadoRel.nombreCorto  }}</td>
+                     <td>{{ arPagoBancoDetalle.codigoPeriodoDetalleFk  }}</td>
+                     <td>{{ arPagoBancoDetalle.empleadoRel.numeroIdentificacion | default('') }}</td>
+                     <td>{{ arPagoBancoDetalle.empleadoRel.nombreCorto | default('') }}</td>
                      <td>{{ arPagoBancoDetalle.bancoRel.nombre |default('') }}</td>
                      <td>{{ arPagoBancoDetalle.cuenta  }}</td>
                      <td class="td-in-well" align="right">{{ arPagoBancoDetalle.vrPago | number_format(0, '.', ',') }}</td>

@@ -468,23 +468,14 @@ class PagoBancoController extends Controller
                     $arrSeleccionados = $request->request->get('ChkSeleccionar');
                     if(count($arrSeleccionados) > 0) {
                         foreach ($arrSeleccionados AS $codigo) {  
-                            //$arSsoPediodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
-                            //$arSsoPediodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigo);                            
-                            $arSsoAportes = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte();
-                            $arSsoAportes = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoAporte')->findBy(array('codigoPeriodoDetalleFk' => $codigo));                            
-                            foreach ($arSsoAportes as $arSsoAporte) {
-                                $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
-                                $arPagoBancoDetalle->setPagoBancoRel($arPagoBanco);
-                                $arPagoBancoDetalle->setSsoAporteRel($arSsoAporte);
-                                $arPagoBancoDetalle->setCuenta($arSsoAporte->getEmpleadoRel()->getCuenta());
-                                $valorPagar = round($arSsoAporte->getTotalCotizacion());
-                                $arPagoBancoDetalle->setVrPago($valorPagar); 
-                                //$arPagoBancoDetalle->setBancoRel();                                        
-                                $arPagoBancoDetalle->setEmpleadoRel($arSsoAporte->getEmpleadoRel());
-                                $em->persist($arPagoBancoDetalle); 
-                                //$arLiquidacion->setEstadoPagoBanco(1);
-                                //$em->persist($arLiquidacion);                                
-                            }
+                            $arSsoPediodoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle();
+                            $arSsoPediodoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoDetalle')->find($codigo);                            
+                            $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
+                            $arPagoBancoDetalle->setPagoBancoRel($arPagoBanco);
+                            $arPagoBancoDetalle->setSsoPeriodoDetalleRel($arSsoPediodoDetalle);                            
+                            $valorPagar = round($arSsoPediodoDetalle->getTotalCotizacion());
+                            $arPagoBancoDetalle->setVrPago($valorPagar);                                                         
+                            $em->persist($arPagoBancoDetalle);                             
                         }
                         $em->flush();
                     }
