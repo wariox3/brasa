@@ -1,14 +1,18 @@
 <?php
 
-namespace Brasa\GeneralBundle\Controller;
+namespace Brasa\GeneralBundle\Controller\Utilidad;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 
 
-class UtilidadCalendarioController extends Controller
+class CalendarioController extends Controller
 {
+    /**
+     * @Route("/gen/utilidades/calendario/", name="brs_gen_utilidad_calendario")
+     */
     public function verAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario

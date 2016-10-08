@@ -3,9 +3,11 @@
 namespace Brasa\GeneralBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
-class BusquedasController extends Controller {
-
+class BusquedasController extends Controller
+{
+    
     public function buscarTerceroAction($campoCodigo, $campoNombre) {
         $em = $this->get('doctrine.orm.entity_manager');
         $request = $this->getRequest();
@@ -30,6 +32,9 @@ class BusquedasController extends Controller {
             "campoNombre" => $campoNombre));
     }
     
+    /**
+     * @Route("/general/buscar/ciudad/{campoCodigo}/{campoNombre}/", name="brs_gen_buscar_ciudad")
+     */
     public function buscarCiudadAction($campoCodigo, $campoNombre) {
         $em = $this->get('doctrine.orm.entity_manager');
         $request = $this->getRequest();
@@ -54,6 +59,7 @@ class BusquedasController extends Controller {
             "campoNombre" => $campoNombre));
     }    
 
+    
     public function buscarEmpleadoAction() {
             $em = $this->getDoctrine()->getEntityManager();
 

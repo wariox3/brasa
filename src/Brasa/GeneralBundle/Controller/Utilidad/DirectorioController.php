@@ -1,14 +1,18 @@
 <?php
 
-namespace Brasa\GeneralBundle\Controller;
+namespace Brasa\GeneralBundle\Controller\Utilidad;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\GeneralBundle\Form\Type\GenDirectorioType;
 use Symfony\Component\HttpFoundation\Response;
 
 class DirectorioController extends Controller
 {
+    /**
+     * @Route("/general/utilidad/gestorarchivo/{codigoDirectorioPadre}", name="brs_gen_utilidad_gestorarchivo")
+     */
     public function listaAction($codigoDirectorioPadre = 0) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -89,6 +93,9 @@ class DirectorioController extends Controller
         ));
     }
     
+    /**
+     * @Route("/general/utilidad/gestorarchivo/directorio/nuevo/{codigoDirectorio}/{codigoDirectorioPadre}", name="brs_gen_utilidad_gestorarchivo_directorio_nuevo")
+     */
     public function nuevoDirectorioAction($codigoDirectorio,$codigoDirectorioPadre) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -117,6 +124,9 @@ class DirectorioController extends Controller
         ));
     }
     
+    /**
+     * @Route("/general/utilidad/gestorarchivo/cargar/archivo/{codigoDirectorioPadre}", name="brs_gen_utilidad_gestorarchivo_cargar_archivo")
+     */
     public function cargarArchivoAction($codigoDirectorioPadre) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -162,6 +172,9 @@ class DirectorioController extends Controller
             ));
     }
     
+    /**
+     * @Route("/general/utilidad/gestorarchivo/descargar/archivo/{codigoArchivo}", name="brs_gen_utilidad_gestorarchivo_descargar_archivo")
+     */
     public function descargarArchivoAction($codigoArchivo) {
         $em = $this->getDoctrine()->getManager();
         $arArchivo = new \Brasa\GeneralBundle\Entity\GenArchivo();

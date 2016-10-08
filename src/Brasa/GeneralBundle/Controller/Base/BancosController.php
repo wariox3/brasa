@@ -1,19 +1,23 @@
 <?php
 
-namespace Brasa\GeneralBundle\Controller;
+namespace Brasa\GeneralBundle\Controller\Base;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Brasa\GeneralBundle\Form\Type\GenTercerosType;
+use Brasa\GeneralBundle\Form\Type\GenBancoType;
 
 
 
-class BaseTercerosController extends Controller
+class BancosController extends Controller
 {
+    /**
+     * @Route("/general/base/bancos", name="brs_gen_base_bancos")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
-        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 101, 1)) {
+        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 102, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
         $paginator  = $this->get('knp_paginator');
@@ -26,14 +30,14 @@ class BaseTercerosController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoTercero) {
-                    $arTercero = new \Brasa\GeneralBundle\Entity\GenTercero();
-                    $arTercero = $em->getRepository('BrasaGeneralBundle:GenTercero')->find($codigoTercero);
-                    $em->remove($arTercero);
+                foreach ($arrSeleccionados AS $codigoBanco) {
+                    $arBanco = new \Brasa\GeneralBundle\Entity\GenBanco();
+                    $arBanco = $em->getRepository('BrasaGeneralBundle:GenBanco')->find($codigoBanco);
+                    $em->remove($arBanco);
                     $em->flush();
                 }
             }
-        if($form->get('BtnExcel')->isClicked()) {
+            if($form->get('BtnExcel')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();
                 // Set document properties
                 $objPHPExcel->getProperties()->setCreator("EMPRESA")
@@ -46,30 +50,28 @@ class BaseTercerosController extends Controller
                 $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
                 $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
                 $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', 'Código')
-                            ->setCellValue('B1', 'Nit')
-                            ->setCellValue('C1', 'Dígito Verificación')
-                            ->setCellValue('D1', 'Nombre');
+                            ->setCellValue('A1', 'Codigo')
+                            ->setCellValue('B1', 'Banco')
+                            ->setCellValue('C1', 'Cuenta');
 
                 $i = 2;
-                $arTerceros = $em->getRepository('BrasaGeneralBundle:GenTercero')->findAll();
+                $arBanco = $em->getRepository('BrasaGeneralBundle:GenBanco')->findAll();
                 
-                foreach ($arTerceros as $arTerceros) {
+                foreach ($arBanco as $arBanco) {
                         
                     $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A' . $i, $arTerceros->getCodigoTerceroPk())
-                            ->setCellValue('B' . $i, $arTerceros->getNit())
-                            ->setCellValue('C' . $i, $arTerceros->getDigitoVerificacion())
-                            ->setCellValue('D' . $i, $arTerceros->getNombreCorto());
+                            ->setCellValue('A' . $i, $arBanco->getCodigoBancoGeneralPk())
+                            ->setCellValue('B' . $i, $arBanco->getBancoRel()->getNombre())
+                            ->setCellValue('C' . $i, $arBanco->getCuenta());
                     $i++;
                 }
 
-                $objPHPExcel->getActiveSheet()->setTitle('Terceros');
+                $objPHPExcel->getActiveSheet()->setTitle('BancoGeneral');
                 $objPHPExcel->setActiveSheetIndex(0);
 
                 // Redirect output to a client’s web browser (Excel2007)
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="Terceros.xlsx"');
+                header('Content-Disposition: attachment;filename="BancoGeneral.xlsx"');
                 header('Cache-Control: max-age=0');
                 // If you're serving to IE 9, then the following may be needed
                 header('Cache-Control: max-age=1');
@@ -84,36 +86,39 @@ class BaseTercerosController extends Controller
             }
             
         }
-        $arTerceros = new \Brasa\GeneralBundle\Entity\GenTercero();
-        $query = $em->getRepository('BrasaGeneralBundle:GenTercero')->findAll();
-        $arTerceros = $paginator->paginate($query, $this->get('request')->query->get('page', 1),200);
+        $arBancos = new \Brasa\GeneralBundle\Entity\GenBanco();
+        $query = $em->getRepository('BrasaGeneralBundle:GenBanco')->findAll();
+        $arBancos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),50);
 
-        return $this->render('BrasaGeneralBundle:Base/Terceros:lista.html.twig', array(
-                    'arTerceros' => $arTerceros,
+        return $this->render('BrasaGeneralBundle:Base/Bancos:lista.html.twig', array(
+                    'arBancos' => $arBancos,
                     'form'=> $form->createView()
            
         ));
     }
     
-    public function nuevoAction($codigoTercero) {
+    /**
+     * @Route("/general/base/bancos/nuevo/{codigoBanco}", name="brs_gen_base_bancos_nuevo")
+     */
+    public function nuevoAction($codigoBanco) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $arTercero = new \Brasa\GeneralBundle\Entity\GenTercero();
-        if ($codigoTercero != 0)
+        $arBanco = new \Brasa\GeneralBundle\Entity\GenBanco();
+        if ($codigoBanco != 0)
         {
-            $arTercero = $em->getRepository('BrasaGeneralBundle:GenTercero')->find($codigoTercero);
+            $arBanco = $em->getRepository('BrasaGeneralBundle:GenBanco')->find($codigoBanco);
         }    
-        $form = $this->createForm(new GenTercerosType(), $arTercero);
+        $form = $this->createForm(new GenBancoType(), $arBanco);
         $form->handleRequest($request);
         if ($form->isValid())
         {
             // guardar la tarea en la base de datos
-            $arTercero = $form->getData();
-            $em->persist($arTercero);
+            $arBanco = $form->getData();
+            $em->persist($arBanco);
             $em->flush();
-            return $this->redirect($this->generateUrl('brs_gen_base_terceros'));
+            return $this->redirect($this->generateUrl('brs_gen_base_bancos'));
         }
-        return $this->render('BrasaGeneralBundle:Base/Terceros:nuevo.html.twig', array(
+        return $this->render('BrasaGeneralBundle:Base/Bancos:nuevo.html.twig', array(
             'form' => $form->createView(),
         ));
     }

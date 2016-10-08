@@ -1,15 +1,19 @@
 <?php
 
-namespace Brasa\GeneralBundle\Controller;
+namespace Brasa\GeneralBundle\Controller\Base;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\GeneralBundle\Form\Type\GenAsesorType;
 
 
 
-class BaseAsesorController extends Controller
+class AsesorController extends Controller
 {
+    /**
+     * @Route("/general/base/asesor", name="brs_gen_base_asesor")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -99,6 +103,9 @@ class BaseAsesorController extends Controller
         ));
     }
     
+    /**
+     * @Route("/general/base/asesor/nuevo/{codigoAsesor}", name="brs_gen_base_asesor_nuevo")
+     */
     public function nuevoAction($codigoAsesor) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

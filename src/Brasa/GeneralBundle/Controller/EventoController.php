@@ -2,6 +2,7 @@
 
 namespace Brasa\GeneralBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Brasa\GeneralBundle\Form\Type\GenEventoType;
 
@@ -9,6 +10,9 @@ class EventoController extends Controller
 {
     var $strSqlLista = "";    
     
+    /**
+     * @Route("/gen/evento/nuevo/", name="brs_gen_evento_nuevo")
+     */
     public function nuevoAction() {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();

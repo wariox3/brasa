@@ -3,10 +3,14 @@
 namespace Brasa\GeneralBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\DoctrineBundle\ConnectionFactory;
+
 class DefaultController extends Controller
 {           
-    
+    /**
+     * @Route("/", name="brasa_general_inicio")
+     */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();

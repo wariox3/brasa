@@ -1,15 +1,19 @@
 <?php
 
-namespace Brasa\GeneralBundle\Controller;
+namespace Brasa\GeneralBundle\Controller\Base;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\GeneralBundle\Form\Type\GenCuentaType;
 
 
 
-class BaseCuentasController extends Controller
+class CuentasController extends Controller
 {
+    /**
+     * @Route("/general/base/cuentas", name="brs_gen_base_cuentas")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -45,6 +49,9 @@ class BaseCuentasController extends Controller
         ));
     }
     
+    /**
+     * @Route("/general/base/cuentas/nuevo/{codigoCuenta}", name="brs_gen_base_cuentas_nuevo")
+     */
     public function nuevoAction($codigoCuenta) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

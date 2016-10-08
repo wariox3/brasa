@@ -4,6 +4,7 @@ namespace Brasa\GeneralBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -12,6 +13,9 @@ use Doctrine\ORM\EntityRepository;
  */
 class ConfiguracionGeneralController extends Controller
 {
+    /**
+     * @Route("/gen/configuracion/general/{codigoConfiguracionPk}", name="brs_gen_configuracion_general")
+     */
     public function configuracionAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
@@ -120,6 +124,9 @@ class ConfiguracionGeneralController extends Controller
         ));
     }
 
+    /**
+     * @Route("/general/borrar/bd/", name="brs_gen_borrar_bd")
+     */
     public function borrarBDAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();

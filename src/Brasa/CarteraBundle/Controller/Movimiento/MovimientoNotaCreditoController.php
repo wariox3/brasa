@@ -1,5 +1,5 @@
 <?php
-namespace Brasa\CarteraBundle\Controller;
+namespace Brasa\CarteraBundle\Controller\Movimiento;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

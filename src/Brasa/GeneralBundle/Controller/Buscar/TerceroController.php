@@ -1,63 +1,61 @@
 <?php
 
-namespace Brasa\CarteraBundle\Controller;
+namespace Brasa\GeneralBundle\Controller\Buscar;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
-class BuscarClienteController extends Controller
+class TerceroController extends Controller
 {
     var $strDqlLista = "";     
-    var $strCodigo = "";
+    var $strNit = "";
     var $strNombre = "";
     
     /**
-     * @Route("/cartera/buscar/cliente/{campoCodigo}/{campoNombre}", name="brs_cartera_buscar_cliente")
-     */ 
-    public function listaAction($campoCodigo,$campoNombre) {
+     * @Route("/general/buscar/tercero/{campoCodigo}/{campoNombre}", name="brs_gen_buscar_tercero")
+     */
+    public function listaAction($campoCodigo, $campoNombre) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioLista();
         $form->handleRequest($request);
-        $this->lista();
+        $this->listar();
         if ($form->isValid()) {            
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form);
-                $this->lista();
+                $this->listar();
             }
         }
-        $arCliente = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
-        return $this->render('BrasaCarteraBundle:Buscar:cliente.html.twig', array(
-            'arClientes' => $arCliente,
+        $arTerceros = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 40);
+        return $this->render('BrasaGeneralBundle:Buscar:tercero.html.twig', array(
+            'arTerceros' => $arTerceros,
             'campoCodigo' => $campoCodigo,
-            'campoNombre' => $campoNombre,
+            'campoNombre' => $campoNombre,            
             'form' => $form->createView()
             ));
     }        
     
-    private function lista() {        
+    private function listar() {        
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaCarteraBundle:CarCliente')->listaDQL(
+        $this->strDqlLista = $em->getRepository('BrasaGeneralBundle:GenTercero')->listaDQL(
                 $this->strNombre,                
-                $this->strCodigo   
+                $this->strNit   
                 ); 
     }       
     
     private function formularioLista() {                
         $form = $this->createFormBuilder()                                                
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->strNombre))
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->strCodigo))                            
+            ->add('TxtNit', 'text', array('label'  => 'Identificacion','data' => $this->strNit))                            
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();        
         return $form;
     }           
 
     private function filtrarLista($form) {
-        $session = $this->getRequest()->getSession();
-        $request = $this->getRequest();
-        $controles = $request->request->get('form');
+        $this->strNit = $form->get('TxtNit')->getData();
         $this->strNombre = $form->get('TxtNombre')->getData();
     }    
           

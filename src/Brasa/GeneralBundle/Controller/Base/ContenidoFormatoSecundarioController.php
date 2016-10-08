@@ -1,9 +1,10 @@
 <?php
 
-namespace Brasa\GeneralBundle\Controller;
+namespace Brasa\GeneralBundle\Controller\Base;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 use Brasa\GeneralBundle\Form\Type\GenContenidoFormatoSecundarioType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
@@ -11,9 +12,13 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
  * GenContenidoFormatoSecundario controller.
  *
  */
-class BaseContenidoFormatoSecundarioController extends Controller
+class ContenidoFormatoSecundarioController extends Controller
 {
     var $strDqlLista = "";
+    
+    /**
+     * @Route("/general/base/contenido/formato/secundario/lista/", name="brs_gen_base_contenido_formato_secundario_lista")
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
@@ -50,6 +55,9 @@ class BaseContenidoFormatoSecundarioController extends Controller
         ));
     }
     
+    /**
+     * @Route("/general/base/contenido/formato/secundario/nuevo/{codigoContenidoFormato}", name="brs_gen_base_contenido_formato_secundario_nuevo")
+     */
     public function nuevoAction($codigoContenidoFormato) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
