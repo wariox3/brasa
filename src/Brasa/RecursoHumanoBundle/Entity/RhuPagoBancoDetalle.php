@@ -41,6 +41,11 @@ class RhuPagoBancoDetalle
      * @ORM\Column(name="codigo_aporte_fk", type="integer", nullable=true)
      */    
     private $codigoAporteFk; 
+
+    /**
+     * @ORM\Column(name="codigo_periodo_detalle_fk", type="integer", nullable=true)
+     */    
+    private $codigoPeriodoDetalleFk; 
     
     /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
@@ -92,10 +97,10 @@ class RhuPagoBancoDetalle
     protected $liquidacionRel;     
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuSsoAporte", inversedBy="pagosBancosDetallesSsoAporteRel")
-     * @ORM\JoinColumn(name="codigo_aporte_fk", referencedColumnName="codigo_aporte_pk")
+     * @ORM\ManyToOne(targetEntity="RhuSsoPeriodoDetalle", inversedBy="pagosBancosDetallesSsoPeriodoDetalleRel")
+     * @ORM\JoinColumn(name="codigo_periodo_detalle_fk", referencedColumnName="codigo_periodo_detalle_pk")
      */
-    protected $ssoAporteRel;     
+    protected $ssoPeriodoDetalleRel;     
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuBanco", inversedBy="pagosBancosDetallesBancoRel")
@@ -109,7 +114,6 @@ class RhuPagoBancoDetalle
      */
     protected $empleadoRel;    
     
-
 
 
     /**
@@ -216,6 +220,54 @@ class RhuPagoBancoDetalle
     public function getCodigoLiquidacionFk()
     {
         return $this->codigoLiquidacionFk;
+    }
+
+    /**
+     * Set codigoAporteFk
+     *
+     * @param integer $codigoAporteFk
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setCodigoAporteFk($codigoAporteFk)
+    {
+        $this->codigoAporteFk = $codigoAporteFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoAporteFk
+     *
+     * @return integer
+     */
+    public function getCodigoAporteFk()
+    {
+        return $this->codigoAporteFk;
+    }
+
+    /**
+     * Set codigoPeriodoDetalleFk
+     *
+     * @param integer $codigoPeriodoDetalleFk
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setCodigoPeriodoDetalleFk($codigoPeriodoDetalleFk)
+    {
+        $this->codigoPeriodoDetalleFk = $codigoPeriodoDetalleFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPeriodoDetalleFk
+     *
+     * @return integer
+     */
+    public function getCodigoPeriodoDetalleFk()
+    {
+        return $this->codigoPeriodoDetalleFk;
     }
 
     /**
@@ -435,6 +487,30 @@ class RhuPagoBancoDetalle
     }
 
     /**
+     * Set ssoPeriodoDetalleRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodoDetalleRel
+     *
+     * @return RhuPagoBancoDetalle
+     */
+    public function setSsoPeriodoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle $ssoPeriodoDetalleRel = null)
+    {
+        $this->ssoPeriodoDetalleRel = $ssoPeriodoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Get ssoPeriodoDetalleRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoDetalle
+     */
+    public function getSsoPeriodoDetalleRel()
+    {
+        return $this->ssoPeriodoDetalleRel;
+    }
+
+    /**
      * Set bancoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuBanco $bancoRel
@@ -480,53 +556,5 @@ class RhuPagoBancoDetalle
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
-    }
-
-    /**
-     * Set codigoAporteFk
-     *
-     * @param integer $codigoAporteFk
-     *
-     * @return RhuPagoBancoDetalle
-     */
-    public function setCodigoAporteFk($codigoAporteFk)
-    {
-        $this->codigoAporteFk = $codigoAporteFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoAporteFk
-     *
-     * @return integer
-     */
-    public function getCodigoAporteFk()
-    {
-        return $this->codigoAporteFk;
-    }
-
-    /**
-     * Set ssoAporteRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAporteRel
-     *
-     * @return RhuPagoBancoDetalle
-     */
-    public function setSsoAporteRel(\Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte $ssoAporteRel = null)
-    {
-        $this->ssoAporteRel = $ssoAporteRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ssoAporteRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte
-     */
-    public function getSsoAporteRel()
-    {
-        return $this->ssoAporteRel;
     }
 }

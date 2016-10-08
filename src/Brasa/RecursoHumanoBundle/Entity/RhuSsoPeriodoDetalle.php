@@ -89,7 +89,10 @@ class RhuSsoPeriodoDetalle
      */
     protected $ssoPeriodosEmpleadosSsoPeriodoDetalleRel;     
 
-    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuPagoBancoDetalle", mappedBy="ssoPeriodoDetalleRel")
+     */
+    protected $pagosBancosDetallesSsoPeriodoDetalleRel;     
     
     /**
      * Constructor
@@ -98,6 +101,7 @@ class RhuSsoPeriodoDetalle
     {
         $this->ssoAportesSsoPeriodoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ssoPeriodosEmpleadosSsoPeriodoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosBancosDetallesSsoPeriodoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -327,6 +331,30 @@ class RhuSsoPeriodoDetalle
     }
 
     /**
+     * Set estadoPagoBanco
+     *
+     * @param boolean $estadoPagoBanco
+     *
+     * @return RhuSsoPeriodoDetalle
+     */
+    public function setEstadoPagoBanco($estadoPagoBanco)
+    {
+        $this->estadoPagoBanco = $estadoPagoBanco;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPagoBanco
+     *
+     * @return boolean
+     */
+    public function getEstadoPagoBanco()
+    {
+        return $this->estadoPagoBanco;
+    }
+
+    /**
      * Set ssoPeriodoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodo $ssoPeriodoRel
@@ -443,26 +471,36 @@ class RhuSsoPeriodoDetalle
     }
 
     /**
-     * Set estadoPagoBanco
+     * Add pagosBancosDetallesSsoPeriodoDetalleRel
      *
-     * @param boolean $estadoPagoBanco
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesSsoPeriodoDetalleRel
      *
      * @return RhuSsoPeriodoDetalle
      */
-    public function setEstadoPagoBanco($estadoPagoBanco)
+    public function addPagosBancosDetallesSsoPeriodoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesSsoPeriodoDetalleRel)
     {
-        $this->estadoPagoBanco = $estadoPagoBanco;
+        $this->pagosBancosDetallesSsoPeriodoDetalleRel[] = $pagosBancosDetallesSsoPeriodoDetalleRel;
 
         return $this;
     }
 
     /**
-     * Get estadoPagoBanco
+     * Remove pagosBancosDetallesSsoPeriodoDetalleRel
      *
-     * @return boolean
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesSsoPeriodoDetalleRel
      */
-    public function getEstadoPagoBanco()
+    public function removePagosBancosDetallesSsoPeriodoDetalleRel(\Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle $pagosBancosDetallesSsoPeriodoDetalleRel)
     {
-        return $this->estadoPagoBanco;
+        $this->pagosBancosDetallesSsoPeriodoDetalleRel->removeElement($pagosBancosDetallesSsoPeriodoDetalleRel);
+    }
+
+    /**
+     * Get pagosBancosDetallesSsoPeriodoDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPagosBancosDetallesSsoPeriodoDetalleRel()
+    {
+        return $this->pagosBancosDetallesSsoPeriodoDetalleRel;
     }
 }
