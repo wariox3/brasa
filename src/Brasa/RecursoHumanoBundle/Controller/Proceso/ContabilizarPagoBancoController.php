@@ -67,13 +67,13 @@ class ContabilizarPagoBancoController extends Controller
                                 }*/
 
                                 if($arPagoBancoDetalle->getCodigoPeriodoDetalleFk()) {
-                                    $dql   = "SELECT a.codigoEntidadPensionFk, SUM(a.cotizacionPension) as pension FROM BrasaRecursoHumanoBundle:RhuSsoAporte a "
+                                    //PENSION
+                                    $dql   = "SELECT a.codigoEntidadPensionFk, SUM(a.cotizacionPension+a.aportesFondoSolidaridadPensionalSolidaridad+a.aportesFondoSolidaridadPensionalSubsistencia) as pension FROM BrasaRecursoHumanoBundle:RhuSsoAporte a "
                                             . "WHERE a.codigoPeriodoDetalleFk = " . $arPagoBancoDetalle->getCodigoPeriodoDetalleFk() . " GROUP BY a.codigoEntidadPensionFk";
                                     $query = $em->createQuery($dql);
                                     $arrayResultado = $query->getResult();                                    
                                     foreach ($arrayResultado as $detalle) {
-                                        if($detalle['pension'] > 0) {
-                                            //Pension
+                                        if($detalle['pension'] > 0) {                                            
                                             $arEntidadPension = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension();
                                             $arEntidadPension = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadPension')->find($detalle['codigoEntidadPensionFk']);
                                             $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arEntidadPension->getNit()));
@@ -90,48 +90,82 @@ class ContabilizarPagoBancoController extends Controller
                                             $arRegistro->setDescripcionContable('SS ENTIDAD PENSION');
                                             $em->persist($arRegistro);                                            
                                         }
+                                    }       
+                                    
+                                    //SALUD
+                                    $dql   = "SELECT a.codigoEntidadSaludFk, SUM(a.cotizacionSalud) as salud FROM BrasaRecursoHumanoBundle:RhuSsoAporte a "
+                                            . "WHERE a.codigoPeriodoDetalleFk = " . $arPagoBancoDetalle->getCodigoPeriodoDetalleFk() . " GROUP BY a.codigoEntidadSaludFk";
+                                    $query = $em->createQuery($dql);
+                                    $arrayResultado = $query->getResult();                                    
+                                    foreach ($arrayResultado as $detalle) {
+                                        if($detalle['salud'] > 0) {                                            
+                                            $arEntidadSalud = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud();
+                                            $arEntidadSalud = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadSalud')->find($detalle['codigoEntidadSaludFk']);
+                                            $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arEntidadSalud->getNit()));
+                                            
+                                            $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();
+                                            $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arCuentaSalud->getCodigoCuentaFk());
+                                            $arRegistro->setComprobanteRel($arComprobanteContable);
+                                            $arRegistro->setCuentaRel($arCuenta);
+                                            $arRegistro->setTerceroRel($arTercero);
+                                            $arRegistro->setNumero($arPagoBanco->getCodigoPagoBancoPk());
+                                            $arRegistro->setNumeroReferencia($arPagoBanco->getCodigoPagoBancoPk());
+                                            $arRegistro->setFecha($arPagoBanco->getFecha());
+                                            $arRegistro->setDebito($detalle['salud']);
+                                            $arRegistro->setDescripcionContable('SS ENTIDAD SALUD');
+                                            $em->persist($arRegistro);                                            
+                                        }
+                                    }
+                                    
+                                    //RIESGOS
+                                    $dql   = "SELECT a.codigoEntidadRiesgoFk, SUM(a.cotizacionRiesgos) as riesgo FROM BrasaRecursoHumanoBundle:RhuSsoAporte a "
+                                            . "WHERE a.codigoPeriodoDetalleFk = " . $arPagoBancoDetalle->getCodigoPeriodoDetalleFk() . " GROUP BY a.codigoEntidadRiesgoFk";
+                                    $query = $em->createQuery($dql);
+                                    $arrayResultado = $query->getResult();                                    
+                                    foreach ($arrayResultado as $detalle) {
+                                        if($detalle['riesgo'] > 0) {                                            
+                                            $arEntidadRiesgo = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional();
+                                            $arEntidadRiesgo = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($detalle['codigoEntidadRiesgoFk']);
+                                            $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arEntidadRiesgo->getNit()));
+                                            
+                                            $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();
+                                            $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arCuentaRiesgos->getCodigoCuentaFk());
+                                            $arRegistro->setComprobanteRel($arComprobanteContable);
+                                            $arRegistro->setCuentaRel($arCuenta);
+                                            $arRegistro->setTerceroRel($arTercero);
+                                            $arRegistro->setNumero($arPagoBanco->getCodigoPagoBancoPk());
+                                            $arRegistro->setNumeroReferencia($arPagoBanco->getCodigoPagoBancoPk());
+                                            $arRegistro->setFecha($arPagoBanco->getFecha());
+                                            $arRegistro->setDebito($detalle['riesgo']);
+                                            $arRegistro->setDescripcionContable('SS ENTIDAD RIESGOS');
+                                            $em->persist($arRegistro);                                            
+                                        }
                                     }                                    
-
-                                    //Salud
-                                    /*$arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();
-                                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arCuentaSalud->getCodigoCuentaFk());
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    $arRegistro->setCuentaRel($arCuenta);
-                                    $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPagoBanco->getCodigoPagoBancoPk());
-                                    $arRegistro->setNumeroReferencia($arPagoBanco->getCodigoPagoBancoPk());
-                                    $arRegistro->setFecha($arPagoBanco->getFecha());
-                                    $arRegistro->setDebito($arPagoBancoDetalle->getVrPago());
-                                    $arRegistro->setDescripcionContable('SS ENTIDAD SALUD');
-                                    $em->persist($arRegistro);
-
-                                    //Riesgos
-                                    $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();
-                                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arCuentaRiesgos->getCodigoCuentaFk());
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    $arRegistro->setCuentaRel($arCuenta);
-                                    $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPagoBanco->getCodigoPagoBancoPk());
-                                    $arRegistro->setNumeroReferencia($arPagoBanco->getCodigoPagoBancoPk());
-                                    $arRegistro->setFecha($arPagoBanco->getFecha());
-                                    $arRegistro->setDebito($arPagoBancoDetalle->getVrPago());
-                                    $arRegistro->setDescripcionContable('SS ENTIDAD RIESGOS');
-                                    $em->persist($arRegistro);
-
-                                    //Parafiscales
-                                    $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();
-                                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arCuentaParafiscales->getCodigoCuentaFk());
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    $arRegistro->setCuentaRel($arCuenta);
-                                    $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arPagoBanco->getCodigoPagoBancoPk());
-                                    $arRegistro->setNumeroReferencia($arPagoBanco->getCodigoPagoBancoPk());
-                                    $arRegistro->setFecha($arPagoBanco->getFecha());
-                                    $arRegistro->setDebito($arPagoBancoDetalle->getVrPago());
-                                    $arRegistro->setDescripcionContable('SS ENTIDAD CAJA (PARAFISCALES)');
-                                    $em->persist($arRegistro);
-                                     * 
-                                     */
+                                    
+                                    //PARAFISCALES (CAJA)
+                                    $dql   = "SELECT a.codigoEntidadCajaFk, SUM(a.cotizacionCaja+a.cotizacionSena+a.cotizacionIcbf) as caja FROM BrasaRecursoHumanoBundle:RhuSsoAporte a "
+                                            . "WHERE a.codigoPeriodoDetalleFk = " . $arPagoBancoDetalle->getCodigoPeriodoDetalleFk() . " GROUP BY a.codigoEntidadCajaFk";
+                                    $query = $em->createQuery($dql);
+                                    $arrayResultado = $query->getResult();                                    
+                                    foreach ($arrayResultado as $detalle) {
+                                        if($detalle['caja'] > 0) {                                            
+                                            $arEntidadCaja = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja();
+                                            $arEntidadCaja = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadCaja')->find($detalle['codigoEntidadCajaFk']);
+                                            $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arEntidadCaja->getNit()));
+                                            
+                                            $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();
+                                            $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arCuentaParafiscales->getCodigoCuentaFk());
+                                            $arRegistro->setComprobanteRel($arComprobanteContable);
+                                            $arRegistro->setCuentaRel($arCuenta);
+                                            $arRegistro->setTerceroRel($arTercero);
+                                            $arRegistro->setNumero($arPagoBanco->getCodigoPagoBancoPk());
+                                            $arRegistro->setNumeroReferencia($arPagoBanco->getCodigoPagoBancoPk());
+                                            $arRegistro->setFecha($arPagoBanco->getFecha());
+                                            $arRegistro->setDebito($detalle['caja']);
+                                            $arRegistro->setDescripcionContable('SS PARAFISCALES');
+                                            $em->persist($arRegistro);                                            
+                                        }
+                                    }                                                                       
 
                                 } else {
                                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();
