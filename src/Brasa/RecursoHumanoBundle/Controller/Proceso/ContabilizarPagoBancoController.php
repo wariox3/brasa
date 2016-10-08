@@ -196,7 +196,7 @@ class ContabilizarPagoBancoController extends Controller
 
                             }
                         }
-                        //$arPagoBanco->setEstadoContabilizado(1);
+                        $arPagoBanco->setEstadoContabilizado(1);
                         $em->persist($arPagoBanco);
                     }
                     $em->flush();
