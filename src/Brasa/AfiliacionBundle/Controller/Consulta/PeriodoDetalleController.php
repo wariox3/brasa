@@ -46,14 +46,19 @@ class PeriodoDetalleController extends Controller
                 $session->get('filtroCodigoCliente'),
                 $session->get('filtroPeriodoEstadoFacturado'),
                 $session->get('filtroDesde'),
-                $session->get('filtroHasta')
+                $session->get('filtroHasta'),
+                $session->get('filtroAsesor')
                 ); 
     }       
 
     private function filtrar ($form) {        
-        $session = $this->getRequest()->getSession();                        
+        $session = $this->getRequest()->getSession(); 
+        $request = $this->getRequest();
+        $controles = $request->request->get('form');
+        $arrControles = $request->request->All();
         $session->set('filtroPeriodoNumero', $form->get('TxtNumero')->getData());
-        $session->set('filtroPeriodoEstadoFacturado', $form->get('estadoFacturado')->getData());                  
+        $session->set('filtroPeriodoEstadoFacturado', $form->get('estadoFacturado')->getData());
+        $session->set('filtroAsesor', $controles['asesorRel']);
         $session->set('filtroNit', $form->get('TxtNit')->getData()); 
         $dateFechaDesde = $form->get('fechaDesde')->getData();
         $dateFechaHasta = $form->get('fechaHasta')->getData();
@@ -70,6 +75,20 @@ class PeriodoDetalleController extends Controller
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
+        $arrayPropiedades = array(
+                'class' => 'BrasaGeneralBundle:GenAsesor',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroAsesor')) {
+            $arrayPropiedades['data'] = $em->getReference("BrasaGeneralBundle:GenAsesor", $session->get('filtroAsesor'));
+        }
         $strNombreCliente = "";
         if($session->get('filtroNit')) {
             $arCliente = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
@@ -84,6 +103,7 @@ class PeriodoDetalleController extends Controller
             $session->set('filtroCodigoCliente', null);
         }        
         $form = $this->createFormBuilder() 
+            ->add('asesorRel', 'entity', $arrayPropiedades)    
             ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
             ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))
             ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCursoNumero')))
@@ -172,7 +192,8 @@ class PeriodoDetalleController extends Controller
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getNombreCorto())
                     ->setCellValue('B' . $i, $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getTelefono(). ' - ' .$arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getCelular())
-                    ->setCellValue('C' . $i, $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getEmail());
+                    ->setCellValue('C' . $i, $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getEmail())
+                    ->setCellValue('D' . $i, "ASESOR: ".$arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getAsesorRel()->getNombre());
                 $i = $i+1;
                 $cliente = $arPeriodoDetalle->getPeriodoRel()->getCodigoClienteFk();
                 //$contador2 = $contador2 + 1;

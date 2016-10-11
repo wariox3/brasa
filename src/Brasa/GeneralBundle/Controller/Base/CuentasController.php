@@ -29,10 +29,10 @@ class CuentasController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoBanco) {
-                    $arBanco = new \Brasa\GeneralBundle\Entity\GenBanco();
-                    $arBanco = $em->getRepository('BrasaGeneralBundle:GenBanco')->find($codigoBanco);
-                    $em->remove($arBanco);
+                foreach ($arrSeleccionados AS $codigoCuenta) {
+                    $arCuenta = new \Brasa\GeneralBundle\Entity\GenCuenta();
+                    $arCuenta = $em->getRepository('BrasaGeneralBundle:GenCuenta')->find($codigoCuenta);
+                    $em->remove($arCuenta);
                     $em->flush();
                 }
             }            

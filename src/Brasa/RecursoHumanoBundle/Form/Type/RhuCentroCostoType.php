@@ -25,9 +25,7 @@ class RhuCentroCostoType extends AbstractType
                     return $er->createQueryBuilder('cc')
                     ->orderBy('cc.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => false,
-                'empty_data' => 4,
-                'empty_value' => 'QUINCENAL',
+                'required' => true,                
                 ))
             ->add('sucursalRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSsoSucursal',

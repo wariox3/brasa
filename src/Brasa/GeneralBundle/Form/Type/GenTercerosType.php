@@ -24,10 +24,10 @@ class GenTercerosType extends AbstractType
             ->add('apellido2', 'text', array('required' => false))
             ->add('formaPagoClienteRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenFormaPago',
-                        'property' => 'nombreFormaPago',))
+                        'property' => 'nombre',))
             ->add('formaPagoProveedorRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenFormaPago',
-                        'property' => 'nombreFormaPago',))
+                        'property' => 'nombre',))
             ->add('asesorRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenAsesor',
                         'property' => 'nombre',))
@@ -45,7 +45,7 @@ class GenTercerosType extends AbstractType
             ->add('celularContactoCliente', 'text', array('required' => false))
             ->add('contactoProveedor', 'text', array('required' => false))
             ->add('celularContactoProveedor', 'text', array('required' => false))
-            ->add('codigoActividadEconomica', 'text', array('required' => false))
+            ->add('codigoActividadEconomica', 'number', array('required' => false))
             ->add('porcentajeCREE', 'text', array('required' => false))
             ->add('BtnGuardar', 'submit', array('label' => 'Guardar'));
     }

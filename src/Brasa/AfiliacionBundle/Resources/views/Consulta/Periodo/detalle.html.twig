@@ -51,9 +51,13 @@
                 </div>
                 <div class="form-group form-group-sm">
                     <label for="form_fechaDesde" class="col-sm-2 control-label">Desde:</label>
-                    <div class="col-sm-10">
+                    <div class="col-sm-4">
                         {{ form_widget(form.fechaDesde, {'attr': {'maxlength' : 10} }) }} 
-                    </div>                
+                    </div>  
+                    <label for="form_asesorRel" class="col-sm-2 control-label">Asesor:</label>
+                    <div class="col-sm-4">                  
+                        {{ form_widget(form.asesorRel, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
                 </div>                     
                 <div class="form-group form-group-sm">
                     <label for="form_fechaHasta" class="col-sm-2 control-label">Hasta:</label>
@@ -121,7 +125,7 @@
                         <td id="suptipo" colspan="4">{{ arPeriodoDetalles.periodoRel.clienteRel.nombreCorto }}</td>
                         <td id="suptipo" colspan="1">{{ arPeriodoDetalles.periodoRel.clienteRel.telefono }}</td>
                         <td id="suptipo" colspan="2">{{ arPeriodoDetalles.periodoRel.clienteRel.email }}</td>
-                        <td id="suptipo" colspan="7"></th>    
+                        <td id="suptipo" colspan="7">{{ arPeriodoDetalles.periodoRel.clienteRel.asesorRel.nombre }}</th>    
                     </tr>
                 {% set cliente = arPeriodoDetalles.periodoRel.codigoClienteFk %}
                 

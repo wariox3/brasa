@@ -16,9 +16,9 @@ class AfiPeriodoDetalleRepository extends EntityRepository {
         return $dql;
     }
 
-    public function listaConsultaDql($codigo = '', $codigoCliente = '', $estadoFacturado = '',$strDesde = "", $strHasta = "") {
+    public function listaConsultaDql($codigo = '', $codigoCliente = '', $estadoFacturado = '',$strDesde = "", $strHasta = "", $strAsesor = "") {
         //$em = $this->getEntityManager();
-        $dql   = "SELECT pd FROM BrasaAfiliacionBundle:AfiPeriodoDetalle pd JOIN pd.periodoRel p WHERE pd.codigoPeriodoDetallePk <> 0";
+        $dql   = "SELECT pd FROM BrasaAfiliacionBundle:AfiPeriodoDetalle pd JOIN pd.periodoRel p JOIN p.clienteRel c WHERE pd.codigoPeriodoDetallePk <> 0";
         if($codigoCliente != '') {
             $dql .= " AND p.codigoClienteFk = " . $codigoCliente;
         }
@@ -33,6 +33,9 @@ class AfiPeriodoDetalleRepository extends EntityRepository {
         }
         if($strHasta != "") {
             $dql .= " AND p.fechaDesde <='" . $strHasta . "'";
+        }
+        if($strAsesor != "" ) {
+            $dql .= " AND c.codigoAsesorFk ='" . $strAsesor . "'";
         }
 
         $dql .= " ORDER BY pd.codigoPeriodoDetallePk";
