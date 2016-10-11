@@ -957,7 +957,7 @@ class ContratosController extends Controller
                     ->setCellValue('V' . $i, $arContrato->getFechaUltimoPago()->Format('Y-m-d'))
                     ->setCellValue('W' . $i, $arContrato->getFechaUltimoPagoPrimas()->Format('Y-m-d'))
                     ->setCellValue('X' . $i, $arContrato->getFechaUltimoPagoCesantias()->Format('Y-m-d'))
-                    ->setCellValue('Y' . $i, $arContrato->getFechaUltimoPagoVacaciones()->Format('Y-m-d'))
+                    ->setCellValue('Y' . $i, '')
                     ->setCellValue('Z' . $i, $objFunciones->devuelveBoolean($arContrato->getEstadoTerminado()))
                     ->setCellValue('AA' . $i, $objFunciones->devuelveBoolean($arContrato->getLimitarHoraExtra()));
             $i++;
