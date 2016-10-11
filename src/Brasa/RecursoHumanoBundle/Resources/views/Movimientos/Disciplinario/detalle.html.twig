@@ -129,7 +129,7 @@
                                     <td></td>
                                 {% else %}
                                     <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_disciplinario_descargo_nuevo', { 'codigoDisciplinario': arDisciplinario.codigoDisciplinarioPk, 'codigoDisciplinarioDescargo': arDescargos.codigoDisciplinarioDescargoPk }) }}', 'AgregarDescargos', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
-                                {% endif%}
+                                {% endif%} 
                                 <td align="center"><input type="checkbox" name="ChkSeleccionarDescargo[]" value="{{ arDescargos.codigoDisciplinarioDescargoPk }}" /></td>
                             </tr>
                         {% endfor %}
