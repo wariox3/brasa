@@ -72,4 +72,15 @@ class RhuDisciplinarioRepository extends EntityRepository {
         }
         return $dql;
     }
+    
+    public function eliminarDescargo($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigoDescargo) {
+                $arDescargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinarioDescargo')->find($codigoDescargo);
+                $em->remove($arDescargo);       
+            }
+            $em->flush();
+        }
+    }
 }

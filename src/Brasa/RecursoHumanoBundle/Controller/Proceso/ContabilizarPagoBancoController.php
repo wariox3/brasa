@@ -47,7 +47,7 @@ class ContabilizarPagoBancoController extends Controller
                         $arPagoBancoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->findBy(array('codigoPagoBancoFk' => $codigo));
                         foreach ($arPagoBancoDetalles as $arPagoBancoDetalle) {
                             if($arPagoBancoDetalle->getVrPago() > 0) {
-                                /*$arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arPagoBancoDetalle->getEmpleadoRel()->getNumeroIdentificacion()));
+                                $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arPagoBancoDetalle->getEmpleadoRel()->getNumeroIdentificacion()));
                                 if(!$arTercero) {
                                     $arTercero = new \Brasa\ContabilidadBundle\Entity\CtbTercero();
                                     $arTercero->setCiudadRel($arPagoBancoDetalle->getEmpleadoRel()->getCiudadRel());
@@ -64,7 +64,7 @@ class ContabilizarPagoBancoController extends Controller
                                     $arTercero->setCelular($arPagoBancoDetalle->getEmpleadoRel()->getCelular());
                                     $arTercero->setEmail($arPagoBancoDetalle->getEmpleadoRel()->getCorreo());
                                     $em->persist($arTercero);
-                                }*/
+                                }
 
                                 if($arPagoBancoDetalle->getCodigoPeriodoDetalleFk()) {
                                     //PENSION

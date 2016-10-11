@@ -152,6 +152,7 @@ class DisciplinarioController extends Controller
     public function detalleAction($codigoDisciplinario) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $arrSeleccionados = $request->request->get('ChkSeleccionarDescargo');
         $objMensaje = $this->get('mensajes_brasa');
         $arProcesoDisciplinario = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinario();
         $arProcesoDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
@@ -181,6 +182,12 @@ class DisciplinarioController extends Controller
                     $objFormatoCarta = new \Brasa\RecursoHumanoBundle\Formatos\FormatoProcesoDisciplinario();
                     $objFormatoCarta->Generar($this, $codigoProcesoDisciplinarioTipo, $codigoProcesoDisciplinario);
                 }    
+            }
+            if($form->get('BtnEliminarDescargo')->isClicked()) {
+                if($arProcesoDisciplinario->getEstadoAutorizado() == 0) {
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->eliminarDescargo($arrSeleccionados);
+                    return $this->redirect($this->generateUrl('brs_rhu_movimiento_disciplinario_detalle', array('codigoDisciplinario' => $codigoDisciplinario)));                                                
+                }
             }
             if($form->get('BtnCerrar')->isClicked()) {
                 if($arProcesoDisciplinario->getEstadoAutorizado() == 1) {
