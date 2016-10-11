@@ -38,6 +38,16 @@ class TurProgramacionInconsistencia
     private $dia = 0;  
     
     /**
+     * @ORM\Column(name="mes", type="integer", nullable=true)
+     */    
+    private $mes = 0;    
+    
+    /**
+     * @ORM\Column(name="anio", type="integer", nullable=true)
+     */    
+    private $anio = 0;     
+    
+    /**
      * @ORM\Column(name="codigo_recurso_fk", type="integer", nullable=true)
      */    
     private $codigoRecursoFk;    
@@ -228,5 +238,53 @@ class TurProgramacionInconsistencia
     public function getZona()
     {
         return $this->zona;
+    }
+
+    /**
+     * Set mes
+     *
+     * @param integer $mes
+     *
+     * @return TurProgramacionInconsistencia
+     */
+    public function setMes($mes)
+    {
+        $this->mes = $mes;
+
+        return $this;
+    }
+
+    /**
+     * Get mes
+     *
+     * @return integer
+     */
+    public function getMes()
+    {
+        return $this->mes;
+    }
+
+    /**
+     * Set anio
+     *
+     * @param integer $anio
+     *
+     * @return TurProgramacionInconsistencia
+     */
+    public function setAnio($anio)
+    {
+        $this->anio = $anio;
+
+        return $this;
+    }
+
+    /**
+     * Get anio
+     *
+     * @return integer
+     */
+    public function getAnio()
+    {
+        return $this->anio;
     }
 }

@@ -140,6 +140,9 @@ class ProgramacionInconsistenciaController extends Controller
                 $arProgramacionInconsistencia = new \Brasa\TurnoBundle\Entity\TurProgramacionInconsistencia();
                 $arProgramacionInconsistencia->setInconsistencia('Recurso sin programacion en el mes');
                 $arProgramacionInconsistencia->setDetalle("El recurso " . $arRecurso->getCodigoRecursoPk() . " " . $arRecurso->getNombreCorto() . " no registra programaciones para el mes");
+                $arProgramacionInconsistencia->setMes($strMes);
+                $arProgramacionInconsistencia->setAnio($strAnio);
+                $arProgramacionInconsistencia->setCodigoRecursoFk($arRecurso->getCodigoRecursoPk());
                 $arProgramacionInconsistencia->setNumeroIdentificacion($arRecurso->getNumeroIdentificacion());
                 $em->persist($arProgramacionInconsistencia);                         
             }
@@ -184,6 +187,9 @@ class ProgramacionInconsistenciaController extends Controller
                             $registro['nombreCorto'] . " dia " . $i);                            
                             $arProgramacionInconsistencia->setNumeroIdentificacion($registro['numeroIdentificacion']);
                             $arProgramacionInconsistencia->setDia($i);
+                            $arProgramacionInconsistencia->setMes($strMes);
+                            $arProgramacionInconsistencia->setAnio($strAnio);
+                            $arProgramacionInconsistencia->setCodigoRecursoFk($registro['codigoRecursoFk']);
                             $arProgramacionInconsistencia->setCodigoRecursoGrupoFk($registro['recursoGrupo']);
                             if($arEmpleado->getCodigoZonaFk()) {
                                 $arProgramacionInconsistencia->setZona($arEmpleado->getZonaRel()->getNombre());
@@ -231,7 +237,10 @@ class ProgramacionInconsistenciaController extends Controller
                             $arProgramacionInconsistencia->setInconsistencia('Asignacion doble de turno');
                             $arProgramacionInconsistencia->setDetalle("Recurso " . $registro['codigoRecursoFk'] . " " . 
                                     $registro['nombreCorto'] . " dia " . $i);
-                            $arProgramacionInconsistencia->setDia($i); 
+                            $arProgramacionInconsistencia->setDia($i);
+                            $arProgramacionInconsistencia->setMes($strMes);
+                            $arProgramacionInconsistencia->setAnio($strAnio);
+                            $arProgramacionInconsistencia->setCodigoRecursoFk($registro['codigoRecursoFk']);
                             $arProgramacionInconsistencia->setCodigoRecursoGrupoFk($registro['recursoGrupo']);
                             $arProgramacionInconsistencia->setNumeroIdentificacion($registro['numeroIdentificacion']);
                             if($arEmpleado->getCodigoZonaFk()) {

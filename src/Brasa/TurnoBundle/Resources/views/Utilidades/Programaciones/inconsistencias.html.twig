@@ -30,7 +30,7 @@
         </div> 
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
-                <th>CODIGO</th>
+                <th>ID</th>
                 <th>INCONSISTENCIA</th>
                 <th>DETALLE</th>
                 <th>DOCUMENTO</th>
@@ -44,7 +44,11 @@
                 <td>{{ arProgramacionInconsistencias.codigoProgramacionInconsistenciaPk  }}</td>  
                 <td>{{ arProgramacionInconsistencias.inconsistencia  }}</td> 
                 <td>{{ arProgramacionInconsistencias.detalle  }}</td> 
-                <td>{{ arProgramacionInconsistencias.numeroIdentificacion  }}</td>
+                {% if arProgramacionInconsistencias.codigoRecursoFk is not null %} 
+                    <td><a href="javascript:abrirVentana3('{{ path('brs_tur_utilidad_recurso_programacion_masiva', { 'anio': arProgramacionInconsistencias.anio, 'mes': arProgramacionInconsistencias.mes, 'codigoRecurso': arProgramacionInconsistencias.codigoRecursoFk }) }}', 'VerProgramaciones', 600, 1200)">{{ arProgramacionInconsistencias.numeroIdentificacion  }}</a></td>
+                {% else %}
+                    <td>{{ arProgramacionInconsistencias.numeroIdentificacion  }}</td>
+                {% endif %}                
                 <td>{{ arProgramacionInconsistencias.codigoRecursoGrupoFk  }}</td>
                 <td>{{ arProgramacionInconsistencias.zona  }}</td>
                 <td>{{ arProgramacionInconsistencias.dia  }}</td> 
