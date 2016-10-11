@@ -49,27 +49,29 @@
             <tr>
                 <th>CÓDIGO</th>
                 <th>FECHA</th>
-                <th>GRUPO PAGO</th>
-                <th>IDENTIFICACIÓN</th>
-                <th>NOMBRE</th>
-                <th>CARGO</th>
                 <th>PROCESO</th>
-                <th>CAUSAL</th>
-                <th>DESCARGOS</th>
-                <th>FECHA DE SUSPENSIÓN</th>
+                <th>MOTIVO</th>
+                <th>DOCUMENTO</th>
+                <th>NOMBRE</th>
+                <th>GRUPO PAGO</th>                                
+                <th>ZONA</th>
+                <th>OPERACION</th>
+                <th>USUARIO</th>
+                <th>PROCEDE</th>
             </tr>
             {% for arProcesosDisciplinarios in arProcesosDisciplinarios %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arProcesosDisciplinarios.codigoDisciplinarioPk }}">{{ arProcesosDisciplinarios.codigoDisciplinarioPk }} </td>
                 <td>{{ arProcesosDisciplinarios.fecha |date("Y/m/d")  }}</td>
-                <td>{{ arProcesosDisciplinarios.centroCostoRel.nombre  }}</td>
+                <td>{{ arProcesosDisciplinarios.disciplinarioTipoRel.nombre  }}</td>
+                <td>{{ arProcesosDisciplinarios.disciplinarioMotivoRel.nombre  }}</td>
                 <td>{{ arProcesosDisciplinarios.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arProcesosDisciplinarios.empleadoRel.nombreCorto  }}</td>
-                <td>{{ arProcesosDisciplinarios.empleadoRel.cargoDescripcion  }}</td>
-                <td>{{ arProcesosDisciplinarios.disciplinarioTipoRel.nombre  }}</td>
-                <td>{{ arProcesosDisciplinarios.asunto|default('NO APLICA')  }}</td>
-                <td>{{ arProcesosDisciplinarios.descargos|default('NO APLICA')  }}</td>
-                <td>{{ arProcesosDisciplinarios.suspension|default('NO APLICA')  }}</td>
+                <td>{{ arProcesosDisciplinarios.centroCostoRel.nombre  }}</td>
+                <td>{{ arProcesosDisciplinarios.empleadoRel.zonaRel.nombre  }}</td>
+                <td>{{ arProcesosDisciplinarios.empleadoRel.subzonaRel.nombre }}</td>
+                <td>{{ arProcesosDisciplinarios.codigoDisciplinarioPk  }}</td>
+                <td>{% if arProcesosDisciplinarios.estadoProcede == 1%}SI{% else %}NO{% endif %}</td>
             </tr>
             {% endfor %}
         </table>

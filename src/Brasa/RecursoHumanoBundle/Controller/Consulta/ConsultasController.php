@@ -2453,16 +2453,17 @@ class ConsultasController extends Controller
             ->setCategory("Test result file");
 
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CODIGO')
+                    ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'FECHA')
-                    ->setCellValue('C1', 'CENTRO COSTOS')
-                    ->setCellValue('D1', 'IDENTIFICACIÓN')
-                    ->setCellValue('E1', 'EMPLEADO')
-                    ->setCellValue('F1', 'CARGO')
-                    ->setCellValue('G1', 'PROCESO')
-                    ->setCellValue('H1', 'CAUSAL')
-                    ->setCellValue('I1', 'DESCARGOS')
-                    ->setCellValue('J1', 'FECHA SUSPENSIÓN');
+                    ->setCellValue('C1', 'PROCESO')
+                    ->setCellValue('D1', 'CAUSAL O MOTIVO')
+                    ->setCellValue('E1', 'IDENTIFICACIÓN')
+                    ->setCellValue('F1', 'EMPLEADO')
+                    ->setCellValue('G1', 'GRUPO PAGO')                   
+                    ->setCellValue('H1', 'ZONA')
+                    ->setCellValue('I1', 'OPERACION')
+                    ->setCellValue('J1', 'USUARIO')
+                    ->setCellValue('K1', 'PROCESO');
 
         $i = 2;
         $query = $em->createQuery($this->strSqlProcesosDisciplinariosLista);
@@ -2475,32 +2476,31 @@ class ConsultasController extends Controller
             $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
         }
         foreach ($arProcesosDisciplinarios as $arProcesoDisciplinario) {
-            if ($arProcesoDisciplinario->getAsunto() == Null){
-                $asunto = "NO APLICA";
+            if ($arProcesoDisciplinario->getEstadoProcede() == 1){
+                    $estadoProcede = "SI";
             } else {
-                $asunto = $arProcesoDisciplinario->getAsunto();
+                $estadoProcede = "NO";
             }
-            if ($arProcesoDisciplinario->getDescargos() == Null){
-                $descargos = "NO APLICA";
-            } else {
-                $descargos = $arProcesoDisciplinario->getDescargos();
+            $zona = '';
+            if ($arProcesoDisciplinario->getEmpleadoRel()->getCodigoZonaFk() != null){
+                $zona = $arProcesoDisciplinario->getEmpleadoRel()->getZonaRel()->getNombre();
             }
-            if ($arProcesoDisciplinario->getSuspension() == Null){
-                $suspension = "NO APLICA";
-            } else {
-                $suspension = $arProcesoDisciplinario->getSuspension();
+            $operacion = '';
+            if ($arProcesoDisciplinario->getEmpleadoRel()->getCodigoSubzonaFk() != null){
+                $operacion = $arProcesoDisciplinario->getEmpleadoRel()->getSubzonaRel()->getNombre();
             }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arProcesoDisciplinario->getCodigoDisciplinarioPk())
-                    ->setCellValue('B' . $i, $arProcesoDisciplinario->getFecha()->format('Y/m/d'))
-                    ->setCellValue('C' . $i, $arProcesoDisciplinario->getCentroCostoRel()->getNombre())
-                    ->setCellValue('D' . $i, $arProcesoDisciplinario->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('E' . $i, $arProcesoDisciplinario->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('F' . $i, $arProcesoDisciplinario->getEmpleadoRel()->getCargoDescripcion())
-                    ->setCellValue('G' . $i, $arProcesoDisciplinario->getDisciplinarioTipoRel()->getNombre())
-                    ->setCellValue('H' . $i, $asunto)
-                    ->setCellValue('I' . $i, $descargos)
-                    ->setCellValue('J' . $i, $suspension);
+                    ->setCellValue('B' . $i, $arProcesoDisciplinario->getFecha())
+                    ->setCellValue('C' . $i, $arProcesoDisciplinario->getDisciplinarioTipoRel()->getNombre())
+                    ->setCellValue('D' . $i, $arProcesoDisciplinario->getDisciplinarioMotivoRel()->getNombre())
+                    ->setCellValue('E' . $i, $arProcesoDisciplinario->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('F' . $i, $arProcesoDisciplinario->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('G' . $i, $arProcesoDisciplinario->getCentroCostoRel()->getNombre())                    
+                    ->setCellValue('H' . $i, $zona)
+                    ->setCellValue('I' . $i, $operacion)
+                    ->setCellValue('J' . $i, $estadoProcede)
+                    ->setCellValue('K' . $i, $arProcesoDisciplinario->getCodigoUsuario());
             $i++;
         }
 

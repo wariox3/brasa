@@ -47,8 +47,8 @@ class envioComprobanteCorreoController extends Controller
                     $strMensaje = "Se adjunta comprobante de pago";                
                     $message = \Swift_Message::newInstance()
                         ->setSubject('Comprobante de pago ')
-                        ->setFrom('jefedesarrollo@jgefectivo.com', "SogaApp" )
-                        ->setTo(strtolower('maestradaz3@gmail.com'))
+                        ->setFrom('analista.desarrollo@jgefectivo.com', "SogaApp" )
+                        ->setTo(strtolower('aranzatus21@gmail.com'))
                         ->setBody($strMensaje,'text/html')                            
                         ->attach(\Swift_Attachment::fromPath($ruta."Pago".$arPago->getCodigoPagoPk().".pdf"));                
                     $this->get('mailer')->send($message);                    
