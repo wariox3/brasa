@@ -104,7 +104,7 @@
             <table class="table table-striped table-bordered table-condensed">
             <tr>
 
-                <th colspan="2">RECURSO</th>
+                <th colspan="3">RECURSO</th>
                 <th>1</th>
                 <th>2</th>
                 <th>3</th>
@@ -151,13 +151,14 @@
                 {% endif %}
                 {% if intCodigoPuesto != arProgramacionDetalle.codigoPuestoFk %}
                     <tr>
-                        <td colspan="2"></td>
+                        <td colspan="3"></td>
                         <td id="suptipo" colspan="38">{{ arProgramacionDetalle.puestoRel.nombre | default('') }}</td>
                     </tr>
                     {% set intCodigoPuesto = arProgramacionDetalle.codigoPuestoFk %}
                 {% endif %}
                 <tr>
                     <td>{{ arProgramacionDetalle.codigoRecursoFk }}</td>
+                    <td>{{ arProgramacionDetalle.recursoRel.numeroIdentificacion | default('') }}</td>
                     <td><a href="javascript:abrirVentana3('{{ path('brs_tur_utilidad_recurso_programacion_masiva', { 'anio': arProgramacionDetalle.anio, 'mes': arProgramacionDetalle.mes, 'codigoRecurso': arProgramacionDetalle.codigoRecursoFk }) }}', 'VerProgramaciones', 600, 1200)">{{ arProgramacionDetalle.recursoRel.nombreCorto | default('') }}</a></td>
                     <td>{{ arProgramacionDetalle.dia1  }}</td>
                     <td>{{ arProgramacionDetalle.dia2  }}</td>

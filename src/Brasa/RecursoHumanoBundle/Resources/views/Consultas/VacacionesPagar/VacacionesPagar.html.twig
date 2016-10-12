@@ -44,10 +44,11 @@
                 <th>CÓDIGO</th>
                 <th>TIPO</th>
                 <th>FECHA</th>
-                <th>NÚMERO</th>
                 <th>IDENTIFICACION</th>                
                 <th>EMPLEADO</th>                
                 <th>GRUPO PAGO</th>
+                <th>ZONA</th>
+                <th>SUBZONA</th>
                 <th>DESDE</th>
                 <th>FECHA ULTIMO PAGO</th>
                 <th>FECHA ULTIMO VACACIONES</th>
@@ -59,10 +60,11 @@
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arVacacionesPagar.codigoContratoPk }}">{{ arVacacionesPagar.codigoContratoPk }} </td>
                 <td>{{ arVacacionesPagar.ContratoTipoRel.nombre  }}</td>
                 <td>{{ arVacacionesPagar.fecha |date("Y/m/d")  }}</td>
-                <td>{{ arVacacionesPagar.numero  }}</td>
                 <td>{{ arVacacionesPagar.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arVacacionesPagar.empleadoRel.nombreCorto  }}</td>
-                <td>{{ arVacacionesPagar.centroCostoRel.nombre  }}</td>                
+                <td>{{ arVacacionesPagar.centroCostoRel.nombre  }}</td>
+                <td>{{ arVacacionesPagar.empleadoRel.zonaRel.nombre | default('')  }}</td>
+                <td>{{ arVacacionesPagar.empleadoRel.subzonaRel.nombre | default('')  }}</td>
                 <td>{{ arVacacionesPagar.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arVacacionesPagar.fechaUltimoPago |date("Y/m/d")  }}</td>
                 <td>{{ arVacacionesPagar.fechaUltimoPagoVacaciones |date("Y/m/d")  }}</td>
