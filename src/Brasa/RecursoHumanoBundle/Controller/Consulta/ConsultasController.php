@@ -502,13 +502,13 @@ class ConsultasController extends Controller
                 $this->EmpleadoListar();
             }
 
-            if($form->get('BtnPdf')->isClicked()) {
+            /*if($form->get('BtnPdf')->isClicked()) {
                 $this->filtrarEmpleadoLista($form);
                 $this->EmpleadoListar();
                 $objFormatoEmpleado = new \Brasa\RecursoHumanoBundle\Formatos\FormatoEmpleado();
                 $objFormatoEmpleado->Generar($this, $this->strSqlEmpleadosLista);
 
-            }
+            }*/
 
             if($form->get('BtnExcel')->isClicked()) {
                 $this->filtrarEmpleadoLista($form);
