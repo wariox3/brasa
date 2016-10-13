@@ -254,7 +254,7 @@ class CreditosController extends Controller
                         } else {
                             if ($arCredito->getVrPagar() >= $arCredito->getSaldo()){
                                 if ($arCredito->getVrPagar() > $arCredito->getTotalPagos()){
-                                    $arCredito->setSaldo($arCredito->getVrPagar() - $arCredito->getTotalPagos()); 
+                                    $arCredito->setSaldo($arCredito->getVrPagar() - $arCredito->getTotalPagos());
                                 } else {
                                     $mensaje = "El valor del credito no puede ser menor al total de pagos";
                                 }

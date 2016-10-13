@@ -1,6 +1,8 @@
 <?php
 namespace Brasa\RecursoHumanoBundle\Formatos;
+
 class FormatoContrato extends \FPDF_FPDF {
+    
     public static $em;
     
     public static $codigoContrato;
@@ -79,9 +81,19 @@ class FormatoContrato extends \FPDF_FPDF {
         $sustitucion6 = $arConfiguracion->getDireccionEmpresa();
         $sustitucion7 = $arContrato->getEmpleadoRel()->getBarrio();
         $sustitucion8 = $arContrato->getEmpleadoRel()->getFechaNacimiento()->format('Y/m/d');
-        $sustitucion9 = $arContrato->getEmpleadoRel()->getCiudadNacimientoRel()->getNombre();
+        if ($arContrato->getEmpleadoRel()->getCodigoCiudadNacimientoFk() != null){
+            $ciudadNacimiento = $arContrato->getEmpleadoRel()->getCiudadNacimientoRel()->getNombre();
+        } else {
+            $ciudadNacimiento = '';
+        }
+        if ($arContrato->getEmpleadoRel()->getCodigoCiudadNacimientoFk() != null){
+            $gentilicio = $arContrato->getEmpleadoRel()->getCiudadNacimientoRel()->getDepartamentoRel()->getPaisRel()->getGentilicio();
+        } else {
+            $gentilicio = '';
+        }
+        $sustitucion9 = $ciudadNacimiento;
         $sustitucion10 = $arContrato->getEmpleadoRel()->getCiudadRel()->getNombre();
-        $sustitucion11 = $arContrato->getEmpleadoRel()->getCiudadNacimientoRel()->getDepartamentoRel()->getPaisRel()->getGentilicio();
+        $sustitucion11 = $gentilicio;
         $sustitucion12 = $arContrato->getCargoRel()->getNombre();
         $sustitucion13 = number_format($arContrato->getVrSalario(), 2,'.',',');
         $sustitucion14 = $arContrato->getCentroCostoRel()->getPeriodoPagoRel()->getNombre();
@@ -100,7 +112,12 @@ class FormatoContrato extends \FPDF_FPDF {
         //$feci = $arContrato->getFechaDesde();
         //$fecf = $arContrato->getFechaHasta();
         $sustitucion17 = $arContrato->getCiudadContratoRel()->getNombre();
-        $sustitucion18 = $arContrato->getEmpleadoRel()->getCiudadExpedicionRel()->getNombre();
+        if ($arContrato->getEmpleadoRel()->getCodigoCiudadExpedicionFk() != null){
+            $ciudadExpedicion = $arContrato->getEmpleadoRel()->getCiudadExpedicionRel()->getNombre();
+        } else {
+            $ciudadExpedicion = '';
+        }
+        $sustitucion18 = $ciudadExpedicion;
         $sustitucion19 = strftime("%d de ". $this->MesesEspañol($feci->format('m')) ." de %Y", strtotime($sustitucion16));
         $sustitucion20 = $arContrato->getHorarioTrabajo();
         $sustitucion21 = strftime("%d de ". $this->MesesEspañol($feci->format('m')) ." de %Y", strtotime($sustitucion16));

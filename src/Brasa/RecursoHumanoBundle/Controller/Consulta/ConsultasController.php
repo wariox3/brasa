@@ -966,7 +966,6 @@ class ConsultasController extends Controller
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
-            ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->getForm();
         return $form;
@@ -2779,12 +2778,32 @@ class ConsultasController extends Controller
             }else{
                 $entidadCesantia = $arEmpleado->getEntidadCesantiaRel()->getNombre();
             }
+            if ($arEmpleado->getCodigoCiudadExpedicionFk() != null){
+                $ciudadExpedicion = $arEmpleado->getciudadExpedicionRel()->getNombre();
+            } else {
+                $ciudadExpedicion = "";
+            }
+            if ($arEmpleado->getCodigoCiudadNacimientoFk() != null){
+                $ciudadNacimiento = $arEmpleado->getCiudadNacimientoRel()->getNombre();
+            } else {
+                $ciudadNacimiento = "";
+            }
+            if ($arEmpleado->getCodigoRhPk() != null){
+                $rh = $arEmpleado->getRhRel()->getTipo();
+            } else {
+                $rh = "";
+            }
+            if ($arEmpleado->getCodigoBancoFk() != null){
+                $banco = $arEmpleado->getBancoRel()->getNombre();
+            } else {
+                $banco = "";
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arEmpleado->getCodigoEmpleadoPk())
                     ->setCellValue('B' . $i, $arEmpleado->getTipoIdentificacionRel()->getNombre())
                     ->setCellValue('C' . $i, $arEmpleado->getNumeroIdentificacion())
                     ->setCellValue('D' . $i, $arEmpleado->getDigitoVerificacion())
-                    ->setCellValue('E' . $i, $arEmpleado->getciudadExpedicionRel()->getNombre())
+                    ->setCellValue('E' . $i, $ciudadExpedicion)
                     ->setCellValue('F' . $i, $arEmpleado->getFechaExpedicionIdentificacion())
                     ->setCellValue('G' . $i, $arEmpleado->getLibretaMilitar())
                     ->setCellValue('H' . $i, $centroCosto)
@@ -2794,11 +2813,11 @@ class ConsultasController extends Controller
                     ->setCellValue('L' . $i, $arEmpleado->getDireccion())
                     ->setCellValue('M' . $i, $arEmpleado->getBarrio())
                     ->setCellValue('N' . $i, $arEmpleado->getciudadRel()->getNombre())
-                    ->setCellValue('O' . $i, $arEmpleado->getRhRel()->getTipo())
+                    ->setCellValue('O' . $i, $rh)
                     ->setCellValue('P' . $i, $sexo)
                     ->setCellValue('Q' . $i, $arEmpleado->getCorreo())
                     ->setCellValue('R' . $i, $arEmpleado->getFechaNacimiento())
-                    ->setCellValue('S' . $i, $arEmpleado->getCiudadNacimientoRel()->getNombre())
+                    ->setCellValue('S' . $i, $ciudadNacimiento)
                     ->setCellValue('T' . $i, $arEmpleado->getEstadoCivilRel()->getNombre())
                     ->setCellValue('U' . $i, $padreFamilia)
                     ->setCellValue('V' . $i, $cabezaHogar)
@@ -2809,7 +2828,7 @@ class ConsultasController extends Controller
                     ->setCellValue('AA' . $i, $entidadCesantia)
                     ->setCellValue('AB' . $i, $clasificacionRiesgo)
                     ->setCellValue('AC' . $i, $arEmpleado->getCuenta())
-                    ->setCellValue('AD' . $i, $arEmpleado->getBancoRel()->getNombre())
+                    ->setCellValue('AD' . $i, $banco)
                     ->setCellValue('AE' . $i, $arEmpleado->getFechaContrato())
                     ->setCellValue('AF' . $i, $arEmpleado->getFechaFinalizaContrato())
                     ->setCellValue('AG' . $i, $cargo)

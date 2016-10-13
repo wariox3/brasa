@@ -118,7 +118,7 @@ class ArchivosController extends Controller
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();  
         $arArchivo = new \Brasa\AdministracionDocumentalBundle\Entity\AdArchivo();
         $arArchivo = $em->getRepository('BrasaAdministracionDocumentalBundle:AdArchivo')->find($codigoArchivo);
-        $strRuta = $arArchivo->getDirectorioRel()->getRutaPrincipal() . $arArchivo->getDirectorioRel()->getNumero() . "/" . $arArchivo->getCodigoArchivoPk() . "_" . $arArchivo->getNombre();
+        $strRuta = $arArchivo->getDirectorioRel()->getRutaPrincipal() . $arArchivo->getDirectorioRel()->getNumero()  ."/" . $arArchivo->getCodigoArchivoPk() . "_" . $arArchivo->getNombre();
         
         $form = $this->createFormBuilder()
             ->add('asunto', 'text', array('required' => true))
@@ -128,16 +128,25 @@ class ArchivosController extends Controller
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
-            if($form->get('BtnEnviar')->isClicked()) {                
+            if($form->get('BtnEnviar')->isClicked()) {
                 
-               $message = \Swift_Message::newInstance()
-                    ->setSubject('Mensaje de prueba ')
-                    ->setFrom('sogaimplementacion@gmail.com', "SogaApp" )
-                    ->setTo('analista.desarrollo@jgefectivo.com')
-                    ->setBody('Hola prueba','text/html');
-               $this->get('mailer')->send($message);
-               //$this->get('session')->getFlashBag()->add("suceso", "Mensaje enviado ");                            
-               $objMensaje->Mensaje("error", "Mensaje enviado", $this);
+                
+                ///$ruta = 'C:\exportacion\\';
+                //$arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();                
+                //$arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigo));                
+                
+                    $strAsunto = $form->get('asunto')->getData();                  
+                    $strMensaje = $form->get('mensaje')->getData();               
+                    $message = \Swift_Message::newInstance()
+                        ->setSubject($strAsunto)
+                        ->setFrom('analista.desarrollo@jgefectivo.com', "SogaApp" )
+                        ->setTo(strtolower('analista.desarrollo@jgefectivo.com'))
+                        ->setBody($strMensaje,'text/html')                            
+                        ->attach(\Swift_Attachment::fromPath($strRuta));                
+                    $this->get('mailer')->send($message); 
+                    echo "Mensaje enviado con exito";
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                                                                                                
             }
             
         }         

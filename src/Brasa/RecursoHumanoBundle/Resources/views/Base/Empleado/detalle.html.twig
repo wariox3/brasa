@@ -62,7 +62,7 @@
                         <td class="titulo">SEXO:</td>
                         <td class="td-in-well">{% if arEmpleado.codigoSexoFk == "M" %} MASCULINO {% else %} FEMENINO{% endif %}</td>
                         <td class="titulo">RH:</td>
-                        <td class="td-in-well">{{ arEmpleado.rhRel.tipo }}</td>
+                        <td class="td-in-well">{{ arEmpleado.rhRel.tipo | default('')}}</td>
                     </tr>
                     <tr>
                         <td class="titulo">FECHA NACIMIENTO:</td>

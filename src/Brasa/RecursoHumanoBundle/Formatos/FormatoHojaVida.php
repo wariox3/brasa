@@ -148,7 +148,12 @@ class FormatoHojaVida extends \FPDF_FPDF {
         $this->SetFont('Arial','',8);
         $this->Cell(39, 8, $arEmpleado->getFechaNacimiento()->format('Y/m/d'), 1, 0, 'C', 1);
         $this->SetFont('Arial','',7);
-        $this->Cell(55, 8, utf8_decode($arEmpleado->getCiudadNacimientoRel()->getNombre()), 1, 0, 'C', 1);
+        if ($arEmpleado->getCodigoCiudadNacimientoFk() != null){
+            $ciudadNacimiento = $arEmpleado->getCiudadNacimientoRel()->getNombre();
+        } else {
+            $ciudadNacimiento = '';
+        }
+        $this->Cell(55, 8, utf8_decode($ciudadNacimiento), 1, 0, 'C', 1);
         if ($arEmpleado->getCodigoSexoFk() == "F") { 
             $this->Cell(24, 8, "FEMENINO", 1, 0, 'C', 1);
         }
@@ -158,7 +163,12 @@ class FormatoHojaVida extends \FPDF_FPDF {
         $this->SetFont('Arial','',8);
         $this->Cell(33, 8, $arEmpleado->getLibretaMilitar(), 1, 0, 'C', 0);
         $this->SetFont('Arial','',7);
-        $this->Cell(53, 8, utf8_decode($arEmpleado->getCiudadExpedicionRel()->getNombre()), 1, 0, 'C', 1);
+        if ($arEmpleado->getCodigoCiudadExpedicionFk() != null){
+            $ciudadExpedicion = $arEmpleado->getCiudadExpedicionRel()->getNombre();
+        } else {
+            $ciudadExpedicion = '';
+        }
+        $this->Cell(53, 8, utf8_decode($ciudadExpedicion), 1, 0, 'C', 1);
         $this->SetXY($intX, $intY + 31);
         $this->SetFont('Arial','B',7.5);
         $this->Cell(46, 5, utf8_decode("DIRECCIÓN DE RESIDENCIA"), 1, 0, 'C', 1);
@@ -196,8 +206,13 @@ class FormatoHojaVida extends \FPDF_FPDF {
             $this->Cell(29, 8, "NO", 1, 0, 'C', 1);
         }
         $this->Cell(24, 8, $arEmpleado->getEstadoCivilRel()->getNombre(), 1, 0, 'C', 1);
-        $this->Cell(17, 8, $arEmpleado->getRhRel()->getTipo(), 1, 0, 'C', 1);
-        $this->Cell(13, 8, $arEmpleado->getRhRel()->getTipo(), 1, 0, 'C', 1);
+        if ($arEmpleado->getCodigoRhPk() != null){
+            $rh = $arEmpleado->getRhRel()->getTipo();
+        } else {
+            $rh = '';
+        }
+        $this->Cell(17, 8, $rh, 1, 0, 'C', 1);
+        $this->Cell(13, 8, $rh, 1, 0, 'C', 1);
         $this->Cell(60, 8, $arEmpleado->getCuenta(), 1, 0, 'C', 1);
         $this->SetXY($intX, $intY + 57);
         $this->SetFont('Arial','B',8);
