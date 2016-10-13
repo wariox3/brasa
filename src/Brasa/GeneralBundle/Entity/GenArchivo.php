@@ -28,7 +28,7 @@ class GenArchivo
     private $codigoDirectorioFk;
 
     /**
-     * @ORM\Column(name="archivo", type="string", length=50)
+     * @ORM\Column(name="archivo", type="string", length=250)
      */
     private $archivo;
     
@@ -44,6 +44,8 @@ class GenArchivo
     protected $directorioRel;    
     
 
+
+    
 
     /**
      * Get codigoArchivoPk
