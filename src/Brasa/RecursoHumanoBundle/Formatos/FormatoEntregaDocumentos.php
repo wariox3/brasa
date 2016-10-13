@@ -112,7 +112,12 @@ class FormatoEntregaDocumentos extends \FPDF_FPDF {
         $sustitucion11 = $promedioSalarioLetras." $(";
         $sustitucion11 .= number_format($floPromedioSalario, 2,'.',',');
         $sustitucion11 .= ")";
-        $sustitucion12 = $arContrato->getEmpleadoRel()->getCiudadExpedicionRel()->getNombre();
+        if ($arContrato->getEmpleadoRel()->getCodigoCiudadExpedicionFk() != null){
+            $ciudadExpedicion = $arContrato->getEmpleadoRel()->getCiudadExpedicionRel()->getNombre();
+        } else {
+            $ciudadExpedicion = '';
+        }
+        $sustitucion12 = $ciudadExpedicion;
         //$sustitucion13 = "no prestacinal";
         $sustitucion14 = $arContrato->getEntidadSaludRel()->getNombre();
         $sustitucion15 = $arContrato->getEntidadPensionRel()->getNombre();

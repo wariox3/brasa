@@ -937,6 +937,16 @@ class ContratosController extends Controller
             } else {
                 $fechaUltimaPagoVacaciones = "";
             }
+            if ($arContrato->getFechaUltimoPagoCesantias() != null){
+                $fechaUltimaPagoCesantias = $arContrato->getFechaUltimoPagoCesantias()->Format('Y-m-d');
+            } else {
+                $fechaUltimaPagoCesantias = "";
+            }
+            if ($arContrato->getFechaUltimoPagoPrimas() != null){
+                $fechaUltimaPagoPrimas = $arContrato->getFechaUltimoPagoPrimas()->Format('Y-m-d');
+            } else {
+                $fechaUltimaPagoPrimas = "";
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arContrato->getCodigoContratoPk())
                     ->setCellValue('B' . $i, $arContrato->getCodigoEmpleadoFk())
@@ -960,8 +970,8 @@ class ContratosController extends Controller
                     ->setCellValue('T' . $i, $arContrato->getCargoDescripcion())
                     ->setCellValue('U' . $i, $arContrato->getClasificacionRiesgoRel()->getNombre())
                     ->setCellValue('V' . $i, $arContrato->getFechaUltimoPago()->Format('Y-m-d'))
-                    ->setCellValue('W' . $i, $arContrato->getFechaUltimoPagoPrimas()->Format('Y-m-d'))
-                    ->setCellValue('X' . $i, $arContrato->getFechaUltimoPagoCesantias()->Format('Y-m-d'))
+                    ->setCellValue('W' . $i, $fechaUltimaPagoPrimas)
+                    ->setCellValue('X' . $i, $fechaUltimaPagoCesantias)
                     ->setCellValue('Y' . $i, $fechaUltimaPagoVacaciones)
                     ->setCellValue('Z' . $i, $objFunciones->devuelveBoolean($arContrato->getEstadoTerminado()))
                     ->setCellValue('AA' . $i, $objFunciones->devuelveBoolean($arContrato->getLimitarHoraExtra()));
