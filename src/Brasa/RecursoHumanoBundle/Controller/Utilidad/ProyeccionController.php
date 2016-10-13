@@ -30,47 +30,58 @@ class ProyeccionController extends Controller
                 $this->generarExcel();
             }
             if($form->get('BtnGenerar')->isClicked()) {                                 
-                $fechaDesde = $form->get('fechaDesde')->getData();
                 $fechaHasta = $form->get('fechaHasta')->getData();
-                if($fechaDesde != null && $fechaHasta != null) {
+                if($fechaHasta != null) {
+                    set_time_limit(0);
+                    ini_set("memory_limit", -1);                    
                     $strSql = "DELETE FROM rhu_proyeccion WHERE 1";
                     $em->getConnection()->executeQuery($strSql); 
                     $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
                     $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
-                    $douAuxilioTransporte = $arConfiguracion->getVrAuxilioTransporte();
-                    //$douAuxilioTransporte = 74000;
-                    $intDias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($fechaDesde, $fechaHasta);
-                    $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-                    $centroCosto = $form->get('centroCostoRel')->getData();
-                    if ($centroCosto == ""){
-                        $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('indefinido' => 1));
-                    }else{
-                        $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('indefinido' => 1, 'codigoCentroCostoFk' => $centroCosto));
-                    }
-                    
+                    $douAuxilioTransporte = $arConfiguracion->getVrAuxilioTransporte();                    
+                    $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();                    
+                    $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('estadoActivo' => 1));                    
                     foreach($arContratos as $arContrato) {
-                        $floSalarioPromedio = $arContrato->getVrSalarioPago();
-                        $floIbc = ($arContrato->getVrSalarioPago() / 30) * $intDias;
-                        $douBasePrestaciones = ($floIbc / $intDias) * 30;
-                        $douBasePrestacionesTotal = $douBasePrestaciones + $douAuxilioTransporte;
-                        $douCesantias = ($douBasePrestacionesTotal * $intDias) / 360;          
-                        $floPorcentajeIntereses = (($intDias * 12) / 360)/100;   
-                        $douInteresesCesantias = $douCesantias * $floPorcentajeIntereses;
-                        $douPrima = ($douBasePrestacionesTotal * $intDias) / 360;                         
-                        $douVacaciones = ($floSalarioPromedio * $intDias) / 720;                        
+                        $dateFechaHasta = $fechaHasta;
                         $arProyeccion = new \Brasa\RecursoHumanoBundle\Entity\RhuProyeccion();
                         $arProyeccion->setContratoRel($arContrato);
                         $arProyeccion->setEmpleadoRel($arContrato->getEmpleadoRel());
-                        $arProyeccion->setVrSalario($arContrato->getVrSalario());
+                        $arProyeccion->setVrSalario($arContrato->getVrSalario());                        
+                        $arProyeccion->setFechaHasta($fechaHasta);
+                        
+                        //Cesantias
+                        $dateFechaDesde = $arContrato->getFechaUltimoPagoCesantias();            
+                        $ibpCesantiasInicial = $arContrato->getIbpCesantiasInicial();                            
+                        $ibpCesantias = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibp($dateFechaDesde->format('Y-m-d'), $arContrato->getFechaUltimoPago()->format('Y-m-d'), $arContrato->getCodigoContratoPk());                
+                        $ibpCesantias += $ibpCesantiasInicial;                  
+                        $intDiasCesantias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $dateFechaHasta);                                                                 
+                        $salarioPromedioCesantias = ($ibpCesantias / $intDiasCesantias) * 30;                                                           
+                        $douCesantias = ($salarioPromedioCesantias * $intDiasCesantias) / 360;          
+                        $floPorcentajeIntereses = (($intDiasCesantias * 12) / 360)/100;
+                        $douInteresesCesantias = $douCesantias * $floPorcentajeIntereses;                                                                                                                        
+                        $arProyeccion->setDiasCesantias($intDiasCesantias);
                         $arProyeccion->setVrCesantias($douCesantias);                        
                         $arProyeccion->setVrInteresesCesantias($douInteresesCesantias);
+                        $arProyeccion->setFechaDesdeCesantias($dateFechaDesde);
+                        
+                        //Primas
+                        $dateFechaDesde = $arContrato->getFechaUltimoPagoPrimas();
+                        $intDiasPrima = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $dateFechaHasta);    
+                        $intDiasPrimaLiquidar = $intDiasPrima;
+                        if($dateFechaDesde->format('m-d') == '06-30' || $dateFechaDesde->format('m-d') == '12-30') {
+                            $intDiasPrimaLiquidar = $intDiasPrimaLiquidar - 1;
+                        }
+                        $ibpPrimasInicial = $arContrato->getIbpPrimasInicial();                    
+                        $ibpPrimas = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibp($dateFechaDesde->format('Y-m-d'), $dateFechaHasta->format('Y-m-d'), $arContrato->getCodigoContratoPk());                
+                        $ibpPrimas += $ibpPrimasInicial;                                            
+                        $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrimaLiquidar) * 30;                                                                        
+                        $douPrima = ($salarioPromedioPrimas * $intDiasPrimaLiquidar) / 360;                                        
+                       
                         $arProyeccion->setVrPrimas($douPrima);
-                        $arProyeccion->setVrVacaciones($douVacaciones);
-                        $arProyeccion->setDias($intDias);
-                        $arProyeccion->setFechaDesde($fechaDesde);
-                        $arProyeccion->setFechaHasta($fechaHasta);
+                        $arProyeccion->setDiasPrima($intDiasPrimaLiquidar);
+                        $arProyeccion->setFechaDesdePrima($dateFechaDesde);                                                
                         $em->persist($arProyeccion);
-                    }                
+                    }         
                     $em->flush();                    
                 }
                 return $this->redirect($this->generateUrl('brs_rhu_utilidades_proyeccion'));           
@@ -99,46 +110,25 @@ class ProyeccionController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuProyeccion')->listaDql(                                        
-                    $session->get('filtroCodigoCentroCosto'),
-                    $session->get('filtroIdentificacion'),
-                    $session->get('filtroDesde'),
-                    $session->get('filtroHasta')
+                    "",
+                    "",
+                    "",
+                    ""
                     );
     }    
 
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $arrayPropiedades = array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('cc')
-                    ->orderBy('cc.nombre', 'ASC');},
-                'property' => 'nombre',
-                'required' => false,
-                'empty_data' => "",
-                'empty_value' => "TODOS",
-                'data' => ""
-            );
-        if($session->get('filtroCodigoCentroCosto')) {
-            $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
-        }
         $dateFecha = new \DateTime('now');
-        $strFechaDesde = $dateFecha->format('Y/m/')."01";
         $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
         $strFechaHasta = $dateFecha->format('Y/m/').$intUltimoDia;
-        if($session->get('filtroDesde') != "") {
-            $strFechaDesde = $session->get('filtroDesde');
-        }
         if($session->get('filtroHasta') != "") {
             $strFechaHasta = $session->get('filtroHasta');
-        }    
-        $dateFechaDesde = date_create($strFechaDesde);
+        }            
         $dateFechaHasta = date_create($strFechaHasta);
-        $form = $this->createFormBuilder()
-            ->add('centroCostoRel', 'entity', $arrayPropiedades)
+        $form = $this->createFormBuilder()            
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
-            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
             ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -150,17 +140,16 @@ class ProyeccionController extends Controller
     private function filtrarLista($form) {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
-        $controles = $request->request->get('form');
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
-        $dateFechaDesde = $form->get('fechaDesde')->getData();
-        $dateFechaHasta = $form->get('fechaHasta')->getData();
-        $session->set('filtroDesde', $dateFechaDesde->format('Y/m/d'));
+        $controles = $request->request->get('form');        
+        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());        
+        $dateFechaHasta = $form->get('fechaHasta')->getData();        
         $session->set('filtroHasta', $dateFechaHasta->format('Y/m/d'));
     }
 
     private function generarExcel() {
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);        
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -174,39 +163,45 @@ class ProyeccionController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'M'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
+        }         
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CÓDIGO')
-                    ->setCellValue('B1', 'IDENTIFICACIÓN')
-                    ->setCellValue('C1', 'EMPLEADO')
-                    ->setCellValue('D1', 'CONTRATO')
-                    ->setCellValue('E1', 'CENTRO COSTO')
-                    ->setCellValue('F1', 'DESDE')
-                    ->setCellValue('G1', 'HASTA')
-                    ->setCellValue('H1', 'SALARIO')
-                    ->setCellValue('I1', 'DÍAS')
-                    ->setCellValue('J1', 'VACACIONES')
-                    ->setCellValue('K1', 'PRIMAS')
-                    ->setCellValue('L1', 'CESANTIAS')
-                    ->setCellValue('M1', 'INTERESES CESANTIAS');
+                    ->setCellValue('A1', 'DOCUMENTO')
+                    ->setCellValue('B1', 'EMPLEADO')
+                    ->setCellValue('C1', 'CONTRATO')
+                    ->setCellValue('D1', 'GRUPO PAGO')
+                    ->setCellValue('E1', 'SALARIO')
+                    ->setCellValue('F1', 'HASTA')                    
+                    ->setCellValue('G1', 'VACACIONES')
+                    ->setCellValue('H1', 'PRIMAS')
+                    ->setCellValue('I1', 'DIAS')
+                    ->setCellValue('J1', 'U.PAGO')
+                    ->setCellValue('K1', 'CESANTIAS')
+                    ->setCellValue('L1', 'INTERESES')
+                    ->setCellValue('M1', 'DIAS')
+                    ->setCellValue('N1', 'U.PAGO');
+        
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
         $arProyecciones = new \Brasa\RecursoHumanoBundle\Entity\RhuProyeccion();
         $arProyecciones = $query->getResult();
         foreach ($arProyecciones as $arProyeccion) {
-            $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arProyeccion->getCodigoProyeccionPk())
-                    ->setCellValue('B' . $i, $arProyeccion->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('C' . $i, $arProyeccion->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('D' . $i, $arProyeccion->getCodigoContratoFk())
-                    ->setCellValue('E' . $i, $arProyeccion->getContratoRel()->getCentroCostoRel()->getNombre())
-                    ->setCellValue('F' . $i, $arProyeccion->getFechaDesde()->Format('Y-m-d'))
-                    ->setCellValue('G' . $i, $arProyeccion->getFechaHasta()->Format('Y-m-d'))
-                    ->setCellValue('H' . $i, $arProyeccion->getVrSalario())
-                    ->setCellValue('I' . $i, $arProyeccion->getDias())
-                    ->setCellValue('J' . $i, $arProyeccion->getVrVacaciones())
-                    ->setCellValue('K' . $i, $arProyeccion->getVrPrimas())
-                    ->setCellValue('L' . $i, $arProyeccion->getVrCesantias())
-                    ->setCellValue('M' . $i, $arProyeccion->getVrInteresesCesantias());
+            $objPHPExcel->setActiveSheetIndex(0)                    
+                    ->setCellValue('A' . $i, $arProyeccion->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('B' . $i, $arProyeccion->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('C' . $i, $arProyeccion->getCodigoContratoFk())
+                    ->setCellValue('D' . $i, $arProyeccion->getContratoRel()->getCentroCostoRel()->getNombre())                                        
+                    ->setCellValue('E' . $i, $arProyeccion->getVrSalario())
+                    ->setCellValue('F' . $i, $arProyeccion->getFechaHasta()->Format('Y-m-d'))                    
+                    ->setCellValue('G' . $i, $arProyeccion->getVrVacaciones())
+                    ->setCellValue('H' . $i, $arProyeccion->getVrPrimas())
+                    ->setCellValue('I' . $i, $arProyeccion->getDiasPrima())
+                    ->setCellValue('J' . $i, $arProyeccion->getFechaDesdePrima()->Format('Y-m-d'))                                        
+                    ->setCellValue('K' . $i, $arProyeccion->getVrCesantias())
+                    ->setCellValue('L' . $i, $arProyeccion->getVrInteresesCesantias())
+                    ->setCellValue('M' . $i, $arProyeccion->getDiasCesantias())
+                    ->setCellValue('N' . $i, $arProyeccion->getFechaDesdeCesantias()->Format('Y-m-d'));
             $i++;
         }
 

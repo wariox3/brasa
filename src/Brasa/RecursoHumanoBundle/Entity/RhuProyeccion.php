@@ -53,9 +53,29 @@ class RhuProyeccion
     private $vrVacaciones = 0;         
     
     /**
+     * @ORM\Column(name="dias_prima", type="integer")
+     */
+    private $diasPrima = 0;    
+    
+    /**
+     * @ORM\Column(name="fecha_desde_prima", type="date", nullable=true)
+     */    
+    private $fechaDesdePrima;    
+    
+    /**
      * @ORM\Column(name="vr_primas", type="float")
      */
     private $vrPrimas = 0;     
+    
+    /**
+     * @ORM\Column(name="dias_cesantias", type="integer")
+     */
+    private $diasCesantias = 0;    
+    
+    /**
+     * @ORM\Column(name="fecha_desde_cesantias", type="date", nullable=true)
+     */    
+    private $fechaDesdeCesantias;    
     
     /**
      * @ORM\Column(name="vr_cesantias", type="float")
@@ -377,5 +397,101 @@ class RhuProyeccion
     public function getVrSalario()
     {
         return $this->vrSalario;
+    }
+
+    /**
+     * Set diasPrima
+     *
+     * @param integer $diasPrima
+     *
+     * @return RhuProyeccion
+     */
+    public function setDiasPrima($diasPrima)
+    {
+        $this->diasPrima = $diasPrima;
+
+        return $this;
+    }
+
+    /**
+     * Get diasPrima
+     *
+     * @return integer
+     */
+    public function getDiasPrima()
+    {
+        return $this->diasPrima;
+    }
+
+    /**
+     * Set fechaDesdePrima
+     *
+     * @param \DateTime $fechaDesdePrima
+     *
+     * @return RhuProyeccion
+     */
+    public function setFechaDesdePrima($fechaDesdePrima)
+    {
+        $this->fechaDesdePrima = $fechaDesdePrima;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaDesdePrima
+     *
+     * @return \DateTime
+     */
+    public function getFechaDesdePrima()
+    {
+        return $this->fechaDesdePrima;
+    }
+
+    /**
+     * Set diasCesantias
+     *
+     * @param integer $diasCesantias
+     *
+     * @return RhuProyeccion
+     */
+    public function setDiasCesantias($diasCesantias)
+    {
+        $this->diasCesantias = $diasCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get diasCesantias
+     *
+     * @return integer
+     */
+    public function getDiasCesantias()
+    {
+        return $this->diasCesantias;
+    }
+
+    /**
+     * Set fechaDesdeCesantias
+     *
+     * @param \DateTime $fechaDesdeCesantias
+     *
+     * @return RhuProyeccion
+     */
+    public function setFechaDesdeCesantias($fechaDesdeCesantias)
+    {
+        $this->fechaDesdeCesantias = $fechaDesdeCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaDesdeCesantias
+     *
+     * @return \DateTime
+     */
+    public function getFechaDesdeCesantias()
+    {
+        return $this->fechaDesdeCesantias;
     }
 }
