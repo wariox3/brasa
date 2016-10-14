@@ -27,22 +27,13 @@ class InvUnidadMedida
      */
     private $nombre;
 
-    /**
-     * @ORM\OneToMany(targetEntity="InvItem", mappedBy="unidadMedidaRel")
-     */
-    protected $itemsRel;
-
-    public function __construct()
-    {
-        $this->itemsRel = new ArrayCollection();
-    }
-
 
 
     /**
      * Set codigoUnidadMedidaPk
      *
      * @param string $codigoUnidadMedidaPk
+     *
      * @return InvUnidadMedida
      */
     public function setCodigoUnidadMedidaPk($codigoUnidadMedidaPk)
@@ -55,7 +46,7 @@ class InvUnidadMedida
     /**
      * Get codigoUnidadMedidaPk
      *
-     * @return string 
+     * @return string
      */
     public function getCodigoUnidadMedidaPk()
     {
@@ -66,6 +57,7 @@ class InvUnidadMedida
      * Set nombre
      *
      * @param string $nombre
+     *
      * @return InvUnidadMedida
      */
     public function setNombre($nombre)
@@ -78,43 +70,10 @@ class InvUnidadMedida
     /**
      * Get nombre
      *
-     * @return string 
+     * @return string
      */
     public function getNombre()
     {
         return $this->nombre;
-    }
-
-    /**
-     * Add itemsRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvItem $itemsRel
-     * @return InvUnidadMedida
-     */
-    public function addItemsRel(\Brasa\InventarioBundle\Entity\InvItem $itemsRel)
-    {
-        $this->itemsRel[] = $itemsRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove itemsRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvItem $itemsRel
-     */
-    public function removeItemsRel(\Brasa\InventarioBundle\Entity\InvItem $itemsRel)
-    {
-        $this->itemsRel->removeElement($itemsRel);
-    }
-
-    /**
-     * Get itemsRel
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getItemsRel()
-    {
-        return $this->itemsRel;
     }
 }

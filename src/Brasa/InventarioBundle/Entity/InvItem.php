@@ -24,9 +24,9 @@ class InvItem
     private $codigoMarcaFk;
     
     /**
-     * @ORM\Column(name="descripcion", type="string", length=150, nullable=true)
+     * @ORM\Column(name="nombre", type="string", length=150, nullable=true)
      */    
-    private $descripcion;
+    private $nombre;
     
     /**
      * @ORM\Column(name="vr_costo_predeterminado", type="float", nullable=true)
@@ -51,37 +51,7 @@ class InvItem
     /**
      * @ORM\Column(name="codigo_barras", type="string", length=80, nullable=true)
      */    
-    private $codigoBarras;     
-    
-    /**
-     * @ORM\Column(name="cuenta_ventas", type="string", length=15, nullable=true)
-     */    
-    private $cuentaVentas; 
-    
-    /**
-     * @ORM\Column(name="cuenta_dovolucion_ventas", type="string", length=15, nullable=true)
-     */    
-    private $cuentaDevolucionVentas;     
-    
-    /**
-     * @ORM\Column(name="cuenta_compras", type="string", length=15, nullable=true)
-     */    
-    private $cuentaCompras;        
-    
-    /**
-     * @ORM\Column(name="cuenta_devolucion_compras", type="string", length=15, nullable=true)
-     */    
-    private $cuentaDevolucionCompras;     
-    
-    /**
-     * @ORM\Column(name="cuenta_costo", type="string", length=15, nullable=true)
-     */    
-    private $cuentaCosto;      
-        
-    /**
-     * @ORM\Column(name="cuenta_inventario", type="string", length=15, nullable=true)
-     */    
-    private $cuentaInventario;  
+    private $codigoBarras;                 
 
     /**
      * @ORM\Column(name="porcentaje_iva", type="integer")
@@ -124,45 +94,20 @@ class InvItem
     private $codigoUnidadMedidaFk;           
     
     /**
-     * @ORM\Column(name="item_servicio", type="boolean")
+     * @ORM\Column(name="servicio", type="boolean")
      */    
-    private $itemServicio = 0;              
+    private $servicio = 0;              
 
     /**
      * @ORM\Column(name="materiaPrima", type="boolean")
      */    
-    private $materiaPrima = 0;     
+    private $materiaPrima = 0;             
     
-    /**
-     * @ORM\ManyToOne(targetEntity="InvUnidadMedida", inversedBy="itemsRel")
-     * @ORM\JoinColumn(name="codigo_unidad_medida_fk", referencedColumnName="codigo_unidad_medida_pk")
-     */
-    protected $unidadMedidaRel;    
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="InvMarca", inversedBy="itemsRel")
-     * @ORM\JoinColumn(name="codigo_marca_fk", referencedColumnName="codigo_marca_pk")
-     */
-    protected $marcaRel;     
-    
-    /**
-     * @ORM\OneToMany(targetEntity="InvMovimientoDetalle", mappedBy="itemRel")
-     */
-    protected $movimientosDetallesRel;
-    
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->movimientosDetallesRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Get codigoItemPk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoItemPk()
     {
@@ -173,6 +118,7 @@ class InvItem
      * Set codigoMarcaFk
      *
      * @param integer $codigoMarcaFk
+     *
      * @return InvItem
      */
     public function setCodigoMarcaFk($codigoMarcaFk)
@@ -185,7 +131,7 @@ class InvItem
     /**
      * Get codigoMarcaFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoMarcaFk()
     {
@@ -193,32 +139,34 @@ class InvItem
     }
 
     /**
-     * Set descripcion
+     * Set nombre
      *
-     * @param string $descripcion
+     * @param string $nombre
+     *
      * @return InvItem
      */
-    public function setDescripcion($descripcion)
+    public function setNombre($nombre)
     {
-        $this->descripcion = $descripcion;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get descripcion
+     * Get nombre
      *
-     * @return string 
+     * @return string
      */
-    public function getDescripcion()
+    public function getNombre()
     {
-        return $this->descripcion;
+        return $this->nombre;
     }
 
     /**
      * Set vrCostoPredeterminado
      *
      * @param float $vrCostoPredeterminado
+     *
      * @return InvItem
      */
     public function setVrCostoPredeterminado($vrCostoPredeterminado)
@@ -231,7 +179,7 @@ class InvItem
     /**
      * Get vrCostoPredeterminado
      *
-     * @return float 
+     * @return float
      */
     public function getVrCostoPredeterminado()
     {
@@ -242,6 +190,7 @@ class InvItem
      * Set vrCostoPromedio
      *
      * @param float $vrCostoPromedio
+     *
      * @return InvItem
      */
     public function setVrCostoPromedio($vrCostoPromedio)
@@ -254,7 +203,7 @@ class InvItem
     /**
      * Get vrCostoPromedio
      *
-     * @return float 
+     * @return float
      */
     public function getVrCostoPromedio()
     {
@@ -265,6 +214,7 @@ class InvItem
      * Set vrPrecioPredeterminado
      *
      * @param float $vrPrecioPredeterminado
+     *
      * @return InvItem
      */
     public function setVrPrecioPredeterminado($vrPrecioPredeterminado)
@@ -277,7 +227,7 @@ class InvItem
     /**
      * Get vrPrecioPredeterminado
      *
-     * @return float 
+     * @return float
      */
     public function getVrPrecioPredeterminado()
     {
@@ -288,6 +238,7 @@ class InvItem
      * Set codigoEAN
      *
      * @param string $codigoEAN
+     *
      * @return InvItem
      */
     public function setCodigoEAN($codigoEAN)
@@ -300,7 +251,7 @@ class InvItem
     /**
      * Get codigoEAN
      *
-     * @return string 
+     * @return string
      */
     public function getCodigoEAN()
     {
@@ -311,6 +262,7 @@ class InvItem
      * Set codigoBarras
      *
      * @param string $codigoBarras
+     *
      * @return InvItem
      */
     public function setCodigoBarras($codigoBarras)
@@ -323,7 +275,7 @@ class InvItem
     /**
      * Get codigoBarras
      *
-     * @return string 
+     * @return string
      */
     public function getCodigoBarras()
     {
@@ -331,147 +283,10 @@ class InvItem
     }
 
     /**
-     * Set cuentaVentas
-     *
-     * @param string $cuentaVentas
-     * @return InvItem
-     */
-    public function setCuentaVentas($cuentaVentas)
-    {
-        $this->cuentaVentas = $cuentaVentas;
-
-        return $this;
-    }
-
-    /**
-     * Get cuentaVentas
-     *
-     * @return string 
-     */
-    public function getCuentaVentas()
-    {
-        return $this->cuentaVentas;
-    }
-
-    /**
-     * Set cuentaDevolucionVentas
-     *
-     * @param string $cuentaDevolucionVentas
-     * @return InvItem
-     */
-    public function setCuentaDevolucionVentas($cuentaDevolucionVentas)
-    {
-        $this->cuentaDevolucionVentas = $cuentaDevolucionVentas;
-
-        return $this;
-    }
-
-    /**
-     * Get cuentaDevolucionVentas
-     *
-     * @return string 
-     */
-    public function getCuentaDevolucionVentas()
-    {
-        return $this->cuentaDevolucionVentas;
-    }
-
-    /**
-     * Set cuentaCompras
-     *
-     * @param string $cuentaCompras
-     * @return InvItem
-     */
-    public function setCuentaCompras($cuentaCompras)
-    {
-        $this->cuentaCompras = $cuentaCompras;
-
-        return $this;
-    }
-
-    /**
-     * Get cuentaCompras
-     *
-     * @return string 
-     */
-    public function getCuentaCompras()
-    {
-        return $this->cuentaCompras;
-    }
-
-    /**
-     * Set cuentaDevolucionCompras
-     *
-     * @param string $cuentaDevolucionCompras
-     * @return InvItem
-     */
-    public function setCuentaDevolucionCompras($cuentaDevolucionCompras)
-    {
-        $this->cuentaDevolucionCompras = $cuentaDevolucionCompras;
-
-        return $this;
-    }
-
-    /**
-     * Get cuentaDevolucionCompras
-     *
-     * @return string 
-     */
-    public function getCuentaDevolucionCompras()
-    {
-        return $this->cuentaDevolucionCompras;
-    }
-
-    /**
-     * Set cuentaCosto
-     *
-     * @param string $cuentaCosto
-     * @return InvItem
-     */
-    public function setCuentaCosto($cuentaCosto)
-    {
-        $this->cuentaCosto = $cuentaCosto;
-
-        return $this;
-    }
-
-    /**
-     * Get cuentaCosto
-     *
-     * @return string 
-     */
-    public function getCuentaCosto()
-    {
-        return $this->cuentaCosto;
-    }
-
-    /**
-     * Set cuentaInventario
-     *
-     * @param string $cuentaInventario
-     * @return InvItem
-     */
-    public function setCuentaInventario($cuentaInventario)
-    {
-        $this->cuentaInventario = $cuentaInventario;
-
-        return $this;
-    }
-
-    /**
-     * Get cuentaInventario
-     *
-     * @return string 
-     */
-    public function getCuentaInventario()
-    {
-        return $this->cuentaInventario;
-    }
-
-    /**
      * Set porcentajeIva
      *
      * @param integer $porcentajeIva
+     *
      * @return InvItem
      */
     public function setPorcentajeIva($porcentajeIva)
@@ -484,7 +299,7 @@ class InvItem
     /**
      * Get porcentajeIva
      *
-     * @return integer 
+     * @return integer
      */
     public function getPorcentajeIva()
     {
@@ -495,6 +310,7 @@ class InvItem
      * Set cantidadExistencia
      *
      * @param integer $cantidadExistencia
+     *
      * @return InvItem
      */
     public function setCantidadExistencia($cantidadExistencia)
@@ -507,7 +323,7 @@ class InvItem
     /**
      * Get cantidadExistencia
      *
-     * @return integer 
+     * @return integer
      */
     public function getCantidadExistencia()
     {
@@ -518,6 +334,7 @@ class InvItem
      * Set cantidadRemisionada
      *
      * @param integer $cantidadRemisionada
+     *
      * @return InvItem
      */
     public function setCantidadRemisionada($cantidadRemisionada)
@@ -530,7 +347,7 @@ class InvItem
     /**
      * Get cantidadRemisionada
      *
-     * @return integer 
+     * @return integer
      */
     public function getCantidadRemisionada()
     {
@@ -541,6 +358,7 @@ class InvItem
      * Set cantidadReservada
      *
      * @param integer $cantidadReservada
+     *
      * @return InvItem
      */
     public function setCantidadReservada($cantidadReservada)
@@ -553,7 +371,7 @@ class InvItem
     /**
      * Get cantidadReservada
      *
-     * @return integer 
+     * @return integer
      */
     public function getCantidadReservada()
     {
@@ -564,6 +382,7 @@ class InvItem
      * Set cantidadDisponible
      *
      * @param integer $cantidadDisponible
+     *
      * @return InvItem
      */
     public function setCantidadDisponible($cantidadDisponible)
@@ -576,7 +395,7 @@ class InvItem
     /**
      * Get cantidadDisponible
      *
-     * @return integer 
+     * @return integer
      */
     public function getCantidadDisponible()
     {
@@ -587,6 +406,7 @@ class InvItem
      * Set cantidadOrdenCompra
      *
      * @param integer $cantidadOrdenCompra
+     *
      * @return InvItem
      */
     public function setCantidadOrdenCompra($cantidadOrdenCompra)
@@ -599,7 +419,7 @@ class InvItem
     /**
      * Get cantidadOrdenCompra
      *
-     * @return integer 
+     * @return integer
      */
     public function getCantidadOrdenCompra()
     {
@@ -610,6 +430,7 @@ class InvItem
      * Set permitirInventarioNegativo
      *
      * @param boolean $permitirInventarioNegativo
+     *
      * @return InvItem
      */
     public function setPermitirInventarioNegativo($permitirInventarioNegativo)
@@ -622,7 +443,7 @@ class InvItem
     /**
      * Get permitirInventarioNegativo
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getPermitirInventarioNegativo()
     {
@@ -633,6 +454,7 @@ class InvItem
      * Set codigoUnidadMedidaFk
      *
      * @param string $codigoUnidadMedidaFk
+     *
      * @return InvItem
      */
     public function setCodigoUnidadMedidaFk($codigoUnidadMedidaFk)
@@ -645,7 +467,7 @@ class InvItem
     /**
      * Get codigoUnidadMedidaFk
      *
-     * @return string 
+     * @return string
      */
     public function getCodigoUnidadMedidaFk()
     {
@@ -653,32 +475,34 @@ class InvItem
     }
 
     /**
-     * Set itemServicio
+     * Set servicio
      *
-     * @param boolean $itemServicio
+     * @param boolean $servicio
+     *
      * @return InvItem
      */
-    public function setItemServicio($itemServicio)
+    public function setServicio($servicio)
     {
-        $this->itemServicio = $itemServicio;
+        $this->servicio = $servicio;
 
         return $this;
     }
 
     /**
-     * Get itemServicio
+     * Get servicio
      *
-     * @return boolean 
+     * @return boolean
      */
-    public function getItemServicio()
+    public function getServicio()
     {
-        return $this->itemServicio;
+        return $this->servicio;
     }
 
     /**
      * Set materiaPrima
      *
      * @param boolean $materiaPrima
+     *
      * @return InvItem
      */
     public function setMateriaPrima($materiaPrima)
@@ -691,89 +515,10 @@ class InvItem
     /**
      * Get materiaPrima
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getMateriaPrima()
     {
         return $this->materiaPrima;
-    }
-
-    /**
-     * Set unidadMedidaRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvUnidadMedida $unidadMedidaRel
-     * @return InvItem
-     */
-    public function setUnidadMedidaRel(\Brasa\InventarioBundle\Entity\InvUnidadMedida $unidadMedidaRel = null)
-    {
-        $this->unidadMedidaRel = $unidadMedidaRel;
-
-        return $this;
-    }
-
-    /**
-     * Get unidadMedidaRel
-     *
-     * @return \Brasa\InventarioBundle\Entity\InvUnidadMedida 
-     */
-    public function getUnidadMedidaRel()
-    {
-        return $this->unidadMedidaRel;
-    }
-
-    /**
-     * Set marcaRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvMarca $marcaRel
-     * @return InvItem
-     */
-    public function setMarcaRel(\Brasa\InventarioBundle\Entity\InvMarca $marcaRel = null)
-    {
-        $this->marcaRel = $marcaRel;
-
-        return $this;
-    }
-
-    /**
-     * Get marcaRel
-     *
-     * @return \Brasa\InventarioBundle\Entity\InvMarca 
-     */
-    public function getMarcaRel()
-    {
-        return $this->marcaRel;
-    }
-
-    /**
-     * Add movimientosDetallesRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesRel
-     * @return InvItem
-     */
-    public function addMovimientosDetallesRel(\Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesRel)
-    {
-        $this->movimientosDetallesRel[] = $movimientosDetallesRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove movimientosDetallesRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesRel
-     */
-    public function removeMovimientosDetallesRel(\Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesRel)
-    {
-        $this->movimientosDetallesRel->removeElement($movimientosDetallesRel);
-    }
-
-    /**
-     * Get movimientosDetallesRel
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getMovimientosDetallesRel()
-    {
-        return $this->movimientosDetallesRel;
     }
 }

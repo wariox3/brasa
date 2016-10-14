@@ -47,19 +47,21 @@ class InvDescuentoFinanciero
     /**
      * @ORM\OneToMany(targetEntity="InvMovimientoDescuentoFinanciero", mappedBy="descuentoFinancieroRel")
      */
-    protected $descuentosFinancierosRel;    
+    protected $movimientosDescuentosFinancierosDescuentoFinancieroRel;    
     
+
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-        $this->descuentosFinancieros = new ArrayCollection();        
-    }     
-   
-
+        $this->movimientosDescuentosFinancierosDescuentoFinancieroRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoDescuentoFinancieroPk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoDescuentoFinancieroPk()
     {
@@ -70,6 +72,7 @@ class InvDescuentoFinanciero
      * Set nombre
      *
      * @param string $nombre
+     *
      * @return InvDescuentoFinanciero
      */
     public function setNombre($nombre)
@@ -82,7 +85,7 @@ class InvDescuentoFinanciero
     /**
      * Get nombre
      *
-     * @return string 
+     * @return string
      */
     public function getNombre()
     {
@@ -93,6 +96,7 @@ class InvDescuentoFinanciero
      * Set porcentaje
      *
      * @param float $porcentaje
+     *
      * @return InvDescuentoFinanciero
      */
     public function setPorcentaje($porcentaje)
@@ -105,7 +109,7 @@ class InvDescuentoFinanciero
     /**
      * Get porcentaje
      *
-     * @return float 
+     * @return float
      */
     public function getPorcentaje()
     {
@@ -116,6 +120,7 @@ class InvDescuentoFinanciero
      * Set referencia
      *
      * @param string $referencia
+     *
      * @return InvDescuentoFinanciero
      */
     public function setReferencia($referencia)
@@ -128,7 +133,7 @@ class InvDescuentoFinanciero
     /**
      * Get referencia
      *
-     * @return string 
+     * @return string
      */
     public function getReferencia()
     {
@@ -139,6 +144,7 @@ class InvDescuentoFinanciero
      * Set codigoCuentaFk
      *
      * @param string $codigoCuentaFk
+     *
      * @return InvDescuentoFinanciero
      */
     public function setCodigoCuentaFk($codigoCuentaFk)
@@ -151,7 +157,7 @@ class InvDescuentoFinanciero
     /**
      * Get codigoCuentaFk
      *
-     * @return string 
+     * @return string
      */
     public function getCodigoCuentaFk()
     {
@@ -162,6 +168,7 @@ class InvDescuentoFinanciero
      * Set tipoRegistro
      *
      * @param integer $tipoRegistro
+     *
      * @return InvDescuentoFinanciero
      */
     public function setTipoRegistro($tipoRegistro)
@@ -174,7 +181,7 @@ class InvDescuentoFinanciero
     /**
      * Get tipoRegistro
      *
-     * @return integer 
+     * @return integer
      */
     public function getTipoRegistro()
     {
@@ -182,35 +189,36 @@ class InvDescuentoFinanciero
     }
 
     /**
-     * Add descuentosFinancierosRel
+     * Add movimientosDescuentosFinancierosDescuentoFinancieroRel
      *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDescuentoFinanciero $descuentosFinancierosRel
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDescuentoFinanciero $movimientosDescuentosFinancierosDescuentoFinancieroRel
+     *
      * @return InvDescuentoFinanciero
      */
-    public function addDescuentosFinancierosRel(\Brasa\InventarioBundle\Entity\InvMovimientoDescuentoFinanciero $descuentosFinancierosRel)
+    public function addMovimientosDescuentosFinancierosDescuentoFinancieroRel(\Brasa\InventarioBundle\Entity\InvMovimientoDescuentoFinanciero $movimientosDescuentosFinancierosDescuentoFinancieroRel)
     {
-        $this->descuentosFinancierosRel[] = $descuentosFinancierosRel;
+        $this->movimientosDescuentosFinancierosDescuentoFinancieroRel[] = $movimientosDescuentosFinancierosDescuentoFinancieroRel;
 
         return $this;
     }
 
     /**
-     * Remove descuentosFinancierosRel
+     * Remove movimientosDescuentosFinancierosDescuentoFinancieroRel
      *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDescuentoFinanciero $descuentosFinancierosRel
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDescuentoFinanciero $movimientosDescuentosFinancierosDescuentoFinancieroRel
      */
-    public function removeDescuentosFinancierosRel(\Brasa\InventarioBundle\Entity\InvMovimientoDescuentoFinanciero $descuentosFinancierosRel)
+    public function removeMovimientosDescuentosFinancierosDescuentoFinancieroRel(\Brasa\InventarioBundle\Entity\InvMovimientoDescuentoFinanciero $movimientosDescuentosFinancierosDescuentoFinancieroRel)
     {
-        $this->descuentosFinancierosRel->removeElement($descuentosFinancierosRel);
+        $this->movimientosDescuentosFinancierosDescuentoFinancieroRel->removeElement($movimientosDescuentosFinancierosDescuentoFinancieroRel);
     }
 
     /**
-     * Get descuentosFinancierosRel
+     * Get movimientosDescuentosFinancierosDescuentoFinancieroRel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getDescuentosFinancierosRel()
+    public function getMovimientosDescuentosFinancierosDescuentoFinancieroRel()
     {
-        return $this->descuentosFinancierosRel;
+        return $this->movimientosDescuentosFinancierosDescuentoFinancieroRel;
     }
 }

@@ -26,22 +26,27 @@ class InvDocumentoTipo
     /**
      * @ORM\OneToMany(targetEntity="InvMovimiento", mappedBy="documentoTipoRel")
      */
-    protected $movimientosRel;    
+    protected $movimientosDocumentoTipoRel;    
     
     /**
      * @ORM\OneToMany(targetEntity="InvDocumento", mappedBy="documentoTipoRel")
      */
-    protected $documentosRel;    
+    protected $documentosDocumentoTipoRel;    
     
     
-    
-    
-
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->movimientosDocumentoTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->documentosDocumentoTipoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoDocumentoTipoPk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoDocumentoTipoPk()
     {
@@ -52,6 +57,7 @@ class InvDocumentoTipo
      * Set nombreDocumentoTipo
      *
      * @param string $nombreDocumentoTipo
+     *
      * @return InvDocumentoTipo
      */
     public function setNombreDocumentoTipo($nombreDocumentoTipo)
@@ -64,7 +70,7 @@ class InvDocumentoTipo
     /**
      * Get nombreDocumentoTipo
      *
-     * @return string 
+     * @return string
      */
     public function getNombreDocumentoTipo()
     {
@@ -72,77 +78,70 @@ class InvDocumentoTipo
     }
 
     /**
-     * Add documentosRel
+     * Add movimientosDocumentoTipoRel
      *
-     * @param \Brasa\InventarioBundle\Entity\InvDocumento $documentosRel
+     * @param \Brasa\InventarioBundle\Entity\InvMovimiento $movimientosDocumentoTipoRel
+     *
      * @return InvDocumentoTipo
      */
-    public function addDocumentosRel(\Brasa\InventarioBundle\Entity\InvDocumento $documentosRel)
+    public function addMovimientosDocumentoTipoRel(\Brasa\InventarioBundle\Entity\InvMovimiento $movimientosDocumentoTipoRel)
     {
-        $this->documentosRel[] = $documentosRel;
+        $this->movimientosDocumentoTipoRel[] = $movimientosDocumentoTipoRel;
 
         return $this;
     }
 
     /**
-     * Remove documentosRel
+     * Remove movimientosDocumentoTipoRel
      *
-     * @param \Brasa\InventarioBundle\Entity\InvDocumento $documentosRel
+     * @param \Brasa\InventarioBundle\Entity\InvMovimiento $movimientosDocumentoTipoRel
      */
-    public function removeDocumentosRel(\Brasa\InventarioBundle\Entity\InvDocumento $documentosRel)
+    public function removeMovimientosDocumentoTipoRel(\Brasa\InventarioBundle\Entity\InvMovimiento $movimientosDocumentoTipoRel)
     {
-        $this->documentosRel->removeElement($documentosRel);
+        $this->movimientosDocumentoTipoRel->removeElement($movimientosDocumentoTipoRel);
     }
 
     /**
-     * Get documentosRel
+     * Get movimientosDocumentoTipoRel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getDocumentosRel()
+    public function getMovimientosDocumentoTipoRel()
     {
-        return $this->documentosRel;
+        return $this->movimientosDocumentoTipoRel;
     }
 
     /**
-     * Add movimientosRel
+     * Add documentosDocumentoTipoRel
      *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel
+     * @param \Brasa\InventarioBundle\Entity\InvDocumento $documentosDocumentoTipoRel
+     *
      * @return InvDocumentoTipo
      */
-    public function addMovimientosRel(\Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel)
+    public function addDocumentosDocumentoTipoRel(\Brasa\InventarioBundle\Entity\InvDocumento $documentosDocumentoTipoRel)
     {
-        $this->movimientosRel[] = $movimientosRel;
+        $this->documentosDocumentoTipoRel[] = $documentosDocumentoTipoRel;
 
         return $this;
     }
 
     /**
-     * Remove movimientosRel
+     * Remove documentosDocumentoTipoRel
      *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel
+     * @param \Brasa\InventarioBundle\Entity\InvDocumento $documentosDocumentoTipoRel
      */
-    public function removeMovimientosRel(\Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel)
+    public function removeDocumentosDocumentoTipoRel(\Brasa\InventarioBundle\Entity\InvDocumento $documentosDocumentoTipoRel)
     {
-        $this->movimientosRel->removeElement($movimientosRel);
+        $this->documentosDocumentoTipoRel->removeElement($documentosDocumentoTipoRel);
     }
 
     /**
-     * Get movimientosRel
+     * Get documentosDocumentoTipoRel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getMovimientosRel()
+    public function getDocumentosDocumentoTipoRel()
     {
-        return $this->movimientosRel;
+        return $this->documentosDocumentoTipoRel;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->movimientosRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->documentosRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
 }

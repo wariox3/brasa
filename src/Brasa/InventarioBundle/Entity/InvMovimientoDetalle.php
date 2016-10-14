@@ -150,27 +150,20 @@ class InvMovimientoDetalle
     /**
      * @ORM\Column(name="codigo_detalle_movimiento_enlace", type="integer", nullable=true)     
      */        
-    private $codigoDetalleMovimientoEnlace;    
+    private $codigoDetalleMovimientoEnlace;         
     
     /**
-     * @ORM\ManyToOne(targetEntity="InvItem", inversedBy="movimientosDetallesRel")
-     * @ORM\JoinColumn(name="codigo_item_fk", referencedColumnName="codigo_item_pk")
-     */
-    protected $itemRel;     
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="InvMovimiento", inversedBy="movimientosDetallesRel")
+     * @ORM\ManyToOne(targetEntity="InvMovimiento", inversedBy="movimientosDetallesMovimientoRel")
      * @ORM\JoinColumn(name="codigo_movimiento_fk", referencedColumnName="codigo_movimiento_pk")
      */
     protected $movimientoRel;  
     
 
 
-
     /**
      * Get codigoDetalleMovimientoPk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoDetalleMovimientoPk()
     {
@@ -181,6 +174,7 @@ class InvMovimientoDetalle
      * Set codigoMovimientoFk
      *
      * @param integer $codigoMovimientoFk
+     *
      * @return InvMovimientoDetalle
      */
     public function setCodigoMovimientoFk($codigoMovimientoFk)
@@ -193,7 +187,7 @@ class InvMovimientoDetalle
     /**
      * Get codigoMovimientoFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoMovimientoFk()
     {
@@ -204,6 +198,7 @@ class InvMovimientoDetalle
      * Set codigoItemFk
      *
      * @param integer $codigoItemFk
+     *
      * @return InvMovimientoDetalle
      */
     public function setCodigoItemFk($codigoItemFk)
@@ -216,7 +211,7 @@ class InvMovimientoDetalle
     /**
      * Get codigoItemFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoItemFk()
     {
@@ -227,6 +222,7 @@ class InvMovimientoDetalle
      * Set codigoBodegaFk
      *
      * @param integer $codigoBodegaFk
+     *
      * @return InvMovimientoDetalle
      */
     public function setCodigoBodegaFk($codigoBodegaFk)
@@ -239,7 +235,7 @@ class InvMovimientoDetalle
     /**
      * Get codigoBodegaFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoBodegaFk()
     {
@@ -250,6 +246,7 @@ class InvMovimientoDetalle
      * Set codigoBodegaDestinoFk
      *
      * @param integer $codigoBodegaDestinoFk
+     *
      * @return InvMovimientoDetalle
      */
     public function setCodigoBodegaDestinoFk($codigoBodegaDestinoFk)
@@ -262,7 +259,7 @@ class InvMovimientoDetalle
     /**
      * Get codigoBodegaDestinoFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoBodegaDestinoFk()
     {
@@ -273,6 +270,7 @@ class InvMovimientoDetalle
      * Set loteFk
      *
      * @param string $loteFk
+     *
      * @return InvMovimientoDetalle
      */
     public function setLoteFk($loteFk)
@@ -285,7 +283,7 @@ class InvMovimientoDetalle
     /**
      * Get loteFk
      *
-     * @return string 
+     * @return string
      */
     public function getLoteFk()
     {
@@ -296,6 +294,7 @@ class InvMovimientoDetalle
      * Set fechaVencimiento
      *
      * @param \DateTime $fechaVencimiento
+     *
      * @return InvMovimientoDetalle
      */
     public function setFechaVencimiento($fechaVencimiento)
@@ -308,7 +307,7 @@ class InvMovimientoDetalle
     /**
      * Get fechaVencimiento
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFechaVencimiento()
     {
@@ -319,6 +318,7 @@ class InvMovimientoDetalle
      * Set cantidad
      *
      * @param integer $cantidad
+     *
      * @return InvMovimientoDetalle
      */
     public function setCantidad($cantidad)
@@ -331,7 +331,7 @@ class InvMovimientoDetalle
     /**
      * Get cantidad
      *
-     * @return integer 
+     * @return integer
      */
     public function getCantidad()
     {
@@ -342,6 +342,7 @@ class InvMovimientoDetalle
      * Set cantidadOperada
      *
      * @param integer $cantidadOperada
+     *
      * @return InvMovimientoDetalle
      */
     public function setCantidadOperada($cantidadOperada)
@@ -354,7 +355,7 @@ class InvMovimientoDetalle
     /**
      * Get cantidadOperada
      *
-     * @return integer 
+     * @return integer
      */
     public function getCantidadOperada()
     {
@@ -365,6 +366,7 @@ class InvMovimientoDetalle
      * Set cantidadAfectada
      *
      * @param integer $cantidadAfectada
+     *
      * @return InvMovimientoDetalle
      */
     public function setCantidadAfectada($cantidadAfectada)
@@ -377,7 +379,7 @@ class InvMovimientoDetalle
     /**
      * Get cantidadAfectada
      *
-     * @return integer 
+     * @return integer
      */
     public function getCantidadAfectada()
     {
@@ -388,6 +390,7 @@ class InvMovimientoDetalle
      * Set vrCosto
      *
      * @param float $vrCosto
+     *
      * @return InvMovimientoDetalle
      */
     public function setVrCosto($vrCosto)
@@ -400,7 +403,7 @@ class InvMovimientoDetalle
     /**
      * Get vrCosto
      *
-     * @return float 
+     * @return float
      */
     public function getVrCosto()
     {
@@ -411,6 +414,7 @@ class InvMovimientoDetalle
      * Set vrTotalCosto
      *
      * @param float $vrTotalCosto
+     *
      * @return InvMovimientoDetalle
      */
     public function setVrTotalCosto($vrTotalCosto)
@@ -423,7 +427,7 @@ class InvMovimientoDetalle
     /**
      * Get vrTotalCosto
      *
-     * @return float 
+     * @return float
      */
     public function getVrTotalCosto()
     {
@@ -434,6 +438,7 @@ class InvMovimientoDetalle
      * Set vrCostoPromedio
      *
      * @param float $vrCostoPromedio
+     *
      * @return InvMovimientoDetalle
      */
     public function setVrCostoPromedio($vrCostoPromedio)
@@ -446,7 +451,7 @@ class InvMovimientoDetalle
     /**
      * Get vrCostoPromedio
      *
-     * @return float 
+     * @return float
      */
     public function getVrCostoPromedio()
     {
@@ -457,6 +462,7 @@ class InvMovimientoDetalle
      * Set vrPrecio
      *
      * @param float $vrPrecio
+     *
      * @return InvMovimientoDetalle
      */
     public function setVrPrecio($vrPrecio)
@@ -469,7 +475,7 @@ class InvMovimientoDetalle
     /**
      * Get vrPrecio
      *
-     * @return float 
+     * @return float
      */
     public function getVrPrecio()
     {
@@ -480,6 +486,7 @@ class InvMovimientoDetalle
      * Set vrSubTotal
      *
      * @param float $vrSubTotal
+     *
      * @return InvMovimientoDetalle
      */
     public function setVrSubTotal($vrSubTotal)
@@ -492,7 +499,7 @@ class InvMovimientoDetalle
     /**
      * Get vrSubTotal
      *
-     * @return float 
+     * @return float
      */
     public function getVrSubTotal()
     {
@@ -503,6 +510,7 @@ class InvMovimientoDetalle
      * Set porcentajeIva
      *
      * @param integer $porcentajeIva
+     *
      * @return InvMovimientoDetalle
      */
     public function setPorcentajeIva($porcentajeIva)
@@ -515,7 +523,7 @@ class InvMovimientoDetalle
     /**
      * Get porcentajeIva
      *
-     * @return integer 
+     * @return integer
      */
     public function getPorcentajeIva()
     {
@@ -526,6 +534,7 @@ class InvMovimientoDetalle
      * Set vrIva
      *
      * @param float $vrIva
+     *
      * @return InvMovimientoDetalle
      */
     public function setVrIva($vrIva)
@@ -538,7 +547,7 @@ class InvMovimientoDetalle
     /**
      * Get vrIva
      *
-     * @return float 
+     * @return float
      */
     public function getVrIva()
     {
@@ -549,6 +558,7 @@ class InvMovimientoDetalle
      * Set porcentajeDescuento
      *
      * @param float $porcentajeDescuento
+     *
      * @return InvMovimientoDetalle
      */
     public function setPorcentajeDescuento($porcentajeDescuento)
@@ -561,7 +571,7 @@ class InvMovimientoDetalle
     /**
      * Get porcentajeDescuento
      *
-     * @return float 
+     * @return float
      */
     public function getPorcentajeDescuento()
     {
@@ -572,6 +582,7 @@ class InvMovimientoDetalle
      * Set vrDescuento
      *
      * @param float $vrDescuento
+     *
      * @return InvMovimientoDetalle
      */
     public function setVrDescuento($vrDescuento)
@@ -584,7 +595,7 @@ class InvMovimientoDetalle
     /**
      * Get vrDescuento
      *
-     * @return float 
+     * @return float
      */
     public function getVrDescuento()
     {
@@ -595,6 +606,7 @@ class InvMovimientoDetalle
      * Set vrBruto
      *
      * @param float $vrBruto
+     *
      * @return InvMovimientoDetalle
      */
     public function setVrBruto($vrBruto)
@@ -607,7 +619,7 @@ class InvMovimientoDetalle
     /**
      * Get vrBruto
      *
-     * @return float 
+     * @return float
      */
     public function getVrBruto()
     {
@@ -618,6 +630,7 @@ class InvMovimientoDetalle
      * Set vrTotal
      *
      * @param float $vrTotal
+     *
      * @return InvMovimientoDetalle
      */
     public function setVrTotal($vrTotal)
@@ -630,7 +643,7 @@ class InvMovimientoDetalle
     /**
      * Get vrTotal
      *
-     * @return float 
+     * @return float
      */
     public function getVrTotal()
     {
@@ -641,6 +654,7 @@ class InvMovimientoDetalle
      * Set operacionInventario
      *
      * @param integer $operacionInventario
+     *
      * @return InvMovimientoDetalle
      */
     public function setOperacionInventario($operacionInventario)
@@ -653,7 +667,7 @@ class InvMovimientoDetalle
     /**
      * Get operacionInventario
      *
-     * @return integer 
+     * @return integer
      */
     public function getOperacionInventario()
     {
@@ -664,6 +678,7 @@ class InvMovimientoDetalle
      * Set operacionComercial
      *
      * @param integer $operacionComercial
+     *
      * @return InvMovimientoDetalle
      */
     public function setOperacionComercial($operacionComercial)
@@ -676,7 +691,7 @@ class InvMovimientoDetalle
     /**
      * Get operacionComercial
      *
-     * @return integer 
+     * @return integer
      */
     public function getOperacionComercial()
     {
@@ -687,6 +702,7 @@ class InvMovimientoDetalle
      * Set afectarRemision
      *
      * @param integer $afectarRemision
+     *
      * @return InvMovimientoDetalle
      */
     public function setAfectarRemision($afectarRemision)
@@ -699,7 +715,7 @@ class InvMovimientoDetalle
     /**
      * Get afectarRemision
      *
-     * @return integer 
+     * @return integer
      */
     public function getAfectarRemision()
     {
@@ -710,6 +726,7 @@ class InvMovimientoDetalle
      * Set estadoAutorizado
      *
      * @param boolean $estadoAutorizado
+     *
      * @return InvMovimientoDetalle
      */
     public function setEstadoAutorizado($estadoAutorizado)
@@ -722,7 +739,7 @@ class InvMovimientoDetalle
     /**
      * Get estadoAutorizado
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getEstadoAutorizado()
     {
@@ -733,6 +750,7 @@ class InvMovimientoDetalle
      * Set estadoAnulado
      *
      * @param boolean $estadoAnulado
+     *
      * @return InvMovimientoDetalle
      */
     public function setEstadoAnulado($estadoAnulado)
@@ -745,7 +763,7 @@ class InvMovimientoDetalle
     /**
      * Get estadoAnulado
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getEstadoAnulado()
     {
@@ -756,6 +774,7 @@ class InvMovimientoDetalle
      * Set estadoCerrado
      *
      * @param boolean $estadoCerrado
+     *
      * @return InvMovimientoDetalle
      */
     public function setEstadoCerrado($estadoCerrado)
@@ -768,7 +787,7 @@ class InvMovimientoDetalle
     /**
      * Get estadoCerrado
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getEstadoCerrado()
     {
@@ -779,6 +798,7 @@ class InvMovimientoDetalle
      * Set codigoDetalleMovimientoEnlace
      *
      * @param integer $codigoDetalleMovimientoEnlace
+     *
      * @return InvMovimientoDetalle
      */
     public function setCodigoDetalleMovimientoEnlace($codigoDetalleMovimientoEnlace)
@@ -791,7 +811,7 @@ class InvMovimientoDetalle
     /**
      * Get codigoDetalleMovimientoEnlace
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoDetalleMovimientoEnlace()
     {
@@ -799,32 +819,10 @@ class InvMovimientoDetalle
     }
 
     /**
-     * Set itemRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvItem $itemRel
-     * @return InvMovimientoDetalle
-     */
-    public function setItemRel(\Brasa\InventarioBundle\Entity\InvItem $itemRel = null)
-    {
-        $this->itemRel = $itemRel;
-
-        return $this;
-    }
-
-    /**
-     * Get itemRel
-     *
-     * @return \Brasa\InventarioBundle\Entity\InvItem 
-     */
-    public function getItemRel()
-    {
-        return $this->itemRel;
-    }
-
-    /**
      * Set movimientoRel
      *
      * @param \Brasa\InventarioBundle\Entity\InvMovimiento $movimientoRel
+     *
      * @return InvMovimientoDetalle
      */
     public function setMovimientoRel(\Brasa\InventarioBundle\Entity\InvMovimiento $movimientoRel = null)
@@ -837,7 +835,7 @@ class InvMovimientoDetalle
     /**
      * Get movimientoRel
      *
-     * @return \Brasa\InventarioBundle\Entity\InvMovimiento 
+     * @return \Brasa\InventarioBundle\Entity\InvMovimiento
      */
     public function getMovimientoRel()
     {

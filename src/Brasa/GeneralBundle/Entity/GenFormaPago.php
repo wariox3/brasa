@@ -32,12 +32,7 @@ class GenFormaPago
     /**
      * @ORM\OneToMany(targetEntity="GenTercero", mappedBy="formaPagoProveedorRel")     
      */
-    protected $tercerosFormaPagoProveedorRel;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\InventarioBundle\Entity\InvMovimiento", mappedBy="formaPagoRel")
-     */
-    protected $movimientosRel;        
+    protected $tercerosFormaPagoProveedorRel;       
     
     /**
      * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurCliente", mappedBy="formaPagoRel")
@@ -59,6 +54,7 @@ class GenFormaPago
      */
     protected $afiClientesFormaPagoRel;    
     
+
     /**
      * Constructor
      */
@@ -66,8 +62,10 @@ class GenFormaPago
     {
         $this->tercerosFormaPagoClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tercerosFormaPagoProveedorRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->movimientosRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->turClientesFormaPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->carClientesFormaPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rhuClientesFormaPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->afiClientesFormaPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -170,40 +168,6 @@ class GenFormaPago
     public function getTercerosFormaPagoProveedorRel()
     {
         return $this->tercerosFormaPagoProveedorRel;
-    }
-
-    /**
-     * Add movimientosRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel
-     *
-     * @return GenFormaPago
-     */
-    public function addMovimientosRel(\Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel)
-    {
-        $this->movimientosRel[] = $movimientosRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove movimientosRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel
-     */
-    public function removeMovimientosRel(\Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel)
-    {
-        $this->movimientosRel->removeElement($movimientosRel);
-    }
-
-    /**
-     * Get movimientosRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMovimientosRel()
-    {
-        return $this->movimientosRel;
     }
 
     /**

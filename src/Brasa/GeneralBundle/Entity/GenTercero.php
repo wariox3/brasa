@@ -186,26 +186,19 @@ class GenTercero
     /**
      * @ORM\OneToMany(targetEntity="GenTerceroDireccion", mappedBy="terceroRel")
      */
-    protected $tercerosDireccionesRel;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\InventarioBundle\Entity\InvMovimiento", mappedBy="terceroRel")
-     */
-    protected $movimientosRel;    
+    protected $tercerosDireccionesRel; 
                           
     /**
      * @ORM\OneToMany(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuFactura", mappedBy="terceroRel")
      */
     protected $rhuFacturasTerceroRel;          
   
-
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->tercerosDireccionesRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->movimientosRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuFacturasTerceroRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -1019,40 +1012,6 @@ class GenTercero
     public function getTercerosDireccionesRel()
     {
         return $this->tercerosDireccionesRel;
-    }
-
-    /**
-     * Add movimientosRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel
-     *
-     * @return GenTercero
-     */
-    public function addMovimientosRel(\Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel)
-    {
-        $this->movimientosRel[] = $movimientosRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove movimientosRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel
-     */
-    public function removeMovimientosRel(\Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel)
-    {
-        $this->movimientosRel->removeElement($movimientosRel);
-    }
-
-    /**
-     * Get movimientosRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMovimientosRel()
-    {
-        return $this->movimientosRel;
     }
 
     /**

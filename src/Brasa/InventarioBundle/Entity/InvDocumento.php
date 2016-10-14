@@ -205,13 +205,13 @@ class InvDocumento
     
     
     /**
-     * @ORM\ManyToOne(targetEntity="InvDocumentoTipo", inversedBy="documentosRel")
+     * @ORM\ManyToOne(targetEntity="InvDocumentoTipo", inversedBy="documentosDocumentoTipoRel")
      * @ORM\JoinColumn(name="codigo_documento_tipo_fk", referencedColumnName="codigo_documento_tipo_pk")
      */
     protected $documentoTipoRel;     
     
     /**
-     * @ORM\ManyToOne(targetEntity="InvDocumentoSubtipo", inversedBy="documentosRel")
+     * @ORM\ManyToOne(targetEntity="InvDocumentoSubtipo", inversedBy="documentosDocumentoSubtipoRel")
      * @ORM\JoinColumn(name="codigo_documento_subtipo_fk", referencedColumnName="codigo_documento_subtipo_pk")
      */
     protected $documentoSubtipoRel; 
@@ -219,16 +219,15 @@ class InvDocumento
     /**
      * @ORM\OneToMany(targetEntity="InvMovimiento", mappedBy="documentoRel")
      */
-    protected $movimientosRel;
+    protected $movimientosDocumentoRel;
 
   
-    
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->movimientosRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->movimientosDocumentoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1034,36 +1033,36 @@ class InvDocumento
     }
 
     /**
-     * Add movimientosRel
+     * Add movimientosDocumentoRel
      *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel
+     * @param \Brasa\InventarioBundle\Entity\InvMovimiento $movimientosDocumentoRel
      *
      * @return InvDocumento
      */
-    public function addMovimientosRel(\Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel)
+    public function addMovimientosDocumentoRel(\Brasa\InventarioBundle\Entity\InvMovimiento $movimientosDocumentoRel)
     {
-        $this->movimientosRel[] = $movimientosRel;
+        $this->movimientosDocumentoRel[] = $movimientosDocumentoRel;
 
         return $this;
     }
 
     /**
-     * Remove movimientosRel
+     * Remove movimientosDocumentoRel
      *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel
+     * @param \Brasa\InventarioBundle\Entity\InvMovimiento $movimientosDocumentoRel
      */
-    public function removeMovimientosRel(\Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel)
+    public function removeMovimientosDocumentoRel(\Brasa\InventarioBundle\Entity\InvMovimiento $movimientosDocumentoRel)
     {
-        $this->movimientosRel->removeElement($movimientosRel);
+        $this->movimientosDocumentoRel->removeElement($movimientosDocumentoRel);
     }
 
     /**
-     * Get movimientosRel
+     * Get movimientosDocumentoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getMovimientosRel()
+    public function getMovimientosDocumentoRel()
     {
-        return $this->movimientosRel;
+        return $this->movimientosDocumentoRel;
     }
 }

@@ -29,9 +29,9 @@ class InvMovimiento
     private $codigoDocumentoTipoFk;               
     
     /**
-     * @ORM\Column(name="numero_movimiento", type="integer", nullable=true)
+     * @ORM\Column(name="numero", type="integer", nullable=true)
      */    
-    private $numeroMovimiento;
+    private $numero;
     
     /**
      * @ORM\Column(name="fecha", type="datetime", nullable=true)
@@ -76,7 +76,7 @@ class InvMovimiento
     /**
      * @ORM\Column(name="vr_subtotal", type="float")
      */
-    private $vrSubTotal = 0;
+    private $vrSubtotal = 0;
     
     /**
      * @ORM\Column(name="vr_descuento", type="float")
@@ -109,9 +109,9 @@ class InvMovimiento
     private $vrRetencionFuente = 0;    
 
     /**
-     * @ORM\Column(name="vr_retencion_CREE", type="float")
+     * @ORM\Column(name="vr_retencion_cree", type="float")
      */
-    private $vrRetencionCREE = 0;    
+    private $vrRetencionCree = 0;    
     
     /**
      * @ORM\Column(name="vr_retencion_iva_ventas", type="float")
@@ -124,19 +124,14 @@ class InvMovimiento
     private $vrOtrasRetenciones = 0;    
 
     /**
-     * @ORM\Column(name="vr_fletes", type="float")
+     * @ORM\Column(name="vr_flete", type="float")
      */
-    private $vrFletes = 0;    
+    private $vrFlete = 0;    
     
     /**
      * @ORM\Column(name="vr_descuento_financiero", type="float")
      */
-    private $vrDescuentoFinanciero = 0;       
-    
-    /**
-     * @ORM\Column(name="codigo_usuario_fk", type="string", length=20, nullable=true)
-     */    
-    private $codigoUsuarioFk; 
+    private $vrDescuentoFinanciero = 0;           
 
     /**
      * @ORM\Column(name="comentarios", type="string", length=500, nullable=true)
@@ -146,82 +141,63 @@ class InvMovimiento
     /**
      * @ORM\Column(name="estado_autorizado", type="boolean")
      */    
-    private $estadoAutorizado = 0;    
+    private $estadoAutorizado = false;    
 
     /**
      * @ORM\Column(name="estado_impreso", type="boolean")
      */    
-    private $estadoImpreso = 0;    
+    private $estadoImpreso = false;    
     
     /**
      * @ORM\Column(name="estado_cerrado", type="boolean")
      */    
-    private $estadoCerrado = 0;    
+    private $estadoCerrado = false;    
     
     /**
      * @ORM\Column(name="estado_anulado", type="boolean")
      */    
-    private $estadoAnulado = 0;    
+    private $estadoAnulado = false;    
 
     /**
      * @ORM\Column(name="estado_contabilizado", type="boolean")
      */    
-    private $estadoContabilizado = 0;    
+    private $estadoContabilizado = false;             
     
     /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTerceroDireccion", inversedBy="movimientosRel")
-     * @ORM\JoinColumn(name="codigo_direccion_fk", referencedColumnName="codigo_direccion_pk")
-     */
-    protected $direccionRel;     
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenFormaPago", inversedBy="movimientosRel")
-     * @ORM\JoinColumn(name="codigo_forma_pago_fk", referencedColumnName="codigo_forma_pago_pk")
-     */
-    protected $formaPagoRel;     
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="InvDocumento", inversedBy="movimientosRel")
+     * @ORM\ManyToOne(targetEntity="InvDocumento", inversedBy="movimientosDocumentoRel")
      * @ORM\JoinColumn(name="codigo_documento_fk", referencedColumnName="codigo_documento_pk")
      */
     protected $documentoRel;   
     
     /**
-     * @ORM\ManyToOne(targetEntity="InvDocumentoTipo", inversedBy="movimientosRel")
+     * @ORM\ManyToOne(targetEntity="InvDocumentoTipo", inversedBy="movimientosDocumentoTipoRel")
      * @ORM\JoinColumn(name="codigo_documento_tipo_fk", referencedColumnName="codigo_documento_tipo_pk")
      */
-    protected $documentoTipoRel; 
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="movimientosRel")
-     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
-     */
-    protected $terceroRel;    
+    protected $documentoTipoRel;       
     
     /**
      * @ORM\OneToMany(targetEntity="InvMovimientoDetalle", mappedBy="movimientoRel")
      */
-    protected $movimientosDetallesRel;    
+    protected $movimientosDetallesMovimientoRel;    
 
     /**
      * @ORM\OneToMany(targetEntity="InvMovimientoDescuentoFinanciero", mappedBy="movimientoRel")
      */
-    protected $descuentosFinancierosRel;     
+    protected $movimientosDescuentosFinancierosMovimientoRel;     
     
-
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->movimientosDetallesRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->descuentosFinancierosRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->movimientosDetallesMovimientoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->movimientosDescuentosFinancierosMovimientoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
      * Get codigoMovimientoPk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoMovimientoPk()
     {
@@ -232,6 +208,7 @@ class InvMovimiento
      * Set codigoDocumentoFk
      *
      * @param integer $codigoDocumentoFk
+     *
      * @return InvMovimiento
      */
     public function setCodigoDocumentoFk($codigoDocumentoFk)
@@ -244,7 +221,7 @@ class InvMovimiento
     /**
      * Get codigoDocumentoFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoDocumentoFk()
     {
@@ -255,6 +232,7 @@ class InvMovimiento
      * Set codigoDocumentoTipoFk
      *
      * @param integer $codigoDocumentoTipoFk
+     *
      * @return InvMovimiento
      */
     public function setCodigoDocumentoTipoFk($codigoDocumentoTipoFk)
@@ -267,7 +245,7 @@ class InvMovimiento
     /**
      * Get codigoDocumentoTipoFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoDocumentoTipoFk()
     {
@@ -275,32 +253,34 @@ class InvMovimiento
     }
 
     /**
-     * Set numeroMovimiento
+     * Set numero
      *
-     * @param integer $numeroMovimiento
+     * @param integer $numero
+     *
      * @return InvMovimiento
      */
-    public function setNumeroMovimiento($numeroMovimiento)
+    public function setNumero($numero)
     {
-        $this->numeroMovimiento = $numeroMovimiento;
+        $this->numero = $numero;
 
         return $this;
     }
 
     /**
-     * Get numeroMovimiento
+     * Get numero
      *
-     * @return integer 
+     * @return integer
      */
-    public function getNumeroMovimiento()
+    public function getNumero()
     {
-        return $this->numeroMovimiento;
+        return $this->numero;
     }
 
     /**
      * Set fecha
      *
      * @param \DateTime $fecha
+     *
      * @return InvMovimiento
      */
     public function setFecha($fecha)
@@ -313,7 +293,7 @@ class InvMovimiento
     /**
      * Get fecha
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFecha()
     {
@@ -324,6 +304,7 @@ class InvMovimiento
      * Set fecha1
      *
      * @param \DateTime $fecha1
+     *
      * @return InvMovimiento
      */
     public function setFecha1($fecha1)
@@ -336,7 +317,7 @@ class InvMovimiento
     /**
      * Get fecha1
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFecha1()
     {
@@ -347,6 +328,7 @@ class InvMovimiento
      * Set fecha2
      *
      * @param \DateTime $fecha2
+     *
      * @return InvMovimiento
      */
     public function setFecha2($fecha2)
@@ -359,7 +341,7 @@ class InvMovimiento
     /**
      * Get fecha2
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFecha2()
     {
@@ -370,6 +352,7 @@ class InvMovimiento
      * Set codigoTerceroFk
      *
      * @param integer $codigoTerceroFk
+     *
      * @return InvMovimiento
      */
     public function setCodigoTerceroFk($codigoTerceroFk)
@@ -382,7 +365,7 @@ class InvMovimiento
     /**
      * Get codigoTerceroFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoTerceroFk()
     {
@@ -393,6 +376,7 @@ class InvMovimiento
      * Set codigoDireccionFk
      *
      * @param integer $codigoDireccionFk
+     *
      * @return InvMovimiento
      */
     public function setCodigoDireccionFk($codigoDireccionFk)
@@ -405,7 +389,7 @@ class InvMovimiento
     /**
      * Get codigoDireccionFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoDireccionFk()
     {
@@ -416,6 +400,7 @@ class InvMovimiento
      * Set codigoFormaPagoFk
      *
      * @param integer $codigoFormaPagoFk
+     *
      * @return InvMovimiento
      */
     public function setCodigoFormaPagoFk($codigoFormaPagoFk)
@@ -428,7 +413,7 @@ class InvMovimiento
     /**
      * Get codigoFormaPagoFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoFormaPagoFk()
     {
@@ -439,6 +424,7 @@ class InvMovimiento
      * Set soporte
      *
      * @param string $soporte
+     *
      * @return InvMovimiento
      */
     public function setSoporte($soporte)
@@ -451,7 +437,7 @@ class InvMovimiento
     /**
      * Get soporte
      *
-     * @return string 
+     * @return string
      */
     public function getSoporte()
     {
@@ -462,6 +448,7 @@ class InvMovimiento
      * Set vrIva
      *
      * @param float $vrIva
+     *
      * @return InvMovimiento
      */
     public function setVrIva($vrIva)
@@ -474,7 +461,7 @@ class InvMovimiento
     /**
      * Get vrIva
      *
-     * @return float 
+     * @return float
      */
     public function getVrIva()
     {
@@ -482,32 +469,34 @@ class InvMovimiento
     }
 
     /**
-     * Set vrSubTotal
+     * Set vrSubtotal
      *
-     * @param float $vrSubTotal
+     * @param float $vrSubtotal
+     *
      * @return InvMovimiento
      */
-    public function setVrSubTotal($vrSubTotal)
+    public function setVrSubtotal($vrSubtotal)
     {
-        $this->vrSubTotal = $vrSubTotal;
+        $this->vrSubtotal = $vrSubtotal;
 
         return $this;
     }
 
     /**
-     * Get vrSubTotal
+     * Get vrSubtotal
      *
-     * @return float 
+     * @return float
      */
-    public function getVrSubTotal()
+    public function getVrSubtotal()
     {
-        return $this->vrSubTotal;
+        return $this->vrSubtotal;
     }
 
     /**
      * Set vrDescuento
      *
      * @param float $vrDescuento
+     *
      * @return InvMovimiento
      */
     public function setVrDescuento($vrDescuento)
@@ -520,7 +509,7 @@ class InvMovimiento
     /**
      * Get vrDescuento
      *
-     * @return float 
+     * @return float
      */
     public function getVrDescuento()
     {
@@ -531,6 +520,7 @@ class InvMovimiento
      * Set vrBruto
      *
      * @param float $vrBruto
+     *
      * @return InvMovimiento
      */
     public function setVrBruto($vrBruto)
@@ -543,7 +533,7 @@ class InvMovimiento
     /**
      * Get vrBruto
      *
-     * @return float 
+     * @return float
      */
     public function getVrBruto()
     {
@@ -554,6 +544,7 @@ class InvMovimiento
      * Set vrNeto
      *
      * @param float $vrNeto
+     *
      * @return InvMovimiento
      */
     public function setVrNeto($vrNeto)
@@ -566,7 +557,7 @@ class InvMovimiento
     /**
      * Get vrNeto
      *
-     * @return float 
+     * @return float
      */
     public function getVrNeto()
     {
@@ -574,9 +565,10 @@ class InvMovimiento
     }
 
     /**
-     * Set vr_total
+     * Set vrTotal
      *
      * @param float $vrTotal
+     *
      * @return InvMovimiento
      */
     public function setVrTotal($vrTotal)
@@ -587,9 +579,9 @@ class InvMovimiento
     }
 
     /**
-     * Get vr_total
+     * Get vrTotal
      *
-     * @return float 
+     * @return float
      */
     public function getVrTotal()
     {
@@ -600,6 +592,7 @@ class InvMovimiento
      * Set vrCosto
      *
      * @param float $vrCosto
+     *
      * @return InvMovimiento
      */
     public function setVrCosto($vrCosto)
@@ -612,7 +605,7 @@ class InvMovimiento
     /**
      * Get vrCosto
      *
-     * @return float 
+     * @return float
      */
     public function getVrCosto()
     {
@@ -623,6 +616,7 @@ class InvMovimiento
      * Set vrRetencionFuente
      *
      * @param float $vrRetencionFuente
+     *
      * @return InvMovimiento
      */
     public function setVrRetencionFuente($vrRetencionFuente)
@@ -635,7 +629,7 @@ class InvMovimiento
     /**
      * Get vrRetencionFuente
      *
-     * @return float 
+     * @return float
      */
     public function getVrRetencionFuente()
     {
@@ -643,32 +637,34 @@ class InvMovimiento
     }
 
     /**
-     * Set vrRetencionCREE
+     * Set vrRetencionCree
      *
-     * @param float $vrRetencionCREE
+     * @param float $vrRetencionCree
+     *
      * @return InvMovimiento
      */
-    public function setVrRetencionCREE($vrRetencionCREE)
+    public function setVrRetencionCree($vrRetencionCree)
     {
-        $this->vrRetencionCREE = $vrRetencionCREE;
+        $this->vrRetencionCree = $vrRetencionCree;
 
         return $this;
     }
 
     /**
-     * Get vrRetencionCREE
+     * Get vrRetencionCree
      *
-     * @return float 
+     * @return float
      */
-    public function getVrRetencionCREE()
+    public function getVrRetencionCree()
     {
-        return $this->vrRetencionCREE;
+        return $this->vrRetencionCree;
     }
 
     /**
      * Set vrRetencionIvaVentas
      *
      * @param float $vrRetencionIvaVentas
+     *
      * @return InvMovimiento
      */
     public function setVrRetencionIvaVentas($vrRetencionIvaVentas)
@@ -681,7 +677,7 @@ class InvMovimiento
     /**
      * Get vrRetencionIvaVentas
      *
-     * @return float 
+     * @return float
      */
     public function getVrRetencionIvaVentas()
     {
@@ -692,6 +688,7 @@ class InvMovimiento
      * Set vrOtrasRetenciones
      *
      * @param float $vrOtrasRetenciones
+     *
      * @return InvMovimiento
      */
     public function setVrOtrasRetenciones($vrOtrasRetenciones)
@@ -704,7 +701,7 @@ class InvMovimiento
     /**
      * Get vrOtrasRetenciones
      *
-     * @return float 
+     * @return float
      */
     public function getVrOtrasRetenciones()
     {
@@ -712,32 +709,34 @@ class InvMovimiento
     }
 
     /**
-     * Set vrFletes
+     * Set vrFlete
      *
-     * @param float $vrFletes
+     * @param float $vrFlete
+     *
      * @return InvMovimiento
      */
-    public function setVrFletes($vrFletes)
+    public function setVrFlete($vrFlete)
     {
-        $this->vrFletes = $vrFletes;
+        $this->vrFlete = $vrFlete;
 
         return $this;
     }
 
     /**
-     * Get vrFletes
+     * Get vrFlete
      *
-     * @return float 
+     * @return float
      */
-    public function getVrFletes()
+    public function getVrFlete()
     {
-        return $this->vrFletes;
+        return $this->vrFlete;
     }
 
     /**
      * Set vrDescuentoFinanciero
      *
      * @param float $vrDescuentoFinanciero
+     *
      * @return InvMovimiento
      */
     public function setVrDescuentoFinanciero($vrDescuentoFinanciero)
@@ -750,7 +749,7 @@ class InvMovimiento
     /**
      * Get vrDescuentoFinanciero
      *
-     * @return float 
+     * @return float
      */
     public function getVrDescuentoFinanciero()
     {
@@ -758,32 +757,10 @@ class InvMovimiento
     }
 
     /**
-     * Set codigoUsuarioFk
-     *
-     * @param string $codigoUsuarioFk
-     * @return InvMovimiento
-     */
-    public function setCodigoUsuarioFk($codigoUsuarioFk)
-    {
-        $this->codigoUsuarioFk = $codigoUsuarioFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoUsuarioFk
-     *
-     * @return string 
-     */
-    public function getCodigoUsuarioFk()
-    {
-        return $this->codigoUsuarioFk;
-    }
-
-    /**
      * Set comentarios
      *
      * @param string $comentarios
+     *
      * @return InvMovimiento
      */
     public function setComentarios($comentarios)
@@ -796,7 +773,7 @@ class InvMovimiento
     /**
      * Get comentarios
      *
-     * @return string 
+     * @return string
      */
     public function getComentarios()
     {
@@ -807,6 +784,7 @@ class InvMovimiento
      * Set estadoAutorizado
      *
      * @param boolean $estadoAutorizado
+     *
      * @return InvMovimiento
      */
     public function setEstadoAutorizado($estadoAutorizado)
@@ -819,7 +797,7 @@ class InvMovimiento
     /**
      * Get estadoAutorizado
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getEstadoAutorizado()
     {
@@ -830,6 +808,7 @@ class InvMovimiento
      * Set estadoImpreso
      *
      * @param boolean $estadoImpreso
+     *
      * @return InvMovimiento
      */
     public function setEstadoImpreso($estadoImpreso)
@@ -842,7 +821,7 @@ class InvMovimiento
     /**
      * Get estadoImpreso
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getEstadoImpreso()
     {
@@ -853,6 +832,7 @@ class InvMovimiento
      * Set estadoCerrado
      *
      * @param boolean $estadoCerrado
+     *
      * @return InvMovimiento
      */
     public function setEstadoCerrado($estadoCerrado)
@@ -865,7 +845,7 @@ class InvMovimiento
     /**
      * Get estadoCerrado
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getEstadoCerrado()
     {
@@ -876,6 +856,7 @@ class InvMovimiento
      * Set estadoAnulado
      *
      * @param boolean $estadoAnulado
+     *
      * @return InvMovimiento
      */
     public function setEstadoAnulado($estadoAnulado)
@@ -888,7 +869,7 @@ class InvMovimiento
     /**
      * Get estadoAnulado
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getEstadoAnulado()
     {
@@ -899,6 +880,7 @@ class InvMovimiento
      * Set estadoContabilizado
      *
      * @param boolean $estadoContabilizado
+     *
      * @return InvMovimiento
      */
     public function setEstadoContabilizado($estadoContabilizado)
@@ -911,7 +893,7 @@ class InvMovimiento
     /**
      * Get estadoContabilizado
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getEstadoContabilizado()
     {
@@ -922,6 +904,7 @@ class InvMovimiento
      * Set documentoRel
      *
      * @param \Brasa\InventarioBundle\Entity\InvDocumento $documentoRel
+     *
      * @return InvMovimiento
      */
     public function setDocumentoRel(\Brasa\InventarioBundle\Entity\InvDocumento $documentoRel = null)
@@ -934,7 +917,7 @@ class InvMovimiento
     /**
      * Get documentoRel
      *
-     * @return \Brasa\InventarioBundle\Entity\InvDocumento 
+     * @return \Brasa\InventarioBundle\Entity\InvDocumento
      */
     public function getDocumentoRel()
     {
@@ -945,6 +928,7 @@ class InvMovimiento
      * Set documentoTipoRel
      *
      * @param \Brasa\InventarioBundle\Entity\InvDocumentoTipo $documentoTipoRel
+     *
      * @return InvMovimiento
      */
     public function setDocumentoTipoRel(\Brasa\InventarioBundle\Entity\InvDocumentoTipo $documentoTipoRel = null)
@@ -957,7 +941,7 @@ class InvMovimiento
     /**
      * Get documentoTipoRel
      *
-     * @return \Brasa\InventarioBundle\Entity\InvDocumentoTipo 
+     * @return \Brasa\InventarioBundle\Entity\InvDocumentoTipo
      */
     public function getDocumentoTipoRel()
     {
@@ -965,137 +949,70 @@ class InvMovimiento
     }
 
     /**
-     * Set terceroRel
+     * Add movimientosDetallesMovimientoRel
      *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesMovimientoRel
+     *
      * @return InvMovimiento
      */
-    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
+    public function addMovimientosDetallesMovimientoRel(\Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesMovimientoRel)
     {
-        $this->terceroRel = $terceroRel;
+        $this->movimientosDetallesMovimientoRel[] = $movimientosDetallesMovimientoRel;
 
         return $this;
     }
 
     /**
-     * Get terceroRel
+     * Remove movimientosDetallesMovimientoRel
      *
-     * @return \Brasa\GeneralBundle\Entity\GenTercero 
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesMovimientoRel
      */
-    public function getTerceroRel()
+    public function removeMovimientosDetallesMovimientoRel(\Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesMovimientoRel)
     {
-        return $this->terceroRel;
+        $this->movimientosDetallesMovimientoRel->removeElement($movimientosDetallesMovimientoRel);
     }
 
     /**
-     * Add movimientosDetallesRel
+     * Get movimientosDetallesMovimientoRel
      *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesRel
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMovimientosDetallesMovimientoRel()
+    {
+        return $this->movimientosDetallesMovimientoRel;
+    }
+
+    /**
+     * Add movimientosDescuentosFinancierosMovimientoRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDescuentoFinanciero $movimientosDescuentosFinancierosMovimientoRel
+     *
      * @return InvMovimiento
      */
-    public function addMovimientosDetallesRel(\Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesRel)
+    public function addMovimientosDescuentosFinancierosMovimientoRel(\Brasa\InventarioBundle\Entity\InvMovimientoDescuentoFinanciero $movimientosDescuentosFinancierosMovimientoRel)
     {
-        $this->movimientosDetallesRel[] = $movimientosDetallesRel;
+        $this->movimientosDescuentosFinancierosMovimientoRel[] = $movimientosDescuentosFinancierosMovimientoRel;
 
         return $this;
     }
 
     /**
-     * Remove movimientosDetallesRel
+     * Remove movimientosDescuentosFinancierosMovimientoRel
      *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesRel
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDescuentoFinanciero $movimientosDescuentosFinancierosMovimientoRel
      */
-    public function removeMovimientosDetallesRel(\Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesRel)
+    public function removeMovimientosDescuentosFinancierosMovimientoRel(\Brasa\InventarioBundle\Entity\InvMovimientoDescuentoFinanciero $movimientosDescuentosFinancierosMovimientoRel)
     {
-        $this->movimientosDetallesRel->removeElement($movimientosDetallesRel);
+        $this->movimientosDescuentosFinancierosMovimientoRel->removeElement($movimientosDescuentosFinancierosMovimientoRel);
     }
 
     /**
-     * Get movimientosDetallesRel
+     * Get movimientosDescuentosFinancierosMovimientoRel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getMovimientosDetallesRel()
+    public function getMovimientosDescuentosFinancierosMovimientoRel()
     {
-        return $this->movimientosDetallesRel;
-    }
-
-    /**
-     * Add descuentosFinancierosRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDescuentoFinanciero $descuentosFinancierosRel
-     * @return InvMovimiento
-     */
-    public function addDescuentosFinancierosRel(\Brasa\InventarioBundle\Entity\InvMovimientoDescuentoFinanciero $descuentosFinancierosRel)
-    {
-        $this->descuentosFinancierosRel[] = $descuentosFinancierosRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove descuentosFinancierosRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDescuentoFinanciero $descuentosFinancierosRel
-     */
-    public function removeDescuentosFinancierosRel(\Brasa\InventarioBundle\Entity\InvMovimientoDescuentoFinanciero $descuentosFinancierosRel)
-    {
-        $this->descuentosFinancierosRel->removeElement($descuentosFinancierosRel);
-    }
-
-    /**
-     * Get descuentosFinancierosRel
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getDescuentosFinancierosRel()
-    {
-        return $this->descuentosFinancierosRel;
-    }
-
-    /**
-     * Set direccionRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTerceroDireccion $direccionRel
-     * @return InvMovimiento
-     */
-    public function setDireccionRel(\Brasa\GeneralBundle\Entity\GenTerceroDireccion $direccionRel = null)
-    {
-        $this->direccionRel = $direccionRel;
-
-        return $this;
-    }
-
-    /**
-     * Get direccionRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenTerceroDireccion 
-     */
-    public function getDireccionRel()
-    {
-        return $this->direccionRel;
-    }
-
-    /**
-     * Set formaPagoRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenFormaPago $formaPagoRel
-     * @return InvMovimiento
-     */
-    public function setFormaPagoRel(\Brasa\GeneralBundle\Entity\GenFormaPago $formaPagoRel = null)
-    {
-        $this->formaPagoRel = $formaPagoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get formaPagoRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenFormaPago 
-     */
-    public function getFormaPagoRel()
-    {
-        return $this->formaPagoRel;
+        return $this->movimientosDescuentosFinancierosMovimientoRel;
     }
 }

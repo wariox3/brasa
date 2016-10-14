@@ -30,17 +30,19 @@ class InvMarca
      */
     protected $itemsRel;
 
+
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-        $this->itemsRel = new ArrayCollection();
+        $this->itemsRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
- 
-
 
     /**
      * Get codigoMarcaPk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoMarcaPk()
     {
@@ -51,6 +53,7 @@ class InvMarca
      * Set nombreMarca
      *
      * @param string $nombreMarca
+     *
      * @return InvMarca
      */
     public function setNombreMarca($nombreMarca)
@@ -63,7 +66,7 @@ class InvMarca
     /**
      * Get nombreMarca
      *
-     * @return string 
+     * @return string
      */
     public function getNombreMarca()
     {
@@ -74,6 +77,7 @@ class InvMarca
      * Add itemsRel
      *
      * @param \Brasa\InventarioBundle\Entity\InvItem $itemsRel
+     *
      * @return InvMarca
      */
     public function addItemsRel(\Brasa\InventarioBundle\Entity\InvItem $itemsRel)
@@ -96,7 +100,7 @@ class InvMarca
     /**
      * Get itemsRel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getItemsRel()
     {

@@ -49,24 +49,22 @@ class InvMovimientoDescuentoFinanciero
     private $comentarios;            
      
     /**
-     * @ORM\ManyToOne(targetEntity="InvMovimiento", inversedBy="descuentosFinancierosRel")
+     * @ORM\ManyToOne(targetEntity="InvMovimiento", inversedBy="movimientosDescuentosFinancierosMovimientoRel")
      * @ORM\JoinColumn(name="codigo_movimiento_fk", referencedColumnName="codigo_movimiento_pk")
      */
     protected $movimientoRel;
     
     /**
-     * @ORM\ManyToOne(targetEntity="InvDescuentoFinanciero", inversedBy="descuentosFinancierosRel")
+     * @ORM\ManyToOne(targetEntity="InvDescuentoFinanciero", inversedBy="movimientosDescuentosFinancierosDescuentoFinancieroRel")
      * @ORM\JoinColumn(name="codigo_descuento_financiero_fk", referencedColumnName="codigo_descuento_financiero_pk")
      */
-    protected $descuentoFinancieroRel;
-    
-    
+    protected $descuentoFinancieroRel;        
 
 
     /**
      * Get codigoMovimientoDescuentoFinancieroPk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoMovimientoDescuentoFinancieroPk()
     {
@@ -77,6 +75,7 @@ class InvMovimientoDescuentoFinanciero
      * Set codigoMovimientoFk
      *
      * @param integer $codigoMovimientoFk
+     *
      * @return InvMovimientoDescuentoFinanciero
      */
     public function setCodigoMovimientoFk($codigoMovimientoFk)
@@ -89,7 +88,7 @@ class InvMovimientoDescuentoFinanciero
     /**
      * Get codigoMovimientoFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoMovimientoFk()
     {
@@ -100,6 +99,7 @@ class InvMovimientoDescuentoFinanciero
      * Set codigoDescuentoFinanceroFk
      *
      * @param integer $codigoDescuentoFinanceroFk
+     *
      * @return InvMovimientoDescuentoFinanciero
      */
     public function setCodigoDescuentoFinanceroFk($codigoDescuentoFinanceroFk)
@@ -112,7 +112,7 @@ class InvMovimientoDescuentoFinanciero
     /**
      * Get codigoDescuentoFinanceroFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoDescuentoFinanceroFk()
     {
@@ -123,6 +123,7 @@ class InvMovimientoDescuentoFinanciero
      * Set base
      *
      * @param float $base
+     *
      * @return InvMovimientoDescuentoFinanciero
      */
     public function setBase($base)
@@ -135,7 +136,7 @@ class InvMovimientoDescuentoFinanciero
     /**
      * Get base
      *
-     * @return float 
+     * @return float
      */
     public function getBase()
     {
@@ -146,6 +147,7 @@ class InvMovimientoDescuentoFinanciero
      * Set porcentaje
      *
      * @param float $porcentaje
+     *
      * @return InvMovimientoDescuentoFinanciero
      */
     public function setPorcentaje($porcentaje)
@@ -158,7 +160,7 @@ class InvMovimientoDescuentoFinanciero
     /**
      * Get porcentaje
      *
-     * @return float 
+     * @return float
      */
     public function getPorcentaje()
     {
@@ -169,6 +171,7 @@ class InvMovimientoDescuentoFinanciero
      * Set vrTotal
      *
      * @param float $vrTotal
+     *
      * @return InvMovimientoDescuentoFinanciero
      */
     public function setVrTotal($vrTotal)
@@ -181,7 +184,7 @@ class InvMovimientoDescuentoFinanciero
     /**
      * Get vrTotal
      *
-     * @return float 
+     * @return float
      */
     public function getVrTotal()
     {
@@ -192,6 +195,7 @@ class InvMovimientoDescuentoFinanciero
      * Set comentarios
      *
      * @param string $comentarios
+     *
      * @return InvMovimientoDescuentoFinanciero
      */
     public function setComentarios($comentarios)
@@ -204,7 +208,7 @@ class InvMovimientoDescuentoFinanciero
     /**
      * Get comentarios
      *
-     * @return string 
+     * @return string
      */
     public function getComentarios()
     {
@@ -215,6 +219,7 @@ class InvMovimientoDescuentoFinanciero
      * Set movimientoRel
      *
      * @param \Brasa\InventarioBundle\Entity\InvMovimiento $movimientoRel
+     *
      * @return InvMovimientoDescuentoFinanciero
      */
     public function setMovimientoRel(\Brasa\InventarioBundle\Entity\InvMovimiento $movimientoRel = null)
@@ -227,7 +232,7 @@ class InvMovimientoDescuentoFinanciero
     /**
      * Get movimientoRel
      *
-     * @return \Brasa\InventarioBundle\Entity\InvMovimiento 
+     * @return \Brasa\InventarioBundle\Entity\InvMovimiento
      */
     public function getMovimientoRel()
     {
@@ -238,6 +243,7 @@ class InvMovimientoDescuentoFinanciero
      * Set descuentoFinancieroRel
      *
      * @param \Brasa\InventarioBundle\Entity\InvDescuentoFinanciero $descuentoFinancieroRel
+     *
      * @return InvMovimientoDescuentoFinanciero
      */
     public function setDescuentoFinancieroRel(\Brasa\InventarioBundle\Entity\InvDescuentoFinanciero $descuentoFinancieroRel = null)
@@ -250,7 +256,7 @@ class InvMovimientoDescuentoFinanciero
     /**
      * Get descuentoFinancieroRel
      *
-     * @return \Brasa\InventarioBundle\Entity\InvDescuentoFinanciero 
+     * @return \Brasa\InventarioBundle\Entity\InvDescuentoFinanciero
      */
     public function getDescuentoFinancieroRel()
     {

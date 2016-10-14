@@ -67,20 +67,7 @@ class GenTerceroDireccion
      * @ORM\ManyToOne(targetEntity="GenCiudad", inversedBy="tercerosDireccionesRel")
      * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
      */
-    protected $ciudadRel;    
-    
-    /**
-     * @ORM\OneToMany(targetEntity="Brasa\InventarioBundle\Entity\InvMovimiento", mappedBy="direccionRel")
-     */
-    protected $movimientosRel;    
-    
-    public function __construct()
-    {        
-        $this->movimientosRel = new ArrayCollection();
-    }      
-
-
-
+    protected $ciudadRel;        
 
     /**
      * Get codigoDireccionPk
@@ -330,39 +317,5 @@ class GenTerceroDireccion
     public function getCiudadRel()
     {
         return $this->ciudadRel;
-    }
-
-    /**
-     * Add movimientosRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel
-     *
-     * @return GenTerceroDireccion
-     */
-    public function addMovimientosRel(\Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel)
-    {
-        $this->movimientosRel[] = $movimientosRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove movimientosRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel
-     */
-    public function removeMovimientosRel(\Brasa\InventarioBundle\Entity\InvMovimiento $movimientosRel)
-    {
-        $this->movimientosRel->removeElement($movimientosRel);
-    }
-
-    /**
-     * Get movimientosRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMovimientosRel()
-    {
-        return $this->movimientosRel;
     }
 }

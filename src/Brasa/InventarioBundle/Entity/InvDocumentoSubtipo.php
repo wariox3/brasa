@@ -26,20 +26,21 @@ class InvDocumentoSubtipo
     /**
      * @ORM\OneToMany(targetEntity="InvDocumento", mappedBy="documentoSubtipoRel")
      */
-    protected $documentosRel;
+    protected $documentosDocumentoSubtipoRel;
+
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->documentosRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->documentosDocumentoSubtipoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
      * Get codigoDocumentoSubtipoPk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoDocumentoSubtipoPk()
     {
@@ -50,6 +51,7 @@ class InvDocumentoSubtipo
      * Set nombre
      *
      * @param string $nombre
+     *
      * @return InvDocumentoSubtipo
      */
     public function setNombre($nombre)
@@ -62,7 +64,7 @@ class InvDocumentoSubtipo
     /**
      * Get nombre
      *
-     * @return string 
+     * @return string
      */
     public function getNombre()
     {
@@ -70,35 +72,36 @@ class InvDocumentoSubtipo
     }
 
     /**
-     * Add documentosRel
+     * Add documentosDocumentoSubtipoRel
      *
-     * @param \Brasa\InventarioBundle\Entity\InvDocumento $documentosRel
+     * @param \Brasa\InventarioBundle\Entity\InvDocumento $documentosDocumentoSubtipoRel
+     *
      * @return InvDocumentoSubtipo
      */
-    public function addDocumentosRel(\Brasa\InventarioBundle\Entity\InvDocumento $documentosRel)
+    public function addDocumentosDocumentoSubtipoRel(\Brasa\InventarioBundle\Entity\InvDocumento $documentosDocumentoSubtipoRel)
     {
-        $this->documentosRel[] = $documentosRel;
+        $this->documentosDocumentoSubtipoRel[] = $documentosDocumentoSubtipoRel;
 
         return $this;
     }
 
     /**
-     * Remove documentosRel
+     * Remove documentosDocumentoSubtipoRel
      *
-     * @param \Brasa\InventarioBundle\Entity\InvDocumento $documentosRel
+     * @param \Brasa\InventarioBundle\Entity\InvDocumento $documentosDocumentoSubtipoRel
      */
-    public function removeDocumentosRel(\Brasa\InventarioBundle\Entity\InvDocumento $documentosRel)
+    public function removeDocumentosDocumentoSubtipoRel(\Brasa\InventarioBundle\Entity\InvDocumento $documentosDocumentoSubtipoRel)
     {
-        $this->documentosRel->removeElement($documentosRel);
+        $this->documentosDocumentoSubtipoRel->removeElement($documentosDocumentoSubtipoRel);
     }
 
     /**
-     * Get documentosRel
+     * Get documentosDocumentoSubtipoRel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getDocumentosRel()
+    public function getDocumentosDocumentoSubtipoRel()
     {
-        return $this->documentosRel;
+        return $this->documentosDocumentoSubtipoRel;
     }
 }
