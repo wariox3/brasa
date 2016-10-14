@@ -775,12 +775,13 @@ class ServicioController extends Controller
                     ->setCellValue('B1', 'NIT')
                     ->setCellValue('C1', 'CLIENTE')
                     ->setCellValue('D1', 'SECTOR') 
-                    ->setCellValue('E1', 'AUT')
-                    ->setCellValue('F1', 'CER')
-                    ->setCellValue('G1', 'HORAS')
-                    ->setCellValue('H1', 'H.DIURNAS')
-                    ->setCellValue('I1', 'H.NOCTURNAS')
-                    ->setCellValue('J1', 'VALOR');
+                    ->setCellValue('E1', 'SECTOR_COM')
+                    ->setCellValue('F1', 'AUT')
+                    ->setCellValue('G1', 'CER')
+                    ->setCellValue('H1', 'HORAS')
+                    ->setCellValue('I1', 'H.DIURNAS')
+                    ->setCellValue('J1', 'H.NOCTURNAS')
+                    ->setCellValue('K1', 'VALOR');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -793,13 +794,15 @@ class ServicioController extends Controller
                     ->setCellValue('B' . $i, $arServicio->getClienteRel()->getNit())
                     ->setCellValue('C' . $i, $arServicio->getClienteRel()->getNombreCorto())
                     ->setCellValue('D' . $i, $arServicio->getSectorRel()->getNombre())  
-                    ->setCellValue('E' . $i, $objFunciones->devuelveBoolean($arServicio->getEstadoAutorizado()))
-                    ->setCellValue('F' . $i, $objFunciones->devuelveBoolean($arServicio->getEstadoCerrado()))
-                    ->setCellValue('G' . $i, $arServicio->getHoras())
-                    ->setCellValue('H' . $i, $arServicio->getHorasDiurnas())
-                    ->setCellValue('I' . $i, $arServicio->getHorasNocturnas())
-                    ->setCellValue('J' . $i, $arServicio->getVrTotal());
-
+                    ->setCellValue('F' . $i, $objFunciones->devuelveBoolean($arServicio->getEstadoAutorizado()))
+                    ->setCellValue('G' . $i, $objFunciones->devuelveBoolean($arServicio->getEstadoCerrado()))
+                    ->setCellValue('H' . $i, $arServicio->getHoras())
+                    ->setCellValue('I' . $i, $arServicio->getHorasDiurnas())
+                    ->setCellValue('J' . $i, $arServicio->getHorasNocturnas())
+                    ->setCellValue('K' . $i, $arServicio->getVrTotal());
+            if($arServicio->getClienteRel()->getCodigoSectorComercialFk()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E' . $i, $arServicio->getClienteRel()->getSectorComercialRel()->getNombre());
+            }
             $i++;
         }
 
