@@ -13,7 +13,7 @@ class RhuVisitaType extends AbstractType
                 
             ->add('comentarios', 'textarea', array('required' => true))
             ->add('fecha', 'datetime', array('required' => true, 'data' => new \DateTime('now')))
-            ->add('nombreQuienVisita','text',array('required' => false))    
+            ->add('nombreQuienVisita','text',array('required' => true))    
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }
