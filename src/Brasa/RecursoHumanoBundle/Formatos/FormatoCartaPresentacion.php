@@ -160,7 +160,17 @@ class FormatoCartaPresentacion extends \FPDF_FPDF {
     public function Footer() {
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+        $arContrato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find(self::$codigoContrato);
+        $strRutaImagen = '';
+        if($arContrato->getEmpleadoRel()->getRutaFoto() != "") {
+            $strRutaImagen = $arConfiguracion->getRutaAlmacenamiento()."imagenes/"."empleados/" . $arContrato->getEmpleadoRel()->getRutaFoto();
+            //$strRutaImagen = "/var/www/html/almacenamientodorchester/imagenes/"."empleados/" . $arContrato->getEmpleadoRel()->getRutaFoto();
+            $this->Cell(0, 0, $this->Image($strRutaImagen , 150 ,200, 25 , 32,'JPG'), 0, 0, 'C', 0); //foto
+        }
         $this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
+        //$this->Text(170, 290, utf8_decode('Página ') . $this->PageNo() . ' de {nb}');
+        
     }
 
     public static function MesesEspañol($mes) {

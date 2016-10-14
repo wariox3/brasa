@@ -60,7 +60,7 @@
                 <th>FECHA INICIO</th>
                 <th>C.CONTABILIDAD</th>
                 <th>AUX.T</th>
-                <th>ACT</th>
+                <th>CONTRATO ACT</th>
                 <th>ACCIONES NUEVO</th>
                 <th style="text-align: center"></th>
                 <th style="text-align: center"></th>                
@@ -77,7 +77,7 @@
                 <td>{% if arEmpleados.fechaContrato != "" %} {{ arEmpleados.fechaContrato|date('Y/m/d')  }} {% else %} SIN DEFINIR {% endif %}</td>
                 <td>{{ arEmpleados.codigoCentroCostoContabilidadFk| default('')}}</td>
                 <td>{% if arEmpleados.auxilioTransporte == 1 %} SI {% else %} NO {% endif %}</td>                                
-                <td>{% if arEmpleados.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>                                
+                <td>{% if arEmpleados.estadoContratoActivo == 1 %} SI {% else %} NO {% endif %}</td>                                
                 <td>
                     <div class="btn-group">
                         <button type="button" class="btn btn-default btn-xs">Nuevo</button>

@@ -33,7 +33,7 @@ class FormatoVisita extends \FPDF_FPDF {
         $this->SetXY(53, 14);
         $this->Image('imagenes/logos/logo.jpg', 12, 15, 35, 17);
         //INFORMACIÓN EMPRESA
-        $this->Cell(150, 7, utf8_decode("DOTACIÓN EMPLEADO"), 0, 0, 'C', 1);
+        $this->Cell(150, 7, utf8_decode("VISITAS"), 0, 0, 'C', 1);
         $this->SetXY(53, 22);
         $this->SetFont('Arial','B',9);
         $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);
