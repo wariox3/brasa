@@ -121,7 +121,12 @@ class VacacionesController extends Controller
                                     $fechaHastaPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestacionesHasta(360, $fechaDesdePeriodo);
                                     $intDias = ($arVacacion->getDiasDisfrutados() + $arVacacion->getDiasPagados()) * 24;
                                     $fechaDesdePeriodo = $arContrato->getFechaUltimoPagoVacaciones();
-                                    $fechaHastaPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestacionesHasta($intDias, $fechaDesdePeriodo);
+                                    $strFechaDesde = $fechaDesdePeriodo->format('Y-m-d');
+                                    $strFechaDesde = strtotime ( '+1 day' , strtotime ( $strFechaDesde ) ) ;
+                                    $strFechaDesde = date ( 'Y-m-d' , $strFechaDesde );        
+                                    $fechaDesdePeriodo = date_create($strFechaDesde);                                    
+                                    
+                                    $fechaHastaPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestacionesHasta($intDias+1, $fechaDesdePeriodo);
                                     $arVacacion->setFechaDesdePeriodo($fechaDesdePeriodo);
                                     $arVacacion->setFechaHastaPeriodo($fechaHastaPeriodo);
                                     $intDiasDevolver = $arVacacion->getDiasPagados();
