@@ -732,6 +732,13 @@ class RhuEmpleado
      */
     protected $pagosBancosDetallesEmpleadoRel;    
     
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RhuVisita", mappedBy="empleadoRel")
+     */
+    protected $visitasEmpleadoRel;
+    
+        
     /**
      * Constructor
      */
@@ -743,6 +750,7 @@ class RhuEmpleado
         $this->pagosAdicionalesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->creditosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->incapacidadesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->embargosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->vacacionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->licenciasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contratosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -752,6 +760,7 @@ class RhuEmpleado
         $this->disciplinariosDescargosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosFamiliasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empleadosEstudiosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->acreditacionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ssoPeriodosEmpleadosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ssoAportesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dotacionesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -772,6 +781,8 @@ class RhuEmpleado
         $this->cartasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->capacitacionesDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cambiosTiposContratosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosBancosDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->visitasEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -2441,6 +2452,30 @@ class RhuEmpleado
     }
 
     /**
+     * Set codigoPuestoFk
+     *
+     * @param integer $codigoPuestoFk
+     *
+     * @return RhuEmpleado
+     */
+    public function setCodigoPuestoFk($codigoPuestoFk)
+    {
+        $this->codigoPuestoFk = $codigoPuestoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPuestoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPuestoFk()
+    {
+        return $this->codigoPuestoFk;
+    }
+
+    /**
      * Set clasificacionRiesgoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo $clasificacionRiesgoRel
@@ -2558,6 +2593,30 @@ class RhuEmpleado
     public function getCentroCostoRel()
     {
         return $this->centroCostoRel;
+    }
+
+    /**
+     * Set centroCostoContabilidadRel
+     *
+     * @param \Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoContabilidadRel
+     *
+     * @return RhuEmpleado
+     */
+    public function setCentroCostoContabilidadRel(\Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoContabilidadRel = null)
+    {
+        $this->centroCostoContabilidadRel = $centroCostoContabilidadRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoContabilidadRel
+     *
+     * @return \Brasa\ContabilidadBundle\Entity\CtbCentroCosto
+     */
+    public function getCentroCostoContabilidadRel()
+    {
+        return $this->centroCostoContabilidadRel;
     }
 
     /**
@@ -3173,6 +3232,40 @@ class RhuEmpleado
     }
 
     /**
+     * Add embargosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmbargo $embargosEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addEmbargosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmbargo $embargosEmpleadoRel)
+    {
+        $this->embargosEmpleadoRel[] = $embargosEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove embargosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmbargo $embargosEmpleadoRel
+     */
+    public function removeEmbargosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmbargo $embargosEmpleadoRel)
+    {
+        $this->embargosEmpleadoRel->removeElement($embargosEmpleadoRel);
+    }
+
+    /**
+     * Get embargosEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmbargosEmpleadoRel()
+    {
+        return $this->embargosEmpleadoRel;
+    }
+
+    /**
      * Add vacacionesEmpleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuVacacion $vacacionesEmpleadoRel
@@ -3548,6 +3641,40 @@ class RhuEmpleado
     public function getEmpleadosEstudiosEmpleadoRel()
     {
         return $this->empleadosEstudiosEmpleadoRel;
+    }
+
+    /**
+     * Add acreditacionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion $acreditacionesEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addAcreditacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion $acreditacionesEmpleadoRel)
+    {
+        $this->acreditacionesEmpleadoRel[] = $acreditacionesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove acreditacionesEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion $acreditacionesEmpleadoRel
+     */
+    public function removeAcreditacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion $acreditacionesEmpleadoRel)
+    {
+        $this->acreditacionesEmpleadoRel->removeElement($acreditacionesEmpleadoRel);
+    }
+
+    /**
+     * Get acreditacionesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAcreditacionesEmpleadoRel()
+    {
+        return $this->acreditacionesEmpleadoRel;
     }
 
     /**
@@ -4231,122 +4358,6 @@ class RhuEmpleado
     }
 
     /**
-     * Set centroCostoContabilidadRel
-     *
-     * @param \Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoContabilidadRel
-     *
-     * @return RhuEmpleado
-     */
-    public function setCentroCostoContabilidadRel(\Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoContabilidadRel = null)
-    {
-        $this->centroCostoContabilidadRel = $centroCostoContabilidadRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoContabilidadRel
-     *
-     * @return \Brasa\ContabilidadBundle\Entity\CtbCentroCosto
-     */
-    public function getCentroCostoContabilidadRel()
-    {
-        return $this->centroCostoContabilidadRel;
-    }
-
-    /**
-     * Add embargosEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmbargo $embargosEmpleadoRel
-     *
-     * @return RhuEmpleado
-     */
-    public function addEmbargosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmbargo $embargosEmpleadoRel)
-    {
-        $this->embargosEmpleadoRel[] = $embargosEmpleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove embargosEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmbargo $embargosEmpleadoRel
-     */
-    public function removeEmbargosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEmbargo $embargosEmpleadoRel)
-    {
-        $this->embargosEmpleadoRel->removeElement($embargosEmpleadoRel);
-    }
-
-    /**
-     * Get embargosEmpleadoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEmbargosEmpleadoRel()
-    {
-        return $this->embargosEmpleadoRel;
-    }
-
-    /**
-     * Add acreditacionesEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion $acreditacionesEmpleadoRel
-     *
-     * @return RhuEmpleado
-     */
-    public function addAcreditacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion $acreditacionesEmpleadoRel)
-    {
-        $this->acreditacionesEmpleadoRel[] = $acreditacionesEmpleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove acreditacionesEmpleadoRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion $acreditacionesEmpleadoRel
-     */
-    public function removeAcreditacionesEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuAcreditacion $acreditacionesEmpleadoRel)
-    {
-        $this->acreditacionesEmpleadoRel->removeElement($acreditacionesEmpleadoRel);
-    }
-
-    /**
-     * Get acreditacionesEmpleadoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAcreditacionesEmpleadoRel()
-    {
-        return $this->acreditacionesEmpleadoRel;
-    }
-
-    /**
-     * Set codigoPuestoFk
-     *
-     * @param integer $codigoPuestoFk
-     *
-     * @return RhuEmpleado
-     */
-    public function setCodigoPuestoFk($codigoPuestoFk)
-    {
-        $this->codigoPuestoFk = $codigoPuestoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoPuestoFk
-     *
-     * @return integer
-     */
-    public function getCodigoPuestoFk()
-    {
-        return $this->codigoPuestoFk;
-    }
-
-    /**
      * Set puestoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurPuesto $puestoRel
@@ -4402,5 +4413,39 @@ class RhuEmpleado
     public function getPagosBancosDetallesEmpleadoRel()
     {
         return $this->pagosBancosDetallesEmpleadoRel;
+    }
+
+    /**
+     * Add visitasEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVisita $visitasEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addVisitasEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVisita $visitasEmpleadoRel)
+    {
+        $this->visitasEmpleadoRel[] = $visitasEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove visitasEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVisita $visitasEmpleadoRel
+     */
+    public function removeVisitasEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVisita $visitasEmpleadoRel)
+    {
+        $this->visitasEmpleadoRel->removeElement($visitasEmpleadoRel);
+    }
+
+    /**
+     * Get visitasEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVisitasEmpleadoRel()
+    {
+        return $this->visitasEmpleadoRel;
     }
 }
