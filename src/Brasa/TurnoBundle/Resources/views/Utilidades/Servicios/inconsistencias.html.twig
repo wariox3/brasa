@@ -8,7 +8,7 @@
 </script>    
 <div class="container">
     <div class="page-header">
-        <h3>Analizar inconsistencias en programaciones</h3>
+        <h3>Analizar inconsistencias en servicios permanentes</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
@@ -39,28 +39,24 @@
                 <th>DIA</th>
 
             </tr>
-            {% for arProgramacionInconsistencias in arProgramacionInconsistencias %}
+            {% for arServicioInconsistencias in arServicioInconsistencias %}
             <tr>                
-                <td>{{ arProgramacionInconsistencias.codigoProgramacionInconsistenciaPk  }}</td>  
-                <td>{{ arProgramacionInconsistencias.inconsistencia  }}</td> 
-                <td>{{ arProgramacionInconsistencias.detalle  }}</td> 
-                {% if arProgramacionInconsistencias.codigoRecursoFk is not null %} 
-                    <td><a href="javascript:abrirVentana3('{{ path('brs_tur_utilidad_recurso_programacion_masiva', { 'anio': arProgramacionInconsistencias.anio, 'mes': arProgramacionInconsistencias.mes, 'codigoRecurso': arProgramacionInconsistencias.codigoRecursoFk }) }}', 'VerProgramaciones', 600, 1200)">{{ arProgramacionInconsistencias.numeroIdentificacion  }}</a></td>
-                {% else %}
-                    <td>{{ arProgramacionInconsistencias.numeroIdentificacion  }}</td>
-                {% endif %}                
-                <td>{{ arProgramacionInconsistencias.codigoRecursoGrupoFk  }}</td>
-                <td>{{ arProgramacionInconsistencias.zona  }}</td>
-                <td>{{ arProgramacionInconsistencias.dia  }}</td> 
+                <td>{{ arServicioInconsistencias.codigoServicioInconsistenciaPk  }}</td>  
+                <td>{{ arServicioInconsistencias.inconsistencia  }}</td> 
+                <td>{{ arServicioInconsistencias.detalle  }}</td> 
+                <td>{{ arServicioInconsistencias.numeroIdentificacion  }}</td>
+                <td>{{ arServicioInconsistencias.codigoRecursoGrupoFk  }}</td>
+                <td>{{ arServicioInconsistencias.zona  }}</td>
+                <td>{{ arServicioInconsistencias.dia  }}</td> 
             </tr>
             
             {% endfor %}
         </table>  
         <div class="btn-group" style="float: left">
-                <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arProgramacionInconsistencias.getTotalItemCount }}</span></div>                        
+                <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arServicioInconsistencias.getTotalItemCount }}</span></div>                        
         </div>
         <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
-                {{ knp_pagination_render(arProgramacionInconsistencias) }}       
+                {{ knp_pagination_render(arServicioInconsistencias) }}       
         </div>
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">                
