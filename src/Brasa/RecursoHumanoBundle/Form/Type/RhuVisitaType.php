@@ -11,7 +11,7 @@ class RhuVisitaType extends AbstractType
     {
         $builder
                 
-            ->add('comentarios', 'textarea', array('required' => true))
+            ->add('comentarios', 'textarea', array('required' => true, 'attr' => array('cols' => '5', 'rows' => '25')))
             ->add('fecha', 'datetime', array('required' => true, 'data' => new \DateTime('now')))
             ->add('nombreQuienVisita','text',array('required' => true))    
             ->add('guardar', 'submit')
