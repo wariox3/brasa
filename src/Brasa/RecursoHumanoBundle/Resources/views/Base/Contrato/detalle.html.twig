@@ -52,9 +52,10 @@
                 </tr>    
                 <tr>
                     <td class="titulo">FECHA TERMINA:</td>
-                    <td>{% if arContrato.estadoActivo == 1 and arContrato.codigoContratoTipoFk == 2%} INDEFINIDO 
+                    <td>{% if arContrato.estadoActivo == 0 or arContrato.codigoContratoTipoFk == 2%} {{ arContrato.fechaHasta |date("Y/m/d")  }} 
                         {% else %}
-                        {{ arContrato.fechaHasta |date("Y/m/d")  }} {% endif %}</td>
+                            INDEFINIDO
+                         {% endif %}</td>
                     <td class="titulo">GRUPO PAGO:</td>
                     <td class="td-in-well">{{ arContrato.centroCostoRel.nombre|default('SIN GRUPO PAGO') }}</td>
                     <td class="titulo">IBP CESANTIAS INICIAL:</td>
