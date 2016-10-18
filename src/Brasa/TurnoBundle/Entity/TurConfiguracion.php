@@ -96,6 +96,11 @@ class TurConfiguracion
      */    
     private $validarHorasProgramacion = false;    
     
+    /**     
+     * @ORM\Column(name="habilitar_compensacion", type="boolean")
+     */    
+    private $habilitarCompesacion = false;     
+    
     /**
      * @ORM\Column(name="codigo_formato_factura", type="integer")
      */    
@@ -584,5 +589,29 @@ class TurConfiguracion
     public function getCodigoFormatoProgramacion()
     {
         return $this->codigoFormatoProgramacion;
+    }
+
+    /**
+     * Set habilitarCompesacion
+     *
+     * @param boolean $habilitarCompesacion
+     *
+     * @return TurConfiguracion
+     */
+    public function setHabilitarCompesacion($habilitarCompesacion)
+    {
+        $this->habilitarCompesacion = $habilitarCompesacion;
+
+        return $this;
+    }
+
+    /**
+     * Get habilitarCompesacion
+     *
+     * @return boolean
+     */
+    public function getHabilitarCompesacion()
+    {
+        return $this->habilitarCompesacion;
     }
 }

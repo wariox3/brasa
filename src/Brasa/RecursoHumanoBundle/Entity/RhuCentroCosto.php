@@ -138,6 +138,11 @@ class RhuCentroCosto
      */    
     private $codigoRecursoGrupoFk = 0;    
     
+    /**     
+     * @ORM\Column(name="descanso_ordinario", type="boolean")
+     */    
+    private $descansoOrdinario = false;             
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuCliente", inversedBy="centrosCostosClienteRel")
      * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
@@ -1649,5 +1654,29 @@ class RhuCentroCosto
     public function getSoportesPagosHorariosCentroCostoRel()
     {
         return $this->soportesPagosHorariosCentroCostoRel;
+    }
+
+    /**
+     * Set descansoOrdinario
+     *
+     * @param boolean $descansoOrdinario
+     *
+     * @return RhuCentroCosto
+     */
+    public function setDescansoOrdinario($descansoOrdinario)
+    {
+        $this->descansoOrdinario = $descansoOrdinario;
+
+        return $this;
+    }
+
+    /**
+     * Get descansoOrdinario
+     *
+     * @return boolean
+     */
+    public function getDescansoOrdinario()
+    {
+        return $this->descansoOrdinario;
     }
 }

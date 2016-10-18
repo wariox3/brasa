@@ -131,6 +131,17 @@
                 </div>
             </div>                
         </div>
+    </div>    
+    <div class="panel panel-default">
+        <div class="panel-heading">Informacion programacion turnos</div>
+        <div class="panel-body">                 
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label">Descanso ordinario:</label>
+                <div class="col-sm-10">
+                        {{ form_widget(form.descansoOrdinario) }}
+                </div>
+            </div>                            
+        </div>
     </div>                  
     <div class="modal-footer">     
             <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_centros_costos_lista') }}">Cancelar</a>        

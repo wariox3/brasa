@@ -327,7 +327,6 @@ class TurSoportePagoRepository extends EntityRepository {
             }
         }       
         
-        
         $intDias = 0;                       
         $intMinutoInicio = (($arTurno->getHoraDesde()->format('i') * 100)/60)/100;
         $intHoraInicio = $arTurno->getHoraDesde()->format('G');        
@@ -355,6 +354,12 @@ class TurSoportePagoRepository extends EntityRepository {
             $arrHoras1 = $this->turnoHoras(0, 0, $intHoraFinal, $boolFestivo2, $arrHoras['horas'], $arTurno->getNovedad(), $arTurno->getDescanso());                 
             $horasTotales = $arrHoras1['horas'];
         }
+        if($arTurno->getDescanso() == 1) {            
+            if($arSoportePago->getDescansoOrdinario()) {
+                $arrHoras['horasDescanso'] = 8;
+            }               
+        }     
+        
         $arSoportePagoDetalle = new \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle();
         $arSoportePagoDetalle->setSoportePagoPeriodoRel($arSoportePagoPeriodo);
         $arSoportePagoDetalle->setSoportePagoRel($arSoportePago);  

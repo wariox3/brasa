@@ -30,7 +30,10 @@ class GenerarSoportePagoController extends Controller
                 set_time_limit(0);
                 ini_set("memory_limit", -1);
                 $codigoSoportePagoPeriodo = $request->request->get('OpGenerar');
+                $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
                 $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
+                $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
+                $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arSoportePagoPeriodo->getRecursoGrupoRel()->getCodigoCentroCostoFk());                
                 $dateFechaDesde = $arSoportePagoPeriodo->getFechaDesde();
                 $dateFechaHasta = $arSoportePagoPeriodo->getFechaHasta();
                 $intDiaInicial = $dateFechaDesde->format('j');
@@ -42,9 +45,6 @@ class GenerarSoportePagoController extends Controller
                 $query = $em->createQuery($dql);                
                 $arRecursosResumen = $query->getResult();
                 foreach($arRecursosResumen as $arRecursoResumen) {
-                    /*if($arRecursoResumen['codigoRecursoFk'] == 2500) {
-                        echo "hola";
-                    }*/
                     $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
                     $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($arRecursoResumen['codigoRecursoFk']);                    
                     $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
@@ -69,6 +69,7 @@ class GenerarSoportePagoController extends Controller
                                     $arSoportePago->setVrSalario($arContrato->getVrSalario());                            
                                     $arSoportePago->setRecursoRel($arRecurso);
                                     $arSoportePago->setSoportePagoPeriodoRel($arSoportePagoPeriodo);
+                                    $arSoportePago->setDescansoOrdinario($arCentroCosto->getDescansoOrdinario());
                                     if($numeroContratos > 1) {
                                         if($arContrato->getFechaDesde() > $arSoportePagoPeriodo->getFechaDesde()) {
                                             $arSoportePago->setFechaDesde($arContrato->getFechaDesde());
@@ -465,10 +466,17 @@ class GenerarSoportePagoController extends Controller
     }
 
     private function formularioDetalle() {
+        $em = $this->getDoctrine()->getManager();
+        $arConfiguracion = new \Brasa\TurnoBundle\Entity\TurConfiguracion();
+        $arConfiguracion = $em->getRepository('BrasaTurnoBundle:TurConfiguracion')->find(1);
+        $arrBotonLiquidarCompensacion = array('label' => 'Compensacion', 'disabled' => true);
+        if($arConfiguracion->getHabilitarCompesacion()) {
+            $arrBotonLiquidarCompensacion['disabled'] = false;
+        }
         $form = $this->createFormBuilder()
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))                        
             ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar'))                                                    
-            ->add('BtnLiquidarCompensacion2', 'submit', array('label'  => 'Compensacion'))                        
+            ->add('BtnLiquidarCompensacion2', 'submit', $arrBotonLiquidarCompensacion)                        
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar')) 
             ->getForm();
         return $form;

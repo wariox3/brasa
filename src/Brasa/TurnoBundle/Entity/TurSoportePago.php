@@ -71,6 +71,11 @@ class TurSoportePago
      * @ORM\Column(name="turno_fijo", type="boolean", nullable=true)
      */    
     private $turnoFijo = false;    
+
+    /**     
+     * @ORM\Column(name="descanso_ordinario", type="boolean", nullable=true)
+     */    
+    private $descansoOrdinario = false; 
     
     /**
      * @ORM\Column(name="descanso", type="float")
@@ -1704,5 +1709,29 @@ class TurSoportePago
     public function getInduccion()
     {
         return $this->induccion;
+    }
+
+    /**
+     * Set descansoOrdinario
+     *
+     * @param boolean $descansoOrdinario
+     *
+     * @return TurSoportePago
+     */
+    public function setDescansoOrdinario($descansoOrdinario)
+    {
+        $this->descansoOrdinario = $descansoOrdinario;
+
+        return $this;
+    }
+
+    /**
+     * Get descansoOrdinario
+     *
+     * @return boolean
+     */
+    public function getDescansoOrdinario()
+    {
+        return $this->descansoOrdinario;
     }
 }
