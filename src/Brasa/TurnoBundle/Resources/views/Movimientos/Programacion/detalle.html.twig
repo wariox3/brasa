@@ -125,7 +125,7 @@
                         {% for arProgramacionDetalle in arProgramacionDetalle %}                            
                             {% if intPuesto != arProgramacionDetalle.codigoPuestoFk or arProgramacionDetalle.codigoPuestoFk == '' %}                                
                                  <tr>
-                                     <td id="suptipo" colspan="36"><b>{{ arProgramacionDetalle.puestoRel.nombre | default('') }}<b/>
+                                     <td id="suptipo" colspan="37"><b>{{ arProgramacionDetalle.puestoRel.nombre | default('') }}<b/>
                                         {% if arProgramacion.estadoAutorizado == 0 %}
                                             {% if arProgramacionDetalle.codigoPuestoFk is not null %}
                                                 <a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_programacion_detalle_editar', {'codigoPuesto': arProgramacionDetalle.codigoPuestoFk, 'codigoProgramacion': arProgramacion.codigoProgramacionPk }) }}', 'Editar puesto', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar programacion puesto"></a>
@@ -138,7 +138,7 @@
                                  </tr>
                                  {% set intPuesto = arProgramacionDetalle.codigoPuestoFk %}
                              {% endif %}
-                            <tr style='height: 10px' width="250" {% if arProgramacionDetalle.ajusteProgramacion == 1 %} class="danger" {% endif %}>
+                                <tr style='height: 10px' width="250" {% if arProgramacionDetalle.ajusteProgramacion == 1 %} class="danger" {% endif %}>
                                 <td><a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_programacion_detalle_resumen', {'codigoProgramacionDetalle': arProgramacionDetalle.codigoProgramacionDetallePk }) }}', 'pedidoDetalleResumen', 600, 900)">{{ arProgramacionDetalle.codigoProgramacionDetallePk }}</a><input type="hidden" name="LblCodigo[]" value="{{ arProgramacionDetalle.codigoProgramacionDetallePk }}"></td>
                                 {% if arProgramacionDetalle.codigoRecursoFk is not null %}
                                     {% if arProgramacion.estadoAutorizado == 0 %}

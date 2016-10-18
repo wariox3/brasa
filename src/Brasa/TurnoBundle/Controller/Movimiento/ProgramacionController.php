@@ -242,15 +242,30 @@ class ProgramacionController extends Controller
      */        
     public function detalleNuevoAction($codigoProgramacion, $codigoPuesto) {
         $request = $this->getRequest();
+        $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
-        $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion);
+        $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion);               
         $form = $this->createFormBuilder()
+            ->add('secuenciaRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurSecuencia',
+                'query_builder' => function (EntityRepository $er)  {
+                    return $er->createQueryBuilder('s')
+                    ->orderBy('s.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                  
+            ->add('TxtCodigoRecurso', 'text')
+            ->add('TxtNombreRecurso', 'text')                 
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
             if ($form->get('BtnGuardar')->isClicked()) {
+                $arRecurso = null;
+                $codigoRecurso = $form->get('TxtCodigoRecurso')->getData();                
+                if($codigoRecurso) {                    
+                    $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigoRecurso);
+                }
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $arrControles = $request->request->All();
                 if(count($arrSeleccionados) > 0) {
@@ -265,6 +280,9 @@ class ProgramacionController extends Controller
                             $arProgramacionDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());                            
                             $arProgramacionDetalle->setAnio($arProgramacion->getFecha()->format('Y'));
                             $arProgramacionDetalle->setMes($arProgramacion->getFecha()->format('m'));
+                            if($arRecurso) {
+                                $arProgramacionDetalle->setRecursoRel($arRecurso);
+                            }
                             $em->persist($arProgramacionDetalle);
                         }
                     }
