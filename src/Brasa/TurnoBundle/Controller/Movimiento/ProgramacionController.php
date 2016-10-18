@@ -202,6 +202,8 @@ class ProgramacionController extends Controller
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
         $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion);
+        $arPuesto = new \Brasa\TurnoBundle\Entity\TurPuesto();
+        $arPuesto = $em->getRepository('BrasaTurnoBundle:TurPuesto')->find($codigoPuesto);        
         $form = $this->formularioDetalleEditar();
         $form->handleRequest($request);
         if($form->isValid()) {
@@ -230,7 +232,8 @@ class ProgramacionController extends Controller
                     'arProgramacionDetalle' => $arProgramacionDetalle,
                     'arrDiaSemana' => $arrDiaSemana,
                     'codigoPuesto' => $codigoPuesto,
-                    'form' => $form->createView(),                    
+                    'form' => $form->createView(), 
+                    'arPuesto' => $arPuesto
                     ));
     } 
     
@@ -550,14 +553,7 @@ class ProgramacionController extends Controller
                 } else {
                     $arProgramacionDetalle->setRecursoRel(NULL);
                 }                
-            }
-            if($arrControles['TxtPuesto'.$intCodigo] != '') {
-                $arPuesto = new \Brasa\TurnoBundle\Entity\TurPuesto();
-                $arPuesto = $em->getRepository('BrasaTurnoBundle:TurPuesto')->find($arrControles['TxtPuesto'.$intCodigo]);
-                if($arPuesto) {
-                    $arProgramacionDetalle->setPuestoRel($arPuesto);
-                }
-            }                  
+            }                 
             
             if($arrControles['TxtDia01D'.$intCodigo] != '') {
                 $arrTurno = $this->validarTurno($arrControles['TxtDia01D'.$intCodigo]);                    
