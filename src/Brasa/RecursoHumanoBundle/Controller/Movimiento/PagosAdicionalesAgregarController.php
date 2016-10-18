@@ -162,7 +162,7 @@ class PagosAdicionalesAgregarController extends Controller
             $intAplicaDiaLaborado = "NO";
         }
         $codigoEmpleado = $arPagoAdicional->getCodigoEmpleadoFk();
-        $codigoCentroCosto = $arPagoAdicional->getEmpleadoRel()->getCodigoCentroCostoFk();
+        $codigoCentroCosto = $arPagoAdicional->getEmpleadoRel()->getCodigoCentroCostoFk();        
         $codigoPagoConcepto = $arPagoAdicional->getCodigoPagoConceptoFk();
         $pagoConcepto = $arPagoAdicional->getPagoConceptoRel()->getNombre();
         $intTipoAdicional = $tipo;
@@ -212,6 +212,10 @@ class PagosAdicionalesAgregarController extends Controller
         if($form->isValid()) {
             $arrControles = $request->request->All();
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arPagoAdicional->getCodigoEmpleadoFk());        
+            if ($codigoCentroCosto == null){
+                $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoUltimoFk());
+                $codigoCentroCosto = $arContrato->getCodigoCentroCostoFk();
+            }
                 if($form->get('TxtValor')->getData() != "" && $form->get('TxtValor')->getData() != 0) {                    
                     $boolError = FALSE;
                      $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
