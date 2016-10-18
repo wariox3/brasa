@@ -105,10 +105,10 @@ class FormatoVisita extends \FPDF_FPDF {
         $this->SetXY(10, 51);
         $this->SetFont('Arial','B',7);
         $this->SetFillColor(236, 236, 236);
-        $this->Cell(23, 6, "" , 1, 0, 'L', 1);
+        $this->Cell(23, 6, "TIPO:" , 1, 0, 'L', 1);
         $this->SetFillColor(255, 255, 255);
         $this->SetFont('Arial','',8);
-        $this->Cell(22, 6, "" , 1, 0, 'L', 1);
+        $this->Cell(22, 6, utf8_decode($arVisita->getVisitaTipoRel()->getNombre()) , 1, 0, 'L', 1);
         $this->SetFillColor(236, 236, 236);
         $this->SetFont('Arial','B',7);
         $this->Cell(23, 6, utf8_decode("REALIZA VISITA:") , 1, 0, 'L', 1);
@@ -126,10 +126,14 @@ class FormatoVisita extends \FPDF_FPDF {
         $this->SetXY(10, 57);
         $this->SetFont('Arial','B',7);
         $this->SetFillColor(236, 236, 236);
-        $this->Cell(23, 6, "", 1, 0, 'L', 1);
+        $this->Cell(23, 6, "VENCIMIENTO:", 1, 0, 'L', 1);
         $this->SetFillColor(255, 255, 255);
         $this->SetFont('Arial','',8);
-        $this->Cell(22, 6, "", 1, 0, 'L', 1);
+        $vencimiento = "NO";
+        if ($arVisita->getValidarVencimiento() == 1){
+            $vencimiento = "SI";
+        }
+        $this->Cell(22, 6, $vencimiento, 1, 0, 'L', 1);
         $this->SetFillColor(236, 236, 236);
         $this->SetFont('Arial','B',7);
         $this->Cell(23, 6, utf8_decode("AUTORIZADO:") , 1, 0, 'L', 1);

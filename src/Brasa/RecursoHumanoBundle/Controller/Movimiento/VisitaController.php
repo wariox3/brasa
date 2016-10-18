@@ -177,7 +177,9 @@ class VisitaController extends Controller
         $session = $this->getRequest()->getSession();
         $this->strListaDql = $em->getRepository('BrasaRecursoHumanoBundle:RhuVisita')->listaDQL(
                 $session->get('filtroIdentificacion'),
-                $session->get('filtroCodigoCentroCosto')
+                $session->get('filtroCodigoCentroCosto'),
+                $session->get('filtroCodigoVisitaTipo'),
+                $session->get('filtroValidarVencimiento')
                 );
     }
 
@@ -198,7 +200,20 @@ class VisitaController extends Controller
         if($session->get('filtroCodigoCentroCosto')) {
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
         }
-        
+        $arrayPropiedadesTipo = array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuVisitaTipo',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'empty_value' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroCodigoVisitaTipo')) {
+            $arrayPropiedadesTipo['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuVisitaTipo", $session->get('filtroCodigoVisitaTipo'));
+        }
         $strNombreEmpleado = "";
         if($session->get('filtroIdentificacion')) {
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $session->get('filtroIdentificacion')));
@@ -210,6 +225,8 @@ class VisitaController extends Controller
         }
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
+            ->add('visitaTipoRel', 'entity', $arrayPropiedadesTipo)
+            ->add('validarVencimiento', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroValidarVencimiento')))    
             ->add('txtNumeroIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('txtNombreCorto', 'text', array('label'  => 'Nombre','data' => $strNombreEmpleado))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -225,6 +242,8 @@ class VisitaController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroIdentificacion', $form->get('txtNumeroIdentificacion')->getData());
+        $session->set('filtroCodigoVisitaTipo', $controles['visitaTipoRel']);
+        $session->set('filtroValidarVencimiento', $controles['validarVencimiento']);
     }    
     
     private function formularioDetalle($arVisita) {
@@ -276,14 +295,16 @@ class VisitaController extends Controller
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'CODIGO')
                             ->setCellValue('B1', 'FECHA')
-                            ->setCellValue('C1', 'GRUPO PAGO')
-                            ->setCellValue('D1', 'IDENTIFICACION')
-                            ->setCellValue('E1', 'EMPLEADO')
-                            ->setCellValue('F1', 'REALIZA VISITA')
-                            ->setCellValue('G1', 'AUTORIZADO')
-                            ->setCellValue('H1', 'CERRADO')
-                            ->setCellValue('I1', 'USUARIO')
-                            ->setCellValue('J1', 'COMENTARIOS');
+                            ->setCellValue('C1', 'TIPO')
+                            ->setCellValue('D1', 'GRUPO PAGO')
+                            ->setCellValue('E1', 'IDENTIFICACION')
+                            ->setCellValue('F1', 'EMPLEADO')
+                            ->setCellValue('G1', 'REALIZA VISITA')
+                            ->setCellValue('H1', 'VENCIMIENTO')
+                            ->setCellValue('I1', 'AUTORIZADO')
+                            ->setCellValue('J1', 'CERRADO')
+                            ->setCellValue('K1', 'USUARIO')
+                            ->setCellValue('L1', 'COMENTARIOS');
                 $i = 2;
                 $query = $em->createQuery($this->strListaDql);
                 $arVisitas = new \Brasa\RecursoHumanoBundle\Entity\RhuVisita();
@@ -294,14 +315,16 @@ class VisitaController extends Controller
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arVisita->getCodigoVisitaPk())
                             ->setCellValue('B' . $i, $arVisita->getFecha()->format('Y/m/d H:i:s'))
-                            ->setCellValue('C' . $i, $arVisita->getEmpleadoRel()->getCentroCostoRel()->getNombre())
-                            ->setCellValue('D' . $i, $arVisita->getEmpleadoRel()->getNumeroIdentificacion())
-                            ->setCellValue('E' . $i, $arVisita->getEmpleadoRel()->getNombreCorto())
-                            ->setCellValue('F' . $i, $arVisita->getNombreQuienVisita())
-                            ->setCellValue('G' . $i, $objFunciones->devuelveBoolean($arVisita->getEstadoAutorizado()))
-                            ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arVisita->getEstadoCerrado()))
-                            ->setCellValue('I' . $i, $arVisita->getCodigoUsuario())
-                            ->setCellValue('J' . $i, $arVisita->getComentarios());
+                            ->setCellValue('C' . $i, $arVisita->getVisitaTipoRel()->getNombre())
+                            ->setCellValue('D' . $i, $arVisita->getEmpleadoRel()->getCentroCostoRel()->getNombre())
+                            ->setCellValue('E' . $i, $arVisita->getEmpleadoRel()->getNumeroIdentificacion())
+                            ->setCellValue('F' . $i, $arVisita->getEmpleadoRel()->getNombreCorto())
+                            ->setCellValue('G' . $i, $arVisita->getNombreQuienVisita())
+                            ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arVisita->getValidarVencimiento()))
+                            ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arVisita->getEstadoAutorizado()))
+                            ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arVisita->getEstadoCerrado()))
+                            ->setCellValue('K' . $i, $arVisita->getCodigoUsuario())
+                            ->setCellValue('L' . $i, $arVisita->getComentarios());
                     $i++;
                 }
 

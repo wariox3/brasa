@@ -28,11 +28,29 @@
                 </div>
             </div>
             <div class="form-group form-group-sm">
+                <label for="form_visitaTipoRel" class="col-sm-3 control-label">Tipo:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.visitaTipoRel, { 'attr': {'class': 'form-control'} }) }}
+                </div>                
+            </div>              
+            <div class="form-group form-group-sm">
                 <label for="form_fecha" class="col-sm-3 control-label">Fecha/hora visita:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.fecha) }}                        
                 </div>                
             </div>
+            <div class="form-group form-group-sm">
+                <label for="form_fechaVence" class="col-sm-3 control-label">Fecha vence:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.fechaVence) }}                        
+                </div>                
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="form_validarVencimiento" class="col-sm-3 control-label">Validar vencimiento:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.validarVencimiento) }}                        
+                </div>                
+            </div>    
             <div class="form-group">
                 <label for="form_nombreQuienVisita" class="col-sm-3 control-label">Persona realiza visita:</label>
                 <div class="col-sm-9">

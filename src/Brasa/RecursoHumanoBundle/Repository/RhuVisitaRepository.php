@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuVisitaRepository extends EntityRepository {
     
-    public function listaDQL($strIdentificacion = "", $codigoCentroCosto = "") {
+    public function listaDQL($strIdentificacion = "", $codigoCentroCosto = "",$codigoVisitaTipo = "",$validarVencimiento = "") {
         $dql   = "SELECT v, e FROM BrasaRecursoHumanoBundle:RhuVisita v JOIN v.empleadoRel e WHERE v.codigoVisitaPk <> 0";
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
@@ -19,7 +19,35 @@ class RhuVisitaRepository extends EntityRepository {
         if($codigoCentroCosto != "" ) {
             $dql .= " AND e.codigoCentroCostoFk = " . $codigoCentroCosto;
         }
+        if($codigoVisitaTipo != "" ) {
+            $dql .= " AND v.codigoVisitaTipoFk = " . $codigoVisitaTipo;
+        }
+        if($validarVencimiento == 1 ) {
+            $dql .= " AND v.validarVencimiento = 1";
+        } 
+        if($validarVencimiento == "0") {
+            $dql .= " AND v.validarVencimiento = 0";
+        }
         $dql .= " ORDER BY v.codigoVisitaPk DESC";
+        return $dql;
+    }
+    
+    //lista visitas con las fecha de vencimiento
+    public function listaVisitasFechaVencimientoDQL($strIdentificacion = "", $strCodigoCentroCosto = "", $strCodigoVisitaTipo = "", $strVencimiento = "") {        
+        $dql   = "SELECT v, e FROM BrasaRecursoHumanoBundle:RhuVisita v JOIN v.empleadoRel e WHERE v.codigoVisitaPk <> 0 AND v.validarVencimiento = 1";
+        if($strCodigoVisitaTipo != "") {
+            $dql .= " AND v.codigoVisitaTipoFk = " . $strCodigoVisitaTipo;
+        }
+        
+        if($strCodigoCentroCosto != "") {
+            $dql .= " AND e.codigoCentroCostoFk = " . $strCodigoCentroCosto;
+        }   
+        if($strIdentificacion != "" ) {
+            $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
+        }
+        if($strVencimiento != "") {
+            $dql .= " AND v.fechaVence <='" .  $strVencimiento . "'";
+        }
         return $dql;
     }
     

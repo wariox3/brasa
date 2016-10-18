@@ -28,6 +28,21 @@ class RhuVisita
     private $codigoEmpleadoFk;
     
     /**
+     * @ORM\Column(name="codigo_visita_tipo_fk", type="integer")
+     */    
+    private $codigoVisitaTipoFk;
+    
+    /**
+     * @ORM\Column(name="fecha_vence", type="date")
+     */    
+    private $fechaVence;    
+    
+    /**     
+     * @ORM\Column(name="validar_vencimiento", type="boolean")
+     */    
+    private $validarVencimiento = false;
+    
+    /**
      * @ORM\Column(name="nombre_quien_visita", type="string", length=100, nullable=true)
      */    
     private $nombreQuienVisita;
@@ -59,6 +74,14 @@ class RhuVisita
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
     protected $empleadoRel;                        
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuVisitaTipo", inversedBy="visitasVisitaTipoRel")
+     * @ORM\JoinColumn(name="codigo_visita_tipo_fk", referencedColumnName="codigo_visita_tipo_pk")
+     */
+    protected $visitaTipoRel;
+
+    
     
 
     
@@ -119,6 +142,78 @@ class RhuVisita
     public function getCodigoEmpleadoFk()
     {
         return $this->codigoEmpleadoFk;
+    }
+
+    /**
+     * Set codigoVisitaTipoFk
+     *
+     * @param integer $codigoVisitaTipoFk
+     *
+     * @return RhuVisita
+     */
+    public function setCodigoVisitaTipoFk($codigoVisitaTipoFk)
+    {
+        $this->codigoVisitaTipoFk = $codigoVisitaTipoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoVisitaTipoFk
+     *
+     * @return integer
+     */
+    public function getCodigoVisitaTipoFk()
+    {
+        return $this->codigoVisitaTipoFk;
+    }
+
+    /**
+     * Set fechaVence
+     *
+     * @param \DateTime $fechaVence
+     *
+     * @return RhuVisita
+     */
+    public function setFechaVence($fechaVence)
+    {
+        $this->fechaVence = $fechaVence;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVence
+     *
+     * @return \DateTime
+     */
+    public function getFechaVence()
+    {
+        return $this->fechaVence;
+    }
+
+    /**
+     * Set validarVencimiento
+     *
+     * @param boolean $validarVencimiento
+     *
+     * @return RhuVisita
+     */
+    public function setValidarVencimiento($validarVencimiento)
+    {
+        $this->validarVencimiento = $validarVencimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get validarVencimiento
+     *
+     * @return boolean
+     */
+    public function getValidarVencimiento()
+    {
+        return $this->validarVencimiento;
     }
 
     /**
@@ -263,5 +358,29 @@ class RhuVisita
     public function getEmpleadoRel()
     {
         return $this->empleadoRel;
+    }
+
+    /**
+     * Set visitaTipoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuVisitaTipo $visitaTipoRel
+     *
+     * @return RhuVisita
+     */
+    public function setVisitaTipoRel(\Brasa\RecursoHumanoBundle\Entity\RhuVisitaTipo $visitaTipoRel = null)
+    {
+        $this->visitaTipoRel = $visitaTipoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get visitaTipoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuVisitaTipo
+     */
+    public function getVisitaTipoRel()
+    {
+        return $this->visitaTipoRel;
     }
 }

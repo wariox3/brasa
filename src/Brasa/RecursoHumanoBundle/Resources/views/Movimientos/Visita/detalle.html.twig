@@ -39,16 +39,16 @@
                         <td class="td-in-well">{{ arVisita.empleadoRel.centroCostoRel.nombre | default('')}}</td>                                                
                     </tr>
                     <tr>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">TIPO:</td>
+                        <td class="td-in-well">{{ arVisita.visitaTipoRel.nombre | default('') }}</td></td>
                         <td class="titulo">REALIZA VISITA:</td>
                         <td class="td-in-well">{{ arVisita.nombreQuienVisita }}</td>
                         <td class="titulo">USUARIO:</td>
                         <td class="td-in-well">{{ arVisita.codigoUsuario }}</td>                                                
                     </tr>
                     <tr>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">VALIDAR VENCIMIENTO:</td>
+                        <td class="td-in-well">{% if arVisita.validarVencimiento == 1 %} SI {% else %} NO {% endif %}</td>
                         <td class="titulo">AUTORIZADO:</td>
                         <td class="td-in-well">{% if arVisita.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>
                         <td class="titulo">CERRADO:</td>
