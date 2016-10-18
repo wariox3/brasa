@@ -480,9 +480,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                     }
                 }                            
             }
-            if($arProgramacionPagoDetalle->getCodigoEmpleadoFk() == 2172) {
-                echo "hola";
-            }
+            
             //Embargos
             $arEmbargos = new \Brasa\RecursoHumanoBundle\Entity\RhuEmbargo();
             $arEmbargos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmbargo')->findBy(array('codigoEmpleadoFk' => $arProgramacionPagoDetalle->getCodigoEmpleadoFk(), 'estadoActivo' => 1));
@@ -502,12 +500,19 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                 if($arEmbargo->getPorcentajeDevengadoMenosDescuentoLey()) {                
                     $douPagoDetalle = (($devengado - $salud - $pension) * $arEmbargo->getPorcentaje()) / 100;
                     $douPagoDetalle = round($douPagoDetalle);
-                }                
+                }     
+                if($arEmbargo->getPorcentajeExcedaSalarioMinimo()) {
+                    $salarioMinimoDevengado = ($douVrSalarioMinimo / 30) * $arProgramacionPagoDetalle->getDiasTransporte();
+                    $baseDescuento = $devengado - $salarioMinimoDevengado;
+                    if($baseDescuento > 0) {             
+                        $douPagoDetalle = ($baseDescuento * $arEmbargo->getPorcentaje()) / 100;
+                        $douPagoDetalle = round($douPagoDetalle);                                                
+                    }                    
+                }
                 if($arEmbargo->getPartesExcedaSalarioMinimo()) {
                     $salarioMinimoDevengado = ($douVrSalarioMinimo / 30) * $arProgramacionPagoDetalle->getDiasTransporte();
                     $baseDescuento = $devengado - $salarioMinimoDevengado;
-                    if($baseDescuento > 0) {
-                        
+                    if($baseDescuento > 0) {                        
                         $douPagoDetalle = $baseDescuento / $arEmbargo->getPartes();
                     }
                 }

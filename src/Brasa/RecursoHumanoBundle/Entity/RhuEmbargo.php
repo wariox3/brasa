@@ -61,6 +61,11 @@ class RhuEmbargo
      * @ORM\Column(name="porcentaje_devengado_menos_descuento_ley", type="boolean")
      */    
     private $porcentajeDevengadoMenosDescuentoLey = false;    
+
+    /**     
+     * @ORM\Column(name="porcentajeExcedaSalarioMinimo", type="boolean")
+     */    
+    private $porcentajeExcedaSalarioMinimo = false; 
     
     /**     
      * @ORM\Column(name="partesExcedaSalarioMinimo", type="boolean")
@@ -522,5 +527,29 @@ class RhuEmbargo
     public function getPorcentajeDevengadoPrestacional()
     {
         return $this->porcentajeDevengadoPrestacional;
+    }
+
+    /**
+     * Set porcentajeExcedaSalarioMinimo
+     *
+     * @param boolean $porcentajeExcedaSalarioMinimo
+     *
+     * @return RhuEmbargo
+     */
+    public function setPorcentajeExcedaSalarioMinimo($porcentajeExcedaSalarioMinimo)
+    {
+        $this->porcentajeExcedaSalarioMinimo = $porcentajeExcedaSalarioMinimo;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeExcedaSalarioMinimo
+     *
+     * @return boolean
+     */
+    public function getPorcentajeExcedaSalarioMinimo()
+    {
+        return $this->porcentajeExcedaSalarioMinimo;
     }
 }

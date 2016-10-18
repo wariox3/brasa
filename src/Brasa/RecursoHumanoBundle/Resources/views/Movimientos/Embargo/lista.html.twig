@@ -34,6 +34,7 @@
                 <th>VALOR</th>
                 <th>% DEV</th>
                 <th>% DEV(PRES)</th>
+                <th>% EXEDA.SAL.MIN</th>
                 <th>%</th>
                 <th>PARTES</th>
                 <th>N.PARTES</th>
@@ -53,6 +54,7 @@
                 <td style="text-align: right">{{ arEmbargos.valor | number_format(0, '.', ',') }}</td>
                 <td>{% if arEmbargos.porcentajeDevengado == 1 %} SI {% else %} NO {% endif %}</td>                                                
                 <td>{% if arEmbargos.porcentajeDevengadoPrestacional == 1 %} SI {% else %} NO {% endif %}</td>                                                
+                <td>{% if arEmbargos.porcentajeExcedaSalarioMinimo == 1 %} SI {% else %} NO {% endif %}</td>                                                
                 <td style="text-align: right">{{ arEmbargos.porcentaje | number_format(0, '.', ',') }}</td>                
                 <td>{% if arEmbargos.partesExcedaSalarioMinimo == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: right">{{ arEmbargos.partes | number_format(0, '.', ',') }}</td>

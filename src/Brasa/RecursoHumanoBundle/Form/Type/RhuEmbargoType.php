@@ -24,6 +24,7 @@ class RhuEmbargoType extends AbstractType
             ->add('porcentajeDevengado', 'checkbox', array('required'  => false))                
             ->add('porcentajeDevengadoPrestacional', 'checkbox', array('required'  => false))                
             ->add('porcentajeDevengadoMenosDescuentoLey', 'checkbox', array('required'  => false))                
+            ->add('porcentajeExcedaSalarioMinimo', 'checkbox', array('required'  => false))                                            
             ->add('estadoActivo', 'checkbox', array('required'  => false))                
             ->add('partesExcedaSalarioMinimo', 'checkbox', array('required'  => false))                                            
             ->add('partes', 'number', array('required' => false))                                                           

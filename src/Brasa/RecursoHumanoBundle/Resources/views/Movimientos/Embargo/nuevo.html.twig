@@ -38,7 +38,24 @@
                 <div class="col-sm-7">
                         {{ form_widget(form.numero, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div> 
+            </div>                 
+            <div class="form-group form-group-sm">
+                <label class="col-sm-5 control-label">Activo:</label>
+                <div class="col-sm-7">
+                        {{ form_widget(form.estadoActivo) }}
+                </div>
+            </div>                
+            <div class="form-group">
+                <label for="form_comentarios" class="col-sm-5 control-label">Comentarios:</label>
+                <div class="col-sm-7">
+                            {{ form_widget(form.comentarios, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
+                </div>
+            </div>                 
+        </div>
+    </div> 
+    <div class="panel panel-default">
+        <div class="panel-heading">Descuento fijo</div>
+        <div class="panel-body">        
             <div class="form-group form-group-sm">
                 <label class="col-sm-5 control-label">Valor fijo:</label>
                 <div class="col-sm-7">
@@ -50,7 +67,12 @@
                 <div class="col-sm-7">
                         {{ form_widget(form.valor, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>  
+            </div>                                 
+        </div>
+    </div> 
+    <div class="panel panel-default">
+        <div class="panel-heading">Descuento porcentaje</div>
+        <div class="panel-body">         
             <div class="form-group form-group-sm">
                 <label class="col-sm-5 control-label">Porcentaje devengado:</label>
                 <div class="col-sm-7">
@@ -68,13 +90,24 @@
                 <div class="col-sm-7">
                         {{ form_widget(form.porcentajeDevengadoMenosDescuentoLey) }}
                 </div>
-            </div>                
+            </div> 
+            <div class="form-group form-group-sm">
+                <label class="col-sm-5 control-label">Porcentaje exceda el salario minimo:</label>
+                <div class="col-sm-7">
+                        {{ form_widget(form.porcentajeExcedaSalarioMinimo) }}
+                </div>
+            </div>                 
             <div class="form-group form-group-sm">
                 <label class="col-sm-5 control-label">Porcentaje:</label>
                 <div class="col-sm-7">
                         {{ form_widget(form.porcentaje, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>                
+            </div>                               
+        </div>
+    </div>    
+    <div class="panel panel-default">
+        <div class="panel-heading">Descuento partes</div>
+        <div class="panel-body">                      
             <div class="form-group form-group-sm">
                 <label class="col-sm-5 control-label">Partes exceda el salario minimo:</label>
                 <div class="col-sm-7">
@@ -86,21 +119,9 @@
                 <div class="col-sm-7">
                         {{ form_widget(form.partes, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>                 
-            <div class="form-group form-group-sm">
-                <label class="col-sm-5 control-label">Activo:</label>
-                <div class="col-sm-7">
-                        {{ form_widget(form.estadoActivo) }}
-                </div>
-            </div>                
-            <div class="form-group">
-                <label for="form_comentarios" class="col-sm-5 control-label">Comentarios:</label>
-                <div class="col-sm-7">
-                            {{ form_widget(form.comentarios, { 'attr': {'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()','class': 'form-control'} }) }}
-                </div>
-            </div>                 
+            </div>                                 
         </div>
-    </div>                   
+    </div>                 
     <div class="modal-footer">   
         <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_movimiento_embargo') }}">Cancelar</a>        
         {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-sm btn-primary'} }) }}
