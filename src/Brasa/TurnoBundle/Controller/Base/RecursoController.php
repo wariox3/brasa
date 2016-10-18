@@ -233,8 +233,8 @@ class RecursoController extends Controller
         $this->strDqlListaEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaRecursoDql(
                         $session->get('filtroEmpleadoNombre'), 
                         $session->get('filtroCodigoCentroCosto'), 
-                        1,
-                        $session->get('filtroIdentificacion'), "", 1);
+                        "",
+                        $session->get('filtroIdentificacion'), "", "");
     }
     
     private function filtrar ($form) {    
