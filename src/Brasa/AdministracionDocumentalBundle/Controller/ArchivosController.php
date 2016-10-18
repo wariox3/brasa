@@ -134,7 +134,7 @@ class ArchivosController extends Controller
                 ///$ruta = 'C:\exportacion\\';
                 //$arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();                
                 //$arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigo));                
-                    $strMail = $form->get('mail')->getData();
+                    $strMail = $form->get('email')->getData();
                     $strAsunto = $form->get('asunto')->getData();                  
                     $strMensaje = $form->get('mensaje')->getData();               
                     $message = \Swift_Message::newInstance()
