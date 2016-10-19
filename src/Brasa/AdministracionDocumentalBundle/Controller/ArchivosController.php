@@ -139,7 +139,7 @@ class ArchivosController extends Controller
                     $strMensaje = $form->get('mensaje')->getData();               
                     $message = \Swift_Message::newInstance()
                         ->setSubject($strAsunto)
-                        ->setFrom('analista.desarrollo@jgefectivo.com', "SogaApp" )
+                        ->setFrom('aranzatus21@gmail.com', "SogaApp" )
                         ->setTo(strtolower($strMail))
                         ->setBody($strMensaje,'text/html')                            
                         ->attach(\Swift_Attachment::fromPath($strRuta));                
